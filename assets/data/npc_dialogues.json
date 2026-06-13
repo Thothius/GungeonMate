@@ -1,0 +1,890 @@
+[
+  {
+    "id": "bello_01",
+    "type": "intro",
+    "prompt": "Keep your hands off the glass unless you're bleeding casings. What's it gonna be?",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Make my guns sing! Got any secret combos?",
+        "reply": "Cactus plus Broccoli equals high-explosive needles. Everything reacts down here. Buy or walk."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Just hand over the firepower. No small talk.",
+        "reply": "I like spenders, not talkers. Just don't test the 12-gauge behind this counter."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "Does the green demon in the grate eat my soul?",
+        "reply": "That's the Sell Creep. He only eats firearms, kid. Keep your distance."
+      }
+    ]
+  },
+  {
+    "id": "bello_02",
+    "type": "random_tip",
+    "prompt": "You look like you're about to panic-spend. Don't waste your money.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Should I save up for the next floor?",
+        "reply": "Blanks restock to two every single floor for free. Don't buy them unless you're desperate."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I only buy items that ensure absolute lethality.",
+        "reply": "Then save your shells for the Prime Primer on Chamber 2. It's expensive but vital for the past-killing bullet."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The keys... they whisper sweet, unlocking fortunes into my ears...",
+        "reply": "If your key count is zero, chest drop rates increase. Let the locks starve a bit."
+      }
+    ]
+  },
+  {
+    "id": "bello_03",
+    "type": "chamber_specific",
+    "chamber": "chamber_2",
+    "prompt": "Chamber 2 is where the real price gouging begins. The Hegemony demands their cut.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Is that why everything costs more green credits?",
+        "reply": "Hegemony Credits bypass my register completely. I only deal in raw, cold casings dropped from dead Gundead."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll take whatever gives me an edge over the Ammoconda.",
+        "reply": "Buy piercing ammo. If you don't destroy the turrets it eats, it regenerates health and gains speed."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The green credits are tiny emerald tombs for lost souls!",
+        "reply": "They're currency for the Breach, lunatic. Here, you pay with lead and brass."
+      }
+    ]
+  },
+  {
+    "id": "bello_04",
+    "type": "random_tip",
+    "prompt": "I see you eyeing that lock. Don't even try it in here.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Can I get a discount if I smile?",
+        "reply": "No. But a cardboard box or a smoke bomb might let you lift an item when I turn my back."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "What happens if I just take it by force?",
+        "reply": "Try it. This shotgun has ended more runs than the High Dragun ever will."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The items want to escape! I can hear them crying inside the glass case!",
+        "reply": "If you raise my panic meter by stealing too much, I'll close shop for the whole run. Control yourself."
+      }
+    ]
+  },
+  {
+    "id": "bello_05",
+    "type": "random_tip",
+    "prompt": "Notice a certain item appearing less often? That's Magnificence at work.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Is that like a luck stat?",
+        "reply": "Picking up an S-tier or A-tier item drops the spawn rate of other high-tier items instantly. Choose wisely."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I don't need luck, just heavy artillery.",
+        "reply": "Good, because the Gungeon actively forces a balance. Enjoy your low-tier items if you already found a powerhouse."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The high tier items are jealous gods! They banish their siblings!",
+        "reply": "That's exactly what I just said, just far more unsettling. Stop yelling in my shop."
+      }
+    ]
+  },
+  {
+    "id": "bello_06",
+    "type": "random_tip",
+    "prompt": "Check every wall before you leave. The architecture down here is full of lies.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Secret rooms! Do I just shoot them?",
+        "reply": "Your base weapon won't show cracks. Use a limited-ammo gun to reveal the crack, then pop a Blank to open it."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "If a wall stands in my way, I blow it open.",
+        "reply": "Make sure you use a real explosion or a Blank, then. Standard bullets won't crack the structural brickwork."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The walls have veins! They bleed plaster when they're hungry!",
+        "reply": "It's just hidden treasure chests and map items. Calm down before you break my masonry."
+      }
+    ]
+  },
+  {
+    "id": "bello_07",
+    "type": "random_tip",
+    "prompt": "See any chests with moving locks? Don't use a key.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Is it a mimic friend?!",
+        "reply": "It's a mimic, but it's not your friend. Shoot every chest once from a distance before opening it."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "If it bites, I shoot it in the teeth.",
+        "reply": "If you defeat it, it drops the item anyway without costing you a key. Free gear if you survive the teeth."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The wooden boxes grow eyes because they want to watch us die!",
+        "reply": "It's an evolutionary curse of the Gungeon. Just pump some lead into it and collect your prize."
+      }
+    ]
+  },
+  {
+    "id": "bello_08",
+    "type": "chamber_specific",
+    "chamber": "chamber_3",
+    "prompt": "The Black Powder Mine is cold. The coal miners here didn't dig for gold, they dug for sulfur.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "I love train rides! Are the minecarts safe?",
+        "reply": "Riding minecarts gives you brief invulnerability while rolling between them. Use them to dodge-roll over tracks."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "The tracks just lead to more dead bodies.",
+        "reply": "Watch out for the Mine Flayer ahead. His clay claymore mines bounce off walls and track your heat signature."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The minecarts run on the grease of crushed bullet kin!",
+        "reply": "It's just standard axles, traveler. Focus on shooting the tarantula turrets instead."
+      }
+    ]
+  },
+  {
+    "id": "bello_09",
+    "type": "random_tip",
+    "prompt": "Running low on health? Armor is a better investment down here.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Because it keeps me shiny?",
+        "reply": "Because breaking a piece of armor triggers a mini-blank effect across the entire screen. It clears bullets and saves lives."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Armor is for cowards who plan on getting hit.",
+        "reply": "Unless you play as the Robot. Then armor is your entire life pool. No hearts allowed for mechanical bodies."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The iron shield plates are cold metallic kisses from the Bullet Goddess!",
+        "reply": "Sure. Let's call it that. Just pay the twenty-six casings and get out."
+      }
+    ]
+  },
+  {
+    "id": "bello_10",
+    "type": "random_tip",
+    "prompt": "Every item has a hidden history. Some carry a heavy curse.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Curse sounds spooky! Does it give me cool powers?",
+        "reply": "It spawns jammed, blood-red enemies with double health. But it also increases your cash drops from room clears."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Let the red enemies come. More targets for me.",
+        "reply": "If your curse level hits ten, the Lord of the Jammed spawns. He's invincible and follows you through walls forever."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The purple smoke smells like crushed stardust and broken reality!",
+        "reply": "That purple aura means your weapon is highly cursed. Don't say I didn't warn you when the reaper arrives."
+      }
+    ]
+  },
+  {
+    "id": "winchester_01",
+    "type": "intro",
+    "prompt": "Step up, slick! Got a pocket full of shell casings and a total lack of depth perception? Let's play!",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "I love carnival games! What do I win?",
+        "reply": "Hit four targets, get a Black or Red chest. Hit zero, get a pile of garbage and my mockery."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I don't play rigged games, carny.",
+        "reply": "It's only rigged if you can't aim. Put up the casings or clear the lane, tough guy."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The blue targets are frozen eyelids watching the sky fall!",
+        "reply": "Wow. Okay. Just take this specific game-gun and stop staring at me like that."
+      }
+    ]
+  },
+  {
+    "id": "winchester_02",
+    "type": "random_tip",
+    "prompt": "You look like the type to miss a stationary barn wall from three paces.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Any tricks to help me hit the bullseye?",
+        "reply": "If you have Wax Wings or a Jetpack, you can literally fly over my barriers and shoot the targets point-blank."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "My bullets always find their mark.",
+        "reply": "Not with my bounce patterns. Unless you have Remote Bullets—then your mouse cursor controls the shot entirely."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The bounce is a dance of the kinetic angels!",
+        "reply": "If you have Bouncing Bullets or Scattershot, the extra projectiles can accidentally clip targets for an easy ace."
+      }
+    ]
+  },
+  {
+    "id": "winchester_03",
+    "type": "chamber_specific",
+    "chamber": "chamber_3",
+    "prompt": "The geometry in this Black Powder Mine layout is beautiful. So many ricochet angles!",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Can I use the moving minecarts to bounce shots?",
+        "reply": "No, the minecarts just block your baseline trajectory. Time your shot exactly between their passes."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Moving obstacles don't stop a bullet.",
+        "reply": "They stop mine. Wait for the moving block to reach its apex before pulling the trigger, hotshot."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The iron tracks are guiding the bullets to their ancestral homes!",
+        "reply": "They're guiding them into the bottomless pit if your timing is that bad. Clear the lane!"
+      }
+    ]
+  },
+  {
+    "id": "winchester_04",
+    "type": "random_tip",
+    "prompt": "Acing my game isn't just about showing off. It alters your luck state.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does it give me special item luck?",
+        "reply": "Getting a flawless score guarantees an item chest that bypasses your current floor tier baseline."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I only care about the highest caliber loot.",
+        "reply": "Then hit all four. A green chest is the absolute bare minimum I give out for three hits."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The treasure box opens its mouth to swallow my sins!",
+        "reply": "It drops a gun, buddy. Keep your philosophy out of my shooting gallery."
+      }
+    ]
+  },
+  {
+    "id": "winchester_05",
+    "type": "random_tip",
+    "prompt": "Think you can cheat me with explosive weapons? Think again.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Do explosive shots wipe out all targets at once?",
+        "reply": "My custom rental pistol overrides your active inventory. No explosive shortcuts unless you carry passive blast perks."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I rely on precision, not splash damage.",
+        "reply": "Good, because the projectile width is highly restricted. Aim for the exact pixel center of the blue block."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The fire elements devour the target frames until they ash!",
+        "reply": "If you have structural flame passives, it might work. Otherwise, stick to the basic laser sight line."
+      }
+    ]
+  },
+  {
+    "id": "winchester_06",
+    "type": "random_tip",
+    "prompt": "Don't rush the shot counter. The clock isn't your enemy, your twitchy finger is.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "So I can take all day to align the laser?",
+        "reply": "Take an hour if you need to. The blocks cycle on a continuous loop; memorize the tracking cadence."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I shoot on instinct, and my instinct is instantaneous.",
+        "reply": "And that's why you hit the blockades three times in a row. Slow your pulse down."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "Time is an accordion made of brass and slow-motion dreams!",
+        "reply": "Sure is. Take your swing at the accordion whenever you're ready, clock-watcher."
+      }
+    ]
+  },
+  {
+    "id": "winchester_07",
+    "type": "chamber_specific",
+    "chamber": "chamber_4",
+    "prompt": "Welcome to the Hollow. The targets bounce slower here because the spirits clog up the air currents.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Ghost targets?! Do they fade away?",
+        "reply": "They don't fade, but the tracking blocks speed up mid-cycle. Watch for the sudden gear acceleration."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Phantoms can't ghost through solid lead.",
+        "reply": "The Kill Pillars ahead will prove you wrong. Focus on my game before you go fight those four stone freaks."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The ice floors are frozen tears of the ancient bullet kings!",
+        "reply": "Watch your traction on the ice platforms. Slip mid-shot and you'll miss the entire matrix layout."
+      }
+    ]
+  },
+  {
+    "id": "winchester_08",
+    "type": "random_tip",
+    "prompt": "You ever notice how some guns just feel... heavier? That's bullet weight variance.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does my game pistol have heavy bullets?",
+        "reply": "It uses lightweight bouncy balls. They float higher in the trajectory curve than standard heavy kinetic rounds."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I compensate for drop automatically.",
+        "reply": "There is no gravity drop in this orientation, genius. It's absolute linear tracking until a wall impact."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The lead drops because it yearns to sleep in the dirt!",
+        "reply": "It bounces because it loves the rubber lining on my walls. Focus on the ricochet vector."
+      }
+    ]
+  },
+  {
+    "id": "winchester_09",
+    "type": "random_tip",
+    "prompt": "Don't try to use your active items inside my gallery boundary box.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Can I use blanks to move the targets closer?",
+        "reply": "Blanks clear bullets but don't nudge the iron hardware. Nice try, bouncy-kid."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "My active items are built for war, not arcade tricks.",
+        "reply": "Then keep them in your holster. Pull an active item line and my system safety locks the targets instantly."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The pocket dimension boxes are angry when locked inside your fence!",
+        "reply": "They can stay angry. Pay the entry fee or step away from the terminal lane."
+      }
+    ]
+  },
+  {
+    "id": "winchester_10",
+    "type": "random_tip",
+    "prompt": "Last chance to prove you aren't a complete waste of baseline ammo casings.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "I'm gonna win the big prize for sure this time!",
+        "reply": "That's the spirit! Go ahead, miss all four shots, and make my afternoon laugh."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Watch closely. I don't miss twice.",
+        "reply": "We'll see about that when the block accelerates on shot number three. Go for it."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The target is my face, the gun is my mind, the bullet is the truth!",
+        "reply": "Alright, look, just shoot the blue things and leave before I call the Breach security crew."
+      }
+    ]
+  },
+  {
+    "id": "frifle_01",
+    "type": "intro",
+    "prompt": "The ecology of this labyrinth is completely disrupted. We hunt to log the specimens. Will you execute the count?",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "A scavenger hunt! What monster is first on the list?",
+        "reply": "Kill thirty Lead Maidens. They are predatory iron blocks that feed on stray kinetic energy. *Mauser nods silently.*"
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Give me a target list. I'll clear the floor.",
+        "reply": "Start with the Shambling Rounds. Their cloaks hide dynamic spore colonies that build projectile matrix loops."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The bullet kin have families made of sulfur and tiny little copper shoes!",
+        "reply": "They are animated lead vessels driven by a temporal paradox. Kill them regardless. *Mauser sighs.*"
+      }
+    ]
+  },
+  {
+    "id": "frifle_02",
+    "type": "random_tip",
+    "prompt": "The Lead Maidens aren't constructed; they grow from the floor ore matrices.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Can I dodge-roll through their homing spikes?",
+        "reply": "Only if you roll forward right as the arrows converge. Use the stone pillars to break their heat tracking line."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I don't hide behind pillars. I out-damage them.",
+        "reply": "Then fire a high-impact blast the exact millisecond their iron doors swing open. Their internal core is completely unarmored."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The screaming skulls inside the box are just lonely children!",
+        "reply": "They are explosive kinetic delivery modules. Stop trying to emphasize with the fauna. *Mauser shakes head.*"
+      }
+    ]
+  },
+  {
+    "id": "frifle_03",
+    "type": "chamber_specific",
+    "chamber": "chamber_2",
+    "prompt": "Chamber 2 is home to the Ammoconda. It's an invasive reptilian construct made entirely of active munitions.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "It looks so wiggly! How do I stop it from growing?",
+        "reply": "It consumes the small node pods that spawn in the arena. Destroy those pods instantly or its speed multiplier stacks permanently."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll shoot it in the head until it drops its skin.",
+        "reply": "Focus on the tail sections if you can't hit the skull node. The snake segments carry localized health scaling bars."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The snake eats its own tail to rewrite the history of the world!",
+        "reply": "It eats metallic stones to fix its armored segments. Please focus on the practical biology, traveler."
+      }
+    ]
+  },
+  {
+    "id": "frifle_04",
+    "type": "random_tip",
+    "prompt": "The Blobulon variants multiply via cellular mitosis upon explosive impact.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "So if I hit them, they make tiny jelly babies?",
+        "reply": "They split into smaller, hyper-fast cubes. Use a freeze beam or poison pool to dissolve their cell walls without splitting them."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "More divisions means more targets for my shotgun spreads.",
+        "reply": "Just make sure you don't get cornered. The tiny cubes ignore normal pathfinding lines and sprint directly at your ankles."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The jelly is the fluid of the great cosmic bullet eye!",
+        "reply": "It's just toxic industrial waste infused with gunpowder residue. *Mauser pulls hood lower.*"
+      }
+    ]
+  },
+  {
+    "id": "frifle_05",
+    "type": "random_tip",
+    "prompt": "Be careful with your kill priority when entering a room with a Gundead Chancellor.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "The little guy with the funny hat? Is he the boss?",
+        "reply": "He buffs the closest bullet kin with double speed and health. Eliminate the cap-wearer first before his target evolves."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I kill the biggest threat first. Always.",
+        "reply": "In this setup, the tiny advisor *is* the big threat. If he links with an Ashen Bullet Kin, you'll waste two magazines on one target."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The hat contains the brain of an ancient micro-king!",
+        "reply": "It's just a decorative cap indicating rank. Shoot it off his skull and clear the sector."
+      }
+    ]
+  },
+  {
+    "id": "frifle_06",
+    "type": "random_tip",
+    "prompt": "The Key Bullet Kin carry a highly volatile defensive flight reaction.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "They run away so fast! Do they drop golden keys?",
+        "reply": "They self-detonate into thin air if you don't drop them within three seconds of entering the room layout. Prioritize them instantly."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "They can't outrun a sniper round.",
+        "reply": "If you hit them with a status slow or freeze item, their escape timer resets. Lock them down before they phase out."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The golden key bullet wants to be eaten by my chest pocket!",
+        "reply": "It just wants to escape back to the lower chambers. Kill it to secure your lockpick currency."
+      }
+    ]
+  },
+  {
+    "id": "frifle_07",
+    "type": "chamber_specific",
+    "chamber": "chamber_4",
+    "prompt": "The Hollow is structurally unstable. The ghosts here are bullet kin who failed to kill their pasts.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Can we help them find peace through friendship?",
+        "reply": "We help them find peace through high-velocity exorcism. *Mauser points to gun barrel.*"
+      },
+      {
+        "tone": "TOUGH",
+        "text": "If they're already dead, my bullets shouldn't care about their feelings.",
+        "reply": "Watch out for the Hallowe'en variants. Their purple fire tracks across ice frames and stays active for five seconds."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The ghosts taste like cold copper pennies and static electricity!",
+        "reply": "Do not lick the phantoms, traveler. They drain your armor stats on contact."
+      }
+    ]
+  },
+  {
+    "id": "frifle_08",
+    "type": "random_tip",
+    "prompt": "The Gun Nut constructs are heavily armored but possess high recovery latency.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "They swing that giant sword so slowly! Is that my chance?",
+        "reply": "Exactly. Dodge-roll directly through their shockwave line, then pump shots into their back while they reset their balance."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "They're just slow targets with big health pools.",
+        "reply": "Watch for the Chained variants on Chamber 3. Their tracking range is double, and they can pull you into trap pits."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The giant sword is a metal tooth from the Gungeon's upper jaw!",
+        "reply": "It's a broadsword forged from scrap iron casings. Focus on the tracking animation lines."
+      }
+    ]
+  },
+  {
+    "id": "frifle_09",
+    "type": "random_tip",
+    "prompt": "The She-Shellmet is a rare environmental mutation. It reacts to water sources.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does it grow into a giant sea monster?",
+        "reply": "If you coat it with a water weapon or push it into a pool, its defensive shells fall off instantly, cutting its hit points in half."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I don't need water tools to crack a shell.",
+        "reply": "Then enjoy wasting two full clips on its protective casing. Physical rounds ricochet off its front plate continuously."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The shell sings the ocean song of a planet made of gun oil!",
+        "reply": "It just clicks its teeth and fires shotgun spreads. *Mauser taps his forehead to indicate insanity.*"
+      }
+    ]
+  },
+  {
+    "id": "frifle_10",
+    "type": "random_tip",
+    "prompt": "Our hunting tally is nearly complete. The final specimen is the High Dragun construct.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "A real dragon made of bone and bullets?! Can I ride it?",
+        "reply": "It will roast your frame into carbon ash. When its final phase blankets the room in fire, stay in the bottom safe grid."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll tear its wings off and use its skull as a helmet.",
+        "reply": "Focus on the heart node when it exposes its chest matrix. Standard scales reject 90% of structural bullet damage arrays."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The Dragun is the mother of all hot copper rain!",
+        "reply": "It's the apex defensive layer of the forge chamber. Go clear the remaining counts so we can close the log book."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_01",
+    "type": "intro",
+    "prompt": "Reality is far too predictable. Let us inject beautiful, burning chaos into your trajectory matrix. Shall we roll the dice?",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Chaos mode sounds like a party! What modifiers do I get?",
+        "reply": "Gull's Revenge drops missiles from the sky on every room clear loop. Enjoy the fireworks, sparky."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Your rules don't scare me. Stack them high.",
+        "reply": "Spoken like a casualty. Adrenaline modifier increases enemy movement speed every time you dodge-roll. Control your movement."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The burning dice are six-sided eyes crying hot sulfur stars!",
+        "reply": "They rewrite the structural rules of engagement. Step into the circle and let your eyes burn with the flame."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_02",
+    "type": "random_tip",
+    "prompt": "The 'Pot Shots' modifier turns every broken vase into a lethal projectile vector.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "So if I roll into a table, the table shoots back?!",
+        "reply": "Every single breakable prop fires a bullet directly at your coordinates upon destruction. Stop rolling blindly into room clutter."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll clear the props with explosives before the fight starts.",
+        "reply": "That just triggers fifty bullets simultaneously across the grid. Learn to trace the clear lines instead."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The clay pots hold the tiny souls of forgotten bullets seeking vengeance!",
+        "reply": "They hold kinetic trap nodes. Keep your spatial awareness locked at 100% or your run ends here."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_03",
+    "type": "chamber_specific",
+    "chamber": "chamber_2",
+    "prompt": "Chamber 2 under challenge rules forces the 'Gorgun's Gaze' modifier into effect.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does she turn me to stone if I look at her sweet face?",
+        "reply": "Every five seconds, an optical wave blankets the room. Turn your avatar's line of sight 180 degrees away to prevent petrification."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I don't look away from my targets. Ever.",
+        "reply": "Then you'll freeze into a stone statue for three seconds while the bullet kin use your frame for target practice. Smart choice."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The stone skin is a beautiful armor made of dead memories!",
+        "reply": "It's a total state stun that bypasses your health mechanics. Turn your back when the ring flashes green."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_04",
+    "type": "random_tip",
+    "prompt": "The 'Thermal Clips' rule punishes those who waste active ammunition streams.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does it make my guns hot and spicy?",
+        "reply": "Reloading early burns the remaining bullets left in your magazine. You must empty the clip completely to save ammo volume."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I fire until the slide locks back anyway.",
+        "reply": "Then the modifier won't alter your cadence. But if you panic-reload mid-fight, your reserve pools will drop to zero in three rooms."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The bullets boil inside the drum like angry copper wasps!",
+        "reply": "They drop out of the interface completely. Keep your fingers off the manual reload key until the cylinder is dry."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_05",
+    "type": "random_tip",
+    "prompt": "Struggling with the 'Shockwave' link matrix? Space control is mandatory.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "The electricity lines look like a glowing skip-rope!",
+        "reply": "An electrical beam tethers pairs of enemies together. Dodge-roll directly over the wire line; touching the current strips your armor instantly."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll break the link by killing the anchor point.",
+        "reply": "Eliminate the faster target first. Once one anchor point drops, the electrical field collapses across that specific node pair."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The blue lightning strings are the nerve system of the Gungeon demon!",
+        "reply": "It's high-voltage energy distribution. Keep your trajectory vectors clean and clear of the connection lines."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_06",
+    "type": "random_tip",
+    "prompt": "The 'High Stress' modifier leaves zero margin for physical calculation errors.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does it make my heart beat super loud?",
+        "reply": "If you take damage once, your health pool instantly drops to half a heart, regardless of your baseline tier. One more hit means death."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I don't plan on getting hit in the first place.",
+        "reply": "The safety state lasts for ten seconds after room activation. Clean the room within that window or your margins vanish entirely."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The red warning light is the embrace of the final bullet dawn!",
+        "reply": "It's the binary panic state. Clear the sector before your motor controls lock up from structural stress."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_07",
+    "type": "chamber_specific",
+    "chamber": "chamber_3",
+    "prompt": "The Mine Flayer in Challenge Mode carries the 'Unstable Antagonism' algorithm.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does he throw exploding birthday presents at me?!",
+        "reply": "Every bullet he fires that misses your frame turns into a stationary proximity mine upon wall impact. The floor space shrinks every second."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll use piercing lasers to clear the mines and hit his face simultaneously.",
+        "reply": "A viable tactical response. Keep your positioning locked near the center core grid to avoid wall mine triggers."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The bells are screaming inside my teeth! Ring out the metal marrow!",
+        "reply": "His bell transformations carry double tracking logic here. Do not let the frequency desynchronize your movement lines."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_08",
+    "type": "random_tip",
+    "prompt": "The 'Long Live the King' protocol selects one elite unit for absolute defense routing.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Is there a crown on his head?! Can I take it?",
+        "reply": "One random enemy is completely invincible until every other unit in the room layout is terminated. Stop shooting the king."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll drop his bodyguards first, then execute the monarch.",
+        "reply": "Correct strategy. Isolate the crowned target using positional loops while wiping out the baseline bullet kin elements."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The golden crown feeds on the blood of its loyal bullet peasants!",
+        "reply": "It distributes a phase-shield array. Keep your primary fire vectors trained on the minor targets until the field drops."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_09",
+    "type": "random_tip",
+    "prompt": "The 'Hammer Time' modifier brings the wrath of the Forge down upon your location tracking system.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Giant iron hammers falling from the ceiling?! Like a arcade game?!",
+        "reply": "A massive metallic mallet tracks your exact pixel coordinates every four seconds, crushing the floor grid into fire pools. Keep moving."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "I'll outrun the shadow before the iron drops.",
+        "reply": "The shadow tracking accelerates when your health is low. Never stay static for more than two weapon cycles."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The forge hammer is reshaping my bones into the perfect weapon caliber!",
+        "reply": "It's going to reshape your avatar into a flat pixel paste if you don't break your tracking sequence. Keep moving loops active."
+      }
+    ]
+  },
+  {
+    "id": "daisuke_10",
+    "type": "random_tip",
+    "prompt": "You have survived the chaos arrays longer than my probability matrices calculated. Impressive.",
+    "responses": [
+      {
+        "tone": "PEP",
+        "text": "Does that mean I get a golden trophy or a cosmic high-five?",
+        "reply": "It means the next floor will double the modifier density. Prepare your motor controls for absolute structural overload."
+      },
+      {
+        "tone": "TOUGH",
+        "text": "Triple the modifiers. I'm just getting warmed up.",
+        "reply": "Arrogance is the ultimate variable destroyer. Let the flames roll the dice once more and see if your lead holds true."
+      },
+      {
+        "tone": "DEMENTED",
+        "text": "The dice have melted into my palms! I control the numbers now!",
+        "reply": "The numbers control you until the past is executed. Go step into the elevator terminal loop, anomaly."
+      }
+    ]
+  }
+]

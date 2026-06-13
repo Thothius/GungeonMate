@@ -1,0 +1,1505 @@
+{
+  "item:Master Round I": {},
+  "item:Master Round II": {},
+  "item:Master Round III": {},
+  "item:Master Round IV": {},
+  "item:Master Round V": {},
+  "item:Prime Primer": {},
+  "item:Arcane Gunpowder": {},
+  "item:Planar Lead": {},
+  "item:Obsidian Shell Casing": {},
+  "item:Meatbun": {
+    "sell_price": "16",
+    "recharge_time": "Single-Use"
+  },
+  "item:Medkit": {
+    "sell_price": "21",
+    "recharge_time": "Single-Use"
+  },
+  "item:Ration": {
+    "sell_price": "21",
+    "recharge_time": "Single-Use"
+  },
+  "item:Orange": {},
+  "item:Friendship Cookie": {
+    "sell_price": "3",
+    "recharge_time": "Single-Use"
+  },
+  "item:Bottle": {
+    "sell_price": "16",
+    "recharge_time": "3 seconds"
+  },
+  "item:Bomb": {
+    "sell_price": "16",
+    "recharge_time": "200 damage"
+  },
+  "item:Ice Bomb": {
+    "sell_price": "16",
+    "recharge_time": "200 damage"
+  },
+  "item:Chaff Grenade": {
+    "sell_price": "21",
+    "recharge_time": "500 damage"
+  },
+  "item:Proximity Mine": {
+    "sell_price": "16",
+    "recharge_time": "300 damage"
+  },
+  "item:Cluster Mine": {
+    "sell_price": "21",
+    "recharge_time": "400 damage"
+  },
+  "item:C4 (Item)": {
+    "sell_price": "16",
+    "recharge_time": "250 damage"
+  },
+  "item:Weird Egg": {
+    "sell_price": "16",
+    "recharge_time": "Single-Use"
+  },
+  "item:Molotov": {
+    "sell_price": "16",
+    "recharge_time": "600 damage"
+  },
+  "item:Air Strike": {
+    "sell_price": "30",
+    "recharge_time": "600 damage"
+  },
+  "item:Napalm Strike": {
+    "sell_price": "21",
+    "recharge_time": "600 damage"
+  },
+  "item:Big Boy": {
+    "sell_price": "30",
+    "recharge_time": "450 damage"
+  },
+  "item:Roll Bomb": {
+    "sell_price": "21"
+  },
+  "item:iBomb Companion App": {
+    "sell_price": "21",
+    "recharge_time": "1 second"
+  },
+  "item:Supply Drop": {
+    "sell_price": "16",
+    "recharge_time": "Single-Use"
+  },
+  "item:Ammo Synthesizer": {
+    "sell_price": "16"
+  },
+  "item:Armor Synthesizer": {
+    "sell_price": "41"
+  },
+  "item:Heart Synthesizer": {
+    "sell_price": "41"
+  },
+  "item:Master of Unlocking": {
+    "sell_price": "30"
+  },
+  "item:Utility Belt": {
+    "sell_price": "21"
+  },
+  "item:Macho Brace": {
+    "sell_price": "21"
+  },
+  "item:Hidden Compartment": {},
+  "item:Backpack": {
+    "sell_price": "16"
+  },
+  "item:Loot Bag": {
+    "sell_price": "21"
+  },
+  "item:Drill": {},
+  "item:Clown Mask": {
+    "sell_price": "30"
+  },
+  "item:Scope": {
+    "sell_price": "16"
+  },
+  "item:Scouter": {
+    "sell_price": "21"
+  },
+  "item:Laser Sight": {
+    "sell_price": "21"
+  },
+  "item:Ammo Belt": {
+    "sell_price": "16"
+  },
+  "item:Bullet Time": {
+    "sell_price": "16",
+    "recharge_time": "400 damage",
+    "duration": "6 seconds"
+  },
+  "item:Aged Bell": {
+    "sell_price": "41",
+    "recharge_time": "600 damage",
+    "duration": "5 seconds"
+  },
+  "item:Singularity": {},
+  "item:Decoy": {},
+  "item:Shadow Clone": {
+    "sell_price": "16",
+    "recharge_time": "250 damage"
+  },
+  "item:Explosive Decoy": {
+    "sell_price": "21",
+    "recharge_time": "500 damage"
+  },
+  "item:Melted Rock": {
+    "sell_price": "21",
+    "recharge_time": "2 seconds"
+  },
+  "item:Trusty Lockpicks": {
+    "recharge_time": "100 damage"
+  },
+  "item:Smoke Bomb": {
+    "sell_price": "21",
+    "recharge_time": "500 damage"
+  },
+  "item:Box": {},
+  "item:Fortune's Favor": {
+    "sell_price": "30",
+    "recharge_time": "600 damage",
+    "duration": "8 seconds"
+  },
+  "item:Jar of Bees": {
+    "sell_price": "21",
+    "recharge_time": "500 damage"
+  },
+  "item:Potion of Lead Skin": {
+    "sell_price": "16",
+    "recharge_time": "600 damage",
+    "duration": "10 seconds"
+  },
+  "item:Double Vision": {},
+  "item:Chest Teleporter": {
+    "sell_price": "41",
+    "recharge_time": "500 damage"
+  },
+  "item:Relodestone": {
+    "sell_price": "54",
+    "recharge_time": "500 damage",
+    "duration": "6 seconds"
+  },
+  "item:Poison Vial": {
+    "sell_price": "16",
+    "recharge_time": "300 damage"
+  },
+  "item:Potion of Gun Friendship": {
+    "sell_price": "16",
+    "recharge_time": "400 damage",
+    "duration": "10 seconds"
+  },
+  "item:Portable Turret": {
+    "sell_price": "30",
+    "recharge_time": "325 damage"
+  },
+  "item:Knife Shield": {
+    "sell_price": "16",
+    "recharge_time": "300 damage"
+  },
+  "item:Grappling Hook": {
+    "sell_price": "16",
+    "recharge_time": "5 seconds"
+  },
+  "item:Stuffed Star": {
+    "sell_price": "30",
+    "recharge_time": "600 damage",
+    "duration": "9 seconds"
+  },
+  "item:Boomerang": {},
+  "item:Shield of the Maiden": {
+    "sell_price": "21",
+    "recharge_time": "1.5 seconds"
+  },
+  "item:Crisis Stone": {
+    "sell_price": "54"
+  },
+  "item:Portable Table Device": {
+    "sell_price": "16",
+    "recharge_time": "150 damage"
+  },
+  "item:Daruma": {
+    "sell_price": "30",
+    "recharge_time": "100 damage"
+  },
+  "item:Partially-Eaten Cheese": {
+    "sell_price": "41",
+    "recharge_time": "300 damage",
+    "duration": "10 seconds"
+  },
+  "item:+1 Bullets": {
+    "sell_price": "21"
+  },
+  "item:Rocket-Powered Bullets": {
+    "sell_price": "30"
+  },
+  "item:Shock Rounds": {
+    "sell_price": "41"
+  },
+  "item:Devolver Rounds": {
+    "sell_price": "30"
+  },
+  "item:Vorpal Bullets": {
+    "sell_price": "41"
+  },
+  "item:Katana Bullets": {
+    "sell_price": "21"
+  },
+  "item:Hungry Bullets": {
+    "sell_price": "41"
+  },
+  "item:Heavy Bullets": {
+    "sell_price": "21"
+  },
+  "item:Bouncy Bullets": {
+    "sell_price": "21"
+  },
+  "item:Explosive Rounds": {
+    "sell_price": "41"
+  },
+  "item:Ghost Bullets": {
+    "sell_price": "21"
+  },
+  "item:Alpha Bullet": {
+    "sell_price": "41"
+  },
+  "item:Omega Bullets": {
+    "sell_price": "41"
+  },
+  "item:Scattershot": {
+    "sell_price": "30"
+  },
+  "item:Irradiated Lead": {
+    "sell_price": "30"
+  },
+  "item:Hot Lead": {
+    "sell_price": "30"
+  },
+  "item:Battery Bullets": {
+    "sell_price": "16"
+  },
+  "item:Frost Bullets": {
+    "sell_price": "41"
+  },
+  "item:Charming Rounds": {
+    "sell_price": "30"
+  },
+  "item:Magic Bullets": {
+    "sell_price": "30"
+  },
+  "item:Fat Bullets": {
+    "sell_price": "41"
+  },
+  "item:Angry Bullets": {
+    "sell_price": "21"
+  },
+  "item:Blank Bullets": {
+    "sell_price": "54"
+  },
+  "item:Orbital Bullets": {
+    "sell_price": "41"
+  },
+  "item:Homing Bullets": {
+    "sell_price": "30"
+  },
+  "item:Shadow Bullets": {
+    "sell_price": "30"
+  },
+  "item:Easy Reload Bullets": {
+    "sell_price": "21"
+  },
+  "item:Stout Bullets": {
+    "sell_price": "30"
+  },
+  "item:Snowballets": {
+    "sell_price": "41"
+  },
+  "item:Remote Bullets": {
+    "sell_price": "21"
+  },
+  "item:Zombie Bullets": {
+    "sell_price": "21"
+  },
+  "item:Flak Bullets": {
+    "sell_price": "21"
+  },
+  "item:Silver Bullets": {
+    "sell_price": "21"
+  },
+  "item:Gilded Bullets": {
+    "sell_price": "30"
+  },
+  "item:Platinum Bullets": {
+    "sell_price": "54"
+  },
+  "item:Chaos Bullets": {
+    "sell_price": "41"
+  },
+  "item:Cursed Bullets": {
+    "sell_price": "21"
+  },
+  "item:Chance Bullets": {
+    "sell_price": "30"
+  },
+  "item:Helix Bullets": {
+    "sell_price": "30"
+  },
+  "item:Bumbullets": {
+    "sell_price": "30"
+  },
+  "item:Bloody 9mm": {
+    "sell_price": "30"
+  },
+  "item:Bionic Leg": {
+    "sell_price": "21"
+  },
+  "item:Shotgun Coffee": {
+    "sell_price": "21"
+  },
+  "item:Shotga Cola": {
+    "sell_price": "21"
+  },
+  "item:Ballistic Boots": {
+    "sell_price": "30"
+  },
+  "item:Magic Sweet": {
+    "sell_price": "41"
+  },
+  "item:Disarming Personality": {},
+  "item:Mustache": {
+    "sell_price": "21"
+  },
+  "item:Lichy Trigger Finger": {
+    "sell_price": "16"
+  },
+  "item:Lich's Eye Bullets": {
+    "sell_price": "54"
+  },
+  "item:Enraging Photo": {},
+  "item:Ballot": {
+    "sell_price": "21"
+  },
+  "item:Live Ammo": {},
+  "item:Eyepatch": {
+    "sell_price": "41"
+  },
+  "item:Military Training": {},
+  "item:Ring of the Resourceful Rat": {
+    "sell_price": "30"
+  },
+  "item:Cartographer's Ring": {
+    "sell_price": "21"
+  },
+  "item:Amulet of the Pit Lord": {
+    "sell_price": "16"
+  },
+  "item:Ring of Fire Resistance": {
+    "sell_price": "21"
+  },
+  "item:Ring of Miserly Protection": {},
+  "item:Unity": {
+    "sell_price": "30"
+  },
+  "item:Ring of Chest Vampirism": {
+    "sell_price": "21"
+  },
+  "item:Cloranthy Ring": {
+    "sell_price": "21"
+  },
+  "item:Ring of Chest Friendship": {
+    "sell_price": "30"
+  },
+  "item:Ring of Mimic Friendship": {
+    "sell_price": "16"
+  },
+  "item:Ring of Triggers": {
+    "sell_price": "41"
+  },
+  "item:Ring of Ethereal Form": {
+    "sell_price": "30",
+    "recharge_time": "600 damage",
+    "duration": "10 seconds"
+  },
+  "item:Gundromeda Strain": {
+    "sell_price": "54"
+  },
+  "item:Broccoli": {
+    "sell_price": "41"
+  },
+  "item:Crutch": {
+    "sell_price": "30"
+  },
+  "item:Spice": {},
+  "item:Liquid Valkyrie": {
+    "sell_price": "41"
+  },
+  "item:Bloody Eye": {
+    "sell_price": "30"
+  },
+  "item:Gunknight Helmet": {
+    "sell_price": "41"
+  },
+  "item:Gunknight Greaves": {
+    "sell_price": "21"
+  },
+  "item:Gunknight Gauntlet": {
+    "sell_price": "21"
+  },
+  "item:Gunknight Armor": {
+    "sell_price": "30"
+  },
+  "item:Old Knight's Shield": {},
+  "item:Old Knight's Helm": {},
+  "item:Old Knight's Flask": {
+    "sell_price": "41",
+    "recharge_time": "1 second"
+  },
+  "item:Old Crest": {},
+  "item:Armor of Thorns": {
+    "sell_price": "21"
+  },
+  "item:Full Metal Jacket": {
+    "sell_price": "30"
+  },
+  "item:Ticket": {},
+  "item:Heavy Boots": {},
+  "item:Bug Boots": {
+    "sell_price": "30"
+  },
+  "item:Gunboots": {
+    "sell_price": "21"
+  },
+  "item:Springheel Boots": {
+    "sell_price": "16"
+  },
+  "item:Rat Boots": {
+    "sell_price": "21"
+  },
+  "item:Coin Crown": {
+    "sell_price": "21"
+  },
+  "item:Oiled Cylinder": {
+    "sell_price": "21"
+  },
+  "item:Ice Cube": {
+    "sell_price": "30"
+  },
+  "item:Rolling Eye": {
+    "sell_price": "21"
+  },
+  "item:Cigarettes": {
+    "sell_price": "16",
+    "recharge_time": "0.25 seconds"
+  },
+  "item:Magazine Rack": {
+    "sell_price": "21",
+    "recharge_time": "450 damage",
+    "duration": "10 seconds"
+  },
+  "item:Charm Horn": {
+    "sell_price": "30",
+    "recharge_time": "200 damage"
+  },
+  "item:Cog of Battle": {
+    "sell_price": "21"
+  },
+  "item:Metronome": {
+    "sell_price": "30"
+  },
+  "item:Honeycomb": {
+    "sell_price": "21"
+  },
+  "item:Map": {
+    "sell_price": "16"
+  },
+  "item:Gungeon Blueprint": {
+    "sell_price": "54"
+  },
+  "item:Sense of Direction": {
+    "sell_price": "16",
+    "recharge_time": "3 seconds"
+  },
+  "item:Duct Tape": {
+    "sell_price": "41",
+    "recharge_time": "Single Use"
+  },
+  "item:Gungeon Pepper": {
+    "sell_price": "21"
+  },
+  "item:Antibody": {
+    "sell_price": "30"
+  },
+  "item:Resourceful Sack": {
+    "sell_price": "41",
+    "recharge_time": "3 seconds"
+  },
+  "item:Pink Guon Stone": {
+    "sell_price": "30"
+  },
+  "item:White Guon Stone": {
+    "sell_price": "30"
+  },
+  "item:Orange Guon Stone": {
+    "sell_price": "41"
+  },
+  "item:Clear Guon Stone": {
+    "sell_price": "16"
+  },
+  "item:Green Guon Stone": {
+    "sell_price": "41"
+  },
+  "item:Red Guon Stone": {
+    "sell_price": "30"
+  },
+  "item:Blue Guon Stone": {
+    "sell_price": "30"
+  },
+  "item:Glass Guon Stone": {
+    "sell_price": "5"
+  },
+  "item:Iron Coin": {
+    "sell_price": "21",
+    "recharge_time": "3 Uses"
+  },
+  "item:Super Hot Watch": {
+    "sell_price": "54"
+  },
+  "item:Drum Clip": {
+    "sell_price": "30"
+  },
+  "item:Holey Grail": {
+    "sell_price": "16"
+  },
+  "item:Blood Brooch": {
+    "sell_price": "41"
+  },
+  "item:Backup Gun": {
+    "sell_price": "30"
+  },
+  "item:Sunglasses": {
+    "sell_price": "21"
+  },
+  "item:Mimic Tooth Necklace": {
+    "sell_price": "41"
+  },
+  "item:Escape Rope": {
+    "sell_price": "16",
+    "recharge_time": "1000 damage"
+  },
+  "item:Jetpack": {
+    "sell_price": "21",
+    "recharge_time": "Toggled"
+  },
+  "item:Wax Wings": {
+    "sell_price": "30"
+  },
+  "item:Cat Bullet King Throne": {
+    "sell_price": "30"
+  },
+  "item:Blast Helmet": {
+    "sell_price": "16"
+  },
+  "item:Lament Configurum": {
+    "sell_price": "41",
+    "recharge_time": "666 damage"
+  },
+  "item:Monster Blood": {
+    "sell_price": "21"
+  },
+  "item:Nanomachines": {
+    "sell_price": "30"
+  },
+  "item:Seven-Leaf Clover": {
+    "sell_price": "54"
+  },
+  "item:Number 2": {},
+  "item:Gold Ammolet": {
+    "sell_price": "30"
+  },
+  "item:Chaos Ammolet": {
+    "sell_price": "41"
+  },
+  "item:Lodestone Ammolet": {
+    "sell_price": "16"
+  },
+  "item:Uranium Ammolet": {
+    "sell_price": "30"
+  },
+  "item:Copper Ammolet": {
+    "sell_price": "30"
+  },
+  "item:Frost Ammolet": {
+    "sell_price": "30"
+  },
+  "item:Table Tech Sight": {
+    "sell_price": "16"
+  },
+  "item:Table Tech Money": {
+    "sell_price": "23"
+  },
+  "item:Table Tech Rocket": {
+    "sell_price": "21"
+  },
+  "item:Table Tech Shotgun": {
+    "sell_price": "16"
+  },
+  "item:Table Tech Heat": {
+    "sell_price": "16"
+  },
+  "item:Table Tech Rage": {
+    "sell_price": "16"
+  },
+  "item:Table Tech Blanks": {
+    "sell_price": "21"
+  },
+  "item:Table Tech Stun": {
+    "sell_price": "21"
+  },
+  "item:Heart Holster": {
+    "sell_price": "30"
+  },
+  "item:Heart Lunchbox": {
+    "sell_price": "30"
+  },
+  "item:Heart Locket": {
+    "sell_price": "30"
+  },
+  "item:Heart Bottle": {
+    "sell_price": "30"
+  },
+  "item:Heart Purse": {
+    "sell_price": "30"
+  },
+  "item:Ruby Bracelet": {
+    "sell_price": "16"
+  },
+  "item:Sixth Chamber": {
+    "sell_price": "41"
+  },
+  "item:Busted Television": {
+    "recharge_time": "None"
+  },
+  "item:Coolant Leak": {
+    "recharge_time": "300 damage"
+  },
+  "item:Heart of Ice": {
+    "sell_price": "41"
+  },
+  "item:Ancient Hero's Bandana": {
+    "sell_price": "54"
+  },
+  "item:Bloodied Scarf": {
+    "sell_price": "30"
+  },
+  "item:Muscle Relaxant": {
+    "sell_price": "30"
+  },
+  "item:Hip Holster": {
+    "sell_price": "30"
+  },
+  "item:Clone": {
+    "sell_price": "54"
+  },
+  "item:Sponge": {},
+  "item:Gas Mask": {
+    "sell_price": "16"
+  },
+  "item:Hazmat Suit": {
+    "sell_price": "30"
+  },
+  "item:Book of Chest Anatomy": {
+    "sell_price": "21"
+  },
+  "item:Gun Soul": {
+    "sell_price": "54"
+  },
+  "item:Shelleton Key": {
+    "sell_price": "54"
+  },
+  "item:Brick of Cash": {
+    "sell_price": "30"
+  },
+  "item:Battle Standard": {
+    "sell_price": "16"
+  },
+  "item:Wingman": {
+    "sell_price": "41"
+  },
+  "item:Wolf": {
+    "sell_price": "30"
+  },
+  "item:Dog": {
+    "sell_price": "16"
+  },
+  "item:Owl": {
+    "sell_price": "54"
+  },
+  "item:Super Space Turtle": {},
+  "item:Junk": {
+    "sell_price": "3"
+  },
+  "item:Gold Junk": {
+    "sell_price": "3"
+  },
+  "item:Lies": {},
+  "item:Ser Junkan 1": {},
+  "item:R2G2": {
+    "sell_price": "54"
+  },
+  "item:Baby Good Shelleton": {
+    "sell_price": "54"
+  },
+  "item:Badge": {
+    "sell_price": "41"
+  },
+  "item:Chicken Flute": {
+    "sell_price": "30"
+  },
+  "item:Space Friend": {
+    "sell_price": "30"
+  },
+  "item:Pig": {
+    "sell_price": "41"
+  },
+  "item:Turkey": {
+    "sell_price": "21"
+  },
+  "item:Turtle Problem": {
+    "sell_price": "21"
+  },
+  "item:Sprun": {
+    "sell_price": "41"
+  },
+  "item:Baby Good Mimic": {
+    "sell_price": "30"
+  },
+  "item:Blank Companion's Ring": {
+    "sell_price": "41"
+  },
+  "item:Briefcase of Cash": {
+    "sell_price": "41"
+  },
+  "item:Galactic Medal of Valor": {},
+  "item:Bullet Idol": {
+    "sell_price": "30"
+  },
+  "item:Riddle of Lead": {
+    "sell_price": "54"
+  },
+  "item:Bracket Key": {
+    "sell_price": "54",
+    "recharge_time": "325 damage"
+  },
+  "item:Elder Blank": {
+    "sell_price": "30",
+    "recharge_time": "300 damage"
+  },
+  "item:Teleporter Prototype": {
+    "sell_price": "30",
+    "recharge_time": "450 damage"
+  },
+  "item:Yellow Chamber": {
+    "sell_price": "54"
+  },
+  "item:Infuriating Note": {},
+  "gun:Rusty Sidearm": {},
+  "gun:Marine Sidearm": {},
+  "gun:Rogue Special": {},
+  "gun:Budget Revolver": {},
+  "gun:Dart Gun": {},
+  "gun:Robot's Right Hand": {},
+  "gun:Slinger": {},
+  "gun:Blasphemy": {
+    "sell_price": "30"
+  },
+  "gun:Casey": {
+    "sell_price": "16"
+  },
+  "gun:Pea Shooter": {
+    "sell_price": "16"
+  },
+  "gun:38 Special": {
+    "sell_price": "16"
+  },
+  "gun:Derringer": {
+    "sell_price": "16"
+  },
+  "gun:Trank Gun": {
+    "sell_price": "21"
+  },
+  "gun:Unfinished Gun": {
+    "sell_price": "16"
+  },
+  "gun:Elimentaler": {
+    "sell_price": "54"
+  },
+  "gun:Bullet": {
+    "sell_price": "21"
+  },
+  "gun:Shell": {
+    "sell_price": "30"
+  },
+  "gun:Hyper Light Blaster": {
+    "sell_price": "30"
+  },
+  "gun:Boxing Glove": {
+    "sell_price": "21"
+  },
+  "gun:Makarov": {
+    "sell_price": "16"
+  },
+  "gun:M1911": {
+    "sell_price": "21"
+  },
+  "gun:Magnum": {
+    "sell_price": "30"
+  },
+  "gun:Colt 1851": {
+    "sell_price": "21"
+  },
+  "gun:SAA": {
+    "sell_price": "30"
+  },
+  "gun:Cold 45": {
+    "sell_price": "30"
+  },
+  "gun:Polaris": {
+    "sell_price": "30"
+  },
+  "gun:Jolter": {
+    "sell_price": "30"
+  },
+  "gun:Dungeon Eagle": {
+    "sell_price": "21"
+  },
+  "gun:Grey Mauser": {
+    "sell_price": "30"
+  },
+  "gun:Vorpal Gun": {
+    "sell_price": "30"
+  },
+  "gun:High Kaliber": {
+    "sell_price": "41"
+  },
+  "gun:Shellegun": {
+    "sell_price": "30"
+  },
+  "gun:Dueling Pistol": {
+    "sell_price": "16"
+  },
+  "gun:AU Gun": {
+    "sell_price": "54"
+  },
+  "gun:Big Iron": {
+    "sell_price": "30"
+  },
+  "gun:Composite Gun": {
+    "sell_price": "54"
+  },
+  "gun:Flare Gun": {
+    "sell_price": "16"
+  },
+  "gun:Smiley's Revolver": {
+    "sell_price": "30"
+  },
+  "gun:Shades's Revolver": {
+    "sell_price": "21"
+  },
+  "gun:Knight's Gun": {
+    "sell_price": "41"
+  },
+  "gun:GuNNER": {
+    "sell_price": "30"
+  },
+  "gun:Regular Shotgun": {
+    "sell_price": "16"
+  },
+  "gun:Big Shotgun": {
+    "sell_price": "41"
+  },
+  "gun:Old Goldie": {
+    "sell_price": "41"
+  },
+  "gun:Sawed-Off": {
+    "sell_price": "16"
+  },
+  "gun:Winchester": {},
+  "gun:Rattler": {
+    "sell_price": "30"
+  },
+  "gun:Bubble Blaster": {
+    "sell_price": "21"
+  },
+  "gun:Elephant Gun": {
+    "sell_price": "21"
+  },
+  "gun:Tangler": {
+    "sell_price": "21"
+  },
+  "gun:Void Shotgun": {
+    "sell_price": "30"
+  },
+  "gun:Mass Shotgun": {
+    "sell_price": "30"
+  },
+  "gun:Shotgun Full of Hate": {
+    "sell_price": "41"
+  },
+  "gun:Shotgun Full of Love": {
+    "sell_price": "41"
+  },
+  "gun:Shotgrub": {
+    "sell_price": "21"
+  },
+  "gun:Gilded Hydra": {
+    "sell_price": "54"
+  },
+  "gun:Blunderbuss": {
+    "sell_price": "16"
+  },
+  "gun:Pulse Cannon": {
+    "sell_price": "21"
+  },
+  "gun:Siren": {
+    "sell_price": "21"
+  },
+  "gun:Zilla Shotgun": {
+    "sell_price": "41"
+  },
+  "gun:Ice Breaker": {
+    "sell_price": "30"
+  },
+  "gun:The Membrane": {
+    "sell_price": "21"
+  },
+  "gun:Huntsman": {
+    "sell_price": "21"
+  },
+  "gun:Blooper": {
+    "sell_price": "30"
+  },
+  "gun:JK-47": {
+    "sell_price": "21"
+  },
+  "gun:Bow": {
+    "sell_price": "21"
+  },
+  "gun:Charmed Bow": {
+    "sell_price": "30"
+  },
+  "gun:Crossbow": {
+    "sell_price": "16"
+  },
+  "gun:Sticky Crossbow": {
+    "sell_price": "21"
+  },
+  "gun:Shotbow": {
+    "sell_price": "30"
+  },
+  "gun:Triple Crossbow": {
+    "sell_price": "21"
+  },
+  "gun:Crescent Crossbow": {
+    "sell_price": "41"
+  },
+  "gun:Gunbow": {
+    "sell_price": "41"
+  },
+  "gun:Klobbe": {
+    "sell_price": "16"
+  },
+  "gun:Machine Pistol": {
+    "sell_price": "16"
+  },
+  "gun:Thompson Sub-Machinegun": {
+    "sell_price": "21"
+  },
+  "gun:AK-47": {
+    "sell_price": "30"
+  },
+  "gun:Strafe Gun": {
+    "sell_price": "54"
+  },
+  "gun:AKEY-47": {
+    "sell_price": "54"
+  },
+  "gun:Stone Dome": {
+    "sell_price": "30"
+  },
+  "gun:Crown of Guns": {
+    "sell_price": "21"
+  },
+  "gun:M16": {
+    "sell_price": "41"
+  },
+  "gun:Combined Rifle": {
+    "sell_price": "30"
+  },
+  "gun:Zorgun": {
+    "sell_price": "41"
+  },
+  "gun:The Fat Line": {
+    "sell_price": "30"
+  },
+  "gun:Mr. Accretion Jr.": {
+    "sell_price": "30"
+  },
+  "gun:VertebraeK-47": {
+    "sell_price": "30"
+  },
+  "gun:Balloon Gun": {
+    "sell_price": "21"
+  },
+  "gun:MAC10": {
+    "sell_price": "21"
+  },
+  "gun:Triple Gun": {
+    "sell_price": "30"
+  },
+  "gun:Heck Blaster": {
+    "sell_price": "41"
+  },
+  "gun:Patriot": {
+    "sell_price": "54"
+  },
+  "gun:AC-15": {
+    "sell_price": "30"
+  },
+  "gun:Vulcan Cannon": {
+    "sell_price": "54"
+  },
+  "gun:Plague Pistol": {
+    "sell_price": "16"
+  },
+  "gun:Gungine": {
+    "sell_price": "54"
+  },
+  "gun:The Predator": {
+    "sell_price": "30"
+  },
+  "gun:Dragunfire": {
+    "sell_price": "41"
+  },
+  "gun:Sniper Rifle": {
+    "sell_price": "21"
+  },
+  "gun:A.W.P.": {
+    "sell_price": "41"
+  },
+  "gun:M1": {
+    "sell_price": "21"
+  },
+  "gun:Winchester Rifle": {
+    "sell_price": "16"
+  },
+  "gun:Corsair": {
+    "sell_price": "21"
+  },
+  "gun:Railgun": {
+    "sell_price": "54"
+  },
+  "gun:Prototype Railgun": {
+    "sell_price": "41"
+  },
+  "gun:Void Marshal": {
+    "sell_price": "30"
+  },
+  "gun:Deck4rd": {
+    "sell_price": "41"
+  },
+  "gun:The Judge": {
+    "sell_price": "30"
+  },
+  "gun:Mourning Star": {
+    "sell_price": "54"
+  },
+  "gun:Alien Sidearm": {
+    "sell_price": "16"
+  },
+  "gun:RUBE-ADYNE Prototype": {
+    "sell_price": "30"
+  },
+  "gun:RUBE-ADYNE MK.II": {
+    "sell_price": "41"
+  },
+  "gun:Rubenstein's Monster": {
+    "sell_price": "3"
+  },
+  "gun:Chamber Gun": {
+    "sell_price": "21"
+  },
+  "gun:Gunderfury": {
+    "sell_price": "41"
+  },
+  "gun:Mine Cutter": {
+    "sell_price": "30"
+  },
+  "gun:Void Core Assault Rifle": {
+    "sell_price": "30"
+  },
+  "gun:Flash Ray": {
+    "sell_price": "16"
+  },
+  "gun:Wind Up Gun": {
+    "sell_price": "16"
+  },
+  "gun:H4mmer": {
+    "sell_price": "30"
+  },
+  "gun:Snakemaker": {
+    "sell_price": "41"
+  },
+  "gun:Turbo-Gun": {
+    "sell_price": "21"
+  },
+  "gun:Hegemony Carbine": {
+    "sell_price": "21"
+  },
+  "gun:Screecher": {
+    "sell_price": "21"
+  },
+  "gun:Laser Lotus": {
+    "sell_price": "41"
+  },
+  "gun:Hegemony Rifle": {
+    "sell_price": "30"
+  },
+  "gun:Fightsabre": {
+    "sell_price": "54"
+  },
+  "gun:Helix": {
+    "sell_price": "21"
+  },
+  "gun:Laser Rifle": {
+    "sell_price": "21"
+  },
+  "gun:Crestfaller": {
+    "sell_price": "21"
+  },
+  "gun:Rad Gun": {
+    "sell_price": "30"
+  },
+  "gun:Thunderclap": {
+    "sell_price": "41"
+  },
+  "gun:Charge Shot": {
+    "sell_price": "30"
+  },
+  "gun:Dark Marker": {
+    "sell_price": "54"
+  },
+  "gun:Particulator": {
+    "sell_price": "54"
+  },
+  "gun:The Emperor": {
+    "sell_price": "41"
+  },
+  "gun:RPG": {
+    "sell_price": "30"
+  },
+  "gun:Grenade Launcher": {
+    "sell_price": "30"
+  },
+  "gun:Stinger": {
+    "sell_price": "30"
+  },
+  "gun:The Exotic": {
+    "sell_price": "41"
+  },
+  "gun:Com4nd0": {
+    "sell_price": "30"
+  },
+  "gun:RC Rocket": {
+    "sell_price": "41"
+  },
+  "gun:Yari Launcher": {
+    "sell_price": "54"
+  },
+  "gun:Lil' Bomber": {
+    "sell_price": "16"
+  },
+  "gun:Grasschopper": {
+    "sell_price": "41"
+  },
+  "gun:Void Core Cannon": {
+    "sell_price": "30"
+  },
+  "gun:Bundle of Wands": {
+    "sell_price": "21"
+  },
+  "gun:Staff of Firepower": {
+    "sell_price": "41"
+  },
+  "gun:Witch Pistol": {
+    "sell_price": "21"
+  },
+  "gun:Hexagun": {
+    "sell_price": "30"
+  },
+  "gun:Phoenix": {
+    "sell_price": "16"
+  },
+  "gun:Magic Lamp": {
+    "sell_price": "30"
+  },
+  "gun:Teapot": {
+    "sell_price": "21"
+  },
+  "gun:Gunslinger's Ashes": {
+    "sell_price": "21"
+  },
+  "gun:Luxin Cannon": {
+    "sell_price": "21"
+  },
+  "gun:Gunther": {
+    "sell_price": "54"
+  },
+  "gun:Unicorn Horn": {
+    "sell_price": "41"
+  },
+  "gun:Cobalt Hammer": {
+    "sell_price": "41"
+  },
+  "gun:Frost Giant": {
+    "sell_price": "30"
+  },
+  "gun:Bullet Bore": {
+    "sell_price": "41"
+  },
+  "gun:Cat Claw": {
+    "sell_price": "41"
+  },
+  "gun:Megahand": {
+    "sell_price": "30"
+  },
+  "gun:Demon Head": {
+    "sell_price": "30"
+  },
+  "gun:Heroine": {
+    "sell_price": "30"
+  },
+  "gun:Mutation": {
+    "sell_price": "30"
+  },
+  "gun:Flame Hand": {
+    "sell_price": "30"
+  },
+  "gun:Sunlight Javelin": {
+    "sell_price": "30"
+  },
+  "gun:Machine Fist": {
+    "sell_price": "41"
+  },
+  "gun:Robot's Left Hand": {
+    "sell_price": "41"
+  },
+  "gun:Snowballer": {
+    "sell_price": "16"
+  },
+  "gun:Super Meat Gun": {
+    "sell_price": "41"
+  },
+  "gun:Anvillain": {
+    "sell_price": "21"
+  },
+  "gun:Fossilized Gun": {
+    "sell_price": "16"
+  },
+  "gun:Gamma Ray": {
+    "sell_price": "21"
+  },
+  "gun:Freeze Ray": {
+    "sell_price": "41"
+  },
+  "gun:Science Cannon": {
+    "sell_price": "30"
+  },
+  "gun:Disintegrator": {
+    "sell_price": "54"
+  },
+  "gun:Proton Backpack": {
+    "sell_price": "30"
+  },
+  "gun:Mega Douser": {
+    "sell_price": "16"
+  },
+  "gun:Plunger": {
+    "sell_price": "21"
+  },
+  "gun:Raiden Coil": {
+    "sell_price": "41"
+  },
+  "gun:Moonscraper": {
+    "sell_price": "21"
+  },
+  "gun:Barrel": {},
+  "gun:Trick Gun": {
+    "sell_price": "21"
+  },
+  "gun:Mailbox": {
+    "sell_price": "16"
+  },
+  "gun:Nail Gun": {
+    "sell_price": "16"
+  },
+  "gun:Light Gun": {
+    "sell_price": "30"
+  },
+  "gun:Dueling Laser": {
+    "sell_price": "30"
+  },
+  "gun:Wood Beam": {
+    "sell_price": "30"
+  },
+  "gun:Mahoguny": {
+    "sell_price": "21"
+  },
+  "gun:The Scrambler": {
+    "sell_price": "21"
+  },
+  "gun:Trashcannon": {
+    "sell_price": "21"
+  },
+  "gun:Glacier": {
+    "sell_price": "41"
+  },
+  "gun:Origuni": {
+    "sell_price": "21"
+  },
+  "gun:The Kiln": {
+    "sell_price": "21"
+  },
+  "gun:Skull Spitter": {
+    "sell_price": "21"
+  },
+  "gun:Buzzkill": {
+    "sell_price": "21"
+  },
+  "gun:Tear Jerker": {
+    "sell_price": "21"
+  },
+  "gun:Starpew": {
+    "sell_price": "41"
+  },
+  "gun:Eye of the Beholster": {
+    "sell_price": "30"
+  },
+  "gun:Molotov Launcher": {
+    "sell_price": "21"
+  },
+  "gun:Glass Cannon": {
+    "sell_price": "21"
+  },
+  "gun:Shock Rifle": {
+    "sell_price": "30"
+  },
+  "gun:Bait Launcher": {
+    "sell_price": "21"
+  },
+  "gun:Brick Breaker": {
+    "sell_price": "21"
+  },
+  "gun:Betrayer's Shield": {
+    "sell_price": "30"
+  },
+  "gun:Lower Case r": {
+    "sell_price": "16"
+  },
+  "gun:Excaliber": {
+    "sell_price": "30"
+  },
+  "gun:Face Melter": {
+    "sell_price": "30"
+  },
+  "gun:Really Special Lute": {
+    "sell_price": "21"
+  },
+  "gun:Trident": {
+    "sell_price": "41"
+  },
+  "gun:Kruller Glaive": {
+    "sell_price": "30"
+  },
+  "gun:Abyssal Tentacle": {
+    "sell_price": "41"
+  },
+  "gun:Quad Laser": {
+    "sell_price": "21"
+  },
+  "gun:Tetrominator": {
+    "sell_price": "30"
+  },
+  "gun:Pitchfork": {
+    "sell_price": "21"
+  },
+  "gun:Evolver": {
+    "sell_price": "21"
+  },
+  "gun:Gungeon Ant": {
+    "sell_price": "21"
+  },
+  "gun:Life Orb": {
+    "sell_price": "41"
+  },
+  "gun:Alien Engine": {
+    "sell_price": "30"
+  },
+  "gun:Microtransaction Gun": {
+    "sell_price": "41"
+  },
+  "gun:Poxcannon": {
+    "sell_price": "21"
+  },
+  "gun:T-Shirt Cannon": {
+    "sell_price": "16"
+  },
+  "gun:Banana": {
+    "sell_price": "21"
+  },
+  "gun:Bee Hive": {
+    "sell_price": "30"
+  },
+  "gun:Silencer": {
+    "sell_price": "21"
+  },
+  "gun:Camera": {
+    "sell_price": "21"
+  },
+  "gun:Directional Pad": {
+    "sell_price": "30"
+  },
+  "gun:3rd Party Controller": {
+    "sell_price": "41"
+  },
+  "gun:Gunzheng": {
+    "sell_price": "30"
+  },
+  "gun:Sling": {
+    "sell_price": "16"
+  },
+  "gun:Cactus": {
+    "sell_price": "21"
+  },
+  "gun:Black Hole Gun": {
+    "sell_price": "41"
+  },
+  "gun:BSG": {
+    "sell_price": "54"
+  },
+  "gun:Compressed Air Tank": {
+    "sell_price": "41"
+  },
+  "gun:Serious Cannon": {
+    "sell_price": "41"
+  },
+  "gun:Makeshift Cannon": {
+    "sell_price": "54"
+  },
+  "gun:Devolver": {
+    "sell_price": "21"
+  },
+  "gun:Finished Gun": {
+    "sell_price": "54"
+  }
+}

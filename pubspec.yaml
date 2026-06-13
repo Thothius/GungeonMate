@@ -1,0 +1,181 @@
+name: gungeon_mate
+description: "Gungeon Mate - Enter the Gungeon companion app for tracking runs, items, guns, and synergies"
+publish_to: 'none'
+version: 1.8.4+29
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  
+  # State management
+  provider: ^6.1.1
+  
+  # Local storage
+  shared_preferences: ^2.2.2
+  
+  # Utilities
+  intl: ^0.19.0
+  
+  # Fonts
+  google_fonts: ^6.2.1
+
+  # Multiplayer transport (Google Nearby Connections = BT + WiFi Direct).
+  # Android-only; requires Google Play Services, which is present on
+  # every non-rooted Android install this app targets.
+  nearby_connections: ^4.2.0
+
+  # Runtime permission prompts for BT/location/nearby-wifi needed by
+  # Nearby Connections on Android 12+.
+  permission_handler: ^11.3.1
+
+  # URL launcher for opening wiki pages
+  url_launcher: ^6.3.1
+
+  # Webview for in-app wiki
+  webview_flutter: ^4.10.0
+
+  # Declarative animations
+  flutter_animate: ^4.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^5.0.0
+
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "#1A1A1A"
+  adaptive_icon_foreground: "assets/images/app_icon.png"
+  min_sdk_android: 21
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # Assets
+  assets:
+    - assets/data/guns.json
+    - assets/data/items.json
+    - assets/data/synergies.json
+    - assets/data/shrines.json
+    - assets/data/gungeoneers.json
+    - assets/data/back_refs.json
+    - assets/data/changelog.json
+    - assets/images/guns/
+    - assets/images/items/
+    - assets/images/shrines/
+    - assets/images/synergies/
+    - assets/images/gungeoneers/
+    - assets/images/junkan/
+    - assets/animations/
+    - assets/animations/gun_types/
+    - assets/animations/dog/
+    - assets/animations/bosses/
+    - assets/animations/trippy/
+
+  fonts:
+    - family: EnterTheGungeonBig
+      fonts:
+        - asset: assets/fonts/EnterTheGungeonBig.ttf
+    - family: ArcadeClassic
+      fonts:
+        - asset: assets/fonts/ARCADECLASSIC.TTF
+    - family: ShakyHandComic
+      fonts:
+        - asset: assets/fonts/Shaky Hand Some Comic.otf
+    - family: FeelingVintage
+      fonts:
+        - asset: assets/fonts/Feeling Vintage.ttf
+    - family: HelloDenver
+      fonts:
+        - asset: assets/fonts/hellodenverdisplaybold_v1.6.ttf
+    - family: LemonadeStand
+      fonts:
+        - asset: assets/fonts/Lemonade Stand D.otf
+    - family: LifeSavers
+      fonts:
+        - asset: assets/fonts/LifeSavers-Bold.ttf
+    - family: ParryHotter
+      fonts:
+        - asset: assets/fonts/ParryHotter.ttf
+    - family: Prototype
+      fonts:
+        - asset: assets/fonts/Prototype.ttf
+    - family: StoriesFantasy
+      fonts:
+        - asset: assets/fonts/Stories Fantasy.ttf
+    - family: Beachday
+      fonts:
+        - asset: assets/fonts/beachday.ttf
+    - family: BlastDragon
+      fonts:
+        - asset: assets/fonts/Blast Dragon D.otf
+    - family: ChonkyCat
+      fonts:
+        - asset: assets/fonts/Chonky Cat.ttf
+    - family: DragonFire
+      fonts:
+        - asset: assets/fonts/Dragon Fire.ttf
+    - family: GamePaused
+      fonts:
+        - asset: assets/fonts/Game Paused DEMO.otf
+    - family: MorrisRoman
+      fonts:
+        - asset: assets/fonts/MorrisRoman-Black.ttf
+    - family: PixelGame
+      fonts:
+        - asset: assets/fonts/Pixel Game.otf
+    - family: Solander
+      fonts:
+        - asset: assets/fonts/solander demo.ttf
+    - family: StarlightRune
+      fonts:
+        - asset: assets/fonts/StarlightRune-Personal Use.ttf
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

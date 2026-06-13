@@ -1,0 +1,3771 @@
+{
+  "item_to_referrers": {
+    "Escape Rope": [
+      "Busted Television",
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V",
+      "Mega Douser",
+      "Teleporter Prototype",
+      "Utility Belt"
+    ],
+    "Teleporter Prototype": [
+      "Chest Teleporter",
+      "Escape Rope",
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V"
+    ],
+    "Super Hot Watch": [
+      "Blasphemy",
+      "Clone",
+      "Magic Lamp",
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V",
+      "Rad Gun",
+      "Shield of the Maiden",
+      "Tear Jerker",
+      "Turbo-Gun"
+    ],
+    "Clone": [
+      "Busted Television",
+      "Chest Teleporter",
+      "Gun Soul",
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V",
+      "Pig",
+      "Ring of the Resourceful Rat",
+      "Spice",
+      "Super Hot Watch"
+    ],
+    "Lil' Bomber": [
+      "Coin Crown",
+      "Duct Tape",
+      "Gilded Bullets",
+      "Ice Bomb",
+      "Loot Bag",
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V",
+      "Rolling Eye"
+    ],
+    "Grappling Hook": [
+      "Baby Good Mimic",
+      "Blank Companion's Ring",
+      "Chicken Flute",
+      "Prime Primer",
+      "Sprun",
+      "Turtle Problem"
+    ],
+    "Directional Pad": [
+      "Backup Gun",
+      "Prime Primer",
+      "Remote Bullets"
+    ],
+    "Spice": [
+      "Clone",
+      "Knight's Gun",
+      "Prime Primer",
+      "Supply Drop"
+    ],
+    "Hidden Compartment": [
+      "Arcane Gunpowder"
+    ],
+    "Backpack": [
+      "Arcane Gunpowder",
+      "GuNNER",
+      "Shadow Clone"
+    ],
+    "Utility Belt": [
+      "Arcane Gunpowder",
+      "Shadow Clone"
+    ],
+    "Homing Bullets": [
+      "Helix Bullets",
+      "Ice Bomb",
+      "Katana Bullets",
+      "Orbital Bullets",
+      "Roll Bomb",
+      "Scattershot",
+      "The Scrambler"
+    ],
+    "Crutch": [
+      "Helix Bullets",
+      "Homing Bullets",
+      "Ice Bomb",
+      "Orbital Bullets",
+      "Roll Bomb"
+    ],
+    "Orbital Bullets": [
+      "Backup Gun",
+      "Bubble Blaster",
+      "Casey",
+      "Chamber Gun",
+      "Eye of the Beholster",
+      "Finished Gun",
+      "Gamma Ray",
+      "Helix Bullets",
+      "High Kaliber",
+      "Ice Bomb",
+      "Makeshift Cannon",
+      "Roll Bomb",
+      "The Fat Line"
+    ],
+    "Bomb": [
+      "Ice Bomb"
+    ],
+    "Camera": [
+      "Chaff Grenade",
+      "Flash Ray",
+      "Magazine Rack",
+      "Megahand",
+      "Orbital Bullets"
+    ],
+    "Bullet Bore": [
+      "Cluster Mine",
+      "Explosive Rounds",
+      "Helix Bullets",
+      "Megahand",
+      "Zorgun"
+    ],
+    "Mine Cutter": [
+      "Cluster Mine",
+      "Mass Shotgun",
+      "Melted Rock"
+    ],
+    "Explosive Rounds": [
+      "Air Strike",
+      "Alien Engine",
+      "Blank Bullets",
+      "Devolver Rounds",
+      "Flak Bullets",
+      "Hungry Bullets",
+      "Irradiated Lead",
+      "Katana Bullets",
+      "Shadow Bullets",
+      "Shock Rounds",
+      "Vorpal Bullets"
+    ],
+    "Gunbow": [
+      "Air Strike",
+      "Explosive Rounds"
+    ],
+    "Mega Douser": [
+      "Bouncy Bullets",
+      "Coolant Leak",
+      "Megahand",
+      "Napalm Strike",
+      "Orbital Bullets"
+    ],
+    "Ice Cube": [
+      "Big Boy",
+      "Dueling Laser",
+      "Heart of Ice",
+      "Vorpal Gun"
+    ],
+    "Battery Bullets": [
+      "Bubble Blaster",
+      "Chicken Flute",
+      "Compressed Air Tank",
+      "Glacier",
+      "Heck Blaster",
+      "Mega Douser",
+      "Roll Bomb",
+      "Shock Rifle",
+      "Siren",
+      "Snowballer",
+      "Thunderclap"
+    ],
+    "Blank Bullets": [
+      "Alien Engine",
+      "Chaos Ammolet",
+      "Devolver Rounds",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Hungry Bullets",
+      "Katana Bullets",
+      "Roll Bomb",
+      "Shadow Bullets",
+      "Shock Rounds",
+      "Uranium Ammolet",
+      "Vorpal Bullets"
+    ],
+    "Fat Bullets": [
+      "Heroine",
+      "High Kaliber",
+      "Roll Bomb",
+      "Stout Bullets",
+      "Table Tech Rocket",
+      "Table Tech Shotgun"
+    ],
+    "Stout Bullets": [
+      "Casey",
+      "Hip Holster",
+      "Roll Bomb",
+      "Snowballets",
+      "Table Tech Rocket",
+      "Table Tech Shotgun"
+    ],
+    "Heavy Bullets": [
+      "Crutch",
+      "Devolver",
+      "Flash Ray",
+      "Hip Holster",
+      "Roll Bomb",
+      "Table Tech Rocket"
+    ],
+    "Chaos Bullets": [
+      "Dark Marker",
+      "Roll Bomb"
+    ],
+    "Flak Bullets": [
+      "Alien Engine",
+      "Blank Bullets",
+      "Boxing Glove",
+      "Casey",
+      "Chamber Gun",
+      "Devolver Rounds",
+      "Explosive Rounds",
+      "Hungry Bullets",
+      "Hyper Light Blaster",
+      "Katana Bullets",
+      "Mass Shotgun",
+      "Molotov Launcher",
+      "Roll Bomb",
+      "Shadow Bullets",
+      "Shock Rounds",
+      "The Membrane",
+      "The Scrambler",
+      "Vorpal Bullets"
+    ],
+    "Hungry Bullets": [
+      "Blank Bullets",
+      "Devolver Rounds",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Katana Bullets",
+      "Polaris",
+      "Roll Bomb",
+      "Shadow Bullets",
+      "Shock Rounds",
+      "Vorpal Bullets"
+    ],
+    "Hot Lead": [
+      "Copper Ammolet",
+      "Explosive Rounds",
+      "Gunboots",
+      "Megahand",
+      "Roll Bomb",
+      "The Scrambler"
+    ],
+    "Irradiated Lead": [
+      "Explosive Rounds",
+      "Gunboots",
+      "Roll Bomb",
+      "Super Space Turtle"
+    ],
+    "Frost Bullets": [
+      "Battery Bullets",
+      "Explosive Rounds",
+      "Frost Ammolet",
+      "Glacier",
+      "Gunboots",
+      "Heart of Ice",
+      "Roll Bomb",
+      "The Scrambler"
+    ],
+    "Scattershot": [
+      "Alien Engine",
+      "Black Hole Gun",
+      "Bubble Blaster",
+      "Bumbullets",
+      "Cobalt Hammer",
+      "Composite Gun",
+      "Crescent Crossbow",
+      "Duct Tape",
+      "Helix Bullets",
+      "High Kaliber",
+      "Hyper Light Blaster",
+      "Laser Rifle",
+      "Magic Lamp",
+      "Mine Cutter",
+      "Mourning Star",
+      "Pig",
+      "Roll Bomb",
+      "Tetrominator",
+      "The Membrane",
+      "Turkey",
+      "Vorpal Gun"
+    ],
+    "Table Tech Sight": [
+      "Bubble Blaster",
+      "Bumbullets",
+      "Composite Gun",
+      "Crescent Crossbow",
+      "Helix Bullets",
+      "High Kaliber",
+      "Hyper Light Blaster",
+      "Magic Lamp",
+      "Origuni",
+      "Roll Bomb"
+    ],
+    "Helix Bullets": [
+      "Balloon Gun",
+      "Bubble Blaster",
+      "Bullet Bore",
+      "Bumbullets",
+      "Composite Gun",
+      "Crescent Crossbow",
+      "Crutch",
+      "Dark Marker",
+      "Frost Giant",
+      "Helix",
+      "High Kaliber",
+      "Homing Bullets",
+      "Hyper Light Blaster",
+      "Kruller Glaive",
+      "Magic Lamp",
+      "Mourning Star",
+      "Orbital Bullets",
+      "Origuni",
+      "Polaris",
+      "RC Rocket",
+      "Remote Bullets",
+      "Roll Bomb",
+      "Scattershot",
+      "Shadow Bullets",
+      "Space Friend",
+      "Super Space Turtle",
+      "Tetrominator",
+      "The Predator",
+      "Turkey",
+      "Unicorn Horn"
+    ],
+    "Double Vision": [
+      "Backup Gun",
+      "Bubble Blaster",
+      "Bumbullets",
+      "Composite Gun",
+      "Crescent Crossbow",
+      "Crestfaller",
+      "Helix Bullets",
+      "High Kaliber",
+      "Hyper Light Blaster",
+      "Magic Lamp",
+      "Roll Bomb",
+      "Starpew",
+      "Turkey"
+    ],
+    "Remote Bullets": [
+      "Cactus",
+      "Cat Bullet King Throne",
+      "Crown of Guns",
+      "Dark Marker",
+      "Face Melter",
+      "Gunboots",
+      "Helix",
+      "High Kaliber",
+      "RC Rocket",
+      "Ring of Triggers",
+      "Roll Bomb",
+      "Scattershot",
+      "Shadow Bullets",
+      "Snowballets",
+      "Super Hot Watch",
+      "The Fat Line",
+      "The Scrambler",
+      "Wingman"
+    ],
+    "Springheel Boots": [
+      "Ballistic Boots",
+      "Gunboots",
+      "Roll Bomb"
+    ],
+    "Bloodied Scarf": [
+      "Ancient Hero's Bandana",
+      "Daruma",
+      "Number 2",
+      "Resourceful Sack",
+      "Roll Bomb",
+      "Rolling Eye",
+      "Snowballets",
+      "Springheel Boots",
+      "Teleporter Prototype",
+      "Thunderclap"
+    ],
+    "Ring of Ethereal Form": [
+      "Cigarettes",
+      "Fossilized Gun",
+      "Gungine",
+      "High Kaliber",
+      "Plunger",
+      "Roll Bomb"
+    ],
+    "Grenade Launcher": [
+      "Metronome",
+      "Zorgun",
+      "iBomb Companion App"
+    ],
+    "Blank Companion's Ring": [
+      "Battle Standard",
+      "Busted Television",
+      "Chaos Ammolet",
+      "Sense of Direction",
+      "iBomb Companion App"
+    ],
+    "Ancient Hero's Bandana": [
+      "Ammo Synthesizer",
+      "Bloodied Scarf",
+      "Number 2"
+    ],
+    "Makeshift Cannon": [
+      "Ammo Synthesizer",
+      "Chance Bullets",
+      "Holey Grail",
+      "Orbital Bullets",
+      "Relodestone",
+      "Ring of Triggers",
+      "Turkey",
+      "Unity"
+    ],
+    "Heart Synthesizer": [
+      "Armor Synthesizer"
+    ],
+    "Ammo Synthesizer": [
+      "Armor Synthesizer",
+      "Melted Rock"
+    ],
+    "Boomerang": [
+      "Megahand",
+      "Utility Belt"
+    ],
+    "M1": [
+      "Backpack",
+      "Scope",
+      "Utility Belt"
+    ],
+    "Hegemony Carbine": [
+      "Ammo Belt",
+      "Ancient Hero's Bandana",
+      "Fat Bullets",
+      "Galactic Medal of Valor",
+      "Hidden Compartment",
+      "Ruby Bracelet",
+      "Utility Belt"
+    ],
+    "Robot's Left Hand": [
+      "Ammo Belt",
+      "Ancient Hero's Bandana",
+      "Fat Bullets",
+      "Hidden Compartment",
+      "Mutation",
+      "Utility Belt"
+    ],
+    "Sticky Crossbow": [
+      "Ammo Belt",
+      "Ancient Hero's Bandana",
+      "Fat Bullets",
+      "Hidden Compartment",
+      "Triple Crossbow",
+      "Utility Belt"
+    ],
+    "Gunboots": [
+      "Ballistic Boots",
+      "Macho Brace",
+      "Remote Bullets",
+      "Ring of Ethereal Form"
+    ],
+    "Roll Bomb": [
+      "Blank Bullets",
+      "Bloodied Scarf",
+      "Helix Bullets",
+      "Macho Brace",
+      "Ring of Ethereal Form",
+      "Zombie Bullets"
+    ],
+    "Cat Bullet King Throne": [
+      "3rd Party Controller",
+      "Fossilized Gun",
+      "Gungine",
+      "Honeycomb",
+      "Jetpack",
+      "M1911",
+      "Macho Brace",
+      "Plunger",
+      "Remote Bullets"
+    ],
+    "Ring of Triggers": [
+      "Abyssal Tentacle",
+      "Blasphemy",
+      "Decoy",
+      "Duct Tape",
+      "Explosive Decoy",
+      "Macho Brace",
+      "Makeshift Cannon",
+      "Quad Laser",
+      "Remote Bullets",
+      "Sense of Direction"
+    ],
+    "Makarov": [
+      "Backpack"
+    ],
+    "Jetpack": [
+      "Backpack",
+      "Blank Companion's Ring",
+      "Cat Bullet King Throne",
+      "Charge Shot",
+      "Fossilized Gun",
+      "Gungine",
+      "Plunger",
+      "Ring of Triggers",
+      "Sprun",
+      "Wax Wings"
+    ],
+    "GuNNER": [
+      "Backpack",
+      "Cigarettes",
+      "Holey Grail",
+      "Magazine Rack"
+    ],
+    "Clown Mask": [
+      "Battle Standard",
+      "Blank Bullets",
+      "Chaos Ammolet",
+      "Copper Ammolet",
+      "Drill",
+      "Frost Ammolet",
+      "Loot Bag",
+      "Ring of Miserly Protection",
+      "Uranium Ammolet"
+    ],
+    "Drill": [
+      "Battle Standard",
+      "Clown Mask",
+      "Gun Soul",
+      "Loot Bag",
+      "Ring of Miserly Protection",
+      "Teleporter Prototype",
+      "Yellow Chamber"
+    ],
+    "Coin Crown": [
+      "Loot Bag"
+    ],
+    "Heart Purse": [
+      "Loot Bag"
+    ],
+    "Green Guon Stone": [
+      "Antibody",
+      "Baby Good Mimic",
+      "Loot Bag",
+      "Tetrominator"
+    ],
+    "Loot Bag": [
+      "Battle Standard",
+      "Clown Mask",
+      "Coin Crown",
+      "Drill",
+      "Green Guon Stone",
+      "Heart Purse",
+      "Lil' Bomber",
+      "Ring of Miserly Protection"
+    ],
+    "Trusty Lockpicks": [
+      "AKEY-47",
+      "Chest Teleporter",
+      "Drill",
+      "Mimic Tooth Necklace"
+    ],
+    "A.W.P.": [
+      "Double Vision",
+      "Frost Ammolet",
+      "Frost Bullets",
+      "Heart of Ice",
+      "Scope"
+    ],
+    "Sniper Rifle": [
+      "Double Vision",
+      "Scope"
+    ],
+    "Lich's Eye Bullets": [
+      "Big Iron",
+      "Cactus",
+      "Chamber Gun",
+      "Devolver",
+      "Glass Cannon",
+      "Megahand",
+      "Scope",
+      "Void Core Assault Rifle",
+      "Void Core Cannon",
+      "Void Shotgun"
+    ],
+    "Big Iron": [
+      "Lich's Eye Bullets",
+      "Scope"
+    ],
+    "38 Special": [
+      "Badge",
+      "Lich's Eye Bullets",
+      "Scope"
+    ],
+    "Badge": [
+      "Battle Standard",
+      "Deck4rd",
+      "Lich's Eye Bullets",
+      "Scouter"
+    ],
+    "Turtle Problem": [
+      "Baby Good Mimic",
+      "Scouter",
+      "Super Space Turtle"
+    ],
+    "Thompson Sub-Machinegun": [
+      "Laser Sight",
+      "Nanomachines",
+      "Shock Rounds"
+    ],
+    "Particulator": [
+      "Laser Sight"
+    ],
+    "RPG": [
+      "Bee Hive",
+      "Crisis Stone",
+      "Duct Tape",
+      "Excaliber",
+      "Irradiated Lead",
+      "Laser Sight",
+      "Stinger",
+      "Super Space Turtle",
+      "Zorgun"
+    ],
+    "Stinger": [
+      "BSG",
+      "Bee Hive",
+      "Laser Sight",
+      "Orbital Bullets",
+      "RPG"
+    ],
+    "Zorgun": [
+      "Alien Engine",
+      "Backup Gun",
+      "Helix Bullets",
+      "Laser Sight",
+      "Orbital Bullets"
+    ],
+    "Laser Lotus": [
+      "Laser Sight",
+      "Rolling Eye",
+      "Shock Rounds"
+    ],
+    "Light Gun": [
+      "Dart Gun",
+      "Laser Sight",
+      "The Scrambler"
+    ],
+    "Machine Pistol": [
+      "Fortune's Favor",
+      "Laser Sight",
+      "Nanomachines",
+      "Bionic Leg",
+      "Shock Rounds",
+      "+1 Bullets"
+    ],
+    "Blue Guon Stone": [
+      "Baby Good Mimic",
+      "Bullet Time",
+      "Tetrominator"
+    ],
+    "Blooper": [
+      "Bullet Time"
+    ],
+    "Megahand": [
+      "AK-47",
+      "Aged Bell",
+      "Buzzkill",
+      "Camera",
+      "Casey",
+      "Hip Holster",
+      "Hot Lead",
+      "Mutation"
+    ],
+    "Trident": [
+      "Aged Bell"
+    ],
+    "Shelleton Key": [
+      "Aged Bell",
+      "Baby Good Shelleton",
+      "Heart Locket"
+    ],
+    "Decoy": [
+      "Explosive Decoy",
+      "Heart of Ice",
+      "Shadow Clone"
+    ],
+    "Chamber Gun": [
+      "Duct Tape",
+      "Kruller Glaive",
+      "Metronome",
+      "Shadow Clone",
+      "Slinger"
+    ],
+    "Monster Blood": [
+      "Explosive Decoy",
+      "Shotgrub"
+    ],
+    "Abyssal Tentacle": [
+      "Black Hole Gun",
+      "Explosive Decoy",
+      "Orbital Bullets"
+    ],
+    "Heart of Ice": [
+      "Explosive Decoy",
+      "Frost Bullets",
+      "Ice Cube",
+      "Vorpal Bullets"
+    ],
+    "Mahoguny": [
+      "Explosive Decoy",
+      "Megahand"
+    ],
+    "Face Melter": [
+      "Backup Gun",
+      "Duct Tape",
+      "Flak Bullets",
+      "Gilded Bullets",
+      "Melted Rock",
+      "Really Special Lute",
+      "Remote Bullets",
+      "Ruby Bracelet"
+    ],
+    "Crisis Stone": [
+      "Blasphemy",
+      "Cigarettes",
+      "Full Metal Jacket",
+      "Melted Rock"
+    ],
+    "Betrayer's Shield": [
+      "Blasphemy",
+      "Crisis Stone",
+      "Lies",
+      "Melted Rock"
+    ],
+    "Mimic Tooth Necklace": [
+      "Ring of Mimic Friendship",
+      "Trusty Lockpicks"
+    ],
+    "Wingman": [
+      "Alien Engine",
+      "Battle Standard",
+      "Grey Mauser",
+      "Smoke Bomb"
+    ],
+    "Hip Holster": [
+      "Blasphemy",
+      "Box",
+      "Bubble Blaster",
+      "Casey",
+      "Dueling Laser",
+      "Heart Holster",
+      "Helix Bullets",
+      "Hyper Light Blaster",
+      "Molotov Launcher",
+      "Quad Laser",
+      "Ruby Bracelet",
+      "Sunlight Javelin"
+    ],
+    "Starpew": [
+      "Double Vision",
+      "Trashcannon"
+    ],
+    "Backup Gun": [
+      "Abyssal Tentacle",
+      "Alien Engine",
+      "Bubble Blaster",
+      "Bumbullets",
+      "Composite Gun",
+      "Compressed Air Tank",
+      "Crescent Crossbow",
+      "Crown of Guns",
+      "Dark Marker",
+      "Directional Pad",
+      "Double Vision",
+      "Evolver",
+      "Face Melter",
+      "Helix Bullets",
+      "High Kaliber",
+      "Hyper Light Blaster",
+      "Raiden Coil",
+      "Starpew",
+      "The Fat Line"
+    ],
+    "Shotbow": [
+      "Chest Teleporter"
+    ],
+    "Cog of Battle": [
+      "Blasphemy",
+      "Klobbe",
+      "Mourning Star",
+      "Rad Gun",
+      "Relodestone",
+      "Teapot"
+    ],
+    "Polaris": [
+      "+1 Bullets",
+      "Bracket Key",
+      "Duct Tape",
+      "Full Metal Jacket",
+      "Potion of Gun Friendship",
+      "Ring of Triggers"
+    ],
+    "Rad Gun": [
+      "+1 Bullets",
+      "Cog of Battle",
+      "Duct Tape",
+      "Easy Reload Bullets",
+      "Potion of Gun Friendship",
+      "Rolling Eye",
+      "Super Hot Watch"
+    ],
+    "M1911": [
+      "Cold 45",
+      "Portable Turret"
+    ],
+    "Bumbullets": [
+      "Charge Shot",
+      "Orbital Bullets",
+      "Portable Turret",
+      "Zombie Bullets"
+    ],
+    "Prime Primer": [
+      "Disarming Personality",
+      "Grappling Hook",
+      "Iron Coin"
+    ],
+    "Planar Lead": [
+      "Grappling Hook",
+      "Rogue Special"
+    ],
+    "Baby Good Mimic": [
+      "Dog",
+      "Grappling Hook",
+      "Pig",
+      "Remote Bullets",
+      "Ticket",
+      "Turtle Problem",
+      "Zombie Bullets"
+    ],
+    "Cigarettes": [
+      "Crisis Stone",
+      "Full Metal Jacket",
+      "Gun Soul",
+      "Old Crest",
+      "Rat Boots",
+      "Ring of Ethereal Form",
+      "Stuffed Star"
+    ],
+    "Melted Rock": [
+      "Badge",
+      "Blank Companion's Ring",
+      "Crisis Stone",
+      "Mine Cutter"
+    ],
+    "Full Metal Jacket": [
+      "Balloon Gun",
+      "Chaos Ammolet",
+      "Cigarettes",
+      "Crisis Stone",
+      "Old Crest"
+    ],
+    "Blasphemy": [
+      "Alpha Bullet",
+      "Backup Gun",
+      "Casey",
+      "Cog of Battle",
+      "Crisis Stone",
+      "Excaliber",
+      "GuNNER",
+      "Heavy Boots",
+      "Ice Cube",
+      "Omega Bullets",
+      "Ring of Triggers",
+      "Slinger",
+      "Vorpal Bullets"
+    ],
+    "Resourceful Sack": [
+      "Bloodied Scarf",
+      "Daruma",
+      "Partially-Eaten Cheese",
+      "Rat Boots",
+      "Ring of Ethereal Form"
+    ],
+    "Rat Boots": [
+      "Partially-Eaten Cheese",
+      "Resourceful Sack"
+    ],
+    "Elimentaler": [
+      "Chamber Gun",
+      "Lich's Eye Bullets",
+      "Partially-Eaten Cheese",
+      "Rat Boots",
+      "Resourceful Sack"
+    ],
+    "Potion of Gun Friendship": [
+      "+1 Bullets",
+      "Crestfaller",
+      "Dark Marker",
+      "Thunderclap"
+    ],
+    "Thunderclap": [
+      "Chicken Flute",
+      "Shock Rounds"
+    ],
+    "Shock Rifle": [
+      "Battery Bullets",
+      "Bubble Blaster",
+      "Chicken Flute",
+      "Mega Douser",
+      "R2G2",
+      "Shock Rounds"
+    ],
+    "Shadow Bullets": [
+      "Backup Gun",
+      "Blank Bullets",
+      "Bubble Blaster",
+      "Composite Gun",
+      "Devolver Rounds",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Gilded Hydra",
+      "Helix Bullets",
+      "Hungry Bullets",
+      "Hyper Light Blaster",
+      "Katana Bullets",
+      "Remote Bullets",
+      "Shock Rounds",
+      "Vorpal Bullets"
+    ],
+    "Mutation": [
+      "Alien Engine",
+      "Backup Gun",
+      "Shock Rounds"
+    ],
+    "Heroine": [
+      "Frost Bullets",
+      "Hip Holster",
+      "Hot Lead",
+      "Mutation",
+      "Shock Rounds"
+    ],
+    "Katana Bullets": [
+      "Blank Bullets",
+      "Devolver Rounds",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Hungry Bullets",
+      "Phoenix",
+      "Polaris",
+      "Shadow Bullets",
+      "Shock Rounds",
+      "Vorpal Bullets"
+    ],
+    "Vorpal Bullets": [
+      "Blank Bullets",
+      "Devolver Rounds",
+      "Excaliber",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Hungry Bullets",
+      "Hyper Light Blaster",
+      "Katana Bullets",
+      "Laser Rifle",
+      "Polaris",
+      "Scattershot",
+      "Shadow Bullets",
+      "Shock Rounds"
+    ],
+    "Devolver Rounds": [
+      "Blank Bullets",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Hungry Bullets",
+      "Katana Bullets",
+      "Shadow Bullets",
+      "Shock Rounds",
+      "Vorpal Bullets"
+    ],
+    "Chicken Flute": [
+      "Battle Standard",
+      "Really Special Lute",
+      "Shock Rounds",
+      "The Scrambler"
+    ],
+    "Bouncy Bullets": [
+      "Banana",
+      "Casey",
+      "Fossilized Gun",
+      "Ghost Bullets",
+      "Gunboots",
+      "Helix Bullets",
+      "High Kaliber",
+      "Mega Douser",
+      "Mourning Star",
+      "Orbital Bullets",
+      "SAA",
+      "Shock Rounds",
+      "Stinger",
+      "Sunlight Javelin",
+      "Table Tech Rocket",
+      "Wood Beam"
+    ],
+    "Shock Rounds": [
+      "Blank Bullets",
+      "Bouncy Bullets",
+      "Chicken Flute",
+      "Crown of Guns",
+      "Devolver Rounds",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Hungry Bullets",
+      "Katana Bullets",
+      "Shadow Bullets",
+      "Shock Rifle",
+      "Super Space Turtle",
+      "The Membrane",
+      "The Scrambler",
+      "Vorpal Bullets"
+    ],
+    "Vorpal Gun": [
+      "Bullet Idol",
+      "Duct Tape",
+      "Scattershot",
+      "Sixth Chamber",
+      "Vorpal Bullets"
+    ],
+    "Excaliber": [
+      "Huntsman",
+      "Vorpal Bullets"
+    ],
+    "Table Tech Shotgun": [
+      "Katana Bullets",
+      "Origuni",
+      "Table Tech Heat"
+    ],
+    "Sunglasses": [
+      "Katana Bullets",
+      "The Predator",
+      "Yari Launcher"
+    ],
+    "Phoenix": [
+      "Copper Ammolet",
+      "Gungeon Pepper",
+      "Hot Lead",
+      "Hungry Bullets",
+      "The Scrambler"
+    ],
+    "Rocket-Powered Bullets": [
+      "BSG",
+      "Balloon Gun",
+      "Heavy Bullets"
+    ],
+    "The Membrane": [
+      "Bouncy Bullets",
+      "Chamber Gun"
+    ],
+    "Table Tech Rocket": [
+      "Bouncy Bullets",
+      "Fat Bullets",
+      "Origuni"
+    ],
+    "Snowballets": [
+      "Bait Launcher",
+      "Bloodied Scarf",
+      "Bouncy Bullets",
+      "Casey",
+      "Compressed Air Tank",
+      "Orbital Bullets",
+      "Phoenix"
+    ],
+    "Sling": [
+      "Bouncy Bullets",
+      "Duct Tape"
+    ],
+    "Air Strike": [
+      "Explosive Rounds"
+    ],
+    "Lower Case r": [
+      "Bracket Key",
+      "Explosive Rounds",
+      "Gilded Bullets",
+      "Lich's Eye Bullets",
+      "Magic Bullets"
+    ],
+    "Angry Bullets": [
+      "Balloon Gun",
+      "Bee Hive",
+      "Bumbullets",
+      "Explosive Rounds",
+      "Grenade Launcher",
+      "Hyper Light Blaster",
+      "Lower Case r",
+      "Phoenix",
+      "RC Rocket",
+      "SAA",
+      "Snowballets"
+    ],
+    "Alien Engine": [
+      "Backup Gun",
+      "Explosive Rounds",
+      "Flak Bullets",
+      "Heavy Boots",
+      "Orbital Bullets",
+      "Shotgrub",
+      "Space Friend",
+      "Wingman"
+    ],
+    "Hyper Light Blaster": [
+      "Angry Bullets",
+      "Chance Bullets",
+      "Drum Clip",
+      "Duct Tape",
+      "Ghost Bullets"
+    ],
+    "The Judge": [
+      "Omega Bullets"
+    ],
+    "Duct Tape": [
+      "Balloon Gun",
+      "Betrayer's Shield",
+      "Black Hole Gun",
+      "Boxing Glove",
+      "Composite Gun",
+      "Crown of Guns",
+      "Directional Pad",
+      "Face Melter",
+      "Flame Hand",
+      "Gunderfury",
+      "Gunther",
+      "Hyper Light Blaster",
+      "Lil' Bomber",
+      "Makeshift Cannon",
+      "Microtransaction Gun",
+      "Old Goldie",
+      "Patriot",
+      "Plunger",
+      "Polaris",
+      "RPG",
+      "Rad Gun",
+      "Really Special Lute",
+      "Ring of Triggers",
+      "Rubenstein's Monster",
+      "Scattershot",
+      "Shellegun",
+      "Sling",
+      "Triple Gun",
+      "Turbo-Gun",
+      "Void Core Assault Rifle",
+      "Void Core Cannon",
+      "Void Shotgun",
+      "Vorpal Gun"
+    ],
+    "Laser Rifle": [
+      "Orbital Bullets",
+      "Scattershot",
+      "The Emperor"
+    ],
+    "Dark Marker": [
+      "Backup Gun",
+      "Chaos Ammolet",
+      "Chaos Bullets",
+      "Duct Tape",
+      "Helix Bullets",
+      "Scattershot"
+    ],
+    "Antibody": [
+      "Blood Brooch",
+      "Green Guon Stone",
+      "GuNNER",
+      "Scattershot"
+    ],
+    "Alpha Bullet": [
+      "Blasphemy",
+      "Frost Bullets",
+      "Hot Lead"
+    ],
+    "Table Tech Heat": [
+      "Gungeon Pepper",
+      "Hot Lead",
+      "Origuni",
+      "Table Tech Shotgun"
+    ],
+    "Copper Ammolet": [
+      "Composite Gun",
+      "Dark Marker",
+      "Hot Lead",
+      "Owl"
+    ],
+    "Omega Bullets": [
+      "Blasphemy",
+      "Frost Bullets",
+      "Hot Lead",
+      "Slinger"
+    ],
+    "Molotov Launcher": [
+      "BSG",
+      "Hot Lead"
+    ],
+    "Ice Breaker": [
+      "Battery Bullets",
+      "The Exotic"
+    ],
+    "Siren": [
+      "Battery Bullets"
+    ],
+    "Frost Ammolet": [
+      "Composite Gun",
+      "Dark Marker",
+      "Frost Bullets",
+      "Owl"
+    ],
+    "Snowballer": [
+      "Frost Bullets"
+    ],
+    "Freeze Ray": [
+      "Camera",
+      "Flash Ray",
+      "Frost Bullets",
+      "Heart of Ice",
+      "Ice Cube"
+    ],
+    "Book of Chest Anatomy": [
+      "38 Special",
+      "Badge",
+      "Bionic Leg",
+      "Charmed Bow",
+      "Charming Rounds",
+      "Pink Guon Stone",
+      "Shotgun Full of Love",
+      "Siren",
+      "The Exotic",
+      "Trident"
+    ],
+    "Bundle of Wands": [
+      "Magic Bullets",
+      "Owl"
+    ],
+    "Hexagun": [
+      "Magic Bullets",
+      "Owl"
+    ],
+    "Staff of Firepower": [
+      "Magic Bullets",
+      "Owl"
+    ],
+    "Witch Pistol": [
+      "Magic Bullets",
+      "Owl"
+    ],
+    "Crestfaller": [
+      "Fat Bullets",
+      "Old Knight's Flask"
+    ],
+    "Void Core Cannon": [
+      "Angry Bullets",
+      "Com4nd0",
+      "Duct Tape",
+      "Glass Cannon",
+      "Raiden Coil"
+    ],
+    "Railgun": [
+      "Angry Bullets",
+      "Prototype Railgun",
+      "Zombie Bullets"
+    ],
+    "Cat Claw": [
+      "Angry Bullets",
+      "Gunknight Gauntlet",
+      "Metronome"
+    ],
+    "Magic Lamp": [
+      "Angry Bullets",
+      "Magic Sweet"
+    ],
+    "Quad Laser": [
+      "Angry Bullets",
+      "Backup Gun"
+    ],
+    "Elder Blank": [
+      "Blank Bullets",
+      "Chaos Ammolet",
+      "Full Metal Jacket",
+      "Glass Guon Stone",
+      "Sprun"
+    ],
+    "Gold Ammolet": [
+      "Blank Bullets",
+      "Composite Gun",
+      "Dark Marker",
+      "Owl"
+    ],
+    "Owl": [
+      "Baby Good Mimic",
+      "Blank Bullets",
+      "Chaos Ammolet",
+      "Copper Ammolet",
+      "Frost Ammolet",
+      "Space Friend",
+      "Sprun",
+      "Staff of Firepower",
+      "Uranium Ammolet",
+      "Yellow Chamber"
+    ],
+    "Shell": [
+      "Blank Bullets",
+      "Bullet"
+    ],
+    "Gold Junk": [
+      "Baby Good Mimic",
+      "Blank Bullets",
+      "Book of Chest Anatomy",
+      "Coin Crown"
+    ],
+    "Casey": [
+      "Blank Bullets",
+      "Boxing Glove",
+      "Bumbullets",
+      "Flak Bullets",
+      "Heavy Boots",
+      "Helix Bullets",
+      "Orbital Bullets",
+      "Shadow Bullets"
+    ],
+    "Vulcan Cannon": [
+      "Blank Bullets",
+      "Duct Tape",
+      "Ticket"
+    ],
+    "Plunger": [
+      "Bug Boots",
+      "Duct Tape",
+      "Gas Mask",
+      "Makeshift Cannon",
+      "Molotov Launcher",
+      "Orbital Bullets",
+      "Sponge"
+    ],
+    "Helix": [
+      "Orbital Bullets"
+    ],
+    "Life Orb": [
+      "Orbital Bullets"
+    ],
+    "Raiden Coil": [
+      "Chamber Gun",
+      "Com4nd0",
+      "Orbital Bullets",
+      "Space Friend",
+      "Void Core Cannon"
+    ],
+    "Evolver": [
+      "Orbital Bullets"
+    ],
+    "Stone Dome": [
+      "GuNNER",
+      "Helix Bullets",
+      "Orbital Bullets"
+    ],
+    "Balloon Gun": [
+      "Duct Tape",
+      "Full Metal Jacket",
+      "Glass Cannon",
+      "Helix Bullets",
+      "Holey Grail",
+      "Jetpack",
+      "Megahand",
+      "Orbital Bullets",
+      "Origuni"
+    ],
+    "The Predator": [
+      "Helix Bullets",
+      "Orbital Bullets",
+      "Vorpal Gun"
+    ],
+    "Gunslinger's Ashes": [
+      "Helix Bullets",
+      "Orbital Bullets",
+      "Proton Backpack",
+      "Zombie Bullets"
+    ],
+    "Skull Spitter": [
+      "Helix Bullets",
+      "Orbital Bullets",
+      "Zombie Bullets"
+    ],
+    "Com4nd0": [
+      "Orbital Bullets",
+      "Raiden Coil",
+      "Void Core Cannon"
+    ],
+    "Yari Launcher": [
+      "Orbital Bullets"
+    ],
+    "Proton Backpack": [
+      "Orbital Bullets",
+      "Zombie Bullets"
+    ],
+    "Bee Hive": [
+      "Backup Gun",
+      "Honeycomb",
+      "Orbital Bullets",
+      "RPG",
+      "Stinger"
+    ],
+    "Boxing Glove": [
+      "Duct Tape",
+      "Flak Bullets",
+      "Orbital Bullets",
+      "Slinger"
+    ],
+    "Heck Blaster": [
+      "Orbital Bullets",
+      "Super Space Turtle"
+    ],
+    "3rd Party Controller": [
+      "Cat Bullet King Throne",
+      "Molotov Launcher",
+      "Orbital Bullets"
+    ],
+    "Serious Cannon": [
+      "Devolver",
+      "Orbital Bullets",
+      "Ring of Triggers",
+      "Rolling Eye",
+      "Turkey"
+    ],
+    "Eye of the Beholster": [
+      "Drum Clip",
+      "Orbital Bullets",
+      "Rolling Eye"
+    ],
+    "Finished Gun": [
+      "Lies",
+      "Number 2",
+      "Orbital Bullets",
+      "Rubenstein's Monster"
+    ],
+    "Gunzheng": [
+      "Orbital Bullets"
+    ],
+    "H4mmer": [
+      "Easy Reload Bullets"
+    ],
+    "Super Space Turtle": [
+      "Battle Standard",
+      "Remote Bullets",
+      "Turkey",
+      "Turtle Problem",
+      "Zombie Bullets"
+    ],
+    "Crown of Guns": [
+      "Cat Bullet King Throne",
+      "Remote Bullets",
+      "Ring of Ethereal Form"
+    ],
+    "Flash Ray": [
+      "Camera",
+      "Remote Bullets",
+      "White Guon Stone"
+    ],
+    "Mass Shotgun": [
+      "Hip Holster",
+      "Mine Cutter",
+      "Remote Bullets"
+    ],
+    "Shellegun": [
+      "Baby Good Shelleton",
+      "Duct Tape",
+      "Phoenix",
+      "Zombie Bullets"
+    ],
+    "Fossilized Gun": [
+      "Mega Douser",
+      "Zombie Bullets"
+    ],
+    "VertebraeK-47": [
+      "Zombie Bullets"
+    ],
+    "Sunlight Javelin": [
+      "Zombie Bullets"
+    ],
+    "Black Hole Gun": [
+      "BSG",
+      "Bloody 9mm",
+      "Crown of Guns",
+      "Helix Bullets",
+      "Mr. Accretion Jr.",
+      "Super Space Turtle",
+      "Zombie Bullets"
+    ],
+    "Trick Gun": [
+      "Blood Brooch",
+      "Duct Tape",
+      "Huntsman",
+      "Rolling Eye",
+      "Silver Bullets"
+    ],
+    "Gilded Hydra": [
+      "Gilded Bullets"
+    ],
+    "Old Goldie": [
+      "Duct Tape",
+      "Gilded Bullets"
+    ],
+    "Table Tech Money": [
+      "Gilded Bullets",
+      "Origuni"
+    ],
+    "Gungeon Ant": [
+      "Gilded Bullets",
+      "Ring of Fire Resistance"
+    ],
+    "Flame Hand": [
+      "AK-47",
+      "Chance Bullets",
+      "Duct Tape",
+      "Gungeon Pepper",
+      "Mutation",
+      "Silencer"
+    ],
+    "Portable Turret": [
+      "Chance Bullets",
+      "Unity"
+    ],
+    "Bubble Blaster": [
+      "Chance Bullets",
+      "Megahand"
+    ],
+    "Singularity": [
+      "BSG",
+      "Crown of Guns",
+      "Helix Bullets"
+    ],
+    "High Kaliber": [
+      "Helix Bullets"
+    ],
+    "Mr. Accretion Jr.": [
+      "Helix Bullets"
+    ],
+    "Tetrominator": [
+      "Helix Bullets",
+      "White Guon Stone"
+    ],
+    "Zombie Bullets": [
+      "Bumbullets",
+      "Gungine",
+      "Proton Backpack"
+    ],
+    "Charmed Bow": [
+      "Battle Standard",
+      "Bumbullets"
+    ],
+    "BSG": [
+      "Big Shotgun",
+      "Bloody 9mm"
+    ],
+    "Gunknight Greaves": [
+      "Ballistic Boots"
+    ],
+    "Brick Breaker": [
+      "Mustache",
+      "Tetrominator"
+    ],
+    "Microtransaction Gun": [
+      "Duct Tape",
+      "Mustache"
+    ],
+    "Teapot": [
+      "Baby Good Shelleton",
+      "Mustache",
+      "R2G2",
+      "Turkey"
+    ],
+    "Riddle of Lead": [
+      "Lament Configurum",
+      "Lichy Trigger Finger"
+    ],
+    "Jolter": [
+      "Lich's Eye Bullets"
+    ],
+    "Demon Head": [
+      "Duct Tape",
+      "Lich's Eye Bullets",
+      "Zilla Shotgun"
+    ],
+    "Armor of Thorns": [
+      "Blast Helmet",
+      "Bullet Idol",
+      "Copper Ammolet",
+      "Derringer",
+      "Live Ammo",
+      "Ring of Ethereal Form",
+      "Ring of Fire Resistance",
+      "Ruby Bracelet"
+    ],
+    "Blast Helmet": [
+      "Armor of Thorns",
+      "Gunboots",
+      "Live Ammo",
+      "Ring of Ethereal Form"
+    ],
+    "Ruby Bracelet": [
+      "Armor of Thorns",
+      "Blast Helmet",
+      "Live Ammo",
+      "Ring of Ethereal Form"
+    ],
+    "Friendship Cookie": [
+      "Gun Soul",
+      "Ring of the Resourceful Rat"
+    ],
+    "Glass Guon Stone": [
+      "Baby Good Mimic",
+      "Clone",
+      "Full Metal Jacket",
+      "Ring of the Resourceful Rat"
+    ],
+    "Junk": [
+      "Baby Good Mimic",
+      "Book of Chest Anatomy",
+      "Mimic Tooth Necklace",
+      "Ring of the Resourceful Rat",
+      "Trashcannon"
+    ],
+    "Cloranthy Ring": [
+      "Ring of Fire Resistance"
+    ],
+    "Red Guon Stone": [
+      "Baby Good Mimic",
+      "Ring of Fire Resistance",
+      "Tetrominator"
+    ],
+    "Macho Brace": [
+      "Gunboots",
+      "Ring of Ethereal Form",
+      "Ring of Fire Resistance",
+      "Ring of Triggers"
+    ],
+    "Bug Boots": [
+      "Cloranthy Ring",
+      "Gungine",
+      "Ring of Ethereal Form",
+      "Ring of Fire Resistance",
+      "Sponge"
+    ],
+    "Pig": [
+      "Baby Good Mimic",
+      "Battle Standard",
+      "Clone",
+      "Gun Soul",
+      "Makeshift Cannon",
+      "Ring of Miserly Protection",
+      "Science Cannon",
+      "The Scrambler",
+      "Trashcannon"
+    ],
+    "Trashcannon": [
+      "Unity"
+    ],
+    "Gungine": [
+      "Bug Boots",
+      "Crestfaller",
+      "Devolver",
+      "Sponge",
+      "Unity"
+    ],
+    "Wood Beam": [
+      "Chamber Gun",
+      "Unity"
+    ],
+    "Sense of Direction": [
+      "Blank Companion's Ring",
+      "Ring of Triggers"
+    ],
+    "iBomb Companion App": [
+      "Blank Companion's Ring",
+      "Corsair",
+      "Ring of Triggers"
+    ],
+    "Easy Reload Bullets": [
+      "Rad Gun",
+      "Ring of Ethereal Form",
+      "The Judge"
+    ],
+    "Live Ammo": [
+      "Armor of Thorns",
+      "Blast Helmet",
+      "Ring of Ethereal Form"
+    ],
+    "Rolling Eye": [
+      "Bloodied Scarf",
+      "Resourceful Sack",
+      "Ring of Ethereal Form",
+      "Serious Cannon",
+      "Trick Gun"
+    ],
+    "Knight's Gun": [
+      "Map",
+      "Spice"
+    ],
+    "Bloody Eye": [
+      "Liquid Valkyrie",
+      "Trick Gun"
+    ],
+    "Liquid Valkyrie": [
+      "Bloody Eye"
+    ],
+    "Ballistic Boots": [
+      "Gunknight Greaves"
+    ],
+    "Aged Bell": [
+      "Gunknight Greaves",
+      "Megahand"
+    ],
+    "AC-15": [
+      "Duct Tape",
+      "Gunknight Armor",
+      "Nanomachines"
+    ],
+    "Pea Shooter": [
+      "Old Knight's Helm",
+      "Old Knight's Shield"
+    ],
+    "Old Knight's Helm": [
+      "Old Knight's Flask",
+      "Old Knight's Shield"
+    ],
+    "Old Knight's Shield": [
+      "Old Knight's Flask",
+      "Old Knight's Helm"
+    ],
+    "Metronome": [
+      "Full Metal Jacket",
+      "Gunboots",
+      "Gunzheng",
+      "Number 2",
+      "Sprun",
+      "Strafe Gun"
+    ],
+    "Meatbun": [
+      "Full Metal Jacket",
+      "Gungeon Pepper"
+    ],
+    "Old Crest": [
+      "Chaos Ammolet",
+      "Full Metal Jacket",
+      "Mimic Tooth Necklace"
+    ],
+    "Glass Cannon": [
+      "Duct Tape",
+      "Full Metal Jacket",
+      "Holey Grail",
+      "Void Core Cannon"
+    ],
+    "Master Round I": [
+      "Chamber Gun",
+      "Cigarettes",
+      "Clone",
+      "Escape Rope",
+      "Full Metal Jacket",
+      "Holey Grail",
+      "Infuriating Note",
+      "Mimic Tooth Necklace",
+      "Riddle of Lead",
+      "Super Hot Watch",
+      "Teleporter Prototype"
+    ],
+    "Amulet of the Pit Lord": [
+      "Full Metal Jacket",
+      "White Guon Stone"
+    ],
+    "Sponge": [
+      "Bug Boots",
+      "Fossilized Gun",
+      "JK-47",
+      "Plunger"
+    ],
+    "Scouter": [
+      "Gunboots",
+      "R2G2"
+    ],
+    "Partially-Eaten Cheese": [
+      "Rat Boots",
+      "Resourceful Sack"
+    ],
+    "Briefcase of Cash": [
+      "Coin Crown"
+    ],
+    "MAC10": [
+      "Cigarettes",
+      "Rolling Eye"
+    ],
+    "Shield of the Maiden": [
+      "Blank Companion's Ring",
+      "Rolling Eye",
+      "Super Hot Watch"
+    ],
+    "Tangler": [
+      "Rolling Eye"
+    ],
+    "Patriot": [
+      "Ancient Hero's Bandana",
+      "Cigarettes",
+      "Duct Tape"
+    ],
+    "Trank Gun": [
+      "Ancient Hero's Bandana",
+      "Cigarettes"
+    ],
+    "Gunknight Armor": [
+      "Cigarettes"
+    ],
+    "Nanomachines": [
+      "Cigarettes",
+      "Prototype Railgun"
+    ],
+    "Stuffed Star": [
+      "Cigarettes"
+    ],
+    "Holey Grail": [
+      "Balloon Gun",
+      "Chaos Ammolet",
+      "Cigarettes",
+      "Glass Cannon",
+      "GuNNER",
+      "Makeshift Cannon",
+      "Shotgrub"
+    ],
+    "Gun Soul": [
+      "Cigarettes",
+      "Clone",
+      "Crestfaller",
+      "Sunlight Javelin"
+    ],
+    "Shotgun Coffee": [
+      "Cigarettes",
+      "Crestfaller"
+    ],
+    "Mailbox": [
+      "Magazine Rack"
+    ],
+    "Drum Clip": [
+      "Composite Gun",
+      "Hyper Light Blaster",
+      "Ice Breaker",
+      "Magazine Rack"
+    ],
+    "Banana": [
+      "Charm Horn"
+    ],
+    "Klobbe": [
+      "Cog of Battle"
+    ],
+    "Sprun": [
+      "Excaliber",
+      "Metronome"
+    ],
+    "Big Shotgun": [
+      "Metronome"
+    ],
+    "Strafe Gun": [
+      "Devolver",
+      "Metronome"
+    ],
+    "Jar of Bees": [
+      "Honeycomb"
+    ],
+    "Cartographer's Ring": [
+      "Gungeon Blueprint"
+    ],
+    "M16": [
+      "Duct Tape",
+      "Shock Rifle"
+    ],
+    "Triple Crossbow": [
+      "Duct Tape",
+      "Sticky Crossbow"
+    ],
+    "Triple Gun": [
+      "Duct Tape"
+    ],
+    "Really Special Lute": [
+      "Battle Standard",
+      "Chicken Flute",
+      "Duct Tape",
+      "Red Guon Stone"
+    ],
+    "Super Meat Gun": [
+      "Buzzkill",
+      "Duct Tape"
+    ],
+    "Cactus": [
+      "Duct Tape"
+    ],
+    "Void Shotgun": [
+      "Duct Tape"
+    ],
+    "Void Core Assault Rifle": [
+      "Duct Tape"
+    ],
+    "Gunderfury": [
+      "Duct Tape"
+    ],
+    "Turbo-Gun": [
+      "Duct Tape"
+    ],
+    "Composite Gun": [
+      "Backup Gun",
+      "Chaos Ammolet",
+      "Duct Tape"
+    ],
+    "RUBE-ADYNE Prototype": [
+      "Duct Tape",
+      "RUBE-ADYNE MK.II"
+    ],
+    "RUBE-ADYNE MK.II": [
+      "Duct Tape",
+      "RUBE-ADYNE Prototype",
+      "Rubenstein's Monster"
+    ],
+    "Daruma": [
+      "Bloodied Scarf",
+      "Chaos Ammolet",
+      "Elder Blank",
+      "Flash Ray",
+      "Resourceful Sack",
+      "White Guon Stone"
+    ],
+    "+1 Bullets": [
+      "Badge",
+      "White Guon Stone"
+    ],
+    "Battle Standard": [
+      "Chicken Flute",
+      "Orange Guon Stone",
+      "Really Special Lute",
+      "Wingman",
+      "Yellow Chamber"
+    ],
+    "Dog": [
+      "Baby Good Mimic",
+      "Battle Standard",
+      "Cat Bullet King Throne",
+      "Iron Coin",
+      "Snakemaker",
+      "Wolf"
+    ],
+    "Master of Unlocking": [
+      "Iron Coin"
+    ],
+    "Disarming Personality": [
+      "Iron Coin",
+      "Smiley's Revolver"
+    ],
+    "Tear Jerker": [
+      "Directional Pad",
+      "Super Hot Watch"
+    ],
+    "Barrel": [
+      "Backup Gun",
+      "Derringer"
+    ],
+    "Grasschopper": [
+      "Backup Gun",
+      "Chaos Ammolet"
+    ],
+    "The Scrambler": [
+      "Backup Gun",
+      "Cat Bullet King Throne"
+    ],
+    "Moonscraper": [
+      "Backup Gun"
+    ],
+    "Chance Bullets": [
+      "Backup Gun",
+      "Chamber Gun",
+      "Flame Hand",
+      "Hyper Light Blaster"
+    ],
+    "Ring of Mimic Friendship": [
+      "Mimic Tooth Necklace"
+    ],
+    "Wax Wings": [
+      "Fossilized Gun",
+      "Gungine",
+      "Jetpack",
+      "Plunger"
+    ],
+    "Broccoli": [
+      "Lament Configurum"
+    ],
+    "Ring of the Resourceful Rat": [
+      "Briefcase of Cash",
+      "Lament Configurum",
+      "Rubenstein's Monster"
+    ],
+    "Bloody 9mm": [
+      "BSG",
+      "Hyper Light Blaster",
+      "Lament Configurum"
+    ],
+    "SAA": [
+      "Cold 45",
+      "Nanomachines"
+    ],
+    "Prototype Railgun": [
+      "Nanomachines",
+      "Railgun"
+    ],
+    "Ballot": [
+      "Nanomachines",
+      "Origuni",
+      "Vorpal Gun"
+    ],
+    "Wind Up Gun": [
+      "Seven-Leaf Clover"
+    ],
+    "Eyepatch": [
+      "Crown of Guns",
+      "Elimentaler",
+      "Gunderfury",
+      "MAC10",
+      "Number 2"
+    ],
+    "Table Tech Blanks": [
+      "Chaos Ammolet",
+      "Origuni"
+    ],
+    "Relodestone": [
+      "Copper Ammolet",
+      "Frost Ammolet",
+      "Lodestone Ammolet",
+      "Makeshift Cannon",
+      "Thunderclap"
+    ],
+    "The Kiln": [
+      "Copper Ammolet",
+      "Frost Ammolet"
+    ],
+    "Flare Gun": [
+      "Copper Ammolet",
+      "The Scrambler"
+    ],
+    "Origuni": [
+      "Deck4rd",
+      "Table Tech Heat",
+      "Table Tech Shotgun"
+    ],
+    "Colt 1851": [
+      "Heart Holster",
+      "Rusty Sidearm"
+    ],
+    "Pulse Cannon": [
+      "Heart Bottle",
+      "Heart Holster",
+      "Heart Locket",
+      "Heart Lunchbox"
+    ],
+    "Lament Configurum": [
+      "Heart Lunchbox",
+      "Yellow Chamber"
+    ],
+    "Slinger": [
+      "Blasphemy",
+      "Chamber Gun",
+      "Kruller Glaive",
+      "Ruby Bracelet"
+    ],
+    "Dragunfire": [
+      "Heart of Ice"
+    ],
+    "Explosive Decoy": [
+      "Heart of Ice"
+    ],
+    "Frost Giant": [
+      "Heart of Ice"
+    ],
+    "Number 2": [
+      "Ancient Hero's Bandana",
+      "Bloodied Scarf"
+    ],
+    "Busted Television": [
+      "Blank Companion's Ring",
+      "Bloodied Scarf",
+      "Sprun"
+    ],
+    "Pitchfork": [
+      "Hip Holster"
+    ],
+    "Plague Pistol": [
+      "Gas Mask"
+    ],
+    "The Exotic": [
+      "Book of Chest Anatomy",
+      "Chamber Gun"
+    ],
+    "Lies": [
+      "Betrayer's Shield",
+      "Book of Chest Anatomy"
+    ],
+    "R2G2": [
+      "Battle Standard",
+      "Life Orb",
+      "Shock Rifle",
+      "Yellow Chamber"
+    ],
+    "Wolf": [
+      "Battle Standard",
+      "Really Special Lute"
+    ],
+    "Charming Rounds": [
+      "Battle Standard"
+    ],
+    "Charm Horn": [
+      "Battle Standard"
+    ],
+    "Dungeon Eagle": [
+      "Owl"
+    ],
+    "Elephant Gun": [
+      "Owl",
+      "Turkey"
+    ],
+    "Chaos Ammolet": [
+      "Composite Gun",
+      "Dark Marker",
+      "Owl"
+    ],
+    "Uranium Ammolet": [
+      "Composite Gun",
+      "Dark Marker",
+      "Owl"
+    ],
+    "Lodestone Ammolet": [
+      "Composite Gun",
+      "Dark Marker",
+      "Owl"
+    ],
+    "Cursed Bullets": [
+      "Bullet",
+      "Casey",
+      "Dueling Laser",
+      "Heck Blaster",
+      "Shell",
+      "Super Space Turtle"
+    ],
+    "Turkey": [
+      "Baby Good Mimic",
+      "Makeshift Cannon",
+      "Serious Cannon",
+      "Super Space Turtle"
+    ],
+    "Platinum Bullets": [
+      "Gold Junk",
+      "Slinger"
+    ],
+    "Magnum": [
+      "Briefcase of Cash",
+      "Klobbe",
+      "Lies"
+    ],
+    "Magic Bullets": [
+      "Space Friend",
+      "Staff of Firepower"
+    ],
+    "Fightsabre": [
+      "Excaliber",
+      "Huntsman",
+      "Pig"
+    ],
+    "Silencer": [
+      "Turkey"
+    ],
+    "Yellow Chamber": [
+      "Shotgrub",
+      "Turtle Problem"
+    ],
+    "Clear Guon Stone": [
+      "Baby Good Mimic",
+      "Tetrominator"
+    ],
+    "Orange Guon Stone": [
+      "Baby Good Mimic",
+      "Charmed Bow",
+      "Tetrominator"
+    ],
+    "Pink Guon Stone": [
+      "Baby Good Mimic",
+      "Tetrominator"
+    ],
+    "White Guon Stone": [
+      "Baby Good Mimic",
+      "Flash Ray",
+      "Tetrominator"
+    ],
+    "Baby Good Shelleton": [
+      "Baby Good Mimic",
+      "Staff of Firepower",
+      "Yellow Chamber"
+    ],
+    "Brick of Cash": [
+      "Briefcase of Cash"
+    ],
+    "Hegemony Rifle": [
+      "Galactic Medal of Valor"
+    ],
+    "Supply Drop": [
+      "Galactic Medal of Valor"
+    ],
+    "Shotgrub": [
+      "Alien Engine",
+      "Bullet Idol"
+    ],
+    "Big Boy": [
+      "Bracket Key"
+    ],
+    "Kruller Glaive": [
+      "Chamber Gun",
+      "Slinger"
+    ],
+    "AKEY-47": [
+      "Blasphemy"
+    ],
+    "Ghost Bullets": [
+      "Casey",
+      "Compressed Air Tank",
+      "Grenade Launcher",
+      "Hyper Light Blaster",
+      "Proton Backpack",
+      "Sunlight Javelin",
+      "The Scrambler"
+    ],
+    "Silver Bullets": [
+      "Casey",
+      "Phoenix",
+      "Trick Gun"
+    ],
+    "Laser Sight": [
+      "Casey",
+      "Particulator"
+    ],
+    "Dueling Pistol": [
+      "Derringer",
+      "Dueling Laser"
+    ],
+    "Devolver": [
+      "Unfinished Gun"
+    ],
+    "Gilded Bullets": [
+      "Bullet",
+      "Gilded Hydra",
+      "Shell"
+    ],
+    "Rusty Sidearm": [
+      "Colt 1851"
+    ],
+    "Smoke Bomb": [
+      "Grey Mauser",
+      "Vorpal Gun"
+    ],
+    "Box": [
+      "Grey Mauser",
+      "Vorpal Gun"
+    ],
+    "Winchester Rifle": [
+      "Grey Mauser"
+    ],
+    "Grey Mauser": [
+      "The Predator",
+      "Vorpal Gun"
+    ],
+    "Medkit": [
+      "Flare Gun"
+    ],
+    "Smiley's Revolver": [
+      "Shades's Revolver"
+    ],
+    "Magazine Rack": [
+      "Camera",
+      "GuNNER",
+      "Makeshift Cannon",
+      "Triple Gun"
+    ],
+    "Winchester": [
+      "Buzzkill",
+      "Regular Shotgun",
+      "Robot's Left Hand"
+    ],
+    "Regular Shotgun": [
+      "Buzzkill",
+      "Huntsman",
+      "Klobbe",
+      "Rattler"
+    ],
+    "Shotga Cola": [
+      "Bubble Blaster",
+      "Crestfaller"
+    ],
+    "Shotgun Full of Love": [
+      "Shotgun Full of Hate"
+    ],
+    "Shotgun Full of Hate": [
+      "Shotgun Full of Love"
+    ],
+    "Sixth Chamber": [
+      "Shotgrub"
+    ],
+    "Bullet Idol": [
+      "Shotgrub"
+    ],
+    "AK-47": [
+      "AKEY-47",
+      "JK-47",
+      "VertebraeK-47"
+    ],
+    "Space Friend": [
+      "Alien Engine",
+      "Charmed Bow"
+    ],
+    "Crossbow": [
+      "Triple Crossbow"
+    ],
+    "Machine Fist": [
+      "AK-47"
+    ],
+    "JK-47": [
+      "Stone Dome"
+    ],
+    "Sawed-Off": [
+      "Buzzkill",
+      "Winchester Rifle"
+    ],
+    "Fortune's Favor": [
+      "Railgun"
+    ],
+    "Knife Shield": [
+      "Deck4rd",
+      "Excaliber",
+      "Megahand"
+    ],
+    "Glacier": [
+      "Chamber Gun"
+    ],
+    "Cluster Mine": [
+      "Mine Cutter"
+    ],
+    "Seven-Leaf Clover": [
+      "Wind Up Gun"
+    ],
+    "Oiled Cylinder": [
+      "Thunderclap",
+      "Turbo-Gun",
+      "Wind Up Gun"
+    ],
+    "Galactic Medal of Valor": [
+      "Hegemony Carbine",
+      "Teapot",
+      "Thunderclap"
+    ],
+    "Huntsman": [
+      "Excaliber",
+      "Fightsabre",
+      "Trick Gun"
+    ],
+    "Muscle Relaxant": [
+      "A.W.P.",
+      "Bow",
+      "Hegemony Rifle",
+      "Hexagun",
+      "Laser Rifle",
+      "M1",
+      "Really Special Lute",
+      "Sniper Rifle",
+      "Winchester Rifle"
+    ],
+    "The Emperor": [
+      "Laser Rifle"
+    ],
+    "Potion of Lead Skin": [
+      "Crestfaller"
+    ],
+    "Old Knight's Flask": [
+      "Crestfaller",
+      "Sunlight Javelin"
+    ],
+    "Military Training": [
+      "Thunderclap"
+    ],
+    "Void Marshal": [
+      "The Emperor"
+    ],
+    "Buzzkill": [
+      "Megahand"
+    ],
+    "Robot's Right Hand": [
+      "Mutation",
+      "Robot's Left Hand"
+    ],
+    "Derringer": [
+      "Super Meat Gun"
+    ],
+    "Ring of Fire Resistance": [
+      "Fossilized Gun"
+    ],
+    "Hazmat Suit": [
+      "Fossilized Gun"
+    ],
+    "Disintegrator": [
+      "Betrayer's Shield",
+      "Science Cannon"
+    ],
+    "Blood Brooch": [
+      "Trick Gun"
+    ],
+    "Screecher": [
+      "Dueling Laser"
+    ],
+    "Unity": [
+      "Trashcannon",
+      "Wood Beam"
+    ],
+    "Weird Egg": [
+      "The Scrambler"
+    ],
+    "Deck4rd": [
+      "Origuni"
+    ],
+    "Table Tech Rage": [
+      "Origuni"
+    ],
+    "Table Tech Stun": [
+      "Origuni"
+    ],
+    "Map": [
+      "Origuni"
+    ],
+    "Rattler": [
+      "Buzzkill"
+    ],
+    "Molotov": [
+      "Molotov Launcher"
+    ],
+    "Heavy Boots": [
+      "Alien Engine"
+    ],
+    "Chaff Grenade": [
+      "Camera"
+    ],
+    "Bracket Key": [
+      "BSG"
+    ],
+    "Unfinished Gun": [
+      "Finished Gun"
+    ]
+  },
+  "synergy_to_referrers": {
+    "Chief Master": [
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V"
+    ],
+    "King Bomber": [
+      "Coin Crown",
+      "Gilded Bullets",
+      "Lil' Bomber",
+      "Loot Bag",
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V"
+    ],
+    "AK-47 (Island Forme)": [
+      "AK-47",
+      "Orange"
+    ],
+    "Pulp Gungeon": [
+      "M1911",
+      "Orange",
+      "Portable Turret"
+    ],
+    "Smart Bombs": [
+      "Ice Bomb"
+    ],
+    "Battle Mode": [
+      "Ice Bomb",
+      "Orbital Bullets"
+    ],
+    "Super Bomberpal": [
+      "Duct Tape",
+      "Ice Bomb",
+      "Lil' Bomber"
+    ],
+    "Camera Shy": [
+      "Camera",
+      "Chaff Grenade"
+    ],
+    "Cerebral Bros": [
+      "Bullet Bore",
+      "Cluster Mine",
+      "Explosive Rounds"
+    ],
+    "Mine Craft": [
+      "Cluster Mine",
+      "Mine Cutter"
+    ],
+    "Phoenix Up": [
+      "Baby Good Mimic",
+      "Copper Ammolet",
+      "Gungeon Pepper",
+      "Hot Lead",
+      "Phoenix",
+      "The Scrambler",
+      "Weird Egg"
+    ],
+    "Air Support": [
+      "Air Strike",
+      "Explosive Rounds"
+    ],
+    "Shot Across The Bow": [
+      "Air Strike",
+      "Explosive Rounds"
+    ],
+    "y cant u crawl": [
+      "Heroine",
+      "Roll Bomb"
+    ],
+    "Synthetic Shield": [
+      "Armor Synthesizer",
+      "Baby Good Mimic"
+    ],
+    "Gunnerang": [
+      "Boomerang",
+      "Utility Belt"
+    ],
+    "M1 Multi-Tool": [
+      "Ammo Belt",
+      "Backpack",
+      "M1",
+      "Scope",
+      "Utility Belt"
+    ],
+    "Mak Pak": [
+      "Backpack"
+    ],
+    "MM6 Mini Rocket": [
+      "Backpack"
+    ],
+    "Whale of a Time": [
+      "Backpack",
+      "GuNNER"
+    ],
+    "Queen of Hearts": [
+      "Coin Crown",
+      "Heart Purse",
+      "Loot Bag"
+    ],
+    "Greener Guon Stone": [
+      "Green Guon Stone",
+      "Loot Bag"
+    ],
+    "360 Yes Scope": [
+      "A.W.P.",
+      "Scope",
+      "Sniper Rifle"
+    ],
+    "Iron Slug": [
+      "Big Iron",
+      "Lich's Eye Bullets",
+      "Scope"
+    ],
+    "Sleuth Out": [
+      "Scope"
+    ],
+    "Future Gangster": [
+      "Laser Sight",
+      "Nanomachines",
+      "Shock Rounds",
+      "Thompson Sub-Machinegun"
+    ],
+    "Particle Accelerator": [
+      "Laser Sight",
+      "Particulator"
+    ],
+    "Particle Flow": [
+      "Laser Sight"
+    ],
+    "Peripheral Vision": [
+      "Laser Sight",
+      "Light Gun"
+    ],
+    "Pistol Machine": [
+      "Laser Sight",
+      "Nanomachines",
+      "Shock Rounds"
+    ],
+    "Bluer Guon Stone": [
+      "Bullet Time"
+    ],
+    "Thrown For A Bloop": [
+      "Bullet Time"
+    ],
+    "Get Equipped With -F": [
+      "Aged Bell"
+    ],
+    "Holy Bell": [
+      "Aged Bell"
+    ],
+    "Kage Bunshin": [
+      "Decoy"
+    ],
+    "Kinjutsu": [
+      "Decoy",
+      "Shadow Clone"
+    ],
+    "Decoy Octorok": [
+      "Abyssal Tentacle",
+      "Decoy",
+      "Explosive Decoy"
+    ],
+    "Deadlier Distraction": [
+      "Explosive Decoy"
+    ],
+    "Frostier Distraction": [
+      "Explosive Decoy",
+      "Heart of Ice"
+    ],
+    "Hardwood": [
+      "Explosive Decoy"
+    ],
+    "Alternative Rock": [
+      "Face Melter",
+      "Gilded Bullets",
+      "Melted Rock",
+      "Ruby Bracelet"
+    ],
+    "Dead Place": [
+      "Melted Rock",
+      "Mine Cutter"
+    ],
+    "Extreme Operation": [
+      "Melted Rock"
+    ],
+    "Human Shield": [
+      "Crisis Stone",
+      "Melted Rock"
+    ],
+    "Pretty Good": [
+      "Box",
+      "Nanomachines",
+      "SAA"
+    ],
+    "Flat Stanley": [
+      "Box",
+      "Mailbox"
+    ],
+    "What a Thrill!": [
+      "Box"
+    ],
+    "Apiary": [
+      "Box"
+    ],
+    "I need scissors! 61!": [
+      "Ancient Hero's Bandana",
+      "Box",
+      "Cigarettes",
+      "Trank Gun"
+    ],
+    "Terminated, Too": [
+      "Flak Bullets",
+      "Grenade Launcher",
+      "Potion of Lead Skin"
+    ],
+    "Dwarven Stout": [
+      "Double Vision"
+    ],
+    "Five O'Clock Somewhere": [
+      "Crestfaller",
+      "Double Vision",
+      "Shotga Cola"
+    ],
+    "Second Accident": [
+      "Chest Teleporter",
+      "Shotbow",
+      "Teleporter Prototype"
+    ],
+    "Telefrag": [
+      "Chest Teleporter",
+      "Teleporter Prototype"
+    ],
+    "Relodestar": [
+      "Copper Ammolet",
+      "Frost Ammolet",
+      "Lodestone Ammolet",
+      "Relodestone"
+    ],
+    "Friend to Gun and Bullet": [
+      "+1 Bullets",
+      "Dark Marker",
+      "Hyper Light Blaster",
+      "Potion of Gun Friendship"
+    ],
+    "Black Flag": [
+      "Grappling Hook"
+    ],
+    "Star Friends": [
+      "Stuffed Star"
+    ],
+    "Shield Night": [
+      "Knight's Gun",
+      "Shield of the Maiden"
+    ],
+    "Mirror Shield": [
+      "Rolling Eye",
+      "Shield of the Maiden"
+    ],
+    "Whiter Guon Stone": [
+      "Daruma",
+      "Flash Ray",
+      "White Guon Stone"
+    ],
+    "Resourceful Indeed": [
+      "Lich's Eye Bullets",
+      "Partially-Eaten Cheese",
+      "Rat Boots",
+      "Resourceful Sack",
+      "Ring of the Resourceful Rat"
+    ],
+    "Alistair's Ladder": [
+      "Shock Rounds",
+      "Thunderclap"
+    ],
+    "Battery Powered": [
+      "R2G2",
+      "Shock Rifle",
+      "Shock Rounds"
+    ],
+    "Chain Lightning": [
+      "Shock Rounds"
+    ],
+    "Lotus Bloom": [
+      "Rolling Eye",
+      "Shock Rounds"
+    ],
+    "Neo Tech, Yo": [
+      "Shock Rounds"
+    ],
+    "Wave Beam": [
+      "Shock Rounds"
+    ],
+    "Snicker-snack": [
+      "Excaliber",
+      "Vorpal Bullets"
+    ],
+    "Over Dose": [
+      "Heavy Bullets"
+    ],
+    "Massive Effect": [
+      "Heavy Bullets",
+      "Mass Shotgun"
+    ],
+    "Absent Minded": [
+      "Bouncy Bullets",
+      "The Membrane"
+    ],
+    "Reactive": [
+      "Explosive Rounds"
+    ],
+    "J am": [
+      "Alpha Bullet",
+      "Omega Bullets",
+      "Thunderclap"
+    ],
+    "Dumb Smart Bullets": [
+      "Scattershot"
+    ],
+    "Laser Light Show": [
+      "Laser Rifle",
+      "Scattershot"
+    ],
+    "Emerald Weapon": [
+      "Irradiated Lead"
+    ],
+    "Added Effect - Fire": [
+      "Hot Lead"
+    ],
+    "Get Equipped with -H-": [
+      "Hot Lead"
+    ],
+    "Hidden Tech Flare": [
+      "Hot Lead"
+    ],
+    "Hot Ones": [
+      "Copper Ammolet",
+      "Hot Lead"
+    ],
+    "Plasma Beam": [
+      "Hot Lead"
+    ],
+    "Ruby Weapon": [
+      "Hot Lead"
+    ],
+    "Special Reserve": [
+      "Hot Lead"
+    ],
+    "Added Effect - Ice": [
+      "Frost Bullets"
+    ],
+    "Arctic Warfare": [
+      "A.W.P.",
+      "Frost Ammolet",
+      "Frost Bullets",
+      "Heart of Ice"
+    ],
+    "Cold Ones": [
+      "Frost Ammolet",
+      "Frost Bullets"
+    ],
+    "Diamond Weapon": [
+      "Frost Bullets"
+    ],
+    "Frosty the Bullet Tyrant": [
+      "Frost Bullets",
+      "Snowballer"
+    ],
+    "Ice Beam": [
+      "Frost Bullets"
+    ],
+    "Ice To Meet You": [
+      "Frost Bullets",
+      "Heart of Ice",
+      "Ice Cube"
+    ],
+    "Willing To Sacrifice": [
+      "Frost Bullets",
+      "Heart of Ice",
+      "Ice Cube"
+    ],
+    "Unbelievably Charming": [
+      "Baby Good Mimic",
+      "Book of Chest Anatomy",
+      "Bumbullets",
+      "Charmed Bow",
+      "Charming Rounds",
+      "Pink Guon Stone",
+      "Shotgun Full of Love"
+    ],
+    "Chicken Arise": [
+      "Bundle of Wands",
+      "Hexagun",
+      "Magic Bullets",
+      "Staff of Firepower",
+      "Witch Pistol"
+    ],
+    "Runic": [
+      "Magic Bullets"
+    ],
+    "Elder Blank Bullets": [
+      "Blank Bullets"
+    ],
+    "Careful Iteration": [
+      "Blank Bullets",
+      "Casey"
+    ],
+    "Gruber's Bane": [
+      "Backup Gun",
+      "Shadow Bullets"
+    ],
+    "Dawn of the Gundead": [
+      "Gunslinger's Ashes",
+      "Skull Spitter",
+      "Zombie Bullets"
+    ],
+    "Electron Pack": [
+      "Proton Backpack",
+      "Zombie Bullets"
+    ],
+    "Hell Singing": [
+      "Dueling Pistol",
+      "Silver Bullets",
+      "Trick Gun"
+    ],
+    "The Ecstasy of Gold": [
+      "Gilded Bullets",
+      "Old Goldie"
+    ],
+    "Gilded Tables": [
+      "Gilded Bullets"
+    ],
+    "Great Queen Ant": [
+      "Gilded Bullets",
+      "Gungeon Ant",
+      "Heck Blaster",
+      "Ring of Fire Resistance"
+    ],
+    "Resplendent": [
+      "Gilded Bullets"
+    ],
+    "Maximize Spell": [
+      "Chance Bullets",
+      "Gungeon Pepper"
+    ],
+    "Turret Link": [
+      "Chance Bullets"
+    ],
+    "Antichamber": [
+      "Dark Marker",
+      "Duct Tape",
+      "Helix Bullets"
+    ],
+    "Brave New World": [
+      "Baby Good Mimic",
+      "Bionic Leg",
+      "Book of Chest Anatomy",
+      "Siren",
+      "Trident"
+    ],
+    "Knight Time": [
+      "Ballistic Boots",
+      "Gunknight Greaves"
+    ],
+    "Triple Jump": [
+      "Ballistic Boots"
+    ],
+    "Sweetness and Light": [
+      "Magic Lamp",
+      "Magic Sweet"
+    ],
+    "Block Party": [
+      "Brick Breaker",
+      "Mustache"
+    ],
+    "http://merch.devolverdigital.com": [
+      "Microtransaction Gun",
+      "Mustache"
+    ],
+    "Monsters and Monocles": [
+      "Mustache"
+    ],
+    "Liches Get Stitches": [
+      "Lichy Trigger Finger"
+    ],
+    "The Submachinist": [
+      "Lich's Eye Bullets"
+    ],
+    "Trigger Twins": [
+      "Lich's Eye Bullets"
+    ],
+    "Rubenstein's Monster": [
+      "Duct Tape",
+      "Lich's Eye Bullets",
+      "RUBE-ADYNE MK.II"
+    ],
+    "Detective Mode": [
+      "38 Special",
+      "Badge",
+      "Book of Chest Anatomy",
+      "Lich's Eye Bullets"
+    ],
+    "There Is Only War": [
+      "Lich's Eye Bullets"
+    ],
+    "Cast Iron": [
+      "Big Iron",
+      "Lich's Eye Bullets"
+    ],
+    "Just In Case": [
+      "Lich's Eye Bullets"
+    ],
+    "Iroquois": [
+      "Cigarettes",
+      "Eyepatch",
+      "Rolling Eye"
+    ],
+    "Backdraft": [
+      "Copper Ammolet",
+      "Ring of Fire Resistance",
+      "Ruby Bracelet"
+    ],
+    "Hot Rolls": [
+      "Cloranthy Ring",
+      "Ring of Fire Resistance"
+    ],
+    "Redder Guon Stone": [
+      "Ring of Fire Resistance"
+    ],
+    "Porkulent": [
+      "Ring of Miserly Protection"
+    ],
+    "Captain Plant It": [
+      "Unity"
+    ],
+    "Garbage Collecting": [
+      "Trashcannon",
+      "Unity"
+    ],
+    "what engine do you use": [
+      "Gungine",
+      "Unity"
+    ],
+    "Pea Cannon": [
+      "Crutch",
+      "Old Knight's Helm",
+      "Old Knight's Shield"
+    ],
+    "Fear the Old Blood": [
+      "Bloody Eye",
+      "Trick Gun"
+    ],
+    "Tears of Blood": [
+      "Bloody Eye"
+    ],
+    "Cormorant": [
+      "Gunknight Armor",
+      "Gunknight Gauntlet",
+      "Gunknight Greaves",
+      "Gunknight Helmet",
+      "Rad Gun",
+      "Thunderclap"
+    ],
+    "Clawntlet": [
+      "Gunknight Gauntlet"
+    ],
+    "Tutorialized": [
+      "Old Knight's Helm",
+      "Old Knight's Shield"
+    ],
+    "\\o/": [
+      "Gun Soul",
+      "Old Knight's Flask",
+      "Sunlight Javelin"
+    ],
+    "Praise the Gun": [
+      "Gun Soul",
+      "Old Knight's Flask"
+    ],
+    "To Serve Android": [
+      "Baby Good Mimic",
+      "Badge",
+      "Deck4rd",
+      "Full Metal Jacket",
+      "Mass Shotgun"
+    ],
+    "Secret Twin": [
+      "Ticket",
+      "Vulcan Cannon"
+    ],
+    "Double Down": [
+      "Gunboots"
+    ],
+    "Spelunker": [
+      "Gunboots"
+    ],
+    "Willing to Sacrifice": [
+      "Ice Cube"
+    ],
+    "Fear The Old Blood": [
+      "Rolling Eye"
+    ],
+    "Full Circle": [
+      "Rolling Eye"
+    ],
+    "What A Thrill": [
+      "Ancient Hero's Bandana",
+      "Cigarettes"
+    ],
+    "Just Shoot Me": [
+      "Camera",
+      "Magazine Rack"
+    ],
+    "Junk Mail": [
+      "Magazine Rack"
+    ],
+    "Magazine Clip": [
+      "Magazine Rack"
+    ],
+    "Hornucopia": [
+      "Charm Horn"
+    ],
+    "Bee Plus": [
+      "Honeycomb"
+    ],
+    "BEES": [
+      "Honeycomb"
+    ],
+    "Cactus Flower": [
+      "Cactus",
+      "Duct Tape"
+    ],
+    "that &^#$# 'pizza'": [
+      "Duct Tape",
+      "Machine Fist",
+      "RPG"
+    ],
+    "The Void Corps": [
+      "Duct Tape",
+      "Void Core Assault Rifle",
+      "Void Core Cannon",
+      "Void Shotgun"
+    ],
+    "Akey Breaky": [
+      "Duct Tape"
+    ],
+    "Betrayer's Lies": [
+      "Betrayer's Shield",
+      "Duct Tape",
+      "Lies"
+    ],
+    "Sausage and Pepper": [
+      "Gungeon Pepper"
+    ],
+    "Tile Match": [
+      "Tetrominator",
+      "White Guon Stone"
+    ],
+    "Bullet Kiln": [
+      "Glass Guon Stone"
+    ],
+    "Like Shooting Fish": [
+      "Backup Gun",
+      "Derringer"
+    ],
+    "Hydro Pump": [
+      "Escape Rope",
+      "Mega Douser"
+    ],
+    "Barrage Shot": [
+      "Charge Shot",
+      "Jetpack"
+    ],
+    "Mad Cats": [
+      "3rd Party Controller",
+      "Cat Bullet King Throne"
+    ],
+    "Usurper": [
+      "Cat Bullet King Throne"
+    ],
+    "Fightsabre Training": [
+      "Baby Good Mimic",
+      "Blast Helmet",
+      "Fightsabre"
+    ],
+    "Production Model": [
+      "Nanomachines",
+      "Prototype Railgun"
+    ],
+    "Steel Skin": [
+      "Nanomachines"
+    ],
+    "Breakfast Club": [
+      "Seven-Leaf Clover",
+      "Wind Up Gun"
+    ],
+    "Don't Worry About The Vase": [
+      "Copper Ammolet",
+      "Frost Ammolet"
+    ],
+    "Firing With Flair": [
+      "Copper Ammolet"
+    ],
+    "Don’t Worry About The Vase": [
+      "Frost Ammolet",
+      "The Kiln"
+    ],
+    "Paperwork": [
+      "Origuni",
+      "Table Tech Heat",
+      "Table Tech Shotgun"
+    ],
+    "All Out Of Law": [
+      "Heart Holster"
+    ],
+    "Finger on the Pulse": [
+      "Heart Bottle",
+      "Heart Holster",
+      "Heart Locket",
+      "Heart Lunchbox"
+    ],
+    "Quick and the Gundead": [
+      "Heart Holster"
+    ],
+    "Heart-Shaped Box": [
+      "Heart Lunchbox"
+    ],
+    "Ruby Carbine": [
+      "Ruby Bracelet"
+    ],
+    "Saved the Best for Last": [
+      "Ruby Bracelet"
+    ],
+    "Dragunice": [
+      "Heart of Ice"
+    ],
+    "Frosty Distraction": [
+      "Heart of Ice"
+    ],
+    "Jotun Time": [
+      "Heart of Ice"
+    ],
+    "Raizo's Stuff": [
+      "Bloodied Scarf"
+    ],
+    "Spengbab": [
+      "Sponge",
+      "Tangler"
+    ],
+    "Super Serum": [
+      "Gas Mask"
+    ],
+    "Crestfallen Soul": [
+      "Crestfaller",
+      "Gun Soul"
+    ],
+    "Cash Rules Everygun Around Me": [
+      "Brick of Cash",
+      "Briefcase of Cash"
+    ],
+    "Pilot Wingsman": [
+      "Alien Engine",
+      "Baby Good Mimic",
+      "Wingman"
+    ],
+    "The Red Hood": [
+      "Huntsman",
+      "Wolf"
+    ],
+    "Sniper Woof": [
+      "A.W.P.",
+      "Bow",
+      "Hexagun",
+      "M1",
+      "Sniper Rifle",
+      "Wolf"
+    ],
+    "Don't Hoot the Messenger": [
+      "Dungeon Eagle",
+      "Owl"
+    ],
+    "Special Delivery": [
+      "Bundle of Wands",
+      "Hexagun",
+      "Owl",
+      "Staff of Firepower"
+    ],
+    "The Elephant in the Room": [
+      "Owl",
+      "Turkey"
+    ],
+    "Super Space Turtle DX": [
+      "Baby Good Mimic",
+      "Super Space Turtle"
+    ],
+    "Turtle Solutions": [
+      "Super Space Turtle",
+      "Turtle Problem"
+    ],
+    "Wicked Sister": [
+      "Briefcase of Cash",
+      "Lies",
+      "Magnum"
+    ],
+    "Tea For Two": [
+      "Baby Good Shelleton",
+      "R2G2",
+      "Turkey"
+    ],
+    "Birthright": [
+      "Baby Good Shelleton"
+    ],
+    "Shell-A-Ton": [
+      "Baby Good Shelleton"
+    ],
+    "Bullet or the Egg": [
+      "Chicken Flute",
+      "The Scrambler"
+    ],
+    "RAIDEN": [
+      "Space Friend"
+    ],
+    "Space Best Friend": [
+      "Alien Engine",
+      "Baby Good Mimic",
+      "Space Friend"
+    ],
+    "The Line of Fire": [
+      "Composite Gun",
+      "Pig"
+    ],
+    "Hyper Beam": [
+      "Heroine",
+      "Pig"
+    ],
+    "The Return": [
+      "Baby Good Mimic",
+      "Glass Cannon",
+      "Luxin Cannon",
+      "Makeshift Cannon",
+      "Pig",
+      "Science Cannon",
+      "Trashcannon",
+      "Void Core Cannon"
+    ],
+    "Moonplanet": [
+      "Baby Good Mimic"
+    ],
+    "Blank Generations": [
+      "Baby Good Mimic"
+    ],
+    "Decorated": [
+      "Galactic Medal of Valor",
+      "Hegemony Carbine"
+    ],
+    "Hegemony Special Forces": [
+      "Galactic Medal of Valor"
+    ],
+    "Critcaliber": [
+      "Bullet Idol"
+    ],
+    "Devil's Plaything": [
+      "Bullet Idol"
+    ],
+    "Just Like The Real Thing": [
+      "Bullet Idol",
+      "Shotgrub"
+    ],
+    "Hacker": [
+      "Bracket Key"
+    ],
+    "Square Brace": [
+      "Bracket Key",
+      "Polaris"
+    ],
+    "Blank Generation": [
+      "Elder Blank"
+    ],
+    "Key Witness": [
+      "Blasphemy"
+    ],
+    "Dead Prez": [
+      "Derringer",
+      "Dueling Pistol"
+    ],
+    "Thorn Bath, ooh!": [
+      "Cactus",
+      "Derringer"
+    ],
+    "Blammo!": [
+      "Bullet"
+    ],
+    "Hard Light": [
+      "Hyper Light Blaster"
+    ],
+    "No Odd Job": [
+      "Klobbe",
+      "Makarov"
+    ],
+    "Mmmmmmmmm MMMMmm!": [
+      "M1911"
+    ],
+    "Reload Roll": [
+      "Magnum"
+    ],
+    "Detective Magnum": [
+      "Magnum"
+    ],
+    "Why's Bullet's Crying?": [
+      "Cold 45"
+    ],
+    "Guns and Deviltry": [
+      "Grey Mauser"
+    ],
+    "Kaliber k'pow uboom k'bhang": [
+      "High Kaliber"
+    ],
+    "Klobbering Time": [
+      "AU Gun",
+      "Klobbe"
+    ],
+    "Shotgun Affinity": [
+      "Big Shotgun",
+      "Blunderbuss",
+      "Bundle of Wands",
+      "Gilded Hydra",
+      "Huntsman",
+      "Knight's Gun",
+      "Old Goldie",
+      "Rattler",
+      "Regular Shotgun",
+      "Sawed-Off",
+      "Shotbow",
+      "Shotgrub",
+      "Shotgun Full of Love",
+      "Siren",
+      "Tangler",
+      "The Membrane",
+      "Triple Crossbow",
+      "Void Shotgun",
+      "Zilla Shotgun"
+    ],
+    "Two Kinds of People": [
+      "Knight's Gun"
+    ],
+    "Heads Up": [
+      "GuNNER"
+    ],
+    "Big Shotgun Gun": [
+      "Big Shotgun"
+    ],
+    "The Elephant In The Room": [
+      "Elephant Gun"
+    ],
+    "Mass Cutter": [
+      "Mass Shotgun",
+      "Mine Cutter"
+    ],
+    "Love/Hate": [
+      "Shotgun Full of Hate"
+    ],
+    "Contrail": [
+      "Alien Engine",
+      "Shotgrub"
+    ],
+    "Monster Grub": [
+      "Shotgrub"
+    ],
+    "Ecstasy of Gold": [
+      "Gilded Hydra"
+    ],
+    "Shadow Warrior": [
+      "Yari Launcher",
+      "Zilla Shotgun"
+    ],
+    "Gunderlord": [
+      "Ice Breaker",
+      "Patriot"
+    ],
+    "It's Your Destiny": [
+      "Ice Breaker",
+      "The Exotic"
+    ],
+    "The Killing Joke": [
+      "AK-47",
+      "JK-47"
+    ],
+    "Soft Air": [
+      "JK-47"
+    ],
+    "Fairy Bow": [
+      "Bow"
+    ],
+    "Slings and Arrows": [
+      "Bow",
+      "Sling"
+    ],
+    "Triple Sticky": [
+      "Sticky Crossbow",
+      "Triple Crossbow"
+    ],
+    "Alas, Sniperion": [
+      "Crescent Crossbow",
+      "Crown of Guns"
+    ],
+    "In The Mood!": [
+      "Strafe Gun"
+    ],
+    "Blast Crown": [
+      "Crown of Guns"
+    ],
+    "Two Heavy": [
+      "Crown of Guns"
+    ],
+    "Outer Limits": [
+      "Mr. Accretion Jr."
+    ],
+    "Orrery": [
+      "Mr. Accretion Jr."
+    ],
+    "Jolly Roger": [
+      "VertebraeK-47"
+    ],
+    "Dr Worm": [
+      "Heck Blaster"
+    ],
+    "What a Thrill": [
+      "Patriot"
+    ],
+    "Armored Corps": [
+      "AC-15"
+    ],
+    "Not Quite As Mini": [
+      "Vulcan Cannon"
+    ],
+    "Vulcan Raving": [
+      "Vulcan Cannon"
+    ],
+    "Contractual Obligation": [
+      "Devolver",
+      "Gungine"
+    ],
+    "Thermal Imaging": [
+      "The Predator"
+    ],
+    "Diazepam": [
+      "Crestfaller",
+      "Hexagun",
+      "Laser Rifle",
+      "Shock Rifle",
+      "Sniper Rifle",
+      "Thunderclap"
+    ],
+    "Smile, you son of a...": [
+      "M1"
+    ],
+    "Dead Cell": [
+      "Railgun"
+    ],
+    "Blade Runner": [
+      "Deck4rd",
+      "Origuni"
+    ],
+    "Running Blades": [
+      "Deck4rd"
+    ],
+    "Master's Chambers": [
+      "Chamber Gun"
+    ],
+    "Ice Cap": [
+      "Camera",
+      "Flash Ray"
+    ],
+    "Savior of the Universe": [
+      "Camera",
+      "Flash Ray"
+    ],
+    "Wound Up": [
+      "Wind Up Gun"
+    ],
+    "Hammer and Nail": [
+      "H4mmer"
+    ],
+    "Double Double Helix": [
+      "Helix"
+    ],
+    "Starburst Fire": [
+      "Laser Rifle",
+      "The Emperor"
+    ],
+    "Five O'clock Somewhere": [
+      "Crestfaller"
+    ],
+    "Kung Fu Hippie, Rappin' Surfer": [
+      "Rad Gun"
+    ],
+    "Hail To The King": [
+      "Yari Launcher"
+    ],
+    "Bomberpal": [
+      "Lil' Bomber"
+    ],
+    "Ghost With The Most": [
+      "Gunslinger's Ashes"
+    ],
+    "Spartan Loadout": [
+      "Cat Claw"
+    ],
+    "Get Equipped With -A-": [
+      "Megahand"
+    ],
+    "Get Equipped With -B-": [
+      "Megahand"
+    ],
+    "Get Equipped With -C-": [
+      "Megahand"
+    ],
+    "Get Equipped With -F-": [
+      "Megahand"
+    ],
+    "Get Equipped With -H-": [
+      "Megahand"
+    ],
+    "Get Equipped With -M-": [
+      "Buzzkill",
+      "Megahand"
+    ],
+    "Get Equipped With -Q-": [
+      "Megahand"
+    ],
+    "Get Equipped With -W-": [
+      "Megahand"
+    ],
+    "There is Only War": [
+      "Demon Head"
+    ],
+    "I Studied The Blade": [
+      "Buzzkill",
+      "Super Meat Gun"
+    ],
+    "Meltdown": [
+      "Gamma Ray"
+    ],
+    "Beta Ray": [
+      "Gamma Ray"
+    ],
+    "Weird Science": [
+      "Science Cannon"
+    ],
+    "Napalm B": [
+      "Mega Douser"
+    ],
+    "Ice Water": [
+      "Mega Douser"
+    ],
+    "Land Among The Stars": [
+      "Moonscraper"
+    ],
+    "Jumping... Is Useless": [
+      "Moonscraper",
+      "Quad Laser"
+    ],
+    "One Fish Two Fish": [
+      "Barrel"
+    ],
+    "Insight": [
+      "Trick Gun"
+    ],
+    "Banshee Cry": [
+      "Dueling Laser"
+    ],
+    "Death Square": [
+      "Dueling Laser"
+    ],
+    "Bacon and Eggs": [
+      "The Scrambler"
+    ],
+    "EGG MURDERER": [
+      "The Scrambler"
+    ],
+    "Two Eggs Over Easy": [
+      "The Scrambler"
+    ],
+    "Grouch": [
+      "Trashcannon"
+    ],
+    "Recycling Bin": [
+      "Trashcannon"
+    ],
+    "Unsinkable": [
+      "Glacier"
+    ],
+    "Paper Lanterns": [
+      "Origuni"
+    ],
+    "Parchmental": [
+      "Origuni"
+    ],
+    "Not So Sawed-Off": [
+      "Buzzkill"
+    ],
+    "Wrath Of The Blam": [
+      "Directional Pad",
+      "Tear Jerker"
+    ],
+    "Max Pane": [
+      "Glass Cannon"
+    ],
+    "Assault and Battery": [
+      "Shock Rifle"
+    ],
+    "Rabid": [
+      "Lower Case r"
+    ],
+    "Ravishing": [
+      "Lower Case r"
+    ],
+    "Reinforced": [
+      "Lower Case r"
+    ],
+    "Root": [
+      "Lower Case r"
+    ],
+    "Remnant": [
+      "Lower Case r"
+    ],
+    "Buster Gun": [
+      "Excaliber"
+    ],
+    "Throw All Daggers": [
+      "Excaliber"
+    ],
+    "Three Part Harmony": [
+      "Really Special Lute"
+    ],
+    "blade": [
+      "Kruller Glaive"
+    ],
+    "Cosmic Horror": [
+      "Abyssal Tentacle",
+      "Black Hole Gun"
+    ],
+    "Jumping... is useless": [
+      "Quad Laser"
+    ],
+    "Primitive Shapes": [
+      "Quad Laser"
+    ],
+    "Circle of Bricks": [
+      "Tetrominator"
+    ],
+    "Pitch Perfect": [
+      "Pitchfork"
+    ],
+    "The Powerhouse of the Cell": [
+      "Evolver"
+    ],
+    "Ancient Aliens": [
+      "Alien Engine"
+    ],
+    "Get Equipped with -F-": [
+      "Camera"
+    ],
+    "Wrath of the Blam": [
+      "Directional Pad"
+    ],
+    "Shredder": [
+      "Gunzheng"
+    ],
+    "Succulent DOOM": [
+      "Cactus"
+    ],
+    "Serious Sam Publishing Contract": [
+      "Devolver",
+      "Serious Cannon"
+    ],
+    "Cool Kids Club": [
+      "Devolver"
+    ],
+    "Overdose": [
+      "Devolver"
+    ]
+  }
+}

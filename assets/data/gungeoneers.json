@@ -1,0 +1,93 @@
+[
+  {
+    "name": "The Marine",
+    "starting_guns": [
+      "Marine Sidearm"
+    ],
+    "starting_items": [
+      "Supply Drop"
+    ],
+    "icon": ""
+  },
+  {
+    "name": "The Pilot",
+    "starting_guns": [
+      "Rogue Special"
+    ],
+    "starting_items": [
+      "Trusty Lockpicks",
+      "Disarming Personality",
+      "Hidden Compartment"
+    ],
+    "icon": ""
+  },
+  {
+    "name": "The Convict",
+    "starting_guns": [
+      "Sawed-Off",
+      "Budget Revolver"
+    ],
+    "starting_items": [
+      "Molotov",
+      "Enraging Photo"
+    ],
+    "icon": ""
+  },
+  {
+    "name": "The Hunter",
+    "starting_guns": [
+      "Rusty Sidearm",
+      "Crossbow"
+    ],
+    "starting_items": [
+      "Dog"
+    ],
+    "icon": ""
+  },
+  {
+    "name": "The Bullet",
+    "starting_guns": [
+      "Blasphemy"
+    ],
+    "starting_items": [
+      "Live Ammo"
+    ],
+    "icon": ""
+  },
+  {
+    "name": "The Robot",
+    "starting_guns": [
+      "Robot's Right Hand"
+    ],
+    "starting_items": [
+      "Battery Bullets",
+      "Coolant Leak"
+    ],
+    "icon": ""
+  },
+  {
+    "name": "The Cultist",
+    "starting_guns": [
+      "Dart Gun"
+    ],
+    "starting_items": [
+      "Friendship Cookie",
+      "Number 2"
+    ],
+    "icon": ""
+  },
+  {
+    "name": "The Paradox",
+    "starting_guns": [],
+    "starting_items": [],
+    "icon": ""
+  },
+  {
+    "name": "The Gunslinger",
+    "starting_guns": [
+      "Slinger"
+    ],
+    "starting_items": [],
+    "icon": ""
+  }
+]

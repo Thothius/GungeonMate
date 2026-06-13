@@ -1,0 +1,58 @@
+[
+  {
+    "version": "v1.8.0",
+    "title": "🔮 LORE DIALOGUE & SECRET CURIO COLLECTIBLES",
+    "date": "June 12, 2026",
+    "items": [
+      "Dialogue Tuning: Added a top-right settings icon in the NPC Dialogue panel to toggle haptic ticks and choose typewriter speeds (Instant, Fast, Normal, Slow).",
+      "5 Secret Delivery Quests: Added special Gungeon delivery storylines for Flynt, Vampire, Sell Creep, Professor Goopton, and Cursula.",
+      "The 3 Gungeon Anomalies: Gather the Myconid Blank-Cap (Red Mushroom), Aurum Ammo-Nugget (Gold Nugget), and Chrono-Trigger Sprocket (Golden Gear) from other merchants.",
+      "Bello's Secret Cabinet: Deliver anomalies to Bello's secret cabinet to unlock a permanent, cumulative 30% price discount on his cost calculator widget.",
+      "Cursula Flirting Engine: Playful, witty, and alien flirting lines that match Cursula's dark purple, shadow-bounded Gungeon personality."
+    ]
+  },
+  {
+    "version": "v1.7.2",
+    "title": "🎲 GUNFORTUNA DIEL DIALOG SKINS",
+    "date": "June 12, 2026",
+    "items": [
+      "Customizer Dropdown: Select beautiful dice skins (Classic, Gold, Frost, Molten, Void, Toxic) in-place before rolling.",
+      "Huntress HUD Fix: Resolved a collapsed-height bug to restore complete item inventory and grid visibility.",
+      "Dog Strip: Grounded dog movements to move horizontally only on top of option widgets.",
+      "Speech Popups: Added dedicated animated speech bubbles that float directly near the dog.",
+      "Filter UI Upgrades: Grid-mode filter visibility improvements and double-height category tags."
+    ]
+  },
+  {
+    "version": "v1.7.0",
+    "title": "🎯 INTERACTIVE WINCHESTER CAMPAIGN",
+    "date": "June 12, 2026",
+    "items": [
+      "Chamber Progression: 10-level campaign replacing standard target shooting variants.",
+      "Dual-Thumb Controls: BAM! fire button paired with PlayStation-style Analog Aiming stick.",
+      "Dog Treat Cookie Throw: Paths active treats for Dog to run and eat.",
+      "Baby Good Mimic Synergy: Co-op purple-tinted twin companion dog with independent AI roaming."
+    ]
+  },
+  {
+    "version": "v1.5.0",
+    "title": "🤖 THE ROBOT OVERHAUL & PERSISTENCE",
+    "date": "May 2026",
+    "items": [
+      "No-Hearts Armor Engine: Dynamic armor display replace hearts dashboard widget.",
+      "Junk Damage Recycler: Live calculation of +5% damage per Junk item carried.",
+      "Advanced Y-Perspectives: Smooth 3D card-flip rotations with spring-back easing."
+    ]
+  },
+  {
+    "version": "v1.0.0",
+    "title": "📦 CORE GUNGEONMATE RELEASE",
+    "date": "May 2026",
+    "items": [
+      "Rich Item Database: Comprehensive offline access to all 239 guns, 270 items, and 395 synergies.",
+      "Single-Device Persistence: Auto-saves active runs so you never lose progress.",
+      "Local Multiplayer Sync: Bluetooth/Wi-Fi event-driven co-op state sync for dual player runs.",
+      "Winchester's Minigame: Fully playable billiard-physics target-shooting simulator."
+    ]
+  }
+]

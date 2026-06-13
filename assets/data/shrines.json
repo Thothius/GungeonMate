@@ -1,0 +1,128 @@
+[
+  {
+    "name": "Ammo",
+    "icon": "",
+    "description": "A shrine to Shell'tan, ammo elemental.",
+    "message": "Deal with the Devil The Shadows Grow Darker",
+    "effect": "Refills the ammo of all weapons, but increases curse by 3.5.",
+    "curse": 3.5,
+    "coolness": 0.0
+  },
+  {
+    "name": "Angel",
+    "icon": "",
+    "description": "A shrine to a prideful bullet angel, now fallen.",
+    "message": "Sacrifice Accepted Stronger",
+    "effect": "Removes one heart container (or two armor if playing as The Robot ), increases damage by 25%, and increases curse by 1.5.",
+    "curse": 1.5,
+    "coolness": 0.0
+  },
+  {
+    "name": "Beholster",
+    "icon": "",
+    "description": "A shrine to the evil eye, the sphere of many guns: the Beholster. It appears each arm of the shrine could hold a weapon.",
+    "message": "N/A",
+    "effect": "Give the shrine the Com4nd0 , M1911 , Void Marshal , Machine Pistol , Eye of the Beholster , and the Trank Gun , the weapons the Beholster uses in-game. After placing all guns on the shrine throughout multiple runs, they will all be returned to the player, granting the Behold! synergy. With the synergy, when the Eye of the Beholster is held, the other guns rotate around the player and shoot at nearby enemies, still using up ammo from each gun. Note that once the synergy is granted, the shrine will reset to having 0 guns once again.",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Blank",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/58/Blank_Shrine.png/revision/latest?cb=20160427200942",
+    "description": "The only legible text is \"...offering...\" The rest is blank.",
+    "message": "N/A",
+    "effect": "Using a blank near the statue has a 90% chance to spawn a chest . This chest may be locked or unlocked. Repeated use of blanks can spawn more chests, but each chest received decreases the success chance by 45%, down to a minimum of 25%. The chest can be a mimic . Elder Blank does not activate the blank shrine. Dead players in Co-op cannot activate the blank shrine.",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Blood",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f7/Blood_Shrine.png",
+    "description": "An ominous fountain, filled with blood. It isn't quite full...",
+    "message": "Sacrifice Kaliber Mah Shakti De",
+    "effect": "Removes one heart container (or two armor if playing as The Robot ). Some enemies become highlighted in red. Standing near highlighted enemies damages and drains them, healing the player after draining enough. This can be used to damage enemies such as Cannonbalrog while they have disappeared. This effect will carry over to a Gungeoneer's past. The damaging aura's healing will not grant any armor for the The Robot . Using this shrine twice will unlock the Life Orb .",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Challenge",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/dd/Challenge_Shrine.png",
+    "description": "Dark energy permeates this shrine. The statue fills you with a sense of foreboding.",
+    "message": "N/A",
+    "effect": "Using the shrine forces the player to fight through three waves of enemies. Surviving the waves rewards the player with a chest . The chest can be a mimic . May disappear if the player moves on to another room before challenging. May occasionally appear in a secret room.",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Cleanse",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6c/Cleanse_Shrine.png",
+    "description": "Curse is 0-2: The spectres don’t disturb you. Curse is 3-4 : You are touched by darkness. Curse is 5-6: You are wreathed in darkness. Curse is 7-9: Tarry not. They come for you. Curse is 10+: No one can help you.",
+    "message": "Purified Your Spirit Feels Lighter",
+    "effect": "Sets the player's curse to 0 in exchange for 5 per point of curse. This shrine has its own unique room when generated and has a unique icon on the map. It is possible to have less than 0 points of curse by dropping a cursed item after using the Cleanse shrine. This is noticed by the fact that the shrine will pay you 5 for each point dropped if you use it again afterwards.",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Companion",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f7/Familiar_Shrine.png",
+    "description": "A statue commemorating the few friendly faces encountered deep in the Gungeon. Though the ground nearby is bloody, your heart is filled with joy.",
+    "message": "Brave Companion A friend in deed",
+    "effect": "Removes one heart container (or two armor if playing as The Robot ), and grants a random item that summons a familiar . You can have multiple companions. (Doesn't give a familiar in Rainbow Mode , but still takes a heart container.) Using this shrine 2 times unlocks Turkey .",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Dice",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/00/Dice_Shrine.png",
+    "description": "A shrine to Icosahedrax, the great arbiter.",
+    "message": "Roll of the Dice",
+    "effect": "Good Effects Bad Effects Renewed Restores a random amount of health. Pained Damages the player for 1-2 hearts. Bolstered Grants 1-2 heart containers. Enfeebled Removes a heart container. Paid Grants 20-99 money. Robbed Removes 25-100% money. Cleansed Removes up to 10 curse . Cursed Increases curse by 5. Blanked Grants 1-10 blanks. De-Blanked Removes a random amount of blanks. Gift Grants a chest. Disarmed Removes the currently held weapon. Reloaded Refills ammo for all guns or increases ammo capacity by 225%. Limited Decreases ammo capacity by 30%. (Currently wielded weapon keeps excess ammo until switched) Hasted Increases movement speed. Unsteady Increases reload time by 35%. Shielded Grants 1-3 armor. Priceless No negative effect. Using this shrine grants one positive and one negative effect. Renewed, Bolstered, and Enfeebled have no effect on The Robot . Using this shrine 3 times unlocks Daisuke . The gift chest can be a Mimic . There is also a small 0.1% chance that the shrine will explode upon use, reducing your heart containers to 1, quadrupling your damage, and pushing you away.",
+    "curse": 5.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Glass",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/8d/Glass_Shrine.png",
+    "description": "A shrine of glass.",
+    "message": "Glass Armor Pane's Blessing",
+    "effect": "Grants three Glass Guon Stones which block enemy bullets but break if the player takes damage. Using the shrine for the first time will unlock the Glass Guon Stone item.",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Hero",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/07/Hero_Shrine.png",
+    "description": "A shrine to an old gunslinger. There is an inscription... \"Kill your past; you've already damned your future.\" The rest is worn away.",
+    "message": "N/A",
+    "effect": "Located in the starting room of the Keep of the Lead Lord , the Hero Shrine can only be activated after killing the character's past. Activating it will set the player's curse to 9. The player cannot use this shrine if their curse is already at 9 or above.",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Junk",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d7/Junk_Shrine.png",
+    "description": "A shrine to Ser Junkan , who rose from nothing to become one of the Gungeon's greatest knights.",
+    "message": "Ser Junkan's Boon Knight in Shining Armor",
+    "effect": "Grants a piece of armor in exchange for Junk .",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Peace",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/58/Peace_Shrine.png",
+    "description": "A shrine to a forgotten bullet who laid down his arms... will you?",
+    "message": "At Peace Live To Gun Another Day",
+    "effect": "Heals the player for one heart in exchange for their currently held weapon. In a Blessed run, guns can continually be exchanged for hearts.",
+    "curse": 0.0,
+    "coolness": 0.0
+  },
+  {
+    "name": "Y.V.",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/75/YV_Shrine.png",
+    "description": "A shrine to the Gun Godz.",
+    "message": "Pop Bullets From Nowhere",
+    "effect": "Costs 10 to use the first time, and the cost increases by 10 per use. Every time the player fires a weapon, there is a chance for it to quickly fire 2 to 4 times at no extra ammo cost. Each use linearly increases the chance to activate the effect by 3.7%. Repeated use only increases the chance to fire additional bullets. It has no effect on the number of bullets fired — these are always random.",
+    "curse": 0.0,
+    "coolness": 0.0
+  }
+]
