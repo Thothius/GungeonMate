@@ -103,17 +103,18 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           final gS = showGlow
               ? _scaleAlpha(f.glowSecondary, prefs.glowIntensity)
               : const Color(0x00000000);
-          final backdrop = prefs.hypnoticBgEnabled
+          final hypnoticBackdrop = prefs.hypnoticBgEnabled
               ? _HypnoticBg(
                   assetName: prefs.hypnoticBgAsset,
                   speedMultiplier: prefs.hypnoticBgSpeed,
                   opacity: prefs.hypnoticBgOpacity,
                 )
-              : (!prefs.particlesEnabled
-                  ? null
-                  : (prefs.customParticleType != CustomParticleType.themeDefault
-                      ? _CustomParticleBackdrop(prefs: prefs)
-                      : _backdropFor(f.backdrop, prefs)));
+              : null;
+          final particleBackdrop = !prefs.particlesEnabled
+              ? null
+              : (prefs.customParticleType != CustomParticleType.themeDefault
+                  ? _CustomParticleBackdrop(prefs: prefs)
+                  : _backdropFor(f.backdrop, prefs));
           Widget content = widget.child;
 
           // Apply visual customizer wrappers based on active Theme Mode!
@@ -139,9 +140,18 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
             behavior: HitTestBehavior.translucent,
             child: Stack(
               children: [
-                // 1. Base Layer: Hypnotic Trippy Background or Particles
-                if (backdrop != null)
-                  Positioned.fill(child: IgnorePointer(child: backdrop)),
+                // 0. Absolute Base Solid Background Color (since scaffolds are transparent)
+                Positioned.fill(
+                  child: Container(color: f.scaffold),
+                ),
+
+                // 1a. Hypnotic Trippy Background
+                if (hypnoticBackdrop != null)
+                  Positioned.fill(child: IgnorePointer(child: hypnoticBackdrop)),
+
+                // 1b. Particles / Theme Backdrops
+                if (particleBackdrop != null)
+                  Positioned.fill(child: IgnorePointer(child: particleBackdrop)),
 
                 // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
                 content,

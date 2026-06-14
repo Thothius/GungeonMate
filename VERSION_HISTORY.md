@@ -6,6 +6,24 @@ All production APK builds are archived in `builds/` with proper version labeling
 
 ---
 
+## v1.8.5 — Theme Overlays & Independent Grid Scaling (June 14, 2026)
+**File:** `gungeon-mate-v1.8.5.apk`
+**Size:** 30.7 MB
+**Build:** 30
+
+### Theme Backdrops Fixed
+- **Transparent Scaffolds** — Set `scaffoldBackgroundColor` in `ThemeData` to transparent and painted `f.scaffold` color as the absolute bottom layer of `ThemeOverlay`. This prevents solid scaffolds from blocking underlying trippy background and particle layers!
+- **Dual Layer Effects** — Separated trippy hypnotic background layers and particle engines so they can now render simultaneously if both are enabled.
+
+### Beautiful Mobile Webview & Offline Fallbacks
+- **Clean In-App Wiki.gg Webview** — Injected custom JS and CSS to strip away global navigation, headers, sidebars, ads, and footers from wiki.gg inside the app for a native look.
+- **Themed Offline Fallback View** — Designed a stunning, dark neon 'WIKI UNREACHABLE' screen that gracefully handles network and DNS connection failures, giving options to retry or view offline info.
+
+### Independent Scaling
+- **Grid Tile Font Size Slider** — Added a separate 'Inventory Tile Font Size' slider in Settings to adjust grid item title text (10.0-18.0 pt) independently of global scale, preventing clipping and squishing.
+
+---
+
 ## v1.8.4 — The Lore & Dialogue Update (June 14, 2026)
 **File:** `gungeon-mate-v1.8.4.apk`
 **Size:** 30.7 MB

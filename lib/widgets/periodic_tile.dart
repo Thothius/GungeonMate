@@ -7,6 +7,7 @@ import '../models/item.dart';
 import '../models/player.dart';
 import '../providers/run_provider.dart';
 import '../services/elemental_tagger.dart';
+import '../services/app_theme.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
@@ -705,8 +706,8 @@ class _PeriodicTileState extends State<PeriodicTile>
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 12,
+                style: TextStyle(
+                  fontSize: VisualPrefs.notifier.value.inventoryFontSize,
                   fontWeight: FontWeight.w600,
                   height: 1.15,
                 ),

@@ -928,6 +928,9 @@ class VisualPrefs {
   /// User-selected base font size (pt). Discrete steps for crisp UX.
   final double fontSize;
 
+  /// Font size for inventory tiles specifically. Let users scale it independently.
+  final double inventoryFontSize;
+
   /// Custom Particle Settings
   final CustomParticleType customParticleType;
   final CustomDiceType customDiceType;
@@ -966,6 +969,7 @@ class VisualPrefs {
     this.fontWeightBias = 0,
     this.font = AppFont.gungeon,
     this.fontSize = 12.0,
+    this.inventoryFontSize = 12.0,
     this.customParticleType = CustomParticleType.themeDefault,
     this.customDiceType = CustomDiceType.themeDefault,
     this.emitFromTop = true,
@@ -991,6 +995,7 @@ class VisualPrefs {
   static const _kWeight   = 'vp.weight_v1';
   static const _kFont     = 'vp.font_v1';
   static const _kFontSize = 'vp.font_size_v1';
+  static const _kInventoryFontSize = 'vp.inventory_font_size_v1';
   static const _kScaleLegacy = 'vp.scale_v1'; // migrated to _kFontSize
 
   static const _kCustomParticleType = 'vp.custom_particle_type_v2';
@@ -1051,6 +1056,8 @@ class VisualPrefs {
       final customDiceTypeIdx = p.getInt(_kCustomDiceType) ?? 0;
       final customDiceType = CustomDiceType.values[customDiceTypeIdx.clamp(0, CustomDiceType.values.length - 1)];
 
+      final inventoryFontSize = p.getDouble(_kInventoryFontSize) ?? 12.0;
+
       notifier.value = VisualPrefs(
         glowIntensity:    p.getDouble(_kGlow)     ?? 0.0,
         particlesEnabled: p.getBool(_kParticles)  ?? true,
@@ -1060,6 +1067,7 @@ class VisualPrefs {
         fontWeightBias:   p.getInt(_kWeight)      ?? 0,
         font:             font,
         fontSize:         fontSize,
+        inventoryFontSize: inventoryFontSize,
         customParticleType: customParticleType,
         customDiceType:   customDiceType,
         emitFromTop:      p.getBool(_kEmitFromTop)    ?? true,
@@ -1117,6 +1125,12 @@ class VisualPrefs {
   static Future<void> setFontSize(double v) async {
     final clamped = v.clamp(6.0, 32.0);
     notifier.value = notifier.value._with(fontSize: clamped);
+    _persist();
+  }
+
+  static Future<void> setInventoryFontSize(double v) async {
+    final clamped = v.clamp(10.0, 18.0);
+    notifier.value = notifier.value._with(inventoryFontSize: clamped);
     _persist();
   }
 
@@ -1202,6 +1216,7 @@ class VisualPrefs {
       await p.setInt(_kWeight,      v.fontWeightBias);
       await p.setInt(_kFont,        v.font.index);
       await p.setDouble(_kFontSize,  v.fontSize);
+      await p.setDouble(_kInventoryFontSize, v.inventoryFontSize);
 
       await p.setInt(_kCustomParticleType, v.customParticleType.index);
       await p.setInt(_kCustomDiceType, v.customDiceType.index);
@@ -1230,6 +1245,7 @@ class VisualPrefs {
     int?    fontWeightBias,
     AppFont? font,
     double? fontSize,
+    double? inventoryFontSize,
     CustomParticleType? customParticleType,
     CustomDiceType? customDiceType,
     bool?   emitFromTop,
@@ -1254,6 +1270,7 @@ class VisualPrefs {
     fontWeightBias:   fontWeightBias   ?? this.fontWeightBias,
     font:             font             ?? this.font,
     fontSize:         fontSize         ?? this.fontSize,
+    inventoryFontSize: inventoryFontSize ?? this.inventoryFontSize,
     customParticleType: customParticleType ?? this.customParticleType,
     customDiceType:   customDiceType   ?? this.customDiceType,
     emitFromTop:      emitFromTop      ?? this.emitFromTop,
@@ -1401,7 +1418,7 @@ class AppTheme {
         onSurface: Colors.white,
       ),
       useMaterial3: true,
-      scaffoldBackgroundColor: f.scaffold,
+      scaffoldBackgroundColor: Colors.transparent,
       cardColor: f.card,
       textTheme: textTheme,
       // Ensure the font is also applied to the primary text theme

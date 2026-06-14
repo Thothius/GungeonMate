@@ -129,6 +129,20 @@ class _ThemeVisualsTab extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
+              // Inventory Tile Font Size Slider
+              _prefSectionTitle('INVENTORY TILE FONT SIZE (${prefs.inventoryFontSize.toStringAsFixed(1)} pt)'),
+              Slider(
+                value: prefs.inventoryFontSize,
+                min: 10.0,
+                max: 18.0,
+                divisions: 8,
+                activeColor: flair.headlineStat,
+                inactiveColor: Colors.white12,
+                label: '${prefs.inventoryFontSize.toStringAsFixed(1)} pt',
+                onChanged: (v) => VisualPrefs.setInventoryFontSize(v),
+              ),
+              const SizedBox(height: 12),
+
               // Font Weight Bias Slider
               _prefSectionTitle('FONT WEIGHT BIAS (${prefs.fontWeightBias >= 0 ? "+" : ""}${prefs.fontWeightBias})'),
               Slider(

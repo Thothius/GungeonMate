@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.8.5",
+    "title": "🎭 THEME OVERLAYS & INDEPENDENT GRID SCALING",
+    "date": "June 14, 2026",
+    "items": [
+      "Full Screen Visual Overlays: Fixed a rendering issue where solid Scaffold backgrounds covered theme backdrops. Scaffolds are now transparent, showing full particles, trippy GIFs, and ambient glows layered correctly.",
+      "Themed Offline Fallback: Added a gorgeous 'WIKI UNREACHABLE' screen matching the dark neon Gungeon style to gracefully handle internet/connection failures with a Retry option.",
+      "Clean Mobile Webview: Injected custom JS and CSS to strip headers, footers, navigation, sidebars, and ads from wiki.gg inside the app for a native look.",
+      "Independent Grid Scaling: Added a separate 'Inventory Tile Font Size' slider in Settings to adjust grid name text (10.0-18.0 pt) independently of global scale.",
+      "Dual Layer Effects: Separated trippy hypnotic background layers and particles so they can now render simultaneously if both are enabled!"
+    ]
+  },
+  {
     "version": "v1.8.0",
     "title": "🔮 LORE DIALOGUE & SECRET CURIO COLLECTIBLES",
     "date": "June 12, 2026",
