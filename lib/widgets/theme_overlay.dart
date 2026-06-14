@@ -110,7 +110,12 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   opacity: prefs.hypnoticBgOpacity,
                 )
               : null;
-          final particleBackdrop = !prefs.particlesEnabled
+          final particleBackdropBg = !prefs.particlesEnabled
+              ? null
+              : (prefs.customParticleType != CustomParticleType.themeDefault
+                  ? _CustomParticleBackdrop(prefs: prefs)
+                  : _backdropFor(f.backdrop, prefs));
+          final particleBackdropFg = !prefs.particlesEnabled
               ? null
               : (prefs.customParticleType != CustomParticleType.themeDefault
                   ? _CustomParticleBackdrop(prefs: prefs)
@@ -149,12 +154,23 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 if (hypnoticBackdrop != null)
                   Positioned.fill(child: IgnorePointer(child: hypnoticBackdrop)),
 
-                // 1b. Particles / Theme Backdrops
-                if (particleBackdrop != null)
-                  Positioned.fill(child: IgnorePointer(child: particleBackdrop)),
+                // 1b. Particles / Theme Backdrops (Background Layer)
+                if (particleBackdropBg != null)
+                  Positioned.fill(child: IgnorePointer(child: particleBackdropBg)),
 
                 // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
                 content,
+
+                // 2.5. Foreground Particles Layer (drifts gracefully over cards and panels!)
+                if (particleBackdropFg != null)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: Opacity(
+                        opacity: 0.8, // Slightly lower opacity for foreground particles to keep text highly readable
+                        child: particleBackdropFg,
+                      ),
+                    ),
+                  ),
 
                 // 3. Top Layers: Ambient Glows & Page Frames
                 if (showGlow)

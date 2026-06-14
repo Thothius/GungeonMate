@@ -233,10 +233,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    final uri = Uri.parse(wikiUrlString);
-                    if (await canLaunchUrl(uri)) {
+                    try {
+                      final uri = Uri.parse(wikiUrlString);
                       await launchUrl(uri, mode: LaunchMode.externalApplication);
-                    }
+                    } catch (_) {}
                   },
                   child: Icon(
                     Icons.open_in_browser_rounded,

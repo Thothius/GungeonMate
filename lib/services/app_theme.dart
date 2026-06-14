@@ -1418,7 +1418,7 @@ class AppTheme {
         onSurface: Colors.white,
       ),
       useMaterial3: true,
-      scaffoldBackgroundColor: f.scaffold,
+      scaffoldBackgroundColor: f.scaffold.withValues(alpha: 0.90),
       cardColor: f.card,
       textTheme: textTheme,
       // Ensure the font is also applied to the primary text theme
