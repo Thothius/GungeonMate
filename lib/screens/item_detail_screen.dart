@@ -40,24 +40,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   final _refsKey = GlobalKey();
   final _scrollCtrl = ScrollController();
 
-  bool _showInAppWiki = false;
-  WebViewController? _webViewController;
-
-  void _initWebViewController(String urlString) {
-    if (_webViewController != null) return;
-    _webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0xFF0F0F12))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {},
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-        ),
-      )
-      ..loadRequest(Uri.parse(urlString));
-  }
-
   @override
   void dispose() {
     _scrollCtrl.dispose();
@@ -111,65 +93,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final wikiUrlEncoded = Uri.encodeComponent(name.replaceAll(' ', '_'));
     final wikiUrlString = 'https://enterthegungeon.wiki.gg/wiki/$wikiUrlEncoded';
 
-    if (_showInAppWiki) {
-      _initWebViewController(wikiUrlString);
-    }
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 0,
         title: const SizedBox.shrink(),
       ),
-      body: _showInAppWiki && _webViewController != null
-          ? SafeArea(
-              child: Column(
-                children: [
-                  Container(
-                    color: const Color(0xFF1E1E22),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white70, size: 20),
-                          onPressed: () {
-                            setState(() {
-                              _showInAppWiki = false;
-                            });
-                          },
-                        ),
-                        Expanded(
-                          child: Text(
-                            wikiUrlString,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: Colors.white54,
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.open_in_browser_rounded, color: Colors.amber, size: 20),
-                          tooltip: 'Open in System Browser',
-                          onPressed: () async {
-                            final uri = Uri.parse(wikiUrlString);
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(height: 1, color: Colors.white10, thickness: 1),
-                  Expanded(
-                    child: WebViewWidget(controller: _webViewController!),
-                  ),
-                ],
-              ),
-            )
-          : CustomScrollView(
+      body: CustomScrollView(
         controller: _scrollCtrl,
         slivers: [
           SliverToBoxAdapter(
@@ -280,14 +210,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       ),
                     ),
                     onPressed: () {
-                      if (_showInAppWiki) {
-                        setState(() {
-                          _showInAppWiki = false;
-                        });
-                      } else {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        Navigator.pop(context);
-                      }
+                      FocusManager.instance.primaryFocus?.unfocus();
+                      Navigator.pop(context);
                     },
                   ),
                 ),
@@ -303,21 +227,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    backgroundColor: _showInAppWiki 
-                        ? AppTheme.flair.primary.withValues(alpha: 0.15) 
-                        : null,
                     side: BorderSide(
                       color: AppTheme.flair.primary,
-                      width: _showInAppWiki ? 2.5 : 1.5,
+                      width: 1.5,
                     ),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _showInAppWiki = !_showInAppWiki;
-                    });
+                  onPressed: () async {
+                    final uri = Uri.parse(wikiUrlString);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    }
                   },
                   child: Icon(
-                    Icons.menu_book_rounded,
+                    Icons.open_in_browser_rounded,
                     size: 26,
                     color: AppTheme.flair.primary,
                   ),

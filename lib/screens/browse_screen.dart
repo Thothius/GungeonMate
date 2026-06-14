@@ -897,7 +897,7 @@ class _BrowseScreenState extends State<BrowseScreen>
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
           c,
-          FlipPageRoute(page: ItemDetailScreen(gun: g)),
+          MaterialPageRoute(builder: (_) => ItemDetailScreen(gun: g)),
         );
         if (!mounted) return;
         // Drop the keyboard again on return — Flutter likes to restore
@@ -956,7 +956,7 @@ class _BrowseScreenState extends State<BrowseScreen>
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
           c,
-          FlipPageRoute(page: ItemDetailScreen(item: it)),
+          MaterialPageRoute(builder: (_) => ItemDetailScreen(item: it)),
         );
         if (!mounted) return;
         FocusManager.instance.primaryFocus?.unfocus();
