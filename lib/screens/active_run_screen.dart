@@ -17,9 +17,6 @@ import 'character_select_screen.dart';
 import 'browse_screen.dart';
 import 'effects_summary_screen.dart';
 import 'shrine_picker_screen.dart';
-import 'tomes_screen.dart';
-import 'npc_view_screen.dart';
-import 'winchester_minigame_screen.dart';
 import 'theme_picker_screen.dart';
 import 'favourites_screen.dart';
 import '../services/app_theme.dart';
@@ -2862,14 +2859,6 @@ class _HeaderMenu extends StatelessWidget {
               ),
             );
             break;
-          case 'tomes':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const TomesScreen(),
-              ),
-            );
-            break;
           case 'use_shrine':
             Navigator.push(
               context,
@@ -2956,22 +2945,6 @@ class _HeaderMenu extends StatelessWidget {
               }
             }));
             break;
-          case 'npcs':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const NpcViewScreen(),
-              ),
-            );
-            break;
-          case 'minigame':
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const WinchesterMinigameScreen(),
-              ),
-            );
-            break;
           case 'help':
             _showHelpDialog(context);
             break;
@@ -2985,22 +2958,6 @@ class _HeaderMenu extends StatelessWidget {
             Icon(Icons.favorite_rounded, size: 18, color: Colors.pinkAccent),
             SizedBox(width: 10),
             Text('My Favourites'),
-          ]),
-        ),
-        const PopupMenuItem(
-          value: 'tomes',
-          child: Row(children: [
-            Icon(Icons.menu_book, size: 18, color: Colors.blueAccent),
-            SizedBox(width: 10),
-            Text('Gungeon Tomes'),
-          ]),
-        ),
-        const PopupMenuItem(
-          value: 'npcs',
-          child: Row(children: [
-            Icon(Icons.groups_rounded, size: 18, color: Colors.orangeAccent),
-            SizedBox(width: 10),
-            Text('Gungeon NPCs'),
           ]),
         ),
         const PopupMenuItem(
@@ -3044,14 +3001,6 @@ class _HeaderMenu extends StatelessWidget {
             Icon(Icons.casino_outlined, size: 18, color: Color(0xFFFFD54F)),
             SizedBox(width: 10),
             Text('Gunfortuna Dice Roll'),
-          ]),
-        ),
-        const PopupMenuItem(
-          value: 'minigame',
-          child: Row(children: [
-            Icon(Icons.sports_esports_rounded, size: 18, color: Colors.cyanAccent),
-            SizedBox(width: 10),
-            Text("Winchester's Minigame"),
           ]),
         ),
         const PopupMenuDivider(),

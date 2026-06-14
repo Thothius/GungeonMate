@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 import '../services/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,10 @@ class ThemeOverlay extends StatefulWidget {
   final Widget child;
   const ThemeOverlay({super.key, required this.child});
 
+  /// Static global notifier for the current physical device tilt (x, y).
+  /// x is tilt left/right (-10 to 10), y is tilt up/down (-10 to 10).
+  static final ValueNotifier<Offset> tiltNotifier = ValueNotifier(Offset.zero);
+
   @override
   State<ThemeOverlay> createState() => _ThemeOverlayState();
 }
@@ -31,6 +36,8 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
   late final AnimationController _touchTicker;
   final List<_TouchParticle> _touchParticles = [];
   final math.Random _rng = math.Random();
+  StreamSubscription? _sensorSub;
+  Offset _smoothedTilt = Offset.zero;
 
   // Scale a color's alpha by [scale] (0.0–1.0).
   static Color _scaleAlpha(Color c, double scale) =>
@@ -43,11 +50,25 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
       vsync: this,
       duration: const Duration(seconds: 1),
     )..addListener(_onFrame)..repeat();
+
+    // Standard low-pass filter to smooth out gyroscope sways
+    _sensorSub = accelerometerEventStream().listen((event) {
+      final tx = -event.x.clamp(-6.0, 6.0);
+      final ty = event.y.clamp(-6.0, 6.0);
+      _smoothedTilt = Offset(
+        _smoothedTilt.dx + (tx - _smoothedTilt.dx) * 0.12,
+        _smoothedTilt.dy + (ty - _smoothedTilt.dy) * 0.12,
+      );
+      ThemeOverlay.tiltNotifier.value = _smoothedTilt;
+    }, onError: (_) {
+      // Graceful fallback for non-gyro devices (e.g. desktop/emulators)
+    });
   }
 
   @override
   void dispose() {
     _touchTicker.dispose();
+    _sensorSub?.cancel();
     super.dispose();
   }
 
@@ -400,7 +421,7 @@ class _GoldDustState extends State<_GoldDust>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _GoldDustPainter(t: _c.value, specs: _specs, advancedFlicker: widget.advancedFlicker),
           size: Size.infinite,
@@ -459,18 +480,20 @@ class _GoldDustPainter extends CustomPainter {
       canvas.drawPath(path, windPaint);
     }
 
-    // 2. Draw gold dust particles carried diagonally by the wind
+    // 2. Draw gold dust particles carried diagonally by the wind with tilt physics
     final paint = Paint();
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (final s in specs) {
       // Position cycles 0→1 over the spec's speed-scaled duration.
       final p = ((t * s.speed) + s.phase) % 1.0;
-      // Bottom→top: y starts at size.height and drifts up.
-      final y = size.height * (1.0 - p);
-      // Wind-swept diagonal drift (x slides from left to right as y rises!)
+      // Bottom→top: y starts at size.height and drifts up, offset slightly by physical Y tilt.
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
+      // Wind-swept diagonal drift + physical X tilt forces!
       final diagonalDrift = p * size.width * 0.18;
+      final tiltXShift = tilt.dx * 25 * p; // sways more at the top of their drift!
       // Lateral sway via a sine wave for a "floaty" feel.
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway;
-      final x = (s.x * size.width + sway + diagonalDrift) % size.width;
+      final x = (s.x * size.width + sway + diagonalDrift + tiltXShift) % size.width;
       // Fade in at the bottom and out at the top for a soft entry/exit.
       final alpha = _bellAlpha(p) * 0.55;
 
