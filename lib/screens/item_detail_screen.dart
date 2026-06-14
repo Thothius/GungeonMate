@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/run_provider.dart';
 import '../models/gun.dart';
 import '../models/item.dart';
@@ -41,8 +42,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
   bool _showInAppWiki = false;
   WebViewController? _webViewController;
-  bool _webHasError = false;
-  String _webErrorMsg = '';
 
   void _initWebViewController(String urlString) {
     if (_webViewController != null) return;
@@ -52,70 +51,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {},
-          onPageStarted: (String url) {
-            setState(() {
-              _webHasError = false;
-              _webErrorMsg = '';
-            });
-          },
-          onPageFinished: (String url) {
-            // Inject CSS to hide wiki.gg headers, global navigations, sidebars, ads and footers for a beautiful native in-app look
-            final cleanWikiJs = """
-              (function() {
-                var css = `
-                  .global-navigation,
-                  .wiki-header,
-                  #mw-navigation,
-                  #p-personal,
-                  #footer,
-                  .mw-footer,
-                  .page-header__actions,
-                  .page-side-tools,
-                  .header-container,
-                  .gamedia-advertisement,
-                  .ad-slot,
-                  .ads,
-                  iframe {
-                    display: none !important;
-                    height: 0 !important;
-                    visibility: hidden !important;
-                    opacity: 0 !important;
-                    pointer-events: none !important;
-                  }
-                  #content, .main-container, .mw-body {
-                    margin: 0 !important;
-                    padding: 12px !important;
-                    width: 100% !important;
-                    max-width: 100% !important;
-                    box-sizing: border-box !important;
-                    background: #0F0F12 !important;
-                    color: #EEEEEE !important;
-                  }
-                  body {
-                    background: #0F0F12 !important;
-                    color: #EEEEEE !important;
-                  }
-                `;
-                var style = document.createElement('style');
-                style.type = 'text/css';
-                style.appendChild(document.createTextNode(css));
-                document.head.appendChild(style);
-              })();
-            """;
-            _webViewController?.runJavaScript(cleanWikiJs);
-          },
-          onWebResourceError: (WebResourceError error) {
-            // Filter out minor asset errors, only catch complete failures
-            if (error.errorType == WebResourceErrorType.hostLookup ||
-                error.errorType == WebResourceErrorType.connect ||
-                error.errorType == WebResourceErrorType.timeout ||
-                error.errorType == WebResourceErrorType.unknown) {
-              setState(() {
-                _webHasError = true;
-                _webErrorMsg = error.description;
-              });
-            }
-          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
         ),
       )
       ..loadRequest(Uri.parse(urlString));
@@ -186,9 +123,51 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ),
       body: _showInAppWiki && _webViewController != null
           ? SafeArea(
-              child: _webHasError
-                  ? _buildWebErrorFallback()
-                  : WebViewWidget(controller: _webViewController!),
+              child: Column(
+                children: [
+                  Container(
+                    color: const Color(0xFF1E1E22),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white70, size: 20),
+                          onPressed: () {
+                            setState(() {
+                              _showInAppWiki = false;
+                            });
+                          },
+                        ),
+                        Expanded(
+                          child: Text(
+                            wikiUrlString,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.white54,
+                              fontFamily: 'monospace',
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.open_in_browser_rounded, color: Colors.amber, size: 20),
+                          tooltip: 'Open in System Browser',
+                          onPressed: () async {
+                            final uri = Uri.parse(wikiUrlString);
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(height: 1, color: Colors.white10, thickness: 1),
+                  Expanded(
+                    child: WebViewWidget(controller: _webViewController!),
+                  ),
+                ],
+              ),
             )
           : CustomScrollView(
         controller: _scrollCtrl,
@@ -419,80 +398,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildWebErrorFallback() {
-    return Container(
-      color: const Color(0xFF0F0F12),
-      padding: const EdgeInsets.all(24),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.wifi_off_rounded,
-              size: 64,
-              color: Colors.redAccent,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'WIKI UNREACHABLE',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-                letterSpacing: 1.2,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Could not connect to wiki.gg.\n${_webErrorMsg.isNotEmpty ? _webErrorMsg : "Check your network connection and try again."}',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 13,
-                color: Colors.white60,
-                height: 1.4,
-              ),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.refresh_rounded, size: 20),
-              label: const Text('RETRY LOADING'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.flair.primary,
-                foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  _webHasError = false;
-                });
-                _webViewController?.reload();
-              },
-            ),
-            const SizedBox(height: 16),
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.white70,
-                side: const BorderSide(color: Colors.white24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  _showInAppWiki = false;
-                });
-              },
-              child: const Text('VIEW OFFLINE INFO'),
-            ),
-          ],
         ),
       ),
     );
