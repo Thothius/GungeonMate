@@ -309,6 +309,15 @@ class _BugReportDialogContentState extends State<_BugReportDialogContent> {
                 letterSpacing: 1.0,
               ),
             ),
+            const SizedBox(height: 4),
+            const Text(
+              'ℹ️ Offline? Your email app will safely queue this in your Outbox and send it once you get Wi-Fi!',
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.white38,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
             const SizedBox(height: 6),
             TextField(
               controller: _feedbackController,
