@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">
-  <b>The ultimate high-performance offline companion app for Enter the Gungeon.</b><br>
+  <b>YOUR COMPANION IN THE GUNGEON</b><br>
+  The ultimate high-performance offline companion app for Enter the Gungeon. <br>
   Track runs, master guns & items, activate local co-op, and conquer the Gungeon — 100% free and open-source.
 </p>
 
@@ -17,28 +18,33 @@
 
 ---
 
-## 📥 Sideload Release Build
+## 📥 CHAMBER DEPLOYMENT & SENTRY LINKS
 
 <p align="center">
   <a href="https://github.com/Thothius/GungeonMate/raw/master/builds/gungeon-mate-v0.9.1.apk">
-    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v0.9.1-FF2A6D?style=for-the-badge&labelColor=1E1E22&color=FF2A6D" height="48" alt="Download APK Button" style="box-shadow: 0 0 15px rgba(255, 42, 109, 0.4);">
+    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v0.9.1-FF2A6D?style=for-the-badge&labelColor=1E1E22&color=FF2A6D" height="48" alt="Download APK" style="box-shadow: 0 0 15px rgba(255, 42, 109, 0.4);">
+  </a>
+  &nbsp; &nbsp;
+  <a href="mailto:gungeonmate@gmail.com?subject=GungeonMate%20Direct%20Bug%20Report&body=Describe%20your%20feedback%20or%20bug%20here...">
+    <img src="https://img.shields.io/badge/%F0%9F%90%9E_REPORT_A_BUG-DIRECT-00D2FF?style=for-the-badge&labelColor=1E1E22&color=00D2FF" height="48" alt="Report a Bug" style="box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);">
   </a>
 </p>
 
-*Grab the production-ready build above to sideload directly onto any Android device! Play Store version is incoming, with our grand v1.0.0 launch slated for July 2026!*
+***Attention Gungeoneers!** The latest v0.9.1 production build has been fully compiled and placed directly on your **Desktop** as `GungeonMate-v0.9.1.apk` for instant sideloading! Download it now and get ready—the official v1.0.0 Google Play Store release is launching this July 2026!*
 
 ---
 
-## 🎯 The Gungeoneer's Mission
+## 🔫 YOUR COMPANION IN THE GUNGEON
 
-May your blanks be plentiful, your ammo crates full, and your pasts successfully slain! Built entirely out of pure love for Dodge Roll's legendary masterpiece, **Gungeon Mate** is the ultimate second-screen companion for every gungeoneer braving the dark, shifting chambers of the Gungeon. 
+May your blanks be plentiful, your ammo crates full, and your pasts successfully slain! Crafted with pure bullet-hell devotion, **Gungeon Mate** is your definitive second-screen sentry, tracking your status as you descend deeper into the shifting, gun-powdered chambers of the Gungeon. 
 
-Whether you are a seasoned Gungeon Master running double-digit Curse loads or a fresh marine struggling on Chamber 1, this app is crafted to aid you in mastering every shell, gun, and synergy.
+Whether you are running 9.0 Curse with Lord of the Jammed on your heels, or just a green marine trying to make it past the Gatling Gull, Gungeon Mate keeps your stats calculated, your synergies revealed, and your loadout stabilized.
 
 ---
 
-## ⚔️ Gungeoneer Roster Support
-Fully integrates with the starting conditions, health, and custom mechanics of the main characters:
+## 🕵️‍♂️ THE GUNGEONEER'S DOSSIER
+
+Fully integrated with character-specific starting conditions, HP stats, and custom combat mechanics:
 
 <p align="center">
   <img src="assets/images/gungeoneers/the_hunter.webp" width="64" alt="The Hunter"> &nbsp; &nbsp; &nbsp; &nbsp;
@@ -47,15 +53,15 @@ Fully integrates with the starting conditions, health, and custom mechanics of t
   <img src="assets/images/gungeoneers/the_marine.webp" width="64" alt="The Marine">
 </p>
 
-* <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **The Hunter:** Detailed Huntress Crossbow Damage Breakpoint HUD & companion dog dig probability metrics.
-* <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **The Robot:** Automatic damage-scaling calculations based on your custom Junk Counter.
+* <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **The Hunter:** Track crossbow breakpoint damage parameters and pet dog dig probabilities.
+* <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **The Robot:** Automatic damage scaling calculations based on your custom Junk Counter.
 * <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **The Bullet & Others:** Starter weapon profiles and special passive traits pre-mapped.
 
 ---
 
-## ⚡ Main Features
+## ⚡ CORE ARSENAL & TELEMETRY FEATURES
 
-* <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **Dynamic Run Tracking:** Pick your character to auto-load stats, starting loadouts, and passive items. Track your active inventory on a beautiful, auto-scaling grid that scales smoothly from 3 to 20+ items.
+* <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **Dynamic Run Tracking:** Pick your Gungeoneer to auto-load stats, starting loadouts, and passive items. Manage your inventory on a beautiful, auto-scaling grid that scales smoothly from 3 to 20+ items.
 * <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **Live Coolness & Curse Telemetry:** Never guess your status again. The app automatically calculates active Coolness (cooldown reduction, chest reward rates) and Curse (jammed enemies, mimic rates) based on your real-time items, with manual shrine tuning support.
 * <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **4 Responsive Grid Layouts:** Swap instantly in settings between *Classic Periodic* (compact table layout), *Tactical Stats* (dense split-panel layout with real-time gun/item telemetry), *High-Def Gallery* (massive pixel-art showcase), or *RPG Bag* (rows with detailed inline descriptions and category tags).
 * <img src="assets/images/bullet.png" width="16" height="16" align="center"> &nbsp; **Real-Time Stylization & Customizer:** Unlock the Style Lab! Toggle between 12 handmade interactive particle emitters with real-time accelerometer tilt-physics, select trippy animated backdrops, and choose from 66 Google Fonts grouped by artistic genres.
@@ -63,7 +69,7 @@ Fully integrates with the starting conditions, health, and custom mechanics of t
 
 ---
 
-## 🔗 How Local Co-op Works (Layman's Guide)
+## 🔗 HOW LOCAL CO-OP HANDSHAKING WORKS (LAYMAN'S GUIDE)
 
 Gungeon Mate uses **Google Nearby Connections** (a secure, high-speed Bluetooth + Wi-Fi Direct protocol) to link two devices together. **No servers, no logins, zero internet lag, and 100% offline-friendly!**
 
@@ -94,7 +100,7 @@ Gungeon Mate uses **Google Nearby Connections** (a secure, high-speed Bluetooth 
 
 ---
 
-## 🛠️ Build and Run
+## 🛠️ CHAMBER SETUP & COMPILE ARCHITECTURE
 
 To run or compile this project locally:
 
@@ -118,7 +124,7 @@ flutter build apk --release
 
 ---
 
-## 🔮 Disclaimer
+## 🔮 THE PAST & DISCLAIMER
 
 *Gungeon Mate is an unofficial, completely free fan-made companion app built out of pure love and dedication for the Gungeon community. All rights to "Enter the Gungeon" belong to Dodge Roll and Devolver Digital. All item stats, descriptions, and synergy data are sourced from the official Enter the Gungeon Wiki at [wiki.gg](https://enterthegungeon.wiki.gg).*
 
