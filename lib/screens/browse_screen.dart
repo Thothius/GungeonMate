@@ -51,7 +51,6 @@ class _BrowseScreenState extends State<BrowseScreen>
   final TextEditingController _searchCtrl = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   String _query = '';
-  String _lastQuery = ''; // Stores the previous query for smart UX reference
   String _quality = 'All';
   _GunSort _gunSort = _GunSort.quality;
   _ItemSort _itemSort = _ItemSort.quality;
@@ -99,16 +98,13 @@ class _BrowseScreenState extends State<BrowseScreen>
       FocusManager.instance.primaryFocus?.unfocus();
       setState(() {});
     });
-    _searchFocusNode.addListener(_onSearchFocusChanged);
+    _searchCtrl.addListener(_onSearchChanged);
   }
 
-  void _onSearchFocusChanged() {
-    if (_searchFocusNode.hasFocus) {
-      if (_query.isNotEmpty) {
-        _lastQuery = _query; // remember current query
-        _searchCtrl.clear(); // clear text so they don't have to backspace
-      }
-    }
+  void _onSearchChanged() {
+    setState(() {
+      _query = _searchCtrl.text.toLowerCase();
+    });
   }
 
   @override
@@ -119,12 +115,8 @@ class _BrowseScreenState extends State<BrowseScreen>
     // to wipe the search box so re-opening Browse always starts clean.
     if (oldWidget.isVisible && !widget.isVisible) {
       FocusManager.instance.primaryFocus?.unfocus();
-      if (_searchCtrl.text.isNotEmpty || _query.isNotEmpty) {
+      if (_searchCtrl.text.isNotEmpty) {
         _searchCtrl.clear();
-        setState(() {
-          _query = '';
-          _lastQuery = '';
-        });
       }
     }
   }
@@ -132,8 +124,8 @@ class _BrowseScreenState extends State<BrowseScreen>
   @override
   void dispose() {
     _tab.dispose();
+    _searchCtrl.removeListener(_onSearchChanged);
     _searchCtrl.dispose();
-    _searchFocusNode.removeListener(_onSearchFocusChanged);
     _searchFocusNode.dispose();
     super.dispose();
   }
@@ -326,60 +318,52 @@ class _BrowseScreenState extends State<BrowseScreen>
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
               child: Row(
                 children: [
-                  // Search is about half the old width (flex 2 vs total ≈ 4).
                   Expanded(
-                    flex: 2,
+                    flex: 6,
                     child: SizedBox(
                       height: 44,
                       child: TextField(
                         controller: _searchCtrl,
                         focusNode: _searchFocusNode,
                         decoration: InputDecoration(
-                          hintText: _lastQuery.isNotEmpty ? "Search (was: '$_lastQuery')" : "Search",
+                          hintText: "Search...",
                           prefixIcon: const Icon(Icons.search, size: 20),
                           isDense: true,
                           contentPadding:
                               const EdgeInsets.symmetric(vertical: 6),
-                          suffixIcon: _searchCtrl.text.isEmpty && _query.isEmpty
+                          suffixIcon: _searchCtrl.text.isEmpty
                               ? null
                               : IconButton(
                                   tooltip: 'Clear',
                                   icon: const Icon(Icons.close, size: 18),
                                   onPressed: () {
                                     _searchCtrl.clear();
-                                    setState(() {
-                                      _query = '';
-                                      _lastQuery = '';
-                                    });
                                   },
                                 ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onChanged: (v) {
-                          setState(() {
-                            if (v.isEmpty) {
-                              _query = _lastQuery.toLowerCase();
-                            } else {
-                              _query = v.toLowerCase();
-                            }
-                          });
-                        },
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  // Grid / List View Toggle Button
-                  IconButton(
-                    tooltip: _isGridView ? 'Switch to List View' : 'Switch to Grid View',
-                    icon: Icon(_isGridView ? Icons.view_list_rounded : Icons.grid_view_rounded, size: 22, color: Colors.white70),
-                    onPressed: () => setState(() => _isGridView = !_isGridView),
-                    constraints: const BoxConstraints(),
-                    padding: const EdgeInsets.all(4),
-                  ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 6),
+                  // Close View Button (Modal context only)
+                  if (widget.showBackButton && Navigator.canPop(context)) ...[
+                    IconButton(
+                      tooltip: 'Close Browse',
+                      icon: const Icon(Icons.close_rounded, size: 22, color: Colors.white70),
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        Navigator.maybePop(context);
+                      },
+                      constraints: const BoxConstraints(),
+                      padding: const EdgeInsets.all(4),
+                    ),
+                    const SizedBox(width: 6),
+                  ],
                   Expanded(
+                    flex: 2,
                     child: _ToolbarButton(
                       icon: Icons.sort,
                       label: isAll
@@ -391,8 +375,9 @@ class _BrowseScreenState extends State<BrowseScreen>
                           _openSortSheet(context, isAll, isGuns),
                     ),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 4),
                   Expanded(
+                    flex: 2,
                     child: _ToolbarButton(
                       icon: Icons.military_tech,
                       label: _quality == 'All' ? 'All tiers' : '$_quality only',
@@ -410,46 +395,7 @@ class _BrowseScreenState extends State<BrowseScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Expandable Header Trigger
-                  InkWell(
-                    onTap: () => setState(() => _filtersExpanded = !_filtersExpanded),
-                    borderRadius: BorderRadius.circular(8),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.03),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(Icons.filter_alt_outlined, size: 16, color: AppTheme.flair.primary),
-                              const SizedBox(width: 6),
-                              Text(
-                                'ELEMENTAL & UTILITY FILTERS',
-                                style: TextStyle(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w900,
-                                  color: AppTheme.flair.primary,
-                                  letterSpacing: 1.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Icon(
-                            _filtersExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                            size: 18,
-                            color: Colors.white54,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  
-                  // Collapsible Filters Panel
+                  // Collapsible Filters Panel (Triggered by the top-row filter icon)
                   if (_filtersExpanded) ...[
                     const SizedBox(height: 8),
                     Container(

@@ -197,7 +197,7 @@ class MultiplayerService {
     _events.add(MpEndpointFound(endpointId: id, endpointName: name));
     // Security Guard: if a PIN is set, only connect to endpoints ending with '#$pin'
     final pin = _pinCode;
-    if (pin != null && !name.endsWith('#$pin')) {
+    if (pin != null && pin.isNotEmpty && !name.endsWith('#$pin')) {
       return; // ignore!
     }
     // Guard: already connected (P2P — only one peer) or already requested.

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../widgets/themed_number.dart';
 import '../services/haptics.dart';
+import '../widgets/quality_badge.dart';
 
 /// Full-screen swipe-to-preview theme picker. Each [PageView] page
 /// renders a miniature dashboard styled with that theme's [ThemeFlair]
@@ -22,7 +24,6 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
   late final PageController _pc;
   late int _index;
   late AppThemeMode _activeMode;
-  late final TextEditingController _fontSizeCtrl;
 
   void controllerRepeatHelper(AnimationController c) => c.repeat(reverse: true);
 
@@ -34,28 +35,20 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
     _index = visibleIdx >= 0 ? visibleIdx : 0;
     _pc = PageController(initialPage: _index, viewportFraction: 0.88);
 
-    final initialSize = VisualPrefs.notifier.value.fontSize;
-    _fontSizeCtrl = TextEditingController(text: initialSize.toStringAsFixed(0));
-    VisualPrefs.notifier.addListener(_onPrefsChanged);
-  }
-
-  void _onPrefsChanged() {
-    final size = VisualPrefs.notifier.value.fontSize;
-    final text = size.toStringAsFixed(0);
-    if (_fontSizeCtrl.text != text) {
-      _fontSizeCtrl.text = text;
-    }
+    // Seed the preview notifier with the initial selection
+    AppTheme.previewNotifier.value = _activeMode;
   }
 
   @override
   void dispose() {
     _pc.dispose();
-    _fontSizeCtrl.dispose();
-    VisualPrefs.notifier.removeListener(_onPrefsChanged);
+    // Clear the preview notifier so we restore the active app theme
+    AppTheme.previewNotifier.value = null;
     super.dispose();
   }
 
   void _select(AppThemeMode m) {
+    AppTheme.previewNotifier.value = null; // Clear preview before applying
     AppTheme.setMode(m);
     setState(() => _activeMode = m);
     Haptics.success(); // Satisfying double-pulse success haptic on apply!
@@ -69,257 +62,123 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
   @override
   Widget build(BuildContext context) {
     final modes = kVisibleThemes;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isLargeScreen = screenWidth >= 720;
+    final cleanTextTheme = GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme);
+    final cleanTheme = Theme.of(context).copyWith(
+      textTheme: cleanTextTheme,
+    );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('CUSTOMIZE'),
-        centerTitle: true,
-        automaticallyImplyLeading: false, // Clean look when embedded in home tab
-      ),
-      body: ValueListenableBuilder<VisualPrefs>(
-        valueListenable: VisualPrefs.notifier,
-        builder: (context, prefs, _) {
-          if (isLargeScreen) {
-            // SIDE-BY-SIDE SPLIT LAYOUT FOR LARGER SCREENS!
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Left Pane: Theme Selection & Preview Card
-                Expanded(
-                  flex: 5,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 16),
-                        // Breathtaking flashing arcade instruction badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(
-                              color: Colors.redAccent.withValues(alpha: 0.7),
-                              width: 1.2,
-                            ),
-                          ),
-                          child: const Text(
-                            'SELECT YOUR THEME',
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.redAccent,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                        )
-                        .animate(onPlay: (c) => controllerRepeatHelper(c))
-                        .fadeIn(duration: 750.ms)
-                        .then()
-                        .fadeOut(duration: 750.ms),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Text(
-                            'Swipe to preview each theme. Tap a card to apply.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Colors.white.withValues(alpha: 0.5),
-                              letterSpacing: 0.4,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          height: 520,
-                          child: PageView.builder(
-                            controller: _pc,
-                            itemCount: modes.length,
-                            onPageChanged: (i) {
-                              setState(() => _index = i);
-                              Haptics.selection(); // Satisfying clicking tactile feedback on swipe!
-                            },
-                            itemBuilder: (context, i) {
-                              final m = modes[i];
-                              final selected = m == _activeMode;
-                              final focused = i == _index;
-                              return AnimatedScale(
-                                duration: const Duration(milliseconds: 200),
-                                scale: focused ? 1.0 : 0.94,
-                                curve: Curves.easeOut,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
-                                  ),
-                                  child: _ThemePreviewCard(
-                                    mode: m,
-                                    isActive: selected,
-                                    onApply: () => _select(m),
-                                    isNew: false,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        // Page-dot strip so users can see how many themes there are
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(modes.length, (i) {
-                              final on = i == _index;
-                              return AnimatedContainer(
-                                duration: const Duration(milliseconds: 220),
-                                margin: const EdgeInsets.symmetric(horizontal: 4),
-                                width: on ? 18 : 7,
-                                height: 7,
-                                decoration: BoxDecoration(
-                                  color: on
-                                      ? Colors.white.withValues(alpha: 0.85)
-                                      : Colors.white.withValues(alpha: 0.25),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              );
-                            }),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+    return Theme(
+      data: cleanTheme,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('CHOOSE PALETTE'),
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 24),
+              // Arcade instruction badge
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    color: Colors.redAccent.withValues(alpha: 0.7),
+                    width: 1.2,
                   ),
                 ),
-                // Vertical divider line between sections
-                Container(
-                  width: 1,
-                  color: Colors.white10,
-                  margin: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                // Right Pane: Tuning Settings Panel (instantly updates!)
-                Expanded(
-                  flex: 5,
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 24),
-                      child: _buildTuningSection(context, prefs),
-                    ),
+                child: const Text(
+                  'SELECT YOUR THEME',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.redAccent,
+                    letterSpacing: 2,
                   ),
                 ),
-              ],
-            );
-          } else {
-            // STANDARD COMPACT VERTICAL LAYOUT FOR SMALLER SCREENS
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 12),
-                  // Breathtaking flashing arcade instruction badge
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.red.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(
-                        color: Colors.redAccent.withValues(alpha: 0.7),
-                        width: 1.2,
-                      ),
-                    ),
-                    child: const Text(
-                      'SELECT YOUR THEME',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.redAccent,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                  )
-                  .animate(onPlay: (c) => controllerRepeatHelper(c))
-                  .fadeIn(duration: 750.ms)
-                  .then()
-                  .fadeOut(duration: 750.ms),
-                  const SizedBox(height: 12),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      'Swipe to preview each theme. Tap a card to apply.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.white.withValues(alpha: 0.5),
-                        letterSpacing: 0.4,
-                      ),
-                    ),
+              )
+              .animate(onPlay: (c) => controllerRepeatHelper(c))
+              .fadeIn(duration: 750.ms)
+              .then()
+              .fadeOut(duration: 750.ms),
+              const SizedBox(height: 14),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'Swipe to preview each palette live. Tap a card to apply.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.white.withValues(alpha: 0.5),
+                    letterSpacing: 0.4,
                   ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 520,
-                    child: PageView.builder(
-                      controller: _pc,
-                      itemCount: modes.length,
-                      onPageChanged: (i) {
-                        setState(() => _index = i);
-                        Haptics.selection(); // Satisfying clicking tactile feedback on swipe!
-                      },
-                      itemBuilder: (context, i) {
-                        final m = modes[i];
-                        final selected = m == _activeMode;
-                        final focused = i == _index;
-                        return AnimatedScale(
-                          duration: const Duration(milliseconds: 200),
-                          scale: focused ? 1.0 : 0.94,
-                          curve: Curves.easeOut,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            child: _ThemePreviewCard(
-                              mode: m,
-                              isActive: selected,
-                              onApply: () => _select(m),
-                              isNew: false,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  // Page-dot strip so users can see how many themes there are
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(modes.length, (i) {
-                        final on = i == _index;
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 220),
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: on ? 18 : 7,
-                          height: 7,
-                          decoration: BoxDecoration(
-                            color: on
-                                ? Colors.white.withValues(alpha: 0.85)
-                                : Colors.white.withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-                  // Live Vibe Tuning Panel
-                  _buildTuningSection(context, prefs),
-                  const SizedBox(height: 24),
-                ],
+                ),
               ),
-            );
-          }
-        },
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 520,
+                child: PageView.builder(
+                  controller: _pc,
+                  itemCount: modes.length,
+                  onPageChanged: (i) {
+                    setState(() => _index = i);
+                    AppTheme.previewNotifier.value = modes[i]; // Live dynamic preview fix!
+                    Haptics.selection();
+                  },
+                  itemBuilder: (context, i) {
+                    final m = modes[i];
+                    final selected = m == _activeMode;
+                    final focused = i == _index;
+                    return AnimatedScale(
+                      duration: const Duration(milliseconds: 200),
+                      scale: focused ? 1.0 : 0.94,
+                      curve: Curves.easeOut,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: _ThemePreviewCard(
+                          mode: m,
+                          isActive: selected,
+                          onApply: () => _select(m),
+                          isNew: false,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+              // Page-dot strip
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(modes.length, (i) {
+                    final on = i == _index;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 220),
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: on ? 18 : 7,
+                      height: 7,
+                      decoration: BoxDecoration(
+                        color: on
+                            ? Colors.white.withValues(alpha: 0.85)
+                            : Colors.white.withValues(alpha: 0.25),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -391,8 +250,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                       value: f,
                       child: Text(
                         f.label,
-                        style: TextStyle(
-                          fontFamily: f.bundledFamily,
+                        style: f.textStyle.copyWith(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                           color: isSel ? activeThemeFlair.primary : Colors.white70,
@@ -401,6 +259,51 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                     );
                   }).toList(),
                 ),
+              ),
+            ),
+          ),
+
+          // Live Font Preview Card (shows how the selected font fits GungeonMate's layout and colors!)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: activeThemeFlair.scaffold.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: activeThemeFlair.primary.withValues(alpha: 0.15)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'LIVE FONT PREVIEW',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: activeThemeFlair.primary.withValues(alpha: 0.6),
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'The Breach: Bello\'s Custom Curios Shop',
+                    style: prefs.font.textStyle.copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: activeThemeFlair.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'DMG: 125 | CRS: +1.5 | COL: +2.0',
+                    style: prefs.font.textStyle.copyWith(
+                      fontSize: 12,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -628,395 +531,84 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
             }),
           ),
           
-          // 4. Ambient Particles Toggle
+          // 4. Particle Effect Type Customizer
           _buildOptionRow(
-            icon: Icons.blur_on_outlined,
-            label: 'Ambient Wind Particles',
+            icon: Icons.bubble_chart_outlined,
+            label: 'Particle Effect Type',
             activeThemeFlair: activeThemeFlair,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Enable Particle Backdrops', style: TextStyle(fontSize: 12, color: Colors.white70)),
-                Switch(
-                  value: prefs.particlesEnabled,
-                  activeColor: activeThemeFlair.primary,
-                  onChanged: (v) {
-                    VisualPrefs.setParticles(v);
-                    Haptics.selection();
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<CustomParticleType>(
+                  value: prefs.customParticleType,
+                  isExpanded: true,
+                  dropdownColor: activeThemeFlair.card,
+                  icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
+                  onChanged: (CustomParticleType? val) {
+                    if (val != null) {
+                      VisualPrefs.setCustomParticleType(val);
+                      Haptics.selection();
+                    }
                   },
-                ),
-              ],
-            ),
-          ),
-
-          if (prefs.particlesEnabled) ...[
-            // 4.1. Custom Particle Type Selection Dropdown
-            _buildOptionRow(
-              icon: Icons.bubble_chart_outlined,
-              label: 'Particle Effect Type',
-              activeThemeFlair: activeThemeFlair,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<CustomParticleType>(
-                    value: prefs.customParticleType,
-                    isExpanded: true,
-                    dropdownColor: activeThemeFlair.card,
-                    icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
-                    onChanged: (CustomParticleType? val) {
-                      if (val != null) {
-                        VisualPrefs.setCustomParticleType(val);
-                        Haptics.selection();
-                      }
-                    },
-                    items: CustomParticleType.values.map((CustomParticleType t) {
-                      final isSel = t == prefs.customParticleType;
-                      String label;
-                      switch (t) {
-                        case CustomParticleType.themeDefault:
-                          label = 'Theme Default';
-                          break;
-                        case CustomParticleType.ember:
-                          label = 'Fire Ember 🔥';
-                          break;
-                        case CustomParticleType.frost:
-                          label = 'Glacial Frost ❄️';
-                          break;
-                        case CustomParticleType.catpaw:
-                          label = 'Whimsical Catpaw 🐾';
-                          break;
-                        case CustomParticleType.rainbow:
-                          label = 'Prismatic Rainbow 🌈';
-                          break;
-                        case CustomParticleType.curse:
-                          label = 'Jam Curse 💀';
-                          break;
-                        case CustomParticleType.vvoid:
-                          label = 'Cyclonic Void 🌀';
-                          break;
-                        case CustomParticleType.gunfairy:
-                          label = 'Charming Gun Fairy 🧚';
-                          break;
-                      }
-                      return DropdownMenuItem<CustomParticleType>(
-                        value: t,
-                        child: Text(
-                          label,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: isSel ? activeThemeFlair.primary : Colors.white70,
-                          ),
+                  items: CustomParticleType.values.map((CustomParticleType t) {
+                    final isSel = t == prefs.customParticleType;
+                    return DropdownMenuItem<CustomParticleType>(
+                      value: t,
+                      child: Text(
+                        t.label,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: isSel ? activeThemeFlair.primary : Colors.white70,
                         ),
-                      );
-                    }).toList(),
-                  ),
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
-            ),
-
-            // 4.2. Particle Size Scale (0.5x to 3.0x)
-            _buildOptionRow(
-              icon: Icons.photo_size_select_small_rounded,
-              label: 'Particle Size (${prefs.particleSizeScale.toStringAsFixed(1)}x)',
-              activeThemeFlair: activeThemeFlair,
-              child: Slider(
-                min: 0.5,
-                max: 3.0,
-                divisions: 25,
-                value: prefs.particleSizeScale,
-                activeColor: activeThemeFlair.primary,
-                inactiveColor: Colors.white10,
-                onChanged: (v) {
-                  VisualPrefs.setParticleSizeScale(v);
-                },
-              ),
-            ),
-
-            // 4.3. Particle Opacity (0% to 100%)
-            _buildOptionRow(
-              icon: Icons.opacity_rounded,
-              label: 'Particle Opacity (${(prefs.particleOpacity * 100).toStringAsFixed(0)}%)',
-              activeThemeFlair: activeThemeFlair,
-              child: Slider(
-                min: 0.0,
-                max: 1.0,
-                value: prefs.particleOpacity,
-                activeColor: activeThemeFlair.primary,
-                inactiveColor: Colors.white10,
-                onChanged: (v) {
-                  VisualPrefs.setParticleOpacity(v);
-                },
-              ),
-            ),
-
-            // 4.3b. Particle Density / Count (5 to 120)
-            _buildOptionRow(
-              icon: Icons.grain_rounded,
-              label: 'Particle Count (${prefs.particleCount})',
-              activeThemeFlair: activeThemeFlair,
-              child: Slider(
-                min: 5.0,
-                max: 120.0,
-                divisions: 23,
-                value: prefs.particleCount.toDouble(),
-                activeColor: activeThemeFlair.primary,
-                inactiveColor: Colors.white10,
-                onChanged: (v) {
-                  VisualPrefs.setParticleCount(v.toInt());
-                },
-              ),
-            ),
-
-            // 4.4. Gunfortuna Dice Style Dropdown
-            _buildOptionRow(
-              icon: Icons.casino_rounded,
-              label: 'Gunfortuna Dice Customization',
-              activeThemeFlair: activeThemeFlair,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<CustomDiceType>(
-                    value: prefs.customDiceType,
-                    isExpanded: true,
-                    dropdownColor: activeThemeFlair.card,
-                    icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
-                    onChanged: (CustomDiceType? val) {
-                      if (val != null) {
-                        VisualPrefs.setCustomDiceType(val);
-                        Haptics.selection();
-                      }
-                    },
-                    items: CustomDiceType.values.map((CustomDiceType t) {
-                      final isSel = t == prefs.customDiceType;
-                      String label;
-                      switch (t) {
-                        case CustomDiceType.themeDefault:
-                          label = 'Theme Default 🎨';
-                          break;
-                        case CustomDiceType.classicWhite:
-                          label = 'Classic White 🤍';
-                          break;
-                        case CustomDiceType.goldGlimmer:
-                          label = 'Gold Glimmer 🌟';
-                          break;
-                        case CustomDiceType.frostShard:
-                          label = 'Frost Shard ❄️';
-                          break;
-                        case CustomDiceType.moltenAmber:
-                          label = 'Molten Amber 🔥';
-                          break;
-                        case CustomDiceType.voidPurple:
-                          label = 'Void Purple 🔮';
-                          break;
-                        case CustomDiceType.toxicOoze:
-                          label = 'Toxic Ooze ☣️';
-                          break;
-                      }
-                      return DropdownMenuItem<CustomDiceType>(
-                        value: t,
-                        child: Text(
-                          label,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                            color: isSel ? activeThemeFlair.primary : Colors.white70,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-            ),
-          ],
-          
-          // 5. Particle Rotation Toggle
-          _buildOptionRow(
-            icon: Icons.rotate_right,
-            label: 'Particle Rotation & Twinkle',
-            activeThemeFlair: activeThemeFlair,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Enable Cosmic/Ember Twirl', style: TextStyle(fontSize: 12, color: Colors.white70)),
-                Switch(
-                  value: prefs.particleRotation,
-                  activeColor: activeThemeFlair.primary,
-                  onChanged: (v) {
-                    VisualPrefs.setParticleRotation(v);
-                    Haptics.selection();
-                  },
-                ),
-              ],
             ),
           ),
 
-          // 7. Advanced Shimmer & Flicker Toggle
+          // 5. Particle Count (Density / Count)
           _buildOptionRow(
-            icon: Icons.flash_on_rounded,
-            label: 'Advanced Shimmer & Flicker',
+            icon: Icons.grain_rounded,
+            label: 'Particle Count (${prefs.particleCount})',
             activeThemeFlair: activeThemeFlair,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Enable Molten/Golden Shimmers', style: TextStyle(fontSize: 12, color: Colors.white70)),
-                Switch(
-                  value: prefs.advancedFlicker,
-                  activeColor: activeThemeFlair.primary,
-                  onChanged: (v) {
-                    VisualPrefs.setAdvancedFlicker(v);
-                    Haptics.selection();
-                  },
-                ),
-              ],
+            child: Slider(
+              min: 5.0,
+              max: 120.0,
+              divisions: 23,
+              value: prefs.particleCount.toDouble(),
+              activeColor: activeThemeFlair.primary,
+              inactiveColor: Colors.white10,
+              onChanged: (v) {
+                VisualPrefs.setParticleCount(v.toInt());
+              },
             ),
           ),
 
-          // 8. Hypnotic Background Customizer
+          // 6. Particle Size Scale (0.5x to 3.0x)
           _buildOptionRow(
-            icon: Icons.cyclone_rounded,
-            label: 'Hypnotic Backgrounds (Trippy)',
+            icon: Icons.photo_size_select_small_rounded,
+            label: 'Particle Size (${prefs.particleSizeScale.toStringAsFixed(1)}x)',
             activeThemeFlair: activeThemeFlair,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Enable Hypnotic Backdrops', style: TextStyle(fontSize: 12, color: Colors.white70)),
-                Switch(
-                  value: prefs.hypnoticBgEnabled,
-                  activeColor: activeThemeFlair.primary,
-                  onChanged: (v) {
-                    VisualPrefs.setHypnoticBgEnabled(v);
-                    Haptics.selection();
-                  },
-                ),
-              ],
+            child: Slider(
+              min: 0.5,
+              max: 3.0,
+              divisions: 25,
+              value: prefs.particleSizeScale,
+              activeColor: activeThemeFlair.primary,
+              inactiveColor: Colors.white10,
+              onChanged: (v) {
+                VisualPrefs.setParticleSizeScale(v);
+              },
             ),
           ),
-
-          if (prefs.hypnoticBgEnabled) ...[
-            // 8.1. Dropdown for Hypnotic GIF Selection
-            _buildOptionRow(
-              icon: Icons.wallpaper_rounded,
-              label: 'Selected Hypnotic Pattern',
-              activeThemeFlair: activeThemeFlair,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    value: prefs.hypnoticBgAsset,
-                    isExpanded: true,
-                    dropdownColor: activeThemeFlair.card,
-                    icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
-                    onChanged: (String? val) {
-                      if (val != null) {
-                        VisualPrefs.setHypnoticBgAsset(val);
-                        Haptics.selection();
-                      }
-                    },
-                    items: const [
-                      DropdownMenuItem(value: 'circles05.gif', child: Text('Expanding Vortex Circles 🕳️', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'circles06.gif', child: Text('Psychedelic Ripple Dots 🔴', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'kaleicospio03.gif', child: Text('Hypnotic Kaleidoscope 🌀', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'lines01.gif', child: Text('Retro Scanlines 📺', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'sea02.gif', child: Text('Calm Digital Waves 🌊', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'sea03.gif', child: Text('Undulating Fluid Sea 〰️', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'squares01.gif', child: Text('Tunneling Square Portals 🟩', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'tiles01.gif', child: Text('Shifting Blue Tiles 🟦', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'tiles05.gif', child: Text('Warped Amber Lattice 🟧', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                      DropdownMenuItem(value: 'weird03.gif', child: Text('Hyper-Trippy Sinusoids 🧠', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white))),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // 8.2. Speed control (Slow down / Speed up 50% steps)
-            _buildOptionRow(
-              icon: Icons.speed_rounded,
-              label: 'Animation Speed',
-              activeThemeFlair: activeThemeFlair,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OutlinedButton(
-                    onPressed: prefs.hypnoticBgSpeed <= 0.2
-                        ? null
-                        : () {
-                            VisualPrefs.setHypnoticBgSpeed(prefs.hypnoticBgSpeed - 0.5);
-                            Haptics.selection();
-                          },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: activeThemeFlair.primary, width: 1.5),
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                    ),
-                    child: Text(
-                      '—',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: activeThemeFlair.primary),
-                    ),
-                  ),
-                  
-                  Container(
-                    constraints: const BoxConstraints(minWidth: 90),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${(prefs.hypnoticBgSpeed * 100).toStringAsFixed(0)}%',
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                    ),
-                  ),
-                  
-                  OutlinedButton(
-                    onPressed: prefs.hypnoticBgSpeed >= 4.0
-                        ? null
-                        : () {
-                            VisualPrefs.setHypnoticBgSpeed(prefs.hypnoticBgSpeed + 0.5);
-                            Haptics.selection();
-                          },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: activeThemeFlair.primary, width: 1.5),
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                    ),
-                    child: Text(
-                      '＋',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: activeThemeFlair.primary),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // 8.3. Opacity Slider (0% to 100%)
-            _buildOptionRow(
-              icon: Icons.layers_outlined,
-              label: 'Background Opacity (${(prefs.hypnoticBgOpacity * 100).toStringAsFixed(0)}%)',
-              activeThemeFlair: activeThemeFlair,
-              child: Slider(
-                min: 0.0,
-                max: 1.0,
-                value: prefs.hypnoticBgOpacity,
-                activeColor: activeThemeFlair.primary,
-                inactiveColor: Colors.white10,
-                onChanged: (v) {
-                  VisualPrefs.setHypnoticBgOpacity(v);
-                },
-              ),
-            ),
-          ],
           
           const SizedBox(height: 10),
         ],
@@ -1312,7 +904,7 @@ class _ThemePreviewCard extends StatelessWidget {
     );
   }
 
-  String _getWhimsicalDescription(AppThemeMode mode) {
+  static String _getWhimsicalDescription(AppThemeMode mode) {
     switch (mode) {
       case AppThemeMode.cosmicWhirlwind:
         return 'Warp your sanity through space-time. Features swirling stellar rifts that may or may not summon a jammed Lord. Highly recommended by Interdimensional Bullet Kin.';

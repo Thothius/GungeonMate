@@ -144,40 +144,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       ),
                       const Spacer(flex: 2),
                       // The Tailor — GungeonMate's inventory-hauling mascot (Now fully interactive on tap!)
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.bottomCenter,
                         children: [
-                          if (_mascotQuote != null) ...[
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1A1A1F), // Charcoal Gungeon bubble
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: const Color(0xFFFFD54F), width: 1.5),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.5),
-                                    blurRadius: 12,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              constraints: const BoxConstraints(maxWidth: 240),
-                              child: Text(
-                                _mascotQuote!,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  fontStyle: FontStyle.italic,
-                                  color: Color(0xFFFFD54F),
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.2,
-                                  height: 1.35,
-                                ),
-                              ),
-                            ),
-                          ],
                           GestureDetector(
                             onTap: _onMascotTapped,
                             child: Container(
@@ -214,6 +184,38 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               ),
                             ),
                           ),
+                          if (_mascotQuote != null)
+                            Positioned(
+                              bottom: 140, // Height of the mascot circle (130) + 10px spacing
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF1A1A1F), // Charcoal Gungeon bubble
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: const Color(0xFFFFD54F), width: 1.5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.5),
+                                      blurRadius: 12,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                constraints: const BoxConstraints(maxWidth: 240),
+                                child: Text(
+                                  _mascotQuote!,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    fontStyle: FontStyle.italic,
+                                    color: Color(0xFFFFD54F),
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.2,
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                       const Spacer(flex: 1),
@@ -293,7 +295,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v1.8.4',
+                    'v0.9.1',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -310,31 +312,34 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       ),
     ),
             ),
-            // Small top-left Changelog button
+            // Small bottom-center Changelog button
             Positioned(
-              left: 16,
-              top: 16,
+              bottom: 16,
+              left: 0,
+              right: 0,
               child: SafeArea(
-                child: InkWell(
-                  onTap: () => _showChangelogDialog(context),
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white12),
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
-                        SizedBox(width: 6),
-                        Text(
-                          'Changelog',
-                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white70),
-                        ),
-                      ],
+                child: Center(
+                  child: InkWell(
+                    onTap: () => _showChangelogDialog(context),
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white24, width: 1.2),
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
+                          SizedBox(width: 6),
+                          Text(
+                            'Changelog (v0.9.1)',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -385,7 +390,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           SizedBox(height: 2),
                           Text(
-                            'v1.8.4 — 2026 Ultimate Edition',
+                            'v2.3.0 — 2026 Ultimate Edition',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

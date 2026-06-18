@@ -161,11 +161,22 @@ class _ShrineGridTile extends StatelessWidget {
                               color: Colors.amber,
                             ),
                           )
-                        : const Icon(
-                            Icons.temple_buddhist_outlined,
-                            size: 32,
-                            color: Colors.amber,
-                          ),
+                        : iconAsset.startsWith('http')
+                            ? Image.network(
+                                iconAsset,
+                                fit: BoxFit.contain,
+                                filterQuality: FilterQuality.none,
+                                errorBuilder: (_, __, ___) => const Icon(
+                                  Icons.temple_buddhist_outlined,
+                                  size: 32,
+                                  color: Colors.amber,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.temple_buddhist_outlined,
+                                size: 32,
+                                color: Colors.amber,
+                              ),
                   ),
                 ),
               ),
@@ -377,11 +388,22 @@ class _ShrineCardState extends State<_ShrineCard> {
                                 color: Colors.amber,
                               ),
                             )
-                          : const Icon(
-                              Icons.temple_buddhist_outlined,
-                              size: 48,
-                              color: Colors.amber,
-                            ),
+                          : resolveShrineIcon(shrine.name, shrine.icon).startsWith('http')
+                              ? Image.network(
+                                  resolveShrineIcon(shrine.name, shrine.icon),
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.none,
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.temple_buddhist_outlined,
+                                    size: 48,
+                                    color: Colors.amber,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.temple_buddhist_outlined,
+                                  size: 48,
+                                  color: Colors.amber,
+                                ),
                     ),
                   ),
                 ),
@@ -648,7 +670,16 @@ class ShrineActivationSheet extends StatelessWidget {
                                     Icons.temple_buddhist,
                                     size: 40),
                               )
-                            : const Icon(Icons.temple_buddhist, size: 40),
+                            : resolveShrineIcon(shrine.name, shrine.icon).startsWith('http')
+                                ? Image.network(
+                                    resolveShrineIcon(shrine.name, shrine.icon),
+                                    fit: BoxFit.contain,
+                                    filterQuality: FilterQuality.none,
+                                    errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.temple_buddhist,
+                                        size: 40),
+                                  )
+                                : const Icon(Icons.temple_buddhist, size: 40),
                       ),
                       const SizedBox(width: 14),
                       Expanded(

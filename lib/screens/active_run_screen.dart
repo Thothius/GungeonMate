@@ -11,6 +11,9 @@ import '../models/player.dart';
 import '../widgets/periodic_tile.dart';
 import '../widgets/gungeoneer_header.dart';
 import '../widgets/inventory_list_row.dart';
+import '../widgets/game_icon.dart';
+import '../widgets/quality_badge.dart';
+import '../services/haptics.dart';
 import 'item_detail_screen.dart';
 import 'stats_detail_screen.dart';
 import 'character_select_screen.dart';
@@ -27,6 +30,7 @@ import '../services/multiplayer_session.dart';
 import '../models/multiplayer_messages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/format.dart';
+import '../utils/bug_reporter.dart';
 
 class ActiveRunScreen extends StatefulWidget {
   final VoidCallback? onRequestBrowse;
@@ -204,25 +208,14 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               heroTag: 'fab_add',
               tooltip: (isMpActive && !onMyMpPage)
                   ? null // no FAB on peer's page in MP
-                  : (onCoop ? 'Add to P2' : 'Add to inventory'),
+                  : (_currentPage == 1 ? 'Add to P2' : 'Add to inventory'),
               onPressed: (isMpActive && !onMyMpPage)
                   ? null
                   : () {
-                      if (!onCoop && widget.onRequestBrowse != null) {
-                        widget.onRequestBrowse!();
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BrowseScreen(
-                              targetSlot: onCoop
-                                  ? PlayerSlot.coop
-                                  : PlayerSlot.main,
-                              showBackButton: true,
-                            ),
-                          ),
-                        );
-                      }
+                      _showQuickAddBottomSheet(
+                        context,
+                        _currentPage == 1 ? PlayerSlot.coop : PlayerSlot.main,
+                      );
                     },
               child: const Icon(Icons.add, size: 32),
             ),
@@ -271,6 +264,289 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       ),
     );
   }
+
+  void _showQuickAddBottomSheet(BuildContext context, PlayerSlot slot) {
+    final p = Provider.of<RunProvider>(context, listen: false);
+    final focusNode = FocusNode();
+    final quickAddController = TextEditingController(text: _quickQuery);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: const Color(0xFF131316),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        side: BorderSide(color: Color(0xFF303036), width: 1.5),
+      ),
+      builder: (bContext) {
+        return StatefulBuilder(
+          builder: (sContext, setModalState) {
+            final textTheme = Theme.of(sContext).textTheme;
+            final query = _quickQuery.toLowerCase().trim();
+
+            // Smart relevance matching & sorting:
+            // 1. Starts with query (highest priority)
+            // 2. Contains query (medium priority)
+            // 3. Quality score tie-breaker
+            final matchingGuns = p.allGuns.where((g) {
+              return g.name.toLowerCase().contains(query);
+            }).toList();
+
+            final matchingItems = p.allItems.where((i) {
+              return i.name.toLowerCase().contains(query);
+            }).toList();
+
+            // Combined and prioritized
+            final List<dynamic> combinedResults = [...matchingGuns, ...matchingItems];
+            combinedResults.sort((a, b) {
+              final aName = a.name.toLowerCase();
+              final bName = b.name.toLowerCase();
+              final aStarts = aName.startsWith(query);
+              final bStarts = bName.startsWith(query);
+              if (aStarts && !bStarts) return -1;
+              if (!aStarts && bStarts) return 1;
+              return aName.compareTo(bName);
+            });
+
+            final results = combinedResults.take(6).toList();
+
+            return AnimatedPadding(
+              duration: const Duration(milliseconds: 100),
+              padding: MediaQuery.of(sContext).viewInsets,
+              child: Container(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(sContext).size.height * 0.65,
+                ),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Handlebar indicator
+                    Container(
+                      width: 36,
+                      height: 4,
+                      margin: const EdgeInsets.only(bottom: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          slot == PlayerSlot.coop ? 'QUICK ADD TO PLAYER 2' : 'QUICK ADD TO RUN',
+                          style: const TextStyle(
+                            fontFamily: 'EnterTheGungeonBig',
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.amberAccent,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(bContext);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BrowseScreen(
+                                  targetSlot: slot,
+                                  showBackButton: true,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'ADVANCED LIBRARY ➔',
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.cyanAccent,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    TextField(
+                      controller: quickAddController,
+                      autofocus: true,
+                      focusNode: focusNode,
+                      style: const TextStyle(color: Colors.white, fontSize: 13.5),
+                      cursorColor: Colors.amberAccent,
+                      decoration: InputDecoration(
+                        hintText: 'Search items, guns...',
+                        hintStyle: const TextStyle(color: Colors.white30, fontSize: 13.5),
+                        prefixIcon: const Icon(Icons.search, color: Colors.white30, size: 20),
+                        suffixIcon: query.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.close, color: Colors.white54, size: 18),
+                                onPressed: () {
+                                  quickAddController.clear();
+                                  setModalState(() {
+                                    _quickQuery = '';
+                                  });
+                                },
+                              )
+                            : null,
+                        filled: true,
+                        fillColor: const Color(0xFF1E1E22),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(color: Colors.amberAccent, width: 1.5),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(color: Colors.white10),
+                        ),
+                      ),
+                      onChanged: (val) {
+                        setModalState(() {
+                          _quickQuery = val;
+                        });
+                      },
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    if (results.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32),
+                        child: Text(
+                          'No matching guns or items found.',
+                          style: TextStyle(color: Colors.white38, fontSize: 12.5),
+                        ),
+                      )
+                    else
+                      Flexible(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          itemCount: results.length,
+                          separatorBuilder: (_, __) => Divider(color: Colors.white.withValues(alpha: 0.05), height: 1),
+                          itemBuilder: (lContext, index) {
+                            final item = results[index];
+                            final isGun = item is Gun;
+                            final name = item.name;
+                            final quality = isGun ? item.quality : item.quality;
+                            final iconPath = isGun ? item.icon : item.icon;
+
+                            // Read live run state directly to see if player already owns it
+                            return AnimatedBuilder(
+                              animation: p,
+                              builder: (abContext, _) {
+                                final activePlayer = slot == PlayerSlot.coop
+                                    ? (p.runState.coop ?? Player())
+                                    : p.runState.main;
+                                final isOwned = isGun
+                                    ? activePlayer.guns.any((g) => g.name == name)
+                                    : (name.toLowerCase() == 'junk'
+                                        ? false
+                                        : activePlayer.items.any((i) => i.name == name));
+
+                                return ListTile(
+                                  dense: true,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                  leading: GameIcon(
+                                    assetPath: iconPath,
+                                    size: 32,
+                                    fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                                    quality: quality,
+                                  ),
+                                  title: Text(
+                                    name,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12.5,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    isGun ? 'Gun • Quality $quality' : 'Item • Quality $quality',
+                                    style: const TextStyle(
+                                      color: Colors.white38,
+                                      fontSize: 10.5,
+                                    ),
+                                  ),
+                                  trailing: isOwned
+                                      ? Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(4),
+                                            border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.3)),
+                                          ),
+                                          child: const Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(Icons.check, size: 12, color: Colors.greenAccent),
+                                              SizedBox(width: 4),
+                                              Text(
+                                                'OWNED',
+                                                style: TextStyle(
+                                                  color: Colors.greenAccent,
+                                                  fontSize: 9,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: const Color(0xFF1E1E22),
+                                            foregroundColor: Colors.amberAccent,
+                                            elevation: 0,
+                                            side: const BorderSide(color: Colors.white10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(6),
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Haptics.selection();
+                                            if (isGun) {
+                                              p.addGun(item, slot: slot);
+                                            } else {
+                                              p.addItem(item, slot: slot);
+                                            }
+                                            quickAddController.clear();
+                                            setModalState(() {
+                                              _quickQuery = '';
+                                            });
+                                          },
+                                          child: const Text(
+                                            'ADD',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).whenComplete(() {
+      focusNode.dispose();
+      quickAddController.dispose();
+    });
+  }
+
+  String _quickQuery = '';
 
   Widget _buildWindgunnerBanner(RunProvider p) {
     return Container(
@@ -786,6 +1062,17 @@ class _MpHeader extends StatelessWidget {
                       ),
                       const Spacer(),
                       IconButton(
+                        icon: const Icon(Icons.bug_report_rounded, size: 20, color: Colors.redAccent),
+                        constraints: const BoxConstraints(),
+                        padding: EdgeInsets.zero,
+                        tooltip: 'Report MP Bug',
+                        onPressed: () {
+                          Haptics.heavy();
+                          BugReporter.show(ctx, 'Multiplayer Link View');
+                        },
+                      ),
+                      const SizedBox(width: 12),
+                      IconButton(
                         icon: const Icon(Icons.close, size: 20, color: Colors.white54),
                         constraints: const BoxConstraints(),
                         padding: EdgeInsets.zero,
@@ -1171,6 +1458,22 @@ class _PlayerPageState extends State<_PlayerPage> {
     _saveInvView(_invView);
   }
 
+  void _changeLayout(Object layout) {
+    if (layout is _InvView) {
+      setState(() {
+        _invView = layout;
+      });
+      _saveInvView(layout);
+    } else if (layout is InventoryDisplayMode) {
+      setState(() {
+        _invView = _InvView.grid;
+      });
+      _saveInvView(_InvView.grid);
+      VisualPrefs.setInventoryDisplayMode(layout);
+    }
+    Haptics.selection();
+  }
+
   Future<void> _saveInvView(_InvView v) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -1199,8 +1502,11 @@ class _PlayerPageState extends State<_PlayerPage> {
     final isMpActive = mpSession.status != MpStatus.idle;
     final canTransfer = hasCoop && (!isMpActive || mpSession.isConnected);
 
-    // Apply the active sort modes. Pickup-order is a no-op pass-through.
-    final guns = _sortGuns(player.guns, _gunSort);
+    return ValueListenableBuilder<VisualPrefs>(
+      valueListenable: VisualPrefs.notifier,
+      builder: (context, prefs, _) {
+        // Apply the active sort modes. Pickup-order is a no-op pass-through.
+        final guns = _sortGuns(player.guns, _gunSort);
     final items = _sortItems(player.items, _itemSort);
 
     // Identify the highest-DPS gun in this player's loadout so both
@@ -1253,7 +1559,23 @@ class _PlayerPageState extends State<_PlayerPage> {
                   _showStatAdjuster(context, isCool: true),
               onLongPressCurse: () =>
                   _showStatAdjuster(context, isCool: false),
-              trailing: const _HeaderMenu(),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Haptics.heavy();
+                      BugReporter.show(context, 'Active Run Dashboard (Inventory View)');
+                    },
+                    icon: const Icon(Icons.bug_report_rounded, color: Colors.redAccent, size: 20),
+                    tooltip: 'Report Bug',
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 4),
+                  const _HeaderMenu(),
+                ],
+              ),
               // Computed once per build — the tagger is a handful of
               // regex scans over a ≤40-item loadout, well under a frame.
               elements: ElementalTagger.elementsOfPlayer(player),
@@ -1280,16 +1602,10 @@ class _PlayerPageState extends State<_PlayerPage> {
           icon: Icons.gps_fixed,
           sortLabel: _gunSort.label,
           onTapSort: _showGunSortSheet,
-          // Same toggle on both section headers — flipping from either
-          // updates Guns *and* Items together. Icon shows the *target*
-          // mode for clarity (looking at a grid → tap to get list).
-          viewIcon: _invView == _InvView.grid
-              ? Icons.view_list_rounded
-              : Icons.grid_view_rounded,
-          viewTooltip: _invView == _InvView.grid
-              ? 'Switch to List View'
-              : 'Switch to Grid View',
-          onTapView: _toggleInvView,
+          showLayoutSelector: true,
+          currentInvView: _invView,
+          currentDisplayMode: VisualPrefs.notifier.value.inventoryDisplayMode,
+          onLayoutChanged: _changeLayout,
         ),
         if (guns.isEmpty)
           SliverToBoxAdapter(
@@ -1372,7 +1688,10 @@ class _PlayerPageState extends State<_PlayerPage> {
           icon: Icons.inventory_2_outlined,
           sortLabel: _itemSort.label,
           onTapSort: _showItemSortSheet,
-          // View toggle only on Guns section - shared state, one control is enough
+          showLayoutSelector: true,
+          currentInvView: _invView,
+          currentDisplayMode: VisualPrefs.notifier.value.inventoryDisplayMode,
+          onLayoutChanged: _changeLayout,
         ),
         if (items.isEmpty)
           SliverToBoxAdapter(
@@ -1462,6 +1781,8 @@ class _PlayerPageState extends State<_PlayerPage> {
       );
     }
     return scrollWidget;
+      },
+    );
   }
 
   /// Inline +/- bottom sheet for a quick coolness/curse tweak — opened
@@ -1657,16 +1978,35 @@ class _PlayerPageState extends State<_PlayerPage> {
 
   SliverGridDelegate _tileGrid(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
-    final cross = w < 360
-        ? 3
-        : w < 600
-            ? 4
-            : 6;
+    final displayMode = VisualPrefs.notifier.value.inventoryDisplayMode;
+
+    int cross;
+    double ratio;
+
+    switch (displayMode) {
+      case InventoryDisplayMode.classicPeriodic:
+        cross = w < 360 ? 3 : w < 600 ? 4 : 6;
+        ratio = 0.80;
+        break;
+      case InventoryDisplayMode.tacticalStats:
+        cross = w < 360 ? 4 : w < 600 ? 4 : 6;
+        ratio = 0.70;
+        break;
+      case InventoryDisplayMode.highDefGraphic:
+        cross = w < 400 ? 2 : w < 700 ? 3 : 5;
+        ratio = 0.95;
+        break;
+      case InventoryDisplayMode.solidLabelBag:
+        cross = w < 500 ? 1 : w < 850 ? 2 : 3;
+        ratio = 2.4;
+        break;
+    }
+
     return SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: cross,
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
-      childAspectRatio: 0.82,
+      childAspectRatio: ratio,
     );
   }
 
@@ -3070,17 +3410,6 @@ class _HeaderMenu extends StatelessWidget {
               Text('End Run', style: TextStyle(color: Colors.redAccent)),
             ]),
           ),
-        const PopupMenuDivider(),
-
-        // --- Group 4: Vibe & Customization ---
-        const PopupMenuItem(
-          value: 'vibe',
-          child: Row(children: [
-            Icon(Icons.palette_outlined, size: 18, color: Colors.purpleAccent),
-            SizedBox(width: 10),
-            Text('Vibe & Customization'),
-          ]),
-        ),
       ],
     );
   }
@@ -3345,13 +3674,11 @@ class _SectionHeaderSliver extends StatelessWidget {
   final String? sortLabel;
   final VoidCallback? onTapSort;
 
-  /// Optional view-mode toggle. When provided, an icon button sits to
-  /// the right of the sort pill and flips between grid / list. Both
-  /// inventory section headers receive the *same* callback so toggling
-  /// from either header switches Guns and Items together.
-  final IconData? viewIcon;
-  final String? viewTooltip;
-  final VoidCallback? onTapView;
+  /// Optional premium layout selector dropdown.
+  final bool showLayoutSelector;
+  final _InvView? currentInvView;
+  final InventoryDisplayMode? currentDisplayMode;
+  final ValueChanged<Object>? onLayoutChanged;
 
   const _SectionHeaderSliver({
     required this.title,
@@ -3359,13 +3686,31 @@ class _SectionHeaderSliver extends StatelessWidget {
     required this.icon,
     this.sortLabel,
     this.onTapSort,
-    this.viewIcon,
-    this.viewTooltip,
-    this.onTapView,
+    this.showLayoutSelector = false,
+    this.currentInvView,
+    this.currentDisplayMode,
+    this.onLayoutChanged,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Determine active icon for layout selector button
+    IconData getActiveLayoutIcon() {
+      if (currentInvView == _InvView.list) {
+        return Icons.view_list_rounded;
+      }
+      switch (currentDisplayMode ?? InventoryDisplayMode.classicPeriodic) {
+        case InventoryDisplayMode.classicPeriodic:
+          return Icons.grid_view_rounded;
+        case InventoryDisplayMode.tacticalStats:
+          return Icons.assessment_outlined;
+        case InventoryDisplayMode.highDefGraphic:
+          return Icons.photo_library_outlined;
+        case InventoryDisplayMode.solidLabelBag:
+          return Icons.inventory_2_outlined;
+      }
+    }
+
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -3431,18 +3776,71 @@ class _SectionHeaderSliver extends StatelessWidget {
                   ),
                 ),
               ),
-            if (viewIcon != null && onTapView != null) ...[
+            if (showLayoutSelector && onLayoutChanged != null) ...[
               const SizedBox(width: 6),
-              IconButton(
-                tooltip: viewTooltip,
-                onPressed: onTapView,
-                icon: Icon(viewIcon, size: 18, color: Colors.white70),
-                padding: EdgeInsets.zero,
-                visualDensity: VisualDensity.compact,
-                constraints: const BoxConstraints(
-                  minWidth: 32,
-                  minHeight: 32,
+              PopupMenuButton<Object>(
+                tooltip: 'Select layout style',
+                icon: Icon(getActiveLayoutIcon(), size: 18, color: Colors.white70),
+                offset: const Offset(0, 36),
+                color: const Color(0xFF232326),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: const BorderSide(color: Colors.white10),
                 ),
+                onSelected: onLayoutChanged,
+                itemBuilder: (ctx) => [
+                  PopupMenuItem(
+                    value: _InvView.list,
+                    child: Row(
+                      children: [
+                        Icon(Icons.view_list_rounded, size: 15, color: currentInvView == _InvView.list ? Colors.amberAccent : Colors.white60),
+                        const SizedBox(width: 8),
+                        Text('List View', style: TextStyle(fontSize: 12, color: currentInvView == _InvView.list ? Colors.amberAccent : Colors.white)),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuDivider(height: 1),
+                  PopupMenuItem(
+                    value: InventoryDisplayMode.classicPeriodic,
+                    child: Row(
+                      children: [
+                        Icon(Icons.grid_view_rounded, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.classicPeriodic) ? Colors.amberAccent : Colors.white60),
+                        const SizedBox(width: 8),
+                        Text('Periodic Grid', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.classicPeriodic) ? Colors.amberAccent : Colors.white)),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: InventoryDisplayMode.tacticalStats,
+                    child: Row(
+                      children: [
+                        Icon(Icons.assessment_outlined, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white60),
+                        const SizedBox(width: 8),
+                        Text('Tactical Stats', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white)),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: InventoryDisplayMode.highDefGraphic,
+                    child: Row(
+                      children: [
+                        Icon(Icons.photo_library_outlined, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.highDefGraphic) ? Colors.amberAccent : Colors.white60),
+                        const SizedBox(width: 8),
+                        Text('Gallery Display', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.highDefGraphic) ? Colors.amberAccent : Colors.white)),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: InventoryDisplayMode.solidLabelBag,
+                    child: Row(
+                      children: [
+                        Icon(Icons.inventory_2_outlined, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.solidLabelBag) ? Colors.amberAccent : Colors.white60),
+                        const SizedBox(width: 8),
+                        Text('RPG Bag rows', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.solidLabelBag) ? Colors.amberAccent : Colors.white)),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ],

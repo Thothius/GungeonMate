@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Eight lore-named palettes. Each is a hand-tuned palette + a
 /// [ThemeFlair] record carrying extra styling knobs (numeric typography,
@@ -44,310 +45,241 @@ enum AppThemeMode {
 /// Thematic font options for the app. Each font provides a different
 /// visual personality while maintaining readability.
 enum AppFont {
-  /// Enter the Gungeon's official chunky pixel display font.
-  /// Default — ships with the app as a bundled asset.
   gungeon,
-
-  /// Classic 80s arcade lettering
-  arcadeClassic,
-
-  /// Hand-drawn wobbly comic style
-  shakyHandComic,
-
-  /// Elegant classic vintage typography
-  feelingVintage,
-
-  /// Bold robust modern display lettering
-  helloDenver,
-
-  /// Playful summer kids lettering
-  lemonadeStand,
-
-  /// Whimsical high-readability sans font
-  lifeSavers,
-
-  /// Mystical wizarding world lettering
-  parryHotter,
-
-  /// Sleek futuristic sci-fi tech font
-  prototype,
-
-  /// Ancient mythic lore fantasy typography
-  storiesFantasy,
-
-  /// Tropical summer look
-  beachday,
-
-  /// Majestic fantasy dragon display font
-  blastDragon,
-
-  /// Round chunky pixel font
-  chonkyCat,
-
-  /// Flaming metal lettering
-  dragonFire,
-
-  /// Arcade game paused style
-  gamePaused,
-
-  /// Gothic medieval roman lettering
-  morrisRoman,
-
-  /// Detailed extrude 8-bit game font
-  pixelGame,
-
-  /// Bold gaming serif display
-  solander,
-
-  /// Magical runic display lettering
-  starlightRune,
-
-  // 15 Magnificent New OS-Native / Fallback Fonts (Ultra Light APK Weight!)
-  systemRoboto,
-  systemCourier,
-  systemGeorgia,
-  systemImpact,
-  systemMonospace,
-  systemSerif,
-  systemTrebuchet,
-  systemTimes,
-  systemGaramond,
-  systemFutura,
-  systemHelvetica,
-  systemOptima,
-  systemCentury,
-  systemBaskerville,
-  systemBodoni,
+  pressStart2p,
+  silkscreen,
+  vt323,
+  pixelifySans,
+  bungee,
+  bungeeShade,
+  rubik8bit,
+  monoton,
+  blackOpsOne,
+  dotgothic16,
+  creepster,
+  orbitron,
+  shareTechMono,
+  syncopate,
+  rajdhani,
+  audiowide,
+  russoOne,
+  fasterOne,
+  archivoBlack,
+  anton,
+  rowdies,
+  righteous,
+  comicNeue,
+  fredoka,
+  sniglet,
+  lemon,
+  lilitaOne,
+  spicyRice,
+  chewy,
+  boogaloo,
+  carterOne,
+  permanentMarker,
+  spaceGrotesk,
+  jetBrainsMono,
+  dmSans,
+  outfit,
+  syne,
+  montserrat,
+  lexend,
+  kanit,
+  teko,
+  fjallaOne,
+  bebasNeue,
+  medievalSharp,
+  cinzelDecorative,
+  almendra,
+  metalMania,
+  unifrakturMaguntia,
+  newRocker,
+  rye,
+  nosifer,
+  playfairDisplay,
+  ebGaramond,
+  merriweather,
+  libreBaskerville,
+  specialElite,
+  coustard,
+  architectsDaughter,
+  cinzel,
+  megrim,
+  rockSalt,
+  shadowsIntoLight,
+  lobster,
+  caveat,
+  comfortaa,
+  alata,
 }
 
 extension AppFontLabel on AppFont {
+  static const Map<AppFont, String> _googleFontNames = {
+    AppFont.pressStart2p: 'Press Start 2P',
+    AppFont.silkscreen: 'Silkscreen',
+    AppFont.vt323: 'VT323',
+    AppFont.pixelifySans: 'Pixelify Sans',
+    AppFont.bungee: 'Bungee',
+    AppFont.bungeeShade: 'Bungee Shade',
+    AppFont.rubik8bit: 'Rubik 8-Bit',
+    AppFont.monoton: 'Monoton',
+    AppFont.blackOpsOne: 'Black Ops One',
+    AppFont.dotgothic16: 'DotGothic16',
+    AppFont.creepster: 'Creepster',
+    AppFont.orbitron: 'Orbitron',
+    AppFont.shareTechMono: 'Share Tech Mono',
+    AppFont.syncopate: 'Syncopate',
+    AppFont.rajdhani: 'Rajdhani',
+    AppFont.audiowide: 'Audiowide',
+    AppFont.russoOne: 'Russo One',
+    AppFont.fasterOne: 'Faster One',
+    AppFont.archivoBlack: 'Archivo Black',
+    AppFont.anton: 'Anton',
+    AppFont.rowdies: 'Rowdies',
+    AppFont.righteous: 'Righteous',
+    AppFont.comicNeue: 'Comic Neue',
+    AppFont.fredoka: 'Fredoka',
+    AppFont.sniglet: 'Sniglet',
+    AppFont.lemon: 'Lemon',
+    AppFont.lilitaOne: 'Lilita One',
+    AppFont.spicyRice: 'Spicy Rice',
+    AppFont.chewy: 'Chewy',
+    AppFont.boogaloo: 'Boogaloo',
+    AppFont.carterOne: 'Carter One',
+    AppFont.permanentMarker: 'Permanent Marker',
+    AppFont.spaceGrotesk: 'Space Grotesk',
+    AppFont.jetBrainsMono: 'JetBrains Mono',
+    AppFont.dmSans: 'DM Sans',
+    AppFont.outfit: 'Outfit',
+    AppFont.syne: 'Syne',
+    AppFont.montserrat: 'Montserrat',
+    AppFont.lexend: 'Lexend',
+    AppFont.kanit: 'Kanit',
+    AppFont.teko: 'Teko',
+    AppFont.fjallaOne: 'Fjalla One',
+    AppFont.bebasNeue: 'Bebas Neue',
+    AppFont.medievalSharp: 'MedievalSharp',
+    AppFont.cinzelDecorative: 'Cinzel Decorative',
+    AppFont.almendra: 'Almendra',
+    AppFont.metalMania: 'Metal Mania',
+    AppFont.unifrakturMaguntia: 'UnifrakturMaguntia',
+    AppFont.newRocker: 'New Rocker',
+    AppFont.rye: 'Rye',
+    AppFont.nosifer: 'Nosifer',
+    AppFont.playfairDisplay: 'Playfair Display',
+    AppFont.ebGaramond: 'EB Garamond',
+    AppFont.merriweather: 'Merriweather',
+    AppFont.libreBaskerville: 'Libre Baskerville',
+    AppFont.specialElite: 'Special Elite',
+    AppFont.coustard: 'Coustard',
+    AppFont.architectsDaughter: 'Architects Daughter',
+    AppFont.cinzel: 'Cinzel',
+    AppFont.megrim: 'Megrim',
+    AppFont.rockSalt: 'Rock Salt',
+    AppFont.shadowsIntoLight: 'Shadows Into Light',
+    AppFont.lobster: 'Lobster',
+    AppFont.caveat: 'Caveat',
+    AppFont.comfortaa: 'Comfortaa',
+    AppFont.alata: 'Alata',
+  };
+
+  static const Map<AppFont, String> _googleFontDescriptions = {
+    AppFont.pressStart2p: 'Classic 8-bit NES arcade pixel',
+    AppFont.silkscreen: 'Crisp tiny 8-bit screen font',
+    AppFont.vt323: 'Nostalgic glowing CRT terminal font',
+    AppFont.pixelifySans: 'Modern hybrid geometric pixel art',
+    AppFont.bungee: 'Chunky vertical urban sign look',
+    AppFont.bungeeShade: 'Shadowed retro arcade heading',
+    AppFont.rubik8bit: 'Extra heavy 3D pixel letters',
+    AppFont.monoton: 'Triple-line futuristic high-tech race style',
+    AppFont.blackOpsOne: 'Military industrial stencil look',
+    AppFont.dotgothic16: 'Authentic 90s Japanese arcade style',
+    AppFont.creepster: 'Spooky classic halloween horror lettering',
+    AppFont.orbitron: 'Futuristic sci-fi aerospace tech',
+    AppFont.shareTechMono: 'Clean digital cybernetic HUD console',
+    AppFont.syncopate: 'Wide high-end cyberpunk architecture',
+    AppFont.rajdhani: 'Squarish military armor tech plates',
+    AppFont.audiowide: 'Smooth streamlined robotic lettering',
+    AppFont.russoOne: 'Heavy soviet metal sci-fi gaming',
+    AppFont.fasterOne: 'Wind-tunnel racing speed blur lines',
+    AppFont.archivoBlack: 'Ultra heavy high-visibility signage',
+    AppFont.anton: 'Thick solid impact display blocks',
+    AppFont.rowdies: 'Edgy casual heavy fighting style',
+    AppFont.righteous: 'Cool geometric art deco bubble-sans',
+    AppFont.comicNeue: 'Highly readable modern cartoon comic',
+    AppFont.fredoka: 'Cute rounded friendly organic blocks',
+    AppFont.sniglet: 'Playful bouncy summer kids cartoon',
+    AppFont.lemon: 'Thick juicy casual letter blocks',
+    AppFont.lilitaOne: 'Chubby fat-finger casual display',
+    AppFont.spicyRice: 'Wacky tropical retro gaming logo',
+    AppFont.chewy: 'Squishy melting marshmallow cartoon',
+    AppFont.boogaloo: 'Swinging 60s retro party lettering',
+    AppFont.carterOne: 'Thick vintage brush logo signwriting',
+    AppFont.permanentMarker: 'Grungy hand-drawn permanent ink scribble',
+    AppFont.spaceGrotesk: 'Sleek geometric tech sans with character',
+    AppFont.jetBrainsMono: 'Elite software engineer monospace editor',
+    AppFont.dmSans: 'Neutral geometric modern interface sans',
+    AppFont.outfit: 'Perfect luxury circular modern display',
+    AppFont.syne: 'Artistic high-fashion expressive layout',
+    AppFont.montserrat: 'Clean urban geometric architectural sans',
+    AppFont.lexend: 'Ultra readable educational interface sans',
+    AppFont.kanit: 'Sleek compact high-density modern sans',
+    AppFont.teko: 'Super tall condensed athletic metal block',
+    AppFont.fjallaOne: 'High impact condensed newspaper heading',
+    AppFont.bebasNeue: 'Clean condensed billboard display legend',
+    AppFont.medievalSharp: 'Sharp runic celtic iron broadsword',
+    AppFont.cinzelDecorative: 'Ornate royalty fantasy crown capitals',
+    AppFont.almendra: 'Classic gothic fantasy parchment script',
+    AppFont.metalMania: 'Heavy thrash metal guitar typography',
+    AppFont.unifrakturMaguntia: 'Traditional blackletter gothic cathedral script',
+    AppFont.newRocker: 'Aggressive hard rock jagged lettering',
+    AppFont.rye: 'Wanted poster wild west saloon woodcut',
+    AppFont.nosifer: 'Dripping toxic acid blood splatter',
+    AppFont.playfairDisplay: 'Luxurious high-contrast theatrical display',
+    AppFont.ebGaramond: 'Classic scholarly book antique print',
+    AppFont.merriweather: 'Robust highly readable editorial serif',
+    AppFont.libreBaskerville: 'Elegant traditional transitional book serif',
+    AppFont.specialElite: 'Grungy ink-splattered vintage typewriter',
+    AppFont.coustard: 'Slab-serif heavy typewriter-slab block',
+    AppFont.architectsDaughter: 'Messy architect blueprints hand scribble',
+    AppFont.cinzel: 'Formal ancient roman stone carving',
+    AppFont.megrim: 'Ultra-stylized thin wire outline vector',
+    AppFont.rockSalt: 'Scribbled dry-erase whiteboard marker',
+    AppFont.shadowsIntoLight: 'Neat feminine clean gel-pen handwriting',
+    AppFont.lobster: 'Thick bold retro script lettering',
+    AppFont.caveat: 'Natural fluid cursive ink handwriting',
+    AppFont.comfortaa: 'Soft circular geometric outline sans',
+    AppFont.alata: 'Clean balanced minimal graphic sans',
+  };
+
   String get label {
-    switch (this) {
-      case AppFont.gungeon:
-        return 'Enter the Gungeon';
-      case AppFont.arcadeClassic:
-        return 'Arcade Classic';
-      case AppFont.shakyHandComic:
-        return 'Shaky Hand Comic';
-      case AppFont.feelingVintage:
-        return 'Feeling Vintage';
-      case AppFont.helloDenver:
-        return 'Hello Denver Bold';
-      case AppFont.lemonadeStand:
-        return 'Lemonade Stand';
-      case AppFont.lifeSavers:
-        return 'Life Savers Bold';
-      case AppFont.parryHotter:
-        return 'Parry Hotter';
-      case AppFont.prototype:
-        return 'Prototype';
-      case AppFont.storiesFantasy:
-        return 'Stories Fantasy';
-      case AppFont.beachday:
-        return 'Beachday Retro';
-      case AppFont.blastDragon:
-        return 'Blast Dragon';
-      case AppFont.chonkyCat:
-        return 'Chonky Cat';
-      case AppFont.dragonFire:
-        return 'Dragon Fire';
-      case AppFont.gamePaused:
-        return 'Game Paused';
-      case AppFont.morrisRoman:
-        return 'Morris Roman';
-      case AppFont.pixelGame:
-        return 'Pixel Game';
-      case AppFont.solander:
-        return 'Solander Bold';
-      case AppFont.starlightRune:
-        return 'Starlight Rune';
-      case AppFont.systemRoboto:
-        return 'Roboto (Sleek)';
-      case AppFont.systemCourier:
-        return 'Courier Prime (Retro)';
-      case AppFont.systemGeorgia:
-        return 'Georgia (Classic)';
-      case AppFont.systemImpact:
-        return 'Impact (Heavy)';
-      case AppFont.systemMonospace:
-        return 'Monospace Tech';
-      case AppFont.systemSerif:
-        return 'Serif Elegant';
-      case AppFont.systemTrebuchet:
-        return 'Trebuchet (Artistic)';
-      case AppFont.systemTimes:
-        return 'Times Roman (Formal)';
-      case AppFont.systemGaramond:
-        return 'Garamond (Book)';
-      case AppFont.systemFutura:
-        return 'Futura (Modern)';
-      case AppFont.systemHelvetica:
-        return 'Helvetica (Universal)';
-      case AppFont.systemOptima:
-        return 'Optima (Classy)';
-      case AppFont.systemCentury:
-        return 'Century (Vintage)';
-      case AppFont.systemBaskerville:
-        return 'Baskerville (Elegant)';
-      case AppFont.systemBodoni:
-        return 'Bodoni (Chic)';
-    }
+    if (this == AppFont.gungeon) return 'Enter the Gungeon';
+    return _googleFontNames[this] ?? 'Enter the Gungeon';
   }
 
   String get description {
-    switch (this) {
-      case AppFont.gungeon:
-        return 'Official Gungeon chunky pixel';
-      case AppFont.arcadeClassic:
-        return 'Classic 80s arcade letterforms';
-      case AppFont.shakyHandComic:
-        return 'Hand-drawn wobbly comic style';
-      case AppFont.feelingVintage:
-        return 'Elegant classic vintage font';
-      case AppFont.helloDenver:
-        return 'Bold robust modern display font';
-      case AppFont.lemonadeStand:
-        return 'Playful summer kids lettering';
-      case AppFont.lifeSavers:
-        return 'Whimsical high-readability sans';
-      case AppFont.parryHotter:
-        return 'Mystical wizarding world lettering';
-      case AppFont.prototype:
-        return 'Sleek sci-fi tech font';
-      case AppFont.storiesFantasy:
-        return 'Ancient mythic lore lettering';
-      case AppFont.beachday:
-        return 'Fun retro summer vibe';
-      case AppFont.blastDragon:
-        return 'Chunky action game logo style';
-      case AppFont.chonkyCat:
-        return 'Cute rounded pixel font';
-      case AppFont.dragonFire:
-        return 'Aggressive fantasy lettering';
-      case AppFont.gamePaused:
-        return 'Retro blinking arcade look';
-      case AppFont.morrisRoman:
-        return 'Gothic medieval crawler feel';
-      case AppFont.pixelGame:
-        return 'Symmetric extruded pixel style';
-      case AppFont.solander:
-        return 'Adventure quest serif style';
-      case AppFont.starlightRune:
-        return 'Glowing runic sorcerer lettering';
-      case AppFont.systemRoboto:
-        return 'Sleek OS-native sans-serif font';
-      case AppFont.systemCourier:
-        return 'Vintage typewriter slab-serif look';
-      case AppFont.systemGeorgia:
-        return 'High-readability classic book style';
-      case AppFont.systemImpact:
-        return 'Ultra-bold high-impact heavy sans';
-      case AppFont.systemMonospace:
-        return 'OS-native developer console style';
-      case AppFont.systemSerif:
-        return 'Formal serif display lettering';
-      case AppFont.systemTrebuchet:
-        return 'Smooth geometric humanist sans';
-      case AppFont.systemTimes:
-        return 'Formal editorial newspaper look';
-      case AppFont.systemGaramond:
-        return 'Elegant academic roman lettering';
-      case AppFont.systemFutura:
-        return 'High-end geometric display lettering';
-      case AppFont.systemHelvetica:
-        return 'Neutral, ultra-clean design standard';
-      case AppFont.systemOptima:
-        return 'Gentle flared sans serif lettering';
-      case AppFont.systemCentury:
-        return 'Graceful educational serif layout';
-      case AppFont.systemBaskerville:
-        return 'Luxurious classic transitional serif';
-      case AppFont.systemBodoni:
-        return 'High-contrast modern theatrical serif';
-    }
-  }
-
-  /// Family name to use directly with TextStyle.fontFamily.
-  String get bundledFamily {
-    switch (this) {
-      case AppFont.gungeon:
-        return 'EnterTheGungeonBig';
-      case AppFont.arcadeClassic:
-        return 'ArcadeClassic';
-      case AppFont.shakyHandComic:
-        return 'ShakyHandComic';
-      case AppFont.feelingVintage:
-        return 'FeelingVintage';
-      case AppFont.helloDenver:
-        return 'HelloDenver';
-      case AppFont.lemonadeStand:
-        return 'LemonadeStand';
-      case AppFont.lifeSavers:
-        return 'LifeSavers';
-      case AppFont.parryHotter:
-        return 'ParryHotter';
-      case AppFont.prototype:
-        return 'Prototype';
-      case AppFont.storiesFantasy:
-        return 'StoriesFantasy';
-      case AppFont.beachday:
-        return 'Beachday';
-      case AppFont.blastDragon:
-        return 'BlastDragon';
-      case AppFont.chonkyCat:
-        return 'ChonkyCat';
-      case AppFont.dragonFire:
-        return 'DragonFire';
-      case AppFont.gamePaused:
-        return 'GamePaused';
-      case AppFont.morrisRoman:
-        return 'MorrisRoman';
-      case AppFont.pixelGame:
-        return 'PixelGame';
-      case AppFont.solander:
-        return 'Solander';
-      case AppFont.starlightRune:
-        return 'StarlightRune';
-      case AppFont.systemRoboto:
-        return 'Roboto';
-      case AppFont.systemCourier:
-        return 'Courier New';
-      case AppFont.systemGeorgia:
-        return 'Georgia';
-      case AppFont.systemImpact:
-        return 'Impact';
-      case AppFont.systemMonospace:
-        return 'monospace';
-      case AppFont.systemSerif:
-        return 'serif';
-      case AppFont.systemTrebuchet:
-        return 'Trebuchet MS';
-      case AppFont.systemTimes:
-        return 'Times New Roman';
-      case AppFont.systemGaramond:
-        return 'Garamond';
-      case AppFont.systemFutura:
-        return 'Futura';
-      case AppFont.systemHelvetica:
-        return 'Helvetica';
-      case AppFont.systemOptima:
-        return 'Optima';
-      case AppFont.systemCentury:
-        return 'Century';
-      case AppFont.systemBaskerville:
-        return 'Baskerville';
-      case AppFont.systemBodoni:
-        return 'Bodoni';
-    }
+    if (this == AppFont.gungeon) return 'Official Gungeon chunky pixel';
+    return _googleFontDescriptions[this] ?? 'Google Font';
   }
 
   TextStyle get textStyle {
-    return TextStyle(fontFamily: bundledFamily);
+    if (this == AppFont.gungeon) return const TextStyle(fontFamily: 'EnterTheGungeonBig');
+    try {
+      return GoogleFonts.getFont(label);
+    } catch (_) {
+      return const TextStyle(fontFamily: 'EnterTheGungeonBig');
+    }
   }
 
   TextTheme get textTheme {
     final base = ThemeData.dark().textTheme;
-    return base.apply(fontFamily: bundledFamily);
+    if (this == AppFont.gungeon) return base.apply(fontFamily: 'EnterTheGungeonBig');
+    try {
+      return GoogleFonts.getTextTheme(label, base);
+    } catch (_) {
+      return base.apply(fontFamily: 'EnterTheGungeonBig');
+    }
   }
 }
 
@@ -484,6 +416,13 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Custom — your personal palette';
     }
   }
+}
+
+enum InventoryDisplayMode {
+  classicPeriodic,
+  tacticalStats,
+  highDefGraphic,
+  solidLabelBag,
 }
 
 /// Data model for custom theme settings persisted to SharedPreferences.
@@ -845,6 +784,7 @@ enum CustomParticleType {
   curse,
   vvoid,
   gunfairy,
+  none,
 }
 
 extension CustomParticleTypeLabel on CustomParticleType {
@@ -866,6 +806,8 @@ extension CustomParticleTypeLabel on CustomParticleType {
         return 'Void (Dark)';
       case CustomParticleType.gunfairy:
         return 'Gun Fairy (🧚)';
+      case CustomParticleType.none:
+        return 'No Particles 🚫';
     }
   }
 }
@@ -931,6 +873,9 @@ class VisualPrefs {
   /// Font size for inventory tiles specifically. Let users scale it independently.
   final double inventoryFontSize;
 
+  /// Global display mode for inventory screens (grid variations).
+  final InventoryDisplayMode inventoryDisplayMode;
+
   /// Custom Particle Settings
   final CustomParticleType customParticleType;
   final CustomDiceType customDiceType;
@@ -970,6 +915,7 @@ class VisualPrefs {
     this.font = AppFont.gungeon,
     this.fontSize = 12.0,
     this.inventoryFontSize = 12.0,
+    this.inventoryDisplayMode = InventoryDisplayMode.classicPeriodic,
     this.customParticleType = CustomParticleType.themeDefault,
     this.customDiceType = CustomDiceType.themeDefault,
     this.emitFromTop = true,
@@ -996,6 +942,7 @@ class VisualPrefs {
   static const _kFont     = 'vp.font_v1';
   static const _kFontSize = 'vp.font_size_v1';
   static const _kInventoryFontSize = 'vp.inventory_font_size_v1';
+  static const _kInventoryDisplayMode = 'vp.inventory_display_mode_v1';
   static const _kScaleLegacy = 'vp.scale_v1'; // migrated to _kFontSize
 
   static const _kCustomParticleType = 'vp.custom_particle_type_v2';
@@ -1057,6 +1004,8 @@ class VisualPrefs {
       final customDiceType = CustomDiceType.values[customDiceTypeIdx.clamp(0, CustomDiceType.values.length - 1)];
 
       final inventoryFontSize = p.getDouble(_kInventoryFontSize) ?? 12.0;
+      final displayModeIdx = p.getInt(_kInventoryDisplayMode) ?? 0;
+      final inventoryDisplayMode = InventoryDisplayMode.values[displayModeIdx.clamp(0, InventoryDisplayMode.values.length - 1)];
 
       notifier.value = VisualPrefs(
         glowIntensity:    p.getDouble(_kGlow)     ?? 0.0,
@@ -1068,6 +1017,7 @@ class VisualPrefs {
         font:             font,
         fontSize:         fontSize,
         inventoryFontSize: inventoryFontSize,
+        inventoryDisplayMode: inventoryDisplayMode,
         customParticleType: customParticleType,
         customDiceType:   customDiceType,
         emitFromTop:      p.getBool(_kEmitFromTop)    ?? true,
@@ -1131,6 +1081,11 @@ class VisualPrefs {
   static Future<void> setInventoryFontSize(double v) async {
     final clamped = v.clamp(10.0, 18.0);
     notifier.value = notifier.value._with(inventoryFontSize: clamped);
+    _persist();
+  }
+
+  static Future<void> setInventoryDisplayMode(InventoryDisplayMode mode) async {
+    notifier.value = notifier.value._with(inventoryDisplayMode: mode);
     _persist();
   }
 
@@ -1217,6 +1172,7 @@ class VisualPrefs {
       await p.setInt(_kFont,        v.font.index);
       await p.setDouble(_kFontSize,  v.fontSize);
       await p.setDouble(_kInventoryFontSize, v.inventoryFontSize);
+      await p.setInt(_kInventoryDisplayMode, v.inventoryDisplayMode.index);
 
       await p.setInt(_kCustomParticleType, v.customParticleType.index);
       await p.setInt(_kCustomDiceType, v.customDiceType.index);
@@ -1246,6 +1202,7 @@ class VisualPrefs {
     AppFont? font,
     double? fontSize,
     double? inventoryFontSize,
+    InventoryDisplayMode? inventoryDisplayMode,
     CustomParticleType? customParticleType,
     CustomDiceType? customDiceType,
     bool?   emitFromTop,
@@ -1271,6 +1228,7 @@ class VisualPrefs {
     font:             font             ?? this.font,
     fontSize:         fontSize         ?? this.fontSize,
     inventoryFontSize: inventoryFontSize ?? this.inventoryFontSize,
+    inventoryDisplayMode: inventoryDisplayMode ?? this.inventoryDisplayMode,
     customParticleType: customParticleType ?? this.customParticleType,
     customDiceType:   customDiceType   ?? this.customDiceType,
     emitFromTop:      emitFromTop      ?? this.emitFromTop,
@@ -1303,8 +1261,14 @@ class AppTheme {
   static final ValueNotifier<AppThemeMode> notifier =
       ValueNotifier<AppThemeMode>(AppThemeMode.frogCute);
 
+  static final ValueNotifier<AppThemeMode?> previewNotifier =
+      ValueNotifier<AppThemeMode?>(null);
+
   static AppThemeMode get mode => notifier.value;
   static ThemeFlair get flair => flairFor(notifier.value);
+
+  static AppThemeMode get displayedMode => previewNotifier.value ?? notifier.value;
+  static ThemeFlair get displayedFlair => flairFor(displayedMode);
 
   /// Cached custom theme name for synchronous label access.
   static String _customThemeName = 'Custom';
@@ -1405,10 +1369,22 @@ class AppTheme {
     final f = flairFor(m);
     final prefs = VisualPrefs.notifier.value;
     final bias = prefs.fontWeightBias;
-    var textTheme = m == AppThemeMode.custom && _cachedCustomTheme != null
-        ? _cachedCustomTheme!.font.textTheme
-        : prefs.font.textTheme;
+    final selectedFont = m == AppThemeMode.custom && _cachedCustomTheme != null
+        ? _cachedCustomTheme!.font
+        : prefs.font;
+    var textTheme = selectedFont.textTheme;
     textTheme = _applyWeightBias(textTheme, bias);
+    
+    String? fontFamilyName;
+    if (selectedFont == AppFont.gungeon) {
+      fontFamilyName = 'EnterTheGungeonBig';
+    } else {
+      try {
+        fontFamilyName = GoogleFonts.getFont(selectedFont.label).fontFamily;
+      } catch (_) {
+        fontFamilyName = 'EnterTheGungeonBig';
+      }
+    }
     
     return ThemeData(
       colorScheme: ColorScheme.dark(
@@ -1418,11 +1394,37 @@ class AppTheme {
         onSurface: Colors.white,
       ),
       useMaterial3: true,
-      scaffoldBackgroundColor: f.scaffold.withValues(alpha: 0.90),
+      fontFamily: fontFamilyName,
+      scaffoldBackgroundColor: prefs.hypnoticBgEnabled
+          ? Colors.transparent
+          : f.scaffold.withValues(alpha: 0.90),
       cardColor: f.card,
       textTheme: textTheme,
-      // Ensure the font is also applied to the primary text theme
       primaryTextTheme: textTheme,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: (textTheme.titleLarge ?? const TextStyle()).copyWith(
+          fontSize: 15,
+          fontWeight: FontWeight.w900,
+          color: Colors.white,
+          letterSpacing: 0.5,
+        ),
+      ),
+      tabBarTheme: TabBarTheme(
+        labelStyle: (textTheme.titleSmall ?? const TextStyle()).copyWith(
+          fontWeight: FontWeight.w900,
+          letterSpacing: 0.5,
+        ),
+        unselectedLabelStyle: (textTheme.titleSmall ?? const TextStyle()).copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      dialogTheme: DialogTheme(
+        titleTextStyle: textTheme.titleLarge,
+        contentTextStyle: textTheme.bodyMedium,
+      ),
       cardTheme: CardThemeData(
         color: f.card,
         elevation: 0,

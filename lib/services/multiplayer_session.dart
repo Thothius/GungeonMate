@@ -979,8 +979,10 @@ class MultiplayerSession extends ChangeNotifier {
       unawaited(_service.disconnect());
       return;
     }
-    // Security PIN Code validation
-    if (h.pinCode != _pinCode) {
+    // Security PIN Code validation (normalized to handle null vs empty string consistently)
+    final myPin = (_pinCode == null || _pinCode!.isEmpty) ? null : _pinCode;
+    final peerPin = (h.pinCode == null || h.pinCode!.isEmpty) ? null : h.pinCode;
+    if (peerPin != myPin) {
       _fail(
         'Security Alert: Unauthorized connection attempt with mismatched connection code.',
         isProtocolError: true,

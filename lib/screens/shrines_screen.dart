@@ -43,7 +43,15 @@ class ShrinesScreen extends StatelessWidget {
                               errorBuilder: (_, __, ___) =>
                                   const Icon(Icons.temple_buddhist_outlined),
                             )
-                          : const Icon(Icons.temple_buddhist_outlined),
+                          : s.icon.startsWith('http')
+                              ? Image.network(
+                                  s.icon,
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.none,
+                                  errorBuilder: (_, __, ___) =>
+                                      const Icon(Icons.temple_buddhist_outlined),
+                                )
+                              : const Icon(Icons.temple_buddhist_outlined),
                     ),
                     title: Text(
                       s.name,

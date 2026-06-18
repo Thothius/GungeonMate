@@ -36,7 +36,17 @@ class GameIcon extends StatelessWidget {
             errorBuilder: (_, __, ___) =>
                 Icon(fallback, size: size * 0.58, color: Colors.white),
           )
-        : Icon(fallback, size: size * 0.58, color: Colors.white);
+        : (assetPath.isNotEmpty && assetPath.startsWith('http'))
+            ? Image.network(
+                assetPath,
+                width: size * 0.72,
+                height: size * 0.72,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.none, // crisp pixel art
+                errorBuilder: (_, __, ___) =>
+                    Icon(fallback, size: size * 0.58, color: Colors.white),
+              )
+            : Icon(fallback, size: size * 0.58, color: Colors.white);
 
     if (!showRing) {
       return SizedBox(width: size, height: size, child: Center(child: inner));

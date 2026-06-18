@@ -111,12 +111,14 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<AppThemeMode>(
-      valueListenable: AppTheme.notifier,
-      builder: (_, mode, __) => ValueListenableBuilder<VisualPrefs>(
-        valueListenable: VisualPrefs.notifier,
-        builder: (_, prefs, __) {
-          final f = AppTheme.flair;
+    return AnimatedBuilder(
+      animation: Listenable.merge([AppTheme.notifier, AppTheme.previewNotifier]),
+      builder: (_, __) {
+        final mode = AppTheme.displayedMode;
+        return ValueListenableBuilder<VisualPrefs>(
+          valueListenable: VisualPrefs.notifier,
+          builder: (_, prefs, __) {
+            final f = AppTheme.displayedFlair;
           final showGlow = prefs.glowIntensity > 0.001;
           final gP = showGlow
               ? _scaleAlpha(f.glowPrimary,   prefs.glowIntensity)
@@ -131,12 +133,13 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   opacity: prefs.hypnoticBgOpacity,
                 )
               : null;
-          final particleBackdropBg = !prefs.particlesEnabled
+          final particlesOn = prefs.particlesEnabled && prefs.customParticleType != CustomParticleType.none;
+          final particleBackdropBg = !particlesOn
               ? null
               : (prefs.customParticleType != CustomParticleType.themeDefault
                   ? _CustomParticleBackdrop(prefs: prefs)
                   : _backdropFor(f.backdrop, prefs));
-          final particleBackdropFg = !prefs.particlesEnabled
+          final particleBackdropFg = !particlesOn
               ? null
               : (prefs.customParticleType != CustomParticleType.themeDefault
                   ? _CustomParticleBackdrop(prefs: prefs)
@@ -186,10 +189,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 if (particleBackdropFg != null)
                   Positioned.fill(
                     child: IgnorePointer(
-                      child: Opacity(
-                        opacity: 0.8, // Slightly lower opacity for foreground particles to keep text highly readable
-                        child: particleBackdropFg,
-                      ),
+                      child: particleBackdropFg,
                     ),
                   ),
 
@@ -240,9 +240,10 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
             ),
           );
         },
-      ),
-    );
-  }
+      );
+    },
+  );
+}
 
   Widget? _backdropFor(ThemeBackdrop b, VisualPrefs prefs) {
     switch (b) {
@@ -572,7 +573,7 @@ class _SparklesState extends State<_Sparkles>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _SparklesPainter(t: _c.value, specs: _specs, particleRotation: widget.particleRotation),
           size: Size.infinite,
@@ -591,12 +592,14 @@ class _SparklesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (int i = 0; i < specs.length; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final y = size.height * (1.0 - p);
+      final y = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway * 1.2;
-      final x = s.x * size.width + sway;
+      final tiltXShift = tilt.dx * 20 * p;
+      final x = (s.x * size.width + sway + tiltXShift) % size.width;
       final alpha = _bellAlpha(p) * 0.55;
 
       // Soft magical twinkle scaling
@@ -752,7 +755,7 @@ class _CrimsonDripState extends State<_CrimsonDrip>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _CrimsonDripPainter(t: _c.value),
           size: Size.infinite,
@@ -802,16 +805,18 @@ class _CrimsonDripPainter extends CustomPainter {
       }
     }
     
-    // Floating dark curse ashes (Red-Black embers) drifting upwards
+    // Floating dark curse ashes (Red-Black embers) drifting upwards with tilt physics!
     final math.Random rng = math.Random(666);
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (int i = 0; i < 15; i++) {
       final double speed = 0.4 + rng.nextDouble() * 0.5;
       final double phase = i / 15.0;
       final double progress = (t * speed + phase) % 1.0;
       
-      final y = size.height * (1.0 - progress);
+      final y = (size.height * (1.0 - progress) + tilt.dy * 15 * progress) % size.height;
       final sway = math.sin(progress * 2 * math.pi + phase * 8) * 22;
-      final x = (i / 15.0) * size.width + sway;
+      final tiltXShift = tilt.dx * 18 * progress;
+      final x = ((i / 15.0) * size.width + sway + tiltXShift) % size.width;
       final alpha = (1.0 - progress) * progress * 4.0 * 0.45; // bell-shaped fade in & out
       
       // Outer charred ember
@@ -857,7 +862,7 @@ class _BrassMotesState extends State<_BrassMotes>
       duration: const Duration(seconds: 28), // slower than gold dust
     )..repeat();
     final rng = math.Random(1873); // Winchester's year. Nice.
-    const count = 14;
+    const count = 28;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -879,7 +884,7 @@ class _BrassMotesState extends State<_BrassMotes>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _BrassMotesPainter(t: _c.value, specs: _specs),
           size: Size.infinite,
@@ -897,15 +902,17 @@ class _BrassMotesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (int i = 0; i < specs.length; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final y = size.height * (1.0 - p);
+      final y = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
       
-      // Wider lazy horizontal drift matching prairie wind currents
+      // Wider lazy horizontal drift matching prairie wind currents + tilt!
       final sway = math.sin(p * 2 * math.pi + s.phase * 4) * s.sway * 1.5;
-      final x = s.x * size.width + sway;
-      final alpha = _bellAlpha(p) * 0.55;
+      final tiltXShift = tilt.dx * 18 * p;
+      final x = (s.x * size.width + sway + tiltXShift) % size.width;
+      final alpha = _bellAlpha(p) * 0.85;
 
       // Soft breeze flicker
       final flicker = 0.72 + 0.28 * math.sin(t * 8 * math.pi + s.phase * 12);
@@ -998,7 +1005,7 @@ class _IceCrystalsState extends State<_IceCrystals>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _IceCrystalsPainter(t: _c.value, specs: _specs, particleRotation: widget.particleRotation),
           size: Size.infinite,
@@ -1031,13 +1038,15 @@ class _IceCrystalsPainter extends CustomPainter {
     }
 
     paint.style = PaintingStyle.fill;
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (int i = 0; i < specs.length; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      // Top to bottom drift
-      final y = size.height * p;
+      // Top to bottom drift + tilt!
+      final y = (size.height * p + tilt.dy * 12 * p) % size.height;
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway * 1.2;
-      final x = s.x * size.width + sway;
+      final tiltXShift = tilt.dx * 18 * p;
+      final x = (s.x * size.width + sway + tiltXShift) % size.width;
       final alpha = _bellAlpha(p) * 0.65;
 
       // Shimmering twinkle
@@ -1145,7 +1154,7 @@ class _WhiteDustState extends State<_WhiteDust>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _WhiteDustPainter(t: _c.value, specs: _specs, gravityVortex: widget.gravityVortex),
           size: Size.infinite,
@@ -1165,12 +1174,14 @@ class _WhiteDustPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
     final avatarCenter = Offset(size.width * 0.5, 115);
+    final tilt = ThemeOverlay.tiltNotifier.value;
 
     for (final s in specs) {
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final rawY = size.height * (1.0 - p);
+      final rawY = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
       final sway = math.sin(p * 2 * math.pi + s.phase * 4) * s.sway;
-      final rawX = s.x * size.width + sway;
+      final tiltXShift = tilt.dx * 18 * p;
+      final rawX = (s.x * size.width + sway + tiltXShift) % size.width;
       final alpha = _bellAlpha(p) * 0.35;
 
       // HANDCRAFTED Void Gravity Well: particles get subtly drawn in by the avatar aura
@@ -1259,7 +1270,7 @@ class _ToxicBubblesState extends State<_ToxicBubbles>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _ToxicBubblesPainter(t: _c.value, specs: _specs),
           size: Size.infinite,
@@ -1292,12 +1303,14 @@ class _ToxicBubblesPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.stroke;
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (final s in specs) {
       final p = ((t * s.speed) + s.phase) % 1.0;
-      // Bottom→top (rising ooze).
-      final y = size.height * (1.0 - p);
+      // Bottom→top (rising ooze) with tilt physics!
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
       final wobble = math.sin(p * 2 * math.pi + s.phase * 5) * s.wobble;
-      final x = s.x * size.width + wobble;
+      final tiltXShift = tilt.dx * 18 * p;
+      final x = (s.x * size.width + wobble + tiltXShift) % size.width;
       final alpha = _bellAlpha(p) * 0.50;
       paint.color = const Color(0xFF4ADE36).withValues(alpha: alpha);
       paint.strokeWidth = 1.2;
@@ -1396,7 +1409,7 @@ class _ForgeEmbersState extends State<_ForgeEmbers>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _ForgeEmbersPainter(t: _c.value, specs: _specs, advancedFlicker: widget.advancedFlicker),
           size: Size.infinite,
@@ -1415,12 +1428,15 @@ class _ForgeEmbersPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (var i = 0; i < specs.length; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final y = size.height * (1.0 - p);
+      // Rising embers with tilt physics!
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
       final sway = math.sin(p * 3 * math.pi + s.phase * 5) * s.sway * 1.4;
-      final x = s.x * size.width + sway;
+      final tiltXShift = tilt.dx * 18 * p;
+      final x = (s.x * size.width + sway + tiltXShift) % size.width;
       final alpha = _bellAlpha(p) * 0.75;
 
       // Flame-like thermal flicker modulation
@@ -1518,7 +1534,7 @@ class _HellfireState extends State<_Hellfire>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _HellfirePainter(t: _c.value, specs: _specs, advancedFlicker: widget.advancedFlicker),
           size: Size.infinite,
@@ -1564,16 +1580,18 @@ class _HellfirePainter extends CustomPainter {
       canvas.drawPath(path, windPaint);
     }
 
-    // 2. Draw rising volcanic embers carried by hot diagonal winds
+    // 2. Draw rising volcanic embers carried by hot diagonal winds with tilt physics!
     final paint = Paint();
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (var i = 0; i < specs.length; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final y = size.height * (1.0 - p);
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
       // Hot wind diagonal sweep (sweeping leftwards from right)
       final windSweep = -p * size.width * 0.25;
       final sway = math.sin(p * 2 * math.pi + s.phase * 4) * s.sway;
-      final x = (s.x * size.width + sway + windSweep) % size.width;
+      final tiltXShift = tilt.dx * 18 * p;
+      final x = (s.x * size.width + sway + windSweep + tiltXShift) % size.width;
       final alpha = _bellAlpha(p) * 0.55;
 
       // Necrotic pulse vibration
@@ -1654,7 +1672,7 @@ class _CosmicRiftState extends State<_CosmicRift>
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: AnimatedBuilder(
-        animation: _c,
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
           painter: _CosmicRiftPainter(t: _c.value, specs: _specs, particleRotation: widget.particleRotation),
           size: Size.infinite,
@@ -1702,17 +1720,19 @@ class _CosmicRiftPainter extends CustomPainter {
       canvas.drawPath(path, windPaint);
     }
 
-    // 2. Draw drifting stars and star sparkles
+    // 2. Draw drifting stars and star sparkles with tilt physics!
     final paint = Paint();
+    final tilt = ThemeOverlay.tiltNotifier.value;
     for (var i = 0; i < specs.length; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      // Drift slowly downwards like a falling space rift
-      final y = size.height * p;
-      // Diagonal wind sweep (drifting bottom-rightwards)
+      // Drift slowly downwards with tilt-Y!
+      final y = (size.height * p + tilt.dy * 12 * p) % size.height;
+      // Diagonal wind sweep (drifting bottom-rightwards) + tilt-X!
       final windSweep = p * size.width * 0.15;
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway;
-      final x = (s.x * size.width + sway + windSweep) % size.width;
+      final tiltXShift = tilt.dx * 18 * p;
+      final x = (s.x * size.width + sway + windSweep + tiltXShift) % size.width;
       final alpha = _bellAlpha(p) * 0.50;
 
       // Star twinkle shimmer
@@ -1948,6 +1968,9 @@ class _CustomParticlePainter extends CustomPainter {
 
       // Render custom types!
       switch (prefs.customParticleType) {
+        case CustomParticleType.none:
+          break;
+
         case CustomParticleType.themeDefault:
           // Standard white dust as fallback
           paint.color = const Color(0xFFFFFFFF).withValues(alpha: alpha * 0.35);

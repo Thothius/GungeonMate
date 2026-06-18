@@ -318,6 +318,58 @@ class _PeriodicTileState extends State<PeriodicTile>
     return Colors.white54;
   }
 
+  String _cleanStat(String raw) {
+    if (raw.isEmpty) return '';
+    var clean = raw;
+    if (clean.contains('(')) {
+      clean = clean.split('(').first;
+    }
+    if (clean.contains('/')) {
+      clean = clean.split('/').first;
+    }
+    if (clean.contains('ETG')) {
+      clean = clean.split('ETG').first;
+    }
+    clean = clean.trim();
+    if (clean.length > 7) {
+      clean = clean.substring(0, 7).trim();
+    }
+    return clean;
+  }
+
+  Widget _buildMiniStat(String label, String value, Color color) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 0.5),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$label:',
+            style: const TextStyle(
+              fontSize: 7.2,
+              fontWeight: FontWeight.w900,
+              color: Colors.white30,
+              letterSpacing: 0.1,
+            ),
+          ),
+          const SizedBox(width: 2.0),
+          Flexible(
+            child: Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 8.0,
+                fontWeight: FontWeight.w900,
+                color: color,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   /// Elemental effect icons for the tile — shown top-right, max 3.
   /// Delegates detection to [ElementalTagger] so both guns *and* items
   /// surface the same badges (e.g. Frost Bullets shows a freeze icon,
@@ -462,261 +514,683 @@ class _PeriodicTileState extends State<PeriodicTile>
   }
 
   Widget _buildCard(BuildContext context) {
+    final prefs = VisualPrefs.notifier.value;
+    final displayMode = prefs.inventoryDisplayMode;
+
     final rawQColor = _qualityColor;
     final isS = _quality.toUpperCase() == 'S' || _quality.toUpperCase() == '1S';
     final qColor = isS ? const Color(0xFFFFD700) : rawQColor; // Gold/yellow for S
     final isHighTier = isS || _quality.toUpperCase() == 'A';
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.zero,
-      color: isS ? const Color(0xFF14120E) : null, // Premium dark gold/black background frame for S-tier
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        side: BorderSide(
-          color: isS 
-              ? const Color(0xFFFFD700) // Gold border
-              : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35),
-          width: isS ? 1.9 : (isHighTier ? 1.4 : 0.8), // Fatter border frame for S
-        ),
+
+    final cardShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8),
+      side: BorderSide(
+        color: isS 
+            ? const Color(0xFFFFD700) // Gold border
+            : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35),
+        width: isS ? 1.9 : (isHighTier ? 1.4 : 0.8), // Fatter border frame for S
       ),
-      shadowColor: isHighTier ? qColor.withValues(alpha: 0.55) : null,
-      elevation: isHighTier ? 4 : 1,
-      child: InkWell(
-        onTap: _handleTap,
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: Center(
-                        child: GameIcon(
-                          assetPath: _iconPath,
-                          fallback: isGun
-                              ? Icons.gps_fixed
-                              : (widget.item!.isActive
-                                  ? Icons.flash_on
-                                  : Icons.inventory_2_outlined),
-                          quality: _quality,
-                          size: 48,
-                        ),
-                      ),
-                    ),
+    );
+
+    final cardBgColor = isS ? const Color(0xFF14120E) : null;
+
+    // Helper: Strikethrough for single-use active items
+    Widget maybeStrikethrough(Widget child) {
+      if (!_isDestroyedOnUse) return child;
+      return Stack(
+        children: [
+          child,
+          Positioned.fill(
+            child: IgnorePointer(
+              child: CustomPaint(
+                painter: _StrikethroughPainter(
+                  color: Colors.redAccent.withValues(alpha: 0.42),
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    // Helper: Quality Badge overlay
+    Widget maybeQualityBadge({double size = 18}) {
+      if (_quality.isEmpty) return const SizedBox.shrink();
+      return QualityBadge(quality: _quality, size: size);
+    }
+
+    // Helper: Fast active item pulsing green dot
+    Widget maybeFastActiveDot({double topOffset = 24}) {
+      if (!_isFastActive || _pulse == null) return const SizedBox.shrink();
+      return Positioned(
+        top: topOffset,
+        left: 6,
+        child: AnimatedBuilder(
+          animation: _pulse!,
+          builder: (_, __) {
+            final t = _pulse!.value;
+            return Container(
+              width: 9,
+              height: 9,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: const Color(0xFF66E07A).withValues(alpha: 0.55 + 0.45 * t),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF66E07A).withValues(alpha: 0.55 * t),
+                    blurRadius: 4 + 2 * t,
                   ),
-                  // Diagonal strike across the icon for single-use actives
-                  // (Junk, Mirror, Glass Guon Stone). Subtle alpha so it
-                  // reads as a hint, not a "broken" indicator.
-                  if (_isDestroyedOnUse)
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: CustomPaint(
-                          painter: _StrikethroughPainter(
-                            color: Colors.redAccent.withValues(alpha: 0.42),
-                          ),
-                        ),
-                      ),
-                    ),
-                  if (_quality.isNotEmpty)
-                    Positioned(
-                      top: 4,
-                      left: 4,
-                      child: QualityBadge(quality: _quality, size: 18),
-                    ),
-                  // Pulsing green dot for fast active items (≤ 5s recharge).
-                  // Lives just below the quality badge so the two left-aligned
-                  // indicators stack cleanly when both are present.
-                  if (_isFastActive && _pulse != null)
-                    Positioned(
-                      top: _quality.isNotEmpty ? 24 : 4,
-                      left: 6,
-                      child: AnimatedBuilder(
-                        animation: _pulse!,
-                        builder: (_, __) {
-                          final t = _pulse!.value;
-                          return Container(
-                            width: 9,
-                            height: 9,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: const Color(0xFF66E07A).withValues(
-                                alpha: 0.55 + 0.45 * t,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color(0xFF66E07A).withValues(
-                                    alpha: 0.55 * t,
-                                  ),
-                                  blurRadius: 4 + 2 * t,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  // Elemental effect icons, top-right. Stacked vertically
-                  // when multiple elements apply (e.g. The Judge).
-                  if (_elements.isNotEmpty)
-                    Positioned(
-                      top: 3,
-                      right: 3,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          for (final e in _elements)
-                            Tooltip(
-                              message: e.tooltip,
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 2),
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withValues(alpha: 0.55),
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(
-                                    color: e.color.withValues(alpha: 0.65),
-                                    width: 0.6,
-                                  ),
-                                ),
-                                child: Icon(e.icon,
-                                    size: 11, color: e.color),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  if (widget.gun != null && widget.gun!.range.isNotEmpty && widget.gun!.range != '0')
-                    Positioned(
-                      bottom: 24,
-                      right: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.75),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.15),
-                            width: 0.6,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.adjust_outlined, size: 8, color: Colors.orangeAccent),
-                            const SizedBox(width: 2.5),
-                            Text(
-                              widget.gun!.range,
-                              style: const TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white,
-                                height: 1.1,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  Positioned(
-                    left: 4,
-                    right: 4,
-                    bottom: 4,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    // Helper: Elemental badge row/column
+    Widget maybeElements() {
+      if (_elements.isEmpty) return const SizedBox.shrink();
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final e in _elements)
+            Tooltip(
+              message: e.tooltip,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 2),
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.55),
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    color: e.color.withValues(alpha: 0.65),
+                    width: 0.6,
+                  ),
+                ),
+                child: Icon(e.icon, size: 11, color: e.color),
+              ),
+            ),
+        ],
+      );
+    }
+
+    // Branch visual representation based on displayMode
+    switch (displayMode) {
+      case InventoryDisplayMode.tacticalStats:
+        // High density stats layout
+        final double statsFontSize = (prefs.inventoryFontSize - 3).clamp(8.0, 12.0);
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          margin: EdgeInsets.zero,
+          color: cardBgColor,
+          shape: cardShape,
+          elevation: isHighTier ? 4 : 1,
+          child: InkWell(
+            onTap: _handleTap,
+            child: Column(
+              children: [
+                Expanded(
+                  child: SizedBox.expand(
+                    child: Stack(
                       children: [
-                        if (_corner.isNotEmpty)
-                          (() {
-                            final badge = Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 5,
-                                vertical: 1,
-                              ),
-                              decoration: BoxDecoration(
-                                color: widget.isTopDps 
-                                    ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-                                    : Colors.black.withValues(alpha: 0.55),
-                                borderRadius: BorderRadius.circular(4),
-                                border: widget.isTopDps
-                                    ? Border.all(color: const Color(0xFFFFD700), width: 1)
-                                    : null,
-                              ),
-                              child: Text(
-                                _corner,
-                                style: TextStyle(
-                                  fontSize: 12.5,
-                                  fontWeight: FontWeight.w900, // bolder and chunkier!
-                                  color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
-                                  height: 1.1,
-                                ),
-                              ),
-                            );
-                            if (widget.isTopDps) {
-                              return badge.animate(
-                                onPlay: (controller) => controller.repeat(reverse: true),
-                              ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
-                               .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
-                            }
-                            return badge;
-                          })()
-                        else
-                          const SizedBox.shrink(),
-                        if (_typeTagCompacted.isNotEmpty)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 1,
+                      Positioned(
+                        left: 4,
+                        top: 0,
+                        bottom: 0,
+                        width: 42,
+                        child: Center(
+                          child: maybeStrikethrough(
+                            GameIcon(
+                              assetPath: _iconPath,
+                              fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                              quality: _quality,
+                              size: 32,
                             ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 48,
+                        right: 4,
+                        top: 4,
+                        bottom: 4,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: isGun
+                                ? [
+                                    if (widget.gun!.damage.isNotEmpty)
+                                      _buildMiniStat('DMG', _cleanStat(widget.gun!.damage), Colors.redAccent),
+                                    if (widget.gun!.magazineSize.isNotEmpty)
+                                      _buildMiniStat('MAG', _cleanStat(widget.gun!.magazineSize), Colors.cyanAccent),
+                                    if (widget.gun!.reloadTime.isNotEmpty)
+                                      _buildMiniStat('RLD', _cleanStat(widget.gun!.reloadTime), Colors.amberAccent),
+                                    if (widget.gun!.ammoCapacity.isNotEmpty)
+                                      _buildMiniStat('MAX', _cleanStat(widget.gun!.ammoCapacity), Colors.greenAccent),
+                                  ]
+                                : [
+                                    if (widget.item!.curse > 0)
+                                      _buildMiniStat('CRS', '+${widget.item!.curse.toStringAsFixed(0)}', Colors.deepPurpleAccent)
+                                    else if (widget.item!.coolness > 0)
+                                      _buildMiniStat('COL', '+${widget.item!.coolness.toStringAsFixed(0)}', Colors.tealAccent)
+                                    else if (widget.item!.rechargeTime.isNotEmpty)
+                                      _buildMiniStat('RCH', _cleanStat(widget.item!.rechargeTime), Colors.orangeAccent)
+                                    else if (widget.item!.duration.isNotEmpty)
+                                      _buildMiniStat('DUR', _cleanStat(widget.item!.duration), Colors.pinkAccent)
+                                    else ...[
+                                      const SizedBox(height: 4),
+                                      const Icon(Icons.shield_outlined, size: 10, color: Colors.white24),
+                                      const SizedBox(height: 2),
+                                      const Text(
+                                        'TACTICAL',
+                                        style: TextStyle(
+                                          fontSize: 6.5,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white24,
+                                          letterSpacing: 0.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 3,
+                        left: 4,
+                        child: maybeQualityBadge(size: 15),
+                      ),
+                      maybeFastActiveDot(topOffset: 20),
+                      Positioned(
+                        top: 3,
+                        right: 4,
+                        child: maybeElements(),
+                      ),
+                      // EXPLICIT NUMERICAL DISPLAY TAG AT THE BOTTOM LEFT
+                      if (_corner.isNotEmpty)
+                        Positioned(
+                          bottom: 4,
+                          left: 4,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                             decoration: BoxDecoration(
-                              color: _typeColor().withValues(alpha: 0.18),
-                              borderRadius: BorderRadius.circular(4),
+                              color: widget.isTopDps 
+                                  ? const Color(0xFFFFD700).withValues(alpha: 0.25)
+                                  : Colors.black87,
+                              borderRadius: BorderRadius.circular(3),
                               border: Border.all(
-                                color: _typeColor().withValues(alpha: 0.55),
-                                width: 0.7,
+                                color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white12,
+                                width: 0.8,
+                              ),
+                            ),
+                            child: Text(
+                              _corner,
+                              style: TextStyle(
+                                fontSize: statsFontSize,
+                                fontWeight: FontWeight.w900,
+                                color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.amberAccent,
+                              ),
+                            ),
+                          ),
+                        ),
+                      // COMPACT CLASS / ROLE TAG AT THE BOTTOM RIGHT
+                      if (_typeTagCompacted.isNotEmpty)
+                        Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: _typeColor().withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(3),
+                              border: Border.all(
+                                color: _typeColor().withValues(alpha: 0.4),
+                                width: 0.6,
                               ),
                             ),
                             child: Text(
                               _typeTagCompacted,
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              softWrap: false,
                               style: TextStyle(
-                                fontSize: 8.5,
-                                fontWeight: FontWeight.w700,
+                                fontSize: statsFontSize - 0.5,
+                                fontWeight: FontWeight.bold,
                                 color: _typeColor(),
-                                letterSpacing: 0.2,
-                                height: 1.1,
                               ),
                             ),
-                          )
-                        else
-                          const SizedBox.shrink(),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(2, 3, 2, 4),
+                  color: Colors.white.withValues(alpha: 0.02),
+                  child: Text(
+                    _name,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: prefs.inventoryFontSize - 1.5,
+                      fontWeight: FontWeight.bold,
+                      height: 1.1,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+
+      case InventoryDisplayMode.highDefGraphic:
+        // Gorgeous Pixel Art Showcase Layout
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          margin: EdgeInsets.zero,
+          color: cardBgColor ?? const Color(0xFF131315),
+          shape: cardShape,
+          elevation: isHighTier ? 6 : 2,
+          child: InkWell(
+            onTap: _handleTap,
+            child: SizedBox.expand(
+              child: Stack(
+                children: [
+                Positioned.fill(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 4, 4, 20),
+                    child: Center(
+                      child: maybeStrikethrough(
+                        GameIcon(
+                          assetPath: _iconPath,
+                          fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                          quality: _quality,
+                          size: 60,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 5,
+                  left: 5,
+                  child: maybeQualityBadge(size: 20),
+                ),
+                maybeFastActiveDot(topOffset: 28),
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: maybeElements(),
+                ),
+                // Glowing stats crown if top dps
+                if (widget.isTopDps)
+                  const Positioned(
+                    top: 5,
+                    left: 28,
+                    child: Icon(Icons.star, color: Color(0xFFFFD700), size: 14),
+                  ),
+                // Transparent Overlaid Name Banner at the Bottom
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.black.withValues(alpha: 0.0),
+                          Colors.black.withValues(alpha: 0.85),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(4, 12, 4, 4),
+                    child: Text(
+                      _name,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: prefs.inventoryFontSize - 1.0,
+                        fontWeight: FontWeight.w900,
+                        color: isHighTier ? qColor : Colors.white,
+                        letterSpacing: 0.3,
+                        shadows: const [
+                          Shadow(color: Colors.black, offset: Offset(0, 1), blurRadius: 2),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ),
+        );
+
+      case InventoryDisplayMode.solidLabelBag:
+        // Wide RPG list-grid row layout
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          margin: EdgeInsets.zero,
+          color: cardBgColor ?? const Color(0xFF17171A),
+          shape: cardShape,
+          elevation: isHighTier ? 3 : 1,
+          child: InkWell(
+            onTap: _handleTap,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Center(
+                          child: maybeStrikethrough(
+                            GameIcon(
+                              assetPath: _iconPath,
+                              fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                              quality: _quality,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 2,
+                        left: 2,
+                        child: maybeQualityBadge(size: 14),
+                      ),
+                      maybeFastActiveDot(topOffset: 16),
+                    ],
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                _name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: prefs.inventoryFontSize + 1.0,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            if (widget.isTopDps) ...[
+                              const SizedBox(width: 4),
+                              const Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 14),
+                            ],
+                          ],
+                        ),
+                        const SizedBox(height: 3),
+                        Row(
+                          children: [
+                            if (_typeTag.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                decoration: BoxDecoration(
+                                  color: _typeColor().withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: _typeColor().withValues(alpha: 0.45),
+                                    width: 0.6,
+                                  ),
+                                ),
+                                child: Text(
+                                  _typeTag,
+                                  style: TextStyle(
+                                    fontSize: 8.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: _typeColor(),
+                                  ),
+                                ),
+                              ),
+                            const SizedBox(width: 6),
+                            if (_elements.isNotEmpty) ...[
+                              for (final e in _elements)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 3),
+                                  child: Icon(e.icon, size: 10, color: e.color),
+                                ),
+                            ],
+                            const Spacer(),
+                            if (_corner.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                                decoration: BoxDecoration(
+                                  color: Colors.black45,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: Colors.white12, width: 0.5),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      isGun ? Icons.adjust_rounded : Icons.flash_on_rounded,
+                                      size: 8,
+                                      color: isGun ? Colors.amberAccent : Colors.lightBlueAccent,
+                                    ),
+                                    const SizedBox(width: 3),
+                                    Text(
+                                      _corner,
+                                      style: const TextStyle(
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(4, 4, 4, 6),
-              color: Colors.white.withValues(alpha: 0.03),
-              child: Text(
-                _name,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: VisualPrefs.notifier.value.inventoryFontSize,
-                  fontWeight: FontWeight.w600,
-                  height: 1.15,
+          ),
+        );
+
+      case InventoryDisplayMode.classicPeriodic:
+      default:
+        // Balanced classic Gungeon periodic table look (default)
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          margin: EdgeInsets.zero,
+          color: cardBgColor,
+          shape: cardShape,
+          shadowColor: isHighTier ? qColor.withValues(alpha: 0.55) : null,
+          elevation: isHighTier ? 4 : 1,
+          child: InkWell(
+            onTap: _handleTap,
+            child: Column(
+              children: [
+                Expanded(
+                  child: SizedBox.expand(
+                    child: Stack(
+                      children: [
+                      Positioned.fill(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Center(
+                            child: maybeStrikethrough(
+                              GameIcon(
+                                assetPath: _iconPath,
+                                fallback: isGun
+                                    ? Icons.gps_fixed
+                                    : (widget.item!.isActive
+                                        ? Icons.flash_on
+                                        : Icons.inventory_2_outlined),
+                                quality: _quality,
+                                size: 48,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 4,
+                        left: 4,
+                        child: maybeQualityBadge(),
+                      ),
+                      maybeFastActiveDot(),
+                      Positioned(
+                        top: 3,
+                        right: 3,
+                        child: maybeElements(),
+                      ),
+                      if (widget.gun != null && widget.gun!.range.isNotEmpty && widget.gun!.range != '0')
+                        Positioned(
+                          bottom: 24,
+                          right: 4,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.75),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.15),
+                                width: 0.6,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.adjust_outlined, size: 8, color: Colors.orangeAccent),
+                                const SizedBox(width: 2.5),
+                                Text(
+                                  widget.gun!.range,
+                                  style: const TextStyle(
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white,
+                                    height: 1.1,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      Positioned(
+                        left: 4,
+                        right: 4,
+                        bottom: 4,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (_corner.isNotEmpty)
+                              (() {
+                                final badge = Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 5,
+                                    vertical: 1,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: widget.isTopDps 
+                                        ? const Color(0xFFFFD700).withValues(alpha: 0.25)
+                                        : Colors.black.withValues(alpha: 0.55),
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: widget.isTopDps
+                                        ? Border.all(color: const Color(0xFFFFD700), width: 1)
+                                        : null,
+                                  ),
+                                  child: Text(
+                                    _corner,
+                                    style: TextStyle(
+                                      fontSize: 12.5,
+                                      fontWeight: FontWeight.w900,
+                                      color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
+                                      height: 1.1,
+                                    ),
+                                  ),
+                                );
+                                if (widget.isTopDps) {
+                                  return badge.animate(
+                                    onPlay: (controller) => controller.repeat(reverse: true),
+                                  ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
+                                   .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
+                                }
+                                return badge;
+                              })()
+                            else
+                              const SizedBox.shrink(),
+                            if (_typeTagCompacted.isNotEmpty)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                  vertical: 1,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _typeColor().withValues(alpha: 0.18),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(
+                                    color: _typeColor().withValues(alpha: 0.55),
+                                    width: 0.7,
+                                  ),
+                                ),
+                                child: Text(
+                                  _typeTagCompacted,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.visible,
+                                  softWrap: false,
+                                  style: TextStyle(
+                                    fontSize: 8.5,
+                                    fontWeight: FontWeight.w700,
+                                    color: _typeColor(),
+                                    letterSpacing: 0.2,
+                                    height: 1.1,
+                                  ),
+                                ),
+                              )
+                            else
+                              const SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(4, 4, 4, 6),
+                  color: Colors.white.withValues(alpha: 0.03),
+                  child: Text(
+                    _name,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: prefs.inventoryFontSize,
+                      fontWeight: FontWeight.w600,
+                      height: 1.15,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        );
+    }
   }
 }
 
