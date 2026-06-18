@@ -1,7 +1,7 @@
 name: gungeon_mate
 description: "Gungeon Mate - Enter the Gungeon companion app for tracking runs, items, guns, and synergies"
 publish_to: 'none'
-version: 1.8.5+30
+version: 0.9.1+34
 
 environment:
   sdk: ^3.7.0
@@ -102,60 +102,6 @@ flutter:
     - family: EnterTheGungeonBig
       fonts:
         - asset: assets/fonts/EnterTheGungeonBig.ttf
-    - family: ArcadeClassic
-      fonts:
-        - asset: assets/fonts/ARCADECLASSIC.TTF
-    - family: ShakyHandComic
-      fonts:
-        - asset: assets/fonts/Shaky Hand Some Comic.otf
-    - family: FeelingVintage
-      fonts:
-        - asset: assets/fonts/Feeling Vintage.ttf
-    - family: HelloDenver
-      fonts:
-        - asset: assets/fonts/hellodenverdisplaybold_v1.6.ttf
-    - family: LemonadeStand
-      fonts:
-        - asset: assets/fonts/Lemonade Stand D.otf
-    - family: LifeSavers
-      fonts:
-        - asset: assets/fonts/LifeSavers-Bold.ttf
-    - family: ParryHotter
-      fonts:
-        - asset: assets/fonts/ParryHotter.ttf
-    - family: Prototype
-      fonts:
-        - asset: assets/fonts/Prototype.ttf
-    - family: StoriesFantasy
-      fonts:
-        - asset: assets/fonts/Stories Fantasy.ttf
-    - family: Beachday
-      fonts:
-        - asset: assets/fonts/beachday.ttf
-    - family: BlastDragon
-      fonts:
-        - asset: assets/fonts/Blast Dragon D.otf
-    - family: ChonkyCat
-      fonts:
-        - asset: assets/fonts/Chonky Cat.ttf
-    - family: DragonFire
-      fonts:
-        - asset: assets/fonts/Dragon Fire.ttf
-    - family: GamePaused
-      fonts:
-        - asset: assets/fonts/Game Paused DEMO.otf
-    - family: MorrisRoman
-      fonts:
-        - asset: assets/fonts/MorrisRoman-Black.ttf
-    - family: PixelGame
-      fonts:
-        - asset: assets/fonts/Pixel Game.otf
-    - family: Solander
-      fonts:
-        - asset: assets/fonts/solander demo.ttf
-    - family: StarlightRune
-      fonts:
-        - asset: assets/fonts/StarlightRune-Personal Use.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
