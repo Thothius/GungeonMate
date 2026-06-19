@@ -2043,11 +2043,17 @@ class _CustomParticlePainter extends CustomPainter {
 
     // Draw gorgeous flowing background theme wind paths for custom particles
     final windColor = switch (prefs.customParticleType) {
-      CustomParticleType.ember => const Color(0xFFFF5722),
-      CustomParticleType.frost => const Color(0xFF00E5FF),
-      CustomParticleType.rainbow => const Color(0xFFFF4081),
-      CustomParticleType.catpaw => const Color(0xFFE040FB),
-      CustomParticleType.gunfairy => const Color(0xFF64FFDA),
+      CustomParticleType.ember => const Color(0xFFFF5722),      // Fire: Red-Orange
+      CustomParticleType.frost => const Color(0xFF00E5FF),      // Frost: Light Cyan
+      CustomParticleType.toxic => const Color(0xFF00E676),      // Toxic: Poison Green
+      CustomParticleType.lightning => const Color(0xFFFFEA00),  // Lightning: Bright Yellow
+      CustomParticleType.rainbow => const Color(0xFFFF4081),    // Rainbow: Prismatic Pink
+      CustomParticleType.goldShells => const Color(0xFFFFD700), // Gold: Gold
+      CustomParticleType.brassCasings => const Color(0xFFFFA726),// Brass: Warm Amber
+      CustomParticleType.steelSparks => const Color(0xFFB0BEC5), // Steel: Cool Slate Gray
+      CustomParticleType.necromantic => const Color(0xFFEA80FC), // Necro: Pale Lavender
+      CustomParticleType.skeletal => const Color(0xFFECEFF1),    // Skeletal: Bone White
+      CustomParticleType.tombstone => const Color(0xFF90A4AE),   // Tombstone: Dusty Gray
       _ => Colors.white,
     };
     final windPaint = Paint()
@@ -2114,10 +2120,10 @@ class _CustomParticlePainter extends CustomPainter {
           ? 0.15 + 0.85 * math.sin(t * 32 * math.pi + s.phase * 50).abs()
           : 0.4 + 0.6 * math.sin(t * 18 * math.pi + s.phase * 22).abs();
 
-      // Complex sprites (catpaw and gunfairy) look jittery when flickering at high frequencies.
+      // Complex sprites (emoji skulls and bones) look jittery when flickering at high frequencies.
       // We override this with a slow, breathing pulse (0.88 to 1.12) for organic flow.
-      final isComplexSprite = prefs.customParticleType == CustomParticleType.catpaw ||
-                              prefs.customParticleType == CustomParticleType.gunfairy;
+      final isComplexSprite = prefs.customParticleType == CustomParticleType.necromantic ||
+                              prefs.customParticleType == CustomParticleType.skeletal;
       final double dynamicScaleMultiplier = isComplexSprite
           ? 0.88 + 0.12 * math.sin(t * 3.2 + s.phase * 8)
           : (prefs.advancedFlicker ? twinkle : 1.0);
@@ -2169,17 +2175,30 @@ class _CustomParticlePainter extends CustomPainter {
           canvas.drawPath(path, paint);
           break;
 
-        case CustomParticleType.catpaw:
-          // Playful Pink/Peach cat paws! Uses Text emoji/symbol 🐾
-          tp.text = TextSpan(
-            text: s.phase < 0.5 ? '🐾' : '🐱',
-            style: TextStyle(
-              fontSize: scaledSize * 2.2,
-              color: const Color(0xFFFF8A80).withValues(alpha: alpha * twinkle * 0.85),
-            ),
-          );
-          tp.layout();
-          tp.paint(canvas, Offset(rawX - tp.width / 2, rawY - tp.height / 2));
+        case CustomParticleType.toxic:
+          // Bubbling green poison (Toxic Greens and Yellow-Greens)
+          final isBright = s.phase < 0.5;
+          final color = isBright ? const Color(0xFF00E676) : const Color(0xFF76FF03);
+          paint.color = color.withValues(alpha: alpha * twinkle * 0.8);
+          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.55, paint);
+          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.45);
+          canvas.drawCircle(Offset(rawX - scaledSize * 0.15, rawY - scaledSize * 0.15), scaledSize * 0.12, paint);
+          break;
+
+        case CustomParticleType.lightning:
+          // Flashing lightning sparks (Electrifying Yellow and White)
+          final color = s.phase < 0.4 ? Colors.white : const Color(0xFFFFEA00);
+          paint.color = color.withValues(alpha: alpha * twinkle * 0.9);
+          final r = scaledSize * 0.85;
+          final path = Path()
+            ..moveTo(rawX, rawY - r)
+            ..lineTo(rawX + r * 0.3, rawY - r * 0.1)
+            ..lineTo(rawX - r * 0.3, rawY + r * 0.1)
+            ..lineTo(rawX, rawY + r)
+            ..lineTo(rawX - r * 0.15, rawY + r * 0.1)
+            ..lineTo(rawX + r * 0.15, rawY - r * 0.1)
+            ..close();
+          canvas.drawPath(path, paint);
           break;
 
         case CustomParticleType.rainbow:
@@ -2190,31 +2209,98 @@ class _CustomParticlePainter extends CustomPainter {
           canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.5, paint);
           break;
 
-        case CustomParticleType.curse:
-          // Purple curses and flame wisps
-          paint.color = const Color(0xFFD500F9).withValues(alpha: alpha * twinkle * 0.75);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.5, paint);
-          // Mini inner wisp
-          paint.color = const Color(0xFF311B92).withValues(alpha: alpha * 0.4);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.25, paint);
+        case CustomParticleType.goldShells:
+          // Shiny golden ammo shells (Pure Gold and Amber highlights)
+          paint.color = const Color(0xFFFFD700).withValues(alpha: alpha * 0.85);
+          final rw = scaledSize * 0.9;
+          final rh = scaledSize * 1.5;
+          canvas.drawRRect(
+            RRect.fromRectAndRadius(
+              Rect.fromCenter(center: Offset(rawX, rawY), width: rw, height: rh),
+              Radius.circular(rw * 0.25),
+            ),
+            paint,
+          );
+          paint.color = Colors.white.withValues(alpha: alpha * 0.45);
+          canvas.drawRect(Rect.fromLTWH(rawX - rw * 0.25, rawY - rh * 0.4, rw * 0.15, rh * 0.8), paint);
           break;
 
-        case CustomParticleType.vvoid:
-          // Deep void stars
-          paint.color = const Color(0xFFECEFF1).withValues(alpha: alpha * twinkle * 0.55);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.4, paint);
+        case CustomParticleType.brassCasings:
+          // Copper-brass cylindrical casing
+          paint.color = const Color(0xFFFF9100).withValues(alpha: alpha * 0.8);
+          final cw = scaledSize * 0.7;
+          final ch = scaledSize * 1.4;
+          canvas.drawRRect(
+            RRect.fromRectAndRadius(
+              Rect.fromCenter(center: Offset(rawX, rawY), width: cw, height: ch),
+              Radius.circular(cw * 0.2),
+            ),
+            paint,
+          );
           break;
 
-        case CustomParticleType.gunfairy:
-          if (gunFairyImage != null) {
-            final src = Rect.fromLTWH(0, 0, gunFairyImage!.width.toDouble(), gunFairyImage!.height.toDouble());
-            final dst = Rect.fromCenter(center: Offset(rawX, rawY), width: scaledSize * 3.5, height: scaledSize * 3.5);
-            paint.color = Colors.white.withValues(alpha: alpha);
-            canvas.drawImageRect(gunFairyImage!, src, dst, paint);
-          } else {
-            paint.color = const Color(0xFFFF4081).withValues(alpha: alpha * twinkle);
-            canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.5, paint);
-          }
+        case CustomParticleType.steelSparks:
+          // Sharp silver-steel friction sparks
+          paint.color = const Color(0xFFCFD8DC).withValues(alpha: alpha * twinkle * 0.9);
+          final sr = scaledSize * 0.9;
+          final path = Path()
+            ..moveTo(rawX, rawY - sr)
+            ..lineTo(rawX + sr * 0.2, rawY - sr * 0.2)
+            ..lineTo(rawX + sr, rawY)
+            ..lineTo(rawX + sr * 0.2, rawY + sr * 0.2)
+            ..lineTo(rawX, rawY + sr)
+            ..lineTo(rawX - sr * 0.2, rawY + sr * 0.2)
+            ..lineTo(rawX - sr, rawY)
+            ..lineTo(rawX - sr * 0.2, rawY - sr * 0.2)
+            ..close();
+          canvas.drawPath(path, paint);
+          break;
+
+        case CustomParticleType.necromantic:
+          // Creepy glowing purple necrotic skulls (Text-Emoji Skull 💀)
+          tp.text = TextSpan(
+            text: '💀',
+            style: TextStyle(
+              fontSize: scaledSize * 1.9,
+              color: const Color(0xFFE040FB).withValues(alpha: alpha * twinkle * 0.8),
+            ),
+          );
+          tp.layout();
+          tp.paint(canvas, Offset(rawX - tp.width / 2, rawY - tp.height / 2));
+          break;
+
+        case CustomParticleType.skeletal:
+          // Floating crossbone or bone-white chunks (Text-Emoji Bone 🦴)
+          tp.text = TextSpan(
+            text: '🦴',
+            style: TextStyle(
+              fontSize: scaledSize * 1.9,
+              color: const Color(0xFFECEFF1).withValues(alpha: alpha * 0.85),
+            ),
+          );
+          tp.layout();
+          tp.paint(canvas, Offset(rawX - tp.width / 2, rawY - tp.height / 2));
+          break;
+
+        case CustomParticleType.tombstone:
+          // Dusty tombstone gray crosses
+          paint.color = const Color(0xFF78909C).withValues(alpha: alpha * 0.7);
+          final tr = scaledSize * 0.8;
+          final path = Path()
+            ..moveTo(rawX - tr * 0.25, rawY - tr)
+            ..lineTo(rawX + tr * 0.25, rawY - tr)
+            ..lineTo(rawX + tr * 0.25, rawY - tr * 0.25)
+            ..lineTo(rawX + tr, rawY - tr * 0.25)
+            ..lineTo(rawX + tr, rawY + tr * 0.25)
+            ..lineTo(rawX + tr * 0.25, rawY + tr * 0.25)
+            ..lineTo(rawX + tr * 0.25, rawY + tr)
+            ..lineTo(rawX - tr * 0.25, rawY + tr)
+            ..lineTo(rawX - tr * 0.25, rawY + tr * 0.25)
+            ..lineTo(rawX - tr, rawY + tr * 0.25)
+            ..lineTo(rawX - tr, rawY - tr * 0.25)
+            ..lineTo(rawX - tr * 0.25, rawY - tr * 0.25)
+            ..close();
+          canvas.drawPath(path, paint);
           break;
       }
     }

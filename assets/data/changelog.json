@@ -1,5 +1,16 @@
 [
   {
+    "version": "v0.9.5",
+    "title": "⚙️ THE PREMIUM PARTICLE REDESIGN & GLOBAL GOOP CONVERSION",
+    "date": "June 19, 2026",
+    "items": [
+      "Categorized Particle Themes: Critically redesigned all background custom particles and grouped them into Elements (Ember, Frost, Toxic, Lightning, Rainbow), Metal (Golden Shells, Brass Casings, Steel Sparks), and Bone (Necrotic Skull, Skeletal Ashes, Tombstone Dust).",
+      "Dynamic Wind and 3D Z-Depth: Added flowing colored background wind paths and physical diagonal vector winds to all premium custom particles, and added Z-depth parallax scale factors.",
+      "Global GoopText Integration: Wrapped all Database Search row results, Item/Gun Detail titles, and Shrine Picker modal attributes in GoopText, so they convert dynamically to Goopian in perfect unison.",
+      "Consolidated Procedural Backgrounds: Removed raw static GIF options to exclusively use our ultra-clean, high-performance, GPU-accelerated animated procedural backdrops."
+    ]
+  },
+  {
     "version": "v0.9.4",
     "title": "📺 THE PROCEDURAL BACKGROUNDS & SPECIAL HUD REFACTOR UPDATE",
     "date": "June 19, 2026",

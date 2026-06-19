@@ -6,6 +6,23 @@ All production APK builds are archived in `builds/` with proper version labeling
 
 ---
 
+## v0.9.5 — Premium Particles & Global Goop Conversion Update (June 19, 2026)
+**File:** `gungeon-mate-v0.9.5.apk`
+**Size:** ~33.1 MB
+**Build:** 37
+
+### Premium Particle Overhaul
+- **Categorized Groups** — Redesigned background custom particles and grouped them into:
+  - **Elements** — Ember (Fire), Frost (Ice), Toxic (Poison), Lightning (Spark), Rainbow (Prismatic).
+  - **Metal** — Golden Shells, Brass Casings, Steel Sparks.
+  - **Bone** — Necrotic Skull, Skeletal ashes, Tombstone Dust.
+- **Dynamic 3D depth & Winds** — Implemented physical colored background wind paths and wind-swept physics, with custom Z-depth parallax scale factors.
+
+### Global Goop conversion
+- **Synchronized Ciphers** — Wrapped all search database rows, item/gun headings, and shrine detail cards in GoopText, converting dynamically in perfect unison.
+
+---
+
 ## v0.9.4 — Animated Backgrounds & Special HUD Refactor Update (June 19, 2026)
 **File:** `gungeon-mate-v0.9.4.apk`
 **Size:** ~33.1 MB

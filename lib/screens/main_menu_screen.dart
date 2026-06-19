@@ -340,7 +340,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v0.9.4',
+                    'v0.9.5',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -379,7 +379,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v0.9.4)',
+                            'Changelog (v0.9.5)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],

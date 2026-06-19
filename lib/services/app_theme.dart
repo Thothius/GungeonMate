@@ -1052,13 +1052,20 @@ class ThemeFlair {
 
 enum CustomParticleType {
   themeDefault,
+  // Elements
   ember,
   frost,
-  catpaw,
+  toxic,
+  lightning,
   rainbow,
-  curse,
-  vvoid,
-  gunfairy,
+  // Metal
+  goldShells,
+  brassCasings,
+  steelSparks,
+  // Bone
+  necromantic,
+  skeletal,
+  tombstone,
   none,
 }
 
@@ -1067,20 +1074,31 @@ extension CustomParticleTypeLabel on CustomParticleType {
     switch (this) {
       case CustomParticleType.themeDefault:
         return 'Theme Default';
+      // Elements
       case CustomParticleType.ember:
-        return 'Ember (Fire)';
+        return '🔥 Ember (Fire Element)';
       case CustomParticleType.frost:
-        return 'Frost (Ice)';
-      case CustomParticleType.catpaw:
-        return 'Cat Paw (Cute)';
+        return '❄️ Frost (Ice Element)';
+      case CustomParticleType.toxic:
+        return '🧪 Toxic (Poison Element)';
+      case CustomParticleType.lightning:
+        return '⚡ Lightning (Spark Element)';
       case CustomParticleType.rainbow:
-        return 'Rainbow (Prismatic)';
-      case CustomParticleType.curse:
-        return 'Curse (Purple)';
-      case CustomParticleType.vvoid:
-        return 'Void (Dark)';
-      case CustomParticleType.gunfairy:
-        return 'Gun Fairy (🧚)';
+        return '🌈 Rainbow (Prismatic Element)';
+      // Metal
+      case CustomParticleType.goldShells:
+        return '🪙 Golden Shells (Metallic)';
+      case CustomParticleType.brassCasings:
+        return '🎯 Brass Casings (Metallic)';
+      case CustomParticleType.steelSparks:
+        return '⚙️ Steel Sparks (Metallic)';
+      // Bone
+      case CustomParticleType.necromantic:
+        return '💀 Necrotic Skull (Bone)';
+      case CustomParticleType.skeletal:
+        return '🦴 Skeletal ashes (Bone)';
+      case CustomParticleType.tombstone:
+        return '🪦 Tombstone Dust (Bone)';
       case CustomParticleType.none:
         return 'No Particles 🚫';
     }
