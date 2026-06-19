@@ -15,6 +15,7 @@ import '../widgets/rich_link_text.dart';
 import '../widgets/themed_number.dart';
 import '../widgets/themed_section_title.dart';
 import '../widgets/wiki_sections.dart';
+import '../services/goop_talk_engine.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final Gun? gun;
@@ -402,7 +403,7 @@ class _Header extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Flexible(
-                      child: Text(
+                      child: GoopText(
                         name,
                         style: const TextStyle(
                           fontSize: 24,
@@ -421,7 +422,7 @@ class _Header extends StatelessWidget {
                       const SizedBox(width: 8),
                     ],
                     Flexible(
-                      child: Text(
+                      child: GoopText(
                         subtitle.toUpperCase(),
                         style: TextStyle(
                           fontSize: 11.5,
@@ -445,7 +446,7 @@ class _Header extends StatelessWidget {
                         width: 0.8,
                       ),
                     ),
-                    child: Text(
+                    child: GoopText(
                       '"$quote"',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/shrine.dart';
@@ -218,7 +219,7 @@ class _ShrineGridTile extends StatelessWidget {
               const SizedBox(height: 8),
 
               // Shrine Name
-              Text(
+              GoopText(
                 shrine.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -438,7 +439,7 @@ class ShrineActivationSheet extends StatelessWidget {
 
                   // Centered Title
                   Center(
-                    child: Text(
+                    child: GoopText(
                       shrine.name,
                       style: const TextStyle(
                         fontSize: 24,
@@ -452,7 +453,7 @@ class ShrineActivationSheet extends StatelessWidget {
                   // Centered Ammonomicon Message
                   if (shrine.message.isNotEmpty && shrine.message != 'N/A')
                     Center(
-                      child: Text(
+                      child: GoopText(
                         '"${shrine.message}"',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -499,7 +500,7 @@ class ShrineActivationSheet extends StatelessWidget {
                   ],
                   if (shrine.description.isNotEmpty) ...[
                     const SizedBox(height: 14),
-                    Text(
+                    GoopText(
                       shrine.description,
                       style: TextStyle(
                         fontSize: 13,
@@ -513,7 +514,7 @@ class ShrineActivationSheet extends StatelessWidget {
                   const _SectionHeader(
                       icon: Icons.auto_awesome, title: 'EFFECT'),
                   const SizedBox(height: 6),
-                  Text(
+                  GoopText(
                     shrine.effect,
                     style: const TextStyle(fontSize: 13.5, height: 1.4),
                   ),

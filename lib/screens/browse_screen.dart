@@ -11,6 +11,7 @@ import '../widgets/quality_badge.dart';
 import '../widgets/game_icon.dart';
 import 'item_detail_screen.dart';
 import 'favourites_screen.dart';
+import '../services/goop_talk_engine.dart';
 
 enum _GunSort { name, quality, dps, gunClass }
 
@@ -1215,7 +1216,7 @@ class _Row extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
+                          child: GoopText(
                             name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
