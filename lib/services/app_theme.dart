@@ -38,9 +38,9 @@ enum AppThemeMode {
       scaffold: Color(0xFF1A101F),
       card: Color(0xFF2D1B36),
       primary: Color(0xFFFF69B4), // pink
-      secondary: Color(0xFFDA70D6), // lavender
+      secondary: Color(0xFFE8A7F0), // light high-contrast lavender
       headlineStat: Color(0xFF00F5D4), // cyan accent
-      bulletColor: Color(0xFFDA70D6),
+      bulletColor: Color(0xFFE8A7F0),
       bulletGlyph: '✦',
       twinkleBullets: true,
       tabularFigures: false,
@@ -53,7 +53,7 @@ enum AppThemeMode {
       dividerThickness: 1.0,
       backdrop: ThemeBackdrop.pastelDriftSparkles,
       glowPrimary: Color(0x33FF69B4),
-      glowSecondary: Color(0x22DA70D6),
+      glowSecondary: Color(0x22E8A7F0),
       auraStyle: AvatarAuraStyle.pastelPulse,
       headerGlyph: '\u2661', // ♡ open heart
       headerUnderlineColor: Color(0x88FF69B4),
@@ -69,7 +69,7 @@ enum AppThemeMode {
       scaffold: Color(0xFF120D0A),
       card: Color(0xFF221A14),
       primary: Color(0xFFD4AF37), // gold
-      secondary: Color(0xFF8B5A2B), // leather brown
+      secondary: Color(0xFFCD9F73), // high-contrast light archival tan
       headlineStat: Color(0xFFFFFDD0), // antique gold
       bulletColor: Color(0xFFD4AF37),
       bulletGlyph: '📖',
@@ -79,13 +79,13 @@ enum AppThemeMode {
       numberWeight: FontWeight.w800,
       chipRadius: 10,
       cardRadius: 12,
-      cardBorderColor: Color(0x66D4AF37), // gold border
+      cardBorderColor: Color(0x88D4AF37), // gold border
       cardBorderWidth: 1.2,
       dividerColor: Color(0x55D4AF37),
       dividerThickness: 1.0,
       backdrop: ThemeBackdrop.paperBreath,
       glowPrimary: Color(0x33D4AF37),
-      glowSecondary: Color(0x118B5A2B),
+      glowSecondary: Color(0x11CD9F73),
       auraStyle: AvatarAuraStyle.brassConic,
       headerGlyph: '📖',
       headerUnderlineColor: Color(0xAAD4AF37),
@@ -101,7 +101,7 @@ enum AppThemeMode {
       scaffold: Color(0xFF0F0C0A),
       card: Color(0xFF1C1714),
       primary: Color(0xFFFF4500), // dragun orange
-      secondary: Color(0xFFFFAA00), // molten sulfur
+      secondary: Color(0xFFFFB74D), // light high-contrast sulfur orange
       headlineStat: Color(0xFFFFCC00),
       bulletColor: Color(0xFFFF4500),
       bulletGlyph: '🔥',
@@ -117,7 +117,7 @@ enum AppThemeMode {
       dividerThickness: 1.0,
       backdrop: ThemeBackdrop.forgeEmbers,
       glowPrimary: Color(0x22FF4500),
-      glowSecondary: Color(0x11FFAA00),
+      glowSecondary: Color(0x11FFB74D),
       auraStyle: AvatarAuraStyle.forgeGlow,
       headerGlyph: '🔥',
       headerUnderlineColor: Color(0x88FF4500),
@@ -133,7 +133,7 @@ enum AppThemeMode {
       scaffold: Color(0xFF0A1118),
       card: Color(0xFF132230),
       primary: Color(0xFF00D2FF), // cyan
-      secondary: Color(0xFF708090), // spectral blue
+      secondary: Color(0xFF90A4AE), // light high-contrast slate gray-blue
       headlineStat: Color(0xFFE0F7FA),
       bulletColor: Color(0xFF00D2FF),
       bulletGlyph: '❄',
@@ -148,7 +148,7 @@ enum AppThemeMode {
       dividerThickness: 1.0,
       backdrop: ThemeBackdrop.iceCrystals,
       glowPrimary: Color(0x2200D2FF),
-      glowSecondary: Color(0x11708090),
+      glowSecondary: Color(0x1190A4AE),
       auraStyle: AvatarAuraStyle.frostRing,
       headerGlyph: '\u2744',
       headerUnderlineColor: Color(0x8800D2FF),
@@ -164,7 +164,7 @@ enum AppThemeMode {
       scaffold: Color(0xFF0A030C),
       card: Color(0xFF16071B),
       primary: Color(0xFF990000), // oxblood red
-      secondary: Color(0xFF4A0E4E), // corrupted violet
+      secondary: Color(0xFFCE93D8), // light high-contrast corrupted violet
       headlineStat: Color(0xFFFF007F), // curse neon
       bulletColor: Color(0xFF990000),
       bulletGlyph: '👹',
@@ -178,7 +178,7 @@ enum AppThemeMode {
       dividerThickness: 1.0,
       backdrop: ThemeBackdrop.redBreathDrip,
       glowPrimary: Color(0x33990000),
-      glowSecondary: Color(0x114A0E4E),
+      glowSecondary: Color(0x11CE93D8),
       auraStyle: AvatarAuraStyle.oxbloodBreath,
       headerGlyph: '\u2020', // †
       headerUnderlineColor: Color(0xAA990000),
@@ -194,7 +194,7 @@ enum AppThemeMode {
       scaffold: Color(0xFF111216),
       card: Color(0xFF1D2026),
       primary: Color(0xFFFF9F1C), // cozy amber
-      secondary: Color(0xFF7D84B2), // stone gray-purple
+      secondary: Color(0xFF9FA8DA), // light high-contrast stone gray-purple
       headlineStat: Color(0xFFFFD166), // brass yellow
       bulletColor: Color(0xFFFF9F1C),
       bulletGlyph: '★',
@@ -210,7 +210,7 @@ enum AppThemeMode {
       dividerThickness: 1.2,
       backdrop: ThemeBackdrop.brassMotes,
       glowPrimary: Color(0x2EFF9F1C),
-      glowSecondary: Color(0x1A7D84B2),
+      glowSecondary: Color(0x1A9FA8DA),
       auraStyle: AvatarAuraStyle.brassConic,
       headerGlyph: '\u2605',
       headerUnderlineColor: Color(0xBBFF9F1C),
@@ -226,7 +226,7 @@ enum AppThemeMode {
       scaffold: Color(0xFF08090A),
       card: Color(0xFF141619),
       primary: Color(0xFF39FF14), // neon green
-      secondary: Color(0xFF4B0082), // soul purple
+      secondary: Color(0xFFB388FF), // light high-contrast deep violet
       headlineStat: Color(0xFFCCFF00),
       bulletColor: Color(0xFF39FF14),
       bulletGlyph: '☠',
@@ -241,7 +241,7 @@ enum AppThemeMode {
       dividerThickness: 1.2,
       backdrop: ThemeBackdrop.hellfire,
       glowPrimary: Color(0x3339FF14),
-      glowSecondary: Color(0x114B0082),
+      glowSecondary: Color(0x11B388FF),
       auraStyle: AvatarAuraStyle.cosmicTemporal,
       headerGlyph: '☠',
       headerUnderlineColor: Color(0xAA39FF14),
@@ -257,7 +257,7 @@ enum AppThemeMode {
       scaffold: Color(0xFF0D110E),
       card: Color(0xFF18221B),
       primary: Color(0xFFFFD700), // gold
-      secondary: Color(0xFF2E5A44), // sewer green
+      secondary: Color(0xFF81C784), // light high-contrast sewer green
       headlineStat: Color(0xFFFFA500), // cheese yellow
       bulletColor: Color(0xFFFFD700),
       bulletGlyph: '🧀',
@@ -272,7 +272,7 @@ enum AppThemeMode {
       dividerThickness: 1.0,
       backdrop: ThemeBackdrop.toxicBubbles,
       glowPrimary: Color(0x22FFD700),
-      glowSecondary: Color(0x112E5A44),
+      glowSecondary: Color(0x1181C784),
       auraStyle: AvatarAuraStyle.toxicOoze,
       headerGlyph: '🧀',
       headerUnderlineColor: Color(0x88FFD700),

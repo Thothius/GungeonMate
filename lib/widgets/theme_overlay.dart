@@ -317,10 +317,10 @@ class _AmbientGlowState extends State<_AmbientGlow>
   @override
   void initState() {
     super.initState();
-    // Slow — 26s cycle. Drift is supposed to be felt, not noticed.
+    // Shunted duration from 26s down to 14s for active, snappy ambiance!
     _c = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 26),
+      duration: const Duration(seconds: 14),
     )..repeat();
   }
 
@@ -336,10 +336,15 @@ class _AmbientGlowState extends State<_AmbientGlow>
       animation: _c,
       builder: (_, __) {
         final t = _c.value * 2 * math.pi;
-        // Drift the primary glow around a small ellipse — just enough
-        // motion to stop the eye treating it as static.
+        final pulse = 0.88 + 0.12 * math.sin(t * 2); // Organic breathing pulse
+        
         final cx = 0.5 + 0.28 * math.cos(t);
         final cy = 0.5 + 0.20 * math.sin(t);
+
+        // Dynamically boost background gradient alphas for vibrant contrast
+        final pColor = widget.primary.withOpacity((widget.primary.opacity * 1.55).clamp(0.0, 0.95));
+        final sColor = widget.secondary.withOpacity((widget.secondary.opacity * 1.55).clamp(0.0, 0.95));
+
         return Stack(
           children: [
             // Primary glow — brightest, wandering.
@@ -348,10 +353,10 @@ class _AmbientGlowState extends State<_AmbientGlow>
                 decoration: BoxDecoration(
                   gradient: RadialGradient(
                     center: Alignment(cx * 2 - 1, cy * 2 - 1),
-                    radius: 1.0,
+                    radius: 1.0 * pulse,
                     colors: [
-                      widget.primary,
-                      widget.secondary,
+                      pColor,
+                      sColor,
                       const Color(0x00000000),
                     ],
                     stops: const [0.0, 0.55, 1.0],
@@ -366,9 +371,9 @@ class _AmbientGlowState extends State<_AmbientGlow>
                 decoration: BoxDecoration(
                   gradient: RadialGradient(
                     center: Alignment(-(cx * 2 - 1), -(cy * 2 - 1)),
-                    radius: 1.1,
+                    radius: 1.15 * pulse,
                     colors: [
-                      widget.secondary,
+                      sColor,
                       const Color(0x00000000),
                     ],
                     stops: const [0.0, 0.75],
@@ -1980,7 +1985,7 @@ class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with S
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _c,
+      animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
       builder: (_, __) => CustomPaint(
         painter: _CustomParticlePainter(
           t: _stopwatch.elapsedMilliseconds / 1000.0,
@@ -2031,6 +2036,7 @@ class _CustomParticlePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
     final tp = TextPainter(textDirection: TextDirection.ltr);
+    final tilt = ThemeOverlay.tiltNotifier.value;
 
     for (final s in specs) {
       // Calculate continuous progress
@@ -2040,19 +2046,21 @@ class _CustomParticlePainter extends CustomPainter {
       double rawX = s.x * size.width;
       double rawY = s.y * size.height;
       final sway = math.sin(p * 2 * math.pi + s.phase * 8) * s.sway;
+      final tiltXShift = tilt.dx * 18 * p;
+      final tiltYShift = tilt.dy * 12 * p;
 
       if (s.direction == 'top') {
-        rawY = size.height * p;
-        rawX = (s.x * size.width + sway) % size.width;
+        rawY = (size.height * p + tiltYShift) % size.height;
+        rawX = (s.x * size.width + sway + tiltXShift) % size.width;
       } else if (s.direction == 'bottom') {
-        rawY = size.height * (1.0 - p);
-        rawX = (s.x * size.width + sway) % size.width;
+        rawY = (size.height * (1.0 - p) + tiltYShift) % size.height;
+        rawX = (s.x * size.width + sway + tiltXShift) % size.width;
       } else if (s.direction == 'left') {
-        rawX = size.width * p;
-        rawY = (s.y * size.height + sway) % size.height;
+        rawX = (size.width * p + tiltXShift) % size.width;
+        rawY = (s.y * size.height + sway + tiltYShift) % size.height;
       } else if (s.direction == 'right') {
-        rawX = size.width * (1.0 - p);
-        rawY = (s.y * size.height + sway) % size.height;
+        rawX = (size.width * (1.0 - p) + tiltXShift) % size.width;
+        rawY = (s.y * size.height + sway + tiltYShift) % size.height;
       }
 
       double edgeFade = 1.0;
@@ -2071,8 +2079,16 @@ class _CustomParticlePainter extends CustomPainter {
           ? 0.15 + 0.85 * math.sin(t * 32 * math.pi + s.phase * 50).abs()
           : 0.4 + 0.6 * math.sin(t * 18 * math.pi + s.phase * 22).abs();
 
+      // Complex sprites (catpaw and gunfairy) look jittery when flickering at high frequencies.
+      // We override this with a slow, breathing pulse (0.85 to 1.15) for organic flow.
+      final isComplexSprite = prefs.customParticleType == CustomParticleType.catpaw ||
+                              prefs.customParticleType == CustomParticleType.gunfairy;
+      final double dynamicScaleMultiplier = isComplexSprite
+          ? 0.88 + 0.12 * math.sin(t * 3.2 + s.phase * 8)
+          : (prefs.advancedFlicker ? twinkle : 1.0);
+
       // Scaled size according to the size slider!
-      final scaledSize = s.size * prefs.particleSizeScale * (prefs.advancedFlicker ? twinkle : 1.0);
+      final scaledSize = s.size * prefs.particleSizeScale * dynamicScaleMultiplier;
 
       // Render custom types!
       switch (prefs.customParticleType) {

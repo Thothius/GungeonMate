@@ -63,24 +63,7 @@
 
 ---
 
-## 🛠️ LOCAL SETUP
-
-To run or compile locally:
-
-```bash
-# 1. Fetch dependencies
-flutter pub get
-
-# 2. Run in debug mode
-flutter run
-
-# 3. Build release APK
-flutter build apk --release
-```
-
----
-
-## 🔮 DISCLAIMER
+##  DISCLAIMER
 
 *Gungeon Mate is an unofficial, completely free fan-made companion app built out of pure love and dedication for the Gungeon community. All rights to "Enter the Gungeon" belong to Dodge Roll and Devolver Digital. All item stats, descriptions, and synergy data are sourced from the official Enter the Gungeon Wiki at [wiki.gg](https://enterthegungeon.wiki.gg).*
 

@@ -301,7 +301,7 @@ class _ThemeVisualsTab extends StatelessWidget {
               // =============================================================
               // Particle Tuning Section
               // =============================================================
-              _prefSectionTitle('PARTICLE OVERLAY STYLE'),
+              _prefSectionTitleWithInfo('PARTICLE OVERLAY STYLE', flair, tooltip: 'Select a premium custom particle theme preset (such as embers, frost, or cat paws) to float in the background of all screens.'),
               const SizedBox(height: 6),
               Container(
                 width: double.infinity,
@@ -343,7 +343,7 @@ class _ThemeVisualsTab extends StatelessWidget {
               const SizedBox(height: 16),
 
               if (prefs.customParticleType != CustomParticleType.none) ...[
-                _prefSectionTitle('PARTICLE COUNT / DENSITY (${prefs.particleCount})'),
+                _prefSectionTitleWithInfo('PARTICLE COUNT / DENSITY (${prefs.particleCount})', flair, tooltip: 'Control the maximum number of custom background particles rendered simultaneously on the screen.'),
                 Slider(
                   min: 5.0,
                   max: 120.0,
@@ -357,7 +357,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
 
-                _prefSectionTitle('PARTICLE SIZE SCALE (${prefs.particleSizeScale.toStringAsFixed(1)}x)'),
+                _prefSectionTitleWithInfo('PARTICLE SIZE SCALE (${prefs.particleSizeScale.toStringAsFixed(1)}x)', flair, tooltip: 'Scale up or down the visual dimensions of the custom background particles.'),
                 Slider(
                   min: 0.5,
                   max: 3.0,
@@ -371,7 +371,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                _prefSectionTitle('PARTICLE EMITTERS'),
+                _prefSectionTitleWithInfo('PARTICLE EMITTERS', flair, tooltip: 'Choose which boundaries of the screen particles are emitted from. Active boundaries glow with your theme color.'),
                 const SizedBox(height: 6),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -392,7 +392,7 @@ class _ThemeVisualsTab extends StatelessWidget {
               // =============================================================
               // Glow & Engine Rendering Section
               // =============================================================
-              _prefSectionTitle('AMBIENT GLOW INTENSITY (${(prefs.glowIntensity * 100).toStringAsFixed(0)}%)'),
+              _prefSectionTitleWithInfo('AMBIENT GLOW INTENSITY (${(prefs.glowIntensity * 100).toStringAsFixed(0)}%)', flair, tooltip: 'Set the opacity blending of the dual-gradient wandering ambient glow in the background.'),
               Slider(
                 min: 0.0,
                 max: 1.0,
