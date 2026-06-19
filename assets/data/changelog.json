@@ -1,5 +1,17 @@
 [
   {
+    "version": "v0.9.4",
+    "title": "📺 THE PROCEDURAL BACKGROUNDS & SPECIAL HUD REFACTOR UPDATE",
+    "date": "June 19, 2026",
+    "items": [
+      "Special Inventory HUDs: Gunderfury, Triple Gun, and Evolver are now fully rendered as separate, detailed dashboard panels right after the main player character DASH, just like Ser Junkan!",
+      "Procedural Animated Backgrounds: Introduced high-performance, real-time CRT Analog Static and Cyber Glitch Screen backdrops, painted entirely procedurally via hardware-accelerated canvas commands.",
+      "Central Dimming Readability Mask: Applied a deep radial gradient vignette over the center and corners of all animated backgrounds, ensuring that card text, labels, and icons remain 100% readable.",
+      "Settings Tooltip showDuration: Calibrated info-tooltip popups under the Style Lab Settings screen to stay visible for 5 full seconds instead of vanishing too quickly.",
+      "Dynamic Particle Gyro sways: Hooked up real-time accelerometer tilt forces to all default and custom particle systems, allowing floating stars, cat paws, and gunfairies to sway organically as you tilt your phone."
+    ]
+  },
+  {
     "version": "v0.9.3",
     "title": "🏹 THE PRE-RELEASE GENERAL UX & SYSTEM POLISH UPDATE",
     "date": "June 19, 2026",

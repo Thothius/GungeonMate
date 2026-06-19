@@ -449,22 +449,22 @@ class _ThemeVisualsTab extends StatelessWidget {
               const SizedBox(height: 20),
 
               // =============================================================
-              // Hypnotic Overlay Section
+              // Animated Backgrounds Section
               // =============================================================
-              _prefSectionTitleWithInfo('HYPNOTIC TRIPPY OVERLAY', flair, tooltip: 'Layer flowing, animated psychedelic loops beneath all screens for a trippy dungeon ambiance.'),
+              _prefSectionTitleWithInfo('ANIMATED BACKGROUNDS OVERLAY', flair, tooltip: 'Layer flowing, animated backgrounds or high-performance procedural static loops beneath all screens for amazing dungeon ambiance.'),
               const SizedBox(height: 6),
               _buildSwitchRow(
                 context: context,
                 icon: Icons.blur_circular_rounded,
-                label: 'Enable Hypnotic Backdrop',
+                label: 'Enable Animated Backgrounds',
                 value: prefs.hypnoticBgEnabled,
                 onChanged: VisualPrefs.setHypnoticBgEnabled,
                 flair: flair,
-                tooltip: 'Layer flowing, animated psychedelic backdrop loops beneath all screens instead of solid backgrounds.',
+                tooltip: 'Layer flowing, animated backgrounds or procedural loops beneath all screens instead of solid backgrounds.',
               ),
               if (prefs.hypnoticBgEnabled) ...[
                 const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('SELECT HYPNOTIC ASSET', flair, tooltip: 'Pick from 10 premium trippy animated backdrops sourced directly from Gungeon folders.'),
+                _prefSectionTitleWithInfo('SELECT BACKGROUND ASSET', flair, tooltip: 'Pick from premium animated backdrops or procedural analog scanline and grid glitch engines.'),
                 const SizedBox(height: 6),
                 Card(
                   color: Colors.white.withValues(alpha: 0.02),
@@ -481,6 +481,8 @@ class _ThemeVisualsTab extends StatelessWidget {
                         isExpanded: true,
                         icon: Icon(Icons.arrow_drop_down, color: flair.primary),
                         items: const [
+                          DropdownMenuItem(value: 'crt_static', child: Text('CRT Analog Static (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'static_glitch', child: Text('Cyber Glitch Screen (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
                           DropdownMenuItem(value: 'circles05.gif', child: Text('Psychedelic Circles', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
                           DropdownMenuItem(value: 'circles06.gif', child: Text('Expanding Ripples', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
                           DropdownMenuItem(value: 'kaleicospio03.gif', child: Text('Kaleidoscopic Warp', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
@@ -503,7 +505,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('HYPNOTIC BACKDROP OPACITY (${(prefs.hypnoticBgOpacity * 100).toStringAsFixed(0)}%)', flair, tooltip: 'Adjust the visibility/opacity blending of the animated trippy backdrops.'),
+                _prefSectionTitleWithInfo('BACKGROUND OPACITY (${(prefs.hypnoticBgOpacity * 100).toStringAsFixed(0)}%)', flair, tooltip: 'Adjust the visibility/opacity blending of the animated backgrounds.'),
                 Slider(
                   min: 0.0,
                   max: 1.0,
@@ -515,7 +517,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('HYPNOTIC BACKDROP SPEED (${prefs.hypnoticBgSpeed.toStringAsFixed(1)}x)', flair, tooltip: 'Calibrate the frame-rate speed multiplier of the flowing background loop.'),
+                _prefSectionTitleWithInfo('BACKGROUND SPEED (${prefs.hypnoticBgSpeed.toStringAsFixed(1)}x)', flair, tooltip: 'Calibrate the animation rate or procedural refresh speeds of the background.'),
                 Slider(
                   min: 0.1,
                   max: 4.0,
@@ -550,6 +552,7 @@ class _ThemeVisualsTab extends StatelessWidget {
             Tooltip(
               message: tooltip,
               triggerMode: TooltipTriggerMode.tap,
+              showDuration: const Duration(seconds: 5), // Keep tooltip visible for 5s!
               padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.symmetric(horizontal: 24),
               decoration: BoxDecoration(

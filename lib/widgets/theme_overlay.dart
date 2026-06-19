@@ -2237,16 +2237,21 @@ class _HypnoticBg extends StatefulWidget {
   State<_HypnoticBg> createState() => _HypnoticBgState();
 }
 
-class _HypnoticBgState extends State<_HypnoticBg> {
+class _HypnoticBgState extends State<_HypnoticBg> with SingleTickerProviderStateMixin {
   List<ui.Image> _frames = [];
   List<int> _durations = [];
   int _currentFrame = 0;
   Timer? _timer;
   bool _isLoading = true;
+  late final AnimationController _localCtrl;
 
   @override
   void initState() {
     super.initState();
+    _localCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10),
+    )..repeat();
     _loadGif();
   }
 
@@ -2266,10 +2271,19 @@ class _HypnoticBgState extends State<_HypnoticBg> {
   @override
   void dispose() {
     _timer?.cancel();
+    _localCtrl.dispose();
     super.dispose();
   }
 
   Future<void> _loadGif() async {
+    if (widget.assetName == 'crt_static' || widget.assetName == 'static_glitch') {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+      return;
+    }
     try {
       final data = await rootBundle.load('assets/animations/trippy/${widget.assetName}');
       final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
@@ -2292,7 +2306,7 @@ class _HypnoticBgState extends State<_HypnoticBg> {
         _playGif();
       }
     } catch (e) {
-      debugPrint("Error loading hypnotic background gif: $e");
+      debugPrint("Error loading animated background gif: $e");
     }
   }
 
@@ -2314,15 +2328,172 @@ class _HypnoticBgState extends State<_HypnoticBg> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading || _frames.isEmpty) {
-      return const SizedBox.shrink();
+    Widget bgWidget;
+
+    if (widget.assetName == 'crt_static' || widget.assetName == 'static_glitch') {
+      bgWidget = AnimatedBuilder(
+        animation: _localCtrl,
+        builder: (context, _) {
+          final localT = DateTime.now().millisecondsSinceEpoch / 1000.0;
+          return CustomPaint(
+            painter: widget.assetName == 'crt_static'
+                ? _CRTStaticPainter(t: localT * widget.speedMultiplier)
+                : _StaticGlitchPainter(t: localT * widget.speedMultiplier),
+            size: Size.infinite,
+          );
+        },
+      );
+    } else {
+      if (_isLoading || _frames.isEmpty) {
+        return const SizedBox.shrink();
+      }
+      bgWidget = RawImage(
+        image: _frames[_currentFrame],
+        fit: BoxFit.cover,
+        opacity: AlwaysStoppedAnimation<double>(widget.opacity),
+      );
     }
-    return RawImage(
-      image: _frames[_currentFrame],
-      fit: BoxFit.cover,
-      opacity: AlwaysStoppedAnimation<double>(widget.opacity),
+
+    // Blend the background layer with a deep central-dimming readability vignette!
+    return Stack(
+      children: [
+        Positioned.fill(child: bgWidget),
+        // Central readability vignette dimming mask (dimmer at center and edges)
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment.center,
+                radius: 1.25,
+                colors: [
+                  Colors.black.withValues(alpha: 0.72), // Dim the center deeply so overlays and text are 100% legible
+                  Colors.black.withValues(alpha: 0.38), // Slightly lighter mid-band
+                  Colors.black.withValues(alpha: 0.84), // Deep dark outer vignette border
+                ],
+                stops: const [0.0, 0.50, 1.0],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
+}
+
+class _CRTStaticPainter extends CustomPainter {
+  final double t;
+  final math.Random _rng = math.Random();
+  _CRTStaticPainter({required this.t});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    
+    // Charcoal scanline background
+    paint.color = const Color(0xFF0F0F11);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+
+    // Procedural noise dots
+    paint.style = PaintingStyle.fill;
+    final numDots = (size.width * size.height / 2200).toInt().clamp(100, 1500);
+    for (int i = 0; i < numDots; i++) {
+      final x = _rng.nextDouble() * size.width;
+      final y = _rng.nextDouble() * size.height;
+      final gray = 30 + _rng.nextInt(120);
+      final alpha = 0.08 + _rng.nextDouble() * 0.15;
+      paint.color = Color.fromARGB((alpha * 255).toInt(), gray, gray, gray);
+      canvas.drawRect(Rect.fromLTWH(x, y, 1.8, 1.8), paint);
+    }
+
+    // CRT Scanlines
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 1.2;
+    final lineSpacing = 6.0;
+    final offset = (t * 22) % lineSpacing;
+    for (double y = offset; y < size.height; y += lineSpacing) {
+      paint.color = Colors.black.withValues(alpha: 0.28);
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+
+    // Horizontal interference bar
+    paint.style = PaintingStyle.fill;
+    final barY = (t * 85) % (size.height + 150) - 75;
+    final barHeight = 60.0;
+    final barGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        Colors.white.withValues(alpha: 0.0),
+        Colors.white.withValues(alpha: 0.05),
+        Colors.white.withValues(alpha: 0.0),
+      ],
+    );
+    paint.shader = barGradient.createShader(Rect.fromLTWH(0, barY, size.width, barHeight));
+    canvas.drawRect(Rect.fromLTWH(0, barY, size.width, barHeight), paint);
+    paint.shader = null;
+  }
+
+  @override
+  bool shouldRepaint(_CRTStaticPainter old) => true;
+}
+
+class _StaticGlitchPainter extends CustomPainter {
+  final double t;
+  final math.Random _rng = math.Random();
+  _StaticGlitchPainter({required this.t});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+
+    // Deep cyber purple-black background
+    paint.color = const Color(0xFF07050A);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+
+    // Random digital glitch bars
+    final numGlitchBars = 4 + _rng.nextInt(6);
+    for (int i = 0; i < numGlitchBars; i++) {
+      final barY = _rng.nextDouble() * size.height;
+      final barHeight = 4.0 + _rng.nextDouble() * 16.0;
+      final barWidth = size.width * (0.1 + _rng.nextDouble() * 0.8);
+      final barX = _rng.nextDouble() * (size.width - barWidth);
+      
+      final colorRand = _rng.nextInt(3);
+      final Color color = switch (colorRand) {
+        0 => const Color(0xFF00FFFF),
+        1 => const Color(0xFFFF007F),
+        _ => const Color(0xFF39FF14),
+      };
+      
+      final alpha = 0.05 + _rng.nextDouble() * 0.12;
+      paint.color = color.withValues(alpha: alpha);
+      canvas.drawRect(Rect.fromLTWH(barX, barY, barWidth, barHeight), paint);
+    }
+
+    // Cyber layout grid
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 0.8;
+    final gridSpacing = 40.0;
+    
+    paint.color = const Color(0xFF00FFFF).withValues(alpha: 0.015);
+    for (double x = 0; x < size.width; x += gridSpacing) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y < size.height; y += gridSpacing) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+
+    // Rare strobe flash
+    final isStrobe = _rng.nextDouble() < 0.04;
+    if (isStrobe) {
+      paint.style = PaintingStyle.fill;
+      paint.color = const Color(0xFFFF007F).withValues(alpha: 0.03);
+      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_StaticGlitchPainter old) => true;
 }
 
 class _SecretCatThroneOverlay extends StatelessWidget {

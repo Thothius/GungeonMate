@@ -6,6 +6,23 @@ All production APK builds are archived in `builds/` with proper version labeling
 
 ---
 
+## v0.9.4 — Animated Backgrounds & Special HUD Refactor Update (June 19, 2026)
+**File:** `gungeon-mate-v0.9.4.apk`
+**Size:** ~33.1 MB
+**Build:** 36
+
+### Special Inventory HUDs
+- **Separate Weapon Dashboards** — Gunderfury, Triple Gun, and Evolver are now fully rendered as separate, detailed dashboard panels right after the main player character DASH, identical to Ser Junkan!
+
+### Procedural Animated Backgrounds
+- **CRT Static & Cyber Glitch** — Added real-time CRT Analog Static and Cyber Glitch Screen backdrops, painted entirely procedurally via hardware-accelerated canvas commands.
+- **Central Readability Mask** — Overlayed a deep radial gradient vignette over the center and corners of all animated backgrounds, ensuring that all foreground card text, labels, and icons remain 100% readable.
+
+### Settings Tooltip Calibration
+- **showDuration Extension** — Configured settings-screen tooltips to remain visible for a full 5 seconds instead of vanishing too quickly.
+
+---
+
 ## v0.9.3 — General UX Refinement & System Polish Update (June 19, 2026)
 **File:** `gungeon-mate-v0.9.3.apk`
 **Size:** ~33.1 MB

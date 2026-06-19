@@ -1629,6 +1629,12 @@ class _PlayerPageState extends State<_PlayerPage> {
           const _HuntressDashboardSliver(),
         if (player.items.any((it) => it.name.toLowerCase().contains('ser junkan')))
           _JunkanDashboardSliver(slot: _slot),
+        if (player.guns.any((g) => g.name.toLowerCase().contains('gunderfury')))
+          _GunderfuryDashboardSliver(slot: _slot),
+        if (player.guns.any((g) => g.name.toLowerCase().contains('triple gun')))
+          _TripleGunDashboardSliver(slot: _slot),
+        if (player.guns.any((g) => g.name.toLowerCase().contains('evolver')))
+          _EvolverDashboardSliver(slot: _slot),
         // Effects tile hidden — effect tags already shown on character dash.
         // SliverToBoxAdapter(
         //   child: _EffectsTile(slot: _slot),
