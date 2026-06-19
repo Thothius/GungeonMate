@@ -1968,7 +1968,15 @@ class _CustomParticlePainter extends CustomPainter {
         rawY = (s.y * size.height + sway) % size.height;
       }
 
-      final alpha = _bellAlpha(p) * prefs.particleOpacity;
+      double edgeFade = 1.0;
+      const double edgeThreshold = 32.0;
+      if (rawX < edgeThreshold) {
+        edgeFade = rawX / edgeThreshold;
+      } else if (rawX > size.width - edgeThreshold) {
+        edgeFade = (size.width - rawX) / edgeThreshold;
+      }
+
+      final alpha = _bellAlpha(p) * prefs.particleOpacity * edgeFade;
       if (alpha <= 0.01) continue;
 
       // Boost up flickering/twinkle globally! Rapid blinking sinusoids

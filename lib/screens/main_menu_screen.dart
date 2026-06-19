@@ -47,6 +47,19 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       "Coolness reduces your active item recharge times, while Curse increases Jammed enemy spawn rates. Balance is key!",
       "Winchester's target shooting requires extreme precision. Learn to bounce bullets off the blue blocks to strike the floating bullseyes!",
       "The Old Crest armor from the Sewer must be carried safely to Chamber 2's altar to open the Abbey. Do NOT get hit along the way!",
+      "*cough*... *wheeze*... too much elevator shaft grease in my lungs today!",
+      "Shhh! Don't let the Resourceful Rat hear you, or he will sneak into your inventory and swap your favorite gun for a half-eaten piece of cheese!",
+      "Huh? What's that noise? *clank* *clank*... Ah, just Ser Junkan polishing his shield again.",
+      "The Glass Guon Stones are extremely fragile! Getting hit breaks them instantly, but having multiple creates an impenetrable rotating orbit shield.",
+      "A high Magnificence rating reduces the drop rates of future high-tier S and A chests. Don't hoard S-tier items if you want more S-tier chests!",
+      "Cigarettes increase your Coolness stat by 1 every time you use them, but they cost you half a heart of HP. Absolute smoke-filled tactical madness!",
+      "Wielding the Shell or Bullet gun while holding the other triggers the 'Bullet-Shell' synergy. They swap roles and fire each other as ammo!",
+      "Chamber Gun adapts its weapon profile dynamically on every floor you enter! It is a shotgun in the Forge, a laser in the Hollow, and a freeze-gun in the Glacier.",
+      "Master Rounds are awarded for defeating floor bosses without taking a single hit of damage. They grant you an entire extra empty heart container!",
+      "The Spice active item is highly addictive! Every use raises your damage, speed, and accuracy, but lowers your max HP and raises your Curse rating.",
+      "Hold onto your blanks! If you have fewer than 2 blanks at the end of a chamber, the elevator will graciously restock you back to 2 on the next floor.",
+      "Sling deals double damage to bosses and bounces bullets off walls. A humble pebble-thrower capable of bringing down the High Dragun in seconds!",
+      "The Prime Primer costs 110 shells in Chamber 2 shop. It is a critical component to forge the Bullet That Can Kill The Past!",
     ];
     
     final rand = math.Random().nextInt(quotes.length);
@@ -54,7 +67,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       _mascotQuote = quotes[rand];
     });
     
-    _quoteTimer = Timer(const Duration(milliseconds: 3000), () {
+    _quoteTimer = Timer(const Duration(milliseconds: 4000), () {
       if (mounted) {
         setState(() {
           _mascotQuote = null;
@@ -86,8 +99,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: _FloatingPawsBackground(
-                child: SafeArea(
+              child: SafeArea(
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 420),
@@ -343,7 +355,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           ),
         ),
       ),
-    ),
             ),
             // Small bottom-center Changelog button
             Positioned(
@@ -605,109 +616,4 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       ),
     );
   }
-}
-
-class _FloatingPawsBackground extends StatefulWidget {
-  final Widget child;
-  const _FloatingPawsBackground({required this.child});
-
-  @override
-  State<_FloatingPawsBackground> createState() => _FloatingPawsBackgroundState();
-}
-
-class _FloatingPawsBackgroundState extends State<_FloatingPawsBackground>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  final List<_PawParticle> _paws = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    )..repeat();
-
-    // Spawn 15 floating paws in random positions!
-    final rand = math.Random();
-    for (int i = 0; i < 15; i++) {
-      _paws.add(
-        _PawParticle(
-          x: rand.nextDouble(),
-          y: rand.nextDouble(),
-          speed: 0.02 + rand.nextDouble() * 0.03,
-          scale: 0.6 + rand.nextDouble() * 0.8,
-          rotation: rand.nextDouble() * 2 * math.pi,
-          opacity: 0.04 + rand.nextDouble() * 0.12,
-        ),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        // Update positions!
-        for (final p in _paws) {
-          p.y -= p.speed * 0.01; // Drift upwards!
-          if (p.y < -0.1) {
-            p.y = 1.1; // reset to bottom
-            p.x = math.Random().nextDouble();
-          }
-        }
-
-        return Stack(
-          children: [
-            // Drifting paws layer
-            ..._paws.map((p) {
-              return Positioned(
-                left: p.x * MediaQuery.of(context).size.width,
-                top: p.y * MediaQuery.of(context).size.height,
-                child: Transform.rotate(
-                  angle: p.rotation,
-                  child: Transform.scale(
-                    scale: p.scale,
-                    child: Opacity(
-                      opacity: p.opacity,
-                      child: const Text(
-                        '🐾',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }),
-            widget.child,
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _PawParticle {
-  double x;
-  double y;
-  final double speed;
-  final double scale;
-  final double rotation;
-  final double opacity;
-
-  _PawParticle({
-    required this.x,
-    required this.y,
-    required this.speed,
-    required this.scale,
-    required this.rotation,
-    required this.opacity,
-  });
 }
