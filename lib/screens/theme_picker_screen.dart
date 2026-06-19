@@ -175,7 +175,15 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   }),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 12),
+              // Live dynamic customization tuning panel
+              ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder: (context, prefs, child) {
+                  return _buildTuningSection(context, prefs);
+                },
+              ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -820,9 +828,9 @@ class _ThemePreviewCard extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _ArcadeAttribute(label: 'VIBE', value: _getThemeVibe(mode), color: f.primary),
-                          _ArcadeAttribute(label: 'DIFFICULTY', value: _getThemeDiff(mode), color: Colors.amberAccent),
-                          _ArcadeAttribute(label: 'ELEMENT', value: _getThemeElem(mode), color: f.secondary),
+                          _ArcadeAttribute(label: 'VIBE', value: mode.vibe, color: f.primary),
+                          _ArcadeAttribute(label: 'DIFFICULTY', value: mode.diff, color: Colors.amberAccent),
+                          _ArcadeAttribute(label: 'ELEMENT', value: mode.elem, color: f.secondary),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -841,7 +849,7 @@ class _ThemePreviewCard extends StatelessWidget {
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
-                                _getWhimsicalDescription(mode),
+                                mode.whimsicalDescription,
                                 style: TextStyle(
                                   fontSize: 10.5,
                                   fontWeight: FontWeight.w600,
@@ -853,6 +861,31 @@ class _ThemePreviewCard extends StatelessWidget {
                             ),
                           ],
                         ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Core Color Swatches (Pimped out visual!)
+                      Row(
+                        children: [
+                          const Text(
+                            'PALETTE CORES:',
+                            style: TextStyle(
+                              fontSize: 8.5,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white54,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          _ColorCoreBox(color: f.scaffold, label: 'BG'),
+                          const SizedBox(width: 4),
+                          _ColorCoreBox(color: f.card, label: 'CRD'),
+                          const SizedBox(width: 4),
+                          _ColorCoreBox(color: f.primary, label: 'PRI'),
+                          const SizedBox(width: 4),
+                          _ColorCoreBox(color: f.secondary, label: 'SEC'),
+                          const SizedBox(width: 4),
+                          _ColorCoreBox(color: f.headlineStat, label: 'ACC'),
+                        ],
                       ),
                       const SizedBox(height: 8),
                       // Mini card with three headline stats — directly using
@@ -903,35 +936,6 @@ class _ThemePreviewCard extends StatelessWidget {
       ),
     );
   }
-
-  static String _getWhimsicalDescription(AppThemeMode mode) {
-    switch (mode) {
-      case AppThemeMode.cosmicWhirlwind:
-        return 'Warp your sanity through space-time. Features swirling stellar rifts that may or may not summon a jammed Lord. Highly recommended by Interdimensional Bullet Kin.';
-      case AppThemeMode.unicorn:
-        return 'Douse your guns in pure, unadulterated cotton candy. Complete with twinkly stars and pastel sparkles. Warning: Highly toxic to serious, dark, and brooding Gungeoneers.';
-      case AppThemeMode.curseblaster:
-        return 'An oxblood pact sealed in blood moon shadows. Perfect for running a 10-curse Lord Jammed speedrun. If you hear voices whispering from the chamber walls, that is normal.';
-      case AppThemeMode.winchester:
-        return 'Giddee up, Outlaw! Grab your brass ammunition and whiskey-barrel wood. This spurred gold rush saddle theme turns GungeonMate into a dusty, high-noon gold saloon.';
-      case AppThemeMode.frogCute:
-        return 'Hop onto your mossy lilypads! Replaces standard bullets with cozy, croaking little frogs. Keeps your loadout damp, fresh, and exceptionally cute.';
-      case AppThemeMode.iceTyrant:
-        return 'Chilled directly inside the Frozen Throne. Carved out of deep slate blue ice sheets. Warning: Cold-handling gloves are not included in this companion app.';
-      case AppThemeMode.charm:
-        return 'Cupid\'s personal ammunition deck. Turn those aggressive bullet kin into loving, pink-blushing partners with sweetheart charms and arrow-struck hearts.';
-      case AppThemeMode.midnightHunter:
-        return 'Step into the shadow woods of the Gungeon. Styled with hunters steel blue and glowing campfire gold. Perfect for tracks, traps, and midnight wolf pack hunting.';
-      case AppThemeMode.voidDimension:
-        return 'Enter a weird, wobbly state of matter. Features warped violet nebulae that defy normal gravity. Do not look directly into the cyclonic void bubbles.';
-      case AppThemeMode.firestorm:
-        return 'A molten gunpowder skeleton\'s favorite ash tray. Blazing hot orange lines and skull markers. Perfect for high-explosive layouts and fire-breathing dragun fights.';
-      case AppThemeMode.theBreach:
-        return 'Crumbling sandstone pillars of a lost Gungeon temple. Forgotten stone greys and temple golds. Gives your run tracker a highly dignified, ancient archeological vibe.';
-      case AppThemeMode.custom:
-        return 'A blank canvas of absolute personal madness. Paint the town in your own choice of radioactive colors. Godspeed, designer!';
-    }
-  }
 }
 
 /// The picker is itself parented under MaterialApp's *current* theme,
@@ -951,14 +955,7 @@ class _PreviewWrapper extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: f.card,
-        borderRadius: BorderRadius.circular(
-          switch (mode) {
-            AppThemeMode.unicorn => 18,
-            AppThemeMode.winchester => 8,
-            AppThemeMode.frogCute => 6,
-            _ => 12,
-          },
-        ),
+        borderRadius: BorderRadius.circular(f.cardRadius),
         border: Border.all(
           color: f.dividerColor ?? Colors.transparent,
           width: f.dividerThickness,
@@ -1330,53 +1327,35 @@ class _ArcadeAttribute extends StatelessWidget {
   }
 }
 
-String _getThemeVibe(AppThemeMode m) {
-  switch (m) {
-    case AppThemeMode.frogCute: return 'SWAMP';
-    case AppThemeMode.cosmicWhirlwind: return 'SWIRLY';
-    case AppThemeMode.unicorn: return 'MAGICAL';
-    case AppThemeMode.curseblaster: return 'EXTREME';
-    case AppThemeMode.winchester: return 'VINTAGE';
-    case AppThemeMode.iceTyrant: return 'FROSTED';
-    case AppThemeMode.charm: return 'LOVING';
-    case AppThemeMode.midnightHunter: return 'FOREST';
-    case AppThemeMode.voidDimension: return 'VOID';
-    case AppThemeMode.firestorm: return 'MOLTEN';
-    case AppThemeMode.theBreach: return 'STONE';
-    default: return 'TACTICAL';
-  }
-}
+class _ColorCoreBox extends StatelessWidget {
+  final Color color;
+  final String label;
 
-String _getThemeDiff(AppThemeMode m) {
-  switch (m) {
-    case AppThemeMode.frogCute: return 'COZY';
-    case AppThemeMode.cosmicWhirlwind: return 'WOW';
-    case AppThemeMode.unicorn: return 'CO-OP';
-    case AppThemeMode.curseblaster: return 'HARDCORE';
-    case AppThemeMode.winchester: return 'STEADY';
-    case AppThemeMode.iceTyrant: return 'BRUTAL';
-    case AppThemeMode.charm: return 'SWEET';
-    case AppThemeMode.midnightHunter: return 'WILD';
-    case AppThemeMode.voidDimension: return 'WARPED';
-    case AppThemeMode.firestorm: return 'SPARK';
-    case AppThemeMode.theBreach: return 'TEMPLE';
-    default: return 'NORMAL';
-  }
-}
+  const _ColorCoreBox({required this.color, required this.label});
 
-String _getThemeElem(AppThemeMode m) {
-  switch (m) {
-    case AppThemeMode.frogCute: return 'WATER';
-    case AppThemeMode.cosmicWhirlwind: return 'COSMOS';
-    case AppThemeMode.unicorn: return 'RAINBOW';
-    case AppThemeMode.curseblaster: return 'FIRE';
-    case AppThemeMode.winchester: return 'BRASS';
-    case AppThemeMode.iceTyrant: return 'ICE';
-    case AppThemeMode.charm: return 'HEART';
-    case AppThemeMode.midnightHunter: return 'STEEL';
-    case AppThemeMode.voidDimension: return 'TEAL';
-    case AppThemeMode.firestorm: return 'ASH';
-    case AppThemeMode.theBreach: return 'PILLAR';
-    default: return 'BULLET';
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 32,
+      height: 22,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.white24, width: 0.8),
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 7.5,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+            shadows: [
+              Shadow(color: Colors.black, blurRadius: 2, offset: Offset(0.5, 0.5)),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

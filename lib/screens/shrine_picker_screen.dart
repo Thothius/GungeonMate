@@ -26,7 +26,14 @@ class ShrinePickerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<RunProvider>();
-    final shrines = provider.allShrines;
+    final rawShrines = provider.allShrines;
+    final List<Shrine> shrines = List.from(rawShrines)..sort((a, b) {
+      final aCleanse = a.name.toLowerCase().contains('cleanse');
+      final bCleanse = b.name.toLowerCase().contains('cleanse');
+      if (aCleanse && !bCleanse) return -1;
+      if (!aCleanse && bCleanse) return 1;
+      return 0; // maintain original sorting
+    });
     final used = <String, int>{};
     for (final s in provider.runState.shrinesUsed) {
       used[s] = (used[s] ?? 0) + 1;
@@ -298,318 +305,6 @@ class _ShrineGridTile extends StatelessWidget {
   }
 }
 
-class _ShrineCard extends StatefulWidget {
-  final Shrine shrine;
-  final int usageCount;
-  final VoidCallback onTap;
-
-  const _ShrineCard({
-    required this.shrine,
-    required this.usageCount,
-    required this.onTap,
-  });
-
-  @override
-  State<_ShrineCard> createState() => _ShrineCardState();
-}
-
-class _ShrineCardState extends State<_ShrineCard> {
-  bool _expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final shrine = widget.shrine;
-    final usageCount = widget.usageCount;
-    final name = shrine.name.toLowerCase();
-    final hasCurse = shrine.curse != 0 || name == 'hero';
-    final hasCool = shrine.coolness != 0;
-    final hasCleanse = name == 'cleanse';
-
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: Colors.amber.withValues(alpha: 0.25),
-          width: 1.0,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _expanded = !_expanded;
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // 1. Center: The Name centered above the image
-              Text(
-                shrine.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  letterSpacing: 0.8,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // 2. Middle: The Image as the biggest element in the center
-              Center(
-                child: Hero(
-                  tag: 'shrine_${shrine.name}',
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.25),
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: Colors.amber.withValues(alpha: 0.1),
-                        width: 1.0,
-                      ),
-                    ),
-                    child: SizedBox(
-                      height: 120,
-                      width: 120,
-                      child: resolveShrineIcon(shrine.name, shrine.icon).startsWith('assets/')
-                          ? Image.asset(
-                              resolveShrineIcon(shrine.name, shrine.icon),
-                              fit: BoxFit.contain,
-                              filterQuality: FilterQuality.none, // Pixel art!
-                              errorBuilder: (_, __, ___) => const Icon(
-                                Icons.temple_buddhist_outlined,
-                                size: 48,
-                                color: Colors.amber,
-                              ),
-                            )
-                          : resolveShrineIcon(shrine.name, shrine.icon).startsWith('http')
-                              ? Image.network(
-                                  resolveShrineIcon(shrine.name, shrine.icon),
-                                  fit: BoxFit.contain,
-                                  filterQuality: FilterQuality.none,
-                                  errorBuilder: (_, __, ___) => const Icon(
-                                    Icons.temple_buddhist_outlined,
-                                    size: 48,
-                                    color: Colors.amber,
-                                  ),
-                                )
-                              : const Icon(
-                                  Icons.temple_buddhist_outlined,
-                                  size: 48,
-                                  color: Colors.amber,
-                                ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-
-              // Usage Count Badge
-              if (usageCount > 0) ...[
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
-                  ),
-                  child: Text(
-                    'USED $usageCount TIME${usageCount > 1 ? "S" : ""}',
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.amber,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-              ],
-
-              // 3. Below image: The primary effect clearly shown below
-              Text(
-                shrine.effect,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.amberAccent,
-                  height: 1.3,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // Quick summary of automatic stats
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                alignment: WrapAlignment.center,
-                children: [
-                  if (hasCurse && !hasCleanse && name != 'hero')
-                    _Pill(
-                      text: 'Curse ${shrine.curse > 0 ? '+' : ''}${shrine.curse.toStringAsFixed(1)}',
-                      color: Colors.deepOrangeAccent,
-                    ),
-                  if (hasCool)
-                    _Pill(
-                      text: 'Coolness ${shrine.coolness > 0 ? '+' : ''}${shrine.coolness.toStringAsFixed(1)}',
-                      color: Colors.lightBlueAccent,
-                    ),
-                  if (hasCleanse)
-                    const _Pill(text: 'Reset Curse → 0', color: Colors.lightGreenAccent),
-                  if (name == 'hero')
-                    const _Pill(text: 'Max Curse → 9.0', color: Colors.deepOrangeAccent),
-                ],
-              ),
-              const SizedBox(height: 14),
-
-              // 4. Use button
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: FilledButton.icon(
-                  onPressed: widget.onTap,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.amber,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
-                  ),
-                  icon: const Icon(Icons.bolt, size: 20),
-                  label: Text(
-                    shrine.hasAutoEffect ? 'USE SHRINE' : 'MARK AS USED',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-              ),
-
-              // 5. Collapsible Additional Info (revealed on tap of card)
-              AnimatedCrossFade(
-                firstChild: const SizedBox.shrink(),
-                secondChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Divider(color: Colors.white12, height: 1),
-                    ),
-                    if (shrine.message.isNotEmpty) ...[
-                      Text(
-                        'Ammonomicon Message:',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.amber.withValues(alpha: 0.8),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '"${shrine.message}"',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                    if (shrine.description.isNotEmpty) ...[
-                      Text(
-                        'Additional Details:',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.amber.withValues(alpha: 0.8),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        shrine.description,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.white.withValues(alpha: 0.7),
-                          height: 1.35,
-                        ),
-                      ),
-                    ] else ...[
-                      Text(
-                        'Details:',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.amber.withValues(alpha: 0.8),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Tapping USE SHRINE automatically adds any associated Coolness or Curse to your active run state, updating chest rewards and jammed enemy mechanics instantly.',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: Colors.white54,
-                          height: 1.35,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-                crossFadeState: _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                duration: const Duration(milliseconds: 200),
-              ),
-
-              const SizedBox(height: 4),
-              Icon(
-                _expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                color: Colors.white24,
-                size: 20,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Pill extends StatelessWidget {
-  final String text;
-  final Color color;
-  const _Pill({required this.text, required this.color});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withValues(alpha: 0.35)),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 11.5,
-          fontWeight: FontWeight.w700,
-          color: color,
-        ),
-      ),
-    );
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 /// Modal bottom sheet opened when the user taps a shrine card. Shows
@@ -656,59 +351,124 @@ class ShrineActivationSheet extends StatelessWidget {
                 controller: ctrl,
                 padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 56,
-                        height: 56,
-                        child: resolveShrineIcon(shrine.name, shrine.icon).startsWith('assets/')
-                            ? Image.asset(
-                                resolveShrineIcon(shrine.name, shrine.icon),
-                                fit: BoxFit.contain,
-                                filterQuality: FilterQuality.none,
-                                errorBuilder: (_, __, ___) => const Icon(
-                                    Icons.temple_buddhist,
-                                    size: 40),
-                              )
-                            : resolveShrineIcon(shrine.name, shrine.icon).startsWith('http')
-                                ? Image.network(
-                                    resolveShrineIcon(shrine.name, shrine.icon),
-                                    fit: BoxFit.contain,
-                                    filterQuality: FilterQuality.none,
-                                    errorBuilder: (_, __, ___) => const Icon(
-                                        Icons.temple_buddhist,
-                                        size: 40),
-                                  )
-                                : const Icon(Icons.temple_buddhist, size: 40),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              shrine.name,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.w900,
-                              ),
+                  // Centered Large Image
+                  Center(
+                    child: Hero(
+                      tag: 'shrine_${shrine.name}',
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.25),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.amber.withValues(alpha: 0.1),
+                            width: 1.2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.3),
+                              blurRadius: 16,
+                              offset: const Offset(0, 4),
                             ),
-                            if (shrine.message.isNotEmpty &&
-                                shrine.message != 'N/A')
-                              Text(
-                                '"${shrine.message}"',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white.withValues(alpha: 0.7),
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
                           ],
                         ),
+                        child: SizedBox(
+                          height: 120,
+                          width: 120,
+                          child: resolveShrineIcon(shrine.name, shrine.icon).startsWith('assets/')
+                              ? Image.asset(
+                                  resolveShrineIcon(shrine.name, shrine.icon),
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.none, // Pixel art!
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.temple_buddhist_outlined,
+                                    size: 48,
+                                    color: Colors.amber,
+                                  ),
+                                )
+                              : resolveShrineIcon(shrine.name, shrine.icon).startsWith('http')
+                                  ? Image.network(
+                                      resolveShrineIcon(shrine.name, shrine.icon),
+                                      fit: BoxFit.contain,
+                                      filterQuality: FilterQuality.none,
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.temple_buddhist_outlined,
+                                        size: 48,
+                                        color: Colors.amber,
+                                      ),
+                                    )
+                                  : const Icon(
+                                      Icons.temple_buddhist_outlined,
+                                      size: 48,
+                                      color: Colors.amber,
+                                    ),
+                        ),
                       ),
-                    ],
+                    ),
                   ),
+                  const SizedBox(height: 14),
+
+                  // Centered Title
+                  Center(
+                    child: Text(
+                      shrine.name,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+
+                  // Centered Ammonomicon Message
+                  if (shrine.message.isNotEmpty && shrine.message != 'N/A')
+                    Center(
+                      child: Text(
+                        '"${shrine.message}"',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          color: Colors.white.withValues(alpha: 0.7),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ),
+
+                  // Health Cost Alert for Angel or Blood Shrine (Takes a life with a life -1!)
+                  if (name.contains('angel') || name.contains('blood')) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.red.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.redAccent.withValues(alpha: 0.35)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withValues(alpha: 0.05),
+                            blurRadius: 8,
+                          ),
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.heart_broken_rounded, color: Colors.redAccent, size: 16),
+                          SizedBox(width: 8),
+                          Text(
+                            '💔 PENALTY COST: -1 HEART CONTAINER (LIFE -1)',
+                            style: TextStyle(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.black,
+                              color: Colors.redAccent,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                   if (shrine.description.isNotEmpty) ...[
                     const SizedBox(height: 14),
                     Text(

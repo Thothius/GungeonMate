@@ -377,7 +377,7 @@ class _CoolnessEffects extends StatelessWidget {
     final c = coolness;
     final rechargeReduction = (c * 5).clamp(0, 50);
     final fuseReduction = (c * 2.5).clamp(0, 10);
-    final baseRoomReward = (10 + c - curse).clamp(0, 100);
+    final baseRoomReward = (1 + c - curse).clamp(0, 100);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -402,7 +402,7 @@ class _CoolnessEffects extends StatelessWidget {
           color: Colors.amber,
           label: 'Base room-clear reward chance',
           value: '${baseRoomReward.toStringAsFixed(1)}%',
-          subtitle: '(10 + coolness - curse)%',
+          subtitle: '(1 + coolness - curse)%',
         ),
         const SizedBox(height: 8),
         const _SectionTitle('Also'),

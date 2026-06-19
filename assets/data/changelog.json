@@ -1,145 +1,31 @@
 [
   {
+    "version": "v0.9.3",
+    "title": "🏹 THE PRE-RELEASE GENERAL UX & SYSTEM POLISH UPDATE",
+    "date": "June 19, 2026",
+    "items": [
+      "Polymorphic Theme Refactor: Moved all theme flair definitions directly into enum templates, removing thousands of lines of scattered switch-case blocks.",
+      "Redesigned Tactical Stats: Created wide double-column inventory cards showing a full 6-parameter stats spreadsheet on top of a giant blurred background gun/item icon, complete with active fire-mode/type tags.",
+      "Shrine Picker Upgrades: Cleanse shrine is now sorted to the absolute top of the list, activation sheet graphics are enlarged to a giant 120x120 size, and explicit 'Heart Container -1' penalty badges are displayed for Angel and Blood shrines.",
+      "App Appearance Compaction: Consolidated all font-tuning dropdowns and sliders into a single unified card in Settings with ultra-compact 32px slider track profiles.",
+      "Huntress HUD Slider: Implemented an information-dense sliding tab dashboard showing Junior II dog item drop weights (doubling to 10% if Baby Good Mimic is held), Crossbow HP breakpoints, and Oubliette/Abbey key economies.",
+      "Main Menu Aesthetics: Enlarged GungeonMate title outlines and ribbons on the main menu, and expanded our central Tailor mascot with 16 new highly detailed Gungeon-lore quotes.",
+      "Tactile ScaleButton Integration: Wrapped all primary main menu categories, the Tailor mascot, and Gunfortuna dice triggers in physical bouncy button scaling and automatic haptics.",
+      "Optimized Display Options: Permanently deleted wonky, unpolished views ('RPG Bag rows' and 'Gallery Display') and redundant tips menus to keep the app lean, fast, and optimized.",
+      "Goopian Language Mode: Added an immersive Goopian translation engine option in Settings. Activating it converts mascot dialogues and gun/item titles into Professor Goopton's unreadable cipher symbols.",
+      "The Sponge 🧽 Mode Toggle: Implemented a prominent, glowing interactive Sponge button in the Active Run app bar when Goopian is active. Tapping it magically runs a matrix-deciphering translation stream to reveal readable English text."
+    ]
+  },
+  {
     "version": "v0.9.1",
     "title": "🎯 THE ROAD TO 1.0: PRE-RELEASE CONSOLIDATION",
     "date": "June 18, 2026",
     "items": [
-      "Version Scheme Revamp: Reset and consolidated app versioning to v0.9.1, laying the groundwork for our grand v1.0.0 Play Store launch coming in July!",
+      "Version Scheme Revamp: Reset and consolidated app versioning, laying the stable foundation for our official Play Store launch in July!",
       "Premium Companion Features: Clean and highly optimized run tracking, synergies reference, dual-telemetry tactical stat grid layouts, and active co-op syncing.",
       "Completely Free: GungeonMate is 100% free and open-source for all Enter the Gungeon fans to use, track, and master their runs.",
       "Dynamic Stylization: Real-time theme picker previews, particle customizers, and physical hardware gyroscope sways are fully calibrated for maximum smoothness.",
       "Optimized APK Build: Compiled a highly streamlined, high-performance production-ready release APK available for direct sideloading."
-    ]
-  },
-  {
-    "version": "v2.3.0",
-    "title": "🌌 THE CHRONO CUSTOMIZER & COMPACT DASHBOARD OVERHAUL",
-    "date": "June 16, 2026",
-    "items": [
-      "Universal Style Lab: Brought all visual, particle-emitter, and hypnotic backdrop customization options out of the theme selection screen and consolidated them under the universal Appearance (Theme & font) settings tab.",
-      "Instant Theme Preview: Fixed the compact page swipe preview bug in the Theme Picker. Swiping through themes now instantly and dynamically previews the palette and dynamic overlays on the active app background in real-time.",
-      "Premium Theme Dashboard: Redesigned the Settings active theme indicator into a gorgeous color-bordered gradient card, displaying live-glowing color beads representing the palette's signature signature.",
-      "Co-op Inventory Sync Fix: Resolved a major multiplayer routing bug where items added by Player 2 (Sidekick) incorrectly loaded into Player 1's inventory slot locally, ensuring seamless inventory sync across devices.",
-      "Collapsible Passives Panel: Converted the active/passive status pills list into an interactive collapsible panel. Automatically rolls up when there are more than 6 passives, displaying an elegant '+ N MORE' tactile trigger.",
-      "Android Network Restoration: Discovered and added the crucial INTERNET permission inside AndroidManifest.xml. This instantly restored full internet connectivity, enabling dynamic Google Fonts streaming and loading all gun/item pixel-art network sprites.",
-      "Hypnotic Backdrop Visibility: Automatically sets scaffold backgrounds to transparent when hypnoticBgEnabled is active, letting the backgrounds shine through clearly on all views.",
-      "Font Dropdown Isolation: Rendered each font option in the dropdown picker using its own literal f.textStyle, creating an elegant visual gallery and preventing selected fonts from taking over the list.",
-      "Quick Add Search Clear: Associated a robust TextEditingController with the Quick Add modal search, enabling the clear (X) suffix icon and auto-clearing inputs on adding items."
-    ]
-  },
-  {
-    "version": "v2.2.0",
-    "title": "🔮 IMMERSIVE STYLE SELECTOR & PARTICLE SIMPLIFICATION",
-    "date": "June 16, 2026",
-    "items": [
-      "Real-time Theme Preview: Swiping themes in the selector carousel now instantly updates the entire app backdrop, particle effects, and overlay filters in the background, giving a complete live preview of each vibe before applying it.",
-      "Consolidated Style Hub: Removed redundant styling routes from the Active Run dashboard settings, cleanly unifying all customization options under the main Settings bottom tab.",
-      "Surgical Autocomplete Search: Re-engineered search query handling to trigger direct TextEditingController listeners. Clears, backspaces, and resets in the Quick Item Browse panel are now instantaneous and bulletproof.",
-      "Streamlined Particle Settings: Re-designed the custom effects suite to be ultra-clean and simple. Users can now easily customize Type (with a dedicated 'No Particles' option), Count, and Size directly, eliminating redundant clutter."
-    ]
-  },
-  {
-    "version": "v2.1.0",
-    "title": "⚡ MASCOT & TACTICAL STATS UI/UX ENHANCEMENTS",
-    "date": "June 16, 2026",
-    "items": [
-      "Mascot Layout Shift Elimination: Converted the Home Screen mascot quote display to a static-height Stack with a floating Positioned bubble. This completely prevents any layout shifts or page jumping when the Mascot transitions between states or quotes.",
-      "Tactical Stats Overhaul: Transformed the Tactical Stats grid display mode from a centered icon with wasted black space to an elegant split-panel layout.",
-      "Dynamic Dual-Telemetry Readouts: The left side of the tile frames the pixel-art icon while the right side displays beautifully color-coded telemetry stats (DMG, MAG, RLD, MAX for guns; CRS, COL, RCH, DUR for items) in a super-clean, high-density format.",
-      "Robust PIN Suffix Discovery: Fixed a game-breaking issue where an empty/unset PIN code on the Sidekick device caused a false-negative mismatch during nearby host discovery, blocking the connection.",
-      "Reliable Handshaking Validation: Standardized PIN comparison by normalizing all empty/null values, ensuring smooth, secure handshakes when reconnecting or resuming co-op runs."
-    ]
-  },
-  {
-    "version": "v2.0.0",
-    "title": "🎨 THE ULTIMATE FONT & RESPONSIVE GRID LAYOUTS OVERHAUL",
-    "date": "June 14, 2026",
-    "items": [
-      "66 Handpicked Google Fonts: Removed bulky, local custom fonts to slim down resources, introducing 66 beautiful, handpicked Google Fonts. Sorted into Retro Arcade, Heavy Metal, Sci-Fi Cyber, Whimsical Cartoon, and Gothic Fantasy visual genres. Falls back to Gungeon font seamlessly if offline!",
-      "Live Font Preview Dropdown: Configured the app style dropdown to dynamically render each font option in its actual letterforms, transforming the font picker into an immersive typography catalog.",
-      "4 Responsive Grid Layout Modes: Added 4 magnificent grid-based display modes (Classic Periodic, Tactical Stats, High-Def Gallery, and RPG Bag) selectable via sleek, tactile ChoiceChips in Settings.",
-      "RPG Bag & Gallery Layouts: Created a horizontal double-column card layout ('RPG BAG') focusing on giant bold titles, and a huge icon showcase card ('GALLERY') for the ultimate high-definition pixel art presentation.",
-      "Failsafe Grid Scaling: Bound all dashboard grids to a global ValueListenableBuilder to trigger instantaneous, zero-latency redraws whenever sizes or layout display preferences change."
-    ]
-  },
-  {
-    "version": "v1.9.0",
-    "title": "⚡ LEAN MOBILE OPTIMIZATION & INSTANT-SEARCH AUTOCOMPLETE",
-    "date": "June 14, 2026",
-    "items": [
-      "Instant-Search Autocomplete: Replaced standard page transitions with a gorgeous, high-speed autocomplete bottom sheet on the Active Run FAB. Adding guns and items now takes millisecond taps with zero context switching.",
-      "Lean App Footprint: Removed bloated legacy features including the NPC Dialogue System, Ammonomicon Tome Reader, and Winchester Minigame Simulator to maximize mobile storage and performance.",
-      "Universal Hardware Sway: Integrated physical device accelerometer tilt-physics via sensors_plus into all 12 handmade, custom-painted particle systems for organic, reactive background depth.",
-      "Direct External Wiki Launches: Replaced clunky in-app webviews with direct, ultra-fast external browser launching to Enter the Gungeon's official wiki (enterthegungeon.wiki.gg).",
-      "Material Navigation Fixes: Removed laggy flip animations, reverting to native material transition flows for error-free screen navigation."
-    ]
-  },
-  {
-    "version": "v1.8.5",
-    "title": "🎭 THEME OVERLAYS & INDEPENDENT GRID SCALING",
-    "date": "June 14, 2026",
-    "items": [
-      "Full Screen Visual Overlays: Fixed a rendering issue where solid Scaffold backgrounds covered theme backdrops. Scaffolds are now transparent, showing full particles, trippy GIFs, and ambient glows layered correctly.",
-      "Themed Offline Fallback: Added a gorgeous 'WIKI UNREACHABLE' screen matching the dark neon Gungeon style to gracefully handle internet/connection failures with a Retry option.",
-      "Clean Mobile Webview: Injected custom JS and CSS to strip headers, footers, navigation, sidebars, and ads from wiki.gg inside the app for a native look.",
-      "Independent Grid Scaling: Added a separate 'Inventory Tile Font Size' slider in Settings to adjust grid name text (10.0-18.0 pt) independently of global scale.",
-      "Dual Layer Effects: Separated trippy hypnotic background layers and particles so they can now render simultaneously if both are enabled!"
-    ]
-  },
-  {
-    "version": "v1.8.0",
-    "title": "🔮 LORE DIALOGUE & SECRET CURIO COLLECTIBLES",
-    "date": "June 12, 2026",
-    "items": [
-      "Dialogue Tuning: Added a top-right settings icon in the NPC Dialogue panel to toggle haptic ticks and choose typewriter speeds (Instant, Fast, Normal, Slow).",
-      "5 Secret Delivery Quests: Added special Gungeon delivery storylines for Flynt, Vampire, Sell Creep, Professor Goopton, and Cursula.",
-      "The 3 Gungeon Anomalies: Gather the Myconid Blank-Cap (Red Mushroom), Aurum Ammo-Nugget (Gold Nugget), and Chrono-Trigger Sprocket (Golden Gear) from other merchants.",
-      "Bello's Secret Cabinet: Deliver anomalies to Bello's secret cabinet to unlock a permanent, cumulative 30% price discount on his cost calculator widget.",
-      "Cursula Flirting Engine: Playful, witty, and alien flirting lines that match Cursula's dark purple, shadow-bounded Gungeon personality."
-    ]
-  },
-  {
-    "version": "v1.7.2",
-    "title": "🎲 GUNFORTUNA DIEL DIALOG SKINS",
-    "date": "June 12, 2026",
-    "items": [
-      "Customizer Dropdown: Select beautiful dice skins (Classic, Gold, Frost, Molten, Void, Toxic) in-place before rolling.",
-      "Huntress HUD Fix: Resolved a collapsed-height bug to restore complete item inventory and grid visibility.",
-      "Dog Strip: Grounded dog movements to move horizontally only on top of option widgets.",
-      "Speech Popups: Added dedicated animated speech bubbles that float directly near the dog.",
-      "Filter UI Upgrades: Grid-mode filter visibility improvements and double-height category tags."
-    ]
-  },
-  {
-    "version": "v1.7.0",
-    "title": "🎯 INTERACTIVE WINCHESTER CAMPAIGN",
-    "date": "June 12, 2026",
-    "items": [
-      "Chamber Progression: 10-level campaign replacing standard target shooting variants.",
-      "Dual-Thumb Controls: BAM! fire button paired with PlayStation-style Analog Aiming stick.",
-      "Dog Treat Cookie Throw: Paths active treats for Dog to run and eat.",
-      "Baby Good Mimic Synergy: Co-op purple-tinted twin companion dog with independent AI roaming."
-    ]
-  },
-  {
-    "version": "v1.5.0",
-    "title": "🤖 THE ROBOT OVERHAUL & PERSISTENCE",
-    "date": "May 2026",
-    "items": [
-      "No-Hearts Armor Engine: Dynamic armor display replace hearts dashboard widget.",
-      "Junk Damage Recycler: Live calculation of +5% damage per Junk item carried.",
-      "Advanced Y-Perspectives: Smooth 3D card-flip rotations with spring-back easing."
-    ]
-  },
-  {
-    "version": "v1.0.0",
-    "title": "📦 CORE GUNGEONMATE RELEASE",
-    "date": "May 2026",
-    "items": [
-      "Rich Item Database: Comprehensive offline access to all 239 guns, 270 items, and 395 synergies.",
-      "Single-Device Persistence: Auto-saves active runs so you never lose progress.",
-      "Local Multiplayer Sync: Bluetooth/Wi-Fi event-driven co-op state sync for dual player runs.",
-      "Winchester's Minigame: Fully playable billiard-physics target-shooting simulator."
     ]
   }
 ]

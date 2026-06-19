@@ -13,6 +13,7 @@ import '../widgets/gungeoneer_header.dart';
 import '../widgets/inventory_list_row.dart';
 import '../widgets/game_icon.dart';
 import '../widgets/quality_badge.dart';
+import '../widgets/scale_button.dart';
 import '../services/haptics.dart';
 import 'item_detail_screen.dart';
 import 'stats_detail_screen.dart';
@@ -1572,6 +1573,42 @@ class _PlayerPageState extends State<_PlayerPage> {
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
+                  ListenableBuilder(
+                    listenable: VisualPrefs.notifier,
+                    builder: (context, _) {
+                      final prefs = VisualPrefs.notifier.value;
+                      final isSponge = prefs.spongeActive;
+                      final isGoopian = prefs.isGoopianLanguage;
+                      if (!isGoopian) return const SizedBox.shrink();
+
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: IconButton(
+                          onPressed: () {
+                            VisualPrefs.setSpongeActive(!isSponge);
+                            Haptics.heavy();
+                          },
+                          icon: Text(
+                            '🧽',
+                            style: TextStyle(
+                              fontSize: 18,
+                              shadows: isSponge
+                                  ? [
+                                      const Shadow(
+                                        color: Colors.amberAccent,
+                                        blurRadius: 10,
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                          ),
+                          tooltip: isSponge ? 'Sponge: English translation active' : 'Sponge: Alien language active',
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      );
+                    },
+                  ),
                   const SizedBox(width: 4),
                   const _HeaderMenu(),
                 ],
@@ -1989,16 +2026,8 @@ class _PlayerPageState extends State<_PlayerPage> {
         ratio = 0.80;
         break;
       case InventoryDisplayMode.tacticalStats:
-        cross = w < 360 ? 4 : w < 600 ? 4 : 6;
-        ratio = 0.70;
-        break;
-      case InventoryDisplayMode.highDefGraphic:
-        cross = w < 400 ? 2 : w < 700 ? 3 : 5;
-        ratio = 0.95;
-        break;
-      case InventoryDisplayMode.solidLabelBag:
-        cross = w < 500 ? 1 : w < 850 ? 2 : 3;
-        ratio = 2.4;
+        cross = w < 500 ? 2 : w < 850 ? 3 : 5;
+        ratio = 1.6;
         break;
     }
 
@@ -2764,6 +2793,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
 
   int _petCount = 0;
   int _treatCount = 0;
+  int _activeTab = 0;
 
   @override
   void initState() {
@@ -2943,6 +2973,28 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                 ),
                 const SizedBox(height: 12),
 
+                // Inner Tab Chips
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildTabChip(0, Icons.pets, 'JUNIOR II'),
+                    _buildTabChip(1, Icons.gps_fixed, 'CROSSBOW'),
+                    _buildTabChip(2, Icons.key, 'KEYS & FLOORS'),
+                  ],
+                ),
+                const SizedBox(height: 14),
+
+                // Active Tab Content View
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: _activeTab == 0
+                      ? _buildDogTab(hasBabyGoodMimic)
+                      : _activeTab == 1
+                          ? _buildCrossbowTab()
+                          : _buildKeysTab(),
+                ),
+                const SizedBox(height: 16),
+
                 // Dog Display Toggle
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2987,6 +3039,297 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
       ),
     );
   }
+
+  Widget _buildTabChip(int index, IconData icon, String label) {
+    final isSelected = _activeTab == index;
+    return InkWell(
+      onTap: () => setState(() => _activeTab = index),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.lightGreenAccent.withValues(alpha: 0.15) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: isSelected ? Colors.lightGreenAccent : Colors.white12,
+            width: 1.0,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 12, color: isSelected ? Colors.lightGreenAccent : Colors.white54),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 9.5,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.lightGreenAccent : Colors.white54,
+                letterSpacing: 0.5,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDogTab(bool hasBabyGoodMimic) {
+    final digChance = hasBabyGoodMimic ? 10.0 : 5.0;
+    return Column(
+      key: const ValueKey('dog_tab'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'ROOM-CLEAR SPARKLE DIGS',
+              style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white70),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: hasBabyGoodMimic ? Colors.purple.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent, width: 0.8),
+              ),
+              child: Text(
+                'CHANCE: ${digChance.toStringAsFixed(1)}%',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (hasBabyGoodMimic)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              '✨ Baby Good Mimic is active! Dig rate is doubled and dual-item discovery is enabled.',
+              style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic, color: Colors.purpleAccent.shade100),
+            ),
+          ),
+        // Item Weights row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildWeightIndicator('❤️ Heart', '45%', Colors.redAccent),
+            _buildWeightIndicator('🔑 Key', '20%', Colors.amberAccent),
+            _buildWeightIndicator('🛡️ Armor', '15%', Colors.blueAccent),
+            _buildWeightIndicator('📦 Ammo', '15%', Colors.orangeAccent),
+            _buildWeightIndicator('💥 Blank', '5%', Colors.pinkAccent),
+          ],
+        ),
+        const SizedBox(height: 10),
+        // Mimic Detection Alert
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.red.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: Colors.redAccent.withValues(alpha: 0.25)),
+          ),
+          child: const Row(
+            children: [
+              Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 14),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'MIMIC ALERT: Junior II will sit and growl/bark directly at mimic chests before they wake up. Do not open chests he targets without prepping!',
+                  style: TextStyle(fontSize: 9.5, color: Colors.redAccent, height: 1.3),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildWeightIndicator(String label, String value, Color color) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.black, color: color),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(fontSize: 8.5, fontWeight: FontWeight.bold, color: Colors.white.withValues(alpha: 0.6)),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCrossbowTab() {
+    return Column(
+      key: const ValueKey('crossbow_tab'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'CROSSBOW TARGETING BREAKPOINTS',
+              style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white70),
+            ),
+            Text(
+              'BASE DMG: 26',
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.orangeAccent),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _buildBreakpointRow('Keep of the Lead Lord (C1)', [
+          const _BreakpointItem('Bullet Kin', '15 HP', '1 shot'),
+          const _BreakpointItem('Shotgun Kin', '20 HP', '1 shot'),
+          const _BreakpointItem('Rubber Kin', '10 HP', '1 shot'),
+        ]),
+        const SizedBox(height: 6),
+        _buildBreakpointRow('Gungeon Proper (C2)', [
+          const _BreakpointItem('Bandit Kin', '22 HP', '1 shot'),
+          const _BreakpointItem('Mutant Kin', '25 HP', '1 shot'),
+          const _BreakpointItem('Vet Shotgun', '30 HP', '2 shots'),
+        ]),
+        const SizedBox(height: 6),
+        _buildBreakpointRow('Black Powder Mine (C3)', [
+          const _BreakpointItem('Ashen Kin', '35 HP', '2 shots'),
+          const _BreakpointItem('Mine Flayer', '220 HP', '9 shots'),
+          const _BreakpointItem('Lead Maiden', '150 HP', '6 shots'),
+        ]),
+      ],
+    );
+  }
+
+  Widget _buildBreakpointRow(String floorName, List<_BreakpointItem> items) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            floorName.toUpperCase(),
+            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.lightGreen, letterSpacing: 0.5),
+          ),
+          const SizedBox(height: 6),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: items.map((item) {
+              return Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.enemy,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70),
+                    ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Text(
+                          item.hp,
+                          style: TextStyle(fontSize: 8.5, color: Colors.white.withValues(alpha: 0.5)),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '→ ${item.shots}',
+                          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.black, color: Colors.orangeAccent),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKeysTab() {
+    return Column(
+      key: const ValueKey('keys_tab'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'KEY ECONOMY & CHAMBER ACCESS',
+          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white70),
+        ),
+        const SizedBox(height: 8),
+        _buildSecretFloorRow(
+          'Chamber 1.5: Oubliette (Sewer)',
+          'Requires 2x Keys + water on fireplace grating in Chamber 1.',
+          'Provides 2 extra chests, a safe shrine room, and Blobulord boss loot.',
+          Colors.tealAccent,
+        ),
+        const SizedBox(height: 8),
+        _buildSecretFloorRow(
+          'Chamber 2.5: Abbey of the True Gun',
+          'Requires carrying Old Crest armor from Sewer to Chamber 2 Altar.',
+          'Highest difficulty early floor. Guarantees Old King Boss + Synergy Chest.',
+          Colors.pinkAccent,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSecretFloorRow(String title, String cost, String rewards, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.15)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.stars_sharp, color: color, size: 12),
+              const SizedBox(width: 6),
+              Text(
+                title.toUpperCase(),
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.black, color: color, letterSpacing: 0.5),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Cost: $cost',
+            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: Colors.white70),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Loot: $rewards',
+            style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BreakpointItem {
+  final String enemy;
+  final String hp;
+  final String shots;
+  const _BreakpointItem(this.enemy, this.hp, this.shots);
 }
 
 /// Compact, always-visible effects accordion that sits right under the
@@ -3332,7 +3675,7 @@ class _HeaderMenu extends StatelessWidget {
           child: Row(children: [
             Icon(Icons.storefront_outlined, size: 18, color: Color(0xFFCE93D8)),
             SizedBox(width: 10),
-            Text('Buy from Cursula  (+2.5 curse)'),
+            Text('Cursula Buy'),
           ]),
         ),
         const PopupMenuItem(
@@ -3391,7 +3734,7 @@ class _HeaderMenu extends StatelessWidget {
               Text('Remove Player'),
             ]),
           ),
-        if (mpActive && mpSession.myRole == MpRole.sidekick)
+        if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
           const PopupMenuItem(
             value: 'leave_mp',
             child: Row(children: [
@@ -3401,7 +3744,15 @@ class _HeaderMenu extends StatelessWidget {
               Text('Leave Multiplayer'),
             ]),
           ),
-        if (!(mpActive && mpSession.myRole == MpRole.sidekick))
+          const PopupMenuItem(
+            value: 'end_run',
+            child: Row(children: [
+              Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
+              SizedBox(width: 10),
+              Text('End Run & Disconnect', style: TextStyle(color: Colors.redAccent)),
+            ]),
+          ),
+        ] else ...[
           const PopupMenuItem(
             value: 'end_run',
             child: Row(children: [
@@ -3410,6 +3761,7 @@ class _HeaderMenu extends StatelessWidget {
               Text('End Run', style: TextStyle(color: Colors.redAccent)),
             ]),
           ),
+        ],
       ],
     );
   }
@@ -3624,12 +3976,16 @@ class _HeaderMenu extends StatelessWidget {
   }
 
   void _confirmEndRun(BuildContext context, RunProvider p) {
+    final session = context.read<MultiplayerSession>();
+    final isSidekick = session.isActive && session.myRole == MpRole.sidekick;
+
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-        title: const Text('End Run?'),
-        content: const Text(
-            'This resets the current run and returns to the main menu.'),
+        title: Text(isSidekick ? 'End Run & Disconnect?' : 'End Run?'),
+        content: Text(isSidekick
+            ? 'This will disconnect you from the host, reset the current session, and return you to the main menu.'
+            : 'This resets the current run and returns to the main menu.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
@@ -3638,24 +3994,15 @@ class _HeaderMenu extends StatelessWidget {
           FilledButton.tonal(
             style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
             onPressed: () async {
-              final session = context.read<MultiplayerSession>();
               Navigator.pop(c);
               if (session.isActive) {
-                // Tells the peer to end too, then tears the MP session
-                // down. Inside, cancel() will also restore the
-                // Sidekick's pre-MP main slot if applicable, so we
-                // don't redundantly call endRun() for them.
+                // Tells the peer to end too, then tears the MP session down cleanly.
                 await session.notifyEndRunAndCancel();
-                if (session.myRole == MpRole.main) {
-                  // Main Player owns the run state — wipe it now that
-                  // the peer has been told.
-                  p.endRun();
-                }
-              } else {
-                p.endRun();
               }
+              // Wipe local run state and pop screens to return to the main menu
+              p.endRun();
             },
-            child: const Text('End Run'),
+            child: Text(isSidekick ? 'End & Disconnect' : 'End Run'),
           ),
         ],
       ),
@@ -3704,10 +4051,6 @@ class _SectionHeaderSliver extends StatelessWidget {
           return Icons.grid_view_rounded;
         case InventoryDisplayMode.tacticalStats:
           return Icons.assessment_outlined;
-        case InventoryDisplayMode.highDefGraphic:
-          return Icons.photo_library_outlined;
-        case InventoryDisplayMode.solidLabelBag:
-          return Icons.inventory_2_outlined;
       }
     }
 
@@ -3817,26 +4160,6 @@ class _SectionHeaderSliver extends StatelessWidget {
                         Icon(Icons.assessment_outlined, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white60),
                         const SizedBox(width: 8),
                         Text('Tactical Stats', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: InventoryDisplayMode.highDefGraphic,
-                    child: Row(
-                      children: [
-                        Icon(Icons.photo_library_outlined, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.highDefGraphic) ? Colors.amberAccent : Colors.white60),
-                        const SizedBox(width: 8),
-                        Text('Gallery Display', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.highDefGraphic) ? Colors.amberAccent : Colors.white)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: InventoryDisplayMode.solidLabelBag,
-                    child: Row(
-                      children: [
-                        Icon(Icons.inventory_2_outlined, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.solidLabelBag) ? Colors.amberAccent : Colors.white60),
-                        const SizedBox(width: 8),
-                        Text('RPG Bag rows', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.solidLabelBag) ? Colors.amberAccent : Colors.white)),
                       ],
                     ),
                   ),
@@ -4819,95 +5142,101 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
 
     return Dialog(
       backgroundColor: const Color(0xFF151211),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: f.primary, width: 1.8),
+        side: BorderSide(color: f.primary, width: 2.0),
       ),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Header
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.casino_rounded, color: f.primary, size: 24),
-                        const SizedBox(width: 8),
-                        Text(
-                          'GUNFORTUNA\'S DIEL',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: f.primary,
-                            letterSpacing: 1.5,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 440),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Header
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.casino_rounded, color: f.primary, size: 26),
+                          const SizedBox(width: 10),
+                          Text(
+                            'GUNFORTUNA\'S DUEL',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: f.primary,
+                              letterSpacing: 1.5,
+                            ),
                           ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, color: Colors.white38, size: 20),
+                        onPressed: () => Navigator.pop(context),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Flavour text (Only show in idle state!)
+                  if (_status == _DiceStatus.idle) ...[
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.03),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                      ),
+                      child: const Text(
+                        '“Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.”',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.white54,
+                          height: 1.4,
                         ),
-                      ],
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white38, size: 20),
-                      onPressed: () => Navigator.pop(context),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
+                    const SizedBox(height: 18),
                   ],
-                ),
-                const SizedBox(height: 12),
 
-                // Flavour text
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.02),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
+                  // Content body
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 350),
+                    transitionBuilder: (child, anim) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: const Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
+                        child: child,
+                      );
+                    },
+                    child: _buildCurrentBody(connected, myDiceStyle, f),
                   ),
-                  child: const Text(
-                    '“Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.”',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.white54,
-                      height: 1.35,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: 18),
-
-                // Content body
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 350),
-                  transitionBuilder: (child, anim) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
-                      child: child,
-                    );
-                  },
-                  child: _buildCurrentBody(connected, myDiceStyle, f),
-                ),
-              ],
-            ),
-          ),
-          // Particle Layer Paint
-          if (_particles.isNotEmpty)
-            Positioned.fill(
-              child: IgnorePointer(
-                child: CustomPaint(
-                  painter: _DialogParticlePainter(particles: _particles),
-                ),
+                ],
               ),
             ),
-        ],
+            // Particle Layer Paint
+            if (_particles.isNotEmpty)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: CustomPaint(
+                    painter: _DialogParticlePainter(particles: _particles),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -4924,26 +5253,42 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          ElevatedButton.icon(
-            onPressed: _sendChallenge,
-            icon: const Icon(Icons.casino_outlined, size: 18),
-            label: const Text('CHALLENGE PARTNER', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: f.primary,
-              foregroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ScaleButton(
+            onTap: _sendChallenge,
+            child: IgnorePointer(
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.casino_outlined, size: 18),
+                  label: const Text('CHALLENGE PARTNER', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: f.primary,
+                    foregroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 10),
-          OutlinedButton(
-            onPressed: _startRolling,
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              side: const BorderSide(color: Colors.white24),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ScaleButton(
+            onTap: _startRolling,
+            child: IgnorePointer(
+              child: SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    side: const BorderSide(color: Colors.white24),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                  child: const Text('ROLL SOLO INSTEAD', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
+                ),
+              ),
             ),
-            child: const Text('ROLL SOLO INSTEAD', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
           ),
         ],
       );
@@ -5037,31 +5382,42 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
     if (_status == _DiceStatus.finished) {
       final isMyVictory = _peerScore != null && _myScore > _peerScore!;
       final isDraw = _peerScore != null && _myScore == _peerScore!;
+      final isSolo = _peerScore == null;
+
+      final Color bannerColor = isSolo
+          ? const Color(0xFFFFD54F) // Majestic Gold for Solo fate
+          : (isDraw
+              ? Colors.white54
+              : (isMyVictory ? Colors.greenAccent : Colors.redAccent));
+
       return Column(
         key: const ValueKey('finished_results'),
         children: [
           // Flavour Winner announcement
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: isDraw 
-                  ? Colors.white10 
-                  : (isMyVictory ? Colors.green.withValues(alpha: 0.1) : Colors.red.withValues(alpha: 0.1)),
+              color: bannerColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isDraw 
-                    ? Colors.white24 
-                    : (isMyVictory ? Colors.greenAccent : Colors.redAccent),
-                width: 1.2,
+                color: bannerColor,
+                width: 1.5,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: bannerColor.withValues(alpha: 0.08),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ],
             ),
             child: Text(
               _announcement,
               style: TextStyle(
-                fontSize: 12.5,
+                fontSize: 13,
                 fontWeight: FontWeight.w900,
-                color: isDraw ? Colors.white : (isMyVictory ? Colors.greenAccent : Colors.redAccent),
-                letterSpacing: 0.5,
+                color: bannerColor == Colors.white54 ? Colors.white : bannerColor,
+                letterSpacing: 1.0,
               ),
               textAlign: TextAlign.center,
             ),
@@ -5163,15 +5519,23 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 20),
-        ElevatedButton.icon(
-          onPressed: _startRolling,
-          icon: const Icon(Icons.casino_outlined, size: 20),
-          label: const Text('ROLL THE DICE!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1.0)),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: f.primary,
-            foregroundColor: Colors.black,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        ScaleButton(
+          onTap: _startRolling,
+          child: IgnorePointer(
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.casino_outlined, size: 20),
+                label: const Text('ROLL THE DICE!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1.0)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: f.primary,
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                ),
+              ),
+            ),
           ),
         ),
       ],
@@ -5242,6 +5606,9 @@ class _DiceWidgetState extends State<_DiceWidget> with SingleTickerProviderState
           final rotY = widget.isRolling ? (t * (3 + widget.index * 3) * math.pi) : 0.0;
           final rotZ = widget.isRolling ? (t * (2 + widget.index * 4) * math.pi) : 0.0;
 
+          // Vertical floating/bobbing during roll to look super organic and pronounced!
+          final double bobY = widget.isRolling ? (math.sin(t * 2 * math.pi + widget.index * 1.5) * 8.0) : 0.0;
+
           // Rapid cycling face value while rolling
           final faceVal = widget.isRolling ? ((widget.index + (t * 40).round()) % 6 + 1) : widget.value;
 
@@ -5253,34 +5620,35 @@ class _DiceWidgetState extends State<_DiceWidget> with SingleTickerProviderState
           return Transform(
             transform: Matrix4.identity()
               ..setEntry(3, 2, 0.0018) // 3D projection
+              ..translate(0.0, bobY)
               ..scale(scale)
               ..rotateX(rotX)
               ..rotateY(rotY)
               ..rotateZ(rotZ),
             alignment: Alignment.center,
             child: Container(
-              width: 54,
-              height: 54,
+              width: 72,
+              height: 72,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: widget.style.bg,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: widget.style.border,
-                  width: widget.isRolling ? 1.5 : 2.5,
+                  width: widget.isRolling ? 2.0 : 3.0,
                 ),
                 boxShadow: [
                   BoxShadow(
                     color: widget.style.glow,
-                    blurRadius: widget.isRolling ? 4 : 8,
-                    spreadRadius: widget.isRolling ? 0 : 2,
+                    blurRadius: widget.isRolling ? 6 : 12,
+                    spreadRadius: widget.isRolling ? 1 : 3,
                   ),
                 ],
               ),
               child: Text(
                 '$faceVal',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 34,
                   fontWeight: FontWeight.w900,
                   color: widget.style.text,
                 ),

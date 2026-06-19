@@ -6,6 +6,42 @@ All production APK builds are archived in `builds/` with proper version labeling
 
 ---
 
+## v0.9.3 — General UX Refinement & System Polish Update (June 19, 2026)
+**File:** `gungeon-mate-v0.9.3.apk`
+**Size:** ~33.1 MB
+**Build:** 35
+
+### Huntress tabbed HUD
+- **Huntress HUD Drawer** — Converted the Huntress dashboard into an information-dense sliding tab panel featuring three interactive sub-HUDs:
+  - **Junior II Digs** — Showcases room-clear dig probabilities (dynamically doubling to 10% when carrying Baby Good Mimic) and includes a critical growling Mimic chest detection warning.
+  - **Crossbow Breakpoints** — A complete health mapping table of early floor enemies (Bullet Kin, Shotgun Kin, Rubber Kin) and how many 26-damage Crossbow shots are needed to eliminate them.
+  - **Key Economy** — Tactical walkthrough guide to Oubliette (Sewer) and Abbey of the True Gun entry costs, conditions, and rewards.
+
+### Seamless Run Termination
+- **Unified End & Disconnect** — Refactored co-op session teardown to allow Sidekicks to directly select "End Run & Disconnect" in their options menu. A single action ends the run, notifies the host, clears local states, and returns the player to the main menu.
+
+### Gunfortuna's Duel Refinements
+- **UI & Scale Improvements** — Enriched the popup constraints to a majestic 440px width, scaled dice to a giant 72x72 face with size-34 typography, corrected DIEL to DUEL, and designed a beautiful glowing amber result banner for solo rolls.
+- **Organic 3D Bobbing Physics** — Programmed a sine-wave vertical translation offset into the rolling matrix, causing the dice to float and bob organically while tumbling.
+
+### Bouncy scale-button mechanics
+- **Premium Click UX** — Wrapped all primary Main Menu category cards (Local Run, Multiplayer, Customize), the Tailor mascot tap area, and active Gunfortuna dice triggers in our haptic ScaleButton wrapper. Touching these elements physically scales them down with satisfying spring bounce-backs and automatic lightweight touch haptics.
+
+### Shrines & Settings UX Polish
+- **Cleanse First** — Automatically sorts the Cleanse Shrine to the absolute top of the picker list, making it instantly accessible for wiping Curse states.
+- **Centered Large Graphics** — Enriched the Shrine activation sheet layout, centering the descriptions and blowing the icon size up to a beautiful, giant 120x120 container with shadow casts.
+- **explicit Heart Penalty Indicators** — Integrated a direct, high-contrast warning badge alert (💔 PENALTY COST: -1 HEART CONTAINER (LIFE -1)) for the Angel and Blood shrines.
+- **Appearance Compaction** — Re-organized all font-style, font-size, inventory-size, and font-bias preferences inside a single, beautifully bordered Card with thin 32px slider track profiles, and completely deleted the redundant HELP & TIPS tab from settings.
+
+### Mascot Dialogue Expansion
+- **The Tailor Speaks** — Expanded our central main menu hauling mascot (The Tailor) with 16 new highly detailed, lore-rich Gungeon quotes. Tapping him now triggers random insights regarding Master Rounds, secret floors (Oubliette/Abbey), chest mimic alerts, S-Tier black chests, and weapon reload mechanics.
+
+### Goopian & The Sponge 🧽 translation modes
+- **Professor Goopton's Cipher** — Added a core "Interface Language" dropdown card in Settings under Run Language. Choosing "Goopian" converts the main menu mascot quotes and all weapon/item titles into unreadable cipher symbols.
+- **Matrix Deciphering Stream** — When Goopian is active, a glowing interactive "The Sponge" 🧽 button floats inside the Active Run app bar. Activating it triggers a real-time, character-by-character digital translation stream that magically decodes the symbols into English from left-to-right (and encodes them in reverse on toggle-off!).
+
+---
+
 ## v0.9.1 — The Road to v1.0.0 Pre-Release Consolidation (June 18, 2026)
 **File:** `gungeon-mate-v0.9.1.apk`
 **Size:** ~33.0 MB

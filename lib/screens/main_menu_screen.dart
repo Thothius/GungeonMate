@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -6,6 +5,8 @@ import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
 import 'theme_picker_screen.dart';
 import '../services/haptics.dart';
+import '../widgets/scale_button.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -29,6 +30,22 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       "Weld, hammer, build... the elevator shafts never rest.",
       "I like a foreman with hands-on grit. Let's make this cable hold!",
       "Is the floor going down, or are we flying upwards? Mechanical philosophy!",
+      "Did you know? The High Dragun at Chamber 5 is made of pure, molten bullets! Watch out for his intense final-stage screen-clearing waves.",
+      "Lich's Eye Trigger is the ultimate passive! It instantly activates ALL synergies for whatever gun you hold. Outrageous!",
+      "Bullet Kin might look cute, but don't let their blank expressions fool you. They are trained, trigger-happy cultists!",
+      "If you see a chest with its lock wiggling, breathing, or licking its lips... STOP! It's a Mimic. Shoot it once before opening!",
+      "To access the Sewer (Oubliette), douse the fireplace in Chamber 1 with a water barrel, pull the hidden switch inside, and save 2 keys.",
+      "Sir Manuel thinks he's a grand defensive master, but he hasn't even breached Chamber 2 yet. Hilarious!",
+      "Watch your Curse level! If it hits 10.0, the Lord of the Jammed will spawn. He is unkillable and will stalk you across rooms.",
+      "Casey is just a wooden baseball bat, but with 100 base damage, it can reflect enemy bullets back at them! Truly a home-run weapon.",
+      "Gunderfury grows more powerful the more enemies you defeat with it. It has three distinct stages of progressive bullet chaos!",
+      "Ser Junkan starts as a useless pile of junk, but collect 6 pieces of junk and he becomes a fully-armored, holy knight of defense!",
+      "Daisuke's double-challenge modifiers are pure madness! Adrenaline, high tension, thermal clips... only for veteran gun-masters.",
+      "The Resourceful Rat is a master thief. Leave any items on the floor and he will swipe them immediately. Punch those vents!",
+      "S-Tier black chests contain legendary Gungeon weapons like the Yari Launcher, Fightsabre, or the infinite-growth Gunther!",
+      "Coolness reduces your active item recharge times, while Curse increases Jammed enemy spawn rates. Balance is key!",
+      "Winchester's target shooting requires extreme precision. Learn to bounce bullets off the blue blocks to strike the floating bullseyes!",
+      "The Old Crest armor from the Sewer must be carried safely to Chamber 2's altar to open the Abbey. Do NOT get hit along the way!",
     ];
     
     final rand = math.Random().nextInt(quotes.length);
@@ -90,7 +107,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               Text(
                                 'GUNGEON MATE',
                                 style: TextStyle(
-                                  fontSize: 34,
+                                  fontSize: 40,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 2.0,
                                   foreground: Paint()
@@ -103,7 +120,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               const Text(
                                 'GUNGEON MATE',
                                 style: TextStyle(
-                                  fontSize: 34,
+                                  fontSize: 40,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 2.0,
                                   color: Color(0xFFFFD54F), // Bright Gold
@@ -130,10 +147,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                 width: 1.2,
                               ),
                             ),
-                            child: const Text(
+                            child: const GoopText(
                               'YOUR COMPANION IN THE GUNGEON',
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 12.5,
                                 fontWeight: FontWeight.w900,
                                 color: Color(0xFFE57373), // Soft active red
                                 letterSpacing: 1.8,
@@ -148,7 +165,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         clipBehavior: Clip.none,
                         alignment: Alignment.bottomCenter,
                         children: [
-                          GestureDetector(
+                          ScaleButton(
                             onTap: _onMascotTapped,
                             child: Container(
                               padding: const EdgeInsets.all(10),
@@ -202,11 +219,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                   ],
                                 ),
                                 constraints: const BoxConstraints(maxWidth: 240),
-                                child: Text(
+                                child: GoopText(
                                   _mascotQuote!,
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 14,
                                     fontStyle: FontStyle.italic,
                                     color: Color(0xFFFFD54F),
                                     fontWeight: FontWeight.bold,
@@ -220,77 +237,92 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       ),
                       const Spacer(flex: 1),
                   // Local Run = single device solo play
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: FilledButton.icon(
-                      icon: const Icon(Icons.play_arrow_rounded, size: 26),
-                      label: const Text(
-                        'Local Run',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1,
+                  ScaleButton(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CharacterSelectScreen(),
+                        ),
+                      );
+                    },
+                    child: const IgnorePointer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: FilledButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.play_arrow_rounded, size: 26),
+                          label: const GoopText(
+                            'Local Run',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const CharacterSelectScreen(),
-                          ),
-                        );
-                      },
                     ),
                   ),
                   const SizedBox(height: 12),
                   // Bluetooth Multiplayer = pair two devices
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: OutlinedButton.icon(
-                      icon: const Icon(Icons.bluetooth_searching, size: 24),
-                      label: const Text(
-                        'Multiplayer',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1,
+                  ScaleButton(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MultiplayerLobbyScreen(),
+                        ),
+                      );
+                    },
+                    child: const IgnorePointer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.bluetooth_searching, size: 24),
+                          label: const GoopText(
+                            'Multiplayer',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const MultiplayerLobbyScreen(),
-                          ),
-                        );
-                      },
                     ),
                   ),
                   const SizedBox(height: 12),
                   // Customize (formerly Theme Picker)
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: OutlinedButton.icon(
-                      icon: const Icon(Icons.palette_outlined, size: 24),
-                      label: const Text(
-                        'Customize',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 1,
+                  ScaleButton(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ThemePickerScreen(),
+                        ),
+                      );
+                    },
+                    child: const IgnorePointer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.palette_outlined, size: 24),
+                          label: const GoopText(
+                            'Customize',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ThemePickerScreen(),
-                          ),
-                        );
-                      },
                     ),
                   ),
                   const SizedBox(height: 12),

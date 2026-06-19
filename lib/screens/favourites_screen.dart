@@ -134,16 +134,8 @@ class FavouritesScreen extends StatelessWidget {
         ratio = 0.80;
         break;
       case InventoryDisplayMode.tacticalStats:
-        cross = w < 360 ? 4 : w < 600 ? 4 : 6;
-        ratio = 0.70;
-        break;
-      case InventoryDisplayMode.highDefGraphic:
-        cross = w < 400 ? 2 : w < 700 ? 3 : 5;
-        ratio = 0.95;
-        break;
-      case InventoryDisplayMode.solidLabelBag:
-        cross = w < 500 ? 1 : w < 850 ? 2 : 3;
-        ratio = 2.4;
+        cross = w < 500 ? 2 : w < 850 ? 3 : 5;
+        ratio = 1.6;
         break;
     }
 

@@ -8,6 +8,7 @@ import '../models/player.dart';
 import '../providers/run_provider.dart';
 import '../services/elemental_tagger.dart';
 import '../services/app_theme.dart';
+import '../services/goop_talk_engine.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
@@ -370,6 +371,35 @@ class _PeriodicTileState extends State<PeriodicTile>
     );
   }
 
+  Widget _buildGridStat(String label, String value, Color color) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 8.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white30,
+            letterSpacing: 0.3,
+          ),
+        ),
+        const SizedBox(height: 1),
+        Text(
+          value.isEmpty ? 'N/A' : value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 10.5,
+            fontWeight: FontWeight.w900,
+            color: color,
+          ),
+        ),
+      ],
+    );
+  }
+
   /// Elemental effect icons for the tile — shown top-right, max 3.
   /// Delegates detection to [ElementalTagger] so both guns *and* items
   /// surface the same badges (e.g. Frost Bullets shows a freeze icon,
@@ -618,8 +648,10 @@ class _PeriodicTileState extends State<PeriodicTile>
     // Branch visual representation based on displayMode
     switch (displayMode) {
       case InventoryDisplayMode.tacticalStats:
-        // High density stats layout
-        final double statsFontSize = (prefs.inventoryFontSize - 3).clamp(8.0, 12.0);
+        // High density wide stats layout (completely redesigned for clean readability)
+        final double statsFontSize = (prefs.inventoryFontSize - 3.5).clamp(8.0, 12.0);
+        final flair = AppTheme.flair;
+
         return Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.zero,
@@ -628,380 +660,185 @@ class _PeriodicTileState extends State<PeriodicTile>
           elevation: isHighTier ? 4 : 1,
           child: InkWell(
             onTap: _handleTap,
-            child: Column(
-              children: [
-                Expanded(
-                  child: SizedBox.expand(
-                    child: Stack(
-                      children: [
-                      Positioned(
-                        left: 4,
-                        top: 0,
-                        bottom: 0,
-                        width: 42,
-                        child: Center(
-                          child: maybeStrikethrough(
-                            GameIcon(
-                              assetPath: _iconPath,
-                              fallback: isGun ? Icons.gps_fixed : Icons.extension,
-                              quality: _quality,
-                              size: 32,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 48,
-                        right: 4,
-                        top: 4,
-                        bottom: 4,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: isGun
-                                ? [
-                                    if (widget.gun!.damage.isNotEmpty)
-                                      _buildMiniStat('DMG', _cleanStat(widget.gun!.damage), Colors.redAccent),
-                                    if (widget.gun!.magazineSize.isNotEmpty)
-                                      _buildMiniStat('MAG', _cleanStat(widget.gun!.magazineSize), Colors.cyanAccent),
-                                    if (widget.gun!.reloadTime.isNotEmpty)
-                                      _buildMiniStat('RLD', _cleanStat(widget.gun!.reloadTime), Colors.amberAccent),
-                                    if (widget.gun!.ammoCapacity.isNotEmpty)
-                                      _buildMiniStat('MAX', _cleanStat(widget.gun!.ammoCapacity), Colors.greenAccent),
-                                  ]
-                                : [
-                                    if (widget.item!.curse > 0)
-                                      _buildMiniStat('CRS', '+${widget.item!.curse.toStringAsFixed(0)}', Colors.deepPurpleAccent)
-                                    else if (widget.item!.coolness > 0)
-                                      _buildMiniStat('COL', '+${widget.item!.coolness.toStringAsFixed(0)}', Colors.tealAccent)
-                                    else if (widget.item!.rechargeTime.isNotEmpty)
-                                      _buildMiniStat('RCH', _cleanStat(widget.item!.rechargeTime), Colors.orangeAccent)
-                                    else if (widget.item!.duration.isNotEmpty)
-                                      _buildMiniStat('DUR', _cleanStat(widget.item!.duration), Colors.pinkAccent)
-                                    else ...[
-                                      const SizedBox(height: 4),
-                                      const Icon(Icons.shield_outlined, size: 10, color: Colors.white24),
-                                      const SizedBox(height: 2),
-                                      const Text(
-                                        'TACTICAL',
-                                        style: TextStyle(
-                                          fontSize: 6.5,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white24,
-                                          letterSpacing: 0.5,
-                                        ),
-                                      ),
-                                    ],
-                                  ],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 3,
-                        left: 4,
-                        child: maybeQualityBadge(size: 15),
-                      ),
-                      maybeFastActiveDot(topOffset: 20),
-                      Positioned(
-                        top: 3,
-                        right: 4,
-                        child: maybeElements(),
-                      ),
-                      // EXPLICIT NUMERICAL DISPLAY TAG AT THE BOTTOM LEFT
-                      if (_corner.isNotEmpty)
-                        Positioned(
-                          bottom: 4,
-                          left: 4,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                            decoration: BoxDecoration(
-                              color: widget.isTopDps 
-                                  ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-                                  : Colors.black87,
-                              borderRadius: BorderRadius.circular(3),
-                              border: Border.all(
-                                color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white12,
-                                width: 0.8,
-                              ),
-                            ),
-                            child: Text(
-                              _corner,
-                              style: TextStyle(
-                                fontSize: statsFontSize,
-                                fontWeight: FontWeight.w900,
-                                color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.amberAccent,
-                              ),
-                            ),
-                          ),
-                        ),
-                      // COMPACT CLASS / ROLE TAG AT THE BOTTOM RIGHT
-                      if (_typeTagCompacted.isNotEmpty)
-                        Positioned(
-                          bottom: 4,
-                          right: 4,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                            decoration: BoxDecoration(
-                              color: _typeColor().withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(3),
-                              border: Border.all(
-                                color: _typeColor().withValues(alpha: 0.4),
-                                width: 0.6,
-                              ),
-                            ),
-                            child: Text(
-                              _typeTagCompacted,
-                              style: TextStyle(
-                                fontSize: statsFontSize - 0.5,
-                                fontWeight: FontWeight.bold,
-                                color: _typeColor(),
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(2, 3, 2, 4),
-                  color: Colors.white.withValues(alpha: 0.02),
-                  child: Text(
-                    _name,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: prefs.inventoryFontSize - 1.5,
-                      fontWeight: FontWeight.bold,
-                      height: 1.1,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-
-      case InventoryDisplayMode.highDefGraphic:
-        // Gorgeous Pixel Art Showcase Layout
-        return Card(
-          clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.zero,
-          color: cardBgColor ?? const Color(0xFF131315),
-          shape: cardShape,
-          elevation: isHighTier ? 6 : 2,
-          child: InkWell(
-            onTap: _handleTap,
             child: SizedBox.expand(
               child: Stack(
                 children: [
-                Positioned.fill(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 4, 4, 20),
-                    child: Center(
-                      child: maybeStrikethrough(
-                        GameIcon(
-                          assetPath: _iconPath,
-                          fallback: isGun ? Icons.gps_fixed : Icons.extension,
-                          quality: _quality,
-                          size: 60,
-                        ),
+                  // 1. Giant Background Image with Low Opacity (to avoid clashing with stats!)
+                  Positioned.fill(
+                    child: Opacity(
+                      opacity: 0.12, // Subdued background
+                      child: Center(
+                        child: _iconPath.startsWith('assets/')
+                            ? Image.asset(
+                                _iconPath,
+                                fit: BoxFit.contain,
+                                width: 72,
+                                height: 72,
+                                filterQuality: FilterQuality.none, // Pixel art!
+                              )
+                            : Image.network(
+                                _iconPath,
+                                fit: BoxFit.contain,
+                                width: 72,
+                                height: 72,
+                                filterQuality: FilterQuality.none,
+                                errorBuilder: (_, __, ___) => Icon(
+                                  isGun ? Icons.gps_fixed : Icons.extension,
+                                  size: 40,
+                                  color: Colors.white12,
+                                ),
+                              ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 5,
-                  left: 5,
-                  child: maybeQualityBadge(size: 20),
-                ),
-                maybeFastActiveDot(topOffset: 28),
-                Positioned(
-                  top: 5,
-                  right: 5,
-                  child: maybeElements(),
-                ),
-                // Glowing stats crown if top dps
-                if (widget.isTopDps)
-                  const Positioned(
-                    top: 5,
-                    left: 28,
-                    child: Icon(Icons.star, color: Color(0xFFFFD700), size: 14),
-                  ),
-                // Transparent Overlaid Name Banner at the Bottom
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.black.withValues(alpha: 0.0),
-                          Colors.black.withValues(alpha: 0.85),
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                    padding: const EdgeInsets.fromLTRB(4, 12, 4, 4),
-                    child: Text(
-                      _name,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: prefs.inventoryFontSize - 1.0,
-                        fontWeight: FontWeight.w900,
-                        color: isHighTier ? qColor : Colors.white,
-                        letterSpacing: 0.3,
-                        shadows: const [
-                          Shadow(color: Colors.black, offset: Offset(0, 1), blurRadius: 2),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ),
-        );
 
-      case InventoryDisplayMode.solidLabelBag:
-        // Wide RPG list-grid row layout
-        return Card(
-          clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.zero,
-          color: cardBgColor ?? const Color(0xFF17171A),
-          shape: cardShape,
-          elevation: isHighTier ? 3 : 1,
-          child: InkWell(
-            onTap: _handleTap,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Center(
-                          child: maybeStrikethrough(
-                            GameIcon(
-                              assetPath: _iconPath,
-                              fallback: isGun ? Icons.gps_fixed : Icons.extension,
-                              quality: _quality,
-                              size: 40,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 2,
-                        left: 2,
-                        child: maybeQualityBadge(size: 14),
-                      ),
-                      maybeFastActiveDot(topOffset: 16),
-                    ],
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                _name,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: prefs.inventoryFontSize + 1.0,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            if (widget.isTopDps) ...[
-                              const SizedBox(width: 4),
-                              const Icon(Icons.local_fire_department, color: Colors.orangeAccent, size: 14),
-                            ],
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Row(
-                          children: [
-                            if (_typeTag.isNotEmpty)
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                                decoration: BoxDecoration(
-                                  color: _typeColor().withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(
-                                    color: _typeColor().withValues(alpha: 0.45),
-                                    width: 0.6,
-                                  ),
-                                ),
-                                child: Text(
-                                  _typeTag,
-                                  style: TextStyle(
-                                    fontSize: 8.5,
-                                    fontWeight: FontWeight.bold,
-                                    color: _typeColor(),
-                                  ),
-                                ),
-                              ),
-                            const SizedBox(width: 6),
-                            if (_elements.isNotEmpty) ...[
-                              for (final e in _elements)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 3),
-                                  child: Icon(e.icon, size: 10, color: e.color),
-                                ),
-                            ],
-                            const Spacer(),
-                            if (_corner.isNotEmpty)
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
-                                decoration: BoxDecoration(
-                                  color: Colors.black45,
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: Colors.white12, width: 0.5),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                  // 2. Main Stats Layer on Top of Background
+                  Positioned(
+                    left: 10,
+                    right: 10,
+                    top: 8,
+                    bottom: 32, // space for the bottom title banner
+                    child: isGun
+                        ? Row(
+                            children: [
+                              // Left stats column
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(
-                                      isGun ? Icons.adjust_rounded : Icons.flash_on_rounded,
-                                      size: 8,
-                                      color: isGun ? Colors.amberAccent : Colors.lightBlueAccent,
-                                    ),
-                                    const SizedBox(width: 3),
-                                    Text(
-                                      _corner,
-                                      style: const TextStyle(
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                    _buildGridStat('DPS', _cleanStat(widget.gun!.dps), Colors.amberAccent),
+                                    _buildGridStat('MAG', _cleanStat(widget.gun!.magazineSize), Colors.cyanAccent),
                                   ],
                                 ),
                               ),
-                          ],
+                              // Middle stats column
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildGridStat('RELOAD', _cleanStat(widget.gun!.reloadTime), Colors.orangeAccent),
+                                    _buildGridStat('RANGE', _cleanStat(widget.gun!.range), Colors.lightBlueAccent),
+                                  ],
+                                ),
+                              ),
+                              // Right stats column
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildGridStat('FORCE', _cleanStat(widget.gun!.force), Colors.redAccent),
+                                    _buildGridStat('SPREAD', _cleanStat(widget.gun!.spread), Colors.purpleAccent),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              // Left stats column
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildGridStat('CURSE', '+${widget.item!.curse.toStringAsFixed(0)}', Colors.deepPurpleAccent),
+                                    _buildGridStat('COOLNESS', '+${widget.item!.coolness.toStringAsFixed(0)}', Colors.tealAccent),
+                                  ],
+                                ),
+                              ),
+                              // Middle stats column
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildGridStat('RECHARGE', _cleanStat(widget.item!.rechargeTime), Colors.orangeAccent),
+                                    _buildGridStat('DURATION', _cleanStat(widget.item!.duration), Colors.pinkAccent),
+                                  ],
+                                ),
+                              ),
+                              // Right stats column (Filler to balance)
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildGridStat('CLASS', widget.item!.type, Colors.white60),
+                                    _buildGridStat('PRICE', _cleanStat(widget.item!.sellPrice), Colors.greenAccent),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+
+                  // 3. Compact Fire Mode / Item Type Badge (top-right)
+                  Positioned(
+                    top: 6,
+                    right: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: flair.secondary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: flair.secondary.withValues(alpha: 0.45), width: 0.6),
+                      ),
+                      child: Text(
+                        (isGun ? widget.gun!.type : widget.item!.type).toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 7.5,
+                          fontWeight: FontWeight.black,
+                          color: flair.secondary,
+                          letterSpacing: 0.5,
                         ),
-                      ],
+                      ),
+                    ),
+                  ),
+
+                  // 4. Compact Quality Badge (top-left)
+                  Positioned(
+                    top: 6,
+                    left: 8,
+                    child: maybeQualityBadge(size: 15),
+                  ),
+                  maybeFastActiveDot(topOffset: 20),
+
+                  // 5. Solid Title Banner at the Bottom
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.75),
+                        border: const Border(top: BorderSide(color: Colors.white10, width: 0.5)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: GoopText(
+                              _name.toUpperCase(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: statsFontSize + 1.5,
+                                fontWeight: FontWeight.black,
+                                color: Colors.white,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                          if (widget.isTopDps) ...[
+                            const SizedBox(width: 4),
+                            const Icon(Icons.local_fire_department_rounded, color: Colors.orangeAccent, size: 14),
+                          ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -1174,7 +1011,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(4, 4, 4, 6),
                   color: Colors.white.withValues(alpha: 0.03),
-                  child: Text(
+                  child: GoopText(
                     _name,
                     textAlign: TextAlign.center,
                     maxLines: 2,

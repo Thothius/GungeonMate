@@ -319,7 +319,7 @@ class _BrowseScreenState extends State<BrowseScreen>
               child: Row(
                 children: [
                   Expanded(
-                    flex: 6,
+                    flex: 4, // Shorter search bar
                     child: SizedBox(
                       height: 44,
                       child: TextField(
@@ -380,7 +380,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                     flex: 2,
                     child: _ToolbarButton(
                       icon: Icons.military_tech,
-                      label: _quality == 'All' ? 'All tiers' : '$_quality only',
+                      label: _quality == 'All' ? 'Tiers' : '$_quality Tier',
                       color: _quality == 'All'
                           ? null
                           : QualityBadge.colorFor(_quality),
@@ -647,7 +647,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                         ),
                   title: Text(
                     t == 'All'
-                        ? 'All tiers'
+                        ? 'Tiers'
                         : (t == 'N' ? 'Starter (N)' : '$t-tier'),
                     style: TextStyle(
                       fontWeight: _quality == t

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/multiplayer_messages.dart';
 import '../models/player.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/multiplayer_session.dart';
 import '../services/haptics.dart';
-import '../utils/bug_reporter.dart';
 import 'character_select_screen.dart';
 import 'theme_picker_screen.dart';
 
@@ -28,7 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final flair = AppTheme.flair;
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('SETTINGS',
@@ -41,7 +39,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             tabs: const [
               Tab(text: 'THEME & FONT'),
               Tab(text: 'RUN UTILITIES'),
-              Tab(text: 'HELP & TIPS'),
             ],
           ),
         ),
@@ -49,7 +46,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             _ThemeVisualsTab(),
             _RunUtilitiesTab(),
-            _HelpTipsTab(),
           ],
         ),
       ),
@@ -135,7 +131,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                               ),
                               const SizedBox(height: 3),
                               Text(
-                                activeTheme.name.toUpperCase(),
+                                activeTheme.label.toUpperCase(),
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w900,
@@ -197,86 +193,107 @@ class _ThemeVisualsTab extends StatelessWidget {
               // =============================================================
               // Typography Tuning Section
               // =============================================================
-              _prefSectionTitle('APP FONT STYLE'),
-              const SizedBox(height: 6),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white10),
+              _prefSectionTitle('APP TYPOGRAPHY TUNING'),
+              const SizedBox(height: 8),
+              Card(
+                color: Colors.white.withValues(alpha: 0.02),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                 ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<AppFont>(
-                    value: prefs.font,
-                    isExpanded: true,
-                    dropdownColor: flair.card,
-                    icon: Icon(Icons.arrow_drop_down, color: flair.primary),
-                    onChanged: (AppFont? val) {
-                      if (val != null) {
-                        VisualPrefs.setFont(val);
-                        Haptics.selection();
-                      }
-                    },
-                    items: AppFont.values.map((AppFont f) {
-                      final isSel = f == prefs.font;
-                      return DropdownMenuItem<AppFont>(
-                        value: f,
-                        child: Text(
-                          f == AppFont.gungeon ? 'Enter the Gungeon 🏹' : f.label,
-                          style: f.textStyle.copyWith(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: isSel ? flair.primary : Colors.white70,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Column(
+                    children: [
+                      // Font selector inside Card
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Font Family', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Container(
+                              height: 38,
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.04),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.white10),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<AppFont>(
+                                  value: prefs.font,
+                                  isExpanded: true,
+                                  dropdownColor: flair.card,
+                                  icon: Icon(Icons.arrow_drop_down, color: flair.primary, size: 18),
+                                  onChanged: (AppFont? val) {
+                                    if (val != null) {
+                                      VisualPrefs.setFont(val);
+                                      Haptics.selection();
+                                    }
+                                  },
+                                  items: AppFont.values.map((AppFont f) {
+                                    final isSel = f == prefs.font;
+                                    return DropdownMenuItem<AppFont>(
+                                      value: f,
+                                      child: Text(
+                                        f == AppFont.gungeon ? 'Enter the Gungeon 🏹' : f.label,
+                                        style: f.textStyle.copyWith(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: isSel ? flair.primary : Colors.white70,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    }).toList(),
+                        ],
+                      ),
+                      const Divider(color: Colors.white12, height: 20),
+
+                      // Compact Font Size Slider row
+                      _buildCompactSliderRow(
+                        'Font Size',
+                        '${prefs.fontSize.toStringAsFixed(0)} pt',
+                        prefs.fontSize,
+                        6.0,
+                        32.0,
+                        13,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setFontSize(v),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Compact Inventory Tile Font Size Slider
+                      _buildCompactSliderRow(
+                        'Inventory Size',
+                        '${prefs.inventoryFontSize.toStringAsFixed(1)} pt',
+                        prefs.inventoryFontSize,
+                        10.0,
+                        18.0,
+                        8,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setInventoryFontSize(v),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Compact Font Weight Bias Slider
+                      _buildCompactSliderRow(
+                        'Weight Bias',
+                        '${prefs.fontWeightBias >= 0 ? "+" : ""}${prefs.fontWeightBias}',
+                        prefs.fontWeightBias.toDouble(),
+                        -400.0,
+                        500.0,
+                        9,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setFontWeightBias(v.toInt()),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-
-              // Font Size Slider
-              _prefSectionTitle('FONT SIZE (${prefs.fontSize.toStringAsFixed(0)} pt)'),
-              Slider(
-                value: prefs.fontSize,
-                min: 6.0,
-                max: 32.0,
-                divisions: 13,
-                activeColor: flair.headlineStat,
-                inactiveColor: Colors.white12,
-                label: '${prefs.fontSize.toStringAsFixed(0)} pt',
-                onChanged: (v) => VisualPrefs.setFontSize(v),
-              ),
-              const SizedBox(height: 12),
-
-              // Inventory Tile Font Size Slider
-              _prefSectionTitle('INVENTORY TILE FONT SIZE (${prefs.inventoryFontSize.toStringAsFixed(1)} pt)'),
-              Slider(
-                value: prefs.inventoryFontSize,
-                min: 10.0,
-                max: 18.0,
-                divisions: 8,
-                activeColor: flair.headlineStat,
-                inactiveColor: Colors.white12,
-                label: '${prefs.inventoryFontSize.toStringAsFixed(1)} pt',
-                onChanged: (v) => VisualPrefs.setInventoryFontSize(v),
-              ),
-              const SizedBox(height: 12),
-
-              // Font Weight Bias Slider
-              _prefSectionTitle('FONT WEIGHT BIAS (${prefs.fontWeightBias >= 0 ? "+" : ""}${prefs.fontWeightBias})'),
-              Slider(
-                value: prefs.fontWeightBias.toDouble(),
-                min: -400.0,
-                max: 500.0,
-                divisions: 9,
-                activeColor: flair.headlineStat,
-                inactiveColor: Colors.white12,
-                label: '${prefs.fontWeightBias}',
-                onChanged: (v) => VisualPrefs.setFontWeightBias(v.toInt()),
               ),
               const SizedBox(height: 20),
 
@@ -574,6 +591,57 @@ class _ThemeVisualsTab extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildCompactSliderRow(
+    String label,
+    String displayValue,
+    double value,
+    double min,
+    double max,
+    int divisions,
+    Color color,
+    ValueChanged<double> onChanged,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Colors.white70),
+            ),
+            Text(
+              displayValue,
+              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: color),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 32,
+          child: SliderTheme(
+            data: SliderThemeData(
+              trackHeight: 3.0,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 12.0),
+              activeTrackColor: color,
+              inactiveTrackColor: Colors.white12,
+              thumbColor: Colors.white,
+              valueIndicatorColor: color,
+            ),
+            child: Slider(
+              value: value,
+              min: min,
+              max: max,
+              divisions: divisions,
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 // =============================================================================
@@ -786,6 +854,105 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
             ),
           const SizedBox(height: 20),
 
+          // 🗣️ Run Language Section
+          _sectionHeader('🗣️ RUN LANGUAGE'),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.03),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white10),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'INTERFACE LANGUAGE',
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Text(
+                      'Simulates hold "The Sponge" 🧽 in Goopian',
+                      style: TextStyle(fontSize: 10, color: Colors.white38),
+                    ),
+                  ],
+                ),
+                ListenableBuilder(
+                  listenable: VisualPrefs.notifier,
+                  builder: (context, _) {
+                    final prefs = VisualPrefs.notifier.value;
+                    final flair = AppTheme.flair;
+                    return Container(
+                      height: 38,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.04),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.white10),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<bool>(
+                          value: prefs.isGoopianLanguage,
+                          dropdownColor: flair.card,
+                          icon: Icon(Icons.arrow_drop_down, color: flair.primary, size: 18),
+                          onChanged: (bool? val) {
+                            if (val != null) {
+                              VisualPrefs.setIsGoopianLanguage(val);
+                              Haptics.heavy();
+                              
+                              // Trigger translation effect snackbar
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(val 
+                                      ? 'Language shifted to Goopian! Hold The Sponge 🧽 to decipher.'
+                                      : 'Language restored to English!'),
+                                  behavior: SnackBarBehavior.floating,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            }
+                          },
+                          items: [
+                            DropdownMenuItem<bool>(
+                              value: false,
+                              child: Text(
+                                'English 🇬🇧',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: !prefs.isGoopianLanguage ? flair.primary : Colors.white70,
+                                ),
+                              ),
+                            ),
+                            DropdownMenuItem<bool>(
+                              value: true,
+                              child: Text(
+                                'Goopian 👽',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: prefs.isGoopianLanguage ? flair.primary : Colors.white70,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
           // ⚠️ Active Run Termination
           _sectionHeader('⚠️ CORE ACTIONS'),
           _utilTile(
@@ -836,146 +1003,3 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
 }
 
 // =============================================================================
-// Tab 3: Help, Strategy & survival Guides
-// =============================================================================
-
-class _HelpTipsTab extends StatelessWidget {
-  const _HelpTipsTab();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        // Introduction card
-        Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.blue.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.blue.withValues(alpha: 0.3), width: 1.2),
-          ),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(Icons.widgets_rounded, color: Colors.blueAccent, size: 22),
-                  SizedBox(width: 8),
-                  Text(
-                    'WELCOME TO GUNGEONMATE',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.blueAccent,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 8),
-              Text(
-                'GungeonMate is your ultimate real-time second-screen companion for Enter the Gungeon. Here is an overview of what you can accomplish:',
-                style: TextStyle(fontSize: 12, color: Colors.white, height: 1.4),
-              ),
-              SizedBox(height: 10),
-              Text(
-                '• Active Run Tracking: Manage and track your inventory, active items, and guns across Player 1 and Player 2 (Co-op) slots.\n'
-                '• Real-time Stats Analytics: View automatic recalculations of your aggregate Coolness, Curse, Chest drop probabilities, and Room Reward modifiers.\n'
-                '• Dynamic Wiki Compendium: Tap any item or gun to browse comprehensive notes, synergy charts, and Ammonomicon lore on the fly.\n'
-                '• Character Dashboards: Track character-specific stats like the Robot\'s Junk Counter damage multiplier or the Huntress\'s Dog dig probability tables.\n'
-                '• Device-to-Peer Matchmaking: Hook up with your local co-op buddy via Bluetooth or Wi-Fi to sync inventories and trade guns seamlessly!',
-                style: TextStyle(fontSize: 11.5, color: Colors.white70, height: 1.5),
-              ),
-            ],
-          ),
-        ),
-        
-        const Text(
-          'COMPANION APP UI/UX SHORTCUTS & TIPS',
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w900,
-            color: Colors.white54,
-            letterSpacing: 1.0,
-          ),
-        ),
-        const SizedBox(height: 10),
-
-        _buildHelpCard(
-          title: '⚡ ITEM SHORTCUTS & GESTURES',
-          desc: '• In the Browse / Wiki tab, long-pressing any gun or item card instantly adds/removes it from your active run inventory without opening the detailed view.\n'
-              '• Tapping any item or gun in your main run screen open its wiki detailed view directly. Pressing back returns you exactly where you were.',
-          color: Colors.cyanAccent,
-        ),
-        _buildHelpCard(
-          title: '🍀 TACTILE STAT ADJUSTMENTS',
-          desc: '• Need to adjust stats manually? The Coolness and Curse detailed screens feature rapid tactile quick-buttons (-1.0, -0.5, +0.5, +1.0) for oil-slick fast adjustments.\n'
-              '• You can also drag the continuous Slider for precise, micro-granular stat control.',
-          color: Colors.greenAccent,
-        ),
-        _buildHelpCard(
-          title: '🎮 LOCAL MULTIPLAYER SIMULATION (SPOOFING)',
-          desc: '• Want to test or design multiplayer co-op dashboards without a second phone?\n'
-              '• Head to the Multiplayer Lobby, choose Sidekick role, and enter Connection PIN "0000". This starts simulated co-op matchmaking instantly! You get main control over both characters and full inventory transfer access for testing.',
-          color: Colors.amberAccent,
-        ),
-        _buildHelpCard(
-          title: '🎨 DYNAMIC VISUAL STYLING',
-          desc: '• Make GungeonMate your own! Visit the "Theme & Font" tab to select magnificent color palettes and scale global font biases (-800, -400, 0, 400, 800) for high readability.\n'
-              '• Custom backdrop particles are fully controlled! Tweak particle sizes and overall Particle Opacity (0% to 100%) to suit your exact brightness tastes.',
-          color: Colors.orangeAccent,
-        ),
-        const SizedBox(height: 16),
-        ElevatedButton.icon(
-          onPressed: () {
-            Haptics.heavy();
-            BugReporter.show(context, 'Help & Tips View');
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.redAccent.withValues(alpha: 0.15),
-            foregroundColor: Colors.redAccent,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            side: const BorderSide(color: Colors.redAccent, width: 1.5),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 8,
-            shadowColor: Colors.redAccent.withValues(alpha: 0.3),
-          ),
-          icon: const Icon(Icons.bug_report_rounded, size: 22),
-          label: const Text(
-            'REPORT A BUG / SEND FEEDBACK',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.2,
-            ),
-          ),
-        ),
-        const SizedBox(height: 24),
-      ],
-    );
-  }
-
-  Widget _buildHelpCard({required String title, required String desc, required Color color}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.25)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: color, letterSpacing: 0.5)),
-          const SizedBox(height: 6),
-          Text(desc, style: const TextStyle(fontSize: 11, color: Colors.white70, height: 1.4)),
-        ],
-      ),
-    );
-  }
-}

@@ -147,7 +147,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           Widget content = widget.child;
 
           // Apply visual customizer wrappers based on active Theme Mode!
-          if (mode == AppThemeMode.cosmicWhirlwind || mode == AppThemeMode.voidDimension) {
+          if (mode == AppThemeMode.bulletHell) {
             content = ElasticWobbleContainer(
               intensity: 0.05,
               speed: 0.6,
@@ -155,7 +155,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
             );
           }
 
-          if (mode == AppThemeMode.winchester || mode == AppThemeMode.custom) {
+          if (mode == AppThemeMode.theBreach || mode == AppThemeMode.ammonomicon || mode == AppThemeMode.custom) {
             content = GlintSheenOverlay(
               sheenColor: f.headlineStat.withValues(alpha: 0.6),
               duration: const Duration(milliseconds: 1800),
@@ -209,7 +209,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                       child: IgnorePointer(child: _PageFrame())),
 
                 // 4. Special Top-Edge Drip Overlay (Curseblaster / Oubliette themes)
-                if (mode == AppThemeMode.curseblaster)
+                if (mode == AppThemeMode.lordJammed)
                   const Positioned(
                     top: 0,
                     left: 0,
@@ -217,7 +217,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                     height: 60,
                     child: IgnorePointer(
                       child: EdgeDripWidget(
-                        color: Color(0x66E83344), // Translucent Curse crimson drip
+                        color: Color(0x66990000), // Translucent Curse crimson drip
                         dripCount: 5,
                         maxDripHeight: 25.0,
                         viscosity: 1.2,
