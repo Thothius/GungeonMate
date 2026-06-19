@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/gungeoneer.dart';
@@ -43,7 +44,7 @@ class CharacterSelectScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-                child: Text(
+                child: GoopText(
                   isCoop
                       ? 'Choose Player 2\'s Gungeoneer'
                       : isMultiplayerPick
@@ -184,7 +185,7 @@ class _CharacterCard extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               color: flair.primary.withValues(alpha: 0.12),
-              child: Text(
+              child: GoopText(
                 character.name,
                 textAlign: TextAlign.center,
                 maxLines: 1,

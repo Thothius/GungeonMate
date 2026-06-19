@@ -268,19 +268,6 @@ class _ThemeVisualsTab extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
 
-                      // Compact Inventory Tile Font Size Slider
-                      _buildCompactSliderRow(
-                        'Inventory Size',
-                        '${prefs.inventoryFontSize.toStringAsFixed(1)} pt',
-                        prefs.inventoryFontSize,
-                        10.0,
-                        18.0,
-                        8,
-                        flair.headlineStat,
-                        (v) => VisualPrefs.setInventoryFontSize(v),
-                      ),
-                      const SizedBox(height: 10),
-
                       // Compact Font Weight Bias Slider
                       _buildCompactSliderRow(
                         'Weight Bias',
@@ -291,6 +278,136 @@ class _ThemeVisualsTab extends StatelessWidget {
                         9,
                         flair.headlineStat,
                         (v) => VisualPrefs.setFontWeightBias(v.toInt()),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // =============================================================
+              // Inventory Grid & Display Tuning Section
+              // =============================================================
+              _prefSectionTitle('INVENTORY GRID & DISPLAY TUNING'),
+              const SizedBox(height: 8),
+              Card(
+                color: Colors.white.withValues(alpha: 0.02),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Column(
+                    children: [
+                      // Default Grid Layout
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Default Layout', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Container(
+                              height: 38,
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.04),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.white10),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<InventoryDisplayMode>(
+                                  value: prefs.inventoryDisplayMode,
+                                  isExpanded: true,
+                                  dropdownColor: flair.card,
+                                  icon: Icon(Icons.arrow_drop_down, color: flair.primary, size: 18),
+                                  onChanged: (InventoryDisplayMode? val) {
+                                    if (val != null) {
+                                      VisualPrefs.setInventoryDisplayMode(val);
+                                      Haptics.selection();
+                                    }
+                                  },
+                                  items: const [
+                                    DropdownMenuItem<InventoryDisplayMode>(
+                                      value: InventoryDisplayMode.classicPeriodic,
+                                      child: Text('Periodic Grid', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                                    ),
+                                    DropdownMenuItem<InventoryDisplayMode>(
+                                      value: InventoryDisplayMode.tacticalStats,
+                                      child: Text('Tactical Stats', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Periodic Grid Columns
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Periodic Columns', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                          const SizedBox(width: 14),
+                          Expanded(
+                            child: Container(
+                              height: 38,
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.04),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.white10),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<int>(
+                                  value: prefs.periodicGridColumnCount,
+                                  isExpanded: true,
+                                  dropdownColor: flair.card,
+                                  icon: Icon(Icons.arrow_drop_down, color: flair.primary, size: 18),
+                                  onChanged: (int? val) {
+                                    if (val != null) {
+                                      VisualPrefs.setPeriodicGridColumnCount(val);
+                                      Haptics.selection();
+                                    }
+                                  },
+                                  items: const [
+                                    DropdownMenuItem<int>(
+                                      value: 0,
+                                      child: Text('Responsive (Auto)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                                    ),
+                                    DropdownMenuItem<int>(
+                                      value: 2,
+                                      child: Text('Compact (2 Columns)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                                    ),
+                                    DropdownMenuItem<int>(
+                                      value: 3,
+                                      child: Text('Medium (3 Columns)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                                    ),
+                                    DropdownMenuItem<int>(
+                                      value: 4,
+                                      child: Text('Dense (4 Columns)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(color: Colors.white12, height: 20),
+
+                      // Compact Inventory Tile Font Size Slider
+                      _buildCompactSliderRow(
+                        'Inventory Font Size',
+                        '${prefs.inventoryFontSize.toStringAsFixed(1)} pt',
+                        prefs.inventoryFontSize,
+                        10.0,
+                        18.0,
+                        8,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setInventoryFontSize(v),
                       ),
                     ],
                   ),
@@ -409,6 +526,16 @@ class _ThemeVisualsTab extends StatelessWidget {
               const SizedBox(height: 6),
               _buildSwitchRow(
                 context: context,
+                icon: Icons.visibility_off_outlined,
+                label: 'Subtle Particle Mode',
+                value: prefs.subtleParticleMode,
+                onChanged: VisualPrefs.setSubtleParticleMode,
+                flair: flair,
+                tooltip: 'When enabled, particle count is reduced by 50% for maximum text readability in dark environments.',
+              ),
+              const SizedBox(height: 8),
+              _buildSwitchRow(
+                context: context,
                 icon: Icons.auto_awesome_rounded,
                 label: 'Interactive Touch Sparkles',
                 value: prefs.particlesEnabled,
@@ -446,6 +573,129 @@ class _ThemeVisualsTab extends StatelessWidget {
                 flair: flair,
                 tooltip: 'Adds a rapid, flickering twinkle frequency to all floating particles for a magical, dynamic shimmer.',
               ),
+              const SizedBox(height: 20),
+
+              // =============================================================
+              // CUSTOM WALLPAPER & PARALLAX ENGINE LAB
+              // =============================================================
+              _prefSectionTitleWithInfo('WALLPAPER & PARALLAX ENGINE LAB', flair, tooltip: 'Select an exclusive handcrafted Gungeon wallpaper, activate gyroscopic depth parallax sways, or loop a high-fidelity 8s live animation.'),
+              const SizedBox(height: 6),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white10),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<WallpaperMode>(
+                    value: prefs.wallpaperMode,
+                    isExpanded: true,
+                    dropdownColor: flair.card,
+                    icon: Icon(Icons.arrow_drop_down, color: flair.primary),
+                    onChanged: (WallpaperMode? val) {
+                      if (val != null) {
+                        VisualPrefs.setWallpaperMode(val);
+                        Haptics.selection();
+                      }
+                    },
+                    items: WallpaperMode.values.map((WallpaperMode mode) {
+                      return DropdownMenuItem<WallpaperMode>(
+                        value: mode,
+                        child: Text(
+                          mode.label,
+                          style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+              if (prefs.wallpaperMode == WallpaperMode.customStill) ...[
+                const SizedBox(height: 12),
+                _prefSectionTitleWithInfo('SELECT STILL WALLPAPER', flair, tooltip: 'Choose from 19 gorgeous high-fidelity pixel-art scenes.'),
+                const SizedBox(height: 6),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.03),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: prefs.selectedStillWallpaper,
+                      isExpanded: true,
+                      dropdownColor: flair.card,
+                      icon: Icon(Icons.arrow_drop_down, color: flair.primary),
+                      onChanged: (String? val) {
+                        if (val != null) {
+                          VisualPrefs.setSelectedStillWallpaper(val);
+                          Haptics.selection();
+                        }
+                      },
+                      items: kStillWallpapers.map((map) {
+                        return DropdownMenuItem<String>(
+                          value: map['asset'],
+                          child: Text(
+                            map['name']!,
+                            style: const TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.bold),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildSwitchRow(
+                  context: context,
+                  icon: Icons.screen_rotation_rounded,
+                  label: 'Gyroscopic Parallax Sway',
+                  value: prefs.parallaxMotionEnabled,
+                  onChanged: VisualPrefs.setParallaxMotionEnabled,
+                  flair: flair,
+                  tooltip: 'Dynamically shifts the wallpaper offset based on device tilt for a beautiful, responsive 3D parallax effect.',
+                ),
+              ],
+              if (prefs.wallpaperMode == WallpaperMode.customAnimated) ...[
+                const SizedBox(height: 12),
+                _prefSectionTitleWithInfo('SELECT ANIMATED LIVE LOOP', flair, tooltip: 'Loop a premium high-fidelity 8-second animated background scene.'),
+                const SizedBox(height: 6),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.03),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: prefs.selectedAnimatedWallpaper,
+                      isExpanded: true,
+                      dropdownColor: flair.card,
+                      icon: Icon(Icons.arrow_drop_down, color: flair.primary),
+                      onChanged: (String? val) {
+                        if (val != null) {
+                          VisualPrefs.setSelectedAnimatedWallpaper(val);
+                          Haptics.selection();
+                        }
+                      },
+                      items: kAnimatedWallpapers.map((map) {
+                        return DropdownMenuItem<String>(
+                          value: map['asset'],
+                          child: Text(
+                            map['name']!,
+                            style: const TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.bold),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(height: 20),
 
               // =============================================================

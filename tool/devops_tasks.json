@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "text": "Conduct UX/UI accessibility & contrast checks",
+    "done": true,
+    "priority": "high"
+  },
+  {
+    "id": 2,
+    "text": "Meticulously wrap secondary views in GoopText",
+    "done": true,
+    "priority": "high"
+  },
+  {
+    "id": 3,
+    "text": "Setup local Python-based DevOps automation panel",
+    "done": true,
+    "priority": "medium"
+  },
+  {
+    "id": 4,
+    "text": "Run a clean production compile of the Release APK (0.9.5)",
+    "done": false,
+    "priority": "high"
+  },
+  {
+    "id": 5,
+    "text": "Publish updated codebase branches to GitHub master & dev",
+    "done": false,
+    "priority": "medium"
+  },
+  {
+    "id": 6,
+    "text": "Prepare Google Play Store developer launch metadata",
+    "done": false,
+    "priority": "low"
+  }
+]

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
+import 'package:video_player/video_player.dart';
 
 import '../services/app_theme.dart';
 import 'package:provider/provider.dart';
@@ -126,14 +127,17 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           final gS = showGlow
               ? _scaleAlpha(f.glowSecondary, prefs.glowIntensity)
               : const Color(0x00000000);
-          final hypnoticBackdrop = prefs.hypnoticBgEnabled
+          final isWallpaperActive = prefs.wallpaperMode != WallpaperMode.themeDefault;
+          final hypnoticBackdrop = (prefs.hypnoticBgEnabled && !isWallpaperActive)
               ? _HypnoticBg(
                   assetName: prefs.hypnoticBgAsset,
                   speedMultiplier: prefs.hypnoticBgSpeed,
                   opacity: prefs.hypnoticBgOpacity,
                 )
               : null;
-          final particlesOn = prefs.particlesEnabled && prefs.customParticleType != CustomParticleType.none;
+          final particlesOn = prefs.particlesEnabled &&
+              prefs.customParticleType != CustomParticleType.none &&
+              (!isWallpaperActive || prefs.customParticleType != CustomParticleType.themeDefault);
           final particleBackdropBg = !particlesOn
               ? null
               : (prefs.customParticleType != CustomParticleType.themeDefault
@@ -164,6 +168,25 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 Positioned.fill(
                   child: Container(color: f.scaffold),
                 ),
+
+                // 0.5. Custom Still or Animated Wallpaper
+                if (prefs.wallpaperMode == WallpaperMode.customStill)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: _StillWallpaperBackground(
+                        assetName: prefs.selectedStillWallpaper,
+                        parallaxEnabled: prefs.parallaxMotionEnabled,
+                      ),
+                    ),
+                  ),
+                if (prefs.wallpaperMode == WallpaperMode.customAnimated)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: _AnimatedWallpaperBackground(
+                        assetName: prefs.selectedAnimatedWallpaper,
+                      ),
+                    ),
+                  ),
 
                 // 1a. Hypnotic Trippy Background
                 if (hypnoticBackdrop != null)
@@ -263,31 +286,31 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
       case ThemeBackdrop.none:
         return null;
       case ThemeBackdrop.goldDust:
-        return _GoldDust(advancedFlicker: prefs.advancedFlicker);
+        return _GoldDust(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.pastelDriftSparkles:
         // Drift is now handled globally by _AmbientGlow; only the
         // sparkles are Unicorn-specific.
-        return _Sparkles(particleRotation: prefs.particleRotation);
+        return _Sparkles(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.redBreathDrip:
         return const _RedBreathDrip();
       case ThemeBackdrop.brassMotes:
-        return const _BrassMotes();
+        return _BrassMotes(subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.paperBreath:
         // Paper theme gets only the ambient glow + page frame — no
         // particle layer. "Stillness is the quirk."
         return null;
       case ThemeBackdrop.iceCrystals:
-        return _IceCrystals(particleRotation: prefs.particleRotation);
+        return _IceCrystals(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.whiteDust:
-        return _WhiteDust(gravityVortex: prefs.gravityVortex);
+        return _WhiteDust(gravityVortex: prefs.gravityVortex, subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.toxicBubbles:
-        return const _ToxicBubbles();
+        return _ToxicBubbles(subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.forgeEmbers:
-        return _ForgeEmbers(advancedFlicker: prefs.advancedFlicker);
+        return _ForgeEmbers(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.hellfire:
-        return _Hellfire(advancedFlicker: prefs.advancedFlicker);
+        return _Hellfire(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode);
       case ThemeBackdrop.cosmicRift:
-        return _CosmicRift(particleRotation: prefs.particleRotation);
+        return _CosmicRift(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode);
     }
   }
 }
@@ -396,7 +419,8 @@ class _AmbientGlowState extends State<_AmbientGlow>
 /// so the field looks irregular but doesn't churn allocations every frame.
 class _GoldDust extends StatefulWidget {
   final bool advancedFlicker;
-  const _GoldDust({required this.advancedFlicker});
+  final bool subtleMode;
+  const _GoldDust({required this.advancedFlicker, required this.subtleMode});
   @override
   State<_GoldDust> createState() => _GoldDustState();
 }
@@ -442,7 +466,12 @@ class _GoldDustState extends State<_GoldDust>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _GoldDustPainter(t: _c.value, specs: _specs, advancedFlicker: widget.advancedFlicker),
+          painter: _GoldDustPainter(
+            t: _c.value,
+            specs: _specs,
+            advancedFlicker: widget.advancedFlicker,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -469,7 +498,13 @@ class _GoldDustPainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
   final bool advancedFlicker;
-  _GoldDustPainter({required this.t, required this.specs, required this.advancedFlicker});
+  final bool subtleMode;
+  _GoldDustPainter({
+    required this.t,
+    required this.specs,
+    required this.advancedFlicker,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -502,7 +537,9 @@ class _GoldDustPainter extends CustomPainter {
     // 2. Draw gold dust particles carried diagonally by the wind with tilt physics
     final paint = Paint();
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (final s in specs) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (int i = 0; i < limit; i++) {
+      final s = specs[i];
       // Position cycles 0→1 over the spec's speed-scaled duration.
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Bottom→top: y starts at size.height and drifts up, offset slightly by physical Y tilt.
@@ -549,7 +586,8 @@ class _GoldDustPainter extends CustomPainter {
 /// theme benefits from the Bubblegum-style gradient, not just Unicorn.
 class _Sparkles extends StatefulWidget {
   final bool particleRotation;
-  const _Sparkles({required this.particleRotation});
+  final bool subtleMode;
+  const _Sparkles({required this.particleRotation, required this.subtleMode});
   @override
   State<_Sparkles> createState() => _SparklesState();
 }
@@ -593,7 +631,12 @@ class _SparklesState extends State<_Sparkles>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _SparklesPainter(t: _c.value, specs: _specs, particleRotation: widget.particleRotation),
+          painter: _SparklesPainter(
+            t: _c.value,
+            specs: _specs,
+            particleRotation: widget.particleRotation,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -605,13 +648,20 @@ class _SparklesPainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
   final bool particleRotation;
-  _SparklesPainter({required this.t, required this.specs, required this.particleRotation});
+  final bool subtleMode;
+  _SparklesPainter({
+    required this.t,
+    required this.specs,
+    required this.particleRotation,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (int i = 0; i < specs.length; i++) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (int i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       final y = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
@@ -949,7 +999,8 @@ class _CrimsonDripPainter extends CustomPainter {
 /// gold dust but drifts sideways as well as up, hovers longer, and
 /// uses brass hues to match the saloon palette.
 class _BrassMotes extends StatefulWidget {
-  const _BrassMotes();
+  final bool subtleMode;
+  const _BrassMotes({required this.subtleMode});
   @override
   State<_BrassMotes> createState() => _BrassMotesState();
 }
@@ -991,7 +1042,11 @@ class _BrassMotesState extends State<_BrassMotes>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _BrassMotesPainter(t: _c.value, specs: _specs),
+          painter: _BrassMotesPainter(
+            t: _c.value,
+            specs: _specs,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -1002,13 +1057,19 @@ class _BrassMotesState extends State<_BrassMotes>
 class _BrassMotesPainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
-  _BrassMotesPainter({required this.t, required this.specs});
+  final bool subtleMode;
+  _BrassMotesPainter({
+    required this.t,
+    required this.specs,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (int i = 0; i < specs.length; i++) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (int i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       final y = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
@@ -1070,7 +1131,8 @@ class _BrassMotesPainter extends CustomPainter {
 
 class _IceCrystals extends StatefulWidget {
   final bool particleRotation;
-  const _IceCrystals({required this.particleRotation});
+  final bool subtleMode;
+  const _IceCrystals({required this.particleRotation, required this.subtleMode});
   @override
   State<_IceCrystals> createState() => _IceCrystalsState();
 }
@@ -1112,7 +1174,12 @@ class _IceCrystalsState extends State<_IceCrystals>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _IceCrystalsPainter(t: _c.value, specs: _specs, particleRotation: widget.particleRotation),
+          painter: _IceCrystalsPainter(
+            t: _c.value,
+            specs: _specs,
+            particleRotation: widget.particleRotation,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -1124,7 +1191,13 @@ class _IceCrystalsPainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
   final bool particleRotation;
-  _IceCrystalsPainter({required this.t, required this.specs, required this.particleRotation});
+  final bool subtleMode;
+  _IceCrystalsPainter({
+    required this.t,
+    required this.specs,
+    required this.particleRotation,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1144,7 +1217,8 @@ class _IceCrystalsPainter extends CustomPainter {
 
     paint.style = PaintingStyle.fill;
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (int i = 0; i < specs.length; i++) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (int i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Top to bottom drift + tilt!
@@ -1219,7 +1293,8 @@ class _IceCrystalsPainter extends CustomPainter {
 
 class _WhiteDust extends StatefulWidget {
   final bool gravityVortex;
-  const _WhiteDust({required this.gravityVortex});
+  final bool subtleMode;
+  const _WhiteDust({required this.gravityVortex, required this.subtleMode});
   @override
   State<_WhiteDust> createState() => _WhiteDustState();
 }
@@ -1261,7 +1336,12 @@ class _WhiteDustState extends State<_WhiteDust>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _WhiteDustPainter(t: _c.value, specs: _specs, gravityVortex: widget.gravityVortex),
+          painter: _WhiteDustPainter(
+            t: _c.value,
+            specs: _specs,
+            gravityVortex: widget.gravityVortex,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -1273,15 +1353,23 @@ class _WhiteDustPainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
   final bool gravityVortex;
-  _WhiteDustPainter({required this.t, required this.specs, required this.gravityVortex});
+  final bool subtleMode;
+  _WhiteDustPainter({
+    required this.t,
+    required this.specs,
+    required this.gravityVortex,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
     final avatarCenter = Offset(size.width * 0.5, 115);
     final tilt = ThemeOverlay.tiltNotifier.value;
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
 
-    for (final s in specs) {
+    for (int i = 0; i < limit; i++) {
+      final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       final rawY = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
       final sway = math.sin(p * 2 * math.pi + s.phase * 4) * s.sway;
@@ -1335,7 +1423,8 @@ class _WhiteDustPainter extends CustomPainter {
 // =============================================================================
 
 class _ToxicBubbles extends StatefulWidget {
-  const _ToxicBubbles();
+  final bool subtleMode;
+  const _ToxicBubbles({required this.subtleMode});
   @override
   State<_ToxicBubbles> createState() => _ToxicBubblesState();
 }
@@ -1377,7 +1466,11 @@ class _ToxicBubblesState extends State<_ToxicBubbles>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _ToxicBubblesPainter(t: _c.value, specs: _specs),
+          painter: _ToxicBubblesPainter(
+            t: _c.value,
+            specs: _specs,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -1403,13 +1496,20 @@ class _BubbleSpec {
 class _ToxicBubblesPainter extends CustomPainter {
   final double t;
   final List<_BubbleSpec> specs;
-  _ToxicBubblesPainter({required this.t, required this.specs});
+  final bool subtleMode;
+  _ToxicBubblesPainter({
+    required this.t,
+    required this.specs,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.stroke;
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (final s in specs) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (int i = 0; i < limit; i++) {
+      final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Bottom→top (rising ooze) with tilt physics!
       final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
@@ -1474,7 +1574,8 @@ class _PageFrame extends StatelessWidget {
 
 class _ForgeEmbers extends StatefulWidget {
   final bool advancedFlicker;
-  const _ForgeEmbers({required this.advancedFlicker});
+  final bool subtleMode;
+  const _ForgeEmbers({required this.advancedFlicker, required this.subtleMode});
   @override
   State<_ForgeEmbers> createState() => _ForgeEmbersState();
 }
@@ -1516,7 +1617,12 @@ class _ForgeEmbersState extends State<_ForgeEmbers>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _ForgeEmbersPainter(t: _c.value, specs: _specs, advancedFlicker: widget.advancedFlicker),
+          painter: _ForgeEmbersPainter(
+            t: _c.value,
+            specs: _specs,
+            advancedFlicker: widget.advancedFlicker,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -1528,13 +1634,20 @@ class _ForgeEmbersPainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
   final bool advancedFlicker;
-  _ForgeEmbersPainter({required this.t, required this.specs, required this.advancedFlicker});
+  final bool subtleMode;
+  _ForgeEmbersPainter({
+    required this.t,
+    required this.specs,
+    required this.advancedFlicker,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (var i = 0; i < specs.length; i++) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (var i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Rising embers with tilt physics!
@@ -1599,7 +1712,8 @@ class _ForgeEmbersPainter extends CustomPainter {
 
 class _Hellfire extends StatefulWidget {
   final bool advancedFlicker;
-  const _Hellfire({required this.advancedFlicker});
+  final bool subtleMode;
+  const _Hellfire({required this.advancedFlicker, required this.subtleMode});
   @override
   State<_Hellfire> createState() => _HellfireState();
 }
@@ -1641,7 +1755,12 @@ class _HellfireState extends State<_Hellfire>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _HellfirePainter(t: _c.value, specs: _specs, advancedFlicker: widget.advancedFlicker),
+          painter: _HellfirePainter(
+            t: _c.value,
+            specs: _specs,
+            advancedFlicker: widget.advancedFlicker,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -1653,7 +1772,13 @@ class _HellfirePainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
   final bool advancedFlicker;
-  _HellfirePainter({required this.t, required this.specs, required this.advancedFlicker});
+  final bool subtleMode;
+  _HellfirePainter({
+    required this.t,
+    required this.specs,
+    required this.advancedFlicker,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1688,7 +1813,8 @@ class _HellfirePainter extends CustomPainter {
     // 2. Draw rising volcanic embers carried by hot diagonal winds with tilt physics!
     final paint = Paint();
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (var i = 0; i < specs.length; i++) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (var i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
@@ -1737,7 +1863,8 @@ class _HellfirePainter extends CustomPainter {
 
 class _CosmicRift extends StatefulWidget {
   final bool particleRotation;
-  const _CosmicRift({required this.particleRotation});
+  final bool subtleMode;
+  const _CosmicRift({required this.particleRotation, required this.subtleMode});
   @override
   State<_CosmicRift> createState() => _CosmicRiftState();
 }
@@ -1779,7 +1906,12 @@ class _CosmicRiftState extends State<_CosmicRift>
       child: AnimatedBuilder(
         animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
         builder: (_, __) => CustomPaint(
-          painter: _CosmicRiftPainter(t: _c.value, specs: _specs, particleRotation: widget.particleRotation),
+          painter: _CosmicRiftPainter(
+            t: _c.value,
+            specs: _specs,
+            particleRotation: widget.particleRotation,
+            subtleMode: widget.subtleMode,
+          ),
           size: Size.infinite,
         ),
       ),
@@ -1791,7 +1923,13 @@ class _CosmicRiftPainter extends CustomPainter {
   final double t;
   final List<_DustSpec> specs;
   final bool particleRotation;
-  _CosmicRiftPainter({required this.t, required this.specs, required this.particleRotation});
+  final bool subtleMode;
+  _CosmicRiftPainter({
+    required this.t,
+    required this.specs,
+    required this.particleRotation,
+    required this.subtleMode,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -1828,7 +1966,8 @@ class _CosmicRiftPainter extends CustomPainter {
     // 2. Draw drifting stars and star sparkles with tilt physics!
     final paint = Paint();
     final tilt = ThemeOverlay.tiltNotifier.value;
-    for (var i = 0; i < specs.length; i++) {
+    final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
+    for (var i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Drift slowly downwards with tilt-Y!
@@ -1934,11 +2073,12 @@ class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with S
   @override
   void didUpdateWidget(_CustomParticleBackdrop oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // If emitters, custom type, or particle count change, regenerate some specs to match
+    // If emitters, custom type, subtle mode, or particle count change, regenerate some specs to match
     if (oldWidget.prefs.emitFromTop != widget.prefs.emitFromTop ||
         oldWidget.prefs.emitFromBottom != widget.prefs.emitFromBottom ||
         oldWidget.prefs.emitFromLeft != widget.prefs.emitFromLeft ||
         oldWidget.prefs.emitFromRight != widget.prefs.emitFromRight ||
+        oldWidget.prefs.subtleParticleMode != widget.prefs.subtleParticleMode ||
         oldWidget.prefs.particleCount != widget.prefs.particleCount) {
       _generateSpecs();
     }
@@ -1961,7 +2101,12 @@ class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with S
       directions.add('top');
     }
 
-    for (var i = 0; i < widget.prefs.particleCount; i++) {
+    final baseCount = widget.prefs.particleCount;
+    final finalCount = widget.prefs.subtleParticleMode 
+        ? (baseCount / 2).round().clamp(5, 120) 
+        : baseCount;
+
+    for (var i = 0; i < finalCount; i++) {
       final dir = directions[rng.nextInt(directions.length)];
       _specs.add(_CustomSpec(
         x: rng.nextDouble(),
@@ -2839,6 +2984,154 @@ class _CuriousCatStareWidgetState extends State<_CuriousCatStareWidget>
         'assets/images/items/cat_bullet_king_throne.webp',
         filterQuality: FilterQuality.none,
         fit: BoxFit.contain,
+      ),
+    );
+  }
+}
+
+class _StillWallpaperBackground extends StatelessWidget {
+  final String assetName;
+  final bool parallaxEnabled;
+
+  const _StillWallpaperBackground({
+    required this.assetName,
+    required this.parallaxEnabled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final imageWidget = Image.asset(
+      'assets/images/wallpapers/still/$assetName',
+      fit: BoxFit.cover,
+      filterQuality: FilterQuality.medium,
+    );
+
+    if (!parallaxEnabled) {
+      return imageWidget;
+    }
+
+    return ValueListenableBuilder<Offset>(
+      valueListenable: ThemeOverlay.tiltNotifier,
+      builder: (context, tilt, child) {
+        // Subtle, elegant gyroscopic sways (tilt bounds clamped to -6..6)
+        final double dx = tilt.dx * 3.8;
+        final double dy = tilt.dy * 3.8;
+
+        return Transform.scale(
+          scale: 1.06, // Scale up slightly to prevent black border cropping
+          alignment: Alignment.center,
+          child: Transform.translate(
+            offset: Offset(dx, dy),
+            child: child,
+          ),
+        );
+      },
+      child: imageWidget,
+    );
+  }
+}
+
+class _AnimatedWallpaperBackground extends StatefulWidget {
+  final String assetName;
+
+  const _AnimatedWallpaperBackground({
+    required this.assetName,
+  });
+
+  @override
+  State<_AnimatedWallpaperBackground> createState() => _AnimatedWallpaperBackgroundState();
+}
+
+class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackground> {
+  VideoPlayerController? _controller;
+  bool _initialized = false;
+  bool _hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+  @override
+  void didUpdateWidget(_AnimatedWallpaperBackground oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.assetName != widget.assetName) {
+      _initializeVideo();
+    }
+  }
+
+  Future<void> _initializeVideo() async {
+    _initialized = false;
+    _hasError = false;
+    final oldController = _controller;
+    if (oldController != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await oldController.dispose();
+      });
+    }
+
+    final path = 'assets/images/wallpapers/animated/${widget.assetName}';
+    final controller = VideoPlayerController.asset(path);
+    _controller = controller;
+
+    try {
+      await controller.initialize();
+      await controller.setLooping(true);
+      await controller.setVolume(0.0);
+      await controller.play();
+      if (mounted) {
+        setState(() {
+          _initialized = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to initialize animated wallpaper video: $e');
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = _controller;
+    if (_hasError || controller == null) {
+      // Elegant fallback: render the still counterpart
+      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.png')
+                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.png')
+                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_17_blobulord.png');
+      return _StillWallpaperBackground(
+        assetName: fallbackStill,
+        parallaxEnabled: true,
+      );
+    }
+
+    if (!_initialized) {
+      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.png')
+                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.png')
+                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_17_blobulord.png');
+      return _StillWallpaperBackground(
+        assetName: fallbackStill,
+        parallaxEnabled: false,
+      );
+    }
+
+    return FittedBox(
+      fit: BoxFit.cover,
+      clipBehavior: Clip.hardEdge,
+      child: SizedBox(
+        width: controller.value.size.width,
+        height: controller.value.size.height,
+        child: VideoPlayer(controller),
       ),
     );
   }

@@ -6,6 +6,44 @@ All production APK builds are archived in `builds/` with proper version labeling
 
 ---
 
+## v0.9.7 — Wallpaper & Gyroscopic Parallax Engine Lab (June 19, 2026)
+**File:** `gungeon-mate-v0.9.7.apk`
+**Size:** ~38.4 MB
+**Build:** 39
+
+### Custom Wallpaper Collections
+- **19 Exclusive Still Wallpapers** — Bundled 19 gorgeous high-fidelity pixel-art scenes depicting Gungeon chambers, weapons, and characters directly in application assets.
+- **Seamless Live Loops** — Packaged 3 high-fidelity 8-second animated background loops (Vortex Galaxy, weapons racks, sewer red jelly) for beautiful background ambiance.
+
+### Gyroscopic Parallax Engine
+- **Hardware-Accelerated 3D Parallax** — Integrated a dynamic rendering system that sways the still wallpaper's offset based on smoothed gyroscope accelerometer readings.
+- **Intelligent Bounds Scaling** — Scaled the wallpaper sways slightly (1.06x) to completely eliminate any edge cropping during device rotation, with a handy toggled switch.
+
+### Robust Fail-safes & Vignettes
+- **Still-Placeholder Fallbacks** — Created a robust system that cross-fades or fallbacks to the still version of a loop during initialization, guaranteeing a smooth UX on all devices.
+- **Legibility Masking Overlay** — Maintained our dark radial vignette gradient overlay above the wallpapers to dim the backgrounds, guaranteeing 100% readability.
+
+---
+
+## v0.9.6 — Inventory Density & Legibility Control Lab (June 19, 2026)
+**File:** `gungeon-mate-v0.9.6.apk`
+**Size:** ~33.1 MB
+**Build:** 38
+
+### Flexible Inventory Grid Density
+- **Adjustable Periodic Column Count** — Style Lab and Settings now feature a periodic grid column count setting, allowing users to seamlessly scale the inventory layout between 2 (compact), 3 (medium), or 4 (dense) columns based on their device aspect ratio.
+- **Active Grid Auto-Layout** — Calibrated both the Main Active Run inventory and the Favourites inventory to automatically adjust column widths and spacing on layout changes.
+
+### Premium Subtle Particle Mode
+- **Advanced Legibility Toggle** — Introduced a premium switch that halves background particle counts across all custom presets and theme-specific backdrops, maximizing text readability in low-light environments while retaining the floating ambiance.
+- **Backdrop Optimizations** — Re-coded all real-time custom painters for Preset backdrops (including Gold Dust, Toxic Bubbles, and Cosmic Rift) to dynamically clamp particle limits instantly.
+
+### Unified Customization Tuning
+- **Integrated Display & Text Scaling** — Consolidated all grid layout, periodic columns, and inventory text scaling options under a single 'Inventory Grid & Display Tuning' section.
+- **Synchronized Style Panels** — Re-organized the Premium Theme Picker's Customization Tuning cards to stay perfectly aligned with the main Settings screens.
+
+---
+
 ## v0.9.5 — Premium Particles & Global Goop Conversion Update (June 19, 2026)
 **File:** `gungeon-mate-v0.9.5.apk`
 **Size:** ~33.1 MB

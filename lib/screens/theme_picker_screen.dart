@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
@@ -71,7 +72,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
       data: cleanTheme,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('CHOOSE PALETTE'),
+          title: const GoopText('CHOOSE PALETTE'),
           centerTitle: true,
           automaticallyImplyLeading: true,
         ),
@@ -90,7 +91,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                     width: 1.2,
                   ),
                 ),
-                child: const Text(
+                child: const GoopText(
                   'SELECT YOUR THEME',
                   style: TextStyle(
                     fontSize: 13,
@@ -107,7 +108,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
               const SizedBox(height: 14),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
+                child: GoopText(
                   'Swipe to preview each palette live. Tap a card to apply.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -214,7 +215,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
               children: [
                 Icon(Icons.tune_rounded, color: activeThemeFlair.primary, size: 20),
                 const SizedBox(width: 8),
-                Text(
+                GoopText(
                   'VIBE & CUSTOMIZATION TUNING',
                   style: TextStyle(
                     fontSize: 12.5,
@@ -285,7 +286,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  GoopText(
                     'LIVE FONT PREVIEW',
                     style: TextStyle(
                       fontSize: 10,
@@ -617,6 +618,223 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
               },
             ),
           ),
+
+          // 7. Subtle Particle Mode
+          _buildOptionRow(
+            icon: Icons.visibility_off_outlined,
+            label: 'Subtle Particle Mode',
+            activeThemeFlair: activeThemeFlair,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  child: Text(
+                    'Halves particles for high legibility',
+                    style: TextStyle(fontSize: 12, color: Colors.white54),
+                  ),
+                ),
+                Switch(
+                  value: prefs.subtleParticleMode,
+                  activeColor: activeThemeFlair.primary,
+                  onChanged: (v) {
+                    VisualPrefs.setSubtleParticleMode(v);
+                    Haptics.selection();
+                  },
+                ),
+              ],
+            ),
+          ),
+
+          // 8. Periodic Grid Columns
+          _buildOptionRow(
+            icon: Icons.grid_on_rounded,
+            label: 'Periodic Grid Columns',
+            activeThemeFlair: activeThemeFlair,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: prefs.periodicGridColumnCount,
+                  isExpanded: true,
+                  dropdownColor: activeThemeFlair.card,
+                  icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
+                  onChanged: (int? val) {
+                    if (val != null) {
+                      VisualPrefs.setPeriodicGridColumnCount(val);
+                      Haptics.selection();
+                    }
+                  },
+                  items: const [
+                    DropdownMenuItem<int>(
+                      value: 0,
+                      child: Text('Responsive (Auto)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70)),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 2,
+                      child: Text('Compact (2 Columns)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70)),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 3,
+                      child: Text('Medium (3 Columns)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70)),
+                    ),
+                    DropdownMenuItem<int>(
+                      value: 4,
+                      child: Text('Dense (4 Columns)', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // 9. Wallpaper Mode
+          _buildOptionRow(
+            icon: Icons.wallpaper_rounded,
+            label: 'Wallpaper Mode',
+            activeThemeFlair: activeThemeFlair,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<WallpaperMode>(
+                  value: prefs.wallpaperMode,
+                  isExpanded: true,
+                  dropdownColor: activeThemeFlair.card,
+                  icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
+                  onChanged: (WallpaperMode? val) {
+                    if (val != null) {
+                      VisualPrefs.setWallpaperMode(val);
+                      Haptics.selection();
+                    }
+                  },
+                  items: WallpaperMode.values.map((WallpaperMode mode) {
+                    return DropdownMenuItem<WallpaperMode>(
+                      value: mode,
+                      child: Text(
+                        mode.label,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+
+          if (prefs.wallpaperMode == WallpaperMode.customStill) ...[
+            // 10. Select Still Wallpaper
+            _buildOptionRow(
+              icon: Icons.image_outlined,
+              label: 'Select Still Wallpaper',
+              activeThemeFlair: activeThemeFlair,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: prefs.selectedStillWallpaper,
+                    isExpanded: true,
+                    dropdownColor: activeThemeFlair.card,
+                    icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
+                    onChanged: (String? val) {
+                      if (val != null) {
+                        VisualPrefs.setSelectedStillWallpaper(val);
+                        Haptics.selection();
+                      }
+                    },
+                    items: kStillWallpapers.map((map) {
+                      return DropdownMenuItem<String>(
+                        value: map['asset'],
+                        child: Text(
+                          map['name']!,
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+
+            // 11. Gyroscopic Parallax Sway
+            _buildOptionRow(
+              icon: Icons.screen_rotation_rounded,
+              label: 'Gyroscopic Parallax Sway',
+              activeThemeFlair: activeThemeFlair,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Expanded(
+                    child: Text(
+                      'Responsive 3D background sways',
+                      style: TextStyle(fontSize: 12, color: Colors.white54),
+                    ),
+                  ),
+                  Switch(
+                    value: prefs.parallaxMotionEnabled,
+                    activeColor: activeThemeFlair.primary,
+                    onChanged: (v) {
+                      VisualPrefs.setParallaxMotionEnabled(v);
+                      Haptics.selection();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+
+          if (prefs.wallpaperMode == WallpaperMode.customAnimated) ...[
+            // 12. Select Animated Live Loop
+            _buildOptionRow(
+              icon: Icons.play_circle_outline_rounded,
+              label: 'Select Live Loop',
+              activeThemeFlair: activeThemeFlair,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: prefs.selectedAnimatedWallpaper,
+                    isExpanded: true,
+                    dropdownColor: activeThemeFlair.card,
+                    icon: Icon(Icons.arrow_drop_down, color: activeThemeFlair.primary),
+                    onChanged: (String? val) {
+                      if (val != null) {
+                        VisualPrefs.setSelectedAnimatedWallpaper(val);
+                        Haptics.selection();
+                      }
+                    },
+                    items: kAnimatedWallpapers.map((map) {
+                      return DropdownMenuItem<String>(
+                        value: map['asset'],
+                        child: Text(
+                          map['name']!,
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ],
           
           const SizedBox(height: 10),
         ],
@@ -848,7 +1066,7 @@ class _ThemePreviewCard extends StatelessWidget {
                             Icon(Icons.format_quote_rounded, size: 14, color: f.primary.withValues(alpha: 0.6)),
                             const SizedBox(width: 4),
                             Expanded(
-                              child: Text(
+                              child: GoopText(
                                 mode.whimsicalDescription,
                                 style: TextStyle(
                                   fontSize: 10.5,
@@ -920,7 +1138,7 @@ class _ThemePreviewCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(f.chipRadius),
                     ),
                   ),
-                  child: Text(
+                  child: GoopText(
                     isActive ? 'Selected' : 'Use this theme',
                     style: const TextStyle(
                       fontSize: 13,

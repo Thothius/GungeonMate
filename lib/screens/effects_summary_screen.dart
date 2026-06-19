@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/player.dart';
@@ -51,7 +52,7 @@ class EffectsSummaryScreen extends StatelessWidget {
     final totalSources = scan.values.fold<int>(0, (a, b) => a + b.length);
 
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: GoopText(title)),
       body: scan.isEmpty
           ? _Empty(loadoutEmpty: guns.isEmpty && items.isEmpty)
           : ListView(
@@ -175,7 +176,7 @@ class _CategorySection extends StatelessWidget {
             children: [
               Icon(category.icon, color: category.color, size: 18),
               const SizedBox(width: 6),
-              Text(
+              GoopText(
                 category.label.toUpperCase(),
                 style: TextStyle(
                   fontSize: 13,
@@ -271,7 +272,7 @@ class _EffectRow extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(
+                      child: GoopText(
                         tag.label,
                         style: const TextStyle(
                           fontSize: 13.5,
@@ -301,7 +302,7 @@ class _EffectRow extends StatelessWidget {
                 // per row and the excerpts are strictly more useful.
                 if (!hasAnyExcerpt) ...[
                   const SizedBox(height: 1),
-                  Text(
+                  GoopText(
                     tag.blurb,
                     style: TextStyle(
                       fontSize: 11.5,
@@ -348,27 +349,35 @@ class _SourceLine extends StatelessWidget {
           ),
           const SizedBox(width: 6),
           Expanded(
-            child: RichText(
-              text: TextSpan(
-                style: const TextStyle(fontSize: 12, height: 1.3),
-                children: [
-                  TextSpan(
-                    text: occurrence.sourceName,
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                GoopText(
+                  occurrence.sourceName,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: c.withValues(alpha: 0.95),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if (hasExcerpt) ...[
+                  Text(
+                    '  —  ',
                     style: TextStyle(
-                      color: c.withValues(alpha: 0.95),
-                      fontWeight: FontWeight.w700,
+                      fontSize: 12,
+                      color: Colors.white.withValues(alpha: 0.78),
                     ),
                   ),
-                  if (hasExcerpt)
-                    TextSpan(
-                      text: '  —  ${occurrence.excerpt}',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.78),
-                        fontWeight: FontWeight.w500,
-                      ),
+                  GoopText(
+                    occurrence.excerpt,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white.withValues(alpha: 0.78),
+                      fontWeight: FontWeight.w500,
                     ),
+                  ),
                 ],
-              ),
+              ],
             ),
           ),
         ],

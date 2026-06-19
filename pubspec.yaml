@@ -45,6 +45,9 @@ dependencies:
   # Sensors for hardware tilt physics
   sensors_plus: ^5.0.1
 
+  # Video looping engine for animated wallpapers
+  video_player: ^2.9.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -97,6 +100,8 @@ flutter:
     - assets/animations/dog/
     - assets/animations/bosses/
     - assets/animations/trippy/
+    - assets/images/wallpapers/still/
+    - assets/images/wallpapers/animated/
 
   fonts:
     - family: EnterTheGungeonBig

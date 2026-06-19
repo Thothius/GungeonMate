@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -801,7 +802,7 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return GoopText(
       text,
       style: TextStyle(
         fontSize: 12,
@@ -849,7 +850,7 @@ class _RoleCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    GoopText(
                       title,
                       style: TextStyle(
                         fontSize: 15,
@@ -858,7 +859,7 @@ class _RoleCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
+                    GoopText(
                       subtitle,
                       style: TextStyle(
                         fontSize: 13,

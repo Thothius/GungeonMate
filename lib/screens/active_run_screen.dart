@@ -2028,7 +2028,8 @@ class _PlayerPageState extends State<_PlayerPage> {
 
     switch (displayMode) {
       case InventoryDisplayMode.classicPeriodic:
-        cross = w < 360 ? 3 : w < 600 ? 4 : 6;
+        final savedColCount = VisualPrefs.notifier.value.periodicGridColumnCount;
+        cross = (savedColCount > 0) ? savedColCount : (w < 360 ? 3 : w < 600 ? 4 : 6);
         ratio = 0.80;
         break;
       case InventoryDisplayMode.tacticalStats:

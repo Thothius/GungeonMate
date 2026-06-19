@@ -419,11 +419,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   children: [
                     const Icon(Icons.history_edu_rounded, color: Color(0xFFFFD54F), size: 28),
                     const SizedBox(width: 12),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const GoopText(
                             'GUNGEON MATE COMPANION',
                             style: TextStyle(
                               fontSize: 16,
@@ -432,8 +432,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               letterSpacing: 1.0,
                             ),
                           ),
-                          SizedBox(height: 2),
-                          Text(
+                          const SizedBox(height: 2),
+                          const GoopText(
                             'v2.3.0 — 2026 Ultimate Edition',
                             style: TextStyle(
                               fontSize: 11,
@@ -461,7 +461,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Section 1: Core App Features
-                        const Text(
+                        const GoopText(
                           'MAIN COMPANION FEATURES',
                           style: TextStyle(
                             fontSize: 11.5,
@@ -479,7 +479,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         const Divider(color: Colors.white12, height: 24),
 
                         // Section 2: Recent Overhauls
-                        const Text(
+                        const GoopText(
                           'VERSION HISTORY & RECENT UPDATES',
                           style: TextStyle(
                             fontSize: 11.5,
@@ -569,12 +569,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                GoopText(
                   title,
                   style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 const SizedBox(height: 1.5),
-                Text(
+                GoopText(
                   body,
                   style: const TextStyle(fontSize: 11, color: Colors.white54, height: 1.2),
                 ),
@@ -592,7 +592,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoopText(
             title,
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
           ),
@@ -604,7 +604,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   children: [
                     const Text('• ', style: TextStyle(color: Colors.white54, fontSize: 11)),
                     Expanded(
-                      child: Text(
+                      child: GoopText(
                         it,
                         style: const TextStyle(fontSize: 11, color: Colors.white70, height: 1.25),
                       ),

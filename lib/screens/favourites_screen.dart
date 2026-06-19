@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../widgets/periodic_tile.dart';
@@ -130,7 +131,8 @@ class FavouritesScreen extends StatelessWidget {
 
     switch (displayMode) {
       case InventoryDisplayMode.classicPeriodic:
-        cross = w < 360 ? 3 : w < 600 ? 4 : 6;
+        final savedColCount = VisualPrefs.notifier.value.periodicGridColumnCount;
+        cross = (savedColCount > 0) ? savedColCount : (w < 360 ? 3 : w < 600 ? 4 : 6);
         ratio = 0.80;
         break;
       case InventoryDisplayMode.tacticalStats:
@@ -204,7 +206,7 @@ class _EmptyState extends StatelessWidget {
               color: flair.primary.withValues(alpha: 0.35),
             ),
             const SizedBox(height: 16),
-            Text(
+            GoopText(
               'No favourites yet',
               style: prefs.font.textStyle.copyWith(
                 fontSize: 16,
@@ -253,7 +255,7 @@ class _SectionHeaderSliver extends StatelessWidget {
           children: [
             Icon(icon, size: 16, color: flair.primary),
             const SizedBox(width: 8),
-            Text(
+            GoopText(
               title.toUpperCase(),
               style: prefs.font.textStyle.copyWith(
                 fontSize: 11,

@@ -376,7 +376,7 @@ class _PeriodicTileState extends State<PeriodicTile>
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        GoopText(
           label,
           style: const TextStyle(
             fontSize: 8.0,
@@ -386,7 +386,7 @@ class _PeriodicTileState extends State<PeriodicTile>
           ),
         ),
         const SizedBox(height: 1),
-        Text(
+        GoopText(
           value.isEmpty ? 'N/A' : value,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

@@ -700,6 +700,43 @@ enum InventoryDisplayMode {
   tacticalStats,
 }
 
+enum WallpaperMode {
+  themeDefault(label: 'Theme Default'),
+  customStill(label: 'Custom Still'),
+  customAnimated(label: 'Custom Animated');
+
+  final String label;
+  const WallpaperMode({required this.label});
+}
+
+const List<Map<String, String>> kStillWallpapers = [
+  {'asset': 'wp_still_01_keep.png', 'name': 'Keep Gateway'},
+  {'asset': 'wp_still_02_unicorn.png', 'name': 'Unicorn Cotton Throne'},
+  {'asset': 'wp_still_03_warehouse.png', 'name': 'Gungeon Proper Racks'},
+  {'asset': 'wp_still_04_spotlight.png', 'name': 'Spotlight Companion'},
+  {'asset': 'wp_still_05_galaxy.png', 'name': 'Gravity Vortex Dust'},
+  {'asset': 'wp_still_06_ammonomicon.png', 'name': 'Ammonomicon Pedestal'},
+  {'asset': 'wp_still_07_dungeon.png', 'name': 'Checkerboard Chamber'},
+  {'asset': 'wp_still_08_mine.png', 'name': 'Mine Shaft Rails'},
+  {'asset': 'wp_still_09_hollow.png', 'name': 'Frozen Tomb Cathedral'},
+  {'asset': 'wp_still_10_forge.png', 'name': 'Forge Master Lava'},
+  {'asset': 'wp_still_11_hell.png', 'name': 'Bullet Hell Trails'},
+  {'asset': 'wp_still_12_hypnotic.png', 'name': 'Hypnotic Pink Swirl'},
+  {'asset': 'wp_still_13_crescent.png', 'name': 'Crescent Moon Bow'},
+  {'asset': 'wp_still_14_evolver.png', 'name': 'Evolver Organism'},
+  {'asset': 'wp_still_15_gunderfury.png', 'name': 'Gunderfury Sword'},
+  {'asset': 'wp_still_16_trashcannon.png', 'name': 'Trashcannon Rust'},
+  {'asset': 'wp_still_17_blobulord.png', 'name': 'Blobulord Sewer'},
+  {'asset': 'wp_still_18_gatling_gull.png', 'name': 'Gatling Gull'},
+  {'asset': 'wp_still_19_gorgun.png', 'name': 'The Gorgun Temple'},
+];
+
+const List<Map<String, String>> kAnimatedWallpapers = [
+  {'asset': 'wp_anim_01_galaxy.mp4', 'name': 'Swirling Gravity Vortex'},
+  {'asset': 'wp_anim_02_warehouse.mp4', 'name': 'Gungeon Weapons Locker'},
+  {'asset': 'wp_anim_03_blobulord.mp4', 'name': 'Wobbling Sewer Jelly'},
+];
+
 /// Data model for custom theme settings persisted to SharedPreferences.
 /// Allows users to create their own color palette with optional backdrop/aura/font.
 class CustomThemeData {
@@ -1193,6 +1230,18 @@ class VisualPrefs {
   final bool isGoopianLanguage;
   final bool spongeActive;
 
+  /// Whether particle count is halved for better readability.
+  final bool subtleParticleMode;
+
+  /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
+  final int periodicGridColumnCount;
+
+  /// Custom wallpaper configuration
+  final WallpaperMode wallpaperMode;
+  final String selectedStillWallpaper;
+  final String selectedAnimatedWallpaper;
+  final bool parallaxMotionEnabled;
+
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
 
@@ -1229,6 +1278,12 @@ class VisualPrefs {
     this.dialogueTextSpeedMs = 30,
     this.isGoopianLanguage = false,
     this.spongeActive = false,
+    this.subtleParticleMode = false,
+    this.periodicGridColumnCount = 0,
+    this.wallpaperMode = WallpaperMode.themeDefault,
+    this.selectedStillWallpaper = 'wp_still_01_keep.png',
+    this.selectedAnimatedWallpaper = 'wp_anim_01_galaxy.mp4',
+    this.parallaxMotionEnabled = true,
   });
 
   static const _kGlow     = 'vp.glow_v1';
@@ -1261,6 +1316,12 @@ class VisualPrefs {
   static const _kDialogueTextSpeed = 'vp.dialogue_text_speed_v1';
   static const _kGoopianLanguage = 'vp.goopian_language_v1';
   static const _kSpongeActive = 'vp.sponge_active_v1';
+  static const _kSubtleParticleMode = 'vp.subtle_particle_mode_v1';
+  static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
+  static const _kWallpaperMode = 'vp.wallpaper_mode_v1';
+  static const _kSelectedStill = 'vp.selected_still_v1';
+  static const _kSelectedAnimated = 'vp.selected_animated_v1';
+  static const _kParallaxEnabled = 'vp.parallax_enabled_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
       ValueNotifier(const VisualPrefs());
@@ -1309,6 +1370,14 @@ class VisualPrefs {
 
       final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
+      final subtleParticleMode = p.getBool(_kSubtleParticleMode) ?? false;
+      final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
+
+      final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
+      final wallpaperMode = WallpaperMode.values[wallpaperModeIdx.clamp(0, WallpaperMode.values.length - 1)];
+      final selectedStill = p.getString(_kSelectedStill) ?? 'wp_still_01_keep.png';
+      final selectedAnimated = p.getString(_kSelectedAnimated) ?? 'wp_anim_01_galaxy.mp4';
+      final parallaxEnabled = p.getBool(_kParallaxEnabled) ?? true;
 
       notifier.value = VisualPrefs(
         glowIntensity:    p.getDouble(_kGlow)     ?? 0.0,
@@ -1338,6 +1407,12 @@ class VisualPrefs {
         dialogueTextSpeedMs: p.getInt(_kDialogueTextSpeed) ?? 30,
         isGoopianLanguage: isGoopian,
         spongeActive: spongeActive,
+        subtleParticleMode: subtleParticleMode,
+        periodicGridColumnCount: periodicGridColumnCount,
+        wallpaperMode: wallpaperMode,
+        selectedStillWallpaper: selectedStill,
+        selectedAnimatedWallpaper: selectedAnimated,
+        parallaxMotionEnabled: parallaxEnabled,
       );
     } catch (_) {}
   }
@@ -1474,6 +1549,36 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setSubtleParticleMode(bool v) async {
+    notifier.value = notifier.value._with(subtleParticleMode: v);
+    _persist();
+  }
+
+  static Future<void> setPeriodicGridColumnCount(int v) async {
+    notifier.value = notifier.value._with(periodicGridColumnCount: v.clamp(0, 4));
+    _persist();
+  }
+
+  static Future<void> setWallpaperMode(WallpaperMode v) async {
+    notifier.value = notifier.value._with(wallpaperMode: v);
+    _persist();
+  }
+
+  static Future<void> setSelectedStillWallpaper(String v) async {
+    notifier.value = notifier.value._with(selectedStillWallpaper: v);
+    _persist();
+  }
+
+  static Future<void> setSelectedAnimatedWallpaper(String v) async {
+    notifier.value = notifier.value._with(selectedAnimatedWallpaper: v);
+    _persist();
+  }
+
+  static Future<void> setParallaxMotionEnabled(bool v) async {
+    notifier.value = notifier.value._with(parallaxMotionEnabled: v);
+    _persist();
+  }
+
   static Future<void> _persist() async {
     try {
       final p = await SharedPreferences.getInstance();
@@ -1506,6 +1611,12 @@ class VisualPrefs {
       await p.setInt(_kDialogueTextSpeed, v.dialogueTextSpeedMs);
       await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
       await p.setBool(_kSpongeActive, v.spongeActive);
+      await p.setBool(_kSubtleParticleMode, v.subtleParticleMode);
+      await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
+      await p.setInt(_kWallpaperMode, v.wallpaperMode.index);
+      await p.setString(_kSelectedStill, v.selectedStillWallpaper);
+      await p.setString(_kSelectedAnimated, v.selectedAnimatedWallpaper);
+      await p.setBool(_kParallaxEnabled, v.parallaxMotionEnabled);
     } catch (_) {}
   }
 
@@ -1537,6 +1648,12 @@ class VisualPrefs {
     int?    dialogueTextSpeedMs,
     bool?   isGoopianLanguage,
     bool?   spongeActive,
+    bool?   subtleParticleMode,
+    int?    periodicGridColumnCount,
+    WallpaperMode? wallpaperMode,
+    String? selectedStillWallpaper,
+    String? selectedAnimatedWallpaper,
+    bool?   parallaxMotionEnabled,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -1565,6 +1682,12 @@ class VisualPrefs {
     dialogueTextSpeedMs: dialogueTextSpeedMs ?? this.dialogueTextSpeedMs,
     isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
     spongeActive:     spongeActive      ?? this.spongeActive,
+    subtleParticleMode: subtleParticleMode ?? this.subtleParticleMode,
+    periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
+    wallpaperMode:    wallpaperMode     ?? this.wallpaperMode,
+    selectedStillWallpaper: selectedStillWallpaper ?? this.selectedStillWallpaper,
+    selectedAnimatedWallpaper: selectedAnimatedWallpaper ?? this.selectedAnimatedWallpaper,
+    parallaxMotionEnabled: parallaxMotionEnabled ?? this.parallaxMotionEnabled,
   );
 }
 

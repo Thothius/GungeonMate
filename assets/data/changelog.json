@@ -1,5 +1,27 @@
 [
   {
+    "version": "v0.9.7",
+    "title": "🖼️ THE WALLPAPER & GYROSCOPIC PARALLAX ENGINE LAB",
+    "date": "June 19, 2026",
+    "items": [
+      "Exclusive Still Wallpapers: Bundled 19 gorgeous high-fidelity pixel-art scenes covering Gungeon chambers, weapons, and characters in assets/images/wallpapers/still/.",
+      "Gyroscopic Parallax Motion: Created a hardware-accelerated parallax engine that dynamically sways and offsets the background image based on the physical phone tilt accelerometer readings.",
+      "Animated Live Loops: Integrated a high-performance video player engine to play seamless 8-second looping MP4 backgrounds (vortex galaxy, weapons racks, sewer gelatin) with elegant fallback support.",
+      "Unified Settings Lab: Designed a dedicated 'Wallpaper & Parallax Engine Lab' section inside both Settings and the Premium Theme Picker to manage selections and toggles in perfect unison."
+    ]
+  },
+  {
+    "version": "v0.9.6",
+    "title": "🎨 THE INVENTORY DENSITY & LEGIBILITY CONTROL LAB",
+    "date": "June 19, 2026",
+    "items": [
+      "Flexible Inventory Grid Density: Added a customizable periodic grid column count setting in Style Lab and Settings, allowing users on standard/compact phones to seamlessly scale the inventory layout between 2 (compact), 3 (medium), or 4 (dense) columns.",
+      "Premium Subtle Particle Mode: Introduced an advanced legibility toggle that halves background particle counts across all custom presets and theme-specific backdrops, maximizing text readability in low-light environments without sacrificing the beautiful floating ambiance.",
+      "Integrated Style Lab Options: Consolidated all grid layout, periodic columns, and inventory text scaling options under a unified, beautiful 'Inventory Grid & Display Tuning' section.",
+      "Unified Customization Panels: Reorganized the full Vibe & Customization Tuning panels inside the Premium Theme Picker to stay perfectly in sync with the primary settings screens."
+    ]
+  },
+  {
     "version": "v0.9.5",
     "title": "⚙️ THE PREMIUM PARTICLE REDESIGN & GLOBAL GOOP CONVERSION",
     "date": "June 19, 2026",

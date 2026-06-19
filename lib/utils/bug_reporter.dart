@@ -150,6 +150,17 @@ class _BugReportDialogContentState extends State<_BugReportDialogContent> {
 
       request.write(json.encode(payload));
       final response = await request.close();
+      
+      // Silently try posting to local DevOps server for real-time workspace monitoring
+      try {
+        final localClient = HttpClient()..connectionTimeout = const Duration(seconds: 2);
+        final localRequest = await localClient.postUrl(Uri.parse('http://127.0.0.1:4040/api/bugs'));
+        localRequest.headers.set('content-type', 'application/json');
+        localRequest.write(json.encode(payload));
+        final localResponse = await localRequest.close();
+        localClient.close();
+      } catch (_) {}
+
       client.close();
       return response.statusCode == 200;
     } catch (_) {

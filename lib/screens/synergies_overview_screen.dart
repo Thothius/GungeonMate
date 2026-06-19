@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../widgets/game_icon.dart';
@@ -113,7 +114,7 @@ class _ItemGroupCard extends StatelessWidget {
           group.isGun ? Icons.gps_fixed : Icons.inventory_2_outlined,
           color: Colors.white70,
         ),
-        title: Text(
+        title: GoopText(
           group.itemName,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
@@ -168,7 +169,7 @@ class _SynergyRow extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Expanded(
-                child: Text(
+                child: GoopText(
                   s.name,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -202,7 +203,7 @@ class _SynergyRow extends StatelessWidget {
                             color: Colors.white.withValues(alpha: 0.15),
                           ),
                         ),
-                        child: Text(
+                        child: GoopText(
                           m,
                           style: const TextStyle(
                             fontSize: 11,
@@ -241,7 +242,7 @@ class _SynergyRow extends StatelessWidget {
               !s.effect.toLowerCase().startsWith('one of the following') &&
               !s.effect.toLowerCase().startsWith('any of the following')) ...[
             const SizedBox(height: 6),
-            Text(
+            GoopText(
               s.prettyEffect,
               style: const TextStyle(fontSize: 12.5, height: 1.3),
             ),
@@ -307,7 +308,7 @@ class _AnyOfChips extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
               ],
-              Text(
+              GoopText(
                 n,
                 style: TextStyle(
                   fontSize: 12,
