@@ -790,7 +790,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                         (isGun ? widget.gun!.type : widget.item!.type).toUpperCase(),
                         style: TextStyle(
                           fontSize: 7.5,
-                          fontWeight: FontWeight.black,
+                          fontWeight: FontWeight.w900,
                           color: flair.secondary,
                           letterSpacing: 0.5,
                         ),
@@ -827,7 +827,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: statsFontSize + 1.5,
-                                fontWeight: FontWeight.black,
+                                fontWeight: FontWeight.w900,
                                 color: Colors.white,
                                 letterSpacing: 0.5,
                               ),

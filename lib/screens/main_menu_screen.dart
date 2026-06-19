@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -246,13 +247,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         ),
                       );
                     },
-                    child: const IgnorePointer(
+                    child: IgnorePointer(
                       child: SizedBox(
                         width: double.infinity,
                         height: 56,
                         child: FilledButton.icon(
                           onPressed: () {},
-                          icon: Icon(Icons.play_arrow_rounded, size: 26),
+                          icon: const Icon(Icons.play_arrow_rounded, size: 26),
                           label: const GoopText(
                             'Local Run',
                             style: TextStyle(
@@ -276,13 +277,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         ),
                       );
                     },
-                    child: const IgnorePointer(
+                    child: IgnorePointer(
                       child: SizedBox(
                         width: double.infinity,
                         height: 56,
                         child: OutlinedButton.icon(
                           onPressed: () {},
-                          icon: Icon(Icons.bluetooth_searching, size: 24),
+                          icon: const Icon(Icons.bluetooth_searching, size: 24),
                           label: const GoopText(
                             'Multiplayer',
                             style: TextStyle(
@@ -306,13 +307,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         ),
                       );
                     },
-                    child: const IgnorePointer(
+                    child: IgnorePointer(
                       child: SizedBox(
                         width: double.infinity,
                         height: 56,
                         child: OutlinedButton.icon(
                           onPressed: () {},
-                          icon: Icon(Icons.palette_outlined, size: 24),
+                          icon: const Icon(Icons.palette_outlined, size: 24),
                           label: const GoopText(
                             'Customize',
                             style: TextStyle(

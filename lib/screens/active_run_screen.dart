@@ -3157,7 +3157,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
       children: [
         Text(
           value,
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.black, color: color),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: color),
         ),
         const SizedBox(height: 2),
         Text(
@@ -3247,7 +3247,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                         const SizedBox(width: 4),
                         Text(
                           '→ ${item.shots}',
-                          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.black, color: Colors.orangeAccent),
+                          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.orangeAccent),
                         ),
                       ],
                     ),
@@ -3305,7 +3305,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
               const SizedBox(width: 6),
               Text(
                 title.toUpperCase(),
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.black, color: color, letterSpacing: 0.5),
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: color, letterSpacing: 0.5),
               ),
             ],
           ),

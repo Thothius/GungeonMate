@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/multiplayer_messages.dart';
 import '../models/player.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
@@ -199,7 +200,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.02),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  side: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),

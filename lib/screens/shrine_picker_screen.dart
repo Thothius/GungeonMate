@@ -460,7 +460,7 @@ class ShrineActivationSheet extends StatelessWidget {
                             '💔 PENALTY COST: -1 HEART CONTAINER (LIFE -1)',
                             style: TextStyle(
                               fontSize: 10.5,
-                              fontWeight: FontWeight.black,
+                              fontWeight: FontWeight.w900,
                               color: Colors.redAccent,
                               letterSpacing: 0.5,
                             ),
