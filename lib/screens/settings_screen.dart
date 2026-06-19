@@ -483,6 +483,8 @@ class _ThemeVisualsTab extends StatelessWidget {
                         items: const [
                           DropdownMenuItem(value: 'crt_static', child: Text('CRT Analog Static (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
                           DropdownMenuItem(value: 'static_glitch', child: Text('Cyber Glitch Screen (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'matrix_code', child: Text('Goopian Cipher Terminal (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'pixel_nebula', child: Text('Pulsing Starfield Nebula (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
                           DropdownMenuItem(value: 'circles05.gif', child: Text('Psychedelic Circles', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
                           DropdownMenuItem(value: 'circles06.gif', child: Text('Expanding Ripples', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
                           DropdownMenuItem(value: 'kaleicospio03.gif', child: Text('Kaleidoscopic Warp', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),

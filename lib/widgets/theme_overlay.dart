@@ -1971,6 +1971,7 @@ class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with S
         sway: 15 + rng.nextDouble() * 30,
         phase: rng.nextDouble(),
         direction: dir,
+        depth: 0.4 + rng.nextDouble() * 0.9,
       ));
     }
   }
@@ -2007,6 +2008,7 @@ class _CustomSpec {
   final double sway;
   final double phase;
   final String direction; // 'top', 'bottom', 'left', 'right'
+  final double depth; // 0.4 (far/slow) to 1.3 (near/fast)
 
   _CustomSpec({
     required this.x,
@@ -2016,6 +2018,7 @@ class _CustomSpec {
     required this.sway,
     required this.phase,
     required this.direction,
+    required this.depth,
   });
 }
 
@@ -2038,28 +2041,59 @@ class _CustomParticlePainter extends CustomPainter {
     final tp = TextPainter(textDirection: TextDirection.ltr);
     final tilt = ThemeOverlay.tiltNotifier.value;
 
+    // Draw gorgeous flowing background theme wind paths for custom particles
+    final windColor = switch (prefs.customParticleType) {
+      CustomParticleType.ember => const Color(0xFFFF5722),
+      CustomParticleType.frost => const Color(0xFF00E5FF),
+      CustomParticleType.rainbow => const Color(0xFFFF4081),
+      CustomParticleType.catpaw => const Color(0xFFE040FB),
+      CustomParticleType.gunfairy => const Color(0xFF64FFDA),
+      _ => Colors.white,
+    };
+    final windPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.3
+      ..color = windColor.withValues(alpha: 0.04 + 0.02 * math.sin(t * 2 * math.pi));
+    for (int i = 0; i < 3; i++) {
+      final pOffset = (t + i / 3.0) % 1.0;
+      final path = Path();
+      final startY = size.height * (1.1 - pOffset);
+      path.moveTo(-50, startY);
+      path.cubicTo(
+        size.width * 0.3, startY - 100 * math.sin(pOffset * math.pi),
+        size.width * 0.7, startY + 100 * math.cos(pOffset * math.pi),
+        size.width + 50, startY - 50
+      );
+      canvas.drawPath(path, windPaint);
+    }
+
     for (final s in specs) {
-      // Calculate continuous progress
-      final p = ((t * s.speed) + s.phase) % 1.0;
+      final depth = s.depth; // 0.4 (far) to 1.3 (near)
+      
+      // Calculate continuous progress scaled by depth (distant particles drift slower)
+      final p = ((t * s.speed * depth) + s.phase) % 1.0;
       
       // Calculate positions depending on their assigned emitter directions!
       double rawX = s.x * size.width;
       double rawY = s.y * size.height;
-      final sway = math.sin(p * 2 * math.pi + s.phase * 8) * s.sway;
-      final tiltXShift = tilt.dx * 18 * p;
-      final tiltYShift = tilt.dy * 12 * p;
+      final sway = math.sin(p * 2 * math.pi + s.phase * 8) * s.sway * depth;
+      final tiltXShift = tilt.dx * 18 * p * depth;
+      final tiltYShift = tilt.dy * 12 * p * depth;
+
+      // Wind-swept physical forces (distant particles are lighter, swept further!)
+      final windShift = p * size.width * 0.14 * (1.5 - depth);
 
       if (s.direction == 'top') {
         rawY = (size.height * p + tiltYShift) % size.height;
-        rawX = (s.x * size.width + sway + tiltXShift) % size.width;
+        rawX = (s.x * size.width + sway + tiltXShift + windShift) % size.width;
       } else if (s.direction == 'bottom') {
         rawY = (size.height * (1.0 - p) + tiltYShift) % size.height;
-        rawX = (s.x * size.width + sway + tiltXShift) % size.width;
+        rawX = (s.x * size.width + sway + tiltXShift + windShift) % size.width;
       } else if (s.direction == 'left') {
-        rawX = (size.width * p + tiltXShift) % size.width;
+        rawX = (size.width * p + tiltXShift + windShift) % size.width;
         rawY = (s.y * size.height + sway + tiltYShift) % size.height;
       } else if (s.direction == 'right') {
-        rawX = (size.width * (1.0 - p) + tiltXShift) % size.width;
+        rawX = (size.width * (1.0 - p) + tiltXShift - windShift) % size.width;
         rawY = (s.y * size.height + sway + tiltYShift) % size.height;
       }
 
@@ -2071,7 +2105,8 @@ class _CustomParticlePainter extends CustomPainter {
         edgeFade = (size.width - rawX) / edgeThreshold;
       }
 
-      final alpha = _bellAlpha(p) * prefs.particleOpacity * edgeFade;
+      // Alpha is dimmer for distant particles, providing gorgeous depth scaling!
+      final alpha = _bellAlpha(p) * prefs.particleOpacity * edgeFade * (0.35 + 0.65 * depth);
       if (alpha <= 0.01) continue;
 
       // Boost up flickering/twinkle globally! Rapid blinking sinusoids
@@ -2080,15 +2115,15 @@ class _CustomParticlePainter extends CustomPainter {
           : 0.4 + 0.6 * math.sin(t * 18 * math.pi + s.phase * 22).abs();
 
       // Complex sprites (catpaw and gunfairy) look jittery when flickering at high frequencies.
-      // We override this with a slow, breathing pulse (0.85 to 1.15) for organic flow.
+      // We override this with a slow, breathing pulse (0.88 to 1.12) for organic flow.
       final isComplexSprite = prefs.customParticleType == CustomParticleType.catpaw ||
                               prefs.customParticleType == CustomParticleType.gunfairy;
       final double dynamicScaleMultiplier = isComplexSprite
           ? 0.88 + 0.12 * math.sin(t * 3.2 + s.phase * 8)
           : (prefs.advancedFlicker ? twinkle : 1.0);
 
-      // Scaled size according to the size slider!
-      final scaledSize = s.size * prefs.particleSizeScale * dynamicScaleMultiplier;
+      // Scaled size according to the size slider & depth!
+      final scaledSize = s.size * prefs.particleSizeScale * dynamicScaleMultiplier * depth;
 
       // Render custom types!
       switch (prefs.customParticleType) {
@@ -2276,7 +2311,10 @@ class _HypnoticBgState extends State<_HypnoticBg> with SingleTickerProviderState
   }
 
   Future<void> _loadGif() async {
-    if (widget.assetName == 'crt_static' || widget.assetName == 'static_glitch') {
+    if (widget.assetName == 'crt_static' ||
+        widget.assetName == 'static_glitch' ||
+        widget.assetName == 'matrix_code' ||
+        widget.assetName == 'pixel_nebula') {
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -2330,15 +2368,24 @@ class _HypnoticBgState extends State<_HypnoticBg> with SingleTickerProviderState
   Widget build(BuildContext context) {
     Widget bgWidget;
 
-    if (widget.assetName == 'crt_static' || widget.assetName == 'static_glitch') {
+    final isProcedural = widget.assetName == 'crt_static' ||
+                         widget.assetName == 'static_glitch' ||
+                         widget.assetName == 'matrix_code' ||
+                         widget.assetName == 'pixel_nebula';
+
+    if (isProcedural) {
       bgWidget = AnimatedBuilder(
         animation: _localCtrl,
         builder: (context, _) {
           final localT = DateTime.now().millisecondsSinceEpoch / 1000.0;
+          final CustomPainter p = switch (widget.assetName) {
+            'crt_static' => _CRTStaticPainter(t: localT * widget.speedMultiplier),
+            'static_glitch' => _StaticGlitchPainter(t: localT * widget.speedMultiplier),
+            'matrix_code' => _MatrixCodePainter(t: localT * widget.speedMultiplier),
+            _ => _PixelNebulaPainter(t: localT * widget.speedMultiplier),
+          };
           return CustomPaint(
-            painter: widget.assetName == 'crt_static'
-                ? _CRTStaticPainter(t: localT * widget.speedMultiplier)
-                : _StaticGlitchPainter(t: localT * widget.speedMultiplier),
+            painter: p,
             size: Size.infinite,
           );
         },
@@ -2494,6 +2541,113 @@ class _StaticGlitchPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_StaticGlitchPainter old) => true;
+}
+
+class _MatrixCodePainter extends CustomPainter {
+  final double t;
+  final math.Random _rng = math.Random(1337);
+  _MatrixCodePainter({required this.t});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    
+    // Pitch-black terminal background
+    paint.color = const Color(0xFF040605);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+
+    final numCols = 18;
+    final colWidth = size.width / numCols;
+    
+    for (int col = 0; col < numCols; col++) {
+      final speed = 0.5 + _rng.nextDouble() * 0.8;
+      final startY = (t * 180 * speed) % (size.height + 300) - 200;
+      
+      final length = 6 + _rng.nextInt(12);
+      for (int i = 0; i < length; i++) {
+        final charY = startY - (i * 24);
+        if (charY < -20 || charY > size.height + 20) continue;
+        
+        final alpha = (1.0 - (i / length)).clamp(0.0, 1.0);
+        
+        Color color;
+        if (i == 0) {
+          color = const Color(0xFFE8F5E9).withValues(alpha: alpha);
+        } else if (col % 2 == 0) {
+          color = const Color(0xFF00FF66).withValues(alpha: alpha * 0.65);
+        } else {
+          color = const Color(0xFF00E5FF).withValues(alpha: alpha * 0.65);
+        }
+        
+        paint.color = color;
+        
+        final glyphSize = 8.0 + _rng.nextInt(6);
+        final glyphX = col * colWidth + (colWidth - glyphSize) / 2;
+        
+        final isGlitchOffset = _rng.nextDouble() < 0.08;
+        final finalX = isGlitchOffset ? glyphX + (_rng.nextDouble() * 12 - 6) : glyphX;
+        
+        canvas.drawRect(Rect.fromLTWH(finalX, charY, glyphSize, glyphSize), paint);
+        canvas.drawRect(Rect.fromLTWH(finalX - 2, charY + glyphSize/2, glyphSize + 4, 1.5), paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_MatrixCodePainter old) => true;
+}
+
+class _PixelNebulaPainter extends CustomPainter {
+  final double t;
+  final math.Random _rng = math.Random(101);
+  _PixelNebulaPainter({required this.t});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    
+    paint.color = const Color(0xFF0B0715);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
+
+    for (int i = 0; i < 3; i++) {
+      final phase = i * (math.pi * 2 / 3);
+      final cX = size.width * 0.5 + math.cos(t * 0.25 + phase) * size.width * 0.22;
+      final cY = size.height * 0.5 + math.sin(t * 0.22 + phase) * size.height * 0.18;
+      final radius = (size.width * 0.45) * (0.8 + 0.15 * math.sin(t * 0.4 + phase));
+      
+      final Color color = switch (i) {
+        0 => const Color(0xFFE91E63),
+        1 => const Color(0xFF9C27B0),
+        _ => const Color(0xFF00E5FF),
+      };
+      
+      paint.shader = RadialGradient(
+        colors: [
+          color.withValues(alpha: 0.12),
+          color.withValues(alpha: 0.04),
+          Colors.transparent,
+        ],
+      ).createShader(Rect.fromCircle(center: Offset(cX, cY), radius: radius));
+      canvas.drawCircle(Offset(cX, cY), radius, paint);
+      paint.shader = null;
+    }
+
+    for (int i = 0; i < 30; i++) {
+      final double starX = _rng.nextDouble() * size.width;
+      final double starY = _rng.nextDouble() * size.height;
+      final double starSpeed = 0.5 + _rng.nextDouble() * 1.5;
+      final double twinkle = (math.sin(t * starSpeed + i) + 1.0) / 2.0;
+      
+      final alpha = 0.1 + twinkle * 0.75;
+      paint.color = Colors.white.withValues(alpha: alpha);
+      
+      final sizeScale = (i % 3 == 0) ? 3.0 : 1.8;
+      canvas.drawRect(Rect.fromLTWH(starX, starY, sizeScale, sizeScale), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_PixelNebulaPainter old) => true;
 }
 
 class _SecretCatThroneOverlay extends StatelessWidget {
