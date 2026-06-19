@@ -28,6 +28,7 @@ class _ScaleButtonState extends State<ScaleButton> {
   Widget build(BuildContext context) {
     final enabled = widget.onTap != null || widget.onLongPress != null;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTapDown: enabled
           ? (_) {
               setState(() => _isPressed = true);

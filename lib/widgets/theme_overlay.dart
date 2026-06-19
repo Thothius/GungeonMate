@@ -155,15 +155,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
             );
           }
 
-          if (mode == AppThemeMode.theBreach || mode == AppThemeMode.ammonomicon || mode == AppThemeMode.custom) {
-            content = GlintSheenOverlay(
-              sheenColor: f.headlineStat.withValues(alpha: 0.6),
-              duration: const Duration(milliseconds: 1800),
-              interval: const Duration(seconds: 8),
-              child: content,
-            );
-          }
-
           return Listener(
             onPointerDown: (event) => _spawnTouchSparkles(event.position, prefs),
             behavior: HitTestBehavior.translucent,
@@ -204,6 +195,28 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                       ),
                     ),
                   ),
+
+                // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          center: Alignment.center,
+                          radius: 1.25,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withValues(alpha: 0.1),
+                            Colors.black.withValues(alpha: 0.52),
+                            Colors.black.withValues(alpha: 0.8),
+                          ],
+                          stops: const [0.0, 0.45, 0.82, 1.0],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
                 if (f.pageFrame)
                   const Positioned.fill(
                       child: IgnorePointer(child: _PageFrame())),
