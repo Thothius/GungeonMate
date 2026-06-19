@@ -414,6 +414,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                 value: prefs.particlesEnabled,
                 onChanged: VisualPrefs.setParticles,
                 flair: flair,
+                tooltip: 'When enabled, tapping anywhere on the screen spawns a physical burst of colorful kinetic sparkles that decelerate and fade.',
               ),
               const SizedBox(height: 8),
               _buildSwitchRow(
@@ -423,6 +424,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                 value: prefs.particleRotation,
                 onChanged: VisualPrefs.setParticleRotation,
                 flair: flair,
+                tooltip: 'When active, particles dynamically spin and rotate based on their velocity vector.',
               ),
               const SizedBox(height: 8),
               _buildSwitchRow(
@@ -432,6 +434,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                 value: prefs.gravityVortex,
                 onChanged: VisualPrefs.setGravityVortex,
                 flair: flair,
+                tooltip: 'Simulates physical gravitational pull! Particles are warped and pulled in orbit around active character portraits.',
               ),
               const SizedBox(height: 8),
               _buildSwitchRow(
@@ -441,13 +444,14 @@ class _ThemeVisualsTab extends StatelessWidget {
                 value: prefs.advancedFlicker,
                 onChanged: VisualPrefs.setAdvancedFlicker,
                 flair: flair,
+                tooltip: 'Adds a rapid, flickering twinkle frequency to all floating particles for a magical, dynamic shimmer.',
               ),
               const SizedBox(height: 20),
 
               // =============================================================
               // Hypnotic Overlay Section
               // =============================================================
-              _prefSectionTitle('HYPNOTIC TRIPPY OVERLAY'),
+              _prefSectionTitleWithInfo('HYPNOTIC TRIPPY OVERLAY', flair, tooltip: 'Layer flowing, animated psychedelic loops beneath all screens for a trippy dungeon ambiance.'),
               const SizedBox(height: 6),
               _buildSwitchRow(
                 context: context,
@@ -456,10 +460,50 @@ class _ThemeVisualsTab extends StatelessWidget {
                 value: prefs.hypnoticBgEnabled,
                 onChanged: VisualPrefs.setHypnoticBgEnabled,
                 flair: flair,
+                tooltip: 'Layer flowing, animated psychedelic backdrop loops beneath all screens instead of solid backgrounds.',
               ),
               if (prefs.hypnoticBgEnabled) ...[
                 const SizedBox(height: 12),
-                _prefSectionTitle('HYPNOTIC BACKDROP OPACITY (${(prefs.hypnoticBgOpacity * 100).toStringAsFixed(0)}%)'),
+                _prefSectionTitleWithInfo('SELECT HYPNOTIC ASSET', flair, tooltip: 'Pick from 10 premium trippy animated backdrops sourced directly from Gungeon folders.'),
+                const SizedBox(height: 6),
+                Card(
+                  color: Colors.white.withValues(alpha: 0.02),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(color: flair.primary.withValues(alpha: 0.15)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: prefs.hypnoticBgAsset,
+                        dropdownColor: const Color(0xFF1E1E22),
+                        isExpanded: true,
+                        icon: Icon(Icons.arrow_drop_down, color: flair.primary),
+                        items: const [
+                          DropdownMenuItem(value: 'circles05.gif', child: Text('Psychedelic Circles', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'circles06.gif', child: Text('Expanding Ripples', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'kaleicospio03.gif', child: Text('Kaleidoscopic Warp', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'lines01.gif', child: Text('Tunneling Lines', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'sea02.gif', child: Text('Goop Sea Wave I', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'sea03.gif', child: Text('Goop Sea Wave II', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'squares01.gif', child: Text('Retro Grid Squares', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'tiles01.gif', child: Text('Optical Chessboard', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'tiles05.gif', child: Text('Infinite Maze Tiles', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                          DropdownMenuItem(value: 'weird03.gif', child: Text('Distortion Plasma', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
+                        ],
+                        onChanged: (val) {
+                          if (val != null) {
+                            VisualPrefs.setHypnoticBgAsset(val);
+                            Haptics.selection();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _prefSectionTitleWithInfo('HYPNOTIC BACKDROP OPACITY (${(prefs.hypnoticBgOpacity * 100).toStringAsFixed(0)}%)', flair, tooltip: 'Adjust the visibility/opacity blending of the animated trippy backdrops.'),
                 Slider(
                   min: 0.0,
                   max: 1.0,
@@ -471,7 +515,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 12),
-                _prefSectionTitle('HYPNOTIC BACKDROP SPEED (${prefs.hypnoticBgSpeed.toStringAsFixed(1)}x)'),
+                _prefSectionTitleWithInfo('HYPNOTIC BACKDROP SPEED (${prefs.hypnoticBgSpeed.toStringAsFixed(1)}x)', flair, tooltip: 'Calibrate the frame-rate speed multiplier of the flowing background loop.'),
                 Slider(
                   min: 0.1,
                   max: 4.0,
@@ -488,6 +532,43 @@ class _ThemeVisualsTab extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _prefSectionTitleWithInfo(String title, ThemeFlair flair, {String? tooltip}) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 4),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.white60, letterSpacing: 0.5),
+          ),
+          if (tooltip != null) ...[
+            const SizedBox(width: 6),
+            Tooltip(
+              message: tooltip,
+              triggerMode: TooltipTriggerMode.tap,
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.symmetric(horizontal: 24),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E1E22),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: flair.primary.withValues(alpha: 0.65), width: 1.2),
+                boxShadow: [
+                  BoxShadow(
+                    color: flair.primary.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+              textStyle: const TextStyle(fontSize: 10.5, color: Colors.white, fontWeight: FontWeight.bold),
+              child: Icon(Icons.info_outline_rounded, size: 13, color: flair.primary.withValues(alpha: 0.6)),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -554,6 +635,7 @@ class _ThemeVisualsTab extends StatelessWidget {
     required bool value,
     required ValueChanged<bool> onChanged,
     required ThemeFlair flair,
+    String? tooltip,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -567,14 +649,40 @@ class _ThemeVisualsTab extends StatelessWidget {
           Icon(icon, size: 16, color: Colors.white54),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              label.toUpperCase(),
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: Colors.white70,
-                letterSpacing: 0.5,
-              ),
+            child: Row(
+              children: [
+                Text(
+                  label.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white70,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                if (tooltip != null) ...[
+                  const SizedBox(width: 6),
+                  Tooltip(
+                    message: tooltip,
+                    triggerMode: TooltipTriggerMode.tap,
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E1E22),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: flair.primary.withValues(alpha: 0.65), width: 1.2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: flair.primary.withValues(alpha: 0.15),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    textStyle: const TextStyle(fontSize: 10.5, color: Colors.white, fontWeight: FontWeight.bold),
+                    child: Icon(Icons.info_outline_rounded, size: 13, color: flair.primary.withValues(alpha: 0.5)),
+                  ),
+                ],
+              ],
             ),
           ),
           Switch(

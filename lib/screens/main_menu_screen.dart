@@ -105,7 +105,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                             alignment: Alignment.center,
                             children: [
                               // Deep red backing stroke outline
-                              Text(
+                              GoopText(
                                 'GUNGEON MATE',
                                 style: TextStyle(
                                   fontSize: 40,
@@ -118,7 +118,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                 ),
                               ),
                               // Metallic gold foreground text with solid shadow
-                              const Text(
+                              const GoopText(
                                 'GUNGEON MATE',
                                 style: TextStyle(
                                   fontSize: 40,
