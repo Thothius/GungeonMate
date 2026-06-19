@@ -4357,7 +4357,7 @@ class _HeaderMenu extends StatelessWidget {
           child: Row(children: [
             Icon(Icons.storefront_outlined, size: 18, color: Color(0xFFCE93D8)),
             SizedBox(width: 10),
-            Text('Cursula Buy'),
+            Text('Cursula Buy  (+2.5 curse)'),
           ]),
         ),
         const PopupMenuItem(
@@ -6277,67 +6277,72 @@ class _DiceWidgetState extends State<_DiceWidget> with SingleTickerProviderState
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: widget.onTap,
-      child: AnimatedBuilder(
-        animation: Listenable.merge([widget.infiniteController, _impactController]),
-        builder: (context, child) {
-          final t = widget.infiniteController.value;
-          final impact = _impactController.value;
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        color: Colors.transparent,
+        child: AnimatedBuilder(
+          animation: Listenable.merge([widget.infiniteController, _impactController]),
+          builder: (context, child) {
+            final t = widget.infiniteController.value;
+            final impact = _impactController.value;
 
-          // Compute 3D rotation tumbling
-          final rotX = widget.isRolling ? (t * (4 + widget.index * 2) * math.pi) : 0.0;
-          final rotY = widget.isRolling ? (t * (3 + widget.index * 3) * math.pi) : 0.0;
-          final rotZ = widget.isRolling ? (t * (2 + widget.index * 4) * math.pi) : 0.0;
+            // Compute 3D rotation tumbling
+            final rotX = widget.isRolling ? (t * (4 + widget.index * 2) * math.pi) : 0.0;
+            final rotY = widget.isRolling ? (t * (3 + widget.index * 3) * math.pi) : 0.0;
+            final rotZ = widget.isRolling ? (t * (2 + widget.index * 4) * math.pi) : 0.0;
 
-          // Vertical floating/bobbing during roll to look super organic and pronounced!
-          final double bobY = widget.isRolling ? (math.sin(t * 2 * math.pi + widget.index * 1.5) * 8.0) : 0.0;
+            // Vertical floating/bobbing during roll to look organic
+            final double bobY = widget.isRolling ? (math.sin(t * 2 * math.pi + widget.index * 1.5) * 8.0) : 0.0;
 
-          // Rapid cycling face value while rolling
-          final faceVal = widget.isRolling ? ((widget.index + (t * 40).round()) % 6 + 1) : widget.value;
+            // Rapid cycling face value while rolling
+            final faceVal = widget.isRolling ? ((widget.index + (t * 40).round()) % 6 + 1) : widget.value;
 
-          // Impact pop scale (up to 1.35x and bounces back quickly)
-          final double scale = widget.isRolling 
-              ? 1.0 
-              : 1.0 + math.sin(impact * math.pi) * 0.35;
+            // Impact pop scale (up to 1.35x and bounces back quickly)
+            final double scale = widget.isRolling 
+                ? 1.0 
+                : 1.0 + math.sin(impact * math.pi) * 0.35;
 
-          return Transform(
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.0018) // 3D projection
-              ..translate(0.0, bobY)
-              ..scale(scale)
-              ..rotateX(rotX)
-              ..rotateY(rotY)
-              ..rotateZ(rotZ),
-            alignment: Alignment.center,
-            child: Container(
-              width: 72,
-              height: 72,
+            return Transform(
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.0018) // 3D projection
+                ..translate(0.0, bobY)
+                ..scale(scale)
+                ..rotateX(rotX)
+                ..rotateY(rotY)
+                ..rotateZ(rotZ),
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: widget.style.bg,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: widget.style.border,
-                  width: widget.isRolling ? 2.0 : 3.0,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: widget.style.glow,
-                    blurRadius: widget.isRolling ? 6 : 12,
-                    spreadRadius: widget.isRolling ? 1 : 3,
+              child: Container(
+                width: 72,
+                height: 72,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: widget.style.bg,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: widget.style.border,
+                    width: widget.isRolling ? 2.0 : 3.0,
                   ),
-                ],
-              ),
-              child: Text(
-                '$faceVal',
-                style: TextStyle(
-                  fontSize: 34,
-                  fontWeight: FontWeight.w900,
-                  color: widget.style.text,
+                  boxShadow: [
+                    BoxShadow(
+                      color: widget.style.glow,
+                      blurRadius: widget.isRolling ? 6 : 12,
+                      spreadRadius: widget.isRolling ? 1 : 3,
+                    ),
+                  ],
+                ),
+                child: Text(
+                  '$faceVal',
+                  style: TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.w900,
+                    color: widget.style.text,
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

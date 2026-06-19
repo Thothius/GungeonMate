@@ -89,6 +89,34 @@ class ShrinePickerScreen extends StatelessWidget {
                 );
               },
             ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: SizedBox(
+            height: 48,
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF2E2A27),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Colors.white12, width: 1.2),
+                ),
+                elevation: 4,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 16),
+              label: const Text(
+                'BACK TO RUN',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.8),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 

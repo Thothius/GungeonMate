@@ -76,9 +76,10 @@ class GungeoneerHeader extends StatefulWidget {
   State<GungeoneerHeader> createState() => _GungeoneerHeaderState();
 }
 
-class _GungeoneerHeaderState extends State<GungeoneerHeader> {
+class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerProviderStateMixin {
   String? _quickComment;
   Timer? _commentTimer;
+  late final AnimationController _wobbleController;
 
   void _onAvatarTapped() {
     _commentTimer?.cancel();
@@ -169,11 +170,16 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> {
   @override
   void initState() {
     super.initState();
+    _wobbleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat();
   }
 
   @override
   void dispose() {
     _commentTimer?.cancel();
+    _wobbleController.dispose();
     super.dispose();
   }
 
@@ -334,23 +340,25 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> {
                 children: [
                   Expanded(
                     child: _buildFlatCapsule(
-                      icon: Icons.ac_unit_rounded,
+                      imagePath: 'assets/images/items/coolness.webp',
                       color: const Color(0xFF00E5FF),
                       value: '+${widget.coolness.toStringAsFixed(1)}',
                       label: 'COOL',
                       onTap: widget.onTapCoolness,
                       onLongPress: widget.onLongPressCoolness,
+                      isCool: true,
                     ),
                   ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: _buildFlatCapsule(
-                      icon: Icons.local_fire_department_rounded,
-                      color: const Color(0xFFFF5252),
+                      imagePath: 'assets/images/items/curse.webp',
+                      color: const Color(0xFFE040FB),
                       value: '+${widget.curse.toStringAsFixed(1)}',
                       label: 'CURSE',
                       onTap: widget.onTapCurse,
                       onLongPress: widget.onLongPressCurse,
+                      isCurse: true,
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -437,14 +445,94 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> {
   }
 
   Widget _buildFlatCapsule({
-    required IconData icon,
+    IconData? icon,
+    String? imagePath,
     required Color color,
     required String value,
     required String label,
     VoidCallback? onTap,
     VoidCallback? onLongPress,
     bool isActive = true,
+    bool isCool = false,
+    bool isCurse = false,
   }) {
+    final double coolVal = widget.coolness;
+    final double curseVal = widget.curse;
+
+    final double coolGlowIntensity = (coolVal >= 2) ? (coolVal / 20.0).clamp(0.1, 1.0) : 0.0;
+    final double curseGlowIntensity = (curseVal >= 2) ? (curseVal / 10.0).clamp(0.1, 1.0) : 0.0;
+
+    Widget iconWidget;
+    if (imagePath != null) {
+      iconWidget = Image.asset(
+        imagePath,
+        width: 14,
+        height: 14,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+      );
+    } else if (icon != null) {
+      iconWidget = Icon(icon, size: 13, color: isActive ? color : Colors.white38);
+    } else {
+      iconWidget = const SizedBox.shrink();
+    }
+
+    Widget animatedIcon = iconWidget;
+
+    if (isCool && coolGlowIntensity > 0) {
+      animatedIcon = AnimatedBuilder(
+        animation: _wobbleController,
+        builder: (context, child) {
+          final pulse = math.sin(_wobbleController.value * 2 * math.pi) * 3.0;
+          return Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF00E5FF).withOpacity(0.55 * coolGlowIntensity),
+                  blurRadius: (8.0 + pulse) * coolGlowIntensity,
+                  spreadRadius: (1.5 + pulse * 0.2) * coolGlowIntensity,
+                ),
+              ],
+            ),
+            child: child,
+          );
+        },
+        child: iconWidget,
+      );
+    } else if (isCurse && curseGlowIntensity > 0) {
+      animatedIcon = AnimatedBuilder(
+        animation: _wobbleController,
+        builder: (context, child) {
+          final pulse = math.sin(_wobbleController.value * 2 * math.pi * 2) * 2.0;
+          final wobbleX = math.sin(_wobbleController.value * 2 * math.pi * 4) * 2.5 * curseGlowIntensity;
+          final wobbleY = math.cos(_wobbleController.value * 2 * math.pi * 3) * 1.8 * curseGlowIntensity;
+          final wobbleAngle = math.sin(_wobbleController.value * 2 * math.pi * 5) * 0.14 * curseGlowIntensity;
+
+          return Transform.translate(
+            offset: Offset(wobbleX, wobbleY),
+            child: Transform.rotate(
+              angle: wobbleAngle,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFE040FB).withOpacity(0.65 * curseGlowIntensity),
+                      blurRadius: (8.0 + pulse) * curseGlowIntensity,
+                      spreadRadius: (1.2 + pulse * 0.15) * curseGlowIntensity,
+                    ),
+                  ],
+                ),
+                child: child,
+              ),
+            ),
+          );
+        },
+        child: iconWidget,
+      );
+    }
+
     final capsule = Container(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       decoration: BoxDecoration(
@@ -467,7 +555,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, size: 13, color: isActive ? color : Colors.white38),
+                animatedIcon,
                 const SizedBox(width: 4),
                 Text(
                   value,
