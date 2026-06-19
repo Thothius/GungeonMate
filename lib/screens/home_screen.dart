@@ -4,6 +4,7 @@ import '../models/player.dart';
 import '../providers/run_provider.dart';
 import '../services/multiplayer_session.dart';
 import '../widgets/mp_request_listener.dart';
+import '../widgets/theme_overlay.dart';
 import 'main_menu_screen.dart';
 import 'active_run_screen.dart';
 import 'browse_screen.dart';
@@ -76,7 +77,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final screens = [
       ActiveRunScreen(
-        onRequestBrowse: () => setState(() => _selectedIndex = 1),
+        onRequestBrowse: () {
+          setState(() => _selectedIndex = 1);
+          ThemeOverlay.currentScreenIndex.value = 1;
+        },
         onPlayerChanged: (slot) => setState(() => _currentPlayerSlot = slot),
       ),
       // Feed Browse its own visibility so its didUpdateWidget hook can
@@ -102,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (didPop) return;
           if (_selectedIndex != 0) {
             setState(() => _selectedIndex = 0);
+            ThemeOverlay.currentScreenIndex.value = 0;
           }
         },
         child: Scaffold(
@@ -115,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 _selectedIndex = index;
               });
+              ThemeOverlay.currentScreenIndex.value = index;
             },
             destinations: const [
               NavigationDestination(

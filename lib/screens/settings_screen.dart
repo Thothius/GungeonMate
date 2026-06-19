@@ -192,7 +192,157 @@ class _ThemeVisualsTab extends StatelessWidget {
               const SizedBox(height: 24),
 
               // =============================================================
-              // Typography Tuning Section
+              // WALLPAPER & PARALLAX ENGINE LAB (moved up!)
+              // =============================================================
+              _prefSectionTitleWithInfo('WALLPAPER & PARALLAX ENGINE LAB', flair, tooltip: 'Select an exclusive handcrafted Gungeon wallpaper, activate gyroscopic depth parallax sways, or loop a high-fidelity 8s live animation. Swipe to browse!'),
+              const SizedBox(height: 8),
+              _SwipePicker<WallpaperMode>(
+                items: WallpaperMode.values,
+                value: prefs.wallpaperMode,
+                onChanged: (m) => VisualPrefs.setWallpaperMode(m),
+                height: 88,
+                itemBuilder: (mode, isSelected) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? flair.card.withValues(alpha: 0.9)
+                        : flair.card.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                      width: isSelected ? 1.5 : 1.0,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        mode == WallpaperMode.themeDefault
+                            ? Icons.palette_outlined
+                            : mode == WallpaperMode.customStill
+                                ? Icons.image_outlined
+                                : Icons.play_circle_outline_rounded,
+                        size: 24,
+                        color: isSelected ? flair.primary : Colors.white54,
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        mode.label,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          color: isSelected ? Colors.white : Colors.white54,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (prefs.wallpaperMode == WallpaperMode.customStill) ...[
+                const SizedBox(height: 12),
+                _prefSectionTitleWithInfo('SELECT STILL WALLPAPER', flair, tooltip: 'Swipe through 19 gorgeous high-fidelity pixel-art scenes.'),
+                const SizedBox(height: 8),
+                _SwipePicker<String>(
+                  items: kStillWallpapers.map((w) => w['asset']!).toList(),
+                  value: prefs.selectedStillWallpaper,
+                  onChanged: (v) => VisualPrefs.setSelectedStillWallpaper(v),
+                  height: 72,
+                  itemBuilder: (asset, isSelected) {
+                    final wallpaper = kStillWallpapers.firstWhere((w) => w['asset'] == asset);
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? flair.card.withValues(alpha: 0.9)
+                            : flair.card.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                          width: isSelected ? 1.5 : 1.0,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.image, size: 16, color: isSelected ? flair.primary : Colors.white38),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              wallpaper['name']!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                                color: isSelected ? Colors.white : Colors.white54,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
+                _buildSwitchRow(
+                  context: context,
+                  icon: Icons.screen_rotation_rounded,
+                  label: 'Gyroscopic Parallax Sway',
+                  value: prefs.parallaxMotionEnabled,
+                  onChanged: VisualPrefs.setParallaxMotionEnabled,
+                  flair: flair,
+                  tooltip: 'Dynamically shifts the wallpaper offset based on device tilt for a beautiful, responsive 3D parallax effect.',
+                ),
+              ],
+              if (prefs.wallpaperMode == WallpaperMode.customAnimated) ...[
+                const SizedBox(height: 12),
+                _prefSectionTitleWithInfo('SELECT ANIMATED LIVE LOOP', flair, tooltip: 'Swipe through premium high-fidelity 8-second animated background scenes.'),
+                const SizedBox(height: 8),
+                _SwipePicker<String>(
+                  items: kAnimatedWallpapers.map((w) => w['asset']!).toList(),
+                  value: prefs.selectedAnimatedWallpaper,
+                  onChanged: (v) => VisualPrefs.setSelectedAnimatedWallpaper(v),
+                  height: 72,
+                  itemBuilder: (asset, isSelected) {
+                    final wallpaper = kAnimatedWallpapers.firstWhere((w) => w['asset'] == asset);
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? flair.card.withValues(alpha: 0.9)
+                            : flair.card.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                          width: isSelected ? 1.5 : 1.0,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.play_circle_fill, size: 16, color: isSelected ? flair.primary : Colors.white38),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Text(
+                              wallpaper['name']!,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w800,
+                                color: isSelected ? Colors.white : Colors.white54,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+              const SizedBox(height: 20),
+
+              // =============================================================
+              // Typography Tuning Section (with swipe font selector!)
               // =============================================================
               _prefSectionTitle('APP TYPOGRAPHY TUNING'),
               const SizedBox(height: 8),
@@ -206,52 +356,46 @@ class _ThemeVisualsTab extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   child: Column(
                     children: [
-                      // Font selector inside Card
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Font Family', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70)),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Container(
-                              height: 38,
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.04),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.white10),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<AppFont>(
-                                  value: prefs.font,
-                                  isExpanded: true,
-                                  dropdownColor: flair.card,
-                                  icon: Icon(Icons.arrow_drop_down, color: flair.primary, size: 18),
-                                  onChanged: (AppFont? val) {
-                                    if (val != null) {
-                                      VisualPrefs.setFont(val);
-                                      Haptics.selection();
-                                    }
-                                  },
-                                  items: AppFont.values.map((AppFont f) {
-                                    final isSel = f == prefs.font;
-                                    return DropdownMenuItem<AppFont>(
-                                      value: f,
-                                      child: Text(
-                                        f == AppFont.gungeon ? 'Enter the Gungeon 🏹' : f.label,
-                                        style: f.textStyle.copyWith(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: isSel ? flair.primary : Colors.white70,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
+                      // Swipe Font Picker with live preview
+                      _SwipePicker<AppFont>(
+                        items: AppFont.values,
+                        value: prefs.font,
+                        onChanged: (f) => VisualPrefs.setFont(f),
+                        height: 92,
+                        itemBuilder: (font, isSelected) => Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? flair.scaffold.withValues(alpha: 0.6)
+                                : flair.scaffold.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSelected ? flair.primary.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.06),
+                              width: isSelected ? 1.5 : 1.0,
                             ),
                           ),
-                        ],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                font.label,
+                                style: font.textStyle.copyWith(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSelected ? flair.primary : Colors.white70,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'The Breach: Bello\'s Shop',
+                                style: font.textStyle.copyWith(
+                                  fontSize: 11,
+                                  color: isSelected ? Colors.white60 : Colors.white38,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                       const Divider(color: Colors.white12, height: 20),
 
@@ -416,7 +560,7 @@ class _ThemeVisualsTab extends StatelessWidget {
               const SizedBox(height: 20),
 
               // =============================================================
-              // Particle Tuning Section
+              // Particle Tuning Section (simplified — Type, Count, Size)
               // =============================================================
               _prefSectionTitleWithInfo('PARTICLE OVERLAY STYLE', flair, tooltip: 'Select a premium custom particle theme preset (such as embers, frost, or cat paws) to float in the background of all screens.'),
               const SizedBox(height: 6),
@@ -487,27 +631,10 @@ class _ThemeVisualsTab extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 16),
-
-                _prefSectionTitleWithInfo('PARTICLE EMITTERS', flair, tooltip: 'Choose which boundaries of the screen particles are emitted from. Active boundaries glow with your theme color.'),
-                const SizedBox(height: 6),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _buildDirectionChip('TOP', prefs.emitFromTop, (v) => VisualPrefs.setEmitters(top: v), flair),
-                      _buildDirectionChip('BOTTOM', prefs.emitFromBottom, (v) => VisualPrefs.setEmitters(bottom: v), flair),
-                      _buildDirectionChip('LEFT', prefs.emitFromLeft, (v) => VisualPrefs.setEmitters(left: v), flair),
-                      _buildDirectionChip('RIGHT', prefs.emitFromRight, (v) => VisualPrefs.setEmitters(right: v), flair),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
               ],
 
               // =============================================================
-              // Glow & Engine Rendering Section
+              // Glow Section
               // =============================================================
               _prefSectionTitleWithInfo('AMBIENT GLOW INTENSITY (${(prefs.glowIntensity * 100).toStringAsFixed(0)}%)', flair, tooltip: 'Set the opacity blending of the dual-gradient wandering ambient glow in the background.'),
               Slider(
@@ -520,182 +647,6 @@ class _ThemeVisualsTab extends StatelessWidget {
                   VisualPrefs.setGlow(v);
                 },
               ),
-              const SizedBox(height: 16),
-
-              _prefSectionTitle('DYNAMIC RENDER ENGINE TUNING'),
-              const SizedBox(height: 6),
-              _buildSwitchRow(
-                context: context,
-                icon: Icons.visibility_off_outlined,
-                label: 'Subtle Particle Mode',
-                value: prefs.subtleParticleMode,
-                onChanged: VisualPrefs.setSubtleParticleMode,
-                flair: flair,
-                tooltip: 'When enabled, particle count is reduced by 50% for maximum text readability in dark environments.',
-              ),
-              const SizedBox(height: 8),
-              _buildSwitchRow(
-                context: context,
-                icon: Icons.auto_awesome_rounded,
-                label: 'Interactive Touch Sparkles',
-                value: prefs.particlesEnabled,
-                onChanged: VisualPrefs.setParticles,
-                flair: flair,
-                tooltip: 'When enabled, tapping anywhere on the screen spawns a physical burst of colorful kinetic sparkles that decelerate and fade.',
-              ),
-              const SizedBox(height: 8),
-              _buildSwitchRow(
-                context: context,
-                icon: Icons.sync_rounded,
-                label: 'Particle Dynamic Rotation',
-                value: prefs.particleRotation,
-                onChanged: VisualPrefs.setParticleRotation,
-                flair: flair,
-                tooltip: 'When active, particles dynamically spin and rotate based on their velocity vector.',
-              ),
-              const SizedBox(height: 8),
-              _buildSwitchRow(
-                context: context,
-                icon: Icons.center_focus_strong_rounded,
-                label: 'Avatar Gravity Vortex',
-                value: prefs.gravityVortex,
-                onChanged: VisualPrefs.setGravityVortex,
-                flair: flair,
-                tooltip: 'Simulates physical gravitational pull! Particles are warped and pulled in orbit around active character portraits.',
-              ),
-              const SizedBox(height: 8),
-              _buildSwitchRow(
-                context: context,
-                icon: Icons.flash_on_rounded,
-                label: 'Advanced Breeze Flicker',
-                value: prefs.advancedFlicker,
-                onChanged: VisualPrefs.setAdvancedFlicker,
-                flair: flair,
-                tooltip: 'Adds a rapid, flickering twinkle frequency to all floating particles for a magical, dynamic shimmer.',
-              ),
-              const SizedBox(height: 20),
-
-              // =============================================================
-              // CUSTOM WALLPAPER & PARALLAX ENGINE LAB
-              // =============================================================
-              _prefSectionTitleWithInfo('WALLPAPER & PARALLAX ENGINE LAB', flair, tooltip: 'Select an exclusive handcrafted Gungeon wallpaper, activate gyroscopic depth parallax sways, or loop a high-fidelity 8s live animation.'),
-              const SizedBox(height: 6),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white10),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<WallpaperMode>(
-                    value: prefs.wallpaperMode,
-                    isExpanded: true,
-                    dropdownColor: flair.card,
-                    icon: Icon(Icons.arrow_drop_down, color: flair.primary),
-                    onChanged: (WallpaperMode? val) {
-                      if (val != null) {
-                        VisualPrefs.setWallpaperMode(val);
-                        Haptics.selection();
-                      }
-                    },
-                    items: WallpaperMode.values.map((WallpaperMode mode) {
-                      return DropdownMenuItem<WallpaperMode>(
-                        value: mode,
-                        child: Text(
-                          mode.label,
-                          style: const TextStyle(fontSize: 13, color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-              if (prefs.wallpaperMode == WallpaperMode.customStill) ...[
-                const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('SELECT STILL WALLPAPER', flair, tooltip: 'Choose from 19 gorgeous high-fidelity pixel-art scenes.'),
-                const SizedBox(height: 6),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.03),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: prefs.selectedStillWallpaper,
-                      isExpanded: true,
-                      dropdownColor: flair.card,
-                      icon: Icon(Icons.arrow_drop_down, color: flair.primary),
-                      onChanged: (String? val) {
-                        if (val != null) {
-                          VisualPrefs.setSelectedStillWallpaper(val);
-                          Haptics.selection();
-                        }
-                      },
-                      items: kStillWallpapers.map((map) {
-                        return DropdownMenuItem<String>(
-                          value: map['asset'],
-                          child: Text(
-                            map['name']!,
-                            style: const TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.bold),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _buildSwitchRow(
-                  context: context,
-                  icon: Icons.screen_rotation_rounded,
-                  label: 'Gyroscopic Parallax Sway',
-                  value: prefs.parallaxMotionEnabled,
-                  onChanged: VisualPrefs.setParallaxMotionEnabled,
-                  flair: flair,
-                  tooltip: 'Dynamically shifts the wallpaper offset based on device tilt for a beautiful, responsive 3D parallax effect.',
-                ),
-              ],
-              if (prefs.wallpaperMode == WallpaperMode.customAnimated) ...[
-                const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('SELECT ANIMATED LIVE LOOP', flair, tooltip: 'Loop a premium high-fidelity 8-second animated background scene.'),
-                const SizedBox(height: 6),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.03),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: prefs.selectedAnimatedWallpaper,
-                      isExpanded: true,
-                      dropdownColor: flair.card,
-                      icon: Icon(Icons.arrow_drop_down, color: flair.primary),
-                      onChanged: (String? val) {
-                        if (val != null) {
-                          VisualPrefs.setSelectedAnimatedWallpaper(val);
-                          Haptics.selection();
-                        }
-                      },
-                      items: kAnimatedWallpapers.map((map) {
-                        return DropdownMenuItem<String>(
-                          value: map['asset'],
-                          child: Text(
-                            map['name']!,
-                            style: const TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.bold),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
-              ],
               const SizedBox(height: 20),
 
               // =============================================================
@@ -843,33 +794,6 @@ class _ThemeVisualsTab extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDirectionChip(
-    String label,
-    bool isActive,
-    ValueChanged<bool> onChanged,
-    ThemeFlair f,
-  ) {
-    return FilterChip(
-      label: Text(
-        label,
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w900,
-          color: isActive ? Colors.black : Colors.white70,
-          letterSpacing: 0.5,
-        ),
-      ),
-      selected: isActive,
-      onSelected: (val) {
-        onChanged(val);
-        Haptics.selection();
-      },
-      selectedColor: f.primary,
-      backgroundColor: Colors.white.withValues(alpha: 0.05),
-      showCheckmark: false,
     );
   }
 
@@ -1351,6 +1275,90 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
         title: Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle, style: const TextStyle(fontSize: 10.5, color: Colors.white54)),
         trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.white38),
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// Reusable Swipe-to-Select Picker Widget
+// =============================================================================
+
+class _SwipePicker<T> extends StatefulWidget {
+  final List<T> items;
+  final T value;
+  final ValueChanged<T> onChanged;
+  final double height;
+  final Widget Function(T item, bool isSelected) itemBuilder;
+
+  const _SwipePicker({
+    required this.items,
+    required this.value,
+    required this.onChanged,
+    required this.height,
+    required this.itemBuilder,
+  });
+
+  @override
+  State<_SwipePicker<T>> createState() => _SwipePickerState<T>();
+}
+
+class _SwipePickerState<T> extends State<_SwipePicker<T>> {
+  late final PageController _pc;
+  late int _index;
+
+  @override
+  void initState() {
+    super.initState();
+    _index = widget.items.indexOf(widget.value);
+    if (_index < 0) _index = 0;
+    _pc = PageController(initialPage: _index, viewportFraction: 0.38);
+  }
+
+  @override
+  void didUpdateWidget(_SwipePicker<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final newIdx = widget.items.indexOf(widget.value);
+    if (newIdx >= 0 && newIdx != _index) {
+      _index = newIdx;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_pc.hasClients) _pc.animateToPage(newIdx, duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _pc.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: widget.height,
+      child: PageView.builder(
+        controller: _pc,
+        itemCount: widget.items.length,
+        onPageChanged: (i) {
+          setState(() => _index = i);
+          widget.onChanged(widget.items[i]);
+          Haptics.selection();
+        },
+        itemBuilder: (context, i) {
+          final item = widget.items[i];
+          final isSelected = item == widget.value;
+          final isFocused = i == _index;
+          return AnimatedScale(
+            duration: const Duration(milliseconds: 200),
+            scale: isFocused ? 1.0 : 0.92,
+            curve: Curves.easeOut,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: widget.itemBuilder(item, isSelected || isFocused),
+            ),
+          );
+        },
       ),
     );
   }

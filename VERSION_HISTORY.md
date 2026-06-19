@@ -6,6 +6,35 @@ All production APK builds are archived in `builds/` with proper version labeling
 
 ---
 
+## v0.9.8 — Great UI Condensation & Galaxy Home Screen (June 19, 2026)
+**File:** `gungeon-mate-v0.9.8.apk`
+**Build:** 40
+
+### Simplified Particle Settings
+- **Clean Particle Options** — Stripped particle settings to just Type, Count, and Size Scale. Removed emitters, rotation, gravity vortex, flicker, subtle mode, and touch sparkles.
+
+### Swipe-to-Select Pickers
+- **Wallpaper Mode Picker** — Replaced dropdown with a horizontal swipe picker showing icons and labels for Theme Default, Custom Still, and Custom Animated.
+- **Still & Animated Wallpaper Pickers** — Swipe through available wallpapers with live name display and animated scaling.
+- **Font Family Picker** — Swipe through all 60+ fonts with a live preview showing the font name and a sample Gungeon phrase in the actual font styling.
+
+### Settings Reorganization
+- **Wallpaper Section Moved Up** — Relocated the Wallpaper & Parallax Engine Lab above particles and typography for faster access.
+- **Condensed Layout** — Removed redundant sections and consolidated the menu for a cleaner, more focused experience.
+
+### Galaxy Always on Home
+- **Home Screen Galaxy** — The swirling Galaxy animated background now always plays on the Home/Inventory screen, creating an immersive cosmic atmosphere.
+- **No Particles on Home** — All particle effects, touch sparkles, and hypnotic backgrounds are suppressed on the Home screen for a clean, focused view.
+- **Screen-Aware Rendering** — Added a static screen-index notifier so ThemeOverlay knows which tab is active and renders backgrounds accordingly.
+
+### Enhanced Readability
+- **Stronger Scrim Overlay** — Added a gradient darkening layer that activates when any wallpaper or the Galaxy background is active, ensuring foreground panels and text remain crisp.
+
+### Swipe-Only Theme Picker
+- **Pure Palette Selection** — Removed all option rows, tuning panels, and customization controls from the Theme Picker. It is now a clean swipe-to-preview palette selector only.
+
+---
+
 ## v0.9.7 — Wallpaper & Gyroscopic Parallax Engine Lab (June 19, 2026)
 **File:** `gungeon-mate-v0.9.7.apk`
 **Size:** ~38.4 MB

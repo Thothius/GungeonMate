@@ -29,6 +29,13 @@ class ThemeOverlay extends StatefulWidget {
   /// x is tilt left/right (-10 to 10), y is tilt up/down (-10 to 10).
   static final ValueNotifier<Offset> tiltNotifier = ValueNotifier(Offset.zero);
 
+  /// Static global notifier for the current screen index (0=Home, 1=Browse, 2=Settings).
+  /// Used to force the Galaxy animated background on the Home screen only.
+  static final ValueNotifier<int> currentScreenIndex = ValueNotifier(0);
+
+  /// The Galaxy animated wallpaper asset that always plays on the Home screen.
+  static const String kHomeGalaxyAsset = 'wp_anim_01_galaxy.mp4';
+
   @override
   State<ThemeOverlay> createState() => _ThemeOverlayState();
 }
@@ -119,6 +126,10 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
         return ValueListenableBuilder<VisualPrefs>(
           valueListenable: VisualPrefs.notifier,
           builder: (_, prefs, __) {
+            return ValueListenableBuilder<int>(
+              valueListenable: ThemeOverlay.currentScreenIndex,
+              builder: (_, screenIndex, __) {
+                final isHomeScreen = screenIndex == 0;
             final f = AppTheme.displayedFlair;
           final showGlow = prefs.glowIntensity > 0.001;
           final gP = showGlow
@@ -127,15 +138,16 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           final gS = showGlow
               ? _scaleAlpha(f.glowSecondary, prefs.glowIntensity)
               : const Color(0x00000000);
-          final isWallpaperActive = prefs.wallpaperMode != WallpaperMode.themeDefault;
-          final hypnoticBackdrop = (prefs.hypnoticBgEnabled && !isWallpaperActive)
+          final isWallpaperActive = !isHomeScreen && prefs.wallpaperMode != WallpaperMode.themeDefault;
+          final hypnoticBackdrop = (prefs.hypnoticBgEnabled && !isWallpaperActive && !isHomeScreen)
               ? _HypnoticBg(
                   assetName: prefs.hypnoticBgAsset,
                   speedMultiplier: prefs.hypnoticBgSpeed,
                   opacity: prefs.hypnoticBgOpacity,
                 )
               : null;
-          final particlesOn = prefs.particlesEnabled &&
+          final particlesOn = !isHomeScreen &&
+              prefs.particlesEnabled &&
               prefs.customParticleType != CustomParticleType.none &&
               (!isWallpaperActive || prefs.customParticleType != CustomParticleType.themeDefault);
           final particleBackdropBg = !particlesOn
@@ -160,7 +172,10 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           }
 
           return Listener(
-            onPointerDown: (event) => _spawnTouchSparkles(event.position, prefs),
+            onPointerDown: (event) {
+              if (ThemeOverlay.currentScreenIndex.value == 0) return;
+              _spawnTouchSparkles(event.position, prefs);
+            },
             behavior: HitTestBehavior.translucent,
             child: Stack(
               children: [
@@ -169,8 +184,19 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   child: Container(color: f.scaffold),
                 ),
 
-                // 0.5. Custom Still or Animated Wallpaper
-                if (prefs.wallpaperMode == WallpaperMode.customStill)
+                // 0.4. Home Screen Galaxy — always plays on the Home/ActiveRun screen
+                if (isHomeScreen)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: _AnimatedWallpaperBackground(
+                        key: const ValueKey('home_galaxy'),
+                        assetName: ThemeOverlay.kHomeGalaxyAsset,
+                      ),
+                    ),
+                  ),
+
+                // 0.5. Custom Still or Animated Wallpaper (non-Home screens only)
+                if (!isHomeScreen && prefs.wallpaperMode == WallpaperMode.customStill)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: _StillWallpaperBackground(
@@ -179,7 +205,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-                if (prefs.wallpaperMode == WallpaperMode.customAnimated)
+                if (!isHomeScreen && prefs.wallpaperMode == WallpaperMode.customAnimated)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: _AnimatedWallpaperBackground(
@@ -240,6 +266,30 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   ),
                 ),
 
+                // 3.6. Enhanced Readability Scrim — when any wallpaper or
+                // Galaxy bg is active, lay down a semi-opaque dark veil so
+                // that foreground cards, text, and panels stay crisp.
+                if (isHomeScreen || isWallpaperActive)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.28),
+                              Colors.black.withValues(alpha: 0.12),
+                              Colors.black.withValues(alpha: 0.22),
+                              Colors.black.withValues(alpha: 0.38),
+                            ],
+                            stops: const [0.0, 0.3, 0.6, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                 if (f.pageFrame)
                   const Positioned.fill(
                       child: IgnorePointer(child: _PageFrame())),
@@ -261,7 +311,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                     ),
                   ),
 
-                if (prefs.particlesEnabled && _touchParticles.isNotEmpty)
+                if (!isHomeScreen && prefs.particlesEnabled && _touchParticles.isNotEmpty)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: CustomPaint(
@@ -275,6 +325,8 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
               ],
             ),
           );
+              },
+            );
         },
       );
     },
@@ -3035,6 +3087,7 @@ class _AnimatedWallpaperBackground extends StatefulWidget {
   final String assetName;
 
   const _AnimatedWallpaperBackground({
+    super.key,
     required this.assetName,
   });
 

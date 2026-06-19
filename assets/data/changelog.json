@@ -1,5 +1,18 @@
 [
   {
+    "version": "v0.9.8",
+    "title": "🧹 THE GREAT UI CONDENSATION & GALAXY HOME SCREEN",
+    "date": "June 19, 2026",
+    "items": [
+      "Simplified Particle Options: Stripped the particle settings down to just Type, Count, and Size Scale — removed emitters, rotation, gravity vortex, flicker, subtle mode, and touch sparkles for a clean, focused experience.",
+      "Swipe-to-Select Pickers: Replaced all dropdowns for Wallpaper Mode, Still/Animated Wallpaper selection, and Font Family with beautiful horizontal swipe pickers featuring live previews and animated scaling.",
+      "Wallpaper Section Moved Up: Relocated the Wallpaper & Parallax Engine Lab higher in the Settings menu, above particles and typography, for faster access.",
+      "Galaxy Always on Home: The swirling Galaxy animated background now always plays on the Home/Inventory screen with zero particles — other screens respect user settings normally.",
+      "Enhanced Readability Scrim: Added a stronger gradient darkening overlay when any wallpaper or the Galaxy background is active, keeping all foreground panels, cards, and text crisp and readable.",
+      "Swipe-Only Theme Picker: Removed all option rows and tuning panels from the Theme Picker screen — it is now a pure swipe-to-preview palette selector."
+    ]
+  },
+  {
     "version": "v0.9.7",
     "title": "🖼️ THE WALLPAPER & GYROSCOPIC PARALLAX ENGINE LAB",
     "date": "June 19, 2026",
