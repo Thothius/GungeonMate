@@ -205,6 +205,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
         duration: const Duration(milliseconds: 260), curve: Curves.easeOut);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       floatingActionButton: FloatingActionButton(
               heroTag: 'fab_add',
               tooltip: (isMpActive && !onMyMpPage)

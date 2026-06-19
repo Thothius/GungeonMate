@@ -72,7 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final hasActiveRun = runProvider.runState.selectedCharacter != null;
 
     if (!hasActiveRun) {
+      ThemeOverlay.currentScreenIndex.value = -1;
       return const MainMenuScreen();
+    }
+
+    // Ensure the Galaxy plays on the Home/Inventory screen
+    if (ThemeOverlay.currentScreenIndex.value != _selectedIndex) {
+      ThemeOverlay.currentScreenIndex.value = _selectedIndex;
     }
 
     final screens = [
@@ -110,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           body: IndexedStack(index: _selectedIndex, children: screens),
           bottomNavigationBar: NavigationBar(
             selectedIndex: _selectedIndex,

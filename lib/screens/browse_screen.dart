@@ -246,7 +246,10 @@ class _BrowseScreenState extends State<BrowseScreen>
   Widget _buildScaffold(
       BuildContext context, RunProvider p, bool isAll, bool isGuns, bool isFavs, bool isCoop) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
         // No screen title — the tab strip already labels the section
         // and the redundant "Browse" word ate vertical space testers
         // wanted back. The (add to P2) hint moves into the tab strip

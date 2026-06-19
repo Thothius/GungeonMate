@@ -29,7 +29,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          scrolledUnderElevation: 0,
           title: const Text('SETTINGS',
               style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2)),
           centerTitle: true,
