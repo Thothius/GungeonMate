@@ -6,6 +6,21 @@ All production APK builds are archived in `builds/` with proper version labeling
 
 ---
 
+## v0.9.97 — Retro Glitch Cinematic Breach & Wallpaper Update (June 23, 2026)
+**File:** `gungeon-mate-v0.9.97.apk`
+**Build:** 41
+
+### Dynamic 3D Retro Glitch Cinematic
+- **Interactive 3D Corridor** — Developed a cinematic intro page with responsive Tailwind CSS, realistic camera forward POV corridor runs, and screen slamming transitions.
+- **Web Audio Sound Synthesis** — Synthesizes authentic retro glitch laser effects, heavy bass impacts, and screen clicks directly in the browser.
+- **Physical Particle Explosion** — Programmed a high-performance physical particle blast on canvas that triggers on screen slam, throwing dithered, outline-glowing block particles directly at the viewport with active bounce.
+- **GungeonMate Live Replica** — Rendered a stunning, high-fidelity dark-neon interactive mockup of GungeonMate's actual home layout with active space galaxy.
+
+### 9 New High-Fidelity Still Wallpapers
+- **Expanded Wallpaper Gallery** — Integrated and registered 9 new beautifully rendered, high-contrast, dithered Gungeon-lore still wallpapers (Cyber Glitch, Circuit Wireframe, Glitch Bullet Tracks, CRT Corridor, Unicorn Rainbow Blaster, Archival Golden Keep, Frozen Tomb Crypt, Forge Volcanic Magma, Cursed Ritual Chamber).
+
+---
+
 ## v0.9.8 — Great UI Condensation & Galaxy Home Screen (June 19, 2026)
 **File:** `gungeon-mate-v0.9.8.apk`
 **Build:** 40
