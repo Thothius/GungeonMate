@@ -72,20 +72,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final hasActiveRun = runProvider.runState.selectedCharacter != null;
 
     if (!hasActiveRun) {
-      ThemeOverlay.currentScreenIndex.value = -1;
+      // Home screen (MainMenu) — Galaxy animated bg plays here
+      ThemeOverlay.currentScreenIndex.value = 0;
       return const MainMenuScreen();
     }
 
-    // Ensure the Galaxy plays on the Home/Inventory screen
-    if (ThemeOverlay.currentScreenIndex.value != _selectedIndex) {
-      ThemeOverlay.currentScreenIndex.value = _selectedIndex;
-    }
+    // Inventory/Browse/Settings — no Galaxy, respect user wallpaper settings
+    ThemeOverlay.currentScreenIndex.value = -1;
 
     final screens = [
       ActiveRunScreen(
         onRequestBrowse: () {
           setState(() => _selectedIndex = 1);
-          ThemeOverlay.currentScreenIndex.value = 1;
         },
         onPlayerChanged: (slot) => setState(() => _currentPlayerSlot = slot),
       ),
@@ -112,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
           if (didPop) return;
           if (_selectedIndex != 0) {
             setState(() => _selectedIndex = 0);
-            ThemeOverlay.currentScreenIndex.value = 0;
           }
         },
         child: Scaffold(
@@ -127,7 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 _selectedIndex = index;
               });
-              ThemeOverlay.currentScreenIndex.value = index;
             },
             destinations: const [
               NavigationDestination(

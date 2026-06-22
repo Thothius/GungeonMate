@@ -146,10 +146,8 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   opacity: prefs.hypnoticBgOpacity,
                 )
               : null;
-          final particlesOn = !isHomeScreen &&
-              prefs.particlesEnabled &&
-              prefs.customParticleType != CustomParticleType.none &&
-              (!isWallpaperActive || prefs.customParticleType != CustomParticleType.themeDefault);
+          final particlesOn = prefs.particlesEnabled &&
+              prefs.customParticleType != CustomParticleType.none;
           final particleBackdropBg = !particlesOn
               ? null
               : (prefs.customParticleType != CustomParticleType.themeDefault
@@ -188,9 +186,12 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 if (isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
-                      child: _AnimatedWallpaperBackground(
-                        key: const ValueKey('home_galaxy'),
-                        assetName: ThemeOverlay.kHomeGalaxyAsset,
+                      child: Opacity(
+                        opacity: 0.55,
+                        child: _AnimatedWallpaperBackground(
+                          key: const ValueKey('home_galaxy'),
+                          assetName: ThemeOverlay.kHomeGalaxyAsset,
+                        ),
                       ),
                     ),
                   ),
@@ -210,6 +211,16 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                     child: IgnorePointer(
                       child: _AnimatedWallpaperBackground(
                         assetName: prefs.selectedAnimatedWallpaper,
+                      ),
+                    ),
+                  ),
+
+                // 0.6. Custom Wallpaper Contrast Backing (prevents background detail bleeding through UI panels)
+                if (isWallpaperActive)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: Container(
+                        color: Colors.black.withValues(alpha: 0.45),
                       ),
                     ),
                   ),
@@ -255,9 +266,9 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                           radius: 1.25,
                           colors: [
                             Colors.transparent,
-                            Colors.black.withValues(alpha: 0.1),
-                            Colors.black.withValues(alpha: 0.52),
-                            Colors.black.withValues(alpha: 0.8),
+                            Colors.black.withValues(alpha: 0.05),
+                            Colors.black.withValues(alpha: 0.25),
+                            Colors.black.withValues(alpha: 0.48),
                           ],
                           stops: const [0.0, 0.45, 0.82, 1.0],
                         ),
@@ -269,7 +280,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 // 3.6. Enhanced Readability Scrim — when any wallpaper or
                 // Galaxy bg is active, lay down a semi-opaque dark veil so
                 // that foreground cards, text, and panels stay crisp.
-                if (isHomeScreen || isWallpaperActive)
+                if (isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
@@ -278,10 +289,30 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Colors.black.withValues(alpha: 0.28),
-                              Colors.black.withValues(alpha: 0.12),
                               Colors.black.withValues(alpha: 0.22),
-                              Colors.black.withValues(alpha: 0.38),
+                              Colors.black.withValues(alpha: 0.08),
+                              Colors.black.withValues(alpha: 0.14),
+                              Colors.black.withValues(alpha: 0.28),
+                            ],
+                            stops: const [0.0, 0.3, 0.6, 1.0],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                else if (isWallpaperActive)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.black.withValues(alpha: 0.12),
+                              Colors.black.withValues(alpha: 0.04),
+                              Colors.black.withValues(alpha: 0.08),
+                              Colors.black.withValues(alpha: 0.18),
                             ],
                             stops: const [0.0, 0.3, 0.6, 1.0],
                           ),
@@ -2325,8 +2356,8 @@ class _CustomParticlePainter extends CustomPainter {
           ? 0.88 + 0.12 * math.sin(t * 3.2 + s.phase * 8)
           : (prefs.advancedFlicker ? twinkle : 1.0);
 
-      // Scaled size according to the size slider & depth!
-      final scaledSize = s.size * prefs.particleSizeScale * dynamicScaleMultiplier * depth;
+      // Scaled size according to depth and premium multipliers for hand-tuned excellence!
+      final scaledSize = s.size * dynamicScaleMultiplier * depth;
 
       // Render custom types!
       switch (prefs.customParticleType) {
@@ -3122,6 +3153,16 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await oldController.dispose();
       });
+      _controller = null;
+    }
+
+    if (widget.assetName.startsWith('procedural_')) {
+      if (mounted) {
+        setState(() {
+          _initialized = true;
+        });
+      }
+      return;
     }
 
     final path = 'assets/images/wallpapers/animated/${widget.assetName}';
@@ -3156,6 +3197,18 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
 
   @override
   Widget build(BuildContext context) {
+    if (widget.assetName.startsWith('procedural_')) {
+      final actualAsset = widget.assetName.replaceAll('procedural_crt', 'crt_static')
+                                         .replaceAll('procedural_glitch', 'static_glitch')
+                                         .replaceAll('procedural_matrix', 'matrix_code')
+                                         .replaceAll('procedural_nebula', 'pixel_nebula');
+      return _HypnoticBg(
+        assetName: actualAsset,
+        speedMultiplier: 1.0,
+        opacity: 0.35,
+      );
+    }
+
     final controller = _controller;
     if (_hasError || controller == null) {
       // Elegant fallback: render the still counterpart

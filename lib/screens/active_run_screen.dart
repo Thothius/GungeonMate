@@ -1316,27 +1316,28 @@ class _MpHeader extends StatelessWidget {
     required IconData icon,
     required Color color,
   }) {
+    final flair = AppTheme.flair;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
+        color: flair.card.withValues(alpha: 0.82),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(color: color.withValues(alpha: 0.24), width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 12, color: color),
-              const SizedBox(width: 4),
+              Icon(icon, size: 13, color: color),
+              const SizedBox(width: 5),
               Text(
-                label,
+                label.toUpperCase(),
                 style: TextStyle(
-                  fontSize: 8.5,
+                  fontSize: 9.0,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white.withValues(alpha: 0.4),
-                  letterSpacing: 0.5,
+                  color: Colors.white.withValues(alpha: 0.65),
+                  letterSpacing: 0.8,
                 ),
               ),
             ],
@@ -1345,7 +1346,7 @@ class _MpHeader extends StatelessWidget {
           Text(
             value,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w900,
               color: color,
             ),
@@ -3899,21 +3900,22 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
   }
 
   Widget _buildBreakpointRow(String floorName, List<_BreakpointItem> items) {
+    final flair = AppTheme.flair;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
+        color: flair.card.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.lightGreen.withValues(alpha: 0.24), width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             floorName.toUpperCase(),
-            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.lightGreen, letterSpacing: 0.5),
+            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.lightGreen, letterSpacing: 0.8),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: items.map((item) {
@@ -3925,19 +3927,19 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                       item.enemy,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70),
+                      style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white),
                     ),
                     const SizedBox(height: 2),
                     Row(
                       children: [
                         Text(
                           item.hp,
-                          style: TextStyle(fontSize: 8.5, color: Colors.white.withValues(alpha: 0.5)),
+                          style: TextStyle(fontSize: 9.0, color: Colors.white.withValues(alpha: 0.65)),
                         ),
                         const SizedBox(width: 4),
                         Text(
                           '→ ${item.shots}',
-                          style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.orangeAccent),
+                          style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.orangeAccent),
                         ),
                       ],
                     ),
@@ -3979,35 +3981,36 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
   }
 
   Widget _buildSecretFloorRow(String title, String cost, String rewards, Color color) {
+    final flair = AppTheme.flair;
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withValues(alpha: 0.15)),
+        color: flair.card.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.28), width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.stars_sharp, color: color, size: 12),
-              const SizedBox(width: 6),
+              Icon(Icons.stars_sharp, color: color, size: 14),
+              const SizedBox(width: 8),
               Text(
                 title.toUpperCase(),
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: color, letterSpacing: 0.5),
+                style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w900, color: color, letterSpacing: 0.8),
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             'Cost: $cost',
-            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: Colors.white70),
+            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           const SizedBox(height: 4),
           Text(
             'Loot: $rewards',
-            style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+            style: TextStyle(fontSize: 9.5, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
           ),
         ],
       ),

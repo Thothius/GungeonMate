@@ -364,7 +364,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                         items: AppFont.values,
                         value: prefs.font,
                         onChanged: (f) => VisualPrefs.setFont(f),
-                        height: 92,
+                        height: 112,
                         itemBuilder: (font, isSelected) => Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
@@ -377,26 +377,29 @@ class _ThemeVisualsTab extends StatelessWidget {
                               width: isSelected ? 1.5 : 1.0,
                             ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                font.label,
-                                style: font.textStyle.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: isSelected ? flair.primary : Colors.white70,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  font.label,
+                                  style: font.textStyle.copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected ? flair.primary : Colors.white70,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'The Breach: Bello\'s Shop',
-                                style: font.textStyle.copyWith(
-                                  fontSize: 11,
-                                  color: isSelected ? Colors.white60 : Colors.white38,
+                                const SizedBox(height: 4),
+                                Text(
+                                  'The Breach: Bello\'s Shop',
+                                  style: font.textStyle.copyWith(
+                                    fontSize: 11,
+                                    color: isSelected ? Colors.white60 : Colors.white38,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -565,42 +568,36 @@ class _ThemeVisualsTab extends StatelessWidget {
               // =============================================================
               // Particle Tuning Section (simplified — Type, Count, Size)
               // =============================================================
-              _prefSectionTitleWithInfo('PARTICLE OVERLAY STYLE', flair, tooltip: 'Select a premium custom particle theme preset (such as embers, frost, or cat paws) to float in the background of all screens.'),
-              const SizedBox(height: 6),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white10),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<CustomParticleType>(
-                    value: prefs.customParticleType,
-                    isExpanded: true,
-                    dropdownColor: flair.card,
-                    icon: Icon(Icons.arrow_drop_down, color: flair.primary),
-                    onChanged: (CustomParticleType? val) {
-                      if (val != null) {
-                        VisualPrefs.setCustomParticleType(val);
-                        Haptics.selection();
-                      }
-                    },
-                    items: CustomParticleType.values.map((CustomParticleType t) {
-                      final isSel = t == prefs.customParticleType;
-                      return DropdownMenuItem<CustomParticleType>(
-                        value: t,
-                        child: Text(
-                          t.label,
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: isSel ? flair.primary : Colors.white70,
-                          ),
-                        ),
-                      );
-                    }).toList(),
+              _prefSectionTitleWithInfo('PARTICLE OVERLAY STYLE', flair, tooltip: 'Select a premium custom particle theme preset (such as embers, frost, or cat paws) to float in the background of all screens. Swipe to browse!'),
+              const SizedBox(height: 8),
+              _SwipePicker<CustomParticleType>(
+                items: CustomParticleType.values,
+                value: prefs.customParticleType,
+                onChanged: (t) => VisualPrefs.setCustomParticleType(t),
+                height: 84,
+                itemBuilder: (type, isSelected) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? flair.card.withValues(alpha: 0.9)
+                        : flair.card.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                      width: isSelected ? 1.5 : 1.0,
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      type.label,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w900,
+                        color: isSelected ? Colors.white : Colors.white54,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -617,20 +614,6 @@ class _ThemeVisualsTab extends StatelessWidget {
                   inactiveColor: Colors.white12,
                   onChanged: (v) {
                     VisualPrefs.setParticleCount(v.toInt());
-                  },
-                ),
-                const SizedBox(height: 12),
-
-                _prefSectionTitleWithInfo('PARTICLE SIZE SCALE (${prefs.particleSizeScale.toStringAsFixed(1)}x)', flair, tooltip: 'Scale up or down the visual dimensions of the custom background particles.'),
-                Slider(
-                  min: 0.5,
-                  max: 3.0,
-                  divisions: 25,
-                  value: prefs.particleSizeScale,
-                  activeColor: flair.primary,
-                  inactiveColor: Colors.white12,
-                  onChanged: (v) {
-                    VisualPrefs.setParticleSizeScale(v);
                   },
                 ),
                 const SizedBox(height: 16),
@@ -650,81 +633,6 @@ class _ThemeVisualsTab extends StatelessWidget {
                   VisualPrefs.setGlow(v);
                 },
               ),
-              const SizedBox(height: 20),
-
-              // =============================================================
-              // Animated Backgrounds Section
-              // =============================================================
-              _prefSectionTitleWithInfo('ANIMATED BACKGROUNDS OVERLAY', flair, tooltip: 'Layer flowing, animated backgrounds or high-performance procedural static loops beneath all screens for amazing dungeon ambiance.'),
-              const SizedBox(height: 6),
-              _buildSwitchRow(
-                context: context,
-                icon: Icons.blur_circular_rounded,
-                label: 'Enable Animated Backgrounds',
-                value: prefs.hypnoticBgEnabled,
-                onChanged: VisualPrefs.setHypnoticBgEnabled,
-                flair: flair,
-                tooltip: 'Layer flowing, animated backgrounds or procedural loops beneath all screens instead of solid backgrounds.',
-              ),
-              if (prefs.hypnoticBgEnabled) ...[
-                const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('SELECT BACKGROUND ASSET', flair, tooltip: 'Pick from premium animated backdrops or procedural analog scanline and grid glitch engines.'),
-                const SizedBox(height: 6),
-                Card(
-                  color: Colors.white.withValues(alpha: 0.02),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: flair.primary.withValues(alpha: 0.15)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: prefs.hypnoticBgAsset,
-                        dropdownColor: const Color(0xFF1E1E22),
-                        isExpanded: true,
-                        icon: Icon(Icons.arrow_drop_down, color: flair.primary),
-                        items: const [
-                          DropdownMenuItem(value: 'crt_static', child: Text('CRT Analog Static (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
-                          DropdownMenuItem(value: 'static_glitch', child: Text('Cyber Glitch Screen (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
-                          DropdownMenuItem(value: 'matrix_code', child: Text('Goopian Cipher Terminal (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
-                          DropdownMenuItem(value: 'pixel_nebula', child: Text('Pulsing Starfield Nebula (Procedural)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold))),
-                        ],
-                        onChanged: (val) {
-                          if (val != null) {
-                            VisualPrefs.setHypnoticBgAsset(val);
-                            Haptics.selection();
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('BACKGROUND OPACITY (${(prefs.hypnoticBgOpacity * 100).toStringAsFixed(0)}%)', flair, tooltip: 'Adjust the visibility/opacity blending of the animated backgrounds.'),
-                Slider(
-                  min: 0.0,
-                  max: 1.0,
-                  value: prefs.hypnoticBgOpacity,
-                  activeColor: flair.primary,
-                  inactiveColor: Colors.white12,
-                  onChanged: (v) {
-                    VisualPrefs.setHypnoticBgOpacity(v);
-                  },
-                ),
-                const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('BACKGROUND SPEED (${prefs.hypnoticBgSpeed.toStringAsFixed(1)}x)', flair, tooltip: 'Calibrate the animation rate or procedural refresh speeds of the background.'),
-                Slider(
-                  min: 0.1,
-                  max: 4.0,
-                  value: prefs.hypnoticBgSpeed,
-                  activeColor: flair.primary,
-                  inactiveColor: Colors.white12,
-                  onChanged: (v) {
-                    VisualPrefs.setHypnoticBgSpeed(v);
-                  },
-                ),
-              ],
               const SizedBox(height: 24),
             ],
           ),

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/run_provider.dart';
@@ -87,6 +88,14 @@ class _GungeonMateAppState extends State<GungeonMateApp>
             title: 'Gungeon Mate',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.themeFor(mode),
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.trackpad,
+                PointerDeviceKind.stylus,
+              },
+            ),
             // Wraps every route's content in a theme-aware overlay so per-
             // theme signature flair (Curseblaster red breath, future others)
             // paints above the scene without each screen needing to opt in.

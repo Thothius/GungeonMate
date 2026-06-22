@@ -11,7 +11,7 @@ All production APK builds are archived in `builds/` with proper version labeling
 **Build:** 40
 
 ### Simplified Particle Settings
-- **Clean Particle Options** — Stripped particle settings to just Type, Count, and Size Scale. Removed emitters, rotation, gravity vortex, flicker, subtle mode, and touch sparkles.
+- **Clean Particle Options** — Stripped particle settings down to just Type and Density. Completely removed custom sizing, emitters, rotation, gravity vortex, flicker, subtle mode, and touch sparkles for perfect, pre-tuned handcrafted excellence.
 
 ### Swipe-to-Select Pickers
 - **Wallpaper Mode Picker** — Replaced dropdown with a horizontal swipe picker showing icons and labels for Theme Default, Custom Still, and Custom Animated.
@@ -22,9 +22,9 @@ All production APK builds are archived in `builds/` with proper version labeling
 - **Wallpaper Section Moved Up** — Relocated the Wallpaper & Parallax Engine Lab above particles and typography for faster access.
 - **Condensed Layout** — Removed redundant sections and consolidated the menu for a cleaner, more focused experience.
 
-### Galaxy Always on Home
-- **Home Screen Galaxy** — The swirling Galaxy animated background now always plays on the Home/Inventory screen, creating an immersive cosmic atmosphere.
-- **No Particles on Home** — All particle effects, touch sparkles, and hypnotic backgrounds are suppressed on the Home screen for a clean, focused view.
+### Galaxy Always on Home with Particles
+- **Home Screen Galaxy** — The swirling Galaxy animated background plays on the Main Menu Home screen, creating an immersive cosmic atmosphere.
+- **Particles in Front of BG** — Premium background particles now drift gracefully in front of the Galaxy background and all active custom wallpapers.
 - **Screen-Aware Rendering** — Added a static screen-index notifier so ThemeOverlay knows which tab is active and renders backgrounds accordingly.
 
 ### Enhanced Readability

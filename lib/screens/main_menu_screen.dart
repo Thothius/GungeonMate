@@ -85,20 +85,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            colors: [
-              Color(0xFF231A1D), // soft deep wine-pink/charcoal center for cat theme!
-              Color(0xFF0C090A), // rich pitch-black edges
-            ],
-            center: Alignment.center,
-            radius: 1.2,
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          Positioned.fill(
               child: SafeArea(
             child: Center(
               child: ConstrainedBox(
@@ -340,7 +330,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v0.9.5',
+                    'v0.9.8',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -354,10 +344,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             ),
           ),
         ),
-      ),
-            ),
-            // Small bottom-center Changelog button
-            Positioned(
+          ),
+          ),
+          // Small bottom-center Changelog button
+          Positioned(
               bottom: 16,
               left: 0,
               right: 0,
@@ -379,7 +369,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v0.9.5)',
+                            'Changelog (v0.9.8)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
@@ -391,7 +381,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 

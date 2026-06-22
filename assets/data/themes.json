@@ -1,0 +1,212 @@
+[
+  {
+    "paletteName": "Unicorn - Prompt #1",
+    "colorSchema": { "scaffold": "#1A101F", "card": "#2D1B36", "primary": "#FF69B4", "secondary": "#E8A7F0", "headlineStat": "#00F5D4" },
+    "aesthetic": "Chunky 32-bit pixel art, magical pastel neon Gungeon style, bubblegum cosmic dust with dithered shading.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, dark magical cosmic rift with deep violet backdrop, swirling starfield of hot pink and soft lavender nebulae, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Glittering rainbow bullet casings ejected from a unicorn horn-gun, leaving sparkling stardust trails."
+  },
+  {
+    "paletteName": "Unicorn - Prompt #2",
+    "colorSchema": { "scaffold": "#1A101F", "card": "#2D1B36", "primary": "#FF69B4", "secondary": "#E8A7F0", "headlineStat": "#00F5D4" },
+    "aesthetic": "Chunky 32-bit pixel art, magical pastel neon Gungeon style, bubblegum cosmic dust with dithered shading.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, magical armor vault with dark grape-purple stone wall textures, glowing neon pink treasure chests, twinkling neon cyan pixelated stars, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Floating 16-bit fairy companions leaving trails of glowing lavender gunpowder residue around the vaults."
+  },
+  {
+    "paletteName": "Unicorn - Prompt #3",
+    "colorSchema": { "scaffold": "#1A101F", "card": "#2D1B36", "primary": "#FF69B4", "secondary": "#E8A7F0", "headlineStat": "#00F5D4" },
+    "aesthetic": "Chunky 32-bit pixel art, magical pastel neon Gungeon style, bubblegum cosmic dust with dithered shading.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, chibi unicorn-horned gun turret resting in cozy dark fantasy dungeon, glowing pastel pink ammunition belts, sparkling stardust trail, floating 16-bit glowing purple gems, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Miniature pink bullet kin with tiny unicorn horns marching along the ammunition belts."
+  },
+  {
+    "paletteName": "Ammonomicon - Prompt #1",
+    "colorSchema": { "scaffold": "#120D0A", "card": "#221A14", "primary": "#D4AF37", "secondary": "#CD9F73", "headlineStat": "#FFFDD0" },
+    "aesthetic": "Chunky 32-bit pixel art, book-leather archival dungeon library, gold-embossed trim, dithered candlelight.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, dark dungeon bookshelf library with dark leather-brown shadow stones and hanging iron chains, books with glittering gold-embossed trims, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Flickering gold-leaf equations of projectile bullet trajectories floating off the shelves like magical glyphs."
+  },
+  {
+    "paletteName": "Ammonomicon - Prompt #2",
+    "colorSchema": { "scaffold": "#120D0A", "card": "#221A14", "primary": "#D4AF37", "secondary": "#CD9F73", "headlineStat": "#FFFDD0" },
+    "aesthetic": "Chunky 32-bit pixel art, book-leather archival dungeon library, gold-embossed trim, dithered candlelight.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, a massive ancient leather grimoire lying open on an old wooden study altar, ivory-white glowing pages, warm candlelight casting soft bronze shadows, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Smudged gold gunpowder residue coating the open book covers, with 16-bit charcoal schematics of ancient revolvers hand-drawn on the margins."
+  },
+  {
+    "paletteName": "Ammonomicon - Prompt #3",
+    "colorSchema": { "scaffold": "#120D0A", "card": "#221A14", "primary": "#D4AF37", "secondary": "#CD9F73", "headlineStat": "#FFFDD0" },
+    "aesthetic": "Chunky 32-bit pixel art, book-leather archival dungeon library, gold-embossed trim, dithered candlelight.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, quiet archival sanctuary with gold-trimmed pedestals, golden bullet casings scattered on old leather desks, warm dithered brass ambient lighting, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "A small inkwell shaped like a heavy shotgun shell, with a dithered feather quill pen resting inside."
+  },
+  {
+    "paletteName": "Forge Master - Prompt #1",
+    "colorSchema": { "scaffold": "#0F0C0A", "card": "#1C1714", "primary": "#FFFF4500", "secondary": "#FFFFB74D", "headlineStat": "#FFFFCC00" },
+    "aesthetic": "Chunky 32-bit pixel art, molten volcanic blacksmith forge, thick black obsidian plates, glowing lava sparks.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, roaring lava blacksmith forge with dark black obsidian plates, rivers of flowing molten orange magma, glowing sulfur yellow sparks, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Molten ore bubbling into distinct Dragun shell silhouettes, with heat-haze distortion warping around the pipes."
+  },
+  {
+    "paletteName": "Forge Master - Prompt #2",
+    "colorSchema": { "scaffold": "#0F0C0A", "card": "#1C1714", "primary": "#FFFF4500", "secondary": "#FFFFB74D", "headlineStat": "#FFFFCC00" },
+    "aesthetic": "Chunky 32-bit pixel art, molten volcanic blacksmith forge, thick black obsidian plates, glowing lava sparks.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, Gungeon blacksmith chamber with heavy black steel scaffolding, glowing orange-hot metal ingots resting on anvil, bright sulfur yellow sparks showering down, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Heavy metallic hammers automatically forging massive glowing 16-bit shotgun shell ingots on the anvil."
+  },
+  {
+    "paletteName": "Forge Master - Prompt #3",
+    "colorSchema": { "scaffold": "#0F0C0A", "card": "#1C1714", "primary": "#FFFF4500", "secondary": "#FFFFB74D", "headlineStat": "#FFFFCC00" },
+    "aesthetic": "Chunky 32-bit pixel art, molten volcanic blacksmith forge, thick black obsidian plates, glowing lava sparks.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, ominous dragon forge gateway with giant mechanical dragon silhouette in the distance breathing fire, rivers of magma, dark charcoal dithered rock textures, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Giant dragon-scale textures carved directly into the obsidian stone walls, glowing orange with active internal heat cracks."
+  },
+  {
+    "paletteName": "Hollow Chill - Prompt #1",
+    "colorSchema": { "scaffold": "#0A1118", "card": "#132230", "primary": "#00D2FF", "secondary": "#90A4AE", "headlineStat": "#E0F7FA" },
+    "aesthetic": "Chunky 32-bit pixel art, freezing frost-rimed slate, haunted tombstone spectral mist.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, freezing frost cave with deep cold navy slate walls, sharp icicles hanging from a massive stone arch, glowing cyan ice crystals, spectral pale-blue runic pillars, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "An icy spectral muzzle flash frozen in mid-air, with dithered frost crystals branching outward from the center."
+  },
+  {
+    "paletteName": "Hollow Chill - Prompt #2",
+    "colorSchema": { "scaffold": "#0A1118", "card": "#132230", "primary": "#00D2FF", "secondary": "#90A4AE", "headlineStat": "#E0F7FA" },
+    "aesthetic": "Chunky 32-bit pixel art, freezing frost-rimed slate, haunted tombstone spectral mist.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, spectral catacomb chamber with frozen tombstones covered in icy rime, glowing blue lanterns casting dithered shadows, ghostly ice bullet casings, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Transparent, ghostly outlines of the legendary Old Crest armor floating in the cold dithered mist."
+  },
+  {
+    "paletteName": "Hollow Chill - Prompt #3",
+    "colorSchema": { "scaffold": "#0A1118", "card": "#132230", "primary": "#00D2FF", "secondary": "#90A4AE", "headlineStat": "#E0F7FA" },
+    "aesthetic": "Chunky 32-bit pixel art, freezing frost-rimed slate, haunted tombstone spectral mist.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, freezing bullet-kin graveyard with snowflake-tiled ice floors, cold navy slate wall textures, glowing cyan symbols, dithered frost particles, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Floating spectral bullets wrapped in translucent ice blocks, rotating slowly above the tombstones."
+  },
+  {
+    "paletteName": "Lord Jammed - Prompt #1",
+    "colorSchema": { "scaffold": "#0A030C", "card": "#16071B", "primary": "#FF0033", "secondary": "#CE93D8", "headlineStat": "#FFFF007F" },
+    "aesthetic": "Chunky 32-bit pixel art, cursed ritual chamber, velvet purple shadows, lethal neon crimson sigils.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, occult blood-ritual chamber with deep corrupted purple floor tiles, glowing lethal scarlet-crimson sigils on walls, misty violet vapors rising from cracks, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "High-contrast blood-red shotgun shells slowly dripping a dark purple corrupted sludge onto the floor tiles."
+  },
+  {
+    "paletteName": "Lord Jammed - Prompt #2",
+    "colorSchema": { "scaffold": "#0A030C", "card": "#16071B", "primary": "#FF0033", "secondary": "#CE93D8", "headlineStat": "#FFFF007F" },
+    "aesthetic": "Chunky 32-bit pixel art, cursed ritual chamber, velvet purple shadows, lethal neon crimson sigils.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, velvet-draped dark throne room of the Lord Jammed, glowing oxblood red candles, floating dithered violet eyes, toxic violet dust, high-contrast dark neon bullet shell altar, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "A terrifying, glowing red wireframe outline of the stalking Lord of the Jammed Reaper fading in and out of the deep purple backdrop."
+  },
+  {
+    "paletteName": "Lord Jammed - Prompt #3",
+    "colorSchema": { "scaffold": "#0A030C", "card": "#16071B", "primary": "#FF0033", "secondary": "#CE93D8", "headlineStat": "#FFFF007F" },
+    "aesthetic": "Chunky 32-bit pixel art, cursed ritual chamber, velvet purple shadows, lethal neon crimson sigils.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, mysterious cursed portal gateway with glowing neon magenta chains wrapping around a crimson stone archway, obsidian steps leading down into dark purple abyss, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Glowing runic curse symbols (numerical curse meter indicators) pulsing on the steps, slowly raising curse mist."
+  },
+  {
+    "paletteName": "The Breach - Prompt #1",
+    "colorSchema": { "scaffold": "#111216", "card": "#1D2026", "primary": "#FFFF9F1C", "secondary": "#9FA8DA", "headlineStat": "#FFFFD166" },
+    "aesthetic": "Chunky 32-bit pixel art, cozy hearthstone medieval tavern, warm brass lanterns, comforting stone slate.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, cozy stone-grey medieval tavern interior with dark slate walls, cozy crackling stone fireplace casting warm dithered amber hearth glow, wooden tables and comfortable barrels, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "A heavy wooden bat (Casey) leaning cozy against the stone fireplace, with warm brass shell casing mugs resting on tables."
+  },
+  {
+    "paletteName": "The Breach - Prompt #2",
+    "colorSchema": { "scaffold": "#111216", "card": "#1D2026", "primary": "#FFFF9F1C", "secondary": "#9FA8DA", "headlineStat": "#FFFFD166" },
+    "aesthetic": "Chunky 32-bit pixel art, cozy hearthstone medieval tavern, warm brass lanterns, comforting stone slate.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, the Breach weapon shop of Bello with rustic wooden shelves, warm brass bullet casings hanging as charms, soft stone-slate floor, cozy glowing lanterns casting golden amber light, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "An authentic green ammo crate (the classic ammo drop box) resting in the corner under warm golden light."
+  },
+  {
+    "paletteName": "The Breach - Prompt #3",
+    "colorSchema": { "scaffold": "#111216", "card": "#1D2026", "primary": "#FFFF9F1C", "secondary": "#9FA8DA", "headlineStat": "#FFFFD166" },
+    "aesthetic": "Chunky 32-bit pixel art, cozy hearthstone medieval tavern, warm brass lanterns, comforting stone slate.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, resting campground in the Breach, campfire sparks rising into the cool evening night, cozy stone bricks, hanging blue-grey banners, warm yellow starlight, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Chunky dithered woodsmoke drifting lazily into a night sky filled with small 16-bit glowing bullet-shaped constellations."
+  },
+  {
+    "paletteName": "Bullet Hell - Prompt #1",
+    "colorSchema": { "scaffold": "#08090A", "card": "#141619", "primary": "#39FF14", "secondary": "#B388FF", "headlineStat": "#CCFF00" },
+    "aesthetic": "Chunky 32-bit pixel art, radioactive acid-toxic underworld, volcanic lava cracks, violet nether mist.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, desolate volcanic underworld with charcoal-black volcanic glass ground, flowing rivers of radioactive green acid goo, dithered violet toxic mist drifting, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Acidic green bullet muzzle flashes lighting up piles of scorched steel casing debris along the banks."
+  },
+  {
+    "paletteName": "Bullet Hell - Prompt #2",
+    "colorSchema": { "scaffold": "#08090A", "card": "#141619", "primary": "#39FF14", "secondary": "#B388FF", "headlineStat": "#CCFF00" },
+    "aesthetic": "Chunky 32-bit pixel art, radioactive acid-toxic underworld, volcanic lava cracks, violet nether mist.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, underworld hell cathedral chamber with charred pillars, glowing radioactive green bullet runes, neon purple energy streams pulsing from cracks, dark metal chains, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "A massive glitched Gungeon chest in the distance flickering between green, purple, and visual noise matrix code."
+  },
+  {
+    "paletteName": "Bullet Hell - Prompt #3",
+    "colorSchema": { "scaffold": "#08090A", "card": "#141619", "primary": "#39FF14", "secondary": "#B388FF", "headlineStat": "#CCFF00" },
+    "aesthetic": "Chunky 32-bit pixel art, radioactive acid-toxic underworld, volcanic lava cracks, violet nether mist.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, acid-ooze bullet kin skull sanctuary with rivers of glowing green goop, dithered purple stardust fog, charred volcanic lava rock textures, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Flickering temporal green code sequences etched into the charred bone structures of the wall skulls."
+  },
+  {
+    "paletteName": "Resourceful Rat - Prompt #1",
+    "colorSchema": { "scaffold": "#0D110E", "card": "#18221B", "primary": "#FFD700", "secondary": "#81C784", "headlineStat": "#FFA500" },
+    "aesthetic": "Chunky 32-bit pixel art, sneaky sewer pipeline maze, glittering gold treasure piles.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, sneaky sewer cache with dark moss-green brick archways, massive piles of glittering gold coins and brass gears, dirty green sewer pipes oozing liquid green, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "A shiny, golden sneaky key glittering inside a damp dithered sewer grate."
+  },
+  {
+    "paletteName": "Resourceful Rat - Prompt #2",
+    "colorSchema": { "scaffold": "#0D110E", "card": "#18221B", "primary": "#FFD700", "secondary": "#81C784", "headlineStat": "#FFA500" },
+    "aesthetic": "Chunky 32-bit pixel art, sneaky sewer pipeline maze, glittering gold treasure piles.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, ventilation shaft treasure chamber with metal grid floors, pile of stolen Gungeon loot, golden cheese blocks glowing yellow, copper wires and green lights, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Rusted metal ventilation fans spinning lazily behind the gridwork floors, casting spinning dithered shadows."
+  },
+  {
+    "paletteName": "Resourceful Rat - Prompt #3",
+    "colorSchema": { "scaffold": "#0D110E", "card": "#18221B", "primary": "#FFD700", "secondary": "#81C784", "headlineStat": "#FFA500" },
+    "aesthetic": "Chunky 32-bit pixel art, sneaky sewer pipeline maze, glittering gold treasure piles.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, secret vault of the Resourceful Rat with metal safes overflowing with gold bullets, green gas lanterns casting dithered mossy light, grid work pipes, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "A tiny pixelated rat wearing a thief mask peeking out from behind a pile of gold bullets."
+  },
+  {
+    "paletteName": "Glitch Chest Neon - Prompt #1",
+    "colorSchema": { "scaffold": "#0B1214", "card": "#152226", "primary": "#00E5FF", "secondary": "#FF007F", "headlineStat": "#E040FB" },
+    "aesthetic": "Chunky 32-bit pixel art, digital cyber glitch scanlines, flickering magenta and neon cyan circuits.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, cyber glitch space tunnel with deep purple walls covered in glowing neon-cyan circuit line traces, floating chunky neon-pink glitch cubes suspended in the center, strong central one-point perspective looking forward, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Glitchy neon-cyan circuit traces pulsing with digital electrical flows that warp around floating 16-bit magenta cubes."
+  },
+  {
+    "paletteName": "Glitch Chest Neon - Prompt #2",
+    "colorSchema": { "scaffold": "#0B1214", "card": "#152226", "primary": "#00E5FF", "secondary": "#FF007F", "headlineStat": "#E040FB" },
+    "aesthetic": "Chunky 32-bit pixel art, digital cyber glitch scanlines, flickering magenta and neon cyan circuits.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, high-tech hacking corridor with blue circuit boards and vertical circuit lines, vertical silhouettes of bullet shells etched in neon on walls and ceiling, floating hot magenta digital glitch cubes with pixel noise, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Retro neon bullet kin wireframe silhouettes pulsing and flickering in pink visual noise directly on the circuit tracks."
+  },
+  {
+    "paletteName": "Glitch Chest Neon - Prompt #3",
+    "colorSchema": { "scaffold": "#0B1214", "card": "#152226", "primary": "#00E5FF", "secondary": "#FF007F", "headlineStat": "#E040FB" },
+    "aesthetic": "Chunky 32-bit pixel art, digital cyber glitch scanlines, flickering magenta and neon cyan circuits.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, narrow CRT monitor computer corridor with scanlines and cyan circuitry lines running along deep blue panels, pink digital noise blocks scattered and glitched across the pathway, strong central one-point perspective looking down a digital cyber-dungeon pathway, thick solid black pixel outlines on all objects, stippled dithered shading, heavy solid black vignette borders, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Horizontal analog scanlines splitting 16-bit gun sprites into offset cyan and magenta channels along the cyber-dungeon walls."
+  },
+  {
+    "paletteName": "Master Round Crimson - Prompt #1",
+    "colorSchema": { "scaffold": "#14080D", "card": "#261019", "primary": "#FF1133", "secondary": "#FFFFD700", "headlineStat": "#FFFF8A80" },
+    "aesthetic": "Chunky 32-bit pixel art, royal velvet red throne room, golden brass pillars.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, royal throne chamber covered in velvet red, deep maroon walls, glowing golden candelabras, majestic crimson red carpet, glowing brass bullet-shaped artifacts, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "The legendary Master Round bullet artifact floating majestically on a velvet cushion inside a golden glass chamber."
+  },
+  {
+    "paletteName": "Master Round Crimson - Prompt #2",
+    "colorSchema": { "scaffold": "#14080D", "card": "#261019", "primary": "#FF1133", "secondary": "#FFFFD700", "headlineStat": "#FFFF8A80" },
+    "aesthetic": "Chunky 32-bit pixel art, royal velvet red throne room, golden brass pillars.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, sanctuary of the Master Round with glowing velvet crimson curtains, shimmering dithered gold bullet pedestal, soft pastel pink light reflecting off gold trim, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "Six glowing, golden rotating brass revolver chambers orbiting the central altar like a cosmic shield."
+  },
+  {
+    "paletteName": "Master Round Crimson - Prompt #3",
+    "colorSchema": { "scaffold": "#14080D", "card": "#261019", "primary": "#FF1133", "secondary": "#FFFFD700", "headlineStat": "#FFFF8A80" },
+    "aesthetic": "Chunky 32-bit pixel art, royal velvet red throne room, golden brass pillars.",
+    "prompt": "Authentic 32-bit chunky retro pixel art, Enter the Gungeon style, hand-drawn pixel textures, regal bullet-kin temple wall with gold-trimmed obsidian pillars, velvet banners, warm crimson ambient light, detailed 16-bit layout, strong central one-point perspective, thick solid black pixel outlines on all objects, stippled dithered shading and checkerboard gradients, heavy solid black vignette borders on top and bottom edges, highly saturated neon highlights surrounded by deep pitch-black shadows, UI safe, mobile vertical wallpaper --ar 9:16 --v 6.0",
+    "geniusAestheticIdea": "A pristine gold crown engraved with a heavy bullet emblem sitting atop the central pedestal."
+  }
+]

@@ -1,13 +1,25 @@
 [
   {
+    "version": "v0.9.9",
+    "title": "👾 RETRO GLITCH CINEMATIC BREACH & PROMPT HARMONIZATION",
+    "date": "June 22, 2026",
+    "items": [
+      "Dynamic 3D Retro Glitch Cinematic: Developed a cinematic intro system in glitch_intro.html with responsive Tailwind CSS, realistic camera forward POV corridor runs, and screen slamming transitions.",
+      "Analog Audio Sound Synthesis: Implemented Web Audio API sound generator to synthesize authentic retro glitch lasers, heavy bass impacts, and screen clicks without requiring extra media asset downloads.",
+      "Interactive Particle Exploser: Programmed a high-performance physical particle blast on canvas that triggers on screen slam, throwing dithered, outline-glowing block particles directly at the viewport with active bounce.",
+      "GungeonMate Live Replica: Rendered a stunning, high-fidelity dark-neon interactive mockup of GungeonMate's actual home layout with an active, drifting space galaxy and hover effects as the portal destination.",
+      "1:1 Image-Matched Glitch Prompts: Completely refined the Glitch Chest Neon theme prompts (#1, #2, #3) in assets/data/themes.json and wallpaper_tracker.html to precisely mirror the uploaded circuit wireframe perspective corridor, bullet silhouette tracks, and CRT narrow analog scanline hallway images."
+    ]
+  },
+  {
     "version": "v0.9.8",
     "title": "🧹 THE GREAT UI CONDENSATION & GALAXY HOME SCREEN",
     "date": "June 19, 2026",
     "items": [
-      "Simplified Particle Options: Stripped the particle settings down to just Type, Count, and Size Scale — removed emitters, rotation, gravity vortex, flicker, subtle mode, and touch sparkles for a clean, focused experience.",
+      "Simplified Particle Options: Stripped the particle settings down to just Type and Density — completely removed sizing, emitters, rotation, gravity vortex, flicker, subtle mode, and touch sparkles for perfect, pre-tuned handcrafted excellence.",
       "Swipe-to-Select Pickers: Replaced all dropdowns for Wallpaper Mode, Still/Animated Wallpaper selection, and Font Family with beautiful horizontal swipe pickers featuring live previews and animated scaling.",
       "Wallpaper Section Moved Up: Relocated the Wallpaper & Parallax Engine Lab higher in the Settings menu, above particles and typography, for faster access.",
-      "Galaxy Always on Home: The swirling Galaxy animated background now always plays on the Home/Inventory screen with zero particles — other screens respect user settings normally.",
+      "Galaxy Always on Home with Particles: The swirling Galaxy animated background plays on the Main Menu Home screen, and premium particles now drift gracefully in front of it and all other background wallpapers.",
       "Enhanced Readability Scrim: Added a stronger gradient darkening overlay when any wallpaper or the Galaxy background is active, keeping all foreground panels, cards, and text crisp and readable.",
       "Swipe-Only Theme Picker: Removed all option rows and tuning panels from the Theme Picker screen — it is now a pure swipe-to-preview palette selector."
     ]
