@@ -216,11 +216,11 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   ),
 
                 // 0.6. Custom Wallpaper Contrast Backing (prevents background detail bleeding through UI panels)
-                if (isWallpaperActive)
+                if (isWallpaperActive || isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
-                        color: Colors.black.withValues(alpha: 0.45),
+                        color: Colors.black.withValues(alpha: isHomeScreen ? 0.62 : 0.50),
                       ),
                     ),
                   ),

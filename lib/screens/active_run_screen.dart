@@ -14,6 +14,7 @@ import '../widgets/inventory_list_row.dart';
 import '../widgets/game_icon.dart';
 import '../widgets/quality_badge.dart';
 import '../widgets/scale_button.dart';
+import '../widgets/glass_container.dart';
 import '../services/haptics.dart';
 import 'item_detail_screen.dart';
 import 'stats_detail_screen.dart';
@@ -1317,13 +1318,12 @@ class _MpHeader extends StatelessWidget {
     required Color color,
   }) {
     final flair = AppTheme.flair;
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: flair.card.withValues(alpha: 0.82),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.24), width: 1.2),
-      ),
+      color: flair.card,
+      opacity: 0.85, // perfect balance of see-through & readability
+      border: Border.all(color: color.withValues(alpha: 0.24), width: 1.2),
+      borderRadius: 12,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -3901,13 +3901,12 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
 
   Widget _buildBreakpointRow(String floorName, List<_BreakpointItem> items) {
     final flair = AppTheme.flair;
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: flair.card.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.lightGreen.withValues(alpha: 0.24), width: 1.2),
-      ),
+      color: flair.card,
+      opacity: 0.85,
+      border: Border.all(color: Colors.lightGreen.withValues(alpha: 0.24), width: 1.2),
+      borderRadius: 10,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -3982,13 +3981,12 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
 
   Widget _buildSecretFloorRow(String title, String cost, String rewards, Color color) {
     final flair = AppTheme.flair;
-    return Container(
+    return GlassContainer(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: flair.card.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.28), width: 1.2),
-      ),
+      color: flair.card,
+      opacity: 0.85,
+      border: Border.all(color: color.withValues(alpha: 0.28), width: 1.2),
+      borderRadius: 10,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
