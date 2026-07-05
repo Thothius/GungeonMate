@@ -6,6 +6,19 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v0.9.996 — White Screen Fix: Scaffold Transparency (July 5, 2026)
+**File:** `gungeon-mate-v0.9.996.apk`
+**Build:** 48
+
+### White Opaque Screen Fix
+- **Root Cause** — `scaffoldBackgroundColor` in `AppTheme.themeFor()` was 90% opaque when `hypnoticBgEnabled` was false. This obscured ThemeOverlay backgrounds (wallpapers, particles, galaxy) on any screen without explicit transparent Scaffold.
+- **Fix** — Now always `Colors.transparent`. ThemeOverlay provides the base solid color via its own `Container(color: f.scaffold)` layer.
+
+### Full Screen Audit
+- **10+ Screens Fixed** — Multiplayer Lobby, Multiplayer Connect, Synergies Overview, Stats Detail, Shrine Picker, Item Detail, Favourites, Effects Summary, Character Select, and HomeScreen loading/error states now explicitly set `backgroundColor: Colors.transparent` on both Scaffold and AppBar.
+
+---
+
 ## v0.9.995 — Visual Polish: Parallax, Overlay, Wind Artifacts, Theme BG (July 5, 2026)
 **File:** `gungeon-mate-v0.9.995.apk`
 **Build:** 47

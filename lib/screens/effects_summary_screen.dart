@@ -52,7 +52,8 @@ class EffectsSummaryScreen extends StatelessWidget {
     final totalSources = scan.values.fold<int>(0, (a, b) => a + b.length);
 
     return Scaffold(
-      appBar: AppBar(title: GoopText(title)),
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(backgroundColor: Colors.transparent, title: GoopText(title)),
       body: scan.isEmpty
           ? _Empty(loadoutEmpty: guns.isEmpty && items.isEmpty)
           : ListView(

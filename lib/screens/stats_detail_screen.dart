@@ -52,7 +52,9 @@ class StatsDetailScreen extends StatelessWidget {
     final title = isCool ? 'Coolness' : 'Curse';
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text(title),
         actions: [
           if (base != 0)

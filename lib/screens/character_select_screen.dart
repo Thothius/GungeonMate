@@ -30,7 +30,9 @@ class CharacterSelectScreen extends StatelessWidget {
       builder: (context, prefs, _) {
         final flair = AppTheme.flair;
         return Scaffold(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             title: Text(
               isCoop
                   ? 'Add Co-op Player'

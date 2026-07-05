@@ -2554,9 +2554,7 @@ class AppTheme {
       ),
       useMaterial3: true,
       fontFamily: fontFamilyName,
-      scaffoldBackgroundColor: prefs.hypnoticBgEnabled
-          ? Colors.transparent
-          : f.scaffold.withValues(alpha: 0.90),
+      scaffoldBackgroundColor: Colors.transparent,
       cardColor: f.card,
       textTheme: textTheme,
       primaryTextTheme: textTheme,

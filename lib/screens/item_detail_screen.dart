@@ -97,7 +97,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final wikiUrlString = 'https://enterthegungeon.wiki.gg/wiki/$wikiUrlEncoded';
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
         toolbarHeight: 0,
         title: const SizedBox.shrink(),

@@ -26,7 +26,9 @@ class FavouritesScreen extends StatelessWidget {
       builder: (context, prefs, _) {
         final flair = AppTheme.flair;
         return Scaffold(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             automaticallyImplyLeading: !embedded,
             // No screen title — the bottom-nav heart icon + section
             // headers below already say "Favourites". The count moves

@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (runProvider.isLoading) {
       return const Scaffold(
+        backgroundColor: Colors.transparent,
         body: Center(
           child: CircularProgressIndicator(),
         ),
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (runProvider.error != null) {
       return Scaffold(
+        backgroundColor: Colors.transparent,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

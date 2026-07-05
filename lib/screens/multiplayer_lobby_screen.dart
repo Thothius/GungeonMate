@@ -269,7 +269,9 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
         runProvider.gungeoneerByName('Cultist');
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: const Text('Multiplayer'),
         centerTitle: true,
       ),
@@ -1104,7 +1106,9 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
     _updateSpin(isSpinning);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: const Text('Multiplayer Connection'),
         centerTitle: true,
         leading: IconButton(

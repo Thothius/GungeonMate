@@ -41,7 +41,9 @@ class ShrinePickerScreen extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: const Text('Use a Shrine'),
         actions: [
           if (provider.runState.shrinesUsed.isNotEmpty)

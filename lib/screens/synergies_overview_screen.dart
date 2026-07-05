@@ -40,7 +40,9 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         // No screen title — the inline summary banner below already
         // labels the section ("N active synergies across your run").
         title: const SizedBox.shrink(),

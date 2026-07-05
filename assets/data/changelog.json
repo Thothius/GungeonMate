@@ -1,5 +1,14 @@
 [
   {
+    "version": "v0.9.996",
+    "title": "🐛 WHITE SCREEN FIX — SCAFFOLD TRANSPARENCY",
+    "date": "July 5, 2026",
+    "items": [
+      "White Opaque Screen Fix: Root cause identified as scaffoldBackgroundColor in AppTheme.themeFor() being 90% opaque when hypnoticBg was disabled. This obscured ThemeOverlay backgrounds (wallpapers, particles, galaxy) on any screen without explicit transparent Scaffold. Now always transparent — ThemeOverlay provides the base solid color via its own Container layer.",
+      "Full Screen Audit: All 10+ pushed screens (Multiplayer Lobby, Multiplayer Connect, Synergies Overview, Stats Detail, Shrine Picker, Item Detail, Favourites, Effects Summary, Character Select, HomeScreen loading/error states) now explicitly set backgroundColor: Colors.transparent on both Scaffold and AppBar."
+    ]
+  },
+  {
     "version": "v0.9.995",
     "title": "🐛 VISUAL POLISH — PARALLAX, OVERLAY, WIND ARTIFACTS, THEME BG",
     "date": "July 5, 2026",
