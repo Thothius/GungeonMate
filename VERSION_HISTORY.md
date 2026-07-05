@@ -6,6 +6,16 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v0.9.997 — Cat Throne White Screen: Root Cause Found (July 5, 2026)
+**File:** `gungeon-mate-v0.9.997.apk`
+**Build:** 49
+
+### Cat Bullet King Throne White Overlay Fix
+- **Root Cause** — The secret `_CuriousCatStareWidget` in `ThemeOverlay` used a `Positioned` widget directly inside `AnimatedBuilder` (not a `Stack`). Since `Positioned` must be a direct child of `Stack`, its `width`/`height` constraints were ignored and the cat image was stretched to fill the entire screen as a semi-transparent white overlay whenever "Cat Bullet King Throne" was in the inventory.
+- **Fix** — Wrapped the `Positioned` in a `Stack` so constraints apply correctly. The cat now peeks from the bottom-right corner as intended.
+
+---
+
 ## v0.9.996 — White Screen Fix: Scaffold Transparency (July 5, 2026)
 **File:** `gungeon-mate-v0.9.996.apk`
 **Build:** 48

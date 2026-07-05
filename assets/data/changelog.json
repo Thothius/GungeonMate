@@ -1,5 +1,13 @@
 [
   {
+    "version": "v0.9.997",
+    "title": "🐛 CAT THRONE WHITE SCREEN — ROOT CAUSE FOUND",
+    "date": "July 5, 2026",
+    "items": [
+      "Cat Bullet King Throne White Overlay Fix: The secret _CuriousCatStareWidget used a Positioned widget directly inside AnimatedBuilder (not a Stack), so its width/height constraints were ignored and the cat image was stretched to fill the entire screen as a semi-transparent white overlay. Now wrapped in a Stack so Positioned works correctly — the cat peeks from the bottom-right corner as intended."
+    ]
+  },
+  {
     "version": "v0.9.996",
     "title": "🐛 WHITE SCREEN FIX — SCAFFOLD TRANSPARENCY",
     "date": "July 5, 2026",

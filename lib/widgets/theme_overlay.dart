@@ -3067,16 +3067,20 @@ class _CuriousCatStareWidgetState extends State<_CuriousCatStareWidget>
             ? math.sin(DateTime.now().millisecondsSinceEpoch * 0.005) * 0.04
             : 0.0;
 
-        return Positioned(
-          bottom: 40.0,
-          right: -45.0 + slideOffset,
-          width: 140.0,
-          height: 140.0,
-          child: Transform.rotate(
-            angle: wiggleAngle,
-            alignment: Alignment.bottomCenter,
-            child: child,
-          ),
+        return Stack(
+          children: [
+            Positioned(
+              bottom: 40.0,
+              right: -45.0 + slideOffset,
+              width: 140.0,
+              height: 140.0,
+              child: Transform.rotate(
+                angle: wiggleAngle,
+                alignment: Alignment.bottomCenter,
+                child: child,
+              ),
+            ),
+          ],
         );
       },
       child: Image.asset(
