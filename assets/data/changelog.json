@@ -1,5 +1,85 @@
 [
   {
+    "version": "v0.9.995",
+    "title": "🐛 VISUAL POLISH — PARALLAX, OVERLAY, WIND ARTIFACTS, THEME BG",
+    "date": "July 5, 2026",
+    "items": [
+      "Smooth Parallax: Converted still wallpaper background to a StatefulWidget with AnimationController for buttery 60fps exponential lerp of gyroscope tilt values. No more sensor jitter or low FPS.",
+      "Quick Add Overlay Fix: Fixed race condition where a bright white overlay appeared when quick-adding items. Now uses FocusManager unfocus + PostFrameCallback to sequence modal dismissal before navigation.",
+      "Wind Path Artifacts Removed: Eliminated wobbly 'wind current' bezier curve rendering from all particle backdrops (Gold Dust, Hellfire, Cosmic Rift, Custom Particles). No more ghostly lines drifting upward.",
+      "Lingering Background Fix: ThemePickerScreen Scaffold was opaque (90% alpha), hiding ThemeOverlay backgrounds during preview and causing a flash when popping. Now transparent like all other screens."
+    ]
+  },
+  {
+    "version": "v0.9.994",
+    "title": "🤖 ROBOT TERMINAL + THEME OVERHAUL + 10 NEW THEMES",
+    "date": "July 5, 2026",
+    "items": [
+      "Robot Dashboard Redesign: Fixed font overflow on junk toggles. Gold Junk and Lies toggles are now bigger, more compact tap targets with icon + label + subtitle layout. DMG boost badge is now larger and more prominent.",
+      "Robot Damage Calculator Terminal: Added expandable retro green terminal showing per-gun damage calculations (weapon name, base DPS, robot-boosted DPS, and delta) with monospace styling and total DPS summary.",
+      "Theme Picker Redesign: Removed chip rows from theme preview cards. Replaced with per-theme custom preview data (stats, bullet notes) for all 21 themes. Added continuous weighted palette swatch bar showing BG/CRD/PRI/SEC/ACC with actual hex colors as fill.",
+      "10 New Themes Added: Gungeon Proper (castle stone blue), The Oubliette (sludge green), Past Paradox (cosmic cyan), High Priest Void (cultist purple), Robot's Core (circuit teal), Cult of Gundead (brass gold), Synergy Surge (blue arrow teal), Glitched Chest (artifact magenta), Lich's Tomb (phantom teal), Winchester's Game (ticket orange).",
+      "Per-Theme Preview Data: All 21 themes now have custom stats, bullet notes, and subheadings that showcase their palette identity with real Gungeon flavor."
+    ]
+  },
+  {
+    "version": "v0.9.992",
+    "title": "🎨 UNICORN THEME FAMILY + HUD & EFFECT FIXES",
+    "date": "July 5, 2026",
+    "items": [
+      "Special Gun Panels Fix: Fixed substring matching bug where Ser Junkan, Gunderfury, and Triple Gun dashboards appeared for characters who don't possess those items. Now uses exact name matching (== 'ser junkan' instead of contains('ser junkan')).",
+      "Status Effects Rendering Fix: Replaced all 45+ 'Status Effects' lore ref tokens across items.json and guns.json with context-specific effect words (fire, poison, frozen, stun, stealth, charm, etc.). Effects like 'sets enemies on fire' and 'green bullets that poison enemies' now display correctly instead of showing a generic italic 'Status Effects' link.",
+      "Unicorn Theme: Removed twinkling star sparkle particles from the original Unicorn Bubblegum theme. The ambient pink/teal glow remains — just no more twinkling stars.",
+      "Unicorn II (Neon): New theme variation — neon-charged cotton candy with hot pink (#FF1493), electric teal (#00CED1), and bright orchid. Stronger glow intensity for a radioactive neon vibe.",
+      "Unicorn III (Dream): New theme variation — softer whispered cotton candy with blush pink (#F8BBD0), sage teal (#80CBC4), and dusty lavender. Rounded 20px corners and gentle glow for a watercolour dream feel.",
+      "Unicorn IV (Sunset): New theme variation — cotton candy at golden hour with coral pink (#FF6B9D), warm peach (#FFAB91), and golden teal (#4DB6AC). Sunset-drenched romantic vibe.",
+      "MP Auto-Reconnect Plan: Created comprehensive implementation plan for automated multiplayer save/reconnect system at docs/mp_auto_reconnect_plan.md."
+    ]
+  },
+  {
+    "version": "v0.9.991",
+    "title": "🐛 DATA CORRECTIONS & DEVOLVER HUD FIX",
+    "date": "July 4, 2026",
+    "items": [
+      "Monster Blood: Fixed first wiki note to include Robot's 5-10 coin drop range.",
+      "Grappling Hook: Replaced 'Status Effects' reference with inline 'stuns' text for clarity.",
+      "Budget Revolver: Removed incorrect Exit the Gungeon dual stats — now shows only Enter the Gungeon values.",
+      "Big Iron: Fixed range from '16 15' to correct value of 16.",
+      "Heroine: Fixed DPS and damage fields to properly label all three charge levels (Level 1/2/3).",
+      "M16: DPS now includes Machine Gun, Grenade Launcher, and Combined DPS values.",
+      "Devolver HUD Fix: Fixed a substring matching bug where 'Devolver' triggered the Evolver HUD dashboard due to contains('evolver') matching. Now uses exact name match."
+    ]
+  },
+  {
+    "version": "v0.9.99",
+    "title": "🔮 GLASSMORPHIC SETTINGS PANELS",
+    "date": "June 30, 2026",
+    "items": [
+      "Glassmorphic Settings Panels: Unified all settings screen panels (Typography, Inventory Grid, Particle Tuning, Switch Rows) and settings sheet dropdown/rows to use a consistent glassy aesthetic with flair.card at 35-38% alpha and themed primary borders. Panels now show the background through them subtly while remaining fully readable — no more nearly-invisible white-on-white containers."
+    ]
+  },
+  {
+    "version": "v0.9.99",
+    "title": "⚡ PARTICLE SYSTEM OVERHAUL, FPS FIX & PARALLAX REWORK",
+    "date": "June 30, 2026",
+    "items": [
+      "Elemental Particle Types: Completely reworked the custom particle type system to 7 distinct elemental types — Fire (embers & sparks), Water (bubbles & droplets), Earth (dust & stone pebbles), Air (wind gusts & streaks), Bullets (golden shells & brass casings), Gunpowder (smoke puffs & muzzle flash sparks), and Stars (cosmic sparkles with white cores). Removed all old emoji-based particles (necromantic skulls, skeletal bones, tombstone crosses, rainbow prismatic, frost, toxic, lightning, gold/brass/steel).",
+      "Massive FPS Optimization: Removed all expensive MaskFilter.blur calls from particle painters (curse fog, sparkles, hellfire, gold dust wind, cosmic rift wind). Replaced curse fog's blur(45) with cheap RadialGradient shaders. Replaced sparkle glow halos with cheap concentric alpha-gradient circles. Added RepaintBoundary to custom particle backdrop. Removed Gun_Fairy.webp async asset load that was wasting memory.",
+      "Particle Cutoff Fix: Removed all modulo wrapping (% size.height, % size.width) from particle position calculations across all 10+ backdrop painters. Particles now travel fully off-screen before fading out instead of wrapping around abruptly.",
+      "Parallax Rework for Large Screens: Increased accelerometer clamp range from ±6 to ±10 and smoothing factor from 0.12 to 0.18 for more responsive tilt. Still wallpaper parallax now scales by screen dimensions (screenSize.width * 0.015) instead of fixed 3.8px, so bigger phones get proportional movement. Lowered image filter quality to low for better FPS."
+    ]
+  },
+  {
+    "version": "v0.9.98",
+    "title": "🦄 UNICORN BUBBLEGUM REWORK & PARTICLE COUNT CONTROL",
+    "date": "June 30, 2026",
+    "items": [
+      "Unicorn Bubblegum Theme Visual Rework: Completely reworked the sparkle particle painter with a 6-color pastel palette (hot pink, lavender, mint cyan, soft pink, amethyst, white), dual-layer glow halos with MaskFilter blur, three distinct shape varieties (4-point star, glowing bubble, 6-point double-star), and bright white cores for a premium magical cotton-candy aesthetic.",
+      "Particle Count Now Affects Theme-Default Particles: Wired the user-controlled particle count slider to all 9 theme-default backdrop widgets (GoldDust, Sparkles, BrassMotes, IceCrystals, WhiteDust, ToxicBubbles, ForgeEmbers, Hellfire, CosmicRift). Previously these used hardcoded counts that ignored the user's density preference.",
+      "Live Particle Count Regeneration: Added didUpdateWidget to every theme-default backdrop widget so particle specs regenerate immediately when the count slider changes — no app restart needed."
+    ]
+  },
+  {
     "version": "v0.9.97",
     "title": "👾 RETRO GLITCH CINEMATIC BREACH & PROMPT HARMONIZATION",
     "date": "June 22, 2026",

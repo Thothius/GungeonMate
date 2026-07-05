@@ -33,7 +33,7 @@ enum AppThemeMode {
     vibe: 'MAGICAL',
     diff: 'CO-OP',
     elem: 'RAINBOW',
-    whimsicalDescription: 'Douse your guns in pure, unadulterated cotton candy. Complete with twinkly stars and pastel sparkles. Warning: Highly toxic to serious, dark, and brooding Gungeoneers.',
+    whimsicalDescription: 'Douse your guns in pure, unadulterated cotton candy. Pastel pink and mint swirl in a soft ambient dream. Warning: Highly toxic to serious, dark, and brooding Gungeoneers.',
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF1A101F),
       card: Color(0xFF2D1B36),
@@ -51,12 +51,105 @@ enum AppThemeMode {
       cardRadius: 18,
       dividerColor: Color(0x55FF69B4),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.pastelDriftSparkles,
+      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x55FF69B4),
       glowSecondary: Color(0x3BE8A7F0),
       auraStyle: AvatarAuraStyle.pastelPulse,
       headerGlyph: '\u2661', // ♡ open heart
       headerUnderlineColor: Color(0x88FF69B4),
+    ),
+  ),
+  unicornII(
+    label: 'Unicorn II',
+    vibe: 'NEON',
+    diff: 'CO-OP',
+    elem: 'RAINBOW',
+    whimsicalDescription: 'A neon-charged cotton candy overload. Hot pink and electric teal scream through the dark with an intense radioactive glow. For Gungeoneers who want their pastel with extra voltage.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0F0A14),
+      card: Color(0xFF1E1528),
+      primary: Color(0xFFFF1493), // neon hot pink
+      secondary: Color(0xFFDA70D6), // bright orchid
+      headlineStat: Color(0xFF00CED1), // electric teal
+      bulletColor: Color(0xFFFF1493),
+      bulletGlyph: '✦',
+      twinkleBullets: true,
+      tabularFigures: false,
+      numberSizeScale: 1.08,
+      numberWeight: FontWeight.w800,
+      numberStyle: FontStyle.italic,
+      chipRadius: 16,
+      cardRadius: 16,
+      dividerColor: Color(0x66FF1493),
+      dividerThickness: 1.2,
+      backdrop: ThemeBackdrop.none,
+      glowPrimary: Color(0x66FF1493),
+      glowSecondary: Color(0x5500CED1),
+      auraStyle: AvatarAuraStyle.pastelPulse,
+      headerGlyph: '\u2661',
+      headerUnderlineColor: Color(0xAAFF1493),
+    ),
+  ),
+  unicornIII(
+    label: 'Unicorn III',
+    vibe: 'DREAMY',
+    diff: 'CO-OP',
+    elem: 'RAINBOW',
+    whimsicalDescription: 'A softer, whispered cotton candy. Muted rose and sage teal drift like a watercolour sunset. For the Gungeoneer who wants the vibe turned down to a gentle hum.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF1F1825),
+      card: Color(0xFF2A2230),
+      primary: Color(0xFFF8BBD0), // soft blush pink
+      secondary: Color(0xFFD1C4E9), // dusty lavender
+      headlineStat: Color(0xFF80CBC4), // sage teal
+      bulletColor: Color(0xFFF8BBD0),
+      bulletGlyph: '♡',
+      twinkleBullets: false,
+      tabularFigures: false,
+      numberSizeScale: 1.03,
+      numberWeight: FontWeight.w600,
+      numberStyle: FontStyle.italic,
+      chipRadius: 20,
+      cardRadius: 20,
+      dividerColor: Color(0x44F8BBD0),
+      dividerThickness: 0.8,
+      backdrop: ThemeBackdrop.none,
+      glowPrimary: Color(0x33F8BBD0),
+      glowSecondary: Color(0x2280CBC4),
+      auraStyle: AvatarAuraStyle.pastelPulse,
+      headerGlyph: '\u2661',
+      headerUnderlineColor: Color(0x66F8BBD0),
+    ),
+  ),
+  unicornIV(
+    label: 'Unicorn IV',
+    vibe: 'SUNSET',
+    diff: 'CO-OP',
+    elem: 'RAINBOW',
+    whimsicalDescription: 'Cotton candy at golden hour. Coral pink and warm teal blend with peach undertones for a sunset-drenched magical vibe. The most romantic way to enter the Gungeon.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF1A1218),
+      card: Color(0xFF2A1E26),
+      primary: Color(0xFFFF6B9D), // coral pink
+      secondary: Color(0xFFFFAB91), // warm peach
+      headlineStat: Color(0xFF4DB6AC), // golden teal
+      bulletColor: Color(0xFFFF6B9D),
+      bulletGlyph: '✦',
+      twinkleBullets: false,
+      tabularFigures: false,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w700,
+      numberStyle: FontStyle.italic,
+      chipRadius: 18,
+      cardRadius: 18,
+      dividerColor: Color(0x55FF6B9D),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.none,
+      glowPrimary: Color(0x44FF6B9D),
+      glowSecondary: Color(0x334DB6AC),
+      auraStyle: AvatarAuraStyle.pastelPulse,
+      headerGlyph: '\u2661',
+      headerUnderlineColor: Color(0x88FF6B9D),
     ),
   ),
   ammonomicon(
@@ -276,6 +369,316 @@ enum AppThemeMode {
       auraStyle: AvatarAuraStyle.toxicOoze,
       headerGlyph: '🧀',
       headerUnderlineColor: Color(0x88FFD700),
+    ),
+  ),
+  gungeonProper(
+    label: 'Gungeon Proper',
+    vibe: 'CLASSIC',
+    diff: 'NORMAL',
+    elem: 'STONE',
+    whimsicalDescription: 'The textbook definition of entering the breach. Clean castle stone blues paired with royal purple accents that recall the long, winding entry halls of the true first floor.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0E1018),
+      card: Color(0xFF1A1E2E),
+      primary: Color(0xFF4682B4),
+      secondary: Color(0xFF9370DB),
+      headlineStat: Color(0xFF87CEEB),
+      bulletColor: Color(0xFF4682B4),
+      bulletGlyph: '🏰',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x444682B4),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x554682B4),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.whiteDust,
+      glowPrimary: Color(0x4D4682B4),
+      glowSecondary: Color(0x2E9370DB),
+      auraStyle: AvatarAuraStyle.brassConic,
+      headerGlyph: '🏰',
+      headerUnderlineColor: Color(0x884682B4),
+    ),
+  ),
+  theOubliette(
+    label: 'The Oubliette',
+    vibe: 'TOXIC',
+    diff: 'HARD',
+    elem: 'SLUDGE',
+    whimsicalDescription: 'Descend into the hidden, damp pipeline layer. A layout covered in industrial sewer muck, rusted pipework bronze, and bright toxic spills that pop sharply against the dark.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0F08),
+      card: Color(0xFF141A10),
+      primary: Color(0xFF39FF14),
+      secondary: Color(0xFF795548),
+      headlineStat: Color(0xFFCCFF00),
+      bulletColor: Color(0xFF39FF14),
+      bulletGlyph: '☣',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x4439FF14),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x5539FF14),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.toxicBubbles,
+      glowPrimary: Color(0x4D39FF14),
+      glowSecondary: Color(0x2E795548),
+      auraStyle: AvatarAuraStyle.toxicOoze,
+      headerGlyph: '☣',
+      headerUnderlineColor: Color(0x8839FF14),
+    ),
+  ),
+  pastParadox(
+    label: 'Past Paradox',
+    vibe: 'COSMIC',
+    diff: 'BRUTAL',
+    elem: 'VOID',
+    whimsicalDescription: 'Kill your past or fracture the space-time continuum trying. Features deep stellar space backdrops cracked wide open by unstable, flashing neon cosmic energy.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF050308),
+      card: Color(0xFF0E0A1A),
+      primary: Color(0xFF00E5FF),
+      secondary: Color(0xFF6A1B9A),
+      headlineStat: Color(0xFFE0F7FA),
+      bulletColor: Color(0xFF00E5FF),
+      bulletGlyph: '🌌',
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x4400E5FF),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x5500E5FF),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.cosmicRift,
+      glowPrimary: Color(0x5500E5FF),
+      glowSecondary: Color(0x336A1B9A),
+      auraStyle: AvatarAuraStyle.cosmicTemporal,
+      headerGlyph: '🌌',
+      headerUnderlineColor: Color(0xAA00E5FF),
+    ),
+  ),
+  highPriestVoid(
+    label: 'High Priest Void',
+    vibe: 'MYSTIC',
+    diff: 'EXPERT',
+    elem: 'SHADOW',
+    whimsicalDescription: 'Immerse your loadout tracker in the ominous shadows of the true gun cultists. Dark ritual violet panels broken apart by flickering candle yellow and unstable boss accents.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0510),
+      card: Color(0xFF160B20),
+      primary: Color(0xFF8B008B),
+      secondary: Color(0xFFFFD54F),
+      headlineStat: Color(0xFFE1BEE7),
+      bulletColor: Color(0xFF8B008B),
+      bulletGlyph: '👁',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x448B008B),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x558B008B),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.none,
+      glowPrimary: Color(0x4D8B008B),
+      glowSecondary: Color(0x2EFFD54F),
+      auraStyle: AvatarAuraStyle.lichPurple,
+      headerGlyph: '👁',
+      headerUnderlineColor: Color(0x888B008B),
+    ),
+  ),
+  robotsCore(
+    label: "Robot's Core",
+    vibe: 'CYBER',
+    diff: 'NORMAL',
+    elem: 'CIRCUIT',
+    whimsicalDescription: 'Ditch organic hearts entirely for pure cold steel. A ultra-clean, calculated cybernetic UI system featuring high-voltage electrical blues and neon green terminal readout indicators.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0F0E),
+      card: Color(0xFF101818),
+      primary: Color(0xFF00F5D4),
+      secondary: Color(0xFF69F0AE),
+      headlineStat: Color(0xFFB2DFDB),
+      bulletColor: Color(0xFF00F5D4),
+      bulletGlyph: '🤖',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x4400F5D4),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x5500F5D4),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.none,
+      glowPrimary: Color(0x4D00F5D4),
+      glowSecondary: Color(0x2E69F0AE),
+      auraStyle: AvatarAuraStyle.frostRing,
+      headerGlyph: '🤖',
+      headerUnderlineColor: Color(0x8800F5D4),
+    ),
+  ),
+  cultOfGundead(
+    label: 'Cult of Gundead',
+    vibe: 'RETRO',
+    diff: 'NORMAL',
+    elem: 'BRASS',
+    whimsicalDescription: 'Pay homage to the standard, loyal foot soldiers of the gungeoneers\' demise. Formatted with soft ammunition brass tones and target practice reds on lead gray backdrops.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0D0B08),
+      card: Color(0xFF1A1610),
+      primary: Color(0xFFFF0000),
+      secondary: Color(0xFFCD9F73),
+      headlineStat: Color(0xFFFFD700),
+      bulletColor: Color(0xFFCD9F73),
+      bulletGlyph: '🎯',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x44CD9F73),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55CD9F73),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.brassMotes,
+      glowPrimary: Color(0x4DFF0000),
+      glowSecondary: Color(0x2ECD9F73),
+      auraStyle: AvatarAuraStyle.brassConic,
+      headerGlyph: '🎯',
+      headerUnderlineColor: Color(0x88CD9F73),
+    ),
+  ),
+  synergySurge(
+    label: 'Synergy Surge',
+    vibe: 'ENERGETIC',
+    diff: 'CO-OP',
+    elem: 'FUSION',
+    whimsicalDescription: 'When your inventory items fuse together perfectly. An ultra-bright, dynamic color palette based on the iconic blue arrows that appear above your gungeoneer during a item pairing.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF080B14),
+      card: Color(0xFF101828),
+      primary: Color(0xFF00B4D8),
+      secondary: Color(0xFF42A5F5),
+      headlineStat: Color(0xFFE3F2FD),
+      bulletColor: Color(0xFF00B4D8),
+      bulletGlyph: '🔷',
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x4400B4D8),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x5500B4D8),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.goldDust,
+      glowPrimary: Color(0x5500B4D8),
+      glowSecondary: Color(0x3342A5F5),
+      auraStyle: AvatarAuraStyle.cosmicTemporal,
+      headerGlyph: '🔷',
+      headerUnderlineColor: Color(0xAA00B4D8),
+    ),
+  ),
+  glitchedChest(
+    label: 'Glitched Chest',
+    vibe: 'CORRUPTED',
+    diff: 'CHAOS',
+    elem: 'ERROR',
+    whimsicalDescription: 'Something went terribly wrong with the chest generation parameters. A distinct glitch aesthetic combining harsh digital greens and magenta color visual artifacts over a pitch-black terminal frame.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF000000),
+      card: Color(0xFF0A0A0A),
+      primary: Color(0xFFFF00E4),
+      secondary: Color(0xFF00FF41),
+      headlineStat: Color(0xFFE0E0E0),
+      bulletColor: Color(0xFF00FF41),
+      bulletGlyph: '💾',
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      chipRadius: 4,
+      cardRadius: 6,
+      cardBorderColor: Color(0x44FF00E4),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55FF00E4),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.none,
+      glowPrimary: Color(0x55FF00E4),
+      glowSecondary: Color(0x3300FF41),
+      auraStyle: AvatarAuraStyle.voidPulse,
+      headerGlyph: '💾',
+      headerUnderlineColor: Color(0xAAFF00E4),
+    ),
+  ),
+  lichsTomb(
+    label: "Lich's Tomb",
+    vibe: 'ELDRITCH',
+    diff: 'EXTREME',
+    elem: 'BONE',
+    whimsicalDescription: 'Stand face to face with the master of the gungeon floor layout. Features skeletal bone white indicators slicing through eerie, lingering phantom teal lines and deep crypt shadows.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF060808),
+      card: Color(0xFF0E1212),
+      primary: Color(0xFF2EC4B6),
+      secondary: Color(0xFFE0E0E0),
+      headlineStat: Color(0xFFF5F5DC),
+      bulletColor: Color(0xFF2EC4B6),
+      bulletGlyph: '☠',
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x442EC4B6),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x552EC4B6),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.hellfire,
+      glowPrimary: Color(0x552EC4B6),
+      glowSecondary: Color(0x33E0E0E0),
+      auraStyle: AvatarAuraStyle.lichPurple,
+      headerGlyph: '☠',
+      headerUnderlineColor: Color(0xAA2EC4B6),
+    ),
+  ),
+  winchestersGame(
+    label: "Winchester's Game",
+    vibe: 'CARNIVAL',
+    diff: 'CASUAL',
+    elem: 'TARGET',
+    whimsicalDescription: "Step right up and test your bouncing shot trajectories. A warm, rustic carnival aesthetic balancing dark wood backgrounds with vibrant ticket orange and practice target green.",
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0F0A06),
+      card: Color(0xFF1C1408),
+      primary: Color(0xFFF77F00),
+      secondary: Color(0xFF66BB6A),
+      headlineStat: Color(0xFFFFE082),
+      bulletColor: Color(0xFFF77F00),
+      bulletGlyph: '🎯',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w700,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x44F77F00),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55F77F00),
+      dividerThickness: 1.0,
+      backdrop: ThemeBackdrop.brassMotes,
+      glowPrimary: Color(0x4DF77F00),
+      glowSecondary: Color(0x2E66BB6A),
+      auraStyle: AvatarAuraStyle.brassConic,
+      headerGlyph: '🎯',
+      headerUnderlineColor: Color(0x88F77F00),
     ),
   ),
   custom(
@@ -583,11 +986,24 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.ammonomicon,
   AppThemeMode.theBreach,
   AppThemeMode.unicorn,
+  AppThemeMode.unicornII,
+  AppThemeMode.unicornIII,
+  AppThemeMode.unicornIV,
   AppThemeMode.forgeMaster,
   AppThemeMode.hollowChill,
   AppThemeMode.lordJammed,
   AppThemeMode.bulletHell,
   AppThemeMode.resourcefulRat,
+  AppThemeMode.gungeonProper,
+  AppThemeMode.theOubliette,
+  AppThemeMode.pastParadox,
+  AppThemeMode.highPriestVoid,
+  AppThemeMode.robotsCore,
+  AppThemeMode.cultOfGundead,
+  AppThemeMode.synergySurge,
+  AppThemeMode.glitchedChest,
+  AppThemeMode.lichsTomb,
+  AppThemeMode.winchestersGame,
 ];
 
 /// Ambient full-screen flair painted by `ThemeOverlay`. Each theme picks
@@ -652,6 +1068,12 @@ extension AppThemeModeLabel on AppThemeMode {
     switch (this) {
       case AppThemeMode.unicorn:
         return 'Unicorn Bubblegum';
+      case AppThemeMode.unicornII:
+        return 'Unicorn Neon';
+      case AppThemeMode.unicornIII:
+        return 'Unicorn Dream';
+      case AppThemeMode.unicornIV:
+        return 'Unicorn Sunset';
       case AppThemeMode.ammonomicon:
         return 'The Ammonomicon';
       case AppThemeMode.forgeMaster:
@@ -666,6 +1088,26 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Bullet Hell';
       case AppThemeMode.resourcefulRat:
         return 'Resourceful Rat';
+      case AppThemeMode.gungeonProper:
+        return 'Gungeon Proper';
+      case AppThemeMode.theOubliette:
+        return 'The Oubliette';
+      case AppThemeMode.pastParadox:
+        return 'Past Paradox';
+      case AppThemeMode.highPriestVoid:
+        return 'High Priest Void';
+      case AppThemeMode.robotsCore:
+        return "Robot's Core";
+      case AppThemeMode.cultOfGundead:
+        return 'Cult of Gundead';
+      case AppThemeMode.synergySurge:
+        return 'Synergy Surge';
+      case AppThemeMode.glitchedChest:
+        return 'Glitched Chest';
+      case AppThemeMode.lichsTomb:
+        return "Lich's Tomb";
+      case AppThemeMode.winchestersGame:
+        return "Winchester's Game";
       case AppThemeMode.custom:
         return AppTheme._customThemeName;
     }
@@ -674,7 +1116,13 @@ extension AppThemeModeLabel on AppThemeMode {
   String get tagline {
     switch (this) {
       case AppThemeMode.unicorn:
-        return 'Cotton Candy — lavender, pink, twinkle';
+        return 'Cotton Candy — lavender, pink, mint';
+      case AppThemeMode.unicornII:
+        return 'Neon Candy — hot pink, electric teal, glow';
+      case AppThemeMode.unicornIII:
+        return 'Soft Dream — blush, sage teal, lavender';
+      case AppThemeMode.unicornIV:
+        return 'Sunset Candy — coral, peach, golden teal';
       case AppThemeMode.ammonomicon:
         return 'Ancient Lore — leather brown, antique gold, crisp teal';
       case AppThemeMode.forgeMaster:
@@ -689,11 +1137,248 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Sixth Chamber — ash gray, toxic radioactive green, soul purple';
       case AppThemeMode.resourcefulRat:
         return 'Lair Hoard — sewer green, stolen gold, cheese yellow';
+      case AppThemeMode.gungeonProper:
+        return 'Classic Dungeon — castle stone blue, royal purple, iron gray';
+      case AppThemeMode.theOubliette:
+        return 'Secret Sewer — sludge green, corroded bronze, toxic lime';
+      case AppThemeMode.pastParadox:
+        return 'Time Rift — cosmic black, neon cyan, void violet';
+      case AppThemeMode.highPriestVoid:
+        return 'Cultist Chamber — void purple, candle yellow, shadow magenta';
+      case AppThemeMode.robotsCore:
+        return 'Cybernetic — circuit teal, battery green, steel gray';
+      case AppThemeMode.cultOfGundead:
+        return 'Bullet Kin — brass gold, lead gray, target red';
+      case AppThemeMode.synergySurge:
+        return 'Blue Arrow — synergy teal, chest blue, electric white';
+      case AppThemeMode.glitchedChest:
+        return 'Error Code — terminal black, artifact magenta, glitch green';
+      case AppThemeMode.lichsTomb:
+        return 'Final Stand — bone white, phantom teal, crypt charcoal';
+      case AppThemeMode.winchestersGame:
+        return 'Target Practice — fairground green, ticket orange, wood brown';
       case AppThemeMode.custom:
         return 'Custom — your personal palette';
     }
   }
 }
+
+/// Per-theme preview data for the theme picker cards. Each theme gets
+/// custom stats, bullet notes, and a subheading that showcases its
+/// palette identity with real Gungeon flavor.
+class ThemePreviewData {
+  final String subheading;
+  final List<String> stats;
+  final List<String> bulletNotes;
+
+  const ThemePreviewData({
+    required this.subheading,
+    required this.stats,
+    required this.bulletNotes,
+  });
+}
+
+/// Preview data for each visible theme. Keyed by enum index for O(1) lookup.
+const Map<AppThemeMode, ThemePreviewData> kThemePreviewData = {
+  AppThemeMode.ammonomicon: ThemePreviewData(
+    subheading: 'Ancient Lore — Deep Book-Leather, Antique Gold, Crisp Teal',
+    stats: ['Infinite Ammo', 'Quality: S', 'Magnificence: 0'],
+    bulletNotes: [
+      '📖 Added to the clean log',
+      '📖 Synergy match detected',
+      '📖 Item description updated',
+    ],
+  ),
+  AppThemeMode.theBreach: ThemePreviewData(
+    subheading: 'Safe Haven — Stonework Gray, Hearthstone Amber, Warm Brass',
+    stats: ['0.0 Curse', '100% Safety', 'Shop Cost: 45'],
+    bulletNotes: [
+      '⭐ Run successfully prepared',
+      '⭐ NPC dialog refreshed',
+      '⭐ Hegemony credits updated',
+    ],
+  ),
+  AppThemeMode.unicorn: ThemePreviewData(
+    subheading: 'Cotton Candy — Pastel Lavender, Sugar Pink, Rainbow Teal',
+    stats: ['Rainbow Mode', 'Sparkle Index: 100', 'Bowler Approved'],
+    bulletNotes: [
+      '✨ Rainbow chest opened',
+      '✨ Cute projectile trailing active',
+      '✨ Sparkle modifier maximum',
+    ],
+  ),
+  AppThemeMode.unicornII: ThemePreviewData(
+    subheading: 'Neon Candy — Hot Pink, Electric Teal, Radioactive Glow',
+    stats: ['Neon Overload', 'Glow: 200%', 'Voltage: Max'],
+    bulletNotes: [
+      '✨ Neon chest electrified',
+      '✨ Glowing projectile active',
+      '✨ Voltage modifier peaked',
+    ],
+  ),
+  AppThemeMode.unicornIII: ThemePreviewData(
+    subheading: 'Soft Dream — Blush Pink, Sage Teal, Dusty Lavender',
+    stats: ['Dream Mode', 'Softness: 100', 'Whisper Approved'],
+    bulletNotes: [
+      '♡ Gentle chest opened',
+      '♡ Soft projectile drifting',
+      '♡ Dreamy modifier steady',
+    ],
+  ),
+  AppThemeMode.unicornIV: ThemePreviewData(
+    subheading: 'Sunset Candy — Coral Pink, Warm Peach, Golden Teal',
+    stats: ['Sunset Mode', 'Warmth: 100', 'Golden Hour'],
+    bulletNotes: [
+      '✨ Coral chest discovered',
+      '✨ Warm projectile glowing',
+      '✨ Sunset modifier active',
+    ],
+  ),
+  AppThemeMode.forgeMaster: ThemePreviewData(
+    subheading: 'Blacksmith — Obsidian Black, Molten Sulfur, Dragun Flame',
+    stats: ['DPS: 999', 'Fire Proof', 'Master Round V'],
+    bulletNotes: [
+      '🔥 Blacksmith order complete',
+      '🔥 Weapon shell heated',
+      '🔥 Obsidian casing attached',
+    ],
+  ),
+  AppThemeMode.hollowChill: ThemePreviewData(
+    subheading: 'Grave Cold — Spectral Tomb Blue, Phantom Cyan, Mist Gray',
+    stats: ['Freeze Rate: Max', 'Heart Tiers: Ice', 'Chill Factor: 10'],
+    bulletNotes: [
+      '❄️ Ghostly presence encountered',
+      '❄️ Room temperature dropped',
+      '❄️ Ice chunk shattered',
+    ],
+  ),
+  AppThemeMode.lordJammed: ThemePreviewData(
+    subheading: 'Curse Born — Oxblood Red, Corrupted Void Violet, Curse Neon',
+    stats: ['Curse Level: 10+', 'Stalker Spawned', 'Red Shot DMG x2'],
+    bulletNotes: [
+      '👿 Soul curse maximized',
+      '👿 Jammed enemy variations found',
+      '👿 Red visual filter applied',
+    ],
+  ),
+  AppThemeMode.bulletHell: ThemePreviewData(
+    subheading: 'Sixth Chamber — Ash Gray, Toxic Green, Soul Purple',
+    stats: ['Chamber: 6', 'Extreme Danger', 'Unforgiving Layout'],
+    bulletNotes: [
+      '💀 Chamber entry sealed',
+      '💀 Poison pool stepped over',
+      '💀 Bullet hell active',
+    ],
+  ),
+  AppThemeMode.resourcefulRat: ThemePreviewData(
+    subheading: 'Lair Hoard — Sewer Green, Stolen Gold, Cheese Yellow',
+    stats: ['4-Way Vector', 'Punchout Ready', 'Gnawed Key'],
+    bulletNotes: [
+      '🧀 Left a mocking note',
+      '🧀 Infuriating puzzle solved',
+      '🧀 Ammo box pilfered',
+    ],
+  ),
+  AppThemeMode.gungeonProper: ThemePreviewData(
+    subheading: 'Chamber 1 — Castle Stone Blue, Royal Purple, Dungeon Iron',
+    stats: ['Floor: 1', 'Keys: 2', 'Secret Room Found'],
+    bulletNotes: [
+      '🏰 Iron key turned',
+      '🏰 Basic chest located',
+      '🏰 Trap door discovered',
+    ],
+  ),
+  AppThemeMode.theOubliette: ThemePreviewData(
+    subheading: 'Secret Sewer — Sludge Green, Corroded Bronze, Toxic Lime',
+    stats: ['Poison Immune', 'Sewage Level: High', 'Old Crest Safe'],
+    bulletNotes: [
+      '☣️ Sewage valve turned',
+      '☣️ Shield preservation checked',
+      '☣️ Grate pathway cleared',
+    ],
+  ),
+  AppThemeMode.pastParadox: ThemePreviewData(
+    subheading: 'Time Rift — Cosmic Nebula Black, Neon Cyan, Void Violet',
+    stats: ['Time Index: Void', 'Paradox Cost: 5', 'Weapon Swapped'],
+    bulletNotes: [
+      '🌌 Alternate reality loaded',
+      '🌌 Space rift fluctuating',
+      '🌌 Past timeline rewritten',
+    ],
+  ),
+  AppThemeMode.highPriestVoid: ThemePreviewData(
+    subheading: 'Cultist Chamber — Void Purple, Candle Yellow, Shadow Magenta',
+    stats: ['Unseen Target', 'Darkness Multiplier', 'Chamber 3 Boss'],
+    bulletNotes: [
+      '👁️ Cultist hood equipped',
+      '👁️ Wall lantern blown out',
+      '👁️ Dark room bullet tracked',
+    ],
+  ),
+  AppThemeMode.robotsCore: ThemePreviewData(
+    subheading: 'Cybernetic — Circuit Teal, Battery Green, Matte Steel Gray',
+    stats: ['Armor Count: 6', 'Coolant: 100%', 'Junk DMG Boost'],
+    bulletNotes: [
+      '🤖 Coolant tank deployed',
+      '🤖 Shield capacitor charged',
+      '🤖 Junk scrap collected',
+    ],
+  ),
+  AppThemeMode.cultOfGundead: ThemePreviewData(
+    subheading: 'Bullet Kin — Soft Brass Gold, Lead Gray, Target Red',
+    stats: ['Kin Count: 99', 'Caliber: Standard', 'Caped Bullet Spawned'],
+    bulletNotes: [
+      '🎯 Bandana tied tight',
+      '🎯 Waddle movement synced',
+      '🎯 Target reticle centered',
+    ],
+  ),
+  AppThemeMode.synergySurge: ThemePreviewData(
+    subheading: 'Blue Arrow — Synergy Teal, Chest Blue, Electric White',
+    stats: ['Synergies: 7', 'Buff: Overwhelming', 'Dual Wielding'],
+    bulletNotes: [
+      '🔷 Synergy fusion unlocked',
+      '🔷 Secondary weapon modified',
+      '🔷 Projectile overlay generated',
+    ],
+  ),
+  AppThemeMode.glitchedChest: ThemePreviewData(
+    subheading: 'Error Code — Terminal Black, Artifact Magenta, Glitch Green',
+    stats: ['ERR: NULL', 'Dual Beholsters', 'Loot Drops x8'],
+    bulletNotes: [
+      '💾 Memory buffer overflow',
+      '💾 Double boss arena spawned',
+      '💾 UI asset rendered wrong',
+    ],
+  ),
+  AppThemeMode.lichsTomb: ThemePreviewData(
+    subheading: 'Final Stand — Bone White, Phantom Teal, Crypt Charcoal',
+    stats: ['Phase: III', 'Boss Level: Absolute', 'Gungeon Mastered'],
+    bulletNotes: [
+      '☠️ Final boss phase initiated',
+      '☠️ Soul tether connected',
+      '☠️ Chamber victory logged',
+    ],
+  ),
+  AppThemeMode.winchestersGame: ThemePreviewData(
+    subheading: 'Target Practice — Fairground Green, Ticket Orange, Wood Brown',
+    stats: ['Targets Hit: 4/4', 'Ace Rank', 'Shots Remaining: 0'],
+    bulletNotes: [
+      '🎯 Bouncing trajectory calculated',
+      '🎯 Target shattered cleanly',
+      '🎯 Black chest reward earned',
+    ],
+  ),
+  AppThemeMode.custom: ThemePreviewData(
+    subheading: 'Custom — Your Personal Palette',
+    stats: ['Custom Stats', 'User Defined', 'Personal Touch'],
+    bulletNotes: [
+      '• Custom note one',
+      '• Custom note two',
+      '• Custom note three',
+    ],
+  ),
+};
 
 enum InventoryDisplayMode {
   classicPeriodic,
@@ -1134,19 +1819,14 @@ class ThemeFlair {
 enum CustomParticleType {
   themeDefault,
   // Elements
-  ember,
-  frost,
-  toxic,
-  lightning,
-  rainbow,
-  // Metal
-  goldShells,
-  brassCasings,
-  steelSparks,
-  // Bone
-  necromantic,
-  skeletal,
-  tombstone,
+  fire,
+  water,
+  earth,
+  air,
+  // Gungeon
+  bullets,
+  gunpowder,
+  stars,
   none,
 }
 
@@ -1156,30 +1836,21 @@ extension CustomParticleTypeLabel on CustomParticleType {
       case CustomParticleType.themeDefault:
         return 'Theme Default';
       // Elements
-      case CustomParticleType.ember:
-        return '🔥 Ember (Fire Element)';
-      case CustomParticleType.frost:
-        return '❄️ Frost (Ice Element)';
-      case CustomParticleType.toxic:
-        return '🧪 Toxic (Poison Element)';
-      case CustomParticleType.lightning:
-        return '⚡ Lightning (Spark Element)';
-      case CustomParticleType.rainbow:
-        return '🌈 Rainbow (Prismatic Element)';
-      // Metal
-      case CustomParticleType.goldShells:
-        return '🪙 Golden Shells (Metallic)';
-      case CustomParticleType.brassCasings:
-        return '🎯 Brass Casings (Metallic)';
-      case CustomParticleType.steelSparks:
-        return '⚙️ Steel Sparks (Metallic)';
-      // Bone
-      case CustomParticleType.necromantic:
-        return '💀 Necrotic Skull (Bone)';
-      case CustomParticleType.skeletal:
-        return '🦴 Skeletal ashes (Bone)';
-      case CustomParticleType.tombstone:
-        return '🪦 Tombstone Dust (Bone)';
+      case CustomParticleType.fire:
+        return '🔥 Fire (Embers & Sparks)';
+      case CustomParticleType.water:
+        return '💧 Water (Bubbles & Droplets)';
+      case CustomParticleType.earth:
+        return '� Earth (Dust & Stone)';
+      case CustomParticleType.air:
+        return '�️ Air (Wind & Gusts)';
+      // Gungeon
+      case CustomParticleType.bullets:
+        return '🔫 Bullets (Shells & Casings)';
+      case CustomParticleType.gunpowder:
+        return '💥 Gunpowder (Smoke & Flashes)';
+      case CustomParticleType.stars:
+        return '✨ Stars (Cosmic Sparkles)';
       case CustomParticleType.none:
         return 'No Particles 🚫';
     }

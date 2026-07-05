@@ -69,7 +69,10 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
     return Theme(
       data: cleanTheme,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          scrolledUnderElevation: 0,
           title: const GoopText('CHOOSE PALETTE'),
           centerTitle: true,
           automaticallyImplyLeading: true,
@@ -144,7 +147,18 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                           mode: m,
                           isActive: selected,
                           onApply: () => _select(m),
-                          isNew: false,
+                          isNew: const [
+                            AppThemeMode.gungeonProper,
+                            AppThemeMode.theOubliette,
+                            AppThemeMode.pastParadox,
+                            AppThemeMode.highPriestVoid,
+                            AppThemeMode.robotsCore,
+                            AppThemeMode.cultOfGundead,
+                            AppThemeMode.synergySurge,
+                            AppThemeMode.glitchedChest,
+                            AppThemeMode.lichsTomb,
+                            AppThemeMode.winchestersGame,
+                          ].contains(m),
                         ),
                       ),
                     );
@@ -361,42 +375,24 @@ class _ThemePreviewCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      // Core Color Swatches (Pimped out visual!)
-                      Row(
-                        children: [
-                          const Text(
-                            'PALETTE CORES:',
-                            style: TextStyle(
-                              fontSize: 8.5,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white54,
-                              letterSpacing: 0.8,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          _ColorCoreBox(color: f.scaffold, label: 'BG'),
-                          const SizedBox(width: 4),
-                          _ColorCoreBox(color: f.card, label: 'CRD'),
-                          const SizedBox(width: 4),
-                          _ColorCoreBox(color: f.primary, label: 'PRI'),
-                          const SizedBox(width: 4),
-                          _ColorCoreBox(color: f.secondary, label: 'SEC'),
-                          const SizedBox(width: 4),
-                          _ColorCoreBox(color: f.headlineStat, label: 'ACC'),
-                        ],
+                      // Continuous weighted palette swatch bar
+                      const Text(
+                        'PALETTE CORES',
+                        style: TextStyle(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white54,
+                          letterSpacing: 0.8,
+                        ),
                       ),
+                      const SizedBox(height: 4),
+                      _WeightedPaletteBar(flair: f),
+                      const SizedBox(height: 10),
+                      // Thematic preview stats — custom per theme
+                      _PreviewWrapper(mode: mode, child: _PreviewStatsRow(flair: f, mode: mode)),
                       const SizedBox(height: 8),
-                      // Mini card with three headline stats — directly using
-                      // ThemedNumber so the picker preview includes the actual
-                      // shimmer/glow/tabular treatment.
-                      _PreviewWrapper(mode: mode, child: _PreviewStatsRow(flair: f)),
-                      const SizedBox(height: 8),
-                      // Chip row.
-                      _PreviewWrapper(mode: mode, child: _PreviewChipsRow(flair: f)),
-                      const SizedBox(height: 8),
-                      // Bullet list — twinkles in Unicorn, paw-prints in Guan
-                      // Guan, brass dashes in Winchester, etc.
-                      _PreviewWrapper(mode: mode, child: _PreviewBullets(flair: f)),
+                      // Thematic bullet notes — custom per theme
+                      _PreviewWrapper(mode: mode, child: _PreviewBullets(flair: f, mode: mode)),
                       const SizedBox(height: 8),
                       // Inventory preview row — shows a gun tile and an item tile
                       // with quality ring to give a feel of the actual game UI.
@@ -466,41 +462,35 @@ class _PreviewWrapper extends StatelessWidget {
 
 class _PreviewStatsRow extends StatelessWidget {
   final ThemeFlair flair;
-  const _PreviewStatsRow({required this.flair});
+  final AppThemeMode mode;
+  const _PreviewStatsRow({required this.flair, required this.mode});
 
   @override
   Widget build(BuildContext context) {
+    final data = kThemePreviewData[mode];
+    final stats = data?.stats ?? ['142 DPS', '5.0 COOL', '3 CURSE'];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _PreviewStat(label: 'DPS', value: '142', flair: flair),
-        _PreviewStat(label: 'COOL', value: '5.0', flair: flair),
-        _PreviewStat(label: 'CURSE', value: '3', flair: flair, curse: 3),
+        for (final s in stats)
+          _PreviewStat(text: s, flair: flair),
       ],
     );
   }
 }
 
 class _PreviewStat extends StatelessWidget {
-  final String label;
-  final String value;
+  final String text;
   final ThemeFlair flair;
-  final double curse;
   const _PreviewStat({
-    required this.label,
-    required this.value,
+    required this.text,
     required this.flair,
-    this.curse = 0,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Inline mini-renderer mirroring ThemedNumber but reading [flair]
-    // directly (not AppTheme.notifier) so the preview always shows
-    // its OWN theme even when not the active one.
-    final isCurse = label == 'CURSE';
     final colour = flair.headlineStat;
-    final size = 22.0 * flair.numberSizeScale;
+    final size = 13.0 * flair.numberSizeScale;
     final style = TextStyle(
       fontSize: size,
       fontWeight: flair.numberWeight,
@@ -519,107 +509,25 @@ class _PreviewStat extends StatelessWidget {
             ]
           : null,
     );
-    Widget number = Text(value, style: style);
-    if (flair.glowCurse && isCurse && curse > 0) {
-      final t = (curse / 8).clamp(0.15, 1.0);
-      number = Stack(
-        alignment: Alignment.center,
-        children: [
-          Text(
-            value,
-            style: style.copyWith(
-              color: Colors.transparent,
-              shadows: [
-                Shadow(
-                  color: const Color(0xFFFF4757).withValues(alpha: t),
-                  blurRadius: 14,
-                ),
-              ],
-            ),
-          ),
-          number,
-        ],
-      );
-    }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        number,
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            letterSpacing: 1.2,
-            color: flair.secondary.withValues(alpha: 0.75),
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      ],
+    return Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: style,
     );
   }
 }
 
-class _PreviewChipsRow extends StatelessWidget {
-  final ThemeFlair flair;
-  const _PreviewChipsRow({required this.flair});
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 6,
-      runSpacing: 6,
-      children: [
-        _previewChip('Passive', flair.primary, flair),
-        _previewChip('Drum Clip', flair.secondary, flair),
-        _previewChip('B-Quality', flair.headlineStat, flair),
-      ],
-    );
-  }
-
-  Widget _previewChip(String label, Color tint, ThemeFlair flair) {
-    if (!flair.chipFilled) {
-      // Minimalist: underlined plain label, no fill, no border.
-      return Text(
-        label,
-        style: TextStyle(
-          fontSize: 12,
-          color: tint,
-          decoration: TextDecoration.underline,
-          decorationColor: tint.withValues(alpha: 0.6),
-        ),
-      );
-    }
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: tint.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(flair.chipRadius),
-        border: Border.all(color: tint.withValues(alpha: 0.5)),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 12,
-          color: tint,
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-    );
-  }
-}
 
 class _PreviewBullets extends StatelessWidget {
   final ThemeFlair flair;
-  const _PreviewBullets({required this.flair});
+  final AppThemeMode mode;
+  const _PreviewBullets({required this.flair, required this.mode});
 
   @override
   Widget build(BuildContext context) {
-    final lines = const [
-      'Loadout note',
-      'Synergy hint',
-      'Stat tweak',
-    ];
+    final data = kThemePreviewData[mode];
+    final lines = data?.bulletNotes ?? ['Loadout note', 'Synergy hint', 'Stat tweak'];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -637,11 +545,15 @@ class _PreviewBullets extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Text(
-                  lines[i],
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: flair.secondary.withValues(alpha: 0.85),
+                Expanded(
+                  child: Text(
+                    lines[i],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: flair.secondary.withValues(alpha: 0.85),
+                    ),
                   ),
                 ),
               ],
@@ -825,35 +737,60 @@ class _ArcadeAttribute extends StatelessWidget {
   }
 }
 
-class _ColorCoreBox extends StatelessWidget {
-  final Color color;
-  final String label;
-
-  const _ColorCoreBox({required this.color, required this.label});
+class _WeightedPaletteBar extends StatelessWidget {
+  final ThemeFlair flair;
+  const _WeightedPaletteBar({required this.flair});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 32,
-      height: 22,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: Colors.white24, width: 0.8),
-      ),
-      child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 7.5,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-            shadows: [
-              Shadow(color: Colors.black, blurRadius: 2, offset: Offset(0.5, 0.5)),
-            ],
-          ),
+    final cores = <_PaletteCore>[
+      _PaletteCore(color: flair.scaffold, label: 'BG', weight: 40),
+      _PaletteCore(color: flair.card, label: 'CRD', weight: 20),
+      _PaletteCore(color: flair.primary, label: 'PRI', weight: 15),
+      _PaletteCore(color: flair.secondary, label: 'SEC', weight: 15),
+      _PaletteCore(color: flair.headlineStat, label: 'ACC', weight: 10),
+    ];
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: SizedBox(
+        height: 28,
+        child: Row(
+          children: [
+            for (final c in cores)
+              Expanded(
+                flex: c.weight,
+                child: Container(
+                  color: c.color,
+                  alignment: Alignment.center,
+                  child: Text(
+                    c.label,
+                    style: TextStyle(
+                      fontSize: 7.5,
+                      fontWeight: FontWeight.w900,
+                      color: c.color.computeLuminance() > 0.5
+                          ? Colors.black87
+                          : Colors.white,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withValues(alpha: 0.4),
+                          blurRadius: 2,
+                          offset: const Offset(0.5, 0.5),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
   }
+}
+
+class _PaletteCore {
+  final Color color;
+  final String label;
+  final int weight;
+  const _PaletteCore({required this.color, required this.label, required this.weight});
 }

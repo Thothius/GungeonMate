@@ -276,6 +276,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: const Color(0xFF131316),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -350,16 +351,20 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                         ),
                         TextButton(
                           onPressed: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.pop(bContext);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => BrowseScreen(
-                                  targetSlot: slot,
-                                  showBackButton: true,
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (!context.mounted) return;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BrowseScreen(
+                                    targetSlot: slot,
+                                    showBackButton: true,
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            });
                           },
                           child: const Text(
                             'ADVANCED LIBRARY ➔',
@@ -1629,13 +1634,13 @@ class _PlayerPageState extends State<_PlayerPage> {
           const _RobotDashboardSliver(),
         if (player.character?.name.toLowerCase().contains('hunter') ?? false)
           const _HuntressDashboardSliver(),
-        if (player.items.any((it) => it.name.toLowerCase().contains('ser junkan')))
+        if (player.items.any((it) => it.name.toLowerCase() == 'ser junkan'))
           _JunkanDashboardSliver(slot: _slot),
-        if (player.guns.any((g) => g.name.toLowerCase().contains('gunderfury')))
+        if (player.guns.any((g) => g.name.toLowerCase() == 'gunderfury'))
           _GunderfuryDashboardSliver(slot: _slot),
-        if (player.guns.any((g) => g.name.toLowerCase().contains('triple gun')))
+        if (player.guns.any((g) => g.name.toLowerCase() == 'triple gun'))
           _TripleGunDashboardSliver(slot: _slot),
-        if (player.guns.any((g) => g.name.toLowerCase().contains('evolver')))
+        if (player.guns.any((g) => g.name.toLowerCase() == 'evolver'))
           _EvolverDashboardSliver(slot: _slot),
         // Effects tile hidden — effect tags already shown on character dash.
         // SliverToBoxAdapter(
@@ -2238,10 +2243,15 @@ class _RobotDashboardSliver extends StatefulWidget {
 }
 
 class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
+  bool _terminalExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
+    final player = p.runState.main;
     final double damageBoost = (p.robotJunk + (p.robotLies ? 1 : 0)) * 5.0 + (p.robotGoldJunk ? 500.0 : 0.0);
+    final double multiplier = 1.0 + damageBoost / 100.0;
+    final guns = player.guns;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -2249,7 +2259,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFF0D1117), // Sleek cybernetic black-grey
+            color: const Color(0xFF0D1117),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.cyan.withValues(alpha: 0.35), width: 1.2),
             boxShadow: [
@@ -2263,7 +2273,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Row
+              // Header Row with big DMG boost badge
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -2283,123 +2293,129 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                     ],
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: p.robotGoldJunk ? Colors.amber.withValues(alpha: 0.15) : Colors.cyan.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(6),
+                      color: p.robotGoldJunk
+                          ? Colors.amber.withValues(alpha: 0.18)
+                          : Colors.cyan.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: p.robotGoldJunk
+                            ? Colors.amber.withValues(alpha: 0.5)
+                            : Colors.cyan.withValues(alpha: 0.4),
+                        width: 1.0,
+                      ),
                     ),
                     child: Text(
-                      p.robotGoldJunk ? '+${damageBoost.toStringAsFixed(0)}% DMG (GOLD ACTIVE)' : '+${damageBoost.toStringAsFixed(0)}% DMG BOOST',
+                      '+${damageBoost.toStringAsFixed(0)}% DMG',
                       style: TextStyle(
-                        fontSize: 9,
+                        fontSize: 13,
                         fontWeight: FontWeight.w900,
                         color: p.robotGoldJunk ? Colors.amberAccent : Colors.cyanAccent,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
                 ],
               ),
               const Divider(color: Colors.white12, height: 16),
-              
-              // Central sleek layout
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Centerpiece Junk Counter
-                  Expanded(
-                    flex: 11,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.02),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'JUNK COUNT',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w900,
-                                  color: Colors.cyanAccent,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                '+5% DMG each',
-                                style: TextStyle(
-                                  fontSize: 8.5,
-                                  color: Colors.white38,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                visualDensity: VisualDensity.compact,
-                                padding: EdgeInsets.zero,
-                                icon: const Icon(Icons.remove_circle_outline, color: Colors.cyanAccent, size: 22),
-                                onPressed: p.robotJunk > 0 ? () => p.setRobotJunk(p.robotJunk - 1) : null,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                child: Text(
-                                  '${p.robotJunk}',
-                                  style: const TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    height: 1.0,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                visualDensity: VisualDensity.compact,
-                                padding: EdgeInsets.zero,
-                                icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent, size: 22),
-                                onPressed: () => p.setRobotJunk(p.robotJunk + 1),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  
-                  // Compact Toggles Column
-                  Expanded(
-                    flex: 10,
-                    child: Column(
+
+              // Junk counter — full width, no overflow
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.02),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Gold Junk Toggle
-                        _buildTinyToggle(
-                          label: 'Gold Junk (+500%)',
-                          value: p.robotGoldJunk,
-                          activeColor: Colors.amberAccent,
-                          onChanged: p.setRobotGoldJunk,
+                        Text(
+                          'JUNK COUNT',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.cyanAccent,
+                            letterSpacing: 0.5,
+                          ),
                         ),
-                        const SizedBox(height: 6),
-                        // Lies Junk Toggle
-                        _buildTinyToggle(
-                          label: 'Lies Junk (+5%)',
-                          value: p.robotLies,
-                          activeColor: Colors.purpleAccent,
-                          onChanged: p.setRobotLies,
+                        SizedBox(height: 2),
+                        Text(
+                          '+5% DMG each',
+                          style: TextStyle(fontSize: 9, color: Colors.white38),
                         ),
                       ],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                          icon: const Icon(Icons.remove_circle_outline, color: Colors.cyanAccent, size: 24),
+                          onPressed: p.robotJunk > 0 ? () => p.setRobotJunk(p.robotJunk - 1) : null,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            '${p.robotJunk}',
+                            style: const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              height: 1.0,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                          icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent, size: 24),
+                          onPressed: () => p.setRobotJunk(p.robotJunk + 1),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Toggle row — full width, two big compact tap targets
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildCompactToggle(
+                      label: 'GOLD JUNK',
+                      subtitle: '+500%',
+                      value: p.robotGoldJunk,
+                      activeColor: Colors.amberAccent,
+                      onChanged: p.setRobotGoldJunk,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildCompactToggle(
+                      label: 'LIES',
+                      subtitle: '+5%',
+                      value: p.robotLies,
+                      activeColor: Colors.purpleAccent,
+                      onChanged: p.setRobotLies,
                     ),
                   ),
                 ],
               ),
+
+              // Expandable Damage Terminal
+              if (guns.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                _buildTerminalToggle(),
+                if (_terminalExpanded) _buildDamageTerminal(guns, multiplier),
+              ],
             ],
           ),
         ),
@@ -2407,45 +2423,297 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
     );
   }
 
-  Widget _buildTinyToggle({
+  Widget _buildCompactToggle({
     required String label,
+    required String subtitle,
     required bool value,
     required Color activeColor,
     required ValueChanged<bool> onChanged,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.01),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 28,
-            height: 20,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Switch(
-                value: value,
-                activeColor: activeColor,
-                onChanged: onChanged,
+    return GestureDetector(
+      onTap: () => onChanged(!value),
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: value ? activeColor.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.02),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: value ? activeColor.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+            width: value ? 1.5 : 1.0,
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              value ? Icons.check_circle_rounded : Icons.radio_button_unchecked,
+              color: value ? activeColor : Colors.white30,
+              size: 22,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      color: value ? activeColor : Colors.white60,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: value ? activeColor.withValues(alpha: 0.8) : Colors.white30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTerminalToggle() {
+    return GestureDetector(
+      onTap: () {
+        setState(() => _terminalExpanded = !_terminalExpanded);
+        Haptics.selection();
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF001100),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.green.withValues(alpha: 0.3), width: 1.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.terminal_rounded, size: 16, color: Colors.green.withValues(alpha: 0.8)),
+                const SizedBox(width: 8),
+                Text(
+                  'DAMAGE CALCULATOR',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.green.withValues(alpha: 0.8),
+                    letterSpacing: 0.8,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ],
+            ),
+            Icon(
+              _terminalExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+              size: 18,
+              color: Colors.green.withValues(alpha: 0.6),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDamageTerminal(List<Gun> guns, double multiplier) {
+    return Container(
+      margin: const EdgeInsets.only(top: 6),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF000800),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.green.withValues(alpha: 0.25), width: 1.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Terminal header
+          Row(
+            children: [
+              Text(
+                '> ROBOT_DMG_CALC v1.0',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.green.withValues(alpha: 0.5),
+                  fontFamily: 'monospace',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '×${multiplier.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.greenAccent,
+                  fontFamily: 'monospace',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          // Column headers
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Text(
+                    'WEAPON',
+                    style: TextStyle(
+                      fontSize: 8,
+                      color: Colors.green.withValues(alpha: 0.4),
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    'BASE',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 8,
+                      color: Colors.green.withValues(alpha: 0.4),
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    'ROBOT',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 8,
+                      color: Colors.green.withValues(alpha: 0.4),
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'Δ',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontSize: 8,
+                      color: Colors.green.withValues(alpha: 0.4),
+                      fontFamily: 'monospace',
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 9.5,
-                color: Colors.white70,
-                fontWeight: FontWeight.bold,
+          // Divider line
+          Container(height: 1, color: Colors.green.withValues(alpha: 0.15)),
+          const SizedBox(height: 4),
+          // Gun rows
+          for (final gun in guns)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 5,
+                    child: Text(
+                      gun.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.green.withValues(alpha: 0.85),
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      gun.dpsValue.toStringAsFixed(1),
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.green.withValues(alpha: 0.6),
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      (gun.dpsValue * multiplier).toStringAsFixed(1),
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.greenAccent,
+                        fontFamily: 'monospace',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      '+${(gun.dpsValue * multiplier - gun.dpsValue).toStringAsFixed(1)}',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.green.withValues(alpha: 0.5),
+                        fontFamily: 'monospace',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
+          // Terminal footer
+          const SizedBox(height: 6),
+          Container(height: 1, color: Colors.green.withValues(alpha: 0.15)),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'TOTAL DPS',
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.green.withValues(alpha: 0.5),
+                  fontFamily: 'monospace',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
+                style: TextStyle(
+                  fontSize: 10,
+                  color: Colors.greenAccent,
+                  fontFamily: 'monospace',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ],
       ),

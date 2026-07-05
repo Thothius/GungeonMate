@@ -4173,9 +4173,8 @@
               "v": " that sets enemies on "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "fire"
             },
             {
               "t": "text",
@@ -4387,9 +4386,8 @@
               "v": ", "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -10414,9 +10412,8 @@
               "v": "Temporarily  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "stealth"
             },
             {
               "t": "text",
@@ -12250,9 +12247,8 @@
                   "v": "Hitting an enemy with the hook "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "stuns"
                 },
                 {
                   "t": "text",
@@ -17097,9 +17093,8 @@
               "v": "Adds a chance to fire green bullets that "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "poisons"
             },
             {
               "t": "text",
@@ -17334,9 +17329,8 @@
               "v": ", its area of effect triples and it ignites enemies with  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "fire"
             },
             {
               "t": "text",
@@ -22231,9 +22225,8 @@
                   "v": "10% chance for the bullet to inflict a random "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status effect",
-                  "kind": "unresolved"
+                  "t": "text",
+                  "v": "status effects"
                 },
                 {
                   "t": "text",
@@ -22278,9 +22271,8 @@
               "v": "25% chance-per-second while shooting an enemy with a beam-type weapon for that enemy to be afflicted with a random "
             },
             {
-              "t": "ref",
-              "v": "Status effect",
-              "kind": "unresolved"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -31114,9 +31106,8 @@
               "v": "When damaged by harmful "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "goop"
             },
             {
               "t": "text",
@@ -33134,18 +33125,16 @@
               "v": ". Trank Gun changes appearance, its rate of fire is decreased, damage and reload time are increased, and its bullets will inflict "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
               "v": " and "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "fire"
             },
             {
               "t": "text",
@@ -33658,9 +33647,8 @@
               "v": "Upon use, "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "charm"
             },
             {
               "t": "text",
@@ -34127,9 +34115,8 @@
               "v": "Enemies killed by any indirect means, such as through the Burn or Poison "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "effects"
             },
             {
               "t": "text",
@@ -36135,9 +36122,8 @@
               "v": "Using the sack empties the sack and fires a piece of explosive cheese for every bullet collected. The pieces of cheese "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "encheeses"
             },
             {
               "t": "text",
@@ -41133,7 +41119,7 @@
             },
             {
               "t": "text",
-              "v": " will receive 5 to 10  instead."
+              "v": " will receive 5 to 10 coins instead."
             }
           ]
         },
@@ -42287,9 +42273,8 @@
             {
               "tokens": [
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "stunned"
                 },
                 {
                   "t": "text",
@@ -42304,9 +42289,8 @@
                   "v": "50% chance to be "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "poisoned"
                 },
                 {
                   "t": "text",
@@ -42321,9 +42305,8 @@
                   "v": "50% chance to be "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "poisoned"
                 },
                 {
                   "t": "text",
@@ -42338,9 +42321,8 @@
                   "v": "50% chance to be completely "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "frozen"
                 },
                 {
                   "t": "text",
@@ -43996,9 +43978,8 @@
               "v": " creates a large area in which all enemies will be set on "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "fire"
             },
             {
               "t": "text",
@@ -44449,9 +44430,8 @@
               "v": " briefly "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "stun"
             },
             {
               "t": "text",
@@ -46560,18 +46540,16 @@
               "v": ", Trank Gun changes appearance, its rate of fire is decreased, damage and reload time are increased, and its bullets will inflict "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
               "v": " and "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "fire"
             },
             {
               "t": "text",
@@ -54836,9 +54814,8 @@
               "v": " - The Grappling Hook is able to hit Baby Good Mimic while in his hiding state, "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "stunning"
             },
             {
               "t": "text",
@@ -56683,9 +56660,8 @@
               "v": "Upon entering a room, there is a 60% chance that an enemy will become "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",

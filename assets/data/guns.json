@@ -433,17 +433,17 @@
     "notes": "Starting gun of The Convict . Does not crack secret walls .",
     "quote": "Affordable Arms",
     "quality": "N",
-    "type": "Semiautomatic Automatic",
+    "type": "Semiautomatic",
     "dps": "20.0",
-    "magazine_size": "5 6",
+    "magazine_size": "6",
     "ammo_capacity": "",
-    "damage": "6 5.5",
-    "fire_rate": "0.15 0.25",
-    "reload_time": "0.9s 1.2s",
-    "shot_speed": "23 15",
-    "range": "18 1000",
-    "force": "10 12",
-    "spread": "10° 5°",
+    "damage": "6",
+    "fire_rate": "0.15",
+    "reload_time": "0.9s",
+    "shot_speed": "23",
+    "range": "18",
+    "force": "10",
+    "spread": "10°",
     "class": "",
     "curse": 0.0,
     "coolness": 0.0,
@@ -3249,9 +3249,8 @@
               "v": "Fires chunks of cheese that "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "encheeses"
             },
             {
               "t": "text",
@@ -6282,9 +6281,8 @@
               "v": " "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -6671,9 +6669,8 @@
               "v": " - If the player is  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -6932,9 +6929,8 @@
               "v": "Deals quadruple damage when fired while the player is  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -7777,7 +7773,7 @@
     "fire_rate": "0.35",
     "reload_time": "1.25s 1.2s",
     "shot_speed": "16 30",
-    "range": "16 15",
+    "range": "16",
     "force": "10",
     "spread": "4° 8° (First Bullet) 5° (Second Bullet)",
     "class": "",
@@ -10090,9 +10086,8 @@
               "v": "Fires 7 regular projectiles in a shotgun blast, and an instantaneous green laser that "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -11615,9 +11610,8 @@
                   "v": "2 poison bullets that create pools of "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "poison"
                 },
                 {
                   "t": "text",
@@ -11974,9 +11968,8 @@
               "v": ", its flame turns green, igniting enemies with  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -12618,9 +12611,8 @@
               "v": " has no affect on the player while the Siren is held. This includes "
             },
             {
-              "t": "ref",
-              "v": "Status effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -12967,9 +12959,8 @@
               "v": "The first two shots of each magazine fire a shotgun blast of "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -14090,9 +14081,8 @@
               "v": "The higher level, requiring the gun to be charged for 0.7 seconds, fires a faster moving and more damaging arrow with a heart trail. This arrow has a 75% chance to inflict the charm "
             },
             {
-              "t": "ref",
-              "v": "Status effect",
-              "kind": "unresolved"
+              "t": "text",
+              "v": "charm"
             },
             {
               "t": "text",
@@ -15743,9 +15733,8 @@
                   "v": "Nails that stick into enemies will trigger a cosmetic "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "status effects"
                 },
                 {
                   "t": "text",
@@ -16163,9 +16152,8 @@
               "v": "While held, any non-boss enemies within 90° of the angle the player is aiming will become "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -16312,9 +16300,8 @@
               "v": "The only other gun which utilises the fear "
             },
             {
-              "t": "ref",
-              "v": "Status effect",
-              "kind": "unresolved"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -19823,9 +19810,8 @@
               "v": "Bullets fired from the Plague Pistol have a 50% chance to inflict the "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -19980,9 +19966,8 @@
               "v": "Grants "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -23152,9 +23137,8 @@
               "v": ", the Chamber Gun is a rocket launcher which fires cheese wheels that "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "encheeses"
             },
             {
               "t": "text",
@@ -30130,9 +30114,8 @@
               "v": "The muzzle flare of this gun is a fiery ejection that sets enemies caught within on  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -30603,9 +30586,8 @@
               "v": "While reloading, the Teapot creates a burning aura in a 5 tile radius around the player, dealing 10 damage per second to enemies caught within and setting them on  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -32411,10 +32393,10 @@
     "quote": "Charge Beam Active",
     "quality": "B",
     "type": "Charged",
-    "dps": "1: 33.7 Level 2: 15.4 Level 3: 47.2",
+    "dps": "Level 1: 33.7 Level 2: 15.4 Level 3: 47.2",
     "magazine_size": "6",
     "ammo_capacity": "200",
-    "damage": "1: 5 Level 2: 10 Level 3: 70",
+    "damage": "Level 1: 5 Level 2: 10 Level 3: 70",
     "fire_rate": "0.07",
     "reload_time": "0.54s",
     "shot_speed": "25",
@@ -32689,9 +32671,8 @@
               "v": "Flings piercing fireballs that set enemies on  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -34920,9 +34901,8 @@
               "v": "The Plunger fires a constant stream of green liquid that inflicts the poison "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "poison"
             },
             {
               "t": "text",
@@ -35392,9 +35372,8 @@
                   "v": " Fish have a chance to "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "status effects"
                 },
                 {
                   "t": "text",
@@ -41178,9 +41157,8 @@
                   "v": "Enemies struck by the glaive are "
                 },
                 {
-                  "t": "ref",
-                  "v": "Status Effects",
-                  "kind": "lore"
+                  "t": "text",
+                  "v": "status effects"
                 },
                 {
                   "t": "text",
@@ -42007,9 +41985,8 @@
               "v": "Launches fireballs that set enemies on  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -42433,9 +42410,8 @@
               "v": ", the engine sprite will change and the flame will turn green, igniting enemies with  "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",
@@ -43330,9 +43306,8 @@
               "v": "The gun is swung forward when fired. Hitting an enemy with this close-ranged swing will "
             },
             {
-              "t": "ref",
-              "v": "Status Effects",
-              "kind": "lore"
+              "t": "text",
+              "v": "status effects"
             },
             {
               "t": "text",

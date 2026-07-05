@@ -135,7 +135,7 @@ class _BugReportDialogContentState extends State<_BugReportDialogContent> {
         'target_entity': entity,
         'launch_source': widget.sourceContext,
         'feedback': feedback,
-        'app_version': 'v0.9.1',
+        'app_version': 'v0.9.994',
         'environment': 'Android Sideloaded Release Build',
         '_subject': 'GungeonMate Bug [$category]${entity != 'N/A' ? ' - $entity' : ''}',
         'message': 'GungeonMate Anonymous Bug Report\n'
@@ -145,7 +145,7 @@ class _BugReportDialogContentState extends State<_BugReportDialogContent> {
             'Source Location: ${widget.sourceContext}\n'
             'Feedback details:\n$feedback\n'
             '--------------------------------------------------\n'
-            'Metadata: App v0.9.1, P2P Sideloaded Build',
+            'Metadata: App v0.9.994, P2P Sideloaded Build',
       };
 
       request.write(json.encode(payload));
@@ -181,7 +181,7 @@ class _BugReportDialogContentState extends State<_BugReportDialogContent> {
         '$feedback\n\n'
         '==================================================\n'
         'DIAGNOSTIC METADATA:\n'
-        '• App Version: v0.9.1\n'
+        '• App Version: v0.9.991\n'
         '• Client Environment: Android Sideloaded Release Build\n'
         '==================================================';
 

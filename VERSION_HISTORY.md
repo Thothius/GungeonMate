@@ -1,8 +1,135 @@
 # Gungeon Mate — Version History
 
-All production APK builds are archived in `builds/` with proper version labeling.
+All production APK builds are archived in `../app-releases/` with proper version labeling.
 
 **Format:** `gungeon-mate-v{MAJOR}.{MINOR}.{PATCH}.apk`
+
+---
+
+## v0.9.995 — Visual Polish: Parallax, Overlay, Wind Artifacts, Theme BG (July 5, 2026)
+**File:** `gungeon-mate-v0.9.995.apk`
+**Build:** 47
+
+### Smooth Parallax
+- **60fps Interpolation** — Still wallpaper background converted to StatefulWidget with AnimationController for exponential lerp of gyroscope tilt. No more sensor jitter or low FPS.
+
+### Quick Add Overlay Fix
+- **Race Condition Resolved** — Fixed bright white overlay when quick-adding items. Uses FocusManager unfocus + PostFrameCallback to sequence modal dismissal before navigation.
+
+### Wind Path Artifacts Removed
+- **Clean Particle Backdrops** — Eliminated wobbly "wind current" bezier curves from Gold Dust, Hellfire, Cosmic Rift, and Custom Particle painters. No more ghostly lines drifting upward.
+
+### Lingering Background Fix
+- **Theme Picker Transparency** — ThemePickerScreen Scaffold was 90% opaque, hiding ThemeOverlay backgrounds during preview and causing a flash on pop. Now transparent like all other screens.
+
+---
+
+## v0.9.994 — Robot Terminal + Theme Overhaul + 10 New Themes (July 5, 2026)
+**File:** `gungeon-mate-v0.9.994.apk`
+**Build:** 46
+
+### Robot Dashboard
+- **Junk Toggles** — Fixed font overflow. Gold Junk and Lies toggles are now bigger, more compact tap targets with icon + label + subtitle layout.
+- **DMG Boost Badge** — Now larger and more prominent with border styling.
+- **Damage Calculator Terminal** — New expandable retro green terminal showing per-gun damage calculations (weapon name, base DPS, robot-boosted DPS, delta) with monospace styling and total DPS summary.
+
+### Theme Picker Redesign
+- **Chips Removed** — Removed chip rows from theme preview cards per user request.
+- **Per-Theme Preview Data** — All 21 themes now have custom stats, bullet notes, and subheadings with real Gungeon flavor.
+- **Weighted Palette Bar** — Replaced individual color boxes with a continuous weighted palette swatch bar showing BG/CRD/PRI/SEC/ACC with actual hex colors as fill and luminance-aware text overlay.
+
+### 10 New Themes
+- **Gungeon Proper** — Castle stone blue, royal purple, dungeon iron gray
+- **The Oubliette** — Sludge green, corroded bronze, toxic lime
+- **Past Paradox** — Cosmic nebula black, neon cyan, void violet
+- **High Priest Void** — Void cultist purple, candle yellow, shadow magenta
+- **Robot's Core** — Circuit teal, battery green, matte steel gray
+- **Cult of Gundead** — Soft brass gold, lead gray, target red
+- **Synergy Surge** — Synergy arrow teal, chest blue, electric white
+- **Glitched Chest** — Terminal black, artifact magenta, digital distortion green
+- **Lich's Tomb** — Bone white, eerie phantom teal, crypt charcoal
+- **Winchester's Game** — Fairground green, prize ticket orange, carnival wood brown
+
+---
+
+## v0.9.992 — Unicorn Theme Family + HUD & Effect Fixes (July 5, 2026)
+**File:** `gungeon-mate-v0.9.992.apk`
+**Build:** 45
+
+### Bug Fixes
+- **Special Gun Panels** — Fixed substring matching bug where Ser Junkan, Gunderfury, and Triple Gun dashboards appeared for characters who don't possess those items. Now uses exact name matching.
+- **Status Effects Rendering** — Replaced all 45+ "Status Effects" lore ref tokens across items.json and guns.json with context-specific effect words (fire, poison, frozen, stun, stealth, charm, etc.). Effects now display correctly instead of showing a generic italic "Status Effects" link.
+
+### Theme Updates
+- **Unicorn Bubblegum** — Removed twinkling star sparkle particles. Ambient pink/teal glow remains.
+- **Unicorn II (Neon)** — New theme: neon-charged cotton candy with hot pink, electric teal, and bright orchid. Stronger glow intensity.
+- **Unicorn III (Dream)** — New theme: softer whispered cotton candy with blush pink, sage teal, and dusty lavender. Rounded 20px corners and gentle glow.
+- **Unicorn IV (Sunset)** — New theme: cotton candy at golden hour with coral pink, warm peach, and golden teal.
+
+### Planning
+- **MP Auto-Reconnect** — Created implementation plan for automated multiplayer save/reconnect system at `docs/mp_auto_reconnect_plan.md`.
+
+---
+
+## v0.9.991 — Data Corrections & Devolver HUD Fix (July 4, 2026)
+**File:** `gungeon-mate-v0.9.991.apk`
+**Build:** 44
+
+### Data Corrections
+- **Monster Blood** — Fixed first wiki note to include Robot's 5-10 coin drop range.
+- **Grappling Hook** — Replaced 'Status Effects' reference with inline 'stuns' text for clarity.
+- **Budget Revolver** — Removed incorrect Exit the Gungeon dual stats; now shows only EtG values.
+- **Big Iron** — Fixed range from '16 15' to correct value of 16.
+- **Heroine** — Fixed DPS and damage fields to properly label all three charge levels (Level 1/2/3).
+- **M16** — DPS now includes Machine Gun, Grenade Launcher, and Combined DPS values.
+
+### UI/UX Fix
+- **Devolver HUD** — Fixed substring matching bug where 'Devolver' triggered the Evolver HUD dashboard due to `contains('evolver')` matching. Now uses exact name match.
+
+---
+
+## v0.9.99 — Particle System Overhaul, FPS Fix, Parallax Rework & Glassmorphic Settings (June 30, 2026)
+**File:** `gungeon-mate-v0.9.99.apk`
+**Build:** 43
+
+### Glassmorphic Settings Panels
+- **Unified Glass Aesthetic** — All settings screen panels (Typography, Inventory Grid, Particle Tuning, Switch Rows) and settings sheet dropdown/rows now use `flair.card` at 35-38% alpha with themed primary borders. Panels show the background through them subtly while remaining fully readable.
+
+### Elemental Particle Types
+- **7 New Types** — Fire (embers & sparks), Water (bubbles & droplets), Earth (dust & stone pebbles), Air (wind gusts & streaks), Bullets (golden shells & brass casings), Gunpowder (smoke puffs & muzzle flash sparks), Stars (cosmic sparkles with white cores).
+- **Removed Old Types** — All emoji-based particles (necromantic skulls, skeletal bones, tombstone crosses, rainbow prismatic, frost, toxic, lightning, gold/brass/steel) replaced with pure Canvas vector shapes for maximum FPS.
+
+### Massive FPS Optimization
+- **Zero MaskFilter.blur** — Removed all expensive blur calls from every particle painter (curse fog, sparkles, hellfire, gold dust wind, cosmic rift wind).
+- **RadialGradient Shaders** — Replaced curse fog's blur(45) with cheap RadialGradient shaders for the same visual effect at fraction of the GPU cost.
+- **Concentric Circle Glows** — Replaced sparkle blur halos with cheap concentric alpha-gradient circles.
+- **RepaintBoundary** — Added to custom particle backdrop to isolate repaints.
+- **Memory Savings** — Removed Gun_Fairy.webp async asset load that was wasting memory on every screen.
+
+### Particle Cutoff Fix
+- **Off-Screen Travel** — Removed all modulo wrapping from particle positions across all 10+ backdrop painters. Particles now travel fully off-screen before fading out instead of wrapping around abruptly.
+
+### Parallax Rework for Large Screens
+- **Wider Tilt Range** — Increased accelerometer clamp from ±6 to ±10 and smoothing from 0.12 to 0.18 for more responsive gyroscope parallax.
+- **Screen-Scaled Movement** — Still wallpaper parallax now scales by screen dimensions instead of fixed 3.8px, so bigger phones get proportional movement.
+- **Lower Filter Quality** — Reduced image filter quality to low for better FPS on wallpaper rendering.
+
+---
+
+## v0.9.98 — Unicorn Bubblegum Rework & Particle Count Control (June 30, 2026)
+**File:** `gungeon-mate-v0.9.98.apk`
+**Build:** 42
+
+### Unicorn Bubblegum Theme Visual Rework
+- **6-Color Pastel Palette** — Sparkle particles now cycle through hot pink, lavender, mint cyan, soft pink, amethyst, and pure white for a vibrant cotton-candy aesthetic.
+- **Dual-Layer Glow Halos** — Each particle gets an outer bloom (6px blur) and mid glow (2.5px blur) using `MaskFilter` for a premium magical bloom effect.
+- **Three Shape Varieties** — Particles alternate between 4-pointed sparkle stars, glowing bubbles with white cores, and 6-pointed double-stars with layered rotation.
+- **Bright White Cores** — All sparkle shapes now feature crisp white center dots for extra twinkle punch.
+
+### Particle Count Now Affects All Theme-Default Backdrops
+- **Universal Count Control** — The user-controlled particle count slider (5–120) now drives all 9 theme-default backdrop widgets: GoldDust, Sparkles, BrassMotes, IceCrystals, WhiteDust, ToxicBubbles, ForgeEmbers, Hellfire, and CosmicRift.
+- **Live Regeneration** — Added `didUpdateWidget` to every backdrop widget so particle specs regenerate immediately when the density slider changes — no app restart required.
+- **Clearer Tooltip** — Updated the settings tooltip to clarify the slider affects both theme-default and custom particle types.
 
 ---
 

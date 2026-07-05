@@ -350,10 +350,10 @@ class _ThemeVisualsTab extends StatelessWidget {
               _prefSectionTitle('APP TYPOGRAPHY TUNING'),
               const SizedBox(height: 8),
               Card(
-                color: Colors.white.withValues(alpha: 0.02),
+                color: flair.card.withValues(alpha: 0.38),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+                  side: BorderSide(color: flair.primary.withValues(alpha: 0.12)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -441,10 +441,10 @@ class _ThemeVisualsTab extends StatelessWidget {
               _prefSectionTitle('INVENTORY GRID & DISPLAY TUNING'),
               const SizedBox(height: 8),
               Card(
-                color: Colors.white.withValues(alpha: 0.02),
+                color: flair.card.withValues(alpha: 0.38),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+                  side: BorderSide(color: flair.primary.withValues(alpha: 0.12)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -604,7 +604,7 @@ class _ThemeVisualsTab extends StatelessWidget {
               const SizedBox(height: 16),
 
               if (prefs.customParticleType != CustomParticleType.none) ...[
-                _prefSectionTitleWithInfo('PARTICLE COUNT / DENSITY (${prefs.particleCount})', flair, tooltip: 'Control the maximum number of custom background particles rendered simultaneously on the screen.'),
+                _prefSectionTitleWithInfo('PARTICLE COUNT / DENSITY (${prefs.particleCount})', flair, tooltip: 'Control the maximum number of background particles rendered simultaneously. This affects both theme-default and custom particle types.'),
                 Slider(
                   min: 5.0,
                   max: 120.0,
@@ -720,9 +720,9 @@ class _ThemeVisualsTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
+        color: flair.card.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
+        border: Border.all(color: flair.primary.withValues(alpha: 0.10)),
       ),
       child: Row(
         children: [

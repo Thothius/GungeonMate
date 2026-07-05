@@ -296,7 +296,7 @@ class _VisualsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withValues(alpha: 0.04),
+      color: AppTheme.flair.card.withValues(alpha: 0.35),
       borderRadius: BorderRadius.circular(10),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -679,10 +679,10 @@ class _VisualsDropdownState extends State<_VisualsDropdown> {
     final f = AppTheme.flair;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
+        color: AppTheme.flair.card.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.05),
+          color: AppTheme.flair.primary.withValues(alpha: 0.10),
           width: 0.8,
         ),
       ),

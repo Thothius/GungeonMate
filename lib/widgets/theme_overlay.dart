@@ -61,11 +61,11 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
 
     // Standard low-pass filter to smooth out gyroscope sways
     _sensorSub = accelerometerEventStream().listen((event) {
-      final tx = -event.x.clamp(-6.0, 6.0);
-      final ty = event.y.clamp(-6.0, 6.0);
+      final tx = -event.x.clamp(-10.0, 10.0);
+      final ty = event.y.clamp(-10.0, 10.0);
       _smoothedTilt = Offset(
-        _smoothedTilt.dx + (tx - _smoothedTilt.dx) * 0.12,
-        _smoothedTilt.dy + (ty - _smoothedTilt.dy) * 0.12,
+        _smoothedTilt.dx + (tx - _smoothedTilt.dx) * 0.18,
+        _smoothedTilt.dy + (ty - _smoothedTilt.dy) * 0.18,
       );
       ThemeOverlay.tiltNotifier.value = _smoothedTilt;
     }, onError: (_) {
@@ -369,31 +369,31 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
       case ThemeBackdrop.none:
         return null;
       case ThemeBackdrop.goldDust:
-        return _GoldDust(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode);
+        return _GoldDust(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.pastelDriftSparkles:
         // Drift is now handled globally by _AmbientGlow; only the
         // sparkles are Unicorn-specific.
-        return _Sparkles(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode);
+        return _Sparkles(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.redBreathDrip:
         return const _RedBreathDrip();
       case ThemeBackdrop.brassMotes:
-        return _BrassMotes(subtleMode: prefs.subtleParticleMode);
+        return _BrassMotes(subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.paperBreath:
         // Paper theme gets only the ambient glow + page frame — no
         // particle layer. "Stillness is the quirk."
         return null;
       case ThemeBackdrop.iceCrystals:
-        return _IceCrystals(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode);
+        return _IceCrystals(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.whiteDust:
-        return _WhiteDust(gravityVortex: prefs.gravityVortex, subtleMode: prefs.subtleParticleMode);
+        return _WhiteDust(gravityVortex: prefs.gravityVortex, subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.toxicBubbles:
-        return _ToxicBubbles(subtleMode: prefs.subtleParticleMode);
+        return _ToxicBubbles(subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.forgeEmbers:
-        return _ForgeEmbers(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode);
+        return _ForgeEmbers(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.hellfire:
-        return _Hellfire(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode);
+        return _Hellfire(advancedFlicker: prefs.advancedFlicker, subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
       case ThemeBackdrop.cosmicRift:
-        return _CosmicRift(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode);
+        return _CosmicRift(particleRotation: prefs.particleRotation, subtleMode: prefs.subtleParticleMode, particleCount: prefs.particleCount);
     }
   }
 }
@@ -503,7 +503,8 @@ class _AmbientGlowState extends State<_AmbientGlow>
 class _GoldDust extends StatefulWidget {
   final bool advancedFlicker;
   final bool subtleMode;
-  const _GoldDust({required this.advancedFlicker, required this.subtleMode});
+  final int particleCount;
+  const _GoldDust({required this.advancedFlicker, required this.subtleMode, required this.particleCount});
   @override
   State<_GoldDust> createState() => _GoldDustState();
 }
@@ -511,7 +512,7 @@ class _GoldDust extends StatefulWidget {
 class _GoldDustState extends State<_GoldDust>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -520,21 +521,29 @@ class _GoldDustState extends State<_GoldDust>
       vsync: this,
       duration: const Duration(seconds: 18),
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(42);
-    // Even phase distribution — a particle is always exiting the top
-    // exactly when another is entering the bottom, so the stream reads
-    // as an unbroken upward flow instead of a randomly-clumped field.
-    const count = 18;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
-        // Keep speed jitter small so phases stay evenly spaced over time.
         speed: 0.92 + rng.nextDouble() * 0.16,
         phase: i / count + rng.nextDouble() * (1.0 / count) * 0.4,
         size: 1.2 + rng.nextDouble() * 1.6,
         sway: 6 + rng.nextDouble() * 14,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_GoldDust oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -591,33 +600,7 @@ class _GoldDustPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Draw beautiful flowing golden wind currents
-    final windPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4
-      ..color = const Color(0xFFF6C849).withValues(alpha: 0.05 + 0.04 * math.sin(t * 2 * math.pi));
-    if (advancedFlicker) {
-      windPaint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.8);
-    }
-    for (int i = 0; i < 3; i++) {
-      final pOffset = (t + i / 3.0) % 1.0;
-      final path = Path();
-      final startY = size.height * (1.1 - pOffset);
-      final c1y = startY - size.height * 0.25;
-      final c2y = startY - size.height * 0.5;
-      final endY = startY - size.height * 0.75;
-      
-      final startX = -120.0 + pOffset * (size.width + 240.0);
-      path.moveTo(startX, startY);
-      path.cubicTo(
-        startX + size.width * 0.25, c1y + math.sin(pOffset * 2 * math.pi) * 45,
-        startX + size.width * 0.55, c2y + math.cos(pOffset * 2 * math.pi) * 45,
-        startX + size.width * 0.85, endY
-      );
-      canvas.drawPath(path, windPaint);
-    }
-
-    // 2. Draw gold dust particles carried diagonally by the wind with tilt physics
+    // Draw gold dust particles carried diagonally by the wind with tilt physics
     final paint = Paint();
     final tilt = ThemeOverlay.tiltNotifier.value;
     final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
@@ -626,13 +609,13 @@ class _GoldDustPainter extends CustomPainter {
       // Position cycles 0→1 over the spec's speed-scaled duration.
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Bottom→top: y starts at size.height and drifts up, offset slightly by physical Y tilt.
-      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p);
       // Wind-swept diagonal drift + physical X tilt forces!
       final diagonalDrift = p * size.width * 0.18;
       final tiltXShift = tilt.dx * 25 * p; // sways more at the top of their drift!
       // Lateral sway via a sine wave for a "floaty" feel.
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway;
-      final x = (s.x * size.width + sway + diagonalDrift + tiltXShift) % size.width;
+      final x = (s.x * size.width + sway + diagonalDrift + tiltXShift);
       // Fade in at the bottom and out at the top for a soft entry/exit.
       final alpha = _bellAlpha(p) * 0.55;
 
@@ -670,7 +653,8 @@ class _GoldDustPainter extends CustomPainter {
 class _Sparkles extends StatefulWidget {
   final bool particleRotation;
   final bool subtleMode;
-  const _Sparkles({required this.particleRotation, required this.subtleMode});
+  final int particleCount;
+  const _Sparkles({required this.particleRotation, required this.subtleMode, required this.particleCount});
   @override
   State<_Sparkles> createState() => _SparklesState();
 }
@@ -678,7 +662,7 @@ class _Sparkles extends StatefulWidget {
 class _SparklesState extends State<_Sparkles>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -687,10 +671,12 @@ class _SparklesState extends State<_Sparkles>
       vsync: this,
       duration: const Duration(seconds: 14),
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(7);
-    // Phase distributed evenly across [0,1) so sparkles trickle up at
-    // a steady rate and the wrap-around is invisible.
-    const count = 14;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -700,6 +686,14 @@ class _SparklesState extends State<_Sparkles>
         sway: 8 + rng.nextDouble() * 18,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_Sparkles oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -739,6 +733,15 @@ class _SparklesPainter extends CustomPainter {
     required this.subtleMode,
   });
 
+  static const _sparkleColors = [
+    Color(0xFFFF69B4), // hot pink
+    Color(0xFFE8A7F0), // lavender
+    Color(0xFF00F5D4), // mint cyan
+    Color(0xFFFFB2E6), // soft pink
+    Color(0xFFB388FF), // amethyst
+    Color(0xFFFFFFFF), // pure white
+  ];
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
@@ -747,25 +750,41 @@ class _SparklesPainter extends CustomPainter {
     for (int i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final y = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
+      final y = (size.height * (1.0 - p) + tilt.dy * 12 * p);
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway * 1.2;
       final tiltXShift = tilt.dx * 20 * p;
-      final x = (s.x * size.width + sway + tiltXShift) % size.width;
-      final alpha = _bellAlpha(p) * 0.55;
+      final x = (s.x * size.width + sway + tiltXShift);
+      final alpha = _bellAlpha(p) * 0.65;
 
       // Soft magical twinkle scaling
       final twinkle = particleRotation
-          ? 0.4 + 0.6 * math.sin(t * 18 * math.pi + s.phase * 15)
+          ? 0.35 + 0.65 * math.sin(t * 18 * math.pi + s.phase * 15)
           : 1.0;
-      final scaleSize = s.size * 1.6 * twinkle;
+      final scaleSize = s.size * 1.8 * twinkle;
       final finalAlpha = (alpha * twinkle).clamp(0.0, 1.0);
+      final color = _sparkleColors[i % _sparkleColors.length];
 
       canvas.save();
       canvas.translate(x, y);
-      
-      if (i % 2 == 0) {
-        // Beautiful 4-pointed vector sparkle
-        paint.color = const Color(0xFFFFB2E6).withValues(alpha: finalAlpha);
+
+      // 1. Soft outer glow halo — cheap concentric circles instead of expensive blur
+      paint.style = PaintingStyle.fill;
+      paint.maskFilter = null;
+      paint.color = color.withValues(alpha: finalAlpha * 0.08);
+      canvas.drawCircle(Offset.zero, scaleSize * 2.2, paint);
+
+      // 2. Mid glow
+      paint.color = color.withValues(alpha: finalAlpha * 0.18);
+      canvas.drawCircle(Offset.zero, scaleSize * 1.5, paint);
+
+      // 3. Inner glow
+      paint.color = color.withValues(alpha: finalAlpha * 0.35);
+      canvas.drawCircle(Offset.zero, scaleSize * 1.1, paint);
+
+      final shapeType = i % 3;
+      if (shapeType == 0) {
+        // 4-pointed sparkle star with color variety
+        paint.color = color.withValues(alpha: finalAlpha);
         if (particleRotation) {
           canvas.rotate(p * 5.0 * math.pi + s.phase * 10);
         }
@@ -780,13 +799,53 @@ class _SparklesPainter extends CustomPainter {
           ..lineTo(-scaleSize * 0.22, -scaleSize * 0.22)
           ..close();
         canvas.drawPath(path, paint);
-      } else {
-        // Glowing magic cotton candy bubble with radial shader likeness
-        paint.color = const Color(0xFFB3E5FC).withValues(alpha: finalAlpha * 0.6);
+
+        // Bright white core
+        paint.color = Colors.white.withValues(alpha: finalAlpha * 0.8);
+        canvas.drawCircle(Offset.zero, scaleSize * 0.18, paint);
+      } else if (shapeType == 1) {
+        // Glowing bubble with colored halo + white core
+        paint.color = color.withValues(alpha: finalAlpha * 0.5);
         canvas.drawCircle(Offset.zero, scaleSize, paint);
-        
+
         paint.color = Colors.white.withValues(alpha: finalAlpha * 0.9);
-        canvas.drawCircle(Offset.zero, scaleSize * 0.35, paint);
+        canvas.drawCircle(Offset.zero, scaleSize * 0.4, paint);
+      } else {
+        // 6-pointed sparkle diamond — extra magical
+        paint.color = color.withValues(alpha: finalAlpha);
+        if (particleRotation) {
+          canvas.rotate(p * 3.5 * math.pi + s.phase * 8);
+        }
+        final r = scaleSize * 0.9;
+        final path = Path()
+          ..moveTo(0, -r)
+          ..lineTo(r * 0.3, -r * 0.3)
+          ..lineTo(r, 0)
+          ..lineTo(r * 0.3, r * 0.3)
+          ..lineTo(0, r)
+          ..lineTo(-r * 0.3, r * 0.3)
+          ..lineTo(-r, 0)
+          ..lineTo(-r * 0.3, -r * 0.3)
+          ..close();
+        canvas.drawPath(path, paint);
+        // Rotate 45deg for second layer = 6-point star
+        canvas.rotate(math.pi / 4);
+        final path2 = Path()
+          ..moveTo(0, -r * 0.7)
+          ..lineTo(r * 0.2, -r * 0.2)
+          ..lineTo(r * 0.7, 0)
+          ..lineTo(r * 0.2, r * 0.2)
+          ..lineTo(0, r * 0.7)
+          ..lineTo(-r * 0.2, r * 0.2)
+          ..lineTo(-r * 0.7, 0)
+          ..lineTo(-r * 0.2, -r * 0.2)
+          ..close();
+        paint.color = color.withValues(alpha: finalAlpha * 0.6);
+        canvas.drawPath(path2, paint);
+
+        // White core
+        paint.color = Colors.white.withValues(alpha: finalAlpha * 0.7);
+        canvas.drawCircle(Offset.zero, r * 0.15, paint);
       }
       canvas.restore();
     }
@@ -869,9 +928,7 @@ class _CurseFogPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.fill
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 45);
+    final paint = Paint()..style = PaintingStyle.fill;
 
     final centers = [
       Offset(
@@ -901,9 +958,15 @@ class _CurseFogPainter extends CustomPainter {
     ];
 
     for (int i = 0; i < centers.length; i++) {
-      paint.color = colors[i];
+      paint.shader = RadialGradient(
+        center: Alignment.center,
+        radius: 1.0,
+        colors: [colors[i], colors[i].withValues(alpha: 0.0)],
+        stops: const [0.0, 1.0],
+      ).createShader(Rect.fromCircle(center: centers[i], radius: radii[i]));
       canvas.drawCircle(centers[i], radii[i], paint);
     }
+    paint.shader = null;
   }
 
   @override
@@ -1051,10 +1114,10 @@ class _CrimsonDripPainter extends CustomPainter {
       final double phase = i / 15.0;
       final double progress = (t * speed + phase) % 1.0;
       
-      final y = (size.height * (1.0 - progress) + tilt.dy * 15 * progress) % size.height;
+      final y = (size.height * (1.0 - progress) + tilt.dy * 15 * progress);
       final sway = math.sin(progress * 2 * math.pi + phase * 8) * 22;
       final tiltXShift = tilt.dx * 18 * progress;
-      final x = ((i / 15.0) * size.width + sway + tiltXShift) % size.width;
+      final x = ((i / 15.0) * size.width + sway + tiltXShift);
       final alpha = (1.0 - progress) * progress * 4.0 * 0.45; // bell-shaped fade in & out
       
       // Outer charred ember
@@ -1083,7 +1146,8 @@ class _CrimsonDripPainter extends CustomPainter {
 /// uses brass hues to match the saloon palette.
 class _BrassMotes extends StatefulWidget {
   final bool subtleMode;
-  const _BrassMotes({required this.subtleMode});
+  final int particleCount;
+  const _BrassMotes({required this.subtleMode, required this.particleCount});
   @override
   State<_BrassMotes> createState() => _BrassMotesState();
 }
@@ -1091,7 +1155,7 @@ class _BrassMotes extends StatefulWidget {
 class _BrassMotesState extends State<_BrassMotes>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -1100,8 +1164,12 @@ class _BrassMotesState extends State<_BrassMotes>
       vsync: this,
       duration: const Duration(seconds: 28), // slower than gold dust
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(1873); // Winchester's year. Nice.
-    const count = 28;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -1111,6 +1179,14 @@ class _BrassMotesState extends State<_BrassMotes>
         sway: 20 + rng.nextDouble() * 26, // wider drift = "floating" dust
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_BrassMotes oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -1155,12 +1231,12 @@ class _BrassMotesPainter extends CustomPainter {
     for (int i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final y = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
+      final y = (size.height * (1.0 - p) + tilt.dy * 12 * p);
       
       // Wider lazy horizontal drift matching prairie wind currents + tilt!
       final sway = math.sin(p * 2 * math.pi + s.phase * 4) * s.sway * 1.5;
       final tiltXShift = tilt.dx * 18 * p;
-      final x = (s.x * size.width + sway + tiltXShift) % size.width;
+      final x = (s.x * size.width + sway + tiltXShift);
       final alpha = _bellAlpha(p) * 0.85;
 
       // Soft breeze flicker
@@ -1215,7 +1291,8 @@ class _BrassMotesPainter extends CustomPainter {
 class _IceCrystals extends StatefulWidget {
   final bool particleRotation;
   final bool subtleMode;
-  const _IceCrystals({required this.particleRotation, required this.subtleMode});
+  final int particleCount;
+  const _IceCrystals({required this.particleRotation, required this.subtleMode, required this.particleCount});
   @override
   State<_IceCrystals> createState() => _IceCrystalsState();
 }
@@ -1223,7 +1300,7 @@ class _IceCrystals extends StatefulWidget {
 class _IceCrystalsState extends State<_IceCrystals>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -1232,8 +1309,12 @@ class _IceCrystalsState extends State<_IceCrystals>
       vsync: this,
       duration: const Duration(seconds: 22),
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(2024);
-    const count = 16;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -1243,6 +1324,14 @@ class _IceCrystalsState extends State<_IceCrystals>
         sway: 8 + rng.nextDouble() * 16,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_IceCrystals oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -1305,10 +1394,10 @@ class _IceCrystalsPainter extends CustomPainter {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Top to bottom drift + tilt!
-      final y = (size.height * p + tilt.dy * 12 * p) % size.height;
+      final y = (size.height * p + tilt.dy * 12 * p);
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway * 1.2;
       final tiltXShift = tilt.dx * 18 * p;
-      final x = (s.x * size.width + sway + tiltXShift) % size.width;
+      final x = (s.x * size.width + sway + tiltXShift);
       final alpha = _bellAlpha(p) * 0.65;
 
       // Shimmering twinkle
@@ -1377,7 +1466,8 @@ class _IceCrystalsPainter extends CustomPainter {
 class _WhiteDust extends StatefulWidget {
   final bool gravityVortex;
   final bool subtleMode;
-  const _WhiteDust({required this.gravityVortex, required this.subtleMode});
+  final int particleCount;
+  const _WhiteDust({required this.gravityVortex, required this.subtleMode, required this.particleCount});
   @override
   State<_WhiteDust> createState() => _WhiteDustState();
 }
@@ -1385,7 +1475,7 @@ class _WhiteDust extends StatefulWidget {
 class _WhiteDustState extends State<_WhiteDust>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -1394,8 +1484,12 @@ class _WhiteDustState extends State<_WhiteDust>
       vsync: this,
       duration: const Duration(seconds: 32), // very slow, ghostly
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(0);
-    const count = 12; // sparse
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -1405,6 +1499,14 @@ class _WhiteDustState extends State<_WhiteDust>
         sway: 12 + rng.nextDouble() * 20,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_WhiteDust oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -1454,10 +1556,10 @@ class _WhiteDustPainter extends CustomPainter {
     for (int i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final rawY = (size.height * (1.0 - p) + tilt.dy * 12 * p) % size.height;
+      final rawY = (size.height * (1.0 - p) + tilt.dy * 12 * p);
       final sway = math.sin(p * 2 * math.pi + s.phase * 4) * s.sway;
       final tiltXShift = tilt.dx * 18 * p;
-      final rawX = (s.x * size.width + sway + tiltXShift) % size.width;
+      final rawX = (s.x * size.width + sway + tiltXShift);
       final alpha = _bellAlpha(p) * 0.35;
 
       // HANDCRAFTED Void Gravity Well: particles get subtly drawn in by the avatar aura
@@ -1507,7 +1609,8 @@ class _WhiteDustPainter extends CustomPainter {
 
 class _ToxicBubbles extends StatefulWidget {
   final bool subtleMode;
-  const _ToxicBubbles({required this.subtleMode});
+  final int particleCount;
+  const _ToxicBubbles({required this.subtleMode, required this.particleCount});
   @override
   State<_ToxicBubbles> createState() => _ToxicBubblesState();
 }
@@ -1515,7 +1618,7 @@ class _ToxicBubbles extends StatefulWidget {
 class _ToxicBubblesState extends State<_ToxicBubbles>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_BubbleSpec> _specs;
+  late List<_BubbleSpec> _specs;
 
   @override
   void initState() {
@@ -1524,8 +1627,12 @@ class _ToxicBubblesState extends State<_ToxicBubbles>
       vsync: this,
       duration: const Duration(seconds: 16),
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(666);
-    const count = 12;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _BubbleSpec(
         x: rng.nextDouble(),
@@ -1535,6 +1642,14 @@ class _ToxicBubblesState extends State<_ToxicBubbles>
         wobble: 10 + rng.nextDouble() * 18,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_ToxicBubbles oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -1595,10 +1710,10 @@ class _ToxicBubblesPainter extends CustomPainter {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Bottom→top (rising ooze) with tilt physics!
-      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p);
       final wobble = math.sin(p * 2 * math.pi + s.phase * 5) * s.wobble;
       final tiltXShift = tilt.dx * 18 * p;
-      final x = (s.x * size.width + wobble + tiltXShift) % size.width;
+      final x = (s.x * size.width + wobble + tiltXShift);
       final alpha = _bellAlpha(p) * 0.50;
       paint.color = const Color(0xFF4ADE36).withValues(alpha: alpha);
       paint.strokeWidth = 1.2;
@@ -1658,7 +1773,8 @@ class _PageFrame extends StatelessWidget {
 class _ForgeEmbers extends StatefulWidget {
   final bool advancedFlicker;
   final bool subtleMode;
-  const _ForgeEmbers({required this.advancedFlicker, required this.subtleMode});
+  final int particleCount;
+  const _ForgeEmbers({required this.advancedFlicker, required this.subtleMode, required this.particleCount});
   @override
   State<_ForgeEmbers> createState() => _ForgeEmbersState();
 }
@@ -1666,7 +1782,7 @@ class _ForgeEmbers extends StatefulWidget {
 class _ForgeEmbersState extends State<_ForgeEmbers>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -1675,8 +1791,12 @@ class _ForgeEmbersState extends State<_ForgeEmbers>
       vsync: this,
       duration: const Duration(seconds: 15),
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(718);
-    const count = 22;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -1686,6 +1806,14 @@ class _ForgeEmbersState extends State<_ForgeEmbers>
         sway: 12 + rng.nextDouble() * 20,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_ForgeEmbers oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -1734,10 +1862,10 @@ class _ForgeEmbersPainter extends CustomPainter {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Rising embers with tilt physics!
-      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p);
       final sway = math.sin(p * 3 * math.pi + s.phase * 5) * s.sway * 1.4;
       final tiltXShift = tilt.dx * 18 * p;
-      final x = (s.x * size.width + sway + tiltXShift) % size.width;
+      final x = (s.x * size.width + sway + tiltXShift);
       final alpha = _bellAlpha(p) * 0.75;
 
       // Flame-like thermal flicker modulation
@@ -1796,7 +1924,8 @@ class _ForgeEmbersPainter extends CustomPainter {
 class _Hellfire extends StatefulWidget {
   final bool advancedFlicker;
   final bool subtleMode;
-  const _Hellfire({required this.advancedFlicker, required this.subtleMode});
+  final int particleCount;
+  const _Hellfire({required this.advancedFlicker, required this.subtleMode, required this.particleCount});
   @override
   State<_Hellfire> createState() => _HellfireState();
 }
@@ -1804,7 +1933,7 @@ class _Hellfire extends StatefulWidget {
 class _HellfireState extends State<_Hellfire>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -1813,8 +1942,12 @@ class _HellfireState extends State<_Hellfire>
       vsync: this,
       duration: const Duration(seconds: 18),
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(13);
-    const count = 18;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -1824,6 +1957,14 @@ class _HellfireState extends State<_Hellfire>
         sway: 15 + rng.nextDouble() * 25,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_Hellfire oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -1865,47 +2006,19 @@ class _HellfirePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Draw curving turbulent heat haze / fire wind currents
-    for (int i = 0; i < 3; i++) {
-      final pOffset = (t + i / 3.0) % 1.0;
-      final path = Path();
-      final startY = size.height * (1.1 - pOffset);
-      final c1y = startY - size.height * 0.25;
-      final c2y = startY - size.height * 0.5;
-      final endY = startY - size.height * 0.75;
-      
-      final startX = size.width * 1.1 - pOffset * (size.width * 1.2);
-      path.moveTo(startX, startY);
-      path.cubicTo(
-        startX - size.width * 0.3, c1y + math.sin(pOffset * 3 * math.pi) * 60,
-        startX - size.width * 0.6, c2y + math.cos(pOffset * 3 * math.pi) * 60,
-        startX - size.width * 0.9, endY
-      );
-
-      final windColor = i % 2 == 0 ? const Color(0xFF9C27B0) : const Color(0xFFE91E63);
-      final windPaint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0
-        ..color = windColor.withValues(alpha: 0.04 + 0.03 * math.sin(t * 3 * math.pi));
-      if (advancedFlicker) {
-        windPaint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.5);
-      }
-      canvas.drawPath(path, windPaint);
-    }
-
-    // 2. Draw rising volcanic embers carried by hot diagonal winds with tilt physics!
+    // Draw rising volcanic embers carried by hot diagonal winds with tilt physics!
     final paint = Paint();
     final tilt = ThemeOverlay.tiltNotifier.value;
     final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
     for (var i = 0; i < limit; i++) {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
-      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p) % size.height;
+      final y = (size.height * (1.0 - p) + tilt.dy * 15 * p);
       // Hot wind diagonal sweep (sweeping leftwards from right)
       final windSweep = -p * size.width * 0.25;
       final sway = math.sin(p * 2 * math.pi + s.phase * 4) * s.sway;
       final tiltXShift = tilt.dx * 18 * p;
-      final x = (s.x * size.width + sway + windSweep + tiltXShift) % size.width;
+      final x = (s.x * size.width + sway + windSweep + tiltXShift);
       final alpha = _bellAlpha(p) * 0.55;
 
       // Necrotic pulse vibration
@@ -1918,14 +2031,11 @@ class _HellfirePainter extends CustomPainter {
       final color = i % 2 == 0 ? const Color(0xFF9C27B0) : const Color(0xFFE91E63);
       paint.color = color.withValues(alpha: finalAlpha);
 
-      // Draw misty glowing orbs with breathing blur radius
-      if (advancedFlicker) {
-        paint.maskFilter = MaskFilter.blur(BlurStyle.normal, (1.2 * pulse).clamp(0.4, 2.8));
-      } else {
-        paint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 1);
-      }
+      // Draw misty glowing orbs with breathing scale (no blur for performance)
       canvas.drawCircle(Offset(x, y), s.size * pulse, paint);
-      paint.maskFilter = null;
+      // Inner brighter core
+      paint.color = color.withValues(alpha: finalAlpha * 0.5);
+      canvas.drawCircle(Offset(x, y), s.size * pulse * 0.5, paint);
     }
   }
 
@@ -1947,7 +2057,8 @@ class _HellfirePainter extends CustomPainter {
 class _CosmicRift extends StatefulWidget {
   final bool particleRotation;
   final bool subtleMode;
-  const _CosmicRift({required this.particleRotation, required this.subtleMode});
+  final int particleCount;
+  const _CosmicRift({required this.particleRotation, required this.subtleMode, required this.particleCount});
   @override
   State<_CosmicRift> createState() => _CosmicRiftState();
 }
@@ -1955,7 +2066,7 @@ class _CosmicRift extends StatefulWidget {
 class _CosmicRiftState extends State<_CosmicRift>
     with SingleTickerProviderStateMixin {
   late final AnimationController _c;
-  late final List<_DustSpec> _specs;
+  late List<_DustSpec> _specs;
 
   @override
   void initState() {
@@ -1964,8 +2075,12 @@ class _CosmicRiftState extends State<_CosmicRift>
       vsync: this,
       duration: const Duration(seconds: 24),
     )..repeat();
+    _generateSpecs();
+  }
+
+  void _generateSpecs() {
     final rng = math.Random(321);
-    const count = 24;
+    final count = widget.particleCount;
     _specs = List.generate(count, (i) {
       return _DustSpec(
         x: rng.nextDouble(),
@@ -1975,6 +2090,14 @@ class _CosmicRiftState extends State<_CosmicRift>
         sway: 10 + rng.nextDouble() * 16,
       );
     });
+  }
+
+  @override
+  void didUpdateWidget(_CosmicRift oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.particleCount != widget.particleCount) {
+      _generateSpecs();
+    }
   }
 
   @override
@@ -2016,37 +2139,7 @@ class _CosmicRiftPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Draw flowing cosmic solar wind paths
-    for (int i = 0; i < 3; i++) {
-      final pOffset = (t + i / 3.0) % 1.0;
-      final path = Path();
-      // Flow horizontally and vertically across representing solar winds
-      final startX = size.width * (1.1 - pOffset);
-      final c1x = startX - size.width * 0.25;
-      final c2x = startX - size.width * 0.5;
-      final endX = startX - size.width * 0.75;
-
-      final startY = -120.0 + pOffset * (size.height + 240.0);
-      path.moveTo(startX, startY);
-      path.cubicTo(
-        c1x + math.sin(pOffset * 2 * math.pi) * 50, startY + size.height * 0.25,
-        c2x + math.cos(pOffset * 2 * math.pi) * 50, startY + size.height * 0.55,
-        endX, startY + size.height * 0.85
-      );
-
-      final isCyan = i % 2 == 0;
-      final windColor = isCyan ? const Color(0xFF00E5FF) : const Color(0xFFFFD700);
-      final windPaint = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.2
-        ..color = windColor.withValues(alpha: 0.05 + 0.03 * math.sin(t * 2 * math.pi));
-      if (particleRotation) {
-        windPaint.maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.8);
-      }
-      canvas.drawPath(path, windPaint);
-    }
-
-    // 2. Draw drifting stars and star sparkles with tilt physics!
+    // Draw drifting stars and star sparkles with tilt physics!
     final paint = Paint();
     final tilt = ThemeOverlay.tiltNotifier.value;
     final limit = subtleMode ? (specs.length / 2).round().clamp(2, specs.length) : specs.length;
@@ -2054,12 +2147,12 @@ class _CosmicRiftPainter extends CustomPainter {
       final s = specs[i];
       final p = ((t * s.speed) + s.phase) % 1.0;
       // Drift slowly downwards with tilt-Y!
-      final y = (size.height * p + tilt.dy * 12 * p) % size.height;
+      final y = (size.height * p + tilt.dy * 12 * p);
       // Diagonal wind sweep (drifting bottom-rightwards) + tilt-X!
       final windSweep = p * size.width * 0.15;
       final sway = math.sin(p * 2 * math.pi + s.phase * 6) * s.sway;
       final tiltXShift = tilt.dx * 18 * p;
-      final x = (s.x * size.width + sway + windSweep + tiltXShift) % size.width;
+      final x = (s.x * size.width + sway + windSweep + tiltXShift);
       final alpha = _bellAlpha(p) * 0.50;
 
       // Star twinkle shimmer
@@ -2123,7 +2216,6 @@ class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with S
   late final AnimationController _c;
   final List<_CustomSpec> _specs = [];
   final Stopwatch _stopwatch = Stopwatch();
-  ui.Image? _gunFairyImage;
 
   @override
   void initState() {
@@ -2134,23 +2226,6 @@ class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with S
     )..repeat();
     _stopwatch.start();
     _generateSpecs();
-    _loadGunFairyImage();
-  }
-
-  Future<void> _loadGunFairyImage() async {
-    try {
-      final data = await DefaultAssetBundle.of(context).load('assets/images/items/Gun_Fairy.webp');
-      final bytes = data.buffer.asUint8List();
-      final codec = await ui.instantiateImageCodec(bytes);
-      final frame = await codec.getNextFrame();
-      if (mounted) {
-        setState(() {
-          _gunFairyImage = frame.image;
-        });
-      }
-    } catch (e) {
-      debugPrint('Failed to load Gun_Fairy particle image: $e');
-    }
   }
 
   @override
@@ -2213,16 +2288,17 @@ class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with S
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
-      builder: (_, __) => CustomPaint(
-        painter: _CustomParticlePainter(
-          t: _stopwatch.elapsedMilliseconds / 1000.0,
-          specs: _specs,
-          prefs: widget.prefs,
-          gunFairyImage: _gunFairyImage,
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
+        builder: (_, __) => CustomPaint(
+          painter: _CustomParticlePainter(
+            t: _stopwatch.elapsedMilliseconds / 1000.0,
+            specs: _specs,
+            prefs: widget.prefs,
+          ),
+          size: Size.infinite,
         ),
-        size: Size.infinite,
       ),
     );
   }
@@ -2254,52 +2330,17 @@ class _CustomParticlePainter extends CustomPainter {
   final double t;
   final List<_CustomSpec> specs;
   final VisualPrefs prefs;
-  final ui.Image? gunFairyImage;
 
   _CustomParticlePainter({
     required this.t,
     required this.specs,
     required this.prefs,
-    this.gunFairyImage,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()..style = PaintingStyle.fill;
-    final tp = TextPainter(textDirection: TextDirection.ltr);
     final tilt = ThemeOverlay.tiltNotifier.value;
-
-    // Draw gorgeous flowing background theme wind paths for custom particles
-    final windColor = switch (prefs.customParticleType) {
-      CustomParticleType.ember => const Color(0xFFFF5722),      // Fire: Red-Orange
-      CustomParticleType.frost => const Color(0xFF00E5FF),      // Frost: Light Cyan
-      CustomParticleType.toxic => const Color(0xFF00E676),      // Toxic: Poison Green
-      CustomParticleType.lightning => const Color(0xFFFFEA00),  // Lightning: Bright Yellow
-      CustomParticleType.rainbow => const Color(0xFFFF4081),    // Rainbow: Prismatic Pink
-      CustomParticleType.goldShells => const Color(0xFFFFD700), // Gold: Gold
-      CustomParticleType.brassCasings => const Color(0xFFFFA726),// Brass: Warm Amber
-      CustomParticleType.steelSparks => const Color(0xFFB0BEC5), // Steel: Cool Slate Gray
-      CustomParticleType.necromantic => const Color(0xFFEA80FC), // Necro: Pale Lavender
-      CustomParticleType.skeletal => const Color(0xFFECEFF1),    // Skeletal: Bone White
-      CustomParticleType.tombstone => const Color(0xFF90A4AE),   // Tombstone: Dusty Gray
-      _ => Colors.white,
-    };
-    final windPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.3
-      ..color = windColor.withValues(alpha: 0.04 + 0.02 * math.sin(t * 2 * math.pi));
-    for (int i = 0; i < 3; i++) {
-      final pOffset = (t + i / 3.0) % 1.0;
-      final path = Path();
-      final startY = size.height * (1.1 - pOffset);
-      path.moveTo(-50, startY);
-      path.cubicTo(
-        size.width * 0.3, startY - 100 * math.sin(pOffset * math.pi),
-        size.width * 0.7, startY + 100 * math.cos(pOffset * math.pi),
-        size.width + 50, startY - 50
-      );
-      canvas.drawPath(path, windPaint);
-    }
 
     for (final s in specs) {
       final depth = s.depth; // 0.4 (far) to 1.3 (near)
@@ -2318,17 +2359,17 @@ class _CustomParticlePainter extends CustomPainter {
       final windShift = p * size.width * 0.14 * (1.5 - depth);
 
       if (s.direction == 'top') {
-        rawY = (size.height * p + tiltYShift) % size.height;
-        rawX = (s.x * size.width + sway + tiltXShift + windShift) % size.width;
+        rawY = (size.height * p + tiltYShift);
+        rawX = (s.x * size.width + sway + tiltXShift + windShift);
       } else if (s.direction == 'bottom') {
-        rawY = (size.height * (1.0 - p) + tiltYShift) % size.height;
-        rawX = (s.x * size.width + sway + tiltXShift + windShift) % size.width;
+        rawY = (size.height * (1.0 - p) + tiltYShift);
+        rawX = (s.x * size.width + sway + tiltXShift + windShift);
       } else if (s.direction == 'left') {
-        rawX = (size.width * p + tiltXShift + windShift) % size.width;
-        rawY = (s.y * size.height + sway + tiltYShift) % size.height;
+        rawX = (size.width * p + tiltXShift + windShift);
+        rawY = (s.y * size.height + sway + tiltYShift);
       } else if (s.direction == 'right') {
-        rawX = (size.width * (1.0 - p) + tiltXShift - windShift) % size.width;
-        rawY = (s.y * size.height + sway + tiltYShift) % size.height;
+        rawX = (size.width * (1.0 - p) + tiltXShift - windShift);
+        rawY = (s.y * size.height + sway + tiltYShift);
       }
 
       double edgeFade = 1.0;
@@ -2348,13 +2389,7 @@ class _CustomParticlePainter extends CustomPainter {
           ? 0.15 + 0.85 * math.sin(t * 32 * math.pi + s.phase * 50).abs()
           : 0.4 + 0.6 * math.sin(t * 18 * math.pi + s.phase * 22).abs();
 
-      // Complex sprites (emoji skulls and bones) look jittery when flickering at high frequencies.
-      // We override this with a slow, breathing pulse (0.88 to 1.12) for organic flow.
-      final isComplexSprite = prefs.customParticleType == CustomParticleType.necromantic ||
-                              prefs.customParticleType == CustomParticleType.skeletal;
-      final double dynamicScaleMultiplier = isComplexSprite
-          ? 0.88 + 0.12 * math.sin(t * 3.2 + s.phase * 8)
-          : (prefs.advancedFlicker ? twinkle : 1.0);
+      final double dynamicScaleMultiplier = prefs.advancedFlicker ? twinkle : 1.0;
 
       // Scaled size according to depth and premium multipliers for hand-tuned excellence!
       final scaledSize = s.size * dynamicScaleMultiplier * depth;
@@ -2365,170 +2400,151 @@ class _CustomParticlePainter extends CustomPainter {
           break;
 
         case CustomParticleType.themeDefault:
-          // Standard white dust as fallback
           paint.color = const Color(0xFFFFFFFF).withValues(alpha: alpha * 0.35);
           canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.5, paint);
           break;
 
-        case CustomParticleType.ember:
-          // Glowing embers/fire (Reds, Oranges, Golds)
-          final isRed = s.phase < 0.4;
-          final isOrange = s.phase >= 0.4 && s.phase < 0.8;
-          final color = isRed
+        case CustomParticleType.fire:
+          // Glowing embers: red, orange, gold with white-hot cores
+          final colorTier = s.phase;
+          final color = colorTier < 0.33
               ? const Color(0xFFFF3D00)
-              : (isOrange ? const Color(0xFFFF9100) : const Color(0xFFFFD700));
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.8);
-          
-          // Draw circular glowing embers
+              : (colorTier < 0.66 ? const Color(0xFFFF9100) : const Color(0xFFFFD600));
+          paint.color = color.withValues(alpha: alpha * twinkle * 0.85);
           canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.6, paint);
-          // Optional mini spark outline
-          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.3);
+          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.5);
           canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.25, paint);
           break;
 
-        case CustomParticleType.frost:
-          // Glistening ice crystals (Cyan, Light Blue)
-          final isCyan = s.phase < 0.5;
-          final color = isCyan ? const Color(0xFF00E5FF) : const Color(0xFFB8E0F0);
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.7);
-
-          // Draw a small ice-crystal cross / diamond shape
-          final r = scaledSize * 0.8;
-          final path = Path()
-            ..moveTo(rawX, rawY - r)
-            ..lineTo(rawX + r * 0.4, rawY)
-            ..lineTo(rawX, rawY + r)
-            ..lineTo(rawX - r * 0.4, rawY)
-            ..close();
-          canvas.drawPath(path, paint);
-          break;
-
-        case CustomParticleType.toxic:
-          // Bubbling green poison (Toxic Greens and Yellow-Greens)
-          final isBright = s.phase < 0.5;
-          final color = isBright ? const Color(0xFF00E676) : const Color(0xFF76FF03);
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.8);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.55, paint);
-          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.45);
-          canvas.drawCircle(Offset(rawX - scaledSize * 0.15, rawY - scaledSize * 0.15), scaledSize * 0.12, paint);
-          break;
-
-        case CustomParticleType.lightning:
-          // Flashing lightning sparks (Electrifying Yellow and White)
-          final color = s.phase < 0.4 ? Colors.white : const Color(0xFFFFEA00);
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.9);
-          final r = scaledSize * 0.85;
-          final path = Path()
-            ..moveTo(rawX, rawY - r)
-            ..lineTo(rawX + r * 0.3, rawY - r * 0.1)
-            ..lineTo(rawX - r * 0.3, rawY + r * 0.1)
-            ..lineTo(rawX, rawY + r)
-            ..lineTo(rawX - r * 0.15, rawY + r * 0.1)
-            ..lineTo(rawX + r * 0.15, rawY - r * 0.1)
-            ..close();
-          canvas.drawPath(path, paint);
-          break;
-
-        case CustomParticleType.rainbow:
-          // Prismatic color shifting based on time and phase!
-          final hue = (t * 360 + s.phase * 360) % 360;
-          final color = HSLColor.fromAHSL(1.0, hue, 0.95, 0.6).toColor();
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.8);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.5, paint);
-          break;
-
-        case CustomParticleType.goldShells:
-          // Shiny golden ammo shells (Pure Gold and Amber highlights)
-          paint.color = const Color(0xFFFFD700).withValues(alpha: alpha * 0.85);
-          final rw = scaledSize * 0.9;
-          final rh = scaledSize * 1.5;
-          canvas.drawRRect(
-            RRect.fromRectAndRadius(
-              Rect.fromCenter(center: Offset(rawX, rawY), width: rw, height: rh),
-              Radius.circular(rw * 0.25),
-            ),
-            paint,
-          );
-          paint.color = Colors.white.withValues(alpha: alpha * 0.45);
-          canvas.drawRect(Rect.fromLTWH(rawX - rw * 0.25, rawY - rh * 0.4, rw * 0.15, rh * 0.8), paint);
-          break;
-
-        case CustomParticleType.brassCasings:
-          // Copper-brass cylindrical casing
-          paint.color = const Color(0xFFFF9100).withValues(alpha: alpha * 0.8);
-          final cw = scaledSize * 0.7;
-          final ch = scaledSize * 1.4;
-          canvas.drawRRect(
-            RRect.fromRectAndRadius(
-              Rect.fromCenter(center: Offset(rawX, rawY), width: cw, height: ch),
-              Radius.circular(cw * 0.2),
-            ),
+        case CustomParticleType.water:
+          // Bubbles & droplets: cyan-blue with white shine
+          final color = s.phase < 0.5
+              ? const Color(0xFF00B0FF)
+              : const Color(0xFF4FC3F7);
+          paint.color = color.withValues(alpha: alpha * twinkle * 0.6);
+          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.65, paint);
+          // White shine dot
+          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.5);
+          canvas.drawCircle(
+            Offset(rawX - scaledSize * 0.18, rawY - scaledSize * 0.18),
+            scaledSize * 0.15,
             paint,
           );
           break;
 
-        case CustomParticleType.steelSparks:
-          // Sharp silver-steel friction sparks
-          paint.color = const Color(0xFFCFD8DC).withValues(alpha: alpha * twinkle * 0.9);
+        case CustomParticleType.earth:
+          // Dust & stone: brown, tan, gray pebbles
+          final color = s.phase < 0.33
+              ? const Color(0xFF8D6E63)
+              : (s.phase < 0.66 ? const Color(0xFFA1887F) : const Color(0xFF6D4C41));
+          paint.color = color.withValues(alpha: alpha * 0.8);
+          final r = scaledSize * 0.7;
+          // Irregular pebble shape
+          canvas.drawOval(
+            Rect.fromCenter(center: Offset(rawX, rawY), width: r * 1.6, height: r * 1.2),
+            paint,
+          );
+          break;
+
+        case CustomParticleType.air:
+          // Wind gusts: light gray-white streaks
+          final color = s.phase < 0.5
+              ? const Color(0xFFB0BEC5)
+              : const Color(0xFFECEFF1);
+          paint.color = color.withValues(alpha: alpha * twinkle * 0.55);
+          final r = scaledSize * 0.9;
+          // Elongated horizontal streak
+          canvas.drawOval(
+            Rect.fromCenter(center: Offset(rawX, rawY), width: r * 2.0, height: r * 0.5),
+            paint,
+          );
+          break;
+
+        case CustomParticleType.bullets:
+          // Shells & casings: gold/brass ammo shapes
+          if (s.phase < 0.5) {
+            // Golden shell
+            paint.color = const Color(0xFFFFD700).withValues(alpha: alpha * 0.85);
+            final rw = scaledSize * 0.9;
+            final rh = scaledSize * 1.5;
+            canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                Rect.fromCenter(center: Offset(rawX, rawY), width: rw, height: rh),
+                Radius.circular(rw * 0.25),
+              ),
+              paint,
+            );
+            paint.color = Colors.white.withValues(alpha: alpha * 0.4);
+            canvas.drawRect(
+              Rect.fromLTWH(rawX - rw * 0.25, rawY - rh * 0.4, rw * 0.15, rh * 0.8),
+              paint,
+            );
+          } else {
+            // Brass casing
+            paint.color = const Color(0xFFCD7F32).withValues(alpha: alpha * 0.8);
+            final cw = scaledSize * 0.7;
+            final ch = scaledSize * 1.4;
+            canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                Rect.fromCenter(center: Offset(rawX, rawY), width: cw, height: ch),
+                Radius.circular(cw * 0.2),
+              ),
+              paint,
+            );
+          }
+          break;
+
+        case CustomParticleType.gunpowder:
+          // Smoke & flashes: dark gray puffs with occasional bright sparks
+          if (s.phase < 0.15) {
+            // Bright muzzle flash spark
+            paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.9);
+            final sr = scaledSize * 0.9;
+            final path = Path()
+              ..moveTo(rawX, rawY - sr)
+              ..lineTo(rawX + sr * 0.2, rawY - sr * 0.2)
+              ..lineTo(rawX + sr, rawY)
+              ..lineTo(rawX + sr * 0.2, rawY + sr * 0.2)
+              ..lineTo(rawX, rawY + sr)
+              ..lineTo(rawX - sr * 0.2, rawY + sr * 0.2)
+              ..lineTo(rawX - sr, rawY)
+              ..lineTo(rawX - sr * 0.2, rawY - sr * 0.2)
+              ..close();
+            canvas.drawPath(path, paint);
+          } else {
+            // Dark smoke puff
+            final color = s.phase < 0.5
+                ? const Color(0xFF424242)
+                : const Color(0xFF616161);
+            paint.color = color.withValues(alpha: alpha * 0.6);
+            canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.7, paint);
+            // Inner darker core
+            paint.color = const Color(0xFF212121).withValues(alpha: alpha * 0.4);
+            canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.35, paint);
+          }
+          break;
+
+        case CustomParticleType.stars:
+          // Refined cosmic sparkles: cyan, gold, white 4-point stars
+          final color = s.phase < 0.33
+              ? const Color(0xFF00E5FF)
+              : (s.phase < 0.66 ? const Color(0xFFFFD700) : Colors.white);
+          paint.color = color.withValues(alpha: alpha * twinkle * 0.85);
           final sr = scaledSize * 0.9;
           final path = Path()
             ..moveTo(rawX, rawY - sr)
-            ..lineTo(rawX + sr * 0.2, rawY - sr * 0.2)
+            ..lineTo(rawX + sr * 0.22, rawY - sr * 0.22)
             ..lineTo(rawX + sr, rawY)
-            ..lineTo(rawX + sr * 0.2, rawY + sr * 0.2)
+            ..lineTo(rawX + sr * 0.22, rawY + sr * 0.22)
             ..lineTo(rawX, rawY + sr)
-            ..lineTo(rawX - sr * 0.2, rawY + sr * 0.2)
+            ..lineTo(rawX - sr * 0.22, rawY + sr * 0.22)
             ..lineTo(rawX - sr, rawY)
-            ..lineTo(rawX - sr * 0.2, rawY - sr * 0.2)
+            ..lineTo(rawX - sr * 0.22, rawY - sr * 0.22)
             ..close();
           canvas.drawPath(path, paint);
-          break;
-
-        case CustomParticleType.necromantic:
-          // Creepy glowing purple necrotic skulls (Text-Emoji Skull 💀)
-          tp.text = TextSpan(
-            text: '💀',
-            style: TextStyle(
-              fontSize: scaledSize * 1.9,
-              color: const Color(0xFFE040FB).withValues(alpha: alpha * twinkle * 0.8),
-            ),
-          );
-          tp.layout();
-          tp.paint(canvas, Offset(rawX - tp.width / 2, rawY - tp.height / 2));
-          break;
-
-        case CustomParticleType.skeletal:
-          // Floating crossbone or bone-white chunks (Text-Emoji Bone 🦴)
-          tp.text = TextSpan(
-            text: '🦴',
-            style: TextStyle(
-              fontSize: scaledSize * 1.9,
-              color: const Color(0xFFECEFF1).withValues(alpha: alpha * 0.85),
-            ),
-          );
-          tp.layout();
-          tp.paint(canvas, Offset(rawX - tp.width / 2, rawY - tp.height / 2));
-          break;
-
-        case CustomParticleType.tombstone:
-          // Dusty tombstone gray crosses
-          paint.color = const Color(0xFF78909C).withValues(alpha: alpha * 0.7);
-          final tr = scaledSize * 0.8;
-          final path = Path()
-            ..moveTo(rawX - tr * 0.25, rawY - tr)
-            ..lineTo(rawX + tr * 0.25, rawY - tr)
-            ..lineTo(rawX + tr * 0.25, rawY - tr * 0.25)
-            ..lineTo(rawX + tr, rawY - tr * 0.25)
-            ..lineTo(rawX + tr, rawY + tr * 0.25)
-            ..lineTo(rawX + tr * 0.25, rawY + tr * 0.25)
-            ..lineTo(rawX + tr * 0.25, rawY + tr)
-            ..lineTo(rawX - tr * 0.25, rawY + tr)
-            ..lineTo(rawX - tr * 0.25, rawY + tr * 0.25)
-            ..lineTo(rawX - tr, rawY + tr * 0.25)
-            ..lineTo(rawX - tr, rawY - tr * 0.25)
-            ..lineTo(rawX - tr * 0.25, rawY - tr * 0.25)
-            ..close();
-          canvas.drawPath(path, paint);
+          // Bright white core
+          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.7);
+          canvas.drawCircle(Offset(rawX, rawY), sr * 0.18, paint);
           break;
       }
     }
@@ -3072,7 +3088,7 @@ class _CuriousCatStareWidgetState extends State<_CuriousCatStareWidget>
   }
 }
 
-class _StillWallpaperBackground extends StatelessWidget {
+class _StillWallpaperBackground extends StatefulWidget {
   final String assetName;
   final bool parallaxEnabled;
 
@@ -3082,34 +3098,68 @@ class _StillWallpaperBackground extends StatelessWidget {
   });
 
   @override
+  State<_StillWallpaperBackground> createState() => _StillWallpaperBackgroundState();
+}
+
+class _StillWallpaperBackgroundState extends State<_StillWallpaperBackground>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ticker;
+  Offset _displayedTilt = Offset.zero;
+  Offset _targetTilt = Offset.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..addListener(_onTick)..repeat();
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  void _onTick() {
+    // Frame-synchronized exponential lerp toward target tilt.
+    // 0.12 per frame at 60fps reaches ~99% of target in ~0.6s,
+    // producing buttery-smooth motion without sensor jitter.
+    _displayedTilt = Offset(
+      _displayedTilt.dx + (_targetTilt.dx - _displayedTilt.dx) * 0.12,
+      _displayedTilt.dy + (_targetTilt.dy - _displayedTilt.dy) * 0.12,
+    );
+    if (mounted) setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     final imageWidget = Image.asset(
-      'assets/images/wallpapers/still/$assetName',
+      'assets/images/wallpapers/still/${widget.assetName}',
       fit: BoxFit.cover,
-      filterQuality: FilterQuality.medium,
+      filterQuality: FilterQuality.low,
     );
 
-    if (!parallaxEnabled) {
+    if (!widget.parallaxEnabled) {
       return imageWidget;
     }
 
-    return ValueListenableBuilder<Offset>(
-      valueListenable: ThemeOverlay.tiltNotifier,
-      builder: (context, tilt, child) {
-        // Subtle, elegant gyroscopic sways (tilt bounds clamped to -6..6)
-        final double dx = tilt.dx * 3.8;
-        final double dy = tilt.dy * 3.8;
+    // Read the current sensor tilt as our target, then render with
+    // the smoothly-interpolated _displayedTilt.
+    _targetTilt = ThemeOverlay.tiltNotifier.value;
 
-        return Transform.scale(
-          scale: 1.06, // Scale up slightly to prevent black border cropping
-          alignment: Alignment.center,
-          child: Transform.translate(
-            offset: Offset(dx, dy),
-            child: child,
-          ),
-        );
-      },
-      child: imageWidget,
+    final screenSize = MediaQuery.of(context).size;
+    final double dx = _displayedTilt.dx * screenSize.width * 0.015;
+    final double dy = _displayedTilt.dy * screenSize.height * 0.015;
+
+    return Transform.scale(
+      scale: 1.08,
+      alignment: Alignment.center,
+      child: Transform.translate(
+        offset: Offset(dx, dy),
+        child: imageWidget,
+      ),
     );
   }
 }

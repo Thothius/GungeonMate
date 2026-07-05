@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.9.97-00E5FF?style=flat-square&logo=flutter">
+  <img alt="Version" src="https://img.shields.io/badge/version-0.9.994-00E5FF?style=flat-square&logo=flutter">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Android-FF007F?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-E040FB?style=flat-square">
 </p>
@@ -21,12 +21,12 @@
 ## 📥 DOWNLOAD & DEPLOY
 
 <p align="center">
-  <a href="https://github.com/Thothius/GungeonMate/raw/master/builds/gungeon-mate-v0.9.97.apk">
-    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v0.9.97-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="48" alt="Download APK" style="box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
+  <a href="https://github.com/Thothius/GungeonMate/raw/master/app-releases/gungeon-mate-v0.9.994.apk">
+    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v0.9.994-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="48" alt="Download APK" style="box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
   </a>
 </p>
 
-***Attention Gungeoneers!** The latest v0.9.97 production release has been compiled as `GungeonMate-v0.9.97-release.apk` on your desktop for instant sideloading! Download it directly to play.*
+***Attention Gungeoneers!** The latest v0.9.994 production release is available in `app-releases/` for instant sideloading! Download it directly to play.*
 
 ---
 
