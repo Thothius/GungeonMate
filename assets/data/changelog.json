@@ -1,5 +1,15 @@
 [
   {
+    "version": "v0.9.999",
+    "title": "\ud83c\udf0d ROOT-CAUSE FIX: EXIT-THE-GUNGEON DATA CONTAMINATION",
+    "date": "July 6, 2026",
+    "items": [
+      "Wiki Scraper Root Cause Fix: The wiki.gg infobox scraper (enrich_from_wikigg.py) was silently gluing Enter the Gungeon stats together with Exit the Gungeon (and other game-mode toggle) stats into a single string whenever a stat had multiple tabs on the wiki page. Fixed the parser to always extract ETG-only values, while carefully preserving legitimate in-game state toggles (like AC-15's Armored/Unarmored stats, which are both real ETG data).",
+      "22 Guns Repaired: A.W.P., AK-47, Alien Sidearm, Anvillain, Balloon Gun, Bee Hive, Big Iron, Big Shotgun, Blasphemy, Blunderbuss, Brick Breaker, Cold 45, Grenade Launcher, H4mmer, Jolter, Pitchfork, Regular Shotgun, and Void Core Assault Rifle had 78 corrupted fields (damage, fire rate, magazine size, ammo capacity, reload time, shot speed, range, force, spread, and type) silently mixing in Exit the Gungeon values — all now cleaned to Enter the Gungeon-only data.",
+      "Full Re-Verification: All 239 guns re-audited after the fix. 235/239 confirmed clean automatically; the remaining 4 are non-issues (wiki displays an infinity symbol instead of text for 3, and Heroine's charge-level labels were already correctly fixed in a prior update)."
+    ]
+  },
+  {
     "version": "v0.9.998",
     "title": "🐻 NECKBEAR'S APPROVAL + CAT GONE + BG FIX",
     "date": "July 6, 2026",

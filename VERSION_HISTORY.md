@@ -6,6 +6,24 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v0.9.999 — Root-Cause Fix: Exit the Gungeon Data Contamination (July 6, 2026)
+**File:** `gungeon-mate-v0.9.999.apk`
+**Build:** 51
+
+### Wiki Scraper Root Cause Fix
+- **Root Cause** — `scripts/enrich_from_wikigg.py`'s `extract_druid_row_value()` blindly stripped HTML tags from a stat row without accounting for wiki.gg's `druid-toggleable-data` tab widget. When a stat had multiple tabs (e.g. Enter the Gungeon vs Exit the Gungeon, or "XTG"/"HoTG" variants), both tab values got concatenated into a single string (e.g. `"40 20"`, `"Semiautomatic Automatic"`).
+- **First-pass fix (too broad)** — Initially stripped *any* non-`"ETG"`-keyed toggle tab. This incorrectly nuked legitimate in-game state toggles that reuse the same widget for non-version purposes (AC-15's `Armored`/`Unarmored` stats — both valid ETG data).
+- **Corrected fix** — Only strip non-ETG toggle tabs when the row *also contains* a literal `data-druid-tab-key="ETG"` tab (confirming it's actually a game-version row). Rows using other toggle purposes (Armored/Unarmored, per-stage evolution, etc.) are left completely untouched.
+- **Tooling added** — `scripts/neckbear_check.py` (diff every gun against cached wiki, auto-stamp `neckbear_approved`) and `scripts/fix_xtg_contamination.py` (safe prefix-match repair: only overwrites a field when `json_value == wiki_value + " " + garbage`, so legitimate formatting differences like Heroine's charge-level labels are never touched).
+
+### 22 Guns Repaired (78 fields)
+A.W.P., AK-47, Alien Sidearm, Anvillain, Balloon Gun, Bee Hive, Big Iron, Big Shotgun, Blasphemy, Blunderbuss, Brick Breaker, Cold 45, Grenade Launcher, H4mmer, Jolter, Pitchfork, Regular Shotgun, Void Core Assault Rifle — damage, fire_rate, magazine_size, ammo_capacity, reload_time, shot_speed, range, force, spread, and type fields cleaned of Exit the Gungeon contamination.
+
+### Full Re-Verification
+All 239 guns re-audited post-fix. 235/239 clean automatically. Remaining 4: 3 are wiki "∞ Infinity" range symbols (image-only, no text to compare — our numeric placeholder values are an intentional prior design choice), 1 is Heroine's already-correct charge-level label formatting.
+
+---
+
 ## v0.9.998 — Neckbear's Approval + Cat Gone + BG Fix (July 6, 2026)
 **File:** `gungeon-mate-v0.9.998.apk`
 **Build:** 50
