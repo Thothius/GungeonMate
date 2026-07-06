@@ -1394,36 +1394,10 @@ enum WallpaperMode {
   const WallpaperMode({required this.label});
 }
 
-const List<Map<String, String>> kStillWallpapers = [
-  {'asset': 'wp_still_01_keep.png', 'name': 'Keep Gateway'},
-  {'asset': 'wp_still_02_unicorn.png', 'name': 'Unicorn Cotton Throne'},
-  {'asset': 'wp_still_03_warehouse.png', 'name': 'Gungeon Proper Racks'},
-  {'asset': 'wp_still_04_spotlight.png', 'name': 'Spotlight Companion'},
-  {'asset': 'wp_still_05_galaxy.png', 'name': 'Gravity Vortex Dust'},
-  {'asset': 'wp_still_06_ammonomicon.png', 'name': 'Ammonomicon Pedestal'},
-  {'asset': 'wp_still_07_dungeon.png', 'name': 'Checkerboard Chamber'},
-  {'asset': 'wp_still_08_mine.png', 'name': 'Mine Shaft Rails'},
-  {'asset': 'wp_still_09_hollow.png', 'name': 'Frozen Tomb Cathedral'},
-  {'asset': 'wp_still_10_forge.png', 'name': 'Forge Master Lava'},
-  {'asset': 'wp_still_11_hell.png', 'name': 'Bullet Hell Trails'},
-  {'asset': 'wp_still_12_hypnotic.png', 'name': 'Hypnotic Pink Swirl'},
-  {'asset': 'wp_still_13_crescent.png', 'name': 'Crescent Moon Bow'},
-  {'asset': 'wp_still_14_evolver.png', 'name': 'Evolver Organism'},
-  {'asset': 'wp_still_15_gunderfury.png', 'name': 'Gunderfury Sword'},
-  {'asset': 'wp_still_16_trashcannon.png', 'name': 'Trashcannon Rust'},
-  {'asset': 'wp_still_17_blobulord.png', 'name': 'Blobulord Sewer'},
-  {'asset': 'wp_still_18_gatling_gull.png', 'name': 'Gatling Gull'},
-  {'asset': 'wp_still_19_gorgun.png', 'name': 'The Gorgun Temple'},
-  {'asset': 'wp_still_20_glitch_intro.png', 'name': 'Cyber Glitch Gateway'},
-  {'asset': 'wp_still_21_cyber_grid.png', 'name': 'Circuit Wireframe Breach'},
-  {'asset': 'wp_still_22_cyber_tracks.png', 'name': 'Glitch Bullet Tracks'},
-  {'asset': 'wp_still_23_cyber_narrow.png', 'name': 'CRT Narrow Corridor'},
-  {'asset': 'wp_still_24_unicorn_galaxy.png', 'name': 'Unicorn Rainbow Blaster'},
-  {'asset': 'wp_still_25_gold_dungeon.png', 'name': 'Archival Golden Keep'},
-  {'asset': 'wp_still_26_ice_cave.png', 'name': 'Frozen Tomb Crypt'},
-  {'asset': 'wp_still_27_lava_forge.png', 'name': 'Forge Volcanic Magma'},
-  {'asset': 'wp_still_28_cursed_shrine.png', 'name': 'Cursed Ritual Chamber'},
-];
+// ponytail: still wallpaper PNGs never existed on disk (assets/images/wallpapers/still/
+// is empty). List emptied until real art is added — see WallpaperMode.customStill
+// filter in settings_screen.dart which hides the option while this is empty.
+const List<Map<String, String>> kStillWallpapers = [];
 
 const List<Map<String, String>> kAnimatedWallpapers = [
   {'asset': 'wp_anim_01_galaxy.mp4', 'name': 'Swirling Gravity Vortex'},

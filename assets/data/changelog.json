@@ -1,5 +1,15 @@
 [
   {
+    "version": "v0.9.998",
+    "title": "🐻 NECKBEAR'S APPROVAL + CAT GONE + BG FIX",
+    "date": "July 6, 2026",
+    "items": [
+      "Cat Throne Overlay Removed: The secret Cat Bullet King Throne screen-peek widget is gone for good, no more surprise overlays.",
+      "Broken Still Wallpapers Fixed: Removed 28 phantom Still Wallpaper entries that pointed at image files which never existed on disk — Custom Still mode is hidden until real art ships.",
+      "Neckbear's Approval Medal: Every one of the 239 guns has been checked stat-by-stat against the official wiki and stamped with a cute bear medal 🐻 shown on both the Browse list and Gun Detail screen. All 239 passed — zero real mismatches found (3 wiki-tab parsing false-positives confirmed already correct from prior fixes)."
+    ]
+  },
+  {
     "version": "v0.9.997",
     "title": "🐛 CAT THRONE WHITE SCREEN — ROOT CAUSE FOUND",
     "date": "July 5, 2026",

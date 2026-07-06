@@ -29,6 +29,11 @@ class Gun {
   /// number of guns whose wiki page wasn't in cache.
   final WikiContent wiki;
 
+  /// True once a human has manually double-checked every stat/note on this
+  /// gun against the official wiki page. Earns the Neckbear's Approval
+  /// medal — a badge of honor, cute and hearty.
+  final bool neckbearApproved;
+
   Gun({
     required this.name,
     this.icon = '',
@@ -52,6 +57,7 @@ class Gun {
     this.curse = 0.0,
     this.coolness = 0.0,
     this.wiki = WikiContent.empty,
+    this.neckbearApproved = false,
   });
 
   /// Numeric DPS for sorting. Returns 0 if not parseable.
@@ -114,6 +120,7 @@ class Gun {
       curse: (json['curse'] ?? 0).toDouble(),
       coolness: (json['coolness'] ?? 0).toDouble(),
       wiki: WikiContent.fromJson(json['wiki'] as Map<String, dynamic>?),
+      neckbearApproved: json['neckbear_approved'] as bool? ?? false,
     );
   }
 
@@ -140,6 +147,7 @@ class Gun {
       'chest_color': chestColor,
       'curse': curse,
       'coolness': coolness,
+      'neckbear_approved': neckbearApproved,
     };
   }
 

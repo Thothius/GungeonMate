@@ -6,6 +6,25 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v0.9.998 — Neckbear's Approval + Cat Gone + BG Fix (July 6, 2026)
+**File:** `gungeon-mate-v0.9.998.apk`
+**Build:** 50
+
+### Cat Throne Overlay Removed
+- Deleted the `_SecretCatThroneOverlay` call site in `theme_overlay.dart`. No more surprise screen-peek widget.
+
+### Broken Still Wallpapers Fixed
+- **Root Cause** — `kStillWallpapers` in `app_theme.dart` listed 28 PNG entries; `assets/images/wallpapers/still/` was completely empty on disk. Every "Still Wallpaper" selection rendered nothing.
+- **Fix** — Emptied `kStillWallpapers`. `WallpaperMode.customStill` is now filtered out of the settings picker while the list is empty, so users can't select a broken mode.
+
+### Neckbear's Approval Medal
+- Added `neckbearApproved` bool field to the `Gun` model (`neckbear_approved` in guns.json).
+- New `NeckbearMedal` widget (`lib/widgets/neckbear_medal.dart`) — a cute 🐻 badge shown next to the gun name on both the Browse list row and the Gun Detail header when verified.
+- Wrote `scripts/neckbear_check.py`: diffs every gun in guns.json against its cached wiki.gg infobox (reusing `enrich_from_wikigg.py` parsers), auto-stamping `neckbear_approved: true` on exact matches.
+- **Result: all 239 guns checked, all 239 approved.** 3 flagged mismatches (Big Iron, Budget Revolver, Heroine) were manually confirmed as wiki HTML toggle-tab parsing artifacts (ETG + Exit the Gungeon values concatenated) — json values were already correct per prior v0.9.991 fixes.
+
+---
+
 ## v0.9.997 — Cat Throne White Screen: Root Cause Found (July 5, 2026)
 **File:** `gungeon-mate-v0.9.997.apk`
 **Build:** 49

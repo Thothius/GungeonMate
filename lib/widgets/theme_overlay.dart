@@ -351,8 +351,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                     ),
                   ),
 
-                // Secret Cat Bullet King Throne Overlay!
-                const _SecretCatThroneOverlay(),
               ],
             ),
           );

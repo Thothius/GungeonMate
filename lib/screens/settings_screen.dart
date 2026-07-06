@@ -200,7 +200,9 @@ class _ThemeVisualsTab extends StatelessWidget {
               _prefSectionTitleWithInfo('WALLPAPER & PARALLAX ENGINE LAB', flair, tooltip: 'Select an exclusive handcrafted Gungeon wallpaper, activate gyroscopic depth parallax sways, or loop a high-fidelity 8s live animation. Swipe to browse!'),
               const SizedBox(height: 8),
               _SwipePicker<WallpaperMode>(
-                items: WallpaperMode.values,
+                items: WallpaperMode.values
+                    .where((m) => m != WallpaperMode.customStill || kStillWallpapers.isNotEmpty)
+                    .toList(),
                 value: prefs.wallpaperMode,
                 onChanged: (m) => VisualPrefs.setWallpaperMode(m),
                 height: 88,

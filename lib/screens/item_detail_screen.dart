@@ -10,6 +10,7 @@ import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/bug_reporter.dart';
 import '../widgets/quality_badge.dart';
+import '../widgets/neckbear_medal.dart';
 import '../widgets/game_icon.dart';
 import '../widgets/rich_link_text.dart';
 import '../widgets/themed_number.dart';
@@ -116,7 +117,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               isGun: gun != null,
               isActive: item?.isActive ?? false,
               iconPath: gun?.icon ?? item?.icon ?? '',
-              verified: gun != null ? gun.wiki.hasAny : (item != null ? item.wiki.hasAny : false),
+              verified: gun?.neckbearApproved ?? false,
             ),
           ),
           SliverToBoxAdapter(
@@ -414,6 +415,10 @@ class _Header extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if (verified) ...[
+                      const SizedBox(width: 8),
+                      const NeckbearMedal(size: 20),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 6),
