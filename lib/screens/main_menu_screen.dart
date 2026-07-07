@@ -330,7 +330,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v0.9.994',
+                    'v1.0.0',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -423,7 +423,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v2.3.0 — 2026 Ultimate Edition',
+                            'v1.0.0 — 2026 Ultimate Edition',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
