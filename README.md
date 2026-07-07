@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-0.9.994-00E5FF?style=flat-square&logo=flutter">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-00E5FF?style=flat-square&logo=flutter">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Android-FF007F?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-E040FB?style=flat-square">
 </p>
@@ -21,16 +21,29 @@
 ## 📥 DOWNLOAD & DEPLOY
 
 <p align="center">
-  <a href="https://github.com/Thothius/GungeonMate/raw/master/app-releases/gungeon-mate-v0.9.994.apk">
-    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v0.9.994-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="48" alt="Download APK" style="box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
+  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/gungeon-mate-v1.0.0.apk">
+    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v1.0.0-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="48" alt="Download APK" style="box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
   </a>
 </p>
 
-***Attention Gungeoneers!** The latest v0.9.994 production release is available in `app-releases/` for instant sideloading! Download it directly to play.*
+***Attention Gungeoneers!** Gungeon Mate has hit v1.0! Grab the latest signed APK from the [Releases page](https://github.com/Thothius/GungeonMate/releases/latest) and sideload it directly — no Play Store, no account, no ads, no internet required.*
 
 ---
 
-## 🔫 NEW PREMIUM FEATURES (v0.9.97)
+## 🐻 v1.0.0 — WIKI-VERIFIED DATA MILESTONE
+
+Gungeon Mate's entire gun and item database (239 guns, 270 items) has now been audited **field-by-field against the official Enter the Gungeon Wiki** and stamped with a "Neckbear's Approval" 🐻 medal wherever verified. This release closes out a multi-pass data-integrity effort:
+
+* **Root-caused a wiki scraper bug** that silently glued "Enter the Gungeon" stats together with "Exit the Gungeon" (and other game-mode toggle) stats on pages with tabbed data — corrupting numbers like damage, fire rate, and magazine size for 22 guns.
+* **Added legacy wiki-page support** so ~140 items on the older infobox layout are no longer skipped during verification.
+* **Fixed silent "N/A" sell-price detection** for items where the wiki renders the value as an icon instead of text.
+* **Result:** 235/239 guns and 268/270 items are now 100% wiki-clean; the handful of remaining exceptions are confirmed non-issues (infinity symbols, special-case recharge text) rather than data errors.
+
+Look for the 🐻 medal next to any gun or item name in the Browse list or Detail screen — it means that entry has been personally verified against the wiki.
+
+---
+
+## 🔫 PREMIUM FEATURES
 
 ### 👾 3D Glitch Cinematic Entry
 Enter GungeonMate through a jaw-dropping **12fps stop-motion cyber breach**! Experience a first-person perspective flythrough down a neon-circuit wireframe 3D corridor. Blocks float by on a 45-degree snapping grid before a colossal **wholesome bullet-hell explosion** shatters the viewport, scattering physical dithered pixel debris that falls under active gravity to reveal the home screen. Includes a real-time **Web Audio API synthesizer** generating authentic 16-bit laser and bass-slam SFX!
@@ -38,10 +51,8 @@ Enter GungeonMate through a jaw-dropping **12fps stop-motion cyber breach**! Exp
 ### 🔮 Premium Glassmorphic UI (Frosted Glass)
 To prevent active custom wallpapers from bleeding through and obscuring statistics, the panels have been upgraded with a **high-performance frosted glass (Glassmorphic) design**. Using `BackdropFilter` hardware-accelerated blurring (`sigmaX: 12.0`), information panels blur background detail into a soft glow while keeping text, gun metrics, and active synergies razor-sharp and legible in any lighting.
 
-### 🖼️ Gyroscopic Parallax Wallpaper Lab & 28 Still Scenes
-Take control of the Gungeon's visual dimensions!
-* **Hardware Gyro Parallax:** Backgrounds tilt and sway dynamically based on real-time hardware accelerometer tilt readings.
-* **9 Brand New Hand-Drawn Still Wallpapers:** Expanded to 28 premium dithered backdrops, including *Circuit Wireframe Breach*, *Glitch Bullet Tracks*, *CRT Narrow Corridor*, *Unicorn Rainbow Blaster*, *Archival Golden Keep*, *Frozen Tomb Crypt*, *Forge Volcanic Magma*, and *Cursed Ritual Chamber*.
+### 🖼️ Gyroscopic Parallax Wallpaper Lab
+Take control of the Gungeon's visual dimensions! Backgrounds tilt and sway dynamically based on real-time hardware accelerometer tilt readings, with a full library of animated and hand-drawn dithered backdrops to choose from in the Style Lab.
 
 ---
 
@@ -84,5 +95,5 @@ Take control of the Gungeon's visual dimensions!
 
 <p align="center">
   <i>Made with 💜 for the Gungeon community. Gungeon Mate is free forever.</i><br>
-  <b>v0.9.97 — Road to July Launch!</b>
+  <b>v1.0.0 — Wiki-Verified & Ready to Roll!</b>
 </p>
