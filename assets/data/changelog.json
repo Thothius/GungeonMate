@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.1.0",
+    "title": "\ud83e\uddee UNIVERSAL DAMAGE CALCULATOR + UI CONTRAST OVERHAUL",
+    "date": "July 7, 2026",
+    "items": [
+      "Universal Damage Calculator: Every Gungeoneer (not just Robot) can now see a live Damage Calculator terminal on their dashboard, summing quantifiable damage bonuses from equipped guns and items into a single DPS multiplier. Toggle it on/off in Settings \u2192 Run Utilities \u2192 Dashboard Display.",
+      "Tactical Stats Card Redesign: Removed the low-opacity ghost background icon on tactical-stats inventory cards (it was muddying the stat readout against busy wallpapers). Cards are now solid-backed with a crisp small icon next to the item/gun name.",
+      "Settings Screen Contrast Pass: Boosted background opacity across wallpaper pickers, font pickers, and utility panels in Settings so text and controls stay legible over any custom wallpaper.",
+      "Dashboard Header Contrast: Stat chips (Coolness, Curse, CD, Ammo, Synergies, DPS) on the active-run header now use a solid dark backing instead of a near-invisible 2-8% tint."
+    ]
+  },
+  {
     "version": "v1.0.1",
     "title": "\ud83d\udd27 BUG FIXES: BG, WALLPAPER & PARTICLE CLEANUP, MP RECONNECT",
     "date": "July 7, 2026",

@@ -6,6 +6,21 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.1.0 — Universal Damage Calculator + UI Contrast Overhaul (July 7, 2026)
+**File:** `gungeon-mate-v1.1.0.apk`
+**Build:** 54
+
+### New Feature: Universal Damage Calculator
+- New `lib/services/damage_calculator.dart`: scans a player's equipped guns + items via `EffectTagger.scan()` for `damage_up`/`damage_down` tags, extracts quantifiable percentages, and produces a single aggregate multiplier.
+- New `_UniversalDamageCalculatorSliver` in `active_run_screen.dart`: shown on every character's dashboard except Robot (which keeps its dedicated junk/lies HUD), rendering a collapsible terminal listing each contributing source plus a per-gun DPS table with the multiplier applied.
+- New `showDamageCalculator` toggle added to `VisualPrefs` (`app_theme.dart`), persisted, default on. Exposed as a switch in Settings → Run Utilities → "🧮 DASHBOARD DISPLAY".
+
+### UI Contrast Overhaul
+- **Root Cause:** Several dashboard/settings panels used near-invisible background alpha (2–8% white/card tint) that blended into custom wallpapers, making text hard to read.
+- `gungeoneer_header.dart`: stat capsule chips (Coolness/Curse/CD/Ammo/Synergies/DPS) now use a solid dark backing (28% black / 16% tint when active) instead of 2–8% alpha.
+- `settings_screen.dart`: boosted background opacity on the wallpaper mode picker, still-wallpaper picker, font picker, typography card, inventory grid card, and all Run Utilities panels (Multiplayer, Language, Damage Calculator, util tiles) from ~3–5% to 45–95% opacity.
+- `periodic_tile.dart`: removed the 12%-opacity full-bleed "ghost" icon background on `tacticalStats` mode cards (it fought with the stat readout and looked muddy against busy wallpapers). Cards now use a solid dark backing plus a crisp 20px icon next to the item/gun name in the title banner.
+
 ## v1.0.1 — Bug Fixes: BG, Wallpaper & Particle Cleanup, MP Reconnect (July 7, 2026)
 **File:** `gungeon-mate-v1.0.1.apk`
 **Build:** 53

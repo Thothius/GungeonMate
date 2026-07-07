@@ -26,6 +26,7 @@ import 'theme_picker_screen.dart';
 import 'favourites_screen.dart';
 import '../services/app_theme.dart';
 import '../services/effect_tagger.dart';
+import '../services/damage_calculator.dart';
 import '../services/elemental_tagger.dart';
 import '../services/haptics.dart';
 import '../services/multiplayer_session.dart';
@@ -1642,6 +1643,8 @@ class _PlayerPageState extends State<_PlayerPage> {
           _TripleGunDashboardSliver(slot: _slot),
         if (player.guns.any((g) => g.name.toLowerCase() == 'evolver'))
           _EvolverDashboardSliver(slot: _slot),
+        if (!(player.character?.name.toLowerCase().contains('robot') ?? false))
+          _UniversalDamageCalculatorSliver(slot: _slot),
         // Effects tile hidden — effect tags already shown on character dash.
         // SliverToBoxAdapter(
         //   child: _EffectsTile(slot: _slot),
@@ -3735,6 +3738,282 @@ class _EvolverStageSpec {
   });
 }
 
+
+/// Universal, character-agnostic Damage Calculator terminal. Shown on
+/// every Gungeoneer's dashboard (except Robot, who has a dedicated HUD
+/// with junk/lies-specific math) when enabled in Settings → Run
+/// Utilities. Sums quantifiable "Damage Up"/"Damage Down" effects from
+/// the player's current guns + items via [DamageCalculator] and applies
+/// the resulting multiplier to every equipped gun's base DPS.
+class _UniversalDamageCalculatorSliver extends StatefulWidget {
+  final PlayerSlot slot;
+  const _UniversalDamageCalculatorSliver({required this.slot});
+
+  @override
+  State<_UniversalDamageCalculatorSliver> createState() =>
+      _UniversalDamageCalculatorSliverState();
+}
+
+class _UniversalDamageCalculatorSliverState
+    extends State<_UniversalDamageCalculatorSliver> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: VisualPrefs.notifier,
+      builder: (context, _) {
+        if (!VisualPrefs.notifier.value.showDamageCalculator) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
+        final p = context.watch<RunProvider>();
+        final player = widget.slot == PlayerSlot.coop
+            ? (p.runState.coop ?? Player())
+            : p.runState.main;
+        final guns = player.guns;
+        if (guns.isEmpty) {
+          return const SliverToBoxAdapter(child: SizedBox.shrink());
+        }
+
+        final contributions = DamageCalculator.contributions(
+          guns: guns,
+          items: player.items,
+        );
+        final multiplier = DamageCalculator.multiplier(
+          guns: guns,
+          items: player.items,
+        );
+        final bonusPercent = (multiplier - 1.0) * 100.0;
+
+        return SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0D1117),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.35), width: 1.2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.amberAccent.withValues(alpha: 0.04),
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() => _expanded = !_expanded);
+                      Haptics.selection();
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(Icons.calculate_rounded, color: Colors.amberAccent, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              'DAMAGE CALCULATOR',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.amberAccent,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.amber.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.amber.withValues(alpha: 0.4), width: 1.0),
+                              ),
+                              child: Text(
+                                '${bonusPercent >= 0 ? '+' : ''}${bonusPercent.toStringAsFixed(0)}% DMG',
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.amberAccent,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Icon(
+                              _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                              size: 18,
+                              color: Colors.amberAccent.withValues(alpha: 0.7),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (_expanded) ...[
+                    const Divider(color: Colors.white12, height: 16),
+                    if (contributions.isNotEmpty) ...[
+                      for (final c in contributions)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  c.sourceName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 10.5, color: Colors.white70),
+                                ),
+                              ),
+                              Text(
+                                c.percent == 0
+                                    ? '—'
+                                    : '${c.percent >= 0 ? '+' : ''}${c.percent.toStringAsFixed(0)}%',
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w800,
+                                  color: c.percent > 0
+                                      ? Colors.greenAccent
+                                      : c.percent < 0
+                                          ? Colors.redAccent
+                                          : Colors.white38,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      const SizedBox(height: 8),
+                    ],
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF000800),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.green.withValues(alpha: 0.25), width: 1.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '> DMG_CALC v1.0',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  color: Colors.green.withValues(alpha: 0.5),
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                '×${multiplier.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 9,
+                                  color: Colors.greenAccent,
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          for (final gun in guns)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 5,
+                                    child: Text(
+                                      gun.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.green.withValues(alpha: 0.85),
+                                        fontFamily: 'monospace',
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      gun.dpsValue.toStringAsFixed(1),
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.green.withValues(alpha: 0.6),
+                                        fontFamily: 'monospace',
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      (gun.dpsValue * multiplier).toStringAsFixed(1),
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.greenAccent,
+                                        fontFamily: 'monospace',
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          const SizedBox(height: 6),
+                          Container(height: 1, color: Colors.green.withValues(alpha: 0.15)),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'TOTAL DPS',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  color: Colors.green.withValues(alpha: 0.5),
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.greenAccent,
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
 
 /// Collapsible Huntress HUD: Junior II dig probability engine, crossbow
 /// breakpoint cheat-sheet, and key-economy secret floor guidance.

@@ -537,13 +537,13 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       decoration: BoxDecoration(
         color: isActive 
-            ? color.withValues(alpha: 0.08) 
-            : Colors.white.withValues(alpha: 0.02),
+            ? color.withValues(alpha: 0.16) 
+            : Colors.black.withValues(alpha: 0.28),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: isActive 
-              ? color.withValues(alpha: 0.35) 
-              : Colors.white.withValues(alpha: 0.05),
+              ? color.withValues(alpha: 0.45) 
+              : Colors.white.withValues(alpha: 0.10),
           width: 1.0,
         ),
       ),

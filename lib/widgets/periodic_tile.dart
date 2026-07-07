@@ -655,7 +655,7 @@ class _PeriodicTileState extends State<PeriodicTile>
         return Card(
           clipBehavior: Clip.antiAlias,
           margin: EdgeInsets.zero,
-          color: cardBgColor,
+          color: cardBgColor ?? const Color(0xFF17150F),
           shape: cardShape,
           elevation: isHighTier ? 4 : 1,
           child: InkWell(
@@ -663,36 +663,7 @@ class _PeriodicTileState extends State<PeriodicTile>
             child: SizedBox.expand(
               child: Stack(
                 children: [
-                  // 1. Giant Background Image with Low Opacity (to avoid clashing with stats!)
-                  Positioned.fill(
-                    child: Opacity(
-                      opacity: 0.12, // Subdued background
-                      child: Center(
-                        child: _iconPath.startsWith('assets/')
-                            ? Image.asset(
-                                _iconPath,
-                                fit: BoxFit.contain,
-                                width: 72,
-                                height: 72,
-                                filterQuality: FilterQuality.none, // Pixel art!
-                              )
-                            : Image.network(
-                                _iconPath,
-                                fit: BoxFit.contain,
-                                width: 72,
-                                height: 72,
-                                filterQuality: FilterQuality.none,
-                                errorBuilder: (_, __, ___) => Icon(
-                                  isGun ? Icons.gps_fixed : Icons.extension,
-                                  size: 40,
-                                  color: Colors.white12,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ),
-
-                  // 2. Main Stats Layer on Top of Background
+                  // 2. Main Stats Layer
                   Positioned(
                     left: 10,
                     right: 10,
@@ -820,6 +791,18 @@ class _PeriodicTileState extends State<PeriodicTile>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: GameIcon(
+                              assetPath: _iconPath,
+                              fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                              quality: _quality,
+                              size: 20,
+                              showRing: false,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
                           Expanded(
                             child: GoopText(
                               _name.toUpperCase(),

@@ -1927,6 +1927,11 @@ class VisualPrefs {
   /// Whether particle count is halved for better readability.
   final bool subtleParticleMode;
 
+  /// Whether the universal Damage Calculator terminal is shown on the
+  /// active-run dashboard for every character (Robot keeps its own
+  /// dedicated HUD regardless of this flag).
+  final bool showDamageCalculator;
+
   /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
   final int periodicGridColumnCount;
 
@@ -1973,6 +1978,7 @@ class VisualPrefs {
     this.isGoopianLanguage = false,
     this.spongeActive = false,
     this.subtleParticleMode = false,
+    this.showDamageCalculator = true,
     this.periodicGridColumnCount = 0,
     this.wallpaperMode = WallpaperMode.themeDefault,
     this.selectedStillWallpaper = 'wp_still_05_galaxy.webp',
@@ -2011,6 +2017,7 @@ class VisualPrefs {
   static const _kGoopianLanguage = 'vp.goopian_language_v1';
   static const _kSpongeActive = 'vp.sponge_active_v1';
   static const _kSubtleParticleMode = 'vp.subtle_particle_mode_v1';
+  static const _kShowDamageCalculator = 'vp.show_damage_calculator_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kWallpaperMode = 'vp.wallpaper_mode_v1';
   static const _kSelectedStill = 'vp.selected_still_v1';
@@ -2077,6 +2084,7 @@ class VisualPrefs {
       final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
       final subtleParticleMode = p.getBool(_kSubtleParticleMode) ?? false;
+      final showDamageCalculator = p.getBool(_kShowDamageCalculator) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
 
       final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
@@ -2126,6 +2134,7 @@ class VisualPrefs {
         isGoopianLanguage: isGoopian,
         spongeActive: spongeActive,
         subtleParticleMode: subtleParticleMode,
+        showDamageCalculator: showDamageCalculator,
         periodicGridColumnCount: periodicGridColumnCount,
         wallpaperMode: wallpaperMode,
         selectedStillWallpaper: selectedStill,
@@ -2272,6 +2281,11 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setShowDamageCalculator(bool v) async {
+    notifier.value = notifier.value._with(showDamageCalculator: v);
+    _persist();
+  }
+
   static Future<void> setPeriodicGridColumnCount(int v) async {
     notifier.value = notifier.value._with(periodicGridColumnCount: v.clamp(0, 4));
     _persist();
@@ -2330,6 +2344,7 @@ class VisualPrefs {
       await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
       await p.setBool(_kSpongeActive, v.spongeActive);
       await p.setBool(_kSubtleParticleMode, v.subtleParticleMode);
+      await p.setBool(_kShowDamageCalculator, v.showDamageCalculator);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kWallpaperMode, v.wallpaperMode.index);
       await p.setString(_kSelectedStill, v.selectedStillWallpaper);
@@ -2367,6 +2382,7 @@ class VisualPrefs {
     bool?   isGoopianLanguage,
     bool?   spongeActive,
     bool?   subtleParticleMode,
+    bool?   showDamageCalculator,
     int?    periodicGridColumnCount,
     WallpaperMode? wallpaperMode,
     String? selectedStillWallpaper,
@@ -2401,6 +2417,7 @@ class VisualPrefs {
     isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
     spongeActive:     spongeActive      ?? this.spongeActive,
     subtleParticleMode: subtleParticleMode ?? this.subtleParticleMode,
+    showDamageCalculator: showDamageCalculator ?? this.showDamageCalculator,
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
     wallpaperMode:    wallpaperMode     ?? this.wallpaperMode,
     selectedStillWallpaper: selectedStillWallpaper ?? this.selectedStillWallpaper,

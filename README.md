@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.1-00E5FF?style=flat-square&logo=flutter">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.0-00E5FF?style=flat-square&logo=flutter">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Android-FF007F?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-E040FB?style=flat-square">
 </p>
@@ -21,8 +21,8 @@
 ## 📥 DOWNLOAD & DEPLOY
 
 <p align="center">
-  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/gungeon-mate-v1.0.1.apk">
-    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v1.0.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="80" alt="Download APK" style="box-shadow: 0 0 30px rgba(255, 0, 127, 0.6); border-radius: 12px;">
+  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/gungeon-mate-v1.1.0.apk">
+    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v1.1.0-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="80" alt="Download APK" style="box-shadow: 0 0 30px rgba(255, 0, 127, 0.6); border-radius: 12px;">
   </a>
 </p>
 
@@ -30,16 +30,15 @@
 
 ---
 
-## 🐻 v1.0.1 — BUG FIXES & POLISH
+## 🧮 v1.1.0 — UNIVERSAL DAMAGE CALCULATOR & UI POLISH
 
-Gungeon Mate's entire gun and item database (239 guns, 270 items) has now been audited **field-by-field against the official Enter the Gungeon Wiki** and stamped with a "Neckbear's Approval" 🐻 medal wherever verified. This release closes out a multi-pass data-integrity effort:
+Every Gungeoneer now gets a live Damage Calculator on their dashboard, plus a pass of contrast fixes across Settings and the active-run header/inventory cards:
 
-* **Root-caused a wiki scraper bug** that silently glued "Enter the Gungeon" stats together with "Exit the Gungeon" (and other game-mode toggle) stats on pages with tabbed data — corrupting numbers like damage, fire rate, and magazine size for 22 guns.
-* **Added legacy wiki-page support** so ~140 items on the older infobox layout are no longer skipped during verification.
-* **Fixed silent "N/A" sell-price detection** for items where the wiki renders the value as an icon instead of text.
-* **Result:** 235/239 guns and 268/270 items are now 100% wiki-clean; the handful of remaining exceptions are confirmed non-issues (infinity symbols, special-case recharge text) rather than data errors.
+* **Universal Damage Calculator:** A collapsible DPS terminal on the run dashboard sums quantifiable "Damage Up"/"Damage Down" effects from your equipped guns and items into a single multiplier, applied live to every gun's DPS. Toggle it in Settings → Run Utilities → Dashboard Display.
+* **Tactical Stats Card Redesign:** Removed the muddy low-opacity background icon on tactical-stats inventory cards; cards are now solid-backed with a crisp small icon next to the name.
+* **Contrast Overhaul:** Boosted background opacity across Settings panels and the run dashboard's stat chips so everything stays legible over any custom wallpaper.
 
-Look for the 🐻 medal next to any gun or item name in the Browse list or Detail screen — it means that entry has been personally verified against the wiki.
+Also carried over from prior wiki-verification passes: 239 guns and 270 items audited field-by-field against the official Enter the Gungeon Wiki, stamped with a "Neckbear's Approval" 🐻 medal wherever verified.
 
 ---
 
@@ -95,5 +94,5 @@ Take control of the Gungeon's visual dimensions! Backgrounds tilt and sway dynam
 
 <p align="center">
   <i>Made with 💜 for the Gungeon community. Gungeon Mate is free forever.</i><br>
-  <b>v1.0.1 — Bug Fixes & Ready to Roll!</b>
+  <b>v1.1.0 — Bug Fixes & Ready to Roll!</b>
 </p>

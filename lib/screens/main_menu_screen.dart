@@ -330,7 +330,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v1.0.1',
+                    'v1.1.0',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -369,7 +369,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v1.0.1)',
+                            'Changelog (v1.1.0)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
@@ -423,7 +423,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.0.1 — 2026 Ultimate Edition',
+                            'v1.1.0 — 2026 Ultimate Edition',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

@@ -210,11 +210,11 @@ class _ThemeVisualsTab extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? flair.card.withValues(alpha: 0.9)
-                        : flair.card.withValues(alpha: 0.5),
+                        ? flair.card.withValues(alpha: 0.98)
+                        : flair.scaffold.withValues(alpha: 0.92),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                      color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.12),
                       width: isSelected ? 1.5 : 1.0,
                     ),
                   ),
@@ -259,11 +259,11 @@ class _ThemeVisualsTab extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? flair.card.withValues(alpha: 0.9)
-                            : flair.card.withValues(alpha: 0.5),
+                            ? flair.card.withValues(alpha: 0.98)
+                            : flair.scaffold.withValues(alpha: 0.92),
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                          color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.12),
                           width: isSelected ? 1.5 : 1.0,
                         ),
                       ),
@@ -352,10 +352,10 @@ class _ThemeVisualsTab extends StatelessWidget {
               _prefSectionTitle('APP TYPOGRAPHY TUNING'),
               const SizedBox(height: 8),
               Card(
-                color: flair.card.withValues(alpha: 0.38),
+                color: flair.card.withValues(alpha: 0.92),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: flair.primary.withValues(alpha: 0.12)),
+                  side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -371,8 +371,8 @@ class _ThemeVisualsTab extends StatelessWidget {
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? flair.scaffold.withValues(alpha: 0.6)
-                                : flair.scaffold.withValues(alpha: 0.3),
+                                ? flair.scaffold.withValues(alpha: 0.95)
+                                : flair.scaffold.withValues(alpha: 0.85),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: isSelected ? flair.primary.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.06),
@@ -443,10 +443,10 @@ class _ThemeVisualsTab extends StatelessWidget {
               _prefSectionTitle('INVENTORY GRID & DISPLAY TUNING'),
               const SizedBox(height: 8),
               Card(
-                color: flair.card.withValues(alpha: 0.38),
+                color: flair.card.withValues(alpha: 0.92),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: BorderSide(color: flair.primary.withValues(alpha: 0.12)),
+                  side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -984,9 +984,9 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.03),
+              color: Colors.black.withValues(alpha: 0.45),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
             ),
             child: Row(
               children: [
@@ -1050,9 +1050,9 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.03),
+              color: Colors.black.withValues(alpha: 0.45),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white10),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1144,6 +1144,58 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
           ),
           const SizedBox(height: 20),
 
+          // 🧮 Damage Calculator Section
+          _sectionHeader('🧮 DASHBOARD DISPLAY'),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'DAMAGE CALCULATOR',
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Shows a live DPS terminal on every character\'s dashboard, factoring in equipped item/gun damage bonuses.',
+                        style: TextStyle(fontSize: 10, color: Colors.white38, height: 1.3),
+                      ),
+                    ],
+                  ),
+                ),
+                ListenableBuilder(
+                  listenable: VisualPrefs.notifier,
+                  builder: (context, _) {
+                    final prefs = VisualPrefs.notifier.value;
+                    final flair = AppTheme.flair;
+                    return Switch(
+                      value: prefs.showDamageCalculator,
+                      activeColor: flair.primary,
+                      onChanged: (v) {
+                        VisualPrefs.setShowDamageCalculator(v);
+                        Haptics.selection();
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
           // ⚠️ Active Run Termination
           _sectionHeader('⚠️ CORE ACTIONS'),
           _utilTile(
@@ -1178,9 +1230,9 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
+        color: Colors.black.withValues(alpha: 0.45),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
       ),
       child: ListTile(
         onTap: onTap,
