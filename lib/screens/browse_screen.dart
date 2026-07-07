@@ -904,6 +904,7 @@ class _BrowseScreenState extends State<BrowseScreen>
       meta: _ItemMeta(item: it, synergyCount: syn),
       inRun: p.ownerSlotOfItem(it.name) == widget.targetSlot,
       isRobot: isRobot,
+      verified: it.neckbearApproved,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(

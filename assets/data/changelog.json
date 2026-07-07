@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.0.0",
+    "title": "\ud83e\uddf8 NECKBEAR'S APPROVAL FOR ITEMS + SCRAPER FIXES",
+    "date": "July 6, 2026",
+    "items": [
+      "Neckbear's Approval Medal for Items: All 270 items are now checked field-by-field (type, chest color, sell price, recharge time, quality) against the official wiki and stamped with the bear medal \ud83d\udc3b on both the Browse list and Item Detail screen. 268/270 passed clean; the remaining 2 (Drill, Duct Tape) have special non-numeric recharge conditions the wiki itself doesn't tabulate as plain text.",
+      "Legacy Wiki Page Support: The scraper (enrich_from_wikigg.py) previously only understood the newer 'druid-infobox' wiki layout and silently failed on ~140 items still using the older 'infoboxtable' format, leaving them uncached. Added a fallback parser for the legacy layout so every item's page is now readable.",
+      "Parenthetical Item Names Fixed: Items with disambiguation suffixes like 'C4 (Item)' were being looked up under the wrong cache filename and treated as missing. The lookup now strips the parenthetical suffix before fetching.",
+      "N/A Sell Price Detection: The wiki marks unsellable items with an image icon (alt=\"N/A\") instead of text, which the scraper was missing entirely, leaving sell_price blank for items like Busted Television, Sponge, Trusty Lockpicks, and 8 others. Now correctly detected and filled in on both new-style and legacy-style wiki pages.",
+      "Data Cleanup: Fixed several corrupted fields found during the audit — bogus 'N damage' text stuck in recharge_time fields, a literal 'None' string incorrectly stored instead of an empty value, and specific sell_price/chest_color mismatches for C4, Ser Junkan 1, Spice, Boomerang, Orange, Ticket, Box, and Drill."
+    ]
+  },
+  {
     "version": "v0.9.999",
     "title": "\ud83c\udf0d ROOT-CAUSE FIX: EXIT-THE-GUNGEON DATA CONTAMINATION",
     "date": "July 6, 2026",

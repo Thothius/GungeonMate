@@ -6,6 +6,36 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.0.0 — Neckbear's Approval for Items + Scraper Fixes (July 6, 2026)
+**File:** `gungeon-mate-v1.0.0.apk`
+**Build:** 52
+
+### Neckbear's Approval Extended to Items
+- Added `neckbearApproved` bool field to the `Item` model (`neckbear_approved` in items.json), wired to `NeckbearMedal` on the Browse list row and Item Detail header, mirroring the gun implementation from v0.9.998.
+- New `scripts/neckbear_check_items.py` and `scripts/fix_xtg_contamination_items.py` audit/repair tooling, mirroring the gun-side scripts.
+
+### Legacy Wiki Page Support (Root Cause)
+- **Root Cause** — `scripts/enrich_from_wikigg.py`'s `parse_item()` only understood the current `druid-infobox` wiki.gg layout. ~140 items still use the older `infoboxtable` layout, so every field for those pages silently came back empty ("NO CACHE").
+- **Fix** — Added `extract_legacy_fields()`, a fallback regex-table parser for the legacy layout, wired in via `setdefault` so it never overrides a druid-infobox match.
+
+### Parenthetical Disambiguation Lookup Fix
+- **Root Cause** — Items named like `C4 (Item)` were fetched/cached under the literal name including the parenthetical suffix, which doesn't exist on the wiki, so they always reported as missing.
+- **Fix** — `base_name()` (in the enrich, check, and fix-contamination scripts) now also strips a trailing `(...)` suffix in addition to roman numerals before cache lookup.
+
+### N/A Sell Price Detection (Root Cause)
+- **Root Cause** — The wiki renders unsellable items' Sell Price row as an image (`alt="N/A"`) instead of plain text. `extract_sell_price()` only searched the stripped text value, so it always returned empty for these rows — affecting both current and legacy layouts.
+- **Fix** — Both `extract_sell_price()` (druid) and `extract_legacy_fields()` (legacy) now check the raw row HTML for `alt="N/A"` first. Corrected sell_price for: Busted Television, Coolant Leak, Disarming Personality, Enraging Photo, Galactic Medal of Valor, Military Training, Number 2, Prime Primer, Ring of Miserly Protection, Sponge, Trusty Lockpicks.
+
+### Data Cleanup
+- Cleared bogus `"N damage"` text that had contaminated several items' `recharge_time` fields (should be empty for damage-triggered actives, handled by existing UI fallback logic).
+- Cleared a literal `"None"` string that had been scraped into Busted Television's `recharge_time` (should be empty, not the word "None").
+- Fixed specific mismatches found during audit: `C4 (Item)` chest_color, `Ser Junkan 1` sell_price, and earlier session fixes for Spice, Boomerang, Orange, Ticket, Box, Drill sell_price/type fields.
+
+### Full Re-Verification
+All 270 items re-audited after the fixes. 268/270 confirmed clean automatically. Remaining 2 (Drill, Duct Tape) are non-issues — the wiki lists "Floor"/"Single Use" as their recharge condition (non-numeric special text), and our existing json values already correctly describe them; the scraper intentionally declines to overwrite recognizable special-case text.
+
+---
+
 ## v0.9.999 — Root-Cause Fix: Exit the Gungeon Data Contamination (July 6, 2026)
 **File:** `gungeon-mate-v0.9.999.apk`
 **Build:** 51

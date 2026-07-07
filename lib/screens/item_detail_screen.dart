@@ -117,7 +117,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               isGun: gun != null,
               isActive: item?.isActive ?? false,
               iconPath: gun?.icon ?? item?.icon ?? '',
-              verified: gun?.neckbearApproved ?? false,
+              verified: gun?.neckbearApproved ?? item?.neckbearApproved ?? false,
             ),
           ),
           SliverToBoxAdapter(
