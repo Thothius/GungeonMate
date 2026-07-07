@@ -6,6 +6,17 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.0.1 — Bug Fixes: BG, Wallpaper & Particle Cleanup, MP Reconnect (July 7, 2026)
+**File:** `gungeon-mate-v1.0.1.apk`
+**Build:** 53
+
+### Bug Fixes
+- **Background Disappears on Tap:** Fixed stale `ThemeOverlay.currentScreenIndex` mutation in `HomeScreen.build()` — deferred to post-frame callback to prevent the animated background from vanishing when tapping after starting a new run.
+- **Wobbling Sewer Jelly Wallpaper Removed:** Removed the problematic animated wallpaper entry from `kAnimatedWallpapers`; added migration guard so users who had it selected are auto-switched to a safe fallback.
+- **Particle Systems Cleaned Up:** Removed wind, gunpowder, and bullet particle types from the `ParticleType` enum and rendering code in `theme_overlay.dart`. Persisted particle indices are auto-migrated to avoid crashes.
+- **Multiplayer Auto-Save & Reconnect:** Added periodic session save every 20s during MP sessions, immediate `saveCurrentSession()` on disconnect/drop detection, and unlimited auto-reconnect retries with exponential backoff instead of entering a terminal error state on transient failures.
+- **Version Labels Fixed:** Corrected stale version labels (`v0.9.994` and `v2.3.0`) on the home screen and changelog dialog to show the correct version.
+
 ## v1.0.0 — Neckbear's Approval for Items + Scraper Fixes (July 6, 2026)
 **File:** `gungeon-mate-v1.0.0.apk`
 **Build:** 52

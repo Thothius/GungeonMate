@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.0.1",
+    "title": "\ud83d\udd27 BUG FIXES: BG, WALLPAPER & PARTICLE CLEANUP, MP RECONNECT",
+    "date": "July 7, 2026",
+    "items": [
+      "Background Disappears on Tap: Fixed a stale screen-index mutation in HomeScreen that caused the animated background to vanish when tapping anywhere after starting a new run.",
+      "Wobbling Sewer Jelly Wallpaper Removed: Removed the problematic animated wallpaper; users who had it selected are auto-migrated to a safe fallback.",
+      "Particle Systems Cleaned Up: Removed wind, gunpowder, and bullet particle types from the enum and rendering code. Persisted user settings are auto-migrated to prevent crashes.",
+      "Multiplayer Auto-Save & Reconnect: Added periodic session save every 20 seconds during MP sessions, immediate save on disconnect detection, and unlimited auto-reconnect retries with exponential backoff instead of entering a terminal error state on transient failures.",
+      "Version Labels Fixed: Corrected stale version labels (v0.9.994 and v2.3.0) on the home screen and changelog dialog to show the correct v1.0.1."
+    ]
+  },
+  {
     "version": "v1.0.0",
     "title": "\ud83e\uddf8 NECKBEAR'S APPROVAL FOR ITEMS + SCRAPER FIXES",
     "date": "July 6, 2026",
