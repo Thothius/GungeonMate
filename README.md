@@ -22,7 +22,7 @@
 
 <p align="center">
   <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/gungeon-mate-v1.0.1.apk">
-    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v1.0.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="48" alt="Download APK" style="box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
+    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v1.0.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="80" alt="Download APK" style="box-shadow: 0 0 30px rgba(255, 0, 127, 0.6); border-radius: 12px;">
   </a>
 </p>
 
