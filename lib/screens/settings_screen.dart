@@ -246,7 +246,7 @@ class _ThemeVisualsTab extends StatelessWidget {
               ),
               if (prefs.wallpaperMode == WallpaperMode.customStill) ...[
                 const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('SELECT STILL WALLPAPER', flair, tooltip: 'Swipe through 19 gorgeous high-fidelity pixel-art scenes.'),
+                _prefSectionTitleWithInfo('SELECT STILL WALLPAPER', flair, tooltip: 'Swipe through 17 gorgeous high-fidelity pixel-art scenes.'),
                 const SizedBox(height: 8),
                 _SwipePicker<String>(
                   items: kStillWallpapers.map((w) => w['asset']!).toList(),

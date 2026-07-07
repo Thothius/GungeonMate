@@ -3186,9 +3186,9 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
     final controller = _controller;
     if (_hasError || controller == null) {
       // Elegant fallback: render the still counterpart
-      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.png')
-                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.png')
-                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_17_blobulord.png');
+      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.webp')
+                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.webp')
+                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_05_galaxy.webp');
       return _StillWallpaperBackground(
         assetName: fallbackStill,
         parallaxEnabled: true,
@@ -3196,9 +3196,9 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
     }
 
     if (!_initialized) {
-      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.png')
-                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.png')
-                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_17_blobulord.png');
+      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.webp')
+                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.webp')
+                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_05_galaxy.webp');
       return _StillWallpaperBackground(
         assetName: fallbackStill,
         parallaxEnabled: false,

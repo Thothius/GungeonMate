@@ -1394,10 +1394,27 @@ enum WallpaperMode {
   const WallpaperMode({required this.label});
 }
 
-// ponytail: still wallpaper PNGs never existed on disk (assets/images/wallpapers/still/
-// is empty). List emptied until real art is added — see WallpaperMode.customStill
-// filter in settings_screen.dart which hides the option while this is empty.
-const List<Map<String, String>> kStillWallpapers = [];
+// Still wallpapers — compressed to WebP (1080px max width, quality 80).
+// 17 scenes totalling ~1.6MB (down from 64.9MB as PNG).
+const List<Map<String, String>> kStillWallpapers = [
+  {'asset': 'wp_still_02_unicorn.webp', 'name': 'Unicorn Land'},
+  {'asset': 'wp_still_03_warehouse.webp', 'name': 'Warehouse'},
+  {'asset': 'wp_still_05_galaxy.webp', 'name': 'Galaxy'},
+  {'asset': 'wp_still_07_dungeon.webp', 'name': 'Dungeon'},
+  {'asset': 'wp_still_08_mine.webp', 'name': 'Mine'},
+  {'asset': 'wp_still_09_hollow.webp', 'name': 'Hollow'},
+  {'asset': 'wp_still_12_hypnotic.webp', 'name': 'Hypnotic'},
+  {'asset': 'wp_still_19_gorgun.webp', 'name': 'Gorgun'},
+  {'asset': 'wp_still_20_glitch_intro.webp', 'name': 'Glitch Intro'},
+  {'asset': 'wp_still_21_cyber_grid.webp', 'name': 'Cyber Grid'},
+  {'asset': 'wp_still_22_cyber_tracks.webp', 'name': 'Cyber Tracks'},
+  {'asset': 'wp_still_23_cyber_narrow.webp', 'name': 'Cyber Narrow'},
+  {'asset': 'wp_still_24_unicorn_galaxy.webp', 'name': 'Unicorn Galaxy'},
+  {'asset': 'wp_still_25_gold_dungeon.webp', 'name': 'Gold Dungeon'},
+  {'asset': 'wp_still_26_ice_cave.webp', 'name': 'Ice Cave'},
+  {'asset': 'wp_still_27_lava_forge.webp', 'name': 'Lava Forge'},
+  {'asset': 'wp_still_28_cursed_shrine.webp', 'name': 'Cursed Shrine'},
+];
 
 const List<Map<String, String>> kAnimatedWallpapers = [
   {'asset': 'wp_anim_01_galaxy.mp4', 'name': 'Swirling Gravity Vortex'},
@@ -1958,7 +1975,7 @@ class VisualPrefs {
     this.subtleParticleMode = false,
     this.periodicGridColumnCount = 0,
     this.wallpaperMode = WallpaperMode.themeDefault,
-    this.selectedStillWallpaper = 'wp_still_01_keep.png',
+    this.selectedStillWallpaper = 'wp_still_05_galaxy.webp',
     this.selectedAnimatedWallpaper = 'wp_anim_01_galaxy.mp4',
     this.parallaxMotionEnabled = true,
   });
@@ -2064,7 +2081,12 @@ class VisualPrefs {
 
       final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
       final wallpaperMode = WallpaperMode.values[wallpaperModeIdx.clamp(0, WallpaperMode.values.length - 1)];
-      final selectedStill = p.getString(_kSelectedStill) ?? 'wp_still_01_keep.png';
+      var selectedStill = p.getString(_kSelectedStill) ?? 'wp_still_05_galaxy.webp';
+      // Migration: if persisted still wallpaper is an old .png or no longer
+      // exists in kStillWallpapers, fall back to the default WebP.
+      if (!kStillWallpapers.any((w) => w['asset'] == selectedStill)) {
+        selectedStill = 'wp_still_05_galaxy.webp';
+      }
       var selectedAnimated = p.getString(_kSelectedAnimated) ?? 'wp_anim_01_galaxy.mp4';
       // Migration: fall back to the default if a previously-selected
       // wallpaper (e.g. the removed "Wobbling Sewer Jelly") no longer
