@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-00E5FF?style=flat-square&logo=flutter">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.1-00E5FF?style=flat-square&logo=flutter">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Android-FF007F?style=flat-square">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-E040FB?style=flat-square">
 </p>
@@ -21,8 +21,8 @@
 ## 📥 DOWNLOAD & DEPLOY
 
 <p align="center">
-  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/gungeon-mate-v1.0.0.apk">
-    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v1.0.0-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="48" alt="Download APK" style="box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
+  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/gungeon-mate-v1.0.1.apk">
+    <img src="https://img.shields.io/badge/%F0%9F%93%A5_DOWNLOAD_APK-v1.0.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="48" alt="Download APK" style="box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);">
   </a>
 </p>
 
@@ -30,7 +30,7 @@
 
 ---
 
-## 🐻 v1.0.0 — WIKI-VERIFIED DATA MILESTONE
+## 🐻 v1.0.1 — BUG FIXES & POLISH
 
 Gungeon Mate's entire gun and item database (239 guns, 270 items) has now been audited **field-by-field against the official Enter the Gungeon Wiki** and stamped with a "Neckbear's Approval" 🐻 medal wherever verified. This release closes out a multi-pass data-integrity effort:
 
@@ -95,5 +95,5 @@ Take control of the Gungeon's visual dimensions! Backgrounds tilt and sway dynam
 
 <p align="center">
   <i>Made with 💜 for the Gungeon community. Gungeon Mate is free forever.</i><br>
-  <b>v1.0.0 — Wiki-Verified & Ready to Roll!</b>
+  <b>v1.0.1 — Bug Fixes & Ready to Roll!</b>
 </p>
