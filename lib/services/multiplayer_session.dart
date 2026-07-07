@@ -181,6 +181,7 @@ class MultiplayerSession extends ChangeNotifier {
   Timer? _broadcastDebounce;
   Timer? _heartbeat;
   Timer? _watchdog;
+  Timer? _autoSaveTimer;
   Timer? _searchTimeout;
   Timer? _helloRetryTimer;
   Timer? _autoReconnectTimer;
@@ -656,6 +657,7 @@ class MultiplayerSession extends ChangeNotifier {
     _broadcastDebounce?.cancel();
     _heartbeat?.cancel();
     _watchdog?.cancel();
+    _autoSaveTimer?.cancel();
     _searchTimeout?.cancel();
     _helloRetryTimer?.cancel();
     _autoReconnectTimer?.cancel();
@@ -867,6 +869,11 @@ class MultiplayerSession extends ChangeNotifier {
           _status = MpStatus.disconnected;
           _stopHeartbeat();
           notifyListeners();
+          // Belt-and-suspenders: snapshot the run to disk the instant a
+          // drop is detected, so if the app itself gets killed while
+          // auto-reconnect is retrying in the background, a fresh
+          // restore point already exists.
+          unawaited(saveCurrentSession());
           _startAutoReconnect();
         } else {
           _stopHeartbeat();
@@ -1174,6 +1181,7 @@ class MultiplayerSession extends ChangeNotifier {
   void _startHeartbeat() {
     _heartbeat?.cancel();
     _watchdog?.cancel();
+    _autoSaveTimer?.cancel();
     _heartbeat = Timer.periodic(const Duration(seconds: 5), (_) {
       if (!isConnected) return;
       unawaited(_service.sendMessage(
@@ -1191,8 +1199,21 @@ class MultiplayerSession extends ChangeNotifier {
         _status = MpStatus.disconnected;
         notifyListeners();
         _stopHeartbeat();
+        // Belt-and-suspenders: snapshot the run to disk the instant a
+        // drop is detected, so if the app itself gets killed while
+        // auto-reconnect is retrying in the background, a fresh restore
+        // point already exists — the user never has to remember to tap
+        // SAVE RUN manually.
+        unawaited(saveCurrentSession());
         _startAutoReconnect();
       }
+    });
+    // Automatic run save every 20s while connected. Silent/best-effort —
+    // this is purely a safety net for app-kill / crash scenarios, not
+    // user-facing, so failures are swallowed by saveCurrentSession itself.
+    _autoSaveTimer = Timer.periodic(const Duration(seconds: 20), (_) {
+      if (!isConnected) return;
+      unawaited(saveCurrentSession());
     });
   }
 
@@ -1201,6 +1222,8 @@ class MultiplayerSession extends ChangeNotifier {
     _heartbeat = null;
     _watchdog?.cancel();
     _watchdog = null;
+    _autoSaveTimer?.cancel();
+    _autoSaveTimer = null;
   }
 
   void _startSearchTimeout() {
@@ -1305,9 +1328,24 @@ class MultiplayerSession extends ChangeNotifier {
 
   void _fail(String message, {bool isProtocolError = false}) {
     _error = message;
+    _stopHeartbeat();
+    // If this failure happened mid auto-reconnect-retry sequence (e.g. a
+    // transient native adapter hiccup while restarting advertising/
+    // discovery), don't dead-end at a terminal `error` state — that
+    // permanently kills the retry loop, since _tryAutoReconnect only
+    // re-arms itself when status is `disconnected`. Keep the sequence
+    // alive by falling back to `disconnected` and scheduling the next
+    // backoff attempt instead, so a transient hiccup never strands the
+    // user mid-run.
+    if (_autoReconnectAttempts > 0 && canReconnect && !isProtocolError) {
+      _log('Auto-reconnect attempt #$_autoReconnectAttempts failed ($message) — scheduling next retry...');
+      _status = MpStatus.disconnected;
+      notifyListeners();
+      _tryAutoReconnect();
+      return;
+    }
     _status = MpStatus.error;
     _protocolError = isProtocolError;
-    _stopHeartbeat();
     notifyListeners();
   }
 

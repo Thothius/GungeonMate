@@ -73,14 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final hasActiveRun = runProvider.runState.selectedCharacter != null;
 
+    // Screen-index changes must never be applied synchronously inside
+    // build(): ThemeOverlay is an ancestor that already painted this
+    // frame with the old index, so mutating it here leaves a stale
+    // background visible until some unrelated event (e.g. a tap)
+    // forces the next repaint. Defer to a post-frame callback instead.
+    final desiredScreenIndex = hasActiveRun ? -1 : 0;
+    if (ThemeOverlay.currentScreenIndex.value != desiredScreenIndex) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ThemeOverlay.currentScreenIndex.value = desiredScreenIndex;
+      });
+    }
+
     if (!hasActiveRun) {
       // Home screen (MainMenu) — Galaxy animated bg plays here
-      ThemeOverlay.currentScreenIndex.value = 0;
       return const MainMenuScreen();
     }
 
     // Inventory/Browse/Settings — no Galaxy, respect user wallpaper settings
-    ThemeOverlay.currentScreenIndex.value = -1;
 
     final screens = [
       ActiveRunScreen(

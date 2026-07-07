@@ -1402,7 +1402,6 @@ const List<Map<String, String>> kStillWallpapers = [];
 const List<Map<String, String>> kAnimatedWallpapers = [
   {'asset': 'wp_anim_01_galaxy.mp4', 'name': 'Swirling Gravity Vortex'},
   {'asset': 'wp_anim_02_warehouse.mp4', 'name': 'Gungeon Weapons Locker'},
-  {'asset': 'wp_anim_03_blobulord.mp4', 'name': 'Wobbling Sewer Jelly'},
   {'asset': 'procedural_crt', 'name': 'CRT Analog Static'},
   {'asset': 'procedural_glitch', 'name': 'Cyber Glitch Screen'},
   {'asset': 'procedural_matrix', 'name': 'Goopian Cipher Terminal'},
@@ -1796,10 +1795,6 @@ enum CustomParticleType {
   fire,
   water,
   earth,
-  air,
-  // Gungeon
-  bullets,
-  gunpowder,
   stars,
   none,
 }
@@ -1816,13 +1811,6 @@ extension CustomParticleTypeLabel on CustomParticleType {
         return '💧 Water (Bubbles & Droplets)';
       case CustomParticleType.earth:
         return '� Earth (Dust & Stone)';
-      case CustomParticleType.air:
-        return '�️ Air (Wind & Gusts)';
-      // Gungeon
-      case CustomParticleType.bullets:
-        return '🔫 Bullets (Shells & Casings)';
-      case CustomParticleType.gunpowder:
-        return '💥 Gunpowder (Smoke & Flashes)';
       case CustomParticleType.stars:
         return '✨ Stars (Cosmic Sparkles)';
       case CustomParticleType.none:
@@ -2047,7 +2035,19 @@ class VisualPrefs {
         }
       }
 
-      final customParticleTypeIdx = p.getInt(_kCustomParticleType) ?? 0;
+      // Migration: air(4)/bullets(5)/gunpowder(6) were removed from
+      // CustomParticleType, shifting stars/none down two slots. Remap
+      // old persisted indices (from the pre-removal enum ordering:
+      // themeDefault,fire,water,earth,air,bullets,gunpowder,stars,none)
+      // onto the new ordering so existing selections don't silently
+      // change to an unrelated particle type.
+      final rawParticleTypeIdx = p.getInt(_kCustomParticleType) ?? 0;
+      final customParticleTypeIdx = switch (rawParticleTypeIdx) {
+        4 || 5 || 6 => 0, // air/bullets/gunpowder -> themeDefault
+        7 => CustomParticleType.stars.index,
+        8 => CustomParticleType.none.index,
+        _ => rawParticleTypeIdx,
+      };
       final customParticleType = CustomParticleType.values[customParticleTypeIdx.clamp(0, CustomParticleType.values.length - 1)];
 
       final customDiceTypeIdx = p.getInt(_kCustomDiceType) ?? 0;
@@ -2065,7 +2065,14 @@ class VisualPrefs {
       final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
       final wallpaperMode = WallpaperMode.values[wallpaperModeIdx.clamp(0, WallpaperMode.values.length - 1)];
       final selectedStill = p.getString(_kSelectedStill) ?? 'wp_still_01_keep.png';
-      final selectedAnimated = p.getString(_kSelectedAnimated) ?? 'wp_anim_01_galaxy.mp4';
+      var selectedAnimated = p.getString(_kSelectedAnimated) ?? 'wp_anim_01_galaxy.mp4';
+      // Migration: fall back to the default if a previously-selected
+      // wallpaper (e.g. the removed "Wobbling Sewer Jelly") no longer
+      // exists in kAnimatedWallpapers, avoiding a firstWhere crash in
+      // the settings picker.
+      if (!kAnimatedWallpapers.any((w) => w['asset'] == selectedAnimated)) {
+        selectedAnimated = 'wp_anim_01_galaxy.mp4';
+      }
       final parallaxEnabled = p.getBool(_kParallaxEnabled) ?? true;
 
       notifier.value = VisualPrefs(

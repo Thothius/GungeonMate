@@ -802,13 +802,13 @@ class _MpHeader extends StatelessWidget {
       statusText = 'Connected';
     } else if (isReconnecting) {
       final att = session.autoReconnectAttempts;
-      statusText = att > 0 ? 'Reconnecting ($att/5)…' : 'Reconnecting…';
+      statusText = att > 0 ? 'Reconnecting (attempt $att)…' : 'Reconnecting…';
     } else if (isSearching) {
       statusText = 'Searching…';
     } else if (session.status == MpStatus.handshaking) {
       statusText = 'Connecting…';
     } else if (isAutoRetrying) {
-      statusText = 'Retrying ${session.autoReconnectAttempts}/5…';
+      statusText = 'Retrying (attempt ${session.autoReconnectAttempts})…';
     } else {
       statusText = 'Offline';
     }
