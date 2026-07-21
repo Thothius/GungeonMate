@@ -4253,7 +4253,7 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
       dashboards.add(const _HuntressDashboardSliver());
       labels.add('HUNTRESS');
     }
-    if (ownedItemNames.contains('ser junkan')) {
+    if (ownedItemNames.any((n) => n.contains('ser junkan'))) {
       dashboards.add(_JunkanDashboardSliver(slot: widget.slot));
       labels.add('JUNKAN');
     }
