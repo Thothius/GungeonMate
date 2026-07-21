@@ -616,6 +616,7 @@ class MultiplayerSession extends ChangeNotifier {
     _peerCharacterName = null;
     _peerLastSnapshotTs = 0;
     _protocolError = false;
+    _wasDisconnected = false;
     _runProvider.mpDisconnected = false;
     _status = MpStatus.idle;
     _error = null;
