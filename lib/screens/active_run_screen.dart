@@ -4292,7 +4292,7 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
       child: Column(
         children: [
           SizedBox(
-            height: 300,
+            height: 320,
             child: PageView.builder(
               controller: _pc,
               itemCount: dashboards.length,
@@ -4300,7 +4300,10 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
                 setState(() => _page = i);
                 Haptics.selection();
               },
-              itemBuilder: (context, i) => dashboards[i],
+              itemBuilder: (context, i) => CustomScrollView(
+                physics: const ClampingScrollPhysics(),
+                slivers: [dashboards[i]],
+              ),
             ),
           ),
           const SizedBox(height: 6),
@@ -4363,53 +4366,55 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
     ];
     const dpsValues = [18.0, 27.5, 42.0];
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0xFF0E1218),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.cyan.withValues(alpha: 0.35), width: 1.2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
-                const SizedBox(width: 8),
-                const Text(
-                  'SHELLEGUN',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
-                ),
-                const Spacer(),
-                Text(
-                  'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _modeBtn('Manual', mode == 1, () => p.setShellegunMode(1)),
-                _modeBtn('Auto', mode == 2, () => p.setShellegunMode(2)),
-                _modeBtn('Beam', mode == 3, () => p.setShellegunMode(3)),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              modes[mode - 1],
-              style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              descriptions[mode - 1],
-              style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
-            ),
-          ],
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0E1218),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.cyan.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'SHELLEGUN',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Text(
+                    'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _modeBtn('Manual', mode == 1, () => p.setShellegunMode(1)),
+                  _modeBtn('Auto', mode == 2, () => p.setShellegunMode(2)),
+                  _modeBtn('Beam', mode == 3, () => p.setShellegunMode(3)),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                modes[mode - 1],
+                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                descriptions[mode - 1],
+                style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -4457,69 +4462,71 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
     final p = context.watch<RunProvider>();
     final floor = p.chamberGunFloor;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0xFF120E08),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
-                const SizedBox(width: 8),
-                const Text(
-                  'CHAMBER GUN',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
-                ),
-                const Spacer(),
-                Text(
-                  'DPS: ${_dps[floor].toStringAsFixed(1)}',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'FLOOR ${floor + 1}: ${_floors[floor]}',
-              style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            const SizedBox(height: 8),
-            // Floor selector — horizontal scrollable row
-            SizedBox(
-              height: 32,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                separatorBuilder: (_, __) => const SizedBox(width: 4),
-                itemBuilder: (context, i) {
-                  final active = i == floor;
-                  return InkWell(
-                    onTap: () { Haptics.light(); p.setChamberGunFloor(i); },
-                    borderRadius: BorderRadius.circular(6),
-                    child: Container(
-                      width: 28,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: active ? Colors.amber.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: active ? Colors.amberAccent : Colors.white12),
-                      ),
-                      child: Text(
-                        '${i + 1}',
-                        style: TextStyle(fontSize: 11, fontWeight: active ? FontWeight.bold : FontWeight.normal, color: active ? Colors.amberAccent : Colors.white54),
-                      ),
-                    ),
-                  );
-                },
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF120E08),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'CHAMBER GUN',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Text(
+                    'DPS: ${_dps[floor].toStringAsFixed(1)}',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 8),
+              Text(
+                'FLOOR ${floor + 1}: ${_floors[floor]}',
+                style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              const SizedBox(height: 8),
+              // Floor selector — horizontal scrollable row
+              SizedBox(
+                height: 32,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
+                  separatorBuilder: (_, __) => const SizedBox(width: 4),
+                  itemBuilder: (context, i) {
+                    final active = i == floor;
+                    return InkWell(
+                      onTap: () { Haptics.light(); p.setChamberGunFloor(i); },
+                      borderRadius: BorderRadius.circular(6),
+                      child: Container(
+                        width: 28,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: active ? Colors.amber.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: active ? Colors.amberAccent : Colors.white12),
+                        ),
+                        child: Text(
+                          '${i + 1}',
+                          style: TextStyle(fontSize: 11, fontWeight: active ? FontWeight.bold : FontWeight.normal, color: active ? Colors.amberAccent : Colors.white54),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -4547,61 +4554,63 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
     final dmgBonus = (kills * 0.5).toStringAsFixed(1);
     final fireRateBonus = (kills * 0.2).toStringAsFixed(1);
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0xFF100E18),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
-                const SizedBox(width: 8),
-                const Text(
-                  'PLATINUM BULLETS',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
-                ),
-                const Spacer(),
-                Text(
-                  '$kills kills',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                _statChip('DMG +$dmgBonus%', Colors.redAccent),
-                const SizedBox(width: 8),
-                _statChip('FIRE RATE +$fireRateBonus%', Colors.orangeAccent),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Each kill stacks +0.5% damage and +0.2% fire rate. Bonus persists for the entire run.',
-              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: kills > 0 ? () { Haptics.light(); p.setPlatinumBulletsKills(kills - 1); } : null,
-                  icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 20),
-                ),
-                Text('$kills', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
-                IconButton(
-                  onPressed: () { Haptics.light(); p.setPlatinumBulletsKills(kills + 1); },
-                  icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 20),
-                ),
-              ],
-            ),
-          ],
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF100E18),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'PLATINUM BULLETS',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '$kills kills',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  _statChip('DMG +$dmgBonus%', Colors.redAccent),
+                  const SizedBox(width: 8),
+                  _statChip('FIRE RATE +$fireRateBonus%', Colors.orangeAccent),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Each kill stacks +0.5% damage and +0.2% fire rate. Bonus persists for the entire run.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: kills > 0 ? () { Haptics.light(); p.setPlatinumBulletsKills(kills - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 20),
+                  ),
+                  Text('$kills', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+                  IconButton(
+                    onPressed: () { Haptics.light(); p.setPlatinumBulletsKills(kills + 1); },
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 20),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -4639,66 +4648,68 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
     final p = context.watch<RunProvider>();
     final uses = p.ironCoinUses;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: const Color(0xFF181210),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.brown.withValues(alpha: 0.4), width: 1.2),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
-                const SizedBox(width: 8),
-                const Text(
-                  'IRON COIN',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
-                ),
-                const Spacer(),
-                Text(
-                  '$uses/3 uses',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            // Coin icons row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (int i = 0; i < 3; i++)
-                  Icon(
-                    Icons.paid_rounded,
-                    size: 32,
-                    color: i < uses ? Colors.amber : Colors.white.withValues(alpha: 0.1),
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF181210),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.brown.withValues(alpha: 0.4), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'IRON COIN',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
                   ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              "Flip to reveal/destroy a chest's contents. 3 uses per run. Use wisely on high-tier chests.",
-              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: uses < 3 ? () { Haptics.light(); p.setIronCoinUses(uses + 1); } : null,
-                  icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 20),
-                ),
-                IconButton(
-                  onPressed: uses > 0 ? () { Haptics.light(); p.setIronCoinUses(uses - 1); } : null,
-                  icon: const Icon(Icons.remove_circle_outline, color: Colors.amber, size: 20),
-                ),
-              ],
-            ),
-          ],
+                  const Spacer(),
+                  Text(
+                    '$uses/3 uses',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Coin icons row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int i = 0; i < 3; i++)
+                    Icon(
+                      Icons.paid_rounded,
+                      size: 32,
+                      color: i < uses ? Colors.amber : Colors.white.withValues(alpha: 0.1),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Flip to reveal/destroy a chest's contents. 3 uses per run. Use wisely on high-tier chests.",
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: uses < 3 ? () { Haptics.light(); p.setIronCoinUses(uses + 1); } : null,
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 20),
+                  ),
+                  IconButton(
+                    onPressed: uses > 0 ? () { Haptics.light(); p.setIronCoinUses(uses - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.amber, size: 20),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
