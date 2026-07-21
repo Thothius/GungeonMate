@@ -34,21 +34,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/format.dart';
 import '../utils/asset_paths.dart';
 
-/// Snappy page route: 200ms fade + slight scale-up, no ghosting of previous screen.
+/// Snappy page route: 180ms fade + slight scale-up, no ghosting of previous screen.
 PageRoute<T> _fastRoute<T>(Widget child) => PageRouteBuilder<T>(
       pageBuilder: (_, __, ___) => child,
       transitionsBuilder: (_, anim, __, child) {
-        final curve = CurvedAnimation(parent: anim, curve: Curves.easeOut);
+        final curve = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic);
         return FadeTransition(
           opacity: curve,
           child: ScaleTransition(
-            scale: Tween<double>(begin: 0.96, end: 1.0).animate(curve),
+            scale: Tween<double>(begin: 0.97, end: 1.0).animate(curve),
             child: child,
           ),
         );
       },
-      transitionDuration: const Duration(milliseconds: 200),
-      reverseTransitionDuration: const Duration(milliseconds: 180),
+      transitionDuration: const Duration(milliseconds: 180),
+      reverseTransitionDuration: const Duration(milliseconds: 150),
     );
 
 class ActiveRunScreen extends StatefulWidget {

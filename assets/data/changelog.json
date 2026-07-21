@@ -1,5 +1,14 @@
 [
   {
+    "version": "v1.5.3",
+    "title": "\u26a1 TRANSITION POLISH + EMPTY DASHBOARD FIX",
+    "date": "July 21, 2026",
+    "items": [
+      "Snappy Page Transitions: All Navigator.push calls now use a custom 180ms fade+scale route instead of the default 300ms MaterialPageRoute slide \u2014 no more ghosting of the previous screen when opening item details, shrines, stats, or theme picker.",
+      "Empty Dashboard Fix: The special dashboards swiper area no longer reserves 320px of empty space when the DPS calculator is disabled or the player has no guns \u2014 the container collapses to zero height when no dashboards are active."
+    ]
+  },
+  {
     "version": "v1.5.0",
     "title": "\ud83c\udfae CODEX + SPECIAL DASHBOARDS + TACTICAL GRID + EVENT LOG",
     "date": "July 21, 2026",

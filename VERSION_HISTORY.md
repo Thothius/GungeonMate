@@ -6,6 +6,26 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.5.3 — Transition Polish + Empty Dashboard Fix (July 21, 2026)
+**Build:** 60
+
+### Snappy Page Transitions
+- Replaced all 12 `MaterialPageRoute` calls in `active_run_screen.dart` with custom `_fastRoute` — a `PageRouteBuilder` using 180ms fade + 0.97→1.0 scale-up with `Curves.easeOutCubic`.
+- Root cause: `MaterialPageRoute` slides the new page over the old one, leaving the previous screen visible during the ~300ms transition — perceived as "ghosting" or "previous view stays for a bit."
+- Fix: Fade+scale transition makes the new screen appear crisply without the old one lingering. Reverse transition is 150ms for snappy back navigation.
+- Affected screens: ItemDetailScreen, StatsDetailScreen, BrowseScreen, ThemePickerScreen, FavouritesScreen, ShrinePickerScreen, EffectsSummaryScreen, CharacterSelectScreen.
+
+### Empty Dashboard Fix
+- Root cause: `_DashboardSwiper` always added `_UniversalDamageCalculatorSliver` for non-robot characters, even when `showDamageCalculator` was disabled or the player had no guns. The swiper reserves a fixed 320px height — showing 320px of empty space.
+- Fix: Check `VisualPrefs.showDamageCalculator` and `player.guns.isNotEmpty` before adding the DPS calc to the dashboards list. When `dashboards.isEmpty`, the swiper returns `SizedBox.shrink()` — zero height.
+- Also wrapped `_DashboardSwiper.build()` in `ListenableBuilder` for `VisualPrefs` so it rebuilds immediately when the toggle flips.
+
+### Bughunt
+- `flutter analyze`: 16 pre-existing warnings, 0 new, 0 errors.
+- All 12 `MaterialPageRoute` references confirmed replaced — grep returns 0 results.
+
+---
+
 ## v1.5.0 — Codex + Special Dashboards + Tactical Grid + Event Log (July 21, 2026)
 **Build:** 59
 
