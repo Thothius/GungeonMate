@@ -6,6 +6,26 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.3.0 — Wiki Data Enrichment: 100% Ammonomicon Coverage (July 21, 2026)
+**Build:** 57
+
+### Ammonomicon Entries — Full Coverage
+- **Guns**: All 239 guns now have `ammonomicon_entry` (was 0/239). Scraped from enterthegungeon.wiki.gg infobox `.druid-row-desc` via Playwright browser automation.
+- **Items**: All 270 items now have `ammonomicon_entry` (was 0/270). 163 from wiki infoboxes, 107 from `effect` field fallback where wiki had no infobox.
+
+### Data Fixes
+- 56 gun `spread` values corrected to include degree symbol (`°`).
+- C/B/A/S rank gun `quote` and `spread` repairs from wiki data.
+- 4 broken synergy references fixed: `IBomb Companion App` → `iBomb Companion App`, `Master Round` → `Master Round I-V`, `Ser Junkan` → `Ser Junkan 1`.
+- 2 missing synergy items added: Wood Beam → Pea Cannon, Grasschopper → To Serve Android.
+
+### Validation
+- 395/395 synergies cross-validated against wiki master Synergies table (391 perfect match, 4 intentional name corrections).
+- 0 structural errors, 0 broken back-references, 0 duplicate names.
+- `flutter analyze`: 0 errors on all screens.
+
+---
+
 ## v1.2.0 — MP Summary Page + Animated Gungeoneer GIFs (July 21, 2026)
 **Build:** 56
 

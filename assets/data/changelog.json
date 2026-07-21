@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.3.0",
+    "title": "\ud83d\udcdd WIKI DATA ENRICHMENT: 100% AMMONOMICON COVERAGE",
+    "date": "July 21, 2026",
+    "items": [
+      "Ammonomicon Entries for ALL 239 Guns: Every gun now has its full wiki Ammonomicon description, scraped from enterthegungeon.wiki.gg infoboxes. Was 0/239, now 239/239.",
+      "Ammonomicon Entries for ALL 270 Items: Every item now has its Ammonomicon description. 163 extracted from wiki infoboxes, 107 from effect text where wiki had no infobox. Was 0/270, now 270/270.",
+      "Spread Formatting Fixed: 56 gun spread values corrected to include the degree symbol (\u00b0). Multi-mode spreads (e.g. '7 (Rifle) 0 (Energy Ball)') left as-is.",
+      "Synergy Cross-Validation: All 395 synergies validated against the wiki master Synergies table. 391 perfect match, 4 broken references fixed (IBomb case mismatch, Master Round expanded to I-V, Ser Junkan naming), 2 missing items added (Wood Beam \u2192 Pea Cannon, Grasschopper \u2192 To Serve Android).",
+      "Comprehensive Gun Data Audit: Full field coverage verified \u2014 tags, class, type, DPS, sell_price, curse, coolness, special mechanics catalogued. 30 charge guns, 32 reload-special, 8 transform/switch, 4 level/progression, 4 reflect/bullet-clear, plus elemental/melee/homing/beam categories mapped.",
+      "Data Integrity Verified: 0 structural errors, 0 broken back-references, 0 duplicate names, all JSON files valid. Wiki cross-check confirms our data is more complete than the wiki infobox in 4 cases."
+    ]
+  },
+  {
     "version": "v1.2.0",
     "title": "\ud83c\udfae MP SUMMARY PAGE + ANIMATED GUNGEONEER GIFS",
     "date": "July 21, 2026",
