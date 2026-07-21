@@ -895,7 +895,15 @@ class _CharacterPickerTile extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: onTap,
-        child: Padding(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.08),
+              width: 1,
+            ),
+          ),
+          child: Padding(
           padding: const EdgeInsets.all(14),
           child: Row(
             children: [
@@ -953,6 +961,7 @@ class _CharacterPickerTile extends StatelessWidget {
           ),
         ),
       ),
+      ),
     );
   }
 }
@@ -968,6 +977,10 @@ class _ForcedCultistTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.08),
+          width: 1,
+        ),
       ),
       child: Row(
         children: [
