@@ -949,7 +949,7 @@ class RunProvider with ChangeNotifier {
       manual.add('Requires defeating your character\'s past');
     } else if (name == 'ammo') {
       manual.add('Weapons ammo refilled');
-    } else if (name == 'angel') {
+    } else if (name == 'angel' || name == 'fallen angel') {
       manual.add('Lose 1 heart container · +25% damage');
     } else if (name == 'blood') {
       manual.add('Lose 1 heart container · damaging aura near highlighted enemies');

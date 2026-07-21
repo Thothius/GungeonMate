@@ -9,7 +9,7 @@
     "coolness": 0.0
   },
   {
-    "name": "Angel",
+    "name": "Fallen Angel",
     "icon": "",
     "description": "A shrine to a prideful bullet angel, now fallen.",
     "message": "Sacrifice Accepted Stronger",
@@ -76,7 +76,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/00/Dice_Shrine.png",
     "description": "A shrine to Icosahedrax, the great arbiter.",
     "message": "Roll of the Dice",
-    "effect": "Good Effects Bad Effects Renewed Restores a random amount of health. Pained Damages the player for 1-2 hearts. Bolstered Grants 1-2 heart containers. Enfeebled Removes a heart container. Paid Grants 20-99 money. Robbed Removes 25-100% money. Cleansed Removes up to 10 curse . Cursed Increases curse by 5. Blanked Grants 1-10 blanks. De-Blanked Removes a random amount of blanks. Gift Grants a chest. Disarmed Removes the currently held weapon. Reloaded Refills ammo for all guns or increases ammo capacity by 225%. Limited Decreases ammo capacity by 30%. (Currently wielded weapon keeps excess ammo until switched) Hasted Increases movement speed. Unsteady Increases reload time by 35%. Shielded Grants 1-3 armor. Priceless No negative effect. Using this shrine grants one positive and one negative effect. Renewed, Bolstered, and Enfeebled have no effect on The Robot . Using this shrine 3 times unlocks Daisuke . The gift chest can be a Mimic . There is also a small 0.1% chance that the shrine will explode upon use, reducing your heart containers to 1, quadrupling your damage, and pushing you away.",
+    "effect": "Good Effects Bad Effects Renewed Restores a random amount of health. Pained Damages the player for 1-2 hearts. Bolstered Grants 1-2 heart containers. Enfeebled Removes a heart container. Paid Grants 20-99 money. Robbed Removes 25-100% money. Cleansed Removes up to 10 curse . Cursed Increases curse by 5. Blanked Grants 1-10 blanks. De-Blanked Removes a random amount of blanks. Gift Grants a chest. Disarmed Removes the currently held weapon. Reloaded Refills ammo for all guns or increases ammo capacity by 125%. Limited Decreases ammo capacity by 30%. (Currently wielded weapon keeps excess ammo until switched) Hasted Increases movement speed. Unsteady Increases reload time by 35%. Shielded Grants 1-3 armor. Priceless No negative effect. Using this shrine grants one positive and one negative effect. Renewed, Bolstered, and Enfeebled have no effect on The Robot . Using this shrine 3 times unlocks Daisuke . The gift chest can be a Mimic . There is also a small 0.1% chance that the shrine will explode upon use, reducing your heart containers to 1, quadrupling your damage, and pushing you away.",
     "curse": 5.0,
     "coolness": 0.0
   },

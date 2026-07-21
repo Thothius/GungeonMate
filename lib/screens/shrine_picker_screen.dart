@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+
 import '../providers/run_provider.dart';
 import '../models/shrine.dart';
 
@@ -11,12 +13,28 @@ String resolveShrineIcon(String shrineName, String defaultIcon) {
     case 'ammo':
     case 'ammo shrine':
       return 'assets/images/shrines/Ammo_Shrine.webp';
+    case 'fallen angel':
+    case 'fallen angel shrine':
     case 'angel':
     case 'angel shrine':
       return 'assets/images/shrines/Angel_Shrine.webp';
     default:
       return defaultIcon;
   }
+}
+
+/// Generate a short one-line effect summary for list cards.
+/// Takes the first sentence of the full effect text, or a custom
+/// summary for shrines with very long/complex effects (Dice).
+String _shortEffect(Shrine s) {
+  final name = s.name.toLowerCase();
+  if (name == 'dice') {
+    return 'Grants one positive + one negative effect. 0.1% chance to explode (quad damage, 1 heart). 3 uses unlocks Daisuke.';
+  }
+  final effect = s.effect;
+  final idx = effect.indexOf('. ', 20);
+  if (idx > 0 && idx < 200) return effect.substring(0, idx + 1);
+  return effect.length > 150 ? '${effect.substring(0, 147)}...' : effect;
 }
 
 /// Full-screen picker shown when the Shrine FAB is tapped from Active
@@ -28,17 +46,22 @@ class ShrinePickerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<RunProvider>();
     final rawShrines = provider.allShrines;
-    final List<Shrine> shrines = List.from(rawShrines)..sort((a, b) {
-      final aCleanse = a.name.toLowerCase().contains('cleanse');
-      final bCleanse = b.name.toLowerCase().contains('cleanse');
-      if (aCleanse && !bCleanse) return -1;
-      if (!aCleanse && bCleanse) return 1;
-      return 0; // maintain original sorting
-    });
     final used = <String, int>{};
     for (final s in provider.runState.shrinesUsed) {
       used[s] = (used[s] ?? 0) + 1;
     }
+    final List<Shrine> shrines = List.from(rawShrines)..sort((a, b) {
+      // Cleanse shrine floats to top (most commonly needed).
+      final aCleanse = a.name.toLowerCase().contains('cleanse');
+      final bCleanse = b.name.toLowerCase().contains('cleanse');
+      if (aCleanse && !bCleanse) return -1;
+      if (!aCleanse && bCleanse) return 1;
+      // Used shrines sink to bottom.
+      final aUsed = used.containsKey(a.name) ? 1 : 0;
+      final bUsed = used.containsKey(b.name) ? 1 : 0;
+      if (aUsed != bUsed) return aUsed - bUsed;
+      return 0; // maintain original sorting
+    });
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -74,22 +97,19 @@ class ShrinePickerScreen extends StatelessWidget {
       ),
       body: shrines.isEmpty
           ? const Center(child: Text('No shrine data'))
-          : GridView.builder(
-              padding: const EdgeInsets.all(12),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 shrines per row!
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.78, // Taller, highly readable cards!
-              ),
+          : ListView.builder(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
               itemCount: shrines.length,
               itemBuilder: (c, i) {
                 final s = shrines[i];
-                return _ShrineGridTile(
+                return _ShrineListTile(
                   shrine: s,
                   usageCount: used[s.name] ?? 0,
                   onTap: () => _openActivationSheet(context, s),
-                );
+                ).animate().fadeIn(
+                      duration: 200.ms,
+                      delay: (i * 30).ms,
+                    );
               },
             ),
       bottomNavigationBar: SafeArea(
@@ -134,12 +154,12 @@ class ShrinePickerScreen extends StatelessWidget {
   }
 }
 
-class _ShrineGridTile extends StatelessWidget {
+class _ShrineListTile extends StatelessWidget {
   final Shrine shrine;
   final int usageCount;
   final VoidCallback onTap;
 
-  const _ShrineGridTile({
+  const _ShrineListTile({
     required this.shrine,
     required this.usageCount,
     required this.onTap,
@@ -151,11 +171,14 @@ class _ShrineGridTile extends StatelessWidget {
     final hasCurse = shrine.curse != 0 || name == 'hero';
     final hasCool = shrine.coolness != 0;
     final hasCleanse = name == 'cleanse';
+    final hasHeartCost =
+        name.contains('angel') || name.contains('blood') || name.contains('companion');
 
     final String iconAsset = resolveShrineIcon(shrine.name, shrine.icon);
 
     return Card(
-      elevation: 3,
+      elevation: 2,
+      margin: const EdgeInsets.only(bottom: 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
         side: BorderSide(
@@ -165,14 +188,13 @@ class _ShrineGridTile extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onTap, // Tapping directly triggers the activation sheet!
+        onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Shrine Icon (with nice circular backup background)
+              // Shrine Icon
               Hero(
                 tag: 'shrine_${shrine.name}',
                 child: Container(
@@ -181,21 +203,21 @@ class _ShrineGridTile extends StatelessWidget {
                     color: Colors.black.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: Colors.amber.withValues(alpha: 0.05),
+                      color: Colors.amber.withValues(alpha: 0.08),
                       width: 1.0,
                     ),
                   ),
                   child: SizedBox(
-                    height: 80,
-                    width: 80,
+                    height: 72,
+                    width: 72,
                     child: iconAsset.startsWith('assets/')
                         ? Image.asset(
                             iconAsset,
                             fit: BoxFit.contain,
-                            filterQuality: FilterQuality.none, // Pixel art!
+                            filterQuality: FilterQuality.none,
                             errorBuilder: (_, __, ___) => const Icon(
                               Icons.temple_buddhist_outlined,
-                              size: 32,
+                              size: 28,
                               color: Colors.amber,
                             ),
                           )
@@ -206,130 +228,129 @@ class _ShrineGridTile extends StatelessWidget {
                                 filterQuality: FilterQuality.none,
                                 errorBuilder: (_, __, ___) => const Icon(
                                   Icons.temple_buddhist_outlined,
-                                  size: 32,
+                                  size: 28,
                                   color: Colors.amber,
                                 ),
                               )
                             : const Icon(
                                 Icons.temple_buddhist_outlined,
-                                size: 32,
+                                size: 28,
                                 color: Colors.amber,
                               ),
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(width: 14),
 
-              // Shrine Name
-              GoopText(
-                shrine.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.white,
-                  letterSpacing: 0.5,
+              // Info column
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name
+                    GoopText(
+                      shrine.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+
+                    // Description (italic, 1 line)
+                    if (shrine.description.isNotEmpty)
+                      GoopText(
+                        shrine.description,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          color: Colors.white.withValues(alpha: 0.45),
+                          fontStyle: FontStyle.italic,
+                          height: 1.2,
+                        ),
+                      ),
+                    const SizedBox(height: 6),
+
+                    // Effect summary (3 lines max)
+                    GoopText(
+                      _shortEffect(shrine),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        height: 1.3,
+                        color: Colors.white.withValues(alpha: 0.8),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // Badges row
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: [
+                        if (hasCurse && !hasCleanse && name != 'hero')
+                          _shrineBadge(
+                            'CURSE ${shrine.curse > 0 ? '+' : ''}${shrine.curse.toStringAsFixed(1)}',
+                            Colors.deepOrangeAccent,
+                          ),
+                        if (hasCool)
+                          _shrineBadge(
+                            'COOL ${shrine.coolness > 0 ? '+' : ''}${shrine.coolness.toStringAsFixed(1)}',
+                            Colors.lightBlueAccent,
+                          ),
+                        if (hasCleanse)
+                          _shrineBadge('CLEANSE', Colors.lightGreenAccent),
+                        if (name == 'hero')
+                          _shrineBadge('SETS CURSE 9', Colors.deepOrangeAccent),
+                        if (hasHeartCost)
+                          _shrineBadge('HEART -1', Colors.redAccent),
+                        if (usageCount > 0)
+                          _shrineBadge(
+                            'USED ${usageCount}X',
+                            Colors.amber,
+                          ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 6),
 
-              // Quick stats badge row
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 4,
-                runSpacing: 4,
-                children: [
-                  if (hasCurse && !hasCleanse && name != 'hero')
-                    Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: Colors.deepOrangeAccent.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: Colors.deepOrangeAccent.withValues(alpha: 0.35), width: 0.6),
-                        ),
-                        child: Text(
-                          'CURSE ${shrine.curse > 0 ? '+' : ''}${shrine.curse.toStringAsFixed(0)}',
-                          style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Colors.deepOrangeAccent),
-                        ),
-                      ),
-                    ),
-                  if (hasCool)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: Colors.lightBlueAccent.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: Colors.lightBlueAccent.withValues(alpha: 0.35), width: 0.6),
-                        ),
-                        child: Text(
-                          'COOL ${shrine.coolness > 0 ? '+' : ''}${shrine.coolness.toStringAsFixed(0)}',
-                          style: const TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Colors.lightBlueAccent),
-                        ),
-                      ),
-                    ),
-                  if (hasCleanse)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: Colors.lightGreenAccent.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: Colors.lightGreenAccent.withValues(alpha: 0.35), width: 0.6),
-                        ),
-                        child: const Text(
-                          'CLEANSE',
-                          style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Colors.lightGreenAccent),
-                        ),
-                      ),
-                    ),
-                  if (name == 'hero')
-                    Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: Colors.deepOrangeAccent.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: Colors.deepOrangeAccent.withValues(alpha: 0.35), width: 0.6),
-                        ),
-                        child: const Text(
-                          'MAX',
-                          style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold, color: Colors.deepOrangeAccent),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-              
-              // Used badge overlay (bottom center)
-              if (usageCount > 0) ...[
-                const SizedBox(height: 6),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.amber.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 0.6),
-                  ),
-                  child: Text(
-                    'USED $usageCount TIME${usageCount > 1 ? "S" : ""}',
-                    style: const TextStyle(
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber,
-                    ),
-                  ),
+              // Chevron
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Colors.white.withValues(alpha: 0.25),
+                  size: 22,
                 ),
-              ],
+              ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _shrineBadge(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: color.withValues(alpha: 0.35), width: 0.6),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.bold,
+          color: color,
         ),
       ),
     );
