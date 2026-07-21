@@ -34,6 +34,23 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/format.dart';
 import '../utils/asset_paths.dart';
 
+/// Snappy page route: 200ms fade + slight scale-up, no ghosting of previous screen.
+PageRoute<T> _fastRoute<T>(Widget child) => PageRouteBuilder<T>(
+      pageBuilder: (_, __, ___) => child,
+      transitionsBuilder: (_, anim, __, child) {
+        final curve = CurvedAnimation(parent: anim, curve: Curves.easeOut);
+        return FadeTransition(
+          opacity: curve,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: 0.96, end: 1.0).animate(curve),
+            child: child,
+          ),
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 200),
+      reverseTransitionDuration: const Duration(milliseconds: 180),
+    );
+
 class ActiveRunScreen extends StatefulWidget {
   final VoidCallback? onRequestBrowse;
   final void Function(PlayerSlot)? onPlayerChanged;
@@ -359,12 +376,10 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                               if (!context.mounted) return;
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (_) => BrowseScreen(
-                                    targetSlot: slot,
-                                    showBackButton: true,
-                                  ),
-                                ),
+                                _fastRoute(BrowseScreen(
+                                  targetSlot: slot,
+                                  showBackButton: true,
+                                )),
                               );
                             });
                           },
@@ -1550,19 +1565,15 @@ class _PlayerPageState extends State<_PlayerPage> {
               curse: state.totalCurse,
               onTapCoolness: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const StatsDetailScreen(
-                    statType: StatType.coolness,
-                  ),
-                ),
+                _fastRoute(const StatsDetailScreen(
+                  statType: StatType.coolness,
+                )),
               ),
               onTapCurse: () => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => const StatsDetailScreen(
-                    statType: StatType.curse,
-                  ),
-                ),
+                _fastRoute(const StatsDetailScreen(
+                  statType: StatType.curse,
+                )),
               ),
               onLongPressCoolness: () =>
                   _showStatAdjuster(context, isCool: true),
@@ -1660,10 +1671,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                   synergyGlowColor: glowColors[g.name.toLowerCase()],
                   onTap: () => Navigator.push(
                     c,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          ItemDetailScreen(gun: g, ownerSlot: _slot),
-                    ),
+                    _fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
                   ),
                   onLongPress: () => _promptTileActions(c, gun: g),
                 );
@@ -1701,10 +1709,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                     synergyGlowColor: glowColors[g.name.toLowerCase()],
                     onTap: () => Navigator.push(
                       c,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ItemDetailScreen(gun: g, ownerSlot: _slot),
-                      ),
+                      _fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
                     ),
                     onLongPress: () => _promptTileActions(c, gun: g),
                   ),
@@ -1745,10 +1750,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                   synergyGlowColor: glowColors[it.name.toLowerCase()],
                   onTap: () => Navigator.push(
                     c,
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          ItemDetailScreen(item: it, ownerSlot: _slot),
-                    ),
+                    _fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
                   ),
                   onLongPress: () => _promptTileActions(c, item: it),
                 );
@@ -1785,10 +1787,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                     synergyGlowColor: glowColors[it.name.toLowerCase()],
                     onTap: () => Navigator.push(
                       c,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            ItemDetailScreen(item: it, ownerSlot: _slot),
-                      ),
+                      _fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
                     ),
                     onLongPress: () => _promptTileActions(c, item: it),
                   ),
@@ -2081,8 +2080,7 @@ class _PlayerPageState extends State<_PlayerPage> {
             Navigator.pop(sheetCtx);
             Navigator.push(
               c,
-              MaterialPageRoute(
-                builder: (_) => ItemDetailScreen(
+              _fastRoute(ItemDetailScreen(
                   gun: gun,
                   item: item,
                   ownerSlot: _slot,
@@ -4797,10 +4795,7 @@ class _EffectsTileState extends State<_EffectsTile> {
                             size: 16, color: Colors.white54),
                         onPressed: () => Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                EffectsSummaryScreen(slot: widget.slot),
-                          ),
+                          _fastRoute(EffectsSummaryScreen(slot: widget.slot)),
                         ),
                       ),
                     if (totalTags > 0)
@@ -4913,25 +4908,19 @@ class _HeaderMenu extends StatelessWidget {
           case 'vibe':
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const ThemePickerScreen(),
-              ),
+              _fastRoute(const ThemePickerScreen()),
             );
             break;
           case 'favourites':
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const FavouritesScreen(embedded: false),
-              ),
+              _fastRoute(const FavouritesScreen(embedded: false)),
             );
             break;
           case 'use_shrine':
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => const ShrinePickerScreen(),
-              ),
+              _fastRoute(const ShrinePickerScreen()),
             );
             break;
           case 'steal':
@@ -5280,10 +5269,7 @@ class _HeaderMenu extends StatelessWidget {
           label: 'CHANGE',
           onPressed: () => Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) =>
-                  const CharacterSelectScreen(mode: CharSelectMode.coop),
-            ),
+            _fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
           ),
         ),
       ));
@@ -5292,9 +5278,7 @@ class _HeaderMenu extends StatelessWidget {
     // Cultist not found in master data — fall back to the manual picker.
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const CharacterSelectScreen(mode: CharSelectMode.coop),
-      ),
+      _fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
     );
   }
 
