@@ -130,14 +130,16 @@ class RunProvider with ChangeNotifier {
   List<Item> get allItems => _allItems;
   List<Synergy> get allSynergies => _allSynergies;
 
-  /// Log entries that affected curse (pickups with curse, steals, shrines, manual).
+  /// Log entries relevant to curse: pickups with curse, steals, shrines,
+  /// manual adjustments, plus synergy/transfer context entries.
   List<RunLogEntry> get curseLog =>
-      _runState.log.where((e) => e.affectsCurse).toList()
+      _runState.log.where((e) => e.affectsCurse || e.category == RunLogCategory.synergy || e.category == RunLogCategory.transfer).toList()
         ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
-  /// Log entries that affected coolness (pickups with coolness, cigs, shrines, manual).
+  /// Log entries relevant to coolness: pickups with coolness, cigs, shrines,
+  /// manual adjustments, plus synergy/transfer context entries.
   List<RunLogEntry> get coolnessLog =>
-      _runState.log.where((e) => e.affectsCoolness).toList()
+      _runState.log.where((e) => e.affectsCoolness || e.category == RunLogCategory.synergy || e.category == RunLogCategory.transfer).toList()
         ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
   List<Shrine> get allShrines => _allShrines;
   List<Gungeoneer> get allGungeoneers => _allGungeoneers;
@@ -345,6 +347,23 @@ class RunProvider with ChangeNotifier {
       _runState = _runState.copyWith(log: updated.sublist(updated.length - 200));
     } else {
       _runState = _runState.copyWith(log: updated);
+    }
+  }
+
+  /// Compares active synergies before & after a pickup/transfer. Logs any
+  /// newly-activated synergies as separate log entries.
+  void _checkNewSynergies(List<Synergy> before) {
+    final after = getActiveSynergiesCombined();
+    final beforeNames = before.map((s) => s.name).toSet();
+    for (final s in after) {
+      if (!beforeNames.contains(s.name)) {
+        _log(RunLogEntry(
+          timestamp: DateTime.now(),
+          category: RunLogCategory.synergy,
+          description: 'Synergy activated: ${s.name}',
+          entityName: s.name,
+        ));
+      }
     }
   }
 
@@ -858,6 +877,7 @@ class RunProvider with ChangeNotifier {
     if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
     if (p.guns.any((g) => g.name == gun.name)) return;
+    final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(slot, p.copyWith(guns: [...p.guns, gun]));
     _log(RunLogEntry(
       timestamp: DateTime.now(),
@@ -866,7 +886,9 @@ class RunProvider with ChangeNotifier {
       curseDelta: gun.curse,
       coolnessDelta: gun.coolness,
       entityName: gun.name,
+      playerName: p.character?.name,
     ));
+    _checkNewSynergies(synergyBefore);
     _saveRun();
     notifyListeners();
   }
@@ -883,6 +905,7 @@ class RunProvider with ChangeNotifier {
       curseDelta: -gun.curse,
       coolnessDelta: -gun.coolness,
       entityName: gun.name,
+      playerName: p.character?.name,
     ));
     _saveRun();
     notifyListeners();
@@ -893,6 +916,7 @@ class RunProvider with ChangeNotifier {
     final p = _playerFor(slot);
     final isJunk = item.name.toLowerCase() == 'junk';
     if (!isJunk && p.items.any((i) => i.name == item.name)) return;
+    final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(slot, p.copyWith(items: [...p.items, item]));
 
     _log(RunLogEntry(
@@ -902,7 +926,9 @@ class RunProvider with ChangeNotifier {
       curseDelta: item.curse,
       coolnessDelta: item.coolness,
       entityName: item.name,
+      playerName: p.character?.name,
     ));
+    _checkNewSynergies(synergyBefore);
 
     // Robot Tax: Automatically convert HP Upgrades and Master Rounds to +1 Armor!
     final charName = p.character?.name.toLowerCase() ?? '';
@@ -951,6 +977,7 @@ class RunProvider with ChangeNotifier {
       curseDelta: -item.curse,
       coolnessDelta: -item.coolness,
       entityName: item.name,
+      playerName: p.character?.name,
     ));
 
     // Only remove one copy if it's Junk (to allow incremental stacking/unstacking)
@@ -987,9 +1014,18 @@ class RunProvider with ChangeNotifier {
     final from = _playerFor(fromSlot);
     final to = _playerFor(toSlot);
     if (to.guns.any((g) => g.name == gun.name)) return false;
+    final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(fromSlot,
         from.copyWith(guns: from.guns.where((g) => g.name != gun.name).toList()));
     _runState = _replacePlayer(toSlot, to.copyWith(guns: [...to.guns, gun]));
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.transfer,
+      description: 'Transferred ${gun.name} → ${to.character?.name ?? 'Co-op'}',
+      entityName: gun.name,
+      playerName: from.character?.name,
+    ));
+    _checkNewSynergies(synergyBefore);
     _saveRun();
     notifyListeners();
     return true;
@@ -1002,9 +1038,18 @@ class RunProvider with ChangeNotifier {
     final from = _playerFor(fromSlot);
     final to = _playerFor(toSlot);
     if (to.items.any((i) => i.name == item.name)) return false;
+    final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(fromSlot,
         from.copyWith(items: from.items.where((i) => i.name != item.name).toList()));
     _runState = _replacePlayer(toSlot, to.copyWith(items: [...to.items, item]));
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.transfer,
+      description: 'Transferred ${item.name} → ${to.character?.name ?? 'Co-op'}',
+      entityName: item.name,
+      playerName: from.character?.name,
+    ));
+    _checkNewSynergies(synergyBefore);
     _saveRun();
     notifyListeners();
     return true;

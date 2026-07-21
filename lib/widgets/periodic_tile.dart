@@ -338,68 +338,6 @@ class _PeriodicTileState extends State<PeriodicTile>
     return clean;
   }
 
-  Widget _buildMiniStat(String label, String value, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.5),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '$label:',
-            style: const TextStyle(
-              fontSize: 7.2,
-              fontWeight: FontWeight.w900,
-              color: Colors.white30,
-              letterSpacing: 0.1,
-            ),
-          ),
-          const SizedBox(width: 2.0),
-          Flexible(
-            child: Text(
-              value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 8.0,
-                fontWeight: FontWeight.w900,
-                color: color,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGridStat(String label, String value, Color color) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        GoopText(
-          label,
-          style: const TextStyle(
-            fontSize: 8.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white30,
-            letterSpacing: 0.3,
-          ),
-        ),
-        const SizedBox(height: 1),
-        GoopText(
-          value.isEmpty ? 'N/A' : value,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 10.5,
-            fontWeight: FontWeight.w900,
-            color: color,
-          ),
-        ),
-      ],
-    );
-  }
-
   /// Elemental effect icons for the tile — shown top-right, max 3.
   /// Delegates detection to [ElementalTagger] so both guns *and* items
   /// surface the same badges (e.g. Frost Bullets shows a freeze icon,
@@ -648,180 +586,114 @@ class _PeriodicTileState extends State<PeriodicTile>
     // Branch visual representation based on displayMode
     switch (displayMode) {
       case InventoryDisplayMode.tacticalStats:
-        // High density wide stats layout (completely redesigned for clean readability)
-        final double statsFontSize = (prefs.inventoryFontSize - 3.5).clamp(8.0, 12.0);
+        final double statsFontSize = (prefs.inventoryFontSize - 2.0).clamp(9.0, 13.0);
+        final double labelFontSize = (statsFontSize - 2.0).clamp(7.0, 10.0);
         final flair = AppTheme.flair;
 
         return Card(
           clipBehavior: Clip.antiAlias,
-          margin: EdgeInsets.zero,
+          margin: const EdgeInsets.all(3),
           color: cardBgColor ?? const Color(0xFF17150F),
           shape: cardShape,
           elevation: isHighTier ? 4 : 1,
           child: InkWell(
             onTap: _handleTap,
-            child: SizedBox.expand(
-              child: Stack(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 6),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 2. Main Stats Layer
-                  Positioned(
-                    left: 10,
-                    right: 10,
-                    top: 8,
-                    bottom: 32, // space for the bottom title banner
-                    child: isGun
-                        ? Row(
-                            children: [
-                              // Left stats column
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildGridStat('DPS', _cleanStat(widget.gun!.dps), Colors.amberAccent),
-                                    _buildGridStat('MAG', _cleanStat(widget.gun!.magazineSize), Colors.cyanAccent),
-                                  ],
-                                ),
-                              ),
-                              // Middle stats column
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildGridStat('RELOAD', _cleanStat(widget.gun!.reloadTime), Colors.orangeAccent),
-                                    _buildGridStat('RANGE', _cleanStat(widget.gun!.range), Colors.lightBlueAccent),
-                                  ],
-                                ),
-                              ),
-                              // Right stats column
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildGridStat('FORCE', _cleanStat(widget.gun!.force), Colors.redAccent),
-                                    _buildGridStat('SPREAD', _cleanStat(widget.gun!.spread), Colors.purpleAccent),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              // Left stats column
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildGridStat('CURSE', '+${widget.item!.curse.toStringAsFixed(0)}', Colors.deepPurpleAccent),
-                                    _buildGridStat('COOLNESS', '+${widget.item!.coolness.toStringAsFixed(0)}', Colors.tealAccent),
-                                  ],
-                                ),
-                              ),
-                              // Middle stats column
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildGridStat('RECHARGE', _cleanStat(widget.item!.rechargeTime), Colors.orangeAccent),
-                                    _buildGridStat('DURATION', _cleanStat(widget.item!.duration), Colors.pinkAccent),
-                                  ],
-                                ),
-                              ),
-                              // Right stats column (Filler to balance)
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildGridStat('CLASS', widget.item!.type, Colors.white60),
-                                    _buildGridStat('PRICE', _cleanStat(widget.item!.sellPrice), Colors.greenAccent),
-                                  ],
-                                ),
-                              ),
-                            ],
+                  // Header row: quality badge + type badge
+                  Row(
+                    children: [
+                      maybeQualityBadge(size: 18),
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: flair.secondary.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: flair.secondary.withValues(alpha: 0.45), width: 0.6),
+                        ),
+                        child: Text(
+                          (isGun ? widget.gun!.type : widget.item!.type).toUpperCase(),
+                          style: TextStyle(
+                            fontSize: labelFontSize,
+                            fontWeight: FontWeight.w900,
+                            color: flair.secondary,
+                            letterSpacing: 0.5,
                           ),
-                  ),
-
-                  // 3. Compact Fire Mode / Item Type Badge (top-right)
-                  Positioned(
-                    top: 6,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                      decoration: BoxDecoration(
-                        color: flair.secondary.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: flair.secondary.withValues(alpha: 0.45), width: 0.6),
-                      ),
-                      child: Text(
-                        (isGun ? widget.gun!.type : widget.item!.type).toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 7.5,
-                          fontWeight: FontWeight.w900,
-                          color: flair.secondary,
-                          letterSpacing: 0.5,
                         ),
                       ),
+                      const Spacer(),
+                      if (widget.isTopDps)
+                        const Icon(Icons.local_fire_department_rounded, color: Colors.orangeAccent, size: 16),
+                      maybeFastActiveDot(),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  // 2×3 stat grid
+                  Expanded(
+                    child: isGun
+                        ? _StatGrid(
+                            stats: [
+                              ('DPS', _cleanStat(widget.gun!.dps), Colors.amberAccent),
+                              ('MAG', _cleanStat(widget.gun!.magazineSize), Colors.cyanAccent),
+                              ('RELOAD', _cleanStat(widget.gun!.reloadTime), Colors.orangeAccent),
+                              ('RANGE', _cleanStat(widget.gun!.range), Colors.lightBlueAccent),
+                              ('FORCE', _cleanStat(widget.gun!.force), Colors.redAccent),
+                              ('SPREAD', _cleanStat(widget.gun!.spread), Colors.purpleAccent),
+                            ],
+                            valueSize: statsFontSize,
+                            labelSize: labelFontSize,
+                          )
+                        : _StatGrid(
+                            stats: [
+                              ('CURSE', '+${widget.item!.curse.toStringAsFixed(0)}', Colors.deepPurpleAccent),
+                              ('COOL', '+${widget.item!.coolness.toStringAsFixed(0)}', Colors.tealAccent),
+                              ('RCHRG', _cleanStat(widget.item!.rechargeTime), Colors.orangeAccent),
+                              ('DUR', _cleanStat(widget.item!.duration), Colors.pinkAccent),
+                              ('CLASS', widget.item!.type, Colors.white60),
+                              ('PRICE', _cleanStat(widget.item!.sellPrice), Colors.greenAccent),
+                            ],
+                            valueSize: statsFontSize,
+                            labelSize: labelFontSize,
+                          ),
+                  ),
+                  // Footer: icon + name
+                  Container(
+                    padding: const EdgeInsets.only(top: 6),
+                    decoration: const BoxDecoration(
+                      border: Border(top: BorderSide(color: Colors.white10, width: 0.5)),
                     ),
-                  ),
-
-                  // 4. Compact Quality Badge (top-left)
-                  Positioned(
-                    top: 6,
-                    left: 8,
-                    child: maybeQualityBadge(size: 15),
-                  ),
-                  maybeFastActiveDot(topOffset: 20),
-
-                  // 5. Solid Title Banner at the Bottom
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.75),
-                        border: const Border(top: BorderSide(color: Colors.white10, width: 0.5)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: GameIcon(
-                              assetPath: _iconPath,
-                              fallback: isGun ? Icons.gps_fixed : Icons.extension,
-                              quality: _quality,
-                              size: 20,
-                              showRing: false,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: GameIcon(
+                            assetPath: _iconPath,
+                            fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                            quality: _quality,
+                            size: 22,
+                            showRing: false,
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: GoopText(
+                            _name.toUpperCase(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: statsFontSize,
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              letterSpacing: 0.5,
                             ),
                           ),
-                          const SizedBox(width: 6),
-                          Expanded(
-                            child: GoopText(
-                              _name.toUpperCase(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: statsFontSize + 1.5,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                          if (widget.isTopDps) ...[
-                            const SizedBox(width: 4),
-                            const Icon(Icons.local_fire_department_rounded, color: Colors.orangeAccent, size: 14),
-                          ],
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -1041,4 +913,62 @@ class _StrikethroughPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _StrikethroughPainter oldDelegate) =>
       oldDelegate.color != color;
+}
+
+/// A 2-column grid of stat label/value pairs for the tactical stats tile.
+/// Each cell shows a tiny label above a bold colored value.
+class _StatGrid extends StatelessWidget {
+  final List<(String, String, Color)> stats;
+  final double valueSize;
+  final double labelSize;
+
+  const _StatGrid({
+    required this.stats,
+    required this.valueSize,
+    required this.labelSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 2.8,
+        mainAxisSpacing: 2,
+        crossAxisSpacing: 6,
+      ),
+      itemCount: stats.length,
+      itemBuilder: (_, i) {
+        final (label, value, color) = stats[i];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: labelSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white30,
+                letterSpacing: 0.3,
+              ),
+            ),
+            const SizedBox(height: 1),
+            Text(
+              value.isEmpty ? 'N/A' : value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: valueSize,
+                fontWeight: FontWeight.w900,
+                color: color,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

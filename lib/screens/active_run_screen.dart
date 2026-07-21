@@ -4005,8 +4005,8 @@ class _UniversalDamageCalculatorSliverState
   }
 }
 
-/// Collapsible Huntress HUD: Junior II dig probability engine, crossbow
-/// breakpoint cheat-sheet, and key-economy secret floor guidance.
+/// Compact Huntress HUD: dig chance, item weights, mimic alert, and
+/// treat/pet counters. No tabs — single concise card.
 class _HuntressDashboardSliver extends StatefulWidget {
   const _HuntressDashboardSliver();
 
@@ -4015,13 +4015,8 @@ class _HuntressDashboardSliver extends StatefulWidget {
 }
 
 class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
-  bool _expanded = false;
-  bool _dogEnabled = true;
-  final GlobalKey<_InteractiveDogStripState> _dogKey = GlobalKey<_InteractiveDogStripState>();
-
   int _petCount = 0;
   int _treatCount = 0;
-  int _activeTab = 0;
 
   @override
   void initState() {
@@ -4042,10 +4037,8 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
   }
 
   Future<void> _incrementPet() async {
-    _dogKey.currentState?.petDog();
-    setState(() {
-      _petCount++;
-    });
+    Haptics.light();
+    setState(() => _petCount++);
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('dog.pet_count', _petCount);
@@ -4053,10 +4046,8 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
   }
 
   Future<void> _incrementTreat() async {
-    _dogKey.currentState?.throwRandomTreat();
-    setState(() {
-      _treatCount++;
-    });
+    Haptics.light();
+    setState(() => _treatCount++);
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('dog.treat_count', _treatCount);
@@ -4068,6 +4059,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
     final p = context.watch<RunProvider>();
     final ownedLower = p.runState.main.items.map((i) => i.name.toLowerCase()).toSet();
     final hasBabyGoodMimic = ownedLower.any((n) => n.contains('baby good mimic'));
+    final digChance = hasBabyGoodMimic ? 10.0 : 5.0;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -4075,489 +4067,146 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color(0xFF101408), // mossy hunter's dark green-black
+            color: const Color(0xFF101408),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: Colors.lightGreen.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header (tap to expand/collapse)
-              InkWell(
-                onTap: () => setState(() => _expanded = !_expanded),
-                borderRadius: BorderRadius.circular(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.pets_rounded, color: Colors.lightGreenAccent, size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          'HUNTRESS & DOG HUD',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.lightGreenAccent,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                      color: Colors.lightGreenAccent,
-                      size: 20,
-                    ),
-                  ],
-                ),
-              ),
-              if (_expanded) ...[
-                const Divider(color: Colors.white12, height: 16),
-
-                // Interactive Dog Actions row
-                Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: _dogEnabled ? _incrementTreat : null,
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: _dogEnabled ? Colors.orangeAccent.withValues(alpha: 0.1) : Colors.white10,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: _dogEnabled ? Colors.orangeAccent.withValues(alpha: 0.3) : Colors.white24),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.star_rounded, color: _dogEnabled ? Colors.orangeAccent : Colors.white24, size: 14),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'TOSS TREAT',
-                                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: _dogEnabled ? Colors.orangeAccent : Colors.white24),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'TOTAL: $_treatCount 🍖',
-                                style: TextStyle(
-                                  fontSize: 8.5,
-                                  fontWeight: FontWeight.w900,
-                                  color: _dogEnabled ? Colors.orangeAccent.withValues(alpha: 0.8) : Colors.white24,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: InkWell(
-                        onTap: _dogEnabled ? _incrementPet : null,
-                        borderRadius: BorderRadius.circular(8),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: _dogEnabled ? Colors.pinkAccent.withValues(alpha: 0.1) : Colors.white10,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: _dogEnabled ? Colors.pinkAccent.withValues(alpha: 0.3) : Colors.white24),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.favorite_rounded, color: _dogEnabled ? Colors.pinkAccent : Colors.white24, size: 14),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'PET DOG',
-                                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: _dogEnabled ? Colors.pinkAccent : Colors.white24),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'TOTAL: $_petCount ❤️',
-                                style: TextStyle(
-                                  fontSize: 8.5,
-                                  fontWeight: FontWeight.w900,
-                                  color: _dogEnabled ? Colors.pinkAccent.withValues(alpha: 0.8) : Colors.white24,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-
-                // Inner Tab Chips
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildTabChip(0, Icons.pets, 'JUNIOR II'),
-                    _buildTabChip(1, Icons.gps_fixed, 'CROSSBOW'),
-                    _buildTabChip(2, Icons.key, 'KEYS & FLOORS'),
-                  ],
-                ),
-                const SizedBox(height: 14),
-
-                // Active Tab Content View
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
-                  child: _activeTab == 0
-                      ? _buildDogTab(hasBabyGoodMimic)
-                      : _activeTab == 1
-                          ? _buildCrossbowTab()
-                          : _buildKeysTab(),
-                ),
-                const SizedBox(height: 16),
-
-                // Dog Display Toggle
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.pets, color: Colors.lightGreenAccent, size: 14),
-                        SizedBox(width: 6),
-                        Text(
-                          'DOG DISPLAY',
-                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.lightGreenAccent, letterSpacing: 0.5),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 24,
-                      child: Switch(
-                        value: _dogEnabled,
-                        activeColor: Colors.lightGreenAccent,
-                        inactiveThumbColor: Colors.white30,
-                        onChanged: (v) {
-                          setState(() {
-                            _dogEnabled = v;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-
-                // Interactive Dog Strip at the bottom of the card
-                if (_dogEnabled)
-                  _InteractiveDogStrip(
-                    key: _dogKey,
-                    isExpanded: _expanded,
-                    hasBabyGoodMimic: hasBabyGoodMimic,
+              // Header + dig chance badge
+              Row(
+                children: [
+                  const Icon(Icons.pets_rounded, color: Colors.lightGreenAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'HUNTRESS & DOG',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.lightGreenAccent, letterSpacing: 0.8),
                   ),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTabChip(int index, IconData icon, String label) {
-    final isSelected = _activeTab == index;
-    return InkWell(
-      onTap: () => setState(() => _activeTab = index),
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.lightGreenAccent.withValues(alpha: 0.15) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? Colors.lightGreenAccent : Colors.white12,
-            width: 1.0,
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 12, color: isSelected ? Colors.lightGreenAccent : Colors.white54),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 9.5,
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.lightGreenAccent : Colors.white54,
-                letterSpacing: 0.5,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDogTab(bool hasBabyGoodMimic) {
-    final digChance = hasBabyGoodMimic ? 10.0 : 5.0;
-    return Column(
-      key: const ValueKey('dog_tab'),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'ROOM-CLEAR SPARKLE DIGS',
-              style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white70),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              decoration: BoxDecoration(
-                color: hasBabyGoodMimic ? Colors.purple.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent, width: 0.8),
-              ),
-              child: Text(
-                'CHANCE: ${digChance.toStringAsFixed(1)}%',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        if (hasBabyGoodMimic)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              '✨ Baby Good Mimic is active! Dig rate is doubled and dual-item discovery is enabled.',
-              style: TextStyle(fontSize: 10, fontStyle: FontStyle.italic, color: Colors.purpleAccent.shade100),
-            ),
-          ),
-        // Item Weights row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildWeightIndicator('❤️ Heart', '45%', Colors.redAccent),
-            _buildWeightIndicator('🔑 Key', '20%', Colors.amberAccent),
-            _buildWeightIndicator('🛡️ Armor', '15%', Colors.blueAccent),
-            _buildWeightIndicator('📦 Ammo', '15%', Colors.orangeAccent),
-            _buildWeightIndicator('💥 Blank', '5%', Colors.pinkAccent),
-          ],
-        ),
-        const SizedBox(height: 10),
-        // Mimic Detection Alert
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.red.withValues(alpha: 0.08),
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: Colors.redAccent.withValues(alpha: 0.25)),
-          ),
-          child: const Row(
-            children: [
-              Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 14),
-              SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'MIMIC ALERT: Junior II will sit and growl/bark directly at mimic chests before they wake up. Do not open chests he targets without prepping!',
-                  style: TextStyle(fontSize: 9.5, color: Colors.redAccent, height: 1.3),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildWeightIndicator(String label, String value, Color color) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: color),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(fontSize: 8.5, fontWeight: FontWeight.bold, color: Colors.white.withValues(alpha: 0.6)),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCrossbowTab() {
-    return Column(
-      key: const ValueKey('crossbow_tab'),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'CROSSBOW TARGETING BREAKPOINTS',
-              style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white70),
-            ),
-            Text(
-              'BASE DMG: 26',
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.orangeAccent),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        _buildBreakpointRow('Keep of the Lead Lord (C1)', [
-          const _BreakpointItem('Bullet Kin', '15 HP', '1 shot'),
-          const _BreakpointItem('Shotgun Kin', '20 HP', '1 shot'),
-          const _BreakpointItem('Rubber Kin', '10 HP', '1 shot'),
-        ]),
-        const SizedBox(height: 6),
-        _buildBreakpointRow('Gungeon Proper (C2)', [
-          const _BreakpointItem('Bandit Kin', '22 HP', '1 shot'),
-          const _BreakpointItem('Mutant Kin', '25 HP', '1 shot'),
-          const _BreakpointItem('Vet Shotgun', '30 HP', '2 shots'),
-        ]),
-        const SizedBox(height: 6),
-        _buildBreakpointRow('Black Powder Mine (C3)', [
-          const _BreakpointItem('Ashen Kin', '35 HP', '2 shots'),
-          const _BreakpointItem('Mine Flayer', '220 HP', '9 shots'),
-          const _BreakpointItem('Lead Maiden', '150 HP', '6 shots'),
-        ]),
-      ],
-    );
-  }
-
-  Widget _buildBreakpointRow(String floorName, List<_BreakpointItem> items) {
-    final flair = AppTheme.flair;
-    return GlassContainer(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      color: flair.card,
-      opacity: 0.85,
-      border: Border.all(color: Colors.lightGreen.withValues(alpha: 0.24), width: 1.2),
-      borderRadius: 10,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            floorName.toUpperCase(),
-            style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.lightGreen, letterSpacing: 0.8),
-          ),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: items.map((item) {
-              return Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.enemy,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: hasBabyGoodMimic ? Colors.purple.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent, width: 0.8),
                     ),
-                    const SizedBox(height: 2),
-                    Row(
-                      children: [
-                        Text(
-                          item.hp,
-                          style: TextStyle(fontSize: 9.0, color: Colors.white.withValues(alpha: 0.65)),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '→ ${item.shots}',
-                          style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.orangeAccent),
-                        ),
-                      ],
+                    child: Text(
+                      'DIG: ${digChance.toStringAsFixed(1)}%',
+                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent),
+                    ),
+                  ),
+                ],
+              ),
+              if (hasBabyGoodMimic)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Text(
+                    '✨ Baby Good Mimic active — dig rate doubled',
+                    style: TextStyle(fontSize: 9.5, fontStyle: FontStyle.italic, color: Colors.purpleAccent.shade100),
+                  ),
+                ),
+              const SizedBox(height: 10),
+              // Item weights row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildWeight('❤️', '45%', Colors.redAccent),
+                  _buildWeight('🔑', '20%', Colors.amberAccent),
+                  _buildWeight('🛡️', '15%', Colors.blueAccent),
+                  _buildWeight('📦', '15%', Colors.orangeAccent),
+                  _buildWeight('💥', '5%', Colors.pinkAccent),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Mimic alert
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: Colors.redAccent.withValues(alpha: 0.25)),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 14),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Junior II growls at mimic chests before they wake.',
+                        style: TextStyle(fontSize: 9.5, color: Colors.redAccent, height: 1.3),
+                      ),
                     ),
                   ],
                 ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildKeysTab() {
-    return Column(
-      key: const ValueKey('keys_tab'),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'KEY ECONOMY & CHAMBER ACCESS',
-          style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: Colors.white70),
-        ),
-        const SizedBox(height: 8),
-        _buildSecretFloorRow(
-          'Chamber 1.5: Oubliette (Sewer)',
-          'Requires 2x Keys + water on fireplace grating in Chamber 1.',
-          'Provides 2 extra chests, a safe shrine room, and Blobulord boss loot.',
-          Colors.tealAccent,
-        ),
-        const SizedBox(height: 8),
-        _buildSecretFloorRow(
-          'Chamber 2.5: Abbey of the True Gun',
-          'Requires carrying Old Crest armor from Sewer to Chamber 2 Altar.',
-          'Highest difficulty early floor. Guarantees Old King Boss + Synergy Chest.',
-          Colors.pinkAccent,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSecretFloorRow(String title, String cost, String rewards, Color color) {
-    final flair = AppTheme.flair;
-    return GlassContainer(
-      padding: const EdgeInsets.all(12),
-      color: flair.card,
-      opacity: 0.85,
-      border: Border.all(color: color.withValues(alpha: 0.28), width: 1.2),
-      borderRadius: 10,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.stars_sharp, color: color, size: 14),
-              const SizedBox(width: 8),
-              Text(
-                title.toUpperCase(),
-                style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w900, color: color, letterSpacing: 0.8),
+              ),
+              const SizedBox(height: 10),
+              // Treat/Pet counters
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: _incrementTreat,
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.orangeAccent.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.orangeAccent.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.star_rounded, color: Colors.orangeAccent, size: 14),
+                            const SizedBox(width: 6),
+                            Text('TREATS: $_treatCount', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: InkWell(
+                      onTap: _incrementPet,
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.pinkAccent.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.pinkAccent.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 14),
+                            const SizedBox(width: 6),
+                            Text('PETS: $_petCount', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.pinkAccent)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Cost: $cost',
-            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            'Loot: $rewards',
-            style: TextStyle(fontSize: 9.5, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
-          ),
-        ],
+        ),
       ),
     );
   }
-}
 
-class _BreakpointItem {
-  final String enemy;
-  final String hp;
-  final String shots;
-  const _BreakpointItem(this.enemy, this.hp, this.shots);
+  Widget _buildWeight(String emoji, String value, Color color) {
+    return Column(
+      children: [
+        Text(value, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: color)),
+        const SizedBox(height: 2),
+        Text(emoji, style: const TextStyle(fontSize: 14)),
+      ],
+    );
+  }
 }
 
 /// Compact, always-visible effects accordion that sits right under the
@@ -6994,374 +6643,8 @@ DiceStyle _getDiceStyle(CustomDiceType type, ThemeFlair flair) {
   }
 }
 
-enum DogBehavior { idle, walking, sniffing, barking, sleeping, finding }
-enum Facing { left, right }
-
-class _InteractiveDogStrip extends StatefulWidget {
-  final bool hasBabyGoodMimic;
-  final bool isExpanded;
-
-  const _InteractiveDogStrip({
-    super.key,
-    required this.hasBabyGoodMimic,
-    required this.isExpanded,
-  });
-
-  @override
-  State<_InteractiveDogStrip> createState() => _InteractiveDogStripState();
-}
-
-class _InteractiveDogStripState extends State<_InteractiveDogStrip> {
-  final math.Random _random = math.Random();
-  late Timer _behaviorTimer;
-  late Timer _movementTimer;
-
-  // --- Dog 1: Dog ---
-  DogBehavior _currentBehavior = DogBehavior.sleeping;
-  double _xPercent = 0.3;
-  Facing _facing = Facing.right;
-
-  // --- Dog 2: Mimic Clone ---
-  DogBehavior _mBehavior = DogBehavior.sleeping;
-  double _mXPercent = 0.7;
-  Facing _mFacing = Facing.left;
-
-  // --- Treat ---
-  double? _treatX;
-
-  // --- Floating speech bubble ---
-  String? _popupMessage;
-  IconData? _popupIcon;
-  Color? _popupColor;
-  double _popupX = 0.5;
-  double _popupOpacity = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _startDogAI();
-  }
-
-  void _showPopup(String msg, IconData icon, Color color, double x) {
-    setState(() {
-      _popupMessage = msg;
-      _popupIcon = icon;
-      _popupColor = color;
-      _popupX = x;
-      _popupOpacity = 1.0;
-    });
-
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        setState(() {
-          _popupOpacity = 0.0;
-        });
-      }
-    });
-  }
-
-  void _startDogAI() {
-    _behaviorTimer = Timer.periodic(const Duration(seconds: 6), (timer) {
-      if (!widget.isExpanded) return;
-
-      if (_currentBehavior != DogBehavior.sleeping && 
-          _currentBehavior != DogBehavior.finding && 
-          _treatX == null) {
-        int roll = _random.nextInt(100);
-        setState(() {
-          if (roll < 30) {
-            _currentBehavior = DogBehavior.idle;
-          } else if (roll < 65) {
-            _currentBehavior = DogBehavior.walking;
-            _facing = _random.nextBool() ? Facing.left : Facing.right;
-          } else if (roll < 85) {
-            _currentBehavior = DogBehavior.sniffing;
-          } else {
-            _currentBehavior = DogBehavior.sleeping;
-          }
-        });
-      }
-
-      if (widget.hasBabyGoodMimic && 
-          _mBehavior != DogBehavior.sleeping && 
-          _mBehavior != DogBehavior.finding && 
-          _treatX == null) {
-        int roll = _random.nextInt(100);
-        setState(() {
-          if (roll < 30) {
-            _mBehavior = DogBehavior.idle;
-          } else if (roll < 65) {
-            _mBehavior = DogBehavior.walking;
-            _mFacing = _random.nextBool() ? Facing.left : Facing.right;
-          } else if (roll < 85) {
-            _mBehavior = DogBehavior.sniffing;
-          } else {
-            _mBehavior = DogBehavior.sleeping;
-          }
-        });
-      }
-    });
-
-    _movementTimer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
-      if (!widget.isExpanded) return;
-
-      if (_treatX != null) {
-        setState(() {
-          double dx = _treatX! - _xPercent;
-          double dist = dx.abs();
-          if (dist > 0.06) {
-            _currentBehavior = DogBehavior.walking;
-            _xPercent += (dx / dist) * 0.015;
-            _facing = dx > 0 ? Facing.right : Facing.left;
-          } else {
-            _currentBehavior = DogBehavior.barking;
-            _treatX = null;
-            _showPopup('Yum! Ate the treat! 🍖', Icons.pets_rounded, Colors.orangeAccent, _xPercent);
-          }
-
-          if (widget.hasBabyGoodMimic && _treatX != null) {
-            double mDx = _treatX! - _mXPercent;
-            double mDist = mDx.abs();
-            if (mDist > 0.06) {
-              _mBehavior = DogBehavior.walking;
-              _mXPercent += (mDx / mDist) * 0.015;
-              _mFacing = mDx > 0 ? Facing.right : Facing.left;
-            } else {
-              _mBehavior = DogBehavior.barking;
-              _treatX = null;
-              _showPopup('Yum! Clone ate the treat! 🍖', Icons.pets_rounded, Colors.purpleAccent, _mXPercent);
-            }
-          }
-        });
-      } else {
-        setState(() {
-          if (_currentBehavior == DogBehavior.walking) {
-            if (_facing == Facing.left) {
-              _xPercent -= 0.005;
-              if (_xPercent < 0.02) {
-                _xPercent = 0.02;
-                _facing = Facing.right;
-              }
-            } else {
-              _xPercent += 0.005;
-              if (_xPercent > 0.92) {
-                _xPercent = 0.92;
-                _facing = Facing.left;
-              }
-            }
-          }
-
-          if (widget.hasBabyGoodMimic && _mBehavior == DogBehavior.walking) {
-            if (_mFacing == Facing.left) {
-              _mXPercent -= 0.005;
-              if (_mXPercent < 0.02) {
-                _mXPercent = 0.02;
-                _mFacing = Facing.right;
-              }
-            } else {
-              _mXPercent += 0.005;
-              if (_mXPercent > 0.92) {
-                _mXPercent = 0.92;
-                _mFacing = Facing.left;
-              }
-            }
-          }
-        });
-      }
-    });
-  }
-
-  void petDog() {
-    setState(() {
-      _currentBehavior = DogBehavior.barking;
-      _facing = Facing.right;
-      if (widget.hasBabyGoodMimic) {
-        _mBehavior = DogBehavior.barking;
-        _mFacing = Facing.left;
-      }
-    });
-    _showPopup(
-      widget.hasBabyGoodMimic ? 'Woof! Bark! Double pet! ❤️' : 'Woof! Bark! ❤️',
-      Icons.favorite_rounded,
-      Colors.pinkAccent,
-      _xPercent,
-    );
-  }
-
-  void throwRandomTreat() {
-    final tx = 0.15 + _random.nextDouble() * 0.7;
-    setState(() {
-      _treatX = tx;
-      _currentBehavior = DogBehavior.walking;
-      if (widget.hasBabyGoodMimic) {
-        _mBehavior = DogBehavior.walking;
-      }
-    });
-  }
-
-  void _handleDogPet({required bool isMimic}) {
-    setState(() {
-      if (isMimic) {
-        _mBehavior = DogBehavior.barking;
-      } else {
-        _currentBehavior = DogBehavior.barking;
-      }
-    });
-    _showPopup(
-      isMimic ? 'Squeak! Cloned Mimic loves pets!' : 'Woof! Dog is happy!',
-      Icons.favorite_rounded,
-      isMimic ? Colors.purpleAccent : Colors.lightGreenAccent,
-      isMimic ? _mXPercent : _xPercent,
-    );
-  }
-
-  String _getDogAsset(bool isMimic) {
-    final behavior = isMimic ? _mBehavior : _currentBehavior;
-    final facing = isMimic ? _mFacing : _facing;
-    String suffix = (facing == Facing.left) ? 'Left' : 'Right';
-    switch (behavior) {
-      case DogBehavior.idle:
-        return 'assets/animations/dog/Dog_Idle_$suffix.gif';
-      case DogBehavior.walking:
-        return (facing == Facing.left)
-            ? 'assets/animations/dog/Dog_Move_Left.gif'
-            : 'assets/animations/dog/Dog_Move_Right.gif';
-      case DogBehavior.sniffing:
-        return 'assets/animations/dog/Dog_Sniff_$suffix.gif';
-      case DogBehavior.barking:
-        return 'assets/animations/dog/Dog_Bark_$suffix.gif';
-      case DogBehavior.sleeping:
-        return 'assets/animations/dog/Dog_Sleep_$suffix.gif';
-      case DogBehavior.finding:
-        return 'assets/animations/dog/Dog_Find_$suffix.gif';
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Container(
-          height: 76,
-          width: double.infinity,
-          margin: const EdgeInsets.only(top: 8),
-          decoration: BoxDecoration(
-            color: Colors.black.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.03)),
-          ),
-          child: Stack(
-            children: [
-              // --- Treat ---
-              if (widget.isExpanded && _treatX != null)
-                Positioned(
-                  left: _treatX! * (constraints.maxWidth - 44) + 10,
-                  bottom: 12,
-                  child: const Icon(
-                    Icons.star_rounded,
-                    color: Colors.amberAccent,
-                    size: 16,
-                  ),
-                ),
-
-              // --- Dog 1: Dog ---
-              if (widget.isExpanded)
-                Positioned(
-                  left: _xPercent * (constraints.maxWidth - 48),
-                  bottom: 0,
-                  child: GestureDetector(
-                    onTap: () => _handleDogPet(isMimic: false),
-                    child: SizedBox(
-                      width: 48,
-                      height: 48,
-                      child: Image.asset(
-                        _getDogAsset(false),
-                        fit: BoxFit.contain,
-                        gaplessPlayback: true,
-                      ),
-                    ),
-                  ),
-                ),
-
-              // --- Dog 2: Mimic Clone ---
-              if (widget.isExpanded && widget.hasBabyGoodMimic)
-                Positioned(
-                  left: _mXPercent * (constraints.maxWidth - 48),
-                  bottom: 0,
-                  child: GestureDetector(
-                    onTap: () => _handleDogPet(isMimic: true),
-                    child: ColorFiltered(
-                      colorFilter: ColorFilter.mode(
-                        Colors.pinkAccent.withValues(alpha: 0.4),
-                        BlendMode.colorBurn,
-                      ),
-                      child: SizedBox(
-                        width: 48,
-                        height: 48,
-                        child: Image.asset(
-                          _getDogAsset(true),
-                          fit: BoxFit.contain,
-                          gaplessPlayback: true,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
-              // --- Speech Bubble near Dog ---
-              if (widget.isExpanded && _popupMessage != null)
-                Positioned(
-                  left: (_popupX * (constraints.maxWidth - 130)).clamp(4.0, constraints.maxWidth - 134.0),
-                  top: 2,
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 200),
-                    opacity: _popupOpacity,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF131610),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: _popupColor ?? Colors.lightGreenAccent, width: 1.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black54,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(_popupIcon, color: _popupColor, size: 12),
-                          const SizedBox(width: 4),
-                          Text(
-                            _popupMessage!,
-                            style: const TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _behaviorTimer.cancel();
-    _movementTimer.cancel();
-    super.dispose();
-  }
-}
+// _InteractiveDogStrip and DogBehavior/Facing enums removed — Huntress HUD
+// simplified to compact single-card layout without animated dog strip.
 
 /// Compact tab button for the Summary page in the MP header.
 class _SummaryTab extends StatelessWidget {
