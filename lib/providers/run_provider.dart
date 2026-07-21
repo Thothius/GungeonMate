@@ -1001,6 +1001,14 @@ class RunProvider with ChangeNotifier {
     return _allSynergies.where((s) => s.matchesItems(itemNames)).toList();
   }
 
+  /// Active synergies for a specific player slot (main or coop).
+  List<Synergy> getActiveSynergiesForSlot(PlayerSlot slot) {
+    final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;
+    if (player == null) return [];
+    final itemNames = player.allItemNames;
+    return _allSynergies.where((s) => s.matchesItems(itemNames)).toList();
+  }
+
   List<Synergy> getSynergiesFor(String itemName) {
     final lower = itemName.toLowerCase();
     return _allSynergies

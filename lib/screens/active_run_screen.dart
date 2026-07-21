@@ -7457,14 +7457,9 @@ class _SummaryTab extends StatelessWidget {
 /// Shows both gungeoneers as animated GIFs with usernames, a stats
 /// comparison panel, and a synergy overview showing all possible
 /// synergies from the combined inventories.
-class _MpSummaryPage extends StatefulWidget {
+class _MpSummaryPage extends StatelessWidget {
   const _MpSummaryPage();
 
-  @override
-  State<_MpSummaryPage> createState() => _MpSummaryPageState();
-}
-
-class _MpSummaryPageState extends State<_MpSummaryPage> {
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
@@ -7494,7 +7489,8 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
     final p1DmgMult = DamageCalculator.multiplier(guns: p1Guns, items: p1Items);
     final p2DmgMult = DamageCalculator.multiplier(guns: p2Guns, items: p2Items);
 
-    final p1ActiveSyns = p.getActiveSynergies();
+    final p1ActiveSyns = p.getActiveSynergiesForSlot(PlayerSlot.main);
+    final p2ActiveSyns = p.getActiveSynergiesForSlot(PlayerSlot.coop);
     final allCombinedSyns = p.getActiveSynergiesCombined();
 
     // All possible synergies from combined inventories (active + partial)
@@ -7655,7 +7651,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                     _StatComparisonRow(
                       label: 'Active Syns',
                       p1Value: '${p1ActiveSyns.length}',
-                      p2Value: '${allCombinedSyns.length - p1ActiveSyns.length > 0 ? allCombinedSyns.length - p1ActiveSyns.length : 0}',
+                      p2Value: '${p2ActiveSyns.length}',
                       icon: Icons.auto_awesome,
                     ),
                     _StatComparisonRow(
@@ -7671,54 +7667,32 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                       icon: Icons.trending_up,
                     ),
                     // Coolness/Curse are shared dungeon state — single
-                    // combined value, not per-player.
+                    // centered value, not duplicated per-player.
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Row(
                         children: [
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              '+${state.totalCoolness.toStringAsFixed(0)}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.cyanAccent,
-                              ),
+                          const Spacer(),
+                          Icon(Icons.ac_unit, size: 12, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Coolness',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white.withValues(alpha: 0.5),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.ac_unit, size: 11, color: Colors.white.withValues(alpha: 0.35)),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Coolness',
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white.withValues(alpha: 0.5),
-                                  ),
-                                ),
-                              ],
+                          const SizedBox(width: 8),
+                          Text(
+                            '+${state.totalCoolness.toStringAsFixed(0)}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.cyanAccent,
                             ),
                           ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              '+${state.totalCoolness.toStringAsFixed(0)}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.purpleAccent,
-                              ),
-                            ),
-                          ),
+                          const Spacer(),
                         ],
                       ),
                     ),
@@ -7726,49 +7700,27 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Row(
                         children: [
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              '+${state.totalCurse.toStringAsFixed(0)}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.cyanAccent,
-                              ),
+                          const Spacer(),
+                          Icon(Icons.local_fire_department, size: 12, color: Colors.redAccent.withValues(alpha: 0.6)),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Curse',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white.withValues(alpha: 0.5),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.local_fire_department, size: 11, color: Colors.white.withValues(alpha: 0.35)),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Curse',
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white.withValues(alpha: 0.5),
-                                  ),
-                                ),
-                              ],
+                          const SizedBox(width: 8),
+                          Text(
+                            '+${state.totalCurse.toStringAsFixed(0)}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.redAccent,
                             ),
                           ),
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              '+${state.totalCurse.toStringAsFixed(0)}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.purpleAccent,
-                              ),
-                            ),
-                          ),
+                          const Spacer(),
                         ],
                       ),
                     ),
@@ -8117,11 +8069,17 @@ class _SynergySummaryRow extends StatelessWidget {
     // Special-case synergies (Smart Bombs, Super Serum, Unbelievably
     // Charming) have items:[] and custom match logic needing ≥2 anyOf.
     // missingFor returns [] when anyOf is partially satisfied, leaving
-    // no hint text. Add a fallback so the user sees what's needed.
+    // no hint text. Add a fallback showing unowned items so the user
+    // sees what's needed.
     final missingHint = missing.isNotEmpty
         ? 'Need: ${missing.take(3).join(", ")}${missing.length > 3 ? "…" : ""}'
         : (isPartial && synergy.items.isEmpty && synergy.anyOf.isNotEmpty
-            ? 'Need: 1 more from ${synergy.anyOf.take(3).join(", ")}${synergy.anyOf.length > 3 ? "…" : ""}'
+            ? () {
+                final unowned = synergy.anyOf
+                    .where((i) => !ownedLower.contains(i.toLowerCase()))
+                    .toList();
+                return 'Need: 1 more from ${unowned.take(3).join(", ")}${unowned.length > 3 ? "…" : ""}';
+              }()
             : null);
 
     final statusColor = isActive
