@@ -186,18 +186,20 @@ final class MpSnapshot extends MpMessage {
 final class MpGift extends MpMessage {
   final String kind; // 'gun' | 'item'
   final String name;
+  final String giftId; // dedup key
 
-  const MpGift({required this.kind, required this.name});
+  const MpGift({required this.kind, required this.name, required this.giftId});
 
   @override
   String get type => 'gift';
 
   @override
-  Map<String, dynamic> toJson() => {'kind': kind, 'name': name};
+  Map<String, dynamic> toJson() => {'kind': kind, 'name': name, 'giftId': giftId};
 
   factory MpGift.fromJson(Map<String, dynamic> j) => MpGift(
         kind: j['kind'] as String? ?? '',
         name: j['name'] as String? ?? '',
+        giftId: j['giftId'] as String? ?? '',
       );
 }
 

@@ -773,8 +773,8 @@ class RunProvider with ChangeNotifier {
     return _runState.copyWith(coop: p);
   }
 
-  void addGun(Gun gun, {PlayerSlot slot = PlayerSlot.main}) {
-    if (_mpDisconnected) return;
+  void addGun(Gun gun, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
     if (p.guns.any((g) => g.name == gun.name)) return;
     _runState = _replacePlayer(slot, p.copyWith(guns: [...p.guns, gun]));
@@ -791,8 +791,8 @@ class RunProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addItem(Item item, {PlayerSlot slot = PlayerSlot.main}) {
-    if (_mpDisconnected) return;
+  void addItem(Item item, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
     final isJunk = item.name.toLowerCase() == 'junk';
     if (!isJunk && p.items.any((i) => i.name == item.name)) return;

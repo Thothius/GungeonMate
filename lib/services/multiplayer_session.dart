@@ -136,12 +136,12 @@ class MultiplayerSession extends ChangeNotifier {
   int _mySnapshotSeq = 0;
 
   /// Track seen request IDs to prevent duplicate request popups.
-  /// (Gift deduplication is intentionally NOT done by name — keying
-  /// by name caused legitimate re-gifts of the same item to be silently
-  /// dropped. Nearby Connections is reliable transport, so duplicates
-  /// at the wire level shouldn't occur in practice.)
   final Set<String> _seenReqIds = {};
   static const int _maxSeenReqIds = 20;
+
+  /// Track seen gift IDs to prevent duplicate gift application.
+  final Set<String> _seenGiftIds = {};
+  static const int _maxSeenGiftIds = 20;
 
   /// Timeout timers for outgoing requests, keyed by reqId.
   final Map<String, Timer> _requestTimeoutTimers = {};
@@ -164,6 +164,13 @@ class MultiplayerSession extends ChangeNotifier {
   /// Guard against double-tap reconnect / cancel races kicking off two
   /// transport handshakes in parallel.
   bool _busyTransition = false;
+  bool _cancelled = false;
+
+  /// Pending gifts: items removed from inventory and sent but not yet
+  /// confirmed via peer snapshot. If the connection drops mid-transit,
+  /// these are re-sent on reconnect. If the user cancels, they're
+  /// restored to inventory.
+  final List<_PendingGift> _pendingGifts = [];
 
   /// Fires once when a reconnection succeeds after a disconnect. UI
   /// listens to show a "Connection Restored" popup. Auto-resets to false.
@@ -199,6 +206,7 @@ class MultiplayerSession extends ChangeNotifier {
   StreamSubscription<MpServiceEvent>? _eventSub;
 
   Timer? _broadcastDebounce;
+  bool _snapshotInFlight = false;
   Timer? _heartbeat;
   Timer? _watchdog;
   Timer? _autoSaveTimer;
@@ -207,6 +215,9 @@ class MultiplayerSession extends ChangeNotifier {
   Timer? _autoReconnectTimer;
   int _lastPeerTouchMs = 0;
   int _autoReconnectAttempts = 0;
+  /// Adaptive watchdog: starts at 30s, bumps to 60s after false-positive
+  /// reconnects to reduce flicker on flaky BLE.
+  int _watchdogTimeoutSec = 30;
   /// Reconnect-forever: never give up while the run is alive. The user
   /// explicitly tearing down (End Run / Disconnect / cancel) is the only
   /// way out. Backoff still grows with attempts but is capped at 30s.
@@ -405,7 +416,7 @@ class MultiplayerSession extends ChangeNotifier {
     required String nickname,
     required Gungeoneer character,
   }) async {
-    if (_status == MpStatus.searching || _status == MpStatus.connected) {
+    if (_status == MpStatus.searching || _status == MpStatus.connected || _status == MpStatus.handshaking) {
       return;
     }
     _log('Initializing advertising: role=Main, nick=$nickname, character=${character.name}');
@@ -463,7 +474,7 @@ class MultiplayerSession extends ChangeNotifier {
   /// Start a session as Sidekick. Forces the Cultist character (as per
   /// product spec). Pulls permissions, then discovers.
   Future<void> startAsSidekick({required String nickname, String pinCode = ''}) async {
-    if (_status == MpStatus.searching || _status == MpStatus.connected) {
+    if (_status == MpStatus.searching || _status == MpStatus.connected || _status == MpStatus.handshaking) {
       return;
     }
     if (pinCode == '0000') {
@@ -548,6 +559,7 @@ class MultiplayerSession extends ChangeNotifier {
   /// User pressed Cancel on the searching view or Disconnect on the
   /// connected view. Tears down the transport and returns to idle.
   Future<void> cancel() async {
+    _cancelled = true;
     _log('Multiplayer session cancelled by user. Restoring local state...');
     // Recovery on session end:
     //  * Sidekick: drop the Cultist coop (a transient MP avatar) and
@@ -580,7 +592,27 @@ class MultiplayerSession extends ChangeNotifier {
     _pendingRequest = null;
     _outgoingRequests.clear();
     _seenReqIds.clear();
+    _seenGiftIds.clear();
     _lastResp = null;
+    // Restore any pending gifts that were in transit — the peer may
+    // not have received them, so put them back in our inventory.
+    if (_pendingGifts.isNotEmpty) {
+      _log('Restoring ${_pendingGifts.length} pending gift(s) to inventory on cancel.');
+      final mySlot = _myRole == MpRole.main ? PlayerSlot.main : PlayerSlot.coop;
+      for (final pg in _pendingGifts) {
+        switch (pg.kind) {
+          case 'gun':
+            final gun = _runProvider.gunByName(pg.name);
+            if (gun != null) _runProvider.addGun(gun, slot: mySlot, force: true);
+            break;
+          case 'item':
+            final it = _runProvider.itemByName(pg.name);
+            if (it != null) _runProvider.addItem(it, slot: mySlot, force: true);
+            break;
+        }
+      }
+      _pendingGifts.clear();
+    }
     // Cancel all pending request timeout timers
     for (final timer in _requestTimeoutTimers.values) {
       timer.cancel();
@@ -618,6 +650,7 @@ class MultiplayerSession extends ChangeNotifier {
     _protocolError = false;
     _wasDisconnected = false;
     _runProvider.mpDisconnected = false;
+    _cancelled = false;
     _status = MpStatus.idle;
     _error = null;
     _log('Transport powered down. Returned to Idle.');
@@ -666,6 +699,11 @@ class MultiplayerSession extends ChangeNotifier {
       
       _log('Nearby endpoints stopped. Entering 800ms native radio cooldown delay to fully release unbonded sockets...');
       await Future.delayed(const Duration(milliseconds: 800)); // Crucial Native Radio Cooldown delay!
+      // Abort if user cancelled during the cooldown delay.
+      if (_cancelled) {
+        _log('Reconnect aborted: user cancelled during radio cooldown.');
+        return;
+      }
       _log('Cooldown complete. Restarting transport services...');
 
       _stopHeartbeat();
@@ -817,15 +855,19 @@ class MultiplayerSession extends ChangeNotifier {
     }
     // If item wasn't found, nothing to send.
     if (removedGun == null && removedItem == null) return;
+    final giftId = _newReqId();
+    // Track as pending so we can re-send on reconnect or restore on cancel.
+    _pendingGifts.add(_PendingGift(giftId: giftId, kind: kind, name: name));
     // Attempt to send; rollback on failure to prevent item loss.
     try {
-      await _service.sendMessage(MpGift(kind: kind, name: name));
+      await _service.sendMessage(MpGift(kind: kind, name: name, giftId: giftId));
     } catch (e) {
       // Rollback: restore item to inventory since send failed.
+      _pendingGifts.removeWhere((g) => g.giftId == giftId);
       if (removedGun != null) {
-        _runProvider.addGun(removedGun, slot: mySlot);
+        _runProvider.addGun(removedGun, slot: mySlot, force: true);
       } else if (removedItem != null) {
-        _runProvider.addItem(removedItem, slot: mySlot);
+        _runProvider.addItem(removedItem, slot: mySlot, force: true);
       }
 // Removed debugPrint for production
     }
@@ -899,14 +941,17 @@ class MultiplayerSession extends ChangeNotifier {
       }
       // Only send approval if gift was successfully sent.
       if (removedGun != null || removedItem != null) {
+        final giftId = _newReqId();
+        _pendingGifts.add(_PendingGift(giftId: giftId, kind: req.kind, name: req.name));
         try {
-          await _service.sendMessage(MpGift(kind: req.kind, name: req.name));
+          await _service.sendMessage(MpGift(kind: req.kind, name: req.name, giftId: giftId));
         } catch (e) {
           // Rollback: restore item since send failed.
+          _pendingGifts.removeWhere((g) => g.giftId == giftId);
           if (removedGun != null) {
-            _runProvider.addGun(removedGun, slot: mySlot);
+            _runProvider.addGun(removedGun, slot: mySlot, force: true);
           } else if (removedItem != null) {
-            _runProvider.addItem(removedItem, slot: mySlot);
+            _runProvider.addItem(removedItem, slot: mySlot, force: true);
           }
 // Removed debugPrint for production
           // Don't send approval since gift failed.
@@ -1131,6 +1176,29 @@ class MultiplayerSession extends ChangeNotifier {
     if (_wasDisconnected) {
       _wasDisconnected = false;
       reconnectSuccessNotifier.value = true;
+      // Adaptive watchdog: bump timeout after a successful reconnect
+      // from a disconnect. If this was a brief hiccup (reconnected
+      // quickly), the watchdog was too aggressive — give it more room.
+      _watchdogTimeoutSec = (_watchdogTimeoutSec + 10).clamp(30, 60);
+      _log('Watchdog timeout adjusted to ${_watchdogTimeoutSec}s after reconnect.');
+      // Re-send any pending gifts that were in transit when the
+      // connection dropped. The peer may or may not have received them;
+      // their next snapshot will confirm, and dedup on their side
+      // prevents double-application if they did get the original.
+      if (_pendingGifts.isNotEmpty) {
+        _log('Re-sending ${_pendingGifts.length} pending gift(s) after reconnect...');
+        for (final pg in _pendingGifts.toList()) {
+          unawaited(_service.sendMessage(
+            MpGift(kind: pg.kind, name: pg.name, giftId: pg.giftId),
+          ).catchError((Object e) {
+            _log('Pending gift re-send failed: ${pg.kind} ${pg.name}');
+            return;
+          }));
+        }
+      }
+    } else {
+      // Fresh connection: reset watchdog to default.
+      _watchdogTimeoutSec = 30;
     }
     _sessionStartedAtMs ??= DateTime.now().millisecondsSinceEpoch;
     notifyListeners();
@@ -1184,14 +1252,37 @@ class MultiplayerSession extends ChangeNotifier {
         curse: s.curse,
         shrinesUsed: s.shrinesUsed,
       );
+      // Confirm pending gifts: if the peer's snapshot now includes items
+      // we sent as gifts, those gifts arrived safely — remove from pending.
+      final peerGunSet = s.gunNames.toSet();
+      final peerItemSet = s.itemNames.toSet();
+      _pendingGifts.removeWhere((pg) {
+        final confirmed = pg.kind == 'gun'
+            ? peerGunSet.contains(pg.name)
+            : peerItemSet.contains(pg.name);
+        if (confirmed) _log('Gift confirmed by peer snapshot: ${pg.kind} ${pg.name}');
+        return confirmed;
+      });
     } catch (e) {
-// Removed debugPrint for production
+      _log('Snapshot apply error: $e');
     } finally {
       _applyingRemote = false;
     }
   }
 
   void _onGift(MpGift g) {
+    // Deduplicate by giftId — Nearby Connections shouldn't double-deliver
+    // but a reconnect retry could.
+    if (g.giftId.isNotEmpty && _seenGiftIds.contains(g.giftId)) {
+      _log('Duplicate gift ignored: ${g.kind} ${g.name} (giftId: ${g.giftId})');
+      return;
+    }
+    if (g.giftId.isNotEmpty) {
+      _seenGiftIds.add(g.giftId);
+      while (_seenGiftIds.length > _maxSeenGiftIds) {
+        _seenGiftIds.remove(_seenGiftIds.first);
+      }
+    }
     // Wrap in _applyingRemote so the gift addition doesn't trigger a
     // snapshot broadcast back to the peer. The peer already knows about
     // the gift (they just sent it), and the next natural change on either
@@ -1213,10 +1304,12 @@ class MultiplayerSession extends ChangeNotifier {
       _applyingRemote = false;
     }
     // Broadcast snapshot immediately after receiving a gift so the peer's
-    // UI is synchronized in real-time.
+    // UI is synchronized in real-time. Use force: true because
+    // _applyingRemote suppressed the natural _onRunChanged, so this is
+    // the only chance to sync — don't let _snapshotInFlight drop it.
     _broadcastDebounce?.cancel();
     _broadcastDebounce = Timer(const Duration(milliseconds: 200), () {
-      unawaited(_broadcastSnapshot());
+      unawaited(_broadcastSnapshot(force: true));
     });
   }
 
@@ -1229,12 +1322,15 @@ class MultiplayerSession extends ChangeNotifier {
     // collapses to one snapshot on the wire.
     _broadcastDebounce?.cancel();
     _broadcastDebounce = Timer(const Duration(milliseconds: 200), () {
+      if (_snapshotInFlight) return; // Skip — a snapshot is already sending; the next change will re-schedule.
       unawaited(_broadcastSnapshot());
     });
   }
 
   Future<void> _broadcastSnapshot({bool force = false}) async {
     if (!isConnected && !force) return;
+    if (_snapshotInFlight && !force) return;
+    _snapshotInFlight = true;
     // Role-aware slot selection:
     // - Main Player: broadcasts main slot (their own character)
     // - Sidekick: broadcasts coop slot (their Cultist character)
@@ -1257,6 +1353,8 @@ class MultiplayerSession extends ChangeNotifier {
     } catch (e) {
       // Snapshot failed (connection dropped). Next change will retry.
 // Removed debugPrint for production
+    } finally {
+      _snapshotInFlight = false;
     }
   }
 
@@ -1320,7 +1418,7 @@ class MultiplayerSession extends ChangeNotifier {
       if (_status != MpStatus.connected) return;
       final silentMs =
           DateTime.now().millisecondsSinceEpoch - _lastPeerTouchMs;
-      if (silentMs > 30000) {
+      if (silentMs > _watchdogTimeoutSec * 1000) {
         _status = MpStatus.disconnected;
         _wasDisconnected = true;
         _runProvider.mpDisconnected = true;
@@ -1378,6 +1476,7 @@ class MultiplayerSession extends ChangeNotifier {
 
   void _tryAutoReconnect() {
     if (_status != MpStatus.disconnected) return;
+    _autoReconnectTimer?.cancel();
     _autoReconnectAttempts++;
     // Exponential backoff capped at 30s. Sequence: 2, 4, 8, 16, 30, 30, ...
     // No upper limit on attempts: the session keeps trying until the
@@ -1565,6 +1664,11 @@ class MultiplayerSession extends ChangeNotifier {
     _peerNickname = rolesSwapped ? saved.myNickname : saved.peerNickname;
     _peerCharacterName = roleToUse == MpRole.main ? state.coop?.character?.name : state.main.character?.name;
 
+    // Restore PIN so both peers can re-discover each other with the same
+    // connection code. Without this, the PIN filter in the service layer
+    // silently rejects the matching endpoint.
+    _pinCode ??= _newPinCode();
+
     // 3. Immediately transition to searching/lobby state and start discovery/advertising!
     _status = MpStatus.searching;
     _error = null;
@@ -1574,14 +1678,14 @@ class MultiplayerSession extends ChangeNotifier {
     _startSearchTimeout();
 
     if (roleToUse == MpRole.main) {
-      final started = await _service.startAdvertising(_myNickname);
+      final started = await _service.startAdvertising('$_myNickname#$_pinCode');
       if (!started) {
         _searchTimeout?.cancel();
         await _service.stopSearching();
         _fail('Could not start advertising. Try toggling Bluetooth.');
       }
     } else {
-      final started = await _service.startDiscovery(_myNickname);
+      final started = await _service.startDiscovery(_myNickname, pinCode: _pinCode);
       if (!started) {
         _searchTimeout?.cancel();
         await _service.stopSearching();
@@ -1589,6 +1693,16 @@ class MultiplayerSession extends ChangeNotifier {
       }
     }
   }
+}
+
+/// Tracks a gift that has been removed from inventory and sent but not
+/// yet confirmed by the peer's snapshot. Used for re-send on reconnect
+/// and restoration on cancel.
+class _PendingGift {
+  final String giftId;
+  final String kind;
+  final String name;
+  _PendingGift({required this.giftId, required this.kind, required this.name});
 }
 
 /// A serialized and stored multiplayer session. Allows both Host (Main) and Client (Sidekick)
@@ -1638,7 +1752,10 @@ class SavedMpSession {
     return SavedMpSession(
       sessionId: json['sessionId'],
       sessionName: json['sessionName'],
-      savedByRole: MpRole.values.firstWhere((r) => r.name == json['savedByRole']),
+      savedByRole: MpRole.values.firstWhere(
+        (r) => r.name == json['savedByRole'],
+        orElse: () => MpRole.main,
+      ),
       myNickname: json['myNickname'] ?? 'Player',
       peerNickname: json['peerNickname'] ?? 'Peer',
       myCharacterName: json['myCharacterName'] ?? '',
