@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/multiplayer_messages.dart';
 import '../models/player.dart';
@@ -1205,8 +1206,59 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
             color: Colors.redAccent,
             onTap: () => _confirmEndRun(context, p),
           ),
+          const SizedBox(height: 10),
+          _utilTile(
+            title: 'Reset All App Data',
+            subtitle: 'Wipes everything: run state, favourites, theme prefs, settings. Restarts the app.',
+            icon: Icons.restart_alt,
+            color: Colors.deepOrange,
+            onTap: () => _confirmResetAppData(context, p),
+          ),
         ],
       ),
+    );
+  }
+
+  Future<void> _confirmResetAppData(BuildContext context, RunProvider p) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        icon: const Icon(Icons.restart_alt, color: Colors.deepOrange, size: 32),
+        title: const Text('Reset All App Data?'),
+        content: const Text(
+          'This permanently erases ALL saved data:\n\n'
+          '• Active run & inventory\n'
+          '• Favourites\n'
+          '• Theme & visual preferences\n'
+          '• Special weapon upgrades\n'
+          '• Multiplayer session data\n\n'
+          'The app will restart. This cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.deepOrange),
+            onPressed: () => Navigator.pop(c, true),
+            child: const Text('RESET EVERYTHING'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    if (!context.mounted) return;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+    } catch (_) {}
+    // Restart the app by pushing to the character select screen
+    // which is the root route after app launch.
+    if (!context.mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const CharacterSelectScreen()),
+      (_) => false,
     );
   }
 

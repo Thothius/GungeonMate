@@ -13,6 +13,7 @@ import '../models/shrine.dart';
 import '../models/gungeoneer.dart';
 import '../models/player.dart';
 import '../models/run_state.dart';
+import '../models/run_log_entry.dart';
 
 class RunProvider with ChangeNotifier {
   RunState _runState = RunState();
@@ -128,6 +129,16 @@ class RunProvider with ChangeNotifier {
   List<Gun> get allGuns => _allGuns;
   List<Item> get allItems => _allItems;
   List<Synergy> get allSynergies => _allSynergies;
+
+  /// Log entries that affected curse (pickups with curse, steals, shrines, manual).
+  List<RunLogEntry> get curseLog =>
+      _runState.log.where((e) => e.affectsCurse).toList()
+        ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+  /// Log entries that affected coolness (pickups with coolness, cigs, shrines, manual).
+  List<RunLogEntry> get coolnessLog =>
+      _runState.log.where((e) => e.affectsCoolness).toList()
+        ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
   List<Shrine> get allShrines => _allShrines;
   List<Gungeoneer> get allGungeoneers => _allGungeoneers;
   BackRefs get backRefs => _backRefs;
@@ -323,6 +334,18 @@ class RunProvider with ChangeNotifier {
       main: refreshPlayer(s.main),
       coop: s.coop != null ? refreshPlayer(s.coop!) : null,
     );
+  }
+
+  /// Append a log entry to the run state. Called by addGun/addItem/adjust*
+  /// and manual action methods. Keeps last 200 entries to avoid unbounded
+  /// growth on long runs.
+  void _log(RunLogEntry entry) {
+    final updated = [..._runState.log, entry];
+    if (updated.length > 200) {
+      _runState = _runState.copyWith(log: updated.sublist(updated.length - 200));
+    } else {
+      _runState = _runState.copyWith(log: updated);
+    }
   }
 
   Future<void> _saveRun() async {
@@ -836,6 +859,14 @@ class RunProvider with ChangeNotifier {
     final p = _playerFor(slot);
     if (p.guns.any((g) => g.name == gun.name)) return;
     _runState = _replacePlayer(slot, p.copyWith(guns: [...p.guns, gun]));
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.pickupGun,
+      description: 'Picked up ${gun.name}',
+      curseDelta: gun.curse,
+      coolnessDelta: gun.coolness,
+      entityName: gun.name,
+    ));
     _saveRun();
     notifyListeners();
   }
@@ -845,6 +876,14 @@ class RunProvider with ChangeNotifier {
     final p = _playerFor(slot);
     _runState = _replacePlayer(
         slot, p.copyWith(guns: p.guns.where((g) => g.name != gun.name).toList()));
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.removeGun,
+      description: 'Removed ${gun.name}',
+      curseDelta: -gun.curse,
+      coolnessDelta: -gun.coolness,
+      entityName: gun.name,
+    ));
     _saveRun();
     notifyListeners();
   }
@@ -855,6 +894,15 @@ class RunProvider with ChangeNotifier {
     final isJunk = item.name.toLowerCase() == 'junk';
     if (!isJunk && p.items.any((i) => i.name == item.name)) return;
     _runState = _replacePlayer(slot, p.copyWith(items: [...p.items, item]));
+
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.pickupItem,
+      description: 'Picked up ${item.name}',
+      curseDelta: item.curse,
+      coolnessDelta: item.coolness,
+      entityName: item.name,
+    ));
 
     // Robot Tax: Automatically convert HP Upgrades and Master Rounds to +1 Armor!
     final charName = p.character?.name.toLowerCase() ?? '';
@@ -895,7 +943,16 @@ class RunProvider with ChangeNotifier {
   void removeItem(Item item, {PlayerSlot slot = PlayerSlot.main}) {
     if (_mpDisconnected) return;
     final p = _playerFor(slot);
-    
+
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.removeItem,
+      description: 'Removed ${item.name}',
+      curseDelta: -item.curse,
+      coolnessDelta: -item.coolness,
+      entityName: item.name,
+    ));
+
     // Only remove one copy if it's Junk (to allow incremental stacking/unstacking)
     List<Item> newItems;
     if (item.name.toLowerCase() == 'junk') {
@@ -959,6 +1016,12 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       coolness: (_runState.coolness + delta).clamp(-100.0, 100.0),
     );
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.manual,
+      description: 'Manual coolness ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
+      coolnessDelta: delta,
+    ));
     _saveRun();
     notifyListeners();
   }
@@ -967,12 +1030,91 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       curse: (_runState.curse + delta).clamp(-100.0, 100.0),
     );
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.manual,
+      description: 'Manual curse ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
+      curseDelta: delta,
+    ));
     _saveRun();
     notifyListeners();
   }
 
   void resetManualStats() {
+    final oldCool = _runState.coolness;
+    final oldCurse = _runState.curse;
     _runState = _runState.copyWith(coolness: 0, curse: 0);
+    if (oldCool != 0 || oldCurse != 0) {
+      _log(RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.manual,
+        description: 'Reset manual stats to 0',
+        coolnessDelta: -oldCool,
+        curseDelta: -oldCurse,
+      ));
+    }
+    _saveRun();
+    notifyListeners();
+  }
+
+  // --- Manual quick actions (things the app can't auto-detect) ------------
+
+  /// Stealing from a shop — +1 curse per steal in ETG.
+  void logSteal() {
+    _runState = _runState.copyWith(
+      curse: (_runState.curse + 1).clamp(-100.0, 100.0),
+    );
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.steal,
+      description: 'Stole from a shop (+1 curse)',
+      curseDelta: 1,
+    ));
+    _saveRun();
+    notifyListeners();
+  }
+
+  /// Visiting Cursula — +2 curse per visit.
+  void logCursula() {
+    _runState = _runState.copyWith(
+      curse: (_runState.curse + 2).clamp(-100.0, 100.0),
+    );
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.cursula,
+      description: 'Visited Cursula (+2 curse)',
+      curseDelta: 2,
+    ));
+    _saveRun();
+    notifyListeners();
+  }
+
+  /// Smoking Cigarettes — +1 coolness per use.
+  void logSmokeCig() {
+    _runState = _runState.copyWith(
+      coolness: (_runState.coolness + 1).clamp(-100.0, 100.0),
+    );
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.smokeCig,
+      description: 'Smoked a cigarette (+1 coolness)',
+      coolnessDelta: 1,
+    ));
+    _saveRun();
+    notifyListeners();
+  }
+
+  /// Rainbow Run reward — +1 coolness.
+  void logRainbowRun() {
+    _runState = _runState.copyWith(
+      coolness: (_runState.coolness + 1).clamp(-100.0, 100.0),
+    );
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.rainbowRun,
+      description: 'Rainbow Run reward (+1 coolness)',
+      coolnessDelta: 1,
+    ));
     _saveRun();
     notifyListeners();
   }
@@ -1032,12 +1174,16 @@ class RunProvider with ChangeNotifier {
     }
 
     if (curseDelta != 0) {
-      adjustCurse(curseDelta);
+      _runState = _runState.copyWith(
+        curse: (_runState.curse + curseDelta).clamp(-100.0, 100.0),
+      );
       final sign = curseDelta > 0 ? '+' : '';
       applied.add('Curse $sign${curseDelta.toStringAsFixed(1)}');
     }
     if (coolDelta != 0) {
-      adjustCoolness(coolDelta);
+      _runState = _runState.copyWith(
+        coolness: (_runState.coolness + coolDelta).clamp(-100.0, 100.0),
+      );
       final sign = coolDelta > 0 ? '+' : '';
       applied.add('Coolness $sign${coolDelta.toStringAsFixed(1)}');
     }
@@ -1046,6 +1192,14 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       shrinesUsed: [..._runState.shrinesUsed, s.name],
     );
+    _log(RunLogEntry(
+      timestamp: DateTime.now(),
+      category: RunLogCategory.shrine,
+      description: 'Activated ${s.name} shrine',
+      curseDelta: curseDelta,
+      coolnessDelta: coolDelta,
+      entityName: s.name,
+    ));
     _saveRun();
     notifyListeners();
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
+import '../models/run_log_entry.dart';
+import '../services/haptics.dart';
 
 enum StatType { coolness, curse }
 
@@ -82,6 +84,10 @@ class StatsDetailScreen extends StatelessWidget {
               }
             },
           ),
+          const SizedBox(height: 16),
+          _QuickActions(isCool: isCool),
+          const SizedBox(height: 16),
+          _EventLog(isCool: isCool),
           const SizedBox(height: 16),
           if (isCool)
             _CoolnessEffects(coolness: total, curse: p.runState.totalCurse)
@@ -749,6 +755,289 @@ class _InfoRow extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ---------------------- Quick action buttons ---------------------------------
+
+class _QuickActions extends StatelessWidget {
+  final bool isCool;
+  const _QuickActions({required this.isCool});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.read<RunProvider>();
+    final color = isCool ? const Color(0xFF00E5FF) : const Color(0xFFFF3D00);
+
+    final actions = isCool
+        ? [
+            _QuickAction(
+              icon: Icons.smoking_rooms,
+              label: 'Smoke Cig',
+              subtitle: '+1 cool',
+              onTap: p.logSmokeCig,
+            ),
+            _QuickAction(
+              icon: Icons.palette,
+              label: 'Rainbow Run',
+              subtitle: '+1 cool',
+              onTap: p.logRainbowRun,
+            ),
+          ]
+        : [
+            _QuickAction(
+              icon: Icons.front_hand,
+              label: 'Steal',
+              subtitle: '+1 curse',
+              onTap: p.logSteal,
+            ),
+            _QuickAction(
+              icon: Icons.local_fire_department,
+              label: 'Cursula',
+              subtitle: '+2 curse',
+              onTap: p.logCursula,
+            ),
+          ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionTitle(isCool ? 'Quick coolness actions' : 'Quick curse actions'),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+          childAspectRatio: 2.8,
+          children: actions
+              .map((a) => _QuickActionCard(action: a, color: color))
+              .toList(),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
+          child: Text(
+            isCool
+                ? 'Things the app can\'t auto-detect — tap to log them.'
+                : 'Things the app can\'t auto-detect — tap to log them.',
+            style: TextStyle(
+              fontSize: 10.5,
+              color: Colors.white.withValues(alpha: 0.5),
+              fontStyle: FontStyle.italic,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _QuickAction {
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final VoidCallback onTap;
+  const _QuickAction({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.onTap,
+  });
+}
+
+class _QuickActionCard extends StatelessWidget {
+  final _QuickAction action;
+  final Color color;
+  const _QuickActionCard({required this.action, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          Haptics.selection();
+          action.onTap();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            child: Row(
+              children: [
+                Icon(action.icon, color: color, size: 22),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        action.label,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        action.subtitle,
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          color: color.withValues(alpha: 0.8),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------------- Event log feed ---------------------------------------
+
+class _EventLog extends StatelessWidget {
+  final bool isCool;
+  const _EventLog({required this.isCool});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final entries = isCool ? p.coolnessLog : p.curseLog;
+    final color = isCool ? const Color(0xFF00E5FF) : const Color(0xFFFF3D00);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionTitle(isCool ? 'Coolness event log' : 'Curse event log'),
+        if (entries.isEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.03),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+            ),
+            child: Text(
+              'No events yet. Pick up items or use quick actions above to start tracking.',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.4),
+                fontStyle: FontStyle.italic,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          )
+        else
+          ...entries.take(20).map((e) => _LogTile(entry: e, color: color)),
+      ],
+    );
+  }
+}
+
+class _LogTile extends StatelessWidget {
+  final RunLogEntry entry;
+  final Color color;
+  const _LogTile({required this.entry, required this.color});
+
+  IconData _iconFor(RunLogCategory cat) {
+    switch (cat) {
+      case RunLogCategory.pickupGun:
+        return Icons.gps_fixed;
+      case RunLogCategory.pickupItem:
+        return Icons.inventory_2_outlined;
+      case RunLogCategory.removeGun:
+        return Icons.remove_circle_outline;
+      case RunLogCategory.removeItem:
+        return Icons.remove_circle_outline;
+      case RunLogCategory.shrine:
+        return Icons.temple_buddhist_outlined;
+      case RunLogCategory.steal:
+        return Icons.front_hand;
+      case RunLogCategory.cursula:
+        return Icons.local_fire_department;
+      case RunLogCategory.smokeCig:
+        return Icons.smoking_rooms;
+      case RunLogCategory.rainbowRun:
+        return Icons.palette;
+      case RunLogCategory.manual:
+        return Icons.tune;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final delta = entry.affectsCurse ? entry.curseDelta : entry.coolnessDelta;
+    final isPositive = delta > 0;
+    final deltaColor = isPositive ? color : Colors.redAccent;
+
+    final timeStr =
+        '${entry.timestamp.hour.toString().padLeft(2, '0')}:'
+        '${entry.timestamp.minute.toString().padLeft(2, '0')}';
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.03),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: Row(
+            children: [
+              Icon(_iconFor(entry.category), size: 18, color: color.withValues(alpha: 0.7)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      entry.description,
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      timeStr,
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${isPositive ? '+' : ''}${delta.toStringAsFixed(1)}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  color: deltaColor,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

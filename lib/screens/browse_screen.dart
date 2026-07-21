@@ -8,7 +8,6 @@ import '../models/player.dart';
 import '../services/multiplayer_session.dart';
 import '../services/app_theme.dart';
 import '../widgets/quality_badge.dart';
-// neckbear_medal import removed (hidden per user request)
 import '../widgets/game_icon.dart';
 import 'item_detail_screen.dart';
 import 'favourites_screen.dart';
@@ -844,7 +843,6 @@ class _BrowseScreenState extends State<BrowseScreen>
       meta: _GunMeta(gun: g, synergyCount: syn),
       inRun: p.ownerSlotOfGun(g.name) == widget.targetSlot,
       isRobot: isRobot,
-      verified: g.neckbearApproved,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
@@ -904,7 +902,6 @@ class _BrowseScreenState extends State<BrowseScreen>
       meta: _ItemMeta(item: it, synergyCount: syn),
       inRun: p.ownerSlotOfItem(it.name) == widget.targetSlot,
       isRobot: isRobot,
-      verified: it.neckbearApproved,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
@@ -1131,7 +1128,6 @@ class _Row extends StatelessWidget {
   final Widget meta;
   final bool inRun;
   final bool isRobot;
-  final bool verified;
   final VoidCallback onTap;
   final VoidCallback onAdd;
 
@@ -1143,14 +1139,12 @@ class _Row extends StatelessWidget {
     required this.meta,
     required this.inRun,
     required this.isRobot,
-    this.verified = false,
     required this.onTap,
     required this.onAdd,
   });
 
   @override
   Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
     final isS = quality.toUpperCase() == 'S' || quality.toUpperCase() == '1S';
 
     BorderSide borderSide = isS 
@@ -1234,11 +1228,6 @@ class _Row extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // NeckbearMedal hidden per user request
-                        // if (verified) ...[
-                        //   const SizedBox(width: 6),
-                        //   const NeckbearMedal(size: 15),
-                        // ],
                         if (robotTag.isNotEmpty) ...[
                           const SizedBox(width: 6),
                           Container(

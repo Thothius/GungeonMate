@@ -2,6 +2,7 @@ import 'gun.dart';
 import 'item.dart';
 import 'gungeoneer.dart';
 import 'player.dart';
+import 'run_log_entry.dart';
 
 /// State of an ongoing dungeon run. Coolness/curse are shared "dungeon
 /// state" — they aren't attributed to one player. Each player has its
@@ -17,12 +18,16 @@ class RunState {
   /// system later.
   final List<String> shrinesUsed;
 
+  /// Chronological event log — pickups, stat changes, shrines, manual actions.
+  final List<RunLogEntry> log;
+
   RunState({
     Player? main,
     this.coop,
     this.coolness = 0.0,
     this.curse = 0.0,
     this.shrinesUsed = const [],
+    this.log = const [],
   }) : main = main ?? Player();
 
   bool get hasCoop => coop != null;
@@ -34,6 +39,7 @@ class RunState {
     double? coolness,
     double? curse,
     List<String>? shrinesUsed,
+    List<RunLogEntry>? log,
   }) {
     return RunState(
       main: main ?? this.main,
@@ -41,6 +47,7 @@ class RunState {
       coolness: coolness ?? this.coolness,
       curse: curse ?? this.curse,
       shrinesUsed: shrinesUsed ?? this.shrinesUsed,
+      log: log ?? this.log,
     );
   }
 
@@ -87,6 +94,8 @@ class RunState {
         'coolness': coolness,
         'curse': curse,
         if (shrinesUsed.isNotEmpty) 'shrines_used': shrinesUsed,
+        if (log.isNotEmpty)
+          'log': log.map((e) => e.toJson()).toList(),
       };
 
   factory RunState.fromJson(Map<String, dynamic> json) {
@@ -118,6 +127,10 @@ class RunState {
       curse: (json['curse'] ?? 0).toDouble(),
       shrinesUsed: (json['shrines_used'] as List<dynamic>?)
               ?.map((e) => e.toString())
+              .toList() ??
+          const [],
+      log: (json['log'] as List<dynamic>?)
+              ?.map((e) => RunLogEntry.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
     );
