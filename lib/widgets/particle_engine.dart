@@ -210,7 +210,6 @@ class ParticleField extends StatefulWidget {
   final GlowEffect? glowOverride;
   final bool? lineLinksOverride;
   final bool bounce;
-  final bool isPreview;
 
   const ParticleField({
     super.key,
@@ -221,7 +220,6 @@ class ParticleField extends StatefulWidget {
     this.glowOverride,
     this.lineLinksOverride,
     this.bounce = false,
-    this.isPreview = false,
   });
 
   @override
@@ -235,6 +233,7 @@ class _ParticleFieldState extends State<ParticleField>
   final List<_Particle> _particles = [];
   final math.Random _rng = math.Random();
   Size? _lastSize;
+  double _lastT = 0.0;
 
   @override
   void initState() {
@@ -308,6 +307,32 @@ class _ParticleFieldState extends State<ParticleField>
     super.dispose();
   }
 
+  void _update(double t, Size size) {
+    final dt = (t - _lastT).clamp(0.001, 0.05);
+    _lastT = t;
+    final tilt = ThemeOverlay.tiltNotifier.value;
+
+    for (final p in _particles) {
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+
+      p.x += tilt.dx * 0.15 * p.depth;
+      p.y += tilt.dy * 0.10 * p.depth;
+
+      if (widget.bounce) {
+        if (p.x < 0) { p.x = 0; p.vx = -p.vx; }
+        if (p.x > size.width) { p.x = size.width; p.vx = -p.vx; }
+        if (p.y < 0) { p.y = 0; p.vy = -p.vy; }
+        if (p.y > size.height) { p.y = size.height; p.vy = -p.vy; }
+      } else {
+        if (p.x < -10) p.x = size.width + 10;
+        if (p.x > size.width + 10) p.x = -10;
+        if (p.y < -10) p.y = size.height + 10;
+        if (p.y > size.height + 10) p.y = -10;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
@@ -321,7 +346,7 @@ class _ParticleFieldState extends State<ParticleField>
               _ensureParticles(size);
 
               final t = _sw.elapsedMilliseconds / 1000.0;
-              final tilt = ThemeOverlay.tiltNotifier.value;
+              _update(t, size);
 
               return CustomPaint(
                 painter: _ParticlePainter(
@@ -332,9 +357,6 @@ class _ParticleFieldState extends State<ParticleField>
                   opacity: widget.opacity,
                   glowEffect: widget.glowOverride ?? widget.preset.config.glowEffect,
                   lineLinks: widget.lineLinksOverride ?? widget.preset.config.lineLinks,
-                  bounce: widget.bounce,
-                  tilt: tilt,
-                  viewport: size,
                 ),
                 size: size,
               );
@@ -358,9 +380,6 @@ class _ParticlePainter extends CustomPainter {
   final double opacity;
   final GlowEffect glowEffect;
   final bool lineLinks;
-  final bool bounce;
-  final Offset tilt;
-  final Size viewport;
 
   _ParticlePainter({
     required this.t,
@@ -370,14 +389,10 @@ class _ParticlePainter extends CustomPainter {
     required this.opacity,
     required this.glowEffect,
     required this.lineLinks,
-    required this.bounce,
-    required this.tilt,
-    required this.viewport,
   });
 
-  // Reusable paint object
-  static final _paint = Paint()..style = PaintingStyle.fill;
-  static final _linePaint = Paint()
+  final _paint = Paint()..style = PaintingStyle.fill;
+  final _linePaint = Paint()
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1.0;
 
@@ -388,41 +403,6 @@ class _ParticlePainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
     final lineDist = (w * 0.12).clamp(60.0, 160.0);
-
-    // Update positions
-    for (final p in particles) {
-      p.x += p.vx * 0.016; // ~60fps frame delta
-      p.y += p.vy * 0.016;
-
-      // Apply subtle tilt drift
-      p.x += tilt.dx * 0.15 * p.depth;
-      p.y += tilt.dy * 0.10 * p.depth;
-
-      if (bounce) {
-        if (p.x < 0) {
-          p.x = 0;
-          p.vx = -p.vx;
-        }
-        if (p.x > w) {
-          p.x = w;
-          p.vx = -p.vx;
-        }
-        if (p.y < 0) {
-          p.y = 0;
-          p.vy = -p.vy;
-        }
-        if (p.y > h) {
-          p.y = h;
-          p.vy = -p.vy;
-        }
-      } else {
-        // Wrap around
-        if (p.x < -10) p.x = w + 10;
-        if (p.x > w + 10) p.x = -10;
-        if (p.y < -10) p.y = h + 10;
-        if (p.y > h + 10) p.y = -10;
-      }
-    }
 
     // Draw line links first (behind particles)
     if (lineLinks && particles.length > 1) {
@@ -658,7 +638,6 @@ class _ParticlePreviewPickerState extends State<ParticlePreviewPicker> {
                           count: 12,
                           sizeScale: 0.8,
                           opacity: 0.8,
-                          isPreview: true,
                         ),
                       ),
                     ),

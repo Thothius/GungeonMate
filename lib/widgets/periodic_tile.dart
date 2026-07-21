@@ -397,7 +397,7 @@ class _PeriodicTileState extends State<PeriodicTile>
     final body = _buildBody(context);
     final constrainedBody = MediaQuery(
       data: MediaQuery.of(context).copyWith(
-        textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(0.8, 1.05),
+        textScaler: TextScaler.linear(MediaQuery.of(context).textScaler.scale(1).clamp(0.8, 1.05)),
       ),
       child: body,
     );
@@ -699,7 +699,6 @@ class _PeriodicTileState extends State<PeriodicTile>
         );
 
       case InventoryDisplayMode.classicPeriodic:
-      default:
         // Balanced classic Gungeon periodic table look (default)
         return Card(
           clipBehavior: Clip.antiAlias,

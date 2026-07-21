@@ -1503,12 +1503,12 @@ class CustomThemeData {
       final prefs = await SharedPreferences.getInstance();
       final json = jsonEncode({
         'name': data.name,
-        'scaffold': data.scaffold.value,
-        'card': data.card.value,
-        'primary': data.primary.value,
-        'secondary': data.secondary.value,
-        'headlineStat': data.headlineStat.value,
-        'bulletColor': data.bulletColor.value,
+        'scaffold': data.scaffold.toARGB32(),
+        'card': data.card.toARGB32(),
+        'primary': data.primary.toARGB32(),
+        'secondary': data.secondary.toARGB32(),
+        'headlineStat': data.headlineStat.toARGB32(),
+        'bulletColor': data.bulletColor.toARGB32(),
         'backdrop': data.backdrop.index,
         'auraStyle': data.auraStyle.index,
         'font': data.font.index,

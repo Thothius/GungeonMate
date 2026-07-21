@@ -675,7 +675,7 @@ class _VisualsDropdownState extends State<_VisualsDropdown> {
                               padding: const EdgeInsets.only(right: 4),
                               child: ChoiceChip(
                                 label: Text(
-                                  '${size.toStringAsFixed(0)}',
+                                  size.toStringAsFixed(0),
                                   style: TextStyle(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w800,

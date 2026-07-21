@@ -52,6 +52,7 @@ class _GoopTextState extends State<GoopText> with SingleTickerProviderStateMixin
   late final AnimationController _controller;
   late Animation<double> _animation;
   Timer? _spongeDelayTimer;
+  // ignore: unused_field
   bool _isTranslated = false;
 
   @override

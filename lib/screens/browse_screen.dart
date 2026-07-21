@@ -64,8 +64,8 @@ class _BrowseScreenState extends State<BrowseScreen>
   bool _freezeOnly = false;
   bool _stunOnly = false;
   bool _stealingOnly = false;
-  bool _filtersExpanded = false; // Collapsible, closed by default!
-  bool _isGridView = false;
+  final _filtersExpanded = false; // Collapsible, closed by default!
+  final _isGridView = false;
 
   int _getGridCrossAxisCount(BuildContext context) {
     final w = MediaQuery.of(context).size.width;

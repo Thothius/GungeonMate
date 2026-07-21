@@ -57,11 +57,24 @@ class RunProvider with ChangeNotifier {
   // 6 = Hollow, 7 = R&G Dept, 8 = Forge, 9 = Bullet Hell
   int _chamberGunFloor = 0;
 
-  // Platinum Bullets: stacking kill counter
-  int _platinumBulletsKills = 0;
+  // Platinum Bullets: approximate firing time in seconds
+  int _platinumBulletsSeconds = 0;
 
   // Iron Coin: 3 uses per run
   int _ironCoinUses = 3;
+
+  // Polaris: kill count and damage-taken penalty
+  // Level 1: 0-10 kills, Level 2: 11-30, Level 3: 31+. Taking damage drops level.
+  int _polarisKills = 0;
+  int _polarisDamageHits = 0;
+
+  // Gunther: friendship points (rooms cleared with chance to gain friendship)
+  // Stage 1: 0-2, Stage 2: 3-5, Stage 3: 6+
+  int _guntherFriendship = 0;
+
+  // Gun Soul: death/respawn state
+  // false = normal, true = died and respawned (soul must be reclaimed)
+  bool _gunSoulActivated = false;
 
   // Sprun mystery trigger: -1 = not yet revealed for this run,
   // 0..4 = index into the possible trigger list shown in the tracker.
@@ -104,8 +117,12 @@ class RunProvider with ChangeNotifier {
   int get spiceUsageCount => _spiceUsageCount;
   int get shellegunMode => _shellegunMode;
   int get chamberGunFloor => _chamberGunFloor;
-  int get platinumBulletsKills => _platinumBulletsKills;
+  int get platinumBulletsSeconds => _platinumBulletsSeconds;
   int get ironCoinUses => _ironCoinUses;
+  int get polarisKills => _polarisKills;
+  int get polarisDamageHits => _polarisDamageHits;
+  int get guntherFriendship => _guntherFriendship;
+  bool get gunSoulActivated => _gunSoulActivated;
 
   int get robotArmor => _robotArmor;
   int get robotJunk => _robotJunk;
@@ -432,8 +449,12 @@ class RunProvider with ChangeNotifier {
       _spiceUsageCount = prefs.getInt('special.spice.count') ?? 0;
       _shellegunMode = prefs.getInt('special.shellegun.mode') ?? 1;
       _chamberGunFloor = prefs.getInt('special.chambergun.floor') ?? 0;
-      _platinumBulletsKills = prefs.getInt('special.platinum.kills') ?? 0;
+      _platinumBulletsSeconds = prefs.getInt('special.platinum.seconds') ?? 0;
       _ironCoinUses = prefs.getInt('special.ironcoin.uses') ?? 3;
+      _polarisKills = prefs.getInt('special.polaris.kills') ?? 0;
+      _polarisDamageHits = prefs.getInt('special.polaris.hits') ?? 0;
+      _guntherFriendship = prefs.getInt('special.gunther.friendship') ?? 0;
+      _gunSoulActivated = prefs.getBool('special.gunsoul.activated') ?? false;
 
       // Robot specific values
       _robotArmor = prefs.getInt('special.robot.armor') ?? 6;
@@ -618,11 +639,11 @@ class RunProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setPlatinumBulletsKills(int kills) async {
-    _platinumBulletsKills = kills.clamp(0, 999);
+  Future<void> setPlatinumBulletsSeconds(int seconds) async {
+    _platinumBulletsSeconds = seconds.clamp(0, 999);
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt('special.platinum.kills', _platinumBulletsKills);
+      await prefs.setInt('special.platinum.seconds', _platinumBulletsSeconds);
     } catch (_) {}
     notifyListeners();
   }
@@ -632,6 +653,42 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.ironcoin.uses', _ironCoinUses);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> setPolarisKills(int kills) async {
+    _polarisKills = kills.clamp(0, 999);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.polaris.kills', _polarisKills);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> setPolarisDamageHits(int hits) async {
+    _polarisDamageHits = hits.clamp(0, 999);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.polaris.hits', _polarisDamageHits);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> setGuntherFriendship(int friendship) async {
+    _guntherFriendship = friendship.clamp(0, 99);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.gunther.friendship', _guntherFriendship);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> setGunSoulActivated(bool activated) async {
+    _gunSoulActivated = activated;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('special.gunsoul.activated', _gunSoulActivated);
     } catch (_) {}
     notifyListeners();
   }

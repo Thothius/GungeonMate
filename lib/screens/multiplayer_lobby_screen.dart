@@ -106,16 +106,6 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     }
   }
 
-  String _formatTimestamp(int ms) {
-    final dt = DateTime.fromMillisecondsSinceEpoch(ms);
-    final y = dt.year;
-    final m = dt.month.toString().padLeft(2, '0');
-    final d = dt.day.toString().padLeft(2, '0');
-    final h = dt.hour.toString().padLeft(2, '0');
-    final min = dt.minute.toString().padLeft(2, '0');
-    return '$y-$m-$d $h:$min';
-  }
-
   Future<void> _hydrateNickname() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -669,7 +659,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'This restores the run with ${p1Char} & ${p2Char}. Choose your connection role to resume matchmaking:',
+                'This restores the run with $p1Char & $p2Char. Choose your connection role to resume matchmaking:',
                 style: const TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.3),
               ),
               const SizedBox(height: 16),

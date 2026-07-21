@@ -2688,10 +2688,9 @@ class _ItemBody extends StatelessWidget {
 
   Widget _buildPlatinumBulletsInfo(BuildContext context) {
     final p = context.watch<RunProvider>();
-    final kills = p.platinumBulletsKills;
-    // Each kill: +1% damage, +1% fire rate (caps at ~100 kills for display)
-    final damageBonus = kills;
-    final fireRateBonus = kills;
+    final seconds = p.platinumBulletsSeconds;
+    final dmgMult = seconds >= 750 ? 3.0 : 1.0 + (seconds / 750.0) * 2.0;
+    final fireRateMult = seconds >= 375 ? 3.0 : 1.0 + (seconds / 375.0) * 2.0;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -2709,7 +2708,7 @@ class _ItemBody extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Platinum Bullets — Kill Streak',
+                  'Platinum Bullets — Firing Time',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -2720,22 +2719,22 @@ class _ItemBody extends StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
-                onPressed: kills > 0 ? () => p.setPlatinumBulletsKills(kills - 1) : null,
+                onPressed: seconds > 0 ? () => p.setPlatinumBulletsSeconds((seconds - 30).clamp(0, 999)) : null,
               ),
               Text(
-                '$kills',
+                '${seconds}s',
                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
                 icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
-                onPressed: () => p.setPlatinumBulletsKills(kills + 1),
+                onPressed: () => p.setPlatinumBulletsSeconds((seconds + 30).clamp(0, 999)),
               ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
-            '+$damageBonus% Damage  •  +$fireRateBonus% Fire Rate',
+            '${dmgMult.toStringAsFixed(1)}x Damage  •  ${fireRateMult.toStringAsFixed(1)}x Fire Rate',
             style: TextStyle(
               fontSize: 12.5,
               fontWeight: FontWeight.bold,
@@ -2744,7 +2743,7 @@ class _ItemBody extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Each enemy kill permanently increases damage and fire rate by 1%. The bonus persists for the entire run.',
+            'Damage & fire rate scale with firing time. Damage maxes at 3x after 750s, fire rate at 3x after 375s. Starts partially powered on later floors.',
             style: TextStyle(
               fontSize: 12,
               color: Colors.white.withValues(alpha: 0.75),

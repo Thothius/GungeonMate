@@ -216,7 +216,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final onMyMpPage = isMpActive
         ? _currentPage == myMpPage
         : true;
-    final onCoop = !isMpActive && hasCoop && _currentPage == 1;
+    // onCoop tracking removed — was unused
 
     void navigateTo(int i) => _page.animateToPage(i,
         duration: const Duration(milliseconds: 260), curve: Curves.easeOut);
@@ -304,7 +304,6 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       builder: (bContext) {
         return StatefulBuilder(
           builder: (sContext, setModalState) {
-            final textTheme = Theme.of(sContext).textTheme;
             final query = _quickQuery.toLowerCase().trim();
 
             // Smart relevance matching & sorting:
@@ -1197,7 +1196,7 @@ class _MpHeader extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   // Simplified stream-lined log console
-                  const Row(
+                  Row(
                     children: [
                       Icon(Icons.terminal_rounded, size: 14, color: Colors.greenAccent),
                       const SizedBox(width: 6),
@@ -1474,14 +1473,6 @@ class _PlayerPageState extends State<_PlayerPage> {
     }
   }
 
-  /// Cycle between the available [_InvView] modes: grid ➔ list.
-  void _toggleInvView() {
-    setState(() {
-      _invView = _invView == _InvView.grid ? _InvView.list : _InvView.grid;
-    });
-    _saveInvView(_invView);
-  }
-
   void _changeLayout(Object layout) {
     if (layout is _InvView) {
       setState(() {
@@ -1515,7 +1506,6 @@ class _PlayerPageState extends State<_PlayerPage> {
     if (player == null || player.character == null) {
       return const Center(child: Text('No player'));
     }
-    final avgDps = isMain ? p.avgDps : p.avgDpsCoop;
     final activeSynergies =
         isMain ? p.getActiveSynergies().length : 0;
     final hasCoop = state.hasCoop;
@@ -1524,7 +1514,6 @@ class _PlayerPageState extends State<_PlayerPage> {
     // For local co-op: allow transfers whenever hasCoop.
     final mpSession = context.watch<MultiplayerSession>();
     final isMpActive = mpSession.status != MpStatus.idle;
-    final canTransfer = hasCoop && (!isMpActive || mpSession.isConnected);
 
     return ValueListenableBuilder<VisualPrefs>(
       valueListenable: VisualPrefs.notifier,
@@ -1694,7 +1683,7 @@ class _PlayerPageState extends State<_PlayerPage> {
               itemBuilder: (c, i) {
                 final g = guns[i];
                 return Dismissible(
-                  key: Key('gun_${g.name}_${_slot}'),
+                  key: Key('gun_${g.name}_$_slot'),
                   direction: DismissDirection.endToStart,
                   background: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4),
@@ -1773,7 +1762,7 @@ class _PlayerPageState extends State<_PlayerPage> {
               itemBuilder: (c, i) {
                 final it = items[i];
                 return Dismissible(
-                  key: Key('item_${it.name}_${_slot}'),
+                  key: Key('item_${it.name}_$_slot'),
                   direction: DismissDirection.endToStart,
                   background: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4),
@@ -2983,9 +2972,9 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                                                   ? () => p.addItem(junkItem, slot: widget.slot)
                                                   : null,
                                               behavior: HitTestBehavior.opaque,
-                                              child: const Padding(
+                                              child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.add_circle_rounded,
                                                   color: Colors.tealAccent,
                                                   size: 24,
@@ -3262,9 +3251,9 @@ class _GunderfuryDashboardSliverState extends State<_GunderfuryDashboardSliver> 
                                             GestureDetector(
                                               onTap: lvl < 60 ? () => p.setGunderfuryLevel(lvl + 1) : null,
                                               behavior: HitTestBehavior.opaque,
-                                              child: const Padding(
+                                              child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.add_circle_rounded,
                                                   color: Colors.purpleAccent,
                                                   size: 24,
@@ -3475,9 +3464,9 @@ class _TripleGunDashboardSliverState extends State<_TripleGunDashboardSliver> {
                                             GestureDetector(
                                               onTap: form < 3 ? () => p.setTripleGunForm(form + 1) : null,
                                               behavior: HitTestBehavior.opaque,
-                                              child: const Padding(
+                                              child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.add_circle_rounded,
                                                   color: Colors.blueAccent,
                                                   size: 24,
@@ -3686,9 +3675,9 @@ class _EvolverDashboardSliverState extends State<_EvolverDashboardSliver> {
                                             GestureDetector(
                                               onTap: activeStage < 6 ? () => p.setEvolverForm(activeStage + 1) : null,
                                               behavior: HitTestBehavior.opaque,
-                                              child: const Padding(
+                                              child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.add_circle_rounded,
                                                   color: Colors.greenAccent,
                                                   size: 24,
@@ -4263,6 +4252,18 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
       dashboards.add(_CigarettesDashboard(slot: widget.slot));
       labels.add('CIGARETTES');
     }
+    if (ownedGunNames.contains('polaris')) {
+      dashboards.add(_PolarisDashboard(slot: widget.slot));
+      labels.add('POLARIS');
+    }
+    if (ownedGunNames.contains('gunther')) {
+      dashboards.add(_GuntherDashboard(slot: widget.slot));
+      labels.add('GUNTHER');
+    }
+    if (ownedItemNames.contains('gun soul')) {
+      dashboards.add(_GunSoulDashboard(slot: widget.slot));
+      labels.add('GUN SOUL');
+    }
     if (dashboards.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
 
     // Clamp page index
@@ -4530,9 +4531,18 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
   Widget build(BuildContext context) {
     super.build(context);
     final p = context.watch<RunProvider>();
-    final kills = p.platinumBulletsKills;
-    final dmgBonus = (kills * 0.5).toStringAsFixed(1);
-    final fireRateBonus = (kills * 0.2).toStringAsFixed(1);
+    final seconds = p.platinumBulletsSeconds;
+
+    // Wiki: Fire rate doubles every 250s, maxes at 3x after 375s.
+    // Damage doubles every 500s, maxes at 3x after 750s.
+    final fireRateMult = seconds >= 375 ? 3.0 : 1.0 + (seconds / 375.0) * 2.0;
+    final dmgMult = seconds >= 750 ? 3.0 : 1.0 + (seconds / 750.0) * 2.0;
+    String tierLabel(double mult) {
+      if (mult >= 3.0) return 'MAX';
+      if (mult >= 2.0) return 'T2';
+      if (mult > 1.0) return 'T1';
+      return 'BASE';
+    }
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -4557,35 +4567,39 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
                   ),
                   const Spacer(),
                   Text(
-                    '$kills kills',
+                    '${seconds}s fired',
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
-              Row(
-                children: [
-                  _statChip('DMG +$dmgBonus%', Colors.redAccent),
-                  const SizedBox(width: 8),
-                  _statChip('FIRE RATE +$fireRateBonus%', Colors.orangeAccent),
-                ],
-              ),
+              // Damage multiplier row
+              _buildMultRow('DMG', dmgMult, seconds, 750, Colors.redAccent, tierLabel(dmgMult)),
+              const SizedBox(height: 8),
+              // Fire rate multiplier row
+              _buildMultRow('RATE', fireRateMult, seconds, 375, Colors.orangeAccent, tierLabel(fireRateMult)),
               const SizedBox(height: 10),
               Text(
-                'Each kill stacks +0.5% damage and +0.2% fire rate. Bonus persists for the entire run.',
+                'Damage & fire rate scale with firing time. Max 3x each. Tap +30s after each fight.',
                 style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: kills > 0 ? () { Haptics.light(); p.setPlatinumBulletsKills(kills - 1); } : null,
+                    onPressed: seconds > 0 ? () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds - 30).clamp(0, 999)); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 20),
                   ),
-                  Text('$kills', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+                  Text('${seconds}s', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
-                    onPressed: () { Haptics.light(); p.setPlatinumBulletsKills(kills + 1); },
+                    onPressed: () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds + 30).clamp(0, 999)); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 20),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () { Haptics.selection(); p.setPlatinumBulletsSeconds(0); },
+                    child: const Text('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
                   ),
                 ],
               ),
@@ -4596,15 +4610,44 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
     );
   }
 
-  Widget _statChip(String label, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
-      child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: color)),
+  Widget _buildMultRow(String label, double mult, int seconds, int maxSeconds, Color color, String tier) {
+    final progress = (seconds / maxSeconds).clamp(0.0, 1.0);
+    return Row(
+      children: [
+        SizedBox(
+          width: 36,
+          child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: color)),
+        ),
+        Expanded(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 6,
+              backgroundColor: Colors.white.withValues(alpha: 0.08),
+              valueColor: AlwaysStoppedAnimation(color.withValues(alpha: 0.8)),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        SizedBox(
+          width: 56,
+          child: Text(
+            '${mult.toStringAsFixed(1)}x',
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color),
+            textAlign: TextAlign.right,
+          ),
+        ),
+        const SizedBox(width: 4),
+        SizedBox(
+          width: 32,
+          child: Text(
+            tier,
+            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: color.withValues(alpha: 0.6)),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -4719,15 +4762,17 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
     final p = context.watch<RunProvider>();
     final count = p.spiceUsageCount;
 
-    final damageBonus = count <= 4
-        ? [0, 0, 20, 40, 55][count.clamp(0, 4)]
-        : 55 + (count - 4) * 15;
+    final damageBonus = count <= 2
+        ? 0
+        : count == 3
+            ? 20
+            : 20 + (count - 3) * 15;
     final curseTotal = count == 0
         ? 0.0
         : count == 1
             ? 0.5
             : 0.5 + (count - 1);
-    final heartChange = count <= 1 ? count : (2 - count).clamp(-2, 1);
+    final heartChange = count <= 2 ? count : 4 - count;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -4770,9 +4815,13 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
               const SizedBox(height: 10),
               Text(
                 count == 0
-                    ? 'No Spice used. 1st use: +1 Heart, +1 Cool, +20% Shot Speed, -10% Spread, +0.5 Curse.'
+                    ? 'No Spice used. 1st use: +1 Heart, +20% Speed, -25% Spread, +0.5 Curse.'
+                    : count == 1
+                        ? '1 use done. 2nd use: +1 Heart, -10% Enemy Bullet Speed, +20% Fire Rate, +1 Curse.'
+                    : count == 2
+                        ? '2 uses done. 3rd use: -1 Heart, +20% Damage, -5% Enemy Bullet Speed, +1 Curse.'
                     : count < 5
-                        ? 'Escalating bonuses. Each use adds damage but costs hearts and curse.'
+                        ? 'Escalating bonuses. Each use: -1 Heart, +15% Damage, +10% Spread, +1 Curse.'
                         : 'Diminishing returns: +15% Dmg, +1.0 Curse per additional use.',
                 style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
@@ -5222,6 +5271,401 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
         Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
         Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
       ],
+    );
+  }
+}
+
+// =============================================================================
+// Polaris Dashboard — 3-level kill tracker with damage penalty
+// =============================================================================
+
+class _PolarisDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _PolarisDashboard({required this.slot});
+
+  @override
+  State<_PolarisDashboard> createState() => _PolarisDashboardState();
+}
+
+class _PolarisDashboardState extends State<_PolarisDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final kills = p.polarisKills;
+    final hits = p.polarisDamageHits;
+
+    // Effective level: base from kills, minus damage hits
+    final baseLevel = kills >= 31 ? 3 : kills >= 11 ? 2 : 1;
+    final effectiveLevel = (baseLevel - hits).clamp(1, 3);
+
+    final dmgPerShot = effectiveLevel == 3 ? 25 : effectiveLevel == 2 ? '5x2' : 5;
+    final dps = effectiveLevel == 3 ? 89.6 : effectiveLevel == 2 ? 35.8 : 17.9;
+    final nextThreshold = effectiveLevel == 1 ? 11 : effectiveLevel == 2 ? 31 : null;
+    final progressToNext = nextThreshold == null
+        ? 1.0
+        : (kills - (effectiveLevel == 2 ? 11 : 0)) / (nextThreshold - (effectiveLevel == 2 ? 11 : 0));
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0E1218),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.auto_awesome, color: Colors.amberAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'POLARIS',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+                    ),
+                    child: Text(
+                      'LV $effectiveLevel',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Level progress bar
+              if (nextThreshold != null) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(3),
+                  child: LinearProgressIndicator(
+                    value: progressToNext.clamp(0.0, 1.0),
+                    minHeight: 5,
+                    backgroundColor: Colors.white.withValues(alpha: 0.08),
+                    valueColor: const AlwaysStoppedAnimation(Colors.amberAccent),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$kills / $nextThreshold kills to Lv ${effectiveLevel + 1}',
+                  style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
+                ),
+              ] else
+                Text('MAX LEVEL', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.amberAccent.withValues(alpha: 0.8))),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _statChip('DMG', '$dmgPerShot'),
+                  _statChip('DPS', dps.toStringAsFixed(1)),
+                  _statChip('Hits', '$hits'),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                effectiveLevel == 3
+                    ? 'L3: 25 damage per shot. Homing with Star Friends synergy.'
+                    : effectiveLevel == 2
+                        ? 'L2: Fires 2 bullets (5 dmg each). Double chance-based effect triggers.'
+                        : 'L1: 5 damage per shot. Kill enemies to level up.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: kills > 0 ? () { Haptics.light(); p.setPolarisKills(kills - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.amberAccent, size: 20),
+                  ),
+                  Text('$kills kills', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
+                  IconButton(
+                    onPressed: () { Haptics.light(); p.setPolarisKills(kills + 1); },
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.amberAccent, size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  IconButton(
+                    onPressed: hits > 0 ? () { Haptics.light(); p.setPolarisDamageHits(hits - 1); } : null,
+                    icon: const Icon(Icons.remove, color: Colors.redAccent, size: 18),
+                    tooltip: 'Reduce damage hits',
+                  ),
+                  Text('-$hits', style: TextStyle(fontSize: 12, color: Colors.redAccent.withValues(alpha: 0.8))),
+                  IconButton(
+                    onPressed: () { Haptics.light(); p.setPolarisDamageHits(hits + 1); },
+                    icon: const Icon(Icons.add, color: Colors.redAccent, size: 18),
+                    tooltip: 'Took damage (level drop)',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _statChip(String label, String value) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
+      ],
+    );
+  }
+}
+
+// =============================================================================
+// Gunther Dashboard — 3-stage friendship tracker
+// =============================================================================
+
+class _GuntherDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _GuntherDashboard({required this.slot});
+
+  @override
+  State<_GuntherDashboard> createState() => _GuntherDashboardState();
+}
+
+class _GuntherDashboardState extends State<_GuntherDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final friendship = p.guntherFriendship;
+
+    final stage = friendship >= 6 ? 3 : friendship >= 3 ? 2 : 1;
+    final dmg = stage == 3 ? 12 : stage == 2 ? 9 : 6;
+    final dps = stage == 3 ? 69.2 : stage == 2 ? 51.9 : 34.6;
+    final trait = stage == 3 ? 'Homing' : stage == 2 ? 'Bounces 2x' : 'Piercing';
+    final nextFriendship = stage == 1 ? 3 : stage == 2 ? 6 : null;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0F0E18),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.purple.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.chat_bubble, color: Colors.purpleAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'GUNTHER',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.purple.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: Colors.purple.withValues(alpha: 0.4)),
+                    ),
+                    child: Text(
+                      'STAGE $stage',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Friendship progress
+              if (nextFriendship != null) ...[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(3),
+                  child: LinearProgressIndicator(
+                    value: (friendship / nextFriendship).clamp(0.0, 1.0),
+                    minHeight: 5,
+                    backgroundColor: Colors.white.withValues(alpha: 0.08),
+                    valueColor: const AlwaysStoppedAnimation(Colors.purpleAccent),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$friendship / $nextFriendship friendship to Stage ${stage + 1}',
+                  style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
+                ),
+              ] else
+                Text('MAX STAGE — Sentient & Homing', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.purpleAccent.withValues(alpha: 0.8))),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _statChip('DMG', '$dmg'),
+                  _statChip('DPS', dps.toStringAsFixed(1)),
+                  _statChip('Trait', trait),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                stage == 3
+                    ? 'L3: 12 dmg, homing bullets. Fully sentient — talks frequently.'
+                    : stage == 2
+                        ? 'L2: 9 dmg, bullets bounce twice. Growing personality.'
+                        : 'L1: 6 dmg, piercing bullets. Clear rooms to gain friendship.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: friendship > 0 ? () { Haptics.light(); p.setGuntherFriendship(friendship - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 20),
+                  ),
+                  Text('$friendship', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                  IconButton(
+                    onPressed: () { Haptics.light(); p.setGuntherFriendship(friendship + 1); },
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 20),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _statChip(String label, String value) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.purpleAccent)),
+      ],
+    );
+  }
+}
+
+// =============================================================================
+// Gun Soul Dashboard — death/respawn toggle
+// =============================================================================
+
+class _GunSoulDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _GunSoulDashboard({required this.slot});
+
+  @override
+  State<_GunSoulDashboard> createState() => _GunSoulDashboardState();
+}
+
+class _GunSoulDashboardState extends State<_GunSoulDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final activated = p.gunSoulActivated;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF180E0E),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: activated ? Colors.orange.withValues(alpha: 0.5) : Colors.deepOrange.withValues(alpha: 0.3),
+              width: 1.2,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    activated ? Icons.local_fire_department : Icons.shield,
+                    color: activated ? Colors.orangeAccent : Colors.deepOrangeAccent,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'GUN SOUL',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.deepOrangeAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: activated ? Colors.orange.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: activated ? Colors.orange.withValues(alpha: 0.5) : Colors.green.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    child: Text(
+                      activated ? 'SOUL LOST' : 'ACTIVE',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        color: activated ? Colors.orangeAccent : Colors.greenAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                activated
+                    ? 'You died and respawned at floor start. Gun Soul is removed from your inventory. Reach the location of your death and interact with your soul to reclaim it — dying now will end the run.'
+                    : 'Grants +1 heart container. Upon death, respawns you at the start of the current floor with all items and guns retained. Enemies respawn.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton.icon(
+                    onPressed: () { Haptics.selection(); p.setGunSoulActivated(!activated); },
+                    icon: Icon(
+                      activated ? Icons.refresh : Icons.warning_amber,
+                      size: 16,
+                      color: activated ? Colors.greenAccent : Colors.orangeAccent,
+                    ),
+                    label: Text(
+                      activated ? 'Soul Reclaimed' : 'Died — Respawned',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: activated ? Colors.greenAccent : Colors.orangeAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -6604,6 +7048,7 @@ class _StarterHint extends StatelessWidget {
     required this.kind,
     required this.slot,
     required this.tileGrid,
+    // ignore: unused_element_parameter
     this.wideMode = false,
   });
 
@@ -6817,7 +7262,6 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
   List<int>? _peerDice;
   int? _peerScore;
 
-  bool _peerAccepted = false;
   String _announcement = '';
 
   // Particles inside the dialog
@@ -6855,7 +7299,6 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
     _mp.onDiceAccept = () {
       if (mounted) {
         setState(() {
-          _peerAccepted = true;
           _status = _DiceStatus.rollingScreen;
         });
       }
@@ -7557,6 +8000,7 @@ class _DialogParticle {
     required this.vx,
     required this.vy,
     required this.color,
+    // ignore: unused_element_parameter
     this.life = 1.0,
   });
 }
@@ -7636,7 +8080,6 @@ DiceStyle _getDiceStyle(CustomDiceType type, ThemeFlair flair) {
         glow: Color(0x3300E676),
       );
     case CustomDiceType.themeDefault:
-    default:
       return DiceStyle(
         bg: const Color(0xFF161413),
         border: flair.primary,

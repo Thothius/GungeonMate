@@ -21,7 +21,6 @@ class VerticalSwipeLayout extends StatefulWidget {
 class _VerticalSwipeLayoutState extends State<VerticalSwipeLayout> with SingleTickerProviderStateMixin {
   late final PageController _pageController;
   late final AnimationController _arrowController;
-  int _currentPage = 0;
 
   @override
   void initState() {
@@ -41,9 +40,7 @@ class _VerticalSwipeLayoutState extends State<VerticalSwipeLayout> with SingleTi
   }
 
   void _onPageChanged(int index) {
-    setState(() {
-      _currentPage = index;
-    });
+    setState(() {});
   }
 
   @override

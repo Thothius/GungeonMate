@@ -190,7 +190,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
       builder: (context, _, __) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-            textScaleFactor: MediaQuery.of(context).textScaleFactor.clamp(0.8, 1.35),
+            textScaler: TextScaler.linear(MediaQuery.of(context).textScaler.scale(1).clamp(0.8, 1.35)),
           ),
           child: _buildExpanded(context),
         );
