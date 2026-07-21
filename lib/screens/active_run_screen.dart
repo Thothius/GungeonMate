@@ -975,8 +975,8 @@ class _MpHeader extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Flexible(
-                    flex: 1,
+                  Expanded(
+                    flex: 2,
                     child: _SummaryTab(
                       active: currentPage == 2,
                       onTap: () => onPick(2),
@@ -7406,7 +7406,7 @@ class _SummaryTab extends StatelessWidget {
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
           decoration: BoxDecoration(
             color: active
                 ? primary.withValues(alpha: 0.15)
@@ -7430,11 +7430,11 @@ class _SummaryTab extends StatelessWidget {
                     : Colors.white.withValues(alpha: 0.55),
               ),
               const SizedBox(width: 4),
-              Flexible(
+              FittedBox(
+                fit: BoxFit.scaleDown,
                 child: Text(
                   'SUMMARY',
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 10,
                     letterSpacing: 0.8,
