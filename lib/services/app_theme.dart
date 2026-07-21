@@ -1864,11 +1864,6 @@ class VisualPrefs {
   /// User-selected glow color for the ambient screen glow (12-color palette).
   final int glowColorIndex;
 
-  /// Handcrafted particle effects toggles
-  final bool particleRotation;
-  final bool gravityVortex;
-  final bool advancedFlicker;
-
   /// Font-weight bias applied globally on top of the active theme.
   /// Adjusted in increments of 100 (e.g. -400 to +500). Stored as an integer.
   final int fontWeightBias;
@@ -1904,9 +1899,6 @@ class VisualPrefs {
 
   final bool isGoopianLanguage;
   final bool spongeActive;
-
-  /// Whether particle count is halved for better readability.
-  final bool subtleParticleMode;
 
   /// Whether the universal Damage Calculator terminal is shown on the
   /// active-run dashboard for every character (Robot keeps its own
@@ -1954,9 +1946,6 @@ class VisualPrefs {
     this.particleLineLinks = false,
     this.particleBounce = false,
     this.glowColorIndex = 0,
-    this.particleRotation = true,
-    this.gravityVortex = true,
-    this.advancedFlicker = true,
     this.fontWeightBias = 0,
     this.font = AppFont.gungeon,
     this.fontSize = 12.0,
@@ -1974,7 +1963,6 @@ class VisualPrefs {
     this.dialogueTextSpeedMs = 30,
     this.isGoopianLanguage = false,
     this.spongeActive = false,
-    this.subtleParticleMode = false,
     this.showDamageCalculator = true,
     this.periodicGridColumnCount = 0,
     this.wallpaperMode = WallpaperMode.themeDefault,
@@ -1985,9 +1973,6 @@ class VisualPrefs {
 
   static const _kGlow     = 'vp.glow_v1';
   static const _kParticles = 'vp.particles_v1';
-  static const _kRot      = 'vp.rot_v1';
-  static const _kVortex   = 'vp.vortex_v1';
-  static const _kFlicker  = 'vp.flicker_v1';
   static const _kWeight   = 'vp.weight_v1';
   static const _kFont     = 'vp.font_v1';
   static const _kFontSize = 'vp.font_size_v1';
@@ -2013,7 +1998,6 @@ class VisualPrefs {
   static const _kDialogueTextSpeed = 'vp.dialogue_text_speed_v1';
   static const _kGoopianLanguage = 'vp.goopian_language_v1';
   static const _kSpongeActive = 'vp.sponge_active_v1';
-  static const _kSubtleParticleMode = 'vp.subtle_particle_mode_v1';
   static const _kShowDamageCalculator = 'vp.show_damage_calculator_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kWallpaperMode = 'vp.wallpaper_mode_v1';
@@ -2073,7 +2057,6 @@ class VisualPrefs {
 
       final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
-      final subtleParticleMode = p.getBool(_kSubtleParticleMode) ?? false;
       final showDamageCalculator = p.getBool(_kShowDamageCalculator) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
 
@@ -2103,9 +2086,6 @@ class VisualPrefs {
         particleLineLinks: particleLineLinks,
         particleBounce:   particleBounce,
         glowColorIndex:   glowColorIndex,
-        particleRotation: p.getBool(_kRot)        ?? true,
-        gravityVortex:    p.getBool(_kVortex)     ?? true,
-        advancedFlicker:  p.getBool(_kFlicker)    ?? true,
         fontWeightBias:   p.getInt(_kWeight)      ?? 0,
         font:             font,
         fontSize:         fontSize,
@@ -2123,7 +2103,6 @@ class VisualPrefs {
         dialogueTextSpeedMs: p.getInt(_kDialogueTextSpeed) ?? 30,
         isGoopianLanguage: isGoopian,
         spongeActive: spongeActive,
-        subtleParticleMode: subtleParticleMode,
         showDamageCalculator: showDamageCalculator,
         periodicGridColumnCount: periodicGridColumnCount,
         wallpaperMode: wallpaperMode,
@@ -2141,21 +2120,6 @@ class VisualPrefs {
 
   static Future<void> setParticles(bool v) async {
     notifier.value = notifier.value._with(particlesEnabled: v);
-    _persist();
-  }
-
-  static Future<void> setParticleRotation(bool v) async {
-    notifier.value = notifier.value._with(particleRotation: v);
-    _persist();
-  }
-
-  static Future<void> setGravityVortex(bool v) async {
-    notifier.value = notifier.value._with(gravityVortex: v);
-    _persist();
-  }
-
-  static Future<void> setAdvancedFlicker(bool v) async {
-    notifier.value = notifier.value._with(advancedFlicker: v);
     _persist();
   }
 
@@ -2271,11 +2235,6 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setSubtleParticleMode(bool v) async {
-    notifier.value = notifier.value._with(subtleParticleMode: v);
-    _persist();
-  }
-
   static Future<void> setShowDamageCalculator(bool v) async {
     notifier.value = notifier.value._with(showDamageCalculator: v);
     _persist();
@@ -2312,9 +2271,6 @@ class VisualPrefs {
       final v = notifier.value;
       await p.setDouble(_kGlow,     v.glowIntensity);
       await p.setBool(_kParticles,  v.particlesEnabled);
-      await p.setBool(_kRot,        v.particleRotation);
-      await p.setBool(_kVortex,     v.gravityVortex);
-      await p.setBool(_kFlicker,    v.advancedFlicker);
       await p.setInt(_kWeight,      v.fontWeightBias);
       await p.setInt(_kFont,        v.font.index);
       await p.setDouble(_kFontSize,  v.fontSize);
@@ -2338,7 +2294,6 @@ class VisualPrefs {
       await p.setInt(_kDialogueTextSpeed, v.dialogueTextSpeedMs);
       await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
       await p.setBool(_kSpongeActive, v.spongeActive);
-      await p.setBool(_kSubtleParticleMode, v.subtleParticleMode);
       await p.setBool(_kShowDamageCalculator, v.showDamageCalculator);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kWallpaperMode, v.wallpaperMode.index);
@@ -2351,9 +2306,6 @@ class VisualPrefs {
   VisualPrefs _with({
     double? glowIntensity,
     bool?   particlesEnabled,
-    bool?   particleRotation,
-    bool?   gravityVortex,
-    bool?   advancedFlicker,
     int?    fontWeightBias,
     AppFont? font,
     double? fontSize,
@@ -2376,7 +2328,6 @@ class VisualPrefs {
     int?    dialogueTextSpeedMs,
     bool?   isGoopianLanguage,
     bool?   spongeActive,
-    bool?   subtleParticleMode,
     bool?   showDamageCalculator,
     int?    periodicGridColumnCount,
     WallpaperMode? wallpaperMode,
@@ -2386,9 +2337,6 @@ class VisualPrefs {
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
-    particleRotation: particleRotation ?? this.particleRotation,
-    gravityVortex:    gravityVortex    ?? this.gravityVortex,
-    advancedFlicker:  advancedFlicker  ?? this.advancedFlicker,
     fontWeightBias:   fontWeightBias   ?? this.fontWeightBias,
     font:             font             ?? this.font,
     fontSize:         fontSize         ?? this.fontSize,
@@ -2411,7 +2359,6 @@ class VisualPrefs {
     dialogueTextSpeedMs: dialogueTextSpeedMs ?? this.dialogueTextSpeedMs,
     isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
     spongeActive:     spongeActive      ?? this.spongeActive,
-    subtleParticleMode: subtleParticleMode ?? this.subtleParticleMode,
     showDamageCalculator: showDamageCalculator ?? this.showDamageCalculator,
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
     wallpaperMode:    wallpaperMode     ?? this.wallpaperMode,
