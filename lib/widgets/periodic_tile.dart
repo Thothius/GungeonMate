@@ -603,11 +603,42 @@ class _PeriodicTileState extends State<PeriodicTile>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Header row: quality badge + type badge
+                  // Top: big icon + full-width name + quality badge
                   Row(
                     children: [
-                      maybeQualityBadge(size: 18),
+                      SizedBox(
+                        width: 34,
+                        height: 34,
+                        child: GameIcon(
+                          assetPath: _iconPath,
+                          fallback: isGun ? Icons.gps_fixed : Icons.extension,
+                          quality: _quality,
+                          size: 34,
+                          showRing: false,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: GoopText(
+                          _name.toUpperCase(),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: statsFontSize + 1,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
                       const SizedBox(width: 6),
+                      maybeQualityBadge(size: 18),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  // Type badge + indicators row
+                  Row(
+                    children: [
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
@@ -628,11 +659,12 @@ class _PeriodicTileState extends State<PeriodicTile>
                       const Spacer(),
                       if (widget.isTopDps)
                         const Icon(Icons.local_fire_department_rounded, color: Colors.orangeAccent, size: 16),
-                      maybeFastActiveDot(),
                     ],
                   ),
                   const SizedBox(height: 6),
-                  // 2×3 stat grid
+                  const Divider(height: 1, thickness: 0.5, color: Colors.white10),
+                  const SizedBox(height: 4),
+                  // 2×3 stat grid — all stats visible
                   Expanded(
                     child: isGun
                         ? _StatGrid(
@@ -659,42 +691,6 @@ class _PeriodicTileState extends State<PeriodicTile>
                             valueSize: statsFontSize,
                             labelSize: labelFontSize,
                           ),
-                  ),
-                  // Footer: icon + name
-                  Container(
-                    padding: const EdgeInsets.only(top: 6),
-                    decoration: const BoxDecoration(
-                      border: Border(top: BorderSide(color: Colors.white10, width: 0.5)),
-                    ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: GameIcon(
-                            assetPath: _iconPath,
-                            fallback: isGun ? Icons.gps_fixed : Icons.extension,
-                            quality: _quality,
-                            size: 22,
-                            showRing: false,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Expanded(
-                          child: GoopText(
-                            _name.toUpperCase(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: statsFontSize,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -935,7 +931,7 @@ class _StatGrid extends StatelessWidget {
       padding: EdgeInsets.zero,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 2.8,
+        childAspectRatio: 2.0,
         mainAxisSpacing: 2,
         crossAxisSpacing: 6,
       ),

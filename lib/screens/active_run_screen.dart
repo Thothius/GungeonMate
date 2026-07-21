@@ -2039,8 +2039,8 @@ class _PlayerPageState extends State<_PlayerPage> {
         ratio = 0.80;
         break;
       case InventoryDisplayMode.tacticalStats:
-        cross = w < 500 ? 2 : w < 850 ? 3 : 5;
-        ratio = 1.6;
+        cross = w < 500 ? 2 : w < 850 ? 3 : 4;
+        ratio = 0.95;
         break;
     }
 
