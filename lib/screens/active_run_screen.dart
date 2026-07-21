@@ -8111,7 +8111,18 @@ class _SynergySummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final missing = synergy.missingFor(ownedLower);
-    final isPartial = !isActive && missing.length < (synergy.items.length + (synergy.anyOf.isNotEmpty ? 1 : 0));
+    final totalNeeded = synergy.items.length + (synergy.anyOf.isNotEmpty ? 1 : 0);
+    final isPartial = !isActive && missing.length < totalNeeded;
+
+    // Special-case synergies (Smart Bombs, Super Serum, Unbelievably
+    // Charming) have items:[] and custom match logic needing ≥2 anyOf.
+    // missingFor returns [] when anyOf is partially satisfied, leaving
+    // no hint text. Add a fallback so the user sees what's needed.
+    final missingHint = missing.isNotEmpty
+        ? 'Need: ${missing.take(3).join(", ")}${missing.length > 3 ? "…" : ""}'
+        : (isPartial && synergy.items.isEmpty && synergy.anyOf.isNotEmpty
+            ? 'Need: 1 more from ${synergy.anyOf.take(3).join(", ")}${synergy.anyOf.length > 3 ? "…" : ""}'
+            : null);
 
     final statusColor = isActive
         ? Colors.greenAccent
@@ -8170,10 +8181,10 @@ class _SynergySummaryRow extends StatelessWidget {
                           : Colors.white.withValues(alpha: 0.7),
                     ),
                   ),
-                  if (!isActive && missing.isNotEmpty) ...[
+                  if (!isActive && missingHint != null) ...[
                     const SizedBox(height: 2),
                     Text(
-                      'Need: ${missing.take(3).join(", ")}${missing.length > 3 ? "…" : ""}',
+                      missingHint,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
