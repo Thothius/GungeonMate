@@ -33,6 +33,56 @@ class _MpRequestListenerState extends State<MpRequestListener> {
   BuildContext? _dropDialogCtx;
 
   @override
+  void initState() {
+    super.initState();
+    // Listen for reconnection success to show a themed confirmation.
+    // Post-frame to ensure ScaffoldMessenger is available.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final session = context.read<MultiplayerSession>();
+      session.reconnectSuccessNotifier.addListener(_onReconnectSuccess);
+    });
+  }
+
+  @override
+  void dispose() {
+    // ponytail: context.read may fail in dispose if widget tree is torn
+    // down, so guard with try/catch.
+    try {
+      context.read<MultiplayerSession>().reconnectSuccessNotifier
+          .removeListener(_onReconnectSuccess);
+    } catch (_) {}
+    super.dispose();
+  }
+
+  void _onReconnectSuccess() {
+    if (!mounted) return;
+    final session = context.read<MultiplayerSession>();
+    if (!session.reconnectSuccessNotifier.value) return;
+    session.reconnectSuccessNotifier.value = false;
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) return;
+    messenger.showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Icon(Icons.wifi_protected_setup, color: Color(0xFF00E676), size: 18),
+            SizedBox(width: 10),
+            Text('Connection restored!', style: TextStyle(fontWeight: FontWeight.w700)),
+          ],
+        ),
+        backgroundColor: const Color(0xFF1E1E22),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: Color(0xFF00E676), width: 1.5),
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final session = context.watch<MultiplayerSession>();
 
@@ -79,15 +129,27 @@ class _MpRequestListenerState extends State<MpRequestListener> {
                   letterSpacing: 0.5,
                 ),
               ),
-              content: const Text(
-                'Trying to reconnect to your peer…\n\n'
-                "Don't add or remove items right now — your changes "
-                "won't sync until the link is restored.",
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 12.5,
-                  height: 1.4,
-                ),
+              content: ListenableBuilder(
+                listenable: session,
+                builder: (context, _) {
+                  final att = session.autoReconnectAttempts;
+                  final isRetrying = session.isAutoReconnecting;
+                  return Text(
+                    isRetrying && att > 0
+                        ? 'Trying to reconnect to your peer…\n'
+                          'Auto-retry attempt #$att\n\n'
+                          "Don't add or remove items right now — your changes "
+                          "won't sync until the link is restored."
+                        : 'Trying to reconnect to your peer…\n\n'
+                          "Don't add or remove items right now — your changes "
+                          "won't sync until the link is restored.",
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12.5,
+                      height: 1.4,
+                    ),
+                  );
+                },
               ),
               actionsAlignment: MainAxisAlignment.spaceBetween,
               actions: [

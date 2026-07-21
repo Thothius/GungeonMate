@@ -1,5 +1,22 @@
 [
   {
+    "version": "v1.1.1",
+    "title": "\ud83d\udd01 MP RECONNECTION OVERHAUL: 10 BUG FIXES",
+    "date": "July 21, 2026",
+    "items": [
+      "PIN Code Persistence (CRITICAL): The MP session PIN is now saved to SharedPreferences and restored on app-kill recovery. Without this, the Main generated a new random PIN on restart and the Sidekick's endpoint filter silently rejected it — reconnection after app-kill was impossible.",
+      "RunState Restoration on App-Kill (CRITICAL): tryRestorePersistedSession now loads the full RunState (inventory, coolness, curse, shrines) from the most recent saved_mp_sessions entry, not just the role/character identity. Survives app-kill with zero data loss.",
+      "Sidekick Pre-MP State Persistence (HIGH): The Sidekick's pre-MP solo run snapshot is now persisted to disk and restored on app-kill recovery. Without this, cancel() after restore would overwrite the real pre-MP state with MP state.",
+      "Cancel Clears Reconnect Identity (CRITICAL): cancel() now clears _lastRole and _lastCharacter so canReconnect returns false. Prevents a PINless reconnect() call after cancel() zeroes the PIN.",
+      "State-Drift Protection During Disconnect (HIGH): Inventory mutations (addGun, removeGun, addItem, removeItem) are now blocked while MP is disconnected. Prevents local state drift that would overwrite the peer's correct state on reconnect.",
+      "FIX LINK Now Saves Before Reconnecting (MEDIUM): The FIX LINK button calls fullReconnectCycle() which saves the session to disk before restarting transport, guaranteeing a fresh restore point exists before teardown.",
+      "Connection Restored Popup (MEDIUM): A themed green SnackBar now appears when auto-reconnect succeeds, confirming the link is back so users don't have to guess.",
+      "Reconnect Attempt Count in Drop Dialog (MEDIUM): The connection-lost dialog now shows the live auto-retry attempt number so users know the system is actively trying.",
+      "Log NotifyListeners Debounced (MEDIUM): _log() now coalesces notifyListeners() calls via scheduleMicrotask, preventing 3-4 redundant UI rebuilds per auto-reconnect attempt.",
+      "MpError Triggers Auto-Reconnect (LOW): Transport errors (MpError events) now transition to disconnected state and start auto-reconnect, instead of leaving the session in a stale connected state with an error string."
+    ]
+  },
+  {
     "version": "v1.1.0",
     "title": "\ud83e\uddee UNIVERSAL DAMAGE CALCULATOR + UI CONTRAST OVERHAUL",
     "date": "July 7, 2026",

@@ -93,6 +93,19 @@ class RunProvider with ChangeNotifier {
   bool _isLoading = true;
   String? _error;
 
+  /// When true, inventory mutations are blocked to prevent state drift
+  /// during MP disconnect. Set by MultiplayerSession when status transitions
+  /// to/from disconnected. The drop dialog already prevents most UI taps,
+  /// but this is the belt-and-suspenders guard for programmatic calls.
+  bool _mpDisconnected = false;
+  bool get mpDisconnected => _mpDisconnected;
+  set mpDisconnected(bool value) {
+    if (_mpDisconnected != value) {
+      _mpDisconnected = value;
+      notifyListeners();
+    }
+  }
+
   RunState get runState => _runState;
   List<Gun> get allGuns => _allGuns;
   List<Item> get allItems => _allItems;
@@ -761,6 +774,7 @@ class RunProvider with ChangeNotifier {
   }
 
   void addGun(Gun gun, {PlayerSlot slot = PlayerSlot.main}) {
+    if (_mpDisconnected) return;
     final p = _playerFor(slot);
     if (p.guns.any((g) => g.name == gun.name)) return;
     _runState = _replacePlayer(slot, p.copyWith(guns: [...p.guns, gun]));
@@ -769,6 +783,7 @@ class RunProvider with ChangeNotifier {
   }
 
   void removeGun(Gun gun, {PlayerSlot slot = PlayerSlot.main}) {
+    if (_mpDisconnected) return;
     final p = _playerFor(slot);
     _runState = _replacePlayer(
         slot, p.copyWith(guns: p.guns.where((g) => g.name != gun.name).toList()));
@@ -777,6 +792,7 @@ class RunProvider with ChangeNotifier {
   }
 
   void addItem(Item item, {PlayerSlot slot = PlayerSlot.main}) {
+    if (_mpDisconnected) return;
     final p = _playerFor(slot);
     final isJunk = item.name.toLowerCase() == 'junk';
     if (!isJunk && p.items.any((i) => i.name == item.name)) return;
@@ -819,6 +835,7 @@ class RunProvider with ChangeNotifier {
   }
 
   void removeItem(Item item, {PlayerSlot slot = PlayerSlot.main}) {
+    if (_mpDisconnected) return;
     final p = _playerFor(slot);
     
     // Only remove one copy if it's Junk (to allow incremental stacking/unstacking)

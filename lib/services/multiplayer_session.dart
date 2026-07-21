@@ -21,6 +21,8 @@ const String _kMpPersistRole = 'mp_last_role';
 const String _kMpPersistChar = 'mp_last_character';
 const String _kMpPersistNick = 'mp_last_nickname';
 const String _kMpPersistActive = 'mp_session_active';
+const String _kMpPersistPin = 'mp_last_pin';
+const String _kMpPersistPreSidekick = 'mp_pre_sidekick';
 
 /// High-level state of the session from the UI's point of view. The
 /// multiplayer screen routes to a different view per value, so keep
@@ -163,17 +165,35 @@ class MultiplayerSession extends ChangeNotifier {
   /// transport handshakes in parallel.
   bool _busyTransition = false;
 
+  /// Fires once when a reconnection succeeds after a disconnect. UI
+  /// listens to show a "Connection Restored" popup. Auto-resets to false.
+  final ValueNotifier<bool> reconnectSuccessNotifier = ValueNotifier(false);
+
+  /// True if we were disconnected and are now reconnecting (used to
+  /// distinguish fresh connections from reconnections).
+  bool _wasDisconnected = false;
+
   final List<String> _connectionLogs = ['[SYSTEM] Multiplayer Diagnostic Log Initialized.'];
   List<String> get connectionLogs => _connectionLogs;
   int get lastPeerTouchMs => _lastPeerTouchMs;
 
+  bool _logNotifyScheduled = false;
   void _log(String message) {
     final now = DateTime.now();
     final timeStr = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}";
     final logLine = "[$timeStr] $message";
     _connectionLogs.add(logLine);
     if (_connectionLogs.length > 200) _connectionLogs.removeAt(0);
-    notifyListeners();
+    // Coalesce notifyListeners — multiple log lines in the same microtask
+    // batch into a single UI rebuild. Without this, auto-reconnect logs
+    // 3-4 lines in rapid succession, triggering 3-4 rebuilds per attempt.
+    if (!_logNotifyScheduled) {
+      _logNotifyScheduled = true;
+      scheduleMicrotask(() {
+        _logNotifyScheduled = false;
+        notifyListeners();
+      });
+    }
   }
 
   StreamSubscription<MpServiceEvent>? _eventSub;
@@ -221,6 +241,23 @@ class MultiplayerSession extends ChangeNotifier {
       await prefs.setString(_kMpPersistChar, _myCharacterName);
       await prefs.setString(_kMpPersistNick, _myNickname);
       await prefs.setBool(_kMpPersistActive, true);
+      // Persist PIN so both peers can re-discover each other with the
+      // same connection code after an app-kill. Without this, the Main
+      // generates a new random PIN on restart and the Sidekick's
+      // endpoint filter silently rejects it.
+      if (_pinCode != null && _pinCode!.isNotEmpty) {
+        await prefs.setString(_kMpPersistPin, _pinCode!);
+      }
+      // Persist pre-MP run snapshot for Sidekick so cancel() after
+      // app-kill restore doesn't overwrite the real pre-MP state.
+      if (_preSidekickRun != null) {
+        await prefs.setString(_kMpPersistPreSidekick, json.encode({
+          'main': _preSidekickRun!.main.toJson(),
+          'coolness': _preSidekickRun!.coolness,
+          'curse': _preSidekickRun!.curse,
+          'shrinesUsed': _preSidekickRun!.shrinesUsed,
+        }));
+      }
     } catch (_) {
       // Persistence is best-effort; never let a SharedPrefs failure
       // crash the session lifecycle.
@@ -234,6 +271,8 @@ class MultiplayerSession extends ChangeNotifier {
       await prefs.remove(_kMpPersistChar);
       await prefs.remove(_kMpPersistNick);
       await prefs.remove(_kMpPersistActive);
+      await prefs.remove(_kMpPersistPin);
+      await prefs.remove(_kMpPersistPreSidekick);
     } catch (_) {
       // ignore
     }
@@ -252,18 +291,63 @@ class MultiplayerSession extends ChangeNotifier {
       final roleName = prefs.getString(_kMpPersistRole);
       final charName = prefs.getString(_kMpPersistChar) ?? '';
       final nick = prefs.getString(_kMpPersistNick) ?? 'Player';
+      final savedPin = prefs.getString(_kMpPersistPin);
       if (roleName == null) return;
       final role = MpRole.values.firstWhere(
         (r) => r.name == roleName,
         orElse: () => MpRole.main,
       );
+
+      // Restore the PIN so both peers advertise/discover with the same
+      // connection code. Without this, the Main generates a new random
+      // PIN and the Sidekick's endpoint filter rejects it.
+      _pinCode = savedPin;
+
+      // Restore the pre-MP run snapshot for Sidekick so cancel() after
+      // app-kill doesn't overwrite the real pre-MP state with MP state.
+      final preSidekickJson = prefs.getString(_kMpPersistPreSidekick);
+      if (preSidekickJson != null) {
+        try {
+          final decoded = json.decode(preSidekickJson);
+          _preSidekickRun = (
+            main: Player.fromJson(decoded['main']),
+            coolness: (decoded['coolness'] as num).toDouble(),
+            curse: (decoded['curse'] as num).toDouble(),
+            shrinesUsed: List<String>.from(decoded['shrinesUsed'] ?? []),
+          );
+        } catch (_) {
+          // Corrupt JSON — leave _preSidekickRun null; cancel() will
+          // fall back to an empty Player.
+        }
+      }
+
+      // Restore the full RunState from the most recent saved_mp_sessions
+      // entry. The auto-save timer writes here every 20s while
+      // connected, and saveCurrentSession() fires on disconnect. This
+      // ensures inventory, coolness, curse, and shrines survive an
+      // app-kill — not just the role/character identity.
+      final savedList = prefs.getStringList('saved_mp_sessions') ?? [];
+      if (savedList.isNotEmpty) {
+        try {
+          final lastSaved = SavedMpSession.fromJson(
+            json.decode(savedList.last),
+          );
+          _runProvider.restoreEntireRunState(
+            RunState.fromJson(lastSaved.runStateJson),
+          );
+        } catch (_) {
+          // Corrupt saved session — fall through to startAsMain/Sidekick
+          // which will create a fresh run.
+        }
+      }
+
       if (role == MpRole.main) {
         final char = _runProvider.gungeoneerByName(charName);
         if (char != null) {
           await startAsMain(nickname: nick, character: char);
         }
       } else {
-        await startAsSidekick(nickname: nick);
+        await startAsSidekick(nickname: nick, pinCode: savedPin ?? '');
       }
     } catch (_) {
       // ignore
@@ -522,11 +606,17 @@ class MultiplayerSession extends ChangeNotifier {
     _sessionStartedAtMs = null;
     _pinCode = null;
     _mySnapshotSeq = 0;
+    // Clear reconnect identity so canReconnect returns false — prevents
+    // a PINless reconnect() call after cancel() zeroes _pinCode.
+    _lastRole = null;
+    _lastCharacter = null;
+    _lastNickname = 'Player';
     _peerRole = null;
     _peerNickname = null;
     _peerCharacterName = null;
     _peerLastSnapshotTs = 0;
     _protocolError = false;
+    _runProvider.mpDisconnected = false;
     _status = MpStatus.idle;
     _error = null;
     _log('Transport powered down. Returned to Idle.');
@@ -542,6 +632,17 @@ class MultiplayerSession extends ChangeNotifier {
 
   /// Whether an auto-reconnect retry is currently scheduled/running.
   bool get isAutoReconnecting => _autoReconnectTimer != null;
+
+  /// Full reconnect cycle for the FIX LINK button: save the current
+  /// session state to disk first (so it survives an app-kill during the
+  /// reconnect attempt), then call [reconnect] to restart transport.
+  /// This is safer than a bare reconnect() because it guarantees a
+  /// fresh restore point exists before the transport teardown.
+  Future<void> fullReconnectCycle() async {
+    _log('FIX LINK: Starting full reconnect cycle (save → reconnect)...');
+    await saveCurrentSession();
+    await reconnect();
+  }
 
   /// One-tap reconnect: tear down current transport state and re-start
   /// advertising/discovery with the previously-used role + character.
@@ -629,6 +730,7 @@ class MultiplayerSession extends ChangeNotifier {
     // User-initiated drop: forget the persisted session so we don't
     // silently rejoin on next app launch.
     unawaited(_clearPersistedSession());
+    _runProvider.mpDisconnected = true;
     _status = MpStatus.disconnected;
     _log('Session disconnected.');
     notifyListeners();
@@ -665,6 +767,7 @@ class MultiplayerSession extends ChangeNotifier {
       timer.cancel();
     }
     _requestTimeoutTimers.clear();
+    reconnectSuccessNotifier.dispose();
     unawaited(_service.dispose());
     super.dispose();
   }
@@ -867,6 +970,8 @@ class MultiplayerSession extends ChangeNotifier {
             _status == MpStatus.error) {
           _log('Drop detected during active run! Starting automatic reconnect sequence...');
           _status = MpStatus.disconnected;
+          _wasDisconnected = true;
+          _runProvider.mpDisconnected = true;
           _stopHeartbeat();
           notifyListeners();
           // Belt-and-suspenders: snapshot the run to disk the instant a
@@ -885,7 +990,21 @@ class MultiplayerSession extends ChangeNotifier {
       case MpError(:final message):
         _log('Nearby Service internal error: $message');
         _error = message;
-        notifyListeners();
+        // If we were connected/handshaking, treat transport errors as a
+        // disconnect so auto-reconnect can fire. Without this, a native
+        // adapter hiccup leaves us in a stale `connected` state with an
+        // error string, and the user has to manually tap FIX LINK.
+        if (_status == MpStatus.connected || _status == MpStatus.handshaking) {
+          _status = MpStatus.disconnected;
+          _wasDisconnected = true;
+          _runProvider.mpDisconnected = true;
+          _stopHeartbeat();
+          notifyListeners();
+          unawaited(saveCurrentSession());
+          _startAutoReconnect();
+        } else {
+          notifyListeners();
+        }
     }
   }
 
@@ -1007,6 +1126,11 @@ class MultiplayerSession extends ChangeNotifier {
       if (h.sessionId != null) _cachedSessionId = h.sessionId;
     }
     _status = MpStatus.connected;
+    _runProvider.mpDisconnected = false;
+    if (_wasDisconnected) {
+      _wasDisconnected = false;
+      reconnectSuccessNotifier.value = true;
+    }
     _sessionStartedAtMs ??= DateTime.now().millisecondsSinceEpoch;
     notifyListeners();
     // Persist session identity now that the handshake succeeded so an
@@ -1197,6 +1321,8 @@ class MultiplayerSession extends ChangeNotifier {
           DateTime.now().millisecondsSinceEpoch - _lastPeerTouchMs;
       if (silentMs > 30000) {
         _status = MpStatus.disconnected;
+        _wasDisconnected = true;
+        _runProvider.mpDisconnected = true;
         notifyListeners();
         _stopHeartbeat();
         // Belt-and-suspenders: snapshot the run to disk the instant a
