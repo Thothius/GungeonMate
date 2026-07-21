@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.4.0",
+    "title": "\ud83e\uddf9 CODE CLEANUP + MP SUMMARY FIXES",
+    "date": "July 21, 2026",
+    "items": [
+      "MP Summary Bughunt: Active synergy counts now show per-player (P1/P2) instead of a shared total. Coolness/Curse rows consolidated to single centered display. Super Serum partial-synergy hint now filters out already-owned items.",
+      "Summary Tab Text Fix: 'SUMMARY' tab label no longer truncates on narrow phone screens \u2014 replaced Flexible+ellipsis with FittedBox for clean scale-down.",
+      "Dead Code Removed: 160 lines of unused widgets deleted \u2014 _ThemeLauncherTile (97 lines, never referenced) from settings_sheet.dart and _ElementRow (63 lines, marked unused_element) from gungeoneer_header.dart.",
+      "Deprecated API Fixed: 2x .withOpacity() calls in gungeoneer_header.dart updated to .withValues(alpha:) per Flutter 3.27+ deprecation."
+    ]
+  },
+  {
     "version": "v1.3.0",
     "title": "\ud83d\udcdd WIKI DATA ENRICHMENT: 100% AMMONOMICON COVERAGE",
     "date": "July 21, 2026",

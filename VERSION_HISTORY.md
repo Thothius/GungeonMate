@@ -6,6 +6,26 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.4.0 — Code Cleanup + MP Summary Fixes (July 21, 2026)
+**Build:** 58
+
+### MP Summary Fixes
+- Active synergy counts now show per-player (P1/P2) instead of shared total.
+- Coolness/Curse rows consolidated to single centered display (was duplicated per-player).
+- Super Serum partial-synergy hint filters out already-owned items.
+- `_MpSummaryPage` converted to `StatelessWidget` (no state needed).
+
+### UI Fixes
+- Summary tab label no longer truncates on narrow phone screens (FittedBox replaces Flexible+ellipsis).
+
+### Code Cleanup
+- Deleted `_ThemeLauncherTile` (97 lines, unused) from `settings_sheet.dart`.
+- Deleted `_ElementRow` (63 lines, unused) from `gungeoneer_header.dart`.
+- Fixed 2x `.withOpacity()` → `.withValues(alpha:)` in `gungeoneer_header.dart`.
+- `flutter analyze`: 0 new issues.
+
+---
+
 ## v1.3.0 — Wiki Data Enrichment: 100% Ammonomicon Coverage (July 21, 2026)
 **Build:** 57
 
