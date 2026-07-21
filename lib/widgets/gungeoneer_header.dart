@@ -489,7 +489,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF00E5FF).withOpacity(0.55 * coolGlowIntensity),
+                  color: const Color(0xFF00E5FF).withValues(alpha: 0.55 * coolGlowIntensity),
                   blurRadius: (8.0 + pulse) * coolGlowIntensity,
                   spreadRadius: (1.5 + pulse * 0.2) * coolGlowIntensity,
                 ),
@@ -518,7 +518,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFE040FB).withOpacity(0.65 * curseGlowIntensity),
+                      color: const Color(0xFFE040FB).withValues(alpha: 0.65 * curseGlowIntensity),
                       blurRadius: (8.0 + pulse) * curseGlowIntensity,
                       spreadRadius: (1.2 + pulse * 0.15) * curseGlowIntensity,
                     ),
@@ -779,78 +779,4 @@ class _EffectChip extends StatelessWidget {
   }
 }
 
-/// Horizontal strip of element indicators. Each chip is tinted with the
-/// element's signature colour and carries a tooltip with the label so
-/// long-press on mobile (and hover on desktop) surfaces the name. We
-/// iterate `Element.values` (not the passed set) to keep ordering
-/// deterministic across rebuilds.
-///
-/// Currently unused: the dashboard no longer renders this row (effect
-/// chips already cover the same info). Kept around so we can put it
-/// back behind a setting without re-implementing the layout.
-// ignore: unused_element
-class _ElementRow extends StatelessWidget {
-  final Set<ElementKind> elements;
-  const _ElementRow({required this.elements});
-
-  @override
-  Widget build(BuildContext context) {
-    final ordered =
-        ElementKind.values.where(elements.contains).toList(growable: false);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          Icon(Icons.bolt,
-              size: 12, color: Colors.white.withValues(alpha: 0.35)),
-          const SizedBox(width: 6),
-          Text(
-            'ELEMENTS',
-            style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.1,
-              color: Colors.white.withValues(alpha: 0.6),
-            ),
-          ),
-          const SizedBox(width: 8),
-          for (final e in ordered) ...[
-            Tooltip(
-              message: e.label,
-              child: Container(
-                margin: const EdgeInsets.only(right: 5),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 6, vertical: 3),
-                decoration: BoxDecoration(
-                  color: e.color.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: e.color.withValues(alpha: 0.5),
-                    width: 0.8,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(e.icon, color: e.color, size: 11),
-                    const SizedBox(width: 3),
-                    Text(
-                      e.label,
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w700,
-                        color: e.color,
-                        letterSpacing: 0.2,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
 
