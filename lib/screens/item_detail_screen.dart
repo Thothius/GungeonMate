@@ -7,10 +7,7 @@ import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
 import '../services/app_theme.dart';
-// haptics import removed (was unused after hiding bug report icon)
-// bug_reporter import removed (hidden per user request)
 import '../widgets/quality_badge.dart';
-// neckbear_medal import removed (hidden per user request)
 import '../widgets/game_icon.dart';
 import '../widgets/rich_link_text.dart';
 import '../widgets/themed_number.dart';
@@ -117,7 +114,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               isGun: gun != null,
               isActive: item?.isActive ?? false,
               iconPath: gun?.icon ?? item?.icon ?? '',
-              verified: gun?.neckbearApproved ?? item?.neckbearApproved ?? false,
             ),
           ),
           SliverToBoxAdapter(
@@ -340,7 +336,6 @@ class _Header extends StatelessWidget {
   final bool isGun;
   final bool isActive;
   final String iconPath;
-  final bool verified;
   const _Header({
     required this.name,
     required this.subtitle,
@@ -349,7 +344,6 @@ class _Header extends StatelessWidget {
     required this.isGun,
     required this.isActive,
     required this.iconPath,
-    required this.verified,
   });
 
   @override
@@ -415,11 +409,6 @@ class _Header extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // NeckbearMedal hidden per user request
-                    // if (verified) ...[
-                    //   const SizedBox(width: 8),
-                    //   const NeckbearMedal(size: 20),
-                    //],
                   ],
                 ),
                 const SizedBox(height: 6),
@@ -472,24 +461,6 @@ class _Header extends StatelessWidget {
         ],
       ),
     ),
-    // BugReport icon hidden per user request
-    // Positioned(
-    //   top: 24,
-    //   right: 64,
-    //   child: IconButton(
-    //     icon: const Icon(
-    //       Icons.bug_report_rounded,
-    //       color: Colors.redAccent,
-    //       size: 24,
-    //     ),
-    //     padding: EdgeInsets.zero,
-    //     constraints: const BoxConstraints(),
-    //     onPressed: () {
-    //       Haptics.heavy();
-    //       BugReporter.show(context, 'Detail View for: $name');
-    //     },
-    //   ),
-    // ),
     Positioned(
       top: 24,
       right: 24,
