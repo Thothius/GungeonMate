@@ -7509,6 +7509,24 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
 
     final activeSynNames = allCombinedSyns.map((s) => s.name.toLowerCase()).toSet();
 
+    // Group possible synergies by status for at-a-glance scanning
+    final activeSyns = <Synergy>[];
+    final partialSyns = <Synergy>[];
+    final lockedSyns = <Synergy>[];
+    for (final syn in possibleSyns) {
+      if (activeSynNames.contains(syn.name.toLowerCase())) {
+        activeSyns.add(syn);
+      } else {
+        final missing = syn.missingFor(combinedNames);
+        final totalNeeded = syn.items.length + (syn.anyOf.isNotEmpty ? 1 : 0);
+        if (missing.length < totalNeeded) {
+          partialSyns.add(syn);
+        } else {
+          lockedSyns.add(syn);
+        }
+      }
+    }
+
     return SafeArea(
       top: false,
       child: CustomScrollView(
@@ -7529,9 +7547,9 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
-                      '✕',
+                      '+',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 22,
                         fontWeight: FontWeight.w900,
                         color: Colors.white.withValues(alpha: 0.3),
                       ),
@@ -7648,27 +7666,149 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                     ),
                     _StatComparisonRow(
                       label: 'DMG Bonus',
-                      p1Value: '+${((p1DmgMult - 1) * 100).toStringAsFixed(0)}%',
-                      p2Value: '+${((p2DmgMult - 1) * 100).toStringAsFixed(0)}%',
+                      p1Value: '${((p1DmgMult - 1) * 100).toStringAsFixed(0)}%',
+                      p2Value: '${((p2DmgMult - 1) * 100).toStringAsFixed(0)}%',
                       icon: Icons.trending_up,
                     ),
-                    _StatComparisonRow(
-                      label: 'Coolness',
-                      p1Value: '+${state.totalCoolness.toStringAsFixed(0)}',
-                      p2Value: '+${state.totalCoolness.toStringAsFixed(0)}',
-                      icon: Icons.ac_unit,
+                    // Coolness/Curse are shared dungeon state — single
+                    // combined value, not per-player.
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              '+${state.totalCoolness.toStringAsFixed(0)}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.cyanAccent,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.ac_unit, size: 11, color: Colors.white.withValues(alpha: 0.35)),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Coolness',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              '+${state.totalCoolness.toStringAsFixed(0)}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.purpleAccent,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    _StatComparisonRow(
-                      label: 'Curse',
-                      p1Value: '+${state.totalCurse.toStringAsFixed(0)}',
-                      p2Value: '+${state.totalCurse.toStringAsFixed(0)}',
-                      icon: Icons.local_fire_department,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              '+${state.totalCurse.toStringAsFixed(0)}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.cyanAccent,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.local_fire_department, size: 11, color: Colors.white.withValues(alpha: 0.35)),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Curse',
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Text(
+                              '+${state.totalCurse.toStringAsFixed(0)}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.purpleAccent,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
           ),
+
+          // ── Disconnection banner (if peer dropped) ────────────
+          if (!session.isConnected)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.orange.withValues(alpha: 0.25), width: 1),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.wifi_off_rounded, size: 14, color: Colors.orangeAccent),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Peer data may be stale — showing last known loadout.',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.orangeAccent.withValues(alpha: 0.8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
           // ── Synergy overview panel ────────────────────────────
           SliverToBoxAdapter(
@@ -7725,13 +7865,50 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                           ),
                         ),
                       )
-                    else
-                      for (final syn in possibleSyns)
-                        _SynergySummaryRow(
-                          synergy: syn,
-                          isActive: activeSynNames.contains(syn.name.toLowerCase()),
-                          ownedLower: combinedNames,
+                    else ...[
+                      // Group synergies by status for at-a-glance scanning
+                      if (activeSyns.isNotEmpty) ...[
+                        _SynergyGroupHeader(
+                          label: 'ACTIVE',
+                          count: activeSyns.length,
+                          color: Colors.greenAccent,
                         ),
+                        for (final syn in activeSyns)
+                          _SynergySummaryRow(
+                            synergy: syn,
+                            isActive: true,
+                            ownedLower: combinedNames,
+                          ),
+                      ],
+                      if (partialSyns.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        _SynergyGroupHeader(
+                          label: 'PARTIAL',
+                          count: partialSyns.length,
+                          color: Colors.amberAccent,
+                        ),
+                        for (final syn in partialSyns)
+                          _SynergySummaryRow(
+                            synergy: syn,
+                            isActive: false,
+                            ownedLower: combinedNames,
+                          ),
+                      ],
+                      if (lockedSyns.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        _SynergyGroupHeader(
+                          label: 'LOCKED',
+                          count: lockedSyns.length,
+                          color: Colors.white24,
+                        ),
+                        for (final syn in lockedSyns)
+                          _SynergySummaryRow(
+                            synergy: syn,
+                            isActive: false,
+                            ownedLower: combinedNames,
+                          ),
+                      ],
+                    ],
                   ],
                 ),
               ),
@@ -8021,6 +8198,56 @@ class _SynergySummaryRow extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Section header for grouped synergies (ACTIVE / PARTIAL / LOCKED).
+class _SynergyGroupHeader extends StatelessWidget {
+  final String label;
+  final int count;
+  final Color color;
+  const _SynergyGroupHeader({
+    required this.label,
+    required this.count,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 6),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 14,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
+              color: color,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            '($count)',
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.bold,
+              color: color.withValues(alpha: 0.5),
+            ),
+          ),
+        ],
       ),
     );
   }
