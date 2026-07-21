@@ -4720,14 +4720,14 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
     final count = p.spiceUsageCount;
 
     final damageBonus = count <= 4
-        ? [0, 20, 40, 55][count.clamp(0, 4)]
+        ? [0, 0, 20, 40, 55][count.clamp(0, 4)]
         : 55 + (count - 4) * 15;
     final curseTotal = count == 0
         ? 0.0
         : count == 1
             ? 0.5
             : 0.5 + (count - 1);
-    final heartChange = count <= 1 ? 0 : count <= 3 ? -(count - 1) : -2;
+    final heartChange = count <= 1 ? count : (2 - count).clamp(-2, 1);
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -4763,7 +4763,7 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
                 children: [
                   _statChip('Uses', '$count'),
                   _statChip('Curse', '+${curseTotal.toStringAsFixed(1)}'),
-                  _statChip('Hearts', heartChange == 0 ? '0' : '$heartChange'),
+                  _statChip('Hearts', heartChange == 0 ? '0' : heartChange > 0 ? '+$heartChange' : '$heartChange'),
                   _statChip('Dmg', '+$damageBonus%'),
                 ],
               ),
