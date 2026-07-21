@@ -8,7 +8,7 @@ import '../models/player.dart';
 import '../services/multiplayer_session.dart';
 import '../services/app_theme.dart';
 import '../widgets/quality_badge.dart';
-import '../widgets/neckbear_medal.dart';
+// neckbear_medal import removed (hidden per user request)
 import '../widgets/game_icon.dart';
 import 'item_detail_screen.dart';
 import 'favourites_screen.dart';
@@ -1234,10 +1234,11 @@ class _Row extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (verified) ...[
-                          const SizedBox(width: 6),
-                          const NeckbearMedal(size: 15),
-                        ],
+                        // NeckbearMedal hidden per user request
+                        // if (verified) ...[
+                        //   const SizedBox(width: 6),
+                        //   const NeckbearMedal(size: 15),
+                        // ],
                         if (robotTag.isNotEmpty) ...[
                           const SizedBox(width: 6),
                           Container(

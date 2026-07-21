@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+// webview_flutter import removed (was unused)
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/run_provider.dart';
 import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
 import '../services/app_theme.dart';
-import '../services/haptics.dart';
-import '../utils/bug_reporter.dart';
+// haptics import removed (was unused after hiding bug report icon)
+// bug_reporter import removed (hidden per user request)
 import '../widgets/quality_badge.dart';
-import '../widgets/neckbear_medal.dart';
+// neckbear_medal import removed (hidden per user request)
 import '../widgets/game_icon.dart';
 import '../widgets/rich_link_text.dart';
 import '../widgets/themed_number.dart';
@@ -415,10 +415,11 @@ class _Header extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (verified) ...[
-                      const SizedBox(width: 8),
-                      const NeckbearMedal(size: 20),
-                    ],
+                    // NeckbearMedal hidden per user request
+                    // if (verified) ...[
+                    //   const SizedBox(width: 8),
+                    //   const NeckbearMedal(size: 20),
+                    //],
                   ],
                 ),
                 const SizedBox(height: 6),
@@ -471,23 +472,24 @@ class _Header extends StatelessWidget {
         ],
       ),
     ),
-    Positioned(
-      top: 24,
-      right: 64,
-      child: IconButton(
-        icon: const Icon(
-          Icons.bug_report_rounded,
-          color: Colors.redAccent,
-          size: 24,
-        ),
-        padding: EdgeInsets.zero,
-        constraints: const BoxConstraints(),
-        onPressed: () {
-          Haptics.heavy();
-          BugReporter.show(context, 'Detail View for: $name');
-        },
-      ),
-    ),
+    // BugReport icon hidden per user request
+    // Positioned(
+    //   top: 24,
+    //   right: 64,
+    //   child: IconButton(
+    //     icon: const Icon(
+    //       Icons.bug_report_rounded,
+    //       color: Colors.redAccent,
+    //       size: 24,
+    //     ),
+    //     padding: EdgeInsets.zero,
+    //     constraints: const BoxConstraints(),
+    //     onPressed: () {
+    //       Haptics.heavy();
+    //       BugReporter.show(context, 'Detail View for: $name');
+    //     },
+    //   ),
+    // ),
     Positioned(
       top: 24,
       right: 24,

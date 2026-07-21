@@ -33,7 +33,7 @@ import '../services/multiplayer_session.dart';
 import '../models/multiplayer_messages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/format.dart';
-import '../utils/bug_reporter.dart';
+// bug_reporter import removed (hidden per user request)
 
 class ActiveRunScreen extends StatefulWidget {
   final VoidCallback? onRequestBrowse;
@@ -1070,16 +1070,17 @@ class _MpHeader extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      IconButton(
-                        icon: const Icon(Icons.bug_report_rounded, size: 20, color: Colors.redAccent),
-                        constraints: const BoxConstraints(),
-                        padding: EdgeInsets.zero,
-                        tooltip: 'Report MP Bug',
-                        onPressed: () {
-                          Haptics.heavy();
-                          BugReporter.show(ctx, 'Multiplayer Link View');
-                        },
-                      ),
+                      // BugReport icon hidden per user request
+                      // IconButton(
+                      //   icon: const Icon(Icons.bug_report_rounded, size: 20, color: Colors.redAccent),
+                      //   constraints: const BoxConstraints(),
+                      //   padding: EdgeInsets.zero,
+                      //   tooltip: 'Report MP Bug',
+                      //   onPressed: () {
+                      //     Haptics.heavy();
+                      //     BugReporter.show(ctx, 'Multiplayer Link View');
+                      //   },
+                      // ),
                       const SizedBox(width: 12),
                       IconButton(
                         icon: const Icon(Icons.close, size: 20, color: Colors.white54),
@@ -1571,16 +1572,17 @@ class _PlayerPageState extends State<_PlayerPage> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      Haptics.heavy();
-                      BugReporter.show(context, 'Active Run Dashboard (Inventory View)');
-                    },
-                    icon: const Icon(Icons.bug_report_rounded, color: Colors.redAccent, size: 20),
-                    tooltip: 'Report Bug',
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
+                  // BugReport icon hidden per user request
+                  // IconButton(
+                  //   onPressed: () {
+                  //     Haptics.heavy();
+                  //     BugReporter.show(context, 'Active Run Dashboard (Inventory View)');
+                  //   },
+                  //   icon: const Icon(Icons.bug_report_rounded, color: Colors.redAccent, size: 20),
+                  //   tooltip: 'Report Bug',
+                  //   padding: EdgeInsets.zero,
+                  //   constraints: const BoxConstraints(),
+                  // ),
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
