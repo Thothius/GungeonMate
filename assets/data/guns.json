@@ -15,7 +15,7 @@
     "shot_speed": "23",
     "range": "35",
     "force": "10",
-    "spread": "5",
+    "spread": "5°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -145,7 +145,8 @@
     },
     "sell_price": "16",
     "chest_color": "blue",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The sidearm of choice for investigative efforts."
   },
   {
     "name": "3rd Party Controller",
@@ -1866,7 +1867,7 @@
     "shot_speed": "23",
     "range": "15",
     "force": "10",
-    "spread": "5",
+    "spread": "5°",
     "class": "",
     "curse": 0.0,
     "coolness": 0.0,
@@ -1967,7 +1968,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The Hegemony of Man has fought, and won, three major wars with alien races. Hundreds of these pistols were salvaged after the second of these wars."
   },
   {
     "name": "Anvillain",
@@ -4803,7 +4805,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Used mostly by farmers who seek to defend their farms from hungry giants, the Blunderbuss fires anything you put into it. Hold to charge and launch projectiles in an inaccurate short spray. Not as effective against sly dragons."
   },
   {
     "name": "Bow",
@@ -6390,7 +6393,8 @@
         }
       ]
     },
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "This Budget Revolver was brought to the Gungeon by an infamous fugitive. Provided by the Hegemony Regional Magistrate. The Convict won their plea to face the Gungeon in lieu of life imprisonment; undo their crimes, or face an eternity in the Gungeon. With no cost to the state, it was an acceptable arrangement.\n\nCheaply made and prone to jams, the Budget Revolver is used by only the most desperate Gungeoneers."
   },
   {
     "name": "Bullet",
@@ -8107,7 +8111,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "A standard baseball bat, modified to hit bullets instead of balls. Launches enemy projectiles back with a vengeance!\n\nNothing can happen until you swing the bat."
   },
   {
     "name": "Cat Claw",
@@ -11382,7 +11387,7 @@
     "shot_speed": "26",
     "range": "1,000",
     "force": "25",
-    "spread": "7",
+    "spread": "7°",
     "class": "PISTOL",
     "curse": 0.0,
     "coolness": 0.0,
@@ -11443,7 +11448,8 @@
     },
     "sell_price": "16",
     "chest_color": "blue",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "One of the earliest examples of trigger fired projectiles."
   },
   {
     "name": "Crown of Guns",
@@ -12328,7 +12334,7 @@
     "shot_speed": "20",
     "range": "25",
     "force": "2",
-    "spread": "5",
+    "spread": "5°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -12430,7 +12436,8 @@
         }
       ]
     },
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Just because children are young, doesn't mean they don't have pasts they would like to change. Perhaps some young soul wished to make sure his or her sibling took the blame for spilling grape juice on the couch. Much less worthy causes have been championed in the Gungeon."
   },
   {
     "name": "Deck4rd",
@@ -12673,7 +12680,7 @@
     "shot_speed": "23",
     "range": "60",
     "force": "30",
-    "spread": "6",
+    "spread": "6°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -12835,7 +12842,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "This tiny pistol packs a correspondingly small punch, but it is well-known for getting its wielders out of tight spots."
   },
   {
     "name": "Devolver",
@@ -13700,7 +13708,7 @@
     "shot_speed": "30",
     "range": "1,000",
     "force": "15",
-    "spread": "8",
+    "spread": "8°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -13768,7 +13776,8 @@
     },
     "sell_price": "16",
     "chest_color": "blue",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Fires ricocheting musket balls.\n\nThis most ancient of pistols has settled many a lovers' quarrel. This particular flintlock would be fairly useless in a duel, as the ricochet would probably kill several bystanders."
   },
   {
     "name": "Dungeon Eagle",
@@ -15543,7 +15552,8 @@
       ]
     },
     "sell_price": "54",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "A gun to rule them all.\n\nThe swan-song of a prolific gunsmith. Though only recently completed, it somehow feels very familiar. A small hourglass is embossed on the cylinder, the sands fully filling the bottom half."
   },
   {
     "name": "Flame Hand",
@@ -15796,7 +15806,7 @@
     "shot_speed": "23",
     "range": "1000",
     "force": "35",
-    "spread": "6",
+    "spread": "6°",
     "class": "FIRE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -15890,7 +15900,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Sets targets aflame! Unfortunately, deep in the Gungeon, no one will see this flare but you."
   },
   {
     "name": "Flash Ray",
@@ -15908,7 +15919,7 @@
     "shot_speed": "600",
     "range": "1000",
     "force": "4",
-    "spread": "10",
+    "spread": "10°",
     "class": "PISTOL",
     "curse": 0.0,
     "coolness": 0.0,
@@ -16119,7 +16130,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The trusty sidearm of a spacefaring hero.\n\nFeaturing a stylish design and solid performance, this blaster is almost always worth keeping around."
   },
   {
     "name": "Fossilized Gun",
@@ -16302,7 +16314,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Reloading this skull produces a gout of flame that can ignite oil.\n\nThis is a spectacularly preserved specimen of a gun that went extinct during the Ballistac era."
   },
   {
     "name": "Freeze Ray",
@@ -22337,7 +22350,7 @@
     "shot_speed": "14",
     "range": "",
     "force": "1",
-    "spread": "20",
+    "spread": "20°",
     "class": "FULLAUTO",
     "curse": 0.0,
     "coolness": 0.0,
@@ -22548,7 +22561,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Gungeonologists have long debated what is truly the worst gun in the Gungeon. More Gungeoneers have perished with Klobbes in their inventory than any other gun. Coincidence?"
   },
   {
     "name": "Knight's Gun",
@@ -23509,7 +23523,7 @@
     "shot_speed": "23",
     "range": "",
     "force": "35",
-    "spread": "6",
+    "spread": "6°",
     "class": "EXPLOSIVE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -23757,7 +23771,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Charge to fire bombs.\nA forgetful adventurer left a pouch full of bombs deep in the Gungeon, and they eventually sprouted into this amusing weapon. A favorite of the Gunsling King, who often sends Manservantes to pick up the bombs."
   },
   {
     "name": "Lower Case r",
@@ -24062,7 +24077,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The letter r looks like a gun. It is rare, but not unheard of, for abstract concepts to take gun form when discussed near the Gungeon."
   },
   {
     "name": "Luxin Cannon",
@@ -24886,7 +24902,7 @@
     "shot_speed": "23",
     "range": "16",
     "force": "6",
-    "spread": "10",
+    "spread": "10°",
     "class": "FULLAUTO",
     "curse": 0.0,
     "coolness": 0.0,
@@ -25019,7 +25035,8 @@
     },
     "sell_price": "16",
     "chest_color": "blue",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The Machine Pistol is a small but powerful hand-held machine gun.\n\nIt is a favorite of Bandana wearing Gundead, whose impatience with reloading is legendary."
   },
   {
     "name": "Magic Lamp",
@@ -25682,7 +25699,7 @@
     "shot_speed": "22",
     "range": "1,000",
     "force": "10",
-    "spread": "10",
+    "spread": "10°",
     "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -25785,7 +25802,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Contains junk mail and one untrustworthy package. It was a wise and hopeful Gungeoneer who observed that mailboxes share the same basic shape of guns. When they sought to change their past, they wondered whether any gun shaped object would operate as guns do, within the Gungeons walls."
   },
   {
     "name": "Makarov",
@@ -25803,7 +25821,7 @@
     "shot_speed": "23",
     "range": "60",
     "force": "10",
-    "spread": "4",
+    "spread": "4°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -25884,7 +25902,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The Makarov was brought to the Gungeon by a lost Cosmonaut. Some say that the brave, lost soul still wanders the Gungeon. This gun is no better or worse than any other gun."
   },
   {
     "name": "Makeshift Cannon",
@@ -26281,7 +26300,8 @@
         }
       ]
     },
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The Marine Sidearm was brought to the Gungeon by a low-ranking Primerdyne soldier.\n\nThough this gun appears sturdy, it has been known to fail when it is most needed."
   },
   {
     "name": "Mass Shotgun",
@@ -26871,7 +26891,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "A water gun might seem to be a poor weapon for Gungeoneering, and in most cases that is true. But a well-placed blast of water can douse a raging inferno; a soaked enemy can be electrified; a dazed foe can be pushed into the abyss. In the Gungeon, creativity is key to victory."
   },
   {
     "name": "Megahand",
@@ -28723,7 +28744,7 @@
     "shot_speed": "26",
     "range": "12",
     "force": "8",
-    "spread": "10",
+    "spread": "10°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -28784,7 +28805,8 @@
     },
     "sell_price": "16",
     "chest_color": "blue",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "This ancient tool is theorized to have been used in bizarre pagan rituals involving spiders and flame."
   },
   {
     "name": "Old Goldie",
@@ -29680,7 +29702,7 @@
     "shot_speed": "20",
     "range": "20",
     "force": "3",
-    "spread": "10",
+    "spread": "10°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -29783,7 +29805,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Traditionally given to Gungeoneers when they first arrive at the Gungeon. It is incredibly weak."
   },
   {
     "name": "Phoenix",
@@ -29801,7 +29824,7 @@
     "shot_speed": "25",
     "range": "25",
     "force": "13",
-    "spread": "3",
+    "spread": "3°",
     "class": "FIRE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -29992,7 +30015,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The muzzle flare from this fiery handgun can ignite enemies. Return enemies to dust. Famously wielded by Two-Shot Erias on her final Gungeon attempt."
   },
   {
     "name": "Pitchfork",
@@ -30110,7 +30134,7 @@
     "shot_speed": "20",
     "range": "25",
     "force": "13",
-    "spread": "5",
+    "spread": "5°",
     "class": "POISON",
     "curse": 0.0,
     "coolness": 0.0,
@@ -30206,7 +30230,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Fires poisonous rounds."
   },
   {
     "name": "Plunger",
@@ -32861,7 +32886,7 @@
     "name": "Regular Shotgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c6/Regular_Shotgun.png",
     "notes": "",
-    "quote": "Cocked And Loaded",
+    "quote": "Cocked and Locked",
     "quality": "D",
     "type": "Semiautomatic",
     "dps": "32.0",
@@ -32873,7 +32898,7 @@
     "shot_speed": "23",
     "range": "15",
     "force": "30",
-    "spread": "10",
+    "spread": "10°",
     "class": "SHOTGUN",
     "curse": 0.0,
     "coolness": 0.0,
@@ -33011,7 +33036,8 @@
     },
     "sell_price": "16",
     "chest_color": "blue",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "A regular shotgun. There's nothing special about it!\n\nFavored by the Shotgun Kin that roam the Gungeon, as it reminds them of their home."
   },
   {
     "name": "Robot's Left Hand",
@@ -33278,7 +33304,8 @@
         }
       ]
     },
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The right hand of an assault robot that fled to the Gungeon. When weilded by the Robot, combines with Junk to increase all damage output.\nIt is a simple projectile delivery system. Reliable, but its short barrel is lacking in intricacy. Under the control of a targeting AI it becomes fearsome indeed."
   },
   {
     "name": "Rogue Special",
@@ -33296,7 +33323,7 @@
     "shot_speed": "22",
     "range": "13",
     "force": "6",
-    "spread": "10",
+    "spread": "10°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -33459,7 +33486,8 @@
         }
       ]
     },
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The Rogue Special, given to the Pilot by his partner. It's never let him down.\n\nThis hip shooter has been known to fire half-cocked and often gets itself into more trouble than it can handle."
   },
   {
     "name": "RPG",
@@ -33954,7 +33982,7 @@
     "shot_speed": "26",
     "range": "1000",
     "force": "9",
-    "spread": "11",
+    "spread": "11°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -34157,13 +34185,14 @@
       ]
     },
     "sell_price": "3",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "An extremely powerful ricochet rifle. Cobbled together from the compatible parts of the RUBE-ADYNE and its prototype, this makeshift gun provides maximum lethality in one convenient package."
   },
   {
     "name": "Rusty Sidearm",
     "icon": "",
     "notes": "Starting gun of The Hunter . Does not crack secret walls .",
-    "quote": "Still Works. Mostly.",
+    "quote": "Still works, mostly.",
     "quality": "N",
     "type": "Semiautomatic",
     "dps": "16.4 (Manual) 14.7 (Automatic)",
@@ -34175,7 +34204,7 @@
     "shot_speed": "16",
     "range": "16",
     "force": "10",
-    "spread": "7",
+    "spread": "7°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -34287,7 +34316,8 @@
         }
       ]
     },
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The Rusty Sidearm was brought to the Gungeon by the Hunter. Despite its extremely dated design and some signs of rust, this gun appears relatively new. Very strange..."
   },
   {
     "name": "SAA",
@@ -34605,7 +34635,8 @@
     },
     "sell_price": "16",
     "chest_color": "blue",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "A shotgun modified for easy concealment. The shorter barrel widens the spread, but up-close, it's just as deadly as its full-barreled cousin."
   },
   {
     "name": "Science Cannon",
@@ -36835,7 +36866,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Sometimes the old ways are the best ways. Deals more damage to powerful foes.\n\nThis is not one of those old, best ways. The lowly sling is barely a gun, even by Gungeon standards. Only recommended as a last resort for serious Gungeoneers."
   },
   {
     "name": "Slinger",
@@ -37065,7 +37097,8 @@
         }
       ]
     },
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Infinite ammo. Does not reveal secret walls. Brought to the Gungeon by a legendary gunplay expert.\n\nCalled the gunslinger by his foes not because of his ability to aim and shoot but because of his unusual habit of literally slinging his gun once it is out of ammo and replacing it with another from his magical belt of a million guns."
   },
   {
     "name": "Smiley's Revolver",
@@ -37413,7 +37446,7 @@
     "shot_speed": "28",
     "range": "35",
     "force": "10",
-    "spread": "10",
+    "spread": "10°",
     "class": "ICE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -37519,7 +37552,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "This weapon was constructed the single time the Gungeon experienced a snow day. New Gundead simply appeared with these cannons strapped to their bodies and pelted everything in sight with powdery projectiles. There were also many chipped teeth."
   },
   {
     "name": "Staff of Firepower",
@@ -39423,7 +39457,7 @@
     "shot_speed": "25",
     "range": "",
     "force": "60",
-    "spread": "5",
+    "spread": "5°",
     "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -39475,7 +39509,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Fires T-Shirts. Gungeon Merch was a shortlived startup enterprise founded by a few misguided Gundead. After shooting their fourth consecutive customer, they turned their sights away from business."
   },
   {
     "name": "Tangler",
@@ -43592,7 +43627,7 @@
     "shot_speed": "15",
     "range": "35",
     "force": "6",
-    "spread": "15",
+    "spread": "15°",
     "class": "FIRE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -43776,7 +43811,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "This gun is still in the process of being forged! It barely functions in its current state, but could be a viable choice in a truly desperate situation. A small hourglass is embossed on the cylinder."
   },
   {
     "name": "Unicorn Horn",
@@ -45257,7 +45293,7 @@
     "shot_speed": "32",
     "range": "∞",
     "force": "9",
-    "spread": "5",
+    "spread": "5°",
     "class": "RIFLE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -45387,7 +45423,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "The Winchester Rifle was used to famous effect by Frifle during his first adventures with the Grey Mauser. It might be a bit dated, but still packs quite the punch."
   },
   {
     "name": "Wind Up Gun",
@@ -45405,7 +45442,7 @@
     "shot_speed": "30",
     "range": "35",
     "force": "10",
-    "spread": "8",
+    "spread": "8°",
     "class": "FULLAUTO",
     "curse": 0.0,
     "coolness": 0.0,
@@ -45526,7 +45563,8 @@
       ]
     },
     "sell_price": "16",
-    "neckbear_approved": true
+    "neckbear_approved": true,
+    "ammonomicon_entry": "Decreases in damage output as the clip empties.\n\nYou gotta wind it!"
   },
   {
     "name": "Witch Pistol",
