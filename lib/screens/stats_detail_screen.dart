@@ -769,34 +769,37 @@ class _QuickActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
-    final color = isCool ? const Color(0xFF00E5FF) : const Color(0xFFFF3D00);
 
     final actions = isCool
         ? [
             _QuickAction(
-              icon: Icons.smoking_rooms,
+              icon: runLogCategoryIcon(RunLogCategory.smokeCig),
               label: 'Smoke Cig',
               subtitle: '+1 cool',
+              color: runLogCategoryColor(RunLogCategory.smokeCig),
               onTap: p.logSmokeCig,
             ),
             _QuickAction(
-              icon: Icons.palette,
+              icon: runLogCategoryIcon(RunLogCategory.rainbowRun),
               label: 'Rainbow Run',
               subtitle: '+1 cool',
+              color: runLogCategoryColor(RunLogCategory.rainbowRun),
               onTap: p.logRainbowRun,
             ),
           ]
         : [
             _QuickAction(
-              icon: Icons.front_hand,
+              icon: runLogCategoryIcon(RunLogCategory.steal),
               label: 'Steal',
               subtitle: '+1 curse',
+              color: runLogCategoryColor(RunLogCategory.steal),
               onTap: p.logSteal,
             ),
             _QuickAction(
-              icon: Icons.local_fire_department,
+              icon: runLogCategoryIcon(RunLogCategory.cursula),
               label: 'Cursula',
               subtitle: '+2 curse',
+              color: runLogCategoryColor(RunLogCategory.cursula),
               onTap: p.logCursula,
             ),
           ];
@@ -813,15 +816,13 @@ class _QuickActions extends StatelessWidget {
           crossAxisSpacing: 8,
           childAspectRatio: 2.8,
           children: actions
-              .map((a) => _QuickActionCard(action: a, color: color))
+              .map((a) => _QuickActionCard(action: a))
               .toList(),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
           child: Text(
-            isCool
-                ? 'Things the app can\'t auto-detect — tap to log them.'
-                : 'Things the app can\'t auto-detect — tap to log them.',
+            'Things the app can\'t auto-detect — tap to log them.',
             style: TextStyle(
               fontSize: 10.5,
               color: Colors.white.withValues(alpha: 0.5),
@@ -838,19 +839,20 @@ class _QuickAction {
   final IconData icon;
   final String label;
   final String subtitle;
+  final Color color;
   final VoidCallback onTap;
   const _QuickAction({
     required this.icon,
     required this.label,
     required this.subtitle,
+    required this.color,
     required this.onTap,
   });
 }
 
 class _QuickActionCard extends StatelessWidget {
   final _QuickAction action;
-  final Color color;
-  const _QuickActionCard({required this.action, required this.color});
+  const _QuickActionCard({required this.action});
 
   @override
   Widget build(BuildContext context) {
@@ -864,15 +866,15 @@ class _QuickActionCard extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.08),
+            color: action.color.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: color.withValues(alpha: 0.25), width: 1),
+            border: Border.all(color: action.color.withValues(alpha: 0.25), width: 1),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: Row(
               children: [
-                Icon(action.icon, color: color, size: 22),
+                Icon(action.icon, color: action.color, size: 22),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Column(
@@ -890,7 +892,7 @@ class _QuickActionCard extends StatelessWidget {
                         action.subtitle,
                         style: TextStyle(
                           fontSize: 10.5,
-                          color: color.withValues(alpha: 0.8),
+                          color: action.color.withValues(alpha: 0.8),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
