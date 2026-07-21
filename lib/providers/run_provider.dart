@@ -86,6 +86,15 @@ class RunProvider with ChangeNotifier {
   int _huntressRoomClears = 0;
   bool _huntressInjured = false;
 
+  // Metronome: kill streak counter (+2% dmg per kill, max 75 kills = +150%)
+  int _metronomeKills = 0;
+
+  // Boxing Glove: star counter (0-3, 3 stars = charged super punch)
+  int _boxingGloveStars = 0;
+
+  // Cigarettes: use counter (coolness +1 per use)
+  int _cigarettesUses = 0;
+
   int get gunderfuryLevel => _gunderfuryLevel;
   int get tripleGunForm => _tripleGunForm;
   int get evolverForm => _evolverForm;
@@ -108,6 +117,10 @@ class RunProvider with ChangeNotifier {
 
   int get huntressRoomClears => _huntressRoomClears;
   bool get huntressInjured => _huntressInjured;
+
+  int get metronomeKills => _metronomeKills;
+  int get boxingGloveStars => _boxingGloveStars;
+  int get cigarettesUses => _cigarettesUses;
 
   bool _isLoading = true;
   String? _error;
@@ -638,6 +651,21 @@ class RunProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.spice.count', _spiceUsageCount);
     } catch (_) {}
+    notifyListeners();
+  }
+
+  void setMetronomeKills(int kills) {
+    _metronomeKills = kills.clamp(0, 75);
+    notifyListeners();
+  }
+
+  void setBoxingGloveStars(int stars) {
+    _boxingGloveStars = stars.clamp(0, 3);
+    notifyListeners();
+  }
+
+  void setCigarettesUses(int uses) {
+    _cigarettesUses = uses.clamp(0, 999);
     notifyListeners();
   }
 

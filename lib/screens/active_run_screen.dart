@@ -4243,6 +4243,26 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
       dashboards.add(_IronCoinDashboard(slot: widget.slot));
       labels.add('IRON COIN');
     }
+    if (ownedItemNames.contains('spice')) {
+      dashboards.add(_SpiceDashboard(slot: widget.slot));
+      labels.add('SPICE');
+    }
+    if (ownedItemNames.contains('metronome')) {
+      dashboards.add(_MetronomeDashboard(slot: widget.slot));
+      labels.add('METRONOME');
+    }
+    if (ownedItemNames.contains('sprun')) {
+      dashboards.add(_SprunDashboard(slot: widget.slot));
+      labels.add('SPRUN');
+    }
+    if (ownedGunNames.contains('boxing glove')) {
+      dashboards.add(_BoxingGloveDashboard(slot: widget.slot));
+      labels.add('BOXING');
+    }
+    if (ownedItemNames.contains('cigarettes')) {
+      dashboards.add(_CigarettesDashboard(slot: widget.slot));
+      labels.add('CIGARETTES');
+    }
     if (dashboards.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
 
     // Clamp page index
@@ -4672,6 +4692,536 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
           ),
         ),
       ),
+    );
+  }
+}
+
+// =============================================================================
+// New dashboards: Spice, Metronome, Sprun, Boxing Glove, Cigarettes
+// =============================================================================
+
+class _SpiceDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _SpiceDashboard({required this.slot});
+
+  @override
+  State<_SpiceDashboard> createState() => _SpiceDashboardState();
+}
+
+class _SpiceDashboardState extends State<_SpiceDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final count = p.spiceUsageCount;
+
+    final damageBonus = count <= 4
+        ? [0, 20, 40, 55][count.clamp(0, 4)]
+        : 55 + (count - 4) * 15;
+    final curseTotal = count == 0
+        ? 0.0
+        : count == 1
+            ? 0.5
+            : 0.5 + (count - 1);
+    final heartChange = count <= 1 ? 0 : count <= 3 ? -(count - 1) : -2;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF180E0E),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.redAccent.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.spa, color: Colors.redAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'SPICE',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.redAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '+$damageBonus% DMG',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.redAccent),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _statChip('Uses', '$count'),
+                  _statChip('Curse', '+${curseTotal.toStringAsFixed(1)}'),
+                  _statChip('Hearts', heartChange == 0 ? '0' : '$heartChange'),
+                  _statChip('Dmg', '+$damageBonus%'),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                count == 0
+                    ? 'No Spice used. 1st use: +1 Heart, +1 Cool, +20% Shot Speed, -10% Spread, +0.5 Curse.'
+                    : count < 5
+                        ? 'Escalating bonuses. Each use adds damage but costs hearts and curse.'
+                        : 'Diminishing returns: +15% Dmg, +1.0 Curse per additional use.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: count > 0 ? () { Haptics.light(); p.setSpiceUsageCount(count - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 20),
+                  ),
+                  Text('$count', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+                  IconButton(
+                    onPressed: () { Haptics.light(); p.setSpiceUsageCount(count + 1); },
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.redAccent, size: 20),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _statChip(String label, String value) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+      ],
+    );
+  }
+}
+
+class _MetronomeDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _MetronomeDashboard({required this.slot});
+
+  @override
+  State<_MetronomeDashboard> createState() => _MetronomeDashboardState();
+}
+
+class _MetronomeDashboardState extends State<_MetronomeDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final kills = p.metronomeKills;
+    final damageBonus = (kills * 2).clamp(0, 150);
+    final progress = kills / 75.0;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0E1218),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.speed, color: Colors.tealAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'METRONOME',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.tealAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '+$damageBonus% DMG',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.tealAccent),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Progress bar
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 8,
+                  backgroundColor: Colors.white.withValues(alpha: 0.08),
+                  valueColor: AlwaysStoppedAnimation(Colors.tealAccent.withValues(alpha: 0.8)),
+                ),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '$kills / 75 kills',
+                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
+                  ),
+                  Text(
+                    kills >= 75 ? 'MAX STACK' : '${75 - kills} to max',
+                    style: TextStyle(fontSize: 10, color: Colors.tealAccent.withValues(alpha: 0.6)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '+2% damage per kill. Resets if you take damage or swap guns. Max +150% at 75 kills.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: kills > 0 ? () { Haptics.light(); p.setMetronomeKills(kills - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.tealAccent, size: 20),
+                  ),
+                  Text('$kills', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
+                  IconButton(
+                    onPressed: kills < 75 ? () { Haptics.light(); p.setMetronomeKills(kills + 1); } : null,
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.tealAccent, size: 20),
+                  ),
+                  const SizedBox(width: 8),
+                  TextButton(
+                    onPressed: () { Haptics.selection(); p.setMetronomeKills(0); },
+                    child: const Text('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SprunDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _SprunDashboard({required this.slot});
+
+  @override
+  State<_SprunDashboard> createState() => _SprunDashboardState();
+}
+
+class _SprunDashboardState extends State<_SprunDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  static const _triggers = [
+    'Activating a Map Blank',
+    'Taking damage to Armor / Losing a half-heart',
+    'Throwing an empty weapon at a wall',
+    'Falling down an elevator shaft or trap pit',
+    'Lighting yourself on fire or stepping into a poison pool',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final idx = p.sprunTriggerIndex;
+    final isWindgunnerActive = p.windgunnerCountdown > 0;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0E1018),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.radar, color: Colors.cyanAccent.shade200, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'SPRUN',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  if (isWindgunnerActive)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Colors.cyan.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.5)),
+                      ),
+                      child: Text(
+                        'WINDGUNNER ${p.windgunnerCountdown}s',
+                        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
+                      ),
+                    )
+                  else
+                    Text(
+                      idx >= 0 ? 'REVEALED' : 'UNKNOWN',
+                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              if (idx >= 0)
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.cyan.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.cyan.withValues(alpha: 0.2)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.flash_on, color: Colors.cyanAccent, size: 16),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _triggers[idx],
+                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.cyanAccent),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                Text(
+                  'Trigger unknown. Tap "Reveal" to discover this run\'s Windgunner activation condition.',
+                  style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
+                ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Haptics.selection();
+                      final randomIdx = DateTime.now().millisecondsSinceEpoch % _triggers.length;
+                      p.setSprunTriggerIndex(randomIdx);
+                    },
+                    child: const Text('Reveal Trigger', style: TextStyle(fontSize: 11, color: Colors.cyanAccent)),
+                  ),
+                  if (idx >= 0) ...[
+                    const SizedBox(width: 8),
+                    TextButton(
+                      onPressed: () { Haptics.light(); p.setSprunTriggerIndex(-1); },
+                      child: const Text('Hide', style: TextStyle(fontSize: 11, color: Colors.white38)),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BoxingGloveDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _BoxingGloveDashboard({required this.slot});
+
+  @override
+  State<_BoxingGloveDashboard> createState() => _BoxingGloveDashboardState();
+}
+
+class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final stars = p.boxingGloveStars;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF181410),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.orangeAccent.withValues(alpha: 0.35), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.sports_mma_rounded, color: Colors.orangeAccent, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'BOXING GLOVE',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.orangeAccent, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Text(
+                    stars == 3 ? 'SUPER PUNCH READY' : '$stars/3 stars',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: stars == 3 ? Colors.orangeAccent : Colors.white.withValues(alpha: 0.5)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Star icons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (int i = 0; i < 3; i++)
+                    Icon(
+                      Icons.star_rounded,
+                      size: 36,
+                      color: i < stars
+                          ? Colors.orangeAccent
+                          : Colors.white.withValues(alpha: 0.1),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                stars == 3
+                    ? '3 stars! Charge the gun to consume stars and fire a high-damage super punch.'
+                    : 'Gains a star per kill (up to 3). Chance to stun on hit. Increases curse by 1.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: stars > 0 ? () { Haptics.light(); p.setBoxingGloveStars(stars - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.orangeAccent, size: 20),
+                  ),
+                  Text('$stars', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
+                  IconButton(
+                    onPressed: stars < 3 ? () { Haptics.light(); p.setBoxingGloveStars(stars + 1); } : null,
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.orangeAccent, size: 20),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CigarettesDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _CigarettesDashboard({required this.slot});
+
+  @override
+  State<_CigarettesDashboard> createState() => _CigarettesDashboardState();
+}
+
+class _CigarettesDashboardState extends State<_CigarettesDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final uses = p.cigarettesUses;
+
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF121418),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.blueGrey.withValues(alpha: 0.4), width: 1.2),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.smoking_rooms, color: Colors.blueGrey, size: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'CIGARETTES',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.blueGrey, letterSpacing: 0.8),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '+$uses Cool',
+                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.blueGrey),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _statChip('Uses', '$uses'),
+                  _statChip('Coolness', '+$uses'),
+                  _statChip('Cost', '-$uses half-hearts'),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Each use: -half a heart, +1 Coolness. Coolness decreases active item cooldowns and increases luck.',
+                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: uses > 0 ? () { Haptics.light(); p.setCigarettesUses(uses - 1); } : null,
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.blueGrey, size: 20),
+                  ),
+                  Text('$uses', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                  IconButton(
+                    onPressed: () { Haptics.light(); p.setCigarettesUses(uses + 1); },
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.blueGrey, size: 20),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _statChip(String label, String value) {
+    return Column(
+      children: [
+        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+      ],
     );
   }
 }
