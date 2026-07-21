@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
 import 'theme_picker_screen.dart';
+import 'codex_screen.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
@@ -329,6 +330,36 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  // Codex — browse Objects, Pickups, and NPCs
+                  ScaleButton(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CodexScreen(showBackButton: true),
+                        ),
+                      );
+                    },
+                    child: IgnorePointer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 56,
+                        child: OutlinedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.menu_book_outlined, size: 24),
+                          label: const GoopText(
+                            'Codex',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   Text(
                     'v1.1.1',
                     style: TextStyle(
@@ -423,7 +454,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.1.1 — 2026 Ultimate Edition',
+                            'v1.4.0 — Code Cleanup + MP Summary Fixes',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
