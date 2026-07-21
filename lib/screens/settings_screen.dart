@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/multiplayer_messages.dart';
 import '../models/player.dart';
+import '../models/run_log_entry.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/multiplayer_session.dart';
@@ -1196,6 +1197,19 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
             ),
           ),
           const SizedBox(height: 20),
+
+          // 📜 Run Event Log
+          _sectionHeader('📜 RUN EVENT LOG'),
+          _utilTile(
+            title: 'View Event History',
+            subtitle: 'See all pickups, stat changes, shrines, synergies & manual actions.',
+            icon: Icons.history_edu_rounded,
+            color: const Color(0xFFFFD740),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const RunLogScreen()),
+            ),
+          ),
 
           // ⚠️ Active Run Termination
           _sectionHeader('⚠️ CORE ACTIONS'),

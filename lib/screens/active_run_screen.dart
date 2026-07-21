@@ -4228,6 +4228,15 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
     final player = widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
     if (player == null) return const SliverToBoxAdapter(child: SizedBox.shrink());
 
+    return ListenableBuilder(
+      listenable: VisualPrefs.notifier,
+      builder: (context, _) {
+        return _buildDashboards(p, player);
+      },
+    );
+  }
+
+  Widget _buildDashboards(RunProvider p, Player player) {
     final ownedGunNames = player.guns.map((g) => g.name.toLowerCase()).toSet();
     final ownedItemNames = player.items.map((i) => i.name.toLowerCase()).toSet();
     final charName = player.character?.name.toLowerCase() ?? '';
@@ -4276,7 +4285,9 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
       dashboards.add(_IronCoinDashboard(slot: widget.slot));
       labels.add('IRON COIN');
     }
-    if (!charName.contains('robot')) {
+    if (!charName.contains('robot') &&
+        VisualPrefs.notifier.value.showDamageCalculator &&
+        player.guns.isNotEmpty) {
       dashboards.add(_UniversalDamageCalculatorSliver(slot: widget.slot));
       labels.add('DPS CALC');
     }
