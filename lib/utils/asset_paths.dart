@@ -49,5 +49,13 @@ String _pathFor(String dir, String name) {
 String localGunIcon(String name) => _pathFor('guns', name);
 String localItemIcon(String name) => _pathFor('items', name);
 String localGungeoneerIcon(String name) => _pathFor('gungeoneers', name);
+
+/// Path to the animated in-game GIF for a gungeoneer (used on the MP
+/// Summary page). Falls back to the static .webp icon if no GIF exists.
+String gungeoneerGifPath(String name) {
+  final slug = slugForAssetName(name);
+  if (slug.isEmpty) return '';
+  return 'assets/images/gungeoneers/$slug.gif';
+}
 String localShrineIcon(String name) => _pathFor('shrines', name);
 String localSynergyIcon(String name) => _pathFor('synergies', name);

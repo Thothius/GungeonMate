@@ -6236,7 +6236,8 @@
   {
     "name": "Pea Cannon",
     "items": [
-      "Pea Shooter"
+      "Pea Shooter",
+      "Wood Beam"
     ],
     "effect": "Pea Shooter shots become larger, deal more damage, and explode.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/7a/Pea_Cannon.png",
@@ -8731,7 +8732,8 @@
   {
     "name": "To Serve Android",
     "items": [
-      "Badge"
+      "Badge",
+      "Grasschopper"
     ],
     "effect": "Police Officer turns into a robot and becomes unkillable.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6b/To_Serve_Android.png",

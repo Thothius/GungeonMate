@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.2.0",
+    "title": "\ud83c\udfae MP SUMMARY PAGE + ANIMATED GUNGEONEER GIFS",
+    "date": "July 21, 2026",
+    "items": [
+      "Multiplayer Summary Page: Swipe right from P2 to reach a new Summary tab in multiplayer. Shows both players side-by-side with animated in-game Gungeoneer GIFs, usernames, and a full stats comparison panel (guns, items, active synergies, max DPS, damage bonus, coolness, curse).",
+      "Synergy Overview Panel: Below the stats panel, a dedicated synergy section lists all possible synergies from the combined inventories of both players. Each synergy shows ACTIVE/PARTIAL/LOCKED status with missing items listed for partial synergies.",
+      "Animated Gungeoneer GIFs: 9 in-game animated GIFs (Marine, Pilot, Convict, Hunter, Bullet, Robot, Cultist, Paradox, Gunslinger) integrated into assets. Used on the Summary page with neon-accented portrait frames matching player slot colors (cyan for P1, purple for P2).",
+      "Damage Calculator Assessment: Comprehensive assessment written to docs/damage_calculator_assessment.md identifying 7 issues in the current calculator (flat multiplier, missing synergy integration, additive-only stacking, fragile regex, no per-gun breakdown, no character passives) with a 5-phase redesign plan."
+    ]
+  },
+  {
     "version": "v1.1.1",
     "title": "\ud83d\udd01 MP RECONNECTION OVERHAUL: 10 BUG FIXES",
     "date": "July 21, 2026",

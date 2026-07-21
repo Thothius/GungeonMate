@@ -6,6 +6,25 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.2.0 — MP Summary Page + Animated Gungeoneer GIFs (July 21, 2026)
+**Build:** 56
+
+### New Feature: Multiplayer Summary Page
+- Third tab in the MP `PageView` (P1 → P2 → Summary), accessible by swiping right or tapping the Summary tab in the MP header.
+- Shows both gungeoneers side-by-side as animated in-game GIFs with neon-accented portrait frames (cyan for P1, purple for P2).
+- Displays each player's nickname below their portrait, plus character name.
+- Stats comparison panel: guns count, items count, active synergies, max DPS, damage bonus %, coolness, curse — all in a clean P1 | STAT | P2 layout.
+- Synergy Overview panel: lists all possible synergies from the combined inventories with ACTIVE/PARTIAL/LOCKED status indicators and missing item hints for partial synergies.
+
+### New Assets: Animated Gungeoneer GIFs
+- 9 in-game animated GIFs added to `assets/images/gungeoneers/`: the_marine, the_pilot, the_convict, the_hunter, the_bullet, the_robot, the_cultist, the_paradox, the_gunslinger.
+- New `gungeoneerGifPath()` helper in `asset_paths.dart` for resolving GIF paths by character name.
+
+### Damage Calculator Assessment
+- Comprehensive assessment written to `docs/damage_calculator_assessment.md` identifying 7 issues and a 5-phase redesign plan.
+
+---
+
 ## v1.1.0 — Universal Damage Calculator + UI Contrast Overhaul (July 7, 2026)
 **File:** `gungeon-mate-v1.1.0.apk`
 **Build:** 54

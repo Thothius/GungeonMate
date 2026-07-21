@@ -369,7 +369,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v1.1.1)',
+                            'Changelog (v1.2.0)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],

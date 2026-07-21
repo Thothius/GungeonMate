@@ -8,6 +8,7 @@ import '../models/gun.dart';
 import '../models/gungeoneer.dart';
 import '../models/item.dart';
 import '../models/player.dart';
+import '../models/synergy.dart';
 import '../widgets/periodic_tile.dart';
 import '../widgets/gungeoneer_header.dart';
 import '../widgets/inventory_list_row.dart';
@@ -33,6 +34,7 @@ import '../services/multiplayer_session.dart';
 import '../models/multiplayer_messages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/format.dart';
+import '../utils/asset_paths.dart';
 // bug_reporter import removed (hidden per user request)
 
 class ActiveRunScreen extends StatefulWidget {
@@ -181,19 +183,18 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final session = context.watch<MultiplayerSession>();
     final isMpActive = session.isActive;
     final hasCoop = state.hasCoop;
-    // Snap back to main page if coop page is no longer available
-    if (!hasCoop && _currentPage > 0) {
+    // Snap back if current page no longer exists (coop removed or MP ended)
+    final maxPage = (hasCoop ? 1 : 0) + (isMpActive && hasCoop ? 1 : 0);
+    if (_currentPage > maxPage) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _page.hasClients) {
-          _page.jumpToPage(0);
-          setState(() => _currentPage = 0);
+          _page.jumpToPage(maxPage);
+          setState(() => _currentPage = maxPage);
         }
       });
     }
 
-    // Pages: 0=P1, 1=P2 (only when coop). No Summary tab anymore —
-    // the dedicated Summary view was removed in favour of cleaner
-    // two-tab navigation.
+    // Pages: 0=P1, 1=P2 (only when coop), 2=Summary (MP only).
     // In MP, "my" page is whichever slot belongs to me.
     final myMpPage = isMpActive
         ? (session.myRole == MpRole.main ? 0 : 1)
@@ -208,7 +209,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: (isMpActive && hasCoop && _currentPage >= 2)
+          ? null
+          : FloatingActionButton(
               heroTag: 'fab_add',
               tooltip: (isMpActive && !onMyMpPage)
                   ? null // no FAB on peer's page in MP
@@ -261,6 +264,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               children: [
                 const _PlayerPage(slot: PlayerSlot.main),
                 if (hasCoop) const _PlayerPage(slot: PlayerSlot.coop),
+                if (isMpActive && hasCoop) const _MpSummaryPage(),
               ],
             ),
           ),
@@ -941,14 +945,14 @@ class _MpHeader extends StatelessWidget {
               ),
             ),
             // ── Player tabs (only when the coop slot exists) ──────
-            // Two equal-width big tabs. No Summary. Slot label on top
-            // (P1 / P2), nickname underneath. The peer tab dims when
-            // disconnected so it's obvious their data is stale.
+            // P1 + P2 equal-width tabs, plus a compact Summary tab.
+            // The peer tab dims when disconnected.
             if (hasCoop) ...[
               const SizedBox(height: 4),
               Row(
                 children: [
                   Expanded(
+                    flex: 2,
                     child: _BigPlayerTab(
                       active: currentPage == 0,
                       slotLabel: 'P1',
@@ -958,8 +962,9 @@ class _MpHeader extends StatelessWidget {
                       opacity: peerDimmed && !tab0IsYou ? 0.45 : 1.0,
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
                   Expanded(
+                    flex: 2,
                     child: _BigPlayerTab(
                       active: currentPage == 1,
                       slotLabel: 'P2',
@@ -967,6 +972,14 @@ class _MpHeader extends StatelessWidget {
                       onTap: () => onPick(1),
                       showYouDot: tab1IsYou,
                       opacity: peerDimmed && !tab1IsYou ? 0.45 : 1.0,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    flex: 1,
+                    child: _SummaryTab(
+                      active: currentPage == 2,
+                      onTap: () => onPick(2),
                     ),
                   ),
                 ],
@@ -7372,5 +7385,643 @@ class _InteractiveDogStripState extends State<_InteractiveDogStrip> {
     _behaviorTimer.cancel();
     _movementTimer.cancel();
     super.dispose();
+  }
+}
+
+/// Compact tab button for the Summary page in the MP header.
+class _SummaryTab extends StatelessWidget {
+  final bool active;
+  final VoidCallback onTap;
+  const _SummaryTab({required this.active, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(8),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+          decoration: BoxDecoration(
+            color: active
+                ? primary.withValues(alpha: 0.15)
+                : Colors.white.withValues(alpha: 0.02),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: active
+                  ? primary.withValues(alpha: 0.5)
+                  : Colors.white.withValues(alpha: 0.06),
+              width: 1.0,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.summarize_rounded,
+                size: 14,
+                color: active
+                    ? primary
+                    : Colors.white.withValues(alpha: 0.55),
+              ),
+              const SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  'SUMMARY',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                    letterSpacing: 0.8,
+                    fontWeight: FontWeight.w800,
+                    color: active
+                        ? primary
+                        : Colors.white.withValues(alpha: 0.55),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Multiplayer Summary page — swipe right from P2 to reach it.
+/// Shows both gungeoneers as animated GIFs with usernames, a stats
+/// comparison panel, and a synergy overview showing all possible
+/// synergies from the combined inventories.
+class _MpSummaryPage extends StatefulWidget {
+  const _MpSummaryPage();
+
+  @override
+  State<_MpSummaryPage> createState() => _MpSummaryPageState();
+}
+
+class _MpSummaryPageState extends State<_MpSummaryPage> {
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final session = context.watch<MultiplayerSession>();
+    final state = p.runState;
+    final main = state.main;
+    final coop = state.coop ?? Player();
+
+    // Resolve nicknames
+    final iAmMain = session.myRole == MpRole.main;
+    final p1Nick = iAmMain ? session.myNickname : (session.peerNickname ?? 'P1');
+    final p2Nick = !iAmMain ? session.myNickname : (session.peerNickname ?? 'P2');
+
+    // Per-player stats
+    final p1Guns = main.guns;
+    final p1Items = main.items;
+    final p2Guns = coop.guns;
+    final p2Items = coop.items;
+
+    final p1MaxDps = p1Guns.isEmpty
+        ? 0.0
+        : p1Guns.map((g) => g.dpsValue).fold<double>(0, (a, b) => a > b ? a : b);
+    final p2MaxDps = p2Guns.isEmpty
+        ? 0.0
+        : p2Guns.map((g) => g.dpsValue).fold<double>(0, (a, b) => a > b ? a : b);
+
+    final p1DmgMult = DamageCalculator.multiplier(guns: p1Guns, items: p1Items);
+    final p2DmgMult = DamageCalculator.multiplier(guns: p2Guns, items: p2Items);
+
+    final p1ActiveSyns = p.getActiveSynergies();
+    final allCombinedSyns = p.getActiveSynergiesCombined();
+
+    // All possible synergies from combined inventories (active + partial)
+    final combinedNames = state.allItemNames
+        .map((n) => n.toLowerCase())
+        .toSet();
+    final possibleSyns = p.allSynergies.where((s) {
+      final hasAny = s.items.any((i) => combinedNames.contains(i.toLowerCase())) ||
+          s.anyOf.any((i) => combinedNames.contains(i.toLowerCase()));
+      return hasAny;
+    }).toList();
+
+    final activeSynNames = allCombinedSyns.map((s) => s.name.toLowerCase()).toSet();
+
+    return SafeArea(
+      top: false,
+      child: CustomScrollView(
+        slivers: [
+          // ── Gungeoneer portraits row ──────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _GungeoneerPortrait(
+                      character: main.character,
+                      nickname: p1Nick,
+                      slotLabel: 'P1',
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Text(
+                      '✕',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: _GungeoneerPortrait(
+                      character: coop.character,
+                      nickname: p2Nick,
+                      slotLabel: 'P2',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ── Stats comparison panel ────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+              child: Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E1E22),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.06),
+                    width: 1.0,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'LOADOUT STATS',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: Colors.white54,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Header row
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            p1Nick,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.cyanAccent.withValues(alpha: 0.8),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            'STAT',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.8,
+                              color: Colors.white.withValues(alpha: 0.35),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            p2Nick,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.purpleAccent.withValues(alpha: 0.8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    _StatComparisonRow(
+                      label: 'Guns',
+                      p1Value: '${p1Guns.length}',
+                      p2Value: '${p2Guns.length}',
+                      icon: Icons.gps_fixed,
+                    ),
+                    _StatComparisonRow(
+                      label: 'Items',
+                      p1Value: '${p1Items.length}',
+                      p2Value: '${p2Items.length}',
+                      icon: Icons.inventory_2_rounded,
+                    ),
+                    _StatComparisonRow(
+                      label: 'Active Syns',
+                      p1Value: '${p1ActiveSyns.length}',
+                      p2Value: '${allCombinedSyns.length - p1ActiveSyns.length > 0 ? allCombinedSyns.length - p1ActiveSyns.length : 0}',
+                      icon: Icons.auto_awesome,
+                    ),
+                    _StatComparisonRow(
+                      label: 'Max DPS',
+                      p1Value: p1MaxDps.toStringAsFixed(1),
+                      p2Value: p2MaxDps.toStringAsFixed(1),
+                      icon: Icons.flash_on,
+                    ),
+                    _StatComparisonRow(
+                      label: 'DMG Bonus',
+                      p1Value: '+${((p1DmgMult - 1) * 100).toStringAsFixed(0)}%',
+                      p2Value: '+${((p2DmgMult - 1) * 100).toStringAsFixed(0)}%',
+                      icon: Icons.trending_up,
+                    ),
+                    _StatComparisonRow(
+                      label: 'Coolness',
+                      p1Value: '+${state.totalCoolness.toStringAsFixed(0)}',
+                      p2Value: '+${state.totalCoolness.toStringAsFixed(0)}',
+                      icon: Icons.ac_unit,
+                    ),
+                    _StatComparisonRow(
+                      label: 'Curse',
+                      p1Value: '+${state.totalCurse.toStringAsFixed(0)}',
+                      p2Value: '+${state.totalCurse.toStringAsFixed(0)}',
+                      icon: Icons.local_fire_department,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // ── Synergy overview panel ────────────────────────────
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+              child: Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E1E22),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Colors.amber.withValues(alpha: 0.12),
+                    width: 1.0,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.auto_awesome, size: 16, color: Colors.amberAccent),
+                        const SizedBox(width: 8),
+                        Text(
+                          'SYNERGY OVERVIEW',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.0,
+                            color: Colors.amberAccent,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          '${allCombinedSyns.length} active',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.greenAccent,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    if (possibleSyns.isEmpty)
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Text(
+                            'No synergies available from current loadout.',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white.withValues(alpha: 0.4),
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      for (final syn in possibleSyns)
+                        _SynergySummaryRow(
+                          synergy: syn,
+                          isActive: activeSynNames.contains(syn.name.toLowerCase()),
+                          ownedLower: combinedNames,
+                        ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 80)),
+        ],
+      ),
+    );
+  }
+}
+
+/// Animated gungeoneer portrait with nickname below.
+class _GungeoneerPortrait extends StatelessWidget {
+  final Gungeoneer? character;
+  final String nickname;
+  final String slotLabel;
+  const _GungeoneerPortrait({
+    required this.character,
+    required this.nickname,
+    required this.slotLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final charName = character?.name ?? 'Unknown';
+    final gifPath = gungeoneerGifPath(charName);
+    final accent = slotLabel == 'P1'
+        ? Colors.cyanAccent
+        : Colors.purpleAccent;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Slot label badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          decoration: BoxDecoration(
+            color: accent.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: accent.withValues(alpha: 0.4), width: 1),
+          ),
+          child: Text(
+            slotLabel,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
+              color: accent,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        // Animated GIF portrait
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: const Color(0xFF0D1117),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: accent.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.08),
+                  blurRadius: 12,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: Image.asset(
+              gifPath,
+              fit: BoxFit.contain,
+              errorBuilder: (_, __, ___) => Image.asset(
+                character?.icon ?? '',
+                fit: BoxFit.contain,
+                errorBuilder: (_, __, ___) => Icon(
+                  Icons.person,
+                  size: 48,
+                  color: accent.withValues(alpha: 0.5),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        // Character name
+        Text(
+          charName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+            color: Colors.white.withValues(alpha: 0.85),
+            letterSpacing: 0.3,
+          ),
+        ),
+        const SizedBox(height: 2),
+        // Nickname
+        Text(
+          nickname,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w900,
+            color: accent,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// One row in the stats comparison panel.
+class _StatComparisonRow extends StatelessWidget {
+  final String label;
+  final String p1Value;
+  final String p2Value;
+  final IconData icon;
+  const _StatComparisonRow({
+    required this.label,
+    required this.p1Value,
+    required this.p2Value,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Text(
+              p1Value,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: Colors.cyanAccent,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, size: 11, color: Colors.white.withValues(alpha: 0.35)),
+                const SizedBox(width: 4),
+                Text(
+                  label,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white.withValues(alpha: 0.5),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              p2Value,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                color: Colors.purpleAccent,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One row in the synergy overview panel.
+class _SynergySummaryRow extends StatelessWidget {
+  final Synergy synergy;
+  final bool isActive;
+  final Set<String> ownedLower;
+  const _SynergySummaryRow({
+    required this.synergy,
+    required this.isActive,
+    required this.ownedLower,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final missing = synergy.missingFor(ownedLower);
+    final isPartial = !isActive && missing.length < (synergy.items.length + (synergy.anyOf.isNotEmpty ? 1 : 0));
+
+    final statusColor = isActive
+        ? Colors.greenAccent
+        : isPartial
+            ? Colors.amberAccent
+            : Colors.white24;
+    final statusText = isActive
+        ? 'ACTIVE'
+        : isPartial
+            ? 'PARTIAL'
+            : 'LOCKED';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: isActive
+              ? Colors.green.withValues(alpha: 0.04)
+              : Colors.white.withValues(alpha: 0.02),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: statusColor.withValues(alpha: isActive ? 0.2 : 0.06),
+            width: 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            // Status indicator
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                color: statusColor,
+                shape: BoxShape.circle,
+                boxShadow: isActive
+                    ? [BoxShadow(color: statusColor.withValues(alpha: 0.4), blurRadius: 4)]
+                    : null,
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Synergy name + missing items
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    synergy.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      color: isActive
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.7),
+                    ),
+                  ),
+                  if (!isActive && missing.isNotEmpty) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      'Need: ${missing.take(3).join(", ")}${missing.length > 3 ? "…" : ""}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        color: Colors.amber.withValues(alpha: 0.6),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            // Status badge
+            Text(
+              statusText,
+              style: TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.5,
+                color: statusColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
