@@ -1621,20 +1621,7 @@ class _PlayerPageState extends State<_PlayerPage> {
             ),
           ),
         ),
-        if (player.character?.name.toLowerCase().contains('robot') ?? false)
-          const _RobotDashboardSliver(),
-        if (player.character?.name.toLowerCase().contains('hunter') ?? false)
-          const _HuntressDashboardSliver(),
-        if (player.items.any((it) => it.name.toLowerCase() == 'ser junkan'))
-          _JunkanDashboardSliver(slot: _slot),
-        if (player.guns.any((g) => g.name.toLowerCase() == 'gunderfury'))
-          _GunderfuryDashboardSliver(slot: _slot),
-        if (player.guns.any((g) => g.name.toLowerCase() == 'triple gun'))
-          _TripleGunDashboardSliver(slot: _slot),
-        if (player.guns.any((g) => g.name.toLowerCase() == 'evolver'))
-          _EvolverDashboardSliver(slot: _slot),
-        if (!(player.character?.name.toLowerCase().contains('robot') ?? false))
-          _UniversalDamageCalculatorSliver(slot: _slot),
+        _DashboardSwiper(slot: _slot),
         // Effects tile hidden — effect tags already shown on character dash.
         // SliverToBoxAdapter(
         //   child: _EffectsTile(slot: _slot),
@@ -4205,6 +4192,515 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
         const SizedBox(height: 2),
         Text(emoji, style: const TextStyle(fontSize: 14)),
       ],
+    );
+  }
+}
+
+// =============================================================================
+// Special Dashboard Swiper — PageView carousel for all active special dashboards
+// =============================================================================
+
+class _DashboardSwiper extends StatefulWidget {
+  final PlayerSlot slot;
+  const _DashboardSwiper({required this.slot});
+
+  @override
+  State<_DashboardSwiper> createState() => _DashboardSwiperState();
+}
+
+class _DashboardSwiperState extends State<_DashboardSwiper> {
+  late final PageController _pc;
+  int _page = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pc = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pc.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final player = widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
+    if (player == null) return const SliverToBoxAdapter(child: SizedBox.shrink());
+
+    final ownedGunNames = player.guns.map((g) => g.name.toLowerCase()).toSet();
+    final ownedItemNames = player.items.map((i) => i.name.toLowerCase()).toSet();
+    final charName = player.character?.name.toLowerCase() ?? '';
+
+    // Build list of active dashboards
+    final dashboards = <Widget>[];
+    final labels = <String>[];
+
+    if (charName.contains('robot')) {
+      dashboards.add(const _RobotDashboardSliver());
+      labels.add('ROBOT');
+    }
+    if (charName.contains('hunter')) {
+      dashboards.add(const _HuntressDashboardSliver());
+      labels.add('HUNTRESS');
+    }
+    if (ownedItemNames.contains('ser junkan')) {
+      dashboards.add(_JunkanDashboardSliver(slot: widget.slot));
+      labels.add('JUNKAN');
+    }
+    if (ownedGunNames.contains('gunderfury')) {
+      dashboards.add(_GunderfuryDashboardSliver(slot: widget.slot));
+      labels.add('GUNDERFURY');
+    }
+    if (ownedGunNames.contains('triple gun')) {
+      dashboards.add(_TripleGunDashboardSliver(slot: widget.slot));
+      labels.add('TRIPLE GUN');
+    }
+    if (ownedGunNames.contains('evolver')) {
+      dashboards.add(_EvolverDashboardSliver(slot: widget.slot));
+      labels.add('EVOLVER');
+    }
+    if (ownedGunNames.contains('shellegun')) {
+      dashboards.add(_ShellegunDashboard(slot: widget.slot));
+      labels.add('SHELLEGUN');
+    }
+    if (ownedGunNames.contains('chamber gun')) {
+      dashboards.add(_ChamberGunDashboard(slot: widget.slot));
+      labels.add('CHAMBER GUN');
+    }
+    if (ownedItemNames.contains('platinum bullets')) {
+      dashboards.add(_PlatinumBulletsDashboard(slot: widget.slot));
+      labels.add('PLATINUM');
+    }
+    if (ownedItemNames.contains('iron coin')) {
+      dashboards.add(_IronCoinDashboard(slot: widget.slot));
+      labels.add('IRON COIN');
+    }
+    if (!charName.contains('robot')) {
+      dashboards.add(_UniversalDamageCalculatorSliver(slot: widget.slot));
+      labels.add('DPS CALC');
+    }
+
+    if (dashboards.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
+
+    // Clamp page index
+    if (_page >= dashboards.length) _page = 0;
+
+    return SliverToBoxAdapter(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 300,
+            child: PageView.builder(
+              controller: _pc,
+              itemCount: dashboards.length,
+              onPageChanged: (i) {
+                setState(() => _page = i);
+                Haptics.selection();
+              },
+              itemBuilder: (context, i) => dashboards[i],
+            ),
+          ),
+          const SizedBox(height: 6),
+          // Dot indicators + label
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (int i = 0; i < dashboards.length; i++)
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  width: i == _page ? 18 : 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    color: i == _page ? Colors.lightGreenAccent : Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            labels.isNotEmpty && _page < labels.length ? labels[_page] : '',
+            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white54, letterSpacing: 1.2),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// New compact dashboards for Shellegun, Chamber Gun, Platinum Bullets, Iron Coin
+// =============================================================================
+
+class _ShellegunDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _ShellegunDashboard({required this.slot});
+
+  @override
+  State<_ShellegunDashboard> createState() => _ShellegunDashboardState();
+}
+
+class _ShellegunDashboardState extends State<_ShellegunDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final mode = p.shellegunMode;
+
+    const modes = ['Pistol (Manual)', 'Pistol (Auto)', 'Beam'];
+    const descriptions = [
+      'Semi-auto energy pistol. Moderate fire rate, high accuracy.',
+      'Fully automatic. Increased fire rate, same damage per shot.',
+      'Continuous energy beam. Highest DPS, consumes ammo rapidly.',
+    ];
+    const dpsValues = [18.0, 27.5, 42.0];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0E1218),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.cyan.withValues(alpha: 0.35), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
+                const SizedBox(width: 8),
+                const Text(
+                  'SHELLEGUN',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
+                ),
+                const Spacer(),
+                Text(
+                  'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _modeBtn('Manual', mode == 1, () => p.setShellegunMode(1)),
+                _modeBtn('Auto', mode == 2, () => p.setShellegunMode(2)),
+                _modeBtn('Beam', mode == 3, () => p.setShellegunMode(3)),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              modes[mode - 1],
+              style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              descriptions[mode - 1],
+              style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _modeBtn(String label, bool active, VoidCallback onTap) {
+    return InkWell(
+      onTap: () { Haptics.light(); onTap(); },
+      borderRadius: BorderRadius.circular(6),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: active ? Colors.cyan.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: active ? Colors.cyanAccent : Colors.white12),
+        ),
+        child: Text(label, style: TextStyle(fontSize: 11, fontWeight: active ? FontWeight.bold : FontWeight.normal, color: active ? Colors.cyanAccent : Colors.white60)),
+      ),
+    );
+  }
+}
+
+class _ChamberGunDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _ChamberGunDashboard({required this.slot});
+
+  @override
+  State<_ChamberGunDashboard> createState() => _ChamberGunDashboardState();
+}
+
+class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  static const _floors = [
+    'Keep of the Lead Lord', 'Oubliette', 'Gungeon Proper', 'Abbey of the True Gun',
+    'Black Powder Mine', "Rat's Lair", 'The Hollow', 'R&G Dept', 'The Forge', 'Bullet Hell',
+  ];
+  static const _dps = [15.0, 18.5, 22.0, 26.0, 30.0, 34.0, 38.5, 43.0, 48.0, 55.0];
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final floor = p.chamberGunFloor;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF120E08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
+                const SizedBox(width: 8),
+                const Text(
+                  'CHAMBER GUN',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
+                ),
+                const Spacer(),
+                Text(
+                  'DPS: ${_dps[floor].toStringAsFixed(1)}',
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'FLOOR ${floor + 1}: ${_floors[floor]}',
+              style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 8),
+            // Floor selector — horizontal scrollable row
+            SizedBox(
+              height: 32,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: 10,
+                separatorBuilder: (_, __) => const SizedBox(width: 4),
+                itemBuilder: (context, i) {
+                  final active = i == floor;
+                  return InkWell(
+                    onTap: () { Haptics.light(); p.setChamberGunFloor(i); },
+                    borderRadius: BorderRadius.circular(6),
+                    child: Container(
+                      width: 28,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: active ? Colors.amber.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: active ? Colors.amberAccent : Colors.white12),
+                      ),
+                      child: Text(
+                        '${i + 1}',
+                        style: TextStyle(fontSize: 11, fontWeight: active ? FontWeight.bold : FontWeight.normal, color: active ? Colors.amberAccent : Colors.white54),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PlatinumBulletsDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _PlatinumBulletsDashboard({required this.slot});
+
+  @override
+  State<_PlatinumBulletsDashboard> createState() => _PlatinumBulletsDashboardState();
+}
+
+class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final kills = p.platinumBulletsKills;
+    final dmgBonus = (kills * 0.5).toStringAsFixed(1);
+    final fireRateBonus = (kills * 0.2).toStringAsFixed(1);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF100E18),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
+                const SizedBox(width: 8),
+                const Text(
+                  'PLATINUM BULLETS',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
+                ),
+                const Spacer(),
+                Text(
+                  '$kills kills',
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                _statChip('DMG +$dmgBonus%', Colors.redAccent),
+                const SizedBox(width: 8),
+                _statChip('FIRE RATE +$fireRateBonus%', Colors.orangeAccent),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Each kill stacks +0.5% damage and +0.2% fire rate. Bonus persists for the entire run.',
+              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: kills > 0 ? () { Haptics.light(); p.setPlatinumBulletsKills(kills - 1); } : null,
+                  icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 20),
+                ),
+                Text('$kills', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.white)),
+                IconButton(
+                  onPressed: () { Haptics.light(); p.setPlatinumBulletsKills(kills + 1); },
+                  icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 20),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _statChip(String label, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
+      ),
+      child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: color)),
+    );
+  }
+}
+
+class _IronCoinDashboard extends StatefulWidget {
+  final PlayerSlot slot;
+  const _IronCoinDashboard({required this.slot});
+
+  @override
+  State<_IronCoinDashboard> createState() => _IronCoinDashboardState();
+}
+
+class _IronCoinDashboardState extends State<_IronCoinDashboard>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final p = context.watch<RunProvider>();
+    final uses = p.ironCoinUses;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF181210),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.brown.withValues(alpha: 0.4), width: 1.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
+                const SizedBox(width: 8),
+                const Text(
+                  'IRON COIN',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
+                ),
+                const Spacer(),
+                Text(
+                  '$uses/3 uses',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            // Coin icons row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (int i = 0; i < 3; i++)
+                  Icon(
+                    Icons.paid_rounded,
+                    size: 32,
+                    color: i < uses ? Colors.amber : Colors.white.withValues(alpha: 0.1),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Flip to reveal/destroy a chest's contents. 3 uses per run. Use wisely on high-tier chests.",
+              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: uses < 3 ? () { Haptics.light(); p.setIronCoinUses(uses + 1); } : null,
+                  icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 20),
+                ),
+                IconButton(
+                  onPressed: uses > 0 ? () { Haptics.light(); p.setIronCoinUses(uses - 1); } : null,
+                  icon: const Icon(Icons.remove_circle_outline, color: Colors.amber, size: 20),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
