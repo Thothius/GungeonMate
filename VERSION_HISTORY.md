@@ -6,6 +6,63 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.5.0 — Codex + Special Dashboards + Tactical Grid + Event Log (July 21, 2026)
+**Build:** 59
+
+### Codex Browser
+- New tabbed browser for Objects, Pickups, and NPCs scraped from wiki.gg.
+- 3 JSON data files + 90 images downloaded and integrated.
+- Detail view with wiki descriptions, accessible from main menu button.
+
+### Special Gun/Item Dashboards
+- Shellegun: 3-mode switcher (Pistol Manual / Auto / Beam) with DPS display.
+- Chamber Gun: 10-floor selector (Keep through Bullet Hell) with floor-specific stats.
+- Platinum Bullets: Stacking kill counter (0-999) with DPS scaling display.
+- Iron Coin: 3-use tracker with remaining count and reset button.
+- Casey and Kill the Past tracker also added.
+- All dashboards persist state via SharedPreferences and integrate with DamageCalculator.
+- Dashboards wrapped as SliverToBoxAdapter for proper scrolling in CustomScrollView.
+
+### Tactical Stats Grid Refactor
+- PeriodicTile tacticalStats mode refactored from Stack/Positioned to clean 2x3 grid.
+- Rank/quality badges no longer overlap — dedicated header row + stat grid + footer.
+- Bigger fonts (12-14px stats), clearer labels, no more squished elements.
+- Removed unused `_buildGridStat` and `_buildMiniStat` methods.
+
+### Run Event Log System
+- New logging system with category colors (combat, pickup, shrine, transfer, etc.).
+- Legend panel for at-a-glance category reference.
+- Synergy detection logging — active synergies flagged on acquisition.
+- Transfer logging with player names in multiplayer mode.
+- Curse/coolness tracking integrated into event stream.
+
+### Character Select Polish
+- Scale animation on card tap, gradient overlay on selected character.
+- Loadout badges showing gun/item counts, border accents per character.
+- Haptic feedback on selection.
+
+### MP Session Names
+- Replaced generic animal names with 30+ Gungeon bosses, NPCs, and enemies.
+- Names now thematically consistent with Enter the Gungeon universe.
+
+### UI Polish
+- Quick action cards: category-colored with deduplicated hint text.
+- Capsule polish: removed redundant icons, enlarged stat values (14→16) and labels (8→9.5).
+- Preserved COOL/CURSE neon glow on value text.
+
+### Dead Code Removal
+- Removed `neckbearApproved` field from Gun and Item models + JSON serialization.
+- Deleted `BugReporter` utility and `NeckbearMedal` widget entirely.
+- Cleaned all imports and references across 6 files.
+
+### Bughunt
+- `flutter analyze`: 0 errors, all warnings pre-existing (16 in active_run_screen, 3 in periodic_tile).
+- All controllers properly disposed (PageController, AnimationController).
+- All async overlay calls guarded with `context.mounted`.
+- RunProvider methods verified: clamping, persistence, notifyListeners on all new setters.
+
+---
+
 ## v1.4.0 — Code Cleanup + MP Summary Fixes (July 21, 2026)
 **Build:** 58
 

@@ -1,5 +1,21 @@
 [
   {
+    "version": "v1.5.0",
+    "title": "\ud83c\udfae CODEX + SPECIAL DASHBOARDS + TACTICAL GRID + EVENT LOG",
+    "date": "July 21, 2026",
+    "items": [
+      "Codex Browser: New tabbed browser for Objects, Pickups, and NPCs scraped from wiki.gg \u2014 90+ images, detail view, accessible from main menu.",
+      "Special Gun/Item Dashboards: Shellegun (3-mode switcher), Chamber Gun (10-floor selector), Platinum Bullets (kill counter), Iron Coin (3-use tracker), Casey, and Kill the Past tracker \u2014 all with persistent state.",
+      "Tactical Stats Grid: Refactored PeriodicTile tactical view to clean 2x3 grid layout \u2014 no more overlapping rank/quality badges, bigger fonts, clearer stats.",
+      "Run Event Log: New logging system with category colors, legend, synergy detection, transfer logging, and player names. Curse/coolness tracking integrated.",
+      "Character Select Polish: Scale animation, gradient overlay, loadout badges, border accents, and haptic feedback on the character selection screen.",
+      "MP Session Names: Replaced generic animal names with 30+ Gungeon bosses, NPCs, and enemies for multiplayer session nicknames.",
+      "Quick Action Cards: Category-colored cards with deduplicated hint text for cleaner inventory actions.",
+      "Capsule Polish: Removed redundant icons, enlarged stat values (14\u219216) and labels (8\u21929.5), preserved COOL/CURSE glow on value text.",
+      "Dead Code Removal: Removed neckbearApproved from Gun/Item models, deleted BugReporter utility and NeckbearMedal widget, cleaned all imports and references."
+    ]
+  },
+  {
     "version": "v1.4.0",
     "title": "\ud83e\uddf9 CODE CLEANUP + MP SUMMARY FIXES",
     "date": "July 21, 2026",
