@@ -340,7 +340,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                 children: [
                   Expanded(
                     child: _buildFlatCapsule(
-                      imagePath: 'assets/images/items/coolness.webp',
                       color: const Color(0xFF00E5FF),
                       value: '+${widget.coolness.toStringAsFixed(1)}',
                       label: 'COOL',
@@ -352,7 +351,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                   const SizedBox(width: 6),
                   Expanded(
                     child: _buildFlatCapsule(
-                      imagePath: 'assets/images/items/curse.webp',
                       color: const Color(0xFFE040FB),
                       value: '+${widget.curse.toStringAsFixed(1)}',
                       label: 'CURSE',
@@ -364,7 +362,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                   const SizedBox(width: 6),
                   Expanded(
                     child: _buildFlatCapsule(
-                      icon: Icons.flash_on,
                       color: const Color(0xFF00B0FF),
                       value: '-${cdReduction.toStringAsFixed(0)}%',
                       label: 'CD ↓',
@@ -374,7 +371,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                   const SizedBox(width: 6),
                   Expanded(
                     child: _buildFlatCapsule(
-                      icon: Icons.radio_button_checked_rounded,
                       color: const Color(0xFF00E676),
                       value: 'x${ammoMultiplier.toStringAsFixed(2)}',
                       label: 'AMMO',
@@ -384,7 +380,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                   const SizedBox(width: 6),
                   Expanded(
                     child: _buildFlatCapsule(
-                      icon: Icons.auto_awesome,
                       color: widget.activeSynergies > 0 ? const Color(0xFFFFD740) : Colors.white38,
                       value: '${widget.activeSynergies}',
                       label: 'SYN',
@@ -394,7 +389,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                   const SizedBox(width: 6),
                   Expanded(
                     child: _buildFlatCapsule(
-                      icon: Icons.bolt_rounded,
                       color: widget.topDps > 0 ? const Color(0xFFFF9100) : Colors.white38,
                       value: widget.topDps > 0 ? widget.topDps.toStringAsFixed(0) : '0',
                       label: 'DPS',
@@ -445,8 +439,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
   }
 
   Widget _buildFlatCapsule({
-    IconData? icon,
-    String? imagePath,
     required Color color,
     required String value,
     required String label,
@@ -462,25 +454,19 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
     final double coolGlowIntensity = (coolVal >= 2) ? (coolVal / 20.0).clamp(0.1, 1.0) : 0.0;
     final double curseGlowIntensity = (curseVal >= 2) ? (curseVal / 10.0).clamp(0.1, 1.0) : 0.0;
 
-    Widget iconWidget;
-    if (imagePath != null) {
-      iconWidget = Image.asset(
-        imagePath,
-        width: 14,
-        height: 14,
-        fit: BoxFit.contain,
-        filterQuality: FilterQuality.none,
-      );
-    } else if (icon != null) {
-      iconWidget = Icon(icon, size: 13, color: isActive ? color : Colors.white38);
-    } else {
-      iconWidget = const SizedBox.shrink();
-    }
-
-    Widget animatedIcon = iconWidget;
+    // Glow wrapper for value text — replaces the old icon-based glow
+    Widget valueText = Text(
+      value,
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w900,
+        color: isActive ? Colors.white : Colors.white38,
+        height: 1.1,
+      ),
+    );
 
     if (isCool && coolGlowIntensity > 0) {
-      animatedIcon = AnimatedBuilder(
+      valueText = AnimatedBuilder(
         animation: _wobbleController,
         builder: (context, child) {
           final pulse = math.sin(_wobbleController.value * 2 * math.pi) * 3.0;
@@ -498,10 +484,10 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
             child: child,
           );
         },
-        child: iconWidget,
+        child: valueText,
       );
     } else if (isCurse && curseGlowIntensity > 0) {
-      animatedIcon = AnimatedBuilder(
+      valueText = AnimatedBuilder(
         animation: _wobbleController,
         builder: (context, child) {
           final pulse = math.sin(_wobbleController.value * 2 * math.pi * 2) * 2.0;
@@ -529,12 +515,12 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
             ),
           );
         },
-        child: iconWidget,
+        child: valueText,
       );
     }
 
     final capsule = Container(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
       decoration: BoxDecoration(
         color: isActive 
             ? color.withValues(alpha: 0.16) 
@@ -552,27 +538,12 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                animatedIcon,
-                const SizedBox(width: 4),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w900,
-                    color: isActive ? Colors.white : Colors.white38,
-                    height: 1.1,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 3),
+            valueText,
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                fontSize: 8,
+                fontSize: 9.5,
                 fontWeight: FontWeight.w900,
                 color: isActive ? color : Colors.white24,
                 letterSpacing: 0.6,
