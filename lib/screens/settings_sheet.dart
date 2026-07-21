@@ -724,31 +724,21 @@ class _VisualsDropdownState extends State<_VisualsDropdown> {
                     if (prefs.particlesEnabled) ...[
                       const SizedBox(height: 10),
                       _VisualsRow(
-                        icon: Icons.sync,
-                        label: 'Particle Rotation',
+                        icon: Icons.timeline_outlined,
+                        label: 'Line Links',
                         trailing: Switch(
-                          value: prefs.particleRotation,
-                          onChanged: VisualPrefs.setParticleRotation,
+                          value: prefs.particleLineLinks,
+                          onChanged: VisualPrefs.setParticleLineLinks,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                       ),
                       const SizedBox(height: 10),
                       _VisualsRow(
-                        icon: Icons.filter_tilt_shift_outlined,
-                        label: 'Void Gravity Vortex',
+                        icon: Icons.sports_baseball_outlined,
+                        label: 'Edge Bounce',
                         trailing: Switch(
-                          value: prefs.gravityVortex,
-                          onChanged: VisualPrefs.setGravityVortex,
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      _VisualsRow(
-                        icon: Icons.local_fire_department_outlined,
-                        label: 'Advanced Flicker',
-                        trailing: Switch(
-                          value: prefs.advancedFlicker,
-                          onChanged: VisualPrefs.setAdvancedFlicker,
+                          value: prefs.particleBounce,
+                          onChanged: VisualPrefs.setParticleBounce,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                       ),

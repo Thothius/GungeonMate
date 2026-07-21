@@ -9,6 +9,7 @@ import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/multiplayer_session.dart';
 import '../services/haptics.dart';
+import '../widgets/particle_engine.dart';
 import 'character_select_screen.dart';
 import 'theme_picker_screen.dart';
 
@@ -195,158 +196,6 @@ class _ThemeVisualsTab extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-
-              // =============================================================
-              // WALLPAPER & PARALLAX ENGINE LAB (moved up!)
-              // =============================================================
-              _prefSectionTitleWithInfo('WALLPAPER & PARALLAX ENGINE LAB', flair, tooltip: 'Select an exclusive handcrafted Gungeon wallpaper, activate gyroscopic depth parallax sways, or loop a high-fidelity 8s live animation. Swipe to browse!'),
-              const SizedBox(height: 8),
-              _SwipePicker<WallpaperMode>(
-                items: WallpaperMode.values
-                    .where((m) => m != WallpaperMode.customStill || kStillWallpapers.isNotEmpty)
-                    .toList(),
-                value: prefs.wallpaperMode,
-                onChanged: (m) => VisualPrefs.setWallpaperMode(m),
-                height: 88,
-                itemBuilder: (mode, isSelected) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? flair.card.withValues(alpha: 0.98)
-                        : flair.scaffold.withValues(alpha: 0.92),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.12),
-                      width: isSelected ? 1.5 : 1.0,
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        mode == WallpaperMode.themeDefault
-                            ? Icons.palette_outlined
-                            : mode == WallpaperMode.customStill
-                                ? Icons.image_outlined
-                                : Icons.play_circle_outline_rounded,
-                        size: 24,
-                        color: isSelected ? flair.primary : Colors.white54,
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        mode.label,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w900,
-                          color: isSelected ? Colors.white : Colors.white54,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              if (prefs.wallpaperMode == WallpaperMode.customStill) ...[
-                const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('SELECT STILL WALLPAPER', flair, tooltip: 'Swipe through 17 gorgeous high-fidelity pixel-art scenes.'),
-                const SizedBox(height: 8),
-                _SwipePicker<String>(
-                  items: kStillWallpapers.map((w) => w['asset']!).toList(),
-                  value: prefs.selectedStillWallpaper,
-                  onChanged: (v) => VisualPrefs.setSelectedStillWallpaper(v),
-                  height: 72,
-                  itemBuilder: (asset, isSelected) {
-                    final wallpaper = kStillWallpapers.firstWhere((w) => w['asset'] == asset);
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? flair.card.withValues(alpha: 0.98)
-                            : flair.scaffold.withValues(alpha: 0.92),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.12),
-                          width: isSelected ? 1.5 : 1.0,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.image, size: 16, color: isSelected ? flair.primary : Colors.white38),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              wallpaper['name']!,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: isSelected ? Colors.white : Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 10),
-                _buildSwitchRow(
-                  context: context,
-                  icon: Icons.screen_rotation_rounded,
-                  label: 'Gyroscopic Parallax Sway',
-                  value: prefs.parallaxMotionEnabled,
-                  onChanged: VisualPrefs.setParallaxMotionEnabled,
-                  flair: flair,
-                  tooltip: 'Dynamically shifts the wallpaper offset based on device tilt for a beautiful, responsive 3D parallax effect.',
-                ),
-              ],
-              if (prefs.wallpaperMode == WallpaperMode.customAnimated) ...[
-                const SizedBox(height: 12),
-                _prefSectionTitleWithInfo('SELECT ANIMATED LIVE LOOP', flair, tooltip: 'Swipe through premium high-fidelity 8-second animated background scenes.'),
-                const SizedBox(height: 8),
-                _SwipePicker<String>(
-                  items: kAnimatedWallpapers.map((w) => w['asset']!).toList(),
-                  value: prefs.selectedAnimatedWallpaper,
-                  onChanged: (v) => VisualPrefs.setSelectedAnimatedWallpaper(v),
-                  height: 72,
-                  itemBuilder: (asset, isSelected) {
-                    final wallpaper = kAnimatedWallpapers.firstWhere((w) => w['asset'] == asset);
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? flair.card.withValues(alpha: 0.9)
-                            : flair.card.withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
-                          width: isSelected ? 1.5 : 1.0,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.play_circle_fill, size: 16, color: isSelected ? flair.primary : Colors.white38),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              wallpaper['name']!,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: isSelected ? Colors.white : Colors.white54,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
-              const SizedBox(height: 20),
 
               // =============================================================
               // Typography Tuning Section (with swipe font selector!)
@@ -570,72 +419,213 @@ class _ThemeVisualsTab extends StatelessWidget {
               const SizedBox(height: 20),
 
               // =============================================================
-              // Particle Tuning Section (simplified — Type, Count, Size)
+              // Particle System Section
               // =============================================================
-              _prefSectionTitleWithInfo('PARTICLE OVERLAY STYLE', flair, tooltip: 'Select a premium custom particle theme preset (such as embers, frost, or cat paws) to float in the background of all screens. Swipe to browse!'),
+              _prefSectionTitleWithInfo('PARTICLE SYSTEM', flair, tooltip: 'Enable and customize the background particle engine. Swipe through live previews to pick a preset, then fine-tune count, size, opacity, glow effect, and line links.'),
               const SizedBox(height: 8),
-              _SwipePicker<CustomParticleType>(
-                items: CustomParticleType.values,
-                value: prefs.customParticleType,
-                onChanged: (t) => VisualPrefs.setCustomParticleType(t),
-                height: 84,
-                itemBuilder: (type, isSelected) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? flair.card.withValues(alpha: 0.9)
-                        : flair.card.withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
-                      width: isSelected ? 1.5 : 1.0,
-                    ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      type.label,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w900,
-                        color: isSelected ? Colors.white : Colors.white54,
-                        letterSpacing: 0.5,
+              Card(
+                color: flair.card.withValues(alpha: 0.92),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Column(
+                    children: [
+                      // Enable toggle
+                      _buildSwitchRow(
+                        context: context,
+                        icon: Icons.auto_awesome_outlined,
+                        label: 'Enable Particles',
+                        value: prefs.particlesEnabled,
+                        onChanged: VisualPrefs.setParticles,
+                        flair: flair,
+                        tooltip: 'Toggle the entire particle system on or off.',
                       ),
-                    ),
+                      if (prefs.particlesEnabled) ...[
+                        const Divider(color: Colors.white12, height: 20),
+                        // Live preview picker
+                        ParticlePreviewPicker(
+                          selected: prefs.particlePreset,
+                          onChanged: (p) => VisualPrefs.setParticlePreset(p),
+                          accentColor: flair.primary,
+                        ),
+                        const SizedBox(height: 14),
+                        // Particle count slider (1-32)
+                        _buildCompactSliderRow(
+                          'Particle Count',
+                          '${prefs.particleCount}',
+                          prefs.particleCount.toDouble(),
+                          1.0,
+                          32.0,
+                          31,
+                          flair.headlineStat,
+                          (v) => VisualPrefs.setParticleCount(v.toInt()),
+                        ),
+                        const SizedBox(height: 10),
+                        // Particle size slider
+                        _buildCompactSliderRow(
+                          'Particle Size',
+                          '${prefs.particleSizeScale.toStringAsFixed(1)}x',
+                          prefs.particleSizeScale,
+                          0.3,
+                          2.0,
+                          17,
+                          flair.headlineStat,
+                          (v) => VisualPrefs.setParticleSizeScale(v),
+                        ),
+                        const SizedBox(height: 10),
+                        // Particle opacity slider
+                        _buildCompactSliderRow(
+                          'Particle Opacity',
+                          '${(prefs.particleOpacity * 100).toStringAsFixed(0)}%',
+                          prefs.particleOpacity,
+                          0.0,
+                          1.0,
+                          20,
+                          flair.headlineStat,
+                          (v) => VisualPrefs.setParticleOpacity(v),
+                        ),
+                        const SizedBox(height: 12),
+                        // Glow effect picker
+                        _SwipePicker<GlowEffect>(
+                          items: GlowEffect.values,
+                          value: prefs.particleGlowEffect,
+                          onChanged: (e) => VisualPrefs.setParticleGlowEffect(e),
+                          height: 56,
+                          itemBuilder: (effect, isSelected) => Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? flair.card.withValues(alpha: 0.9)
+                                  : flair.card.withValues(alpha: 0.5),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                                width: isSelected ? 1.5 : 1.0,
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                effect.label,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w900,
+                                  color: isSelected ? Colors.white : Colors.white54,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Line links toggle
+                        _buildSwitchRow(
+                          context: context,
+                          icon: Icons.timeline_outlined,
+                          label: 'Line Links',
+                          value: prefs.particleLineLinks,
+                          onChanged: VisualPrefs.setParticleLineLinks,
+                          flair: flair,
+                          tooltip: 'Draw faint connecting lines between nearby particles (particles.js style).',
+                        ),
+                        // Bounce toggle
+                        _buildSwitchRow(
+                          context: context,
+                          icon: Icons.sports_baseball_outlined,
+                          label: 'Edge Bounce',
+                          value: prefs.particleBounce,
+                          onChanged: VisualPrefs.setParticleBounce,
+                          flair: flair,
+                          tooltip: 'Particles bounce off screen edges instead of wrapping around.',
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
-              if (prefs.customParticleType != CustomParticleType.none) ...[
-                _prefSectionTitleWithInfo('PARTICLE COUNT / DENSITY (${prefs.particleCount})', flair, tooltip: 'Control the maximum number of background particles rendered simultaneously. This affects both theme-default and custom particle types.'),
-                Slider(
-                  min: 5.0,
-                  max: 120.0,
-                  divisions: 23,
-                  value: prefs.particleCount.toDouble(),
-                  activeColor: flair.primary,
-                  inactiveColor: Colors.white12,
-                  onChanged: (v) {
-                    VisualPrefs.setParticleCount(v.toInt());
-                  },
+              // =============================================================
+              // Screen Glow Section (slider + color picker)
+              // =============================================================
+              _prefSectionTitleWithInfo('SCREEN GLOW', flair, tooltip: 'Set the opacity of the ambient screen glow and choose from 12 deep, curated colors.'),
+              const SizedBox(height: 8),
+              Card(
+                color: flair.card.withValues(alpha: 0.92),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
                 ),
-                const SizedBox(height: 16),
-              ],
-
-              // =============================================================
-              // Glow Section
-              // =============================================================
-              _prefSectionTitleWithInfo('AMBIENT GLOW INTENSITY (${(prefs.glowIntensity * 100).toStringAsFixed(0)}%)', flair, tooltip: 'Set the opacity blending of the dual-gradient wandering ambient glow in the background.'),
-              Slider(
-                min: 0.0,
-                max: 1.0,
-                value: prefs.glowIntensity,
-                activeColor: flair.primary,
-                inactiveColor: Colors.white12,
-                onChanged: (v) {
-                  VisualPrefs.setGlow(v);
-                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Column(
+                    children: [
+                      // Glow intensity slider
+                      _buildCompactSliderRow(
+                        'Glow Intensity',
+                        '${(prefs.glowIntensity * 100).toStringAsFixed(0)}%',
+                        prefs.glowIntensity,
+                        0.0,
+                        1.0,
+                        20,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setGlow(v),
+                      ),
+                      const SizedBox(height: 14),
+                      // Glow color picker — 4x3 grid
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'GLOW COLOR',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white54,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 6,
+                          mainAxisSpacing: 8,
+                          crossAxisSpacing: 8,
+                          childAspectRatio: 1.0,
+                        ),
+                        itemCount: VisualPrefs.glowColors.length,
+                        itemBuilder: (_, i) {
+                          final color = VisualPrefs.glowColors[i];
+                          final isSelected = i == prefs.glowColorIndex;
+                          return GestureDetector(
+                            onTap: () {
+                              Haptics.selection();
+                              VisualPrefs.setGlowColorIndex(i);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: color,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.12),
+                                  width: isSelected ? 2.0 : 1.0,
+                                ),
+                                boxShadow: isSelected
+                                    ? [BoxShadow(color: color.withValues(alpha: 0.6), blurRadius: 8, spreadRadius: 1)]
+                                    : null,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 24),
             ],

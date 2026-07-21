@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../widgets/particle_engine.dart' show ParticlePreset, GlowEffect;
 
 /// Eight lore-named palettes. Each is a hand-tuned palette + a
 /// [ThemeFlair] record carrying extra styling knobs (numeric typography,
@@ -1806,36 +1807,6 @@ class ThemeFlair {
 // VisualPrefs — user-controlled overlay effects, independent of palette
 // =============================================================================
 
-enum CustomParticleType {
-  themeDefault,
-  // Elements
-  fire,
-  water,
-  earth,
-  stars,
-  none,
-}
-
-extension CustomParticleTypeLabel on CustomParticleType {
-  String get label {
-    switch (this) {
-      case CustomParticleType.themeDefault:
-        return 'Theme Default';
-      // Elements
-      case CustomParticleType.fire:
-        return '🔥 Fire (Embers & Sparks)';
-      case CustomParticleType.water:
-        return '💧 Water (Bubbles & Droplets)';
-      case CustomParticleType.earth:
-        return '� Earth (Dust & Stone)';
-      case CustomParticleType.stars:
-        return '✨ Stars (Cosmic Sparkles)';
-      case CustomParticleType.none:
-        return 'No Particles 🚫';
-    }
-  }
-}
-
 enum CustomDiceType {
   themeDefault,
   classicWhite,
@@ -1875,8 +1846,23 @@ class VisualPrefs {
   /// Defaults to 0.0 — the out-of-box look is clean and unaffected.
   final double glowIntensity;
 
-  /// Whether theme-specific particle/backdrop animations are shown.
+  /// Whether the particle system is enabled. Off by default.
   final bool particlesEnabled;
+
+  /// Selected particle preset (replaces old CustomParticleType).
+  final ParticlePreset particlePreset;
+
+  /// Glow effect applied to particles.
+  final GlowEffect particleGlowEffect;
+
+  /// Whether to connect nearby particles with lines (particles.js style).
+  final bool particleLineLinks;
+
+  /// Whether particles bounce off edges instead of wrapping.
+  final bool particleBounce;
+
+  /// User-selected glow color for the ambient screen glow (12-color palette).
+  final int glowColorIndex;
 
   /// Handcrafted particle effects toggles
   final bool particleRotation;
@@ -1900,13 +1886,8 @@ class VisualPrefs {
   /// Global display mode for inventory screens (grid variations).
   final InventoryDisplayMode inventoryDisplayMode;
 
-  /// Custom Particle Settings
-  final CustomParticleType customParticleType;
+  /// Custom Dice Settings
   final CustomDiceType customDiceType;
-  final bool emitFromTop;
-  final bool emitFromBottom;
-  final bool emitFromLeft;
-  final bool emitFromRight;
   final double particleSizeScale;
   final double particleOpacity;
   final int particleCount;
@@ -1949,9 +1930,30 @@ class VisualPrefs {
     6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 20.0, 24.0, 28.0, 32.0,
   ];
 
+  /// 12 deep, curated glow colors for the ambient screen glow.
+  static const glowColors = [
+    Color(0xFF0D47A1), // Abyssal Blue
+    Color(0xFFB71C1C), // Curse Crimson
+    Color(0xFFE65100), // Forge Amber
+    Color(0xFF006064), // Frost Cyan
+    Color(0xFF1B5E20), // Toxic Green
+    Color(0xFF4A148C), // Void Purple
+    Color(0xFFBF8C00), // Gungeon Gold
+    Color(0xFF1A237E), // Shadow Indigo
+    Color(0xFF880E4F), // Blood Rose
+    Color(0xFF004D40), // Ethereal Teal
+    Color(0xFF6A1B9A), // Magenta Pulse
+    Color(0xFF263238), // Obsidian Grey
+  ];
+
   const VisualPrefs({
     this.glowIntensity = 0.0,
-    this.particlesEnabled = true,
+    this.particlesEnabled = false,
+    this.particlePreset = ParticlePreset.gungeonDust,
+    this.particleGlowEffect = GlowEffect.none,
+    this.particleLineLinks = false,
+    this.particleBounce = false,
+    this.glowColorIndex = 0,
     this.particleRotation = true,
     this.gravityVortex = true,
     this.advancedFlicker = true,
@@ -1960,15 +1962,10 @@ class VisualPrefs {
     this.fontSize = 12.0,
     this.inventoryFontSize = 12.0,
     this.inventoryDisplayMode = InventoryDisplayMode.classicPeriodic,
-    this.customParticleType = CustomParticleType.themeDefault,
     this.customDiceType = CustomDiceType.themeDefault,
-    this.emitFromTop = true,
-    this.emitFromBottom = true,
-    this.emitFromLeft = false,
-    this.emitFromRight = false,
     this.particleSizeScale = 1.0,
-    this.particleOpacity = 1.0,
-    this.particleCount = 35,
+    this.particleOpacity = 0.7,
+    this.particleCount = 16,
     this.hypnoticBgEnabled = false,
     this.hypnoticBgAsset = "circles05.gif",
     this.hypnoticBgSpeed = 1.0,
@@ -1998,12 +1995,12 @@ class VisualPrefs {
   static const _kInventoryDisplayMode = 'vp.inventory_display_mode_v1';
   static const _kScaleLegacy = 'vp.scale_v1'; // migrated to _kFontSize
 
-  static const _kCustomParticleType = 'vp.custom_particle_type_v2';
+  static const _kParticlePreset = 'vp.particle_preset_v3';
+  static const _kParticleGlowEffect = 'vp.particle_glow_effect_v1';
+  static const _kParticleLineLinks = 'vp.particle_line_links_v1';
+  static const _kParticleBounce = 'vp.particle_bounce_v1';
+  static const _kGlowColorIndex = 'vp.glow_color_index_v1';
   static const _kCustomDiceType = 'vp.custom_dice_type_v1';
-  static const _kEmitFromTop = 'vp.emit_from_top_v2';
-  static const _kEmitFromBottom = 'vp.emit_from_bottom_v2';
-  static const _kEmitFromLeft = 'vp.emit_from_left_v2';
-  static const _kEmitFromRight = 'vp.emit_from_right_v2';
   static const _kParticleSizeScale = 'vp.particle_size_scale_v2';
   static const _kParticleOpacity = 'vp.particle_opacity_v1';
   static const _kParticleCount = 'vp.particle_count_v1';
@@ -2059,20 +2056,13 @@ class VisualPrefs {
         }
       }
 
-      // Migration: air(4)/bullets(5)/gunpowder(6) were removed from
-      // CustomParticleType, shifting stars/none down two slots. Remap
-      // old persisted indices (from the pre-removal enum ordering:
-      // themeDefault,fire,water,earth,air,bullets,gunpowder,stars,none)
-      // onto the new ordering so existing selections don't silently
-      // change to an unrelated particle type.
-      final rawParticleTypeIdx = p.getInt(_kCustomParticleType) ?? 0;
-      final customParticleTypeIdx = switch (rawParticleTypeIdx) {
-        4 || 5 || 6 => 0, // air/bullets/gunpowder -> themeDefault
-        7 => CustomParticleType.stars.index,
-        8 => CustomParticleType.none.index,
-        _ => rawParticleTypeIdx,
-      };
-      final customParticleType = CustomParticleType.values[customParticleTypeIdx.clamp(0, CustomParticleType.values.length - 1)];
+      final particlePresetIdx = p.getInt(_kParticlePreset) ?? 0;
+      final particlePreset = ParticlePreset.values[particlePresetIdx.clamp(0, ParticlePreset.values.length - 1)];
+      final particleGlowIdx = p.getInt(_kParticleGlowEffect) ?? 0;
+      final particleGlowEffect = GlowEffect.values[particleGlowIdx.clamp(0, GlowEffect.values.length - 1)];
+      final particleLineLinks = p.getBool(_kParticleLineLinks) ?? false;
+      final particleBounce = p.getBool(_kParticleBounce) ?? false;
+      final glowColorIndex = p.getInt(_kGlowColorIndex) ?? 0;
 
       final customDiceTypeIdx = p.getInt(_kCustomDiceType) ?? 0;
       final customDiceType = CustomDiceType.values[customDiceTypeIdx.clamp(0, CustomDiceType.values.length - 1)];
@@ -2107,7 +2097,12 @@ class VisualPrefs {
 
       notifier.value = VisualPrefs(
         glowIntensity:    p.getDouble(_kGlow)     ?? 0.0,
-        particlesEnabled: p.getBool(_kParticles)  ?? true,
+        particlesEnabled: p.getBool(_kParticles)  ?? false,
+        particlePreset:   particlePreset,
+        particleGlowEffect: particleGlowEffect,
+        particleLineLinks: particleLineLinks,
+        particleBounce:   particleBounce,
+        glowColorIndex:   glowColorIndex,
         particleRotation: p.getBool(_kRot)        ?? true,
         gravityVortex:    p.getBool(_kVortex)     ?? true,
         advancedFlicker:  p.getBool(_kFlicker)    ?? true,
@@ -2116,15 +2111,10 @@ class VisualPrefs {
         fontSize:         fontSize,
         inventoryFontSize: inventoryFontSize,
         inventoryDisplayMode: inventoryDisplayMode,
-        customParticleType: customParticleType,
         customDiceType:   customDiceType,
-        emitFromTop:      p.getBool(_kEmitFromTop)    ?? true,
-        emitFromBottom:   p.getBool(_kEmitFromBottom) ?? true,
-        emitFromLeft:     p.getBool(_kEmitFromLeft)   ?? false,
-        emitFromRight:    p.getBool(_kEmitFromRight)  ?? false,
         particleSizeScale: p.getDouble(_kParticleSizeScale) ?? 1.0,
-        particleOpacity:   p.getDouble(_kParticleOpacity) ?? 1.0,
-        particleCount:     p.getInt(_kParticleCount) ?? 35,
+        particleOpacity:   p.getDouble(_kParticleOpacity) ?? 0.7,
+        particleCount:     p.getInt(_kParticleCount) ?? 16,
         hypnoticBgEnabled: p.getBool(_kHypnoticEnabled) ?? false,
         hypnoticBgAsset:   p.getString(_kHypnoticAsset) ?? "circles05.gif",
         hypnoticBgSpeed:   p.getDouble(_kHypnoticSpeed) ?? 1.0,
@@ -2196,28 +2186,33 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setCustomParticleType(CustomParticleType type) async {
-    notifier.value = notifier.value._with(customParticleType: type);
+  static Future<void> setParticlePreset(ParticlePreset v) async {
+    notifier.value = notifier.value._with(particlePreset: v);
     _persist();
   }
 
-  static Future<void> setEmitters({
-    bool? top,
-    bool? bottom,
-    bool? left,
-    bool? right,
-  }) async {
-    notifier.value = notifier.value._with(
-      emitFromTop: top ?? notifier.value.emitFromTop,
-      emitFromBottom: bottom ?? notifier.value.emitFromBottom,
-      emitFromLeft: left ?? notifier.value.emitFromLeft,
-      emitFromRight: right ?? notifier.value.emitFromRight,
-    );
+  static Future<void> setParticleGlowEffect(GlowEffect v) async {
+    notifier.value = notifier.value._with(particleGlowEffect: v);
+    _persist();
+  }
+
+  static Future<void> setParticleLineLinks(bool v) async {
+    notifier.value = notifier.value._with(particleLineLinks: v);
+    _persist();
+  }
+
+  static Future<void> setParticleBounce(bool v) async {
+    notifier.value = notifier.value._with(particleBounce: v);
+    _persist();
+  }
+
+  static Future<void> setGlowColorIndex(int v) async {
+    notifier.value = notifier.value._with(glowColorIndex: v.clamp(0, 11));
     _persist();
   }
 
   static Future<void> setParticleSizeScale(double v) async {
-    notifier.value = notifier.value._with(particleSizeScale: v.clamp(0.5, 3.0));
+    notifier.value = notifier.value._with(particleSizeScale: v.clamp(0.3, 2.0));
     _persist();
   }
 
@@ -2227,7 +2222,7 @@ class VisualPrefs {
   }
 
   static Future<void> setParticleCount(int v) async {
-    notifier.value = notifier.value._with(particleCount: v.clamp(5, 120));
+    notifier.value = notifier.value._with(particleCount: v.clamp(1, 32));
     _persist();
   }
 
@@ -2326,12 +2321,12 @@ class VisualPrefs {
       await p.setDouble(_kInventoryFontSize, v.inventoryFontSize);
       await p.setInt(_kInventoryDisplayMode, v.inventoryDisplayMode.index);
 
-      await p.setInt(_kCustomParticleType, v.customParticleType.index);
+      await p.setInt(_kParticlePreset, v.particlePreset.index);
+      await p.setInt(_kParticleGlowEffect, v.particleGlowEffect.index);
+      await p.setBool(_kParticleLineLinks, v.particleLineLinks);
+      await p.setBool(_kParticleBounce, v.particleBounce);
+      await p.setInt(_kGlowColorIndex, v.glowColorIndex);
       await p.setInt(_kCustomDiceType, v.customDiceType.index);
-      await p.setBool(_kEmitFromTop, v.emitFromTop);
-      await p.setBool(_kEmitFromBottom, v.emitFromBottom);
-      await p.setBool(_kEmitFromLeft, v.emitFromLeft);
-      await p.setBool(_kEmitFromRight, v.emitFromRight);
       await p.setDouble(_kParticleSizeScale, v.particleSizeScale);
       await p.setDouble(_kParticleOpacity, v.particleOpacity);
       await p.setInt(_kParticleCount, v.particleCount);
@@ -2364,12 +2359,12 @@ class VisualPrefs {
     double? fontSize,
     double? inventoryFontSize,
     InventoryDisplayMode? inventoryDisplayMode,
-    CustomParticleType? customParticleType,
+    ParticlePreset? particlePreset,
+    GlowEffect? particleGlowEffect,
+    bool?   particleLineLinks,
+    bool?   particleBounce,
+    int?    glowColorIndex,
     CustomDiceType? customDiceType,
-    bool?   emitFromTop,
-    bool?   emitFromBottom,
-    bool?   emitFromLeft,
-    bool?   emitFromRight,
     double? particleSizeScale,
     double? particleOpacity,
     int?    particleCount,
@@ -2399,12 +2394,12 @@ class VisualPrefs {
     fontSize:         fontSize         ?? this.fontSize,
     inventoryFontSize: inventoryFontSize ?? this.inventoryFontSize,
     inventoryDisplayMode: inventoryDisplayMode ?? this.inventoryDisplayMode,
-    customParticleType: customParticleType ?? this.customParticleType,
+    particlePreset:   particlePreset   ?? this.particlePreset,
+    particleGlowEffect: particleGlowEffect ?? this.particleGlowEffect,
+    particleLineLinks: particleLineLinks ?? this.particleLineLinks,
+    particleBounce:   particleBounce   ?? this.particleBounce,
+    glowColorIndex:   glowColorIndex   ?? this.glowColorIndex,
     customDiceType:   customDiceType   ?? this.customDiceType,
-    emitFromTop:      emitFromTop      ?? this.emitFromTop,
-    emitFromBottom:   emitFromBottom   ?? this.emitFromBottom,
-    emitFromLeft:     emitFromLeft     ?? this.emitFromLeft,
-    emitFromRight:    emitFromRight    ?? this.emitFromRight,
     particleSizeScale: particleSizeScale ?? this.particleSizeScale,
     particleOpacity:   particleOpacity   ?? this.particleOpacity,
     particleCount:     particleCount     ?? this.particleCount,

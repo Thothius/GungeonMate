@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../services/haptics.dart';
 import 'theme_engines.dart';
+import 'particle_engine.dart';
 
 class _TouchParticle {
   Offset pos;
@@ -132,11 +133,18 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 final isHomeScreen = screenIndex == 0;
             final f = AppTheme.displayedFlair;
           final showGlow = prefs.glowIntensity > 0.001;
+          final userGlowColor = VisualPrefs.glowColors[prefs.glowColorIndex];
           final gP = showGlow
-              ? _scaleAlpha(f.glowPrimary,   prefs.glowIntensity)
+              ? _scaleAlpha(
+                  Color.lerp(f.glowPrimary, userGlowColor, 0.5) ?? f.glowPrimary,
+                  prefs.glowIntensity,
+                )
               : const Color(0x00000000);
           final gS = showGlow
-              ? _scaleAlpha(f.glowSecondary, prefs.glowIntensity)
+              ? _scaleAlpha(
+                  Color.lerp(f.glowSecondary, userGlowColor, 0.5) ?? f.glowSecondary,
+                  prefs.glowIntensity,
+                )
               : const Color(0x00000000);
           final isWallpaperActive = !isHomeScreen && prefs.wallpaperMode != WallpaperMode.themeDefault;
           final hypnoticBackdrop = (prefs.hypnoticBgEnabled && !isWallpaperActive && !isHomeScreen)
@@ -146,18 +154,19 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   opacity: prefs.hypnoticBgOpacity,
                 )
               : null;
-          final particlesOn = prefs.particlesEnabled &&
-              prefs.customParticleType != CustomParticleType.none;
+          final particlesOn = prefs.particlesEnabled;
           final particleBackdropBg = !particlesOn
               ? null
-              : (prefs.customParticleType != CustomParticleType.themeDefault
-                  ? _CustomParticleBackdrop(prefs: prefs)
-                  : _backdropFor(f.backdrop, prefs));
-          final particleBackdropFg = !particlesOn
-              ? null
-              : (prefs.customParticleType != CustomParticleType.themeDefault
-                  ? _CustomParticleBackdrop(prefs: prefs)
-                  : _backdropFor(f.backdrop, prefs));
+              : ParticleField(
+                  preset: prefs.particlePreset,
+                  count: prefs.particleCount,
+                  sizeScale: prefs.particleSizeScale,
+                  opacity: prefs.particleOpacity,
+                  glowOverride: prefs.particleGlowEffect,
+                  lineLinksOverride: prefs.particleLineLinks,
+                  bounce: prefs.particleBounce,
+                );
+          final particleBackdropFg = particleBackdropBg;
           Widget content = widget.child;
 
           // Apply visual customizer wrappers based on active Theme Mode!
@@ -2198,288 +2207,6 @@ class _CosmicRiftPainter extends CustomPainter {
   bool shouldRepaint(_CosmicRiftPainter old) => old.t != t;
 }
 
-// =============================================================================
-// Premium Custom Particle Engine (Highly Interactive & High Performance!)
-// =============================================================================
-
-class _CustomParticleBackdrop extends StatefulWidget {
-  final VisualPrefs prefs;
-  const _CustomParticleBackdrop({required this.prefs});
-
-  @override
-  State<_CustomParticleBackdrop> createState() => _CustomParticleBackdropState();
-}
-
-class _CustomParticleBackdropState extends State<_CustomParticleBackdrop> with SingleTickerProviderStateMixin {
-  late final AnimationController _c;
-  final List<_CustomSpec> _specs = [];
-  final Stopwatch _stopwatch = Stopwatch();
-
-  @override
-  void initState() {
-    super.initState();
-    _c = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..repeat();
-    _stopwatch.start();
-    _generateSpecs();
-  }
-
-  @override
-  void didUpdateWidget(_CustomParticleBackdrop oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // If emitters, custom type, subtle mode, or particle count change, regenerate some specs to match
-    if (oldWidget.prefs.emitFromTop != widget.prefs.emitFromTop ||
-        oldWidget.prefs.emitFromBottom != widget.prefs.emitFromBottom ||
-        oldWidget.prefs.emitFromLeft != widget.prefs.emitFromLeft ||
-        oldWidget.prefs.emitFromRight != widget.prefs.emitFromRight ||
-        oldWidget.prefs.subtleParticleMode != widget.prefs.subtleParticleMode ||
-        oldWidget.prefs.particleCount != widget.prefs.particleCount) {
-      _generateSpecs();
-    }
-  }
-
-  void _generateSpecs() {
-    _specs.clear();
-    final rng = math.Random();
-    
-    // Determine available emitter directions
-    final List<String> directions = [];
-    if (widget.prefs.emitFromTop) directions.add('top');
-    if (widget.prefs.emitFromBottom) directions.add('bottom');
-    if (widget.prefs.emitFromLeft) directions.add('left');
-    if (widget.prefs.emitFromRight) directions.add('right');
-    
-    // Fallback if none enabled
-    if (directions.isEmpty) {
-      directions.add('bottom');
-      directions.add('top');
-    }
-
-    final baseCount = widget.prefs.particleCount;
-    final finalCount = widget.prefs.subtleParticleMode 
-        ? (baseCount / 2).round().clamp(5, 120) 
-        : baseCount;
-
-    for (var i = 0; i < finalCount; i++) {
-      final dir = directions[rng.nextInt(directions.length)];
-      _specs.add(_CustomSpec(
-        x: rng.nextDouble(),
-        y: rng.nextDouble(),
-        size: 3.5 + rng.nextDouble() * 5.0,
-        speed: 0.08 + rng.nextDouble() * 0.12,
-        sway: 15 + rng.nextDouble() * 30,
-        phase: rng.nextDouble(),
-        direction: dir,
-        depth: 0.4 + rng.nextDouble() * 0.9,
-      ));
-    }
-  }
-
-  @override
-  void dispose() {
-    _stopwatch.stop();
-    _c.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: AnimatedBuilder(
-        animation: Listenable.merge([_c, ThemeOverlay.tiltNotifier]),
-        builder: (_, __) => CustomPaint(
-          painter: _CustomParticlePainter(
-            t: _stopwatch.elapsedMilliseconds / 1000.0,
-            specs: _specs,
-            prefs: widget.prefs,
-          ),
-          size: Size.infinite,
-        ),
-      ),
-    );
-  }
-}
-
-class _CustomSpec {
-  double x;
-  double y;
-  final double size;
-  final double speed;
-  final double sway;
-  final double phase;
-  final String direction; // 'top', 'bottom', 'left', 'right'
-  final double depth; // 0.4 (far/slow) to 1.3 (near/fast)
-
-  _CustomSpec({
-    required this.x,
-    required this.y,
-    required this.size,
-    required this.speed,
-    required this.sway,
-    required this.phase,
-    required this.direction,
-    required this.depth,
-  });
-}
-
-class _CustomParticlePainter extends CustomPainter {
-  final double t;
-  final List<_CustomSpec> specs;
-  final VisualPrefs prefs;
-
-  _CustomParticlePainter({
-    required this.t,
-    required this.specs,
-    required this.prefs,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-    final tilt = ThemeOverlay.tiltNotifier.value;
-
-    for (final s in specs) {
-      final depth = s.depth; // 0.4 (far) to 1.3 (near)
-      
-      // Calculate continuous progress scaled by depth (distant particles drift slower)
-      final p = ((t * s.speed * depth) + s.phase) % 1.0;
-      
-      // Calculate positions depending on their assigned emitter directions!
-      double rawX = s.x * size.width;
-      double rawY = s.y * size.height;
-      final sway = math.sin(p * 2 * math.pi + s.phase * 8) * s.sway * depth;
-      final tiltXShift = tilt.dx * 18 * p * depth;
-      final tiltYShift = tilt.dy * 12 * p * depth;
-
-      // Wind-swept physical forces (distant particles are lighter, swept further!)
-      final windShift = p * size.width * 0.14 * (1.5 - depth);
-
-      if (s.direction == 'top') {
-        rawY = (size.height * p + tiltYShift);
-        rawX = (s.x * size.width + sway + tiltXShift + windShift);
-      } else if (s.direction == 'bottom') {
-        rawY = (size.height * (1.0 - p) + tiltYShift);
-        rawX = (s.x * size.width + sway + tiltXShift + windShift);
-      } else if (s.direction == 'left') {
-        rawX = (size.width * p + tiltXShift + windShift);
-        rawY = (s.y * size.height + sway + tiltYShift);
-      } else if (s.direction == 'right') {
-        rawX = (size.width * (1.0 - p) + tiltXShift - windShift);
-        rawY = (s.y * size.height + sway + tiltYShift);
-      }
-
-      double edgeFade = 1.0;
-      const double edgeThreshold = 32.0;
-      if (rawX < edgeThreshold) {
-        edgeFade = rawX / edgeThreshold;
-      } else if (rawX > size.width - edgeThreshold) {
-        edgeFade = (size.width - rawX) / edgeThreshold;
-      }
-
-      // Alpha is dimmer for distant particles, providing gorgeous depth scaling!
-      final alpha = _bellAlpha(p) * prefs.particleOpacity * edgeFade * (0.35 + 0.65 * depth);
-      if (alpha <= 0.01) continue;
-
-      // Boost up flickering/twinkle globally! Rapid blinking sinusoids
-      final twinkle = prefs.advancedFlicker
-          ? 0.15 + 0.85 * math.sin(t * 32 * math.pi + s.phase * 50).abs()
-          : 0.4 + 0.6 * math.sin(t * 18 * math.pi + s.phase * 22).abs();
-
-      final double dynamicScaleMultiplier = prefs.advancedFlicker ? twinkle : 1.0;
-
-      // Scaled size according to depth and premium multipliers for hand-tuned excellence!
-      final scaledSize = s.size * dynamicScaleMultiplier * depth;
-
-      // Render custom types!
-      switch (prefs.customParticleType) {
-        case CustomParticleType.none:
-          break;
-
-        case CustomParticleType.themeDefault:
-          paint.color = const Color(0xFFFFFFFF).withValues(alpha: alpha * 0.35);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.5, paint);
-          break;
-
-        case CustomParticleType.fire:
-          // Glowing embers: red, orange, gold with white-hot cores
-          final colorTier = s.phase;
-          final color = colorTier < 0.33
-              ? const Color(0xFFFF3D00)
-              : (colorTier < 0.66 ? const Color(0xFFFF9100) : const Color(0xFFFFD600));
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.85);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.6, paint);
-          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.5);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.25, paint);
-          break;
-
-        case CustomParticleType.water:
-          // Bubbles & droplets: cyan-blue with white shine
-          final color = s.phase < 0.5
-              ? const Color(0xFF00B0FF)
-              : const Color(0xFF4FC3F7);
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.6);
-          canvas.drawCircle(Offset(rawX, rawY), scaledSize * 0.65, paint);
-          // White shine dot
-          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.5);
-          canvas.drawCircle(
-            Offset(rawX - scaledSize * 0.18, rawY - scaledSize * 0.18),
-            scaledSize * 0.15,
-            paint,
-          );
-          break;
-
-        case CustomParticleType.earth:
-          // Dust & stone: brown, tan, gray pebbles
-          final color = s.phase < 0.33
-              ? const Color(0xFF8D6E63)
-              : (s.phase < 0.66 ? const Color(0xFFA1887F) : const Color(0xFF6D4C41));
-          paint.color = color.withValues(alpha: alpha * 0.8);
-          final r = scaledSize * 0.7;
-          // Irregular pebble shape
-          canvas.drawOval(
-            Rect.fromCenter(center: Offset(rawX, rawY), width: r * 1.6, height: r * 1.2),
-            paint,
-          );
-          break;
-
-        case CustomParticleType.stars:
-          // Refined cosmic sparkles: cyan, gold, white 4-point stars
-          final color = s.phase < 0.33
-              ? const Color(0xFF00E5FF)
-              : (s.phase < 0.66 ? const Color(0xFFFFD700) : Colors.white);
-          paint.color = color.withValues(alpha: alpha * twinkle * 0.85);
-          final sr = scaledSize * 0.9;
-          final path = Path()
-            ..moveTo(rawX, rawY - sr)
-            ..lineTo(rawX + sr * 0.22, rawY - sr * 0.22)
-            ..lineTo(rawX + sr, rawY)
-            ..lineTo(rawX + sr * 0.22, rawY + sr * 0.22)
-            ..lineTo(rawX, rawY + sr)
-            ..lineTo(rawX - sr * 0.22, rawY + sr * 0.22)
-            ..lineTo(rawX - sr, rawY)
-            ..lineTo(rawX - sr * 0.22, rawY - sr * 0.22)
-            ..close();
-          canvas.drawPath(path, paint);
-          // Bright white core
-          paint.color = Colors.white.withValues(alpha: alpha * twinkle * 0.7);
-          canvas.drawCircle(Offset(rawX, rawY), sr * 0.18, paint);
-          break;
-      }
-    }
-  }
-
-  double _bellAlpha(double p) {
-    const ramp = 0.15;
-    if (p < ramp) return p / ramp;
-    if (p > 1.0 - ramp) return (1.0 - p) / ramp;
-    return 1.0;
-  }
-
-  @override
-  bool shouldRepaint(_CustomParticlePainter old) => old.t != t;
-}
 
 class _TouchParticlePainter extends CustomPainter {
   final List<_TouchParticle> particles;
