@@ -1528,6 +1528,14 @@ class MultiplayerSession extends ChangeNotifier {
     'Treadnaught', 'Rat', 'Dragun', 'Lich', 'Hollowpoint',
     'Spectre', 'Cubulon', 'Gun Nut', 'Powder Skunk', 'Arrowkin',
     'Fuselier', 'Minelet', 'Shellet', 'Veteran', 'Jammed',
+    'High Dragun', 'High Priest', 'Kill Pillars', 'Wallmonger',
+    'Fleetbelly', 'Gorgun', 'Ammoconda', 'Mine Flayer', 'Twin Agonizer',
+    'Resourceful Rat', 'Bello', 'Winchester', 'Blacksmith', 'Sorceress',
+    'Drunkard', 'Tinker', 'Vampire', 'Witches', 'Brother Albern',
+    'Synergrace', 'Daisuke', 'Ser Manuel', 'Blockner', 'Cursula',
+    'Flynt', 'Old Red', 'Doug', 'Gunknights', 'Ledge Goblin',
+    'Lead Key', 'Lord of the Jammed', 'Interdimensional Horror',
+    'Blockman', 'Agonizer', 'Fungal Wizard', 'Gunreaper',
   ];
 
   String? _cachedSessionName;
