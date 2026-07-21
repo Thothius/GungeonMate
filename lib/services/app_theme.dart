@@ -52,7 +52,6 @@ enum AppThemeMode {
       cardRadius: 18,
       dividerColor: Color(0x55FF69B4),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x55FF69B4),
       glowSecondary: Color(0x3BE8A7F0),
       auraStyle: AvatarAuraStyle.pastelPulse,
@@ -83,7 +82,6 @@ enum AppThemeMode {
       cardRadius: 16,
       dividerColor: Color(0x66FF1493),
       dividerThickness: 1.2,
-      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x66FF1493),
       glowSecondary: Color(0x5500CED1),
       auraStyle: AvatarAuraStyle.pastelPulse,
@@ -114,7 +112,6 @@ enum AppThemeMode {
       cardRadius: 20,
       dividerColor: Color(0x44F8BBD0),
       dividerThickness: 0.8,
-      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x33F8BBD0),
       glowSecondary: Color(0x2280CBC4),
       auraStyle: AvatarAuraStyle.pastelPulse,
@@ -145,7 +142,6 @@ enum AppThemeMode {
       cardRadius: 18,
       dividerColor: Color(0x55FF6B9D),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x44FF6B9D),
       glowSecondary: Color(0x334DB6AC),
       auraStyle: AvatarAuraStyle.pastelPulse,
@@ -177,7 +173,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.2,
       dividerColor: Color(0x55D4AF37),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.paperBreath,
       glowPrimary: Color(0x55D4AF37),
       glowSecondary: Color(0x33CD9F73),
       auraStyle: AvatarAuraStyle.brassConic,
@@ -209,7 +204,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x44FF4500),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.forgeEmbers,
       glowPrimary: Color(0x4DFF4500),
       glowSecondary: Color(0x2EFFB74D),
       auraStyle: AvatarAuraStyle.forgeGlow,
@@ -240,7 +234,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x5500D2FF),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.iceCrystals,
       glowPrimary: Color(0x4D00D2FF),
       glowSecondary: Color(0x2E90A4AE),
       auraStyle: AvatarAuraStyle.frostRing,
@@ -270,7 +263,6 @@ enum AppThemeMode {
       cardRadius: 12,
       dividerColor: Color(0x77FF0033),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.redBreathDrip,
       glowPrimary: Color(0x55FF0033),
       glowSecondary: Color(0x33CE93D8),
       auraStyle: AvatarAuraStyle.oxbloodBreath,
@@ -302,7 +294,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.2,
       dividerColor: Color(0x88FF9F1C),
       dividerThickness: 1.2,
-      backdrop: ThemeBackdrop.brassMotes,
       glowPrimary: Color(0x4DFF9F1C),
       glowSecondary: Color(0x339FA8DA),
       auraStyle: AvatarAuraStyle.brassConic,
@@ -333,7 +324,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x6639FF14),
       dividerThickness: 1.2,
-      backdrop: ThemeBackdrop.hellfire,
       glowPrimary: Color(0x5539FF14),
       glowSecondary: Color(0x33B388FF),
       auraStyle: AvatarAuraStyle.cosmicTemporal,
@@ -364,7 +354,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x55FFD700),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.toxicBubbles,
       glowPrimary: Color(0x4DFFD700),
       glowSecondary: Color(0x2E81C784),
       auraStyle: AvatarAuraStyle.toxicOoze,
@@ -395,7 +384,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x554682B4),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.whiteDust,
       glowPrimary: Color(0x4D4682B4),
       glowSecondary: Color(0x2E9370DB),
       auraStyle: AvatarAuraStyle.brassConic,
@@ -426,7 +414,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x5539FF14),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.toxicBubbles,
       glowPrimary: Color(0x4D39FF14),
       glowSecondary: Color(0x2E795548),
       auraStyle: AvatarAuraStyle.toxicOoze,
@@ -457,7 +444,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x5500E5FF),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.cosmicRift,
       glowPrimary: Color(0x5500E5FF),
       glowSecondary: Color(0x336A1B9A),
       auraStyle: AvatarAuraStyle.cosmicTemporal,
@@ -488,7 +474,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x558B008B),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x4D8B008B),
       glowSecondary: Color(0x2EFFD54F),
       auraStyle: AvatarAuraStyle.lichPurple,
@@ -519,7 +504,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x5500F5D4),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x4D00F5D4),
       glowSecondary: Color(0x2E69F0AE),
       auraStyle: AvatarAuraStyle.frostRing,
@@ -550,7 +534,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x55CD9F73),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.brassMotes,
       glowPrimary: Color(0x4DFF0000),
       glowSecondary: Color(0x2ECD9F73),
       auraStyle: AvatarAuraStyle.brassConic,
@@ -581,7 +564,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x5500B4D8),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.goldDust,
       glowPrimary: Color(0x5500B4D8),
       glowSecondary: Color(0x3342A5F5),
       auraStyle: AvatarAuraStyle.cosmicTemporal,
@@ -612,7 +594,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x55FF00E4),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.none,
       glowPrimary: Color(0x55FF00E4),
       glowSecondary: Color(0x3300FF41),
       auraStyle: AvatarAuraStyle.voidPulse,
@@ -643,7 +624,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x552EC4B6),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.hellfire,
       glowPrimary: Color(0x552EC4B6),
       glowSecondary: Color(0x33E0E0E0),
       auraStyle: AvatarAuraStyle.lichPurple,
@@ -674,7 +654,6 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x55F77F00),
       dividerThickness: 1.0,
-      backdrop: ThemeBackdrop.brassMotes,
       glowPrimary: Color(0x4DF77F00),
       glowSecondary: Color(0x2E66BB6A),
       auraStyle: AvatarAuraStyle.brassConic,
@@ -726,7 +705,6 @@ enum AppThemeMode {
         chipFilled: true,
         dividerColor: data.primary.withValues(alpha: 0.3),
         dividerThickness: 1.0,
-        backdrop: data.backdrop,
         glowPrimary: data.primary.withValues(alpha: 0.2),
         glowSecondary: data.secondary.withValues(alpha: 0.1),
         auraStyle: data.auraStyle,
@@ -1006,25 +984,6 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.lichsTomb,
   AppThemeMode.winchestersGame,
 ];
-
-/// Ambient full-screen flair painted by `ThemeOverlay`. Each theme picks
-/// at most one. Painters are implemented in `widgets/theme_overlay.dart`
-/// — the enum is here so the flair config and the overlay agree on the
-/// vocabulary in one place.
-enum ThemeBackdrop {
-  none,
-  goldDust,            // Coolmaxing — sparse rising gold flecks.
-  pastelDriftSparkles, // Unicorn — animated hue shift + ✦ sparkles.
-  redBreathDrip,       // Curseblaster — corner pulse + right-edge drip.
-  brassMotes,          // Winchester — slow drifting brass dust.
-  paperBreath,         // Minimalist — barely-there warm gradient breath.
-  iceCrystals,         // Ice Tyrant — falling cyan-white ice shards.
-  whiteDust,           // Pitch Black — sparse white motes in void.
-  toxicBubbles,        // Oubliette — rising green toxic ooze bubbles.
-  forgeEmbers,         // Forge Master — rising fiery sparks.
-  hellfire,            // Lich's Tomb — ghostly/hellish violet-crimson embers.
-  cosmicRift,          // Past Slayer — cosmic temporal starry drift.
-}
 
 /// Animated avatar-border treatment. Painted by `AvatarAura` around
 /// any character portrait so each theme has a distinct "aura" the user
@@ -1436,7 +1395,6 @@ class CustomThemeData {
   final Color secondary;
   final Color headlineStat;
   final Color bulletColor;
-  final ThemeBackdrop backdrop;
   final AvatarAuraStyle auraStyle;
   final AppFont font;
 
@@ -1448,7 +1406,6 @@ class CustomThemeData {
     required this.secondary,
     required this.headlineStat,
     required this.bulletColor,
-    this.backdrop = ThemeBackdrop.none,
     this.auraStyle = AvatarAuraStyle.none,
     this.font = AppFont.gungeon,
   });
@@ -1488,7 +1445,6 @@ class CustomThemeData {
           secondary: Color(json['secondary'] as int),
           headlineStat: Color(json['headlineStat'] as int),
           bulletColor: Color(json['bulletColor'] as int),
-          backdrop: ThemeBackdrop.values[json['backdrop'] as int? ?? 0],
           auraStyle: AvatarAuraStyle.values[json['auraStyle'] as int? ?? 0],
           font: AppFont.values[json['font'] as int? ?? 0], // Default to Gungeon (index 0)
         );
@@ -1509,7 +1465,6 @@ class CustomThemeData {
         'secondary': data.secondary.toARGB32(),
         'headlineStat': data.headlineStat.toARGB32(),
         'bulletColor': data.bulletColor.toARGB32(),
-        'backdrop': data.backdrop.index,
         'auraStyle': data.auraStyle.index,
         'font': data.font.index,
       });
@@ -1526,7 +1481,6 @@ class CustomThemeData {
     secondary: Color(0xFF2196F3),
     headlineStat: Color(0xFF4CAF50),
     bulletColor: Color(0xFF4CAF50),
-    backdrop: ThemeBackdrop.none,
     auraStyle: AvatarAuraStyle.none,
     font: AppFont.gungeon,
   );
@@ -1545,7 +1499,6 @@ class CustomThemeData {
       secondary: colors[3],
       headlineStat: colors[4],
       bulletColor: colors[5],
-      backdrop: ThemeBackdrop.values[rng.nextInt(ThemeBackdrop.values.length)],
       auraStyle: AvatarAuraStyle.values[rng.nextInt(AvatarAuraStyle.values.length)],
       font: AppFont.values[rng.nextInt(AppFont.values.length)],
     );
@@ -1559,7 +1512,6 @@ class CustomThemeData {
     Color? secondary,
     Color? headlineStat,
     Color? bulletColor,
-    ThemeBackdrop? backdrop,
     AvatarAuraStyle? auraStyle,
     AppFont? font,
   }) {
@@ -1571,7 +1523,6 @@ class CustomThemeData {
       secondary: secondary ?? this.secondary,
       headlineStat: headlineStat ?? this.headlineStat,
       bulletColor: bulletColor ?? this.bulletColor,
-      backdrop: backdrop ?? this.backdrop,
       auraStyle: auraStyle ?? this.auraStyle,
       font: font ?? this.font,
     );
@@ -1734,10 +1685,6 @@ class ThemeFlair {
   /// minimalist, up to ~1.4 for brass Winchester.
   final double dividerThickness;
 
-  /// Ambient overlay painted by `ThemeOverlay`. Defaults to none so
-  /// adding a new theme costs nothing until you opt in.
-  final ThemeBackdrop backdrop;
-
   /// Tinted glow tones used by the always-on `_AmbientGlow` layer the
   /// overlay paints behind every theme (Bubblegum-style soft radial
   /// gradient that drifts gently). Picked per-theme so the glow reads
@@ -1792,7 +1739,6 @@ class ThemeFlair {
     this.chipFilled = true,
     this.dividerColor,
     this.dividerThickness = 1.0,
-    this.backdrop = ThemeBackdrop.none,
     this.glowPrimary = const Color(0x22FFFFFF),
     this.glowSecondary = const Color(0x11FFFFFF),
     this.auraStyle = AvatarAuraStyle.none,

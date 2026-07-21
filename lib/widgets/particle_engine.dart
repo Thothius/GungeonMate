@@ -312,6 +312,10 @@ class _ParticleFieldState extends State<ParticleField>
     _lastT = t;
     final tilt = ThemeOverlay.tiltNotifier.value;
 
+    // ponytail: tilt is applied as a per-frame offset, not accumulated velocity.
+    // Particles drift in the tilt direction and return via wrap/bounce when tilt
+    // stops. This is correct for ambient dust — upgrade to spring-back if physical
+    // inertia is ever needed.
     for (final p in _particles) {
       p.x += p.vx * dt;
       p.y += p.vy * dt;
@@ -404,7 +408,8 @@ class _ParticlePainter extends CustomPainter {
     final h = size.height;
     final lineDist = (w * 0.12).clamp(60.0, 160.0);
 
-    // Draw line links first (behind particles)
+    // ponytail: O(n²) pair check per frame. At count=32 that's 496 pairs — fine.
+    // If max count ever increases above ~64, switch to spatial hashing.
     if (lineLinks && particles.length > 1) {
       for (var i = 0; i < particles.length; i++) {
         for (var j = i + 1; j < particles.length; j++) {
@@ -541,6 +546,9 @@ class _ParticlePainter extends CustomPainter {
     canvas.drawPath(path, paint);
   }
 
+  // ponytail: always-repaint is correct for animation-driven painters.
+  // RepaintBoundary in the parent widget isolates this from the rest of the app.
+  // If ever nested in a scrollable, add a VisibilityDetector to pause offscreen.
   @override
   bool shouldRepaint(_ParticlePainter old) => true;
 }
@@ -629,18 +637,19 @@ class _ParticlePreviewPickerState extends State<ParticlePreviewPicker> {
                   children: [
                     // Dark backing
                     Positioned.fill(child: Container(color: const Color(0xFF1E1E22))),
-                    // Live particle preview
-                    Positioned.fill(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(13),
-                        child: ParticleField(
-                          preset: preset,
-                          count: 12,
-                          sizeScale: 0.8,
-                          opacity: 0.8,
+                    // Live particle preview only on the selected page
+                    if (isSelected)
+                      Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(13),
+                          child: ParticleField(
+                            preset: preset,
+                            count: 12,
+                            sizeScale: 0.8,
+                            opacity: 0.8,
+                          ),
                         ),
                       ),
-                    ),
                     // Label overlay at bottom
                     Positioned(
                       left: 0,

@@ -166,7 +166,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   lineLinksOverride: prefs.particleLineLinks,
                   bounce: prefs.particleBounce,
                 );
-          final particleBackdropFg = null; // particles only in background layer
           Widget content = widget.child;
 
           // Apply visual customizer wrappers based on active Theme Mode!
@@ -244,14 +243,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
 
                 // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
                 content,
-
-                // 2.5. Foreground Particles Layer (drifts gracefully over cards and panels!)
-                if (particleBackdropFg != null)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: particleBackdropFg,
-                    ),
-                  ),
 
                 // 3. Top Layers: Ambient Glows & Page Frames
                 if (showGlow)
