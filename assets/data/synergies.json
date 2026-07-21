@@ -106,7 +106,7 @@
     "name": "AI Assistant",
     "items": [
       "Roll Bomb",
-      "IBomb Companion App"
+      "iBomb Companion App"
     ],
     "effect": "Roll bombs will bounce around instead of detonating immediately, and can be manually detonated with iBomb Companion App.",
     "icon": "",
@@ -5478,7 +5478,11 @@
     "effect": "Each Master Round the player carries permanently unlocks the mode of its respective floor for Chamber Gun. Reloading the gun with a full magazine cycles through the unlocked modes.",
     "icon": "",
     "any_of": [
-      "Master Round"
+      "Master Round I",
+      "Master Round II",
+      "Master Round III",
+      "Master Round IV",
+      "Master Round V"
     ],
     "effect_tokens": [
       {
@@ -7571,7 +7575,7 @@
     "any_of": [
       "Rocket-Powered Bullets",
       "Air Strike",
-      "IBomb Companion App",
+      "iBomb Companion App",
       "Explosive Rounds"
     ],
     "effect_tokens": [
@@ -8360,7 +8364,7 @@
     "effect": "When reloading Teapot, a red aura appears around companions. Every enemy in this aura will be ignited.",
     "icon": "",
     "any_of": [
-      "Ser Junkan",
+      "Ser Junkan 1",
       "Wolf",
       "Turkey",
       "Clown Mask"
