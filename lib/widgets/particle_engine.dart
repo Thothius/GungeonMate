@@ -32,35 +32,37 @@ extension ParticlePresetX on ParticlePreset {
       };
 
   String get description => switch (this) {
-        ParticlePreset.gungeonDust => 'Subtle grey-white motes drifting upward',
-        ParticlePreset.forgeEmbers => 'Fire embers rising, orange/red/gold',
-        ParticlePreset.frostShards => 'Ice crystals drifting down, cyan/white',
-        ParticlePreset.toxicBubbles => 'Green bubbles floating up',
-        ParticlePreset.cosmicStars => 'Twinkling 4-point stars, cyan/gold/white',
-        ParticlePreset.cursedSmoke => 'Purple-black smoke wisps with cursed glow',
-        ParticlePreset.brassCasings => 'Brass shell casings falling',
-        ParticlePreset.voidRift => 'Dark purple energy particles with ripple glow',
+        ParticlePreset.gungeonDust => 'Subtle grey-white motes drifting upward with gentle sway',
+        ParticlePreset.forgeEmbers => 'Fire embers rising with lively flicker, orange/red/gold',
+        ParticlePreset.frostShards => 'Ice crystals drifting down with slow spin, cyan/white',
+        ParticlePreset.toxicBubbles => 'Green bubbles wobbling upward',
+        ParticlePreset.cosmicStars => 'Twinkling 4-point stars with slow rotation, cyan/gold/white',
+        ParticlePreset.cursedSmoke => 'Purple-black smoke wisps with shifting cursed aura',
+        ParticlePreset.brassCasings => 'Brass shell casings tumbling as they fall',
+        ParticlePreset.voidRift => 'Dark purple energy triangles with dual ripple rings',
         ParticlePreset.bulletHell => 'Fast-moving small dots, dense and chaotic',
       };
 
   PresetConfig get config => switch (this) {
         ParticlePreset.gungeonDust => PresetConfig(
-            colors: [const Color(0xFFE0E0E0), const Color(0xFFBDBDBD), const Color(0xFF9E9E9E)],
+            colors: [const Color(0xFFE0E0E0), const Color(0xFFBDBDBD), const Color(0xFF9E9E9E), const Color(0xFF757575)],
             shape: ParticleShape.circle,
             sizeMin: 1.5, sizeMax: 4.0,
             speedMin: 8.0, speedMax: 20.0,
             glowEffect: GlowEffect.none,
             lineLinks: false,
             drift: DriftDirection.up,
+            wobble: 0.5,
           ),
         ParticlePreset.forgeEmbers => PresetConfig(
-            colors: [const Color(0xFFFF3D00), const Color(0xFFFF9100), const Color(0xFFFFD600)],
+            colors: [const Color(0xFFFF3D00), const Color(0xFFFF9100), const Color(0xFFFFD600), const Color(0xFFFF5722)],
             shape: ParticleShape.circle,
             sizeMin: 2.0, sizeMax: 5.0,
             speedMin: 15.0, speedMax: 35.0,
             glowEffect: GlowEffect.smokey,
             lineLinks: false,
             drift: DriftDirection.up,
+            wobble: 1.5,
           ),
         ParticlePreset.frostShards => PresetConfig(
             colors: [const Color(0xFF00B0FF), const Color(0xFF4FC3F7), const Color(0xFFE1F5FE)],
@@ -70,15 +72,18 @@ extension ParticlePresetX on ParticlePreset {
             glowEffect: GlowEffect.pulse,
             lineLinks: false,
             drift: DriftDirection.down,
+            wobble: 0.3,
+            rotate: true,
           ),
         ParticlePreset.toxicBubbles => PresetConfig(
-            colors: [const Color(0xFF76FF03), const Color(0xFF64DD17), const Color(0xFFAEEA00)],
+            colors: [const Color(0xFF76FF03), const Color(0xFF64DD17), const Color(0xFFAEEA00), const Color(0xFF33691E)],
             shape: ParticleShape.circle,
             sizeMin: 3.0, sizeMax: 7.0,
             speedMin: 5.0, speedMax: 14.0,
             glowEffect: GlowEffect.none,
             lineLinks: false,
             drift: DriftDirection.up,
+            wobble: 1.0,
           ),
         ParticlePreset.cosmicStars => PresetConfig(
             colors: [const Color(0xFF00E5FF), const Color(0xFFFFD700), Colors.white],
@@ -88,15 +93,18 @@ extension ParticlePresetX on ParticlePreset {
             glowEffect: GlowEffect.pulse,
             lineLinks: true,
             drift: DriftDirection.random,
+            wobble: 0.2,
+            rotate: true,
           ),
         ParticlePreset.cursedSmoke => PresetConfig(
-            colors: [const Color(0xFF6A1B9A), const Color(0xFF4A148C), const Color(0xFF311B92)],
+            colors: [const Color(0xFF6A1B9A), const Color(0xFF4A148C), const Color(0xFF311B92), const Color(0xFF8E24AA)],
             shape: ParticleShape.circle,
             sizeMin: 4.0, sizeMax: 9.0,
             speedMin: 3.0, speedMax: 10.0,
             glowEffect: GlowEffect.cursed,
             lineLinks: false,
             drift: DriftDirection.up,
+            wobble: 0.8,
           ),
         ParticlePreset.brassCasings => PresetConfig(
             colors: [const Color(0xFFB8860B), const Color(0xFFCD853F), const Color(0xFFDAA520)],
@@ -106,15 +114,18 @@ extension ParticlePresetX on ParticlePreset {
             glowEffect: GlowEffect.none,
             lineLinks: false,
             drift: DriftDirection.down,
+            rotate: true,
           ),
         ParticlePreset.voidRift => PresetConfig(
-            colors: [const Color(0xFF7B1FA2), const Color(0xFF512DA8), const Color(0xFF4527A0)],
+            colors: [const Color(0xFF7B1FA2), const Color(0xFF512DA8), const Color(0xFF4527A0), const Color(0xFF9575CD)],
             shape: ParticleShape.triangle,
             sizeMin: 2.5, sizeMax: 6.0,
             speedMin: 5.0, speedMax: 15.0,
             glowEffect: GlowEffect.ripple,
             lineLinks: true,
             drift: DriftDirection.random,
+            wobble: 0.6,
+            rotate: true,
           ),
         ParticlePreset.bulletHell => PresetConfig(
             colors: [const Color(0xFFFF5252), const Color(0xFFFFEB3B), const Color(0xFFFFAB40)],
@@ -124,6 +135,7 @@ extension ParticlePresetX on ParticlePreset {
             glowEffect: GlowEffect.none,
             lineLinks: false,
             drift: DriftDirection.random,
+            wobble: 0.3,
           ),
       };
 }
@@ -158,6 +170,8 @@ class PresetConfig {
   final GlowEffect glowEffect;
   final bool lineLinks;
   final DriftDirection drift;
+  final double wobble; // 0 = straight, 1.5 = strong sway
+  final bool rotate; // true = shapes spin slowly
 
   const PresetConfig({
     required this.colors,
@@ -169,6 +183,8 @@ class PresetConfig {
     required this.glowEffect,
     required this.lineLinks,
     required this.drift,
+    this.wobble = 0.0,
+    this.rotate = false,
   });
 }
 
@@ -185,6 +201,10 @@ class _Particle {
   Color color;
   double phase;
   double depth; // 0.4 (far) to 1.3 (near)
+  double wobbleAmp;
+  double wobblePhase;
+  double rotation;
+  double rotationSpeed;
 
   _Particle({
     required this.x,
@@ -195,6 +215,10 @@ class _Particle {
     required this.color,
     required this.phase,
     required this.depth,
+    this.wobbleAmp = 0.0,
+    this.wobblePhase = 0.0,
+    this.rotation = 0.0,
+    this.rotationSpeed = 0.0,
   });
 }
 
@@ -288,15 +312,27 @@ class _ParticleFieldState extends State<ParticleField>
         break;
     }
 
+    // Per-particle color brightness jitter — breaks flat palette swarms
+    final baseColor = cfg.colors[_rng.nextInt(cfg.colors.length)];
+    final hsl = HSLColor.fromColor(baseColor);
+    final lightJitter = 0.85 + _rng.nextDouble() * 0.3; // 0.85–1.15
+    final jitteredColor = hsl
+        .withLightness((hsl.lightness * lightJitter).clamp(0.0, 1.0))
+        .toColor();
+
     _particles.add(_Particle(
       x: _rng.nextDouble() * size.width,
       y: _rng.nextDouble() * size.height,
       vx: vx,
       vy: vy,
       baseSize: cfg.sizeMin + _rng.nextDouble() * (cfg.sizeMax - cfg.sizeMin),
-      color: cfg.colors[_rng.nextInt(cfg.colors.length)],
+      color: jitteredColor,
       phase: _rng.nextDouble(),
       depth: 0.4 + _rng.nextDouble() * 0.9,
+      wobbleAmp: cfg.wobble,
+      wobblePhase: _rng.nextDouble() * 2 * math.pi,
+      rotation: _rng.nextDouble() * 2 * math.pi,
+      rotationSpeed: cfg.rotate ? (_rng.nextDouble() - 0.5) * 2.0 : 0.0,
     ));
   }
 
@@ -319,6 +355,21 @@ class _ParticleFieldState extends State<ParticleField>
     for (final p in _particles) {
       p.x += p.vx * dt;
       p.y += p.vy * dt;
+
+      // Perpendicular wobble — sine offset at ~2 Hz, amplitude scaled by depth
+      if (p.wobbleAmp > 0) {
+        final wobble = math.sin(t * 2.0 + p.wobblePhase) * p.wobbleAmp * p.depth;
+        final speed = math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (speed > 0.1) {
+          p.x += (-p.vy / speed) * wobble * dt * 10;
+          p.y += (p.vx / speed) * wobble * dt * 10;
+        }
+      }
+
+      // Rotation
+      if (p.rotationSpeed != 0) {
+        p.rotation += p.rotationSpeed * dt;
+      }
 
       p.x += tilt.dx * 0.15 * p.depth;
       p.y += tilt.dy * 0.10 * p.depth;
@@ -432,27 +483,33 @@ class _ParticlePainter extends CustomPainter {
       final depthAlpha = 0.35 + 0.65 * p.depth;
       final baseAlpha = opacity * depthAlpha;
 
-      // Edge fade
+      // Edge fade — smoothstep for softer falloff
       double edgeFade = 1.0;
       const edgeThreshold = 24.0;
+      double smoothstep(double e0, double e1, double x) {
+        final t = ((x - e0) / (e1 - e0)).clamp(0.0, 1.0);
+        return t * t * (3 - 2 * t);
+      }
       if (p.x < edgeThreshold) {
-        edgeFade = p.x / edgeThreshold;
+        edgeFade = smoothstep(0, edgeThreshold, p.x);
       } else if (p.x > w - edgeThreshold) {
-        edgeFade = (w - p.x) / edgeThreshold;
+        edgeFade = smoothstep(0, edgeThreshold, w - p.x);
       }
       if (p.y < edgeThreshold) {
-        edgeFade = math.min(edgeFade, p.y / edgeThreshold);
+        edgeFade = math.min(edgeFade, smoothstep(0, edgeThreshold, p.y));
       } else if (p.y > h - edgeThreshold) {
-        edgeFade = math.min(edgeFade, (h - p.y) / edgeThreshold);
+        edgeFade = math.min(edgeFade, smoothstep(0, edgeThreshold, h - p.y));
       }
 
       final alpha = baseAlpha * edgeFade;
       if (alpha <= 0.01) continue;
 
-      // Size with optional pulse effect
+      // Size with optional pulse effect + subtle breathing for all particles
       var drawSize = p.baseSize * sizeScale * p.depth;
       if (glowEffect == GlowEffect.pulse) {
         drawSize *= 0.7 + 0.3 * math.sin(t * 3.0 + p.phase * 10).abs();
+      } else {
+        drawSize *= 0.92 + 0.08 * math.sin(t * 1.5 + p.phase * 6);
       }
 
       final color = p.color.withValues(alpha: alpha);
@@ -469,53 +526,90 @@ class _ParticlePainter extends CustomPainter {
           _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 0.3);
           break;
         case GlowEffect.cursed:
+          // Hue-shifted outer aura — oscillates between purple and sickly green
+          final cursedShift = math.sin(t * 1.5 + p.phase * 6) * 0.5 + 0.5;
+          final cursedHsl = HSLColor.fromColor(p.color)
+              .withHue((270 + cursedShift * 60) % 360);
           _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 1.2);
+          _paint.color = cursedHsl.toColor().withValues(alpha: alpha * 0.3);
+          canvas.drawCircle(Offset(p.x, p.y), drawSize * 1.5, _paint);
           break;
         case GlowEffect.ripple:
           _paint.maskFilter = null;
-          // Draw expanding ripple rings
-          final ripplePhase = (t * 1.5 + p.phase) % 1.0;
-          final rippleR = drawSize * (1.5 + ripplePhase * 3.0);
-          final rippleAlpha = alpha * (1.0 - ripplePhase) * 0.5;
-          _paint.color = p.color.withValues(alpha: rippleAlpha);
-          canvas.drawCircle(Offset(p.x, p.y), rippleR, _paint);
+          // Two expanding ripple rings — staggered phase for richer effect
+          for (final offset in [0.0, 0.5]) {
+            final ripplePhase = (t * 1.5 + p.phase + offset) % 1.0;
+            final rippleR = drawSize * (1.5 + ripplePhase * 3.0);
+            final rippleAlpha = alpha * (1.0 - ripplePhase) * 0.4;
+            _paint.color = p.color.withValues(alpha: rippleAlpha);
+            canvas.drawCircle(Offset(p.x, p.y), rippleR, _paint);
+          }
           break;
       }
 
       _paint.color = color;
 
       // Draw shape
-      switch (config.shape) {
-        case ParticleShape.circle:
-          canvas.drawCircle(Offset(p.x, p.y), drawSize, _paint);
-          if (glowEffect != GlowEffect.none) {
-            // Bright core
-            _paint.maskFilter = null;
-            _paint.color = Colors.white.withValues(alpha: alpha * 0.5);
-            canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.3, _paint);
-          }
-          break;
+      if (p.rotationSpeed != 0 && config.shape != ParticleShape.circle) {
+        canvas.save();
+        canvas.translate(p.x, p.y);
+        canvas.rotate(p.rotation);
+        switch (config.shape) {
+          case ParticleShape.star:
+            _drawStar(canvas, 0, 0, drawSize, _paint);
+            if (glowEffect != GlowEffect.none) {
+              _paint.maskFilter = null;
+              _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
+              canvas.drawCircle(Offset.zero, drawSize * 0.2, _paint);
+            }
+            break;
+          case ParticleShape.triangle:
+            _drawTriangle(canvas, 0, 0, drawSize, _paint);
+            break;
+          case ParticleShape.edge:
+            final r = drawSize;
+            canvas.drawRect(
+              Rect.fromCenter(center: Offset.zero, width: r * 2, height: r * 1.4),
+              _paint,
+            );
+            break;
+          case ParticleShape.circle:
+            break; // handled below
+        }
+        canvas.restore();
+      } else {
+        switch (config.shape) {
+          case ParticleShape.circle:
+            canvas.drawCircle(Offset(p.x, p.y), drawSize, _paint);
+            if (glowEffect != GlowEffect.none) {
+              // Bright core
+              _paint.maskFilter = null;
+              _paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+              canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.3, _paint);
+            }
+            break;
 
-        case ParticleShape.star:
-          _drawStar(canvas, p.x, p.y, drawSize, _paint);
-          if (glowEffect != GlowEffect.none) {
-            _paint.maskFilter = null;
-            _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
-            canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.2, _paint);
-          }
-          break;
+          case ParticleShape.star:
+            _drawStar(canvas, p.x, p.y, drawSize, _paint);
+            if (glowEffect != GlowEffect.none) {
+              _paint.maskFilter = null;
+              _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
+              canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.2, _paint);
+            }
+            break;
 
-        case ParticleShape.triangle:
-          _drawTriangle(canvas, p.x, p.y, drawSize, _paint);
-          break;
+          case ParticleShape.triangle:
+            _drawTriangle(canvas, p.x, p.y, drawSize, _paint);
+            break;
 
-        case ParticleShape.edge:
-          final r = drawSize;
-          canvas.drawRect(
-            Rect.fromCenter(center: Offset(p.x, p.y), width: r * 2, height: r * 1.4),
-            _paint,
-          );
-          break;
+          case ParticleShape.edge:
+            final r = drawSize;
+            canvas.drawRect(
+              Rect.fromCenter(center: Offset(p.x, p.y), width: r * 2, height: r * 1.4),
+              _paint,
+            );
+            break;
+        }
       }
 
       // Reset mask for next particle
