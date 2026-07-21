@@ -916,7 +916,6 @@ class _EventLog extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final entries = isCool ? p.coolnessLog : p.curseLog;
-    final color = isCool ? const Color(0xFF00E5FF) : const Color(0xFFFF3D00);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -941,8 +940,11 @@ class _EventLog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           )
-        else
-          ...entries.take(20).map((e) => _LogTile(entry: e, color: color)),
+        else ...[
+          ...entries.take(20).map((e) => _LogTile(entry: e, isCool: isCool)),
+          const SizedBox(height: 8),
+          _LogLegend(entries: entries),
+        ],
       ],
     );
   }
@@ -950,39 +952,16 @@ class _EventLog extends StatelessWidget {
 
 class _LogTile extends StatelessWidget {
   final RunLogEntry entry;
-  final Color color;
-  const _LogTile({required this.entry, required this.color});
-
-  IconData _iconFor(RunLogCategory cat) {
-    switch (cat) {
-      case RunLogCategory.pickupGun:
-        return Icons.gps_fixed;
-      case RunLogCategory.pickupItem:
-        return Icons.inventory_2_outlined;
-      case RunLogCategory.removeGun:
-        return Icons.remove_circle_outline;
-      case RunLogCategory.removeItem:
-        return Icons.remove_circle_outline;
-      case RunLogCategory.shrine:
-        return Icons.temple_buddhist_outlined;
-      case RunLogCategory.steal:
-        return Icons.front_hand;
-      case RunLogCategory.cursula:
-        return Icons.local_fire_department;
-      case RunLogCategory.smokeCig:
-        return Icons.smoking_rooms;
-      case RunLogCategory.rainbowRun:
-        return Icons.palette;
-      case RunLogCategory.manual:
-        return Icons.tune;
-    }
-  }
+  final bool isCool;
+  const _LogTile({required this.entry, required this.isCool});
 
   @override
   Widget build(BuildContext context) {
-    final delta = entry.affectsCurse ? entry.curseDelta : entry.coolnessDelta;
+    final catColor = runLogCategoryColor(entry.category);
+    final delta = isCool ? entry.coolnessDelta : entry.curseDelta;
+    final hasDelta = (isCool ? entry.affectsCoolness : entry.affectsCurse);
     final isPositive = delta > 0;
-    final deltaColor = isPositive ? color : Colors.redAccent;
+    final deltaColor = isPositive ? catColor : Colors.redAccent;
 
     final timeStr =
         '${entry.timestamp.hour.toString().padLeft(2, '0')}:'
@@ -992,15 +971,20 @@ class _LogTile extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 4),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: catColor.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+          border: Border(
+            left: BorderSide(color: catColor, width: 3),
+            top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+            right: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+            bottom: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Row(
             children: [
-              Icon(_iconFor(entry.category), size: 18, color: color.withValues(alpha: 0.7)),
+              Icon(runLogCategoryIcon(entry.category), size: 18, color: catColor),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -1013,31 +997,134 @@ class _LogTile extends StatelessWidget {
                         fontSize: 12.5,
                         fontWeight: FontWeight.w600,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
-                      timeStr,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.white.withValues(alpha: 0.4),
-                      ),
+                    const SizedBox(height: 2),
+                    Row(
+                      children: [
+                        Text(
+                          timeStr,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white.withValues(alpha: 0.4),
+                          ),
+                        ),
+                        if (entry.playerName != null) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: catColor.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              entry.playerName!,
+                              style: TextStyle(
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w700,
+                                color: catColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 8),
-              Text(
-                '${isPositive ? '+' : ''}${delta.toStringAsFixed(1)}',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w900,
-                  color: deltaColor,
-                ),
-              ),
+              if (hasDelta)
+                Text(
+                  '${isPositive ? '+' : ''}${delta.toStringAsFixed(1)}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    color: deltaColor,
+                  ),
+                )
+              else
+                Icon(runLogCategoryIcon(entry.category),
+                    size: 14, color: catColor.withValues(alpha: 0.4)),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Color-to-category legend shown at the bottom of the event log.
+/// Only shows categories that actually appear in the current log.
+class _LogLegend extends StatelessWidget {
+  final List<RunLogEntry> entries;
+  const _LogLegend({required this.entries});
+
+  @override
+  Widget build(BuildContext context) {
+    final present = <RunLogCategory>{};
+    for (final e in entries) {
+      present.add(e.category);
+    }
+    final cats = present.toList()..sort((a, b) => a.index.compareTo(b.index));
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'LEGEND',
+            style: TextStyle(
+              fontSize: 9.5,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 10,
+            runSpacing: 6,
+            children: cats.map((c) {
+              final color = runLogCategoryColor(c);
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: color,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.withValues(alpha: 0.4),
+                          blurRadius: 3,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    runLogCategoryLabel(c),
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      color: Colors.white.withValues(alpha: 0.7),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
