@@ -1,0 +1,121 @@
+[
+  {
+    "name": "Shells",
+    "category": "Currency",
+    "description": "Shells are the game's main form of currency, and are often dropped by enemies upon their death. They stay on the ground until retrieved or until combat finishes, at which point they will slide across the floor to the player. They can be used to purchase items in Shops and make wagers with various NPCs. Shells that fall into pits will reappear on top of the player.",
+    "icon": "money.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Copper Casing",
+    "category": "Currency",
+    "description": "Worth 1 shell. The most common currency pickup, dropped by enemies upon death.",
+    "icon": "money.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money"
+  },
+  {
+    "name": "Silver Casing",
+    "category": "Currency",
+    "description": "Worth 5 shells. Less common than copper casings but more valuable.",
+    "icon": "money_5.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money"
+  },
+  {
+    "name": "Gold Casing",
+    "category": "Currency",
+    "description": "Worth 50 shells. The most valuable currency pickup.",
+    "icon": "golden_shell.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money"
+  },
+  {
+    "name": "Half Heart",
+    "category": "Health",
+    "description": "Restores half a heart of health. If the player has full health, they can interact with health pickups to save them for later at a health dispenser. The Robot cannot pick up hearts.",
+    "icon": "half_heart.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Full Heart",
+    "category": "Health",
+    "description": "Restores a full heart of health. If the player picks up a full heart while missing only half a heart, the second half will not be stored. Hearts can be stored at health dispensers at the entrance to the next floor and at shops.",
+    "icon": "heart.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Armor",
+    "category": "Defense",
+    "description": "Armor is appended to the end of the player's health bar upon pickup, and the player can carry multiple pieces. Armor absorbs one hit, after which it is destroyed. Whenever armor is destroyed, a Blank is activated for free. Armor will be stolen by the Resourceful Rat if the player leaves the room.",
+    "icon": "armor.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Blank",
+    "category": "Utility",
+    "description": "Blanks clear all enemy projectiles on screen and push enemies away. A core pickup for survival in the Gungeon.",
+    "icon": "blank.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blank"
+  },
+  {
+    "name": "Key",
+    "category": "Utility",
+    "description": "Keys are used to open locked chests and doors, as well as the trapdoor to the Oubliette and the trapdoor to the passageway to the Resourceful Rat's Lair. Every Shop apart from the Forge's shop will always have at least one key for sale.",
+    "icon": "key.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Cell Key",
+    "category": "Utility",
+    "description": "Cell keys are used to open cells to free NPCs. On any floor with a cell, a cell key will drop from a random enemy on the floor (including the boss). They cannot be used as regular keys. Cell keys are automatically collected if the player attempts to leave them behind.",
+    "icon": "cell_key.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Rat Key",
+    "category": "Utility",
+    "description": "Rat keys are used to open Rat Chests and certain doors. They are obtained from the third phase of the Resourceful Rat fight. They cannot be used as regular keys. Rat Keys are automatically collected if the player attempts to leave them behind.",
+    "icon": "ratkey.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Ammo",
+    "category": "Ammo",
+    "description": "Ammo fully replenishes the player's currently held weapon's ammunition upon picking it up. Ammo cannot be picked up if the weapon the player is holding has full or infinite ammo. Ammo will be stolen by the Resourceful Rat if the player leaves the room, unless it is a secret room.",
+    "icon": "ammo.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Spread Ammo",
+    "category": "Ammo",
+    "description": "The Spread Ammo box restores 50% of the ammo of the currently held weapon and 20% to all other weapons (rounded up). In co-op, the spread ammo will give 20% ammo to all other weapons the other player has, too. Also stealable by the Resourceful Rat.",
+    "icon": "spread_ammo.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Hegemony Credit",
+    "category": "Currency",
+    "description": "Hegemony Credits are a special currency used to unlock items and guns from the shops between runs. They are earned by defeating bosses for the first time.",
+    "icon": "hegemony_credit.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Hegemony_Credit"
+  },
+  {
+    "name": "Map",
+    "category": "Utility",
+    "description": "Maps reveal the layout of the current floor, showing all rooms, secret rooms, and special rooms. A rare pickup that can be found in chests or dropped by certain enemies.",
+    "icon": "map.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  },
+  {
+    "name": "Supply Drop",
+    "category": "Utility",
+    "description": "Calls down a single regular ammo box in a supply crate. A rare pickup that can appear in the room clear loot table.",
+    "icon": "supply_drop.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Supply_Drop"
+  },
+  {
+    "name": "Glass Guon Stone",
+    "category": "Defense",
+    "description": "Glass Guon Stones orbit the player and block enemy bullets. They are destroyed upon blocking a bullet. Multiple Glass Guon Stones can be collected. A rare pickup that can appear in the room clear loot table.",
+    "icon": "glass_guon_stone.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+  }
+]

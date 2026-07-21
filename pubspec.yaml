@@ -89,12 +89,18 @@ flutter:
     - assets/data/gungeoneers.json
     - assets/data/back_refs.json
     - assets/data/changelog.json
+    - assets/data/objects.json
+    - assets/data/pickups.json
+    - assets/data/npcs.json
     - assets/images/guns/
     - assets/images/items/
     - assets/images/shrines/
     - assets/images/synergies/
     - assets/images/gungeoneers/
     - assets/images/junkan/
+    - assets/images/objects/
+    - assets/images/pickups/
+    - assets/images/npcs/
     - assets/animations/
     - assets/animations/gun_types/
     - assets/animations/dog/

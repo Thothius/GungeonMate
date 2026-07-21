@@ -1,0 +1,309 @@
+[
+  {
+    "name": "Explosive Barrel",
+    "category": "Barrel",
+    "description": "Explosive barrels explode when shot. Enemies and Gungeoneers alike are damaged by exploding barrels. Dodge rolling through an explosive barrel destroys it without causing an explosion. Deals approximately 35 damage to enemies.",
+    "icon": "explosive_barrel.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Rare Explosive Barrel",
+    "category": "Barrel",
+    "description": "Exactly the same as Explosive Barrels. Extremely rare.",
+    "icon": "rareexplosive.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Water Barrel",
+    "category": "Barrel",
+    "description": "Water barrels leave water when rolled or shot. The water overrides other liquids and can be electrified to deal damage to enemies. Also puts out fireplace to access the Oubliette.",
+    "icon": "water_barrel.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Oil Barrel",
+    "category": "Barrel",
+    "description": "Oil barrels trail oil when rolled or shot. Explosions and fire weapons ignite the oil, dealing significant damage to walking enemies.",
+    "icon": "oil_barrel.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Poison Barrel",
+    "category": "Barrel",
+    "description": "Toxic barrels spread poison when rolled or shot. Enemies that step on the goop are continuously hurt for a few seconds.",
+    "icon": "poison_barrel.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Table",
+    "category": "Table",
+    "description": "Tables can be flipped to provide cover from enemy bullets. Flipping a table clears projectiles in its path. Table Tech items grant bonuses when flipping tables. Tables count towards the Rage Mode achievement.",
+    "icon": "",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Table"
+  },
+  {
+    "name": "Coffin",
+    "category": "Coffin",
+    "description": "Coffins are found in the Hollow. They are similar to tables, but can only be flipped on their long ends. They have a chance to spill a cone of poison goop in the direction flipped. They activate Table Tech effects and count towards the Rage Mode achievement.",
+    "icon": "coffin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Clutter",
+    "category": "Clutter",
+    "description": "A wide variety of minor objects found throughout the Gungeon, ranging from flowers to crates to skeletons. Some stop a single bullet before being destroyed, while others do not obstruct gunfire. All clutter breaks instantly on contact. Has a very tiny chance to spawn a Gun Fairy when broken.",
+    "icon": "",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Breakables"
+  },
+  {
+    "name": "Brazier",
+    "category": "Brazier",
+    "description": "Braziers can be found as early as the Keep of the Lead Lord, but are most commonly found in the Forge. They can be flipped and leave a trail of fire. Braziers do not provide cover, don't clear projectiles, and don't interact with Table Tech passive items.",
+    "icon": "brazier.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Cursed Pot",
+    "category": "Cursed Pot",
+    "description": "Cursed Pots have a large purple aura around them. If the player stands in the aura for too long, their curse will increase by 1 and the pot will break. Cursed Pots can be broken by shooting or touching them. They increase the count of killed enemies, useful for weapons like the Polaris.",
+    "icon": "cursed_pot.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Oil Lamp",
+    "category": "Oil Lamp",
+    "description": "Oil Lamps can be found mounted to the walls of the Black Powder Mine. Upon being shot, they will break and leave behind a puddle of oil. Explosions and fire weapons ignite the oil, dealing significant damage to walking enemies.",
+    "icon": "oil_lamp.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Minecart",
+    "category": "Minecart",
+    "description": "Minecarts are found in the Black Powder Mine. Interacting with a minecart lets a Gungeoneer ride along minecart tracks. Some minecarts can contain explosive barrels or mechanical turrets which fire at the player. In co-op, two players can occupy the same minecart.",
+    "icon": "minecart.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Muncher",
+    "category": "Muncher",
+    "description": "Munchers are strange creatures that eat any gun other than starting weapons. After giving the green muncher 2 guns to eat, they will reward you with a new gun. The red muncher will take 10+ guns until rewarding you with a new gun.",
+    "icon": "muncher.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Munchers"
+  },
+  {
+    "name": "Evil Muncher",
+    "category": "Muncher",
+    "description": "The red muncher will take 10+ guns until rewarding you with a new gun.",
+    "icon": "evil_muncher.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Munchers"
+  },
+  {
+    "name": "Mirror",
+    "category": "Mirror",
+    "description": "Mirrors will show an unlocked chest in their reflection, which can be opened if the player presses the interact button while their reflection is next to the chest. This will shatter the mirror and increase the player's curse by 3.5. The mirror will also shatter if the player shoots it, increasing curse by the same amount and making the chest impossible to get.",
+    "icon": "mirror.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Demon Face",
+    "category": "Demon Face",
+    "description": "Grants access to the Black Market. See Black Market for more details.",
+    "icon": "demon_face.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Objects"
+  },
+  {
+    "name": "Brown Chest",
+    "category": "Chest",
+    "description": "The most common chest type. Has a chance to contain extra loot. 73.89% chance for 1 extra drop. Can never drop more than 1 gun at a time.",
+    "icon": "brown_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Blue Chest",
+    "category": "Chest",
+    "description": "A higher quality chest than Brown Chests. Contains better quality items and guns.",
+    "icon": "blue_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Green Chest",
+    "category": "Chest",
+    "description": "A high quality chest. Contains higher quality items and guns than Blue Chests.",
+    "icon": "green_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Red Chest",
+    "category": "Chest",
+    "description": "A rare chest type with high quality loot. Has a chance to contain items, guns, or pickups.",
+    "icon": "red_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Black Chest",
+    "category": "Chest",
+    "description": "The rarest standard chest type. Contains the highest quality items and guns.",
+    "icon": "black_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Synergy Chest",
+    "category": "Chest",
+    "description": "Has a ~5% chance to appear in Reward Rooms after Synergrace has been rescued. Gives a random quality gun or item with a high chance of it completing a Synergy.",
+    "icon": "synergy_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Rat Chest",
+    "category": "Chest",
+    "description": "Appears in a rare secret room accompanying Brother Albern. Has its own special item pool spanning multiple qualities, and can give 1-2 items/guns. Requires a Rat Key to open.",
+    "icon": "rat_chest.gif",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Rainbow Chest",
+    "category": "Chest",
+    "description": "A very rare chest that contains multiple items and guns of various qualities. Appears in Rainbow Mode and rarely in normal play.",
+    "icon": "rainbow_chest.gif",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Hidden Rainbow Chest",
+    "category": "Chest",
+    "description": "A hidden variant of the Rainbow Chest that appears in secret rooms.",
+    "icon": "hidden_rainbow_chest.gif",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Truth Chest",
+    "category": "Chest",
+    "description": "A special chest that appears in the Forge after completing certain conditions.",
+    "icon": "truth_chest.gif",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Glitched Chest",
+    "category": "Chest",
+    "description": "Most chests have a 0.1% chance to also appear Glitchy. These Glitched Chests do not drop items, instead transporting the player to a secret boss-fight, with massive rewards.",
+    "icon": "glitched_chest.gif",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Lamb Chest",
+    "category": "Chest",
+    "description": "Spawned by the Baa Baa Lord Shrine in the Keep of the Lead Lord in the Chinese Mobile Version during the Cult of the Lamb crossover event. Part of the sequence to become The Lamb.",
+    "icon": "lamb_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Revival Chest",
+    "category": "Chest",
+    "description": "A special chest used in co-op mode to revive a fallen player.",
+    "icon": "revival_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chests"
+  },
+  {
+    "name": "Chandelier",
+    "category": "Trap",
+    "location": "Keep",
+    "description": "Hangs from the ceiling, connected by an offscreen chain to a switch somewhere in the same room. Shooting or interacting with the switch drops the chandelier, which explodes upon landing.",
+    "icon": "chandelier.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Sawblade",
+    "category": "Trap",
+    "location": "Many Floors",
+    "description": "Travels along a set path depending on room layout, either looping or moving back and forth. Typically aligned along wall edges.",
+    "icon": "sawblade.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Spikes",
+    "category": "Trap",
+    "location": "Many Floors",
+    "description": "When stepped on, spikes will spring out of the floor panel after a short delay.",
+    "icon": "spikes.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Rolling Log",
+    "category": "Trap",
+    "location": "Many Floors",
+    "description": "A spiky log which can be any length, determined by room layout. Rolls back and forth along a set path, damaging enemies and players on contact.",
+    "icon": "rolling_log.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Flame Trap",
+    "category": "Trap",
+    "location": "Many Floors",
+    "description": "Often appears in large groups. On set intervals, will belch a burst of flame into the air, damaging players above. In many rooms, different flame traps have their intervals offset, resulting in more complicated activation patterns.",
+    "icon": "flame_trap.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Flame Pipe",
+    "category": "Trap",
+    "location": "Forge",
+    "description": "Sits along a wall face. When shot, the cap will burst and spray a constant flame away from the wall for 10 seconds. Once deactivating, it cannot be activated again.",
+    "icon": "flame_pipe.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Rotating Fire",
+    "category": "Trap",
+    "location": "Forge",
+    "description": "Bars of fire rotating around a stationary skull.",
+    "icon": "rotating_fire.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Trapdoor",
+    "category": "Trap",
+    "location": "Many Floors",
+    "description": "If the player steps on a trapdoor, it will collapse after a short delay, causing the player to fall in and take damage.",
+    "icon": "trapdoor.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Cave-In",
+    "category": "Trap",
+    "location": "Mine",
+    "description": "If a red plunger is shot or interacted with, boulders will fall onto a corresponding spot in the room marked with a red X. Boulder impacts ignite oil as though they were explosions.",
+    "icon": "boulder.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Turret",
+    "category": "Trap",
+    "location": "Many Floors",
+    "description": "Turrets shoot bullets forward at a fixed interval.",
+    "icon": "turret.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Minecart Turret",
+    "category": "Trap",
+    "location": "Mine",
+    "description": "They travel along a track, continuously shooting bullets at the player. They can be destroyed by explosions, and are deactivated once the room is completed.",
+    "icon": "minecart_turret.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Crusher",
+    "category": "Trap",
+    "location": "Oubliette/Forge",
+    "description": "If the player steps into a crush trap, the walls will pinch together, damaging the player if they are caught. Also triggers for enemies, dealing 35 damage to them.",
+    "icon": "crush.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  },
+  {
+    "name": "Fire Ring",
+    "category": "Trap",
+    "location": "Bullet Hell",
+    "description": "Fire rings are skulls that periodically shoot rings of fire similar to Muzzle Wisps, and continue firing even after the room is cleared.",
+    "icon": "fire_ring.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Traps"
+  }
+]
