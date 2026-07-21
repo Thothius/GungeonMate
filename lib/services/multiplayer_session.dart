@@ -1520,12 +1520,14 @@ class MultiplayerSession extends ChangeNotifier {
     'Brave', 'Swift', 'Mighty', 'Clever', 'Bold', 'Fierce', 'Noble',
     'Sly', 'Lucky', 'Grim', 'Wild', 'Steady', 'Quick', 'Sharp',
     'Stout', 'Keen', 'Wily', 'Stalwart', 'Valiant', 'Cunning',
+    'Jammed', 'Blessed', 'Cursed', 'Blanked', 'Hegemony',
   ];
 
   static const _animals = [
-    'Bullet', 'Rat', 'Owl', 'Wolf', 'Raven', 'Fox', 'Bear', 'Hawk',
-    'Snake', 'Turtle', 'Badger', 'Otter', 'Lynx', 'Viper', 'Falcon',
-    'Drake', 'Boar', 'Crane', 'Mantis', 'Scorpion',
+    'Bullet Kin', 'Blobulon', 'Mushroom', 'Gatling Gull', 'Beholster',
+    'Treadnaught', 'Rat', 'Dragun', 'Lich', 'Hollowpoint',
+    'Spectre', 'Cubulon', 'Gun Nut', 'Powder Skunk', 'Arrowkin',
+    'Fuselier', 'Minelet', 'Shellet', 'Veteran', 'Jammed',
   ];
 
   String? _cachedSessionName;
