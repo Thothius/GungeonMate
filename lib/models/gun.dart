@@ -68,8 +68,15 @@ class Gun {
   }
 
   /// Calculates dynamic, form-stateful DPS for weapons with multiple modes
-  /// (Gunderfury, Triple Gun, Evolver) based on active state parameters.
-  double getDynamicDps({int gunderLevel = 1, int tripleForm = 1, int evolverStage = 1}) {
+  /// (Gunderfury, Triple Gun, Evolver, Shellegun, Chamber Gun) based on
+  /// active state parameters.
+  double getDynamicDps({
+    int gunderLevel = 1,
+    int tripleForm = 1,
+    int evolverStage = 1,
+    int shellegunMode = 1,
+    int chamberGunFloor = 0,
+  }) {
     final nameLower = name.toLowerCase();
     if (nameLower == 'gunderfury') {
       if (gunderLevel < 30) return 22.5;
@@ -90,6 +97,18 @@ class Gun {
         case 5: return 23.0;
         default: return 93.8;
       }
+    }
+    if (nameLower == 'shellegun') {
+      // Mode 1 = Pistol manual, 2 = Pistol auto, 3 = Beam
+      if (shellegunMode == 1) return 33.1;
+      if (shellegunMode == 2) return 24.0;
+      return 13.3;
+    }
+    if (nameLower == 'chamber gun') {
+      // Floor index: 0=Keep, 1=Oubliette, 2=Proper, 3=Abbey,
+      // 4=Black Powder Mine, 5=Rat's Lair, 6=Hollow, 7=R&G, 8=Forge, 9=Bullet Hell
+      const floorDps = [15.9, 30.3, 25.1, 80.0, 300.0, 20.0, 68.0, 100.0, 70.0, 180.0];
+      return floorDps[chamberGunFloor.clamp(0, 9)];
     }
     return dpsValue;
   }

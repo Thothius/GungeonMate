@@ -1221,6 +1221,204 @@ class _GunStats extends StatelessWidget {
   }
 // Note: _buildEvolverInfo ends above. _GunStats continues below with build().
 
+  Widget _buildShellegunInfo(BuildContext context, RunProvider p) {
+    final mode = p.shellegunMode;
+    const modeNames = ['Pistol (Manual)', 'Pistol (Auto)', 'Beam'];
+    const modeDescs = [
+      'Fires manually-controlled shells. Highest single-shot DPS.',
+      'Fires automatically. Moderate fire rate, lower per-shot damage.',
+      'Continuous beam. Low DPS but piercing and consistent.',
+    ];
+    const modeDps = [33.1, 24.0, 13.3];
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.teal.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.tune, color: Colors.tealAccent.shade100, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Shellegun Firing Mode',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.tealAccent.shade100,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _QuickJumpButton(
+                label: 'Manual',
+                active: mode == 1,
+                onTap: () => p.setShellegunMode(1),
+              ),
+              _QuickJumpButton(
+                label: 'Auto',
+                active: mode == 2,
+                onTap: () => p.setShellegunMode(2),
+              ),
+              _QuickJumpButton(
+                label: 'Beam',
+                active: mode == 3,
+                onTap: () => p.setShellegunMode(3),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Form $mode: ${modeNames[mode - 1]} — ${modeDps[mode - 1]} DPS',
+            style: TextStyle(
+              fontSize: 12.5,
+              fontWeight: FontWeight.bold,
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            modeDescs[mode - 1],
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.75),
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChamberGunInfo(BuildContext context, RunProvider p) {
+    final floor = p.chamberGunFloor;
+    const floorNames = [
+      'Keep of the Lead Lord',
+      'Oubliette',
+      'Gungeon Proper',
+      'Abbey of the True Gun',
+      'Black Powder Mine',
+      "Resourceful Rat's Lair",
+      'The Hollow',
+      'R&G Dept.',
+      'The Forge',
+      'Bullet Hell',
+    ];
+    const floorDps = [15.9, 30.3, 25.1, 80.0, 300.0, 20.0, 68.0, 100.0, 70.0, 180.0];
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.deepOrange.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.deepOrangeAccent.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.layers, color: Colors.deepOrangeAccent.shade100, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Chamber Gun — Active Floor',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepOrangeAccent.shade100,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: List.generate(floorNames.length, (i) {
+              return _QuickJumpButton(
+                label: floorNames[i].split(' ').first,
+                active: floor == i,
+                onTap: () => p.setChamberGunFloor(i),
+              );
+            }),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '${floorNames[floor]} — ${floorDps[floor]} DPS',
+            style: TextStyle(
+              fontSize: 12.5,
+              fontWeight: FontWeight.bold,
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Chamber Gun transforms based on the current floor. Select your floor to see accurate DPS.',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.75),
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCaseyInfo(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.lime.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.limeAccent.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.sports_baseball, color: Colors.limeAccent.shade100, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Casey — Melee & Reflect',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.limeAccent.shade100,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '100 base damage per swing. Reflects enemy bullets back at them for massive damage. DPS shown (50) reflects only melee — actual combat value is far higher with bullet reflection.',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.75),
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // Stats are grouped by mental category so a long pill list stops
@@ -1257,6 +1455,15 @@ class _GunStats extends StatelessWidget {
         : null;
     final evolverInfo = gun.name.toLowerCase() == 'evolver'
         ? _buildEvolverInfo(context, p)
+        : null;
+    final shellegunInfo = gun.name.toLowerCase() == 'shellegun'
+        ? _buildShellegunInfo(context, p)
+        : null;
+    final chamberGunInfo = gun.name.toLowerCase() == 'chamber gun'
+        ? _buildChamberGunInfo(context, p)
+        : null;
+    final caseyInfo = gun.name.toLowerCase() == 'casey'
+        ? _buildCaseyInfo(context)
         : null;
 
     final String animationAsset;
@@ -1420,6 +1627,18 @@ class _GunStats extends StatelessWidget {
               ],
               if (evolverInfo != null) ...[
                 evolverInfo,
+                const SizedBox(height: 14),
+              ],
+              if (shellegunInfo != null) ...[
+                shellegunInfo,
+                const SizedBox(height: 14),
+              ],
+              if (chamberGunInfo != null) ...[
+                chamberGunInfo,
+                const SizedBox(height: 14),
+              ],
+              if (caseyInfo != null) ...[
+                caseyInfo,
                 const SizedBox(height: 14),
               ],
               if (gun.notes.isNotEmpty) ...[
@@ -2496,6 +2715,225 @@ class _ItemBody extends StatelessWidget {
     );
   }
 
+  Widget _buildPlatinumBulletsInfo(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final kills = p.platinumBulletsKills;
+    // Each kill: +1% damage, +1% fire rate (caps at ~100 kills for display)
+    final damageBonus = kills;
+    final fireRateBonus = kills;
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.indigo.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.indigoAccent.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.trending_up, color: Colors.indigoAccent.shade100, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Platinum Bullets — Kill Streak',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.indigoAccent.shade100,
+                  ),
+                ),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
+                onPressed: kills > 0 ? () => p.setPlatinumBulletsKills(kills - 1) : null,
+              ),
+              Text(
+                '$kills',
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
+                onPressed: () => p.setPlatinumBulletsKills(kills + 1),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '+$damageBonus% Damage  •  +$fireRateBonus% Fire Rate',
+            style: TextStyle(
+              fontSize: 12.5,
+              fontWeight: FontWeight.bold,
+              color: Colors.white.withValues(alpha: 0.9),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Each enemy kill permanently increases damage and fire rate by 1%. The bonus persists for the entire run.',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.75),
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIronCoinInfo(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final uses = p.ironCoinUses;
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.amber.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.monetization_on, color: Colors.amberAccent.shade100, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Iron Coin — Charges',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amberAccent.shade100,
+                  ),
+                ),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
+                onPressed: uses > 0 ? () => p.setIronCoinUses(uses - 1) : null,
+              ),
+              Text(
+                '$uses / 3',
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
+                onPressed: uses < 3 ? () => p.setIronCoinUses(uses + 1) : null,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: List.generate(3, (i) {
+              final spent = i >= uses;
+              return Padding(
+                padding: const EdgeInsets.only(right: 6),
+                child: Icon(
+                  spent ? Icons.radio_button_unchecked : Icons.check_circle,
+                  size: 18,
+                  color: spent ? Colors.white24 : Colors.amberAccent,
+                ),
+              );
+            }),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Kills all enemies in a random room on the current floor. 3 uses per run. Also grants a 10% discount at shops while held.',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.75),
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildKillThePastInfo(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final allItems = [
+      ...p.runState.main.items,
+      ...?p.runState.coop?.items,
+    ];
+    final owned = allItems.map((i) => i.name.toLowerCase()).toSet();
+    const ingredients = ['prime primer', 'arcane gunpowder', 'planar lead', 'obsidian shell casing'];
+    final ownedCount = ingredients.where((n) => owned.contains(n)).length;
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.purple.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.brightness_3, color: Colors.purpleAccent.shade100, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Bullet to Kill the Past — $ownedCount/4',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.purpleAccent.shade100,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: ingredients.map((name) {
+              final has = owned.contains(name);
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    has ? Icons.check_circle : Icons.circle_outlined,
+                    size: 14,
+                    color: has ? Colors.purpleAccent : Colors.white24,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    name.split(' ').map((w) => w[0].toUpperCase() + w.substring(1)).join(' '),
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: has ? FontWeight.bold : FontWeight.normal,
+                      color: has ? Colors.purpleAccent : Colors.white38,
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Collect all 4 ingredients and take them to the Blacksmith to forge the Bullet that can Kill the Past.',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.75),
+              height: 1.3,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String? durationStr;
@@ -2523,6 +2961,17 @@ class _ItemBody extends StatelessWidget {
     final isPaydayItem = const ['clown mask', 'drill', 'loot bag'].contains(item.name.toLowerCase());
     final paydayInfo = isPaydayItem
         ? _buildPaydayInfo(context)
+        : null;
+    final platinumInfo = item.name.toLowerCase() == 'platinum bullets'
+        ? _buildPlatinumBulletsInfo(context)
+        : null;
+    final ironCoinInfo = item.name.toLowerCase() == 'iron coin'
+        ? _buildIronCoinInfo(context)
+        : null;
+    const killThePastItems = ['prime primer', 'arcane gunpowder', 'planar lead', 'obsidian shell casing'];
+    final isKillThePastItem = killThePastItems.contains(item.name.toLowerCase());
+    final killThePastInfo = isKillThePastItem
+        ? _buildKillThePastInfo(context)
         : null;
 
     return Padding(
@@ -2553,6 +3002,18 @@ class _ItemBody extends StatelessWidget {
               if (paydayInfo != null) ...[
                 const SizedBox(height: 12),
                 paydayInfo,
+              ],
+              if (platinumInfo != null) ...[
+                const SizedBox(height: 12),
+                platinumInfo,
+              ],
+              if (ironCoinInfo != null) ...[
+                const SizedBox(height: 12),
+                ironCoinInfo,
+              ],
+              if (killThePastInfo != null) ...[
+                const SizedBox(height: 12),
+                killThePastInfo,
               ],
               if (stats.isNotEmpty) ...[
                 const SizedBox(height: 12),

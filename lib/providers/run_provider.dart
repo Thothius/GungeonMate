@@ -48,6 +48,20 @@ class RunProvider with ChangeNotifier {
   int _evolverKills = 0;
   int _spiceUsageCount = 0;
 
+  // Shellegun mode: 1 = Pistol (manual), 2 = Pistol (auto), 3 = Beam
+  int _shellegunMode = 1;
+
+  // Chamber Gun floor index: 0 = Keep of the Lead Lord, 1 = Oubliette,
+  // 2 = Gungeon Proper, 3 = Abbey, 4 = Black Powder Mine, 5 = Rat's Lair,
+  // 6 = Hollow, 7 = R&G Dept, 8 = Forge, 9 = Bullet Hell
+  int _chamberGunFloor = 0;
+
+  // Platinum Bullets: stacking kill counter
+  int _platinumBulletsKills = 0;
+
+  // Iron Coin: 3 uses per run
+  int _ironCoinUses = 3;
+
   // Sprun mystery trigger: -1 = not yet revealed for this run,
   // 0..4 = index into the possible trigger list shown in the tracker.
   int _sprunTriggerIndex = -1;
@@ -78,6 +92,10 @@ class RunProvider with ChangeNotifier {
   int get sprunTriggerIndex => _sprunTriggerIndex;
   int get windgunnerCountdown => _windgunnerCountdown;
   int get spiceUsageCount => _spiceUsageCount;
+  int get shellegunMode => _shellegunMode;
+  int get chamberGunFloor => _chamberGunFloor;
+  int get platinumBulletsKills => _platinumBulletsKills;
+  int get ironCoinUses => _ironCoinUses;
 
   int get robotArmor => _robotArmor;
   int get robotJunk => _robotJunk;
@@ -357,6 +375,10 @@ class RunProvider with ChangeNotifier {
       _evolverKills = prefs.getInt('special.evolver.kills') ?? 0;
       _sprunTriggerIndex = prefs.getInt('special.sprun.trigger') ?? -1;
       _spiceUsageCount = prefs.getInt('special.spice.count') ?? 0;
+      _shellegunMode = prefs.getInt('special.shellegun.mode') ?? 1;
+      _chamberGunFloor = prefs.getInt('special.chambergun.floor') ?? 0;
+      _platinumBulletsKills = prefs.getInt('special.platinum.kills') ?? 0;
+      _ironCoinUses = prefs.getInt('special.ironcoin.uses') ?? 3;
 
       // Robot specific values
       _robotArmor = prefs.getInt('special.robot.armor') ?? 6;
@@ -521,6 +543,42 @@ class RunProvider with ChangeNotifier {
   void dispose() {
     _windgunnerTimer?.cancel();
     super.dispose();
+  }
+
+  Future<void> setShellegunMode(int mode) async {
+    _shellegunMode = mode.clamp(1, 3);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.shellegun.mode', _shellegunMode);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> setChamberGunFloor(int floor) async {
+    _chamberGunFloor = floor.clamp(0, 9);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.chambergun.floor', _chamberGunFloor);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> setPlatinumBulletsKills(int kills) async {
+    _platinumBulletsKills = kills.clamp(0, 999);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.platinum.kills', _platinumBulletsKills);
+    } catch (_) {}
+    notifyListeners();
+  }
+
+  Future<void> setIronCoinUses(int uses) async {
+    _ironCoinUses = uses.clamp(0, 3);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.ironcoin.uses', _ironCoinUses);
+    } catch (_) {}
+    notifyListeners();
   }
 
   Future<void> setEvolverForm(int form) async {
@@ -1093,6 +1151,8 @@ class RunProvider with ChangeNotifier {
       gunderLevel: _gunderfuryLevel,
       tripleForm: _tripleGunForm,
       evolverStage: _evolverForm,
+      shellegunMode: _shellegunMode,
+      chamberGunFloor: _chamberGunFloor,
     )).fold<double>(0, (a, b) => a + b);
     return total / guns.length;
   }
@@ -1119,6 +1179,8 @@ class RunProvider with ChangeNotifier {
         gunderLevel: _gunderfuryLevel,
         tripleForm: _tripleGunForm,
         evolverStage: _evolverForm,
+        shellegunMode: _shellegunMode,
+        chamberGunFloor: _chamberGunFloor,
       )).fold<double>(0, (a, b) => a + b);
 
   /// Parse "123", "N/A", "" to an int (0 on fail).
@@ -1198,6 +1260,8 @@ class RunProvider with ChangeNotifier {
         gunderLevel: _gunderfuryLevel,
         tripleForm: _tripleGunForm,
         evolverStage: _evolverForm,
+        shellegunMode: _shellegunMode,
+        chamberGunFloor: _chamberGunFloor,
       );
       if (dpsVal > bestDps) {
         bestDps = dpsVal;
@@ -1210,6 +1274,8 @@ class RunProvider with ChangeNotifier {
         gunderLevel: _gunderfuryLevel,
         tripleForm: _tripleGunForm,
         evolverStage: _evolverForm,
+        shellegunMode: _shellegunMode,
+        chamberGunFloor: _chamberGunFloor,
       );
       if (dpsVal > bestDps) {
         bestDps = dpsVal;
