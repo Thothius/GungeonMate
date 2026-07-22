@@ -1574,12 +1574,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                   statType: StatType.coolness,
                 )),
               ),
-              onTapCurse: () => Navigator.push(
-                context,
-                _fastRoute(const StatsDetailScreen(
-                  statType: StatType.curse,
-                )),
-              ),
+              onTapCurse: () => _showCurseSheet(context),
               onLongPressCoolness: () =>
                   _showStatAdjuster(context, isCool: true),
               onLongPressCurse: () =>
@@ -1623,13 +1618,28 @@ class _PlayerPageState extends State<_PlayerPage> {
                       );
                     },
                   ),
-                  // Damage calc icon — opens bottom sheet with DPS breakdown
-                  IconButton(
-                    onPressed: () => _showDamageCalcSheet(context, _slot),
-                    icon: const Icon(Icons.calculate_rounded, size: 18, color: Colors.amberAccent),
-                    tooltip: 'Damage Calculator',
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
+                  // Damage calc toggle — tap to show/hide DPS terminal on dashboard,
+                  // long-press to open the full DPS breakdown sheet.
+                  ListenableBuilder(
+                    listenable: VisualPrefs.notifier,
+                    builder: (context, _) {
+                      final isOn = VisualPrefs.notifier.value.showDamageCalculator;
+                      return IconButton(
+                        onPressed: () {
+                          VisualPrefs.setShowDamageCalculator(!isOn);
+                          Haptics.selection();
+                        },
+                        onLongPress: () => _showDamageCalcSheet(context, _slot),
+                        icon: Icon(
+                          Icons.calculate_rounded,
+                          size: 18,
+                          color: isOn ? Colors.amberAccent : Colors.white38,
+                        ),
+                        tooltip: isOn ? 'Damage Calculator: ON' : 'Damage Calculator: OFF',
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      );
+                    },
                   ),
                   const SizedBox(width: 4),
                   const _HeaderMenu(),
@@ -1851,6 +1861,22 @@ class _PlayerPageState extends State<_PlayerPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
       builder: (ctx) => _StatAdjusterSheet(isCool: isCool),
+    );
+  }
+
+  /// Curse hub — combines stat adjuster, curse-raising actions, and a
+  /// link to the full curse stats breakdown. Opened by tapping the curse
+  /// capsule on the dashboard.
+  void _showCurseSheet(BuildContext c) {
+    Haptics.selection();
+    showModalBottomSheet<void>(
+      context: c,
+      backgroundColor: const Color(0xFF1E1E1E),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) => const _CurseSheet(),
     );
   }
 
@@ -5978,12 +6004,6 @@ class _HeaderMenu extends StatelessWidget {
           case 'help':
             _showHelpDialog(context);
             break;
-          case 'toggle_damage_calc':
-            VisualPrefs.setShowDamageCalculator(
-              !VisualPrefs.notifier.value.showDamageCalculator,
-            );
-            Haptics.selection();
-            break;
         }
       },
       itemBuilder: (ctx) => [
@@ -6015,47 +6035,9 @@ class _HeaderMenu extends StatelessWidget {
             Text('Use Shrine'),
           ]),
         ),
-        const PopupMenuItem(
-          value: 'steal',
-          child: Row(children: [
-            Icon(Icons.front_hand_outlined, size: 18, color: Color(0xFFEF5350)),
-            SizedBox(width: 10),
-            Text('Steal item  (+1 curse)'),
-          ]),
-        ),
-        const PopupMenuItem(
-          value: 'cursula',
-          child: Row(children: [
-            Icon(Icons.storefront_outlined, size: 18, color: Color(0xFFCE93D8)),
-            SizedBox(width: 10),
-            Text('Cursula Buy  (+2.5 curse)'),
-          ]),
-        ),
-        const PopupMenuItem(
-          value: 'dice_roll',
-          child: Row(children: [
-            Icon(Icons.casino_outlined, size: 18, color: Color(0xFFFFD54F)),
-            SizedBox(width: 10),
-            Text('Gunfortuna Dice Roll'),
-          ]),
-        ),
         const PopupMenuDivider(),
 
         // --- Group 3: System, Resets & Admin ---
-        PopupMenuItem(
-          value: 'toggle_damage_calc',
-          child: Row(children: [
-            Icon(
-              VisualPrefs.notifier.value.showDamageCalculator
-                  ? Icons.check_box_outlined
-                  : Icons.check_box_outline_blank,
-              size: 18,
-              color: Colors.amberAccent,
-            ),
-            const SizedBox(width: 10),
-            const Text('Damage Calculator'),
-          ]),
-        ),
         if (mpActive) ...[
           const PopupMenuItem(
             value: 'save_mp_session',
@@ -7294,6 +7276,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
   final List<int> _actualDice = [1, 1, 1];
   final List<int> _myDice = [1, 1, 1];
   final List<bool> _diceStopped = [false, false, false];
+  final GlobalKey _diceRowKey = GlobalKey();
   int _myScore = 0;
   bool _hasRolled = false;
 
@@ -7450,9 +7433,15 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
       }
       _myScore = sum;
 
-      // Spawn satisfying sparkles
-      final double xPos = 60.0 + index * 80.0;
-      _spawnSparkles(xPos, 160.0, particleColor);
+      // Spawn satisfying sparkles at actual die position
+      // ponytail: y is still hardcoded — would need a per-die GlobalKey for exact y.
+      // x is now accurate via _diceRowKey RenderBox. Upgrade path: GlobalKey per die.
+      final renderBox = _diceRowKey.currentContext?.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        final rowWidth = renderBox.size.width;
+        final xPos = rowWidth * (index + 0.5) / 3;
+        _spawnSparkles(xPos, 160.0, particleColor);
+      }
       Haptics.heavy();
 
       // Check if all dice have stopped
@@ -7697,6 +7686,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Row(
+              key: _diceRowKey,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(3, (index) {
                 final isStopped = _diceStopped[index];

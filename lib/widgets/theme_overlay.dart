@@ -1370,6 +1370,7 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
   VideoPlayerController? _controller;
   bool _initialized = false;
   bool _hasError = false;
+  int _videoInitToken = 0;
 
   @override
   void initState() {
@@ -1388,6 +1389,7 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
   Future<void> _initializeVideo() async {
     _initialized = false;
     _hasError = false;
+    final myToken = ++_videoInitToken;
     final oldController = _controller;
     if (oldController != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -1411,9 +1413,18 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
 
     try {
       await controller.initialize();
+      if (myToken != _videoInitToken) {
+        // A newer _initializeVideo call superseded us — dispose orphan.
+        await controller.dispose();
+        return;
+      }
       await controller.setLooping(true);
       await controller.setVolume(0.0);
       await controller.play();
+      if (myToken != _videoInitToken) {
+        await controller.dispose();
+        return;
+      }
       if (mounted) {
         setState(() {
           _initialized = true;
@@ -1421,10 +1432,12 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
       }
     } catch (e) {
       debugPrint('Failed to initialize animated wallpaper video: $e');
-      if (mounted) {
+      if (myToken == _videoInitToken && mounted) {
         setState(() {
           _hasError = true;
         });
+      } else {
+        await controller.dispose();
       }
     }
   }

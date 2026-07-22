@@ -208,6 +208,7 @@ class MultiplayerSession extends ChangeNotifier {
 
   Timer? _broadcastDebounce;
   bool _snapshotInFlight = false;
+  bool _needsResend = false;
   Timer? _heartbeat;
   Timer? _watchdog;
   Timer? _autoSaveTimer;
@@ -595,6 +596,7 @@ class MultiplayerSession extends ChangeNotifier {
     _seenReqIds.clear();
     _seenGiftIds.clear();
     _lastResp = null;
+    _needsResend = false;
     // Restore any pending gifts that were in transit — the peer may
     // not have received them, so put them back in our inventory.
     if (_pendingGifts.isNotEmpty) {
@@ -1347,7 +1349,11 @@ class MultiplayerSession extends ChangeNotifier {
     // collapses to one snapshot on the wire.
     _broadcastDebounce?.cancel();
     _broadcastDebounce = Timer(const Duration(milliseconds: 200), () {
-      if (_snapshotInFlight) return; // Skip — a snapshot is already sending; the next change will re-schedule.
+      if (_snapshotInFlight) {
+        // A snapshot is already sending — flag for resend instead of dropping.
+        _needsResend = true;
+        return;
+      }
       unawaited(_broadcastSnapshot());
     });
   }
@@ -1380,6 +1386,10 @@ class MultiplayerSession extends ChangeNotifier {
 // Removed debugPrint for production
     } finally {
       _snapshotInFlight = false;
+      if (_needsResend) {
+        _needsResend = false;
+        unawaited(_broadcastSnapshot());
+      }
     }
   }
 

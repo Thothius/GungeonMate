@@ -68,7 +68,7 @@ class _PeriodicTileState extends State<PeriodicTile>
 
   /// Duration the user must hold to fire [onLongPress]. Tuned so normal
   /// tap-and-release feels instant while the shake gives clear feedback.
-  static const Duration _holdDuration = Duration(milliseconds: 180);
+  static const Duration _holdDuration = Duration(milliseconds: 250);
 
   @override
   void initState() {
