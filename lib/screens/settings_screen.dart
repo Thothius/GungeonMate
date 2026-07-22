@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             labelStyle: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w900),
             indicatorColor: flair.headlineStat,
             tabs: const [
-              Tab(text: 'THEME & FONT'),
+              Tab(text: 'VISUALS'),
               Tab(text: 'RUN UTILITIES'),
             ],
           ),
@@ -1007,6 +1007,39 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     );
   }
 
+  void _confirmLeaveMp(BuildContext context, MultiplayerSession session) {
+    final isSidekick = session.myRole == MpRole.sidekick;
+    showDialog(
+      context: context,
+      builder: (c) => AlertDialog(
+        icon: const Icon(Icons.bluetooth_disabled,
+            color: Colors.lightBlueAccent),
+        title: const Text('Leave Multiplayer?'),
+        content: Text(
+          isSidekick
+              ? 'You will disconnect from the host. Your inventory will be restored to your pre-MP state.'
+              : 'You will disconnect and end the multiplayer session.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c),
+            child: const Text('Cancel'),
+          ),
+          FilledButton.tonal(
+            style: FilledButton.styleFrom(
+                backgroundColor: Colors.lightBlueAccent.withValues(alpha: 0.15),
+                foregroundColor: Colors.lightBlueAccent),
+            onPressed: () {
+              session.cancel();
+              Navigator.pop(c);
+            },
+            child: const Text('Leave'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
@@ -1103,9 +1136,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                 subtitle: 'Disconnect from the host and return to solo play.',
                 icon: Icons.bluetooth_disabled,
                 color: Colors.lightBlueAccent,
-                onTap: () {
-                  mpSession.cancel();
-                },
+                onTap: () => _confirmLeaveMp(context, mpSession),
               ),
           ],
           const SizedBox(height: 20),
