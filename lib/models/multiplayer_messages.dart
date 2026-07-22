@@ -72,6 +72,7 @@ sealed class MpMessage {
       'pong' => MpPong.fromJson(map),
       'diceChallenge' => MpDiceChallenge.fromJson(map),
       'diceAccept' => const MpDiceAccept(),
+      'diceDecline' => const MpDiceDecline(),
       'diceResult' => MpDiceResult.fromJson(map),
       _ => throw FormatException('MpMessage: unknown type "$t"'),
     };
@@ -309,6 +310,15 @@ final class MpDiceAccept extends MpMessage {
   const MpDiceAccept();
   @override
   String get type => 'diceAccept';
+  @override
+  Map<String, dynamic> toJson() => const {};
+}
+
+/// Dice Roll Decline: Sent to decline the challenge.
+final class MpDiceDecline extends MpMessage {
+  const MpDiceDecline();
+  @override
+  String get type => 'diceDecline';
   @override
   Map<String, dynamic> toJson() => const {};
 }

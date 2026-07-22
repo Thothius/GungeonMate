@@ -600,6 +600,7 @@ class MultiplayerSession extends ChangeNotifier {
       _log('Restoring ${_pendingGifts.length} pending gift(s) to inventory on cancel.');
       final mySlot = _myRole == MpRole.main ? PlayerSlot.main : PlayerSlot.coop;
       for (final pg in _pendingGifts) {
+        if (!pg.localRemoval) continue; // sendAddToPeer: item was never removed, skip restore
         switch (pg.kind) {
           case 'gun':
             final gun = _runProvider.gunByName(pg.name);
@@ -840,7 +841,7 @@ class MultiplayerSession extends ChangeNotifier {
   Future<void> sendAddToPeer({required String kind, required String name}) async {
     if (!isConnected) return;
     final giftId = _newReqId();
-    _pendingGifts.add(_PendingGift(giftId: giftId, kind: kind, name: name));
+    _pendingGifts.add(_PendingGift(giftId: giftId, kind: kind, name: name, localRemoval: false));
     try {
       await _service.sendMessage(MpGift(kind: kind, name: name, giftId: giftId));
     } catch (_) {
@@ -1726,7 +1727,8 @@ class _PendingGift {
   final String giftId;
   final String kind;
   final String name;
-  _PendingGift({required this.giftId, required this.kind, required this.name});
+  final bool localRemoval;
+  _PendingGift({required this.giftId, required this.kind, required this.name, this.localRemoval = true});
 }
 
 /// A serialized and stored multiplayer session. Allows both Host (Main) and Client (Sidekick)

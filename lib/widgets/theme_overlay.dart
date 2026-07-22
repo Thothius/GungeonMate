@@ -859,6 +859,7 @@ class _HypnoticBgState extends State<_HypnoticBg> with SingleTickerProviderState
       }
     } catch (e) {
       debugPrint("Error loading animated background gif: $e");
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 

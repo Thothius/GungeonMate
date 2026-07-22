@@ -461,7 +461,7 @@ class _ThemePreviewCard extends StatelessWidget {
                         );
                         // Refresh the card after editing
                         if (context.mounted) {
-                          AppTheme.notifier.value = AppTheme.notifier.value;
+                          AppTheme.notifier.notifyListeners();
                         }
                       },
                       icon: Icon(Icons.palette, size: 16, color: f.primary),
@@ -913,7 +913,7 @@ class _CustomThemeEditorSheetState extends State<_CustomThemeEditorSheet> {
     await CustomThemeData.save(_data);
     AppTheme.setCustomThemeData(_data);
     if (mounted) {
-      AppTheme.notifier.value = AppTheme.notifier.value;
+      AppTheme.notifier.notifyListeners();
       Navigator.pop(context);
     }
   }

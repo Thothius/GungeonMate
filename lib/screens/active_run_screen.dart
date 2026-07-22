@@ -1059,7 +1059,8 @@ class _MpHeader extends StatelessWidget {
               strengthIcon = Icons.signal_cellular_alt;
             }
 
-            return Padding(
+            return SafeArea(
+              child: Padding(
               padding: EdgeInsets.fromLTRB(20, 20, 20, MediaQuery.of(ctx).viewInsets.bottom + 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -1336,6 +1337,7 @@ class _MpHeader extends StatelessWidget {
                     ],
                   ),
                 ],
+              ),
               ),
             );
           },
@@ -3763,7 +3765,8 @@ class _DamageCalcSheet extends StatelessWidget {
     );
     final bonusPercent = (multiplier - 1.0) * 100.0;
 
-    return Padding(
+    return SafeArea(
+      child: Padding(
       padding: EdgeInsets.fromLTRB(
         16, 12, 16, 16 + MediaQuery.of(context).viewInsets.bottom,
       ),
@@ -3954,6 +3957,7 @@ class _DamageCalcSheet extends StatelessWidget {
           ),
           const SizedBox(height: 16),
         ],
+      ),
       ),
     );
   }

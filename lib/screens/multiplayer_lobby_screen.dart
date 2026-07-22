@@ -170,6 +170,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
         builder: (_) => const CharacterSelectScreen.multiplayerPick(),
       ),
     );
+    if (!mounted) return;
     if (picked != null) {
       setState(() => _selectedCharacter = picked);
     }
