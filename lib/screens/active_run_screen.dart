@@ -1568,12 +1568,7 @@ class _PlayerPageState extends State<_PlayerPage> {
               showSynergies: isMain,
               coolness: state.totalCoolness,
               curse: state.totalCurse,
-              onTapCoolness: () => Navigator.push(
-                context,
-                _fastRoute(const StatsDetailScreen(
-                  statType: StatType.coolness,
-                )),
-              ),
+              onTapCoolness: () => _showCoolnessSheet(context),
               onTapCurse: () => _showCurseSheet(context),
               onLongPressCoolness: () =>
                   _showStatAdjuster(context, isCool: true),
@@ -1861,6 +1856,21 @@ class _PlayerPageState extends State<_PlayerPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
       builder: (ctx) => _StatAdjusterSheet(isCool: isCool),
+    );
+  }
+
+  /// Coolness hub — mirrors the curse sheet: live effects, stat adjuster,
+  /// quick actions, and a link to the full stats breakdown.
+  void _showCoolnessSheet(BuildContext c) {
+    Haptics.selection();
+    showModalBottomSheet<void>(
+      context: c,
+      backgroundColor: const Color(0xFF1E1E1E),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) => const _CoolnessSheet(),
     );
   }
 
@@ -6655,6 +6665,286 @@ class _StatAdjusterSheet extends StatelessWidget {
 }
 
 // =============================================================================
+// Coolness hub sheet — stat adjuster + quick actions + details link
+// =============================================================================
+
+class _CoolnessSheet extends StatelessWidget {
+  const _CoolnessSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final value = p.runState.coolness;
+    const accent = Color(0xFF00E5FF);
+
+    void apply(double delta) => p.adjustCoolness(delta);
+
+    Widget step(double delta) {
+      final positive = delta > 0;
+      final text = '${positive ? '+' : ''}${formatStat(delta)}';
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: OutlinedButton(
+            onPressed: () => apply(delta),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              foregroundColor: positive ? accent : Colors.white70,
+              side: BorderSide(
+                color: accent.withValues(alpha: positive ? 0.7 : 0.25),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget actionButton({
+      required IconData icon,
+      required Color color,
+      required String label,
+      required String subtitle,
+      required VoidCallback onTap,
+    }) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: onTap,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: color.withValues(alpha: 0.35),
+                    width: 0.8,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Icon(icon, color: color, size: 20),
+                    const SizedBox(height: 6),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: color,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white.withValues(alpha: 0.45),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    final rechargeReduction = (value * 5).clamp(0.0, 50.0);
+    final fuseReduction = (value * 2.5).clamp(0.0, 10.0);
+    final roomReward = (1 + value - p.runState.totalCurse).clamp(0, 100);
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 38,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                const Icon(Icons.ac_unit_rounded, color: accent, size: 22),
+                const SizedBox(width: 8),
+                const Text(
+                  'COOLNESS',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  formatStat(value),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: accent,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // Compact live effects at current coolness level
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                _coolEffectChip('CD SPEEDUP', '+${rechargeReduction.toStringAsFixed(0)}%', accent),
+                _coolEffectChip('FUSE REDUCTION', '${fuseReduction.toStringAsFixed(1)}%', accent),
+                _coolEffectChip('ROOM REWARD', '${roomReward.toStringAsFixed(0)}%', Colors.amber),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Stat adjuster row
+            Row(
+              children: [
+                step(-1),
+                step(-0.5),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: OutlinedButton(
+                      onPressed: () => apply(-value),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        foregroundColor: Colors.white60,
+                        side: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.12),
+                          width: 1.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'RESET',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                step(0.5),
+                step(1),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Quick coolness actions
+            Row(
+              children: [
+                actionButton(
+                  icon: Icons.smoking_rooms,
+                  color: const Color(0xFF81D4FA),
+                  label: 'Smoke Cig',
+                  subtitle: '+1 cool',
+                  onTap: () {
+                    p.logSmokeCig();
+                    Haptics.selection();
+                  },
+                ),
+                actionButton(
+                  icon: Icons.palette_rounded,
+                  color: const Color(0xFFFF80AB),
+                  label: 'Rainbow Run',
+                  subtitle: '+1 cool',
+                  onTap: () {
+                    p.logRainbowRun();
+                    Haptics.selection();
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // Link to full coolness details
+            Center(
+              child: TextButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    _fastRoute(const StatsDetailScreen(
+                      statType: StatType.coolness,
+                    )),
+                  );
+                },
+                icon: const Icon(Icons.analytics_outlined, size: 16),
+                label: const Text(
+                  'View Coolness Breakdown',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  foregroundColor: accent.withValues(alpha: 0.8),
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _coolEffectChip(String label, String val, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
+      ),
+      child: Column(
+        children: [
+          Text(val, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
+          const SizedBox(height: 2),
+          Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
 // Curse hub sheet — stat adjuster + curse actions + details link
 // =============================================================================
 
@@ -6885,7 +7175,7 @@ class _CurseSheet extends StatelessWidget {
                   label: 'Steal',
                   subtitle: '+1 curse',
                   onTap: () {
-                    apply(1);
+                    p.logSteal();
                     Haptics.selection();
                   },
                 ),
@@ -6893,9 +7183,9 @@ class _CurseSheet extends StatelessWidget {
                   icon: Icons.storefront_outlined,
                   color: const Color(0xFFCE93D8),
                   label: 'Cursula',
-                  subtitle: '+2.5 curse',
+                  subtitle: '+2 curse',
                   onTap: () {
-                    apply(2.5);
+                    p.logCursula();
                     Haptics.selection();
                   },
                 ),
