@@ -16,6 +16,10 @@ enum ParticlePreset {
   brassCasings,
   voidRift,
   bulletHell,
+  unicornSparkles,
+  cosmicDust,
+  goldenSparkle,
+  rainbowConfetti,
 }
 
 extension ParticlePresetX on ParticlePreset {
@@ -29,6 +33,10 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.brassCasings => 'Brass Casings',
         ParticlePreset.voidRift => 'Void Rift',
         ParticlePreset.bulletHell => 'Bullet Hell',
+        ParticlePreset.unicornSparkles => 'Unicorn Sparkles',
+        ParticlePreset.cosmicDust => 'Cosmic Dust',
+        ParticlePreset.goldenSparkle => 'Golden Sparkle',
+        ParticlePreset.rainbowConfetti => 'Rainbow Confetti',
       };
 
   String get description => switch (this) {
@@ -41,6 +49,10 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.brassCasings => 'Brass shell casings tumbling as they fall',
         ParticlePreset.voidRift => 'Dark purple energy triangles with dual ripple rings',
         ParticlePreset.bulletHell => 'Fast-moving small dots, dense and chaotic',
+        ParticlePreset.unicornSparkles => 'Pink/purple/cyan sparkles with pulse glow and twinkle',
+        ParticlePreset.cosmicDust => 'Deep blue/violet dust with ripple rings and line links',
+        ParticlePreset.goldenSparkle => 'Gold/amber stars with smokey glow, slow spin',
+        ParticlePreset.rainbowConfetti => 'Multi-color confetti pieces tumbling down',
       };
 
   PresetConfig get config => switch (this) {
@@ -136,6 +148,49 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.random,
             wobble: 0.3,
+          ),
+        ParticlePreset.unicornSparkles => PresetConfig(
+            colors: [const Color(0xFFFF69B4), const Color(0xFFE040FB), const Color(0xFF00E5FF), const Color(0xFFFFD700)],
+            shape: ParticleShape.star,
+            sizeMin: 2.0, sizeMax: 6.0,
+            speedMin: 3.0, speedMax: 10.0,
+            glowEffect: GlowEffect.pulse,
+            lineLinks: false,
+            drift: DriftDirection.random,
+            wobble: 0.4,
+            rotate: true,
+          ),
+        ParticlePreset.cosmicDust => PresetConfig(
+            colors: [const Color(0xFF1A237E), const Color(0xFF311B92), const Color(0xFF00838F), const Color(0xFF1DE9F6)],
+            shape: ParticleShape.circle,
+            sizeMin: 1.0, sizeMax: 3.5,
+            speedMin: 2.0, speedMax: 8.0,
+            glowEffect: GlowEffect.ripple,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.3,
+          ),
+        ParticlePreset.goldenSparkle => PresetConfig(
+            colors: [const Color(0xFFFFD700), const Color(0xFFFFC107), const Color(0xFFFFEB3B), const Color(0xFFFF8F00)],
+            shape: ParticleShape.star,
+            sizeMin: 2.0, sizeMax: 5.0,
+            speedMin: 4.0, speedMax: 12.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: false,
+            drift: DriftDirection.random,
+            wobble: 0.2,
+            rotate: true,
+          ),
+        ParticlePreset.rainbowConfetti => PresetConfig(
+            colors: [const Color(0xFFFF5252), const Color(0xFFFFEB3B), const Color(0xFF69F0AE), const Color(0xFF40C4FF), const Color(0xFFE040FB), const Color(0xFFFFAB40)],
+            shape: ParticleShape.edge,
+            sizeMin: 2.5, sizeMax: 5.0,
+            speedMin: 15.0, speedMax: 40.0,
+            glowEffect: GlowEffect.none,
+            lineLinks: false,
+            drift: DriftDirection.down,
+            wobble: 1.2,
+            rotate: true,
           ),
       };
 }

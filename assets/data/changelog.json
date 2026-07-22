@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.6.0",
+    "title": "\u2728 UNICORN MEGA THEME + SPARKLE NUMBERS + CUSTOM THEME EDITOR",
+    "date": "July 22, 2026",
+    "items": [
+      "3 New Unicorn Palettes: Rainbow (full spectrum pink/purple/gold), Aurora (northern lights green/violet), and Galaxy (deep space purple/cyan/gold) \u2014 bringing the Unicorn megapack to 7 switchable palettes.",
+      "Sparkle Numbers: All Unicorn palettes now render tiny twinkling star glyphs around headline numbers with staggered phase animations \u2014 stats feel magical.",
+      "Number Glow: Headline numbers in Unicorn themes now have a soft coloured halo behind the digits, tinted to match each palette's primary colour.",
+      "4 New Particle Presets: Unicorn Sparkles (pink/purple/cyan stars with pulse glow), Cosmic Dust (deep blue/violet with ripple rings and line links), Golden Sparkle (gold/amber stars with smokey glow), and Rainbow Confetti (multi-color tumbling confetti).",
+      "Custom Theme Editor: A new 'Customize Colors' button on the Custom theme card opens a bottom sheet with 6 color slots (Background, Card, Primary, Secondary, Accent, Bullet) and 24 curated Gungeon colors per slot, plus a Randomize button.",
+      "Custom Theme Now Visible: The Custom theme is now selectable from the theme picker alongside Unicorn, Forge Master, and Robot's Core."
+    ]
+  },
+  {
     "version": "v1.5.3",
     "title": "\u26a1 TRANSITION POLISH + EMPTY DASHBOARD FIX",
     "date": "July 21, 2026",

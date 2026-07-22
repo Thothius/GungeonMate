@@ -6,6 +6,34 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.0 — Unicorn Mega Theme + Sparkle Numbers + Custom Theme Editor (July 22, 2026)
+**Build:** 61
+
+### 3 New Unicorn Palettes
+- Rainbow: Full spectrum pink/purple/gold with bold neon energy.
+- Aurora: Northern lights green/violet on deep forest black.
+- Galaxy: Deep space purple/cyan/gold on cosmic black.
+- Brings the Unicorn megapack to 7 switchable palettes total.
+
+### Sparkle Numbers + Number Glow
+- All 7 Unicorn palettes now render tiny twinkling star glyphs around headline numbers.
+- 4 sparkles at staggered phases (2.2s cycle) with independent opacity and scale pulsing.
+- Headline numbers also get a soft coloured halo behind digits, tinted to each palette's primary.
+
+### 4 New Particle Presets
+- Unicorn Sparkles: Pink/purple/cyan star shapes with pulse glow and rotation.
+- Cosmic Dust: Deep blue/violet circles with ripple rings and line links.
+- Golden Sparkle: Gold/amber stars with smokey glow and slow spin.
+- Rainbow Confetti: Multi-color edge shapes tumbling downward with high wobble.
+
+### Custom Theme Editor
+- Custom theme is now visible in the theme picker.
+- "Customize Colors" button opens a bottom sheet with 6 color slots.
+- 24 curated Gungeon colors per slot, plus a Randomize button.
+- Slots: Background, Card, Primary, Secondary, Accent/Headline, Bullet.
+
+---
+
 ## v1.5.3 — Transition Polish + Empty Dashboard Fix (July 21, 2026)
 **Build:** 60
 

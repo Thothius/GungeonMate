@@ -65,6 +65,28 @@ class ThemedNumber extends StatelessWidget {
         );
         Widget text = Text(value, style: style);
 
+        // Unicorn number glow — soft coloured halo behind digits.
+        if (f.numberGlowColor != null && role == ThemedNumberRole.headline) {
+          text = Stack(
+            alignment: Alignment.center,
+            children: [
+              Text(
+                value,
+                style: style.copyWith(
+                  color: Colors.transparent,
+                  shadows: [
+                    Shadow(
+                      color: f.numberGlowColor!.withValues(alpha: 0.5),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+              ),
+              text,
+            ],
+          );
+        }
+
         if (f.glowCurse &&
             role == ThemedNumberRole.curse &&
             curseValue > 0) {
@@ -94,6 +116,10 @@ class ThemedNumber extends StatelessWidget {
 
         if (f.shimmerHeadline && role == ThemedNumberRole.headline) {
           text = _ShimmerOverlay(tint: f.primary, child: text);
+        }
+
+        if (f.sparkleNumbers && role == ThemedNumberRole.headline) {
+          text = _SparkleOverlay(color: f.numberGlowColor ?? f.primary, child: text);
         }
 
         return text;
@@ -196,6 +222,94 @@ class _SlideTransform extends GradientTransform {
   @override
   Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
     return Matrix4.identity()..translate(dx, 0);
+  }
+}
+
+/// Wraps a child with 4 tiny twinkling star glyphs positioned around
+/// the edges. Each star pulses opacity and scale at a different phase
+/// so they twinkle independently — like a magical sparkle field.
+class _SparkleOverlay extends StatefulWidget {
+  final Widget child;
+  final Color color;
+  const _SparkleOverlay({required this.child, required this.color});
+
+  @override
+  State<_SparkleOverlay> createState() => _SparkleOverlayState();
+}
+
+class _SparkleOverlayState extends State<_SparkleOverlay>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2200),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _c,
+      builder: (_, child) {
+        final t = _c.value;
+        return Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            child!,
+            // 4 sparkles at corners, each with a different phase offset.
+            for (int i = 0; i < 4; i++)
+              _buildSparkle(t, i),
+          ],
+        );
+      },
+      child: widget.child,
+    );
+  }
+
+  Widget _buildSparkle(double t, int i) {
+    // Stagger phases so sparkles don't pulse in lock-step.
+    final phase = (t + i * 0.25) % 1.0;
+    final tri = phase < 0.5 ? phase * 2 : (1 - phase) * 2;
+    final opacity = (0.3 + 0.7 * tri).clamp(0.0, 1.0);
+    final scale = 0.6 + 0.5 * tri;
+
+    // Positions: top-left, top-right, bottom-left, bottom-right.
+    const offsets = [
+      Offset(-0.75, -0.65),
+      Offset(0.75, -0.65),
+      Offset(-0.75, 0.65),
+      Offset(0.75, 0.65),
+    ];
+
+    return Positioned(
+      left: 0,
+      top: 0,
+      child: Transform.translate(
+        offset: offsets[i] * 14,
+        child: Transform.scale(
+          scale: scale,
+          child: Text(
+            '✦',
+            style: TextStyle(
+              fontSize: 7,
+              color: widget.color.withValues(alpha: opacity),
+              height: 1,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
