@@ -31,23 +31,7 @@ import '../models/multiplayer_messages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/format.dart';
 import '../utils/asset_paths.dart';
-
-/// Snappy page route: 180ms fade + slight scale-up, no ghosting of previous screen.
-PageRoute<T> _fastRoute<T>(Widget child) => PageRouteBuilder<T>(
-      pageBuilder: (_, __, ___) => child,
-      transitionsBuilder: (_, anim, __, child) {
-        final curve = CurvedAnimation(parent: anim, curve: Curves.easeOutCubic);
-        return FadeTransition(
-          opacity: curve,
-          child: ScaleTransition(
-            scale: Tween<double>(begin: 0.97, end: 1.0).animate(curve),
-            child: child,
-          ),
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 180),
-      reverseTransitionDuration: const Duration(milliseconds: 150),
-    );
+import '../utils/fast_route.dart';
 
 class ActiveRunScreen extends StatefulWidget {
   final VoidCallback? onRequestBrowse;
@@ -378,7 +362,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                               if (!context.mounted) return;
                               Navigator.push(
                                 context,
-                                _fastRoute(BrowseScreen(
+                                fastRoute(BrowseScreen(
                                   targetSlot: slot,
                                   showBackButton: true,
                                 )),
@@ -1606,7 +1590,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                           ),
                           tooltip: isSponge ? 'Sponge: English translation active' : 'Sponge: Alien language active',
                           padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
+                          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                         ),
                       );
                     },
@@ -1625,14 +1609,28 @@ class _PlayerPageState extends State<_PlayerPage> {
                         onLongPress: () => _showDamageCalcSheet(context, _slot),
                         icon: Icon(
                           Icons.calculate_rounded,
-                          size: 18,
+                          size: 20,
                           color: isOn ? Colors.amberAccent : Colors.white38,
                         ),
                         tooltip: isOn ? 'Damage Calculator: ON' : 'Damage Calculator: OFF',
                         padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
+                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                       );
                     },
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Haptics.selection();
+                      Navigator.push(context, fastRoute(const ShrinePickerScreen()));
+                    },
+                    icon: const Icon(
+                      Icons.temple_buddhist,
+                      size: 20,
+                      color: Colors.amber,
+                    ),
+                    tooltip: 'Use Shrine',
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                   ),
                   const SizedBox(width: 4),
                   const _HeaderMenu(),
@@ -1646,6 +1644,84 @@ class _PlayerPageState extends State<_PlayerPage> {
                 items: player.items,
               ),
             ),
+          ),
+        ),
+        // Compact DPS readout — visible when Damage Calculator toggle is ON
+        SliverToBoxAdapter(
+          child: ListenableBuilder(
+            listenable: VisualPrefs.notifier,
+            builder: (context, _) {
+              final isOn = VisualPrefs.notifier.value.showDamageCalculator;
+              if (!isOn || player.guns.isEmpty) return const SizedBox.shrink();
+              final multiplier = DamageCalculator.multiplier(
+                guns: player.guns,
+                items: player.items,
+              );
+              final bonusPct = (multiplier - 1.0) * 100.0;
+              final topDps = player.guns
+                  .map((g) => g.dpsValue * multiplier)
+                  .reduce((a, b) => a > b ? a : b);
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                child: GestureDetector(
+                  onTap: () => _showDamageCalcSheet(context, _slot),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF000800),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.green.withValues(alpha: 0.25), width: 1.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.terminal_rounded, size: 14, color: Colors.green.withValues(alpha: 0.7)),
+                            const SizedBox(width: 6),
+                            Text(
+                              'DPS CALC',
+                              style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.green.withValues(alpha: 0.7),
+                                letterSpacing: 0.5,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            if (bonusPct.abs() > 0.1) ...[
+                              Text(
+                                '${bonusPct >= 0 ? '+' : ''}${bonusPct.toStringAsFixed(0)}%',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: bonusPct > 0 ? Colors.greenAccent : Colors.redAccent,
+                                  fontFamily: 'monospace',
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
+                            Text(
+                              'TOP: ${topDps.toStringAsFixed(1)}',
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.greenAccent,
+                                fontFamily: 'monospace',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ),
         _DashboardSwiper(slot: _slot),
@@ -1687,7 +1763,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                   synergyGlowColor: glowColors[g.name.toLowerCase()],
                   onTap: () => Navigator.push(
                     c,
-                    _fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
+                    fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
                   ),
                   onLongPress: () => _promptTileActions(c, gun: g),
                 );
@@ -1725,7 +1801,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                     synergyGlowColor: glowColors[g.name.toLowerCase()],
                     onTap: () => Navigator.push(
                       c,
-                      _fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
+                      fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
                     ),
                     onLongPress: () => _promptTileActions(c, gun: g),
                   ),
@@ -1766,7 +1842,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                   synergyGlowColor: glowColors[it.name.toLowerCase()],
                   onTap: () => Navigator.push(
                     c,
-                    _fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
+                    fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
                   ),
                   onLongPress: () => _promptTileActions(c, item: it),
                 );
@@ -1803,7 +1879,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                     synergyGlowColor: glowColors[it.name.toLowerCase()],
                     onTap: () => Navigator.push(
                       c,
-                      _fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
+                      fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
                     ),
                     onLongPress: () => _promptTileActions(c, item: it),
                   ),
@@ -2139,7 +2215,7 @@ class _PlayerPageState extends State<_PlayerPage> {
             Navigator.pop(sheetCtx);
             Navigator.push(
               c,
-              _fastRoute(ItemDetailScreen(
+              fastRoute(ItemDetailScreen(
                   gun: gun,
                   item: item,
                   ownerSlot: _slot,
@@ -4641,12 +4717,14 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
                 children: [
                   IconButton(
                     onPressed: seconds > 0 ? () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds - 30).clamp(0, 999)); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('${seconds}s', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds + 30).clamp(0, 999)); },
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   const SizedBox(width: 8),
                   TextButton(
@@ -4775,11 +4853,13 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
                 children: [
                   IconButton(
                     onPressed: uses < 3 ? () { Haptics.light(); p.setIronCoinUses(uses + 1); } : null,
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   IconButton(
                     onPressed: uses > 0 ? () { Haptics.light(); p.setIronCoinUses(uses - 1); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.amber, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.amber, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
               ),
@@ -4883,12 +4963,14 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
                 children: [
                   IconButton(
                     onPressed: count > 0 ? () { Haptics.light(); p.setSpiceUsageCount(count - 1); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$count', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.redAccent)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setSpiceUsageCount(count + 1); },
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.redAccent, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.redAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
               ),
@@ -4994,12 +5076,14 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
                 children: [
                   IconButton(
                     onPressed: kills > 0 ? () { Haptics.light(); p.setMetronomeKills(kills - 1); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.tealAccent, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.tealAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$kills', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
                   IconButton(
                     onPressed: kills < 75 ? () { Haptics.light(); p.setMetronomeKills(kills + 1); } : null,
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.tealAccent, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.tealAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   const SizedBox(width: 8),
                   TextButton(
@@ -5217,12 +5301,14 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
                 children: [
                   IconButton(
                     onPressed: stars > 0 ? () { Haptics.light(); p.setBoxingGloveStars(stars - 1); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.orangeAccent, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.orangeAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$stars', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
                   IconButton(
                     onPressed: stars < 3 ? () { Haptics.light(); p.setBoxingGloveStars(stars + 1); } : null,
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.orangeAccent, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.orangeAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
               ),
@@ -5301,12 +5387,14 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
                 children: [
                   IconButton(
                     onPressed: uses > 0 ? () { Haptics.light(); p.setCigarettesUses(uses - 1); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.blueGrey, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.blueGrey, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$uses', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setCigarettesUses(uses + 1); },
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.blueGrey, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.blueGrey, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
               ),
@@ -5441,24 +5529,28 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                 children: [
                   IconButton(
                     onPressed: kills > 0 ? () { Haptics.light(); p.setPolarisKills(kills - 1); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.amberAccent, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.amberAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$kills kills', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPolarisKills(kills + 1); },
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.amberAccent, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.amberAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   const SizedBox(width: 12),
                   IconButton(
                     onPressed: hits > 0 ? () { Haptics.light(); p.setPolarisDamageHits(hits - 1); } : null,
-                    icon: const Icon(Icons.remove, color: Colors.redAccent, size: 18),
+                    icon: const Icon(Icons.remove, color: Colors.redAccent, size: 22),
                     tooltip: 'Reduce damage hits',
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('-$hits', style: TextStyle(fontSize: 12, color: Colors.redAccent.withValues(alpha: 0.8))),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPolarisDamageHits(hits + 1); },
-                    icon: const Icon(Icons.add, color: Colors.redAccent, size: 18),
+                    icon: const Icon(Icons.add, color: Colors.redAccent, size: 22),
                     tooltip: 'Took damage (level drop)',
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
               ),
@@ -5587,12 +5679,14 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
                 children: [
                   IconButton(
                     onPressed: friendship > 0 ? () { Haptics.light(); p.setGuntherFriendship(friendship - 1); } : null,
-                    icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$friendship', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setGuntherFriendship(friendship + 1); },
-                    icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 24),
+                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
               ),
@@ -5803,7 +5897,7 @@ class _EffectsTileState extends State<_EffectsTile> {
                             size: 16, color: Colors.white54),
                         onPressed: () => Navigator.push(
                           context,
-                          _fastRoute(EffectsSummaryScreen(slot: widget.slot)),
+                          fastRoute(EffectsSummaryScreen(slot: widget.slot)),
                         ),
                       ),
                     if (totalTags > 0)
@@ -5915,13 +6009,13 @@ class _HeaderMenu extends StatelessWidget {
           case 'favourites':
             Navigator.push(
               context,
-              _fastRoute(const FavouritesScreen(embedded: false)),
+              fastRoute(const FavouritesScreen(embedded: false)),
             );
             break;
           case 'use_shrine':
             Navigator.push(
               context,
-              _fastRoute(const ShrinePickerScreen()),
+              fastRoute(const ShrinePickerScreen()),
             );
             break;
           case 'end_run':
@@ -6765,7 +6859,7 @@ class _CoolnessSheet extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    _fastRoute(const StatsDetailScreen(
+                    fastRoute(const StatsDetailScreen(
                       statType: StatType.coolness,
                     )),
                   );
@@ -7075,7 +7169,7 @@ class _CurseSheet extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    _fastRoute(const StatsDetailScreen(
+                    fastRoute(const StatsDetailScreen(
                       statType: StatType.curse,
                     )),
                   );

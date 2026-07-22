@@ -133,17 +133,20 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 final isHomeScreen = screenIndex == 0;
             final f = AppTheme.displayedFlair;
           final showGlow = prefs.glowIntensity > 0.001;
+          // ponytail: cap effective glow at 0.6 so max doesn't wash out UI.
+          //           Now behind content, so even at cap it glows behind panels.
           final userGlowColor = VisualPrefs.glowColors[prefs.glowColorIndex];
+          final effectiveGlow = prefs.glowIntensity * 0.6;
           final gP = showGlow
               ? _scaleAlpha(
                   Color.lerp(f.glowPrimary, userGlowColor, 0.5) ?? f.glowPrimary,
-                  prefs.glowIntensity,
+                  effectiveGlow,
                 )
               : const Color(0x00000000);
           final gS = showGlow
               ? _scaleAlpha(
                   Color.lerp(f.glowSecondary, userGlowColor, 0.5) ?? f.glowSecondary,
-                  prefs.glowIntensity,
+                  effectiveGlow,
                 )
               : const Color(0x00000000);
           final isWallpaperActive = !isHomeScreen && prefs.wallpaperMode != WallpaperMode.themeDefault;
@@ -241,10 +244,8 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 if (particleBackdropBg != null)
                   Positioned.fill(child: IgnorePointer(child: particleBackdropBg)),
 
-                // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
-                content,
-
-                // 3. Top Layers: Ambient Glows & Page Frames
+                // 1c. Ambient Glow — behind content so it glows behind panels,
+                //     not covering layered content on top.
                 if (showGlow)
                   Positioned.fill(
                     child: IgnorePointer(
@@ -255,6 +256,9 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                       ),
                     ),
                   ),
+
+                // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
+                content,
 
                 // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
                 Positioned.fill(
