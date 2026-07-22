@@ -96,6 +96,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
+              _mpSession?.sendDiceDecline();
             },
             child: const Text('DECLINE', style: TextStyle(color: Colors.white38)),
           ),
@@ -7308,6 +7309,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
   // To restore callbacks on dispose
   void Function(String challengerName)? _prevChallenge;
   void Function()? _prevAccept;
+  void Function()? _prevDecline;
   void Function(int peerScore, List<int> peerDice)? _prevResult;
 
   @override
@@ -7327,6 +7329,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
     _mp = Provider.of<MultiplayerSession>(context, listen: false);
     _prevChallenge = _mp.onDiceChallenge;
     _prevAccept = _mp.onDiceAccept;
+    _prevDecline = _mp.onDiceDecline;
     _prevResult = _mp.onDiceResult;
 
     if (widget.isChallenged) {
@@ -7337,6 +7340,15 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
       if (mounted) {
         setState(() {
           _status = _DiceStatus.rollingScreen;
+        });
+      }
+    };
+
+    _mp.onDiceDecline = () {
+      if (mounted) {
+        setState(() {
+          _status = _DiceStatus.idle;
+          _announcement = 'Challenge declined.';
         });
       }
     };
@@ -7359,6 +7371,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
     _particleController.dispose();
     _mp.onDiceChallenge = _prevChallenge;
     _mp.onDiceAccept = _prevAccept;
+    _mp.onDiceDecline = _prevDecline;
     _mp.onDiceResult = _prevResult;
     super.dispose();
   }
@@ -7681,19 +7694,22 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
             style: TextStyle(fontSize: 10, color: Colors.amberAccent, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 18),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(3, (index) {
-              final isStopped = _diceStopped[index];
-              return _DiceWidget(
-                value: _myDice[index],
-                isRolling: !isStopped,
-                infiniteController: _infiniteController,
-                index: index,
-                style: diceStyle,
-                onTap: () => _stopDie(index, diceStyle.border),
-              );
-            }),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(3, (index) {
+                final isStopped = _diceStopped[index];
+                return _DiceWidget(
+                  value: _myDice[index],
+                  isRolling: !isStopped,
+                  infiniteController: _infiniteController,
+                  index: index,
+                  style: diceStyle,
+                  onTap: () => _stopDie(index, diceStyle.border),
+                );
+              }),
+            ),
           ),
           const SizedBox(height: 20),
           Text(
@@ -7708,18 +7724,21 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
       return Column(
         key: const ValueKey('rolled_waiting'),
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(3, (index) {
-              return _DiceWidget(
-                value: _myDice[index],
-                isRolling: false,
-                infiniteController: _infiniteController,
-                index: index,
-                style: diceStyle,
-                onTap: null,
-              );
-            }),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(3, (index) {
+                return _DiceWidget(
+                  value: _myDice[index],
+                  isRolling: false,
+                  infiniteController: _infiniteController,
+                  index: index,
+                  style: diceStyle,
+                  onTap: null,
+                );
+              }),
+            ),
           ),
           const SizedBox(height: 24),
           const Text('ROLLED!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: Color(0xFF66E07A))),

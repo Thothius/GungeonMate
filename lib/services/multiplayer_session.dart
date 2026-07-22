@@ -111,6 +111,7 @@ class MultiplayerSession extends ChangeNotifier {
   // Dice Roll Callbacks (for Gunfortuna Dice Roll events)
   void Function(String challengerName)? onDiceChallenge;
   void Function()? onDiceAccept;
+  void Function()? onDiceDecline;
   void Function(int peerScore, List<int> peerDice)? onDiceResult;
 
   /// Requests we've sent that are still waiting for a response. Keyed
@@ -828,6 +829,13 @@ class MultiplayerSession extends ChangeNotifier {
     }
   }
 
+  /// Decline a dice roll challenge invitation from the peer.
+  Future<void> sendDiceDecline() async {
+    if (isConnected) {
+      await _service.sendMessage(const MpDiceDecline());
+    }
+  }
+
   /// Broadcast dice roll results to the peer.
   Future<void> sendDiceResult(int score, List<int> dice) async {
     if (isConnected) {
@@ -1137,6 +1145,8 @@ class MultiplayerSession extends ChangeNotifier {
         onDiceChallenge?.call(msg.challengerName);
       case MpDiceAccept():
         onDiceAccept?.call();
+      case MpDiceDecline():
+        onDiceDecline?.call();
       case MpDiceResult():
         onDiceResult?.call(msg.score, msg.dice);
     }
