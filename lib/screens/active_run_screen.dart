@@ -18,11 +18,9 @@ import '../widgets/glass_container.dart';
 import '../services/haptics.dart';
 import 'item_detail_screen.dart';
 import 'stats_detail_screen.dart';
-import 'character_select_screen.dart';
 import 'browse_screen.dart';
 import 'effects_summary_screen.dart';
 import 'shrine_picker_screen.dart';
-import 'theme_picker_screen.dart';
 import 'favourites_screen.dart';
 import '../services/app_theme.dart';
 import '../services/effect_tagger.dart';
@@ -5893,7 +5891,6 @@ class _HeaderMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
-    final hasCoop = p.runState.hasCoop;
     final mpSession = context.watch<MultiplayerSession>();
     final mpActive = mpSession.isActive;
     return PopupMenuButton<String>(
@@ -5915,12 +5912,6 @@ class _HeaderMenu extends StatelessWidget {
       ),
       onSelected: (v) {
         switch (v) {
-          case 'vibe':
-            Navigator.push(
-              context,
-              _fastRoute(const ThemePickerScreen()),
-            );
-            break;
           case 'favourites':
             Navigator.push(
               context,
@@ -5933,37 +5924,11 @@ class _HeaderMenu extends StatelessWidget {
               _fastRoute(const ShrinePickerScreen()),
             );
             break;
-          case 'add_player':
-            _addCoopPlayer(context);
-            break;
-          case 'remove_player':
-            _confirmRemoveCoop(context, p);
-            break;
           case 'end_run':
             _confirmEndRun(context, p);
             break;
           case 'leave_mp':
             _confirmLeaveMp(context, mpSession);
-            break;
-          case 'reset_items_p1':
-            p.clearInventory(slot: PlayerSlot.main);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Player 1 inventory reset!'),
-                duration: Duration(milliseconds: 1400),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            break;
-          case 'reset_items_p2':
-            p.clearInventory(slot: PlayerSlot.coop);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Player 2 inventory reset!'),
-                duration: Duration(milliseconds: 1400),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
             break;
           case 'save_mp_session':
             unawaited(mpSession.saveCurrentSession().then((_) {
@@ -6024,7 +5989,7 @@ class _HeaderMenu extends StatelessWidget {
         ),
         const PopupMenuDivider(),
 
-        // --- Group 3: System, Resets & Admin ---
+        // --- Group 3: MP & Session ---
         if (mpActive) ...[
           const PopupMenuItem(
             value: 'save_mp_session',
@@ -6035,41 +6000,6 @@ class _HeaderMenu extends StatelessWidget {
             ]),
           ),
         ],
-        const PopupMenuItem(
-          value: 'reset_items_p1',
-          child: Row(children: [
-            Icon(Icons.restart_alt_rounded, size: 18, color: Colors.cyanAccent),
-            SizedBox(width: 10),
-            Text('Reset Player 1 Items'),
-          ]),
-        ),
-        if (hasCoop)
-          const PopupMenuItem(
-            value: 'reset_items_p2',
-            child: Row(children: [
-              Icon(Icons.restart_alt_rounded, size: 18, color: Colors.pinkAccent),
-              SizedBox(width: 10),
-              Text('Reset Player 2 Items'),
-            ]),
-          ),
-        if (!hasCoop && !mpActive)
-          const PopupMenuItem(
-            value: 'add_player',
-            child: Row(children: [
-              Icon(Icons.person_add_alt, size: 18),
-              SizedBox(width: 10),
-              Text('Add Player (Co-op)'),
-            ]),
-          ),
-        if (hasCoop && !mpActive)
-          const PopupMenuItem(
-            value: 'remove_player',
-            child: Row(children: [
-              Icon(Icons.person_remove_alt_1, size: 18),
-              SizedBox(width: 10),
-              Text('Remove Player'),
-            ]),
-          ),
         if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
           const PopupMenuItem(
             value: 'leave_mp',
@@ -6086,15 +6016,6 @@ class _HeaderMenu extends StatelessWidget {
               Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
               SizedBox(width: 10),
               Text('End Run & Disconnect', style: TextStyle(color: Colors.redAccent)),
-            ]),
-          ),
-        ] else ...[
-          const PopupMenuItem(
-            value: 'end_run',
-            child: Row(children: [
-              Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
-              SizedBox(width: 10),
-              Text('End Run', style: TextStyle(color: Colors.redAccent)),
             ]),
           ),
         ],
@@ -6210,62 +6131,6 @@ class _HeaderMenu extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Divider(color: Colors.white12, height: 1),
-        ],
-      ),
-    );
-  }
-
-  void _addCoopPlayer(BuildContext context) {
-    // Default to The Cultist (mirrors MP Sidekick behaviour and matches
-    // the base game's drop-in co-op partner). If the user wants a
-    // different Gungeoneer for Player 2 they can long-press the menu
-    // entry to open the full picker — see `onLongPressedAddPlayer`.
-    final p = context.read<RunProvider>();
-    final cultist = p.gungeoneerByName('The Cultist') ??
-        p.gungeoneerByName('Cultist');
-    if (cultist != null) {
-      p.startCoopPlayer(cultist);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${cultist.name} joined as Player 2'),
-        duration: const Duration(milliseconds: 1400),
-        action: SnackBarAction(
-          label: 'CHANGE',
-          onPressed: () => Navigator.push(
-            context,
-            _fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
-          ),
-        ),
-      ));
-      return;
-    }
-    // Cultist not found in master data — fall back to the manual picker.
-    Navigator.push(
-      context,
-      _fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
-    );
-  }
-
-  void _confirmRemoveCoop(BuildContext context, RunProvider p) {
-    showDialog(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: const Text('Remove Player 2?'),
-        content: const Text(
-            'Their loadout will be discarded. Items are not transferred to Player 1.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const Text('Cancel'),
-          ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(
-                backgroundColor: Colors.red.shade900),
-            onPressed: () {
-              p.endCoopPlayer();
-              Navigator.pop(c);
-            },
-            child: const Text('Remove'),
-          ),
         ],
       ),
     );

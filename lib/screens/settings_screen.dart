@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +14,7 @@ import '../services/haptics.dart';
 import '../widgets/particle_engine.dart';
 import 'character_select_screen.dart';
 import 'theme_picker_screen.dart';
+import 'shrine_picker_screen.dart';
 
 /// Central control room for Gungeon Mate.
 /// - Tab 1: Theme & Sizing Preferences (launching the full 1.5k-line visual picker!)
@@ -627,6 +630,51 @@ class _ThemeVisualsTab extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
+
+              // =============================================================
+              // Dashboard Display Section
+              // =============================================================
+              _prefSectionTitle('DASHBOARD DISPLAY'),
+              const SizedBox(height: 8),
+              Card(
+                color: flair.card.withValues(alpha: 0.92),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  child: Column(
+                    children: [
+                      // Damage Calculator toggle
+                      _buildSwitchRow(
+                        context: context,
+                        icon: Icons.calculate_outlined,
+                        label: 'Damage Calculator',
+                        value: prefs.showDamageCalculator,
+                        onChanged: VisualPrefs.setShowDamageCalculator,
+                        flair: flair,
+                        tooltip: 'Shows a live DPS terminal on every character\'s dashboard, factoring in equipped item/gun damage bonuses.',
+                      ),
+                      const Divider(color: Colors.white12, height: 20),
+                      // Goopian Language toggle
+                      _buildSwitchRow(
+                        context: context,
+                        icon: Icons.translate_rounded,
+                        label: 'Goopian Language',
+                        value: prefs.isGoopianLanguage,
+                        onChanged: (v) {
+                          VisualPrefs.setIsGoopianLanguage(v);
+                          Haptics.heavy();
+                        },
+                        flair: flair,
+                        tooltip: 'Simulates hold "The Sponge" in Goopian. All interface text shifts to the Goopian alien language.',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               const SizedBox(height: 24),
             ],
           ),
@@ -965,13 +1013,15 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     final hasCoop = p.runState.hasCoop;
     final player1Name = p.runState.main.character?.name ?? 'Player 1';
     final player2Name = p.runState.coop?.character?.name ?? 'Player 2';
+    final mpSession = context.watch<MultiplayerSession>();
+    final mpActive = mpSession.isActive;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 👥 Co-op Management Section
+          // 👥 Multiplayer & Co-op
           _sectionHeader('👥 MULTIPLAYER & CO-OP'),
           Container(
             padding: const EdgeInsets.all(14),
@@ -1016,9 +1066,51 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               ],
             ),
           ),
+          if (mpActive) ...[
+            const SizedBox(height: 10),
+            _utilTile(
+              title: 'Save MP Session',
+              subtitle: 'Persist current multiplayer state for reconnection.',
+              icon: Icons.save_outlined,
+              color: Colors.greenAccent,
+              onTap: () {
+                unawaited(mpSession.saveCurrentSession().then((_) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Run saved'),
+                        duration: Duration(seconds: 2),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                }).catchError((e) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Failed to save session: $e'),
+                        duration: const Duration(seconds: 3),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                }));
+              },
+            ),
+            if (mpSession.myRole == MpRole.sidekick)
+              _utilTile(
+                title: 'Leave Multiplayer',
+                subtitle: 'Disconnect from the host and return to solo play.',
+                icon: Icons.bluetooth_disabled,
+                color: Colors.lightBlueAccent,
+                onTap: () {
+                  mpSession.cancel();
+                },
+              ),
+          ],
           const SizedBox(height: 20),
 
-          // 🧹 Inventory Reset Section
+          // 🧹 Inventory Maintenance
           _sectionHeader('🧹 INVENTORY MAINTENANCE'),
           _utilTile(
             title: 'Reset $player1Name Items',
@@ -1037,159 +1129,22 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
             ),
           const SizedBox(height: 20),
 
-          // 🗣️ Run Language Section
-          _sectionHeader('🗣️ RUN LANGUAGE'),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.45),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'INTERFACE LANGUAGE',
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Simulates hold "The Sponge" 🧽 in Goopian',
-                      style: TextStyle(fontSize: 10, color: Colors.white38),
-                    ),
-                  ],
-                ),
-                ListenableBuilder(
-                  listenable: VisualPrefs.notifier,
-                  builder: (context, _) {
-                    final prefs = VisualPrefs.notifier.value;
-                    final flair = AppTheme.flair;
-                    return Container(
-                      height: 38,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.04),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.white10),
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<bool>(
-                          value: prefs.isGoopianLanguage,
-                          dropdownColor: flair.card,
-                          icon: Icon(Icons.arrow_drop_down, color: flair.primary, size: 18),
-                          onChanged: (bool? val) {
-                            if (val != null) {
-                              VisualPrefs.setIsGoopianLanguage(val);
-                              Haptics.heavy();
-                              
-                              // Trigger translation effect snackbar
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(val 
-                                      ? 'Language shifted to Goopian! Hold The Sponge 🧽 to decipher.'
-                                      : 'Language restored to English!'),
-                                  behavior: SnackBarBehavior.floating,
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                          },
-                          items: [
-                            DropdownMenuItem<bool>(
-                              value: false,
-                              child: Text(
-                                'English 🇬🇧',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: !prefs.isGoopianLanguage ? flair.primary : Colors.white70,
-                                ),
-                              ),
-                            ),
-                            DropdownMenuItem<bool>(
-                              value: true,
-                              child: Text(
-                                'Goopian 👽',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  color: prefs.isGoopianLanguage ? flair.primary : Colors.white70,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+          // 🛐 Gameplay Actions
+          _sectionHeader('🛐 GAMEPLAY ACTIONS'),
+          _utilTile(
+            title: 'Use Shrine',
+            subtitle: 'Apply a shrine effect to the active player.',
+            icon: Icons.temple_buddhist,
+            color: Colors.amber,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ShrinePickerScreen()),
             ),
           ),
           const SizedBox(height: 20),
 
-          // 🧮 Damage Calculator Section
-          _sectionHeader('🧮 DASHBOARD DISPLAY'),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.45),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'DAMAGE CALCULATOR',
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white70,
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Shows a live DPS terminal on every character\'s dashboard, factoring in equipped item/gun damage bonuses.',
-                        style: TextStyle(fontSize: 10, color: Colors.white38, height: 1.3),
-                      ),
-                    ],
-                  ),
-                ),
-                ListenableBuilder(
-                  listenable: VisualPrefs.notifier,
-                  builder: (context, _) {
-                    final prefs = VisualPrefs.notifier.value;
-                    final flair = AppTheme.flair;
-                    return Switch(
-                      value: prefs.showDamageCalculator,
-                      activeColor: flair.primary,
-                      onChanged: (v) {
-                        VisualPrefs.setShowDamageCalculator(v);
-                        Haptics.selection();
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // 📜 Run Event Log
-          _sectionHeader('📜 RUN EVENT LOG'),
+          // 📜 Run Data
+          _sectionHeader('📜 RUN DATA'),
           _utilTile(
             title: 'View Event History',
             subtitle: 'See all pickups, stat changes, shrines, synergies & manual actions.',
@@ -1200,8 +1155,9 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               MaterialPageRoute(builder: (_) => const RunLogScreen()),
             ),
           ),
+          const SizedBox(height: 20),
 
-          // ⚠️ Active Run Termination
+          // ⚠️ Core Actions
           _sectionHeader('⚠️ CORE ACTIONS'),
           _utilTile(
             title: 'End Active Run',
