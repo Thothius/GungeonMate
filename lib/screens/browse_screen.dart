@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
@@ -12,6 +11,7 @@ import '../widgets/game_icon.dart';
 import 'item_detail_screen.dart';
 import 'favourites_screen.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/fast_route.dart';
 
 enum _GunSort { name, quality, dps, gunClass }
 
@@ -64,8 +64,8 @@ class _BrowseScreenState extends State<BrowseScreen>
   bool _freezeOnly = false;
   bool _stunOnly = false;
   bool _stealingOnly = false;
-  final _filtersExpanded = false; // Collapsible, closed by default!
-  final _isGridView = false;
+  bool _filtersExpanded = false; // Collapsible, closed by default
+  bool _isGridView = false;
 
   int _getGridCrossAxisCount(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -315,7 +315,8 @@ class _BrowseScreenState extends State<BrowseScreen>
           ),
         ),
       ),
-      body: Column(
+      body: SafeArea(
+        child: Column(
         children: [
           if (!isFavs) ...[
             Padding(
@@ -366,6 +367,20 @@ class _BrowseScreenState extends State<BrowseScreen>
                     ),
                     const SizedBox(width: 6),
                   ],
+                  _ToolbarIcon(
+                    icon: Icons.filter_list,
+                    tooltip: 'Element filters',
+                    active: _filtersExpanded,
+                    onPressed: () => setState(() => _filtersExpanded = !_filtersExpanded),
+                  ),
+                  const SizedBox(width: 4),
+                  _ToolbarIcon(
+                    icon: _isGridView ? Icons.view_list : Icons.grid_view,
+                    tooltip: _isGridView ? 'List view' : 'Grid view',
+                    active: _isGridView,
+                    onPressed: () => setState(() => _isGridView = !_isGridView),
+                  ),
+                  const SizedBox(width: 4),
                   Expanded(
                     flex: 2,
                     child: _ToolbarButton(
@@ -471,6 +486,7 @@ class _BrowseScreenState extends State<BrowseScreen>
             ),
           ],
         ],
+      ),
       ),
     );
   }
@@ -735,7 +751,7 @@ class _BrowseScreenState extends State<BrowseScreen>
     
     final Color qColor;
     switch (quality.toUpperCase()) {
-      case 'S': qColor = Colors.amberAccent; break;
+      case 'S': qColor = const Color(0xFFFFD700); break;
       case 'A': qColor = Colors.redAccent; break;
       case 'B': qColor = Colors.greenAccent; break;
       case 'C': qColor = Colors.blueAccent; break;
@@ -752,7 +768,7 @@ class _BrowseScreenState extends State<BrowseScreen>
               FocusManager.instance.primaryFocus?.unfocus();
               await Navigator.push(
                 c,
-                MaterialPageRoute(builder: (_) => makeDetailScreen()),
+                fastRoute(makeDetailScreen()),
               );
               FocusManager.instance.primaryFocus?.unfocus();
             },
@@ -847,7 +863,7 @@ class _BrowseScreenState extends State<BrowseScreen>
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
           c,
-          MaterialPageRoute(builder: (_) => ItemDetailScreen(gun: g)),
+          fastRoute(ItemDetailScreen(gun: g)),
         );
         if (!mounted) return;
         // Drop the keyboard again on return — Flutter likes to restore
@@ -906,7 +922,7 @@ class _BrowseScreenState extends State<BrowseScreen>
         FocusManager.instance.primaryFocus?.unfocus();
         await Navigator.push(
           c,
-          MaterialPageRoute(builder: (_) => ItemDetailScreen(item: it)),
+          fastRoute(ItemDetailScreen(item: it)),
         );
         if (!mounted) return;
         FocusManager.instance.primaryFocus?.unfocus();
@@ -1145,11 +1161,7 @@ class _Row extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isS = quality.toUpperCase() == 'S' || quality.toUpperCase() == '1S';
-
-    BorderSide borderSide = isS 
-        ? const BorderSide(color: Color(0xFFFFD700), width: 1.6) // Gold outline border
-        : const BorderSide(color: Colors.transparent, width: 0);
+    BorderSide borderSide = const BorderSide(color: Colors.transparent, width: 0);
 
     String robotTag = '';
     Color? robotTagColor;
@@ -1585,33 +1597,42 @@ class _ItemMeta extends StatelessWidget {
   }
 }
 
-class FlipPageRoute<T> extends PageRouteBuilder<T> {
-  final Widget page;
-  FlipPageRoute({required this.page})
-      : super(
-          pageBuilder: (context, animation, secondaryAnimation) => page,
-          transitionDuration: const Duration(milliseconds: 650),
-          reverseTransitionDuration: const Duration(milliseconds: 550),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            final anim = CurvedAnimation(parent: animation, curve: Curves.easeOutBack);
-            return AnimatedBuilder(
-              animation: anim,
-              builder: (context, _) {
-                final double value = anim.value;
-                final double angle = (1.0 - value) * math.pi / 2; // rotating 90deg to 0
+/// Compact icon-only toggle button for the browse toolbar.
+class _ToolbarIcon extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final bool active;
+  final VoidCallback onPressed;
+  const _ToolbarIcon({
+    required this.icon,
+    required this.tooltip,
+    required this.active,
+    required this.onPressed,
+  });
 
-                return Opacity(
-                  opacity: value.clamp(0.0, 1.0),
-                  child: Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001) // 3D perspective
-                      ..rotateY(angle),
-                    alignment: Alignment.center,
-                    child: child,
-                  ),
-                );
-              },
-            );
-          },
-        );
+  @override
+  Widget build(BuildContext context) {
+    final c = active
+        ? Theme.of(context).colorScheme.primary
+        : Colors.white.withValues(alpha: 0.6);
+    return Tooltip(
+      message: tooltip,
+      child: SizedBox(
+        height: 44,
+        width: 40,
+        child: OutlinedButton(
+          onPressed: onPressed,
+          style: OutlinedButton.styleFrom(
+            padding: EdgeInsets.zero,
+            side: BorderSide(color: c.withValues(alpha: 0.45)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            backgroundColor: active ? c.withValues(alpha: 0.12) : null,
+          ),
+          child: Icon(icon, size: 18, color: c),
+        ),
+      ),
+    );
+  }
 }

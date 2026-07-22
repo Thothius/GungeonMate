@@ -9,6 +9,7 @@ import 'codex_screen.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/fast_route.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -245,9 +246,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const CharacterSelectScreen(),
-                        ),
+                        fastRoute(const CharacterSelectScreen()),
                       );
                     },
                     child: IgnorePointer(
@@ -275,9 +274,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const MultiplayerLobbyScreen(),
-                        ),
+                        fastRoute(const MultiplayerLobbyScreen()),
                       );
                     },
                     child: IgnorePointer(
@@ -305,9 +302,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const ThemePickerScreen(),
-                        ),
+                        fastRoute(const ThemePickerScreen()),
                       );
                     },
                     child: IgnorePointer(
@@ -335,9 +330,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const CodexScreen(showBackButton: true),
-                        ),
+                        fastRoute(const CodexScreen(showBackButton: true)),
                       );
                     },
                     child: IgnorePointer(
@@ -361,7 +354,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v1.6.1',
+                    'v1.6.2',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -400,7 +393,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v1.6.1)',
+                            'Changelog (v1.6.2)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
@@ -454,7 +447,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.6.1 — MP Summary Overhaul: Compact Stats + Collaborative Synergy Icons',
+                            'v1.6.2 — Theme-Accent Dashboard Border + Curse Sheet Polish + Menu Restructure',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

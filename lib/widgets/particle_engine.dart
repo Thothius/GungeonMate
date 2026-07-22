@@ -20,6 +20,11 @@ enum ParticlePreset {
   cosmicDust,
   goldenSparkle,
   rainbowConfetti,
+  bulletKin,
+  heartContainers,
+  cursedSkulls,
+  masterRounds,
+  jamHexes,
 }
 
 extension ParticlePresetX on ParticlePreset {
@@ -37,6 +42,11 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.cosmicDust => 'Cosmic Dust',
         ParticlePreset.goldenSparkle => 'Golden Sparkle',
         ParticlePreset.rainbowConfetti => 'Rainbow Confetti',
+        ParticlePreset.bulletKin => 'Bullet Kin Parade',
+        ParticlePreset.heartContainers => 'Heart Containers',
+        ParticlePreset.cursedSkulls => 'Cursed Skulls',
+        ParticlePreset.masterRounds => 'Master Rounds',
+        ParticlePreset.jamHexes => 'Jam Swarm',
       };
 
   String get description => switch (this) {
@@ -53,6 +63,11 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.cosmicDust => 'Deep blue/violet dust with ripple rings and line links',
         ParticlePreset.goldenSparkle => 'Gold/amber stars with smokey glow, slow spin',
         ParticlePreset.rainbowConfetti => 'Multi-color confetti pieces tumbling down',
+        ParticlePreset.bulletKin => 'Cute brass bullet shapes drifting upward with warm glow',
+        ParticlePreset.heartContainers => 'Floating heart containers with beating pulse glow',
+        ParticlePreset.cursedSkulls => 'Eerie skull particles with shifting cursed aura',
+        ParticlePreset.masterRounds => 'Spinning golden master rounds falling with smokey trail',
+        ParticlePreset.jamHexes => 'Purple jam hexagons with cursed glow and connected network',
       };
 
   PresetConfig get config => switch (this) {
@@ -192,10 +207,62 @@ extension ParticlePresetX on ParticlePreset {
             wobble: 1.2,
             rotate: true,
           ),
+        ParticlePreset.bulletKin => PresetConfig(
+            colors: [const Color(0xFFDAA520), const Color(0xFFCD853F), const Color(0xFFB8860B), const Color(0xFFFFD700)],
+            shape: ParticleShape.bullet,
+            sizeMin: 3.0, sizeMax: 7.0,
+            speedMin: 5.0, speedMax: 15.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: false,
+            drift: DriftDirection.up,
+            wobble: 0.8,
+          ),
+        ParticlePreset.heartContainers => PresetConfig(
+            colors: [const Color(0xFFFF5252), const Color(0xFFE91E63), const Color(0xFFF06292), const Color(0xFFD32F2F)],
+            shape: ParticleShape.heart,
+            sizeMin: 3.0, sizeMax: 6.0,
+            speedMin: 4.0, speedMax: 12.0,
+            glowEffect: GlowEffect.pulse,
+            lineLinks: false,
+            drift: DriftDirection.up,
+            wobble: 0.5,
+          ),
+        ParticlePreset.cursedSkulls => PresetConfig(
+            colors: [const Color(0xFF6A1B9A), const Color(0xFF4A148C), const Color(0xFF8E24AA), const Color(0xFF2E7D32)],
+            shape: ParticleShape.skull,
+            sizeMin: 3.5, sizeMax: 7.0,
+            speedMin: 3.0, speedMax: 10.0,
+            glowEffect: GlowEffect.cursed,
+            lineLinks: false,
+            drift: DriftDirection.random,
+            wobble: 0.6,
+          ),
+        ParticlePreset.masterRounds => PresetConfig(
+            colors: [const Color(0xFFFFD700), const Color(0xFFFFC107), const Color(0xFFFF8F00), const Color(0xFFFFEB3B)],
+            shape: ParticleShape.circle,
+            sizeMin: 3.0, sizeMax: 6.0,
+            speedMin: 6.0, speedMax: 16.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: false,
+            drift: DriftDirection.down,
+            wobble: 0.3,
+            rotate: true,
+          ),
+        ParticlePreset.jamHexes => PresetConfig(
+            colors: [const Color(0xFF6A1B9A), const Color(0xFF4A148C), const Color(0xFF8E24AA), const Color(0xFFAB47BC)],
+            shape: ParticleShape.hexagon,
+            sizeMin: 3.0, sizeMax: 6.5,
+            speedMin: 4.0, speedMax: 14.0,
+            glowEffect: GlowEffect.cursed,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.5,
+            rotate: true,
+          ),
       };
 }
 
-enum ParticleShape { circle, star, triangle, edge }
+enum ParticleShape { circle, star, triangle, edge, bullet, heart, skull, hexagon }
 
 enum GlowEffect { none, smokey, ripple, pulse, cursed }
 
@@ -628,6 +695,23 @@ class _ParticlePainter extends CustomPainter {
               _paint,
             );
             break;
+          case ParticleShape.bullet:
+            _drawBullet(canvas, 0, 0, drawSize, _paint);
+            break;
+          case ParticleShape.heart:
+            _drawHeart(canvas, 0, 0, drawSize, _paint);
+            if (glowEffect != GlowEffect.none) {
+              _paint.maskFilter = null;
+              _paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+              canvas.drawCircle(Offset.zero, drawSize * 0.15, _paint);
+            }
+            break;
+          case ParticleShape.skull:
+            _drawSkull(canvas, 0, 0, drawSize, _paint);
+            break;
+          case ParticleShape.hexagon:
+            _drawHexagon(canvas, 0, 0, drawSize, _paint);
+            break;
           case ParticleShape.circle:
             break; // handled below
         }
@@ -664,6 +748,28 @@ class _ParticlePainter extends CustomPainter {
               _paint,
             );
             break;
+          case ParticleShape.bullet:
+            _drawBullet(canvas, p.x, p.y, drawSize, _paint);
+            if (glowEffect != GlowEffect.none) {
+              _paint.maskFilter = null;
+              _paint.color = Colors.white.withValues(alpha: alpha * 0.4);
+              canvas.drawCircle(Offset(p.x, p.y - drawSize * 0.3), drawSize * 0.15, _paint);
+            }
+            break;
+          case ParticleShape.heart:
+            _drawHeart(canvas, p.x, p.y, drawSize, _paint);
+            if (glowEffect != GlowEffect.none) {
+              _paint.maskFilter = null;
+              _paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+              canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.15, _paint);
+            }
+            break;
+          case ParticleShape.skull:
+            _drawSkull(canvas, p.x, p.y, drawSize, _paint);
+            break;
+          case ParticleShape.hexagon:
+            _drawHexagon(canvas, p.x, p.y, drawSize, _paint);
+            break;
         }
       }
 
@@ -692,6 +798,53 @@ class _ParticlePainter extends CustomPainter {
       ..lineTo(cx + r * 0.866, cy + r * 0.5)
       ..lineTo(cx - r * 0.866, cy + r * 0.5)
       ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  void _drawBullet(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    final path = Path()
+      ..moveTo(cx, cy - r * 1.2)
+      ..lineTo(cx + r * 0.5, cy - r * 0.3)
+      ..quadraticBezierTo(cx + r * 0.7, cy + r * 0.3, cx, cy + r * 0.6)
+      ..quadraticBezierTo(cx - r * 0.7, cy + r * 0.3, cx - r * 0.5, cy - r * 0.3)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  void _drawHeart(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    final path = Path()
+      ..moveTo(cx, cy + r * 0.7)
+      ..cubicTo(cx + r * 1.1, cy + r * 0.2, cx + r * 0.65, cy - r * 0.85, cx, cy - r * 0.25)
+      ..cubicTo(cx - r * 0.65, cy - r * 0.85, cx - r * 1.1, cy + r * 0.2, cx, cy + r * 0.7)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  void _drawSkull(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    canvas.drawCircle(Offset(cx, cy - r * 0.15), r * 0.65, paint);
+    final jawRect = RRect.fromRectAndRadius(
+      Rect.fromCenter(center: Offset(cx, cy + r * 0.35), width: r * 0.7, height: r * 0.45),
+      Radius.circular(r * 0.12),
+    );
+    canvas.drawRRect(jawRect, paint);
+    final eyePaint = Paint()..color = Colors.black.withValues(alpha: 0.55);
+    canvas.drawCircle(Offset(cx - r * 0.22, cy - r * 0.2), r * 0.14, eyePaint);
+    canvas.drawCircle(Offset(cx + r * 0.22, cy - r * 0.2), r * 0.14, eyePaint);
+  }
+
+  void _drawHexagon(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    final path = Path();
+    for (var i = 0; i < 6; i++) {
+      final angle = (math.pi / 3) * i - math.pi / 2;
+      final px = cx + r * math.cos(angle);
+      final py = cy + r * math.sin(angle);
+      if (i == 0) {
+        path.moveTo(px, py);
+      } else {
+        path.lineTo(px, py);
+      }
+    }
+    path.close();
     canvas.drawPath(path, paint);
   }
 

@@ -6,6 +6,38 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.2 — Theme-Accent Dashboard Border + Curse Sheet Polish + Menu Restructure (July 23, 2026)
+**Build:** 63
+
+### Animated Theme-Accent Dashboard Border
+- `GungeoneerHeader` now has a `_borderPulseController` (4.5s reverse-repeating) that drives an `AnimatedBuilder` wrapping the card container.
+- Border uses `f.primary` (theme accent) with alpha pulsing 0.15→0.40 via sine wave; matching `boxShadow` pulses blurRadius 8→14 in sync.
+- Border width bumped to 1.2 for visibility. Properly disposed in `dispose()`.
+
+### Curse Sheet UX Polish
+- Replaced uneven `Wrap` with a 3×2 `Row`/`Expanded` grid for effect chips — perfect alignment on any screen width.
+- Added visual 0–10 curse meter bar with gradient and scale labels.
+- Added section labels: `EFFECTS AT CURRENT LEVEL`, `ADJUST CURSE`, `QUICK ACTIONS`.
+- Upgraded breakdown button to full-width `OutlinedButton` with accent border.
+- Standardized spacing (14/16) and bumped chip value font sizes.
+
+### Header Menu Restructure
+- Removed `use_shrine` menu item (now a dashboard button).
+- Added `save_run` menu item for local runs — calls `RunProvider.saveRun()` with snackbar confirmation.
+- Added public `saveRun()` method to `RunProvider` delegating to `_saveRun()`.
+- Ensured `end_run` available for local runs and MP host; MP sidekick keeps `leave_mp` + `end_run`.
+- Simplified redundant ternary `mpActive ? 'End Run' : 'End Run'` → `'End Run'`.
+
+### Panel Opacity / Dimness Fix
+- Settings `_utilTile`: `Colors.black @ 0.45` → `Colors.white @ 0.06`, border `0.10` → `0.15`.
+- Settings MP section: same fix.
+- Settings `_toggleChip`: `flair.card @ 0.35` → `0.65`, border `0.10` → `0.20`.
+- Settings `_FullLogLegend`: `Colors.white @ 0.02` → `0.05`, border `0.05` → `0.10`.
+- MP summary stats grid border: `Colors.white @ 0.06` → `0.12`.
+- MP summary synergy panel border: `Colors.amber @ 0.12` → `0.20`.
+
+---
+
 ## v1.6.1 — MP Summary Overhaul: Compact Stats + Collaborative Synergy Icons (July 22, 2026)
 **Build:** 62
 

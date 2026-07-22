@@ -166,7 +166,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   sizeScale: prefs.particleSizeScale,
                   opacity: prefs.particleOpacity,
                   glowOverride: prefs.particleGlowEffect,
-                  lineLinksOverride: prefs.particleLineLinks,
+                  lineLinksOverride: prefs.particleLineLinks ? true : null,
                   bounce: prefs.particleBounce,
                 );
           Widget content = widget.child;

@@ -80,6 +80,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
   String? _quickComment;
   Timer? _commentTimer;
   late final AnimationController _wobbleController;
+  late final AnimationController _borderPulseController;
 
   void _onAvatarTapped() {
     _commentTimer?.cancel();
@@ -174,12 +175,17 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
       vsync: this,
       duration: const Duration(milliseconds: 2000),
     )..repeat();
+    _borderPulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4500),
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
     _commentTimer?.cancel();
     _wobbleController.dispose();
+    _borderPulseController.dispose();
     super.dispose();
   }
 
@@ -216,15 +222,31 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-      child: Container(
-        decoration: BoxDecoration(
-          color: f.card,
-          borderRadius: BorderRadius.circular(f.cardRadius),
-          border: f.cardBorderColor != null
-              ? Border.all(color: f.cardBorderColor!, width: f.cardBorderWidth)
-              : Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1.0),
-        ),
-        clipBehavior: Clip.none,
+      child: AnimatedBuilder(
+        animation: _borderPulseController,
+        builder: (context, child) {
+          final pulse = (math.sin(_borderPulseController.value * 2 * math.pi) + 1) / 2;
+          final borderAlpha = 0.15 + pulse * 0.25;
+          return Container(
+            decoration: BoxDecoration(
+              color: f.card,
+              borderRadius: BorderRadius.circular(f.cardRadius),
+              border: Border.all(
+                color: f.primary.withValues(alpha: borderAlpha),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: f.primary.withValues(alpha: borderAlpha * 0.3),
+                  blurRadius: 8 + pulse * 6,
+                  spreadRadius: 0,
+                ),
+              ],
+            ),
+            clipBehavior: Clip.none,
+            child: child,
+          );
+        },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -397,6 +397,10 @@ class RunProvider with ChangeNotifier {
     }
   }
 
+  /// Public manual save — triggers the same persistence as [_saveRun]
+  /// but can be called from the UI for a "Save Run" button.
+  Future<void> saveRun() => _saveRun();
+
   Future<void> _saveRun() async {
     try {
       final jsonMap = _runState.toJson();

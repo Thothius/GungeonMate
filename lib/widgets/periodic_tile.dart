@@ -717,7 +717,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                       children: [
                       Positioned.fill(
                         child: Padding(
-                          padding: const EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(2),
                           child: Center(
                             child: maybeStrikethrough(
                               GameIcon(
@@ -728,7 +728,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                                         ? Icons.flash_on
                                         : Icons.inventory_2_outlined),
                                 quality: _quality,
-                                size: 48,
+                                size: 58,
                               ),
                             ),
                           ),
@@ -740,86 +740,14 @@ class _PeriodicTileState extends State<PeriodicTile>
                         child: maybeQualityBadge(),
                       ),
                       maybeFastActiveDot(),
+                      // Top-right: type tag + elemental icons stacked
                       Positioned(
                         top: 3,
                         right: 3,
-                        child: maybeElements(),
-                      ),
-                      if (widget.gun != null && widget.gun!.range.isNotEmpty && widget.gun!.range != '0')
-                        Positioned(
-                          bottom: 24,
-                          right: 4,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.75),
-                              borderRadius: BorderRadius.circular(4),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.15),
-                                width: 0.6,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.adjust_outlined, size: 8, color: Colors.orangeAccent),
-                                const SizedBox(width: 2.5),
-                                Text(
-                                  widget.gun!.range,
-                                  style: const TextStyle(
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                    height: 1.1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      Positioned(
-                        left: 4,
-                        right: 4,
-                        bottom: 4,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            if (_corner.isNotEmpty)
-                              (() {
-                                final badge = Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 5,
-                                    vertical: 1,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: widget.isTopDps 
-                                        ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-                                        : Colors.black.withValues(alpha: 0.55),
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: widget.isTopDps
-                                        ? Border.all(color: const Color(0xFFFFD700), width: 1)
-                                        : null,
-                                  ),
-                                  child: Text(
-                                    _corner,
-                                    style: TextStyle(
-                                      fontSize: 12.5,
-                                      fontWeight: FontWeight.w900,
-                                      color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
-                                      height: 1.1,
-                                    ),
-                                  ),
-                                );
-                                if (widget.isTopDps) {
-                                  return badge.animate(
-                                    onPlay: (controller) => controller.repeat(reverse: true),
-                                  ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
-                                   .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
-                                }
-                                return badge;
-                              })()
-                            else
-                              const SizedBox.shrink(),
                             if (_typeTagCompacted.isNotEmpty)
                               Container(
                                 padding: const EdgeInsets.symmetric(
@@ -850,7 +778,51 @@ class _PeriodicTileState extends State<PeriodicTile>
                               )
                             else
                               const SizedBox.shrink(),
+                            maybeElements(),
                           ],
+                        ),
+                      ),
+                      // Bottom-center: DPS / corner badge
+                      Positioned(
+                        left: 4,
+                        right: 4,
+                        bottom: 4,
+                        child: Center(
+                          child: _corner.isNotEmpty
+                              ? (() {
+                                  final badge = Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 5,
+                                      vertical: 1,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: widget.isTopDps 
+                                          ? const Color(0xFFFFD700).withValues(alpha: 0.25)
+                                          : Colors.black.withValues(alpha: 0.55),
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: widget.isTopDps
+                                          ? Border.all(color: const Color(0xFFFFD700), width: 1)
+                                          : null,
+                                    ),
+                                    child: Text(
+                                      _corner,
+                                      style: TextStyle(
+                                        fontSize: 12.5,
+                                        fontWeight: FontWeight.w900,
+                                        color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
+                                        height: 1.1,
+                                      ),
+                                    ),
+                                  );
+                                  if (widget.isTopDps) {
+                                    return badge.animate(
+                                      onPlay: (controller) => controller.repeat(reverse: true),
+                                    ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
+                                     .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
+                                  }
+                                  return badge;
+                                })()
+                              : const SizedBox.shrink(),
                         ),
                       ),
                     ],

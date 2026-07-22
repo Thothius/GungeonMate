@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.6.2",
+    "title": "\ud83c\udfa8 THEME-ACCENT DASHBOARD BORDER + CURSE SHEET POLISH + MENU RESTRUCTURE",
+    "date": "July 23, 2026",
+    "items": [
+      "Animated Theme-Accent Dashboard Border: The player dashboard (GungeoneerHeader) now pulses with a slow 4.5s breathing border using the current theme's primary accent color \u2014 subtle glow that shifts alpha 0.15\u20130.40 with a matching box shadow, so every theme paints its signature on the dashboard edges.",
+      "Curse Sheet UX Polish: Redesigned the curse slide-up view with a visual 0\u201310 curse meter bar, a 3\u00d72 effect chip grid for perfect alignment, section labels (EFFECTS, ADJUST CURSE, QUICK ACTIONS), and a full-width breakdown button \u2014 everything fits and is clearly visible now.",
+      "Header Menu Restructure: Removed 'Use Shrine' (now a dashboard button), added 'Save Run' for manual persistence, and ensured 'End Run' is available for both local and MP host scenarios.",
+      "Panel Opacity Fix: Settings utility tiles, MP section, and toggle chips were using heavy black 45% opacity overlays causing a dim appearance \u2014 switched to light white 6% tint with brighter borders for a crisp, readable look. MP summary panel borders also brightened."
+    ]
+  },
+  {
     "version": "v1.6.1",
     "title": "\ud83c\udfae MP SUMMARY OVERHAUL \u2014 COMPACT STATS + COLLABORATIVE SYNERGY ICONS",
     "date": "July 22, 2026",

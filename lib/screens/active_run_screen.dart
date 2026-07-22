@@ -1618,6 +1618,27 @@ class _PlayerPageState extends State<_PlayerPage> {
                       );
                     },
                   ),
+                  // Effects panel toggle — tap to show/hide the effects accordion.
+                  ListenableBuilder(
+                    listenable: VisualPrefs.notifier,
+                    builder: (context, _) {
+                      final isOn = VisualPrefs.notifier.value.showEffectsPanel;
+                      return IconButton(
+                        onPressed: () {
+                          VisualPrefs.setShowEffectsPanel(!isOn);
+                          Haptics.selection();
+                        },
+                        icon: Icon(
+                          Icons.auto_awesome,
+                          size: 20,
+                          color: isOn ? Colors.amberAccent : Colors.white38,
+                        ),
+                        tooltip: isOn ? 'Effects Panel: ON' : 'Effects Panel: OFF',
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      );
+                    },
+                  ),
                   IconButton(
                     onPressed: () {
                       Haptics.selection();
@@ -1725,10 +1746,18 @@ class _PlayerPageState extends State<_PlayerPage> {
           ),
         ),
         _DashboardSwiper(slot: _slot),
-        // Effects tile hidden — effect tags already shown on character dash.
-        // SliverToBoxAdapter(
-        //   child: _EffectsTile(slot: _slot),
-        // ),
+        // Effects panel — toggleable via the effects button on the char panel.
+        SliverToBoxAdapter(
+          child: ListenableBuilder(
+            listenable: VisualPrefs.notifier,
+            builder: (context, _) {
+              if (!VisualPrefs.notifier.value.showEffectsPanel) {
+                return const SizedBox.shrink();
+              }
+              return _EffectsTile(slot: _slot);
+            },
+          ),
+        ),
         _SectionHeaderSliver(
           title: 'Guns',
           count: guns.length,
@@ -4401,7 +4430,7 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
       child: Column(
         children: [
           SizedBox(
-            height: 320,
+            height: 260,
             child: PageView.builder(
               controller: _pc,
               itemCount: dashboards.length,
@@ -6012,12 +6041,6 @@ class _HeaderMenu extends StatelessWidget {
               fastRoute(const FavouritesScreen(embedded: false)),
             );
             break;
-          case 'use_shrine':
-            Navigator.push(
-              context,
-              fastRoute(const ShrinePickerScreen()),
-            );
-            break;
           case 'end_run':
             _confirmEndRun(context, p);
             break;
@@ -6029,7 +6052,7 @@ class _HeaderMenu extends StatelessWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Run saved'),
+                    content: Text('MP session saved'),
                     duration: Duration(seconds: 2),
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -6047,8 +6070,34 @@ class _HeaderMenu extends StatelessWidget {
               }
             }));
             break;
+          case 'save_run':
+            unawaited(p.saveRun().then((_) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Run saved'),
+                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            }).catchError((e) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to save run: $e'),
+                    duration: const Duration(seconds: 3),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            }));
+            break;
           case 'help':
             _showHelpDialog(context);
+            break;
+          case 'dice_roll':
+            _showDiceRollDialog(context);
             break;
         }
       },
@@ -6074,26 +6123,38 @@ class _HeaderMenu extends StatelessWidget {
 
         // --- Group 2: Actions & Mechanics ---
         const PopupMenuItem(
-          value: 'use_shrine',
+          value: 'dice_roll',
           child: Row(children: [
-            Icon(Icons.temple_buddhist, size: 18, color: Colors.amber),
+            Icon(Icons.casino_outlined, size: 18, color: Color(0xFFFFD54F)),
             SizedBox(width: 10),
-            Text('Use Shrine'),
+            Text('Gunfortuna Dice Roll'),
           ]),
         ),
         const PopupMenuDivider(),
 
-        // --- Group 3: MP & Session ---
+        // --- Group 3: Save & Session ---
         if (mpActive) ...[
           const PopupMenuItem(
             value: 'save_mp_session',
             child: Row(children: [
-              Icon(Icons.save_outlined, size: 18, color: Colors.greenAccent),
+              Icon(Icons.cloud_upload_rounded, size: 18, color: Colors.greenAccent),
               SizedBox(width: 10),
               Text('Save MP Session'),
             ]),
           ),
+        ] else ...[
+          const PopupMenuItem(
+            value: 'save_run',
+            child: Row(children: [
+              Icon(Icons.save_outlined, size: 18, color: Colors.greenAccent),
+              SizedBox(width: 10),
+              Text('Save Run'),
+            ]),
+          ),
         ],
+        const PopupMenuDivider(),
+
+        // --- Group 4: End & Leave ---
         if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
           const PopupMenuItem(
             value: 'leave_mp',
@@ -6110,6 +6171,15 @@ class _HeaderMenu extends StatelessWidget {
               Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
               SizedBox(width: 10),
               Text('End Run & Disconnect', style: TextStyle(color: Colors.redAccent)),
+            ]),
+          ),
+        ] else ...[
+          const PopupMenuItem(
+            value: 'end_run',
+            child: Row(children: [
+              Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
+              SizedBox(width: 10),
+              Text('End Run', style: TextStyle(color: Colors.redAccent)),
             ]),
           ),
         ],
@@ -6166,7 +6236,7 @@ class _HeaderMenu extends StatelessWidget {
                   ),
                   _buildHelpSection(
                     title: '🎲 Gunfortuna Dice Roll',
-                    desc: 'Play custom 3D dice rolling challenges with your co-op partner directly during active runs! Open it from this options gear menu.',
+                    desc: 'Play custom 3D dice rolling challenges with your co-op partner directly during active runs! Open it from the gear options menu → Gunfortuna Dice Roll.',
                     color: const Color(0xFFFFD54F),
                   ),
                   _buildHelpSection(
@@ -7018,13 +7088,14 @@ class _CurseSheet extends StatelessWidget {
               child: Container(
                 width: 38,
                 height: 4,
-                margin: const EdgeInsets.only(bottom: 12),
+                margin: const EdgeInsets.only(bottom: 10),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
+            // Header row
             Row(
               children: [
                 const Icon(Icons.warning_amber_rounded, color: accent, size: 22),
@@ -7049,16 +7120,93 @@ class _CurseSheet extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 12),
+
+            // Curse meter bar — visual 0-10 scale
+            Builder(builder: (context) {
+              final clamped = value.clamp(0.0, 10.0);
+              final pct = clamped / 10.0;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: SizedBox(
+                      height: 8,
+                      child: Stack(
+                        children: [
+                          // Background track
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.06),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          // Fill
+                          FractionallySizedBox(
+                            widthFactor: pct,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    accent.withValues(alpha: 0.5),
+                                    accent,
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ),
+                          ),
+                          // Tick marks at each integer
+                          Row(
+                            children: List.generate(11, (i) => Expanded(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Container(
+                                  width: 1,
+                                  height: 8,
+                                  color: Colors.white.withValues(alpha: 0.12),
+                                ),
+                              ),
+                            )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('0', style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
+                      Text('5', style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
+                      Text('10', style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                ],
+              );
+            }),
             const SizedBox(height: 14),
 
-            // Compact live effects at current curse level
+            // Section label
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                'EFFECTS AT CURRENT LEVEL',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white38,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ),
+            // 3×2 grid of effect chips — perfectly aligned
             Builder(builder: (context) {
               final currentIdx = value.floor().clamp(0, 10);
               final row = curseTable[currentIdx];
-              final coolness = p.runState.totalCoolness;
-              final roomReward = (1 + coolness - value).clamp(-50, 100);
               Widget effectChip(String label, String val, Color color) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(8),
@@ -7066,27 +7214,68 @@ class _CurseSheet extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(val, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
-                    const SizedBox(height: 2),
+                    Text(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
+                    const SizedBox(height: 3),
                     Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
                   ],
                 ),
               );
-              return Wrap(
-                spacing: 6,
-                runSpacing: 6,
+              return Row(
                 children: [
-                  effectChip('JAMMED', row.jammedEnemy, Colors.deepOrangeAccent),
-                  effectChip('JAM BOSS', row.jammedBoss, Colors.deepOrangeAccent),
-                  effectChip('MIMIC', row.mimicChance, Colors.redAccent),
-                  effectChip('FUSE', row.fuseChance, Colors.redAccent),
-                  effectChip('ROOM', '${roomReward.toStringAsFixed(0)}%', Colors.amber),
-                  effectChip('AMMO', row.ammo, Colors.lightGreenAccent),
+                  Expanded(child: effectChip('JAMMED', row.jammedEnemy, Colors.deepOrangeAccent)),
+                  const SizedBox(width: 6),
+                  Expanded(child: effectChip('JAM BOSS', row.jammedBoss, Colors.deepOrangeAccent)),
+                  const SizedBox(width: 6),
+                  Expanded(child: effectChip('MIMIC', row.mimicChance, Colors.redAccent)),
+                ],
+              );
+            }),
+            const SizedBox(height: 6),
+            Builder(builder: (context) {
+              final currentIdx = value.floor().clamp(0, 10);
+              final row = curseTable[currentIdx];
+              final coolness = p.runState.totalCoolness;
+              final roomReward = (1 + coolness - value).clamp(-50, 100);
+              Widget effectChip(String label, String val, Color color) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
+                ),
+                child: Column(
+                  children: [
+                    Text(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
+                    const SizedBox(height: 3),
+                    Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                  ],
+                ),
+              );
+              return Row(
+                children: [
+                  Expanded(child: effectChip('FUSE', row.fuseChance, Colors.redAccent)),
+                  const SizedBox(width: 6),
+                  Expanded(child: effectChip('ROOM', '${roomReward.toStringAsFixed(0)}%', Colors.amber)),
+                  const SizedBox(width: 6),
+                  Expanded(child: effectChip('AMMO', row.ammo, Colors.lightGreenAccent)),
                 ],
               );
             }),
             const SizedBox(height: 16),
 
+            // Section label
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                'ADJUST CURSE',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white38,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ),
             // Stat adjuster row
             Row(
               children: [
@@ -7098,7 +7287,7 @@ class _CurseSheet extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: () => apply(-value),
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         foregroundColor: Colors.white60,
                         side: BorderSide(
                           color: Colors.white.withValues(alpha: 0.12),
@@ -7125,6 +7314,19 @@ class _CurseSheet extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
+            // Section label
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                'QUICK ACTIONS',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white38,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ),
             // Curse-raising actions
             Row(
               children: [
@@ -7148,23 +7350,14 @@ class _CurseSheet extends StatelessWidget {
                     Haptics.selection();
                   },
                 ),
-                actionButton(
-                  icon: Icons.casino_outlined,
-                  color: const Color(0xFFFFD54F),
-                  label: 'Dice Roll',
-                  subtitle: 'Gunfortuna',
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showDiceRollDialog(context);
-                  },
-                ),
               ],
             ),
             const SizedBox(height: 14),
 
-            // Link to full curse details
-            Center(
-              child: TextButton.icon(
+            // Full-width breakdown button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -7182,12 +7375,16 @@ class _CurseSheet extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                style: TextButton.styleFrom(
-                  foregroundColor: accent.withValues(alpha: 0.8),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: accent.withValues(alpha: 0.9),
+                  side: BorderSide(color: accent.withValues(alpha: 0.3), width: 0.8),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 4),
           ],
         ),
       ),
@@ -8859,7 +9056,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                   color: const Color(0xFF1E1E22),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.06),
+                    color: Colors.white.withValues(alpha: 0.12),
                     width: 1.0,
                   ),
                 ),
@@ -8980,7 +9177,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                   color: const Color(0xFF1E1E22),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: Colors.amber.withValues(alpha: 0.12),
+                    color: Colors.amber.withValues(alpha: 0.20),
                     width: 1.0,
                   ),
                 ),

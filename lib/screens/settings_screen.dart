@@ -587,9 +587,9 @@ class _ThemeVisualsTab extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: flair.card.withValues(alpha: 0.35),
+        color: flair.card.withValues(alpha: 0.65),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: flair.primary.withValues(alpha: 0.10)),
+        border: Border.all(color: flair.primary.withValues(alpha: 0.20)),
       ),
       child: Row(
         children: [
@@ -884,9 +884,9 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.45),
+              color: Colors.white.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
             ),
             child: Row(
               children: [
@@ -1098,9 +1098,9 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.45),
+        color: Colors.white.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
       ),
       child: ListTile(
         onTap: onTap,
@@ -1410,9 +1410,9 @@ class _FullLogLegend extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.02),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

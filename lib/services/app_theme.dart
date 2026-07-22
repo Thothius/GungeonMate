@@ -2025,6 +2025,9 @@ class VisualPrefs {
   /// dedicated HUD regardless of this flag).
   final bool showDamageCalculator;
 
+  /// Whether the Effects panel accordion is shown on the active-run dashboard.
+  final bool showEffectsPanel;
+
   /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
   final int periodicGridColumnCount;
 
@@ -2084,6 +2087,7 @@ class VisualPrefs {
     this.isGoopianLanguage = false,
     this.spongeActive = false,
     this.showDamageCalculator = false,
+    this.showEffectsPanel = false,
     this.periodicGridColumnCount = 0,
     this.wallpaperMode = WallpaperMode.themeDefault,
     this.selectedStillWallpaper = 'wp_still_05_galaxy.webp',
@@ -2119,6 +2123,7 @@ class VisualPrefs {
   static const _kGoopianLanguage = 'vp.goopian_language_v1';
   static const _kSpongeActive = 'vp.sponge_active_v1';
   static const _kShowDamageCalculator = 'vp.show_damage_calculator_v1';
+  static const _kShowEffectsPanel = 'vp.show_effects_panel_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kWallpaperMode = 'vp.wallpaper_mode_v1';
   static const _kSelectedStill = 'vp.selected_still_v1';
@@ -2178,6 +2183,7 @@ class VisualPrefs {
       final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
       final showDamageCalculator = p.getBool(_kShowDamageCalculator) ?? false;
+      final showEffectsPanel = p.getBool(_kShowEffectsPanel) ?? false;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
 
       final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
@@ -2224,6 +2230,7 @@ class VisualPrefs {
         isGoopianLanguage: isGoopian,
         spongeActive: spongeActive,
         showDamageCalculator: showDamageCalculator,
+        showEffectsPanel: showEffectsPanel,
         periodicGridColumnCount: periodicGridColumnCount,
         wallpaperMode: wallpaperMode,
         selectedStillWallpaper: selectedStill,
@@ -2360,6 +2367,11 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setShowEffectsPanel(bool v) async {
+    notifier.value = notifier.value._with(showEffectsPanel: v);
+    _persist();
+  }
+
   static Future<void> setPeriodicGridColumnCount(int v) async {
     notifier.value = notifier.value._with(periodicGridColumnCount: v.clamp(0, 4));
     _persist();
@@ -2415,6 +2427,7 @@ class VisualPrefs {
       await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
       await p.setBool(_kSpongeActive, v.spongeActive);
       await p.setBool(_kShowDamageCalculator, v.showDamageCalculator);
+      await p.setBool(_kShowEffectsPanel, v.showEffectsPanel);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kWallpaperMode, v.wallpaperMode.index);
       await p.setString(_kSelectedStill, v.selectedStillWallpaper);
@@ -2449,6 +2462,7 @@ class VisualPrefs {
     bool?   isGoopianLanguage,
     bool?   spongeActive,
     bool?   showDamageCalculator,
+    bool?   showEffectsPanel,
     int?    periodicGridColumnCount,
     WallpaperMode? wallpaperMode,
     String? selectedStillWallpaper,
@@ -2480,6 +2494,7 @@ class VisualPrefs {
     isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
     spongeActive:     spongeActive      ?? this.spongeActive,
     showDamageCalculator: showDamageCalculator ?? this.showDamageCalculator,
+    showEffectsPanel: showEffectsPanel ?? this.showEffectsPanel,
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
     wallpaperMode:    wallpaperMode     ?? this.wallpaperMode,
     selectedStillWallpaper: selectedStillWallpaper ?? this.selectedStillWallpaper,

@@ -203,6 +203,35 @@ class CodexDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
+
+            const SizedBox(height: 20),
+
+            // Back button — quick nav back to codex list
+            Center(
+              child: TextButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back_rounded,
+                    size: 18, color: flair.primary.withValues(alpha: 0.7)),
+                label: Text(
+                  'Back to Codex',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: flair.primary.withValues(alpha: 0.7),
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: flair.primary.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

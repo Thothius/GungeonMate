@@ -682,37 +682,38 @@ class _RemixChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Wrap(
         alignment: WrapAlignment.center,
-        spacing: 6,
+        spacing: 10,
+        runSpacing: 8,
         children: [
           for (int i = 0; i < labels.length; i++)
             GestureDetector(
               onTap: () => onTap(i),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                 decoration: BoxDecoration(
                   color: i == activeIndex
                       ? flair.primary.withValues(alpha: 0.2)
                       : Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: i == activeIndex
                         ? flair.primary
                         : Colors.white.withValues(alpha: 0.1),
-                    width: i == activeIndex ? 1.5 : 1.0,
+                    width: i == activeIndex ? 2.0 : 1.0,
                   ),
                 ),
                 child: Text(
                   labels[i],
                   style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: i == activeIndex ? FontWeight.w800 : FontWeight.w600,
+                    fontSize: 15,
+                    fontWeight: i == activeIndex ? FontWeight.w900 : FontWeight.w700,
                     color: i == activeIndex
                         ? flair.primary
-                        : Colors.white.withValues(alpha: 0.6),
-                    letterSpacing: 0.4,
+                        : Colors.white.withValues(alpha: 0.7),
+                    letterSpacing: 0.6,
                   ),
                 ),
               ),
