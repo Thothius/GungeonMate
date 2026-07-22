@@ -8365,43 +8365,42 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                     // Row 1: Guns | Items | Active Syns
                     Row(
                       children: [
-                        Expanded(child: _statChip('Guns', '${p1Guns.length}', '${p2Guns.length}', p1Nick, p2Nick, Icons.gps_fixed)),
-                        Expanded(child: _statChip('Items', '${p1Items.length}', '${p2Items.length}', p2Nick, p2Nick, Icons.inventory_2_rounded)),
-                        Expanded(child: _statChip('Syns', '${p1ActiveSyns.length}', '${p2ActiveSyns.length}', p1Nick, p2Nick, Icons.auto_awesome)),
+                        Expanded(child: _statChip('Guns', '${p1Guns.length}', '${p2Guns.length}', Icons.gps_fixed)),
+                        Expanded(child: _statChip('Items', '${p1Items.length}', '${p2Items.length}', Icons.inventory_2_rounded)),
+                        Expanded(child: _statChip('Syns', '${p1ActiveSyns.length}', '${p2ActiveSyns.length}', Icons.auto_awesome)),
                       ],
                     ),
                     const SizedBox(height: 6),
                     // Row 2: Max DPS | DMG Bonus | Cool/Curse
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(child: _statChip('DPS', p1MaxDps.toStringAsFixed(0), p2MaxDps.toStringAsFixed(0), p1Nick, p2Nick, Icons.flash_on)),
-                          Expanded(child: _statChip('DMG', '${((p1DmgMult - 1) * 100).toStringAsFixed(0)}%', '${((p2DmgMult - 1) * 100).toStringAsFixed(0)}%', p1Nick, p2Nick, Icons.trending_up)),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.ac_unit, size: 10, color: Colors.cyanAccent.withValues(alpha: 0.6)),
-                                    const SizedBox(width: 3),
-                                    Text('+${state.totalCoolness.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.cyanAccent)),
-                                  ],
-                                ),
-                                const SizedBox(height: 2),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(Icons.local_fire_department, size: 10, color: Colors.redAccent.withValues(alpha: 0.6)),
-                                    const SizedBox(width: 3),
-                                    Text('+${state.totalCurse.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.redAccent)),
-                                  ],
-                                ),
-                              ],
-                            ),
+                    Row(
+                      children: [
+                        Expanded(child: _statChip('DPS', p1MaxDps.toStringAsFixed(0), p2MaxDps.toStringAsFixed(0), Icons.flash_on)),
+                        Expanded(child: _statChip('DMG', '${((p1DmgMult - 1) * 100).toStringAsFixed(0)}%', '${((p2DmgMult - 1) * 100).toStringAsFixed(0)}%', Icons.trending_up)),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.ac_unit, size: 10, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                                  const SizedBox(width: 3),
+                                  Text('+${state.totalCoolness.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.cyanAccent)),
+                                ],
+                              ),
+                              const SizedBox(height: 2),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.local_fire_department, size: 10, color: Colors.redAccent.withValues(alpha: 0.6)),
+                                  const SizedBox(width: 3),
+                                  Text('+${state.totalCurse.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.redAccent)),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -8441,12 +8440,11 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
               ),
             ),
 
-          // ── Synergy overview panel ────────────────────────────
+          // ── Synergy overview panel (collapsible) ──────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
               child: Container(
-                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E1E22),
                   borderRadius: BorderRadius.circular(14),
@@ -8458,87 +8456,168 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Icon(Icons.auto_awesome, size: 16, color: Colors.amberAccent),
-                        const SizedBox(width: 8),
-                        Text(
-                          'SYNERGY OVERVIEW',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.0,
-                            color: Colors.amberAccent,
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          '${allCombinedSyns.length} active',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.greenAccent,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    if (possibleSyns.isEmpty)
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: Text(
-                            'No synergies available from current loadout.',
-                            style: TextStyle(
-                              fontSize: 11,
+                    // Tappable header — tap to expand/collapse
+                    InkWell(
+                      onTap: () {
+                        Haptics.selection();
+                        setState(() => _synergyExpanded = !_synergyExpanded);
+                      },
+                      borderRadius: BorderRadius.circular(14),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        child: Row(
+                          children: [
+                            Icon(Icons.auto_awesome, size: 16, color: Colors.amberAccent),
+                            const SizedBox(width: 8),
+                            Text(
+                              'SYNERGY OVERVIEW',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.0,
+                                color: Colors.amberAccent,
+                              ),
+                            ),
+                            const Spacer(),
+                            Text(
+                              '${allCombinedSyns.length} active',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.greenAccent,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Icon(
+                              _synergyExpanded
+                                  ? Icons.keyboard_arrow_up_rounded
+                                  : Icons.keyboard_arrow_down_rounded,
+                              size: 18,
                               color: Colors.white.withValues(alpha: 0.4),
                             ),
-                          ),
+                          ],
                         ),
-                      )
-                    else ...[
-                      // Group synergies by status for at-a-glance scanning
-                      if (activeSyns.isNotEmpty) ...[
-                        _SynergyGroupHeader(
-                          label: 'ACTIVE',
-                          count: activeSyns.length,
-                          color: Colors.greenAccent,
+                      ),
+                    ),
+                    // Next-pickup hint (always visible when partials exist)
+                    if (nextPickupHint != null && !_synergyExpanded)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+                        child: Row(
+                          children: [
+                            Icon(Icons.lightbulb_outline, size: 12, color: Colors.amber.withValues(alpha: 0.7)),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                nextPickupHint,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.amber.withValues(alpha: 0.8),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        for (final syn in activeSyns)
-                          _SynergySummaryRow(
-                            synergy: syn,
-                            isActive: true,
-                            ownedLower: combinedNames,
-                          ),
-                      ],
-                      if (partialSyns.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        _SynergyGroupHeader(
-                          label: 'PARTIAL',
-                          count: partialSyns.length,
-                          color: Colors.amberAccent,
+                      ),
+                    // Expanded content
+                    if (_synergyExpanded) ...[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (nextPickupHint != null) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                margin: const EdgeInsets.only(bottom: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.amber.withValues(alpha: 0.06),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: Colors.amber.withValues(alpha: 0.15), width: 1),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.lightbulb_outline, size: 14, color: Colors.amberAccent),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        nextPickupHint,
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.amberAccent,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                            if (possibleSyns.isEmpty)
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 20),
+                                  child: Text(
+                                    'No synergies available from current loadout.',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.white.withValues(alpha: 0.4),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            else ...[
+                              if (activeSyns.isNotEmpty) ...[
+                                _SynergyGroupHeader(
+                                  label: 'ACTIVE',
+                                  count: activeSyns.length,
+                                  color: Colors.greenAccent,
+                                ),
+                                for (final syn in activeSyns)
+                                  _SynergySummaryRow(
+                                    synergy: syn,
+                                    isActive: true,
+                                    ownedLower: combinedNames,
+                                    provider: p,
+                                  ),
+                              ],
+                              if (partialSyns.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                _SynergyGroupHeader(
+                                  label: 'PARTIAL',
+                                  count: partialSyns.length,
+                                  color: Colors.amberAccent,
+                                ),
+                                for (final syn in partialSyns)
+                                  _SynergySummaryRow(
+                                    synergy: syn,
+                                    isActive: false,
+                                    ownedLower: combinedNames,
+                                    provider: p,
+                                  ),
+                              ],
+                              if (lockedSyns.isNotEmpty) ...[
+                                const SizedBox(height: 8),
+                                _SynergyGroupHeader(
+                                  label: 'LOCKED',
+                                  count: lockedSyns.length,
+                                  color: Colors.white24,
+                                ),
+                                for (final syn in lockedSyns)
+                                  _SynergySummaryRow(
+                                    synergy: syn,
+                                    isActive: false,
+                                    ownedLower: combinedNames,
+                                    provider: p,
+                                  ),
+                              ],
+                            ],
+                          ],
                         ),
-                        for (final syn in partialSyns)
-                          _SynergySummaryRow(
-                            synergy: syn,
-                            isActive: false,
-                            ownedLower: combinedNames,
-                          ),
-                      ],
-                      if (lockedSyns.isNotEmpty) ...[
-                        const SizedBox(height: 8),
-                        _SynergyGroupHeader(
-                          label: 'LOCKED',
-                          count: lockedSyns.length,
-                          color: Colors.white24,
-                        ),
-                        for (final syn in lockedSyns)
-                          _SynergySummaryRow(
-                            synergy: syn,
-                            isActive: false,
-                            ownedLower: combinedNames,
-                          ),
-                      ],
+                      ),
                     ],
                   ],
                 ),
@@ -8548,6 +8627,41 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
           const SliverToBoxAdapter(child: SizedBox(height: 80)),
         ],
       ),
+    );
+  }
+
+  /// Compact stat chip showing P1 vs P2 values with a label.
+  Widget _statChip(String label, String p1Val, String p2Val, IconData icon) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              p1Val,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.cyanAccent),
+            ),
+            const SizedBox(width: 6),
+            Icon(icon, size: 10, color: Colors.white.withValues(alpha: 0.3)),
+            const SizedBox(width: 6),
+            Text(
+              p2Val,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.purpleAccent),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -8660,83 +8774,20 @@ class _GungeoneerPortrait extends StatelessWidget {
   }
 }
 
-/// One row in the stats comparison panel.
-class _StatComparisonRow extends StatelessWidget {
-  final String label;
-  final String p1Value;
-  final String p2Value;
-  final IconData icon;
-  const _StatComparisonRow({
-    required this.label,
-    required this.p1Value,
-    required this.p2Value,
-    required this.icon,
-  });
+// _StatComparisonRow removed — replaced by compact _statChip grid in _MpSummaryPageState.
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Text(
-              p1Value,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: Colors.cyanAccent,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 11, color: Colors.white.withValues(alpha: 0.35)),
-                const SizedBox(width: 4),
-                Text(
-                  label,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white.withValues(alpha: 0.5),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Text(
-              p2Value,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                color: Colors.purpleAccent,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// One row in the synergy overview panel.
+/// One row in the synergy overview panel — visual icon pairs.
+/// Owned items show full-color with a glow; missing items are greyed out.
 class _SynergySummaryRow extends StatelessWidget {
   final Synergy synergy;
   final bool isActive;
   final Set<String> ownedLower;
+  final RunProvider provider;
   const _SynergySummaryRow({
     required this.synergy,
     required this.isActive,
     required this.ownedLower,
+    required this.provider,
   });
 
   @override
@@ -8745,35 +8796,17 @@ class _SynergySummaryRow extends StatelessWidget {
     final totalNeeded = synergy.items.length + (synergy.anyOf.isNotEmpty ? 1 : 0);
     final isPartial = !isActive && missing.length < totalNeeded;
 
-    // Special-case synergies (Smart Bombs, Super Serum, Unbelievably
-    // Charming) have items:[] and custom match logic needing ≥2 anyOf.
-    // missingFor returns [] when anyOf is partially satisfied, leaving
-    // no hint text. Add a fallback showing unowned items so the user
-    // sees what's needed.
-    final missingHint = missing.isNotEmpty
-        ? 'Need: ${missing.take(3).join(", ")}${missing.length > 3 ? "…" : ""}'
-        : (isPartial && synergy.items.isEmpty && synergy.anyOf.isNotEmpty
-            ? () {
-                final unowned = synergy.anyOf
-                    .where((i) => !ownedLower.contains(i.toLowerCase()))
-                    .toList();
-                return 'Need: 1 more from ${unowned.take(3).join(", ")}${unowned.length > 3 ? "…" : ""}';
-              }()
-            : null);
-
     final statusColor = isActive
         ? Colors.greenAccent
         : isPartial
             ? Colors.amberAccent
             : Colors.white24;
-    final statusText = isActive
-        ? 'ACTIVE'
-        : isPartial
-            ? 'PARTIAL'
-            : 'LOCKED';
+
+    // Build the list of all items involved in this synergy (required + anyOf)
+    final allItems = <String>[...synergy.items, ...synergy.anyOf];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 3),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
@@ -8788,7 +8821,7 @@ class _SynergySummaryRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Status indicator
+            // Status dot
             Container(
               width: 6,
               height: 6,
@@ -8801,50 +8834,146 @@ class _SynergySummaryRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            // Synergy name + missing items
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    synergy.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w800,
-                      color: isActive
-                          ? Colors.white
-                          : Colors.white.withValues(alpha: 0.7),
-                    ),
-                  ),
-                  if (!isActive && missingHint != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      missingHint,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 9.5,
-                        color: Colors.amber.withValues(alpha: 0.6),
-                      ),
-                    ),
-                  ],
-                ],
+            // Synergy name
+            Text(
+              synergy.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
+                color: isActive
+                    ? Colors.white
+                    : Colors.white.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(width: 8),
+            // Visual icon pairs
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    for (int i = 0; i < allItems.length; i++) ...[
+                      if (i > 0) ...[
+                        // Connecting line between items
+                        Container(
+                          width: 12,
+                          height: 2,
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
+                          decoration: BoxDecoration(
+                            color: isActive
+                                ? Colors.greenAccent.withValues(alpha: 0.5)
+                                : isPartial
+                                    ? Colors.amberAccent.withValues(alpha: 0.3)
+                                    : Colors.white.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(1),
+                          ),
+                        ),
+                      ],
+                      _SynergyItemIcon(
+                        itemName: allItems[i],
+                        isOwned: ownedLower.contains(allItems[i].toLowerCase()),
+                        isActive: isActive,
+                        provider: provider,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
             // Status badge
             Text(
-              statusText,
+              isActive ? 'ACTIVE' : isPartial ? 'PARTIAL' : 'LOCKED',
               style: TextStyle(
-                fontSize: 9,
+                fontSize: 8.5,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 0.5,
                 color: statusColor,
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A single item icon inside a synergy row — lit if owned, greyed if missing.
+class _SynergyItemIcon extends StatelessWidget {
+  final String itemName;
+  final bool isOwned;
+  final bool isActive;
+  final RunProvider provider;
+  const _SynergyItemIcon({
+    required this.itemName,
+    required this.isOwned,
+    required this.isActive,
+    required this.provider,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final gun = provider.gunByName(itemName);
+    final item = provider.itemByName(itemName);
+    final iconPath = gun?.icon ?? item?.icon ?? '';
+
+    final ringColor = isActive
+        ? Colors.greenAccent.withValues(alpha: 0.6)
+        : isOwned
+            ? Colors.white.withValues(alpha: 0.3)
+            : Colors.white.withValues(alpha: 0.08);
+
+    return Opacity(
+      opacity: isOwned ? 1.0 : 0.35,
+      child: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: ringColor, width: 1.5),
+          boxShadow: isOwned && isActive
+              ? [BoxShadow(color: Colors.greenAccent.withValues(alpha: 0.15), blurRadius: 4)]
+              : null,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: _buildImage(iconPath),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImage(String path) {
+    if (path.isEmpty) return _fallbackIcon();
+    if (path.startsWith('http')) {
+      return Image.network(
+        path,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        errorBuilder: (_, __, ___) => _fallbackIcon(),
+      );
+    }
+    return Image.asset(
+      path,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.none,
+      errorBuilder: (_, __, ___) => _fallbackIcon(),
+    );
+  }
+
+  Widget _fallbackIcon() {
+    return Container(
+      color: const Color(0xFF0D1117),
+      child: Center(
+        child: Text(
+          itemName.isNotEmpty ? itemName[0].toUpperCase() : '?',
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w900,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
         ),
       ),
     );

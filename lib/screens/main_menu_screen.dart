@@ -361,7 +361,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v1.6.0',
+                    'v1.6.1',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -400,7 +400,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v1.6.0)',
+                            'Changelog (v1.6.1)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
@@ -454,7 +454,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.6.0 — Unicorn Mega Theme + Sparkle Numbers + Custom Theme Editor',
+                            'v1.6.1 — MP Summary Overhaul: Compact Stats + Collaborative Synergy Icons',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

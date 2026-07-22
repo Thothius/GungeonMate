@@ -6,6 +6,27 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.1 — MP Summary Overhaul: Compact Stats + Collaborative Synergy Icons (July 22, 2026)
+**Build:** 62
+
+### Compact Stat Chips
+- MP summary page now shows P1 (cyan) vs P2 (purple) values in a tight 3-column grid.
+- Guns, items, active syns, max DPS, damage bonus, and combined coolness/curse all visible at a glance.
+- Removed old `_StatComparisonRow` class — replaced by inline `_statChip` method.
+
+### Collapsible Synergy Overview
+- Synergy panel collapsed by default with tap-to-expand header.
+- Shows active count and next-pickup hint when collapsed; full breakdown when expanded.
+- `_synergyExpanded` state in `_MpSummaryPageState`.
+
+### Visual Synergy Icon Pairs
+- Synergy rows now display actual item/gun pixel-art icons in horizontal scroll.
+- Owned items full-color with green glow; missing items greyed at 35% opacity.
+- Connecting lines between paired items, colored by synergy status.
+- New `_SynergyItemIcon` widget with fallback letter icon for missing assets.
+
+---
+
 ## v1.6.0 — Unicorn Mega Theme + Sparkle Numbers + Custom Theme Editor (July 22, 2026)
 **Build:** 61
 

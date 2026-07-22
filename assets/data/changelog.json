@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.6.1",
+    "title": "\ud83c\udfae MP SUMMARY OVERHAUL \u2014 COMPACT STATS + COLLABORATIVE SYNERGY ICONS",
+    "date": "July 22, 2026",
+    "items": [
+      "Compact Stat Chips: MP summary page now shows P1 (cyan) vs P2 (purple) values in a tight 3-column grid with icons \u2014 guns, items, active syns, max DPS, damage bonus, and combined coolness/curse all visible at a glance.",
+      "Collapsible Synergy Overview: The synergy panel on the MP summary page is now collapsed by default with a tap-to-expand header \u2014 shows active count and next-pickup hint when collapsed, full breakdown when expanded.",
+      "Visual Synergy Icon Pairs: Synergy rows now display actual item/gun pixel-art icons in a horizontal scroll instead of text 'Need: X, Y' hints \u2014 owned items are full-color with glow, missing items are greyed out, with connecting lines between paired items."
+    ]
+  },
+  {
     "version": "v1.6.0",
     "title": "\u2728 UNICORN MEGA THEME + SPARKLE NUMBERS + CUSTOM THEME EDITOR",
     "date": "July 22, 2026",
