@@ -5923,34 +5923,11 @@ class _HeaderMenu extends StatelessWidget {
               _fastRoute(const ShrinePickerScreen()),
             );
             break;
-          case 'steal':
-            p.adjustCurse(1);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Steal → Curse +1'),
-                duration: Duration(milliseconds: 1600),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            break;
-          case 'cursula':
-            p.adjustCurse(2.5);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Bought from Cursula → Curse +2.5'),
-                duration: Duration(milliseconds: 1600),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-            break;
           case 'add_player':
             _addCoopPlayer(context);
             break;
           case 'remove_player':
             _confirmRemoveCoop(context, p);
-            break;
-          case 'dice_roll':
-            _showDiceRollDialog(context);
             break;
           case 'end_run':
             _confirmEndRun(context, p);
@@ -6670,6 +6647,262 @@ class _StatAdjusterSheet extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// Curse hub sheet — stat adjuster + curse actions + details link
+// =============================================================================
+
+class _CurseSheet extends StatelessWidget {
+  const _CurseSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final value = p.runState.curse;
+    const accent = Color(0xFFE040FB);
+
+    void apply(double delta) => p.adjustCurse(delta);
+
+    Widget step(double delta) {
+      final positive = delta > 0;
+      final text = '${positive ? '+' : ''}${formatStat(delta)}';
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: OutlinedButton(
+            onPressed: () => apply(delta),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              foregroundColor: positive ? accent : Colors.white70,
+              side: BorderSide(
+                color: accent.withValues(alpha: positive ? 0.7 : 0.25),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.4,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    Widget actionButton({
+      required IconData icon,
+      required Color color,
+      required String label,
+      required String subtitle,
+      required VoidCallback onTap,
+    }) {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: onTap,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: color.withValues(alpha: 0.35),
+                    width: 0.8,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Icon(icon, color: color, size: 20),
+                    const SizedBox(height: 6),
+                    Text(
+                      label,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: color,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white.withValues(alpha: 0.45),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 38,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.18),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                const Icon(Icons.warning_amber_rounded, color: accent, size: 22),
+                const SizedBox(width: 8),
+                const Text(
+                  'CURSE',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  formatStat(value),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: accent,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Stat adjuster row
+            Row(
+              children: [
+                step(-1),
+                step(-0.5),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: OutlinedButton(
+                      onPressed: () => apply(-value),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        foregroundColor: Colors.white60,
+                        side: BorderSide(
+                          color: Colors.white.withValues(alpha: 0.12),
+                          width: 1.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'RESET',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                step(0.5),
+                step(1),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Curse-raising actions
+            Row(
+              children: [
+                actionButton(
+                  icon: Icons.front_hand_outlined,
+                  color: const Color(0xFFEF5350),
+                  label: 'Steal',
+                  subtitle: '+1 curse',
+                  onTap: () {
+                    apply(1);
+                    Haptics.selection();
+                  },
+                ),
+                actionButton(
+                  icon: Icons.storefront_outlined,
+                  color: const Color(0xFFCE93D8),
+                  label: 'Cursula',
+                  subtitle: '+2.5 curse',
+                  onTap: () {
+                    apply(2.5);
+                    Haptics.selection();
+                  },
+                ),
+                actionButton(
+                  icon: Icons.casino_outlined,
+                  color: const Color(0xFFFFD54F),
+                  label: 'Dice Roll',
+                  subtitle: 'Gunfortuna',
+                  onTap: () {
+                    Navigator.pop(context);
+                    _showDiceRollDialog(context);
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+
+            // Link to full curse details
+            Center(
+              child: TextButton.icon(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    _fastRoute(const StatsDetailScreen(
+                      statType: StatType.curse,
+                    )),
+                  );
+                },
+                icon: const Icon(Icons.analytics_outlined, size: 16),
+                label: const Text(
+                  'View Curse Breakdown',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                style: TextButton.styleFrom(
+                  foregroundColor: accent.withValues(alpha: 0.8),
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
           ],
         ),
       ),

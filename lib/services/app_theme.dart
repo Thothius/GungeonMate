@@ -2500,8 +2500,8 @@ class AppTheme {
   // returning users don't get parked on an invalid index.
   static const String _legacyKey = 'theme.mode';
 
-  static final ValueNotifier<AppThemeMode> notifier =
-      ValueNotifier<AppThemeMode>(AppThemeMode.unicorn);
+  static final RefreshableValueNotifier<AppThemeMode> notifier =
+      RefreshableValueNotifier<AppThemeMode>(AppThemeMode.unicorn);
 
   static final ValueNotifier<AppThemeMode?> previewNotifier =
       ValueNotifier<AppThemeMode?>(null);
@@ -2633,6 +2633,10 @@ class AppTheme {
     }
   }
 
+  /// Force a rebuild of all widgets listening to [notifier] without
+  /// changing the mode. Used after custom theme data is edited.
+  static void refresh() => notifier.refresh();
+
   /// Shift every FontWeight in [base] by [bias] × 3 index steps.
   static TextTheme _applyWeightBias(TextTheme base, int bias) {
     if (bias == 0) return base;
@@ -2744,5 +2748,12 @@ class AppTheme {
   /// Concrete flair for each theme. Kept in one place so the picker
   /// preview and the live app read the exact same values.
   static ThemeFlair flairFor(AppThemeMode m) => m.flair;
+}
+
+/// A [ValueNotifier] that exposes [refresh] so external callers can
+/// force a rebuild without changing the value.
+class RefreshableValueNotifier<T> extends ValueNotifier<T> {
+  RefreshableValueNotifier(super.value);
+  void refresh() => notifyListeners();
 }
 
