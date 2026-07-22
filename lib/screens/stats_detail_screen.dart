@@ -6,8 +6,8 @@ import '../services/haptics.dart';
 
 enum StatType { coolness, curse }
 
-/// Coolness effect table row.
-class _CurseRow {
+/// Curse effect table row.
+class CurseRow {
   final int curse;
   final String jammedEnemy;
   final String jammedBoss;
@@ -15,7 +15,7 @@ class _CurseRow {
   final String fuseChance;
   final String roomRewards;
   final String ammo;
-  const _CurseRow(
+  const CurseRow(
     this.curse,
     this.jammedEnemy,
     this.jammedBoss,
@@ -26,18 +26,18 @@ class _CurseRow {
   );
 }
 
-const _curseTable = <_CurseRow>[
-  _CurseRow(0, '0%', '0%', '2.25%', 'Unchanged', 'Unchanged', 'Unchanged'),
-  _CurseRow(1, '1%', '0%', '4.35%', '+5%', '-1%', 'x1.05'),
-  _CurseRow(2, '1%', '0%', '6.45%', '+10%', '-2%', 'x1.10'),
-  _CurseRow(3, '2%', '0%', '8.55%', '+15%', '-3%', 'x1.15'),
-  _CurseRow(4, '2%', '0%', '10.65%', '+20%', '-4%', 'x1.20'),
-  _CurseRow(5, '5%', '0%', '12.75%', '+25%', '-5%', 'x1.25'),
-  _CurseRow(6, '5%', '0%', '14.85%', '+30%', '-6%', 'x1.30'),
-  _CurseRow(7, '10%', '20%', '16.95%', '+35%', '-7%', 'x1.35'),
-  _CurseRow(8, '10%', '20%', '19.05%', '+40%', '-8%', 'x1.40'),
-  _CurseRow(9, '25%', '30%', '21.15%', '+45%', '-9%', 'x1.45'),
-  _CurseRow(10, '50%', '50%', '23.25%', '+50%', '-10%', 'x1.50'),
+const curseTable = <CurseRow>[
+  CurseRow(0, '0%', '0%', '2.25%', 'Unchanged', 'Unchanged', 'Unchanged'),
+  CurseRow(1, '1%', '0%', '4.35%', '+5%', '-1%', 'x1.05'),
+  CurseRow(2, '1%', '0%', '6.45%', '+10%', '-2%', 'x1.10'),
+  CurseRow(3, '2%', '0%', '8.55%', '+15%', '-3%', 'x1.15'),
+  CurseRow(4, '2%', '0%', '10.65%', '+20%', '-4%', 'x1.20'),
+  CurseRow(5, '5%', '0%', '12.75%', '+25%', '-5%', 'x1.25'),
+  CurseRow(6, '5%', '0%', '14.85%', '+30%', '-6%', 'x1.30'),
+  CurseRow(7, '10%', '20%', '16.95%', '+35%', '-7%', 'x1.35'),
+  CurseRow(8, '10%', '20%', '19.05%', '+40%', '-8%', 'x1.40'),
+  CurseRow(9, '25%', '30%', '21.15%', '+45%', '-9%', 'x1.45'),
+  CurseRow(10, '50%', '50%', '23.25%', '+50%', '-10%', 'x1.50'),
 ];
 
 class StatsDetailScreen extends StatelessWidget {
@@ -465,7 +465,7 @@ class _CurseEffects extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currentIdx = curse.floor().clamp(0, 10);
-    final row = _curseTable[currentIdx];
+    final row = curseTable[currentIdx];
     final roomReward = (1 + coolness - curse).clamp(-50, 100);
 
     return Column(
@@ -621,14 +621,14 @@ class _CurseTable extends StatelessWidget {
             ),
           ],
           rows: [
-            for (int i = 0; i < _curseTable.length; i++)
+            for (int i = 0; i < curseTable.length; i++)
               DataRow(
                 color: i == highlightIdx
                     ? WidgetStatePropertyAll(Colors.amber.withValues(alpha: 0.18))
                     : null,
                 cells: [
                   DataCell(Text(
-                    '${_curseTable[i].curse}',
+                    '${curseTable[i].curse}',
                     style: TextStyle(
                       fontWeight: i == highlightIdx
                           ? FontWeight.bold
@@ -636,12 +636,12 @@ class _CurseTable extends StatelessWidget {
                       color: i == highlightIdx ? Colors.amber : null,
                     ),
                   )),
-                  DataCell(Text(_curseTable[i].jammedEnemy)),
-                  DataCell(Text(_curseTable[i].jammedBoss)),
-                  DataCell(Text(_curseTable[i].mimicChance)),
-                  DataCell(Text(_curseTable[i].fuseChance)),
-                  DataCell(Text(_curseTable[i].roomRewards)),
-                  DataCell(Text(_curseTable[i].ammo)),
+                  DataCell(Text(curseTable[i].jammedEnemy)),
+                  DataCell(Text(curseTable[i].jammedBoss)),
+                  DataCell(Text(curseTable[i].mimicChance)),
+                  DataCell(Text(curseTable[i].fuseChance)),
+                  DataCell(Text(curseTable[i].roomRewards)),
+                  DataCell(Text(curseTable[i].ammo)),
                 ],
               ),
           ],

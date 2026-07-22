@@ -6800,6 +6800,42 @@ class _CurseSheet extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 14),
+
+            // Compact live effects at current curse level
+            Builder(builder: (context) {
+              final currentIdx = value.floor().clamp(0, 10);
+              final row = curseTable[currentIdx];
+              final coolness = p.runState.totalCoolness;
+              final roomReward = (1 + coolness - value).clamp(-50, 100);
+              Widget effectChip(String label, String val, Color color) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
+                ),
+                child: Column(
+                  children: [
+                    Text(val, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
+                    const SizedBox(height: 2),
+                    Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                  ],
+                ),
+              );
+              return Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  effectChip('JAMMED', row.jammedEnemy, Colors.deepOrangeAccent),
+                  effectChip('JAM BOSS', row.jammedBoss, Colors.deepOrangeAccent),
+                  effectChip('MIMIC', row.mimicChance, Colors.redAccent),
+                  effectChip('FUSE', row.fuseChance, Colors.redAccent),
+                  effectChip('ROOM', '${roomReward.toStringAsFixed(0)}%', Colors.amber),
+                  effectChip('AMMO', row.ammo, Colors.lightGreenAccent),
+                ],
+              );
+            }),
             const SizedBox(height: 16),
 
             // Stat adjuster row
