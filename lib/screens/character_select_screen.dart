@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
@@ -84,12 +85,12 @@ class CharacterSelectScreen extends StatelessWidget {
               ),
               Expanded(
                 child: GridView.builder(
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 20),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.78,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.72,
+                    crossAxisSpacing: 14,
+                    mainAxisSpacing: 14,
                   ),
                   itemCount: p.allGungeoneers.length,
                   itemBuilder: (c, i) => _CharacterCard(
@@ -108,6 +109,13 @@ class CharacterSelectScreen extends StatelessWidget {
                         if (Navigator.canPop(c)) Navigator.pop(c);
                       }
                     },
+                  ).animate().fadeIn(
+                    duration: 300.ms,
+                    delay: (i * 60).ms,
+                  ).slide(
+                    begin: const Offset(0, 0.08),
+                    duration: 300.ms,
+                    curve: Curves.easeOutCubic,
                   ),
                 ),
               ),
@@ -134,18 +142,19 @@ class _CharacterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gunList = character.startingGuns.take(2).join(', ');
     return ScaleButton(
       onTap: onTap,
       enableHaptics: false,
       child: Card(
         color: const Color(0xFF1E1E22),
-        elevation: 4,
-        shadowColor: Colors.black.withValues(alpha: 0.5),
+        elevation: 6,
+        shadowColor: flair.primary.withValues(alpha: 0.12),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: flair.primary.withValues(alpha: 0.15),
-            width: 1,
+            color: flair.primary.withValues(alpha: 0.2),
+            width: 1.2,
           ),
         ),
         clipBehavior: Clip.antiAlias,
@@ -157,25 +166,26 @@ class _CharacterCard extends StatelessWidget {
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                      gradient: RadialGradient(
+                        center: Alignment.center,
+                        radius: 0.8,
                         colors: [
-                          flair.primary.withValues(alpha: 0.06),
-                          Colors.white.withValues(alpha: 0.02),
+                          flair.primary.withValues(alpha: 0.1),
+                          flair.primary.withValues(alpha: 0.02),
+                          Colors.transparent,
                         ],
                       ),
                     ),
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(18),
                     child: LayoutBuilder(
                       builder: (ctx, box) {
-                        final side = box.biggest.shortestSide.clamp(40.0, 120.0);
+                        final side = box.biggest.shortestSide.clamp(50.0, 140.0);
                         return AvatarAura(
                           size: side,
-                          borderRadius: 10,
+                          borderRadius: 12,
                           speedScale: 1.4,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12),
                             child: Transform.scale(
                               scale: 1.5,
                               child: character.icon.startsWith('assets/')
@@ -185,13 +195,13 @@ class _CharacterCard extends StatelessWidget {
                                       filterQuality: FilterQuality.none,
                                       errorBuilder: (_, __, ___) => const Icon(
                                         Icons.person,
-                                        size: 56,
+                                        size: 64,
                                         color: Colors.white70,
                                       ),
                                     )
                                   : const Icon(
                                       Icons.person,
-                                      size: 56,
+                                      size: 64,
                                       color: Colors.white70,
                                     ),
                             ),
@@ -201,36 +211,40 @@ class _CharacterCard extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: 6,
-                    right: 6,
+                    top: 8,
+                    right: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(6),
+                        color: Colors.black.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: flair.primary.withValues(alpha: 0.3),
+                          width: 0.5,
+                        ),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.gps_fixed, size: 8, color: flair.primary.withValues(alpha: 0.7)),
+                          Icon(Icons.gps_fixed, size: 9, color: flair.primary.withValues(alpha: 0.8)),
                           const SizedBox(width: 2),
                           Text(
                             '${character.startingGuns.length}',
                             style: TextStyle(
-                              fontSize: 9,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
-                              color: flair.primary.withValues(alpha: 0.8),
+                              color: flair.primary.withValues(alpha: 0.9),
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          Icon(Icons.inventory_2_outlined, size: 8, color: Colors.white.withValues(alpha: 0.5)),
+                          const SizedBox(width: 5),
+                          Icon(Icons.inventory_2_outlined, size: 9, color: Colors.white.withValues(alpha: 0.6)),
                           const SizedBox(width: 2),
                           Text(
                             '${character.startingItems.length}',
                             style: TextStyle(
-                              fontSize: 9,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white.withValues(alpha: 0.6),
+                              color: Colors.white.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -242,24 +256,42 @@ class _CharacterCard extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 8),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
               decoration: BoxDecoration(
-                color: flair.primary.withValues(alpha: 0.1),
+                color: flair.primary.withValues(alpha: 0.08),
                 border: Border(
                   top: BorderSide(color: flair.primary.withValues(alpha: 0.15), width: 0.5),
                 ),
               ),
-              child: GoopText(
-                character.name,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: prefs.font.textStyle.copyWith(
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                  color: Colors.white,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GoopText(
+                    character.name,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: prefs.font.textStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                      color: Colors.white,
+                    ),
+                  ),
+                  if (gunList.isNotEmpty) ...[
+                    const SizedBox(height: 3),
+                    Text(
+                      gunList,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        color: Colors.white.withValues(alpha: 0.45),
+                        height: 1.2,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
           ],

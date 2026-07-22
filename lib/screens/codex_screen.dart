@@ -106,9 +106,9 @@ class _CodexScreenState extends State<CodexScreen>
                     fontWeight: FontWeight.w900, letterSpacing: 1.2))
             : const SizedBox.shrink(),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(58),
+          preferredSize: const Size.fromHeight(52),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 2, 8, 6),
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
             child: TabBar(
               controller: _tab,
               labelStyle: const TextStyle(
@@ -132,19 +132,19 @@ class _CodexScreenState extends State<CodexScreen>
               dividerHeight: 0,
               tabs: [
                 Tab(
-                  height: 48,
+                  height: 42,
                   iconMargin: const EdgeInsets.only(bottom: 2),
                   icon: const Icon(Icons.widgets, size: 18),
                   text: 'Objects',
                 ),
                 Tab(
-                  height: 48,
+                  height: 42,
                   iconMargin: const EdgeInsets.only(bottom: 2),
                   icon: const Icon(Icons.inventory_2_outlined, size: 18),
                   text: 'Pickups',
                 ),
                 Tab(
-                  height: 48,
+                  height: 42,
                   iconMargin: const EdgeInsets.only(bottom: 2),
                   icon: const Icon(Icons.person_outline, size: 18),
                   text: 'NPCs',
@@ -160,7 +160,7 @@ class _CodexScreenState extends State<CodexScreen>
               children: [
                 // Search bar
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                  padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
                   child: SizedBox(
                     height: 44,
                     child: TextField(
@@ -255,69 +255,41 @@ class _CodexList extends StatelessWidget {
       );
     }
 
-    // Group entries by category
-    final grouped = <String, List<CodexEntry>>{};
-    for (final e in entries) {
-      final cat = e.category.isEmpty ? 'Other' : e.category;
-      grouped.putIfAbsent(cat, () => []).add(e);
-    }
-    final categories = grouped.keys.toList()..sort();
-
     return CustomScrollView(
       slivers: [
-        for (final cat in categories) ...[
-          // Category header
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
-              child: Text(
-                cat.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
-                  color: AppTheme.flair.secondary.withValues(alpha: 0.8),
-                ),
-              ),
-            ),
-          ),
-          // Grid of entries
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final entry = grouped[cat]![index];
-                  return _CodexCard(
-                    entry: entry,
-                    section: section,
-                    onTap: () {
-                      Haptics.selection();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => CodexDetailScreen(
-                            entry: entry,
-                            section: section,
-                          ),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(10, 8, 10, 24),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final entry = entries[index];
+                return _CodexCard(
+                  entry: entry,
+                  section: section,
+                  onTap: () {
+                    Haptics.selection();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CodexDetailScreen(
+                          entry: entry,
+                          section: section,
                         ),
-                      );
-                    },
-                  );
-                },
-                childCount: grouped[cat]!.length,
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                childAspectRatio: 0.82,
-              ),
+                      ),
+                    );
+                  },
+                );
+              },
+              childCount: entries.length,
+            ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 6,
+              childAspectRatio: 0.82,
             ),
           ),
-          const SliverToBoxAdapter(child: SizedBox(height: 4)),
-        ],
-        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ),
       ],
     );
   }
@@ -348,10 +320,10 @@ class _CodexCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF1E1E22),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: flair.primary.withValues(alpha: 0.15),
-            width: 1,
+            color: flair.primary.withValues(alpha: 0.12),
+            width: 0.8,
           ),
         ),
         child: Column(
@@ -359,7 +331,7 @@ class _CodexCard extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(4),
                 child: assetPath.isNotEmpty
                     ? Image.asset(
                         assetPath,
@@ -367,26 +339,26 @@ class _CodexCard extends StatelessWidget {
                         filterQuality: FilterQuality.none,
                         errorBuilder: (_, __, ___) => Icon(
                           _iconForCategory(entry.category),
-                          size: 32,
+                          size: 24,
                           color: flair.primary.withValues(alpha: 0.5),
                         ),
                       )
                     : Icon(
                         _iconForCategory(entry.category),
-                        size: 32,
+                        size: 24,
                         color: flair.primary.withValues(alpha: 0.5),
                       ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(4, 0, 4, 6),
+              padding: const EdgeInsets.fromLTRB(3, 0, 3, 4),
               child: Text(
                 entry.name,
                 maxLines: 2,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 8.5,
                   fontWeight: FontWeight.w700,
                   color: Colors.white.withValues(alpha: 0.85),
                   height: 1.1,
