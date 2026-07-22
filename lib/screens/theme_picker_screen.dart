@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -147,18 +148,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                           mode: m,
                           isActive: selected,
                           onApply: () => _select(m),
-                          isNew: const [
-                            AppThemeMode.gungeonProper,
-                            AppThemeMode.theOubliette,
-                            AppThemeMode.pastParadox,
-                            AppThemeMode.highPriestVoid,
-                            AppThemeMode.robotsCore,
-                            AppThemeMode.cultOfGundead,
-                            AppThemeMode.synergySurge,
-                            AppThemeMode.glitchedChest,
-                            AppThemeMode.lichsTomb,
-                            AppThemeMode.winchestersGame,
-                          ].contains(m),
+                          isNew: false,
                         ),
                       ),
                     );
@@ -214,6 +204,23 @@ class _ThemePreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isUnicorn = mode == AppThemeMode.unicorn;
+    final hasRemix = kThemeRemixes.containsKey(mode);
+    final listenable = isUnicorn
+        ? AppTheme.unicornPaletteNotifier
+        : hasRemix
+            ? AppTheme.remixNotifier
+            : null;
+    if (listenable != null) {
+      return ListenableBuilder(
+        listenable: listenable,
+        builder: (context, _) => _buildCard(context),
+      );
+    }
+    return _buildCard(context);
+  }
+
+  Widget _buildCard(BuildContext context) {
     final f = AppTheme.flairFor(mode);
     return Material(
       color: Colors.transparent,
@@ -402,6 +409,81 @@ class _ThemePreviewCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
+              // Palette / remix switcher chips.
+              if (mode == AppThemeMode.unicorn)
+                ListenableBuilder(
+                  listenable: AppTheme.unicornPaletteNotifier,
+                  builder: (context, _) {
+                    final active = AppTheme.unicornPalette;
+                    return _RemixChips(
+                      flair: AppTheme.flairFor(mode),
+                      labels: UnicornPalette.values.map((p) => p.label).toList(),
+                      activeIndex: active.index,
+                      onTap: (i) {
+                        AppTheme.setUnicornPalette(UnicornPalette.values[i]);
+                        Haptics.selection();
+                      },
+                    );
+                  },
+                )
+              else if (kThemeRemixes.containsKey(mode))
+                ListenableBuilder(
+                  listenable: AppTheme.remixNotifier,
+                  builder: (context, _) {
+                    final remixes = kThemeRemixes[mode]!;
+                    final active = AppTheme.remixFor(mode);
+                    return _RemixChips(
+                      flair: AppTheme.flairFor(mode),
+                      labels: remixes.map((r) => r.label).toList(),
+                      activeIndex: active,
+                      onTap: (i) {
+                        AppTheme.setRemix(mode, i);
+                        Haptics.selection();
+                      },
+                    );
+                  },
+                ),
+              if (mode == AppThemeMode.custom)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 32,
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: const Color(0xFF1E1E22),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+                          ),
+                          builder: (sheetCtx) => const _CustomThemeEditorSheet(),
+                        );
+                        // Refresh the card after editing
+                        if (context.mounted) {
+                          AppTheme.notifier.value = AppTheme.notifier.value;
+                        }
+                      },
+                      icon: Icon(Icons.palette, size: 16, color: f.primary),
+                      label: GoopText(
+                        'Customize Colors',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: f.primary,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: f.primary.withValues(alpha: 0.5), width: 1.2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(f.chipRadius),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               SizedBox(
                 width: double.infinity,
                 height: 38,
@@ -793,4 +875,264 @@ class _PaletteCore {
   final String label;
   final int weight;
   const _PaletteCore({required this.color, required this.label, required this.weight});
+}
+
+/// Curated Gungeon color palette for the custom theme editor.
+/// 24 deep, saturated colors that work well as scaffold/card/primary/secondary.
+const _kCustomColorPalette = <Color>[
+  Color(0xFF0D0C0B), Color(0xFF1A1A1A), Color(0xFF1A101F), Color(0xFF0F0A14),
+  Color(0xFF0A030C), Color(0xFF080510), Color(0xFF050308), Color(0xFF0A0F0E),
+  Color(0xFF0E1018), Color(0xFF120D0A), Color(0xFF0D110E), Color(0xFF0A1118),
+  Color(0xFFFF69B4), Color(0xFFFF1493), Color(0xFFE91E63), Color(0xFFFF4500),
+  Color(0xFFFFD700), Color(0xFF00E5FF), Color(0xFF00E676), Color(0xFF7C4DFF),
+  Color(0xFFB71C1C), Color(0xFF1B5E20), Color(0xFF1A237E), Color(0xFF4A148C),
+];
+
+class _CustomThemeEditorSheet extends StatefulWidget {
+  const _CustomThemeEditorSheet();
+
+  @override
+  State<_CustomThemeEditorSheet> createState() => _CustomThemeEditorSheetState();
+}
+
+class _CustomThemeEditorSheetState extends State<_CustomThemeEditorSheet> {
+  late CustomThemeData _data;
+  bool _loaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    _data = await CustomThemeData.loadAsync();
+    if (mounted) setState(() => _loaded = true);
+  }
+
+  Future<void> _save() async {
+    await CustomThemeData.save(_data);
+    AppTheme.setCustomThemeData(_data);
+    if (mounted) {
+      AppTheme.notifier.value = AppTheme.notifier.value;
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!_loaded) {
+      return const Padding(
+        padding: EdgeInsets.all(24),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 18),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Text(
+                  'CUSTOMIZE THEME',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: () {
+                    setState(() => _data = CustomThemeData.random());
+                    Haptics.selection();
+                  },
+                  icon: const Icon(Icons.casino, size: 16),
+                  label: const Text('Randomize', style: TextStyle(fontSize: 12)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _ColorSlotPicker(
+              label: 'Background',
+              current: _data.scaffold,
+              onPicked: (c) => setState(() => _data = _data.copyWith(scaffold: c)),
+            ),
+            _ColorSlotPicker(
+              label: 'Card',
+              current: _data.card,
+              onPicked: (c) => setState(() => _data = _data.copyWith(card: c)),
+            ),
+            _ColorSlotPicker(
+              label: 'Primary',
+              current: _data.primary,
+              onPicked: (c) => setState(() => _data = _data.copyWith(primary: c)),
+            ),
+            _ColorSlotPicker(
+              label: 'Secondary',
+              current: _data.secondary,
+              onPicked: (c) => setState(() => _data = _data.copyWith(secondary: c)),
+            ),
+            _ColorSlotPicker(
+              label: 'Accent / Headline',
+              current: _data.headlineStat,
+              onPicked: (c) => setState(() => _data = _data.copyWith(headlineStat: c)),
+            ),
+            _ColorSlotPicker(
+              label: 'Bullet',
+              current: _data.bulletColor,
+              onPicked: (c) => setState(() => _data = _data.copyWith(bulletColor: c)),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              height: 42,
+              child: FilledButton(
+                onPressed: _save,
+                child: const Text(
+                  'Save Theme',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, letterSpacing: 0.6),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A single color slot with a horizontal scrollable row of swatches.
+class _ColorSlotPicker extends StatelessWidget {
+  final String label;
+  final Color current;
+  final ValueChanged<Color> onPicked;
+  const _ColorSlotPicker({required this.label, required this.current, required this.onPicked});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white70,
+                  letterSpacing: 0.4,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                width: 16,
+                height: 16,
+                decoration: BoxDecoration(
+                  color: current,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: Colors.white24, width: 1),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          SizedBox(
+            height: 36,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: _kCustomColorPalette.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (_, i) {
+                final c = _kCustomColorPalette[i];
+                final selected = c.value == current.value;
+                return GestureDetector(
+                  onTap: () {
+                    onPicked(c);
+                    Haptics.selection();
+                  },
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: c,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: selected ? Colors.white : Colors.white12,
+                        width: selected ? 2.0 : 1.0,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A horizontal wrap of selectable chips for palette switching / remixing.
+class _RemixChips extends StatelessWidget {
+  final ThemeFlair flair;
+  final List<String> labels;
+  final int activeIndex;
+  final ValueChanged<int> onTap;
+
+  const _RemixChips({
+    required this.flair,
+    required this.labels,
+    required this.activeIndex,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        spacing: 6,
+        children: [
+          for (int i = 0; i < labels.length; i++)
+            GestureDetector(
+              onTap: () => onTap(i),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: i == activeIndex
+                      ? flair.primary.withValues(alpha: 0.2)
+                      : Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: i == activeIndex
+                        ? flair.primary
+                        : Colors.white.withValues(alpha: 0.1),
+                    width: i == activeIndex ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Text(
+                  labels[i],
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: i == activeIndex ? FontWeight.w800 : FontWeight.w600,
+                    color: i == activeIndex
+                        ? flair.primary
+                        : Colors.white.withValues(alpha: 0.6),
+                    letterSpacing: 0.4,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }

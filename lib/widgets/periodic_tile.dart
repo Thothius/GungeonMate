@@ -17,10 +17,10 @@ import 'synergy_glow.dart';
 ///
 /// Interactions:
 /// - single tap → `onTap`
-/// - **hold** → the tile shakes for ~650ms to communicate "I'm listening",
-///   then fires `onLongPress` (if provided). The shake cancels if the
-///   finger is lifted before the threshold, so single-tap-to-open stays
-///   snappy.
+/// - **hold** → the tile shakes briefly to communicate "I'm listening",
+///   then fires `onLongPress` (if provided) after ~180ms. The shake
+///   cancels if the finger is lifted before the threshold, so
+///   single-tap-to-open stays snappy.
 class PeriodicTile extends StatefulWidget {
   final Gun? gun;
   final Item? item;
@@ -68,7 +68,7 @@ class _PeriodicTileState extends State<PeriodicTile>
 
   /// Duration the user must hold to fire [onLongPress]. Tuned so normal
   /// tap-and-release feels instant while the shake gives clear feedback.
-  static const Duration _holdDuration = Duration(milliseconds: 350);
+  static const Duration _holdDuration = Duration(milliseconds: 180);
 
   @override
   void initState() {

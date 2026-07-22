@@ -34,7 +34,7 @@ enum AppThemeMode {
     vibe: 'MAGICAL',
     diff: 'CO-OP',
     elem: 'RAINBOW',
-    whimsicalDescription: 'Douse your guns in pure, unadulterated cotton candy. Pastel pink and mint swirl in a soft ambient dream. Warning: Highly toxic to serious, dark, and brooding Gungeoneers.',
+    whimsicalDescription: 'A cotton candy megapack with seven switchable palettes: Cotton Candy, Neon, Dreamy, Sunset, Rainbow, Aurora, and Galaxy. Cycle through pastel pink, electric neon, whispered rose, golden-hour coral, full spectrum, northern lights, and deep space — all from one theme.',
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF1A101F),
       card: Color(0xFF2D1B36),
@@ -44,6 +44,8 @@ enum AppThemeMode {
       bulletColor: Color(0xFFE8A7F0),
       bulletGlyph: '✦',
       twinkleBullets: true,
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFFF69B4),
       tabularFigures: false,
       numberSizeScale: 1.05,
       numberWeight: FontWeight.w700,
@@ -74,6 +76,8 @@ enum AppThemeMode {
       bulletColor: Color(0xFFFF1493),
       bulletGlyph: '✦',
       twinkleBullets: true,
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFFF1493),
       tabularFigures: false,
       numberSizeScale: 1.08,
       numberWeight: FontWeight.w800,
@@ -104,6 +108,8 @@ enum AppThemeMode {
       bulletColor: Color(0xFFF8BBD0),
       bulletGlyph: '♡',
       twinkleBullets: false,
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFF8BBD0),
       tabularFigures: false,
       numberSizeScale: 1.03,
       numberWeight: FontWeight.w600,
@@ -134,6 +140,8 @@ enum AppThemeMode {
       bulletColor: Color(0xFFFF6B9D),
       bulletGlyph: '✦',
       twinkleBullets: false,
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFFF6B9D),
       tabularFigures: false,
       numberSizeScale: 1.05,
       numberWeight: FontWeight.w700,
@@ -687,6 +695,16 @@ enum AppThemeMode {
   }) : _staticFlair = staticFlair;
 
   ThemeFlair get flair {
+    if (this == AppThemeMode.unicorn) {
+      return AppTheme.unicornPalette.flair;
+    }
+    if (kThemeRemixes.containsKey(this)) {
+      final remixes = kThemeRemixes[this]!;
+      final idx = AppTheme.remixFor(this);
+      if (idx > 0 && idx < remixes.length) {
+        return _hueShiftFlair(_staticFlair!, remixes[idx].hueShift);
+      }
+    }
     if (this == AppThemeMode.custom) {
       final data = AppTheme._cachedCustomTheme ?? CustomThemeData.defaultTheme;
       return ThemeFlair(
@@ -716,8 +734,111 @@ enum AppThemeMode {
   }
 }
 
-/// Thematic font options for the app. Each font provides a different
-/// visual personality while maintaining readability.
+/// Palette variants for the Unicorn megapack. Each maps to one of the
+/// original Unicorn I-IV flairs, letting users cycle without needing
+/// four separate theme entries.
+enum UnicornPalette {
+  cottonCandy,
+  neon,
+  dreamy,
+  sunset,
+  rainbow,
+  aurora,
+  galaxy;
+
+  String get label => switch (this) {
+        cottonCandy => 'Cotton Candy',
+        neon => 'Neon',
+        dreamy => 'Dreamy',
+        sunset => 'Sunset',
+        rainbow => 'Rainbow',
+        aurora => 'Aurora',
+        galaxy => 'Galaxy',
+      };
+
+  ThemeFlair get flair => switch (this) {
+        cottonCandy => AppThemeMode.unicorn._staticFlair!,
+        neon => AppThemeMode.unicornII._staticFlair!,
+        dreamy => AppThemeMode.unicornIII._staticFlair!,
+        sunset => AppThemeMode.unicornIV._staticFlair!,
+        rainbow => const ThemeFlair(
+          scaffold: Color(0xFF100818),
+          card: Color(0xFF1E1030),
+          primary: Color(0xFFE91E63),
+          secondary: Color(0xFF9C27B0),
+          headlineStat: Color(0xFFFFEB3B),
+          bulletColor: Color(0xFFE91E63),
+          bulletGlyph: '✦',
+          twinkleBullets: true,
+          sparkleNumbers: true,
+          numberGlowColor: Color(0xFFE91E63),
+          tabularFigures: false,
+          numberSizeScale: 1.08,
+          numberWeight: FontWeight.w800,
+          numberStyle: FontStyle.italic,
+          chipRadius: 16,
+          cardRadius: 16,
+          dividerColor: Color(0x66E91E63),
+          dividerThickness: 1.2,
+          glowPrimary: Color(0x44E91E63),
+          glowSecondary: Color(0x33FFEB3B),
+          auraStyle: AvatarAuraStyle.pastelPulse,
+          headerGlyph: '\u2661',
+          headerUnderlineColor: Color(0x88E91E63),
+        ),
+        aurora => const ThemeFlair(
+          scaffold: Color(0xFF050E0A),
+          card: Color(0xFF0E1F18),
+          primary: Color(0xFF00E676),
+          secondary: Color(0xFFAA00FF),
+          headlineStat: Color(0xFF00BFA5),
+          bulletColor: Color(0xFF00E676),
+          bulletGlyph: '✦',
+          twinkleBullets: true,
+          sparkleNumbers: true,
+          numberGlowColor: Color(0xFF00E676),
+          tabularFigures: false,
+          numberSizeScale: 1.06,
+          numberWeight: FontWeight.w700,
+          numberStyle: FontStyle.italic,
+          chipRadius: 18,
+          cardRadius: 18,
+          dividerColor: Color(0x4400E676),
+          dividerThickness: 1.0,
+          glowPrimary: Color(0x4400E676),
+          glowSecondary: Color(0x33AA00FF),
+          auraStyle: AvatarAuraStyle.pastelPulse,
+          headerGlyph: '\u2661',
+          headerUnderlineColor: Color(0x6600E676),
+        ),
+        galaxy => const ThemeFlair(
+          scaffold: Color(0xFF06040F),
+          card: Color(0xFF0E0A20),
+          primary: Color(0xFF7C4DFF),
+          secondary: Color(0xFF00E5FF),
+          headlineStat: Color(0xFFFFD700),
+          bulletColor: Color(0xFF7C4DFF),
+          bulletGlyph: '✦',
+          twinkleBullets: true,
+          sparkleNumbers: true,
+          numberGlowColor: Color(0xFF7C4DFF),
+          tabularFigures: false,
+          numberSizeScale: 1.06,
+          numberWeight: FontWeight.w700,
+          numberStyle: FontStyle.italic,
+          chipRadius: 18,
+          cardRadius: 18,
+          dividerColor: Color(0x557C4DFF),
+          dividerThickness: 1.0,
+          glowPrimary: Color(0x447C4DFF),
+          glowSecondary: Color(0x3300E5FF),
+          auraStyle: AvatarAuraStyle.pastelPulse,
+          headerGlyph: '\u2661',
+          headerUnderlineColor: Color(0x777C4DFF),
+        ),
+      };
+}
+
 enum AppFont {
   gungeon,
   pressStart2p,
@@ -962,27 +1083,10 @@ extension AppFontLabel on AppFont {
 /// are no longer offered to users; on app init we migrate any persisted
 /// value not in this list onto the first entry below.
 const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
-  AppThemeMode.ammonomicon,
-  AppThemeMode.theBreach,
   AppThemeMode.unicorn,
-  AppThemeMode.unicornII,
-  AppThemeMode.unicornIII,
-  AppThemeMode.unicornIV,
   AppThemeMode.forgeMaster,
-  AppThemeMode.hollowChill,
-  AppThemeMode.lordJammed,
-  AppThemeMode.bulletHell,
-  AppThemeMode.resourcefulRat,
-  AppThemeMode.gungeonProper,
-  AppThemeMode.theOubliette,
-  AppThemeMode.pastParadox,
-  AppThemeMode.highPriestVoid,
   AppThemeMode.robotsCore,
-  AppThemeMode.cultOfGundead,
-  AppThemeMode.synergySurge,
-  AppThemeMode.glitchedChest,
-  AppThemeMode.lichsTomb,
-  AppThemeMode.winchestersGame,
+  AppThemeMode.custom,
 ];
 
 /// Animated avatar-border treatment. Painted by `AvatarAura` around
@@ -1076,7 +1180,7 @@ extension AppThemeModeLabel on AppThemeMode {
   String get tagline {
     switch (this) {
       case AppThemeMode.unicorn:
-        return 'Cotton Candy — lavender, pink, mint';
+        return '${AppTheme.unicornPalette.label} — 7 palettes in one megapack';
       case AppThemeMode.unicornII:
         return 'Neon Candy — hot pink, electric teal, glow';
       case AppThemeMode.unicornIII:
@@ -1636,6 +1740,16 @@ class ThemeFlair {
   /// numbers periodically (Coolmaxing signature).
   final bool shimmerHeadline;
 
+  /// Whether headline numbers should be surrounded by tiny twinkling
+  /// sparkles (Unicorn signature). Renders a few animated star glyphs
+  /// that pulse and fade around the number.
+  final bool sparkleNumbers;
+
+  /// Optional glow colour for headline numbers. When non-null, numbers
+  /// get a soft outer glow in this colour. Used by Unicorn palettes to
+  /// make stats feel magical.
+  final Color? numberGlowColor;
+
   /// Whether ✦ bullets should pulse opacity (Unicorn signature).
   final bool twinkleBullets;
 
@@ -1725,6 +1839,8 @@ class ThemeFlair {
     required this.bulletColor,
     this.bulletGlyph = '•',
     this.shimmerHeadline = false,
+    this.sparkleNumbers = false,
+    this.numberGlowColor,
     this.twinkleBullets = false,
     this.glowCurse = false,
     this.embossNumbers = false,
@@ -1749,9 +1865,67 @@ class ThemeFlair {
   });
 }
 
-// =============================================================================
-// VisualPrefs — user-controlled overlay effects, independent of palette
-// =============================================================================
+/// Shift the hue of a [Color] by [degrees] in HSL space.
+Color _hueShift(Color c, double degrees) {
+  final hsl = HSLColor.fromColor(c);
+  return hsl.withHue((hsl.hue + degrees) % 360).toColor();
+}
+
+/// Return a copy of [f] with every [Color] field hue-shifted by [degrees].
+ThemeFlair _hueShiftFlair(ThemeFlair f, double degrees) {
+  if (degrees == 0) return f;
+  return ThemeFlair(
+    scaffold: _hueShift(f.scaffold, degrees),
+    card: _hueShift(f.card, degrees),
+    primary: _hueShift(f.primary, degrees),
+    secondary: _hueShift(f.secondary, degrees),
+    headlineStat: _hueShift(f.headlineStat, degrees),
+    bulletColor: _hueShift(f.bulletColor, degrees),
+    bulletGlyph: f.bulletGlyph,
+    shimmerHeadline: f.shimmerHeadline,
+    sparkleNumbers: f.sparkleNumbers,
+    numberGlowColor: f.numberGlowColor != null ? _hueShift(f.numberGlowColor!, degrees) : null,
+    twinkleBullets: f.twinkleBullets,
+    glowCurse: f.glowCurse,
+    embossNumbers: f.embossNumbers,
+    tabularFigures: f.tabularFigures,
+    numberSizeScale: f.numberSizeScale,
+    numberWeight: f.numberWeight,
+    numberStyle: f.numberStyle,
+    chipRadius: f.chipRadius,
+    cardRadius: f.cardRadius,
+    cardBorderColor: f.cardBorderColor != null ? _hueShift(f.cardBorderColor!, degrees) : null,
+    cardBorderWidth: f.cardBorderWidth,
+    chipFilled: f.chipFilled,
+    dividerColor: f.dividerColor != null ? _hueShift(f.dividerColor!, degrees) : null,
+    dividerThickness: f.dividerThickness,
+    glowPrimary: _hueShift(f.glowPrimary, degrees),
+    glowSecondary: _hueShift(f.glowSecondary, degrees),
+    auraStyle: f.auraStyle,
+    headerGlyph: f.headerGlyph,
+    headerAllCaps: f.headerAllCaps,
+    headerUnderlineColor: f.headerUnderlineColor != null ? _hueShift(f.headerUnderlineColor!, degrees) : null,
+    pageFrame: f.pageFrame,
+  );
+}
+
+/// Per-theme remix options. Each entry is `(label, hueShiftDegrees)`.
+/// Unicorn uses [UnicornPalette] instead — not listed here.
+const kThemeRemixes = <AppThemeMode, List<({String label, double hueShift})>>{
+  AppThemeMode.forgeMaster: [
+    (label: 'Original', hueShift: 0),
+    (label: 'Ember', hueShift: 18),
+    (label: 'Ash', hueShift: -35),
+    (label: 'Magma', hueShift: 35),
+  ],
+  AppThemeMode.robotsCore: [
+    (label: 'Original', hueShift: 0),
+    (label: 'Overclock', hueShift: 55),
+    (label: 'Rust', hueShift: -25),
+    (label: 'Plasma', hueShift: 175),
+  ],
+};
+
 
 enum CustomDiceType {
   themeDefault,
@@ -1909,7 +2083,7 @@ class VisualPrefs {
     this.dialogueTextSpeedMs = 30,
     this.isGoopianLanguage = false,
     this.spongeActive = false,
-    this.showDamageCalculator = true,
+    this.showDamageCalculator = false,
     this.periodicGridColumnCount = 0,
     this.wallpaperMode = WallpaperMode.themeDefault,
     this.selectedStillWallpaper = 'wp_still_05_galaxy.webp',
@@ -2003,7 +2177,7 @@ class VisualPrefs {
 
       final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
-      final showDamageCalculator = p.getBool(_kShowDamageCalculator) ?? true;
+      final showDamageCalculator = p.getBool(_kShowDamageCalculator) ?? false;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
 
       final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
@@ -2321,12 +2495,13 @@ class AppTheme {
   const AppTheme._();
 
   static const String _prefsKey = 'theme.mode.v2';
+  static const String _unicornPaletteKey = 'theme.unicorn.palette.v1';
   // Old key from the 4-mode era. Migrated on first run then cleared so
   // returning users don't get parked on an invalid index.
   static const String _legacyKey = 'theme.mode';
 
   static final ValueNotifier<AppThemeMode> notifier =
-      ValueNotifier<AppThemeMode>(AppThemeMode.ammonomicon);
+      ValueNotifier<AppThemeMode>(AppThemeMode.unicorn);
 
   static final ValueNotifier<AppThemeMode?> previewNotifier =
       ValueNotifier<AppThemeMode?>(null);
@@ -2336,6 +2511,36 @@ class AppTheme {
 
   static AppThemeMode get displayedMode => previewNotifier.value ?? notifier.value;
   static ThemeFlair get displayedFlair => flairFor(displayedMode);
+
+  /// Active palette for the Unicorn megapack. Persisted across sessions.
+  static UnicornPalette _unicornPalette = UnicornPalette.cottonCandy;
+  static UnicornPalette get unicornPalette => _unicornPalette;
+  static final ValueNotifier<UnicornPalette> unicornPaletteNotifier =
+      ValueNotifier<UnicornPalette>(UnicornPalette.cottonCandy);
+
+  static Future<void> setUnicornPalette(UnicornPalette p) async {
+    _unicornPalette = p;
+    unicornPaletteNotifier.value = p;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_unicornPaletteKey, p.index);
+    } catch (_) {}
+  }
+
+  /// Per-theme remix index (0 = original). Persisted.
+  static final Map<AppThemeMode, int> _remixIndex = {};
+  static final ValueNotifier<int> remixNotifier = ValueNotifier(0);
+
+  static int remixFor(AppThemeMode m) => _remixIndex[m] ?? 0;
+
+  static Future<void> setRemix(AppThemeMode m, int idx) async {
+    _remixIndex[m] = idx;
+    remixNotifier.value = idx;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('theme.remix.${m.index}', idx);
+    } catch (_) {}
+  }
 
   /// Cached custom theme name for synchronous label access.
   static String _customThemeName = 'Custom';
@@ -2363,22 +2568,49 @@ class AppTheme {
     notifier.value = kVisibleThemes.first;
     try {
       final prefs = await SharedPreferences.getInstance();
+
+      // Load unicorn palette preference.
+      final palIdx = prefs.getInt(_unicornPaletteKey);
+      if (palIdx != null && palIdx >= 0 && palIdx < UnicornPalette.values.length) {
+        _unicornPalette = UnicornPalette.values[palIdx];
+        unicornPaletteNotifier.value = _unicornPalette;
+      }
+
+      // Load per-theme remix indices.
+      for (final m in kThemeRemixes.keys) {
+        final rIdx = prefs.getInt('theme.remix.${m.index}');
+        if (rIdx != null && rIdx >= 0 && rIdx < kThemeRemixes[m]!.length) {
+          _remixIndex[m] = rIdx;
+        }
+      }
+
       final idx = prefs.getInt(_prefsKey);
       if (idx != null && idx >= 0 && idx < AppThemeMode.values.length) {
         final m = AppThemeMode.values[idx];
         if (kVisibleThemes.contains(m)) {
           notifier.value = m;
         } else {
-          // Persisted theme was removed — migrate to default and write
-          // it back so the picker shows the right active card.
+          // Migrate Unicorn II-IV to Unicorn + corresponding palette.
+          if (m == AppThemeMode.unicornII) {
+            _unicornPalette = UnicornPalette.neon;
+            unicornPaletteNotifier.value = _unicornPalette;
+            await prefs.setInt(_unicornPaletteKey, UnicornPalette.neon.index);
+          } else if (m == AppThemeMode.unicornIII) {
+            _unicornPalette = UnicornPalette.dreamy;
+            unicornPaletteNotifier.value = _unicornPalette;
+            await prefs.setInt(_unicornPaletteKey, UnicornPalette.dreamy.index);
+          } else if (m == AppThemeMode.unicornIV) {
+            _unicornPalette = UnicornPalette.sunset;
+            unicornPaletteNotifier.value = _unicornPalette;
+            await prefs.setInt(_unicornPaletteKey, UnicornPalette.sunset.index);
+          }
+          // Persisted theme was removed — migrate to Unicorn (first visible).
           notifier.value = kVisibleThemes.first;
           await prefs.setInt(_prefsKey, kVisibleThemes.first.index);
         }
         return;
       }
-      // Old legacy 4-mode index. Anything other than "marine" maps to
-      // the new default; marine was the cleanest equivalent of
-      // Minimalist.
+      // Old legacy 4-mode index.
       final legacyIdx = prefs.getInt(_legacyKey);
       if (legacyIdx != null) {
         notifier.value = kVisibleThemes.first;

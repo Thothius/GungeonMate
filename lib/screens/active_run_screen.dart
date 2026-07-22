@@ -227,17 +227,15 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
           ? null
           : FloatingActionButton(
               heroTag: 'fab_add',
-              tooltip: (isMpActive && !onMyMpPage)
-                  ? null // no FAB on peer's page in MP
+              tooltip: isMpActive && !onMyMpPage
+                  ? 'Add to ${session.peerNickname ?? 'Peer'}'
                   : (_currentPage == 1 ? 'Add to P2' : 'Add to inventory'),
-              onPressed: (isMpActive && !onMyMpPage)
-                  ? null
-                  : () {
-                      _showQuickAddBottomSheet(
-                        context,
-                        _currentPage == 1 ? PlayerSlot.coop : PlayerSlot.main,
-                      );
-                    },
+              onPressed: () {
+                _showQuickAddBottomSheet(
+                  context,
+                  _currentPage == 1 ? PlayerSlot.coop : PlayerSlot.main,
+                );
+              },
               child: const Icon(Icons.add, size: 32),
             ),
       body: Column(
@@ -358,7 +356,13 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          slot == PlayerSlot.coop ? 'QUICK ADD TO PLAYER 2' : 'QUICK ADD TO RUN',
+                          () {
+                            final mpSession = context.read<MultiplayerSession>();
+                            if (mpSession.isActive && !mpSession.isSimulated && mpSession.mySlot != slot) {
+                              return 'ADD TO ${mpSession.peerNickname?.toUpperCase() ?? 'PEER'}';
+                            }
+                            return slot == PlayerSlot.coop ? 'QUICK ADD TO PLAYER 2' : 'QUICK ADD TO RUN';
+                          }(),
                           style: const TextStyle(
                             fontFamily: 'EnterTheGungeonBig',
                             fontSize: 12.5,
@@ -533,7 +537,16 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                           ),
                                           onPressed: () {
                                             Haptics.selection();
-                                            if (isGun) {
+                                            final mpSession = context.read<MultiplayerSession>();
+                                            final isMpPeerAdd = mpSession.isActive &&
+                                                !mpSession.isSimulated &&
+                                                mpSession.mySlot != slot;
+                                            if (isMpPeerAdd) {
+                                              mpSession.sendAddToPeer(
+                                                kind: isGun ? 'gun' : 'item',
+                                                name: name,
+                                              );
+                                            } else if (isGun) {
                                               p.addGun(item, slot: slot);
                                             } else {
                                               p.addItem(item, slot: slot);
@@ -5960,6 +5973,12 @@ class _HeaderMenu extends StatelessWidget {
           case 'help':
             _showHelpDialog(context);
             break;
+          case 'toggle_damage_calc':
+            VisualPrefs.setShowDamageCalculator(
+              !VisualPrefs.notifier.value.showDamageCalculator,
+            );
+            Haptics.selection();
+            break;
         }
       },
       itemBuilder: (ctx) => [
@@ -6018,6 +6037,20 @@ class _HeaderMenu extends StatelessWidget {
         const PopupMenuDivider(),
 
         // --- Group 3: System, Resets & Admin ---
+        PopupMenuItem(
+          value: 'toggle_damage_calc',
+          child: Row(children: [
+            Icon(
+              VisualPrefs.notifier.value.showDamageCalculator
+                  ? Icons.check_box_outlined
+                  : Icons.check_box_outline_blank,
+              size: 18,
+              color: Colors.amberAccent,
+            ),
+            const SizedBox(width: 10),
+            const Text('Damage Calculator'),
+          ]),
+        ),
         if (mpActive) ...[
           const PopupMenuItem(
             value: 'save_mp_session',
@@ -8158,11 +8191,17 @@ class _SummaryTab extends StatelessWidget {
 }
 
 /// Multiplayer Summary page — swipe right from P2 to reach it.
-/// Shows both gungeoneers as animated GIFs with usernames, a stats
-/// comparison panel, and a synergy overview showing all possible
-/// synergies from the combined inventories.
-class _MpSummaryPage extends StatelessWidget {
+/// Shows both gungeoneers as animated GIFs with usernames, a compact
+/// stats grid, and a collapsible synergy overview with visual icon pairs.
+class _MpSummaryPage extends StatefulWidget {
   const _MpSummaryPage();
+
+  @override
+  State<_MpSummaryPage> createState() => _MpSummaryPageState();
+}
+
+class _MpSummaryPageState extends State<_MpSummaryPage> {
+  bool _synergyExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -8172,12 +8211,10 @@ class _MpSummaryPage extends StatelessWidget {
     final main = state.main;
     final coop = state.coop ?? Player();
 
-    // Resolve nicknames
     final iAmMain = session.myRole == MpRole.main;
     final p1Nick = iAmMain ? session.myNickname : (session.peerNickname ?? 'P1');
     final p2Nick = !iAmMain ? session.myNickname : (session.peerNickname ?? 'P2');
 
-    // Per-player stats
     final p1Guns = main.guns;
     final p1Items = main.items;
     final p2Guns = coop.guns;
@@ -8189,6 +8226,7 @@ class _MpSummaryPage extends StatelessWidget {
     final p2MaxDps = p2Guns.isEmpty
         ? 0.0
         : p2Guns.map((g) => g.dpsValue).fold<double>(0, (a, b) => a > b ? a : b);
+    final teamMaxDps = math.max(p1MaxDps, p2MaxDps);
 
     final p1DmgMult = DamageCalculator.multiplier(guns: p1Guns, items: p1Items);
     final p2DmgMult = DamageCalculator.multiplier(guns: p2Guns, items: p2Items);
@@ -8197,10 +8235,7 @@ class _MpSummaryPage extends StatelessWidget {
     final p2ActiveSyns = p.getActiveSynergiesForSlot(PlayerSlot.coop);
     final allCombinedSyns = p.getActiveSynergiesCombined();
 
-    // All possible synergies from combined inventories (active + partial)
-    final combinedNames = state.allItemNames
-        .map((n) => n.toLowerCase())
-        .toSet();
+    final combinedNames = state.allItemNames.map((n) => n.toLowerCase()).toSet();
     final possibleSyns = p.allSynergies.where((s) {
       final hasAny = s.items.any((i) => combinedNames.contains(i.toLowerCase())) ||
           s.anyOf.any((i) => combinedNames.contains(i.toLowerCase()));
@@ -8209,7 +8244,6 @@ class _MpSummaryPage extends StatelessWidget {
 
     final activeSynNames = allCombinedSyns.map((s) => s.name.toLowerCase()).toSet();
 
-    // Group possible synergies by status for at-a-glance scanning
     final activeSyns = <Synergy>[];
     final partialSyns = <Synergy>[];
     final lockedSyns = <Synergy>[];
@@ -8224,6 +8258,23 @@ class _MpSummaryPage extends StatelessWidget {
         } else {
           lockedSyns.add(syn);
         }
+      }
+    }
+
+    // Next-pickup hint: which single missing item would activate the most partials
+    String? nextPickupHint;
+    if (partialSyns.isNotEmpty) {
+      final candidateCounts = <String, int>{};
+      for (final syn in partialSyns) {
+        for (final m in syn.missingFor(combinedNames)) {
+          if (!m.startsWith('any of:')) {
+            candidateCounts[m] = (candidateCounts[m] ?? 0) + 1;
+          }
+        }
+      }
+      if (candidateCounts.isNotEmpty) {
+        final best = candidateCounts.entries.reduce((a, b) => a.value >= b.value ? a : b);
+        nextPickupHint = 'Next pickup: ${best.key} (+${best.value} synergy${best.value > 1 ? 's' : ''})';
       }
     }
 
@@ -8267,12 +8318,12 @@ class _MpSummaryPage extends StatelessWidget {
             ),
           ),
 
-          // ── Stats comparison panel ────────────────────────────
+          // ── Compact stats grid ────────────────────────────────
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
               child: Container(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E1E22),
                   borderRadius: BorderRadius.circular(14),
@@ -8283,148 +8334,72 @@ class _MpSummaryPage extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      'LOADOUT STATS',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
-                        color: Colors.white54,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    // Header row
+                    // Team DPS headline
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            p1Nick,
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.cyanAccent.withValues(alpha: 0.8),
-                            ),
+                        Icon(Icons.flash_on, size: 14, color: Colors.amberAccent.withValues(alpha: 0.7)),
+                        const SizedBox(width: 6),
+                        Text(
+                          'TEAM MAX DPS',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.0,
+                            color: Colors.white.withValues(alpha: 0.4),
                           ),
                         ),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            'STAT',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.8,
-                              color: Colors.white.withValues(alpha: 0.35),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            p2Nick,
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.purpleAccent.withValues(alpha: 0.8),
-                            ),
+                        const SizedBox(width: 8),
+                        Text(
+                          teamMaxDps.toStringAsFixed(1),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.amberAccent,
+                            shadows: [Shadow(color: Colors.amberAccent.withValues(alpha: 0.3), blurRadius: 8)],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    _StatComparisonRow(
-                      label: 'Guns',
-                      p1Value: '${p1Guns.length}',
-                      p2Value: '${p2Guns.length}',
-                      icon: Icons.gps_fixed,
+                    const SizedBox(height: 10),
+                    // Row 1: Guns | Items | Active Syns
+                    Row(
+                      children: [
+                        Expanded(child: _statChip('Guns', '${p1Guns.length}', '${p2Guns.length}', p1Nick, p2Nick, Icons.gps_fixed)),
+                        Expanded(child: _statChip('Items', '${p1Items.length}', '${p2Items.length}', p2Nick, p2Nick, Icons.inventory_2_rounded)),
+                        Expanded(child: _statChip('Syns', '${p1ActiveSyns.length}', '${p2ActiveSyns.length}', p1Nick, p2Nick, Icons.auto_awesome)),
+                      ],
                     ),
-                    _StatComparisonRow(
-                      label: 'Items',
-                      p1Value: '${p1Items.length}',
-                      p2Value: '${p2Items.length}',
-                      icon: Icons.inventory_2_rounded,
-                    ),
-                    _StatComparisonRow(
-                      label: 'Active Syns',
-                      p1Value: '${p1ActiveSyns.length}',
-                      p2Value: '${p2ActiveSyns.length}',
-                      icon: Icons.auto_awesome,
-                    ),
-                    _StatComparisonRow(
-                      label: 'Max DPS',
-                      p1Value: p1MaxDps.toStringAsFixed(1),
-                      p2Value: p2MaxDps.toStringAsFixed(1),
-                      icon: Icons.flash_on,
-                    ),
-                    _StatComparisonRow(
-                      label: 'DMG Bonus',
-                      p1Value: '${((p1DmgMult - 1) * 100).toStringAsFixed(0)}%',
-                      p2Value: '${((p2DmgMult - 1) * 100).toStringAsFixed(0)}%',
-                      icon: Icons.trending_up,
-                    ),
-                    // Coolness/Curse are shared dungeon state — single
-                    // centered value, not duplicated per-player.
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                    const SizedBox(height: 6),
+                    // Row 2: Max DPS | DMG Bonus | Cool/Curse
+                    Expanded(
                       child: Row(
                         children: [
-                          const Spacer(),
-                          Icon(Icons.ac_unit, size: 12, color: Colors.cyanAccent.withValues(alpha: 0.6)),
-                          const SizedBox(width: 6),
-                          Text(
-                            'Coolness',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white.withValues(alpha: 0.5),
+                          Expanded(child: _statChip('DPS', p1MaxDps.toStringAsFixed(0), p2MaxDps.toStringAsFixed(0), p1Nick, p2Nick, Icons.flash_on)),
+                          Expanded(child: _statChip('DMG', '${((p1DmgMult - 1) * 100).toStringAsFixed(0)}%', '${((p2DmgMult - 1) * 100).toStringAsFixed(0)}%', p1Nick, p2Nick, Icons.trending_up)),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.ac_unit, size: 10, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                                    const SizedBox(width: 3),
+                                    Text('+${state.totalCoolness.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.cyanAccent)),
+                                  ],
+                                ),
+                                const SizedBox(height: 2),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.local_fire_department, size: 10, color: Colors.redAccent.withValues(alpha: 0.6)),
+                                    const SizedBox(width: 3),
+                                    Text('+${state.totalCurse.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.redAccent)),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '+${state.totalCoolness.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.cyanAccent,
-                            ),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          Icon(Icons.local_fire_department, size: 12, color: Colors.redAccent.withValues(alpha: 0.6)),
-                          const SizedBox(width: 6),
-                          Text(
-                            'Curse',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white.withValues(alpha: 0.5),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '+${state.totalCurse.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                          const Spacer(),
                         ],
                       ),
                     ),

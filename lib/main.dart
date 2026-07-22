@@ -82,12 +82,16 @@ class _GungeonMateAppState extends State<GungeonMateApp>
       // the palette swap is instant and covers every descendant.
       child: ValueListenableBuilder<AppThemeMode>(
         valueListenable: AppTheme.notifier,
-        builder: (_, mode, __) => ValueListenableBuilder<VisualPrefs>(
-          valueListenable: VisualPrefs.notifier,
-          builder: (context, prefs, ___) => MaterialApp(
-            title: 'Gungeon Mate',
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.themeFor(mode),
+        builder: (_, mode, __) => ValueListenableBuilder<UnicornPalette>(
+          valueListenable: AppTheme.unicornPaletteNotifier,
+          builder: (_, pal, __) => ValueListenableBuilder<int>(
+          valueListenable: AppTheme.remixNotifier,
+          builder: (_, remix, __) => ValueListenableBuilder<VisualPrefs>(
+            valueListenable: VisualPrefs.notifier,
+            builder: (context, prefs, ___) => MaterialApp(
+              title: 'Gungeon Mate',
+              debugShowCheckedModeBanner: false,
+              theme: AppTheme.themeFor(mode),
             scrollBehavior: const MaterialScrollBehavior().copyWith(
               dragDevices: {
                 PointerDeviceKind.touch,
@@ -110,6 +114,8 @@ class _GungeonMateAppState extends State<GungeonMateApp>
             },
             home: const HomeScreen(),
           ),
+        ),
+        ),
         ),
       ),
     );

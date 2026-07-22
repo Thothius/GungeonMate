@@ -834,6 +834,20 @@ class MultiplayerSession extends ChangeNotifier {
     }
   }
 
+  /// Add-to-peer: send a gift without removing from local inventory.
+  /// Used when one player quick-adds an item to the peer's inventory
+  /// via the FAB — no local removal needed, just ship the gift.
+  Future<void> sendAddToPeer({required String kind, required String name}) async {
+    if (!isConnected) return;
+    final giftId = _newReqId();
+    _pendingGifts.add(_PendingGift(giftId: giftId, kind: kind, name: name));
+    try {
+      await _service.sendMessage(MpGift(kind: kind, name: name, giftId: giftId));
+    } catch (_) {
+      _pendingGifts.removeWhere((g) => g.giftId == giftId);
+    }
+  }
+
   /// Gift: remove locally + send `gift`. If send fails, rollback the removal
   /// to prevent item loss.
   Future<void> sendGift({required String kind, required String name}) async {
