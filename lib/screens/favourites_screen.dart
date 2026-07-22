@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../widgets/periodic_tile.dart';
 import 'item_detail_screen.dart';
+import '../utils/fast_route.dart';
 import '../services/app_theme.dart';
 
 /// Quick-access view for guns/items the user has starred. Shared across
@@ -80,9 +81,7 @@ class FavouritesScreen extends StatelessWidget {
                               gun: g,
                               onTap: () => Navigator.push(
                                 c,
-                                MaterialPageRoute(
-                                  builder: (_) => ItemDetailScreen(gun: g),
-                                ),
+                                fastRoute(ItemDetailScreen(gun: g)),
                               ),
                             );
                           },
@@ -108,9 +107,7 @@ class FavouritesScreen extends StatelessWidget {
                               item: it,
                               onTap: () => Navigator.push(
                                 c,
-                                MaterialPageRoute(
-                                  builder: (_) => ItemDetailScreen(item: it),
-                                ),
+                                fastRoute(ItemDetailScreen(item: it)),
                               ),
                             );
                           },

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../widgets/game_icon.dart';
 import 'item_detail_screen.dart';
+import '../utils/fast_route.dart';
 
 class SynergiesOverviewScreen extends StatefulWidget {
   const SynergiesOverviewScreen({super.key});
@@ -336,9 +337,7 @@ class _AnyOfChips extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (_) => ItemDetailScreen(gun: gun, item: item),
-              ),
+              fastRoute(ItemDetailScreen(gun: gun, item: item)),
             ),
             child: body,
           ),

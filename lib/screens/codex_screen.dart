@@ -5,6 +5,7 @@ import '../models/codex_entry.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import 'codex_detail_screen.dart';
+import '../utils/fast_route.dart';
 
 /// The GungeonMate Codex — a browseable encyclopedia of Objects, Pickups,
 /// and NPCs from Enter the Gungeon. Accessed from the main menu or as a
@@ -270,12 +271,10 @@ class _CodexList extends StatelessWidget {
                     Haptics.selection();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => CodexDetailScreen(
-                          entry: entry,
-                          section: section,
-                        ),
-                      ),
+                      fastRoute(CodexDetailScreen(
+                        entry: entry,
+                        section: section,
+                      )),
                     );
                   },
                 );

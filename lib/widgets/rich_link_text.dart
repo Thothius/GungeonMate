@@ -8,6 +8,7 @@ import '../models/rich_text.dart';
 import '../models/shrine.dart';
 import '../providers/run_provider.dart';
 import '../screens/item_detail_screen.dart';
+import '../utils/fast_route.dart';
 import '../screens/stats_detail_screen.dart';
 import '../services/app_theme.dart';
 import 'game_icon.dart';
@@ -160,7 +161,7 @@ class RichLinkText extends StatelessWidget {
             : StatType.coolness;
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => StatsDetailScreen(statType: t)),
+          fastRoute(StatsDetailScreen(statType: t)),
         );
         return;
       case RefKind.gun:
@@ -222,9 +223,7 @@ class RichLinkText extends StatelessWidget {
     FocusManager.instance.primaryFocus?.unfocus();
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => ItemDetailScreen(gun: gun, item: item),
-      ),
+      fastRoute(ItemDetailScreen(gun: gun, item: item)),
     );
   }
 }
@@ -409,9 +408,7 @@ class _PeekSheet extends StatelessWidget {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => ItemDetailScreen(gun: gun, item: item),
-                    ),
+                    fastRoute(ItemDetailScreen(gun: gun, item: item)),
                   );
                 },
               ),

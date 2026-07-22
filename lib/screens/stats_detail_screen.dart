@@ -910,20 +910,85 @@ class _QuickActionCard extends StatelessWidget {
 
 // ---------------------- Event log feed ---------------------------------------
 
-class _EventLog extends StatelessWidget {
+class _EventLog extends StatefulWidget {
   final bool isCool;
   const _EventLog({required this.isCool});
 
   @override
+  State<_EventLog> createState() => _EventLogState();
+}
+
+class _EventLogState extends State<_EventLog> {
+  bool _collapsed = true;
+
+  @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
-    final entries = isCool ? p.coolnessLog : p.curseLog;
+    final entries = widget.isCool ? p.coolnessLog : p.curseLog;
+    final title = widget.isCool ? 'Coolness event log' : 'Curse event log';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(isCool ? 'Coolness event log' : 'Curse event log'),
-        if (entries.isEmpty)
+        // Tap-to-expand header with entry count badge
+        InkWell(
+          onTap: entries.isEmpty
+              ? null
+              : () {
+                  Haptics.selection();
+                  setState(() => _collapsed = !_collapsed);
+                },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+            child: Row(
+              children: [
+                Text(
+                  title.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.4,
+                    color: Colors.white.withValues(alpha: 0.65),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                if (entries.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '${entries.length}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                const Spacer(),
+                if (entries.isNotEmpty)
+                  AnimatedRotation(
+                    turns: _collapsed ? 0 : 0.5,
+                    duration: const Duration(milliseconds: 180),
+                    child: Icon(
+                      Icons.expand_more_rounded,
+                      size: 16,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        if (!_collapsed && entries.isNotEmpty) ...[
+          ...entries.take(20).map((e) => _LogTile(entry: e, isCool: widget.isCool)),
+          const SizedBox(height: 8),
+          _LogLegend(entries: entries),
+        ],
+        if (_collapsed && entries.isEmpty)
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -941,12 +1006,7 @@ class _EventLog extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-          )
-        else ...[
-          ...entries.take(20).map((e) => _LogTile(entry: e, isCool: isCool)),
-          const SizedBox(height: 8),
-          _LogLegend(entries: entries),
-        ],
+          ),
       ],
     );
   }

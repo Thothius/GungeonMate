@@ -1746,18 +1746,6 @@ class _PlayerPageState extends State<_PlayerPage> {
           ),
         ),
         _DashboardSwiper(slot: _slot),
-        // Effects panel — toggleable via the effects button on the char panel.
-        SliverToBoxAdapter(
-          child: ListenableBuilder(
-            listenable: VisualPrefs.notifier,
-            builder: (context, _) {
-              if (!VisualPrefs.notifier.value.showEffectsPanel) {
-                return const SizedBox.shrink();
-              }
-              return _EffectsTile(slot: _slot);
-            },
-          ),
-        ),
         _SectionHeaderSliver(
           title: 'Guns',
           count: guns.length,
@@ -4115,6 +4103,7 @@ class _HuntressDashboardSliver extends StatefulWidget {
 class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
   int _petCount = 0;
   int _treatCount = 0;
+  bool _collapsed = false;
 
   @override
   void initState() {
@@ -4172,7 +4161,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header + dig chance badge
+              // Header + dig chance badge + collapse toggle
               Row(
                 children: [
                   const Icon(Icons.pets_rounded, color: Colors.lightGreenAccent, size: 18),
@@ -4194,9 +4183,22 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                       style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent),
                     ),
                   ),
+                  const SizedBox(width: 6),
+                  InkWell(
+                    onTap: () {
+                      Haptics.selection();
+                      setState(() => _collapsed = !_collapsed);
+                    },
+                    borderRadius: BorderRadius.circular(4),
+                    child: Icon(
+                      _collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded,
+                      color: Colors.lightGreenAccent.withValues(alpha: 0.7),
+                      size: 18,
+                    ),
+                  ),
                 ],
               ),
-              if (hasBabyGoodMimic)
+              if (!_collapsed) ...[
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: Text(
@@ -4289,6 +4291,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                   ),
                 ],
               ),
+              ], // end if (!_collapsed)
             ],
           ),
         ),
@@ -4308,7 +4311,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
 }
 
 // =============================================================================
-// Special Dashboard Swiper — PageView carousel for all active special dashboards
+// Special Dashboard Swiper — AnimatedSwitcher carousel for all active special dashboards
 // =============================================================================
 
 class _DashboardSwiper extends StatefulWidget {
@@ -4320,20 +4323,7 @@ class _DashboardSwiper extends StatefulWidget {
 }
 
 class _DashboardSwiperState extends State<_DashboardSwiper> {
-  late final PageController _pc;
   int _page = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _pc = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pc.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -4426,37 +4416,60 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
     // Clamp page index
     if (_page >= dashboards.length) _page = 0;
 
+    // Extract the child widget from each SliverToBoxAdapter so we can
+    // render it directly without a fixed-height PageView — the height
+    // scales to the dashboard's actual content.
+    Widget dashboardChild(Widget sliver) {
+      if (sliver is SliverToBoxAdapter && sliver.child != null) {
+        return sliver.child!;
+      }
+      return SizedBox(height: 120, child: CustomScrollView(slivers: [sliver]));
+    }
+
     return SliverToBoxAdapter(
       child: Column(
         children: [
-          SizedBox(
-            height: 260,
-            child: PageView.builder(
-              controller: _pc,
-              itemCount: dashboards.length,
-              onPageChanged: (i) {
-                setState(() => _page = i);
+          // Dashboard content — height scales to content, no fixed height.
+          GestureDetector(
+            onHorizontalDragEnd: (details) {
+              final v = details.primaryVelocity ?? 0;
+              if (v < -200 && _page < dashboards.length - 1) {
+                setState(() => _page++);
                 Haptics.selection();
-              },
-              itemBuilder: (context, i) => CustomScrollView(
-                physics: const ClampingScrollPhysics(),
-                slivers: [dashboards[i]],
+              } else if (v > 200 && _page > 0) {
+                setState(() => _page--);
+                Haptics.selection();
+              }
+            },
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              child: KeyedSubtree(
+                key: ValueKey(_page),
+                child: dashboardChild(dashboards[_page]),
               ),
             ),
           ),
           const SizedBox(height: 6),
-          // Dot indicators + label
+          // Dot indicators (tappable) + label
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               for (int i = 0; i < dashboards.length; i++)
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 3),
-                  width: i == _page ? 18 : 6,
-                  height: 6,
-                  decoration: BoxDecoration(
-                    color: i == _page ? Colors.lightGreenAccent : Colors.white.withValues(alpha: 0.2),
-                    borderRadius: BorderRadius.circular(3),
+                GestureDetector(
+                  onTap: () {
+                    setState(() => _page = i);
+                    Haptics.selection();
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: i == _page ? 18 : 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: i == _page ? Colors.lightGreenAccent : Colors.white.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
                   ),
                 ),
             ],

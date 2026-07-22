@@ -11,6 +11,8 @@ import '../models/multiplayer_messages.dart';
 import '../models/run_state.dart';
 import '../providers/run_provider.dart';
 import '../services/multiplayer_session.dart';
+import '../services/haptics.dart';
+import '../utils/fast_route.dart';
 import '../widgets/avatar_aura.dart';
 import 'character_select_screen.dart';
 import 'home_screen.dart';
@@ -34,6 +36,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
   bool _isMain = true; // true = Main Player, false = Sidekick
   Gungeoneer? _selectedCharacter;
   List<SavedMpSession> _savedSessions = [];
+  bool _sessionsCollapsed = true;
 
   @override
   void initState() {
@@ -86,9 +89,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     if (!mounted) return;
     await Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (_) => const MultiplayerConnectScreen(),
-      ),
+      fastRoute(const MultiplayerConnectScreen()),
     );
   }
 
@@ -166,9 +167,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
   Future<void> _pickCharacter() async {
     final picked = await Navigator.push<Gungeoneer>(
       context,
-      MaterialPageRoute(
-        builder: (_) => const CharacterSelectScreen.multiplayerPick(),
-      ),
+      fastRoute(const CharacterSelectScreen.multiplayerPick()),
     );
     if (!mounted) return;
     if (picked != null) {
@@ -215,9 +214,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     // Navigate to searching/connected screen
     await Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (_) => const MultiplayerConnectScreen(),
-      ),
+      fastRoute(const MultiplayerConnectScreen()),
     );
   }
 
@@ -361,9 +358,46 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               ),
               if (_savedSessions.isNotEmpty) ...[
                 const SizedBox(height: 36),
-                _SectionLabel('LOAD SAVED SESSION'),
-                const SizedBox(height: 12),
-                ListView.builder(
+                InkWell(
+                  onTap: () {
+                    Haptics.selection();
+                    setState(() => _sessionsCollapsed = !_sessionsCollapsed);
+                  },
+                  child: Row(
+                    children: [
+                      _SectionLabel('LOAD SAVED SESSION'),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '${_savedSessions.length}',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ),
+                      const Spacer(),
+                      AnimatedRotation(
+                        turns: _sessionsCollapsed ? 0 : 0.5,
+                        duration: const Duration(milliseconds: 180),
+                        child: Icon(
+                          Icons.expand_more_rounded,
+                          size: 18,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (!_sessionsCollapsed) ...[
+                  const SizedBox(height: 12),
+                  ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _savedSessions.length,
@@ -497,6 +531,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                     );
                   },
                 ),
+                ], // end if (!_sessionsCollapsed)
               ],
             const SizedBox(height: 32),
             Center(
@@ -1207,7 +1242,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                     // Navigate to active run - go back to home which shows inventory
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => const HomeScreen()),
+                      fastRoute(const HomeScreen()),
                       (route) => false,
                     );
                   },

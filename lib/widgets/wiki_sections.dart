@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/rich_text.dart';
 import '../providers/run_provider.dart';
 import '../screens/item_detail_screen.dart';
+import '../utils/fast_route.dart';
 import 'game_icon.dart';
 import 'rich_link_text.dart';
 import 'themed_section_title.dart';
@@ -375,9 +376,7 @@ class BackRefChip extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => ItemDetailScreen(gun: g, item: it),
-            ),
+            fastRoute(ItemDetailScreen(gun: g, item: it)),
           );
         },
         // Matches the peek affordance on synergy chips and inline rich-

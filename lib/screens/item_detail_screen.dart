@@ -14,6 +14,7 @@ import '../widgets/themed_number.dart';
 import '../widgets/themed_section_title.dart';
 import '../widgets/wiki_sections.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/fast_route.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final Gun? gun;
@@ -3318,9 +3319,7 @@ class _SynergyChip extends StatelessWidget {
           FocusManager.instance.primaryFocus?.unfocus();
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => ItemDetailScreen(gun: gun, item: item),
-            ),
+            fastRoute(ItemDetailScreen(gun: gun, item: item)),
           );
         },
         // Long-press offers a peek preview without growing the nav

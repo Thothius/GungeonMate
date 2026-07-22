@@ -15,6 +15,7 @@ import '../widgets/particle_engine.dart';
 import 'character_select_screen.dart';
 import 'theme_picker_screen.dart';
 import 'shrine_picker_screen.dart';
+import '../utils/fast_route.dart';
 
 /// Central control room for Gungeon Mate.
 /// - Tab 1: Theme & Sizing Preferences (launching the full 1.5k-line visual picker!)
@@ -190,7 +191,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const ThemePickerScreen()),
+                            fastRoute(const ThemePickerScreen()),
                           );
                         },
                       ),
@@ -723,9 +724,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
           label: 'CHANGE',
           onPressed: () => Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => const CharacterSelectScreen(mode: CharSelectMode.coop),
-            ),
+            fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
           ),
         ),
       ));
@@ -733,9 +732,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     }
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const CharacterSelectScreen(mode: CharSelectMode.coop),
-      ),
+      fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
     );
   }
 
@@ -994,7 +991,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
             color: Colors.amber,
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const ShrinePickerScreen()),
+              fastRoute(const ShrinePickerScreen()),
             ),
           ),
           const SizedBox(height: 20),
@@ -1008,7 +1005,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
             color: const Color(0xFFFFD740),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const RunLogScreen()),
+              fastRoute(const RunLogScreen()),
             ),
           ),
           const SizedBox(height: 20),
@@ -1073,7 +1070,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     // which is the root route after app launch.
     if (!context.mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const CharacterSelectScreen()),
+      fastRoute(const CharacterSelectScreen()),
       (_) => false,
     );
   }

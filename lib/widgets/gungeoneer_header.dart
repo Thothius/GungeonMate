@@ -428,30 +428,39 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
               color: Colors.white.withValues(alpha: 0.05),
             ),
 
-            // PREMIUM BEVELED PASSIVE TAGS PANEL (Visually Padded and Shadowed!)
+            // PREMIUM BEVELED PASSIVE TAGS PANEL — toggled by the effects
+            // button in the header trailing row via VisualPrefs.showEffectsPanel.
             if (widget.effectChips.isNotEmpty) ...[
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.25),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: f.primary.withValues(alpha: 0.12),
-                      width: 1.0,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 6,
-                        offset: const Offset(0, 3),
+              ListenableBuilder(
+                listenable: VisualPrefs.notifier,
+                builder: (context, _) {
+                  if (!VisualPrefs.notifier.value.showEffectsPanel) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.25),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: f.primary.withValues(alpha: 0.12),
+                          width: 1.0,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: _EffectChipsWrap(chips: widget.effectChips),
-                ),
+                      child: _EffectChipsWrap(chips: widget.effectChips),
+                    ),
+                  );
+                },
               ),
             ],
           ],
