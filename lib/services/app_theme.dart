@@ -1424,42 +1424,24 @@ enum InventoryDisplayMode {
 
 enum WallpaperMode {
   themeDefault(label: 'Theme Default'),
-  customStill(label: 'Custom Still'),
-  customAnimated(label: 'Custom Animated');
+  customStill(label: 'Custom Still');
 
   final String label;
   const WallpaperMode({required this.label});
 }
 
-// Still wallpapers — compressed to WebP (1080px max width, quality 80).
-// 17 scenes totalling ~1.6MB (down from 64.9MB as PNG).
+// Still wallpapers — 10 curated WebP scenes.
 const List<Map<String, String>> kStillWallpapers = [
-  {'asset': 'wp_still_02_unicorn.webp', 'name': 'Unicorn Land'},
-  {'asset': 'wp_still_03_warehouse.webp', 'name': 'Warehouse'},
-  {'asset': 'wp_still_05_galaxy.webp', 'name': 'Galaxy'},
-  {'asset': 'wp_still_07_dungeon.webp', 'name': 'Dungeon'},
-  {'asset': 'wp_still_08_mine.webp', 'name': 'Mine'},
-  {'asset': 'wp_still_09_hollow.webp', 'name': 'Hollow'},
-  {'asset': 'wp_still_12_hypnotic.webp', 'name': 'Hypnotic'},
-  {'asset': 'wp_still_19_gorgun.webp', 'name': 'Gorgun'},
-  {'asset': 'wp_still_20_glitch_intro.webp', 'name': 'Glitch Intro'},
-  {'asset': 'wp_still_21_cyber_grid.webp', 'name': 'Cyber Grid'},
-  {'asset': 'wp_still_22_cyber_tracks.webp', 'name': 'Cyber Tracks'},
-  {'asset': 'wp_still_23_cyber_narrow.webp', 'name': 'Cyber Narrow'},
-  {'asset': 'wp_still_24_unicorn_galaxy.webp', 'name': 'Unicorn Galaxy'},
-  {'asset': 'wp_still_25_gold_dungeon.webp', 'name': 'Gold Dungeon'},
-  {'asset': 'wp_still_26_ice_cave.webp', 'name': 'Ice Cave'},
-  {'asset': 'wp_still_27_lava_forge.webp', 'name': 'Lava Forge'},
-  {'asset': 'wp_still_28_cursed_shrine.webp', 'name': 'Cursed Shrine'},
-];
-
-const List<Map<String, String>> kAnimatedWallpapers = [
-  {'asset': 'wp_anim_01_galaxy.mp4', 'name': 'Swirling Gravity Vortex'},
-  {'asset': 'wp_anim_02_warehouse.mp4', 'name': 'Gungeon Weapons Locker'},
-  {'asset': 'procedural_crt', 'name': 'CRT Analog Static'},
-  {'asset': 'procedural_glitch', 'name': 'Cyber Glitch Screen'},
-  {'asset': 'procedural_matrix', 'name': 'Goopian Cipher Terminal'},
-  {'asset': 'procedural_nebula', 'name': 'Pulsing Starfield Nebula'},
+  {'asset': '001.webp', 'name': 'Wallpaper 001'},
+  {'asset': '002.webp', 'name': 'Wallpaper 002'},
+  {'asset': '003.webp', 'name': 'Wallpaper 003'},
+  {'asset': '004.webp', 'name': 'Wallpaper 004'},
+  {'asset': '005.webp', 'name': 'Wallpaper 005'},
+  {'asset': '006.webp', 'name': 'Wallpaper 006'},
+  {'asset': '007.webp', 'name': 'Wallpaper 007'},
+  {'asset': '008.webp', 'name': 'Wallpaper 008'},
+  {'asset': '009.webp', 'name': 'Wallpaper 009'},
+  {'asset': '010.webp', 'name': 'Wallpaper 010'},
 ];
 
 /// Data model for custom theme settings persisted to SharedPreferences.
@@ -1980,12 +1962,6 @@ class VisualPrefs {
   final double particleOpacity;
   final int particleCount;
 
-  /// Hypnotic Background settings
-  final bool hypnoticBgEnabled;
-  final String hypnoticBgAsset;
-  final double hypnoticBgSpeed;
-  final double hypnoticBgOpacity;
-
   /// Dialogue Settings
   final bool dialogueHapticsEnabled;
   final int dialogueTextSpeedMs;
@@ -2007,7 +1983,6 @@ class VisualPrefs {
   /// Custom wallpaper configuration
   final WallpaperMode wallpaperMode;
   final String selectedStillWallpaper;
-  final String selectedAnimatedWallpaper;
   final bool parallaxMotionEnabled;
 
   /// Computed scale factor applied globally via MediaQuery.
@@ -2051,10 +2026,6 @@ class VisualPrefs {
     this.particleSizeScale = 1.0,
     this.particleOpacity = 0.7,
     this.particleCount = 16,
-    this.hypnoticBgEnabled = false,
-    this.hypnoticBgAsset = "circles05.gif",
-    this.hypnoticBgSpeed = 1.0,
-    this.hypnoticBgOpacity = 0.3,
     this.dialogueHapticsEnabled = true,
     this.dialogueTextSpeedMs = 30,
     this.isGoopianLanguage = false,
@@ -2063,8 +2034,7 @@ class VisualPrefs {
     this.showEffectsPanel = false,
     this.periodicGridColumnCount = 0,
     this.wallpaperMode = WallpaperMode.themeDefault,
-    this.selectedStillWallpaper = 'wp_still_05_galaxy.webp',
-    this.selectedAnimatedWallpaper = 'wp_anim_01_galaxy.mp4',
+    this.selectedStillWallpaper = '001.webp',
     this.parallaxMotionEnabled = true,
   });
 
@@ -2087,10 +2057,6 @@ class VisualPrefs {
   static const _kParticleOpacity = 'vp.particle_opacity_v1';
   static const _kParticleCount = 'vp.particle_count_v1';
 
-  static const _kHypnoticEnabled = 'vp.hypnotic_enabled_v1';
-  static const _kHypnoticAsset   = 'vp.hypnotic_asset_v1';
-  static const _kHypnoticSpeed   = 'vp.hypnotic_speed_v1';
-  static const _kHypnoticOpacity = 'vp.hypnotic_opacity_v1';
   static const _kDialogueHaptics = 'vp.dialogue_haptics_v1';
   static const _kDialogueTextSpeed = 'vp.dialogue_text_speed_v1';
   static const _kGoopianLanguage = 'vp.goopian_language_v1';
@@ -2100,7 +2066,6 @@ class VisualPrefs {
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kWallpaperMode = 'vp.wallpaper_mode_v1';
   static const _kSelectedStill = 'vp.selected_still_v1';
-  static const _kSelectedAnimated = 'vp.selected_animated_v1';
   static const _kParallaxEnabled = 'vp.parallax_enabled_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
@@ -2161,19 +2126,11 @@ class VisualPrefs {
 
       final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
       final wallpaperMode = WallpaperMode.values[wallpaperModeIdx.clamp(0, WallpaperMode.values.length - 1)];
-      var selectedStill = p.getString(_kSelectedStill) ?? 'wp_still_05_galaxy.webp';
-      // Migration: if persisted still wallpaper is an old .png or no longer
-      // exists in kStillWallpapers, fall back to the default WebP.
+      var selectedStill = p.getString(_kSelectedStill) ?? '001.webp';
+      // Migration: if persisted still wallpaper no longer exists in
+      // kStillWallpapers, fall back to the first available.
       if (!kStillWallpapers.any((w) => w['asset'] == selectedStill)) {
-        selectedStill = 'wp_still_05_galaxy.webp';
-      }
-      var selectedAnimated = p.getString(_kSelectedAnimated) ?? 'wp_anim_01_galaxy.mp4';
-      // Migration: fall back to the default if a previously-selected
-      // wallpaper (e.g. the removed "Wobbling Sewer Jelly") no longer
-      // exists in kAnimatedWallpapers, avoiding a firstWhere crash in
-      // the settings picker.
-      if (!kAnimatedWallpapers.any((w) => w['asset'] == selectedAnimated)) {
-        selectedAnimated = 'wp_anim_01_galaxy.mp4';
+        selectedStill = '001.webp';
       }
       final parallaxEnabled = p.getBool(_kParallaxEnabled) ?? true;
 
@@ -2194,10 +2151,6 @@ class VisualPrefs {
         particleSizeScale: p.getDouble(_kParticleSizeScale) ?? 1.0,
         particleOpacity:   p.getDouble(_kParticleOpacity) ?? 0.7,
         particleCount:     p.getInt(_kParticleCount) ?? 16,
-        hypnoticBgEnabled: p.getBool(_kHypnoticEnabled) ?? false,
-        hypnoticBgAsset:   p.getString(_kHypnoticAsset) ?? "circles05.gif",
-        hypnoticBgSpeed:   p.getDouble(_kHypnoticSpeed) ?? 1.0,
-        hypnoticBgOpacity: p.getDouble(_kHypnoticOpacity) ?? 0.3,
         dialogueHapticsEnabled: p.getBool(_kDialogueHaptics) ?? true,
         dialogueTextSpeedMs: p.getInt(_kDialogueTextSpeed) ?? 30,
         isGoopianLanguage: isGoopian,
@@ -2207,7 +2160,6 @@ class VisualPrefs {
         periodicGridColumnCount: periodicGridColumnCount,
         wallpaperMode: wallpaperMode,
         selectedStillWallpaper: selectedStill,
-        selectedAnimatedWallpaper: selectedAnimated,
         parallaxMotionEnabled: parallaxEnabled,
       );
     } catch (_) {}
@@ -2295,26 +2247,6 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setHypnoticBgEnabled(bool v) async {
-    notifier.value = notifier.value._with(hypnoticBgEnabled: v);
-    _persist();
-  }
-
-  static Future<void> setHypnoticBgAsset(String asset) async {
-    notifier.value = notifier.value._with(hypnoticBgAsset: asset);
-    _persist();
-  }
-
-  static Future<void> setHypnoticBgSpeed(double v) async {
-    notifier.value = notifier.value._with(hypnoticBgSpeed: v.clamp(0.1, 4.0));
-    _persist();
-  }
-
-  static Future<void> setHypnoticBgOpacity(double v) async {
-    notifier.value = notifier.value._with(hypnoticBgOpacity: v.clamp(0.0, 1.0));
-    _persist();
-  }
-
   static Future<void> setDialogueHapticsEnabled(bool v) async {
     notifier.value = notifier.value._with(dialogueHapticsEnabled: v);
     _persist();
@@ -2360,11 +2292,6 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setSelectedAnimatedWallpaper(String v) async {
-    notifier.value = notifier.value._with(selectedAnimatedWallpaper: v);
-    _persist();
-  }
-
   static Future<void> setParallaxMotionEnabled(bool v) async {
     notifier.value = notifier.value._with(parallaxMotionEnabled: v);
     _persist();
@@ -2391,10 +2318,6 @@ class VisualPrefs {
       await p.setDouble(_kParticleSizeScale, v.particleSizeScale);
       await p.setDouble(_kParticleOpacity, v.particleOpacity);
       await p.setInt(_kParticleCount, v.particleCount);
-      await p.setBool(_kHypnoticEnabled, v.hypnoticBgEnabled);
-      await p.setString(_kHypnoticAsset, v.hypnoticBgAsset);
-      await p.setDouble(_kHypnoticSpeed, v.hypnoticBgSpeed);
-      await p.setDouble(_kHypnoticOpacity, v.hypnoticBgOpacity);
       await p.setBool(_kDialogueHaptics, v.dialogueHapticsEnabled);
       await p.setInt(_kDialogueTextSpeed, v.dialogueTextSpeedMs);
       await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
@@ -2404,7 +2327,6 @@ class VisualPrefs {
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kWallpaperMode, v.wallpaperMode.index);
       await p.setString(_kSelectedStill, v.selectedStillWallpaper);
-      await p.setString(_kSelectedAnimated, v.selectedAnimatedWallpaper);
       await p.setBool(_kParallaxEnabled, v.parallaxMotionEnabled);
     } catch (_) {}
   }
@@ -2426,10 +2348,6 @@ class VisualPrefs {
     double? particleSizeScale,
     double? particleOpacity,
     int?    particleCount,
-    bool?   hypnoticBgEnabled,
-    String? hypnoticBgAsset,
-    double? hypnoticBgSpeed,
-    double? hypnoticBgOpacity,
     bool?   dialogueHapticsEnabled,
     int?    dialogueTextSpeedMs,
     bool?   isGoopianLanguage,
@@ -2439,7 +2357,6 @@ class VisualPrefs {
     int?    periodicGridColumnCount,
     WallpaperMode? wallpaperMode,
     String? selectedStillWallpaper,
-    String? selectedAnimatedWallpaper,
     bool?   parallaxMotionEnabled,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
@@ -2458,10 +2375,6 @@ class VisualPrefs {
     particleSizeScale: particleSizeScale ?? this.particleSizeScale,
     particleOpacity:   particleOpacity   ?? this.particleOpacity,
     particleCount:     particleCount     ?? this.particleCount,
-    hypnoticBgEnabled: hypnoticBgEnabled ?? this.hypnoticBgEnabled,
-    hypnoticBgAsset:   hypnoticBgAsset   ?? this.hypnoticBgAsset,
-    hypnoticBgSpeed:   hypnoticBgSpeed   ?? this.hypnoticBgSpeed,
-    hypnoticBgOpacity: hypnoticBgOpacity ?? this.hypnoticBgOpacity,
     dialogueHapticsEnabled: dialogueHapticsEnabled ?? this.dialogueHapticsEnabled,
     dialogueTextSpeedMs: dialogueTextSpeedMs ?? this.dialogueTextSpeedMs,
     isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
@@ -2471,7 +2384,6 @@ class VisualPrefs {
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
     wallpaperMode:    wallpaperMode     ?? this.wallpaperMode,
     selectedStillWallpaper: selectedStillWallpaper ?? this.selectedStillWallpaper,
-    selectedAnimatedWallpaper: selectedAnimatedWallpaper ?? this.selectedAnimatedWallpaper,
     parallaxMotionEnabled: parallaxMotionEnabled ?? this.parallaxMotionEnabled,
   );
 }
@@ -2509,6 +2421,7 @@ class AppTheme {
   static Future<void> setUnicornPalette(UnicornPalette p) async {
     _unicornPalette = p;
     unicornPaletteNotifier.value = p;
+    notifier.refresh();
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt(_unicornPaletteKey, p.index);
@@ -2524,6 +2437,7 @@ class AppTheme {
   static Future<void> setRemix(AppThemeMode m, int idx) async {
     _remixIndex[m] = idx;
     remixNotifier.value = idx;
+    notifier.refresh();
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('theme.remix.${m.index}', idx);

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:video_player/video_player.dart';
 
@@ -121,7 +119,12 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: Listenable.merge([AppTheme.notifier, AppTheme.previewNotifier]),
+      animation: Listenable.merge([
+        AppTheme.notifier,
+        AppTheme.previewNotifier,
+        AppTheme.unicornPaletteNotifier,
+        AppTheme.remixNotifier,
+      ]),
       builder: (_, __) {
         final mode = AppTheme.displayedMode;
         return ValueListenableBuilder<VisualPrefs>(
@@ -150,13 +153,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 )
               : const Color(0x00000000);
           final isWallpaperActive = !isHomeScreen && prefs.wallpaperMode != WallpaperMode.themeDefault;
-          final hypnoticBackdrop = (prefs.hypnoticBgEnabled && !isWallpaperActive && !isHomeScreen)
-              ? _HypnoticBg(
-                  assetName: prefs.hypnoticBgAsset,
-                  speedMultiplier: prefs.hypnoticBgSpeed,
-                  opacity: prefs.hypnoticBgOpacity,
-                )
-              : null;
           final particlesOn = prefs.particlesEnabled;
           final particleBackdropBg = !particlesOn
               ? null
@@ -217,15 +213,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-                if (!isHomeScreen && prefs.wallpaperMode == WallpaperMode.customAnimated)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: _AnimatedWallpaperBackground(
-                        assetName: prefs.selectedAnimatedWallpaper,
-                      ),
-                    ),
-                  ),
-
                 // 0.6. Custom Wallpaper Contrast Backing (prevents background detail bleeding through UI panels)
                 if (isWallpaperActive || isHomeScreen)
                   Positioned.fill(
@@ -235,10 +222,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-
-                // 1a. Hypnotic Trippy Background
-                if (hypnoticBackdrop != null)
-                  Positioned.fill(child: IgnorePointer(child: hypnoticBackdrop)),
 
                 // 1b. Particles / Theme Backdrops (Background Layer)
                 if (particleBackdropBg != null)
@@ -775,400 +758,6 @@ class _TouchParticlePainter extends CustomPainter {
   bool shouldRepaint(_TouchParticlePainter old) => true;
 }
 
-class _HypnoticBg extends StatefulWidget {
-  final String assetName;
-  final double speedMultiplier;
-  final double opacity;
-
-  const _HypnoticBg({
-    required this.assetName,
-    required this.speedMultiplier,
-    required this.opacity,
-  });
-
-  @override
-  State<_HypnoticBg> createState() => _HypnoticBgState();
-}
-
-class _HypnoticBgState extends State<_HypnoticBg> with SingleTickerProviderStateMixin {
-  List<ui.Image> _frames = [];
-  List<int> _durations = [];
-  int _currentFrame = 0;
-  Timer? _timer;
-  bool _isLoading = true;
-  late final AnimationController _localCtrl;
-
-  @override
-  void initState() {
-    super.initState();
-    _localCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    )..repeat();
-    _loadGif();
-  }
-
-  @override
-  void didUpdateWidget(_HypnoticBg oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.assetName != widget.assetName) {
-      _isLoading = true;
-      _currentFrame = 0;
-      _timer?.cancel();
-      _loadGif();
-    } else if (oldWidget.speedMultiplier != widget.speedMultiplier) {
-      _playGif();
-    }
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _localCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _loadGif() async {
-    if (widget.assetName == 'crt_static' ||
-        widget.assetName == 'static_glitch' ||
-        widget.assetName == 'matrix_code' ||
-        widget.assetName == 'pixel_nebula') {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-      return;
-    }
-    try {
-      final data = await rootBundle.load('assets/animations/trippy/${widget.assetName}');
-      final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-      
-      final List<ui.Image> frames = [];
-      final List<int> durations = [];
-      
-      for (int i = 0; i < codec.frameCount; i++) {
-        final frameInfo = await codec.getNextFrame();
-        frames.add(frameInfo.image);
-        durations.add(frameInfo.duration.inMilliseconds > 0 ? frameInfo.duration.inMilliseconds : 100);
-      }
-      
-      if (mounted) {
-        setState(() {
-          _frames = frames;
-          _durations = durations;
-          _isLoading = false;
-        });
-        _playGif();
-      }
-    } catch (e) {
-      debugPrint("Error loading animated background gif: $e");
-      if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  void _playGif() {
-    _timer?.cancel();
-    if (_frames.isEmpty || !mounted) return;
-
-    final baseDuration = _durations[_currentFrame];
-    final adjustedDuration = (baseDuration / widget.speedMultiplier).round().clamp(10, 5000);
-
-    _timer = Timer(Duration(milliseconds: adjustedDuration), () {
-      if (!mounted) return;
-      setState(() {
-        _currentFrame = (_currentFrame + 1) % _frames.length;
-      });
-      _playGif();
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    Widget bgWidget;
-
-    final isProcedural = widget.assetName == 'crt_static' ||
-                         widget.assetName == 'static_glitch' ||
-                         widget.assetName == 'matrix_code' ||
-                         widget.assetName == 'pixel_nebula';
-
-    if (isProcedural) {
-      bgWidget = AnimatedBuilder(
-        animation: _localCtrl,
-        builder: (context, _) {
-          final localT = DateTime.now().millisecondsSinceEpoch / 1000.0;
-          final CustomPainter p = switch (widget.assetName) {
-            'crt_static' => _CRTStaticPainter(t: localT * widget.speedMultiplier),
-            'static_glitch' => _StaticGlitchPainter(t: localT * widget.speedMultiplier),
-            'matrix_code' => _MatrixCodePainter(t: localT * widget.speedMultiplier),
-            _ => _PixelNebulaPainter(t: localT * widget.speedMultiplier),
-          };
-          return CustomPaint(
-            painter: p,
-            size: Size.infinite,
-          );
-        },
-      );
-    } else {
-      if (_isLoading || _frames.isEmpty) {
-        return const SizedBox.shrink();
-      }
-      bgWidget = RawImage(
-        image: _frames[_currentFrame],
-        fit: BoxFit.cover,
-        opacity: AlwaysStoppedAnimation<double>(widget.opacity),
-      );
-    }
-
-    // Blend the background layer with a deep central-dimming readability vignette!
-    return Stack(
-      children: [
-        Positioned.fill(child: bgWidget),
-        // Central readability vignette dimming mask (dimmer at center and edges)
-        Positioned.fill(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                center: Alignment.center,
-                radius: 1.25,
-                colors: [
-                  Colors.black.withValues(alpha: 0.72), // Dim the center deeply so overlays and text are 100% legible
-                  Colors.black.withValues(alpha: 0.38), // Slightly lighter mid-band
-                  Colors.black.withValues(alpha: 0.84), // Deep dark outer vignette border
-                ],
-                stops: const [0.0, 0.50, 1.0],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _CRTStaticPainter extends CustomPainter {
-  final double t;
-  final math.Random _rng = math.Random();
-  _CRTStaticPainter({required this.t});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint();
-    
-    // Charcoal scanline background
-    paint.color = const Color(0xFF0F0F11);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-
-    // Procedural noise dots
-    paint.style = PaintingStyle.fill;
-    final numDots = (size.width * size.height / 2200).toInt().clamp(100, 1500);
-    for (int i = 0; i < numDots; i++) {
-      final x = _rng.nextDouble() * size.width;
-      final y = _rng.nextDouble() * size.height;
-      final gray = 30 + _rng.nextInt(120);
-      final alpha = 0.08 + _rng.nextDouble() * 0.15;
-      paint.color = Color.fromARGB((alpha * 255).toInt(), gray, gray, gray);
-      canvas.drawRect(Rect.fromLTWH(x, y, 1.8, 1.8), paint);
-    }
-
-    // CRT Scanlines
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 1.2;
-    final lineSpacing = 6.0;
-    final offset = (t * 22) % lineSpacing;
-    for (double y = offset; y < size.height; y += lineSpacing) {
-      paint.color = Colors.black.withValues(alpha: 0.28);
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-
-    // Horizontal interference bar
-    paint.style = PaintingStyle.fill;
-    final barY = (t * 85) % (size.height + 150) - 75;
-    final barHeight = 60.0;
-    final barGradient = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [
-        Colors.white.withValues(alpha: 0.0),
-        Colors.white.withValues(alpha: 0.05),
-        Colors.white.withValues(alpha: 0.0),
-      ],
-    );
-    paint.shader = barGradient.createShader(Rect.fromLTWH(0, barY, size.width, barHeight));
-    canvas.drawRect(Rect.fromLTWH(0, barY, size.width, barHeight), paint);
-    paint.shader = null;
-  }
-
-  @override
-  bool shouldRepaint(_CRTStaticPainter old) => true;
-}
-
-class _StaticGlitchPainter extends CustomPainter {
-  final double t;
-  final math.Random _rng = math.Random();
-  _StaticGlitchPainter({required this.t});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-
-    // Deep cyber purple-black background
-    paint.color = const Color(0xFF07050A);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-
-    // Random digital glitch bars
-    final numGlitchBars = 4 + _rng.nextInt(6);
-    for (int i = 0; i < numGlitchBars; i++) {
-      final barY = _rng.nextDouble() * size.height;
-      final barHeight = 4.0 + _rng.nextDouble() * 16.0;
-      final barWidth = size.width * (0.1 + _rng.nextDouble() * 0.8);
-      final barX = _rng.nextDouble() * (size.width - barWidth);
-      
-      final colorRand = _rng.nextInt(3);
-      final Color color = switch (colorRand) {
-        0 => const Color(0xFF00FFFF),
-        1 => const Color(0xFFFF007F),
-        _ => const Color(0xFF39FF14),
-      };
-      
-      final alpha = 0.05 + _rng.nextDouble() * 0.12;
-      paint.color = color.withValues(alpha: alpha);
-      canvas.drawRect(Rect.fromLTWH(barX, barY, barWidth, barHeight), paint);
-    }
-
-    // Cyber layout grid
-    paint.style = PaintingStyle.stroke;
-    paint.strokeWidth = 0.8;
-    final gridSpacing = 40.0;
-    
-    paint.color = const Color(0xFF00FFFF).withValues(alpha: 0.015);
-    for (double x = 0; x < size.width; x += gridSpacing) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
-    }
-    for (double y = 0; y < size.height; y += gridSpacing) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-
-    // Rare strobe flash
-    final isStrobe = _rng.nextDouble() < 0.04;
-    if (isStrobe) {
-      paint.style = PaintingStyle.fill;
-      paint.color = const Color(0xFFFF007F).withValues(alpha: 0.03);
-      canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_StaticGlitchPainter old) => true;
-}
-
-class _MatrixCodePainter extends CustomPainter {
-  final double t;
-  final math.Random _rng = math.Random(1337);
-  _MatrixCodePainter({required this.t});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-    
-    // Pitch-black terminal background
-    paint.color = const Color(0xFF040605);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-
-    final numCols = 18;
-    final colWidth = size.width / numCols;
-    
-    for (int col = 0; col < numCols; col++) {
-      final speed = 0.5 + _rng.nextDouble() * 0.8;
-      final startY = (t * 180 * speed) % (size.height + 300) - 200;
-      
-      final length = 6 + _rng.nextInt(12);
-      for (int i = 0; i < length; i++) {
-        final charY = startY - (i * 24);
-        if (charY < -20 || charY > size.height + 20) continue;
-        
-        final alpha = (1.0 - (i / length)).clamp(0.0, 1.0);
-        
-        Color color;
-        if (i == 0) {
-          color = const Color(0xFFE8F5E9).withValues(alpha: alpha);
-        } else if (col % 2 == 0) {
-          color = const Color(0xFF00FF66).withValues(alpha: alpha * 0.65);
-        } else {
-          color = const Color(0xFF00E5FF).withValues(alpha: alpha * 0.65);
-        }
-        
-        paint.color = color;
-        
-        final glyphSize = 8.0 + _rng.nextInt(6);
-        final glyphX = col * colWidth + (colWidth - glyphSize) / 2;
-        
-        final isGlitchOffset = _rng.nextDouble() < 0.08;
-        final finalX = isGlitchOffset ? glyphX + (_rng.nextDouble() * 12 - 6) : glyphX;
-        
-        canvas.drawRect(Rect.fromLTWH(finalX, charY, glyphSize, glyphSize), paint);
-        canvas.drawRect(Rect.fromLTWH(finalX - 2, charY + glyphSize/2, glyphSize + 4, 1.5), paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(_MatrixCodePainter old) => true;
-}
-
-class _PixelNebulaPainter extends CustomPainter {
-  final double t;
-  final math.Random _rng = math.Random(101);
-  _PixelNebulaPainter({required this.t});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-    
-    paint.color = const Color(0xFF0B0715);
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
-
-    for (int i = 0; i < 3; i++) {
-      final phase = i * (math.pi * 2 / 3);
-      final cX = size.width * 0.5 + math.cos(t * 0.25 + phase) * size.width * 0.22;
-      final cY = size.height * 0.5 + math.sin(t * 0.22 + phase) * size.height * 0.18;
-      final radius = (size.width * 0.45) * (0.8 + 0.15 * math.sin(t * 0.4 + phase));
-      
-      final Color color = switch (i) {
-        0 => const Color(0xFFE91E63),
-        1 => const Color(0xFF9C27B0),
-        _ => const Color(0xFF00E5FF),
-      };
-      
-      paint.shader = RadialGradient(
-        colors: [
-          color.withValues(alpha: 0.12),
-          color.withValues(alpha: 0.04),
-          Colors.transparent,
-        ],
-      ).createShader(Rect.fromCircle(center: Offset(cX, cY), radius: radius));
-      canvas.drawCircle(Offset(cX, cY), radius, paint);
-      paint.shader = null;
-    }
-
-    for (int i = 0; i < 30; i++) {
-      final double starX = _rng.nextDouble() * size.width;
-      final double starY = _rng.nextDouble() * size.height;
-      final double starSpeed = 0.5 + _rng.nextDouble() * 1.5;
-      final double twinkle = (math.sin(t * starSpeed + i) + 1.0) / 2.0;
-      
-      final alpha = 0.1 + twinkle * 0.75;
-      paint.color = Colors.white.withValues(alpha: alpha);
-      
-      final sizeScale = (i % 3 == 0) ? 3.0 : 1.8;
-      canvas.drawRect(Rect.fromLTWH(starX, starY, sizeScale, sizeScale), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_PixelNebulaPainter old) => true;
-}
-
 // ignore: unused_element
 class _SecretCatThroneOverlay extends StatelessWidget {
   const _SecretCatThroneOverlay();
@@ -1402,15 +991,6 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
       _controller = null;
     }
 
-    if (widget.assetName.startsWith('procedural_')) {
-      if (mounted) {
-        setState(() {
-          _initialized = true;
-        });
-      }
-      return;
-    }
-
     final path = 'assets/images/wallpapers/animated/${widget.assetName}';
     final controller = VideoPlayerController.asset(path);
     _controller = controller;
@@ -1454,36 +1034,17 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
 
   @override
   Widget build(BuildContext context) {
-    if (widget.assetName.startsWith('procedural_')) {
-      final actualAsset = widget.assetName.replaceAll('procedural_crt', 'crt_static')
-                                         .replaceAll('procedural_glitch', 'static_glitch')
-                                         .replaceAll('procedural_matrix', 'matrix_code')
-                                         .replaceAll('procedural_nebula', 'pixel_nebula');
-      return _HypnoticBg(
-        assetName: actualAsset,
-        speedMultiplier: 1.0,
-        opacity: 0.35,
-      );
-    }
-
     final controller = _controller;
     if (_hasError || controller == null) {
-      // Elegant fallback: render the still counterpart
-      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.webp')
-                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.webp')
-                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_05_galaxy.webp');
       return _StillWallpaperBackground(
-        assetName: fallbackStill,
+        assetName: '001.webp',
         parallaxEnabled: true,
       );
     }
 
     if (!_initialized) {
-      final String fallbackStill = widget.assetName.replaceAll('wp_anim_01_galaxy.mp4', 'wp_still_05_galaxy.webp')
-                                                    .replaceAll('wp_anim_02_warehouse.mp4', 'wp_still_03_warehouse.webp')
-                                                    .replaceAll('wp_anim_03_blobulord.mp4', 'wp_still_05_galaxy.webp');
       return _StillWallpaperBackground(
-        assetName: fallbackStill,
+        assetName: '001.webp',
         parallaxEnabled: false,
       );
     }
