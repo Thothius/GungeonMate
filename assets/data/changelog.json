@@ -1,5 +1,25 @@
 [
   {
+    "version": "v1.7.0",
+    "title": "🚀 v1.7.0 — GOOPIAN LANGUAGE + CODEX BESTIARY + SETTINGS OVERHAUL",
+    "date": "July 23, 2026",
+    "items": [
+      "Goopian Language Mode — toggle between English and Goopian alien text; 600+ Text widgets across all 16 screens converted to animated GoopText translation.",
+      "Codex Bestiary — 146 enemies and 27 bosses added with icons, health values, and detail views sourced from wiki.gg.",
+      "Settings Reorganization — 4-tab layout (VISUALS, RUN, APP, DEBUG) with cleaner separation of concerns.",
+      "Character Select Rework — tap avatars to flip and preview, SELECT button to confirm; fixed loadout panel overflow.",
+      "Player Avatar Cycling — tap avatar on active run to cycle through static icon, in-game GIF, and animated card art.",
+      "Shrine Icon — tap opens Shrine Picker, long-press toggles shrine tracker panel.",
+      "Main Menu Polish — floating mascot with tilt parallax, idle float animation, compact settings gear icon, codex icon.",
+      "Performance — GoopText singleton refactor, dashboard AnimatedSize for smooth expand/collapse, wallpaper asset consolidation.",
+      "Refactor — removed procedural painters and hypnotic background system (-580 lines), consolidated 28 named WebPs into 10 curated wallpapers.",
+      "18 Special Dashboards — Robot, Huntress, Junkan, Gunderfury, Triple Gun, Evolver, Shellegun, Chamber Gun, Platinum Bullets, Iron Coin, Spice, Metronome, Sprun, Boxing Glove, Cigarettes, Polaris, Gunther, Gun Soul.",
+      "Damage Calculator — toggleable DPS terminal with per-gun breakdown and multiplier contributions.",
+      "Multiplayer — auto-reconnect, persisted sessions, FIX LINK, state-drift protection, dice decline protocol, snapshot backpressure, gift dedup.",
+      "UI Polish — collapsible sections everywhere (synergies, referenced-by, curse/coolness logs, saved sessions), fastRoute 150ms fade transitions on all navigation."
+    ]
+  },
+  {
     "version": "v1.6.9",
     "title": "🎨 UI POLISH — CHARACTER SELECT, SHRINE ICON, AVATAR CYCLING",
     "date": "July 23, 2026",

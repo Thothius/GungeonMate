@@ -335,7 +335,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.6.9',
+                    'v1.7.0',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -423,7 +423,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                               Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                               SizedBox(width: 6),
                               GoopText(
-                                'Changelog (v1.6.9)',
+                                'Changelog (v1.7.0)',
                                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                               ),
                             ],
@@ -479,7 +479,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.6.9 — Settings Reorganization + UI Polish',
+                            'v1.7.0 — Goopian Language + Codex Bestiary + Settings Overhaul',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
