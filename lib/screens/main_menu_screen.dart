@@ -338,6 +338,41 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  // Codex — full-width menu button
+                  ScaleButton(
+                    onTap: () {
+                      Haptics.selection();
+                      Navigator.push(
+                        context,
+                        fastRoute(const CodexScreen(showBackButton: true)),
+                      );
+                    },
+                    child: IgnorePointer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 54,
+                        child: OutlinedButton.icon(
+                          onPressed: () {},
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.18),
+                              width: 1.2,
+                            ),
+                          ),
+                          icon: const Icon(Icons.menu_book_rounded, size: 22),
+                          label: const GoopText(
+                            'Codex',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   GoopText(
                     'v1.8.0',
@@ -387,27 +422,6 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                             border: Border.all(color: Colors.white24, width: 1.2),
                           ),
                           child: const Icon(Icons.settings_rounded, size: 16, color: Colors.cyanAccent),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Codex icon
-                      InkWell(
-                        onTap: () {
-                          Haptics.selection();
-                          Navigator.push(
-                            context,
-                            fastRoute(const CodexScreen(showBackButton: true)),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.white24, width: 1.2),
-                          ),
-                          child: const Icon(Icons.menu_book_rounded, size: 16, color: Colors.amberAccent),
                         ),
                       ),
                       const SizedBox(width: 8),
