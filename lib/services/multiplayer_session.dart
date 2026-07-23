@@ -177,6 +177,11 @@ class MultiplayerSession extends ChangeNotifier {
   /// listens to show a "Connection Restored" popup. Auto-resets to false.
   final ValueNotifier<bool> reconnectSuccessNotifier = ValueNotifier(false);
 
+  /// Fires once when the user taps FIX LINK to open the Reconnection Hub
+  /// dialog. UI listens to show a PIN display/entry dialog for manual
+  /// re-pair. Auto-resets to false.
+  final ValueNotifier<bool> showReconnectHubNotifier = ValueNotifier(false);
+
   /// True if we were disconnected and are now reconnecting (used to
   /// distinguish fresh connections from reconnections).
   bool _wasDisconnected = false;
@@ -671,6 +676,24 @@ class MultiplayerSession extends ChangeNotifier {
   /// Whether an auto-reconnect retry is currently scheduled/running.
   bool get isAutoReconnecting => _autoReconnectTimer != null;
 
+  /// True if auto-reconnect has tried many times and the peer is likely
+  /// permanently unreachable. UI shows a "peer seems gone" notice and
+  /// suggests manual re-pair via the Reconnection Hub.
+  bool get peerLikelyGone => _autoReconnectAttempts >= 10;
+
+  /// Set the PIN code for manual re-pair (Sidekick enters host's PIN).
+  /// Called from the Reconnection Hub dialog before triggering reconnect.
+  void setPinCode(String pin) {
+    _pinCode = pin;
+  }
+
+  /// Trigger the Reconnection Hub UI. The FIX LINK button calls this
+  /// instead of fullReconnectCycle() directly so the user gets a
+  /// PIN display/entry dialog for manual re-pair.
+  void requestReconnectHub() {
+    showReconnectHubNotifier.value = true;
+  }
+
   /// Full reconnect cycle for the FIX LINK button: save the current
   /// session state to disk first (so it survives an app-kill during the
   /// reconnect attempt), then call [reconnect] to restart transport.
@@ -811,6 +834,7 @@ class MultiplayerSession extends ChangeNotifier {
     }
     _requestTimeoutTimers.clear();
     reconnectSuccessNotifier.dispose();
+    showReconnectHubNotifier.dispose();
     unawaited(_service.dispose());
     super.dispose();
   }

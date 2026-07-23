@@ -1281,13 +1281,7 @@ class _MpHeader extends StatelessWidget {
                           icon: const Icon(Icons.sync_problem_rounded, size: 16),
                           label: const Text('FIX LINK', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5)),
                           onPressed: isConnected ? null : () {
-                            liveSession.fullReconnectCycle();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Saving run & reconnecting...'),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
+                            liveSession.requestReconnectHub();
                           },
                         ),
                       ),
