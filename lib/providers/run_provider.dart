@@ -982,8 +982,8 @@ class RunProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeGun(Gun gun, {PlayerSlot slot = PlayerSlot.main}) {
-    if (_mpDisconnected) return;
+  void removeGun(Gun gun, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
     _runState = _replacePlayer(
         slot, p.copyWith(guns: p.guns.where((g) => g.name != gun.name).toList()));
@@ -1055,8 +1055,8 @@ class RunProvider with ChangeNotifier {
     }
   }
 
-  void removeItem(Item item, {PlayerSlot slot = PlayerSlot.main}) {
-    if (_mpDisconnected) return;
+  void removeItem(Item item, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
 
     _log(RunLogEntry(
