@@ -87,7 +87,12 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: Listenable.merge([AppTheme.notifier, VisualPrefs.notifier]),
+      listenable: Listenable.merge([
+        AppTheme.notifier,
+        AppTheme.unicornPaletteNotifier,
+        AppTheme.remixNotifier,
+        VisualPrefs.notifier,
+      ]),
       builder: (context, _) {
         final activeTheme = AppTheme.mode;
         final flair = AppTheme.flair;

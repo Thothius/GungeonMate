@@ -4401,10 +4401,10 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
                 Haptics.selection();
               }
             },
-            child: AnimatedSwitcher(
+            child: AnimatedSize(
               duration: const Duration(milliseconds: 200),
-              switchInCurve: Curves.easeOutCubic,
-              switchOutCurve: Curves.easeInCubic,
+              curve: Curves.easeOutCubic,
+              alignment: Alignment.topCenter,
               child: KeyedSubtree(
                 key: ValueKey(_page),
                 child: dashboardChild(dashboards[_page]),
@@ -9790,7 +9790,7 @@ class _SpongeButtonState extends State<_SpongeButton>
                     animation: _glow!,
                     builder: (_, child) {
                       final t = _glow!.value;
-                      return GoopText(
+                      return Text(
                         '🧽',
                         style: TextStyle(
                           fontSize: 20,
@@ -9805,7 +9805,7 @@ class _SpongeButtonState extends State<_SpongeButton>
                       );
                     },
                   )
-                : const GoopText(
+                : const Text(
                     '🧽',
                     style: TextStyle(fontSize: 20),
                   ),
