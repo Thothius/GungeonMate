@@ -9,7 +9,6 @@ import 'codex_screen.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
-import '../services/app_theme.dart';
 import '../utils/fast_route.dart';
 import '../widgets/theme_overlay.dart';
 
@@ -682,112 +681,113 @@ class _MainMenuScreenState extends State<MainMenuScreen>
   }
 }
 
-/// Segmented English / Goopian language toggle pill.
-/// Tapping switches VisualPrefs.isGoopianLanguage, which triggers
-/// all GoopText widgets across the app to animate.
-class _LanguageToggle extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: VisualPrefs.notifier,
-      builder: (context, _) {
-        final isGoopian = VisualPrefs.notifier.value.isGoopianLanguage;
-        return ScaleButton(
-          onTap: () {
-            Haptics.selection();
-            VisualPrefs.setIsGoopianLanguage(!isGoopian);
-          },
-          enableHaptics: false,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E1E22),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isGoopian
-                    ? const Color(0xFF9C27B0).withValues(alpha: 0.5)
-                    : Colors.white.withValues(alpha: 0.15),
-                width: 1.2,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _Segment(
-                  label: 'English',
-                  icon: Icons.language,
-                  active: !isGoopian,
-                  activeColor: Colors.cyanAccent,
-                ),
-                _Segment(
-                  label: GoopTalkEngine.translateToGoop('Goopian'),
-                  icon: Icons.translate,
-                  active: isGoopian,
-                  activeColor: const Color(0xFF9C27B0),
-                  isGoopian: true,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _Segment extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool active;
-  final Color activeColor;
-  final bool isGoopian;
-
-  const _Segment({
-    required this.label,
-    required this.icon,
-    required this.active,
-    required this.activeColor,
-    this.isGoopian = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: active ? activeColor.withValues(alpha: 0.18) : Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 13,
-            color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
-          ),
-          const SizedBox(width: 5),
-          isGoopian
-              ? Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
-                    color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
-                    letterSpacing: 0.5,
-                  ),
-                )
-              : GoopText(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
-                    color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
-                    letterSpacing: 0.5,
-                  ),
-                ),
-        ],
-      ),
-    );
-  }
-}
+// _LanguageToggle — hidden for now (Goopian feature disabled)
+// /// Segmented English / Goopian language toggle pill.
+// /// Tapping switches VisualPrefs.isGoopianLanguage, which triggers
+// /// all GoopText widgets across the app to animate.
+// class _LanguageToggle extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return ListenableBuilder(
+//       listenable: VisualPrefs.notifier,
+//       builder: (context, _) {
+//         final isGoopian = VisualPrefs.notifier.value.isGoopianLanguage;
+//         return ScaleButton(
+//           onTap: () {
+//             Haptics.selection();
+//             VisualPrefs.setIsGoopianLanguage(!isGoopian);
+//           },
+//           enableHaptics: false,
+//           child: Container(
+//             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+//             decoration: BoxDecoration(
+//               color: const Color(0xFF1E1E22),
+//               borderRadius: BorderRadius.circular(20),
+//               border: Border.all(
+//                 color: isGoopian
+//                     ? const Color(0xFF9C27B0).withValues(alpha: 0.5)
+//                     : Colors.white.withValues(alpha: 0.15),
+//                 width: 1.2,
+//               ),
+//             ),
+//             child: Row(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 _Segment(
+//                   label: 'English',
+//                   icon: Icons.language,
+//                   active: !isGoopian,
+//                   activeColor: Colors.cyanAccent,
+//                 ),
+//                 _Segment(
+//                   label: GoopTalkEngine.translateToGoop('Goopian'),
+//                   icon: Icons.translate,
+//                   active: isGoopian,
+//                   activeColor: const Color(0xFF9C27B0),
+//                   isGoopian: true,
+//                 ),
+//               ],
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// class _Segment extends StatelessWidget {
+//   final String label;
+//   final IconData icon;
+//   final bool active;
+//   final Color activeColor;
+//   final bool isGoopian;
+//
+//   const _Segment({
+//     required this.label,
+//     required this.icon,
+//     required this.active,
+//     required this.activeColor,
+//     this.isGoopian = false,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+//       decoration: BoxDecoration(
+//         color: active ? activeColor.withValues(alpha: 0.18) : Colors.transparent,
+//         borderRadius: BorderRadius.circular(16),
+//       ),
+//       child: Row(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Icon(
+//             icon,
+//             size: 13,
+//             color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
+//           ),
+//           const SizedBox(width: 5),
+//           isGoopian
+//               ? Text(
+//                   label,
+//                   style: TextStyle(
+//                     fontSize: 11.5,
+//                     fontWeight: FontWeight.w700,
+//                     color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
+//                     letterSpacing: 0.5,
+//                   ),
+//                 )
+//               : GoopText(
+//                   label,
+//                   style: TextStyle(
+//                     fontSize: 11.5,
+//                     fontWeight: FontWeight.w700,
+//                     color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
+//                     letterSpacing: 0.5,
+//                   ),
+//                 ),
+//         ],
+//       ),
+//     );
+//   }
+// }
