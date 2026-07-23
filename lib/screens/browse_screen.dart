@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/gun.dart';
@@ -12,6 +12,10 @@ import 'item_detail_screen.dart';
 import 'favourites_screen.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
+import '../widgets/browse/any_entry.dart';
+import '../widgets/browse/browse_pills.dart';
+import '../widgets/browse/browse_row.dart';
+import '../widgets/browse/toolbar_button.dart';
 
 enum _GunSort { name, quality, dps, gunClass }
 
@@ -28,7 +32,7 @@ class BrowseScreen extends StatefulWidget {
   /// case), [dispose] never fires on tab switches. The parent feeds us
   /// a freshly-computed visibility flag so we can clear the search
   /// input the moment the user navigates away. Defaults to `true` for
-  /// the modal-route case (Run header → Browse), where dispose handles
+  /// the modal-route case (Run header â†’ Browse), where dispose handles
   /// teardown naturally.
   final bool isVisible;
 
@@ -250,7 +254,7 @@ class _BrowseScreenState extends State<BrowseScreen>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
-        // No screen title — the tab strip already labels the section
+        // No screen title â€” the tab strip already labels the section
         // and the redundant "Browse" word ate vertical space testers
         // wanted back. The (add to P2) hint moves into the tab strip
         // sub-line below when relevant.
@@ -290,7 +294,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                   height: 52,
                   iconMargin: const EdgeInsets.only(bottom: 2),
                   icon: const Icon(Icons.apps, size: 20),
-                  text: isCoop ? 'All · P2' : 'All',
+                  text: isCoop ? 'All Â· P2' : 'All',
                 ),
                 const Tab(
                   height: 52,
@@ -367,14 +371,14 @@ class _BrowseScreenState extends State<BrowseScreen>
                     ),
                     const SizedBox(width: 6),
                   ],
-                  _ToolbarIcon(
+                  ToolbarIcon(
                     icon: Icons.filter_list,
                     tooltip: 'Element filters',
                     active: _filtersExpanded,
                     onPressed: () => setState(() => _filtersExpanded = !_filtersExpanded),
                   ),
                   const SizedBox(width: 4),
-                  _ToolbarIcon(
+                  ToolbarIcon(
                     icon: _isGridView ? Icons.view_list : Icons.grid_view,
                     tooltip: _isGridView ? 'List view' : 'Grid view',
                     active: _isGridView,
@@ -383,7 +387,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                   const SizedBox(width: 4),
                   Expanded(
                     flex: 2,
-                    child: _ToolbarButton(
+                    child: ToolbarButton(
                       icon: Icons.sort,
                       label: isAll
                           ? _allSortLabel(_allSort)
@@ -397,7 +401,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                   const SizedBox(width: 4),
                   Expanded(
                     flex: 2,
-                    child: _ToolbarButton(
+                    child: ToolbarButton(
                       icon: Icons.military_tech,
                       label: _quality == 'All' ? 'Tiers' : '$_quality Tier',
                       color: _quality == 'All'
@@ -429,14 +433,14 @@ class _BrowseScreenState extends State<BrowseScreen>
                         spacing: 6,
                         runSpacing: 6,
                         children: [
-                          _buildFilterChip('Piercing 🎯', _piercingOnly, Colors.orangeAccent, (v) => setState(() => _piercingOnly = v)),
-                          _buildFilterChip('Explosive 💥', _explosiveOnly, Colors.redAccent, (v) => setState(() => _explosiveOnly = v)),
-                          _buildFilterChip('Ice ❄️', _iceOnly, Colors.lightBlueAccent, (v) => setState(() => _iceOnly = v)),
-                          _buildFilterChip('Freeze 🥶', _freezeOnly, Colors.cyanAccent, (v) => setState(() => _freezeOnly = v)),
-                          _buildFilterChip('Fire 🔥', _fireOnly, Colors.deepOrangeAccent, (v) => setState(() => _fireOnly = v)),
-                          _buildFilterChip('Poison 🤢', _poisonOnly, Colors.lightGreenAccent, (v) => setState(() => _poisonOnly = v)),
-                          _buildFilterChip('Stun 💫', _stunOnly, Colors.purpleAccent, (v) => setState(() => _stunOnly = v)),
-                          _buildFilterChip('Stealing 🕵️', _stealingOnly, Colors.amberAccent, (v) => setState(() => _stealingOnly = v)),
+                          _buildFilterChip('Piercing ðŸŽ¯', _piercingOnly, Colors.orangeAccent, (v) => setState(() => _piercingOnly = v)),
+                          _buildFilterChip('Explosive ðŸ’¥', _explosiveOnly, Colors.redAccent, (v) => setState(() => _explosiveOnly = v)),
+                          _buildFilterChip('Ice â„ï¸', _iceOnly, Colors.lightBlueAccent, (v) => setState(() => _iceOnly = v)),
+                          _buildFilterChip('Freeze ðŸ¥¶', _freezeOnly, Colors.cyanAccent, (v) => setState(() => _freezeOnly = v)),
+                          _buildFilterChip('Fire ðŸ”¥', _fireOnly, Colors.deepOrangeAccent, (v) => setState(() => _fireOnly = v)),
+                          _buildFilterChip('Poison ðŸ¤¢', _poisonOnly, Colors.lightGreenAccent, (v) => setState(() => _poisonOnly = v)),
+                          _buildFilterChip('Stun ðŸ’«', _stunOnly, Colors.purpleAccent, (v) => setState(() => _stunOnly = v)),
+                          _buildFilterChip('Stealing ðŸ•µï¸', _stealingOnly, Colors.amberAccent, (v) => setState(() => _stealingOnly = v)),
                         ],
                       ),
                     ),
@@ -554,44 +558,44 @@ class _BrowseScreenState extends State<BrowseScreen>
               ),
               const Divider(height: 1),
               if (isAll) ...[
-                _sortTile(ctx, 'Quality (S → D)', Icons.workspace_premium,
+                _sortTile(ctx, 'Quality (S â†’ D)', Icons.workspace_premium,
                     _allSort == _AllSort.quality,
                     () => setState(() => _allSort = _AllSort.quality)),
-                _sortTile(ctx, 'Type (Guns → Active → Passive)',
+                _sortTile(ctx, 'Type (Guns â†’ Active â†’ Passive)',
                     Icons.category,
                     _allSort == _AllSort.type,
                     () => setState(() => _allSort = _AllSort.type)),
-                _sortTile(ctx, 'Synergies (most → least)', Icons.hub,
+                _sortTile(ctx, 'Synergies (most â†’ least)', Icons.hub,
                     _allSort == _AllSort.synergies,
                     () => setState(() => _allSort = _AllSort.synergies)),
-                _sortTile(ctx, 'Name (A → Z)', Icons.sort_by_alpha,
+                _sortTile(ctx, 'Name (A â†’ Z)', Icons.sort_by_alpha,
                     _allSort == _AllSort.name,
                     () => setState(() => _allSort = _AllSort.name)),
               ] else if (isGuns) ...[
-                _sortTile(ctx, 'Quality (S → D)', Icons.workspace_premium,
+                _sortTile(ctx, 'Quality (S â†’ D)', Icons.workspace_premium,
                     _gunSort == _GunSort.quality,
                     () => setState(() => _gunSort = _GunSort.quality)),
-                _sortTile(ctx, 'DPS (high → low)', Icons.flash_on,
+                _sortTile(ctx, 'DPS (high â†’ low)', Icons.flash_on,
                     _gunSort == _GunSort.dps,
                     () => setState(() => _gunSort = _GunSort.dps)),
                 _sortTile(ctx, 'Class', Icons.category,
                     _gunSort == _GunSort.gunClass,
                     () => setState(() => _gunSort = _GunSort.gunClass)),
-                _sortTile(ctx, 'Name (A → Z)', Icons.sort_by_alpha,
+                _sortTile(ctx, 'Name (A â†’ Z)', Icons.sort_by_alpha,
                     _gunSort == _GunSort.name,
                     () => setState(() => _gunSort = _GunSort.name)),
               ] else ...[
-                _sortTile(ctx, 'Quality (S → D)', Icons.workspace_premium,
+                _sortTile(ctx, 'Quality (S â†’ D)', Icons.workspace_premium,
                     _itemSort == _ItemSort.quality,
                     () => setState(() => _itemSort = _ItemSort.quality)),
                 _sortTile(ctx, 'Type (Active / Passive / Companion)',
                     Icons.inventory_2_outlined,
                     _itemSort == _ItemSort.type,
                     () => setState(() => _itemSort = _ItemSort.type)),
-                _sortTile(ctx, 'Synergies (most → least)', Icons.hub,
+                _sortTile(ctx, 'Synergies (most â†’ least)', Icons.hub,
                     _itemSort == _ItemSort.synergies,
                     () => setState(() => _itemSort = _ItemSort.synergies)),
-                _sortTile(ctx, 'Name (A → Z)', Icons.sort_by_alpha,
+                _sortTile(ctx, 'Name (A â†’ Z)', Icons.sort_by_alpha,
                     _itemSort == _ItemSort.name,
                     () => setState(() => _itemSort = _ItemSort.name)),
               ],
@@ -851,12 +855,12 @@ class _BrowseScreenState extends State<BrowseScreen>
     final charName = targetPlayer?.character?.name.toLowerCase() ?? '';
     final isRobot = charName.contains('robot');
 
-    return _Row(
+    return BrowseRow(
       name: g.name,
       quality: g.quality,
       iconPath: g.icon,
       fallback: Icons.gps_fixed,
-      meta: _GunMeta(gun: g, synergyCount: syn),
+      meta: GunMeta(gun: g, synergyCount: syn),
       inRun: p.ownerSlotOfGun(g.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
@@ -866,7 +870,7 @@ class _BrowseScreenState extends State<BrowseScreen>
           fastRoute(ItemDetailScreen(gun: g)),
         );
         if (!mounted) return;
-        // Drop the keyboard again on return — Flutter likes to restore
+        // Drop the keyboard again on return â€” Flutter likes to restore
         // focus to the search field, which would re-open the IME.
         FocusManager.instance.primaryFocus?.unfocus();
       },
@@ -894,7 +898,7 @@ class _BrowseScreenState extends State<BrowseScreen>
     if (session.status != MpStatus.disconnected) return false;
     ScaffoldMessenger.of(c).showSnackBar(
       const SnackBar(
-        content: GoopText('Reconnecting to peer… try again in a moment.'),
+        content: GoopText('Reconnecting to peerâ€¦ try again in a moment.'),
         duration: Duration(milliseconds: 1400),
       ),
     );
@@ -910,12 +914,12 @@ class _BrowseScreenState extends State<BrowseScreen>
     final charName = targetPlayer?.character?.name.toLowerCase() ?? '';
     final isRobot = charName.contains('robot');
 
-    return _Row(
+    return BrowseRow(
       name: it.name,
       quality: it.quality,
       iconPath: it.icon,
       fallback: it.isActive ? Icons.flash_on : Icons.inventory_2_outlined,
-      meta: _ItemMeta(item: it, synergyCount: syn),
+      meta: ItemMeta(item: it, synergyCount: syn),
       inRun: p.ownerSlotOfItem(it.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
@@ -955,7 +959,7 @@ class _BrowseScreenState extends State<BrowseScreen>
     );
   }
 
-  /// Combined Guns + Items list — the default Browse view. Each row carries
+  /// Combined Guns + Items list â€” the default Browse view. Each row carries
   /// its native meta widget, and we sort by the unified _AllSort axis.
   Widget _allList(RunProvider p) {
     // Build a heterogeneous list keyed by entry type. We only annotate
@@ -973,12 +977,12 @@ class _BrowseScreenState extends State<BrowseScreen>
             _matchesFilters(it.effect))
         .toList();
 
-    final entries = <_AnyEntry>[
-      for (final g in guns) _AnyEntry.gun(g),
-      for (final it in items) _AnyEntry.item(it),
+    final entries = <AnyEntry>[
+      for (final g in guns) AnyEntry.gun(g),
+      for (final it in items) AnyEntry.item(it),
     ];
 
-    int typeBucket(_AnyEntry e) {
+    int typeBucket(AnyEntry e) {
       if (e.gun != null) return 0; // guns first
       final it = e.item!;
       if (it.isCompanion) return 1;
@@ -987,10 +991,10 @@ class _BrowseScreenState extends State<BrowseScreen>
       return 4;
     }
 
-    int qualityKey(_AnyEntry e) =>
+    int qualityKey(AnyEntry e) =>
         _qualityOrder[e.quality] ?? 99;
 
-    int synergies(_AnyEntry e) =>
+    int synergies(AnyEntry e) =>
         p.synergyCountFor(e.name);
 
     switch (_allSort) {
@@ -1124,515 +1128,3 @@ class _BrowseScreenState extends State<BrowseScreen>
   }
 }
 
-/// Internal sum-type used by the unified `All` browse list. Holds either
-/// a [Gun] or an [Item] reference along with shared lookup keys.
-class _AnyEntry {
-  final Gun? gun;
-  final Item? item;
-  _AnyEntry.gun(this.gun) : item = null;
-  _AnyEntry.item(this.item) : gun = null;
-
-  String get name => gun?.name ?? item!.name;
-  String get quality => gun?.quality ?? item!.quality;
-}
-
-class _Row extends StatelessWidget {
-  final String name;
-  final String quality;
-  final String iconPath;
-  final IconData fallback;
-  final Widget meta;
-  final bool inRun;
-  final bool isRobot;
-  final VoidCallback onTap;
-  final VoidCallback onAdd;
-
-  const _Row({
-    required this.name,
-    required this.quality,
-    required this.iconPath,
-    required this.fallback,
-    required this.meta,
-    required this.inRun,
-    required this.isRobot,
-    required this.onTap,
-    required this.onAdd,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    BorderSide borderSide = const BorderSide(color: Colors.transparent, width: 0);
-
-    String robotTag = '';
-    Color? robotTagColor;
-
-    if (isRobot) {
-      final nameLower = name.toLowerCase();
-      final isGod = nameLower.contains('armor synthesizer') ||
-                    nameLower.contains('gunknight') ||
-                    nameLower.contains('riddle of lead') ||
-                    nameLower.contains('nanomachines');
-                    
-      final isConverter = nameLower.contains('master round') ||
-                          nameLower.contains('heart container') ||
-                          nameLower.contains('heart holster') ||
-                          nameLower.contains('heart locket') ||
-                          nameLower.contains('heart purse') ||
-                          nameLower.contains('heart bottle') ||
-                          nameLower.contains('yellow chamber') ||
-                          nameLower.contains('pink guon stone');
-                          
-      final isDeadWeight = nameLower.contains('vampire') ||
-                           nameLower.contains('patches and mendy') ||
-                           nameLower.contains('blasphemy');
-
-      if (isGod) {
-        borderSide = const BorderSide(color: Colors.greenAccent, width: 1.5);
-        robotTag = 'GOD TIER ⚡';
-        robotTagColor = Colors.greenAccent;
-      } else if (isConverter) {
-        borderSide = const BorderSide(color: Colors.blueAccent, width: 1.5);
-        robotTag = 'CONVERTS TO ARMOR 🛡️';
-        robotTagColor = Colors.blueAccent;
-      } else if (isDeadWeight) {
-        borderSide = const BorderSide(color: Colors.redAccent, width: 1.5);
-        robotTag = 'DEAD WEIGHT ⚠️';
-        robotTagColor = Colors.redAccent;
-      }
-    }
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      color: null, // Transparent card background consistent with all other tiers
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: borderSide,
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
-          child: Row(
-            children: [
-              GameIcon(
-                assetPath: iconPath,
-                fallback: fallback,
-                quality: quality,
-                size: 48,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GoopText(
-                            name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        if (robotTag.isNotEmpty) ...[
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: robotTagColor!.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(4),
-                              border: Border.all(color: robotTagColor.withValues(alpha: 0.4), width: 0.8),
-                            ),
-                            child: GoopText(
-                              robotTag,
-                              style: TextStyle(
-                                fontSize: 8.5,
-                                fontWeight: FontWeight.bold,
-                                color: robotTagColor,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    meta,
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: inRun ? null : onAdd,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: inRun
-                        ? Colors.green.withValues(alpha: 0.15)
-                        : AppTheme.flair.primary.withValues(alpha: 0.12),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: inRun
-                          ? Colors.green.withValues(alpha: 0.5)
-                          : AppTheme.flair.primary.withValues(alpha: 0.4),
-                      width: 1.5,
-                    ),
-                  ),
-                  child: Icon(
-                    inRun ? Icons.check : Icons.add_rounded,
-                    color: inRun ? Colors.green : AppTheme.flair.primary,
-                    size: 24,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Shared pill helpers — kept free-standing so _GunMeta & _ItemMeta render
-// a unified look. All pills share the same height / shape / text size so
-// the Wrap stays tidy even when it flows to multiple lines.
-// ---------------------------------------------------------------------------
-
-Widget _metaPill(String text, Color color, {IconData? icon}) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-    decoration: BoxDecoration(
-      color: color.withValues(alpha: 0.14),
-      borderRadius: BorderRadius.circular(6),
-      border: Border.all(color: color.withValues(alpha: 0.45), width: 0.7),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (icon != null) ...[
-          Icon(icon, size: 12, color: color),
-          const SizedBox(width: 3),
-        ],
-        GoopText(
-          text,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: color,
-            letterSpacing: 0.3,
-            height: 1.1,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-/// Quality pill, colored by tier with the letter in the dot so it reads
-/// the same as the QualityBadge but flows in the Wrap row.
-Widget _qualityPill(String quality) {
-  if (quality.isEmpty) return const SizedBox.shrink();
-  final color = QualityBadge.colorFor(quality);
-  final letter = quality.toUpperCase() == '1S' ? 'S' : quality.toUpperCase();
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
-    decoration: BoxDecoration(
-      color: color.withValues(alpha: 0.14),
-      borderRadius: BorderRadius.circular(6),
-      border: Border.all(color: color.withValues(alpha: 0.7), width: 0.8),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 15,
-          height: 15,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          child: GoopText(
-            letter,
-            style: const TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-              height: 1,
-            ),
-          ),
-        ),
-        const SizedBox(width: 4),
-        Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: GoopText(
-            '$letter-tier',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: color,
-              letterSpacing: 0.2,
-              height: 1.1,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-/// Gold-coin sell-price pill — mimics a glittering gold coin.
-Widget _coinPill(String price) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
-    decoration: BoxDecoration(
-      color: const Color(0xFFFFC857).withValues(alpha: 0.12),
-      borderRadius: BorderRadius.circular(6),
-      border: Border.all(
-        color: const Color(0xFFE5A823).withValues(alpha: 0.65),
-        width: 0.8,
-      ),
-    ),
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // The coin itself: gold circle with a slight inner highlight.
-        Container(
-          width: 15,
-          height: 15,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const RadialGradient(
-              center: Alignment(-0.3, -0.3),
-              radius: 0.9,
-              colors: [
-                Color(0xFFFFE082), // lighter highlight
-                Color(0xFFFFC107), // mid gold
-                Color(0xFFB8860B), // dark rim
-              ],
-              stops: [0.0, 0.55, 1.0],
-            ),
-            border: Border.all(
-              color: const Color(0xFF8B6508),
-              width: 0.6,
-            ),
-          ),
-          alignment: Alignment.center,
-          child: const GoopText(
-            '\$',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w900,
-              color: Color(0xFF7A4E00),
-              height: 1,
-            ),
-          ),
-        ),
-        const SizedBox(width: 4),
-        Padding(
-          padding: const EdgeInsets.only(right: 4),
-          child: GoopText(
-            price,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFFFFD166),
-              letterSpacing: 0.3,
-              height: 1.1,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _synergyPill(int count) {
-  if (count == 0) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: GoopText(
-        'no synergy',
-        style: TextStyle(
-          fontSize: 10,
-          color: Colors.white.withValues(alpha: 0.35),
-          fontStyle: FontStyle.italic,
-          height: 1.1,
-        ),
-      ),
-    );
-  }
-  return _metaPill('$count synergy${count == 1 ? "" : "s"}',
-      Colors.blueAccent,
-      icon: Icons.hub);
-}
-
-class _GunMeta extends StatelessWidget {
-  final Gun gun;
-  final int synergyCount;
-  const _GunMeta({required this.gun, required this.synergyCount});
-
-  @override
-  Widget build(BuildContext context) {
-    final bits = <Widget>[
-      _qualityPill(gun.quality),
-      if (gun.gunClass.isNotEmpty && gun.gunClass.toUpperCase() != 'NONE')
-        _metaPill(_titleCase(gun.gunClass), Colors.orangeAccent),
-      if (gun.dps.isNotEmpty)
-        _metaPill('DPS ${gun.dpsValue.toStringAsFixed(0)}',
-            Colors.deepOrangeAccent,
-            icon: Icons.flash_on),
-      if (gun.type.isNotEmpty)
-        _metaPill(gun.type, Colors.white70),
-      if (gun.sellPrice.isNotEmpty && gun.sellPrice != 'N/A')
-        _coinPill(gun.sellPrice),
-      _synergyPill(synergyCount),
-    ];
-    return Wrap(
-      spacing: 5,
-      runSpacing: 4,
-      children: bits,
-    );
-  }
-
-  String _titleCase(String s) {
-    if (s.isEmpty) return s;
-    final l = s.toLowerCase();
-    return l[0].toUpperCase() + l.substring(1);
-  }
-}
-
-/// Aligned, thumb-sized outlined button used for Sort / Quality in the
-/// browse top bar. Keeps visual parity with the search field height.
-class _ToolbarButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color? color;
-  final VoidCallback onPressed;
-  const _ToolbarButton({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-    this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final c = color ?? Colors.white.withValues(alpha: 0.7);
-    return SizedBox(
-      height: 44,
-      child: OutlinedButton(
-        onPressed: onPressed,
-        style: OutlinedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          side: BorderSide(color: c.withValues(alpha: 0.45)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          backgroundColor: color == null ? null : c.withValues(alpha: 0.08),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 16, color: c),
-            const SizedBox(width: 5),
-            Flexible(
-              child: GoopText(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.fade,
-                softWrap: false,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: c,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ItemMeta extends StatelessWidget {
-  final Item item;
-  final int synergyCount;
-  const _ItemMeta({required this.item, required this.synergyCount});
-
-  @override
-  Widget build(BuildContext context) {
-    final bits = <Widget>[_qualityPill(item.quality)];
-    if (item.isCompanion) {
-      bits.add(_metaPill('Companion', Colors.purpleAccent));
-    } else if (item.isActive) {
-      bits.add(_metaPill('Active', Colors.lightBlueAccent));
-      if (item.rechargeTime.isNotEmpty) {
-        bits.add(_metaPill(item.rechargeTime, Colors.white70,
-            icon: Icons.schedule));
-      }
-    } else if (item.isPassive) {
-      bits.add(_metaPill('Passive', Colors.lightGreenAccent));
-    }
-    if (item.sellPrice.isNotEmpty && item.sellPrice != 'N/A') {
-      bits.add(_coinPill(item.sellPrice));
-    }
-    bits.add(_synergyPill(synergyCount));
-    return Wrap(
-      spacing: 5,
-      runSpacing: 4,
-      children: bits,
-    );
-  }
-}
-
-/// Compact icon-only toggle button for the browse toolbar.
-class _ToolbarIcon extends StatelessWidget {
-  final IconData icon;
-  final String tooltip;
-  final bool active;
-  final VoidCallback onPressed;
-  const _ToolbarIcon({
-    required this.icon,
-    required this.tooltip,
-    required this.active,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final c = active
-        ? Theme.of(context).colorScheme.primary
-        : Colors.white.withValues(alpha: 0.6);
-    return Tooltip(
-      message: tooltip,
-      child: SizedBox(
-        height: 44,
-        width: 40,
-        child: OutlinedButton(
-          onPressed: onPressed,
-          style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.zero,
-            side: BorderSide(color: c.withValues(alpha: 0.45)),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            backgroundColor: active ? c.withValues(alpha: 0.12) : null,
-          ),
-          child: Icon(icon, size: 18, color: c),
-        ),
-      ),
-    );
-  }
-}
