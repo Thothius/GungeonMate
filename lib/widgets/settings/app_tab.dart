@@ -104,65 +104,66 @@ class AppTabState extends State<AppTab> {
     );
   }
 
-  Widget _buildLanguageCard(ThemeFlair flair) {
-    return Card(
-      color: flair.card.withValues(alpha: 0.92),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        child: ListenableBuilder(
-          listenable: VisualPrefs.notifier,
-          builder: (context, _) {
-            final isGoopian = VisualPrefs.notifier.value.isGoopianLanguage;
-            return Row(
-              children: [
-                Icon(Icons.language, size: 16, color: Colors.white54),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: GoopText(
-                    'GOOPIAN LANGUAGE MODE',
-                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70, letterSpacing: 0.5),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Haptics.selection();
-                    VisualPrefs.setIsGoopianLanguage(!isGoopian);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: isGoopian
-                          ? const Color(0xFF9C27B0).withValues(alpha: 0.18)
-                          : Colors.white.withValues(alpha: 0.06),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: isGoopian
-                            ? const Color(0xFF9C27B0).withValues(alpha: 0.5)
-                            : Colors.white.withValues(alpha: 0.15),
-                      ),
-                    ),
-                    child: GoopText(
-                      isGoopian ? 'GOOPIAN' : 'ENGLISH',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: isGoopian ? const Color(0xFF9C27B0) : Colors.white54,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
+  // _buildLanguageCard — hidden for now (Goopian feature disabled)
+  // Widget _buildLanguageCard(ThemeFlair flair) {
+  //   return Card(
+  //     color: flair.card.withValues(alpha: 0.92),
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(12),
+  //       side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
+  //     ),
+  //     child: Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+  //       child: ListenableBuilder(
+  //         listenable: VisualPrefs.notifier,
+  //         builder: (context, _) {
+  //           final isGoopian = VisualPrefs.notifier.value.isGoopianLanguage;
+  //           return Row(
+  //             children: [
+  //               Icon(Icons.language, size: 16, color: Colors.white54),
+  //               const SizedBox(width: 10),
+  //               Expanded(
+  //                 child: GoopText(
+  //                   'GOOPIAN LANGUAGE MODE',
+  //                   style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70, letterSpacing: 0.5),
+  //                 ),
+  //               ),
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Haptics.selection();
+  //                   VisualPrefs.setIsGoopianLanguage(!isGoopian);
+  //                 },
+  //                 child: Container(
+  //                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //                   decoration: BoxDecoration(
+  //                     color: isGoopian
+  //                         ? const Color(0xFF9C27B0).withValues(alpha: 0.18)
+  //                         : Colors.white.withValues(alpha: 0.06),
+  //                     borderRadius: BorderRadius.circular(16),
+  //                     border: Border.all(
+  //                       color: isGoopian
+  //                           ? const Color(0xFF9C27B0).withValues(alpha: 0.5)
+  //                           : Colors.white.withValues(alpha: 0.15),
+  //                     ),
+  //                   ),
+  //                   child: GoopText(
+  //                     isGoopian ? 'GOOPIAN' : 'ENGLISH',
+  //                     style: TextStyle(
+  //                       fontSize: 10,
+  //                       fontWeight: FontWeight.w900,
+  //                       color: isGoopian ? const Color(0xFF9C27B0) : Colors.white54,
+  //                       letterSpacing: 0.5,
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildDialogueCard(ThemeFlair flair) {
     final prefs = VisualPrefs.notifier.value;

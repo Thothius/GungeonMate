@@ -625,10 +625,10 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
             GoopText(
               title,
               style: const TextStyle(
-                fontSize: 11,
+                fontSize: 11.5,
                 fontWeight: FontWeight.w900,
-                color: Colors.white60,
-                letterSpacing: 0.5,
+                color: Colors.white38,
+                letterSpacing: 0.6,
               ),
             ),
             const Spacer(),
@@ -666,10 +666,10 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
             GoopText(
               title,
               style: const TextStyle(
-                fontSize: 11,
+                fontSize: 11.5,
                 fontWeight: FontWeight.w900,
-                color: Colors.white60,
-                letterSpacing: 0.5,
+                color: Colors.white38,
+                letterSpacing: 0.6,
               ),
             ),
             if (tooltip != null) ...[

@@ -67,16 +67,20 @@ class DebugTab extends StatelessWidget {
   }
 
   Widget _utilTile(BuildContext context, {required IconData icon, required String title, required String subtitle, VoidCallback? onTap}) {
-    return Card(
-      color: Colors.white.withValues(alpha: 0.03),
-      margin: const EdgeInsets.symmetric(vertical: 4),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+      ),
       child: ListTile(
         dense: true,
         visualDensity: VisualDensity.compact,
-        leading: Icon(icon, color: Colors.greenAccent, size: 22),
-        title: GoopText(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
-        subtitle: GoopText(subtitle, style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5))),
-        trailing: Icon(Icons.chevron_right, color: Colors.white.withValues(alpha: 0.3), size: 20),
+        leading: Icon(icon, color: Colors.greenAccent, size: 20),
+        title: GoopText(title, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white)),
+        subtitle: GoopText(subtitle, style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.54))),
+        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Colors.white38),
         onTap: onTap,
       ),
     );
