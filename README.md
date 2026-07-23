@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.7.1-00E5FF?style=flat-square&logo=flutter">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.8.0-00E5FF?style=flat-square&logo=flutter">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Android-FF007F?style=flat-square">
   <img alt="Data" src="https://img.shields.io/badge/wiki_data-509_verified-E040FB?style=flat-square">
 </p>
@@ -20,8 +20,8 @@
 ## 📥 DOWNLOAD
 
 <p align="center">
-  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/GungeonMate-v1.7.1.apk">
-    <img src="https://img.shields.io/badge/⬇_DOWNLOAD_APK-v1.7.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="72" alt="Download APK">
+  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/GungeonMate-v1.8.0.apk">
+    <img src="https://img.shields.io/badge/⬇_DOWNLOAD_APK-v1.8.0-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="72" alt="Download APK">
   </a>
 </p>
 
