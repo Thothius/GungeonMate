@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.6.7",
+    "title": "✨ MAIN MENU POLISH — FLOATING MASCOT + TILT PARALLAX",
+    "date": "July 23, 2026",
+    "items": [
+      "Mascot circle removed — The Tailor now floats freely with a subtle golden glow halo instead of a bordered circle container.",
+      "Tilt parallax added — Mascot responds to phone accelerometer movement with a gentle magical drift, creating an ocular subtle effect.",
+      "Idle float animation — Mascot gently bobs up and down with a 3.2s sine wave breathing animation, never sitting static.",
+      "Menu buttons refined — Slightly compacted height (56→54), refined font sizes, added subtle elevation shadow on Local Run button, haptic feedback on both button taps.",
+      "Button borders polished — Multiplayer button border opacity tuned for a more refined look."
+    ]
+  },
+  {
     "version": "v1.6.6",
     "title": "🦄 UNICORN PALETTE REDESIGN — 6 PINK/CRIMSON/PURPLE PALETTES",
     "date": "July 23, 2026",

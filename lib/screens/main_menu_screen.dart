@@ -8,6 +8,7 @@ import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
+import '../widgets/theme_overlay.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -17,9 +18,11 @@ class MainMenuScreen extends StatefulWidget {
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen> {
+class _MainMenuScreenState extends State<MainMenuScreen>
+    with SingleTickerProviderStateMixin {
   String? _mascotQuote;
   Timer? _quoteTimer;
+  late final AnimationController _floatCtrl;
 
   void _onMascotTapped() {
     _quoteTimer?.cancel();
@@ -77,8 +80,18 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _floatCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3200),
+    )..repeat(reverse: true);
+  }
+
+  @override
   void dispose() {
     _quoteTimer?.cancel();
+    _floatCtrl.dispose();
     super.dispose();
   }
 
@@ -163,41 +176,52 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         ],
                       ),
                       const Spacer(flex: 2),
-                      // The Tailor — GungeonMate's inventory-hauling mascot (Now fully interactive on tap!)
+                      // The Tailor — floating mascot with tilt parallax + idle bob
                       Stack(
                         clipBehavior: Clip.none,
                         alignment: Alignment.bottomCenter,
                         children: [
-                          ScaleButton(
-                            onTap: _onMascotTapped,
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black.withValues(alpha: 0.3),
-                                border: Border.all(
-                                  color: const Color(0xFFFFD54F).withValues(alpha: 0.35),
-                                  width: 1.5,
+                          // Subtle glow halo behind character (no circle border)
+                          AnimatedBuilder(
+                            animation: _floatCtrl,
+                            builder: (context, floatChild) {
+                              return ValueListenableBuilder<Offset>(
+                                valueListenable: ThemeOverlay.tiltNotifier,
+                                builder: (context, tilt, _) {
+                                  // Gentle idle bob + tilt-driven parallax drift
+                                  final floatY = math.sin(_floatCtrl.value * math.pi) * 6.0;
+                                  final tiltX = tilt.dx * 2.5;
+                                  final tiltY = tilt.dy * 2.0;
+                                  return Transform.translate(
+                                    offset: Offset(tiltX, floatY + tiltY),
+                                    child: floatChild,
+                                  );
+                                },
+                              );
+                            },
+                            child: ScaleButton(
+                              onTap: _onMascotTapped,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: const Color(0xFFFFD54F).withValues(alpha: 0.06),
+                                      blurRadius: 28,
+                                      spreadRadius: 8,
+                                    ),
+                                  ],
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFFFFD54F).withValues(alpha: 0.08),
-                                    blurRadius: 24,
-                                    spreadRadius: 6,
-                                  ),
-                                ],
-                              ),
-                              child: ClipOval(
                                 child: Image.asset(
                                   'assets/animations/Tailor_idle.gif',
-                                  width: 110,
-                                  height: 110,
+                                  width: 120,
+                                  height: 120,
                                   fit: BoxFit.contain,
-                                  filterQuality: FilterQuality.none, // crisp pixel art
+                                  filterQuality: FilterQuality.none,
                                   gaplessPlayback: true,
                                   errorBuilder: (_, __, ___) => const Icon(
                                     Icons.backpack_rounded,
-                                    size: 64,
+                                    size: 72,
                                     color: Color(0xFFFFD54F),
                                   ),
                                 ),
@@ -242,6 +266,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   // Local Run = single device solo play
                   ScaleButton(
                     onTap: () {
+                      Haptics.selection();
                       Navigator.push(
                         context,
                         fastRoute(const CharacterSelectScreen()),
@@ -250,26 +275,31 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     child: IgnorePointer(
                       child: SizedBox(
                         width: double.infinity,
-                        height: 56,
+                        height: 54,
                         child: FilledButton.icon(
                           onPressed: () {},
-                          icon: const Icon(Icons.play_arrow_rounded, size: 26),
+                          style: FilledButton.styleFrom(
+                            elevation: 3,
+                            shadowColor: const Color(0xFFFFD54F).withValues(alpha: 0.15),
+                          ),
+                          icon: const Icon(Icons.play_arrow_rounded, size: 24),
                           label: const GoopText(
                             'Local Run',
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
+                              letterSpacing: 1.2,
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
                   // Bluetooth Multiplayer = pair two devices
                   ScaleButton(
                     onTap: () {
+                      Haptics.selection();
                       Navigator.push(
                         context,
                         fastRoute(const MultiplayerLobbyScreen()),
@@ -278,16 +308,22 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     child: IgnorePointer(
                       child: SizedBox(
                         width: double.infinity,
-                        height: 56,
+                        height: 54,
                         child: OutlinedButton.icon(
                           onPressed: () {},
-                          icon: const Icon(Icons.bluetooth_searching, size: 24),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(
+                              color: Colors.white.withValues(alpha: 0.18),
+                              width: 1.2,
+                            ),
+                          ),
+                          icon: const Icon(Icons.bluetooth_searching, size: 22),
                           label: const GoopText(
                             'Multiplayer',
                             style: TextStyle(
-                              fontSize: 17,
+                              fontSize: 16,
                               fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
+                              letterSpacing: 1.2,
                             ),
                           ),
                         ),
@@ -296,7 +332,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'v1.6.6',
+                    'v1.6.7',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -335,7 +371,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v1.6.6)',
+                            'Changelog (v1.6.7)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
@@ -389,7 +425,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.6.6 — Unicorn Palette Redesign: 6 Pink/Crimson/Purple Palettes',
+                            'v1.6.7 — Main Menu Polish: Floating Mascot + Tilt Parallax',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

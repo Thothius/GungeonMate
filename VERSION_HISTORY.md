@@ -6,6 +6,25 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.7 — Main Menu Polish: Floating Mascot + Tilt Parallax (July 23, 2026)
+**Build:** 68
+
+### Mascot Redesign
+- Removed circle container (border + dark background) — The Tailor now floats freely.
+- Added subtle golden glow halo via `boxShadow` (no visible border).
+- Added idle float animation: 3.2s sine wave bobbing ±6px (never static).
+- Added accelerometer tilt parallax: mascot drifts ±2.5px X / ±2.0px Y based on `ThemeOverlay.tiltNotifier`.
+- Combined float + tilt creates a magical ocular subtle effect when moving the phone.
+
+### Menu Button Polish
+- Button height reduced 56→54 for tighter look.
+- Font size 17→16, letter spacing 1→1.2 for refined typography.
+- Local Run: added elevation 3 with subtle golden shadow.
+- Multiplayer: border opacity tuned to 0.18 for cleaner look.
+- Haptics.selection() added to both button taps.
+
+---
+
 ## v1.6.6 — Unicorn Palette Redesign: 6 Pink/Crimson/Purple Palettes (July 23, 2026)
 **Build:** 67
 
