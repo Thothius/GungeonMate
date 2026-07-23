@@ -1070,11 +1070,8 @@ class ItemBody extends StatelessWidget {
         : null;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
+      padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+      child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (item.effect.isNotEmpty)
@@ -1122,8 +1119,6 @@ class ItemBody extends StatelessWidget {
               ],
             ],
           ),
-        ),
-      ),
     );
   }
 }

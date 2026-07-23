@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
-import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../quality_badge.dart';
 import '../game_icon.dart';
@@ -35,21 +34,9 @@ class ItemDetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final f = AppTheme.flair;
     final isFav = context.watch<RunProvider>().isFavourite(name);
-    return Container(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(18, 22, 18, 18),
-      decoration: BoxDecoration(
-        color: f.card,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: f.primary.withValues(alpha: 0.08),
-            blurRadius: 12,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

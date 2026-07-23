@@ -37,7 +37,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   final _statsKey = GlobalKey();
   final _wikiKey = GlobalKey();
   final _synergyKey = GlobalKey();
-  final _refsKey = GlobalKey();
   final _scrollCtrl = ScrollController();
 
   @override
@@ -88,8 +87,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     }
 
     final wiki = gun?.wiki ?? item!.wiki;
-    final referrers = runProvider.backRefs.referrersFor(name);
-
     final wikiUrlEncoded = Uri.encodeComponent(name.replaceAll(' ', '_'));
     final wikiUrlString = 'https://enterthegungeon.wiki.gg/wiki/$wikiUrlEncoded';
 
@@ -105,26 +102,42 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         controller: _scrollCtrl,
         slivers: [
           SliverToBoxAdapter(
-            child: ItemDetailHeader(
-              name: name,
-              subtitle: subtitle,
-              quality: quality,
-              quote: quote,
-              isGun: gun != null,
-              isActive: item?.isActive ?? false,
-              iconPath: gun?.icon ?? item?.icon ?? '',
-              sellPrice: gun?.sellPrice ?? item?.sellPrice ?? '',
-              synergyCount: synergyStatuses.length,
-              curse: gun?.curse ?? item?.curse ?? 0.0,
-              coolness: gun?.coolness ?? item?.coolness ?? 0.0,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: KeyedSubtree(
-              key: _statsKey,
-              child: gun != null
-                  ? GunStats(gun: gun)
-                  : ItemBody(item: item!, ownerSlot: ownerSlot),
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+              decoration: BoxDecoration(
+                color: AppTheme.flair.card,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.flair.primary.withValues(alpha: 0.08),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  ItemDetailHeader(
+                    name: name,
+                    subtitle: subtitle,
+                    quality: quality,
+                    quote: quote,
+                    isGun: gun != null,
+                    isActive: item?.isActive ?? false,
+                    iconPath: gun?.icon ?? item?.icon ?? '',
+                    sellPrice: gun?.sellPrice ?? item?.sellPrice ?? '',
+                    synergyCount: synergyStatuses.length,
+                    curse: gun?.curse ?? item?.curse ?? 0.0,
+                    coolness: gun?.coolness ?? item?.coolness ?? 0.0,
+                  ),
+                  KeyedSubtree(
+                    key: _statsKey,
+                    child: gun != null
+                        ? GunStats(gun: gun)
+                        : ItemBody(item: item!, ownerSlot: ownerSlot),
+                  ),
+                ],
+              ),
             ),
           ),
           // ---- Wiki rich content (Effects, Interactions, Notes, Trivia) ----
@@ -147,15 +160,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 statuses: synergyStatuses,
                 currentName: name,
               ),
-            ),
-          ),
-          // "Referenced by" â€” entities whose own wiki notes mention this one.
-          // Surfaces non-obvious related content, e.g. opening Duct Tape
-          // shows the 33 guns that talk about it in their notes.
-          SliverToBoxAdapter(
-            child: KeyedSubtree(
-              key: _refsKey,
-              child: ReferencedBySection(referrers: referrers),
             ),
           ),
           if (item != null && item.isDestroyedOnUse && isInRun)
