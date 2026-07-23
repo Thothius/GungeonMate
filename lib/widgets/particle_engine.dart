@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'theme_overlay.dart' show ThemeOverlay;
+import '../services/goop_talk_engine.dart';
 
 // =============================================================================
 // Enums
@@ -969,7 +970,7 @@ class _ParticlePreviewPickerState extends State<ParticlePreviewPicker> {
                             ],
                           ),
                         ),
-                        child: Text(
+                        child: GoopText(
                           preset.label,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -1004,7 +1005,7 @@ class _ParticlePreviewPickerState extends State<ParticlePreviewPicker> {
                     }
                   : null,
             ),
-            Text(
+            GoopText(
               '${_page + 1} / ${presets.length}',
               style: const TextStyle(
                 fontSize: 11,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Rank-tier badge. Colors match the in-game chest tiers:
 ///   S → black pill, white label, golden glow (animated)
@@ -103,7 +104,7 @@ class _QualityBadgeState extends State<QualityBadge>
             ? Border.all(color: const Color(0xFFE0E0E0), width: 1.6) // Silver/white fatter frame
             : null,
       ),
-      child: Text(
+      child: GoopText(
         letter,
         style: TextStyle(
           color: Colors.white,

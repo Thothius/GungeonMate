@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/codex_entry.dart';
 import '../services/app_theme.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Full-page view for a single Codex entry — large icon, name, category,
 /// description, and wiki link.
@@ -27,7 +28,7 @@ class CodexDetailScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
-        title: Text(
+        title: GoopText(
           entry.name.toUpperCase(),
           style: const TextStyle(
             fontWeight: FontWeight.w900,
@@ -108,7 +109,7 @@ class CodexDetailScreen extends StatelessWidget {
                               width: 1,
                             ),
                           ),
-                          child: Text(
+                          child: GoopText(
                             entry.category.toUpperCase(),
                             style: TextStyle(
                               fontSize: 10,
@@ -120,7 +121,7 @@ class CodexDetailScreen extends StatelessWidget {
                         ),
                       if (entry.health != null && entry.health!.isNotEmpty) ...[
                         const SizedBox(height: 6),
-                        Text(
+                        GoopText(
                           'Base HP: ${entry.health}',
                           style: TextStyle(
                             fontSize: 11,
@@ -131,7 +132,7 @@ class CodexDetailScreen extends StatelessWidget {
                       ],
                       if (entry.location != null && entry.location!.isNotEmpty) ...[
                         const SizedBox(height: 6),
-                        Text(
+                        GoopText(
                           'Location: ${entry.location}',
                           style: TextStyle(
                             fontSize: 11,
@@ -150,7 +151,7 @@ class CodexDetailScreen extends StatelessWidget {
 
             // Description
             if (entry.description.isNotEmpty) ...[
-              Text(
+              GoopText(
                 'DESCRIPTION',
                 style: TextStyle(
                   fontSize: 10,
@@ -171,7 +172,7 @@ class CodexDetailScreen extends StatelessWidget {
                     width: 1,
                   ),
                 ),
-                child: Text(
+                child: GoopText(
                   entry.description,
                   style: TextStyle(
                     fontSize: 13,
@@ -198,14 +199,14 @@ class CodexDetailScreen extends StatelessWidget {
                     Clipboard.setData(ClipboardData(text: entry.wikiUrl));
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('URL copied'),
+                        content: GoopText('URL copied'),
                         duration: Duration(seconds: 1),
                       ),
                     );
                   },
                   icon: Icon(Icons.open_in_new,
                       size: 14, color: flair.primary.withValues(alpha: 0.6)),
-                  label: Text(
+                  label: GoopText(
                     'View on wiki.gg',
                     style: TextStyle(
                       fontSize: 11,
@@ -223,7 +224,7 @@ class CodexDetailScreen extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back_rounded,
                     size: 18, color: flair.primary.withValues(alpha: 0.7)),
-                label: Text(
+                label: GoopText(
                   'Back to Codex',
                   style: TextStyle(
                     fontSize: 13,

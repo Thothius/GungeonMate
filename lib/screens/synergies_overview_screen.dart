@@ -51,7 +51,7 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: FilterChip(
-              label: Text(_onlyActive ? 'Active only' : 'All'),
+              label: GoopText(_onlyActive ? 'Active only' : 'All'),
               selected: _onlyActive,
               onSelected: (v) => setState(() => _onlyActive = v),
             ),
@@ -69,7 +69,7 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
                 const Icon(Icons.hub, color: Colors.amber),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
+                  child: GoopText(
                     '$activeCount active synergies across your run',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
@@ -80,7 +80,7 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
           Expanded(
             child: filtered.isEmpty
                 ? Center(
-                    child: Text(
+                    child: GoopText(
                       'No synergies for current inventory.',
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.6),
@@ -121,7 +121,7 @@ class _ItemGroupCard extends StatelessWidget {
           group.itemName,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: Text(
+        subtitle: GoopText(
           '${group.entries.length} synergies'
           '${activeCount > 0 ? '  •  $activeCount active' : ''}',
           style: TextStyle(
@@ -181,7 +181,7 @@ class _SynergyRow extends StatelessWidget {
                 ),
               ),
               if (!status.active)
-                Text(
+                GoopText(
                   'needs ${status.missing.length}',
                   style: TextStyle(
                     fontSize: 11,
@@ -227,7 +227,7 @@ class _SynergyRow extends StatelessWidget {
                   color: Colors.amber.withValues(alpha: 0.75),
                 ),
                 const SizedBox(width: 4),
-                Text(
+                GoopText(
                   'Alternative Partners:',
                   style: TextStyle(
                     fontSize: 11.5,

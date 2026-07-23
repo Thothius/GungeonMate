@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.6.8",
+    "title": "⏃⎎⎓⏁ GOOPIAN LANGUAGE MODE — FULL APP TRANSLATION",
+    "date": "July 23, 2026",
+    "items": [
+      "Language selection toggle added to main menu — switch between English and Goopian with a segmented pill toggle.",
+      "Full app Goopianization — 600+ Text widgets across all 16 screens and 10 widget files converted to GoopText for animated alien translation.",
+      "Sponge button polish — pulsing amber glow animation when translation is active, nuanced haptic feedback (success on activate, light on deactivate).",
+      "GoopText animation polish — snappier 500ms duration with easeOutExpo curve, reduced sponge delay from 1000ms to 800ms.",
+      "GoopText now supports softWrap parameter for full Text widget compatibility.",
+      "Language preference persists across app restarts via VisualPrefs."
+    ]
+  },
+  {
     "version": "v1.6.7",
     "title": "✨ MAIN MENU POLISH — FLOATING MASCOT + TILT PARALLAX",
     "date": "July 23, 2026",

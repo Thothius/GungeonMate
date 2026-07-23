@@ -143,7 +143,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoopText(
             title,
             style: const TextStyle(
               fontSize: 13.5,
@@ -152,7 +152,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             body,
             style: const TextStyle(
               fontSize: 11.5,
@@ -201,7 +201,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
       if (pinCode.length != 4 || int.tryParse(pinCode) == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Please enter a valid 4-digit Connection PIN from the host!'),
+            content: GoopText('Please enter a valid 4-digit Connection PIN from the host!'),
             duration: Duration(seconds: 3),
             behavior: SnackBarBehavior.floating,
           ),
@@ -228,10 +228,10 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
           children: [
             Icon(Icons.wifi, color: Colors.lightBlueAccent),
             SizedBox(width: 12),
-            Expanded(child: Text('Bluetooth + Wi-Fi')),
+            Expanded(child: GoopText('Bluetooth + Wi-Fi')),
           ],
         ),
-        content: const Text(
+        content: const GoopText(
           'Multiplayer pairs devices over Bluetooth and Wi-Fi (Nearby Devices).\n\n'
           'TIP: For the best speed and range, put BOTH phones on the SAME Wi-Fi network before connecting. The session will use Wi-Fi automatically when available and fall back to Bluetooth otherwise.\n\n'
           'No data is sent to servers — connections are device-to-device.',
@@ -239,11 +239,11 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Continue'),
+            child: const GoopText('Continue'),
           ),
         ],
       ),
@@ -261,7 +261,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Multiplayer'),
+        title: const GoopText('Multiplayer'),
         centerTitle: true,
       ),
       body: PageView(
@@ -362,7 +362,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                 height: 54,
                 child: FilledButton.icon(
                   icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth),
-                  label: Text(_isMain ? 'Start Hosting' : 'Find Host'),
+                  label: GoopText(_isMain ? 'Start Hosting' : 'Find Host'),
                   onPressed: () {
                     Haptics.selection();
                     _start();
@@ -453,7 +453,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                     ),
                                     const SizedBox(width: 6),
                                     Expanded(
-                                      child: Text(
+                                      child: GoopText(
                                         s.sessionName.toUpperCase(),
                                         style: const TextStyle(
                                           fontSize: 13,
@@ -465,7 +465,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    Text(
+                                    GoopText(
                                       '${_formatDuration(s.durationMs)} PLAYED',
                                       style: TextStyle(
                                         fontSize: 10,
@@ -489,7 +489,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                 Row(
                                   children: [
                                     Expanded(
-                                      child: Text(
+                                      child: GoopText(
                                         'CO-OP: $p1Char (Host) ✕ $p2Char (Sidekick)',
                                         style: const TextStyle(
                                           fontSize: 11,
@@ -510,14 +510,14 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                         children: [
                                           const Icon(Icons.ac_unit_rounded, size: 10, color: Colors.cyanAccent),
                                           const SizedBox(width: 2),
-                                          Text(
+                                          GoopText(
                                             '+${runState.coolness.toStringAsFixed(0)}',
                                             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
                                           ),
                                           const SizedBox(width: 6),
                                           const Icon(Icons.local_fire_department_rounded, size: 10, color: Colors.redAccent),
                                           const SizedBox(width: 2),
-                                          Text(
+                                          GoopText(
                                             '+${runState.curse.toStringAsFixed(0)}',
                                             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.redAccent),
                                           ),
@@ -528,7 +528,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 // Footer row: Equipment details
-                                Text(
+                                GoopText(
                                   'P1 Items: ${mainEquip.length} · P2 Items: ${coopEquip.length}',
                                   style: TextStyle(
                                     fontSize: 10,
@@ -567,7 +567,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                         children: [
                           Icon(Icons.help_outline_rounded, size: 14, color: Colors.amberAccent),
                           SizedBox(width: 6),
-                          Text(
+                          GoopText(
                             'How to Play',
                             style: TextStyle(
                               fontSize: 12,
@@ -607,7 +607,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   children: [
                     Icon(Icons.help_outline_rounded, color: Colors.amberAccent, size: 24),
                     SizedBox(width: 10),
-                    Text(
+                    GoopText(
                       'MULTIPLAYER GUIDE',
                       style: TextStyle(
                         fontSize: 16,
@@ -639,7 +639,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
             Center(
               child: TextButton.icon(
                 icon: const Icon(Icons.keyboard_arrow_up_rounded, color: Colors.amberAccent),
-                label: const Text(
+                label: const GoopText(
                   'Swipe Up or Tap to go back',
                   style: TextStyle(color: Colors.amberAccent, fontWeight: FontWeight.bold),
                 ),
@@ -680,7 +680,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               const Icon(Icons.wifi_protected_setup_rounded, color: Colors.amber, size: 22),
               const SizedBox(width: 10),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'RESUME: ${session.sessionName.toUpperCase()}',
                   style: const TextStyle(
                     fontSize: 14,
@@ -697,7 +697,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              const GoopText(
                 'LOBBY RECONNECTION PROTOCOL',
                 style: TextStyle(
                   fontSize: 10,
@@ -707,7 +707,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              GoopText(
                 'This restores the run with $p1Char & $p2Char. Choose your connection role to resume matchmaking:',
                 style: const TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.3),
               ),
@@ -734,7 +734,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            const GoopText(
                               'HOST AS MAIN PLAYER',
                               style: TextStyle(
                                 fontSize: 12,
@@ -744,7 +744,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                               ),
                             ),
                             const SizedBox(height: 2),
-                            Text(
+                            GoopText(
                               'You will host and advertise this run as $p1Char.',
                               style: const TextStyle(fontSize: 11, color: Colors.white60),
                             ),
@@ -778,7 +778,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            const GoopText(
                               'JOIN AS SIDEKICK CLIENT',
                               style: TextStyle(
                                 fontSize: 12,
@@ -788,7 +788,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                               ),
                             ),
                             const SizedBox(height: 2),
-                            Text(
+                            GoopText(
                               'You will search for the Host to join this run as $p2Char.',
                               style: const TextStyle(fontSize: 11, color: Colors.white60),
                             ),
@@ -804,7 +804,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('CANCEL', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+              child: const GoopText('CANCEL', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
             ),
           ],
         );
@@ -816,12 +816,12 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Save?'),
-        content: Text('Are you sure you want to delete the saved session "${session.sessionName}"? This cannot be undone.'),
+        title: const GoopText('Delete Save?'),
+        content: GoopText('Are you sure you want to delete the saved session "${session.sessionName}"? This cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.redAccent),
@@ -829,7 +829,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               Navigator.pop(ctx);
               _deleteSavedSession(session.sessionId);
             },
-            child: const Text('Delete'),
+            child: const GoopText('Delete'),
           ),
         ],
       ),
@@ -1009,7 +1009,7 @@ class _CharacterPickerTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    GoopText(
                       character?.name ?? 'Pick a Gungeoneer',
                       style: TextStyle(
                         fontSize: 15,
@@ -1018,7 +1018,7 @@ class _CharacterPickerTile extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
+                    GoopText(
                       character != null ? 'Tap to change' : 'Required for Main',
                       style: TextStyle(
                         fontSize: 12,
@@ -1107,7 +1107,7 @@ class _ForcedCultistTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                GoopText(
                   cultist?.name ?? 'The Cultist',
                   style: const TextStyle(
                     fontSize: 15,
@@ -1115,7 +1115,7 @@ class _ForcedCultistTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
+                GoopText(
                   'Sidekicks always play as The Cultist',
                   style: TextStyle(
                     fontSize: 12,
@@ -1249,7 +1249,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Multiplayer Connection'),
+        title: const GoopText('Multiplayer Connection'),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close),
@@ -1290,7 +1290,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text(
+                        GoopText(
                           status == MpStatus.connected ? 'LINKED' : isSpinning ? 'SEARCHING' : '—',
                           style: TextStyle(
                             fontSize: 9,
@@ -1312,7 +1312,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
+              GoopText(
                 title,
                 style: TextStyle(
                   fontSize: 22,
@@ -1321,7 +1321,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
+              GoopText(
                 subtitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -1340,7 +1340,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                   ),
                   child: Column(
                     children: [
-                      Text(
+                      GoopText(
                         'CONNECTION PIN',
                         style: TextStyle(
                           fontSize: 11,
@@ -1350,7 +1350,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                         ),
                       ),
                       const SizedBox(height: 6),
-                      Text(
+                      GoopText(
                         session.pinCode!,
                         style: const TextStyle(
                           fontSize: 36,
@@ -1360,7 +1360,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      GoopText(
                         'Share this code with your Sidekick!',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -1386,7 +1386,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                       ),
                     ),
                     icon: const Icon(Icons.play_arrow, size: 24),
-                    label: const Text(
+                    label: const GoopText(
                       'Go to Run',
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 0.5),
                     ),
@@ -1418,7 +1418,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                       await session.cancel();
                       if (context.mounted) Navigator.pop(context);
                     },
-                    child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: const GoopText('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -1433,7 +1433,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                     ),
                     onPressed: () => openAppSettings(),
                     icon: const Icon(Icons.settings, size: 22),
-                    label: const Text('Open Settings', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
+                    label: const GoopText('Open Settings', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
                   ),
                 ),
               ],
@@ -1455,7 +1455,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                       await session.cancel();
                       if (context.mounted) Navigator.pop(context);
                     },
-                    child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: const GoopText('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -1471,7 +1471,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                       ),
                     ),
                     icon: const Icon(Icons.key, size: 22),
-                    label: const Text('RE-PAIR', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                    label: const GoopText('RE-PAIR', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1)),
                     onPressed: session.canReconnect
                         ? () {
                             Haptics.selection();
@@ -1482,7 +1482,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                 ),
                 if (status == MpStatus.disconnected) ...[
                   const SizedBox(height: 12),
-                  Text(
+                  GoopText(
                     'Your run is preserved. The peer should still be on '
                     'the multiplayer screen — RE-PAIR opens the Reconnection '
                     'Hub to re-pair over Wi-Fi / Bluetooth without losing inventory.',
@@ -1506,7 +1506,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                   children: [
                     const Icon(Icons.terminal_rounded, size: 14, color: Colors.greenAccent),
                     const SizedBox(width: 6),
-                    Text(
+                    GoopText(
                       'DIAGNOSTIC CONSOLE',
                       style: TextStyle(
                         fontSize: 10.5,
@@ -1562,7 +1562,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                       final log = session.connectionLogs[idx];
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 5),
-                        child: Text(
+                        child: GoopText(
                           log,
                           style: const TextStyle(
                             fontFamily: 'Courier',
@@ -1621,7 +1621,7 @@ class _ConnectPortrait extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             border: Border.all(color: accent.withValues(alpha: 0.4), width: 1),
           ),
-          child: Text(
+          child: GoopText(
             slotLabel,
             style: TextStyle(
               fontSize: 9,
@@ -1678,7 +1678,7 @@ class _ConnectPortrait extends StatelessWidget {
                         color: accent.withValues(alpha: 0.8),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
+                      child: const GoopText(
                         'YOU',
                         style: TextStyle(
                           fontSize: 7,
@@ -1693,7 +1693,7 @@ class _ConnectPortrait extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        Text(
+        GoopText(
           charName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -1704,7 +1704,7 @@ class _ConnectPortrait extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 1),
-        Text(
+        GoopText(
           nickname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

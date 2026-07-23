@@ -152,13 +152,13 @@ class FavouritesScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-        title: const Text('Reset favourites?'),
-        content: Text(
+        title: const GoopText('Reset favourites?'),
+        content: GoopText(
             'This clears all ${p.favouritesCount} favourited items and guns. Can\'t be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.redAccent),
@@ -172,12 +172,12 @@ class FavouritesScreen extends StatelessWidget {
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Favourites cleared'),
+                  content: GoopText('Favourites cleared'),
                   duration: Duration(milliseconds: 1200),
                 ),
               );
             },
-            child: const Text('Reset'),
+            child: const GoopText('Reset'),
           ),
         ],
       ),
@@ -214,7 +214,7 @@ class _EmptyState extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            GoopText(
               'Tap the ♥ heart on any gun/item detail to star it. Your favourites show up here for quick access.',
               textAlign: TextAlign.center,
               style: TextStyle(

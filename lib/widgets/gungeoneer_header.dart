@@ -6,6 +6,7 @@ import '../services/effect_tagger.dart';
 import '../services/elemental_tagger.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Banner for the Inventory: portrait + name + quick-glance stats row.
 class GungeoneerHeader extends StatefulWidget {
@@ -301,7 +302,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                       // Name column (vertically centered now that the
                       // status subtitle is gone)
                       Expanded(
-                        child: Text(
+                        child: GoopText(
                           widget.character.name.toUpperCase(),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -339,7 +340,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                             ),
                           ],
                         ),
-                        child: Text(
+                        child: GoopText(
                           _quickComment!,
                           style: TextStyle(
                             fontSize: 10,
@@ -486,7 +487,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
     final double curseGlowIntensity = (curseVal >= 2) ? (curseVal / 10.0).clamp(0.1, 1.0) : 0.0;
 
     // Glow wrapper for value text — replaces the old icon-based glow
-    Widget valueText = Text(
+    Widget valueText = GoopText(
       value,
       style: TextStyle(
         fontSize: 16,
@@ -571,7 +572,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
           children: [
             valueText,
             const SizedBox(height: 4),
-            Text(
+            GoopText(
               label,
               style: TextStyle(
                 fontSize: 9.5,
@@ -700,7 +701,7 @@ class _EffectChipsWrapState extends State<_EffectChipsWrap> {
                   size: 13,
                 ),
                 const SizedBox(width: 3),
-                Text(
+                GoopText(
                   _isExpanded ? 'COLLAPSE' : '+$hiddenCount MORE',
                   style: TextStyle(
                     fontSize: 10.5,
@@ -743,7 +744,7 @@ class _EffectChip extends StatelessWidget {
           children: [
             Icon(chip.tag.icon, color: color, size: 12.5),
             const SizedBox(width: 3),
-            Text(
+            GoopText(
               chip.tag.label,
               style: TextStyle(
                 fontSize: 11.5,
@@ -754,7 +755,7 @@ class _EffectChip extends StatelessWidget {
             ),
             if (value != null) ...[
               const SizedBox(width: 3),
-              Text(
+              GoopText(
                 value,
                 style: const TextStyle(
                   fontSize: 11.5,
@@ -765,7 +766,7 @@ class _EffectChip extends StatelessWidget {
             ],
             if (chip.sourceCount > 1) ...[
               const SizedBox(width: 3),
-              Text(
+              GoopText(
                 '×${chip.sourceCount}',
                 style: TextStyle(
                   fontSize: 10.5,

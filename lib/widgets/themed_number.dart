@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/app_theme.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Role a [ThemedNumber] is playing in the UI. The widget adjusts its
 /// colour (and for Curseblaster, its glow strength) based on the role
@@ -63,14 +64,14 @@ class ThemedNumber extends StatelessWidget {
               : null,
           shadows: _shadowsFor(f),
         );
-        Widget text = Text(value, style: style);
+        Widget text = GoopText(value, style: style);
 
         // Unicorn number glow — soft coloured halo behind digits.
         if (f.numberGlowColor != null && role == ThemedNumberRole.headline) {
           text = Stack(
             alignment: Alignment.center,
             children: [
-              Text(
+              GoopText(
                 value,
                 style: style.copyWith(
                   color: Colors.transparent,
@@ -97,7 +98,7 @@ class ThemedNumber extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               // Outer soft halo via a blurred shadow-only Text copy.
-              Text(
+              GoopText(
                 value,
                 style: style.copyWith(
                   color: Colors.transparent,
@@ -299,7 +300,7 @@ class _SparkleOverlayState extends State<_SparkleOverlay>
         offset: offsets[i] * 14,
         child: Transform.scale(
           scale: scale,
-          child: Text(
+          child: GoopText(
             '✦',
             style: TextStyle(
               fontSize: 7,
@@ -350,7 +351,7 @@ class _ThemedBulletState extends State<ThemedBullet>
       valueListenable: AppTheme.notifier,
       builder: (_, __, ___) {
         final f = AppTheme.flair;
-        final glyph = Text(
+        final glyph = GoopText(
           f.bulletGlyph,
           style: TextStyle(
             fontSize: widget.size,

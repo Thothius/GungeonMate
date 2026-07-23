@@ -180,7 +180,7 @@ class _ImmersiveThemePage extends StatelessWidget {
             const Spacer(flex: 1),
 
             // Theme name — large, bold, in the theme's headline colour
-            Text(
+            GoopText(
               mode.label.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -206,7 +206,7 @@ class _ImmersiveThemePage extends StatelessWidget {
             const SizedBox(height: 4),
 
             // Tagline — small, muted
-            Text(
+            GoopText(
               mode.tagline,
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -315,7 +315,7 @@ class _ImmersiveThemePage extends StatelessWidget {
                     if (context.mounted) AppTheme.refresh();
                   },
                   icon: Icon(Icons.tune_rounded, size: 18, color: f.primary),
-                  label: Text(
+                  label: GoopText(
                     'Customize Colors',
                     style: TextStyle(
                       fontSize: 13,
@@ -436,7 +436,7 @@ class _CustomThemeEditorSheetState extends State<_CustomThemeEditorSheet> {
           children: [
             Row(
               children: [
-                const Text(
+                const GoopText(
                   'CUSTOMIZE THEME',
                   style: TextStyle(
                     fontSize: 16,
@@ -451,7 +451,7 @@ class _CustomThemeEditorSheetState extends State<_CustomThemeEditorSheet> {
                     Haptics.selection();
                   },
                   icon: const Icon(Icons.casino, size: 16),
-                  label: const Text('Randomize', style: TextStyle(fontSize: 12)),
+                  label: const GoopText('Randomize', style: TextStyle(fontSize: 12)),
                 ),
               ],
             ),
@@ -492,7 +492,7 @@ class _CustomThemeEditorSheetState extends State<_CustomThemeEditorSheet> {
               height: 42,
               child: FilledButton(
                 onPressed: _save,
-                child: const Text(
+                child: const GoopText(
                   'Save Theme',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, letterSpacing: 0.6),
                 ),
@@ -521,7 +521,7 @@ class _ColorSlotPicker extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(
+              GoopText(
                 label,
                 style: const TextStyle(
                   fontSize: 11,
@@ -643,7 +643,7 @@ class _DashboardPreview extends StatelessWidget {
                 const SizedBox(width: 10),
                 // Name
                 Expanded(
-                  child: Text(
+                  child: GoopText(
                     'THE MARINE',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -724,7 +724,7 @@ class _DashboardPreview extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Column(
             children: [
-              Text(
+              GoopText(
                 value,
                 style: TextStyle(
                   fontSize: 13,
@@ -734,7 +734,7 @@ class _DashboardPreview extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              Text(
+              GoopText(
                 label,
                 style: TextStyle(
                   fontSize: 8,
@@ -779,7 +779,7 @@ class _DashboardPreview extends StatelessWidget {
               border: Border.all(color: qualityColor.withValues(alpha: 0.55), width: 1.2),
             ),
             child: Center(
-              child: Text(
+              child: GoopText(
                 quality,
                 style: TextStyle(
                   fontSize: 9,
@@ -803,7 +803,7 @@ class _DashboardPreview extends StatelessWidget {
           const SizedBox(width: 8),
           // Name
           Expanded(
-            child: Text(
+            child: GoopText(
               name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -918,7 +918,7 @@ class _PaletteSelector extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     // Label
-                    Text(
+                    GoopText(
                       item.label,
                       style: TextStyle(
                         fontSize: 13,

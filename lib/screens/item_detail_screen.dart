@@ -171,7 +171,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('${item.name} destroyed on use'),
+                      content: GoopText('${item.name} destroyed on use'),
                       duration: const Duration(milliseconds: 1400),
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -199,7 +199,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   height: 68,
                   child: OutlinedButton.icon(
                     icon: const Icon(Icons.arrow_back, size: 24),
-                    label: const Text(
+                    label: const GoopText(
                       'Back',
                       style: TextStyle(
                         fontSize: 16,
@@ -287,7 +287,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               slot == PlayerSlot.coop ? ' from P2' : '';
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('$name removed$who'),
+                              content: GoopText('$name removed$who'),
                               duration: const Duration(milliseconds: 1200),
                             ),
                           );
@@ -317,7 +317,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               slot == PlayerSlot.coop ? ' to P2' : '';
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('$name added$who'),
+                              content: GoopText('$name added$who'),
                               duration: const Duration(milliseconds: 1200),
                             ),
                           );
@@ -516,7 +516,7 @@ class _Header extends StatelessWidget {
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(wasFav
+                  content: GoopText(wasFav
                       ? '$name removed from favourites'
                       : '$name added to favourites'),
                   duration: const Duration(seconds: 1),
@@ -563,7 +563,7 @@ class _MetadataChip extends StatelessWidget {
         children: [
           Icon(icon, size: 14, color: color),
           const SizedBox(width: 5),
-          Text(
+          GoopText(
             '$label ',
             style: TextStyle(
               fontSize: 11,
@@ -571,7 +571,7 @@ class _MetadataChip extends StatelessWidget {
               color: color.withValues(alpha: 0.85),
             ),
           ),
-          Text(
+          GoopText(
             value,
             style: const TextStyle(
               fontSize: 12.5,
@@ -652,7 +652,7 @@ class _GunStats extends StatelessWidget {
               Icon(Icons.bolt, color: Colors.purpleAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'GUNDERFURY LEVEL TRACKER',
                   style: TextStyle(
                     fontSize: 12,
@@ -722,7 +722,7 @@ class _GunStats extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              const GoopText(
                 'EXPERIENCE GAUGE',
                 style: TextStyle(
                   fontSize: 9,
@@ -731,7 +731,7 @@ class _GunStats extends StatelessWidget {
                   letterSpacing: 0.5,
                 ),
               ),
-              Text(
+              GoopText(
                 lvl == 60 ? 'MAX LEVEL' : '${currentXp.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} / 75,000 XP',
                 style: TextStyle(
                   fontSize: 9.5,
@@ -815,7 +815,7 @@ class _GunStats extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    GoopText(
                       'ACTIVE FORM: ${formName.toUpperCase()}',
                       style: const TextStyle(
                         fontSize: 12.5,
@@ -825,7 +825,7 @@ class _GunStats extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 3),
-                    Text(
+                    GoopText(
                       statsDesc,
                       style: const TextStyle(
                         fontSize: 11.5,
@@ -840,7 +840,7 @@ class _GunStats extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(
+          GoopText(
             description,
             style: TextStyle(
               fontSize: 11.5,
@@ -883,7 +883,7 @@ class _GunStats extends StatelessWidget {
               Icon(Icons.alt_route, color: Colors.blueAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Triple Gun Active Form',
                   style: TextStyle(
                     fontSize: 14,
@@ -916,7 +916,7 @@ class _GunStats extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(
+          GoopText(
             formName,
             style: TextStyle(
               fontSize: 12.5,
@@ -925,7 +925,7 @@ class _GunStats extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             formDesc,
             style: TextStyle(
               fontSize: 12,
@@ -1021,7 +1021,7 @@ class _GunStats extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    GoopText(
                       'THE EVOLVER: METAMORPHOSIS ENGINE',
                       style: TextStyle(
                         fontSize: 11.5,
@@ -1030,7 +1030,7 @@ class _GunStats extends StatelessWidget {
                         letterSpacing: 0.8,
                       ),
                     ),
-                    Text(
+                    GoopText(
                       'Biological Adaptations Slay Counter',
                       style: TextStyle(
                         fontSize: 9.5,
@@ -1057,7 +1057,7 @@ class _GunStats extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Text(
+                      child: GoopText(
                         '$totalKills/25',
                         style: const TextStyle(
                           fontSize: 13,
@@ -1142,7 +1142,7 @@ class _GunStats extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            Text(
+                            GoopText(
                               spec.name,
                               style: TextStyle(
                                 fontSize: 9,
@@ -1162,7 +1162,7 @@ class _GunStats extends StatelessWidget {
           const SizedBox(height: 12),
 
           // Tactile Unique Kills Checkbox Grid
-          const Text(
+          const GoopText(
             'UNIQUE ENEMY TYPES SLAIN CHECKLIST',
             style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.greenAccent, letterSpacing: 0.5),
           ),
@@ -1239,7 +1239,7 @@ class _GunStats extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(
+                    GoopText(
                       'BIO-ANALYSIS: STAGE ${currentSpec.id} [${currentSpec.name.toUpperCase()}]',
                       style: TextStyle(
                         fontFamily: 'EnterTheGungeonBig',
@@ -1249,7 +1249,7 @@ class _GunStats extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Text(
+                    GoopText(
                       currentSpec.dps,
                       style: TextStyle(
                         fontFamily: 'ArcadeClassic',
@@ -1261,12 +1261,12 @@ class _GunStats extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 6),
-                Text(
+                GoopText(
                   'Projectiles: ${currentSpec.bullet}',
                   style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white70),
                 ),
                 const SizedBox(height: 3),
-                Text(
+                GoopText(
                   'Formula: ${activeStage == 6 ? "Ultimate Form Unlocked!" : "Requires ${(activeStage * 5) - totalKills} more unique kills to force-evolve."}',
                   style: const TextStyle(fontSize: 10.5, color: Colors.white38),
                 ),
@@ -1304,7 +1304,7 @@ class _GunStats extends StatelessWidget {
               Icon(Icons.tune, color: Colors.tealAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Shellegun Firing Mode',
                   style: TextStyle(
                     fontSize: 14,
@@ -1337,7 +1337,7 @@ class _GunStats extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(
+          GoopText(
             'Form $mode: ${modeNames[mode - 1]} — ${modeDps[mode - 1]} DPS',
             style: TextStyle(
               fontSize: 12.5,
@@ -1346,7 +1346,7 @@ class _GunStats extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             modeDescs[mode - 1],
             style: TextStyle(
               fontSize: 12,
@@ -1390,7 +1390,7 @@ class _GunStats extends StatelessWidget {
               Icon(Icons.layers, color: Colors.deepOrangeAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Chamber Gun — Active Floor',
                   style: TextStyle(
                     fontSize: 14,
@@ -1414,7 +1414,7 @@ class _GunStats extends StatelessWidget {
             }),
           ),
           const SizedBox(height: 8),
-          Text(
+          GoopText(
             '${floorNames[floor]} — ${floorDps[floor]} DPS',
             style: TextStyle(
               fontSize: 12.5,
@@ -1423,7 +1423,7 @@ class _GunStats extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             'Chamber Gun transforms based on the current floor. Select your floor to see accurate DPS.',
             style: TextStyle(
               fontSize: 12,
@@ -1452,7 +1452,7 @@ class _GunStats extends StatelessWidget {
               Icon(Icons.sports_baseball, color: Colors.limeAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Casey — Melee & Reflect',
                   style: TextStyle(
                     fontSize: 14,
@@ -1464,7 +1464,7 @@ class _GunStats extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(
+          GoopText(
             '100 base damage per swing. Reflects enemy bullets back at them for massive damage. DPS shown (50) reflects only melee — actual combat value is far higher with bullet reflection.',
             style: TextStyle(
               fontSize: 12,
@@ -1572,7 +1572,7 @@ class _GunStats extends StatelessWidget {
                               Icon(Icons.bolt, size: 14, color: AppTheme.flair.primary),
                               const SizedBox(width: 4),
                               Flexible(
-                                child: Text(
+                                child: GoopText(
                                   gun.type.toUpperCase(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -1597,7 +1597,7 @@ class _GunStats extends StatelessWidget {
                               errorBuilder: (_, __, ___) => Container(
                                 height: 80,
                                 alignment: Alignment.center,
-                                child: Text(
+                                child: GoopText(
                                   gun.type,
                                   style: const TextStyle(color: Colors.white54, fontSize: 10),
                                 ),
@@ -1632,7 +1632,7 @@ class _GunStats extends StatelessWidget {
                             children: [
                               Icon(Icons.flash_on, size: 14, color: AppTheme.flair.secondary),
                               const SizedBox(width: 4),
-                              Text(
+                              GoopText(
                                 'GUN DPS',
                                 style: TextStyle(
                                   fontSize: 11,
@@ -1644,7 +1644,7 @@ class _GunStats extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 12),
-                          Text(
+                          GoopText(
                             gun.dpsValue > 0 ? gun.dpsValue.toStringAsFixed(1) : (gun.dps.isEmpty ? '0.0' : gun.dps),
                             style: TextStyle(
                               fontSize: 32,
@@ -1660,7 +1660,7 @@ class _GunStats extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          Text(
+                          GoopText(
                             'Damage Per Second',
                             style: TextStyle(
                               fontSize: 9,
@@ -1700,7 +1700,7 @@ class _GunStats extends StatelessWidget {
                 const SizedBox(height: 14),
               ],
               if (gun.notes.isNotEmpty) ...[
-                Text(
+                GoopText(
                   gun.notes,
                   style: const TextStyle(fontSize: 14.5, height: 1.35),
                 ),
@@ -1782,7 +1782,7 @@ class _StatGroup extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.6),
               ),
               const SizedBox(width: 6),
-              Text(
+              GoopText(
                 label.toUpperCase(),
                 style: TextStyle(
                   fontSize: 11.5,
@@ -1882,7 +1882,7 @@ class _StatPill extends StatelessWidget {
         children: [
           if (isCharge) ...[Icon(Icons.electric_bolt, size: 12, color: Colors.lightBlueAccent), const SizedBox(width: 3)],
           if (isDuration) ...[Icon(Icons.timer_outlined, size: 12, color: Colors.greenAccent.shade200), const SizedBox(width: 3)],
-          Text(
+          GoopText(
             '$label  ',
             style: TextStyle(
               fontSize: 12,
@@ -1910,7 +1910,7 @@ class _StatPill extends StatelessWidget {
               role: ThemedNumberRole.headline,
             )
           else
-            Text(
+            GoopText(
               value,
               style: const TextStyle(
                 fontSize: 13,
@@ -1932,7 +1932,7 @@ class _StatPill extends StatelessWidget {
                   width: 0.7,
                 ),
               ),
-              child: Text(
+              child: GoopText(
                 chestRank,
                 style: const TextStyle(
                   fontSize: 11,
@@ -2079,7 +2079,7 @@ class _ItemBody extends StatelessWidget {
               Icon(Icons.stars, color: Colors.amber.shade300, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'SER JUNKAN LEVEL TRACKER',
                   style: TextStyle(
                     fontSize: 12,
@@ -2100,7 +2100,7 @@ class _ItemBody extends StatelessWidget {
                 children: [
                   Icon(Icons.inventory_2_outlined, color: Colors.white54, size: 16),
                   SizedBox(width: 6),
-                  Text(
+                  GoopText(
                     'Regular Junk:',
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                   ),
@@ -2146,7 +2146,7 @@ class _ItemBody extends StatelessWidget {
                 children: [
                   Icon(Icons.precision_manufacturing_outlined, color: Colors.amber.shade200, size: 16),
                   const SizedBox(width: 6),
-                  const Text(
+                  const GoopText(
                     'Has Gold Junk (Mech Suit):',
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                   ),
@@ -2196,7 +2196,7 @@ class _ItemBody extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Rank Name
-                    Text(
+                    GoopText(
                       'ACTIVE FORM: $rankName',
                       style: const TextStyle(
                         fontSize: 13,
@@ -2207,7 +2207,7 @@ class _ItemBody extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     // Stats Row
-                    Text(
+                    GoopText(
                       stats,
                       style: const TextStyle(
                         fontSize: 11.5,
@@ -2223,7 +2223,7 @@ class _ItemBody extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           // Description
-          Text(
+          GoopText(
             description,
             style: TextStyle(
               fontSize: 12,
@@ -2281,7 +2281,7 @@ class _ItemBody extends StatelessWidget {
               Icon(Icons.spa, color: Colors.redAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Spice Addiction Tracker',
                   style: TextStyle(
                     fontSize: 14,
@@ -2325,7 +2325,7 @@ class _ItemBody extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          Text(
+          GoopText(
             'CURRENT: $currentEffects',
             style: TextStyle(
               fontSize: 12,
@@ -2334,7 +2334,7 @@ class _ItemBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             'NEXT: $nextEffects',
             style: TextStyle(
               fontSize: 11.5,
@@ -2343,7 +2343,7 @@ class _ItemBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 6),
-          Text(
+          GoopText(
             'Note: Adjusting Spice count automatically syncs Curse to your active run (+0.5 for 1st use, +1.0 for each additional use).',
             style: TextStyle(
               fontSize: 10,
@@ -2387,7 +2387,7 @@ class _ItemBody extends StatelessWidget {
               Icon(Icons.radar_outlined, color: Colors.cyanAccent.shade200, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'SPRUN: ORB OBSERVATION DETECTOR',
                   style: TextStyle(
                     fontSize: 11.5,
@@ -2412,13 +2412,13 @@ class _ItemBody extends StatelessWidget {
                 children: [
                   const Icon(Icons.blur_circular_outlined, size: 36, color: Colors.cyanAccent),
                   const SizedBox(height: 8),
-                  const Text(
+                  const GoopText(
                     '🔮 ACTIVE SEED SYNERGY HIDDEN',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white70),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  const GoopText(
                     'Each run pre-determines a randomized trigger to transform Sprun into the infinite-ammo Windgunner. Tap below to run active seed analysis.',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 10, color: Colors.white54, height: 1.3),
@@ -2434,7 +2434,7 @@ class _ItemBody extends StatelessWidget {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                       ),
                       icon: const Icon(Icons.biotech_outlined, size: 16),
-                      label: const Text(
+                      label: const GoopText(
                         'ANALYZE ACTIVE RUN SEED TRIGGER',
                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
                       ),
@@ -2448,7 +2448,7 @@ class _ItemBody extends StatelessWidget {
               ),
             ),
           ] else ...[
-            const Text(
+            const GoopText(
               'ACTIVE SEED ANALYSIS RESULTS:',
               style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.5),
             ),
@@ -2475,7 +2475,7 @@ class _ItemBody extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
+                        child: GoopText(
                           possibleTriggers[idx],
                           style: TextStyle(
                             fontSize: 11,
@@ -2494,7 +2494,7 @@ class _ItemBody extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                GoopText(
                   'Mystery seed decoded successfully.',
                   style: TextStyle(fontSize: 9.5, color: Colors.cyanAccent.withValues(alpha: 0.5)),
                 ),
@@ -2502,7 +2502,7 @@ class _ItemBody extends StatelessWidget {
                   onTap: () => p.setSprunTriggerIndex(-1),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    child: Text(
+                    child: GoopText(
                       'RE-SET SEED',
                       style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.cyanAccent.shade100, letterSpacing: 0.5),
                     ),
@@ -2528,7 +2528,7 @@ class _ItemBody extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      GoopText(
                         isWindgunnerActive ? '⚡ WINDGUNNER MODE IS ACTIVE!' : 'WINDGUNNER MODE OFF-LINE',
                         style: TextStyle(
                           fontSize: 10.5,
@@ -2538,7 +2538,7 @@ class _ItemBody extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 1.5),
-                      Text(
+                      GoopText(
                         isWindgunnerActive 
                             ? 'Infinite Ammo, Flight, God-tier Burst! Count: ${p.windgunnerCountdown}s'
                             : 'Trigger criteria above to release power.',
@@ -2603,7 +2603,7 @@ class _ItemBody extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    GoopText(
                       'THE PAYDAY CREW ASSEMBLY HUD',
                       style: TextStyle(
                         fontSize: 11.5,
@@ -2612,7 +2612,7 @@ class _ItemBody extends StatelessWidget {
                         letterSpacing: 0.8,
                       ),
                     ),
-                    Text(
+                    GoopText(
                       'Heister Count Exponential Matrix',
                       style: TextStyle(
                         fontSize: 9.5,
@@ -2630,7 +2630,7 @@ class _ItemBody extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.3)),
                 ),
-                child: Text(
+                child: GoopText(
                   '$itemsCount/3 CO-OP',
                   style: const TextStyle(
                     fontSize: 11,
@@ -2686,28 +2686,28 @@ class _ItemBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                const GoopText(
                   'SUMMON POWER PROFILE:',
                   style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.blueAccent, letterSpacing: 0.5),
                 ),
                 const SizedBox(height: 4),
                 if (itemsCount == 0)
-                  const Text(
+                  const GoopText(
                     'No heisters active. Hold Dallas (Clown Mask), Wolf (Drill), or Chains (Loot Bag) to activate.',
                     style: TextStyle(fontSize: 10.5, color: Colors.white38, height: 1.2),
                   )
                 else if (itemsCount == 1)
-                  const Text(
+                  const GoopText(
                     'Dallas Active: Melee charge stuns enemies.',
                     style: TextStyle(fontSize: 10.5, color: Colors.white70, fontWeight: FontWeight.bold, height: 1.2),
                   )
                 else if (itemsCount == 2)
-                  const Text(
+                  const GoopText(
                     'Dallas + Wolf Active: Added blank defense. Deletes projectiles.',
                     style: TextStyle(fontSize: 10.5, color: Colors.cyanAccent, fontWeight: FontWeight.bold, height: 1.2),
                   )
                 else
-                  const Text(
+                  const GoopText(
                     'Dallas + Wolf + Chains Active: FULL HEIST CREW ASSEMBLED! Automated shotgun scaling active. Infinite heister capabilities!',
                     style: TextStyle(fontSize: 10.5, color: Colors.greenAccent, fontWeight: FontWeight.w900, height: 1.2),
                   ),
@@ -2749,7 +2749,7 @@ class _ItemBody extends StatelessWidget {
                 color: active ? Colors.blueAccent.shade100 : Colors.white24,
               ),
               const SizedBox(height: 4),
-              Text(
+              GoopText(
                 name.toUpperCase(),
                 style: TextStyle(
                   fontSize: 10,
@@ -2757,7 +2757,7 @@ class _ItemBody extends StatelessWidget {
                   color: active ? Colors.white : Colors.white24,
                 ),
               ),
-              Text(
+              GoopText(
                 active ? 'SUMMONED' : 'LOCKED',
                 style: TextStyle(
                   fontSize: 8,
@@ -2794,7 +2794,7 @@ class _ItemBody extends StatelessWidget {
               Icon(Icons.trending_up, color: Colors.indigoAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Platinum Bullets — Firing Time',
                   style: TextStyle(
                     fontSize: 14,
@@ -2808,7 +2808,7 @@ class _ItemBody extends StatelessWidget {
                 icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
                 onPressed: seconds > 0 ? () => p.setPlatinumBulletsSeconds((seconds - 30).clamp(0, 999)) : null,
               ),
-              Text(
+              GoopText(
                 '${seconds}s',
                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
@@ -2820,7 +2820,7 @@ class _ItemBody extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Text(
+          GoopText(
             '${dmgMult.toStringAsFixed(1)}x Damage  •  ${fireRateMult.toStringAsFixed(1)}x Fire Rate',
             style: TextStyle(
               fontSize: 12.5,
@@ -2829,7 +2829,7 @@ class _ItemBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             'Damage & fire rate scale with firing time. Damage maxes at 3x after 750s, fire rate at 3x after 375s. Starts partially powered on later floors.',
             style: TextStyle(
               fontSize: 12,
@@ -2861,7 +2861,7 @@ class _ItemBody extends StatelessWidget {
               Icon(Icons.monetization_on, color: Colors.amberAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Iron Coin — Charges',
                   style: TextStyle(
                     fontSize: 14,
@@ -2875,7 +2875,7 @@ class _ItemBody extends StatelessWidget {
                 icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
                 onPressed: uses > 0 ? () => p.setIronCoinUses(uses - 1) : null,
               ),
-              Text(
+              GoopText(
                 '$uses / 3',
                 style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
@@ -2901,7 +2901,7 @@ class _ItemBody extends StatelessWidget {
             }),
           ),
           const SizedBox(height: 6),
-          Text(
+          GoopText(
             'Kills all enemies in a random room on the current floor. 3 uses per run. Also grants a 10% discount at shops while held.',
             style: TextStyle(
               fontSize: 12,
@@ -2939,7 +2939,7 @@ class _ItemBody extends StatelessWidget {
               Icon(Icons.brightness_3, color: Colors.purpleAccent.shade100, size: 20),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
+                child: GoopText(
                   'Bullet to Kill the Past — $ownedCount/4',
                   style: TextStyle(
                     fontSize: 14,
@@ -2965,7 +2965,7 @@ class _ItemBody extends StatelessWidget {
                     color: has ? Colors.purpleAccent : Colors.white24,
                   ),
                   const SizedBox(width: 4),
-                  Text(
+                  GoopText(
                     name.split(' ').map((w) => w[0].toUpperCase() + w.substring(1)).join(' '),
                     style: TextStyle(
                       fontSize: 11,
@@ -2978,7 +2978,7 @@ class _ItemBody extends StatelessWidget {
             }).toList(),
           ),
           const SizedBox(height: 6),
-          Text(
+          GoopText(
             'Collect all 4 ingredients and take them to the Blacksmith to forge the Bullet that can Kill the Past.',
             style: TextStyle(
               fontSize: 12,
@@ -3040,7 +3040,7 @@ class _ItemBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (item.effect.isNotEmpty)
-                Text(
+                GoopText(
                   item.effect,
                   style: const TextStyle(fontSize: 14, height: 1.4),
                 ),
@@ -3129,7 +3129,7 @@ class _SynergiesSectionState extends State<_SynergiesSection> {
                 children: [
                   Icon(Icons.hub, size: 16, color: Colors.amber),
                   const SizedBox(width: 6),
-                  Text(
+                  GoopText(
                     'SYNERGIES',
                     style: TextStyle(
                       fontSize: 12,
@@ -3165,7 +3165,7 @@ class _SynergiesSectionState extends State<_SynergiesSection> {
                         color: Colors.amber.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
+                      child: GoopText(
                         '$activeCount active',
                         style: const TextStyle(
                           fontSize: 10,
@@ -3194,7 +3194,7 @@ class _SynergiesSectionState extends State<_SynergiesSection> {
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(
+                child: GoopText(
                   'No known synergies.',
                   style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
                 ),
@@ -3260,7 +3260,7 @@ class _SynergyCard extends StatelessWidget {
                   child: Row(
                     children: [
                       Flexible(
-                        child: Text(
+                        child: GoopText(
                           s.name,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -3307,7 +3307,7 @@ class _SynergyCard extends StatelessWidget {
                       color: Colors.amber.withValues(alpha: 0.80),
                     ),
                     const SizedBox(width: 5),
-                    Text(
+                    GoopText(
                       'Alternative components matched',
                       style: TextStyle(
                         fontSize: 11,
@@ -3330,7 +3330,7 @@ class _SynergyCard extends StatelessWidget {
                       color: Colors.amber.withValues(alpha: 0.75),
                     ),
                     const SizedBox(width: 4),
-                    Text(
+                    GoopText(
                       'Alternative Partners:',
                       style: TextStyle(
                         fontSize: 11,
@@ -3365,7 +3365,7 @@ class _SynergyCard extends StatelessWidget {
               ),
             ] else if (s.effect.isNotEmpty) ...[
               const SizedBox(height: 8),
-              Text(
+              GoopText(
                 s.prettyEffect,
                 style: const TextStyle(fontSize: 13, height: 1.35),
               ),
@@ -3435,7 +3435,7 @@ class _SynergyChip extends StatelessWidget {
           ),
           const SizedBox(width: 4),
         ],
-        Text(
+        GoopText(
           name,
           style: TextStyle(
             fontSize: 11.5,
@@ -3531,7 +3531,7 @@ class _DestroyBanner extends StatelessWidget {
                     size: 18,
                   ),
                   const SizedBox(width: 6),
-                  const Text(
+                  const GoopText(
                     'DESTROYED ON USE',
                     style: TextStyle(
                       fontSize: 12,
@@ -3543,7 +3543,7 @@ class _DestroyBanner extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 6),
-              Text(
+              GoopText(
                 'This active item is consumed when used. Tap Destroy to remove it from the run; the item detail will close automatically.',
                 style: TextStyle(
                   fontSize: 12.5,
@@ -3558,7 +3558,7 @@ class _DestroyBanner extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: onDestroy,
                   icon: const Icon(Icons.whatshot, size: 20),
-                  label: const Text(
+                  label: const GoopText(
                     'Destroy',
                     style: TextStyle(
                       fontSize: 15,
@@ -3609,7 +3609,7 @@ class _QuickJumpButton extends StatelessWidget {
             width: 1,
           ),
         ),
-        child: Text(
+        child: GoopText(
           label,
           style: TextStyle(
             fontSize: 11,

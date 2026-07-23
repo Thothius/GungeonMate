@@ -34,6 +34,7 @@ class GoopText extends StatefulWidget {
   final TextAlign? textAlign;
   final int? maxLines;
   final TextOverflow? overflow;
+  final bool? softWrap;
 
   const GoopText(
     this.text, {
@@ -42,6 +43,7 @@ class GoopText extends StatefulWidget {
     this.textAlign,
     this.maxLines,
     this.overflow,
+    this.softWrap,
   });
 
   @override
@@ -60,10 +62,10 @@ class _GoopTextState extends State<GoopText> with SingleTickerProviderStateMixin
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 500),
     );
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic),
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutExpo),
     );
 
     _evaluateState(instant: true);
@@ -113,7 +115,7 @@ class _GoopTextState extends State<GoopText> with SingleTickerProviderStateMixin
         _controller.value = 0.0;
         _isTranslated = false;
       }
-      _spongeDelayTimer = Timer(const Duration(milliseconds: 1000), () {
+      _spongeDelayTimer = Timer(const Duration(milliseconds: 500), () {
         if (mounted) {
           setState(() {
             _isTranslated = true;
@@ -132,31 +134,54 @@ class _GoopTextState extends State<GoopText> with SingleTickerProviderStateMixin
     }
   }
 
+  static const _scrambleSymbols = '⏃⎎⎓⏁⟒⎾⏂⟌⎲⎗⎐⎔⎏⍎⎄⎩⎱⍓⌺⎧⎿';
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
         final double t = _animation.value; // 0 = Goopian, 1 = English
-        
-        // Character-by-character interpolation based on the animation value
+
         final original = widget.text;
-        final goop = GoopTalkEngine.translateToGoop(original);
 
         String activeText;
         if (t == 1.0) {
           activeText = original;
         } else if (t == 0.0) {
-          activeText = goop;
+          activeText = GoopTalkEngine.translateToGoop(original);
         } else {
-          // Splice original and goop based on progress t
-          final int thresholdIndex = (original.length * t).round().clamp(0, original.length);
-          final left = original.substring(0, thresholdIndex);
-          final right = goop.substring(
-            (goop.length * t).round().clamp(0, goop.length),
-            goop.length,
-          );
-          activeText = left + right;
+          // Scramble-wave: a wave front sweeps left-to-right.
+          // Behind the front = English, ahead = Goopian,
+          // at the front = rapidly flickering random symbols (the "woosh").
+          final waveFront = (original.length * t).round();
+          const scrambleWindow = 5;
+          final phase = (t * 300).toInt(); // drives symbol flickering speed
+
+          final buf = StringBuffer();
+          for (int i = 0; i < original.length; i++) {
+            final ch = original[i];
+            final lower = ch.toLowerCase();
+            final isAlpha = lower.codeUnitAt(0) >= 97 && lower.codeUnitAt(0) <= 122;
+
+            if (i < waveFront - scrambleWindow) {
+              // Settled English
+              buf.write(ch);
+            } else if (i >= waveFront) {
+              // Still Goopian
+              final mapped = GoopTalkEngine._goopCipher[lower];
+              buf.write(mapped ?? ch);
+            } else {
+              // Scramble zone — flicker random symbols for letters only
+              if (isAlpha) {
+                final idx = (i * 17 + phase) % _scrambleSymbols.length;
+                buf.write(_scrambleSymbols[idx]);
+              } else {
+                buf.write(ch);
+              }
+            }
+          }
+          activeText = buf.toString();
         }
 
         return Text(
@@ -165,6 +190,7 @@ class _GoopTextState extends State<GoopText> with SingleTickerProviderStateMixin
           textAlign: widget.textAlign,
           maxLines: widget.maxLines,
           overflow: widget.overflow,
+          softWrap: widget.softWrap,
         );
       },
     );

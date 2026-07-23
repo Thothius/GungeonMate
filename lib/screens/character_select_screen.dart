@@ -36,7 +36,7 @@ class CharacterSelectScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            title: Text(
+            title: GoopText(
               isCoop
                   ? 'Add Co-op Player'
                   : isMultiplayerPick
@@ -64,7 +64,7 @@ class CharacterSelectScreen extends StatelessWidget {
               if (!isMultiplayerPick)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
-                  child: Text(
+                  child: GoopText(
                     isCoop
                         ? 'Adds a second player to the current run with the character\'s default loadout. Long-press tiles to transfer items between players.'
                         : 'Starts a new run with character\'s default loadout.',
@@ -286,7 +286,7 @@ class _CharacterCard extends StatelessWidget {
                   ),
                   if (gunList.isNotEmpty) ...[
                     const SizedBox(height: 3),
-                    Text(
+                    GoopText(
                       gunList,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

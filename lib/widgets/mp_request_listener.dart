@@ -8,6 +8,7 @@ import '../models/multiplayer_messages.dart';
 import '../providers/run_provider.dart';
 import '../services/multiplayer_session.dart';
 import '../utils/asset_paths.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Invisible widget that listens to [MultiplayerSession] for inbound
 /// requests + response toasts and surfaces them as a global confirm/deny
@@ -78,7 +79,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
           children: [
             Icon(Icons.wifi_protected_setup, color: Color(0xFF00E676), size: 18),
             SizedBox(width: 10),
-            Text('Connection restored!', style: TextStyle(fontWeight: FontWeight.w700)),
+            GoopText('Connection restored!', style: TextStyle(fontWeight: FontWeight.w700)),
           ],
         ),
         backgroundColor: const Color(0xFF1E1E22),
@@ -164,7 +165,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
                 side: const BorderSide(color: Colors.orangeAccent, width: 1.5),
               ),
               icon: const Icon(Icons.wifi_off_rounded, size: 36, color: Colors.orangeAccent),
-              title: const Text(
+              title: const GoopText(
                 'Connection lost',
                 style: TextStyle(
                   color: Colors.white,
@@ -183,7 +184,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      GoopText(
                         isRetrying && att > 0
                             ? 'Trying to reconnect to your peer…\n'
                               'Auto-retry attempt #$att\n\n'
@@ -212,7 +213,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
                               Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 16),
                               SizedBox(width: 8),
                               Expanded(
-                                child: Text(
+                                child: GoopText(
                                   'Peer seems unreachable after many attempts. Try RE-PAIR to manually reconnect.',
                                   style: TextStyle(color: Colors.redAccent, fontSize: 11, fontWeight: FontWeight.w600),
                                 ),
@@ -234,7 +235,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   ),
                   icon: const Icon(Icons.close, size: 14),
-                  label: const Text('DISCONNECT', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                  label: const GoopText('DISCONNECT', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                   onPressed: () {
                     Navigator.pop(dialogCtx);
                     session.cancel();
@@ -250,7 +251,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                       ),
                       icon: const Icon(Icons.key, size: 14),
-                      label: const Text('RE-PAIR', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                      label: const GoopText('RE-PAIR', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         Navigator.pop(dialogCtx);
                         session.requestReconnectHub();
@@ -264,7 +265,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                       ),
                       icon: const Icon(Icons.refresh, size: 14),
-                      label: const Text('RETRY NOW', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900)),
+                      label: const GoopText('RETRY NOW', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900)),
                       onPressed: () {
                         session.reconnect();
                       },
@@ -304,8 +305,8 @@ class _MpRequestListenerState extends State<MpRequestListener> {
       barrierDismissible: false,
       builder: (dialogCtx) => AlertDialog(
         icon: const Icon(Icons.swap_horiz, size: 32),
-        title: Text('$peerName wants ${req.name}'),
-        content: Text(
+        title: GoopText('$peerName wants ${req.name}'),
+        content: GoopText(
           'Send your ${req.kind == 'gun' ? 'gun' : 'item'} '
           '"${req.name}" to $peerName?',
         ),
@@ -315,11 +316,11 @@ class _MpRequestListenerState extends State<MpRequestListener> {
               Navigator.pop(dialogCtx);
               session.respondToPendingRequest(false);
             },
-            child: const Text('Deny'),
+            child: const GoopText('Deny'),
           ),
           FilledButton.icon(
             icon: const Icon(Icons.check, size: 18),
-            label: const Text('Send'),
+            label: const GoopText('Send'),
             onPressed: () {
               Navigator.pop(dialogCtx);
               session.respondToPendingRequest(true);
@@ -339,7 +340,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
     if (messenger == null) return;
     final peer = session.peerNickname ?? 'Peer';
     messenger.showSnackBar(SnackBar(
-      content: Text(
+      content: GoopText(
         r.approved
             ? '$peer sent you ${r.name}'
             : '$peer denied your request for ${r.name}',
@@ -403,7 +404,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
       if (pin.length != 4 || int.tryParse(pin) == null) {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
           const SnackBar(
-            content: Text('Enter a valid 4-digit PIN from the host.'),
+            content: GoopText('Enter a valid 4-digit PIN from the host.'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -465,7 +466,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                               size: 24,
                             ),
                             const SizedBox(width: 8),
-                            Text(
+                            GoopText(
                               connected ? 'Connected!' : 'Reconnection Hub',
                               style: TextStyle(
                                 color: Colors.white,
@@ -512,7 +513,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                                 size: 32,
                               ),
                               const SizedBox(height: 4),
-                              Text(
+                              GoopText(
                                 connected ? 'LINKED' : 'BROKEN',
                                 style: TextStyle(
                                   fontSize: 9,
@@ -539,7 +540,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       children: [
-                        Text(
+                        GoopText(
                           connected
                               ? 'Link restored with ${session.peerNickname ?? 'peer'}!'
                               : searching
@@ -561,7 +562,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                                 size: 16,
                                 color: Colors.green.withValues(alpha: 0.7)),
                             const SizedBox(width: 6),
-                            Text(
+                            GoopText(
                               'Run state saved to device',
                               style: TextStyle(
                                 color: Colors.green.withValues(alpha: 0.7),
@@ -573,7 +574,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                         ),
                         if (session.autoReconnectAttempts > 0 && !connected) ...[
                           const SizedBox(height: 6),
-                          Text(
+                          GoopText(
                             'Auto-retry attempt #${session.autoReconnectAttempts}',
                             style: TextStyle(
                               color: Colors.orange.withValues(alpha: 0.7),
@@ -623,7 +624,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                                     connected ? Icons.check_circle : Icons.refresh,
                                     size: 24,
                                   ),
-                            label: Text(
+                            label: GoopText(
                               connected ? 'DONE' : 'RECONNECT',
                               style: const TextStyle(
                                 fontSize: 16,
@@ -655,7 +656,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                               ),
                             ),
                             icon: const Icon(Icons.close, size: 20),
-                            label: const Text(
+                            label: const GoopText(
                               'DISCONNECT',
                               style: TextStyle(
                                 fontSize: 14,
@@ -687,7 +688,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        GoopText(
           'YOUR CONNECTION PIN',
           style: TextStyle(
             fontSize: 12,
@@ -704,7 +705,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: accent.withValues(alpha: 0.3), width: 1.5),
           ),
-          child: Text(
+          child: GoopText(
             session.pinCode ?? '----',
             style: const TextStyle(
               fontSize: 48,
@@ -715,7 +716,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        const Text(
+        const GoopText(
           'Share this PIN with your Sidekick.\nBoth players should tap RECONNECT.',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white54, fontSize: 12, height: 1.4),
@@ -728,7 +729,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        GoopText(
           'ENTER HOST PIN',
           style: TextStyle(
             fontSize: 12,
@@ -769,7 +770,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
           ),
         ),
         const SizedBox(height: 12),
-        const Text(
+        const GoopText(
           'Ask the Main Player for their 4-digit PIN,\nthen tap RECONNECT.',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white54, fontSize: 12, height: 1.4),
@@ -813,7 +814,7 @@ class _PortraitCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: accent.withValues(alpha: 0.4), width: 1),
           ),
-          child: Text(
+          child: GoopText(
             slotLabel,
             style: TextStyle(
               fontSize: 10,
@@ -880,7 +881,7 @@ class _PortraitCard extends StatelessWidget {
                         color: accent.withValues(alpha: 0.8),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
+                      child: const GoopText(
                         'YOU',
                         style: TextStyle(
                           fontSize: 8,
@@ -897,7 +898,7 @@ class _PortraitCard extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         // Character name
-        Text(
+        GoopText(
           charName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -910,7 +911,7 @@ class _PortraitCard extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         // Nickname
-        Text(
+        GoopText(
           nickname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

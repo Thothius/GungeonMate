@@ -18,6 +18,7 @@ import 'character_select_screen.dart';
 import 'theme_picker_screen.dart';
 import 'shrine_picker_screen.dart';
 import '../utils/fast_route.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Central control room for Gungeon Mate.
 /// - Tab 1: Theme & Sizing Preferences (launching the full 1.5k-line visual picker!)
@@ -42,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           scrolledUnderElevation: 0,
-          title: const Text('SETTINGS',
+          title: const GoopText('SETTINGS',
               style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2)),
           centerTitle: true,
           automaticallyImplyLeading: false, // Clean inside tabs
@@ -143,7 +144,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              const GoopText(
                                 'ACTIVE PALETTE',
                                 style: TextStyle(
                                   fontSize: 9.5,
@@ -153,7 +154,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                                 ),
                               ),
                               const SizedBox(height: 3),
-                              Text(
+                              GoopText(
                                 activeTheme.label.toUpperCase(),
                                 style: const TextStyle(
                                   fontSize: 16,
@@ -183,7 +184,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                       width: double.infinity,
                       child: FilledButton.icon(
                         icon: const Icon(Icons.tune_rounded, size: 16),
-                        label: const Text(
+                        label: const GoopText(
                           'CHOOSE THEME PALETTE',
                           style: TextStyle(
                             fontSize: 11.5,
@@ -257,7 +258,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
+                                GoopText(
                                   font.label,
                                   style: font.textStyle.copyWith(
                                     fontSize: 16,
@@ -266,7 +267,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                                   ),
                                 ),
                                 const SizedBox(height: 4),
-                                Text(
+                                GoopText(
                                   'The Breach: Bello\'s Shop',
                                   style: font.textStyle.copyWith(
                                     fontSize: 11,
@@ -407,7 +408,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                               ),
                             ),
                             child: Center(
-                              child: Text(
+                              child: GoopText(
                                 effect.label,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -479,7 +480,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                       // Glow color picker — 4x3 grid
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
+                        child: GoopText(
                           'GLOW COLOR',
                           style: TextStyle(
                             fontSize: 11,
@@ -551,7 +552,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
         padding: const EdgeInsets.only(left: 4, bottom: 4),
         child: Row(
           children: [
-            Text(
+            GoopText(
               title,
               style: const TextStyle(
                 fontSize: 11,
@@ -592,7 +593,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
         padding: const EdgeInsets.only(left: 4, bottom: 4),
         child: Row(
           children: [
-            Text(
+            GoopText(
               title,
               style: const TextStyle(
                 fontSize: 11,
@@ -653,7 +654,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          GoopText(
             title,
             style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.white60, letterSpacing: 0.5),
           ),
@@ -727,7 +728,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
           Expanded(
             child: Row(
               children: [
-                Text(
+                GoopText(
                   label.toUpperCase(),
                   style: const TextStyle(
                     fontSize: 10,
@@ -793,11 +794,11 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            GoopText(
               label,
               style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Colors.white70),
             ),
-            Text(
+            GoopText(
               displayValue,
               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: color),
             ),
@@ -846,7 +847,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     if (cultist != null) {
       p.startCoopPlayer(cultist);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('${cultist.name} joined as Player 2!'),
+        content: GoopText('${cultist.name} joined as Player 2!'),
         duration: const Duration(milliseconds: 1400),
         action: SnackBarAction(
           label: 'CHANGE',
@@ -868,12 +869,12 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-        title: const Text('Remove Player 2 (Co-op)?'),
-        content: const Text('Their loadout will be discarded. Items are not transferred to Player 1.'),
+        title: const GoopText('Remove Player 2 (Co-op)?'),
+        content: const GoopText('Their loadout will be discarded. Items are not transferred to Player 1.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
@@ -881,7 +882,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               p.endCoopPlayer();
               Navigator.pop(c);
             },
-            child: const Text('Remove'),
+            child: const GoopText('Remove'),
           ),
         ],
       ),
@@ -897,15 +898,15 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
       context: context,
       builder: (c) => AlertDialog(
         icon: const Icon(Icons.delete_sweep_rounded, color: Colors.redAccent),
-        title: Text("Clear $name's inventory?"),
-        content: const Text(
+        title: GoopText("Clear $name's inventory?"),
+        content: const GoopText(
           'Removes all guns and items except their starter loadout. '
           'Coolness, curse, and shrine status are unchanged.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
@@ -913,11 +914,11 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               p.clearInventory(slot: slot);
               Navigator.pop(c);
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("$name's items cleared!"),
+                content: GoopText("$name's items cleared!"),
                 duration: const Duration(seconds: 1),
               ));
             },
-            child: const Text('Clear Inventory'),
+            child: const GoopText('Clear Inventory'),
           ),
         ],
       ),
@@ -929,12 +930,12 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
       context: context,
       builder: (c) => AlertDialog(
         icon: const Icon(Icons.warning_rounded, color: Colors.redAccent),
-        title: const Text('End Run?'),
-        content: const Text('This resets the current active run completely and returns you to the character select screen.'),
+        title: const GoopText('End Run?'),
+        content: const GoopText('This resets the current active run completely and returns you to the character select screen.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
@@ -950,7 +951,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                 p.endRun();
               }
             },
-            child: const Text('End Run'),
+            child: const GoopText('End Run'),
           ),
         ],
       ),
@@ -964,8 +965,8 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
       builder: (c) => AlertDialog(
         icon: const Icon(Icons.bluetooth_disabled,
             color: Colors.lightBlueAccent),
-        title: const Text('Leave Multiplayer?'),
-        content: Text(
+        title: const GoopText('Leave Multiplayer?'),
+        content: GoopText(
           isSidekick
               ? 'You will disconnect from the host. Your inventory will be restored to your pre-MP state.'
               : 'You will disconnect and end the multiplayer session.',
@@ -973,7 +974,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(
@@ -983,7 +984,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               session.cancel();
               Navigator.pop(c);
             },
-            child: const Text('Leave'),
+            child: const GoopText('Leave'),
           ),
         ],
       ),
@@ -1019,7 +1020,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      GoopText(
                         hasCoop ? 'PLAYER 2 ACTIVE' : 'SOLO PLAYER ACTIVE',
                         style: TextStyle(
                           fontSize: 13,
@@ -1028,7 +1029,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      Text(
+                      GoopText(
                         hasCoop
                             ? 'Drop-in Gungeoneer: $player2Name'
                             : 'Play with a friend by adding the co-op Cultist helper!',
@@ -1044,7 +1045,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                     foregroundColor: hasCoop ? Colors.redAccent : Colors.pinkAccent,
                     side: BorderSide(color: hasCoop ? Colors.redAccent : Colors.pinkAccent),
                   ),
-                  child: Text(hasCoop ? 'Remove P2' : 'Add Co-op'),
+                  child: GoopText(hasCoop ? 'Remove P2' : 'Add Co-op'),
                 ),
               ],
             ),
@@ -1061,7 +1062,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Run saved'),
+                        content: GoopText('Run saved'),
                         duration: Duration(seconds: 2),
                         behavior: SnackBarBehavior.floating,
                       ),
@@ -1071,7 +1072,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Failed to save session: $e'),
+                        content: GoopText('Failed to save session: $e'),
                         duration: const Duration(seconds: 3),
                         behavior: SnackBarBehavior.floating,
                       ),
@@ -1165,8 +1166,8 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
       context: context,
       builder: (c) => AlertDialog(
         icon: const Icon(Icons.restart_alt, color: Colors.deepOrange, size: 32),
-        title: const Text('Reset All App Data?'),
-        content: const Text(
+        title: const GoopText('Reset All App Data?'),
+        content: const GoopText(
           'This permanently erases ALL saved data:\n\n'
           '• Active run & inventory\n'
           '• Favourites\n'
@@ -1178,12 +1179,12 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c, false),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.deepOrange),
             onPressed: () => Navigator.pop(c, true),
-            child: const Text('RESET EVERYTHING'),
+            child: const GoopText('RESET EVERYTHING'),
           ),
         ],
       ),
@@ -1206,7 +1207,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
   Widget _sectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 10),
-      child: Text(
+      child: GoopText(
         title,
         style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w900, color: Colors.white38, letterSpacing: 0.6),
       ),
@@ -1232,8 +1233,8 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
         dense: true,
         visualDensity: VisualDensity.compact,
         leading: Icon(icon, color: color, size: 20),
-        title: Text(title, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 10, color: Colors.white54)),
+        title: GoopText(title, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
+        subtitle: GoopText(subtitle, style: const TextStyle(fontSize: 10, color: Colors.white54)),
         trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Colors.white38),
       ),
     );
@@ -1339,7 +1340,7 @@ class RunLogScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('EVENT LOG'),
+        title: const GoopText('EVENT LOG'),
         centerTitle: true,
       ),
       body: entries.isEmpty
@@ -1350,7 +1351,7 @@ class RunLogScreen extends StatelessWidget {
                   Icon(Icons.history_toggle_off,
                       size: 64, color: Colors.white.withValues(alpha: 0.2)),
                   const SizedBox(height: 16),
-                  Text(
+                  GoopText(
                     'No events logged yet',
                     style: TextStyle(
                       fontSize: 15,
@@ -1358,7 +1359,7 @@ class RunLogScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Text(
+                  GoopText(
                     'Pick up guns, items, use shrines, or tap quick actions\nto start building your run history.',
                     style: TextStyle(
                       fontSize: 12,
@@ -1380,7 +1381,7 @@ class RunLogScreen extends StatelessWidget {
                         Icon(Icons.receipt_long,
                             size: 16, color: Colors.white.withValues(alpha: 0.4)),
                         const SizedBox(width: 6),
-                        Text(
+                        GoopText(
                           '${entries.length} event${entries.length == 1 ? '' : 's'}',
                           style: TextStyle(
                             fontSize: 12,
@@ -1447,7 +1448,7 @@ class _FullLogTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    GoopText(
                       entry.description,
                       style: const TextStyle(
                         fontSize: 12.5,
@@ -1459,7 +1460,7 @@ class _FullLogTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        Text(
+                        GoopText(
                           timeStr,
                           style: TextStyle(
                             fontSize: 10,
@@ -1474,7 +1475,7 @@ class _FullLogTile extends StatelessWidget {
                               color: catColor.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: Text(
+                            child: GoopText(
                               entry.playerName!,
                               style: TextStyle(
                                 fontSize: 9.5,
@@ -1491,7 +1492,7 @@ class _FullLogTile extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               if (hasCurse)
-                Text(
+                GoopText(
                   '${entry.curseDelta > 0 ? '+' : ''}${entry.curseDelta.toStringAsFixed(1)}',
                   style: TextStyle(
                     fontSize: 13,
@@ -1501,7 +1502,7 @@ class _FullLogTile extends StatelessWidget {
                 ),
               if (hasCool) ...[
                 if (hasCurse) const SizedBox(width: 6),
-                Text(
+                GoopText(
                   '${entry.coolnessDelta > 0 ? '+' : ''}${entry.coolnessDelta.toStringAsFixed(1)}',
                   style: TextStyle(
                     fontSize: 13,
@@ -1544,7 +1545,7 @@ class _FullLogLegend extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoopText(
             'LEGEND',
             style: TextStyle(
               fontSize: 9.5,
@@ -1577,7 +1578,7 @@ class _FullLogLegend extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 5),
-                  Text(
+                  GoopText(
                     runLogCategoryLabel(c),
                     style: TextStyle(
                       fontSize: 10.5,
@@ -1622,13 +1623,13 @@ class _DebugTab extends StatelessWidget {
       children: [
         Icon(Icons.bug_report_rounded, size: 48, color: Colors.greenAccent.withValues(alpha: 0.6)),
         const SizedBox(height: 12),
-        const Text(
+        const GoopText(
           'DEBUG MODE',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: Colors.greenAccent),
         ),
         const SizedBox(height: 6),
-        Text(
+        GoopText(
           'Testing tools for dashboards and special item interactions.',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5)),
@@ -1648,7 +1649,7 @@ class _DebugTab extends StatelessWidget {
         ),
         if (!hasRun) ...[
           const SizedBox(height: 12),
-          Text(
+          GoopText(
             'Start a run first to use debug tools.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 10, color: Colors.orangeAccent.withValues(alpha: 0.7)),
@@ -1666,8 +1667,8 @@ class _DebugTab extends StatelessWidget {
         dense: true,
         visualDensity: VisualDensity.compact,
         leading: Icon(icon, color: Colors.greenAccent, size: 22),
-        title: Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
-        subtitle: Text(subtitle, style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5))),
+        title: GoopText(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
+        subtitle: GoopText(subtitle, style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5))),
         trailing: Icon(Icons.chevron_right, color: Colors.white.withValues(alpha: 0.3), size: 20),
         onTap: onTap,
       ),
@@ -1724,7 +1725,7 @@ class _SpecialItemsGridScreenState extends State<_SpecialItemsGridScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
-        title: const Text('SPECIAL ITEMS & GUNS', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+        title: const GoopText('SPECIAL ITEMS & GUNS', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 1.2)),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white70),
@@ -1763,7 +1764,7 @@ class _SpecialItemsGridScreenState extends State<_SpecialItemsGridScreen> {
               }
             },
             icon: Icon(allOwned ? Icons.remove_circle : Icons.add_circle, size: 18, color: Colors.greenAccent),
-            label: Text(
+            label: GoopText(
               allOwned ? 'Remove All' : 'Add All',
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.greenAccent),
             ),
@@ -1875,7 +1876,7 @@ class _SpecialGridTile extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 6),
-            Text(
+            GoopText(
               entry.name,
               textAlign: TextAlign.center,
               maxLines: 2,

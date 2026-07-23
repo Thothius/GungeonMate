@@ -6,6 +6,7 @@ import '../services/elemental_tagger.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Compact one-per-row representation of a gun or item for the
 /// inventory *list* view mode. Pairs a pixel-art portrait with the
@@ -179,7 +180,7 @@ class _InventoryListRowState extends State<InventoryListRow>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    GoopText(
                       _name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -220,7 +221,7 @@ class _InventoryListRowState extends State<InventoryListRow>
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    Text(
+                    GoopText(
                       primary.value,
                       style: TextStyle(
                         fontSize: widget.isTopDps ? 18 : 16,
@@ -236,7 +237,7 @@ class _InventoryListRowState extends State<InventoryListRow>
                     ),
                     if (primary.unit != null) ...[
                       const SizedBox(width: 2),
-                      Text(
+                      GoopText(
                         primary.unit!,
                         style: TextStyle(
                           fontSize: widget.isTopDps ? 13 : 12,
@@ -353,7 +354,7 @@ class _TypePill extends StatelessWidget {
           width: 0.7,
         ),
       ),
-      child: Text(
+      child: GoopText(
         label,
         style: TextStyle(
           fontSize: 9,

@@ -8,6 +8,7 @@ import '../services/haptics.dart';
 import '../utils/fast_route.dart';
 import 'game_icon.dart';
 import 'rich_link_text.dart';
+import '../services/goop_talk_engine.dart';
 
 // =============================================================================
 // Wiki-content slivers — Effects / Item Interactions / Notes / Tips / Trivia
@@ -138,7 +139,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                   children: [
                     Icon(Icons.share_outlined, size: 16, color: Colors.lightBlueAccent),
                     const SizedBox(width: 6),
-                    Text(
+                    GoopText(
                       'REFERENCED BY',
                       style: TextStyle(
                         fontSize: 12,
@@ -204,7 +205,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 6),
-            child: Text(
+            child: GoopText(
               '${label.toUpperCase()}  ·  ${names.length}',
               style: TextStyle(
                 fontSize: 10.5,
@@ -276,7 +277,7 @@ class _ShowMoreChip extends StatelessWidget {
                 color: Colors.lightBlueAccent.withValues(alpha: 0.85),
               ),
               const SizedBox(width: 4),
-              Text(
+              GoopText(
                 label,
                 style: TextStyle(
                   fontSize: 11.5,
@@ -352,7 +353,7 @@ class BackRefChip extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
               ],
-              Text(
+              GoopText(
                 name,
                 style: const TextStyle(
                   fontSize: 12.5,

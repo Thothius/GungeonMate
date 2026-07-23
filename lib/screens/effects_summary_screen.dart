@@ -101,14 +101,14 @@ class _Summary extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  GoopText(
                     '$totalTags distinct effects',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  Text(
+                  GoopText(
                     '$totalSources sources · $groupCount categories',
                     style: TextStyle(
                       fontSize: 12,
@@ -142,7 +142,7 @@ class _Empty extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.3),
             ),
             const SizedBox(height: 12),
-            Text(
+            GoopText(
               loadoutEmpty
                   ? 'No loadout yet — pick up some stuff'
                   : 'Nothing detected in current effects text',
@@ -288,7 +288,7 @@ class _EffectRow extends StatelessWidget {
                         color: Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
+                      child: GoopText(
                         '×${occurrences.length}',
                         style: const TextStyle(
                           fontSize: 11.5,
@@ -362,7 +362,7 @@ class _SourceLine extends StatelessWidget {
                   ),
                 ),
                 if (hasExcerpt) ...[
-                  Text(
+                  GoopText(
                     '  —  ',
                     style: TextStyle(
                       fontSize: 12,

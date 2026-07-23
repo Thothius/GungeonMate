@@ -472,7 +472,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                     ),
                   ),
                   icon: const Icon(Icons.arrow_back, size: 20),
-                  label: const Text(
+                  label: const GoopText(
                     'BACK TO RUN',
                     style: TextStyle(
                       fontSize: 14,
@@ -546,7 +546,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                   children: [
                     Icon(Icons.sort, size: 18),
                     SizedBox(width: 8),
-                    Text('Sort by',
+                    GoopText('Sort by',
                         style: TextStyle(
                             fontWeight: FontWeight.w800, fontSize: 15)),
                   ],
@@ -608,7 +608,7 @@ class _BrowseScreenState extends State<BrowseScreen>
     return ListTile(
       leading: Icon(icon,
           color: selected ? Colors.amber : Colors.white.withValues(alpha: 0.6)),
-      title: Text(label,
+      title: GoopText(label,
           style: TextStyle(
               fontWeight: selected ? FontWeight.w800 : FontWeight.w500)),
       trailing: selected
@@ -636,7 +636,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                   children: [
                     Icon(Icons.military_tech, size: 18),
                     SizedBox(width: 8),
-                    Text('Filter by quality',
+                    GoopText('Filter by quality',
                         style: TextStyle(
                             fontWeight: FontWeight.w800, fontSize: 15)),
                   ],
@@ -656,7 +656,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                             color: QualityBadge.colorFor(t),
                             shape: BoxShape.circle,
                           ),
-                          child: Text(
+                          child: GoopText(
                             t,
                             style: const TextStyle(
                               color: Colors.white,
@@ -665,7 +665,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                             ),
                           ),
                         ),
-                  title: Text(
+                  title: GoopText(
                     t == 'All'
                         ? 'Tiers'
                         : (t == 'N' ? 'Starter (N)' : '$t-tier'),
@@ -729,7 +729,7 @@ class _BrowseScreenState extends State<BrowseScreen>
   void _showAddSnackBar(BuildContext c, String name) {
     ScaffoldMessenger.of(c).showSnackBar(
       SnackBar(
-        content: Text(widget.targetSlot == PlayerSlot.coop
+        content: GoopText(widget.targetSlot == PlayerSlot.coop
             ? '$name added to P2'
             : '$name added'),
         duration: const Duration(seconds: 1),
@@ -806,7 +806,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                   color: qColor,
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: Text(
+                child: GoopText(
                   quality,
                   style: const TextStyle(
                     fontSize: 7.5,
@@ -875,7 +875,7 @@ class _BrowseScreenState extends State<BrowseScreen>
         p.addGun(g, slot: widget.targetSlot);
         ScaffoldMessenger.of(c).showSnackBar(
           SnackBar(
-            content: Text(widget.targetSlot == PlayerSlot.coop
+            content: GoopText(widget.targetSlot == PlayerSlot.coop
                 ? '${g.name} added to P2'
                 : '${g.name} added'),
             duration: const Duration(seconds: 1),
@@ -894,7 +894,7 @@ class _BrowseScreenState extends State<BrowseScreen>
     if (session.status != MpStatus.disconnected) return false;
     ScaffoldMessenger.of(c).showSnackBar(
       const SnackBar(
-        content: Text('Reconnecting to peer… try again in a moment.'),
+        content: GoopText('Reconnecting to peer… try again in a moment.'),
         duration: Duration(milliseconds: 1400),
       ),
     );
@@ -942,7 +942,7 @@ class _BrowseScreenState extends State<BrowseScreen>
 
         ScaffoldMessenger.of(c).showSnackBar(
           SnackBar(
-            content: Text(isRobot && isHpUp
+            content: GoopText(isRobot && isHpUp
                 ? 'Robot Tax: ${it.name} converted to +1 Armor & grants 10-15 casings!'
                 : (widget.targetSlot == PlayerSlot.coop
                     ? '${it.name} added to P2'
@@ -1100,7 +1100,7 @@ class _BrowseScreenState extends State<BrowseScreen>
 
   Widget _buildFilterChip(String label, bool value, Color color, ValueChanged<bool> onSelected) {
     return FilterChip(
-      label: Text(
+      label: GoopText(
         label,
         style: TextStyle(
           fontSize: 10.5,
@@ -1249,7 +1249,7 @@ class _Row extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(color: robotTagColor.withValues(alpha: 0.4), width: 0.8),
                             ),
-                            child: Text(
+                            child: GoopText(
                               robotTag,
                               style: TextStyle(
                                 fontSize: 8.5,
@@ -1321,7 +1321,7 @@ Widget _metaPill(String text, Color color, {IconData? icon}) {
           Icon(icon, size: 12, color: color),
           const SizedBox(width: 3),
         ],
-        Text(
+        GoopText(
           text,
           style: TextStyle(
             fontSize: 11,
@@ -1357,7 +1357,7 @@ Widget _qualityPill(String quality) {
           height: 15,
           alignment: Alignment.center,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-          child: Text(
+          child: GoopText(
             letter,
             style: const TextStyle(
               fontSize: 10,
@@ -1370,7 +1370,7 @@ Widget _qualityPill(String quality) {
         const SizedBox(width: 4),
         Padding(
           padding: const EdgeInsets.only(right: 4),
-          child: Text(
+          child: GoopText(
             '$letter-tier',
             style: TextStyle(
               fontSize: 11,
@@ -1423,7 +1423,7 @@ Widget _coinPill(String price) {
             ),
           ),
           alignment: Alignment.center,
-          child: const Text(
+          child: const GoopText(
             '\$',
             style: TextStyle(
               fontSize: 10,
@@ -1436,7 +1436,7 @@ Widget _coinPill(String price) {
         const SizedBox(width: 4),
         Padding(
           padding: const EdgeInsets.only(right: 4),
-          child: Text(
+          child: GoopText(
             price,
             style: const TextStyle(
               fontSize: 11,
@@ -1460,7 +1460,7 @@ Widget _synergyPill(int count) {
         color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(6),
       ),
-      child: Text(
+      child: GoopText(
         'no synergy',
         style: TextStyle(
           fontSize: 10,
@@ -1547,7 +1547,7 @@ class _ToolbarButton extends StatelessWidget {
             Icon(icon, size: 16, color: c),
             const SizedBox(width: 5),
             Flexible(
-              child: Text(
+              child: GoopText(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.fade,

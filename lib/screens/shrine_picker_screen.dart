@@ -67,7 +67,7 @@ class ShrinePickerScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Use a Shrine'),
+        title: const GoopText('Use a Shrine'),
         actions: [
           if (provider.runState.shrinesUsed.isNotEmpty)
             Padding(
@@ -82,7 +82,7 @@ class ShrinePickerScreen extends StatelessWidget {
                     border: Border.all(
                         color: Colors.amber.withValues(alpha: 0.4)),
                   ),
-                  child: Text(
+                  child: GoopText(
                     '${provider.runState.shrinesUsed.length} used',
                     style: const TextStyle(
                       color: Colors.amber,
@@ -96,7 +96,7 @@ class ShrinePickerScreen extends StatelessWidget {
         ],
       ),
       body: shrines.isEmpty
-          ? const Center(child: Text('No shrine data'))
+          ? const Center(child: GoopText('No shrine data'))
           : ListView.builder(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
               itemCount: shrines.length,
@@ -132,7 +132,7 @@ class ShrinePickerScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 16),
-              label: const Text(
+              label: const GoopText(
                 'BACK TO RUN',
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.8),
               ),
@@ -345,7 +345,7 @@ class _ShrineListTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(4),
         border: Border.all(color: color.withValues(alpha: 0.35), width: 0.6),
       ),
-      child: Text(
+      child: GoopText(
         text,
         style: TextStyle(
           fontSize: 9,
@@ -508,7 +508,7 @@ class ShrineActivationSheet extends StatelessWidget {
                         children: [
                           Icon(Icons.heart_broken_rounded, color: Colors.redAccent, size: 16),
                           SizedBox(width: 8),
-                          Text(
+                          GoopText(
                             '💔 PENALTY COST: -1 HEART CONTAINER (LIFE -1)',
                             style: TextStyle(
                               fontSize: 10.5,
@@ -566,7 +566,7 @@ class ShrineActivationSheet extends StatelessWidget {
                         padding:
                             const EdgeInsets.symmetric(vertical: 14),
                       ),
-                      child: const Text('Cancel'),
+                      child: const GoopText('Cancel'),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -587,7 +587,7 @@ class ShrineActivationSheet extends StatelessWidget {
                         foregroundColor: Colors.black,
                       ),
                       icon: const Icon(Icons.bolt, size: 20),
-                      label: Text(
+                      label: GoopText(
                         shrine.hasAutoEffect
                             ? 'Use Shrine'
                             : 'Mark as Used',
@@ -616,7 +616,7 @@ class ShrineActivationSheet extends StatelessWidget {
         : '${r.shrine.name}: ${lines.join(' · ')}';
     ScaffoldMessenger.of(c).showSnackBar(
       SnackBar(
-        content: Text(label),
+        content: GoopText(label),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(milliseconds: 2600),
         action: r.manual.length > 1
@@ -626,28 +626,28 @@ class ShrineActivationSheet extends StatelessWidget {
                   showDialog(
                     context: c,
                     builder: (_) => AlertDialog(
-                      title: Text('${r.shrine.name} · what to do'),
+                      title: GoopText('${r.shrine.name} · what to do'),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (r.applied.isNotEmpty) ...[
-                            const Text('Auto-applied:',
+                            const GoopText('Auto-applied:',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700)),
-                            for (final a in r.applied) Text('  · $a'),
+                            for (final a in r.applied) GoopText('  · $a'),
                             const SizedBox(height: 10),
                           ],
-                          const Text('You do it in-game:',
+                          const GoopText('You do it in-game:',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700)),
-                          for (final m in r.manual) Text('  · $m'),
+                          for (final m in r.manual) GoopText('  · $m'),
                         ],
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(c),
-                          child: const Text('OK'),
+                          child: const GoopText('OK'),
                         ),
                       ],
                     ),
@@ -670,7 +670,7 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: Colors.amber),
         const SizedBox(width: 6),
-        Text(
+        GoopText(
           title,
           style: const TextStyle(
             fontSize: 11,
@@ -746,7 +746,7 @@ class _WillApplyCard extends StatelessWidget {
                 icon: Icons.bolt, title: 'WILL BE APPLIED'),
             const SizedBox(height: 8),
             if (auto.isEmpty)
-              Text(
+              GoopText(
                 'No automatic stat changes — marks the shrine as used in your log.',
                 style: TextStyle(
                   fontSize: 13,
@@ -782,7 +782,7 @@ class _AutoRow extends StatelessWidget {
         children: [
           Icon(icon, size: 16, color: color),
           const SizedBox(width: 8),
-          Text(
+          GoopText(
             label,
             style: const TextStyle(
               fontSize: 13.5,
@@ -812,7 +812,7 @@ class _BlockedNotice extends StatelessWidget {
           const Icon(Icons.block, color: Colors.redAccent, size: 18),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
+            child: GoopText(
               message,
               style: const TextStyle(fontSize: 13, height: 1.35),
             ),

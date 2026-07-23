@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/app_theme.dart';
+import '../services/goop_talk_engine.dart';
 
 /// Reusable section header used by WikiSection / Synergies / Referenced By
 /// blocks. Reads `flair.headerGlyph`, `flair.headerAllCaps`,
@@ -51,7 +52,7 @@ class ThemedSectionTitle extends StatelessWidget {
     } else if (glyph != null) {
       leading = Padding(
         padding: const EdgeInsets.only(right: 8),
-        child: Text(
+        child: GoopText(
           glyph,
           style: TextStyle(
             fontSize: titleSize + 1,
@@ -77,7 +78,7 @@ class ThemedSectionTitle extends StatelessWidget {
           children: [
             leading,
             Expanded(
-              child: Text(
+              child: GoopText(
                 '$titleText$countText',
                 style: TextStyle(
                   fontSize: caps ? titleSize - 2 : titleSize,

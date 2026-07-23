@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/run_log_entry.dart';
 import '../services/haptics.dart';
+import '../services/goop_talk_engine.dart';
 
 enum StatType { coolness, curse }
 
@@ -57,7 +58,7 @@ class StatsDetailScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(title),
+        title: GoopText(title),
         actions: [
           if (base != 0)
             IconButton(
@@ -117,7 +118,7 @@ class StatsDetailScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 16),
-              label: const Text(
+              label: const GoopText(
                 'BACK TO RUN',
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 0.8),
               ),
@@ -192,7 +193,7 @@ class _ValueCard extends StatelessWidget {
                   color: color,
                 ),
                 const SizedBox(height: 6),
-                Text(
+                GoopText(
                   value.toStringAsFixed(1),
                   style: TextStyle(
                     fontSize: 52,
@@ -204,7 +205,7 @@ class _ValueCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 if (hasBreakdown) ...[
-                  Text(
+                  GoopText(
                     isTeam
                         ? 'Base ${_fmt(base)}  ·  From Team ${_fmt(fromItems)}'
                         : 'Base ${_fmt(base)}  ·  From Items ${_fmt(fromItems)}',
@@ -260,7 +261,7 @@ class _ValueCard extends StatelessWidget {
                       Text('0.0', style: TextStyle(fontSize: 10, color: Colors.white54, fontWeight: FontWeight.bold)),
                       Text('5.0', style: TextStyle(fontSize: 10, color: Colors.white30)),
                       Text('10.0', style: TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
-                      Text('15.0+', style: TextStyle(fontSize: 10, color: Colors.white54, fontWeight: FontWeight.bold)),
+                      GoopText('15.0+', style: TextStyle(fontSize: 10, color: Colors.white54, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -298,7 +299,7 @@ class _ValueCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    GoopText(
                       meterLabel,
                       style: TextStyle(
                         fontSize: 11,
@@ -337,7 +338,7 @@ class _ValueCard extends StatelessWidget {
                         Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 16),
                         SizedBox(width: 8),
                         Expanded(
-                          child: Text(
+                          child: GoopText(
                             'LORD OF THE JAMMED HAS SPAWNED!',
                             style: TextStyle(
                               fontSize: 10.5,
@@ -387,7 +388,7 @@ class _ValueCard extends StatelessWidget {
               ),
             ),
             onPressed: cb,
-            child: Text(
+            child: GoopText(
               label,
               style: const TextStyle(
                 fontSize: 12,
@@ -462,7 +463,7 @@ class _CoolnessEffectsState extends State<_CoolnessEffects> {
             padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
             child: Row(
               children: [
-                Text(
+                GoopText(
                   'ALSO',
                   style: TextStyle(
                     fontSize: 11,
@@ -582,7 +583,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
                 Icon(Icons.warning_rounded, color: Colors.redAccent, size: 28),
                 SizedBox(width: 10),
                 Expanded(
-                  child: Text(
+                  child: GoopText(
                     'Lord of the Jammed has spawned. Run.',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -604,7 +605,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
             padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
             child: Row(
               children: [
-                Text(
+                GoopText(
                   'FULL CURSE EFFECT TABLE',
                   style: TextStyle(
                     fontSize: 11,
@@ -633,7 +634,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
+            child: GoopText(
               'Jam E./B. = Jammed Enemy / Boss chance · Mimic = chest mimic chance · '
               'Fuse = fused chest chance · Room = room-clear reward mod · '
               'Ammo = ammo drop multiplier. At 10+ curse, enemy/boss jam chances '
@@ -670,42 +671,42 @@ class _CurseTable extends StatelessWidget {
           columnSpacing: 18,
           columns: const [
             DataColumn(
-              label: Tooltip(message: 'Current curse level', child: Text('Curse')),
+              label: Tooltip(message: 'Current curse level', child: GoopText('Curse')),
             ),
             DataColumn(
               label: Tooltip(
                 message: 'Chance a regular enemy spawns Jammed (golden, tougher)',
-                child: Text('Jam E.'),
+                child: GoopText('Jam E.'),
               ),
             ),
             DataColumn(
               label: Tooltip(
                 message: 'Chance a boss spawns Jammed',
-                child: Text('Jam B.'),
+                child: GoopText('Jam B.'),
               ),
             ),
             DataColumn(
               label: Tooltip(
                 message: 'Chance chests are mimics',
-                child: Text('Mimic'),
+                child: GoopText('Mimic'),
               ),
             ),
             DataColumn(
               label: Tooltip(
                 message: 'Chance chests spawn with a fuse',
-                child: Text('Fuse'),
+                child: GoopText('Fuse'),
               ),
             ),
             DataColumn(
               label: Tooltip(
                 message: 'Change to base room-clear reward chance',
-                child: Text('Room'),
+                child: GoopText('Room'),
               ),
             ),
             DataColumn(
               label: Tooltip(
                 message: 'Ammo drop multiplier',
-                child: Text('Ammo'),
+                child: GoopText('Ammo'),
               ),
             ),
           ],
@@ -716,7 +717,7 @@ class _CurseTable extends StatelessWidget {
                     ? WidgetStatePropertyAll(Colors.amber.withValues(alpha: 0.18))
                     : null,
                 cells: [
-                  DataCell(Text(
+                  DataCell(GoopText(
                     '${curseTable[i].curse}',
                     style: TextStyle(
                       fontWeight: i == highlightIdx
@@ -725,12 +726,12 @@ class _CurseTable extends StatelessWidget {
                       color: i == highlightIdx ? Colors.amber : null,
                     ),
                   )),
-                  DataCell(Text(curseTable[i].jammedEnemy)),
-                  DataCell(Text(curseTable[i].jammedBoss)),
-                  DataCell(Text(curseTable[i].mimicChance)),
-                  DataCell(Text(curseTable[i].fuseChance)),
-                  DataCell(Text(curseTable[i].roomRewards)),
-                  DataCell(Text(curseTable[i].ammo)),
+                  DataCell(GoopText(curseTable[i].jammedEnemy)),
+                  DataCell(GoopText(curseTable[i].jammedBoss)),
+                  DataCell(GoopText(curseTable[i].mimicChance)),
+                  DataCell(GoopText(curseTable[i].fuseChance)),
+                  DataCell(GoopText(curseTable[i].roomRewards)),
+                  DataCell(GoopText(curseTable[i].ammo)),
                 ],
               ),
           ],
@@ -748,7 +749,7 @@ class _SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
         padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
-        child: Text(
+        child: GoopText(
           text.toUpperCase(),
           style: TextStyle(
             fontSize: 11,
@@ -788,14 +789,14 @@ class _EffectRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  GoopText(
                     label,
                     style: const TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Text(
+                  GoopText(
                     subtitle,
                     style: TextStyle(
                       fontSize: 12,
@@ -806,7 +807,7 @@ class _EffectRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Text(
+            GoopText(
               value,
               style: TextStyle(
                 fontSize: 17,
@@ -834,7 +835,7 @@ class _InfoRow extends StatelessWidget {
           Icon(icon, size: 16, color: Colors.white.withValues(alpha: 0.7)),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
+            child: GoopText(
               text,
               style: TextStyle(
                 fontSize: 13,
@@ -910,7 +911,7 @@ class _QuickActions extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
-          child: Text(
+          child: GoopText(
             'Things the app can\'t auto-detect — tap to log them.',
             style: TextStyle(
               fontSize: 10.5,
@@ -970,14 +971,14 @@ class _QuickActionCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      GoopText(
                         action.label,
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Text(
+                      GoopText(
                         action.subtitle,
                         style: TextStyle(
                           fontSize: 10.5,
@@ -1031,7 +1032,7 @@ class _EventLogState extends State<_EventLog> {
             padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
             child: Row(
               children: [
-                Text(
+                GoopText(
                   title.toUpperCase(),
                   style: TextStyle(
                     fontSize: 11,
@@ -1086,7 +1087,7 @@ class _EventLogState extends State<_EventLog> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
             ),
-            child: Text(
+            child: GoopText(
               'No events yet. Pick up items or use quick actions above to start tracking.',
               style: TextStyle(
                 fontSize: 12,
@@ -1142,7 +1143,7 @@ class _LogTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    GoopText(
                       entry.description,
                       style: const TextStyle(
                         fontSize: 12.5,
@@ -1154,7 +1155,7 @@ class _LogTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Row(
                       children: [
-                        Text(
+                        GoopText(
                           timeStr,
                           style: TextStyle(
                             fontSize: 10,
@@ -1169,7 +1170,7 @@ class _LogTile extends StatelessWidget {
                               color: catColor.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(4),
                             ),
-                            child: Text(
+                            child: GoopText(
                               entry.playerName!,
                               style: TextStyle(
                                 fontSize: 9.5,
@@ -1186,7 +1187,7 @@ class _LogTile extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               if (hasDelta)
-                Text(
+                GoopText(
                   '${isPositive ? '+' : ''}${delta.toStringAsFixed(1)}',
                   style: TextStyle(
                     fontSize: 14,
@@ -1230,7 +1231,7 @@ class _LogLegend extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoopText(
             'LEGEND',
             style: TextStyle(
               fontSize: 9.5,
@@ -1263,7 +1264,7 @@ class _LogLegend extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 4),
-                  Text(
+                  GoopText(
                     runLogCategoryLabel(c),
                     style: TextStyle(
                       fontSize: 10.5,

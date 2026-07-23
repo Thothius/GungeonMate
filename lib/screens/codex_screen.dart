@@ -6,6 +6,7 @@ import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import 'codex_detail_screen.dart';
 import '../utils/fast_route.dart';
+import '../services/goop_talk_engine.dart';
 
 /// The GungeonMate Codex — a browseable encyclopedia of Objects, Pickups,
 /// NPCs, Enemies, and Bosses from Enter the Gungeon. Accessed as a
@@ -112,7 +113,7 @@ class _CodexScreenState extends State<CodexScreen>
               )
             : null,
         title: widget.showBackButton
-            ? const Text('CODEX',
+            ? const GoopText('CODEX',
                 style: TextStyle(
                     fontWeight: FontWeight.w900, letterSpacing: 1.2))
             : const SizedBox.shrink(),
@@ -273,7 +274,7 @@ class _CodexList extends StatelessWidget {
             Icon(Icons.search_off,
                 size: 48, color: Colors.white.withValues(alpha: 0.3)),
             const SizedBox(height: 12),
-            Text(
+            GoopText(
               'No results found',
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.4),
@@ -381,7 +382,7 @@ class _CodexCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(3, 0, 3, 4),
-              child: Text(
+              child: GoopText(
                 entry.name,
                 maxLines: 2,
                 textAlign: TextAlign.center,

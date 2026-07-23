@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/player.dart';
 import '../providers/run_provider.dart';
+import '../services/goop_talk_engine.dart';
 import '../services/multiplayer_session.dart';
 import '../widgets/mp_request_listener.dart';
 import '../widgets/theme_overlay.dart';
@@ -58,11 +59,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error: ${runProvider.error}'),
+              GoopText('Error: ${runProvider.error}'),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => runProvider.loadData(),
-                child: const Text('Retry'),
+                child: const GoopText('Retry'),
               ),
             ],
           ),

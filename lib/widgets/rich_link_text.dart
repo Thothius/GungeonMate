@@ -15,6 +15,7 @@ import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'themed_number.dart';
 import 'themed_section_title.dart';
+import '../services/goop_talk_engine.dart';
 
 // =============================================================================
 // Color palette for ref tokens
@@ -283,7 +284,7 @@ class _RefChipText extends StatelessWidget {
       onTap: onTap,
       onLongPress: onLongPress,
       behavior: HitTestBehavior.opaque,
-      child: Text(
+      child: GoopText(
         label,
         style: baseStyle.copyWith(
           color: color,
@@ -350,7 +351,7 @@ class _PeekSheet extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      GoopText(
                         name,
                         style: const TextStyle(
                           fontSize: 18,
@@ -365,7 +366,7 @@ class _PeekSheet extends StatelessWidget {
                             const SizedBox(width: 6),
                           ],
                           Flexible(
-                            child: Text(
+                            child: GoopText(
                               subtitle,
                               style: TextStyle(
                                 fontSize: 12.5,
@@ -382,7 +383,7 @@ class _PeekSheet extends StatelessWidget {
             ),
             if (quote.isNotEmpty) ...[
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 '"$quote"',
                 style: TextStyle(
                   fontSize: 12.5,
@@ -393,7 +394,7 @@ class _PeekSheet extends StatelessWidget {
             ],
             if (body.isNotEmpty) ...[
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 body,
                 style: const TextStyle(fontSize: 13.5, height: 1.35),
               ),
@@ -403,7 +404,7 @@ class _PeekSheet extends StatelessWidget {
               width: double.infinity,
               child: FilledButton.icon(
                 icon: const Icon(Icons.open_in_new, size: 18),
-                label: const Text('Open detail'),
+                label: const GoopText('Open detail'),
                 onPressed: () {
                   Navigator.pop(context);
                   Navigator.push(
@@ -465,7 +466,7 @@ class _CharacterPeekSheet extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      GoopText(
                         character.name,
                         style: const TextStyle(
                           fontSize: 18,
@@ -473,7 +474,7 @@ class _CharacterPeekSheet extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text(
+                      GoopText(
                         'Gungeoneer',
                         style: TextStyle(
                           fontSize: 12.5,
@@ -530,7 +531,7 @@ class _PeekLoadoutRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              GoopText(
                 label.toUpperCase(),
                 style: TextStyle(
                   fontSize: 10.5,
@@ -540,7 +541,7 @@ class _PeekLoadoutRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              Text(
+              GoopText(
                 items.join(', '),
                 style: const TextStyle(fontSize: 13.5, height: 1.35),
               ),
@@ -598,7 +599,7 @@ class _ShrinePeekSheet extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      GoopText(
                         shrine.name,
                         style: const TextStyle(
                           fontSize: 18,
@@ -606,7 +607,7 @@ class _ShrinePeekSheet extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text(
+                      GoopText(
                         'Shrine',
                         style: TextStyle(
                           fontSize: 12.5,
@@ -621,14 +622,14 @@ class _ShrinePeekSheet extends StatelessWidget {
             ),
             if (shrine.description.isNotEmpty) ...[
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 shrine.description,
                 style: const TextStyle(fontSize: 13.5, height: 1.35),
               ),
             ],
             if (shrine.effect.isNotEmpty) ...[
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 shrine.effect,
                 style: TextStyle(
                   fontSize: 13,
@@ -691,7 +692,7 @@ class _ShrineDeltaChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          GoopText(
             '$label ',
             style: TextStyle(
               fontSize: 11.5,
@@ -700,7 +701,7 @@ class _ShrineDeltaChip extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.75),
             ),
           ),
-          Text(
+          GoopText(
             '$sign$txt',
             style: TextStyle(
               fontSize: 13,

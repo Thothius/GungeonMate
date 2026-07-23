@@ -32,6 +32,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/format.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
+import '../services/goop_talk_engine.dart';
 
 class ActiveRunScreen extends StatefulWidget {
   final VoidCallback? onRequestBrowse;
@@ -72,15 +73,15 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
         backgroundColor: const Color(0xFF1B1816),
-        title: const Text('🎲 Gunfortuna Challenge! 🎲', style: TextStyle(fontWeight: FontWeight.w900, color: Color(0xFFFFD54F), letterSpacing: 1.0)),
-        content: Text('$challengerName challenges you to a Gunfortuna Dice Roll! Do you accept the challenge?'),
+        title: const GoopText('🎲 Gunfortuna Challenge! 🎲', style: TextStyle(fontWeight: FontWeight.w900, color: Color(0xFFFFD54F), letterSpacing: 1.0)),
+        content: GoopText('$challengerName challenges you to a Gunfortuna Dice Roll! Do you accept the challenge?'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
               _mpSession?.sendDiceDecline();
             },
-            child: const Text('DECLINE', style: TextStyle(color: Colors.white38)),
+            child: const GoopText('DECLINE', style: TextStyle(color: Colors.white38)),
           ),
           ElevatedButton(
             onPressed: () {
@@ -89,7 +90,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               _showDiceRollDialog(context, isChallenged: true);
             },
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFFD54F), foregroundColor: Colors.black),
-            child: const Text('ACCEPT', style: TextStyle(fontWeight: FontWeight.w900)),
+            child: const GoopText('ACCEPT', style: TextStyle(fontWeight: FontWeight.w900)),
           ),
         ],
       ),
@@ -128,10 +129,10 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
           children: [
             Icon(Icons.error_outline, color: Colors.redAccent),
             SizedBox(width: 12),
-            Text('Connection Error'),
+            GoopText('Connection Error'),
           ],
         ),
-        content: Text(message),
+        content: GoopText(message),
         actions: [
           TextButton(
             onPressed: () async {
@@ -139,22 +140,22 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Run saved'),
+                    content: GoopText('Run saved'),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
                 Navigator.pop(context);
               }
             },
-            child: const Text('Save Session'),
+            child: const GoopText('Save Session'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Dismiss'),
+            child: const GoopText('Dismiss'),
           ),
           FilledButton.icon(
             icon: const Icon(Icons.refresh, size: 16),
-            label: const Text('Retry Reconnect'),
+            label: const GoopText('Retry Reconnect'),
             onPressed: () {
               Navigator.pop(context);
               if (_mpSession?.canReconnect == true) {
@@ -174,7 +175,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final main = state.main;
 
     if (main.character == null) {
-      return const Scaffold(body: Center(child: Text('No inventory loaded')));
+      return const Scaffold(body: Center(child: GoopText('No inventory loaded')));
     }
 
     final session = context.watch<MultiplayerSession>();
@@ -338,7 +339,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        GoopText(
                           () {
                             final mpSession = context.read<MultiplayerSession>();
                             if (mpSession.isActive && !mpSession.isSimulated && mpSession.mySlot != slot) {
@@ -369,7 +370,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                               );
                             });
                           },
-                          child: const Text(
+                          child: const GoopText(
                             'ADVANCED LIBRARY ➔',
                             style: TextStyle(
                               fontSize: 10.5,
@@ -428,7 +429,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                     if (results.isEmpty)
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 32),
-                        child: Text(
+                        child: GoopText(
                           'No matching guns or items found.',
                           style: TextStyle(color: Colors.white38, fontSize: 12.5),
                         ),
@@ -468,7 +469,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                     fallback: isGun ? Icons.gps_fixed : Icons.extension,
                                     quality: quality,
                                   ),
-                                  title: Text(
+                                  title: GoopText(
                                     name,
                                     style: const TextStyle(
                                       color: Colors.white,
@@ -476,7 +477,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                       fontSize: 12.5,
                                     ),
                                   ),
-                                  subtitle: Text(
+                                  subtitle: GoopText(
                                     isGun ? 'Gun • Quality $quality' : 'Item • Quality $quality',
                                     style: const TextStyle(
                                       color: Colors.white38,
@@ -496,7 +497,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                             children: [
                                               Icon(Icons.check, size: 12, color: Colors.greenAccent),
                                               SizedBox(width: 4),
-                                              Text(
+                                              GoopText(
                                                 'OWNED',
                                                 style: TextStyle(
                                                   color: Colors.greenAccent,
@@ -539,7 +540,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                               _quickQuery = '';
                                             });
                                           },
-                                          child: const Text(
+                                          child: const GoopText(
                                             'ADD',
                                             style: TextStyle(
                                               fontSize: 10,
@@ -587,7 +588,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
           const Icon(Icons.flash_on, color: Colors.white, size: 16),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
+            child: GoopText(
               'WINDGUNNER STATE COMPASS ACTIVE (${p.windgunnerCountdown}s of Infinite Power)',
               textAlign: TextAlign.center,
               style: const TextStyle(
@@ -726,7 +727,7 @@ class _BigPlayerTab extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
+                      GoopText(
                         slotLabel,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -742,7 +743,7 @@ class _BigPlayerTab extends StatelessWidget {
                       const SizedBox(height: 2),
                       FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
+                        child: GoopText(
                           characterName,
                           maxLines: 1,
                           style: TextStyle(
@@ -882,7 +883,7 @@ class _MpHeader extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          GoopText(
                             statusText.toUpperCase(),
                             style: TextStyle(
                               fontSize: 10,
@@ -893,7 +894,7 @@ class _MpHeader extends StatelessWidget {
                           ),
                           if (session.error != null && !isConnected) ...[
                             const SizedBox(height: 2),
-                            Text(
+                            GoopText(
                               session.error!,
                               style: const TextStyle(
                                 fontSize: 9.5,
@@ -917,7 +918,7 @@ class _MpHeader extends StatelessWidget {
                           foregroundColor: Colors.lightBlueAccent,
                         ),
                         icon: const Icon(Icons.bluetooth_searching, size: 13),
-                        label: const Text('Reconnect',
+                        label: const GoopText('Reconnect',
                             style: TextStyle(
                                 fontSize: 11, fontWeight: FontWeight.w700)),
                         onPressed: () => session.reconnect(),
@@ -928,7 +929,7 @@ class _MpHeader extends StatelessWidget {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
+                          GoopText(
                             session.sessionName,
                             style: TextStyle(
                               fontSize: 11,
@@ -1081,7 +1082,7 @@ class _MpHeader extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Text(
+                      const GoopText(
                         'GUNFORTUNA LINK PANEL',
                         style: TextStyle(
                           fontSize: 13,
@@ -1150,7 +1151,7 @@ class _MpHeader extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              const GoopText(
                                 'SESSION PIN CODE',
                                 style: TextStyle(
                                   fontSize: 9.5,
@@ -1160,7 +1161,7 @@ class _MpHeader extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Text(
+                              GoopText(
                                 isMain ? 'Share with your Sidekick player' : 'Connected to host session',
                                 style: const TextStyle(
                                   fontSize: 11,
@@ -1177,7 +1178,7 @@ class _MpHeader extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(color: Colors.amber.withValues(alpha: 0.2)),
                           ),
-                          child: Text(
+                          child: GoopText(
                             code,
                             style: const TextStyle(
                               fontSize: 22,
@@ -1197,7 +1198,7 @@ class _MpHeader extends StatelessWidget {
                     children: [
                       Icon(Icons.terminal_rounded, size: 14, color: Colors.greenAccent),
                       const SizedBox(width: 6),
-                      Text(
+                      GoopText(
                         'CONSOLE LOGS',
                         style: TextStyle(
                           fontSize: 10,
@@ -1220,7 +1221,7 @@ class _MpHeader extends StatelessWidget {
                     ),
                     child: liveSession.connectionLogs.isEmpty
                         ? const Center(
-                            child: Text(
+                            child: GoopText(
                               'CONSOLE IDLE',
                               style: TextStyle(color: Colors.white24, fontSize: 10, fontWeight: FontWeight.bold),
                             ),
@@ -1249,7 +1250,7 @@ class _MpHeader extends StatelessWidget {
 
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 8),
-                                child: Text(
+                                child: GoopText(
                                   cleanLog,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -1279,7 +1280,7 @@ class _MpHeader extends StatelessWidget {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                           icon: const Icon(Icons.sync_problem_rounded, size: 16),
-                          label: const Text('FIX LINK', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5)),
+                          label: const GoopText('FIX LINK', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5)),
                           onPressed: isConnected ? null : () {
                             liveSession.requestReconnectHub();
                           },
@@ -1296,13 +1297,13 @@ class _MpHeader extends StatelessWidget {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                           icon: const Icon(Icons.save_rounded, size: 16),
-                          label: const Text('SAVE RUN', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5)),
+                          label: const GoopText('SAVE RUN', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12, letterSpacing: 0.5)),
                           onPressed: () async {
                             await liveSession.saveCurrentSession();
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Run saved'),
+                                  content: GoopText('Run saved'),
                                   behavior: SnackBarBehavior.floating,
                                 ),
                               );
@@ -1343,7 +1344,7 @@ class _MpHeader extends StatelessWidget {
             children: [
               Icon(icon, size: 13, color: color),
               const SizedBox(width: 5),
-              Text(
+              GoopText(
                 label.toUpperCase(),
                 style: TextStyle(
                   fontSize: 9.0,
@@ -1355,7 +1356,7 @@ class _MpHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 6),
-          Text(
+          GoopText(
             value,
             style: TextStyle(
               fontSize: 14,
@@ -1496,7 +1497,7 @@ class _PlayerPageState extends State<_PlayerPage> {
     final state = p.runState;
     final player = isMain ? state.main : state.coop;
     if (player == null || player.character == null) {
-      return const Center(child: Text('No player'));
+      return const Center(child: GoopText('No player'));
     }
     final activeSynergies =
         isMain ? p.getActiveSynergies().length : 0;
@@ -1553,42 +1554,7 @@ class _PlayerPageState extends State<_PlayerPage> {
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ListenableBuilder(
-                    listenable: VisualPrefs.notifier,
-                    builder: (context, _) {
-                      final prefs = VisualPrefs.notifier.value;
-                      final isSponge = prefs.spongeActive;
-                      final isGoopian = prefs.isGoopianLanguage;
-                      if (!isGoopian) return const SizedBox.shrink();
-
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 6),
-                        child: IconButton(
-                          onPressed: () {
-                            VisualPrefs.setSpongeActive(!isSponge);
-                            Haptics.heavy();
-                          },
-                          icon: Text(
-                            '🧽',
-                            style: TextStyle(
-                              fontSize: 18,
-                              shadows: isSponge
-                                  ? [
-                                      const Shadow(
-                                        color: Colors.amberAccent,
-                                        blurRadius: 10,
-                                      ),
-                                    ]
-                                  : null,
-                            ),
-                          ),
-                          tooltip: isSponge ? 'Sponge: English translation active' : 'Sponge: Alien language active',
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                        ),
-                      );
-                    },
-                  ),
+                  const _SpongeButton(),
                   // Damage calc toggle — tap to show/hide DPS terminal on dashboard,
                   // long-press to open the full DPS breakdown sheet.
                   ListenableBuilder(
@@ -1694,7 +1660,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                           children: [
                             Icon(Icons.terminal_rounded, size: 14, color: Colors.green.withValues(alpha: 0.7)),
                             const SizedBox(width: 6),
-                            Text(
+                            GoopText(
                               'DPS CALC',
                               style: TextStyle(
                                 fontSize: 9,
@@ -1709,7 +1675,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                         Row(
                           children: [
                             if (bonusPct.abs() > 0.1) ...[
-                              Text(
+                              GoopText(
                                 '${bonusPct >= 0 ? '+' : ''}${bonusPct.toStringAsFixed(0)}%',
                                 style: TextStyle(
                                   fontSize: 10,
@@ -1720,7 +1686,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                               ),
                               const SizedBox(width: 8),
                             ],
-                            Text(
+                            GoopText(
                               'TOP: ${topDps.toStringAsFixed(1)}',
                               style: const TextStyle(
                                 fontSize: 10,
@@ -2024,7 +1990,7 @@ class _PlayerPageState extends State<_PlayerPage> {
     if (m == null) return;
     m.hideCurrentSnackBar();
     m.showSnackBar(SnackBar(
-      content: Text(msg),
+      content: GoopText(msg),
       duration: const Duration(milliseconds: 1500),
     ));
   }
@@ -2240,7 +2206,7 @@ class _PlayerPageState extends State<_PlayerPage> {
             final nowFav = p.toggleFavourite(name);
             Navigator.pop(sheetCtx);
             ScaffoldMessenger.of(c).showSnackBar(SnackBar(
-              content: Text(
+              content: GoopText(
                   nowFav ? '$name added to favourites' : '$name unfavourited'),
               duration: const Duration(milliseconds: 1400),
             ));
@@ -2273,7 +2239,7 @@ class _PlayerPageState extends State<_PlayerPage> {
     final messenger = ScaffoldMessenger.of(c);
     messenger.hideCurrentSnackBar();
     messenger.showSnackBar(SnackBar(
-      content: Text('Removed ${g.name}'),
+      content: GoopText('Removed ${g.name}'),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: 'UNDO',
@@ -2291,7 +2257,7 @@ class _PlayerPageState extends State<_PlayerPage> {
     final messenger = ScaffoldMessenger.of(c);
     messenger.hideCurrentSnackBar();
     messenger.showSnackBar(SnackBar(
-      content: Text('Removed ${it.name}'),
+      content: GoopText('Removed ${it.name}'),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: 'UNDO',
@@ -2325,13 +2291,13 @@ class _TransferSheet extends StatelessWidget {
           children: [
             Icon(icon, size: 36, color: Colors.amber),
             const SizedBox(height: 10),
-            Text(
+            GoopText(
               title,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 4),
-            Text(subtitle,
+            GoopText(subtitle,
                 style: TextStyle(color: Colors.white.withValues(alpha: 0.6))),
             const SizedBox(height: 18),
             Row(
@@ -2339,14 +2305,14 @@ class _TransferSheet extends StatelessWidget {
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
+                    child: const GoopText('Cancel'),
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: FilledButton.icon(
                     icon: const Icon(Icons.check),
-                    label: const Text('Transfer'),
+                    label: const GoopText('Transfer'),
                     onPressed: onConfirm,
                   ),
                 ),
@@ -2405,7 +2371,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                     children: [
                       Icon(Icons.android_rounded, color: Colors.cyanAccent, size: 20),
                       SizedBox(width: 8),
-                      Text(
+                      GoopText(
                         'THE ROBOT HUD',
                         style: TextStyle(
                           fontSize: 12,
@@ -2430,7 +2396,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                         width: 1.0,
                       ),
                     ),
-                    child: Text(
+                    child: GoopText(
                       '+${damageBoost.toStringAsFixed(0)}% DMG',
                       style: TextStyle(
                         fontSize: 13,
@@ -2458,7 +2424,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                     const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        GoopText(
                           'JUNK COUNT',
                           style: TextStyle(
                             fontSize: 11,
@@ -2468,7 +2434,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                           ),
                         ),
                         SizedBox(height: 2),
-                        Text(
+                        GoopText(
                           '+5% DMG each',
                           style: TextStyle(fontSize: 9, color: Colors.white38),
                         ),
@@ -2581,7 +2547,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  GoopText(
                     label,
                     style: TextStyle(
                       fontSize: 11,
@@ -2590,7 +2556,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                       letterSpacing: 0.5,
                     ),
                   ),
-                  Text(
+                  GoopText(
                     subtitle,
                     style: TextStyle(
                       fontSize: 9,
@@ -2628,7 +2594,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
               children: [
                 Icon(Icons.terminal_rounded, size: 16, color: Colors.green.withValues(alpha: 0.8)),
                 const SizedBox(width: 8),
-                Text(
+                GoopText(
                   'DAMAGE CALCULATOR',
                   style: TextStyle(
                     fontSize: 10,
@@ -2666,7 +2632,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
           // Terminal header
           Row(
             children: [
-              Text(
+              GoopText(
                 '> ROBOT_DMG_CALC v1.0',
                 style: TextStyle(
                   fontSize: 9,
@@ -2676,7 +2642,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                 ),
               ),
               const Spacer(),
-              Text(
+              GoopText(
                 '×${multiplier.toStringAsFixed(2)}',
                 style: TextStyle(
                   fontSize: 9,
@@ -2695,7 +2661,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
               children: [
                 Expanded(
                   flex: 5,
-                  child: Text(
+                  child: GoopText(
                     'WEAPON',
                     style: TextStyle(
                       fontSize: 8,
@@ -2708,7 +2674,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: Text(
+                  child: GoopText(
                     'BASE',
                     textAlign: TextAlign.right,
                     style: TextStyle(
@@ -2722,7 +2688,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: Text(
+                  child: GoopText(
                     'ROBOT',
                     textAlign: TextAlign.right,
                     style: TextStyle(
@@ -2736,7 +2702,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Text(
+                  child: GoopText(
                     'Δ',
                     textAlign: TextAlign.right,
                     style: TextStyle(
@@ -2761,7 +2727,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                 children: [
                   Expanded(
                     flex: 5,
-                    child: Text(
+                    child: GoopText(
                       gun.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -2774,7 +2740,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                   ),
                   Expanded(
                     flex: 2,
-                    child: Text(
+                    child: GoopText(
                       gun.dpsValue.toStringAsFixed(1),
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -2786,7 +2752,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                   ),
                   Expanded(
                     flex: 2,
-                    child: Text(
+                    child: GoopText(
                       (gun.dpsValue * multiplier).toStringAsFixed(1),
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -2799,7 +2765,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Text(
+                    child: GoopText(
                       '+${(gun.dpsValue * multiplier - gun.dpsValue).toStringAsFixed(1)}',
                       textAlign: TextAlign.right,
                       style: TextStyle(
@@ -2819,7 +2785,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              GoopText(
                 'TOTAL DPS',
                 style: TextStyle(
                   fontSize: 9,
@@ -2828,7 +2794,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
+              GoopText(
                 '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
                 style: TextStyle(
                   fontSize: 10,
@@ -2973,7 +2939,7 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                             size: 20,
                           ),
                           const SizedBox(width: 8),
-                          Text(
+                          GoopText(
                             hasGoldJunk ? 'MECHA JUNKAN HUD' : 'SER JUNKAN - LVL ${hasGoldJunk ? "MAX" : (junkCount > 7 ? "7+" : junkCount)}',
                             style: TextStyle(
                               fontSize: 12,
@@ -2992,7 +2958,7 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                               color: hasGoldJunk ? Colors.amber.withValues(alpha: 0.12) : Colors.teal.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Text(
+                            child: GoopText(
                               rankName,
                               style: TextStyle(
                                 fontSize: 9,
@@ -3046,7 +3012,7 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            GoopText(
                               description,
                               style: const TextStyle(
                                 fontSize: 10.5,
@@ -3055,7 +3021,7 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                               ),
                             ),
                             const SizedBox(height: 6),
-                            Text(
+                            GoopText(
                               stats,
                               style: TextStyle(
                                 fontSize: 9.5,
@@ -3077,7 +3043,7 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
+                                        const GoopText(
                                           'JUNK',
                                           style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
@@ -3155,7 +3121,7 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                                             color: hasGoldJunk ? Colors.amberAccent : Colors.white30,
                                           ),
                                           const SizedBox(width: 4),
-                                          Text(
+                                          GoopText(
                                             hasGoldJunk ? 'MECH ACTIVE' : 'ACTIVATE MECH',
                                             style: TextStyle(
                                               fontSize: 8.5,
@@ -3262,7 +3228,7 @@ class _GunderfuryDashboardSliverState extends State<_GunderfuryDashboardSliver> 
                         children: [
                           Icon(Icons.bolt, color: Colors.purpleAccent.shade100, size: 20),
                           const SizedBox(width: 8),
-                          Text(
+                          GoopText(
                             'GUNDERFURY HUD - LVL $lvl',
                             style: TextStyle(
                               fontSize: 12,
@@ -3281,7 +3247,7 @@ class _GunderfuryDashboardSliverState extends State<_GunderfuryDashboardSliver> 
                               color: Colors.purple.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Text(
+                            child: GoopText(
                               formName.toUpperCase(),
                               style: TextStyle(
                                 fontSize: 9,
@@ -3333,12 +3299,12 @@ class _GunderfuryDashboardSliverState extends State<_GunderfuryDashboardSliver> 
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            GoopText(
                               description,
                               style: const TextStyle(fontSize: 10.5, color: Colors.white70, height: 1.3),
                             ),
                             const SizedBox(height: 6),
-                            Text(
+                            GoopText(
                               statsDesc,
                               style: TextStyle(
                                 fontSize: 9.5,
@@ -3360,7 +3326,7 @@ class _GunderfuryDashboardSliverState extends State<_GunderfuryDashboardSliver> 
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
+                                        const GoopText(
                                           'GUNDER LEVEL',
                                           style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
@@ -3479,7 +3445,7 @@ class _TripleGunDashboardSliverState extends State<_TripleGunDashboardSliver> {
                         children: [
                           Icon(Icons.alt_route, color: Colors.blueAccent.shade100, size: 20),
                           const SizedBox(width: 8),
-                          Text(
+                          GoopText(
                             'TRIPLE GUN HUD',
                             style: TextStyle(
                               fontSize: 12,
@@ -3498,7 +3464,7 @@ class _TripleGunDashboardSliverState extends State<_TripleGunDashboardSliver> {
                               color: Colors.blue.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Text(
+                            child: GoopText(
                               'FORM $form',
                               style: TextStyle(
                                 fontSize: 9,
@@ -3550,12 +3516,12 @@ class _TripleGunDashboardSliverState extends State<_TripleGunDashboardSliver> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            GoopText(
                               formName,
                               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                             const SizedBox(height: 4),
-                            Text(
+                            GoopText(
                               formDesc,
                               style: const TextStyle(fontSize: 10, color: Colors.white70, height: 1.3),
                             ),
@@ -3573,7 +3539,7 @@ class _TripleGunDashboardSliverState extends State<_TripleGunDashboardSliver> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
+                                        const GoopText(
                                           'ACTIVE FORM',
                                           style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
@@ -3690,7 +3656,7 @@ class _EvolverDashboardSliverState extends State<_EvolverDashboardSliver> {
                         children: [
                           Icon(Icons.bubble_chart, color: Colors.greenAccent.shade100, size: 20),
                           const SizedBox(width: 8),
-                          Text(
+                          GoopText(
                             'EVOLVER HUD',
                             style: TextStyle(
                               fontSize: 12,
@@ -3709,7 +3675,7 @@ class _EvolverDashboardSliverState extends State<_EvolverDashboardSliver> {
                               color: Colors.green.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: Text(
+                            child: GoopText(
                               'STAGE $activeStage: ${currentSpec.name.toUpperCase()}',
                               style: TextStyle(
                                 fontSize: 9,
@@ -3761,12 +3727,12 @@ class _EvolverDashboardSliverState extends State<_EvolverDashboardSliver> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            GoopText(
                               'Stage $activeStage: ${currentSpec.name} • ${currentSpec.dps}',
                               style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: currentSpec.color),
                             ),
                             const SizedBox(height: 4),
-                            Text(
+                            GoopText(
                               'Form Bullet: ${currentSpec.bullet}',
                               style: const TextStyle(fontSize: 10, color: Colors.white70, height: 1.3),
                             ),
@@ -3784,7 +3750,7 @@ class _EvolverDashboardSliverState extends State<_EvolverDashboardSliver> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        const Text(
+                                        const GoopText(
                                           'EVOLUTION STAGE',
                                           style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
@@ -3903,7 +3869,7 @@ class _DamageCalcSheet extends StatelessWidget {
                 children: [
                   Icon(Icons.calculate_rounded, color: Colors.amberAccent, size: 20),
                   SizedBox(width: 8),
-                  Text(
+                  GoopText(
                     'DAMAGE CALCULATOR',
                     style: TextStyle(
                       fontSize: 14,
@@ -3921,7 +3887,7 @@ class _DamageCalcSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: Colors.amber.withValues(alpha: 0.4), width: 1.0),
                 ),
-                child: Text(
+                child: GoopText(
                   '${bonusPercent >= 0 ? '+' : ''}${bonusPercent.toStringAsFixed(0)}% DMG',
                   style: const TextStyle(
                     fontSize: 13,
@@ -3942,14 +3908,14 @@ class _DamageCalcSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text(
+                      child: GoopText(
                         c.sourceName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontSize: 11, color: Colors.white70),
                       ),
                     ),
-                    Text(
+                    GoopText(
                       c.percent == 0
                           ? '—'
                           : '${c.percent >= 0 ? '+' : ''}${c.percent.toStringAsFixed(0)}%',
@@ -3980,7 +3946,7 @@ class _DamageCalcSheet extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
+                    GoopText(
                       '> DMG_CALC v1.0',
                       style: TextStyle(
                         fontSize: 9,
@@ -3990,7 +3956,7 @@ class _DamageCalcSheet extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Text(
+                    GoopText(
                       '×${multiplier.toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 9,
@@ -4009,7 +3975,7 @@ class _DamageCalcSheet extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 5,
-                          child: Text(
+                          child: GoopText(
                             gun.name,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -4022,7 +3988,7 @@ class _DamageCalcSheet extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 2,
-                          child: Text(
+                          child: GoopText(
                             gun.dpsValue.toStringAsFixed(1),
                             textAlign: TextAlign.right,
                             style: TextStyle(
@@ -4034,7 +4000,7 @@ class _DamageCalcSheet extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 2,
-                          child: Text(
+                          child: GoopText(
                             (gun.dpsValue * multiplier).toStringAsFixed(1),
                             textAlign: TextAlign.right,
                             style: const TextStyle(
@@ -4054,7 +4020,7 @@ class _DamageCalcSheet extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    GoopText(
                       'TOTAL DPS',
                       style: TextStyle(
                         fontSize: 9,
@@ -4063,7 +4029,7 @@ class _DamageCalcSheet extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
+                    GoopText(
                       '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
                       style: const TextStyle(
                         fontSize: 10,
@@ -4160,7 +4126,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                 children: [
                   const Icon(Icons.pets_rounded, color: Colors.lightGreenAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'HUNTRESS & DOG',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.lightGreenAccent, letterSpacing: 0.8),
                   ),
@@ -4172,7 +4138,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent, width: 0.8),
                     ),
-                    child: Text(
+                    child: GoopText(
                       'DIG: ${digChance.toStringAsFixed(1)}%',
                       style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: hasBabyGoodMimic ? Colors.purpleAccent : Colors.lightGreenAccent),
                     ),
@@ -4195,7 +4161,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
               if (!_collapsed) ...[
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
-                  child: Text(
+                  child: GoopText(
                     '✨ Baby Good Mimic active — dig rate doubled',
                     style: TextStyle(fontSize: 9.5, fontStyle: FontStyle.italic, color: Colors.purpleAccent.shade100),
                   ),
@@ -4226,7 +4192,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                     Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 14),
                     SizedBox(width: 8),
                     Expanded(
-                      child: Text(
+                      child: GoopText(
                         'Junior II growls at mimic chests before they wake.',
                         style: TextStyle(fontSize: 9.5, color: Colors.redAccent, height: 1.3),
                       ),
@@ -4254,7 +4220,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                           children: [
                             const Icon(Icons.star_rounded, color: Colors.orangeAccent, size: 14),
                             const SizedBox(width: 6),
-                            Text('TREATS: $_treatCount', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
+                            GoopText('TREATS: $_treatCount', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
                           ],
                         ),
                       ),
@@ -4277,7 +4243,7 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
                           children: [
                             const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 14),
                             const SizedBox(width: 6),
-                            Text('PETS: $_petCount', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.pinkAccent)),
+                            GoopText('PETS: $_petCount', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.pinkAccent)),
                           ],
                         ),
                       ),
@@ -4296,9 +4262,9 @@ class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
   Widget _buildWeight(String emoji, String value, Color color) {
     return Column(
       children: [
-        Text(value, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: color)),
+        GoopText(value, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: color)),
         const SizedBox(height: 2),
-        Text(emoji, style: const TextStyle(fontSize: 14)),
+        GoopText(emoji, style: const TextStyle(fontSize: 14)),
       ],
     );
   }
@@ -4469,7 +4435,7 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             labels.isNotEmpty && _page < labels.length ? labels[_page] : '',
             style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white54, letterSpacing: 1.2),
           ),
@@ -4528,12 +4494,12 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
                 children: [
                   const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'SHELLEGUN',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
                   ),
@@ -4549,12 +4515,12 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 modes[mode - 1],
                 style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
               ),
               const SizedBox(height: 4),
-              Text(
+              GoopText(
                 descriptions[mode - 1],
                 style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
               ),
@@ -4576,7 +4542,7 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
           borderRadius: BorderRadius.circular(6),
           border: Border.all(color: active ? Colors.cyanAccent : Colors.white12),
         ),
-        child: Text(label, style: TextStyle(fontSize: 11, fontWeight: active ? FontWeight.bold : FontWeight.normal, color: active ? Colors.cyanAccent : Colors.white60)),
+        child: GoopText(label, style: TextStyle(fontSize: 11, fontWeight: active ? FontWeight.bold : FontWeight.normal, color: active ? Colors.cyanAccent : Colors.white60)),
       ),
     );
   }
@@ -4624,19 +4590,19 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
                 children: [
                   const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'CHAMBER GUN',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     'DPS: ${_dps[floor].toStringAsFixed(1)}',
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
+              GoopText(
                 'FLOOR ${floor + 1}: ${_floors[floor]}',
                 style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
               ),
@@ -4661,7 +4627,7 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(color: active ? Colors.amberAccent : Colors.white12),
                         ),
-                        child: Text(
+                        child: GoopText(
                           '${i + 1}',
                           style: TextStyle(fontSize: 11, fontWeight: active ? FontWeight.bold : FontWeight.normal, color: active ? Colors.amberAccent : Colors.white54),
                         ),
@@ -4725,12 +4691,12 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
                 children: [
                   const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'PLATINUM BULLETS',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     '${seconds}s fired',
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
                   ),
@@ -4743,7 +4709,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
               // Fire rate multiplier row
               _buildMultRow('RATE', fireRateMult, seconds, 375, Colors.orangeAccent, tierLabel(fireRateMult)),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 'Damage & fire rate scale with firing time. Max 3x each. Tap +30s after each fight.',
                 style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
@@ -4756,7 +4722,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 24),
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
-                  Text('${seconds}s', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                  GoopText('${seconds}s', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds + 30).clamp(0, 999)); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 24),
@@ -4765,7 +4731,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
                   const SizedBox(width: 8),
                   TextButton(
                     onPressed: () { Haptics.selection(); p.setPlatinumBulletsSeconds(0); },
-                    child: const Text('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
+                    child: const GoopText('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
                   ),
                 ],
               ),
@@ -4782,7 +4748,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
       children: [
         SizedBox(
           width: 36,
-          child: Text(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: color)),
+          child: GoopText(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: color)),
         ),
         Expanded(
           child: ClipRRect(
@@ -4798,7 +4764,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
         const SizedBox(width: 8),
         SizedBox(
           width: 56,
-          child: Text(
+          child: GoopText(
             '${mult.toStringAsFixed(1)}x',
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: color),
             textAlign: TextAlign.right,
@@ -4807,7 +4773,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
         const SizedBox(width: 4),
         SizedBox(
           width: 32,
-          child: Text(
+          child: GoopText(
             tier,
             style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: color.withValues(alpha: 0.6)),
             textAlign: TextAlign.right,
@@ -4854,12 +4820,12 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
                 children: [
                   const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'IRON COIN',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     '$uses/3 uses',
                     style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
                   ),
@@ -4879,7 +4845,7 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 "Flip to reveal/destroy a chest's contents. 3 uses per run. Use wisely on high-tier chests.",
                 style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
@@ -4959,12 +4925,12 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
                 children: [
                   const Icon(Icons.spa, color: Colors.redAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'SPICE',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.redAccent, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     '+$damageBonus% DMG',
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.redAccent),
                   ),
@@ -4981,7 +4947,7 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 count == 0
                     ? 'No Spice used. 1st use: +1 Heart, +20% Speed, -25% Spread, +0.5 Curse.'
                     : count == 1
@@ -5020,8 +4986,8 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.redAccent)),
       ],
     );
   }
@@ -5065,12 +5031,12 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
                 children: [
                   const Icon(Icons.speed, color: Colors.tealAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'METRONOME',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.tealAccent, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     '+$damageBonus% DMG',
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.tealAccent),
                   ),
@@ -5091,18 +5057,18 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  GoopText(
                     '$kills / 75 kills',
                     style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
                   ),
-                  Text(
+                  GoopText(
                     kills >= 75 ? 'MAX STACK' : '${75 - kills} to max',
                     style: TextStyle(fontSize: 10, color: Colors.tealAccent.withValues(alpha: 0.6)),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
+              GoopText(
                 '+2% damage per kill. Resets if you take damage or swap guns. Max +150% at 75 kills.',
                 style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
               ),
@@ -5124,7 +5090,7 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
                   const SizedBox(width: 8),
                   TextButton(
                     onPressed: () { Haptics.selection(); p.setMetronomeKills(0); },
-                    child: const Text('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
+                    child: const GoopText('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
                   ),
                 ],
               ),
@@ -5181,7 +5147,7 @@ class _SprunDashboardState extends State<_SprunDashboard>
                 children: [
                   Icon(Icons.radar, color: Colors.cyanAccent.shade200, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'SPRUN',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
                   ),
@@ -5194,13 +5160,13 @@ class _SprunDashboardState extends State<_SprunDashboard>
                         borderRadius: BorderRadius.circular(6),
                         border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.5)),
                       ),
-                      child: Text(
+                      child: GoopText(
                         'WINDGUNNER ${p.windgunnerCountdown}s',
                         style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
                       ),
                     )
                   else
-                    Text(
+                    GoopText(
                       idx >= 0 ? 'REVEALED' : 'UNKNOWN',
                       style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
                     ),
@@ -5220,7 +5186,7 @@ class _SprunDashboardState extends State<_SprunDashboard>
                       const Icon(Icons.flash_on, color: Colors.cyanAccent, size: 16),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
+                        child: GoopText(
                           _triggers[idx],
                           style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.cyanAccent),
                         ),
@@ -5229,7 +5195,7 @@ class _SprunDashboardState extends State<_SprunDashboard>
                   ),
                 )
               else
-                Text(
+                GoopText(
                   'Trigger unknown. Tap "Reveal" to discover this run\'s Windgunner activation condition.',
                   style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
                 ),
@@ -5243,13 +5209,13 @@ class _SprunDashboardState extends State<_SprunDashboard>
                       final randomIdx = DateTime.now().millisecondsSinceEpoch % _triggers.length;
                       p.setSprunTriggerIndex(randomIdx);
                     },
-                    child: const Text('Reveal Trigger', style: TextStyle(fontSize: 11, color: Colors.cyanAccent)),
+                    child: const GoopText('Reveal Trigger', style: TextStyle(fontSize: 11, color: Colors.cyanAccent)),
                   ),
                   if (idx >= 0) ...[
                     const SizedBox(width: 8),
                     TextButton(
                       onPressed: () { Haptics.light(); p.setSprunTriggerIndex(-1); },
-                      child: const Text('Hide', style: TextStyle(fontSize: 11, color: Colors.white38)),
+                      child: const GoopText('Hide', style: TextStyle(fontSize: 11, color: Colors.white38)),
                     ),
                   ],
                 ],
@@ -5298,12 +5264,12 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
                 children: [
                   const Icon(Icons.sports_mma_rounded, color: Colors.orangeAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'BOXING GLOVE',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.orangeAccent, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     stars == 3 ? 'SUPER PUNCH READY' : '$stars/3 stars',
                     style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: stars == 3 ? Colors.orangeAccent : Colors.white.withValues(alpha: 0.5)),
                   ),
@@ -5325,7 +5291,7 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 stars == 3
                     ? '3 stars! Charge the gun to consume stars and fire a high-damage super punch.'
                     : 'Gains a star per kill (up to 3). Chance to stun on hit. Increases curse by 1.',
@@ -5392,12 +5358,12 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
                 children: [
                   const Icon(Icons.smoking_rooms, color: Colors.blueGrey, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'CIGARETTES',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.blueGrey, letterSpacing: 0.8),
                   ),
                   const Spacer(),
-                  Text(
+                  GoopText(
                     '+$uses Cool',
                     style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.blueGrey),
                   ),
@@ -5413,7 +5379,7 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 'Each use: -half a heart, +1 Coolness. Coolness decreases active item cooldowns and increases luck.',
                 style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
@@ -5444,8 +5410,8 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
       ],
     );
   }
@@ -5503,7 +5469,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                 children: [
                   const Icon(Icons.auto_awesome, color: Colors.amberAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'POLARIS',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
                   ),
@@ -5515,7 +5481,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
                     ),
-                    child: Text(
+                    child: GoopText(
                       'LV $effectiveLevel',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
                     ),
@@ -5535,12 +5501,12 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
+                GoopText(
                   '$kills / $nextThreshold kills to Lv ${effectiveLevel + 1}',
                   style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
                 ),
               ] else
-                Text('MAX LEVEL', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.amberAccent.withValues(alpha: 0.8))),
+                GoopText('MAX LEVEL', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.amberAccent.withValues(alpha: 0.8))),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -5551,7 +5517,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 effectiveLevel == 3
                     ? 'L3: 25 damage per shot. Homing with Star Friends synergy.'
                     : effectiveLevel == 2
@@ -5568,7 +5534,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.amberAccent, size: 24),
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
-                  Text('$kills kills', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
+                  GoopText('$kills kills', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPolarisKills(kills + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.amberAccent, size: 24),
@@ -5581,7 +5547,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                     tooltip: 'Reduce damage hits',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
-                  Text('-$hits', style: TextStyle(fontSize: 12, color: Colors.redAccent.withValues(alpha: 0.8))),
+                  GoopText('-$hits', style: TextStyle(fontSize: 12, color: Colors.redAccent.withValues(alpha: 0.8))),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPolarisDamageHits(hits + 1); },
                     icon: const Icon(Icons.add, color: Colors.redAccent, size: 22),
@@ -5600,8 +5566,8 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
+        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
       ],
     );
   }
@@ -5653,7 +5619,7 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
                 children: [
                   const Icon(Icons.chat_bubble, color: Colors.purpleAccent, size: 18),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'GUNTHER',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
                   ),
@@ -5665,7 +5631,7 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(color: Colors.purple.withValues(alpha: 0.4)),
                     ),
-                    child: Text(
+                    child: GoopText(
                       'STAGE $stage',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
                     ),
@@ -5685,12 +5651,12 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
+                GoopText(
                   '$friendship / $nextFriendship friendship to Stage ${stage + 1}',
                   style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
                 ),
               ] else
-                Text('MAX STAGE — Sentient & Homing', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.purpleAccent.withValues(alpha: 0.8))),
+                GoopText('MAX STAGE — Sentient & Homing', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.purpleAccent.withValues(alpha: 0.8))),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -5701,7 +5667,7 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 stage == 3
                     ? 'L3: 12 dmg, homing bullets. Fully sentient — talks frequently.'
                     : stage == 2
@@ -5736,8 +5702,8 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        Text(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.purpleAccent)),
+        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.purpleAccent)),
       ],
     );
   }
@@ -5790,7 +5756,7 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
                     size: 18,
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  const GoopText(
                     'GUN SOUL',
                     style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.deepOrangeAccent, letterSpacing: 0.8),
                   ),
@@ -5804,7 +5770,7 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
                         color: activated ? Colors.orange.withValues(alpha: 0.5) : Colors.green.withValues(alpha: 0.3),
                       ),
                     ),
-                    child: Text(
+                    child: GoopText(
                       activated ? 'SOUL LOST' : 'ACTIVE',
                       style: TextStyle(
                         fontSize: 10,
@@ -5816,7 +5782,7 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
                 ],
               ),
               const SizedBox(height: 10),
-              Text(
+              GoopText(
                 activated
                     ? 'You died and respawned at floor start. Gun Soul is removed from your inventory. Reach the location of your death and interact with your soul to reclaim it — dying now will end the run.'
                     : 'Grants +1 heart container. Upon death, respawns you at the start of the current floor with all items and guns retained. Enemies respawn.',
@@ -5833,7 +5799,7 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
                       size: 16,
                       color: activated ? Colors.greenAccent : Colors.orangeAccent,
                     ),
-                    label: Text(
+                    label: GoopText(
                       activated ? 'Soul Reclaimed' : 'Died — Respawned',
                       style: TextStyle(
                         fontSize: 11,
@@ -5896,7 +5862,7 @@ class _EffectsTileState extends State<_EffectsTile> {
                     const Icon(Icons.auto_awesome,
                         color: Colors.amber, size: 18),
                     const SizedBox(width: 8),
-                    const Text(
+                    const GoopText(
                       'Effects',
                       style: TextStyle(
                         fontSize: 13,
@@ -5946,7 +5912,7 @@ class _EffectsTileState extends State<_EffectsTile> {
                     else
                       Padding(
                         padding: const EdgeInsets.only(right: 12),
-                        child: Text(
+                        child: GoopText(
                           'none',
                           style: TextStyle(
                             fontSize: 11,
@@ -5992,7 +5958,7 @@ class _EffectsTileState extends State<_EffectsTile> {
                                       size: 12,
                                       color: t.category.color),
                                   const SizedBox(width: 4),
-                                  Text(
+                                  GoopText(
                                     t.label,
                                     style: TextStyle(
                                       fontSize: 11,
@@ -6059,7 +6025,7 @@ class _HeaderMenu extends StatelessWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('MP session saved'),
+                    content: GoopText('MP session saved'),
                     duration: Duration(seconds: 2),
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -6069,7 +6035,7 @@ class _HeaderMenu extends StatelessWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Failed to save session: $e'),
+                    content: GoopText('Failed to save session: $e'),
                     duration: const Duration(seconds: 3),
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -6082,7 +6048,7 @@ class _HeaderMenu extends StatelessWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Run saved'),
+                    content: GoopText('Run saved'),
                     duration: Duration(seconds: 2),
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -6092,7 +6058,7 @@ class _HeaderMenu extends StatelessWidget {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Failed to save run: $e'),
+                    content: GoopText('Failed to save run: $e'),
                     duration: const Duration(seconds: 3),
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -6115,7 +6081,7 @@ class _HeaderMenu extends StatelessWidget {
           child: Row(children: [
             Icon(Icons.favorite_rounded, size: 18, color: Colors.pinkAccent),
             SizedBox(width: 10),
-            Text('My Favourites'),
+            GoopText('My Favourites'),
           ]),
         ),
         const PopupMenuItem(
@@ -6123,7 +6089,7 @@ class _HeaderMenu extends StatelessWidget {
           child: Row(children: [
             Icon(Icons.help_outline_rounded, size: 18, color: Colors.tealAccent),
             SizedBox(width: 10),
-            Text('Help & Tips'),
+            GoopText('Help & Tips'),
           ]),
         ),
         const PopupMenuDivider(),
@@ -6134,7 +6100,7 @@ class _HeaderMenu extends StatelessWidget {
           child: Row(children: [
             Icon(Icons.casino_outlined, size: 18, color: Color(0xFFFFD54F)),
             SizedBox(width: 10),
-            Text('Gunfortuna Dice Roll'),
+            GoopText('Gunfortuna Dice Roll'),
           ]),
         ),
         const PopupMenuDivider(),
@@ -6146,7 +6112,7 @@ class _HeaderMenu extends StatelessWidget {
             child: Row(children: [
               Icon(Icons.cloud_upload_rounded, size: 18, color: Colors.greenAccent),
               SizedBox(width: 10),
-              Text('Save MP Session'),
+              GoopText('Save MP Session'),
             ]),
           ),
         ] else ...[
@@ -6155,7 +6121,7 @@ class _HeaderMenu extends StatelessWidget {
             child: Row(children: [
               Icon(Icons.save_outlined, size: 18, color: Colors.greenAccent),
               SizedBox(width: 10),
-              Text('Save Run'),
+              GoopText('Save Run'),
             ]),
           ),
         ],
@@ -6169,7 +6135,7 @@ class _HeaderMenu extends StatelessWidget {
               Icon(Icons.bluetooth_disabled,
                   size: 18, color: Colors.lightBlueAccent),
               SizedBox(width: 10),
-              Text('Leave Multiplayer'),
+              GoopText('Leave Multiplayer'),
             ]),
           ),
           const PopupMenuItem(
@@ -6177,7 +6143,7 @@ class _HeaderMenu extends StatelessWidget {
             child: Row(children: [
               Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
               SizedBox(width: 10),
-              Text('End Run & Disconnect', style: TextStyle(color: Colors.redAccent)),
+              GoopText('End Run & Disconnect', style: TextStyle(color: Colors.redAccent)),
             ]),
           ),
         ] else ...[
@@ -6186,7 +6152,7 @@ class _HeaderMenu extends StatelessWidget {
             child: Row(children: [
               Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
               SizedBox(width: 10),
-              Text('End Run', style: TextStyle(color: Colors.redAccent)),
+              GoopText('End Run', style: TextStyle(color: Colors.redAccent)),
             ]),
           ),
         ],
@@ -6207,7 +6173,7 @@ class _HeaderMenu extends StatelessWidget {
           children: [
             Icon(Icons.help_outline_rounded, color: Colors.tealAccent, size: 24),
             SizedBox(width: 10),
-            Text(
+            GoopText(
               'GungeonMate Help & Tips',
               style: TextStyle(
                 color: Colors.white,
@@ -6264,7 +6230,7 @@ class _HeaderMenu extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text(
+            child: const GoopText(
               'DISMISS',
               style: TextStyle(
                 color: Colors.tealAccent,
@@ -6283,7 +6249,7 @@ class _HeaderMenu extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          GoopText(
             title,
             style: TextStyle(
               fontSize: 13,
@@ -6292,7 +6258,7 @@ class _HeaderMenu extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
+          GoopText(
             desc,
             style: const TextStyle(
               fontSize: 11.5,
@@ -6314,8 +6280,8 @@ class _HeaderMenu extends StatelessWidget {
       builder: (c) => AlertDialog(
         icon: const Icon(Icons.bluetooth_disabled,
             color: Colors.lightBlueAccent),
-        title: const Text('Leave Multiplayer?'),
-        content: Text(
+        title: const GoopText('Leave Multiplayer?'),
+        content: GoopText(
           isSidekick
               ? 'Disconnects from the host. Your pre-multiplayer solo '
                   'run (if any) will be restored. Items the host gave '
@@ -6326,7 +6292,7 @@ class _HeaderMenu extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('Stay'),
+            child: const GoopText('Stay'),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(
@@ -6335,7 +6301,7 @@ class _HeaderMenu extends StatelessWidget {
               Navigator.pop(c);
               await session.cancel();
             },
-            child: const Text('Leave'),
+            child: const GoopText('Leave'),
           ),
         ],
       ),
@@ -6349,14 +6315,14 @@ class _HeaderMenu extends StatelessWidget {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-        title: Text(isSidekick ? 'End Run & Disconnect?' : 'End Run?'),
-        content: Text(isSidekick
+        title: GoopText(isSidekick ? 'End Run & Disconnect?' : 'End Run?'),
+        content: GoopText(isSidekick
             ? 'This will disconnect you from the host, reset the current session, and return you to the main menu.'
             : 'This resets the current run and returns to the main menu.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(c),
-            child: const Text('Cancel'),
+            child: const GoopText('Cancel'),
           ),
           FilledButton.tonal(
             style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
@@ -6369,7 +6335,7 @@ class _HeaderMenu extends StatelessWidget {
               // Wipe local run state and pop screens to return to the main menu
               p.endRun();
             },
-            child: Text(isSidekick ? 'End & Disconnect' : 'End Run'),
+            child: GoopText(isSidekick ? 'End & Disconnect' : 'End Run'),
           ),
         ],
       ),
@@ -6428,7 +6394,7 @@ class _SectionHeaderSliver extends StatelessWidget {
           children: [
             Icon(icon, size: 18, color: Colors.white70),
             const SizedBox(width: 6),
-            Text(
+            GoopText(
               '$title  ',
               style: const TextStyle(
                 fontSize: 15,
@@ -6466,7 +6432,7 @@ class _SectionHeaderSliver extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
+                        GoopText(
                           sortLabel!,
                           style: const TextStyle(
                             fontSize: 11,
@@ -6505,7 +6471,7 @@ class _SectionHeaderSliver extends StatelessWidget {
                       children: [
                         Icon(Icons.view_list_rounded, size: 15, color: currentInvView == _InvView.list ? Colors.amberAccent : Colors.white60),
                         const SizedBox(width: 8),
-                        Text('List View', style: TextStyle(fontSize: 12, color: currentInvView == _InvView.list ? Colors.amberAccent : Colors.white)),
+                        GoopText('List View', style: TextStyle(fontSize: 12, color: currentInvView == _InvView.list ? Colors.amberAccent : Colors.white)),
                       ],
                     ),
                   ),
@@ -6516,7 +6482,7 @@ class _SectionHeaderSliver extends StatelessWidget {
                       children: [
                         Icon(Icons.grid_view_rounded, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.classicPeriodic) ? Colors.amberAccent : Colors.white60),
                         const SizedBox(width: 8),
-                        Text('Periodic Grid', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.classicPeriodic) ? Colors.amberAccent : Colors.white)),
+                        GoopText('Periodic Grid', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.classicPeriodic) ? Colors.amberAccent : Colors.white)),
                       ],
                     ),
                   ),
@@ -6526,7 +6492,7 @@ class _SectionHeaderSliver extends StatelessWidget {
                       children: [
                         Icon(Icons.assessment_outlined, size: 15, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white60),
                         const SizedBox(width: 8),
-                        Text('Tactical Stats', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white)),
+                        GoopText('Tactical Stats', style: TextStyle(fontSize: 12, color: (currentInvView == _InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white)),
                       ],
                     ),
                   ),
@@ -6593,7 +6559,7 @@ class _StatAdjusterSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
+            child: GoopText(
               text,
               style: const TextStyle(
                 fontSize: 14,
@@ -6628,7 +6594,7 @@ class _StatAdjusterSheet extends StatelessWidget {
               children: [
                 Icon(icon, color: accent, size: 22),
                 const SizedBox(width: 8),
-                Text(
+                GoopText(
                   'Adjust $label',
                   style: const TextStyle(
                     fontSize: 16,
@@ -6637,7 +6603,7 @@ class _StatAdjusterSheet extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Text(
+                GoopText(
                   formatStat(value),
                   style: TextStyle(
                     fontSize: 24,
@@ -6677,7 +6643,7 @@ class _StatAdjusterSheet extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text(
+                      child: const GoopText(
                         'RESET',
                         style: TextStyle(
                           fontSize: 11,
@@ -6733,7 +6699,7 @@ class _CoolnessSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
+            child: GoopText(
               text,
               style: const TextStyle(
                 fontSize: 14,
@@ -6775,7 +6741,7 @@ class _CoolnessSheet extends StatelessWidget {
                   children: [
                     Icon(icon, color: color, size: 20),
                     const SizedBox(height: 6),
-                    Text(
+                    GoopText(
                       label,
                       textAlign: TextAlign.center,
                       maxLines: 1,
@@ -6788,7 +6754,7 @@ class _CoolnessSheet extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
+                    GoopText(
                       subtitle,
                       style: TextStyle(
                         fontSize: 9,
@@ -6830,7 +6796,7 @@ class _CoolnessSheet extends StatelessWidget {
               children: [
                 const Icon(Icons.ac_unit_rounded, color: accent, size: 22),
                 const SizedBox(width: 8),
-                const Text(
+                const GoopText(
                   'COOLNESS',
                   style: TextStyle(
                     fontSize: 16,
@@ -6839,7 +6805,7 @@ class _CoolnessSheet extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Text(
+                GoopText(
                   formatStat(value),
                   style: const TextStyle(
                     fontSize: 24,
@@ -6885,7 +6851,7 @@ class _CoolnessSheet extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text(
+                      child: const GoopText(
                         'RESET',
                         style: TextStyle(
                           fontSize: 11,
@@ -6942,7 +6908,7 @@ class _CoolnessSheet extends StatelessWidget {
                   );
                 },
                 icon: const Icon(Icons.analytics_outlined, size: 16),
-                label: const Text(
+                label: const GoopText(
                   'View Coolness Breakdown',
                   style: TextStyle(
                     fontSize: 12,
@@ -6971,9 +6937,9 @@ class _CoolnessSheet extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(val, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
+          GoopText(val, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
           const SizedBox(height: 2),
-          Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+          GoopText(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
         ],
       ),
     );
@@ -7013,7 +6979,7 @@ class _CurseSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
+            child: GoopText(
               text,
               style: const TextStyle(
                 fontSize: 14,
@@ -7055,7 +7021,7 @@ class _CurseSheet extends StatelessWidget {
                   children: [
                     Icon(icon, color: color, size: 20),
                     const SizedBox(height: 6),
-                    Text(
+                    GoopText(
                       label,
                       textAlign: TextAlign.center,
                       maxLines: 1,
@@ -7068,7 +7034,7 @@ class _CurseSheet extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 2),
-                    Text(
+                    GoopText(
                       subtitle,
                       style: TextStyle(
                         fontSize: 9,
@@ -7107,7 +7073,7 @@ class _CurseSheet extends StatelessWidget {
               children: [
                 const Icon(Icons.warning_amber_rounded, color: accent, size: 22),
                 const SizedBox(width: 8),
-                const Text(
+                const GoopText(
                   'CURSE',
                   style: TextStyle(
                     fontSize: 16,
@@ -7116,7 +7082,7 @@ class _CurseSheet extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Text(
+                GoopText(
                   formatStat(value),
                   style: const TextStyle(
                     fontSize: 24,
@@ -7198,7 +7164,7 @@ class _CurseSheet extends StatelessWidget {
             // Section label
             const Padding(
               padding: EdgeInsets.only(bottom: 8),
-              child: Text(
+              child: GoopText(
                 'EFFECTS AT CURRENT LEVEL',
                 style: TextStyle(
                   fontSize: 10,
@@ -7221,9 +7187,9 @@ class _CurseSheet extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
+                    GoopText(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
                     const SizedBox(height: 3),
-                    Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                    GoopText(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
                   ],
                 ),
               );
@@ -7252,9 +7218,9 @@ class _CurseSheet extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    Text(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
+                    GoopText(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
                     const SizedBox(height: 3),
-                    Text(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                    GoopText(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
                   ],
                 ),
               );
@@ -7273,7 +7239,7 @@ class _CurseSheet extends StatelessWidget {
             // Section label
             const Padding(
               padding: EdgeInsets.only(bottom: 8),
-              child: Text(
+              child: GoopText(
                 'ADJUST CURSE',
                 style: TextStyle(
                   fontSize: 10,
@@ -7304,7 +7270,7 @@ class _CurseSheet extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text(
+                      child: const GoopText(
                         'RESET',
                         style: TextStyle(
                           fontSize: 11,
@@ -7324,7 +7290,7 @@ class _CurseSheet extends StatelessWidget {
             // Section label
             const Padding(
               padding: EdgeInsets.only(bottom: 8),
-              child: Text(
+              child: GoopText(
                 'QUICK ACTIONS',
                 style: TextStyle(
                   fontSize: 10,
@@ -7375,7 +7341,7 @@ class _CurseSheet extends StatelessWidget {
                   );
                 },
                 icon: const Icon(Icons.analytics_outlined, size: 16),
-                label: const Text(
+                label: const GoopText(
                   'View Curse Breakdown',
                   style: TextStyle(
                     fontSize: 12,
@@ -7601,7 +7567,7 @@ class _SortPickerSheet<T> extends StatelessWidget {
                 children: [
                   Icon(titleIcon, size: 18, color: Colors.amber),
                   const SizedBox(width: 8),
-                  Text(
+                  GoopText(
                     'Sort $title by',
                     style: const TextStyle(
                       fontSize: 14,
@@ -7620,7 +7586,7 @@ class _SortPickerSheet<T> extends StatelessWidget {
                   color: opt == current ? Colors.amber : Colors.white70,
                   size: 20,
                 ),
-                title: Text(
+                title: GoopText(
                   labelOf(opt),
                   style: TextStyle(
                     fontWeight:
@@ -7704,7 +7670,7 @@ class _TileActionsSheet extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        GoopText(
                           name,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -7715,7 +7681,7 @@ class _TileActionsSheet extends StatelessWidget {
                           ),
                         ),
                         if (subtitle.isNotEmpty)
-                          Text(
+                          GoopText(
                             subtitle,
                             style: TextStyle(
                               fontSize: 11.5,
@@ -7731,7 +7697,7 @@ class _TileActionsSheet extends StatelessWidget {
             if (onTransfer != null && transferLabel != null)
               ListTile(
                 leading: const Icon(Icons.swap_horiz, color: Colors.amberAccent),
-                title: Text(
+                title: GoopText(
                   transferLabel!,
                   style: const TextStyle(color: Colors.amberAccent, fontWeight: FontWeight.bold),
                 ),
@@ -7740,7 +7706,7 @@ class _TileActionsSheet extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.open_in_new,
                   color: Colors.lightBlueAccent),
-              title: const Text('Open detail'),
+              title: const GoopText('Open detail'),
               onTap: onOpen,
             ),
             ListTile(
@@ -7748,7 +7714,7 @@ class _TileActionsSheet extends StatelessWidget {
                 isFav ? Icons.favorite : Icons.favorite_border,
                 color: isFav ? Colors.pinkAccent : Colors.white70,
               ),
-              title: Text(
+              title: GoopText(
                 isFav ? 'Unfavourite' : 'Favourite',
               ),
               onTap: onToggleFavourite,
@@ -7756,7 +7722,7 @@ class _TileActionsSheet extends StatelessWidget {
             ListTile(
               leading:
                   const Icon(Icons.delete_outline, color: Colors.redAccent),
-              title: const Text(
+              title: const GoopText(
                 'Remove from run',
                 style: TextStyle(color: Colors.redAccent),
               ),
@@ -7828,7 +7794,7 @@ class _StarterHint extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Center(
-              child: Text(
+              child: GoopText(
                 isParadox
                     ? 'The Paradox starts with a random loadout — '
                         'add ${isGuns ? "guns" : "items"} as you pick them up.'
@@ -7864,7 +7830,7 @@ class _StarterHint extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Expanded(
-                  child: Text(
+                  child: GoopText(
                     headline,
                     style: TextStyle(
                       fontSize: 11.5,
@@ -7912,7 +7878,7 @@ class _StarterHint extends StatelessWidget {
                             p.addItem(it!, slot: slot);
                           }
                           messenger.showSnackBar(SnackBar(
-                            content: Text('Added $name'),
+                            content: GoopText('Added $name'),
                             duration:
                                 const Duration(milliseconds: 1200),
                           ));
@@ -7952,7 +7918,7 @@ class _StarterHint extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 8, 4, 12),
-            child: Text(
+            child: GoopText(
               'Tap a starter to add it, or use the ADD button for anything else.',
               style: TextStyle(
                 fontSize: 11.5,
@@ -8249,7 +8215,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                         children: [
                           Icon(Icons.casino_rounded, color: f.primary, size: 26),
                           const SizedBox(width: 10),
-                          Text(
+                          GoopText(
                             'GUNFORTUNA\'S DUEL',
                             style: TextStyle(
                               fontSize: 18,
@@ -8279,7 +8245,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
                       ),
-                      child: const Text(
+                      child: const GoopText(
                         '“Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.”',
                         style: TextStyle(
                           fontSize: 11,
@@ -8331,7 +8297,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
         key: const ValueKey('idle_connected'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          const GoopText(
             'Challenge your sidekick or main partner to a high-stakes dice duel! 3x dice will decide who gets Gunfortuna\'s favor!',
             style: TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.4),
             textAlign: TextAlign.center,
@@ -8345,7 +8311,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                 child: ElevatedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.casino_outlined, size: 18),
-                  label: const Text('CHALLENGE PARTNER', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0)),
+                  label: const GoopText('CHALLENGE PARTNER', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: f.primary,
                     foregroundColor: Colors.black,
@@ -8369,7 +8335,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                     side: const BorderSide(color: Colors.white24),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  child: const Text('ROLL SOLO INSTEAD', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
+                  child: const GoopText('ROLL SOLO INSTEAD', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
                 ),
               ),
             ),
@@ -8385,7 +8351,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
           SizedBox(height: 10),
           CircularProgressIndicator(color: Colors.amberAccent),
           SizedBox(height: 16),
-          Text('Waiting for partner to accept...', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white70)),
+          GoopText('Waiting for partner to accept...', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white70)),
           SizedBox(height: 10),
         ],
       );
@@ -8395,12 +8361,12 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
       return Column(
         key: const ValueKey('rolling_active'),
         children: [
-          const Text(
+          const GoopText(
             'THE CYLINDERS ARE SPINNING!',
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white54, letterSpacing: 1.0),
           ),
           const SizedBox(height: 4),
-          const Text(
+          const GoopText(
             'Tap each die individually to stop its spin!',
             style: TextStyle(fontSize: 10, color: Colors.amberAccent, fontWeight: FontWeight.bold),
           ),
@@ -8424,7 +8390,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
             ),
           ),
           const SizedBox(height: 20),
-          Text(
+          GoopText(
             'Current Sum: $_myScore',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white),
           ),
@@ -8453,9 +8419,9 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
             ),
           ),
           const SizedBox(height: 24),
-          const Text('ROLLED!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: Color(0xFF66E07A))),
+          const GoopText('ROLLED!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: Color(0xFF66E07A))),
           const SizedBox(height: 6),
-          Text('Your Score: $_myScore', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white)),
+          GoopText('Your Score: $_myScore', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white)),
           const SizedBox(height: 8),
           if (_peerScore == null)
             const Row(
@@ -8463,7 +8429,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
               children: [
                 SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.cyanAccent)),
                 SizedBox(width: 10),
-                Text('Waiting for partner to finish rolling...', style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: Colors.cyanAccent)),
+                GoopText('Waiting for partner to finish rolling...', style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: Colors.cyanAccent)),
               ],
             ),
         ],
@@ -8502,7 +8468,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                 ),
               ],
             ),
-            child: Text(
+            child: GoopText(
               _announcement,
               style: TextStyle(
                 fontSize: 13,
@@ -8525,7 +8491,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                   children: [
                     const Icon(Icons.person, color: Colors.cyanAccent, size: 24),
                     const SizedBox(height: 4),
-                    Text(
+                    GoopText(
                       _mp.myNickname.toUpperCase(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -8537,12 +8503,12 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                       style: const TextStyle(fontSize: 38, fontWeight: FontWeight.w900, color: Colors.white, height: 1.0),
                     ),
                     const SizedBox(height: 4),
-                    Text('(${_myDice.join("-")})', style: const TextStyle(fontSize: 11, color: Colors.white38)),
+                    GoopText('(${_myDice.join("-")})', style: const TextStyle(fontSize: 11, color: Colors.white38)),
                   ],
                 ),
               ),
               if (_peerScore != null) ...[
-                const Text(
+                const GoopText(
                   'VS',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white24),
                 ),
@@ -8552,7 +8518,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                     children: [
                       const Icon(Icons.person_outline, color: Colors.pinkAccent, size: 24),
                       const SizedBox(height: 4),
-                      Text(
+                      GoopText(
                         (_mp.peerNickname ?? 'Partner').toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -8564,7 +8530,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                         style: const TextStyle(fontSize: 38, fontWeight: FontWeight.w900, color: Colors.white, height: 1.0),
                       ),
                       const SizedBox(height: 4),
-                      Text('(${_peerDice?.join("-") ?? ""})', style: const TextStyle(fontSize: 11, color: Colors.white38)),
+                      GoopText('(${_peerDice?.join("-") ?? ""})', style: const TextStyle(fontSize: 11, color: Colors.white38)),
                     ],
                   ),
                 ),
@@ -8583,7 +8549,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: const Text('ROLL AGAIN', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+              child: const GoopText('ROLL AGAIN', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
             )
           else
             OutlinedButton(
@@ -8593,7 +8559,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
                 side: const BorderSide(color: Colors.white24),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
-              child: const Text('CLOSE', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
+              child: const GoopText('CLOSE', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
             ),
         ],
       );
@@ -8604,7 +8570,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
       key: const ValueKey('solo_initial'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text(
+        const GoopText(
           'Throw Gunfortuna\'s sacred dice to determine your fortune in Gungeon! Spin 3x dice for a rating from 3 to 18.',
           style: TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.45),
           textAlign: TextAlign.center,
@@ -8618,7 +8584,7 @@ class _DiceRollDialogState extends State<_DiceRollDialog> with TickerProviderSta
               child: ElevatedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.casino_outlined, size: 20),
-                label: const Text('ROLL THE DICE!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1.0)),
+                label: const GoopText('ROLL THE DICE!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1.0)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: f.primary,
                   foregroundColor: Colors.black,
@@ -8904,7 +8870,7 @@ class _SummaryTab extends StatelessWidget {
               const SizedBox(width: 4),
               FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(
+                child: GoopText(
                   'SUMMARY',
                   maxLines: 1,
                   style: TextStyle(
@@ -9075,7 +9041,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                       children: [
                         Icon(Icons.flash_on, size: 14, color: Colors.amberAccent.withValues(alpha: 0.7)),
                         const SizedBox(width: 6),
-                        Text(
+                        GoopText(
                           'TEAM MAX DPS',
                           style: TextStyle(
                             fontSize: 9,
@@ -9085,7 +9051,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text(
+                        GoopText(
                           teamMaxDps.toStringAsFixed(1),
                           style: TextStyle(
                             fontSize: 20,
@@ -9120,7 +9086,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                                 children: [
                                   Icon(Icons.ac_unit, size: 10, color: Colors.cyanAccent.withValues(alpha: 0.6)),
                                   const SizedBox(width: 3),
-                                  Text('+${state.totalCoolness.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.cyanAccent)),
+                                  GoopText('+${state.totalCoolness.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.cyanAccent)),
                                 ],
                               ),
                               const SizedBox(height: 2),
@@ -9129,7 +9095,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                                 children: [
                                   Icon(Icons.local_fire_department, size: 10, color: Colors.redAccent.withValues(alpha: 0.6)),
                                   const SizedBox(width: 3),
-                                  Text('+${state.totalCurse.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.redAccent)),
+                                  GoopText('+${state.totalCurse.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.redAccent)),
                                 ],
                               ),
                             ],
@@ -9160,7 +9126,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                       Icon(Icons.wifi_off_rounded, size: 14, color: Colors.orangeAccent),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
+                        child: GoopText(
                           'Peer data may be stale — showing last known loadout.',
                           style: TextStyle(
                             fontSize: 10,
@@ -9204,7 +9170,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                           children: [
                             Icon(Icons.auto_awesome, size: 16, color: Colors.amberAccent),
                             const SizedBox(width: 8),
-                            Text(
+                            GoopText(
                               'SYNERGY OVERVIEW',
                               style: TextStyle(
                                 fontSize: 11,
@@ -9214,7 +9180,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                               ),
                             ),
                             const Spacer(),
-                            Text(
+                            GoopText(
                               '${allCombinedSyns.length} active',
                               style: TextStyle(
                                 fontSize: 10,
@@ -9243,7 +9209,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                             Icon(Icons.lightbulb_outline, size: 12, color: Colors.amber.withValues(alpha: 0.7)),
                             const SizedBox(width: 6),
                             Expanded(
-                              child: Text(
+                              child: GoopText(
                                 nextPickupHint,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -9278,7 +9244,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                                     Icon(Icons.lightbulb_outline, size: 14, color: Colors.amberAccent),
                                     const SizedBox(width: 8),
                                     Expanded(
-                                      child: Text(
+                                      child: GoopText(
                                         nextPickupHint,
                                         style: TextStyle(
                                           fontSize: 11,
@@ -9295,7 +9261,7 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
                               Center(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 20),
-                                  child: Text(
+                                  child: GoopText(
                                     'No synergies available from current loadout.',
                                     style: TextStyle(
                                       fontSize: 11,
@@ -9373,21 +9339,21 @@ class _MpSummaryPageState extends State<_MpSummaryPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            GoopText(
               p1Val,
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.cyanAccent),
             ),
             const SizedBox(width: 6),
             Icon(icon, size: 10, color: Colors.white.withValues(alpha: 0.3)),
             const SizedBox(width: 6),
-            Text(
+            GoopText(
               p2Val,
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.purpleAccent),
             ),
           ],
         ),
         const SizedBox(height: 2),
-        Text(
+        GoopText(
           label,
           style: TextStyle(
             fontSize: 9,
@@ -9431,7 +9397,7 @@ class _GungeoneerPortrait extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             border: Border.all(color: accent.withValues(alpha: 0.4), width: 1),
           ),
-          child: Text(
+          child: GoopText(
             slotLabel,
             style: TextStyle(
               fontSize: 10,
@@ -9480,7 +9446,7 @@ class _GungeoneerPortrait extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         // Character name
-        Text(
+        GoopText(
           charName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -9493,7 +9459,7 @@ class _GungeoneerPortrait extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         // Nickname
-        Text(
+        GoopText(
           nickname,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -9570,7 +9536,7 @@ class _SynergySummaryRow extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             // Synergy name
-            Text(
+            GoopText(
               synergy.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -9619,7 +9585,7 @@ class _SynergySummaryRow extends StatelessWidget {
             ),
             const SizedBox(width: 6),
             // Status badge
-            Text(
+            GoopText(
               isActive ? 'ACTIVE' : isPartial ? 'PARTIAL' : 'LOCKED',
               style: TextStyle(
                 fontSize: 8.5,
@@ -9702,7 +9668,7 @@ class _SynergyItemIcon extends StatelessWidget {
     return Container(
       color: const Color(0xFF0D1117),
       child: Center(
-        child: Text(
+        child: GoopText(
           itemName.isNotEmpty ? itemName[0].toUpperCase() : '?',
           style: TextStyle(
             fontSize: 10,
@@ -9741,7 +9707,7 @@ class _SynergyGroupHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(
+          GoopText(
             label,
             style: TextStyle(
               fontSize: 10,
@@ -9751,7 +9717,7 @@ class _SynergyGroupHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(
+          GoopText(
             '($count)',
             style: TextStyle(
               fontSize: 9,
@@ -9761,6 +9727,96 @@ class _SynergyGroupHeader extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Sponge translation toggle with pulsing amber glow when active.
+/// Only visible when Goopian language is enabled.
+class _SpongeButton extends StatefulWidget {
+  const _SpongeButton();
+
+  @override
+  State<_SpongeButton> createState() => _SpongeButtonState();
+}
+
+class _SpongeButtonState extends State<_SpongeButton>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _glow;
+
+  @override
+  void dispose() {
+    _glow?.dispose();
+    super.dispose();
+  }
+
+  void _ensureGlow(bool active) {
+    if (active && _glow == null) {
+      _glow = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 1400),
+      )..repeat(reverse: true);
+    } else if (!active && _glow != null) {
+      _glow!.dispose();
+      _glow = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: VisualPrefs.notifier,
+      builder: (context, _) {
+        final prefs = VisualPrefs.notifier.value;
+        final isSponge = prefs.spongeActive;
+        final isGoopian = prefs.isGoopianLanguage;
+        if (!isGoopian) return const SizedBox.shrink();
+
+        _ensureGlow(isSponge);
+
+        return Padding(
+          padding: const EdgeInsets.only(left: 6),
+          child: IconButton(
+            onPressed: () {
+              VisualPrefs.setSpongeActive(!isSponge);
+              if (isSponge) {
+                Haptics.light();
+              } else {
+                Haptics.success();
+              }
+            },
+            icon: _glow != null
+                ? AnimatedBuilder(
+                    animation: _glow!,
+                    builder: (_, child) {
+                      final t = _glow!.value;
+                      return GoopText(
+                        '🧽',
+                        style: TextStyle(
+                          fontSize: 20,
+                          shadows: [
+                            Shadow(
+                              color: Colors.amberAccent
+                                  .withValues(alpha: 0.4 + 0.5 * t),
+                              blurRadius: 6 + 12 * t,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                : const GoopText(
+                    '🧽',
+                    style: TextStyle(fontSize: 20),
+                  ),
+            tooltip: isSponge
+                ? 'Sponge: English translation active'
+                : 'Sponge: Alien language active',
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          ),
+        );
+      },
     );
   }
 }

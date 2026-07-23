@@ -646,7 +646,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(color: flair.secondary.withValues(alpha: 0.45), width: 0.6),
                         ),
-                        child: Text(
+                        child: GoopText(
                           (isGun ? widget.gun!.type : widget.item!.type).toUpperCase(),
                           style: TextStyle(
                             fontSize: labelFontSize,
@@ -762,7 +762,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                                     width: 0.7,
                                   ),
                                 ),
-                                child: Text(
+                                child: GoopText(
                                   _typeTagCompacted,
                                   maxLines: 1,
                                   overflow: TextOverflow.visible,
@@ -804,7 +804,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                                           ? Border.all(color: const Color(0xFFFFD700), width: 1)
                                           : null,
                                     ),
-                                    child: Text(
+                                    child: GoopText(
                                       _corner,
                                       style: TextStyle(
                                         fontSize: 12.5,
@@ -913,7 +913,7 @@ class _StatGrid extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            GoopText(
               label,
               style: TextStyle(
                 fontSize: labelSize,
@@ -923,7 +923,7 @@ class _StatGrid extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 1),
-            Text(
+            GoopText(
               value.isEmpty ? 'N/A' : value,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
