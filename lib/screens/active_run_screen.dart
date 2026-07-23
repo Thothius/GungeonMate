@@ -22,10 +22,10 @@ import 'browse_screen.dart';
 import 'effects_summary_screen.dart';
 import 'shrine_picker_screen.dart';
 import 'favourites_screen.dart';
+import 'settings_screen.dart';
 import '../services/app_theme.dart';
 import '../services/effect_tagger.dart';
 import '../services/damage_calculator.dart';
-import '../services/elemental_tagger.dart';
 import '../services/multiplayer_session.dart';
 import '../models/multiplayer_messages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -1599,31 +1599,62 @@ class _PlayerPageState extends State<_PlayerPage> {
                       );
                     },
                   ),
-                  IconButton(
-                    onPressed: () {
-                      Haptics.selection();
-                      Navigator.push(context, fastRoute(const ShrinePickerScreen()));
+                  // Shrine tracker — tap to open the shrine picker,
+                  // long-press to toggle the shrine usage panel.
+                  ListenableBuilder(
+                    listenable: VisualPrefs.notifier,
+                    builder: (context, _) {
+                      final isOn = VisualPrefs.notifier.value.showShrinePanel;
+                      return IconButton(
+                        onPressed: () {
+                          Haptics.selection();
+                          Navigator.push(context, fastRoute(const ShrinePickerScreen()));
+                        },
+                        onLongPress: () {
+                          VisualPrefs.setShowShrinePanel(!isOn);
+                          Haptics.selection();
+                        },
+                        icon: Icon(
+                          Icons.temple_buddhist,
+                          size: 20,
+                          color: isOn ? Colors.amberAccent : Colors.white38,
+                        ),
+                        tooltip: 'Shrine Picker',
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      );
                     },
-                    icon: const Icon(
-                      Icons.temple_buddhist,
-                      size: 20,
-                      color: Colors.amber,
-                    ),
-                    tooltip: 'Use Shrine',
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                  ),
+                  // Dashboards toggle — tap to show/hide all special-item/gun dashboards.
+                  ListenableBuilder(
+                    listenable: VisualPrefs.notifier,
+                    builder: (context, _) {
+                      final isOn = VisualPrefs.notifier.value.showDashboards;
+                      return IconButton(
+                        onPressed: () {
+                          VisualPrefs.setShowDashboards(!isOn);
+                          Haptics.selection();
+                        },
+                        icon: Icon(
+                          Icons.dashboard_customize_rounded,
+                          size: 20,
+                          color: isOn ? Colors.amberAccent : Colors.white38,
+                        ),
+                        tooltip: isOn ? 'Dashboards: ON' : 'Dashboards: OFF',
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      );
+                    },
                   ),
                   const SizedBox(width: 4),
                   const _HeaderMenu(),
                 ],
               ),
-              // Computed once per build — the tagger is a handful of
-              // regex scans over a ≤40-item loadout, well under a frame.
-              elements: ElementalTagger.elementsOfPlayer(player),
               effectChips: EffectTagger.summaryChips(
                 guns: player.guns,
                 items: player.items,
               ),
+              shrinesUsed: state.shrinesUsed,
             ),
           ),
         ),
@@ -1705,7 +1736,15 @@ class _PlayerPageState extends State<_PlayerPage> {
             },
           ),
         ),
-        _DashboardSwiper(slot: _slot),
+        ListenableBuilder(
+          listenable: VisualPrefs.notifier,
+          builder: (context, _) {
+            if (!VisualPrefs.notifier.value.showDashboards) {
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            }
+            return _DashboardSwiper(slot: _slot);
+          },
+        ),
         _SectionHeaderSliver(
           title: 'Guns',
           count: guns.length,
@@ -2334,6 +2373,7 @@ class _RobotDashboardSliver extends StatefulWidget {
 
 class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
   bool _terminalExpanded = false;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -2364,50 +2404,62 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header Row with big DMG boost badge
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.android_rounded, color: Colors.cyanAccent, size: 20),
-                      SizedBox(width: 8),
-                      GoopText(
-                        'THE ROBOT HUD',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.cyanAccent,
-                          letterSpacing: 0.8,
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.android_rounded, color: Colors.cyanAccent, size: 20),
+                        SizedBox(width: 8),
+                        GoopText(
+                          'THE ROBOT HUD',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.cyanAccent,
+                            letterSpacing: 0.8,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: p.robotGoldJunk
-                          ? Colors.amber.withValues(alpha: 0.18)
-                          : Colors.cyan.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: p.robotGoldJunk
-                            ? Colors.amber.withValues(alpha: 0.5)
-                            : Colors.cyan.withValues(alpha: 0.4),
-                        width: 1.0,
-                      ),
+                      ],
                     ),
-                    child: GoopText(
-                      '+${damageBoost.toStringAsFixed(0)}% DMG',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w900,
-                        color: p.robotGoldJunk ? Colors.amberAccent : Colors.cyanAccent,
-                        letterSpacing: 0.5,
-                      ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: p.robotGoldJunk
+                                ? Colors.amber.withValues(alpha: 0.18)
+                                : Colors.cyan.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: p.robotGoldJunk
+                                  ? Colors.amber.withValues(alpha: 0.5)
+                                  : Colors.cyan.withValues(alpha: 0.4),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: GoopText(
+                            '+${damageBoost.toStringAsFixed(0)}% DMG',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w900,
+                              color: p.robotGoldJunk ? Colors.amberAccent : Colors.cyanAccent,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const Divider(color: Colors.white12, height: 16),
 
               // Junk counter — full width, no overflow
@@ -2505,6 +2557,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                 const SizedBox(height: 8),
                 _buildTerminalToggle(),
                 if (_terminalExpanded) _buildDamageTerminal(guns, multiplier),
+              ],
               ],
             ],
           ),
@@ -2821,7 +2874,7 @@ class _JunkanDashboardSliver extends StatefulWidget {
 }
 
 class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
-  bool _expanded = true;
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -3161,7 +3214,7 @@ class _GunderfuryDashboardSliver extends StatefulWidget {
 }
 
 class _GunderfuryDashboardSliverState extends State<_GunderfuryDashboardSliver> {
-  bool _expanded = true;
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -3395,7 +3448,7 @@ class _TripleGunDashboardSliver extends StatefulWidget {
 }
 
 class _TripleGunDashboardSliverState extends State<_TripleGunDashboardSliver> {
-  bool _expanded = true;
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -3608,7 +3661,7 @@ class _EvolverDashboardSliver extends StatefulWidget {
 }
 
 class _EvolverDashboardSliverState extends State<_EvolverDashboardSliver> {
-  bool _expanded = true;
+  bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -4063,7 +4116,7 @@ class _HuntressDashboardSliver extends StatefulWidget {
 class _HuntressDashboardSliverState extends State<_HuntressDashboardSliver> {
   int _petCount = 0;
   int _treatCount = 0;
-  bool _collapsed = false;
+  bool _collapsed = true;
 
   @override
   void initState() {
@@ -4401,14 +4454,9 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
                 Haptics.selection();
               }
             },
-            child: AnimatedSize(
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOutCubic,
-              alignment: Alignment.topCenter,
-              child: KeyedSubtree(
-                key: ValueKey(_page),
-                child: dashboardChild(dashboards[_page]),
-              ),
+            child: KeyedSubtree(
+              key: ValueKey(_page),
+              child: dashboardChild(dashboards[_page]),
             ),
           ),
           const SizedBox(height: 6),
@@ -4462,6 +4510,7 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -4490,21 +4539,28 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'SHELLEGUN',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'SHELLEGUN',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -4524,6 +4580,7 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
                 descriptions[mode - 1],
                 style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
               ),
+              ],
             ],
           ),
         ),
@@ -4560,6 +4617,7 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   static const _floors = [
     'Keep of the Lead Lord', 'Oubliette', 'Gungeon Proper', 'Abbey of the True Gun',
@@ -4586,21 +4644,28 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'CHAMBER GUN',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    'DPS: ${_dps[floor].toStringAsFixed(1)}',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'CHAMBER GUN',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      'DPS: ${_dps[floor].toStringAsFixed(1)}',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amberAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 8),
               GoopText(
                 'FLOOR ${floor + 1}: ${_floors[floor]}',
@@ -4636,6 +4701,7 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
                   },
                 ),
               ),
+              ],
             ],
           ),
         ),
@@ -4656,6 +4722,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -4687,21 +4754,28 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'PLATINUM BULLETS',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    '${seconds}s fired',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'PLATINUM BULLETS',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      '${seconds}s fired',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.purpleAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               // Damage multiplier row
               _buildMultRow('DMG', dmgMult, seconds, 750, Colors.redAccent, tierLabel(dmgMult)),
@@ -4735,6 +4809,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -4796,6 +4871,7 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -4816,21 +4892,28 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'IRON COIN',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    '$uses/3 uses',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'IRON COIN',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      '$uses/3 uses',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amber.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               // Coin icons row
               Row(
@@ -4865,6 +4948,7 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -4889,6 +4973,7 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -4921,21 +5006,28 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.spa, color: Colors.redAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'SPICE',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.redAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    '+$damageBonus% DMG',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.redAccent),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.spa, color: Colors.redAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'SPICE',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.redAccent, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      '+$damageBonus% DMG',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.redAccent),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.redAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -4976,6 +5068,7 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -5005,6 +5098,7 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -5027,21 +5121,28 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.speed, color: Colors.tealAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'METRONOME',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.tealAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    '+$damageBonus% DMG',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.tealAccent),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.speed, color: Colors.tealAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'METRONOME',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.tealAccent, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      '+$damageBonus% DMG',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.tealAccent),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.tealAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               // Progress bar
               ClipRRect(
@@ -5094,6 +5195,7 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -5114,6 +5216,7 @@ class _SprunDashboardState extends State<_SprunDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   static const _triggers = [
     'Activating a Map Blank',
@@ -5143,35 +5246,42 @@ class _SprunDashboardState extends State<_SprunDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.radar, color: Colors.cyanAccent.shade200, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'SPRUN',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  if (isWindgunnerActive)
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: Colors.cyan.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.5)),
-                      ),
-                      child: GoopText(
-                        'WINDGUNNER ${p.windgunnerCountdown}s',
-                        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
-                      ),
-                    )
-                  else
-                    GoopText(
-                      idx >= 0 ? 'REVEALED' : 'UNKNOWN',
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    Icon(Icons.radar, color: Colors.cyanAccent.shade200, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'SPRUN',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
                     ),
-                ],
+                    const Spacer(),
+                    if (isWindgunnerActive)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: Colors.cyan.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.5)),
+                        ),
+                        child: GoopText(
+                          'WINDGUNNER ${p.windgunnerCountdown}s',
+                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
+                        ),
+                      )
+                    else
+                      GoopText(
+                        idx >= 0 ? 'REVEALED' : 'UNKNOWN',
+                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                      ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               if (idx >= 0)
                 Container(
@@ -5220,6 +5330,7 @@ class _SprunDashboardState extends State<_SprunDashboard>
                   ],
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -5240,6 +5351,7 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -5260,21 +5372,28 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.sports_mma_rounded, color: Colors.orangeAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'BOXING GLOVE',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.orangeAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    stars == 3 ? 'SUPER PUNCH READY' : '$stars/3 stars',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: stars == 3 ? Colors.orangeAccent : Colors.white.withValues(alpha: 0.5)),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.sports_mma_rounded, color: Colors.orangeAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'BOXING GLOVE',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.orangeAccent, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      stars == 3 ? 'SUPER PUNCH READY' : '$stars/3 stars',
+                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: stars == 3 ? Colors.orangeAccent : Colors.white.withValues(alpha: 0.5)),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.orangeAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               // Star icons
               Row(
@@ -5314,6 +5433,7 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -5334,6 +5454,7 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -5354,21 +5475,28 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.smoking_rooms, color: Colors.blueGrey, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'CIGARETTES',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.blueGrey, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  GoopText(
-                    '+$uses Cool',
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.blueGrey),
-                  ),
-                ],
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.smoking_rooms, color: Colors.blueGrey, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'CIGARETTES',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.blueGrey, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    GoopText(
+                      '+$uses Cool',
+                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.blueGrey),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.blueGrey.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -5400,6 +5528,7 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -5433,6 +5562,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -5465,29 +5595,36 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.auto_awesome, color: Colors.amberAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'POLARIS',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.amber.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.auto_awesome, color: Colors.amberAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'POLARIS',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
                     ),
-                    child: GoopText(
-                      'LV $effectiveLevel',
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: Colors.amber.withValues(alpha: 0.4)),
+                      ),
+                      child: GoopText(
+                        'LV $effectiveLevel',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amberAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               // Level progress bar
               if (nextThreshold != null) ...[
@@ -5556,6 +5693,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -5589,6 +5727,7 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -5615,29 +5754,36 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Icon(Icons.chat_bubble, color: Colors.purpleAccent, size: 18),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'GUNTHER',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.purple.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: Colors.purple.withValues(alpha: 0.4)),
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.chat_bubble, color: Colors.purpleAccent, size: 18),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'GUNTHER',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
                     ),
-                    child: GoopText(
-                      'STAGE $stage',
-                      style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Colors.purple.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: Colors.purple.withValues(alpha: 0.4)),
+                      ),
+                      child: GoopText(
+                        'STAGE $stage',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.purpleAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               // Friendship progress
               if (nextFriendship != null) ...[
@@ -5692,6 +5838,7 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -5725,6 +5872,7 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  bool _collapsed = true;
 
   @override
   Widget build(BuildContext context) {
@@ -5748,39 +5896,46 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    activated ? Icons.local_fire_department : Icons.shield,
-                    color: activated ? Colors.orangeAccent : Colors.deepOrangeAccent,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 8),
-                  const GoopText(
-                    'GUN SOUL',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.deepOrangeAccent, letterSpacing: 0.8),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: activated ? Colors.orange.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(
-                        color: activated ? Colors.orange.withValues(alpha: 0.5) : Colors.green.withValues(alpha: 0.3),
+              InkWell(
+                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                borderRadius: BorderRadius.circular(8),
+                child: Row(
+                  children: [
+                    Icon(
+                      activated ? Icons.local_fire_department : Icons.shield,
+                      color: activated ? Colors.orangeAccent : Colors.deepOrangeAccent,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    const GoopText(
+                      'GUN SOUL',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.deepOrangeAccent, letterSpacing: 0.8),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: activated ? Colors.orange.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: activated ? Colors.orange.withValues(alpha: 0.5) : Colors.green.withValues(alpha: 0.3),
+                        ),
+                      ),
+                      child: GoopText(
+                        activated ? 'SOUL LOST' : 'ACTIVE',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                          color: activated ? Colors.orangeAccent : Colors.greenAccent,
+                        ),
                       ),
                     ),
-                    child: GoopText(
-                      activated ? 'SOUL LOST' : 'ACTIVE',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w900,
-                        color: activated ? Colors.orangeAccent : Colors.greenAccent,
-                      ),
-                    ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.deepOrangeAccent.withValues(alpha: 0.6)),
+                  ],
+                ),
               ),
+              if (!_collapsed) ...[
               const SizedBox(height: 10),
               GoopText(
                 activated
@@ -5810,6 +5965,7 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
                   ),
                 ],
               ),
+              ],
             ],
           ),
         ),
@@ -6014,6 +6170,12 @@ class _HeaderMenu extends StatelessWidget {
               fastRoute(const FavouritesScreen(embedded: false)),
             );
             break;
+          case 'settings':
+            Navigator.push(
+              context,
+              fastRoute(const SettingsScreen()),
+            );
+            break;
           case 'end_run':
             _confirmEndRun(context, p);
             break;
@@ -6066,8 +6228,9 @@ class _HeaderMenu extends StatelessWidget {
               }
             }));
             break;
-          case 'help':
-            _showHelpDialog(context);
+          case 'toggle_dashboards':
+            VisualPrefs.setShowDashboards(!VisualPrefs.notifier.value.showDashboards);
+            Haptics.selection();
             break;
           case 'dice_roll':
             _showDiceRollDialog(context);
@@ -6075,7 +6238,7 @@ class _HeaderMenu extends StatelessWidget {
         }
       },
       itemBuilder: (ctx) => [
-        // --- Group 1: Guides & Info ---
+        // --- Top: Favourites & Settings ---
         const PopupMenuItem(
           value: 'favourites',
           child: Row(children: [
@@ -6085,16 +6248,26 @@ class _HeaderMenu extends StatelessWidget {
           ]),
         ),
         const PopupMenuItem(
-          value: 'help',
+          value: 'settings',
           child: Row(children: [
-            Icon(Icons.help_outline_rounded, size: 18, color: Colors.tealAccent),
+            Icon(Icons.settings_rounded, size: 18, color: Colors.cyanAccent),
             SizedBox(width: 10),
-            GoopText('Help & Tips'),
+            GoopText('Settings'),
+          ]),
+        ),
+        // Dashboards toggle
+        PopupMenuItem(
+          value: 'toggle_dashboards',
+          child: Row(children: [
+            Icon(Icons.dashboard_customize_rounded, size: 18,
+                color: VisualPrefs.notifier.value.showDashboards ? Colors.amberAccent : Colors.white38),
+            const SizedBox(width: 10),
+            GoopText(VisualPrefs.notifier.value.showDashboards ? 'Hide Dashboards' : 'Show Dashboards'),
           ]),
         ),
         const PopupMenuDivider(),
 
-        // --- Group 2: Actions & Mechanics ---
+        // --- Actions ---
         const PopupMenuItem(
           value: 'dice_roll',
           child: Row(children: [
@@ -6105,7 +6278,7 @@ class _HeaderMenu extends StatelessWidget {
         ),
         const PopupMenuDivider(),
 
-        // --- Group 3: Save & Session ---
+        // --- Save & Session ---
         if (mpActive) ...[
           const PopupMenuItem(
             value: 'save_mp_session',
@@ -6127,7 +6300,7 @@ class _HeaderMenu extends StatelessWidget {
         ],
         const PopupMenuDivider(),
 
-        // --- Group 4: End & Leave ---
+        // --- End & Leave ---
         if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
           const PopupMenuItem(
             value: 'leave_mp',
@@ -6157,119 +6330,6 @@ class _HeaderMenu extends StatelessWidget {
           ),
         ],
       ],
-    );
-  }
-
-  void _showHelpDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E22),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Colors.tealAccent, width: 1.0),
-        ),
-        title: const Row(
-          children: [
-            Icon(Icons.help_outline_rounded, color: Colors.tealAccent, size: 24),
-            SizedBox(width: 10),
-            GoopText(
-              'GungeonMate Help & Tips',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: Scrollbar(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(right: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildHelpSection(
-                    title: '👉 Swipe-to-Delete',
-                    desc: 'Swipe any item or gun row from right-to-left in List View to instantly delete it from your inventory. Clean, swift, and game-ready!',
-                    color: Colors.redAccent,
-                  ),
-                  _buildHelpSection(
-                    title: '🎨 Responsive Theme Customizer',
-                    desc: 'Rotate your phone or use a tablet to view the theme select and customize panels side-by-side with fully live rendering fonts, custom weights, and glowing particles!',
-                    color: Colors.tealAccent,
-                  ),
-                  _buildHelpSection(
-                    title: '🤖 Ser Junkan Level Tracker',
-                    desc: 'Open Ser Junkan\'s detail view to see a dedicated rank and stats tracker complete with crisp, real-time updated pixel-art of his forms as you collect Junk!',
-                    color: Colors.amberAccent,
-                  ),
-                  _buildHelpSection(
-                    title: '🎲 Gunfortuna Dice Roll',
-                    desc: 'Play custom 3D dice rolling challenges with your co-op partner directly during active runs! Open it from the gear options menu → Gunfortuna Dice Roll.',
-                    color: const Color(0xFFFFD54F),
-                  ),
-                  _buildHelpSection(
-                    title: '📊 Dual-Player Live HUD',
-                    desc: 'The top dashboard keeps you and your sidekick updated on exact, un-squished live parameters: Coolness, Curse, Synergies, and maximum DPS.',
-                    color: Colors.blueAccent,
-                  ),
-                  _buildHelpSection(
-                    title: '🔗 Wiki Back-references',
-                    desc: 'Explore item notes to discover secrets! The "Referenced by" panel lists all items whose lore mentions your currently viewed gear.',
-                    color: Colors.purpleAccent,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const GoopText(
-              'DISMISS',
-              style: TextStyle(
-                color: Colors.tealAccent,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHelpSection({required String title, required String desc, required Color color}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GoopText(
-            title,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w900,
-              color: color,
-            ),
-          ),
-          const SizedBox(height: 4),
-          GoopText(
-            desc,
-            style: const TextStyle(
-              fontSize: 11.5,
-              color: Colors.white70,
-              height: 1.35,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Divider(color: Colors.white12, height: 1),
-        ],
-      ),
     );
   }
 

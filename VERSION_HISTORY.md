@@ -6,6 +6,30 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.9 — UI Polish: Character Select, Shrine Icon, Avatar Cycling (July 23, 2026)
+**Build:** 70
+
+### Character Select
+- Cards now require SELECT button press — tap avatars to flip and preview freely before confirming.
+- Fixed overflow when starting loadout panel expands (SingleChildScrollView + fixed image height).
+
+### Active Run Dashboard
+- Shrine icon tap now opens Shrine Picker screen; long-press toggles shrine tracker panel.
+- Player avatar cycles through 3 graphics modes on tap: static icon → in-game GIF → animated card art.
+- Quick comment speech bubble wrapped in IgnorePointer to prevent intercepting icon button taps.
+
+### Main Menu
+- Settings gear icon added (compact, icon-only) next to Codex icon and Changelog button.
+- Codex icon added to bottom menu row.
+
+### Settings Screen
+- Reorganized into 4 tabs: VISUALS, RUN, APP, DEBUG.
+- New APP tab — Language toggle, Dialogue haptics, Custom Dice, Changelog viewer, Reset Data.
+- VISUALS tab expanded — Wallpaper section and Inventory Layout section exposed.
+- Run Options popup refined — removed Guides & Info, My Favourites kept, Settings entry added.
+
+---
+
 ## v1.6.7 — Main Menu Polish: Floating Mascot + Tilt Parallax (July 23, 2026)
 **Build:** 68
 

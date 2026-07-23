@@ -3,10 +3,10 @@ import 'dart:async';
 import 'dart:math' as math;
 import '../models/gungeoneer.dart';
 import '../services/effect_tagger.dart';
-import '../services/elemental_tagger.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/asset_paths.dart';
 
 /// Banner for the Inventory: portrait + name + quick-glance stats row.
 class GungeoneerHeader extends StatefulWidget {
@@ -40,18 +40,15 @@ class GungeoneerHeader extends StatefulWidget {
   final VoidCallback? onLongPressCoolness;
   final VoidCallback? onLongPressCurse;
 
-  /// Aggregated elemental effects this player's loadout currently
-  /// applies (Fire, Freeze, Poison, Electric, Water, Stun, Charm,
-  /// Explosive). When non-empty, renders a compact dashboard row of
-  /// tinted element chips below the main stats strip so the player
-  /// can see "this team ignites + electrifies" without drilling in.
-  final Set<ElementKind> elements;
-
   /// Recognized passive effects (damage up, flight, dodge roll up, etc.)
   /// surfaced as compact chips with their extracted numeric stat where
-  /// we can isolate one. Renders below the elemental row, only when
-  /// non-empty so a fresh loadout doesn't take the vertical hit.
+  /// we can isolate one. Renders below the stats strip, toggled by the
+  /// effects icon in the header trailing row.
   final List<EffectChip> effectChips;
+
+  /// Chronological list of shrine names used this run. Shown in a
+  /// compact tracker panel toggled by the shrine icon.
+  final List<String> shrinesUsed;
 
   const GungeoneerHeader({
     super.key,
@@ -69,8 +66,8 @@ class GungeoneerHeader extends StatefulWidget {
     this.onTapCurse,
     this.onLongPressCoolness,
     this.onLongPressCurse,
-    this.elements = const <ElementKind>{},
     this.effectChips = const <EffectChip>[],
+    this.shrinesUsed = const <String>[],
   });
 
   @override
@@ -83,10 +80,17 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
   late final AnimationController _wobbleController;
   late final AnimationController _borderPulseController;
 
+  /// 0 = static icon, 1 = in-game GIF, 2 = animated card art
+  int _avatarMode = 0;
+
   void _onAvatarTapped() {
     _commentTimer?.cancel();
     Haptics.selection();
-    
+
+    setState(() {
+      _avatarMode = (_avatarMode + 1) % 3;
+    });
+
     final charName = widget.character.name.toLowerCase().trim();
     final List<String> quotes;
     
@@ -259,62 +263,28 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                 children: [
                   Row(
                     children: [
-                      // Clean, flat Avatar (Tappable for Quick Quotes!)
+                      // Clean, flat Avatar (Tappable — cycles through
+                      // static icon → in-game GIF → animated card art)
                       GestureDetector(
                         onTap: _onAvatarTapped,
                         child: Container(
-                          width: 44,
-                          height: 44,
+                          width: 56,
+                          height: 56,
                           decoration: BoxDecoration(
                             color: f.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: f.primary.withValues(alpha: 0.35),
                               width: 1.2,
                             ),
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Transform.scale(
-                              scale: 1.5,
-                              child: iconPath.startsWith('assets/')
-                                  ? Image.asset(
-                                      iconPath,
-                                      fit: BoxFit.contain,
-                                      filterQuality: FilterQuality.none,
-                                      errorBuilder: (_, __, ___) => const Icon(
-                                        Icons.person,
-                                        size: 24,
-                                        color: Colors.white54,
-                                      ),
-                                    )
-                                  : const Icon(
-                                      Icons.person,
-                                      size: 24,
-                                      color: Colors.white54,
-                                    ),
-                            ),
+                            borderRadius: BorderRadius.circular(10),
+                            child: _buildAvatarContent(iconPath),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 12),
-
-                      // Name column (vertically centered now that the
-                      // status subtitle is gone)
-                      Expanded(
-                        child: GoopText(
-                          widget.character.name.toUpperCase(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            letterSpacing: 1.0,
-                            height: 1.1,
-                          ),
-                        ),
-                      ),
+                      const Spacer(),
 
                       if (trailingWidget != null) ...[
                         trailingWidget,
@@ -323,9 +293,10 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                   ),
                   if (_quickComment != null)
                     Positioned(
-                      top: 36,
-                      left: 56,
-                      child: AnimatedContainer(
+                      top: 48,
+                      left: 68,
+                      child: IgnorePointer(
+                        child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
@@ -352,6 +323,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                         ),
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
@@ -464,10 +436,100 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                 },
               ),
             ],
+
+            // SHRINE TRACKER PANEL — toggled by the shrine icon in the
+            // header trailing row via VisualPrefs.showShrinePanel.
+            if (widget.shrinesUsed.isNotEmpty) ...[
+              ListenableBuilder(
+                listenable: VisualPrefs.notifier,
+                builder: (context, _) {
+                  if (!VisualPrefs.notifier.value.showShrinePanel) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.25),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: const Color(0xFFFFD740).withValues(alpha: 0.20),
+                          width: 1.0,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: _ShrineTracker(shrines: widget.shrinesUsed),
+                    ),
+                  );
+                },
+              ),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildAvatarContent(String iconPath) {
+    final char = widget.character;
+    final fallback = const Icon(Icons.person, size: 28, color: Colors.white54);
+
+    if (_avatarMode == 0) {
+      // Static icon
+      return iconPath.startsWith('assets/')
+          ? Image.asset(
+              iconPath,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.none,
+              gaplessPlayback: true,
+              errorBuilder: (_, __, ___) => fallback,
+            )
+          : fallback;
+    }
+
+    if (_avatarMode == 1) {
+      // In-game animated GIF
+      final gifPath = gungeoneerGifPath(char.name);
+      if (gifPath.isNotEmpty) {
+        return Image.asset(
+          gifPath,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.none,
+          gaplessPlayback: true,
+          errorBuilder: (_, __, ___) => iconPath.startsWith('assets/')
+              ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+              : fallback,
+        );
+      }
+      return iconPath.startsWith('assets/')
+          ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+          : fallback;
+    }
+
+    // Animated card art
+    final cardPath = gungeoneerAnimatedCardPath(char.name);
+    if (cardPath.isNotEmpty) {
+      return Image.asset(
+        cardPath,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        gaplessPlayback: true,
+        errorBuilder: (_, __, ___) => iconPath.startsWith('assets/')
+            ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+            : fallback,
+      );
+    }
+    return iconPath.startsWith('assets/')
+        ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+        : fallback;
   }
 
   Widget _buildFlatCapsule({
@@ -782,4 +844,60 @@ class _EffectChip extends StatelessWidget {
   }
 }
 
+/// Compact shrine usage tracker. Shows each shrine name as a pill
+/// with an icon, in a wrap layout. Most recent first.
+class _ShrineTracker extends StatelessWidget {
+  final List<String> shrines;
+  const _ShrineTracker({required this.shrines});
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final reversed = shrines.reversed.toList();
+    return Wrap(
+      spacing: 5,
+      runSpacing: 5,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (int i = 0; i < reversed.length; i++)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFFD740).withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: const Color(0xFFFFD740).withValues(alpha: 0.40),
+                width: 0.7,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.temple_buddhist, color: Color(0xFFFFD740), size: 12.5),
+                const SizedBox(width: 4),
+                GoopText(
+                  reversed[i],
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFFFD740),
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        GoopText(
+          '${shrines.length} shrine${shrines.length == 1 ? '' : 's'} used',
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+            color: flair.headlineStat.withValues(alpha: 0.6),
+            letterSpacing: 0.3,
+          ),
+        ),
+      ],
+    );
+  }
+}
 

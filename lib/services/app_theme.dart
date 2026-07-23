@@ -1430,18 +1430,24 @@ enum WallpaperMode {
   const WallpaperMode({required this.label});
 }
 
-// Still wallpapers — 10 curated WebP scenes.
+// Still wallpapers — 16 curated PNG scenes.
 const List<Map<String, String>> kStillWallpapers = [
-  {'asset': '001.webp', 'name': 'Wallpaper 001'},
-  {'asset': '002.webp', 'name': 'Wallpaper 002'},
-  {'asset': '003.webp', 'name': 'Wallpaper 003'},
-  {'asset': '004.webp', 'name': 'Wallpaper 004'},
-  {'asset': '005.webp', 'name': 'Wallpaper 005'},
-  {'asset': '006.webp', 'name': 'Wallpaper 006'},
-  {'asset': '007.webp', 'name': 'Wallpaper 007'},
-  {'asset': '008.webp', 'name': 'Wallpaper 008'},
-  {'asset': '009.webp', 'name': 'Wallpaper 009'},
-  {'asset': '010.webp', 'name': 'Wallpaper 010'},
+  {'asset': '001.png', 'name': 'Wallpaper 001'},
+  {'asset': '002.png', 'name': 'Wallpaper 002'},
+  {'asset': '003.png', 'name': 'Wallpaper 003'},
+  {'asset': '004.png', 'name': 'Wallpaper 004'},
+  {'asset': '005.png', 'name': 'Wallpaper 005'},
+  {'asset': '006.png', 'name': 'Wallpaper 006'},
+  {'asset': '007.png', 'name': 'Wallpaper 007'},
+  {'asset': '008.png', 'name': 'Wallpaper 008'},
+  {'asset': '009.png', 'name': 'Wallpaper 009'},
+  {'asset': '010.png', 'name': 'Wallpaper 010'},
+  {'asset': '011.png', 'name': 'Wallpaper 011'},
+  {'asset': '012.png', 'name': 'Wallpaper 012'},
+  {'asset': '013.png', 'name': 'Wallpaper 013'},
+  {'asset': '014.png', 'name': 'Wallpaper 014'},
+  {'asset': '015.png', 'name': 'Wallpaper 015'},
+  {'asset': '016.png', 'name': 'Wallpaper 016'},
 ];
 
 /// Data model for custom theme settings persisted to SharedPreferences.
@@ -1977,6 +1983,12 @@ class VisualPrefs {
   /// Whether the Effects panel accordion is shown on the active-run dashboard.
   final bool showEffectsPanel;
 
+  /// Whether the Shrine tracker panel is shown on the active-run dashboard.
+  final bool showShrinePanel;
+
+  /// Whether special-item/gun dashboards are shown on the active-run screen.
+  final bool showDashboards;
+
   /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
   final int periodicGridColumnCount;
 
@@ -2032,9 +2044,11 @@ class VisualPrefs {
     this.spongeActive = false,
     this.showDamageCalculator = false,
     this.showEffectsPanel = false,
+    this.showShrinePanel = false,
+    this.showDashboards = true,
     this.periodicGridColumnCount = 0,
     this.wallpaperMode = WallpaperMode.themeDefault,
-    this.selectedStillWallpaper = '001.webp',
+    this.selectedStillWallpaper = '001.png',
     this.parallaxMotionEnabled = true,
   });
 
@@ -2063,6 +2077,8 @@ class VisualPrefs {
   static const _kSpongeActive = 'vp.sponge_active_v1';
   static const _kShowDamageCalculator = 'vp.show_damage_calculator_v1';
   static const _kShowEffectsPanel = 'vp.show_effects_panel_v1';
+  static const _kShowShrinePanel = 'vp.show_shrine_panel_v1';
+  static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kWallpaperMode = 'vp.wallpaper_mode_v1';
   static const _kSelectedStill = 'vp.selected_still_v1';
@@ -2122,15 +2138,17 @@ class VisualPrefs {
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
       final showDamageCalculator = p.getBool(_kShowDamageCalculator) ?? false;
       final showEffectsPanel = p.getBool(_kShowEffectsPanel) ?? false;
+      final showShrinePanel = p.getBool(_kShowShrinePanel) ?? false;
+      final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
 
       final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
       final wallpaperMode = WallpaperMode.values[wallpaperModeIdx.clamp(0, WallpaperMode.values.length - 1)];
-      var selectedStill = p.getString(_kSelectedStill) ?? '001.webp';
+      var selectedStill = p.getString(_kSelectedStill) ?? '001.png';
       // Migration: if persisted still wallpaper no longer exists in
       // kStillWallpapers, fall back to the first available.
       if (!kStillWallpapers.any((w) => w['asset'] == selectedStill)) {
-        selectedStill = '001.webp';
+        selectedStill = '001.png';
       }
       final parallaxEnabled = p.getBool(_kParallaxEnabled) ?? true;
 
@@ -2157,6 +2175,8 @@ class VisualPrefs {
         spongeActive: spongeActive,
         showDamageCalculator: showDamageCalculator,
         showEffectsPanel: showEffectsPanel,
+        showShrinePanel: showShrinePanel,
+        showDashboards: showDashboards,
         periodicGridColumnCount: periodicGridColumnCount,
         wallpaperMode: wallpaperMode,
         selectedStillWallpaper: selectedStill,
@@ -2277,6 +2297,16 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setShowShrinePanel(bool v) async {
+    notifier.value = notifier.value._with(showShrinePanel: v);
+    _persist();
+  }
+
+  static Future<void> setShowDashboards(bool v) async {
+    notifier.value = notifier.value._with(showDashboards: v);
+    _persist();
+  }
+
   static Future<void> setPeriodicGridColumnCount(int v) async {
     notifier.value = notifier.value._with(periodicGridColumnCount: v.clamp(0, 4));
     _persist();
@@ -2324,6 +2354,8 @@ class VisualPrefs {
       await p.setBool(_kSpongeActive, v.spongeActive);
       await p.setBool(_kShowDamageCalculator, v.showDamageCalculator);
       await p.setBool(_kShowEffectsPanel, v.showEffectsPanel);
+      await p.setBool(_kShowShrinePanel, v.showShrinePanel);
+      await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kWallpaperMode, v.wallpaperMode.index);
       await p.setString(_kSelectedStill, v.selectedStillWallpaper);
@@ -2354,6 +2386,8 @@ class VisualPrefs {
     bool?   spongeActive,
     bool?   showDamageCalculator,
     bool?   showEffectsPanel,
+    bool?   showShrinePanel,
+    bool?   showDashboards,
     int?    periodicGridColumnCount,
     WallpaperMode? wallpaperMode,
     String? selectedStillWallpaper,
@@ -2381,6 +2415,8 @@ class VisualPrefs {
     spongeActive:     spongeActive      ?? this.spongeActive,
     showDamageCalculator: showDamageCalculator ?? this.showDamageCalculator,
     showEffectsPanel: showEffectsPanel ?? this.showEffectsPanel,
+    showShrinePanel: showShrinePanel ?? this.showShrinePanel,
+    showDashboards: showDashboards ?? this.showDashboards,
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
     wallpaperMode:    wallpaperMode     ?? this.wallpaperMode,
     selectedStillWallpaper: selectedStillWallpaper ?? this.selectedStillWallpaper,

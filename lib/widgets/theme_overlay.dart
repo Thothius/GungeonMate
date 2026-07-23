@@ -1037,14 +1037,14 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
     final controller = _controller;
     if (_hasError || controller == null) {
       return _StillWallpaperBackground(
-        assetName: '001.webp',
+        assetName: '001.png',
         parallaxEnabled: true,
       );
     }
 
     if (!_initialized) {
       return _StillWallpaperBackground(
-        assetName: '001.webp',
+        assetName: '001.png',
         parallaxEnabled: false,
       );
     }

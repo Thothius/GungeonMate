@@ -1,5 +1,22 @@
 [
   {
+    "version": "v1.6.9",
+    "title": "🎨 UI POLISH — CHARACTER SELECT, SHRINE ICON, AVATAR CYCLING",
+    "date": "July 23, 2026",
+    "items": [
+      "Character select cards now require SELECT button press — tap avatars to flip and preview freely before confirming.",
+      "Character select cards fixed overflow when starting loadout panel expands (SingleChildScrollView + fixed image height).",
+      "Shrine icon on player dashboard now opens Shrine Picker screen on tap; long-press toggles the shrine tracker panel.",
+      "Player avatar on active run cycles through 3 graphics modes on tap: static icon → in-game GIF → animated card art.",
+      "Quick comment speech bubble wrapped in IgnorePointer to prevent intercepting taps on header icon buttons.",
+      "Settings gear icon added to main menu (compact, icon-only). Codex icon added to main menu bottom row.",
+      "Settings screen reorganized into 4 tabs: VISUALS, RUN, APP, DEBUG — cleaner separation of concerns.",
+      "New APP tab — Language toggle, Dialogue haptics & text speed, Custom Dice picker, Changelog viewer, Reset All App Data.",
+      "VISUALS tab expanded — Wallpaper section and Inventory Layout section now exposed.",
+      "Run Options popup menu refined — removed Guides & Info, My Favourites kept as top option, new Settings entry added."
+    ]
+  },
+  {
     "version": "v1.6.8",
     "title": "⏃⎎⎓⏁ GOOPIAN LANGUAGE MODE — FULL APP TRANSLATION",
     "date": "July 23, 2026",
