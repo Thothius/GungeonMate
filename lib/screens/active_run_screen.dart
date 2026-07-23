@@ -1551,9 +1551,11 @@ class _PlayerPageState extends State<_PlayerPage> {
                   _showStatAdjuster(context, isCool: true),
               onLongPressCurse: () =>
                   _showStatAdjuster(context, isCool: false),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+              trailing: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                   const _SpongeButton(),
                   // Damage calc toggle — tap to show/hide DPS terminal on dashboard,
                   // long-press to open the full DPS breakdown sheet.
@@ -1649,6 +1651,7 @@ class _PlayerPageState extends State<_PlayerPage> {
                   const SizedBox(width: 4),
                   const _HeaderMenu(),
                 ],
+              ),
               ),
               effectChips: EffectTagger.summaryChips(
                 guns: player.guns,
@@ -4429,14 +4432,18 @@ class _DashboardSwiperState extends State<_DashboardSwiper> {
     // Clamp page index
     if (_page >= dashboards.length) _page = 0;
 
-    // Extract the child widget from each SliverToBoxAdapter so we can
-    // render it directly without a fixed-height PageView — the height
-    // scales to the dashboard's actual content.
+    // Render each dashboard sliver at its full content height — no
+    // internal scrolling, no fixed height. shrinkWrap sizes to content;
+    // NeverScrollableScrollPhysics prevents nested scroll jank.
     Widget dashboardChild(Widget sliver) {
       if (sliver is SliverToBoxAdapter && sliver.child != null) {
         return sliver.child!;
       }
-      return SizedBox(height: 120, child: CustomScrollView(slivers: [sliver]));
+      return CustomScrollView(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        slivers: [sliver],
+      );
     }
 
     return SliverToBoxAdapter(

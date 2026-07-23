@@ -287,7 +287,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                       const Spacer(),
 
                       if (trailingWidget != null) ...[
-                        trailingWidget,
+                        Flexible(child: trailingWidget),
                       ],
                     ],
                   ),
