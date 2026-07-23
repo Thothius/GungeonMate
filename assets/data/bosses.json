@@ -1,0 +1,218 @@
+[
+  {
+    "name": "Bullet King",
+    "category": "Boss",
+    "health": "950",
+    "description": "",
+    "icon": "Bullet_King.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_King"
+  },
+  {
+    "name": "Gatling Gull",
+    "category": "Boss",
+    "health": "700",
+    "description": "",
+    "icon": "Gatling_Gull.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gatling_Gull"
+  },
+  {
+    "name": "Trigger Twins",
+    "category": "Boss",
+    "health": "400+400",
+    "description": "",
+    "icon": "Trigger_Twins.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Trigger_Twins"
+  },
+  {
+    "name": "Ammoconda",
+    "category": "Boss",
+    "health": "899.6",
+    "description": "",
+    "icon": "Ammoconda.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda"
+  },
+  {
+    "name": "Beholster",
+    "category": "Boss",
+    "health": "1072.5",
+    "description": "",
+    "icon": "Beholster.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Beholster"
+  },
+  {
+    "name": "Gorgun",
+    "category": "Boss",
+    "health": "975",
+    "description": "",
+    "icon": "The_Gorgun.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Gorgun"
+  },
+  {
+    "name": "Cannonbalrog",
+    "category": "Boss",
+    "health": "1520",
+    "description": "",
+    "icon": "Cannonbalrog.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannonbalrog"
+  },
+  {
+    "name": "Mine Flayer",
+    "category": "Boss",
+    "health": "1760",
+    "description": "",
+    "icon": "Mine_Flayer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer"
+  },
+  {
+    "name": "Treadnaught",
+    "category": "Boss",
+    "health": "1520",
+    "description": "",
+    "icon": "Treadnaught.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Treadnaught"
+  },
+  {
+    "name": "High Priest",
+    "category": "Boss",
+    "health": "1757.5",
+    "description": "",
+    "icon": "High_Priest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest"
+  },
+  {
+    "name": "Kill Pillars",
+    "category": "Boss",
+    "health": "555x4 (2220)",
+    "description": "",
+    "icon": "Kill_Pillars.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kill_Pillars"
+  },
+  {
+    "name": "Wallmonger",
+    "category": "Boss",
+    "health": "1757.5",
+    "description": "",
+    "icon": "Wallmonger.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Wallmonger"
+  },
+  {
+    "name": "High Dragun",
+    "category": "Boss",
+    "health": "2767.8 (Phase 1), 500 (Phase 2)",
+    "description": "",
+    "icon": "High_Dragun.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Dragun"
+  },
+  {
+    "name": "Blockner",
+    "category": "Boss",
+    "health": "1200",
+    "description": "",
+    "icon": "Blockner.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"
+  },
+  {
+    "name": "Door Lord",
+    "category": "Boss",
+    "health": "1430 (Floor 2), 1760 (Floor 3), 2035 (Floor 4)",
+    "description": "",
+    "icon": "Door_Lord.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Door_Lord"
+  },
+  {
+    "name": "Blobulord",
+    "category": "Boss",
+    "health": "1333.3",
+    "description": "",
+    "icon": "Blobulord.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord"
+  },
+  {
+    "name": "Old King",
+    "category": "Boss",
+    "health": "3333.2",
+    "description": "",
+    "icon": "Old_King.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_King"
+  },
+  {
+    "name": "Resourceful Rat",
+    "category": "Boss",
+    "health": "1480 (Phase 1), 3515 (Phase 2)",
+    "description": "",
+    "icon": "Boss_Resourceful_Rat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Resourceful_Rat_(Boss)"
+  },
+  {
+    "name": "Agunim",
+    "category": "Boss",
+    "health": "N/A (3 hits)",
+    "description": "",
+    "icon": "Heligunim.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agunim"
+  },
+  {
+    "name": "Black Stache",
+    "category": "Boss",
+    "health": "1200",
+    "description": "",
+    "icon": "Black_Stache.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Black_Stache"
+  },
+  {
+    "name": "Dr. Wolf's Monster",
+    "category": "Boss",
+    "health": "N/A",
+    "description": "",
+    "icon": "Dr._Wolf%27s_Monster.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dr._Wolf%27s_Monster"
+  },
+  {
+    "name": "HS Absolution",
+    "category": "Boss",
+    "health": "5200",
+    "description": "",
+    "icon": "HS_Absolution.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/HM_Absolution"
+  },
+  {
+    "name": "Interdimensional Horror",
+    "category": "Boss",
+    "health": "1150",
+    "description": "",
+    "icon": "Interdimensional_Horror.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Interdimensional_Horror"
+  },
+  {
+    "name": "Agunim",
+    "category": "Boss",
+    "health": "N/A (3 hits)",
+    "description": "",
+    "icon": "Agunim.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agunim"
+  },
+  {
+    "name": "Cannon",
+    "category": "Boss",
+    "health": "700",
+    "description": "",
+    "icon": "Cannon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannon"
+  },
+  {
+    "name": "The Last Human",
+    "category": "Boss",
+    "health": "1200",
+    "description": "",
+    "icon": "The_Last_Human.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Last_Human"
+  },
+  {
+    "name": "Lich",
+    "category": "Boss",
+    "health": "1995 (Phase 1), 2100 (Phase 2), 2100 (Phase 3)",
+    "description": "",
+    "icon": "Lich.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lich"
+  }
+]

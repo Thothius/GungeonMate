@@ -85,14 +85,16 @@ class StatsDetailScreen extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          _QuickActions(isCool: isCool),
-          const SizedBox(height: 16),
-          _EventLog(isCool: isCool),
-          const SizedBox(height: 16),
+          // Live effects — most relevant, right under the value card
           if (isCool)
             _CoolnessEffects(coolness: total, curse: p.runState.totalCurse)
           else
             _CurseEffects(curse: total, coolness: p.runState.totalCoolness),
+          const SizedBox(height: 16),
+          _QuickActions(isCool: isCool),
+          const SizedBox(height: 16),
+          // Event log — collapsed by default
+          _EventLog(isCool: isCool),
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -402,13 +404,22 @@ class _ValueCard extends StatelessWidget {
 
 // ---------------------- Coolness effects -------------------------------------
 
-class _CoolnessEffects extends StatelessWidget {
+class _CoolnessEffects extends StatefulWidget {
   final double coolness;
   final double curse;
   const _CoolnessEffects({required this.coolness, required this.curse});
 
   @override
+  State<_CoolnessEffects> createState() => _CoolnessEffectsState();
+}
+
+class _CoolnessEffectsState extends State<_CoolnessEffects> {
+  bool _alsoExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
+    final coolness = widget.coolness;
+    final curse = widget.curse;
     // Clamp to int for the displayed curve math (game uses integer buckets).
     final c = coolness;
     final rechargeReduction = (c * 5).clamp(0, 50);
@@ -441,15 +452,49 @@ class _CoolnessEffects extends StatelessWidget {
           subtitle: '(1 + coolness - curse)%',
         ),
         const SizedBox(height: 8),
-        const _SectionTitle('Also'),
-        _InfoRow(
-          icon: Icons.casino,
-          text: 'If reward triggers: 20% chest / 80% pickup',
+        // "Also" section — collapsed by default
+        InkWell(
+          onTap: () {
+            Haptics.selection();
+            setState(() => _alsoExpanded = !_alsoExpanded);
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+            child: Row(
+              children: [
+                Text(
+                  'ALSO',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.4,
+                    color: Colors.white.withValues(alpha: 0.65),
+                  ),
+                ),
+                const Spacer(),
+                AnimatedRotation(
+                  turns: _alsoExpanded ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 180),
+                  child: Icon(
+                    Icons.expand_more_rounded,
+                    size: 16,
+                    color: Colors.white.withValues(alpha: 0.4),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        _InfoRow(
-          icon: Icons.star,
-          text: 'Increases Vorpal Gun critical shot chance',
-        ),
+        if (_alsoExpanded) ...[
+          _InfoRow(
+            icon: Icons.casino,
+            text: 'If reward triggers: 20% chest / 80% pickup',
+          ),
+          _InfoRow(
+            icon: Icons.star,
+            text: 'Increases Vorpal Gun critical shot chance',
+          ),
+        ],
       ],
     );
   }
@@ -457,13 +502,22 @@ class _CoolnessEffects extends StatelessWidget {
 
 // ---------------------- Curse effects + table --------------------------------
 
-class _CurseEffects extends StatelessWidget {
+class _CurseEffects extends StatefulWidget {
   final double curse;
   final double coolness;
   const _CurseEffects({required this.curse, required this.coolness});
 
   @override
+  State<_CurseEffects> createState() => _CurseEffectsState();
+}
+
+class _CurseEffectsState extends State<_CurseEffects> {
+  bool _tableExpanded = false;
+
+  @override
   Widget build(BuildContext context) {
+    final curse = widget.curse;
+    final coolness = widget.coolness;
     final currentIdx = curse.floor().clamp(0, 10);
     final row = curseTable[currentIdx];
     final roomReward = (1 + coolness - curse).clamp(-50, 100);
@@ -540,23 +594,58 @@ class _CurseEffects extends StatelessWidget {
             ),
           ),
         const SizedBox(height: 16),
-        const _SectionTitle('Full curse effect table'),
-        _CurseTable(highlightIdx: currentIdx),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Text(
-            'Jam E./B. = Jammed Enemy / Boss chance · Mimic = chest mimic chance · '
-            'Fuse = fused chest chance · Room = room-clear reward mod · '
-            'Ammo = ammo drop multiplier. At 10+ curse, enemy/boss jam chances '
-            'cap at 50% but other effects keep scaling.',
-            style: TextStyle(
-              fontSize: 11,
-              height: 1.4,
-              color: Colors.white.withValues(alpha: 0.7),
+        // Full curse table — collapsed by default
+        InkWell(
+          onTap: () {
+            Haptics.selection();
+            setState(() => _tableExpanded = !_tableExpanded);
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+            child: Row(
+              children: [
+                Text(
+                  'FULL CURSE EFFECT TABLE',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.4,
+                    color: Colors.white.withValues(alpha: 0.65),
+                  ),
+                ),
+                const Spacer(),
+                AnimatedRotation(
+                  turns: _tableExpanded ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 180),
+                  child: Icon(
+                    Icons.expand_more_rounded,
+                    size: 16,
+                    color: Colors.white.withValues(alpha: 0.4),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
+        if (_tableExpanded) ...[
+          const SizedBox(height: 6),
+          _CurseTable(highlightIdx: currentIdx),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              'Jam E./B. = Jammed Enemy / Boss chance · Mimic = chest mimic chance · '
+              'Fuse = fused chest chance · Room = room-clear reward mod · '
+              'Ammo = ammo drop multiplier. At 10+ curse, enemy/boss jam chances '
+              'cap at 50% but other effects keep scaling.',
+              style: TextStyle(
+                fontSize: 11,
+                height: 1.4,
+                color: Colors.white.withValues(alpha: 0.7),
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

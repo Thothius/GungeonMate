@@ -1,6 +1,6 @@
-/// A single entry in the GungeonMate Codex — covers Objects, Pickups, and NPCs.
-/// All three JSON files (objects.json, pickups.json, npcs.json) share the same
-/// shape, so one model handles them all.
+/// A single entry in the GungeonMate Codex — covers Objects, Pickups, NPCs,
+/// Enemies, and Bosses. All JSON files share the same shape, so one model
+/// handles them all.
 class CodexEntry {
   final String name;
   final String category;
@@ -9,6 +9,7 @@ class CodexEntry {
   final String wikiUrl;
   final String? location;
   final String? game;
+  final String? health;
 
   CodexEntry({
     required this.name,
@@ -18,6 +19,7 @@ class CodexEntry {
     this.wikiUrl = '',
     this.location,
     this.game,
+    this.health,
   });
 
   factory CodexEntry.fromJson(Map<String, dynamic> j) {
@@ -29,6 +31,7 @@ class CodexEntry {
       wikiUrl: j['wiki_url'] as String? ?? '',
       location: j['location'] as String?,
       game: j['game'] as String?,
+      health: j['health'] as String?,
     );
   }
 
@@ -59,7 +62,7 @@ class CodexEntry {
 }
 
 /// Which codex section a list belongs to.
-enum CodexSection { objects, pickups, npcs }
+enum CodexSection { objects, pickups, npcs, enemies, bosses }
 
 /// Helper to resolve the image folder for a codex section.
 String codexImageFolder(CodexSection section) {
@@ -70,6 +73,10 @@ String codexImageFolder(CodexSection section) {
       return 'pickups';
     case CodexSection.npcs:
       return 'npcs';
+    case CodexSection.enemies:
+      return 'enemies';
+    case CodexSection.bosses:
+      return 'bosses';
   }
 }
 

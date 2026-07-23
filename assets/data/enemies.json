@@ -1,0 +1,1170 @@
+[
+  {
+    "name": "Bandana Bullet Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, rapidly firing bullets.",
+    "health": "15",
+    "icon": "Bandana_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bandana_Bullet_Kin"
+  },
+  {
+    "name": "Veteran Bullet Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing multiple bullets in quick succession with 62% predictive aim.",
+    "health": "15",
+    "icon": "Veteran_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Veteran_Bullet_Kin"
+  },
+  {
+    "name": "Tanker",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, rapidly firing bullets.",
+    "health": "18.8",
+    "icon": "Tanker.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tanker"
+  },
+  {
+    "name": "Minelet",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets with 40% predictive aim. Occasionally hides under its hard hat, temporarily deflecting bullets, then pops out and releases bullets in all directions.",
+    "health": "15",
+    "icon": "Minelet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Minelet"
+  },
+  {
+    "name": "Cardinal",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets. Occasionally fires a cluster of 5 bullets that homes in on the player.",
+    "health": "22.5",
+    "icon": "Cardinal.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cardinal"
+  },
+  {
+    "name": "Shroomer",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing two bullets in a V shape.",
+    "health": "30",
+    "icon": "Shroomer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shroomer"
+  },
+  {
+    "name": "Ashen Bullet Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing fast-moving bullets. Fires six times total before reloading, with the last three bullets having a 40% chance each to be fired with 100% predictive aim.\nWhen spawning in a room containing decorative ash bullet kin breakables, there is a 30% chance that the Ashen Bullet Kin will not spawn normally. Instead, the Ashen Bullet Kin will disguise itself as one of the harmless breakables, only bursting out and becoming active when the breakable is broken, or after 2-6 seconds have passed.",
+    "health": "15",
+    "icon": "Ashen_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ashen_Bullet_Kin"
+  },
+  {
+    "name": "Mutant Bullet Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets. Occasionally spits out a small cone of poison creep.",
+    "health": "20",
+    "icon": "Mutant_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mutant_Bullet_Kin"
+  },
+  {
+    "name": "Fallen Bullet Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing spreads of three fast-moving bullets. Leaves behind fire upon death.",
+    "health": "20",
+    "icon": "Fallen_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fallen_Bullet_Kin"
+  },
+  {
+    "name": "Office Bullet",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets.",
+    "health": "20",
+    "icon": "Office_Bullet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Office_Bullet"
+  },
+  {
+    "name": "Office Bullette",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets.",
+    "health": "20",
+    "icon": "Office_Bullette.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Office_Bullette"
+  },
+  {
+    "name": "Western Bullet Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets.",
+    "health": "22.5",
+    "icon": "Western_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Western_Bullet_Kin"
+  },
+  {
+    "name": "Pirate Bullet Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets.",
+    "health": "15",
+    "icon": "Pirate_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pirate_Bullet_Kin"
+  },
+  {
+    "name": "Bullet Fish",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets.",
+    "health": "15",
+    "icon": "Bullet_Fish.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Fish"
+  },
+  {
+    "name": "Red Bullet Fish",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets.",
+    "health": "15",
+    "icon": "Red_Bullet_Fish.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Bullet_Fish"
+  },
+  {
+    "name": "Knight Bullet Kin",
+    "category": "Enemy",
+    "description": "Walks sluggishly towards the player, occasionally firing an extremely slow pointy bullet.",
+    "health": "25",
+    "icon": "Knight_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Knight_Bullet_Kin"
+  },
+  {
+    "name": "Brollet",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets. Explodes violently upon death, or if the player comes too close.",
+    "health": "15",
+    "icon": "Brollet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Brollet"
+  },
+  {
+    "name": "Chancellor",
+    "category": "Enemy",
+    "description": "Sits stationary in the Bullet Kings bossroom.After taking any damage, the Chancellor's health is set to 1 and he will run madly towards the player.If the Bullet King is killed without harming the Chancellor, his health is set to 1 and he will no longer charge.",
+    "health": "1000",
+    "icon": "Chancellor.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancellor"
+  },
+  {
+    "name": "Chancellor",
+    "category": "Enemy",
+    "description": "Sits stationary in the Gungeon Proper's bossroom if the Chancellor was spared on the previous floor.After taking any damage, or if 5 seconds have passed, the Chancellor's health is set to 20 and he will run madly towards the player.",
+    "health": "1000",
+    "icon": "Chancellor_Revenge.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancellor"
+  },
+  {
+    "name": "Old Chancellor",
+    "category": "Enemy",
+    "description": "Sits stationary in the Old Kings bossroom.After taking any damage, the Chancellor's health is set to 1 and he will run madly towards the player.If the Old King is killed without harming the Chancellor, his health is set to 1 and he will no longer charge.",
+    "health": "1000",
+    "icon": "Old_Chancellor.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Chancellor"
+  },
+  {
+    "name": "Red-Caped Bullet Kin",
+    "category": "Enemy",
+    "description": "Chance to appear in random rooms after at least one Past has been killed. Does not attack the player, wandering aimlessly around the room.Does not deal contact damage unless it is jammed.If not killed in a room, it will eventually teleport away. Allowing 5 red-caped bullet kin to escape unlocks The Bullet.",
+    "health": "15",
+    "icon": "Red-Caped_Bullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red-Caped_Bullet_Kin"
+  },
+  {
+    "name": "Chance Kin",
+    "category": "Enemy",
+    "description": "Runs away from the player and disappears if not killed. Turns into a cube which drops a random pickup upon death.",
+    "health": "20",
+    "icon": "Chance_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chance_Kin"
+  },
+  {
+    "name": "Keybullet Kin",
+    "category": "Enemy",
+    "description": "Runs away from the player and disappears if not killed. Drops a key upon death.",
+    "health": "20",
+    "icon": "Keybullet_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Keybullet_Kin"
+  },
+  {
+    "name": "Confirmed",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, periodically firing four slithering lines of bullets.",
+    "health": "45",
+    "icon": "Confirmed.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Confirmed"
+  },
+  {
+    "name": "Red Shotgun Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing a tight spread of 5 bullets. Has a chance to fire 6 bullets in all directions upon death.",
+    "health": "30",
+    "icon": "Red_Shotgun_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Shotgun_Kin"
+  },
+  {
+    "name": "Blue Shotgun Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing a wide spread of 5 bullets quickly followed by a wide spread of 4 bullets. Has a chance to fire 6 bullets in all directions upon death.",
+    "health": "40",
+    "icon": "Blue_Shotgun_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blue_Shotgun_Kin"
+  },
+  {
+    "name": "Veteran Shotgun Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing a V-shaped spread of 5 fast-moving bullets with 100% predictive aim. Fires many bullets in all directions upon death that travel at varying speeds.",
+    "health": "33.8",
+    "icon": "Veteran_Shotgun_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Veteran_Shotgun_Kin"
+  },
+  {
+    "name": "Mutant Shotgun Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing tight spreads of 5 fast-moving bullets. Always fires 6 bullets in all directions upon death.",
+    "health": "32",
+    "icon": "Mutant_Shotgun_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mutant_Shotgun_Kin"
+  },
+  {
+    "name": "Executioner",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing chaotic spreads of bullets. Occasionally stops to fire 3 bullet chains towards the player, attaching them to walls. These chains disappear shortly afterwards.\nSometimes fires a bullet chain upon death, accompanied by a burst of 6 bullets in all directions.",
+    "health": "55",
+    "icon": "Executioner.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Executioner"
+  },
+  {
+    "name": "Ashen Shotgun Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing 3 tight spreads of 5 fast-moving bullets.\nWhen spawning in a room containing decorative ash shotgun kin breakables, there is a 30% chance that the Ashen Shotgun Kin will not spawn normally. Instead, the Ashen Shotgun Kin will disguise itself as one of the harmless breakables, only bursting out and becoming active when the breakable is broken, or after 2-6 seconds have passed.",
+    "health": "20",
+    "icon": "Ashen_Shotgun_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ashen_Shotgun_Kin"
+  },
+  {
+    "name": "Shotgrub",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing spreads of bullets which release more waving bullets upon hitting an obstacle.",
+    "health": "20",
+    "icon": "Shotgrub_%28Enemy%29.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shotgrub_(Enemy)"
+  },
+  {
+    "name": "Pirate Shotgun Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing a tight spread of 5 bullets.",
+    "health": "30",
+    "icon": "Pirate_Shotgun_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pirate_Shotgun_Kin"
+  },
+  {
+    "name": "Western Shotgun Kin",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing a wide spread of 5 bullets quickly followed by a wide spread of 4 bullets. Fires many bullets in all directions upon death that travel at varying speeds, as well as two giant bullets angled towards the player.",
+    "health": "40",
+    "icon": "Western_Shotgun_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Western_Shotgun_Kin"
+  },
+  {
+    "name": "Sniper Shell",
+    "category": "Enemy",
+    "description": "Periodically aims at the player with a red laser, then fires a single high-speed bullet.",
+    "health": "18.8",
+    "icon": "Sniper_Shell.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Sniper_Shell"
+  },
+  {
+    "name": "Professional",
+    "category": "Enemy",
+    "description": "Periodically aims at the player with a green laser, then fires a single high-speed bullet that explodes into bullets in all directions upon impact.",
+    "health": "21",
+    "icon": "Professional.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Professional"
+  },
+  {
+    "name": "Gummy",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, rapidly firing bullets. Occasionally pauses to summon a large jammed Spent that periodically shoots a spread of bullets in all directions.",
+    "health": "26.3",
+    "icon": "Gummy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gummy"
+  },
+  {
+    "name": "Skullet",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing two spreads of triangular bullets.",
+    "health": "15.8",
+    "icon": "Skullet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skullet"
+  },
+  {
+    "name": "Skullmet",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing two spreads of triangular bullets.",
+    "health": "21.1",
+    "icon": "Skullmet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skullmet"
+  },
+  {
+    "name": "Spent",
+    "category": "Enemy",
+    "description": "Runs towards the player and attempts to deal contact damage. Lunges when close enough to the player with a brief burst of speed.Killing a Spent will cause waves of more Spent to emerge from the ground.",
+    "health": "4.2",
+    "icon": "Spent.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spent"
+  },
+  {
+    "name": "Zombullet",
+    "category": "Enemy",
+    "description": "Spawned by Gummies, always jammed.Sprints towards the player, periodically performing a close-range lunging bite attack (if they are close) or a radial burst of irregular bullets (if they are far).",
+    "health": "4.2",
+    "icon": "Zombullet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Zombullet"
+  },
+  {
+    "name": "Bomb Bot",
+    "category": "Enemy",
+    "description": "Summoned by Fuselier.Waddles towards the player, attempting to deal contact damage.",
+    "health": "10",
+    "icon": "Bomb_Bot.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bomb_Bot"
+  },
+  {
+    "name": "Mouser",
+    "category": "Enemy",
+    "description": "Spawns in huge groups.Sprints towards the player, attempting to deal contact damage. Moves slower the closer it comes to the player.",
+    "health": "1",
+    "icon": "Mouser.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mouser"
+  },
+  {
+    "name": "Creech",
+    "category": "Enemy",
+    "description": "Walks towards the player, periodically releasing very fast bouncing bullets in all directions.",
+    "health": "20",
+    "icon": "Creech.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Creech"
+  },
+  {
+    "name": "Hollowpoint",
+    "category": "Enemy",
+    "description": "Floats towards the player, rapidly firing bullets. Periodically disappears and reappears elsewhere in the room.",
+    "health": "25",
+    "icon": "Hollowpoint.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Hollowpoint"
+  },
+  {
+    "name": "Bombshee",
+    "category": "Enemy",
+    "description": "Follows other enemies around, frequently emitting a short-ranged shriek that destroys the player's bullets. If all the other enemies die, the Bombshee will launch itself at the player, exploding on contact.",
+    "health": "45",
+    "icon": "Bombshee.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bombshee"
+  },
+  {
+    "name": "High Priest Candle Man",
+    "category": "Enemy",
+    "description": "Summoned by the High Priest in Challenge Mode.Sits motionless, and does not deal contact damage. Dies immediately upon touching the player.When killed, bursts into a pool of infinitely burning napalm goop that lasts until the High Priest is defeated.",
+    "health": "1",
+    "icon": "High_Priest_Candle_Man.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest_Candle_Man"
+  },
+  {
+    "name": "Candle Guy",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, firing bullets.",
+    "health": "15",
+    "icon": "Candle_Guy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Candle_Guy"
+  },
+  {
+    "name": "Cactus",
+    "category": "Enemy",
+    "description": "Walks towards the player, releasing rings of spiky bullets around its body.",
+    "health": "30",
+    "icon": "Cactus_Enemy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cactus_(Enemy)"
+  },
+  {
+    "name": "Rubber Kin",
+    "category": "Enemy",
+    "description": "Attempts to launch itself towards the player, knocking the player back upon contact. Cannot deal direct damage to players, but does predict players’ movements.",
+    "health": "13",
+    "icon": "Rubber_Kin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Rubber_Kin"
+  },
+  {
+    "name": "Tazie",
+    "category": "Enemy",
+    "description": "Launches itself towards the predicted location of the player, dealing damage upon contact.",
+    "health": "12",
+    "icon": "Tazie.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tazie"
+  },
+  {
+    "name": "Musket Ball Guy",
+    "category": "Enemy",
+    "description": "Launches itself towards the predicted location of the player, dealing damage upon contact.",
+    "health": "12",
+    "icon": "Musket_Ball_Guy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Musket_Ball_Guy"
+  },
+  {
+    "name": "King Bullat",
+    "category": "Enemy",
+    "description": "Periodically fires bouncing bullets in all directions. Spawns 3-4 Bullats and Shotgats upon death.",
+    "health": "26",
+    "icon": "King_Bullat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/King_Bullat"
+  },
+  {
+    "name": "Bullat Gargoyle",
+    "category": "Enemy",
+    "description": "Frequently fires bullets in all directions in a diamond shape.",
+    "health": "45",
+    "icon": "Bullat_Gargoyle.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullat_Gargoyle"
+  },
+  {
+    "name": "Pinhead",
+    "category": "Enemy",
+    "description": "Walks towards the player and explodes upon death. If the player gets too close, it will leap towards the player and explode.",
+    "health": "13",
+    "icon": "Pinhead.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pinhead"
+  },
+  {
+    "name": "Nitra",
+    "category": "Enemy",
+    "description": "Walks towards the player and creates a line of explosions upon death, away from the player. If the player gets too close, it will detonate itself and the line of explosions will try to aim towards the player.",
+    "health": "10",
+    "icon": "Nitra.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Nitra"
+  },
+  {
+    "name": "Claymore",
+    "category": "Enemy",
+    "description": "Summoned by the Mine Flayer.Walks clockwise or counterclockwise around the Mine Flayer's boss room, exploding if the player comes too close.Invulnerable to most forms of attack.",
+    "health": "15",
+    "icon": "Claymore.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Claymore"
+  },
+  {
+    "name": "m80 Guy",
+    "category": "Enemy",
+    "description": "Walks towards the player and creates a long line of explosions upon death, away from the player. If the player gets too close, it will detonate itself and the line of explosions will try to aim towards the player.",
+    "health": "10",
+    "icon": "M80_Guy.png",
+    "wiki_url": ""
+  },
+  {
+    "name": "Mine Flayer Bell",
+    "category": "Enemy",
+    "description": "Summoned by the Mine Flayer. Wanders around the room aimlessly.Releases a ring of bullets on death.",
+    "health": "15",
+    "icon": "Mine_Flayer_Bell.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer_Bell"
+  },
+  {
+    "name": "Arrowkin",
+    "category": "Enemy",
+    "description": "Walks towards the player then stops at a distance. Charges and fires arrows towards the player.",
+    "health": "15",
+    "icon": "Arrowkin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Arrowkin"
+  },
+  {
+    "name": "Blobulin",
+    "category": "Enemy",
+    "description": "Quickly moves towards the player and attempts to deal contact damage.",
+    "health": "1",
+    "icon": "Blobulin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulin"
+  },
+  {
+    "name": "Blobuloid",
+    "category": "Enemy",
+    "description": "Moves towards the player and attempts to deal contact damage. Splits into two Blobulins upon death.",
+    "health": "10",
+    "icon": "Blobuloid.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobuloid"
+  },
+  {
+    "name": "Blobulon",
+    "category": "Enemy",
+    "description": "Moves towards the player and attempts to deal contact damage. Splits into two Blobuloids upon death.",
+    "health": "20",
+    "icon": "Blobulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulon"
+  },
+  {
+    "name": "Blobulord Death Crawler",
+    "category": "Enemy",
+    "description": "Left behind by the Blobulord upon his defeat.Crawls slowly towards the player. Cannot deal contact damage unless it is jammed.",
+    "health": "15",
+    "icon": "Blobulord_Death_Crawler.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord"
+  },
+  {
+    "name": "Poisbulin",
+    "category": "Enemy",
+    "description": "Quickly moves towards the player, leaving a trail of poison creep.",
+    "health": "1",
+    "icon": "Poisbulin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbulin"
+  },
+  {
+    "name": "Poisbuloid",
+    "category": "Enemy",
+    "description": "Moves towards the player, leaving a trail of poison creep. Splits into two Poisbulins upon death.",
+    "health": "10.8",
+    "icon": "Poisbuloid.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbuloid"
+  },
+  {
+    "name": "Poisbulon",
+    "category": "Enemy",
+    "description": "Moves towards the player, leaving a trail of poison creep. Turns into one Poisbuloid upon death.",
+    "health": "19.2",
+    "icon": "Poisbulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbulon"
+  },
+  {
+    "name": "Blizzbulon",
+    "category": "Enemy",
+    "description": "Fires triangular bullets in all directions, followed by 2 spreads of 3 triangular bullets towards the player.",
+    "health": "21.1",
+    "icon": "Blizzbulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blizzbulon"
+  },
+  {
+    "name": "Leadbulon",
+    "category": "Enemy",
+    "description": "Moves towards the player and attempts to deal contact damage. Becomes enraged after taking enough damage, moving faster and leaving a trail of fire. Once enraged, will slowly shrink and lose health.",
+    "health": "22.7",
+    "icon": "Leadbulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Leadbulon"
+  },
+  {
+    "name": "Poopulon",
+    "category": "Enemy",
+    "description": "Occasionally spins, releasing a large amount of spiraling bullets in all directions.",
+    "health": "20",
+    "icon": "Poopulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poopulon"
+  },
+  {
+    "name": "Bloodbulon",
+    "category": "Enemy",
+    "description": "Moves towards the player and attempts to deal contact damage. Becomes larger and slower as it takes damage. Releases many bullets in all directions upon death.",
+    "health": "30",
+    "icon": "Bloodbulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bloodbulon"
+  },
+  {
+    "name": "Skusket",
+    "category": "Enemy",
+    "description": "Has two lines of bullets orbiting it. Slowly floats towards the player, firing skulls that home in on the player and split into 6 bullets upon being destroyed.",
+    "health": "13",
+    "icon": "Skusket.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skusket"
+  },
+  {
+    "name": "Bookllet",
+    "category": "Enemy",
+    "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes.",
+    "health": "25",
+    "icon": "Bookllet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bookllet"
+  },
+  {
+    "name": "Blue Bookllet",
+    "category": "Enemy",
+    "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes or rings of bullets that pulse back and forth.",
+    "health": "25",
+    "icon": "Blue_Bookllet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blue_Bookllet"
+  },
+  {
+    "name": "Green Bookllet",
+    "category": "Enemy",
+    "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes or a large clover shape.",
+    "health": "25",
+    "icon": "Green_Bookllet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Green_Bookllet"
+  },
+  {
+    "name": "Angry Tablet",
+    "category": "Enemy",
+    "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes.",
+    "health": "25",
+    "icon": "Angry_Tablet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Angry_Tablet"
+  },
+  {
+    "name": "Angry Necronomicon",
+    "category": "Enemy",
+    "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes, rotating squares, circles, triangles, or Xs that predict the player's movements, or loose spreads of bullets in the players direction.",
+    "health": "35",
+    "icon": "Angry_Necronomicon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Angry_Necronomicon"
+  },
+  {
+    "name": "Gigi",
+    "category": "Enemy",
+    "description": "Flies towards the player, periodically spitting an egg that releases a swarm of squirming bullets towards the player.",
+    "health": "12",
+    "icon": "Gigi.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gigi"
+  },
+  {
+    "name": "Parrot",
+    "category": "Enemy",
+    "description": "Flies towards the player, periodically spitting an egg that releases a swarm of squirming bullets towards the player.",
+    "health": "12",
+    "icon": "Parrot.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Parrot"
+  },
+  {
+    "name": "Muzzle Wisp",
+    "category": "Enemy",
+    "description": "Dashes three times in random directions, then releases a ring of flaming bullets. Leaves behind a patch of fire upon death. Sets the player on fire upon contact.",
+    "health": "19",
+    "icon": "Muzzle_Wisp.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Muzzle_Wisp"
+  },
+  {
+    "name": "Muzzle Flare",
+    "category": "Enemy",
+    "description": "Dashes three times in random directions, firing three bullets towards the player with each dash, then releases a ring of flaming bullets. Leaves behind a patch of fire upon death. Sets the player on fire upon contact.",
+    "health": "15.9",
+    "icon": "Muzzle_Flare.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Muzzle_Flare"
+  },
+  {
+    "name": "Cubulon",
+    "category": "Enemy",
+    "description": "Frequently fires bullets in all directions in a diamond shape.",
+    "health": "30",
+    "icon": "Cubulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cubulon"
+  },
+  {
+    "name": "Chancebulon",
+    "category": "Enemy",
+    "description": "Fires random attacks from other Blobulon enemies, along with groups of bullets that look like dice. Has a chance to fire multiple attacks at the same time, and has a chance to die instead of attacking.",
+    "health": "50",
+    "icon": "Chancebulon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancebulon"
+  },
+  {
+    "name": "Cubulead",
+    "category": "Enemy",
+    "description": "Fires bullets in all directions in a diamond shape, then pulls its bullets back towards itself.",
+    "health": "18.2",
+    "icon": "Cubulead.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cubulead"
+  },
+  {
+    "name": "Apprentice Gunjurer",
+    "category": "Enemy",
+    "description": "Fires bullets in a variety of rotating shapes, such as a square, circle, triangle, or X that predict the player's movements. Occasionally disappears and reappears elsewhere in the room.Predictive aim is only applied if the player is more than 4.5 tiles away from the Apprentice Gunjurer, Otherwise, no shot leading is used.[1]",
+    "health": "18.8",
+    "icon": "Apprentice_Gunjurer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Apprentice_Gunjurer"
+  },
+  {
+    "name": "Gunjurer",
+    "category": "Enemy",
+    "description": "Summons 6 bullets, during which time any bullets fired at it will be absorbed. The 6 bullets along with any absorbed bullets are then fired at the player. Occasionally disappears and reappears elsewhere in the room.",
+    "health": "15.8",
+    "icon": "Gunjurer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunjurer"
+  },
+  {
+    "name": "High Gunjurer",
+    "category": "Enemy",
+    "description": "Fires large rings of bullets at the player. Occasionally disappears and reappears elsewhere in the room.",
+    "health": "24",
+    "icon": "High_Gunjurer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Gunjurer"
+  },
+  {
+    "name": "Lore Gunjurer",
+    "category": "Enemy",
+    "description": "Summons one of 4 bullet familiars, each with distinct behaviors.\nWarrior: The bullet will home in on the player until it vanishes.\nRogue: The bullet will home in on the player and then teleport behind them in an attempt to catch them off-guard.\nMage: The bullet follows the player closely and will shoot smaller bullets at them.\nBard: The bullet will home in on the player, bouncing off of walls until it vanishes.",
+    "health": "30",
+    "icon": "Lore_Gunjurer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lore_Gunjurer"
+  },
+  {
+    "name": "Gunsinger",
+    "category": "Enemy",
+    "description": "Buffs an enemy in the room, increasing their health and speed. They will cancel their spell and run away if the player is too close or they take damage.",
+    "health": "15",
+    "icon": "Gunsinger.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunsinger"
+  },
+  {
+    "name": "Aged Gunsinger",
+    "category": "Enemy",
+    "description": "Buffs all enemies in the room, increasing their health and speed. They will cancel their spell and run away if the player is too close or they take damage.",
+    "health": "17.5",
+    "icon": "Aged_Gunsinger.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Aged_Gunsinger"
+  },
+  {
+    "name": "Ammomancer",
+    "category": "Enemy",
+    "description": "Attempts to summon Shelletons. They will cancel their summoning ritual and run away if the player is too close or they take damage. If the Ammonancer is killed while their Shelleton is still alive, then the Shelleton will collapse.",
+    "health": "20",
+    "icon": "Ammomancer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammomancer"
+  },
+  {
+    "name": "Jammomancer",
+    "category": "Enemy",
+    "description": "Jams an enemy in the room, increasing their health, speed, and damage. They will cancel their spell and run away if the player gets too close or they take damage.",
+    "health": "15",
+    "icon": "Jammomancer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Jammomancer"
+  },
+  {
+    "name": "Jamerlengo",
+    "category": "Enemy",
+    "description": "Jams all enemies in the room, increasing their health, speed, and damage. They will cancel their spell and run away if the player gets too close or they take damage.",
+    "health": "15",
+    "icon": "Jamerlengo.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Jamerlengo"
+  },
+  {
+    "name": "Wizbang",
+    "category": "Enemy",
+    "description": "Teleports around the room, occasionally creating a projection of itself near the player that explodes into bullets in all directions.",
+    "health": "25",
+    "icon": "Wizbang.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Wizbang"
+  },
+  {
+    "name": "Mimic",
+    "category": "Enemy",
+    "description": "Rapidly fires bullets towards the player with different patterns depending on the quality of the chest. Drops items and/or pickups upon death. When the player attempts to open a Mimic or shoot it for the first time, it will shoot a jammed shot at the player that explodes into six bullets on contact with a wall or after traveling a certain distance.",
+    "health": "Varies",
+    "icon": "Mimic.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mimic"
+  },
+  {
+    "name": "Gun Fairy",
+    "category": "Enemy",
+    "description": "Wanders around the room, rapidly firing bullets towards the player. Occasionally spawned by breaking pots.",
+    "health": "15",
+    "icon": "Gun_Fairy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Fairy"
+  },
+  {
+    "name": "Bullat",
+    "category": "Enemy",
+    "description": "Launches itself at the player, dying in the process.",
+    "health": "1",
+    "icon": "Bullat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullat"
+  },
+  {
+    "name": "Shotgat",
+    "category": "Enemy",
+    "description": "Launches two projectiles in a V shape at the player, dying in the process.",
+    "health": "2",
+    "icon": "Shotgat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shotgat"
+  },
+  {
+    "name": "Grenat",
+    "category": "Enemy",
+    "description": "Launches an exploding projectile at the player, dying in the process.",
+    "health": "3",
+    "icon": "Grenat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Grenat"
+  },
+  {
+    "name": "Spirat",
+    "category": "Enemy",
+    "description": "Launches itself at the player, dying in the process. Predicts the player's movements, and can reposition itself several times before hitting walls.",
+    "health": "5",
+    "icon": "Spirat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spirat"
+  },
+  {
+    "name": "Coaler",
+    "category": "Enemy",
+    "description": "Occasionally fires bullets at the player. Catches on fire upon taking damage, running around erratically and sending flaming bullets out in random directions.",
+    "health": "19.2",
+    "icon": "Coaler.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Coaler"
+  },
+  {
+    "name": "Gat",
+    "category": "Enemy",
+    "description": "Bounces around the room and deflects bullets. Occasionally opens up to fire three spreads of four bullets towards the player.",
+    "health": "12",
+    "icon": "Gat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gat"
+  },
+  {
+    "name": "Det",
+    "category": "Enemy",
+    "description": "Periodically fires four lasers in a + or × formation. Explodes upon death.",
+    "health": "18",
+    "icon": "Det.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Det"
+  },
+  {
+    "name": "Gunzookie",
+    "category": "Enemy",
+    "description": "Periodically spits up bubbles that, upon popping, fire a bullet that predicts the player's movements.",
+    "health": "15",
+    "icon": "Gunzookie.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunzookie"
+  },
+  {
+    "name": "Gunzockie",
+    "category": "Enemy",
+    "description": "Periodically spits up four bubbles that, upon popping, fire a bullet that predicts the player's movements.",
+    "health": "15",
+    "icon": "Gunzockie.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunzockie"
+  },
+  {
+    "name": "Bullet Shark",
+    "category": "Enemy",
+    "description": "Charges towards the player, releasing bullets to the sides of itself.",
+    "health": "15",
+    "icon": "Bullet_Shark.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Shark"
+  },
+  {
+    "name": "Great Bullet Shark",
+    "category": "Enemy",
+    "description": "Charges towards the player, releasing many bullets to the sides of itself.",
+    "health": "18.2",
+    "icon": "Great_Bullet_Shark.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Great_Bullet_Shark"
+  },
+  {
+    "name": "Tombstoner",
+    "category": "Enemy",
+    "description": "Walks towards the player, firing bullets in a cross formation.",
+    "health": "20",
+    "icon": "Tombstoner.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tombstoner"
+  },
+  {
+    "name": "KBullet",
+    "category": "Enemy",
+    "description": "Walks towards the player, firing bullets in a cross formation.",
+    "health": "20",
+    "icon": "KBullet.png",
+    "wiki_url": ""
+  },
+  {
+    "name": "Kalibullet",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing two spreads of bullets.",
+    "health": "20",
+    "icon": "Kalibullet.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kalibullet"
+  },
+  {
+    "name": "Gun Cultist",
+    "category": "Enemy",
+    "description": "Erratically moves around the room and wildly shoots at the player. Has the ability to dodge roll.",
+    "health": "22.7",
+    "icon": "Gun_Cultist.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Cultist"
+  },
+  {
+    "name": "Beadie",
+    "category": "Enemy",
+    "description": "Fires bullets towards the player and explodes upon death.",
+    "health": "20",
+    "icon": "Beadie.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Beadie"
+  },
+  {
+    "name": "Snake Guy",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, occasionally firing a V-shaped spread of 5 fast-moving bullets and predicting the player's movements.",
+    "health": "30",
+    "icon": "Snake_Enemy.png",
+    "wiki_url": ""
+  },
+  {
+    "name": "Ammoconda Ball",
+    "category": "Enemy",
+    "description": "Summoned by the Ammoconda.Sits stationary, occasionally firing a single bullet towards the player.The Ammoconda can eat the ball, killing it and buffing itself.",
+    "health": "75",
+    "icon": "Ammoconda_Ball.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda_Ball"
+  },
+  {
+    "name": "Cylinder",
+    "category": "Enemy",
+    "description": "Drifts towards the player, firing semi-random spreads of triangle shaped bullets.",
+    "health": "15",
+    "icon": "Cylinder_Enemy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cylinder"
+  },
+  {
+    "name": "Red Cylinder",
+    "category": "Enemy",
+    "description": "Drifts towards the player, firing semi-random spreads of triangle shaped bullets.",
+    "health": "15",
+    "icon": "Red_Cylinder_Enemy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Cylinder"
+  },
+  {
+    "name": "Gun Nut",
+    "category": "Enemy",
+    "description": "Periodically strikes the ground with its sword, releasing a wide 90 degree arc of bullets towards the player. Can only aim in the eight compass directions.",
+    "health": "100",
+    "icon": "Gun_Nut.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Nut"
+  },
+  {
+    "name": "Spectral Gun Nut",
+    "category": "Enemy",
+    "description": "Periodically fires a wide 90 degree arc of bullets towards the player, along with a larger jammed bullet that explodes into bullets in all directions upon impact.",
+    "health": "54",
+    "icon": "Spectral_Gun_Nut.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spectral_Gun_Nut"
+  },
+  {
+    "name": "Chain Gunner",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player while swinging a ball and chain made of bullets. If it is the only enemy left in the room, its eyes will glow red and it will launch the ball and chain at the player.",
+    "health": "90",
+    "icon": "Chain_Gunner.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chain_Gunner"
+  },
+  {
+    "name": "Fungun",
+    "category": "Enemy",
+    "description": "Periodically releases clouds of bullets. Leaves a small pool of poison creep upon death.",
+    "health": "15",
+    "icon": "Fungun.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fungun"
+  },
+  {
+    "name": "Spogre",
+    "category": "Enemy",
+    "description": "Periodically releases large clouds of bullets. Releases a smaller cloud of bullets upon death.",
+    "health": "60",
+    "icon": "Spogre.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spogre"
+  },
+  {
+    "name": "Mountain Cube",
+    "category": "Enemy",
+    "description": "Slides towards the player if they line up with it horizontally or vertically. Can be killed, causing it to explode and freeze any other enemies inside the blast radius. The explosion cannot damage the player. Dies upon completing the room.",
+    "health": "21.1",
+    "icon": "Mountain_Cube.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mountain_Cube"
+  },
+  {
+    "name": "Lead Cube",
+    "category": "Enemy",
+    "description": "Slides towards the player if they line up with it horizontally or vertically. Cannot be killed until the room is completed.",
+    "health": "20",
+    "icon": "Lead_Cube.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lead_Cube"
+  },
+  {
+    "name": "Flesh Cube",
+    "category": "Enemy",
+    "description": "Slides towards the player if they line up with it horizontally or vertically, leaving behind a trail of fire. Releases bullets in all directions upon colliding with an obstacle. Cannot be killed. Dies when the room is completed.",
+    "health": "N/A",
+    "icon": "Flesh_Cube.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Flesh_Cube"
+  },
+  {
+    "name": "Dead Blow",
+    "category": "Enemy",
+    "description": "Pounds the ground, leaving a patch of fire and sending fire bullets in all directions. Cannot be killed, and disappears when the room is completed. In some rooms, the Dead Blow will follow the player.",
+    "health": "N/A",
+    "icon": "Dead_Blow.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dead_Blow"
+  },
+  {
+    "name": "Lead Maiden",
+    "category": "Enemy",
+    "description": "Hops around, then opens up and fires three rings of triangular bullets that stick to walls, then fire towards the player. Cannot be damaged while closed. Explodes upon death.",
+    "health": "60",
+    "icon": "Lead_Maiden.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lead_Maiden"
+  },
+  {
+    "name": "Fridge Maiden",
+    "category": "Enemy",
+    "description": "Hops around, then opens up and fires three rings of triangular bullets that stick to walls, then fire towards the player. Cannot be damaged while closed. Explodes upon death.",
+    "health": "60",
+    "icon": "Fridge_Maiden.png",
+    "wiki_url": ""
+  },
+  {
+    "name": "Misfire Beast",
+    "category": "Enemy",
+    "description": "Camouflages itself and creates projections that attack the player with bullet whips.",
+    "health": "48",
+    "icon": "Misfire_Beast.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Misfire_Beast"
+  },
+  {
+    "name": "Phaser Spider",
+    "category": "Enemy",
+    "description": "Fires large web-shaped sprays of bullets at the player that leave slowing cobwebs on the floor. Frequently burrows into the ground and reappears elsewhere in the room.",
+    "health": "60",
+    "icon": "Phaser_Spider.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Phaser_Spider"
+  },
+  {
+    "name": "Killithid",
+    "category": "Enemy",
+    "description": "Summons portals around the room that fire bullets towards the player. Occasionally splits into three copies of itself, two of which are illusions.",
+    "health": "45",
+    "icon": "Killithid.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Killithid"
+  },
+  {
+    "name": "Gripmaster",
+    "category": "Enemy",
+    "description": "Hovers over the player and attempts to grab them. If the player is successfully grabbed, it will shoot the player to a previously cleared room, which will be reset and have all enemies respawned. Automatically dies if all other enemies in the room are killed.",
+    "health": "30",
+    "icon": "Gripmaster.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gripmaster"
+  },
+  {
+    "name": "Dragun Knifeguy",
+    "category": "Enemy",
+    "description": "Thrown by the High Dragun. Sticks into the wall, periodically firing rapid arcing bursts of bullets away from themselves.Does not actively target the player.",
+    "health": "60",
+    "icon": "Dragun_Knifeguy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dragun_Knifeguy"
+  },
+  {
+    "name": "Advanced Dragun Knifeguy",
+    "category": "Enemy",
+    "description": "Thrown by the Advanced Dragun. Sticks into the wall, periodically firing a loose spread of extremely rapid kunai towards the player, telegraphed by red trajectory lines.",
+    "health": "60",
+    "icon": "Advanced_Dragun_Knifeguy.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Advanced_Dragun_Knifeguy"
+  },
+  {
+    "name": "Tarnisher",
+    "category": "Enemy",
+    "description": "Sinks into the floor and chases the player.  If it successfully catches the player, it will deal damage, partially drain the current gun's ammo, and reduce the magazine size of all of the player's guns until they pick up ammo.",
+    "health": "30",
+    "icon": "Tarnisher.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tarnisher"
+  },
+  {
+    "name": "Shambling Round",
+    "category": "Enemy",
+    "description": "Has three stages that it progresses through as it takes damage. In its first stage, it fires rings of bullets in all directions. In its second stage, it rapidly alternates between firing bullets out of its left and right sides. In its third stage, it sprays numerous bullets in all directions. Upon death, it leaves behind a cap that explodes after a short delay.",
+    "health": "96",
+    "icon": "Shambling_Round.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shambling_Round"
+  },
+  {
+    "name": "Shelleton",
+    "category": "Enemy",
+    "description": "Slowly walks towards the player, frequently firing two wide bursts of bullets at the player. Occasionally fires a laser at the player. Collapses upon death, and will revive if not destroyed after a short period of time.",
+    "health": "78",
+    "icon": "Shelleton.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shelleton"
+  },
+  {
+    "name": "Agonizer",
+    "category": "Enemy",
+    "description": "Periodically spews bullets in all directions.",
+    "health": "50",
+    "icon": "Agonizer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agonizer"
+  },
+  {
+    "name": "Revolvenant",
+    "category": "Enemy",
+    "description": "Stretches its arm towards the player, attaching it to a wall. The arm will then release bullets perpendicular to itself. The arms might also form a circle around the player, which follows the movement of the player and will shoot bullets at them.",
+    "health": "90",
+    "icon": "Revolvenant.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Revolvenant"
+  },
+  {
+    "name": "Bullet Mech",
+    "category": "Enemy",
+    "description": "Lumbers towards the player, periodically pausing to jump twice in a row.On the first jump, it releases a diamond-shaped blast of bullets similar to a Cubulon's attack. On the second jump it releases a circular ring of 12 bullets.",
+    "health": "60",
+    "icon": "Bullet_Mech.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Mech"
+  },
+  {
+    "name": "Gunreaper",
+    "category": "Enemy",
+    "description": "Swings its scythe, sending a homing arc of bullets towards the player. Cannot be killed, and disappears upon completing the room.",
+    "health": "N/A",
+    "icon": "Gunreaper.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunreaper"
+  },
+  {
+    "name": "Lord of the Jammed",
+    "category": "Enemy",
+    "description": "Swings its scythe, sending bullets in all directions. Cannot be killed, and follows the player through rooms and across floors.",
+    "health": "N/A",
+    "icon": "Lord_of_the_Jammed.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lord_of_the_Jammed"
+  },
+  {
+    "name": "Bullet Kin Titan",
+    "category": "Enemy",
+    "description": "Walks slowly towards the player, firing large, slow-moving bullets in spreads of fire.",
+    "health": "80",
+    "icon": "Bullet_Kin_Titan.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Kin_Titan"
+  },
+  {
+    "name": "Bullet Kin Titan Boss",
+    "category": "Enemy",
+    "description": "Walks slowly towards the player, firing large bullets in three-way spreads, in bursts of three.\nWill occasionally fire with predictive aim, taking the player's movement into account.",
+    "health": "100",
+    "icon": "Bullet_Kin_Titan_Boss.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Kin_Titan_Boss"
+  },
+  {
+    "name": "Bullet Gal Titan Boss",
+    "category": "Enemy",
+    "description": "Walks slowly towards the player, firing large bullets in three-way spreads, in bursts of three.\nWill occasionally fire with predictive aim, taking the player's movement into account.",
+    "health": "80",
+    "icon": "Bullet_Gal_Titan_Boss.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Gal_Titan_Boss"
+  },
+  {
+    "name": "Fuselier",
+    "category": "Enemy",
+    "description": "A mini-boss that flies around the top of the screen and rains down various attacks.",
+    "health": "450",
+    "icon": "Fuselier.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fuselier"
+  },
+  {
+    "name": "Blockner",
+    "category": "Enemy",
+    "description": "A mini-boss that can appear after killing Blockner in Black Powder Mine. Has the same attacks that Blockner has, except he does not start with two Gun Nuts present in the room.",
+    "health": "450",
+    "icon": "Blockner%27s_Ghost.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"
+  },
+  {
+    "name": "Shadow Magician",
+    "category": "Enemy",
+    "description": "Fires bullets in magical spell patterns and twirls across the room.",
+    "health": "450",
+    "icon": "Shadow_Magician.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shadow_Magician"
+  }
+]

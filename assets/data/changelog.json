@@ -1,5 +1,28 @@
 [
   {
+    "version": "v1.6.5",
+    "title": "✨ UI POLISH — COLLAPSIBLE SECTIONS + COMPACT SETTINGS",
+    "date": "July 23, 2026",
+    "items": [
+      "Collapsible Synergies: Item and gun detail pages now show synergies collapsed by default with a count badge and active-synergy indicator — tap to expand.",
+      "Collapsible Referenced-By: The 'Referenced by' panel on item/gun detail pages is now collapsed by default with a referrer count badge — tap to expand.",
+      "Curse/Coolness Reorder: Live effects now appear directly under the value card on stats detail screens, with quick actions below. The full curse effect table and 'Also' section are collapsed by default as nice-to-know details.",
+      "Compact Settings: Settings screen tightened — typography and particle system sections are collapsible (collapsed by default), inter-section spacing reduced, util tiles use dense layout, font picker height reduced."
+    ]
+  },
+  {
+    "version": "v1.6.4",
+    "title": "📖 CODEX EXPANSION — ENEMIES & BOSSES + HOME SCREEN STREAMLINE",
+    "date": "July 23, 2026",
+    "items": [
+      "Codex Enemies Tab: Added 146 enemies scraped from wiki.gg with icons, base health values, and descriptions — covers all Cult of the Gundead variants from Bullet Kin to Lord of the Jammed.",
+      "Codex Bosses Tab: Added 27 bosses with icons and wiki links — includes all floor bosses (Bullet King, Gatling Gull, Trigger Twins, Ammoconda, Beholster, Gorgun, Cannonbalrog, Mine Flayer, Treadnaught, High Priest, Kill Pillars, Wallmonger, High Dragun) plus secret bosses (Blockner, Door Lord, Blobulord, Old King, Resourceful Rat, Agunim, Black Stache, Dr. Wolf's Monster, HS Absolution, Interdimensional Horror, Cannon, The Last Human, Lich).",
+      "Base HP Display: Enemy and boss detail screens now show base health values alongside their category badge.",
+      "Home Screen Streamline: Removed Customize and Codex buttons from the main menu — these are in-run features accessible via the bottom navigation bar during an active run.",
+      "Navigation Bar Simplified: Reduced active-run bottom tabs from 4 to 2 (Inventory + Browse) — Codex and Settings are no longer shown as persistent tabs."
+    ]
+  },
+  {
     "version": "v1.6.3",
     "title": "\ud83c\udfa8 THEME PICKER REDESIGN \u2014 DASHBOARD PREVIEW + BIG PALETTE BUTTONS",
     "date": "July 23, 2026",

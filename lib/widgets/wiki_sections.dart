@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import '../models/rich_text.dart';
 import '../providers/run_provider.dart';
 import '../screens/item_detail_screen.dart';
+import '../services/haptics.dart';
 import '../utils/fast_route.dart';
 import 'game_icon.dart';
 import 'rich_link_text.dart';
-import 'themed_section_title.dart';
 
 // =============================================================================
 // Wiki-content slivers — Effects / Item Interactions / Notes / Tips / Trivia
@@ -85,6 +85,9 @@ class ReferencedBySection extends StatefulWidget {
 }
 
 class _ReferencedBySectionState extends State<ReferencedBySection> {
+  /// Top-level collapse — the whole section starts collapsed.
+  bool _sectionCollapsed = true;
+
   /// Collapser threshold — groups longer than this start collapsed.
   /// Tuned so the common case (≤8 refs in a group) never shows a
   /// `Show all` toggle.
@@ -93,49 +96,6 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
   /// Per-group "expanded?" state. Keyed by group label so adding new
   /// kinds in future doesn't shuffle existing toggles.
   final Map<String, bool> _expanded = {};
-
-  /// Number of groups whose ref count exceeds [_collapseThreshold] —
-  /// i.e. groups that *would* render their own per-group `Show all`
-  /// chip. The master toggle only surfaces when this is ≥2 (so it
-  /// genuinely saves taps over flipping each group individually).
-  int _collapsibleGroupCount(
-    List<String> guns,
-    List<String> items,
-    List<String> other,
-  ) {
-    var n = 0;
-    if (guns.length > _collapseThreshold) n++;
-    if (items.length > _collapseThreshold) n++;
-    if (other.length > _collapseThreshold) n++;
-    return n;
-  }
-
-  /// True when every collapsible group is currently expanded. Drives
-  /// the toggle's "Expand all" ↔ "Collapse all" label flip.
-  bool _allGroupsExpanded(
-    List<String> guns,
-    List<String> items,
-    List<String> other,
-  ) {
-    bool ok(String label, List<String> list) {
-      if (list.length <= _collapseThreshold) return true;
-      return _expanded[label] == true;
-    }
-    return ok('Guns', guns) && ok('Items', items) && ok('Other', other);
-  }
-
-  void _toggleAll(
-    List<String> guns,
-    List<String> items,
-    List<String> other,
-  ) {
-    final expand = !_allGroupsExpanded(guns, items, other);
-    setState(() {
-      if (guns.length > _collapseThreshold) _expanded['Guns'] = expand;
-      if (items.length > _collapseThreshold) _expanded['Items'] = expand;
-      if (other.length > _collapseThreshold) _expanded['Other'] = expand;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -168,27 +128,60 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ThemedSectionTitle(
-                icon: Icons.share_outlined,
-                iconColor: Colors.lightBlueAccent,
-                title: 'Referenced by',
-                count: widget.referrers.length,
-                // Master expand/collapse toggle. Surfaces only when at
-                // least two groups would individually need their own
-                // `Show all` chip — for shorter ref lists the per-group
-                // chips are already enough.
-                trailing: _collapsibleGroupCount(guns, items, other) >= 2
-                    ? _MasterToggle(
-                        allExpanded:
-                            _allGroupsExpanded(guns, items, other),
-                        onTap: () => _toggleAll(guns, items, other),
-                      )
-                    : null,
+              // Tap-to-expand header with chevron
+              InkWell(
+                onTap: () {
+                  Haptics.selection();
+                  setState(() => _sectionCollapsed = !_sectionCollapsed);
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.share_outlined, size: 16, color: Colors.lightBlueAccent),
+                    const SizedBox(width: 6),
+                    Text(
+                      'REFERENCED BY',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: Colors.white.withValues(alpha: 0.7),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '${widget.referrers.length}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    AnimatedRotation(
+                      turns: _sectionCollapsed ? 0 : 0.5,
+                      duration: const Duration(milliseconds: 180),
+                      child: Icon(
+                        Icons.expand_more_rounded,
+                        size: 18,
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 4),
-              if (guns.isNotEmpty) _buildGroup('Guns', guns),
-              if (items.isNotEmpty) _buildGroup('Items', items),
-              if (other.isNotEmpty) _buildGroup('Other', other),
+              if (!_sectionCollapsed) ...[
+                const SizedBox(height: 8),
+                if (guns.isNotEmpty) _buildGroup('Guns', guns),
+                if (items.isNotEmpty) _buildGroup('Items', items),
+                if (other.isNotEmpty) _buildGroup('Other', other),
+              ],
             ],
           ),
         ),
@@ -279,55 +272,6 @@ class _ShowMoreChip extends StatelessWidget {
             children: [
               Icon(
                 collapse ? Icons.expand_less : Icons.expand_more,
-                size: 14,
-                color: Colors.lightBlueAccent.withValues(alpha: 0.85),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.lightBlueAccent.withValues(alpha: 0.95),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// One-tap "Expand all groups" / "Collapse all groups" affordance shown
-/// in the [ReferencedBySection] header when at least two groups are
-/// individually collapsible. Sits opposite the title so it never
-/// crowds the count, and uses a quieter outline than the per-group
-/// `Show all` chips so the eye still treats those as the primary
-/// drilldown.
-class _MasterToggle extends StatelessWidget {
-  final bool allExpanded;
-  final VoidCallback onTap;
-  const _MasterToggle({
-    required this.allExpanded,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final label = allExpanded ? 'Collapse all' : 'Expand all';
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                allExpanded ? Icons.unfold_less : Icons.unfold_more,
                 size: 14,
                 color: Colors.lightBlueAccent.withValues(alpha: 0.85),
               ),

@@ -118,6 +118,17 @@ class CodexDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                      if (entry.health != null && entry.health!.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          'Base HP: ${entry.health}',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: flair.secondary.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
                       if (entry.location != null && entry.location!.isNotEmpty) ...[
                         const SizedBox(height: 6),
                         Text(

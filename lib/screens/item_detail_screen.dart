@@ -7,11 +7,11 @@ import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
 import '../services/app_theme.dart';
+import '../services/haptics.dart';
 import '../widgets/quality_badge.dart';
 import '../widgets/game_icon.dart';
 import '../widgets/rich_link_text.dart';
 import '../widgets/themed_number.dart';
-import '../widgets/themed_section_title.dart';
 import '../widgets/wiki_sections.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
@@ -3004,7 +3004,7 @@ class _ItemBody extends StatelessWidget {
   }
 }
 
-class _SynergiesSection extends StatelessWidget {
+class _SynergiesSection extends StatefulWidget {
   final List<SynergyStatus> statuses;
   final String currentName;
   const _SynergiesSection({
@@ -3013,20 +3013,98 @@ class _SynergiesSection extends StatelessWidget {
   });
 
   @override
+  State<_SynergiesSection> createState() => _SynergiesSectionState();
+}
+
+class _SynergiesSectionState extends State<_SynergiesSection> {
+  bool _collapsed = true;
+
+  @override
   Widget build(BuildContext context) {
+    final activeCount =
+        widget.statuses.where((s) => s.active).length;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ThemedSectionTitle(
-            icon: Icons.hub,
-            iconColor: Colors.amber,
-            title: 'Synergies',
-            count: statuses.length,
+          // Tap-to-expand header
+          InkWell(
+            onTap: widget.statuses.isEmpty
+                ? null
+                : () {
+                    Haptics.selection();
+                    setState(() => _collapsed = !_collapsed);
+                  },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
+                children: [
+                  Icon(Icons.hub, size: 16, color: Colors.amber),
+                  const SizedBox(width: 6),
+                  Text(
+                    'SYNERGIES',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                      color: Colors.white.withValues(alpha: 0.7),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  if (widget.statuses.isNotEmpty)
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '${widget.statuses.length}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    ),
+                  if (activeCount > 0) ...[
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '$activeCount active',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.amber,
+                        ),
+                      ),
+                    ),
+                  ],
+                  const Spacer(),
+                  if (widget.statuses.isNotEmpty)
+                    AnimatedRotation(
+                      turns: _collapsed ? 0 : 0.5,
+                      duration: const Duration(milliseconds: 180),
+                      child: Icon(
+                        Icons.expand_more_rounded,
+                        size: 18,
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(height: 6),
-          if (statuses.isEmpty)
+          if (!_collapsed && widget.statuses.isEmpty)
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -3036,11 +3114,11 @@ class _SynergiesSection extends StatelessWidget {
                 ),
               ),
             )
-          else
-            ...statuses.map(
+          else if (!_collapsed)
+            ...widget.statuses.map(
               (s) => _SynergyCard(
                 status: s,
-                currentName: currentName,
+                currentName: widget.currentName,
               ),
             ),
         ],

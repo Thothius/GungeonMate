@@ -8,7 +8,7 @@ import 'codex_detail_screen.dart';
 import '../utils/fast_route.dart';
 
 /// The GungeonMate Codex — a browseable encyclopedia of Objects, Pickups,
-/// and NPCs from Enter the Gungeon. Accessed from the main menu or as a
+/// NPCs, Enemies, and Bosses from Enter the Gungeon. Accessed as a
 /// bottom-nav tab during an active run.
 class CodexScreen extends StatefulWidget {
   final bool showBackButton;
@@ -29,12 +29,14 @@ class _CodexScreenState extends State<CodexScreen>
   List<CodexEntry> _objects = [];
   List<CodexEntry> _pickups = [];
   List<CodexEntry> _npcs = [];
+  List<CodexEntry> _enemies = [];
+  List<CodexEntry> _bosses = [];
   bool _loaded = false;
 
   @override
   void initState() {
     super.initState();
-    _tab = TabController(length: 3, vsync: this);
+    _tab = TabController(length: 5, vsync: this);
     _searchCtrl.addListener(_onSearchChanged);
     _loadData();
   }
@@ -51,6 +53,8 @@ class _CodexScreenState extends State<CodexScreen>
       bundle.loadString('assets/data/objects.json'),
       bundle.loadString('assets/data/pickups.json'),
       bundle.loadString('assets/data/npcs.json'),
+      bundle.loadString('assets/data/enemies.json'),
+      bundle.loadString('assets/data/bosses.json'),
     ]);
     if (!mounted) return;
     setState(() {
@@ -61,6 +65,12 @@ class _CodexScreenState extends State<CodexScreen>
           .map((j) => CodexEntry.fromJson(j as Map<String, dynamic>))
           .toList();
       _npcs = (jsonDecode(results[2]) as List)
+          .map((j) => CodexEntry.fromJson(j as Map<String, dynamic>))
+          .toList();
+      _enemies = (jsonDecode(results[3]) as List)
+          .map((j) => CodexEntry.fromJson(j as Map<String, dynamic>))
+          .toList();
+      _bosses = (jsonDecode(results[4]) as List)
           .map((j) => CodexEntry.fromJson(j as Map<String, dynamic>))
           .toList();
       _loaded = true;
@@ -150,6 +160,18 @@ class _CodexScreenState extends State<CodexScreen>
                   icon: const Icon(Icons.person_outline, size: 18),
                   text: 'NPCs',
                 ),
+                Tab(
+                  height: 42,
+                  iconMargin: const EdgeInsets.only(bottom: 2),
+                  icon: const Icon(Icons.dangerous_outlined, size: 18),
+                  text: 'Enemies',
+                ),
+                Tab(
+                  height: 42,
+                  iconMargin: const EdgeInsets.only(bottom: 2),
+                  icon: const Icon(Icons.emoji_events_outlined, size: 18),
+                  text: 'Bosses',
+                ),
               ],
             ),
           ),
@@ -213,6 +235,14 @@ class _CodexScreenState extends State<CodexScreen>
                       _CodexList(
                         entries: _filter(_npcs, CodexSection.npcs),
                         section: CodexSection.npcs,
+                      ),
+                      _CodexList(
+                        entries: _filter(_enemies, CodexSection.enemies),
+                        section: CodexSection.enemies,
+                      ),
+                      _CodexList(
+                        entries: _filter(_bosses, CodexSection.bosses),
+                        section: CodexSection.bosses,
                       ),
                     ],
                   ),
@@ -396,6 +426,10 @@ class _CodexCard extends StatelessWidget {
       case 'minor npc':
       case 'other npc':
         return Icons.person_outline;
+      case 'enemy':
+        return Icons.dangerous_outlined;
+      case 'boss':
+        return Icons.emoji_events_outlined;
       default:
         return Icons.widgets;
     }

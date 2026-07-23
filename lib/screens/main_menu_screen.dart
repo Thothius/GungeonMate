@@ -4,8 +4,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
-import 'theme_picker_screen.dart';
-import 'codex_screen.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
@@ -297,64 +295,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // Customize (formerly Theme Picker)
-                  ScaleButton(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        fastRoute(const ThemePickerScreen()),
-                      );
-                    },
-                    child: IgnorePointer(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.palette_outlined, size: 24),
-                          label: const GoopText(
-                            'Customize',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Codex — browse Objects, Pickups, and NPCs
-                  ScaleButton(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        fastRoute(const CodexScreen(showBackButton: true)),
-                      );
-                    },
-                    child: IgnorePointer(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: OutlinedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.menu_book_outlined, size: 24),
-                          label: const GoopText(
-                            'Codex',
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
                   Text(
-                    'v1.6.2',
+                    'v1.6.5',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -393,7 +335,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                           SizedBox(width: 6),
                           Text(
-                            'Changelog (v1.6.2)',
+                            'Changelog (v1.6.5)',
                             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
@@ -447,7 +389,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.6.2 — Theme-Accent Dashboard Border + Curse Sheet Polish + Menu Restructure',
+                            'v1.6.5 — UI Polish: Collapsible Sections + Compact Settings',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

@@ -68,8 +68,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 // Tab 1: Appearance, Theme Palette & Fonts
 // =============================================================================
 
-class _ThemeVisualsTab extends StatelessWidget {
+class _ThemeVisualsTab extends StatefulWidget {
   const _ThemeVisualsTab();
+
+  @override
+  State<_ThemeVisualsTab> createState() => _ThemeVisualsTabState();
+}
+
+class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
+  bool _particlesExpanded = false;
+  bool _typographyExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +97,7 @@ class _ThemeVisualsTab extends StatelessWidget {
               // Active Theme Premium Dashboard Card
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -165,7 +173,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     // Choose Theme Action Button
                     SizedBox(
                       width: double.infinity,
@@ -183,7 +191,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                           backgroundColor: flair.primary,
                           foregroundColor: Colors.white,
                           elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 13),
+                          padding: const EdgeInsets.symmetric(vertical: 11),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -199,12 +207,18 @@ class _ThemeVisualsTab extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               // =============================================================
-              // Typography Tuning Section (with swipe font selector!)
+              // Typography Tuning Section (collapsible)
               // =============================================================
-              _prefSectionTitle('APP TYPOGRAPHY TUNING'),
+              _collapsibleSectionHeader(
+                'APP TYPOGRAPHY TUNING',
+                flair,
+                _typographyExpanded,
+                () => setState(() => _typographyExpanded = !_typographyExpanded),
+              ),
+              if (_typographyExpanded) ...[
               const SizedBox(height: 8),
               Card(
                 color: flair.card.withValues(alpha: 0.92),
@@ -221,7 +235,7 @@ class _ThemeVisualsTab extends StatelessWidget {
                         items: AppFont.values,
                         value: prefs.font,
                         onChanged: (f) => VisualPrefs.setFont(f),
-                        height: 112,
+                        height: 80,
                         itemBuilder: (font, isSelected) => Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
@@ -290,12 +304,20 @@ class _ThemeVisualsTab extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              ],
+              const SizedBox(height: 16),
 
               // =============================================================
-              // Particle System Section
+              // Particle System Section (collapsible)
               // =============================================================
-              _prefSectionTitleWithInfo('PARTICLE SYSTEM', flair, tooltip: 'Enable and customize the background particle engine. Swipe through live previews to pick a preset, then fine-tune count, size, opacity, glow effect, and line links.'),
+              _collapsibleSectionHeaderWithInfo(
+                'PARTICLE SYSTEM',
+                flair,
+                _particlesExpanded,
+                () => setState(() => _particlesExpanded = !_particlesExpanded),
+                tooltip: 'Enable and customize the background particle engine. Swipe through live previews to pick a preset, then fine-tune count, size, opacity, glow effect, and line links.',
+              ),
+              if (_particlesExpanded) ...[
               const SizedBox(height: 8),
               Card(
                 color: flair.card.withValues(alpha: 0.92),
@@ -420,7 +442,8 @@ class _ThemeVisualsTab extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              ],
+              const SizedBox(height: 16),
 
               // =============================================================
               // Screen Glow Section (slider + color picker)
@@ -501,11 +524,122 @@ class _ThemeVisualsTab extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _collapsibleSectionHeader(
+    String title,
+    ThemeFlair flair,
+    bool expanded,
+    VoidCallback onTap,
+  ) {
+    return InkWell(
+      onTap: () {
+        Haptics.selection();
+        onTap();
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4, bottom: 4),
+        child: Row(
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                color: Colors.white60,
+                letterSpacing: 0.5,
+              ),
+            ),
+            const Spacer(),
+            AnimatedRotation(
+              turns: expanded ? 0.5 : 0,
+              duration: const Duration(milliseconds: 180),
+              child: Icon(
+                Icons.expand_more_rounded,
+                size: 16,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _collapsibleSectionHeaderWithInfo(
+    String title,
+    ThemeFlair flair,
+    bool expanded,
+    VoidCallback onTap, {
+    String? tooltip,
+  }) {
+    return InkWell(
+      onTap: () {
+        Haptics.selection();
+        onTap();
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4, bottom: 4),
+        child: Row(
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                color: Colors.white60,
+                letterSpacing: 0.5,
+              ),
+            ),
+            if (tooltip != null) ...[
+              const SizedBox(width: 6),
+              Tooltip(
+                message: tooltip,
+                triggerMode: TooltipTriggerMode.tap,
+                showDuration: const Duration(seconds: 5),
+                padding: const EdgeInsets.all(12),
+                margin: const EdgeInsets.symmetric(horizontal: 24),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E1E22),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: flair.primary.withValues(alpha: 0.65),
+                      width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: 0.15),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+                textStyle: const TextStyle(
+                    fontSize: 10.5,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+                child: Icon(Icons.info_outline_rounded,
+                    size: 13,
+                    color: flair.primary.withValues(alpha: 0.6)),
+              ),
+            ],
+            const Spacer(),
+            AnimatedRotation(
+              turns: expanded ? 0.5 : 0,
+              duration: const Duration(milliseconds: 180),
+              child: Icon(
+                Icons.expand_more_rounded,
+                size: 16,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -543,16 +677,6 @@ class _ThemeVisualsTab extends StatelessWidget {
             ),
           ],
         ],
-      ),
-    );
-  }
-
-  Widget _prefSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 4),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.white60, letterSpacing: 0.5),
       ),
     );
   }
@@ -961,7 +1085,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
                 onTap: () => _confirmLeaveMp(context, mpSession),
               ),
           ],
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
 
           // 🧹 Inventory Maintenance
           _sectionHeader('🧹 INVENTORY MAINTENANCE'),
@@ -980,7 +1104,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               color: Colors.pinkAccent,
               onTap: () => _confirmClearInventory(context, p, PlayerSlot.coop),
             ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
 
           // 🛐 Gameplay Actions
           _sectionHeader('🛐 GAMEPLAY ACTIONS'),
@@ -994,7 +1118,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               fastRoute(const ShrinePickerScreen()),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
 
           // 📜 Run Data
           _sectionHeader('📜 RUN DATA'),
@@ -1008,7 +1132,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
               fastRoute(const RunLogScreen()),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
 
           // ⚠️ Core Actions
           _sectionHeader('⚠️ CORE ACTIONS'),
@@ -1019,7 +1143,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
             color: Colors.redAccent,
             onTap: () => _confirmEndRun(context, p),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           _utilTile(
             title: 'Reset All App Data',
             subtitle: 'Wipes everything: run state, favourites, theme prefs, settings. Restarts the app.',
@@ -1093,7 +1217,7 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
     required VoidCallback onTap,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(10),
@@ -1101,10 +1225,12 @@ class _RunUtilitiesTabState extends State<_RunUtilitiesTab> {
       ),
       child: ListTile(
         onTap: onTap,
-        leading: Icon(icon, color: color),
-        title: Text(title, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
-        subtitle: Text(subtitle, style: const TextStyle(fontSize: 10.5, color: Colors.white54)),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.white38),
+        dense: true,
+        visualDensity: VisualDensity.compact,
+        leading: Icon(icon, color: color, size: 20),
+        title: Text(title, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold)),
+        subtitle: Text(subtitle, style: const TextStyle(fontSize: 10, color: Colors.white54)),
+        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Colors.white38),
       ),
     );
   }

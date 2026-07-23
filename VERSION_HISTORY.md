@@ -6,6 +6,60 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.5 — UI Polish: Collapsible Sections + Compact Settings (July 23, 2026)
+**Build:** 66
+
+### Collapsible Synergies (Item/Gun Detail)
+- `_SynergiesSection` converted from StatelessWidget to StatefulWidget with `_collapsed = true`.
+- Header shows synergy count badge and active-synergy indicator (amber pill).
+- Tap-to-expand with animated chevron rotation and haptic feedback.
+
+### Collapsible Referenced-By (Item/Gun Detail)
+- `ReferencedBySection` now starts with `_sectionCollapsed = true`.
+- Header shows referrer count badge and animated chevron.
+- Removed unused `_MasterToggle` class and helper methods (`_collapsibleGroupCount`, `_allGroupsExpanded`, `_toggleAll`).
+- Removed unused `themed_section_title.dart` import.
+
+### Curse/Coolness Detailed Views Reorder
+- Live effects now appear directly under the value card (most relevant first).
+- Quick actions moved below effects.
+- Event log remains collapsed by default at the bottom.
+- `_CoolnessEffects` "Also" section now collapsible (collapsed by default).
+- `_CurseEffects` full curse effect table now collapsible (collapsed by default).
+- Both converted from StatelessWidget to StatefulWidget.
+
+### Compact Settings Menu
+- `_ThemeVisualsTab` converted from StatelessWidget to StatefulWidget.
+- Typography and Particle System sections are collapsible (collapsed by default) with tap-to-expand headers.
+- Added `_collapsibleSectionHeader` and `_collapsibleSectionHeaderWithInfo` helper widgets.
+- Reduced inter-section spacing (24→16, 20→12).
+- Reduced theme card padding (18→14 horizontal, 16→12 vertical).
+- Reduced font picker height (112→80).
+- `_utilTile` now uses `dense: true` and `VisualDensity.compact` with smaller icons and margins.
+- Removed unused `_prefSectionTitle` method.
+
+---
+
+## v1.6.4 — Codex Expansion: Enemies & Bosses + Home Screen Streamline (July 23, 2026)
+**Build:** 65
+
+### Codex Enemies Tab
+- Added 146 enemies scraped from wiki.gg with pixel-art icons, base health values, and descriptions.
+- Covers all Cult of the Gundead variants from Bullet Kin to Lord of the Jammed.
+
+### Codex Bosses Tab
+- Added 27 bosses with icons and wiki links.
+- Includes all floor bosses (Bullet King, Gatling Gull, Trigger Twins, Ammoconda, Beholster, Gorgun, Cannonbalrog, Mine Flayer, Treadnaught, High Priest, Kill Pillars, Wallmonger, High Dragun) plus secret bosses (Blockner, Door Lord, Blobulord, Old King, Resourceful Rat, Agunim, Black Stache, Dr. Wolf's Monster, HS Absolution, Interdimensional Horror, Cannon, The Last Human, Lich).
+
+### Base HP Display
+- Enemy and boss detail screens now show base health values alongside their category badge.
+
+### Home Screen Streamline
+- Removed Customize and Codex buttons from the main menu — these are in-run features.
+- Reduced active-run bottom navigation tabs from 4 to 2 (Inventory + Browse).
+
+---
+
 ## v1.6.3 — Theme Picker Redesign: Dashboard Preview + Big Palette Buttons (July 23, 2026)
 **Build:** 64
 
