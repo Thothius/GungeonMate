@@ -90,7 +90,7 @@ class CharacterSelectScreen extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: isMultiplayerPick ? 0.60 : 0.56,
+                    childAspectRatio: isMultiplayerPick ? 0.62 : 0.64,
                     crossAxisSpacing: 14,
                     mainAxisSpacing: 14,
                   ),
@@ -405,12 +405,9 @@ class _SimpleCharacterCardState extends State<_SimpleCharacterCard>
     final char = widget.character;
     final gifPath = gungeoneerGifPath(char.name);
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (gifPath.isNotEmpty)
-            Image.asset(
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+      child: gifPath.isNotEmpty
+          ? Image.asset(
               gifPath,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.none,
@@ -419,30 +416,17 @@ class _SimpleCharacterCardState extends State<_SimpleCharacterCard>
                 char.icon,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.none,
-                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 48, color: Colors.white70),
+                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
               ),
             )
-          else if (char.icon.startsWith('assets/'))
-            Image.asset(
-              char.icon,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.none,
-              errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 48, color: Colors.white70),
-            )
-          else
-            const Icon(Icons.person, size: 48, color: Colors.white70),
-          const SizedBox(height: 4),
-          GoopText(
-            'IN-GAME',
-            style: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.w900,
-              color: Colors.white38,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ],
-      ),
+          : (char.icon.startsWith('assets/')
+              ? Image.asset(
+                  char.icon,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.none,
+                  errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
+                )
+              : const Icon(Icons.person, size: 64, color: Colors.white70)),
     );
   }
 
@@ -450,7 +434,7 @@ class _SimpleCharacterCardState extends State<_SimpleCharacterCard>
     final char = widget.character;
     if (char.icon.startsWith('assets/')) {
       return Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(4),
         child: Image.asset(
           char.icon,
           fit: BoxFit.contain,
@@ -539,14 +523,14 @@ class _CharacterCardState extends State<_CharacterCard>
       ),
       clipBehavior: Clip.antiAlias,
       child: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: Column(
         children: [
           // --- Flip image area ---
           // Fixed-height image area instead of Expanded to prevent
           // overflow when the items panel expands.
           SizedBox(
-            height: 180,
+            height: 220,
             child: Stack(
               children: [
                 // Gradient background
@@ -759,12 +743,9 @@ class _CharacterCardState extends State<_CharacterCard>
     final char = widget.character;
     final gifPath = gungeoneerGifPath(char.name);
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (gifPath.isNotEmpty)
-            Image.asset(
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+      child: gifPath.isNotEmpty
+          ? Image.asset(
               gifPath,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.none,
@@ -773,30 +754,17 @@ class _CharacterCardState extends State<_CharacterCard>
                 char.icon,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.none,
-                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 48, color: Colors.white70),
+                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
               ),
             )
-          else if (char.icon.startsWith('assets/'))
-            Image.asset(
-              char.icon,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.none,
-              errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 48, color: Colors.white70),
-            )
-          else
-            const Icon(Icons.person, size: 48, color: Colors.white70),
-          const SizedBox(height: 4),
-          GoopText(
-            'IN-GAME',
-            style: TextStyle(
-              fontSize: 8,
-              fontWeight: FontWeight.w900,
-              color: Colors.white38,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ],
-      ),
+          : (char.icon.startsWith('assets/')
+              ? Image.asset(
+                  char.icon,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.none,
+                  errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
+                )
+              : const Icon(Icons.person, size: 64, color: Colors.white70)),
     );
   }
 
@@ -804,7 +772,7 @@ class _CharacterCardState extends State<_CharacterCard>
     final char = widget.character;
     if (char.icon.startsWith('assets/')) {
       return Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(4),
         child: Image.asset(
           char.icon,
           fit: BoxFit.contain,

@@ -278,13 +278,14 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                               width: 1.2,
                             ),
                           ),
+                          padding: const EdgeInsets.all(1.2),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(8.8),
                             child: _buildAvatarContent(iconPath),
                           ),
                         ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 6),
 
                       if (trailingWidget != null) ...[
                         Flexible(child: trailingWidget),

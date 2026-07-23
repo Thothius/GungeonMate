@@ -1,5 +1,20 @@
 [
   {
+    "version": "v1.7.1",
+    "title": "UI Polish: Detail View Redesign + Damage Calc Sizing",
+    "date": "July 23, 2026",
+    "items": [
+      "Item/Gun detail header redesigned — graphic centered with no inner border, title centered below, quote as plain italic text, rank shown as first metadata pill alongside sell price and synergy count.",
+      "Removed quality badge circle and type label from header row — rank now displayed as a colored pill in the centered metadata wrap.",
+      "Damage Calculator collapsed panel — increased padding, min-height, and font sizes for better readability.",
+      "Damage Calculator popup sheet — increased padding and header sizing for a more comfortable view.",
+      "Character select loadout view — taller cards, bigger in-game graphic, reduced padding for full content display.",
+      "Dashboard settings icon — fixed Spacer pushing icons off-screen in active run header.",
+      "Avatar cycling — fixed rectangular outline disappearing when switching to in-game GIF or animated card art.",
+      "Settings tab added to bottom navigation bar for discoverability."
+    ]
+  },
+  {
     "version": "v1.7.0",
     "title": "🚀 v1.7.0 — GOOPIAN LANGUAGE + CODEX BESTIARY + SETTINGS OVERHAUL",
     "date": "July 23, 2026",

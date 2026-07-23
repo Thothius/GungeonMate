@@ -9,6 +9,7 @@ import '../widgets/theme_overlay.dart';
 import 'main_menu_screen.dart';
 import 'active_run_screen.dart';
 import 'browse_screen.dart';
+import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -105,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
         isVisible: _selectedIndex == 1,
         targetSlot: _currentPlayerSlot,
       ),
+      const SettingsScreen(),
     ];
 
     // Back-button policy: only the Inventory tab pops the route (which
@@ -145,6 +147,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icon(Icons.search),
                 selectedIcon: Icon(Icons.search),
                 label: 'Browse',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.settings_outlined),
+                selectedIcon: Icon(Icons.settings),
+                label: 'Settings',
               ),
             ],
           ),

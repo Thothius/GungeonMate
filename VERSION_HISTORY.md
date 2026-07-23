@@ -6,6 +6,56 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.7.1 — UI Polish: Detail View Redesign + Damage Calc Sizing (July 23, 2026)
+**Build:** 72
+
+### Item/Gun Detail Header Redesign
+- Graphic centered with no inner border — clean, aligned perfectly.
+- Title centered below graphic.
+- Removed quality badge circle and type label from header row.
+- Quote shown as plain centered italic text (no container border).
+- Rank now displayed as first colored metadata pill alongside sell price and synergy count — all centered.
+
+### Damage Calculator
+- Collapsed panel: increased padding (16/12), min-height (48), font sizes (10→11) for readability.
+- Popup sheet: increased padding (20/16/20/20), header icon (22px), header font (15px), bonus pill font (14px).
+
+### Bug Fixes (BUG-013 to BUG-016)
+- Character select loadout view: taller cards (0.64 ratio), bigger in-game graphic (2px padding), 220px image height.
+- Dashboard settings icon: replaced Spacer() with SizedBox(width: 6) to stop icons being pushed off-screen.
+- Avatar cycling: added 1.2px padding to Container, reduced ClipRRect radius to 8.8 to keep border visible.
+- Settings tab: added to bottom NavigationBar as third tab with SettingsScreen.
+
+---
+
+## v1.7.0 — Goopian Language + Codex Bestiary + Settings Overhaul (July 23, 2026)
+**Build:** 71
+
+### Goopian Language Mode
+- Toggle between English and Goopian alien text; 600+ Text widgets across all 16 screens converted to animated GoopText translation.
+
+### Codex Bestiary
+- 146 enemies and 27 bosses added with icons, health values, and detail views sourced from wiki.gg.
+
+### Settings Reorganization
+- 4-tab layout (VISUALS, RUN, APP, DEBUG) with cleaner separation of concerns.
+
+### Character Select Rework
+- Tap avatars to flip and preview, SELECT button to confirm; fixed loadout panel overflow.
+
+### Player Avatar Cycling
+- Tap avatar on active run to cycle through static icon, in-game GIF, and animated card art.
+
+### Other
+- Shrine Icon — tap opens Shrine Picker, long-press toggles shrine tracker panel.
+- Main Menu Polish — floating mascot with tilt parallax, idle float animation, compact settings gear icon.
+- 18 Special Dashboards — Robot, Huntress, Junkan, Gunderfury, Triple Gun, Evolver, Shellegun, Chamber Gun, Platinum Bullets, Iron Coin, Spice, Metronome, Sprun, Boxing Glove, Cigarettes, Polaris, Gunther, Gun Soul.
+- Damage Calculator — toggleable DPS terminal with per-gun breakdown and multiplier contributions.
+- Multiplayer — auto-reconnect, persisted sessions, FIX LINK, state-drift protection, dice decline protocol.
+- UI Polish — collapsible sections everywhere, fastRoute 150ms fade transitions on all navigation.
+
+---
+
 ## v1.6.9 — UI Polish: Character Select, Shrine Icon, Avatar Cycling (July 23, 2026)
 **Build:** 70
 

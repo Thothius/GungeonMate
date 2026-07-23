@@ -1677,14 +1677,15 @@ class _PlayerPageState extends State<_PlayerPage> {
                   .map((g) => g.dpsValue * multiplier)
                   .reduce((a, b) => a > b ? a : b);
               return Padding(
-                padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                 child: GestureDetector(
                   onTap: () => _showDamageCalcSheet(context, _slot),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    constraints: const BoxConstraints(minHeight: 48),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
                       color: const Color(0xFF000800),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: Colors.green.withValues(alpha: 0.25), width: 1.0),
                     ),
                     child: Row(
@@ -1692,12 +1693,12 @@ class _PlayerPageState extends State<_PlayerPage> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.terminal_rounded, size: 14, color: Colors.green.withValues(alpha: 0.7)),
-                            const SizedBox(width: 6),
+                            Icon(Icons.terminal_rounded, size: 16, color: Colors.green.withValues(alpha: 0.7)),
+                            const SizedBox(width: 8),
                             GoopText(
                               'DPS CALC',
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.green.withValues(alpha: 0.7),
                                 letterSpacing: 0.5,
@@ -1712,18 +1713,18 @@ class _PlayerPageState extends State<_PlayerPage> {
                               GoopText(
                                 '${bonusPct >= 0 ? '+' : ''}${bonusPct.toStringAsFixed(0)}%',
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.bold,
                                   color: bonusPct > 0 ? Colors.greenAccent : Colors.redAccent,
                                   fontFamily: 'monospace',
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 10),
                             ],
                             GoopText(
                               'TOP: ${topDps.toStringAsFixed(1)}',
                               style: const TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.greenAccent,
                                 fontFamily: 'monospace',
@@ -3912,9 +3913,15 @@ class _DamageCalcSheet extends StatelessWidget {
     return SafeArea(
       child: Padding(
       padding: EdgeInsets.fromLTRB(
-        16, 12, 16, 16 + MediaQuery.of(context).viewInsets.bottom,
+        20, 16, 20, 20 + MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: Column(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: double.infinity,
+          maxHeight: MediaQuery.of(context).size.height * 0.75,
+        ),
+        child: SingleChildScrollView(
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -3923,12 +3930,12 @@ class _DamageCalcSheet extends StatelessWidget {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.calculate_rounded, color: Colors.amberAccent, size: 20),
-                  SizedBox(width: 8),
+                  Icon(Icons.calculate_rounded, color: Colors.amberAccent, size: 22),
+                  SizedBox(width: 10),
                   GoopText(
                     'DAMAGE CALCULATOR',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 15,
                       fontWeight: FontWeight.w900,
                       color: Colors.amberAccent,
                       letterSpacing: 0.8,
@@ -3937,7 +3944,7 @@ class _DamageCalcSheet extends StatelessWidget {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
                   color: Colors.amber.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
@@ -3946,7 +3953,7 @@ class _DamageCalcSheet extends StatelessWidget {
                 child: GoopText(
                   '${bonusPercent >= 0 ? '+' : ''}${bonusPercent.toStringAsFixed(0)}% DMG',
                   style: const TextStyle(
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: FontWeight.w900,
                     color: Colors.amberAccent,
                     letterSpacing: 0.5,
@@ -3955,7 +3962,7 @@ class _DamageCalcSheet extends StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Colors.white12, height: 20),
+          const Divider(color: Colors.white12, height: 24),
           if (contributions.isNotEmpty) ...[
             for (final c in contributions)
               Padding(
@@ -4101,6 +4108,8 @@ class _DamageCalcSheet extends StatelessWidget {
           ),
           const SizedBox(height: 16),
         ],
+      ),
+      ),
       ),
       ),
     );

@@ -119,40 +119,43 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                       Column(
                         children: [
                           // Styled logo/title with an intense stroke outline and golden saloon look
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              // Deep red backing stroke outline
-                              GoopText(
-                                'GUNGEON MATE',
-                                style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 2.0,
-                                  foreground: Paint()
-                                    ..style = PaintingStyle.stroke
-                                    ..strokeWidth = 6
-                                    ..color = const Color(0xFFC62828), // Deep Gungeon Red
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // Deep red backing stroke outline
+                                GoopText(
+                                  'GUNGEON MATE',
+                                  style: TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 2.0,
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 6
+                                      ..color = const Color(0xFFC62828), // Deep Gungeon Red
+                                  ),
                                 ),
-                              ),
-                              // Metallic gold foreground text with solid shadow
-                              const GoopText(
-                                'GUNGEON MATE',
-                                style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 2.0,
-                                  color: Color(0xFFFFD54F), // Bright Gold
-                                  shadows: [
-                                    Shadow(
-                                      offset: Offset(0, 3),
-                                      blurRadius: 4,
-                                      color: Colors.black54,
-                                    ),
-                                  ],
+                                // Metallic gold foreground text with solid shadow
+                                const GoopText(
+                                  'GUNGEON MATE',
+                                  style: TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 2.0,
+                                    color: Color(0xFFFFD54F), // Bright Gold
+                                    shadows: [
+                                      Shadow(
+                                        offset: Offset(0, 3),
+                                        blurRadius: 4,
+                                        color: Colors.black54,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 8),
                           // Premium Gungeon-style Ribbon Subtitle
@@ -335,7 +338,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.7.0',
+                    'v1.7.1',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -423,7 +426,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                               Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                               SizedBox(width: 6),
                               GoopText(
-                                'Changelog (v1.7.0)',
+                                'Changelog (v1.7.1)',
                                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                               ),
                             ],
@@ -479,7 +482,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.7.0 — Goopian Language + Codex Bestiary + Settings Overhaul',
+                            'v1.7.1 — UI Polish: Detail View Redesign + Damage Calc Sizing',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

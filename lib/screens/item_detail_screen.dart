@@ -366,7 +366,7 @@ class _Header extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-          padding: const EdgeInsets.fromLTRB(18, 18, 48, 18),
+          padding: const EdgeInsets.fromLTRB(18, 22, 48, 18),
           decoration: BoxDecoration(
             color: f.card,
             borderRadius: BorderRadius.circular(16),
@@ -383,85 +383,53 @@ class _Header extends StatelessWidget {
             ],
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: f.secondary.withValues(alpha: 0.2),
-                    width: 1.0,
-                  ),
-                ),
-                child: GameIcon(
-                  assetPath: iconPath,
-                  fallback: isGun
-                      ? Icons.gps_fixed
-                      : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
-                  quality: quality,
-                  size: 128,
-                ),
+              GameIcon(
+                assetPath: iconPath,
+                fallback: isGun
+                    ? Icons.gps_fixed
+                    : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
+                quality: quality,
+                size: 128,
               ),
               const SizedBox(height: 14),
               GoopText(
                 name,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.5,
                 ),
               ),
-              const SizedBox(height: 6),
-              Row(
-                children: [
-                  if (quality.isNotEmpty) ...[
-                    QualityBadge(quality: quality, size: 18),
-                    const SizedBox(width: 8),
-                  ],
-                  Flexible(
-                    child: GoopText(
-                      subtitle.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w800,
-                        color: f.secondary.withValues(alpha: 0.9),
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               if (quote.isNotEmpty) ...[
                 const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.03),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      width: 0.8,
-                    ),
-                  ),
-                  child: GoopText(
-                    '"$quote"',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 15.5,
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontStyle: FontStyle.italic,
-                    ),
+                GoopText(
+                  '"$quote"',
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 15.5,
+                    color: Colors.white.withValues(alpha: 0.9),
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
               ],
-              const SizedBox(height: 12),
+              const SizedBox(height: 14),
               Wrap(
+                alignment: WrapAlignment.center,
                 spacing: 8,
                 runSpacing: 8,
                 children: [
+                  if (quality.isNotEmpty)
+                    _MetadataChip(
+                      icon: Icons.star_rounded,
+                      label: 'Rank',
+                      value: quality.toUpperCase(),
+                      color: QualityBadge.colorFor(quality),
+                    ),
                   if (sellPrice.isNotEmpty)
                     _MetadataChip(
                       icon: Icons.monetization_on_outlined,
