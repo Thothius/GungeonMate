@@ -29,39 +29,36 @@
 
 ---
 
-## ✨ FEATURES
+## Features
 
-### 🎯 Run Tracking
-- **Live Dashboard** — Coolness/curse meters, shrine tracking, DPS calculator, active synergy detection with animated theme-accent border that pulses with your chosen theme
-- **18 Special Dashboards** — Character/gun/item-specific HUD panels: Robot (armor/junk), Huntress (dig chance/mimics), Gunderfury, Triple Gun, Evolver, Shellegun, Chamber Gun, Platinum Bullets, Iron Coin, Spice, Metronome, Sprun, Boxing Glove, Cigarettes, Polaris, Gunther, Gun Soul, Ser Junkan
-- **Curse Management** — Visual 0–10 curse meter bar, effect grid, quick actions for Cursula/Blanking/Decurse, and full breakdown view
-- **Save & End Run** — Manual save runs, end run from header menu for both local and multiplayer host scenarios
+**Run Tracking**
+- Live dashboard with coolness/curse meters, shrine tracking, DPS calculator, synergy detection
+- 18 special dashboards (Robot, Huntress, Gunderfury, Triple Gun, Evolver, Shellegun, Chamber Gun, Platinum Bullets, Iron Coin, Spice, Metronome, Sprun, Boxing Glove, Cigarettes, Polaris, Gunther, Gun Soul, Ser Junkan)
+- Curse management with 0-10 meter, effect grid, quick actions, breakdown view
+- Manual save and end run from header menu
 
-### 📊 Full Database
-- **239 Guns** — Full stats, DPS values, quality tiers, elemental tags, Ammonomicon entries
-- **270 Items** — Effects, synergies, recharge times, quality badges with wiki-verified data
-- **395 Synergies** — Active detection, visual icon pairs, next-pickup hints, partial/locked status
-- **Codex Bestiary** — Browse 146 enemies, 27 bosses (with health values), objects, pickups, and NPCs with detailed entries
+**Database**
+- 239 guns with full stats, DPS, quality tiers, elemental tags
+- 270 items with effects, synergies, recharge times, quality badges
+- 395 synergies with active detection, visual icon pairs, next-pickup hints
+- Codex bestiary: 146 enemies, 27 bosses, objects, pickups, NPCs
 
-### 🎮 Multiplayer & Co-Op
-- **Bluetooth Multiplayer** — Pair two devices via BLE/Wi-Fi Direct with PIN pairing, live snapshot sync, gift items/guns, auto-reconnect with persisted sessions
-- **MP Summary** — Side-by-side stats comparison (P1 cyan vs P2 purple), compact 3-column stat grid, collapsible synergy overview with visual icon pairs
-- **Local Co-Op** — Add a second player with character's default loadout, long-press to transfer items between players
-- **Gunfortuna Dice** — Multiplayer dice game with sparkle particles and decline protocol
+**Multiplayer**
+- Bluetooth co-op via BLE/Wi-Fi Direct, live snapshot sync, gift items/guns, auto-reconnect
+- Side-by-side MP stats comparison with synergy overview
+- Local co-op with second player loadout and item transfer
+- Gunfortuna dice game
 
-### 🎨 Style Lab & Themes
-- **12+ Themes** — Forge Master, Robot's Core, Unicorn (7 palettes: Rainbow, Aurora, Galaxy, etc.), Custom color editor with 6 slots and 24 curated Gungeon colors per slot
-- **Goopian Language Mode** — Toggle between English and animated Goopian alien text across the entire app
-- **Animated Dashboard Border** — Every theme paints its signature accent color as a slow breathing glow around the player dashboard
-- **Particle Engine** — 15+ presets including Bullet Kin Parade, Heart Containers, Cursed Skulls, Master Rounds, Jam Swarm, Unicorn Sparkles, Cosmic Dust, Golden Sparkle, Rainbow Confetti
-- **Custom Wallpapers** — 10 curated WebP backgrounds, gyro parallax, font controls, text scaling
-- **Immersive Theme Picker** — Full-screen swipe-to-preview with live rendering, palette tags, and one-tap apply
+**Themes**
+- 12+ themes including Forge Master, Robot's Core, Unicorn (7 palettes), custom color editor
+- Goopian language mode (English to animated alien text)
+- 15+ particle presets, 10 curated wallpapers with gyro parallax
+- Full-screen theme picker with live preview
 
-### 🔧 Utilities
-- **Run Log** — Full chronological event log with category colors, curse/coolness tracking, legend
-- **Gunfortuna Dice Roller** — In-app dice roll dialog with multiplayer callback support
-- **Bug Reporter** — Anonymous in-app feedback to dev team
-- **Settings** — Theme customization, visual prefs, multiplayer management, data utilities
+**Utilities**
+- Chronological run log with category colors and curse/coolness tracking
+- In-app bug reporter
+- 4-tab settings (Visuals, Run, App, Debug)
 
 ---
 
