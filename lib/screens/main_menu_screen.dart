@@ -340,7 +340,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.7.1',
+                    'v1.8.0',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -428,7 +428,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                               Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
                               SizedBox(width: 6),
                               GoopText(
-                                'Changelog (v1.7.1)',
+                                'Changelog (v1.8.0)',
                                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
                               ),
                             ],
@@ -484,7 +484,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.7.1 — UI Polish: Detail View Redesign + Damage Calc Sizing',
+                            'v1.8.0 — Codebase Reorg: 5 Megafiles Split into 39 Widget Files',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

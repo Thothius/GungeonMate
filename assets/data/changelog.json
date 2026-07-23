@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.8.0",
+    "title": "🏗️ Codebase Reorg: 5 Megafiles Split into 39 Widget Files",
+    "date": "July 23, 2026",
+    "items": [
+      "Active Run screen split — 9,520 lines → 566 lines across 15 widget files (player header, player page, dashboards, stat sheets, dice roll, summary tab, and more).",
+      "Item Detail screen split — 3,582 lines → 332 lines across 6 widget files (header, gun stats, item body, synergies section, destroy banner, quick jump).",
+      "Settings screen split — 2,390 lines → 64 lines across 6 widget files (theme visuals, run tab, app tab, swipe picker, run log, debug tab).",
+      "Theme Overlay split — 951 lines → 312 lines across 8 widget files (particles, backgrounds, easter eggs).",
+      "Browse screen split — 1,638 lines → 1,130 lines across 4 widget files (browse row, pills, toolbar, any entry).",
+      "Total: 17,891 lines → 2,404 lines across 39 new widget files. All dispose() and mounted checks preserved. Zero analysis issues."
+    ]
+  },
+  {
     "version": "v1.7.2",
     "title": "Still Wallpaper Removal + Bughunt Cleanup",
     "date": "July 23, 2026",

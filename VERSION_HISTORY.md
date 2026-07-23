@@ -6,6 +6,39 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.8.0 — Codebase Reorg: 5 Megafiles Split into 39 Widget Files (July 23, 2026)
+**Build:** 73
+
+### Megafile Reorganization (All 5 Phases Complete)
+Split 5 megafiles totaling 17,891 lines into 39 focused widget files (2,404 lines total in original files).
+
+**Phase 1: active_run_screen.dart (9,520 → 566 lines, 15 files)**
+- widgets/active_run/: player_header, player_page, active_run_helpers, stat_sheets, sort_picker, starter_hint, dice_roll, summary_tab
+- widgets/dashboards/: dashboard_swiper, robot_dashboard, junkan_dashboard, special_gun_dashboards, huntress_dashboard, compact_dashboards
+- widgets/sheets/: damage_calc_sheet
+
+**Phase 2: theme_overlay.dart (951 → 312 lines, 8 files)**
+- widgets/particles/: touch_particle, ambient_glow, curse_fog, curse_breath, crimson_drip
+- widgets/backgrounds/: page_frame, animated_wallpaper
+- widgets/easter_eggs/: cat_throne
+
+**Phase 3: item_detail_screen.dart (3,582 → 332 lines, 6 files)**
+- widgets/item_detail/: header, gun_stats, item_body, synergies_section, destroy_banner, quick_jump_button
+
+**Phase 4: browse_screen.dart (1,638 → 1,130 lines, 4 files)**
+- widgets/browse/: any_entry, browse_pills, browse_row, toolbar_button
+
+**Phase 5: settings_screen.dart (2,390 → 64 lines, 6 files)**
+- widgets/settings/: theme_visuals_tab, run_tab, app_tab, swipe_picker, run_log_screen, debug_tab
+
+### Verification
+- flutter analyze lib/ — 0 issues
+- All AnimationControllers have dispose()
+- All async callbacks have mounted/context.mounted checks
+- All private classes made public (removed _ prefix), super.key added
+
+---
+
 ## v1.7.1 — UI Polish: Detail View Redesign + Damage Calc Sizing (July 23, 2026)
 **Build:** 72
 
