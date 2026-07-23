@@ -6,6 +6,31 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.6 — Unicorn Palette Redesign: 6 Pink/Crimson/Purple Palettes (July 23, 2026)
+**Build:** 67
+
+### Palette Overhaul
+- Reduced from 7 to 6 palettes — removed Rainbow (yellow accent didn't fit).
+- Replaced Aurora (green-based) with Bubblegum (pink/magenta/violet).
+- Replaced Galaxy (blue/cyan-based) with Mulberry (deep magenta/purple/pink).
+- All 6 palettes now use exclusively pink, crimson, purple, and bubblegum tones.
+
+### Color Fixes on Existing Palettes
+- Cotton Candy: rose pink `#F06292` replaces cyan `#00F5D4` headlineStat.
+- Neon: magenta-purple `#E040FB` replaces electric teal `#00CED1`.
+- Dreamy: lilac `#CE93D8` replaces sage teal `#80CBC4`.
+- Sunset: powder pink `#FFD1DC` replaces golden teal `#4DB6AC`.
+
+### New Palettes
+- **Bubblegum**: scaffold `#1A0F1E`, primary `#FF80AB`, secondary `#E040FB`, stat `#B388FF`.
+- **Mulberry**: scaffold `#1C0A18`, primary `#C2185B`, secondary `#9C27B0`, stat `#F06292`.
+
+### Migration
+- Old persisted palette indices ≥4 (rainbow/aurora/galaxy) are out of range and default to Cotton Candy.
+- All taglines, preview data, and whimsical descriptions updated to remove teal/cyan/green references.
+
+---
+
 ## v1.6.5 — UI Polish: Collapsible Sections + Compact Settings (July 23, 2026)
 **Build:** 66
 

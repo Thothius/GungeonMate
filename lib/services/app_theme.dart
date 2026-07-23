@@ -34,13 +34,13 @@ enum AppThemeMode {
     vibe: 'MAGICAL',
     diff: 'CO-OP',
     elem: 'RAINBOW',
-    whimsicalDescription: 'A cotton candy megapack with seven switchable palettes: Cotton Candy, Neon, Dreamy, Sunset, Rainbow, Aurora, and Galaxy. Cycle through pastel pink, electric neon, whispered rose, golden-hour coral, full spectrum, northern lights, and deep space — all from one theme.',
+    whimsicalDescription: 'A cotton candy megapack with six switchable palettes: Cotton Candy, Neon, Dreamy, Sunset, Bubblegum, and Mulberry. Cycle through pastel pink, electric magenta, whispered rose, golden-hour coral, bright bubblegum pop, and deep crimson-purple — all from one theme.',
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF1A101F),
       card: Color(0xFF2D1B36),
       primary: Color(0xFFFF69B4), // pink
       secondary: Color(0xFFE8A7F0), // light high-contrast lavender
-      headlineStat: Color(0xFF00F5D4), // cyan accent
+      headlineStat: Color(0xFFF06292), // rose pink accent
       bulletColor: Color(0xFFE8A7F0),
       bulletGlyph: '✦',
       twinkleBullets: true,
@@ -55,7 +55,7 @@ enum AppThemeMode {
       dividerColor: Color(0x55FF69B4),
       dividerThickness: 1.0,
       glowPrimary: Color(0x55FF69B4),
-      glowSecondary: Color(0x3BE8A7F0),
+      glowSecondary: Color(0x3BF06292),
       auraStyle: AvatarAuraStyle.pastelPulse,
       headerGlyph: '\u2661', // ♡ open heart
       headerUnderlineColor: Color(0x88FF69B4),
@@ -66,13 +66,13 @@ enum AppThemeMode {
     vibe: 'NEON',
     diff: 'CO-OP',
     elem: 'RAINBOW',
-    whimsicalDescription: 'A neon-charged cotton candy overload. Hot pink and electric teal scream through the dark with an intense radioactive glow. For Gungeoneers who want their pastel with extra voltage.',
+    whimsicalDescription: 'A neon-charged cotton candy overload. Hot pink and electric magenta scream through the dark with an intense radioactive glow. For Gungeoneers who want their pastel with extra voltage.',
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF0F0A14),
       card: Color(0xFF1E1528),
       primary: Color(0xFFFF1493), // neon hot pink
       secondary: Color(0xFFDA70D6), // bright orchid
-      headlineStat: Color(0xFF00CED1), // electric teal
+      headlineStat: Color(0xFFE040FB), // magenta-purple accent
       bulletColor: Color(0xFFFF1493),
       bulletGlyph: '✦',
       twinkleBullets: true,
@@ -87,7 +87,7 @@ enum AppThemeMode {
       dividerColor: Color(0x66FF1493),
       dividerThickness: 1.2,
       glowPrimary: Color(0x66FF1493),
-      glowSecondary: Color(0x5500CED1),
+      glowSecondary: Color(0x55E040FB),
       auraStyle: AvatarAuraStyle.pastelPulse,
       headerGlyph: '\u2661',
       headerUnderlineColor: Color(0xAAFF1493),
@@ -98,13 +98,13 @@ enum AppThemeMode {
     vibe: 'DREAMY',
     diff: 'CO-OP',
     elem: 'RAINBOW',
-    whimsicalDescription: 'A softer, whispered cotton candy. Muted rose and sage teal drift like a watercolour sunset. For the Gungeoneer who wants the vibe turned down to a gentle hum.',
+    whimsicalDescription: 'A softer, whispered cotton candy. Muted rose and dusty lavender drift like a watercolour sunset. For the Gungeoneer who wants the vibe turned down to a gentle hum.',
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF1F1825),
       card: Color(0xFF2A2230),
       primary: Color(0xFFF8BBD0), // soft blush pink
       secondary: Color(0xFFD1C4E9), // dusty lavender
-      headlineStat: Color(0xFF80CBC4), // sage teal
+      headlineStat: Color(0xFFCE93D8), // lilac accent
       bulletColor: Color(0xFFF8BBD0),
       bulletGlyph: '♡',
       twinkleBullets: false,
@@ -119,7 +119,7 @@ enum AppThemeMode {
       dividerColor: Color(0x44F8BBD0),
       dividerThickness: 0.8,
       glowPrimary: Color(0x33F8BBD0),
-      glowSecondary: Color(0x2280CBC4),
+      glowSecondary: Color(0x22CE93D8),
       auraStyle: AvatarAuraStyle.pastelPulse,
       headerGlyph: '\u2661',
       headerUnderlineColor: Color(0x66F8BBD0),
@@ -130,13 +130,13 @@ enum AppThemeMode {
     vibe: 'SUNSET',
     diff: 'CO-OP',
     elem: 'RAINBOW',
-    whimsicalDescription: 'Cotton candy at golden hour. Coral pink and warm teal blend with peach undertones for a sunset-drenched magical vibe. The most romantic way to enter the Gungeon.',
+    whimsicalDescription: 'Cotton candy at golden hour. Coral pink and warm peach blend with powder-pink undertones for a sunset-drenched magical vibe. The most romantic way to enter the Gungeon.',
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF1A1218),
       card: Color(0xFF2A1E26),
       primary: Color(0xFFFF6B9D), // coral pink
       secondary: Color(0xFFFFAB91), // warm peach
-      headlineStat: Color(0xFF4DB6AC), // golden teal
+      headlineStat: Color(0xFFFFD1DC), // powder pink accent
       bulletColor: Color(0xFFFF6B9D),
       bulletGlyph: '✦',
       twinkleBullets: false,
@@ -151,7 +151,7 @@ enum AppThemeMode {
       dividerColor: Color(0x55FF6B9D),
       dividerThickness: 1.0,
       glowPrimary: Color(0x44FF6B9D),
-      glowSecondary: Color(0x334DB6AC),
+      glowSecondary: Color(0x33FFD1DC),
       auraStyle: AvatarAuraStyle.pastelPulse,
       headerGlyph: '\u2661',
       headerUnderlineColor: Color(0x88FF6B9D),
@@ -734,26 +734,24 @@ enum AppThemeMode {
   }
 }
 
-/// Palette variants for the Unicorn megapack. Each maps to one of the
-/// original Unicorn I-IV flairs, letting users cycle without needing
-/// four separate theme entries.
+/// Palette variants for the Unicorn megapack. The first four map to
+/// the original Unicorn I-IV flairs; Bubblegum and Mulberry are
+/// standalone palettes in the same pink/crimson/purple family.
 enum UnicornPalette {
   cottonCandy,
   neon,
   dreamy,
   sunset,
-  rainbow,
-  aurora,
-  galaxy;
+  bubblegum,
+  mulberry;
 
   String get label => switch (this) {
         cottonCandy => 'Cotton Candy',
         neon => 'Neon',
         dreamy => 'Dreamy',
         sunset => 'Sunset',
-        rainbow => 'Rainbow',
-        aurora => 'Aurora',
-        galaxy => 'Galaxy',
+        bubblegum => 'Bubblegum',
+        mulberry => 'Mulberry',
       };
 
   ThemeFlair get flair => switch (this) {
@@ -761,80 +759,55 @@ enum UnicornPalette {
         neon => AppThemeMode.unicornII._staticFlair!,
         dreamy => AppThemeMode.unicornIII._staticFlair!,
         sunset => AppThemeMode.unicornIV._staticFlair!,
-        rainbow => const ThemeFlair(
-          scaffold: Color(0xFF100818),
-          card: Color(0xFF1E1030),
-          primary: Color(0xFFE91E63),
-          secondary: Color(0xFF9C27B0),
-          headlineStat: Color(0xFFFFEB3B),
-          bulletColor: Color(0xFFE91E63),
+        bubblegum => const ThemeFlair(
+          scaffold: Color(0xFF1A0F1E),
+          card: Color(0xFF2A1A30),
+          primary: Color(0xFFFF80AB), // bubblegum pink
+          secondary: Color(0xFFE040FB), // magenta
+          headlineStat: Color(0xFFB388FF), // light violet
+          bulletColor: Color(0xFFFF80AB),
           bulletGlyph: '✦',
           twinkleBullets: true,
           sparkleNumbers: true,
-          numberGlowColor: Color(0xFFE91E63),
-          tabularFigures: false,
-          numberSizeScale: 1.08,
-          numberWeight: FontWeight.w800,
-          numberStyle: FontStyle.italic,
-          chipRadius: 16,
-          cardRadius: 16,
-          dividerColor: Color(0x66E91E63),
-          dividerThickness: 1.2,
-          glowPrimary: Color(0x44E91E63),
-          glowSecondary: Color(0x33FFEB3B),
-          auraStyle: AvatarAuraStyle.pastelPulse,
-          headerGlyph: '\u2661',
-          headerUnderlineColor: Color(0x88E91E63),
-        ),
-        aurora => const ThemeFlair(
-          scaffold: Color(0xFF050E0A),
-          card: Color(0xFF0E1F18),
-          primary: Color(0xFF00E676),
-          secondary: Color(0xFFAA00FF),
-          headlineStat: Color(0xFF00BFA5),
-          bulletColor: Color(0xFF00E676),
-          bulletGlyph: '✦',
-          twinkleBullets: true,
-          sparkleNumbers: true,
-          numberGlowColor: Color(0xFF00E676),
+          numberGlowColor: Color(0xFFFF80AB),
           tabularFigures: false,
           numberSizeScale: 1.06,
           numberWeight: FontWeight.w700,
           numberStyle: FontStyle.italic,
           chipRadius: 18,
           cardRadius: 18,
-          dividerColor: Color(0x4400E676),
+          dividerColor: Color(0x55FF80AB),
           dividerThickness: 1.0,
-          glowPrimary: Color(0x4400E676),
-          glowSecondary: Color(0x33AA00FF),
+          glowPrimary: Color(0x44FF80AB),
+          glowSecondary: Color(0x33B388FF),
           auraStyle: AvatarAuraStyle.pastelPulse,
           headerGlyph: '\u2661',
-          headerUnderlineColor: Color(0x6600E676),
+          headerUnderlineColor: Color(0x88FF80AB),
         ),
-        galaxy => const ThemeFlair(
-          scaffold: Color(0xFF06040F),
-          card: Color(0xFF0E0A20),
-          primary: Color(0xFF7C4DFF),
-          secondary: Color(0xFF00E5FF),
-          headlineStat: Color(0xFFFFD700),
-          bulletColor: Color(0xFF7C4DFF),
+        mulberry => const ThemeFlair(
+          scaffold: Color(0xFF1C0A18),
+          card: Color(0xFF2E1228),
+          primary: Color(0xFFC2185B), // deep magenta-mulberry
+          secondary: Color(0xFF9C27B0), // purple
+          headlineStat: Color(0xFFF06292), // pink
+          bulletColor: Color(0xFFC2185B),
           bulletGlyph: '✦',
           twinkleBullets: true,
           sparkleNumbers: true,
-          numberGlowColor: Color(0xFF7C4DFF),
+          numberGlowColor: Color(0xFFC2185B),
           tabularFigures: false,
           numberSizeScale: 1.06,
           numberWeight: FontWeight.w700,
           numberStyle: FontStyle.italic,
           chipRadius: 18,
           cardRadius: 18,
-          dividerColor: Color(0x557C4DFF),
+          dividerColor: Color(0x55C2185B),
           dividerThickness: 1.0,
-          glowPrimary: Color(0x447C4DFF),
-          glowSecondary: Color(0x3300E5FF),
+          glowPrimary: Color(0x44C2185B),
+          glowSecondary: Color(0x33F06292),
           auraStyle: AvatarAuraStyle.pastelPulse,
           headerGlyph: '\u2661',
-          headerUnderlineColor: Color(0x777C4DFF),
+          headerUnderlineColor: Color(0x77C2185B),
         ),
       };
 }
@@ -1180,13 +1153,13 @@ extension AppThemeModeLabel on AppThemeMode {
   String get tagline {
     switch (this) {
       case AppThemeMode.unicorn:
-        return '${AppTheme.unicornPalette.label} — 7 palettes in one megapack';
+        return '${AppTheme.unicornPalette.label} — 6 palettes in one megapack';
       case AppThemeMode.unicornII:
-        return 'Neon Candy — hot pink, electric teal, glow';
+        return 'Neon Candy — hot pink, electric magenta, glow';
       case AppThemeMode.unicornIII:
-        return 'Soft Dream — blush, sage teal, lavender';
+        return 'Soft Dream — blush, dusty lavender, lilac';
       case AppThemeMode.unicornIV:
-        return 'Sunset Candy — coral, peach, golden teal';
+        return 'Sunset Candy — coral, peach, powder pink';
       case AppThemeMode.ammonomicon:
         return 'Ancient Lore — leather brown, antique gold, crisp teal';
       case AppThemeMode.forgeMaster:
@@ -1263,8 +1236,8 @@ const Map<AppThemeMode, ThemePreviewData> kThemePreviewData = {
     ],
   ),
   AppThemeMode.unicorn: ThemePreviewData(
-    subheading: 'Cotton Candy — Pastel Lavender, Sugar Pink, Rainbow Teal',
-    stats: ['Rainbow Mode', 'Sparkle Index: 100', 'Bowler Approved'],
+    subheading: 'Cotton Candy — Pastel Lavender, Sugar Pink, Rose Accent',
+    stats: ['Bubblegum Mode', 'Sparkle Index: 100', 'Bowler Approved'],
     bulletNotes: [
       '✨ Rainbow chest opened',
       '✨ Cute projectile trailing active',
@@ -1272,7 +1245,7 @@ const Map<AppThemeMode, ThemePreviewData> kThemePreviewData = {
     ],
   ),
   AppThemeMode.unicornII: ThemePreviewData(
-    subheading: 'Neon Candy — Hot Pink, Electric Teal, Radioactive Glow',
+    subheading: 'Neon Candy — Hot Pink, Electric Magenta, Radioactive Glow',
     stats: ['Neon Overload', 'Glow: 200%', 'Voltage: Max'],
     bulletNotes: [
       '✨ Neon chest electrified',
@@ -1281,7 +1254,7 @@ const Map<AppThemeMode, ThemePreviewData> kThemePreviewData = {
     ],
   ),
   AppThemeMode.unicornIII: ThemePreviewData(
-    subheading: 'Soft Dream — Blush Pink, Sage Teal, Dusty Lavender',
+    subheading: 'Soft Dream — Blush Pink, Dusty Lavender, Lilac Accent',
     stats: ['Dream Mode', 'Softness: 100', 'Whisper Approved'],
     bulletNotes: [
       '♡ Gentle chest opened',
@@ -1290,7 +1263,7 @@ const Map<AppThemeMode, ThemePreviewData> kThemePreviewData = {
     ],
   ),
   AppThemeMode.unicornIV: ThemePreviewData(
-    subheading: 'Sunset Candy — Coral Pink, Warm Peach, Golden Teal',
+    subheading: 'Sunset Candy — Coral Pink, Warm Peach, Powder Pink Accent',
     stats: ['Sunset Mode', 'Warmth: 100', 'Golden Hour'],
     bulletNotes: [
       '✨ Coral chest discovered',

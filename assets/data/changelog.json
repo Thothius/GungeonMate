@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.6.6",
+    "title": "🦄 UNICORN PALETTE REDESIGN — 6 PINK/CRIMSON/PURPLE PALETTES",
+    "date": "July 23, 2026",
+    "items": [
+      "Unicorn palettes reduced from 7 to 6 — removed Rainbow (yellow accent), replaced Aurora (green) with Bubblegum (pink/magenta/violet), replaced Galaxy (blue/cyan) with Mulberry (deep magenta/purple/pink).",
+      "All 6 palettes now use exclusively pink, crimson, purple, and bubblegum tones — no green, blue, teal, or cyan accents remain.",
+      "Cotton Candy: rose pink accent replaces cyan. Neon: magenta-purple replaces electric teal. Dreamy: lilac replaces sage teal. Sunset: powder pink replaces golden teal.",
+      "Bubblegum: bright bubblegum pink + magenta + light violet — a playful pop-art palette.",
+      "Mulberry: deep magenta + purple + pink — a rich crimson-purple palette for the bold."
+    ]
+  },
+  {
     "version": "v1.6.5",
     "title": "✨ UI POLISH — COLLAPSIBLE SECTIONS + COMPACT SETTINGS",
     "date": "July 23, 2026",
