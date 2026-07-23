@@ -115,6 +115,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               isGun: gun != null,
               isActive: item?.isActive ?? false,
               iconPath: gun?.icon ?? item?.icon ?? '',
+              sellPrice: gun?.sellPrice ?? item?.sellPrice ?? '',
+              synergyCount: synergyStatuses.length,
+              curse: gun?.curse ?? item?.curse ?? 0.0,
+              coolness: gun?.coolness ?? item?.coolness ?? 0.0,
             ),
           ),
           SliverToBoxAdapter(
@@ -337,6 +341,10 @@ class _Header extends StatelessWidget {
   final bool isGun;
   final bool isActive;
   final String iconPath;
+  final String sellPrice;
+  final int synergyCount;
+  final double curse;
+  final double coolness;
   const _Header({
     required this.name,
     required this.subtitle,
@@ -345,6 +353,10 @@ class _Header extends StatelessWidget {
     required this.isGun,
     required this.isActive,
     required this.iconPath,
+    required this.sellPrice,
+    required this.synergyCount,
+    required this.curse,
+    required this.coolness,
   });
 
   @override
@@ -354,148 +366,222 @@ class _Header extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-          padding: const EdgeInsets.fromLTRB(18, 18, 48, 18), // Extra padding on right to avoid overlaps
+          padding: const EdgeInsets.fromLTRB(18, 18, 48, 18),
           decoration: BoxDecoration(
             color: f.card,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: f.primary.withValues(alpha: 0.25),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: f.primary.withValues(alpha: 0.08),
-            blurRadius: 12,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.25),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: f.secondary.withValues(alpha: 0.2),
-                width: 1.0,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: f.primary.withValues(alpha: 0.25),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: f.primary.withValues(alpha: 0.08),
+                blurRadius: 12,
+                spreadRadius: 2,
               ),
-            ),
-            child: GameIcon(
-              assetPath: iconPath,
-              fallback: isGun
-                  ? Icons.gps_fixed
-                  : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
-              quality: quality,
-              size: 96,
-            ),
+            ],
           ),
-          const SizedBox(width: 18),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: GoopText(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                  ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.25),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: f.secondary.withValues(alpha: 0.2),
+                    width: 1.0,
+                  ),
                 ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    if (quality.isNotEmpty) ...[
-                      QualityBadge(quality: quality, size: 18),
-                      const SizedBox(width: 8),
-                    ],
-                    Flexible(
-                      child: GoopText(
-                        subtitle.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w800,
-                          color: f.secondary.withValues(alpha: 0.9),
-                          letterSpacing: 1.0,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: GameIcon(
+                  assetPath: iconPath,
+                  fallback: isGun
+                      ? Icons.gps_fixed
+                      : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
+                  quality: quality,
+                  size: 128,
                 ),
-                if (quote.isNotEmpty) ...[
-                  const SizedBox(height: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.03),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.05),
-                        width: 0.8,
-                      ),
-                    ),
+              ),
+              const SizedBox(height: 14),
+              GoopText(
+                name,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  if (quality.isNotEmpty) ...[
+                    QualityBadge(quality: quality, size: 18),
+                    const SizedBox(width: 8),
+                  ],
+                  Flexible(
                     child: GoopText(
-                      '"$quote"',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                      subtitle.toUpperCase(),
                       style: TextStyle(
-                        fontSize: 15.5, // Made main desc text bigger!
-                        color: Colors.white.withValues(alpha: 0.9),
-                        fontStyle: FontStyle.italic,
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w800,
+                        color: f.secondary.withValues(alpha: 0.9),
+                        letterSpacing: 1.0,
                       ),
                     ),
                   ),
                 ],
+              ),
+              if (quote.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.03),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      width: 0.8,
+                    ),
+                  ),
+                  child: GoopText(
+                    '"$quote"',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 15.5,
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
               ],
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  if (sellPrice.isNotEmpty)
+                    _MetadataChip(
+                      icon: Icons.monetization_on_outlined,
+                      label: 'Sell',
+                      value: sellPrice,
+                      color: Colors.amber,
+                    ),
+                  _MetadataChip(
+                    icon: Icons.hub_outlined,
+                    label: 'Synergies',
+                    value: '$synergyCount',
+                    color: Colors.cyanAccent,
+                  ),
+                  if (curse > 0)
+                    _MetadataChip(
+                      icon: Icons.mood_bad_outlined,
+                      label: 'Curse',
+                      value: '+${_fmtStat(curse)}',
+                      color: Colors.redAccent,
+                    ),
+                  if (coolness > 0)
+                    _MetadataChip(
+                      icon: Icons.ac_unit,
+                      label: 'Coolness',
+                      value: '+${_fmtStat(coolness)}',
+                      color: Colors.lightBlueAccent,
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 24,
+          right: 24,
+          child: IconButton(
+            icon: Icon(
+              context.watch<RunProvider>().isFavourite(name)
+                  ? Icons.favorite_rounded
+                  : Icons.favorite_border_rounded,
+              color: context.watch<RunProvider>().isFavourite(name)
+                  ? Colors.pinkAccent
+                  : Colors.white38,
+              size: 24,
+            ),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            onPressed: () {
+              final p = context.read<RunProvider>();
+              final wasFav = p.isFavourite(name);
+              p.toggleFavourite(name);
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(wasFav
+                      ? '$name removed from favourites'
+                      : '$name added to favourites'),
+                  duration: const Duration(seconds: 1),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  static String _fmtStat(double v) =>
+      v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
+}
+
+class _MetadataChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color color;
+  const _MetadataChip({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: color),
+          const SizedBox(width: 5),
+          Text(
+            '$label ',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: color.withValues(alpha: 0.85),
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 12.5,
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
             ),
           ),
         ],
       ),
-    ),
-    Positioned(
-      top: 24,
-      right: 24,
-      child: IconButton(
-        icon: Icon(
-          context.watch<RunProvider>().isFavourite(name)
-              ? Icons.favorite_rounded
-              : Icons.favorite_border_rounded,
-          color: context.watch<RunProvider>().isFavourite(name)
-              ? Colors.pinkAccent
-              : Colors.white38,
-          size: 24,
-        ),
-        padding: EdgeInsets.zero,
-        constraints: const BoxConstraints(),
-        onPressed: () {
-          final p = context.read<RunProvider>();
-          final wasFav = p.isFavourite(name);
-          p.toggleFavourite(name);
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(wasFav
-                  ? '$name removed from favourites'
-                  : '$name added to favourites'),
-              duration: const Duration(seconds: 1),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        },
-      ),
-    ),
-  ],
-);
+    );
   }
 }
 
