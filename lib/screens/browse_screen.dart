@@ -5,9 +5,6 @@ import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
 import '../services/multiplayer_session.dart';
-import '../services/app_theme.dart';
-import '../widgets/quality_badge.dart';
-import '../widgets/game_icon.dart';
 import 'item_detail_screen.dart';
 import 'favourites_screen.dart';
 import '../services/goop_talk_engine.dart';
@@ -15,13 +12,6 @@ import '../utils/fast_route.dart';
 import '../widgets/browse/any_entry.dart';
 import '../widgets/browse/browse_pills.dart';
 import '../widgets/browse/browse_row.dart';
-import '../widgets/browse/toolbar_button.dart';
-
-enum _GunSort { name, quality, dps, gunClass }
-
-enum _ItemSort { name, quality, type, synergies }
-
-enum _AllSort { quality, name, synergies, type }
 
 class BrowseScreen extends StatefulWidget {
   /// When provided, the ADD button and the snackbar route adds into the
@@ -56,29 +46,6 @@ class _BrowseScreenState extends State<BrowseScreen>
   final TextEditingController _searchCtrl = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   String _query = '';
-  String _quality = 'All';
-  _GunSort _gunSort = _GunSort.quality;
-  _ItemSort _itemSort = _ItemSort.quality;
-  _AllSort _allSort = _AllSort.quality;
-  bool _piercingOnly = false;
-  bool _explosiveOnly = false;
-  bool _iceOnly = false;
-  bool _fireOnly = false;
-  bool _poisonOnly = false;
-  bool _freezeOnly = false;
-  bool _stunOnly = false;
-  bool _stealingOnly = false;
-  bool _filtersExpanded = false; // Collapsible, closed by default
-  bool _isGridView = false;
-
-  int _getGridCrossAxisCount(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    return w < 360
-        ? 3
-        : w < 600
-            ? 4
-            : 6;
-  }
 
   static const Map<String, int> _qualityOrder = {
     'S': 0,
@@ -135,96 +102,27 @@ class _BrowseScreenState extends State<BrowseScreen>
     super.dispose();
   }
 
-  bool _matchesQuality(String q) {
-    if (_quality == 'All') return true;
-    if (_quality == 'S') return q == 'S' || q == '1S';
-    return q == _quality;
-  }
-
-  bool _matchesFilters(String text) {
-    final t = text.toLowerCase();
-    if (_piercingOnly && !t.contains('pierce') && !t.contains('piercing')) return false;
-    if (_explosiveOnly && !t.contains('explosive') && !t.contains('explosion') && !t.contains('explode') && !t.contains('detonate')) return false;
-    if (_iceOnly && !t.contains('ice') && !t.contains('frost')) return false;
-    if (_freezeOnly && !t.contains('freeze') && !t.contains('freezing')) return false;
-    if (_fireOnly && !t.contains('fire') && !t.contains('burn') && !t.contains('ignite') && !t.contains('flame')) return false;
-    if (_poisonOnly && !t.contains('poison') && !t.contains('toxic') && !t.contains('acid')) return false;
-    if (_stunOnly && !t.contains('stun') && !t.contains('stunned') && !t.contains('stunning') && !t.contains('daze')) return false;
-    if (_stealingOnly && !t.contains('steal') && !t.contains('stealing') && !t.contains('thief') && !t.contains('rob')) return false;
-    return true;
-  }
-
   List<Gun> _sortedGuns(RunProvider p) {
     final list = p.allGuns
-        .where((g) =>
-            g.name.toLowerCase().contains(_query) &&
-            _matchesQuality(g.quality) &&
-            _matchesFilters(g.notes))
+        .where((g) => g.name.toLowerCase().contains(_query))
         .toList();
-    switch (_gunSort) {
-      case _GunSort.name:
-        list.sort((a, b) => a.name.compareTo(b.name));
-        break;
-      case _GunSort.quality:
-        list.sort((a, b) {
-          final c = (_qualityOrder[a.quality] ?? 99)
-              .compareTo(_qualityOrder[b.quality] ?? 99);
-          return c != 0 ? c : a.name.compareTo(b.name);
-        });
-        break;
-      case _GunSort.dps:
-        list.sort((a, b) => b.dpsValue.compareTo(a.dpsValue));
-        break;
-      case _GunSort.gunClass:
-        list.sort((a, b) {
-          final c = a.gunClass.toLowerCase().compareTo(b.gunClass.toLowerCase());
-          return c != 0 ? c : a.name.compareTo(b.name);
-        });
-        break;
-    }
+    list.sort((a, b) {
+      final c = (_qualityOrder[a.quality] ?? 99)
+          .compareTo(_qualityOrder[b.quality] ?? 99);
+      return c != 0 ? c : a.name.compareTo(b.name);
+    });
     return list;
-  }
-
-  String _itemTypeBucket(Item it) {
-    if (it.isCompanion) return '1_companion';
-    if (it.isActive) return '2_active';
-    if (it.isPassive) return '3_passive';
-    return '4_other';
   }
 
   List<Item> _sortedItems(RunProvider p) {
     final list = p.allItems
-        .where((it) =>
-            it.name.toLowerCase().contains(_query) &&
-            _matchesQuality(it.quality) &&
-            _matchesFilters(it.effect))
+        .where((it) => it.name.toLowerCase().contains(_query))
         .toList();
-    switch (_itemSort) {
-      case _ItemSort.name:
-        list.sort((a, b) => a.name.compareTo(b.name));
-        break;
-      case _ItemSort.quality:
-        list.sort((a, b) {
-          final c = (_qualityOrder[a.quality] ?? 99)
-              .compareTo(_qualityOrder[b.quality] ?? 99);
-          return c != 0 ? c : a.name.compareTo(b.name);
-        });
-        break;
-      case _ItemSort.type:
-        list.sort((a, b) {
-          final c = _itemTypeBucket(a).compareTo(_itemTypeBucket(b));
-          return c != 0 ? c : a.name.compareTo(b.name);
-        });
-        break;
-      case _ItemSort.synergies:
-        list.sort((a, b) {
-          final c = p
-              .synergyCountFor(b.name)
-              .compareTo(p.synergyCountFor(a.name));
-          return c != 0 ? c : a.name.compareTo(b.name);
-        });
-        break;
-    }
+    list.sort((a, b) {
+      final c = (_qualityOrder[a.quality] ?? 99)
+          .compareTo(_qualityOrder[b.quality] ?? 99);
+      return c != 0 ? c : a.name.compareTo(b.name);
+    });
     return list;
   }
 
@@ -328,7 +226,6 @@ class _BrowseScreenState extends State<BrowseScreen>
               child: Row(
                 children: [
                   Expanded(
-                    flex: 4, // Shorter search bar
                     child: SizedBox(
                       height: 44,
                       child: TextField(
@@ -356,9 +253,8 @@ class _BrowseScreenState extends State<BrowseScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(width: 6),
-                  // Close View Button (Modal context only)
                   if (widget.showBackButton && Navigator.canPop(context)) ...[
+                    const SizedBox(width: 6),
                     IconButton(
                       tooltip: 'Close Browse',
                       icon: const Icon(Icons.close_rounded, size: 22, color: Colors.white70),
@@ -368,81 +264,6 @@ class _BrowseScreenState extends State<BrowseScreen>
                       },
                       constraints: const BoxConstraints(),
                       padding: const EdgeInsets.all(4),
-                    ),
-                    const SizedBox(width: 6),
-                  ],
-                  ToolbarIcon(
-                    icon: Icons.filter_list,
-                    tooltip: 'Element filters',
-                    active: _filtersExpanded,
-                    onPressed: () => setState(() => _filtersExpanded = !_filtersExpanded),
-                  ),
-                  const SizedBox(width: 4),
-                  ToolbarIcon(
-                    icon: _isGridView ? Icons.view_list : Icons.grid_view,
-                    tooltip: _isGridView ? 'List view' : 'Grid view',
-                    active: _isGridView,
-                    onPressed: () => setState(() => _isGridView = !_isGridView),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    flex: 2,
-                    child: ToolbarButton(
-                      icon: Icons.sort,
-                      label: isAll
-                          ? _allSortLabel(_allSort)
-                          : (isGuns
-                              ? _gunSortLabel(_gunSort)
-                              : _itemSortLabel(_itemSort)),
-                      onPressed: () =>
-                          _openSortSheet(context, isAll, isGuns),
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    flex: 2,
-                    child: ToolbarButton(
-                      icon: Icons.military_tech,
-                      label: _quality == 'All' ? 'Tiers' : '$_quality Tier',
-                      color: _quality == 'All'
-                          ? null
-                          : QualityBadge.colorFor(_quality),
-                      onPressed: () => _openQualitySheet(context),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Collapsible Filters Panel (Triggered by the top-row filter icon)
-                  if (_filtersExpanded) ...[
-                    const SizedBox(height: 8),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-                      ),
-                      child: Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          _buildFilterChip('Piercing ðŸŽ¯', _piercingOnly, Colors.orangeAccent, (v) => setState(() => _piercingOnly = v)),
-                          _buildFilterChip('Explosive ðŸ’¥', _explosiveOnly, Colors.redAccent, (v) => setState(() => _explosiveOnly = v)),
-                          _buildFilterChip('Ice â„ï¸', _iceOnly, Colors.lightBlueAccent, (v) => setState(() => _iceOnly = v)),
-                          _buildFilterChip('Freeze ðŸ¥¶', _freezeOnly, Colors.cyanAccent, (v) => setState(() => _freezeOnly = v)),
-                          _buildFilterChip('Fire ðŸ”¥', _fireOnly, Colors.deepOrangeAccent, (v) => setState(() => _fireOnly = v)),
-                          _buildFilterChip('Poison ðŸ¤¢', _poisonOnly, Colors.lightGreenAccent, (v) => setState(() => _poisonOnly = v)),
-                          _buildFilterChip('Stun ðŸ’«', _stunOnly, Colors.purpleAccent, (v) => setState(() => _stunOnly = v)),
-                          _buildFilterChip('Stealing ðŸ•µï¸', _stealingOnly, Colors.amberAccent, (v) => setState(() => _stealingOnly = v)),
-                        ],
-                      ),
                     ),
                   ],
                 ],
@@ -495,230 +316,8 @@ class _BrowseScreenState extends State<BrowseScreen>
     );
   }
 
-  // --- Toolbar handlers --------------------------------------------------
-
-  String _gunSortLabel(_GunSort s) {
-    switch (s) {
-      case _GunSort.quality:
-        return 'Quality';
-      case _GunSort.dps:
-        return 'DPS';
-      case _GunSort.gunClass:
-        return 'Class';
-      case _GunSort.name:
-        return 'Name';
-    }
-  }
-
-  String _itemSortLabel(_ItemSort s) {
-    switch (s) {
-      case _ItemSort.quality:
-        return 'Quality';
-      case _ItemSort.type:
-        return 'Type';
-      case _ItemSort.synergies:
-        return 'Synergies';
-      case _ItemSort.name:
-        return 'Name';
-    }
-  }
-
-  String _allSortLabel(_AllSort s) {
-    switch (s) {
-      case _AllSort.quality:
-        return 'Quality';
-      case _AllSort.name:
-        return 'Name';
-      case _AllSort.synergies:
-        return 'Synergies';
-      case _AllSort.type:
-        return 'Type';
-    }
-  }
-
-  void _openSortSheet(BuildContext c, bool isAll, bool isGuns) {
-    showModalBottomSheet(
-      context: c,
-      builder: (ctx) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 14, 16, 6),
-                child: Row(
-                  children: [
-                    Icon(Icons.sort, size: 18),
-                    SizedBox(width: 8),
-                    GoopText('Sort by',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 15)),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-              if (isAll) ...[
-                _sortTile(ctx, 'Quality (S â†’ D)', Icons.workspace_premium,
-                    _allSort == _AllSort.quality,
-                    () => setState(() => _allSort = _AllSort.quality)),
-                _sortTile(ctx, 'Type (Guns â†’ Active â†’ Passive)',
-                    Icons.category,
-                    _allSort == _AllSort.type,
-                    () => setState(() => _allSort = _AllSort.type)),
-                _sortTile(ctx, 'Synergies (most â†’ least)', Icons.hub,
-                    _allSort == _AllSort.synergies,
-                    () => setState(() => _allSort = _AllSort.synergies)),
-                _sortTile(ctx, 'Name (A â†’ Z)', Icons.sort_by_alpha,
-                    _allSort == _AllSort.name,
-                    () => setState(() => _allSort = _AllSort.name)),
-              ] else if (isGuns) ...[
-                _sortTile(ctx, 'Quality (S â†’ D)', Icons.workspace_premium,
-                    _gunSort == _GunSort.quality,
-                    () => setState(() => _gunSort = _GunSort.quality)),
-                _sortTile(ctx, 'DPS (high â†’ low)', Icons.flash_on,
-                    _gunSort == _GunSort.dps,
-                    () => setState(() => _gunSort = _GunSort.dps)),
-                _sortTile(ctx, 'Class', Icons.category,
-                    _gunSort == _GunSort.gunClass,
-                    () => setState(() => _gunSort = _GunSort.gunClass)),
-                _sortTile(ctx, 'Name (A â†’ Z)', Icons.sort_by_alpha,
-                    _gunSort == _GunSort.name,
-                    () => setState(() => _gunSort = _GunSort.name)),
-              ] else ...[
-                _sortTile(ctx, 'Quality (S â†’ D)', Icons.workspace_premium,
-                    _itemSort == _ItemSort.quality,
-                    () => setState(() => _itemSort = _ItemSort.quality)),
-                _sortTile(ctx, 'Type (Active / Passive / Companion)',
-                    Icons.inventory_2_outlined,
-                    _itemSort == _ItemSort.type,
-                    () => setState(() => _itemSort = _ItemSort.type)),
-                _sortTile(ctx, 'Synergies (most â†’ least)', Icons.hub,
-                    _itemSort == _ItemSort.synergies,
-                    () => setState(() => _itemSort = _ItemSort.synergies)),
-                _sortTile(ctx, 'Name (A â†’ Z)', Icons.sort_by_alpha,
-                    _itemSort == _ItemSort.name,
-                    () => setState(() => _itemSort = _ItemSort.name)),
-              ],
-              const SizedBox(height: 8),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _sortTile(BuildContext ctx, String label, IconData icon,
-      bool selected, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon,
-          color: selected ? Colors.amber : Colors.white.withValues(alpha: 0.6)),
-      title: GoopText(label,
-          style: TextStyle(
-              fontWeight: selected ? FontWeight.w800 : FontWeight.w500)),
-      trailing: selected
-          ? const Icon(Icons.check, color: Colors.amber, size: 20)
-          : null,
-      onTap: () {
-        onTap();
-        Navigator.pop(ctx);
-      },
-    );
-  }
-
-  void _openQualitySheet(BuildContext c) {
-    const tiers = ['All', 'S', 'A', 'B', 'C', 'D', 'N'];
-    showModalBottomSheet(
-      context: c,
-      builder: (ctx) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 14, 16, 6),
-                child: Row(
-                  children: [
-                    Icon(Icons.military_tech, size: 18),
-                    SizedBox(width: 8),
-                    GoopText('Filter by quality',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 15)),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-              for (final t in tiers)
-                ListTile(
-                  leading: t == 'All'
-                      ? const Icon(Icons.all_inclusive,
-                          color: Colors.white70)
-                      : Container(
-                          width: 24,
-                          height: 24,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: QualityBadge.colorFor(t),
-                            shape: BoxShape.circle,
-                          ),
-                          child: GoopText(
-                            t,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                  title: GoopText(
-                    t == 'All'
-                        ? 'Tiers'
-                        : (t == 'N' ? 'Starter (N)' : '$t-tier'),
-                    style: TextStyle(
-                      fontWeight: _quality == t
-                          ? FontWeight.w800
-                          : FontWeight.w500,
-                    ),
-                  ),
-                  trailing: _quality == t
-                      ? const Icon(Icons.check,
-                          color: Colors.amber, size: 20)
-                      : null,
-                  onTap: () {
-                    setState(() => _quality = t);
-                    Navigator.pop(ctx);
-                  },
-                ),
-              const SizedBox(height: 8),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   Widget _gunsList(RunProvider p) {
     final items = _sortedGuns(p);
-    if (_isGridView) {
-      return GridView.builder(
-        padding: const EdgeInsets.fromLTRB(12, 10, 12, 24),
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: _getGridCrossAxisCount(context),
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 1.0,
-        ),
-        itemCount: items.length,
-        itemBuilder: (c, i) {
-          final g = items[i];
-          return _gridTile(c, p, g.name, g.quality, g.icon, () => ItemDetailScreen(gun: g), () {
-            if (_blockedByMpDrop(c)) return;
-            p.addGun(g, slot: widget.targetSlot);
-            _showAddSnackBar(c, g.name);
-          });
-        },
-      );
-    }
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -727,122 +326,6 @@ class _BrowseScreenState extends State<BrowseScreen>
         final g = items[i];
         return _gunRow(c, p, g);
       },
-    );
-  }
-
-  void _showAddSnackBar(BuildContext c, String name) {
-    ScaffoldMessenger.of(c).showSnackBar(
-      SnackBar(
-        content: GoopText(widget.targetSlot == PlayerSlot.coop
-            ? '$name added to P2'
-            : '$name added'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
-  }
-
-  Widget _gridTile(
-    BuildContext c,
-    RunProvider p,
-    String name,
-    String quality,
-    String iconPath,
-    Widget Function() makeDetailScreen,
-    VoidCallback onAdd,
-  ) {
-    final isSelected = p.ownerSlotOfGun(name) == widget.targetSlot || p.ownerSlotOfItem(name) == widget.targetSlot;
-    final f = AppTheme.flair;
-    
-    final Color qColor;
-    switch (quality.toUpperCase()) {
-      case 'S': qColor = const Color(0xFFFFD700); break;
-      case 'A': qColor = Colors.redAccent; break;
-      case 'B': qColor = Colors.greenAccent; break;
-      case 'C': qColor = Colors.blueAccent; break;
-      case 'D': qColor = Colors.grey; break;
-      default: qColor = Colors.white24;
-    }
-
-    return Tooltip(
-      message: name,
-      child: Stack(
-        children: [
-          InkWell(
-            onTap: () async {
-              FocusManager.instance.primaryFocus?.unfocus();
-              await Navigator.push(
-                c,
-                fastRoute(makeDetailScreen()),
-              );
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            onLongPress: onAdd,
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: isSelected ? f.primary.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isSelected 
-                      ? f.primary 
-                      : Colors.white.withValues(alpha: 0.08),
-                  width: isSelected ? 1.5 : 1.0,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: GameIcon(
-                  assetPath: iconPath,
-                  size: 32,
-                  fallback: Icons.extension,
-                ),
-              ),
-            ),
-          ),
-          if (quality.isNotEmpty)
-            Positioned(
-              top: 2,
-              left: 2,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                decoration: BoxDecoration(
-                  color: qColor,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: GoopText(
-                  quality,
-                  style: const TextStyle(
-                    fontSize: 7.5,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black,
-                    height: 1.0,
-                  ),
-                ),
-              ),
-            ),
-          Positioned(
-            bottom: 1,
-            right: 1,
-            child: InkWell(
-              onTap: onAdd,
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                padding: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  color: isSelected ? f.primary : Colors.black54,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.add,
-                  size: 10,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 
@@ -959,22 +442,13 @@ class _BrowseScreenState extends State<BrowseScreen>
     );
   }
 
-  /// Combined Guns + Items list â€” the default Browse view. Each row carries
-  /// its native meta widget, and we sort by the unified _AllSort axis.
+  /// Combined Guns + Items list — the default Browse view.
   Widget _allList(RunProvider p) {
-    // Build a heterogeneous list keyed by entry type. We only annotate
-    // each entry once; rendering branches per-type at build time.
     final guns = p.allGuns
-        .where((g) =>
-            g.name.toLowerCase().contains(_query) &&
-            _matchesQuality(g.quality) &&
-            _matchesFilters(g.notes))
+        .where((g) => g.name.toLowerCase().contains(_query))
         .toList();
     final items = p.allItems
-        .where((it) =>
-            it.name.toLowerCase().contains(_query) &&
-            _matchesQuality(it.quality) &&
-            _matchesFilters(it.effect))
+        .where((it) => it.name.toLowerCase().contains(_query))
         .toList();
 
     final entries = <AnyEntry>[
@@ -982,81 +456,11 @@ class _BrowseScreenState extends State<BrowseScreen>
       for (final it in items) AnyEntry.item(it),
     ];
 
-    int typeBucket(AnyEntry e) {
-      if (e.gun != null) return 0; // guns first
-      final it = e.item!;
-      if (it.isCompanion) return 1;
-      if (it.isActive) return 2;
-      if (it.isPassive) return 3;
-      return 4;
-    }
-
-    int qualityKey(AnyEntry e) =>
-        _qualityOrder[e.quality] ?? 99;
-
-    int synergies(AnyEntry e) =>
-        p.synergyCountFor(e.name);
-
-    switch (_allSort) {
-      case _AllSort.quality:
-        entries.sort((a, b) {
-          final c = qualityKey(a).compareTo(qualityKey(b));
-          return c != 0 ? c : a.name.compareTo(b.name);
-        });
-        break;
-      case _AllSort.name:
-        entries.sort((a, b) => a.name.compareTo(b.name));
-        break;
-      case _AllSort.synergies:
-        entries.sort((a, b) {
-          final c = synergies(b).compareTo(synergies(a));
-          return c != 0 ? c : a.name.compareTo(b.name);
-        });
-        break;
-      case _AllSort.type:
-        entries.sort((a, b) {
-          final c = typeBucket(a).compareTo(typeBucket(b));
-          if (c != 0) return c;
-          final q = qualityKey(a).compareTo(qualityKey(b));
-          return q != 0 ? q : a.name.compareTo(b.name);
-        });
-        break;
-    }
-
-    if (_isGridView) {
-      return GridView.builder(
-        padding: const EdgeInsets.fromLTRB(12, 10, 12, 24),
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: _getGridCrossAxisCount(context),
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 1.0,
-        ),
-        itemCount: entries.length,
-        itemBuilder: (c, i) {
-          final e = entries[i];
-          final name = e.name;
-          final quality = e.quality;
-          final icon = e.gun != null ? e.gun!.icon : e.item!.icon;
-          final makeDetail = e.gun != null 
-              ? () => ItemDetailScreen(gun: e.gun) 
-              : () => ItemDetailScreen(item: e.item);
-          final onAdd = e.gun != null
-              ? () {
-                  if (_blockedByMpDrop(c)) return;
-                  p.addGun(e.gun!, slot: widget.targetSlot);
-                  _showAddSnackBar(c, name);
-                }
-              : () {
-                  if (_blockedByMpDrop(c)) return;
-                  p.addItem(e.item!, slot: widget.targetSlot);
-                  _showAddSnackBar(c, name);
-                };
-          return _gridTile(c, p, name, quality, icon, makeDetail, onAdd);
-        },
-      );
-    }
+    entries.sort((a, b) {
+      final c = (_qualityOrder[a.quality] ?? 99)
+          .compareTo(_qualityOrder[b.quality] ?? 99);
+      return c != 0 ? c : a.name.compareTo(b.name);
+    });
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
@@ -1073,57 +477,11 @@ class _BrowseScreenState extends State<BrowseScreen>
 
   Widget _itemsList(RunProvider p) {
     final items = _sortedItems(p);
-    if (_isGridView) {
-      return GridView.builder(
-        padding: const EdgeInsets.fromLTRB(12, 10, 12, 24),
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: _getGridCrossAxisCount(context),
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 1.0,
-        ),
-        itemCount: items.length,
-        itemBuilder: (c, i) {
-          final it = items[i];
-          return _gridTile(c, p, it.name, it.quality, it.icon, () => ItemDetailScreen(item: it), () {
-            if (_blockedByMpDrop(c)) return;
-            p.addItem(it, slot: widget.targetSlot);
-            _showAddSnackBar(c, it.name);
-          });
-        },
-      );
-    }
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemCount: items.length,
       itemBuilder: (c, i) => _itemRow(c, p, items[i]),
-    );
-  }
-
-  Widget _buildFilterChip(String label, bool value, Color color, ValueChanged<bool> onSelected) {
-    return FilterChip(
-      label: GoopText(
-        label,
-        style: TextStyle(
-          fontSize: 10.5,
-          fontWeight: FontWeight.bold,
-          color: value ? color : Colors.white70,
-        ),
-      ),
-      selected: value,
-      selectedColor: color.withValues(alpha: 0.15),
-      checkmarkColor: color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      side: BorderSide(
-        color: value ? color : Colors.white10,
-        width: 1.0,
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-      onSelected: onSelected,
     );
   }
 }
