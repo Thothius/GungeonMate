@@ -12,6 +12,7 @@ import '../models/run_state.dart';
 import '../providers/run_provider.dart';
 import '../services/multiplayer_session.dart';
 import '../services/haptics.dart';
+import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../widgets/avatar_aura.dart';
 import 'character_select_screen.dart';
@@ -282,7 +283,10 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                 subtitle: 'Host the session, pick any Gungeoneer',
                 icon: Icons.person,
                 selected: _isMain,
-                onTap: () => setState(() => _isMain = true),
+                onTap: () {
+                  Haptics.selection();
+                  setState(() => _isMain = true);
+                },
               ),
               const SizedBox(height: 10),
               _RoleCard(
@@ -290,7 +294,10 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                 subtitle: 'Join a host, play as The Cultist',
                 icon: Icons.bluetooth_searching,
                 selected: !_isMain,
-                onTap: () => setState(() => _isMain = false),
+                onTap: () {
+                  Haptics.selection();
+                  setState(() => _isMain = false);
+                },
               ),
               const SizedBox(height: 24),
               // Character / Nickname section
@@ -299,7 +306,10 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               if (_isMain)
                 _CharacterPickerTile(
                   character: _selectedCharacter,
-                  onTap: _pickCharacter,
+                  onTap: () {
+                    Haptics.selection();
+                    _pickCharacter();
+                  },
                 )
               else
                 _ForcedCultistTile(cultist: cultist),
@@ -353,7 +363,10 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                 child: FilledButton.icon(
                   icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth),
                   label: Text(_isMain ? 'Start Hosting' : 'Find Host'),
-                  onPressed: _start,
+                  onPressed: () {
+                    Haptics.selection();
+                    _start();
+                  },
                 ),
               ),
               if (_savedSessions.isNotEmpty) ...[
@@ -618,10 +631,10 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               ],
             ),
             const Divider(color: Colors.white12, height: 24),
-            _buildGuideStep('1. Set up Player Roles 👥', 'Decide who will be the HOST (Main Player) and who will be the SIDEKICK (Co-op Cultist). The Host controls character selection, while the Sidekick plays as the Cultist.'),
-            _buildGuideStep('2. Verify Wireless Settings 📡', 'Ensure BOTH devices have Bluetooth and Wi-Fi toggled ON. For optimal speed, put both phones on the SAME local Wi-Fi router network!'),
-            _buildGuideStep('3. Host starts Advertising 🏁', 'The HOST picks their character, enters their Nickname, sets the Role to "Main Player", and taps "Start Advertising". A 4-digit PIN code will be generated.'),
-            _buildGuideStep('4. Sidekick Enters PIN 🔑', 'The SIDEKICK enters their Nickname, selects "Sidekick", types the HOST\'s 4-digit PIN, and taps "Start Discovery". They will immediately connect device-to-device!'),
+            _buildGuideStep('1. Set up Player Roles', 'Decide who will be the HOST (Main Player) and who will be the SIDEKICK (Co-op Cultist). The Host controls character selection, while the Sidekick plays as the Cultist.'),
+            _buildGuideStep('2. Verify Wireless Settings', 'Ensure BOTH devices have Bluetooth and Wi-Fi toggled ON. For optimal speed, put both phones on the SAME local Wi-Fi router network!'),
+            _buildGuideStep('3. Host Starts Hosting', 'The HOST picks their character, enters their Nickname, sets the Role to "Main Player", and taps "Start Hosting". A 4-digit PIN code will be generated.'),
+            _buildGuideStep('4. Sidekick Enters PIN', 'The SIDEKICK enters their Nickname, selects "Sidekick", types the HOST\'s 4-digit PIN, and taps "Find Host". They will immediately connect device-to-device!'),
             const SizedBox(height: 32),
             Center(
               child: TextButton.icon(
@@ -915,6 +928,13 @@ class _CharacterPickerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final animPath = character != null
+        ? gungeoneerAnimatedCardPath(character!.name)
+        : '';
+    final gifPath = character != null
+        ? gungeoneerGifPath(character!.name)
+        : '';
+
     return Material(
       color: Colors.white.withValues(alpha: 0.05),
       borderRadius: BorderRadius.circular(12),
@@ -935,23 +955,49 @@ class _CharacterPickerTile extends StatelessWidget {
             children: [
               if (character != null)
                 AvatarAura(
-                  size: 48,
+                  size: 56,
                   borderRadius: 8,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      character!.icon,
-                      width: 48,
-                      height: 48,
-                      errorBuilder: (_, __, ___) =>
-                          const Icon(Icons.person, size: 32),
+                    child: SizedBox(
+                      width: 56,
+                      height: 56,
+                      child: animPath.isNotEmpty
+                          ? Image.asset(
+                              animPath,
+                              fit: BoxFit.contain,
+                              errorBuilder: (_, __, ___) => gifPath.isNotEmpty
+                                  ? Image.asset(
+                                      gifPath,
+                                      fit: BoxFit.contain,
+                                      errorBuilder: (_, __, ___) =>
+                                          Image.asset(
+                                        character!.icon,
+                                        fit: BoxFit.contain,
+                                        errorBuilder: (_, __, ___) =>
+                                            const Icon(Icons.person, size: 32),
+                                      ),
+                                    )
+                                  : Image.asset(
+                                      character!.icon,
+                                      fit: BoxFit.contain,
+                                      errorBuilder: (_, __, ___) =>
+                                          const Icon(Icons.person, size: 32),
+                                    ),
+                            )
+                          : Image.asset(
+                              character!.icon,
+                              fit: BoxFit.contain,
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.person, size: 32),
+                            ),
                     ),
                   ),
                 )
               else
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 56,
+                  height: 56,
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
@@ -998,6 +1044,13 @@ class _ForcedCultistTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final animPath = cultist != null
+        ? gungeoneerAnimatedCardPath(cultist!.name)
+        : '';
+    final gifPath = cultist != null
+        ? gungeoneerGifPath(cultist!.name)
+        : '';
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -1010,13 +1063,43 @@ class _ForcedCultistTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              cultist?.icon ?? '',
-              width: 48,
-              height: 48,
-              errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 32),
+          AvatarAura(
+            size: 56,
+            borderRadius: 8,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: SizedBox(
+                width: 56,
+                height: 56,
+                child: animPath.isNotEmpty
+                    ? Image.asset(
+                        animPath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) => gifPath.isNotEmpty
+                            ? Image.asset(
+                                gifPath,
+                                fit: BoxFit.contain,
+                                errorBuilder: (_, __, ___) => Image.asset(
+                                  cultist?.icon ?? '',
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (_, __, ___) =>
+                                      const Icon(Icons.person, size: 32),
+                                ),
+                              )
+                            : Image.asset(
+                                cultist?.icon ?? '',
+                                fit: BoxFit.contain,
+                                errorBuilder: (_, __, ___) =>
+                                    const Icon(Icons.person, size: 32),
+                              ),
+                      )
+                    : Image.asset(
+                        cultist?.icon ?? '',
+                        fit: BoxFit.contain,
+                        errorBuilder: (_, __, ___) =>
+                            const Icon(Icons.person, size: 32),
+                      ),
+              ),
             ),
           ),
           const SizedBox(width: 16),
@@ -1061,6 +1144,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _spinCtrl;
   late final ScrollController _logScrollCtrl;
+  bool _consoleCollapsed = true;
 
   @override
   void initState() {
@@ -1144,6 +1228,23 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
 
     _updateSpin(isSpinning);
 
+    final myChar = session.lastCharacter;
+    final myNick = session.lastNickname;
+    final peerCharName = session.peerCharacterName;
+    final peerNick = session.peerNickname;
+
+    Gungeoneer? peerChar;
+    if (peerCharName != null && peerCharName.isNotEmpty) {
+      try {
+        final rp = context.read<RunProvider>();
+        peerChar = rp.gungeoneerByName(peerCharName);
+      } catch (_) {}
+    }
+
+    final accent = status == MpStatus.connected
+        ? const Color(0xFF00E676)
+        : Colors.lightBlueAccent;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -1160,27 +1261,63 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 12),
-              RotationTransition(
-                turns: _spinCtrl,
-                child: Icon(
-                  icon,
-                  size: 64,
-                  color: status == MpStatus.connected
-                      ? Colors.green
-                      : Colors.lightBlueAccent,
+              // Animated gungeoneer portraits
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _ConnectPortrait(
+                      character: myChar,
+                      nickname: myNick,
+                      slotLabel: session.myRole == MpRole.main ? 'P1 · MAIN' : 'P2 · SIDEKICK',
+                      accent: session.myRole == MpRole.main ? Colors.cyanAccent : Colors.purpleAccent,
+                      isMe: true,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RotationTransition(
+                          turns: _spinCtrl,
+                          child: Icon(
+                            icon,
+                            size: 32,
+                            color: accent,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          status == MpStatus.connected ? 'LINKED' : isSpinning ? 'SEARCHING' : '—',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.5,
+                            color: accent.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                    _ConnectPortrait(
+                      character: peerChar,
+                      nickname: peerNick ?? 'Waiting…',
+                      slotLabel: session.myRole == MpRole.main ? 'P2 · SIDEKICK' : 'P1 · MAIN',
+                      accent: session.myRole == MpRole.main ? Colors.purpleAccent : Colors.cyanAccent,
+                      isMe: false,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
               Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
+                  color: accent,
                 ),
               ),
               const SizedBox(height: 8),
@@ -1193,13 +1330,13 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                 ),
               ),
               if (session.myRole == MpRole.main && (status == MpStatus.searching || status == MpStatus.handshaking) && session.pinCode != null) ...[
-                const SizedBox(height: 32),
+                const SizedBox(height: 28),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                   decoration: BoxDecoration(
-                    color: Colors.amber.withValues(alpha: 0.1),
+                    color: Colors.cyanAccent.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.5),
+                    border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.3), width: 1.5),
                   ),
                   child: Column(
                     children: [
@@ -1209,17 +1346,17 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: Colors.white.withValues(alpha: 0.6),
+                          color: Colors.cyanAccent,
                         ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         session.pinCode!,
                         style: const TextStyle(
-                          fontSize: 32,
+                          fontSize: 36,
                           fontWeight: FontWeight.w900,
-                          color: Colors.amber,
-                          letterSpacing: 4.0,
+                          color: Colors.white,
+                          letterSpacing: 6.0,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -1237,68 +1374,118 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
               ],
               if (status == MpStatus.connected) ...[
                 const SizedBox(height: 32),
-                FilledButton(
-                  onPressed: () {
-                    // Navigate to active run - go back to home which shows inventory
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      fastRoute(const HomeScreen()),
-                      (route) => false,
-                    );
-                  },
-                  child: const Text('Go to Run'),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: const Color(0xFF00E676),
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    icon: const Icon(Icons.play_arrow, size: 24),
+                    label: const Text(
+                      'Go to Run',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                    ),
+                    onPressed: () {
+                      Haptics.selection();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        fastRoute(const HomeScreen()),
+                        (route) => false,
+                      );
+                    },
+                  ),
                 ),
               ],
               if (status == MpStatus.permissionDenied) ...[
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () async {
-                        await session.cancel();
-                        if (context.mounted) Navigator.pop(context);
-                      },
-                      child: const Text('Cancel'),
+                const SizedBox(height: 28),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      side: const BorderSide(color: Colors.redAccent, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
-                    const SizedBox(width: 12),
-                    FilledButton.icon(
-                      onPressed: () => openAppSettings(),
-                      icon: const Icon(Icons.settings, size: 18),
-                      label: const Text('Open Settings'),
+                    onPressed: () async {
+                      await session.cancel();
+                      if (context.mounted) Navigator.pop(context);
+                    },
+                    child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
-                  ],
+                    onPressed: () => openAppSettings(),
+                    icon: const Icon(Icons.settings, size: 22),
+                    label: const Text('Open Settings', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
+                  ),
                 ),
               ],
               if (status == MpStatus.error ||
                   status == MpStatus.disconnected) ...[
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () async {
-                        await session.cancel();
-                        if (context.mounted) Navigator.pop(context);
-                      },
-                      child: const Text('Cancel'),
+                const SizedBox(height: 28),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      side: const BorderSide(color: Colors.redAccent, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
-                    const SizedBox(width: 12),
-                    FilledButton.icon(
-                      icon: const Icon(Icons.bluetooth_searching, size: 18),
-                      label: const Text('Reconnect'),
-                      onPressed: session.canReconnect
-                          ? () => session.reconnect()
-                          : null,
+                    onPressed: () async {
+                      await session.cancel();
+                      if (context.mounted) Navigator.pop(context);
+                    },
+                    child: const Text('Cancel', style: TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.cyanAccent,
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
-                  ],
+                    icon: const Icon(Icons.key, size: 22),
+                    label: const Text('RE-PAIR', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                    onPressed: session.canReconnect
+                        ? () {
+                            Haptics.selection();
+                            session.requestReconnectHub();
+                          }
+                        : null,
+                  ),
                 ),
                 if (status == MpStatus.disconnected) ...[
                   const SizedBox(height: 12),
                   Text(
                     'Your run is preserved. The peer should still be on '
-                    'the multiplayer screen — Reconnect re-pairs over '
-                    'Wi-Fi / Bluetooth without losing inventory.',
+                    'the multiplayer screen — RE-PAIR opens the Reconnection '
+                    'Hub to re-pair over Wi-Fi / Bluetooth without losing inventory.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 12.5,
@@ -1307,58 +1494,235 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                   ),
                 ],
               ],
-              
-              // LIVE MONOSPACE DIAGNOSTIC CONSOLE
-              const SizedBox(height: 36),
-              Row(
-                children: [
-                  const Icon(Icons.terminal_rounded, size: 14, color: Colors.greenAccent),
-                  const SizedBox(width: 6),
-                  Text(
-                    'CONNECTION DIAGNOSTIC CONSOLE',
-                    style: TextStyle(
-                      fontSize: 10.5,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0,
-                      color: Colors.greenAccent.withValues(alpha: 0.8),
+
+              // Collapsible diagnostic console
+              const SizedBox(height: 32),
+              InkWell(
+                onTap: () {
+                  Haptics.selection();
+                  setState(() => _consoleCollapsed = !_consoleCollapsed);
+                },
+                child: Row(
+                  children: [
+                    const Icon(Icons.terminal_rounded, size: 14, color: Colors.greenAccent),
+                    const SizedBox(width: 6),
+                    Text(
+                      'DIAGNOSTIC CONSOLE',
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0,
+                        color: Colors.greenAccent.withValues(alpha: 0.8),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Container(
-                height: 180,
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                ),
-                child: ListView.builder(
-                  controller: _logScrollCtrl,
-                  itemCount: session.connectionLogs.length,
-                  itemBuilder: (context, idx) {
-                    final log = session.connectionLogs[idx];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.08),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       child: Text(
-                        log,
-                        style: const TextStyle(
-                          fontFamily: 'Courier',
-                          fontSize: 10,
-                          height: 1.2,
-                          color: Colors.greenAccent,
+                        '${session.connectionLogs.length}',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white.withValues(alpha: 0.5),
                         ),
                       ),
-                    );
-                  },
+                    ),
+                    const Spacer(),
+                    AnimatedRotation(
+                      turns: _consoleCollapsed ? 0 : 0.5,
+                      duration: const Duration(milliseconds: 180),
+                      child: Icon(
+                        Icons.expand_more_rounded,
+                        size: 16,
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+              if (!_consoleCollapsed) ...[
+                const SizedBox(height: 8),
+                Container(
+                  height: 180,
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                  ),
+                  child: ListView.builder(
+                    controller: _logScrollCtrl,
+                    itemCount: session.connectionLogs.length,
+                    itemBuilder: (context, idx) {
+                      final log = session.connectionLogs[idx];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          log,
+                          style: const TextStyle(
+                            fontFamily: 'Courier',
+                            fontSize: 10,
+                            height: 1.2,
+                            color: Colors.greenAccent,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Animated gungeoneer portrait for the connect screen.
+class _ConnectPortrait extends StatelessWidget {
+  final Gungeoneer? character;
+  final String nickname;
+  final String slotLabel;
+  final Color accent;
+  final bool isMe;
+
+  const _ConnectPortrait({
+    required this.character,
+    required this.nickname,
+    required this.slotLabel,
+    required this.accent,
+    required this.isMe,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final charName = character?.name ?? 'Unknown';
+    final animPath = character != null
+        ? gungeoneerAnimatedCardPath(character!.name)
+        : '';
+    final gifPath = character != null
+        ? gungeoneerGifPath(character!.name)
+        : '';
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          decoration: BoxDecoration(
+            color: accent.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: accent.withValues(alpha: 0.4), width: 1),
+          ),
+          child: Text(
+            slotLabel,
+            style: TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
+              color: accent,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: 90,
+            height: 110,
+            decoration: BoxDecoration(
+              color: const Color(0xFF161B22),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: accent.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
+            ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                if (animPath.isNotEmpty)
+                  Image.asset(
+                    animPath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => gifPath.isNotEmpty
+                        ? Image.asset(
+                            gifPath,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => _placeholder(accent),
+                          )
+                        : _placeholder(accent),
+                  )
+                else if (gifPath.isNotEmpty)
+                  Image.asset(
+                    gifPath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => _placeholder(accent),
+                  )
+                else
+                  _placeholder(accent),
+                if (isMe)
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: accent.withValues(alpha: 0.8),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'YOU',
+                        style: TextStyle(
+                          fontSize: 7,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          charName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w800,
+            color: Colors.white.withValues(alpha: 0.85),
+          ),
+        ),
+        const SizedBox(height: 1),
+        Text(
+          nickname,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w900,
+            color: accent,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _placeholder(Color accent) {
+    return Icon(
+      Icons.person,
+      size: 36,
+      color: accent.withValues(alpha: 0.4),
     );
   }
 }
