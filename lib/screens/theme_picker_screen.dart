@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
+import '../utils/asset_paths.dart';
 
 /// Full-screen immersive theme picker. Each page fills the entire screen
 /// with the theme's scaffold colour, showcasing a large palette and a
@@ -168,29 +169,22 @@ class _ImmersiveThemePage extends StatelessWidget {
 
   Widget _buildPage(BuildContext context) {
     final f = AppTheme.flairFor(mode);
-    final cores = <_PaletteCore>[
-      _PaletteCore(color: f.scaffold, label: 'BACKGROUND', weight: 34),
-      _PaletteCore(color: f.card, label: 'CARD', weight: 22),
-      _PaletteCore(color: f.primary, label: 'PRIMARY', weight: 18),
-      _PaletteCore(color: f.secondary, label: 'SECONDARY', weight: 14),
-      _PaletteCore(color: f.headlineStat, label: 'ACCENT', weight: 12),
-    ];
 
     return Container(
       color: f.scaffold,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 28),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(flex: 2),
+            const Spacer(flex: 1),
 
             // Theme name — large, bold, in the theme's headline colour
             Text(
               mode.label.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 28,
                 fontWeight: FontWeight.w900,
                 color: f.headlineStat,
                 letterSpacing: 4,
@@ -209,14 +203,14 @@ class _ImmersiveThemePage extends StatelessWidget {
             .fadeIn(duration: 400.ms, delay: 100.ms)
             .slideY(begin: 0.08, end: 0, duration: 400.ms),
 
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
 
             // Tagline — small, muted
             Text(
               mode.tagline,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: f.secondary.withValues(alpha: 0.7),
                 letterSpacing: 1.2,
@@ -225,70 +219,15 @@ class _ImmersiveThemePage extends StatelessWidget {
 
             const Spacer(flex: 1),
 
-            // Large palette bar — the hero element
-            // Weighted horizontal bars showing each colour's proportion
-            ClipRRect(
-              borderRadius: BorderRadius.circular(14),
-              child: SizedBox(
-                height: 80,
-                child: Row(
-                  children: [
-                    for (final c in cores)
-                      Expanded(
-                        flex: c.weight,
-                        child: Container(
-                          color: c.color,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            )
-            .animate()
-            .fadeIn(duration: 500.ms, delay: 200.ms)
-            .slideY(begin: 0.12, end: 0, duration: 500.ms),
+            // ═══════════════════════════════════════════
+            // DASHBOARD PREVIEW — mini GungeoneerHeader mockup
+            // ═══════════════════════════════════════════
+            _DashboardPreview(f: f)
+                .animate()
+                .fadeIn(duration: 500.ms, delay: 200.ms)
+                .slideY(begin: 0.1, end: 0, duration: 500.ms),
 
-            const SizedBox(height: 10),
-
-            // Colour labels under the bar
-            Row(
-              children: [
-                for (final c in cores)
-                  Expanded(
-                    flex: c.weight,
-                    child: Text(
-                      c.label,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 7.5,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white.withValues(alpha: 0.35),
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-
-            // Big colour dots row — shows each colour as a large circle
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _ColorDot(color: f.scaffold, size: 44),
-                _ColorDot(color: f.card, size: 44),
-                _ColorDot(color: f.primary, size: 56),
-                _ColorDot(color: f.secondary, size: 44),
-                _ColorDot(color: f.headlineStat, size: 44),
-              ],
-            )
-            .animate()
-            .fadeIn(duration: 500.ms, delay: 350.ms)
-            .slideY(begin: 0.15, end: 0, duration: 500.ms),
-
-            const Spacer(flex: 2),
+            const Spacer(flex: 1),
 
             // Flavour description — 1-2 sentences, italic, centered
             Padding(
@@ -297,29 +236,37 @@ class _ImmersiveThemePage extends StatelessWidget {
                 mode.whimsicalDescription,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
-                  height: 1.5,
+                  height: 1.4,
                   fontStyle: FontStyle.italic,
-                  color: Colors.white.withValues(alpha: 0.65),
+                  color: Colors.white.withValues(alpha: 0.55),
                   letterSpacing: 0.3,
                 ),
               ),
             )
             .animate()
-            .fadeIn(duration: 600.ms, delay: 450.ms),
+            .fadeIn(duration: 600.ms, delay: 400.ms),
 
-            const Spacer(flex: 2),
+            const Spacer(flex: 1),
 
-            // Remix / palette chips (if applicable)
+            // ═══════════════════════════════════════════
+            // PALETTE / REMIX SELECTOR — big tappable cards
+            // ═══════════════════════════════════════════
             if (mode == AppThemeMode.unicorn)
               ListenableBuilder(
                 listenable: AppTheme.unicornPaletteNotifier,
                 builder: (context, _) {
                   final active = AppTheme.unicornPalette;
-                  return _RemixChips(
+                  return _PaletteSelector(
                     flair: f,
-                    labels: UnicornPalette.values.map((p) => p.label).toList(),
+                    items: UnicornPalette.values.map((p) {
+                      final pf = p.flair;
+                      return (
+                        label: p.label,
+                        colors: [pf.scaffold, pf.primary, pf.headlineStat],
+                      );
+                    }).toList(),
                     activeIndex: active.index,
                     onTap: (i) {
                       AppTheme.setUnicornPalette(UnicornPalette.values[i]);
@@ -334,9 +281,12 @@ class _ImmersiveThemePage extends StatelessWidget {
                 builder: (context, _) {
                   final remixes = kThemeRemixes[mode]!;
                   final active = AppTheme.remixFor(mode);
-                  return _RemixChips(
+                  return _PaletteSelector(
                     flair: f,
-                    labels: remixes.map((r) => r.label).toList(),
+                    items: remixes.map((r) => (
+                      label: r.label,
+                      colors: [f.scaffold, f.primary, f.headlineStat],
+                    )).toList(),
                     activeIndex: active,
                     onTap: (i) {
                       AppTheme.setRemix(mode, i);
@@ -349,7 +299,7 @@ class _ImmersiveThemePage extends StatelessWidget {
             // Custom theme editor button
             if (mode == AppThemeMode.custom)
               Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(bottom: 8),
                 child: OutlinedButton.icon(
                   onPressed: () async {
                     await showModalBottomSheet(
@@ -426,42 +376,6 @@ class _ImmersiveThemePage extends StatelessWidget {
   }
 }
 
-/// A large colour dot with a subtle border, used in the palette row.
-class _ColorDot extends StatelessWidget {
-  final Color color;
-  final double size;
-  const _ColorDot({required this.color, required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color,
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.12),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.3),
-            blurRadius: 12,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _PaletteCore {
-  final Color color;
-  final String label;
-  final int weight;
-  const _PaletteCore({required this.color, required this.label, required this.weight});
-}
 
 /// Curated Gungeon color palette for the custom theme editor.
 /// 24 deep, saturated colors that work well as scaffold/card/primary/secondary.
@@ -665,16 +579,273 @@ class _ColorSlotPicker extends StatelessWidget {
   }
 }
 
-/// A horizontal wrap of selectable chips for palette switching / remixing.
-class _RemixChips extends StatelessWidget {
+// ═══════════════════════════════════════════════════════════════
+// _DashboardPreview — Mini GungeoneerHeader mockup that shows how
+// the theme looks on the actual active run screen.
+// ═══════════════════════════════════════════════════════════════
+class _DashboardPreview extends StatelessWidget {
+  final ThemeFlair f;
+  const _DashboardPreview({required this.f});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: f.card,
+        borderRadius: BorderRadius.circular(f.cardRadius),
+        border: Border.all(
+          color: f.primary.withValues(alpha: 0.25),
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: f.primary.withValues(alpha: 0.08),
+            blurRadius: 10,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Row 1: Portrait + Name + trailing dots
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+            child: Row(
+              children: [
+                // Portrait
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: f.primary.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: f.primary.withValues(alpha: 0.35),
+                      width: 1.2,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      localGungeoneerIcon('The Marine'),
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.none,
+                      errorBuilder: (_, __, ___) => Icon(
+                        Icons.person,
+                        size: 22,
+                        color: f.primary.withValues(alpha: 0.5),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                // Name
+                Expanded(
+                  child: Text(
+                    'THE MARINE',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                      letterSpacing: 1.0,
+                      height: 1.1,
+                    ),
+                  ),
+                ),
+                // Trailing menu icon
+                Icon(Icons.more_vert_rounded, size: 18, color: f.primary.withValues(alpha: 0.5)),
+              ],
+            ),
+          ),
+          // Row 2: Stat capsules
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
+            child: Row(
+              children: [
+                _previewCapsule(f, const Color(0xFF00E5FF), '+3.0', 'COOL', true),
+                const SizedBox(width: 4),
+                _previewCapsule(f, const Color(0xFFE040FB), '+1.5', 'CURSE', true),
+                const SizedBox(width: 4),
+                _previewCapsule(f, const Color(0xFFFFD740), '4', 'SYN', true),
+                const SizedBox(width: 4),
+                _previewCapsule(f, const Color(0xFFFF9100), '52', 'DPS', true),
+              ],
+            ),
+          ),
+          // Divider
+          Container(
+            height: 1,
+            width: double.infinity,
+            color: Colors.white.withValues(alpha: 0.05),
+          ),
+          // Row 3: Mini inventory rows
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                _previewInventoryRow(f, 'Marine Sidearm', 'A', const Color(0xFF00E5FF)),
+                const SizedBox(height: 4),
+                _previewInventoryRow(f, 'Supply Drop', 'B', const Color(0xFF00E676)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _previewCapsule(
+    ThemeFlair f,
+    Color color,
+    String value,
+    String label,
+    bool isActive,
+  ) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
+        decoration: BoxDecoration(
+          color: isActive
+              ? color.withValues(alpha: 0.16)
+              : Colors.black.withValues(alpha: 0.28),
+          borderRadius: BorderRadius.circular(f.chipRadius),
+          border: Border.all(
+            color: isActive
+                ? color.withValues(alpha: 0.45)
+                : Colors.white.withValues(alpha: 0.10),
+            width: 1.0,
+          ),
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Column(
+            children: [
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w900,
+                  color: isActive ? Colors.white : Colors.white38,
+                  height: 1.1,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w900,
+                  color: isActive ? color : Colors.white24,
+                  letterSpacing: 0.5,
+                  height: 1.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _previewInventoryRow(
+    ThemeFlair f,
+    String name,
+    String quality,
+    Color qualityColor,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: f.primary.withValues(alpha: 0.08),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        children: [
+          // Quality badge dot
+          Container(
+            width: 18,
+            height: 18,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: qualityColor.withValues(alpha: 0.18),
+              border: Border.all(color: qualityColor.withValues(alpha: 0.55), width: 1.2),
+            ),
+            child: Center(
+              child: Text(
+                quality,
+                style: TextStyle(
+                  fontSize: 9,
+                  fontWeight: FontWeight.w900,
+                  color: qualityColor,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Icon placeholder
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: f.primary.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Icon(Icons.inventory_2_outlined, size: 12, color: f.primary.withValues(alpha: 0.4)),
+          ),
+          const SizedBox(width: 8),
+          // Name
+          Expanded(
+            child: Text(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: Colors.white.withValues(alpha: 0.8),
+              ),
+            ),
+          ),
+          // DPS / stat number
+          Text(
+            '14.2',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w900,
+              color: f.headlineStat,
+              shadows: f.numberGlowColor != null
+                  ? [Shadow(color: f.numberGlowColor!, blurRadius: 6)]
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// _PaletteSelector — Big tappable palette cards with color swatches.
+// Replaces the old small _RemixChips with something much more
+// tactile and visual.
+// ═══════════════════════════════════════════════════════════════
+class _PaletteSelector extends StatelessWidget {
   final ThemeFlair flair;
-  final List<String> labels;
+  final List<({String label, List<Color> colors})> items;
   final int activeIndex;
   final ValueChanged<int> onTap;
 
-  const _RemixChips({
+  const _PaletteSelector({
     required this.flair,
-    required this.labels,
+    required this.items,
     required this.activeIndex,
     required this.onTap,
   });
@@ -682,43 +853,92 @@ class _RemixChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        spacing: 10,
-        runSpacing: 8,
-        children: [
-          for (int i = 0; i < labels.length; i++)
-            GestureDetector(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: SizedBox(
+        height: 64,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          itemCount: items.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 10),
+          itemBuilder: (context, i) {
+            final item = items[i];
+            final isActive = i == activeIndex;
+            return GestureDetector(
               onTap: () => onTap(i),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOutCubic,
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
-                  color: i == activeIndex
-                      ? flair.primary.withValues(alpha: 0.2)
-                      : Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(12),
+                  color: isActive
+                      ? flair.primary.withValues(alpha: 0.15)
+                      : Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: i == activeIndex
+                    color: isActive
                         ? flair.primary
-                        : Colors.white.withValues(alpha: 0.1),
-                    width: i == activeIndex ? 2.0 : 1.0,
+                        : Colors.white.withValues(alpha: 0.08),
+                    width: isActive ? 2.0 : 1.0,
                   ),
+                  boxShadow: isActive
+                      ? [
+                          BoxShadow(
+                            color: flair.primary.withValues(alpha: 0.2),
+                            blurRadius: 8,
+                            spreadRadius: 0,
+                          ),
+                        ]
+                      : null,
                 ),
-                child: Text(
-                  labels[i],
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: i == activeIndex ? FontWeight.w900 : FontWeight.w700,
-                    color: i == activeIndex
-                        ? flair.primary
-                        : Colors.white.withValues(alpha: 0.7),
-                    letterSpacing: 0.6,
-                  ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Color swatch stack
+                    Row(
+                      children: [
+                        for (int c = 0; c < item.colors.length; c++) ...[
+                          if (c > 0) const SizedBox(width: 3),
+                          Container(
+                            width: 16,
+                            height: 32,
+                            decoration: BoxDecoration(
+                              color: item.colors[c],
+                              borderRadius: BorderRadius.horizontal(
+                                left: c == 0 ? const Radius.circular(4) : Radius.zero,
+                                right: c == item.colors.length - 1
+                                    ? const Radius.circular(4)
+                                    : Radius.zero,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(width: 10),
+                    // Label
+                    Text(
+                      item.label,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: isActive ? FontWeight.w900 : FontWeight.w700,
+                        color: isActive
+                            ? flair.primary
+                            : Colors.white.withValues(alpha: 0.65),
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    if (isActive) ...[
+                      const SizedBox(width: 6),
+                      Icon(Icons.check_circle_rounded, size: 14, color: flair.primary),
+                    ],
+                  ],
                 ),
               ),
-            ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }

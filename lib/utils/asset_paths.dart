@@ -59,3 +59,33 @@ String gungeoneerGifPath(String name) {
 }
 String localShrineIcon(String name) => _pathFor('shrines', name);
 String localSynergyIcon(String name) => _pathFor('synergies', name);
+
+/// Path to the animated card GIF (or webp for Cultist) for a gungeoneer.
+/// Files live in assets/images/gungeoneers/animated/ and use a different
+/// naming convention than the static icons (e.g. "Marine_Card_Animated.gif").
+/// Returns empty string if no animated card exists for the character.
+String gungeoneerAnimatedCardPath(String name) {
+  final slug = slugForAssetName(name);
+  switch (slug) {
+    case 'the_marine':
+      return 'assets/images/gungeoneers/animated/Marine_Card_Animated.gif';
+    case 'the_pilot':
+      return 'assets/images/gungeoneers/animated/Pilot_Card_Animated.gif';
+    case 'the_convict':
+      return 'assets/images/gungeoneers/animated/Convict_Card_Animated.gif';
+    case 'the_hunter':
+      return 'assets/images/gungeoneers/animated/Hunter_Card_Animated.gif';
+    case 'the_bullet':
+      return 'assets/images/gungeoneers/animated/The_Bullet_Animated.gif';
+    case 'the_robot':
+      return 'assets/images/gungeoneers/animated/Robot_Card_Animated.gif';
+    case 'the_cultist':
+      return 'assets/images/gungeoneers/animated/Cultist_Card.webp';
+    case 'the_paradox':
+      return 'assets/images/gungeoneers/animated/Paradox_Card_Animated.gif';
+    case 'the_gunslinger':
+      return 'assets/images/gungeoneers/animated/Gunslinger_Card_Animated.gif';
+    default:
+      return '';
+  }
+}

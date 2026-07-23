@@ -6,6 +6,28 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.6.3 — Theme Picker Redesign: Dashboard Preview + Big Palette Buttons (July 23, 2026)
+**Build:** 64
+
+### Dashboard Preview
+- Theme picker now shows a mini `GungeoneerHeader` mockup with portrait, stat capsules (COOL/CURSE/SYN/DPS), and sample inventory rows.
+- Preview uses the theme's actual `ThemeFlair` colors (card, primary, headlineStat, chipRadius, cardRadius, numberGlowColor) so users see exactly how the theme looks on the active run screen.
+- Portrait loads The Marine's local asset icon via `localGungeoneerIcon`.
+
+### Big Palette Selector
+- Replaced small `_RemixChips` text-only chips with `_PaletteSelector` — large 64px-tall tappable cards.
+- Each card shows a vertical color swatch stack (scaffold/primary/accent) next to the label text.
+- Active card gets a glowing border with `boxShadow`, check icon, and animated transitions.
+- Unicorn palette cards show per-palette colors (via `UnicornPalette.flair`), not just the current mode's colors.
+- Horizontally scrollable with `BouncingScrollPhysics` for smooth UX.
+
+### Removed
+- `_ColorDot` widget (unused after redesign)
+- `_PaletteCore` class (unused after redesign)
+- `_RemixChips` widget (replaced by `_PaletteSelector`)
+
+---
+
 ## v1.6.2 — Theme-Accent Dashboard Border + Curse Sheet Polish + Menu Restructure (July 23, 2026)
 **Build:** 63
 

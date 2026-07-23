@@ -4,10 +4,10 @@ import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/gungeoneer.dart';
-import '../widgets/avatar_aura.dart';
 import '../widgets/scale_button.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
+import '../utils/asset_paths.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
 
@@ -176,37 +176,43 @@ class _CharacterCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    padding: const EdgeInsets.all(18),
-                    child: LayoutBuilder(
-                      builder: (ctx, box) {
-                        final side = box.biggest.shortestSide.clamp(50.0, 140.0);
-                        return AvatarAura(
-                          size: side,
-                          borderRadius: 12,
-                          speedScale: 1.4,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Transform.scale(
-                              scale: 1.5,
-                              child: character.icon.startsWith('assets/')
-                                  ? Image.asset(
-                                      character.icon,
-                                      fit: BoxFit.contain,
-                                      filterQuality: FilterQuality.none,
-                                      errorBuilder: (_, __, ___) => const Icon(
-                                        Icons.person,
-                                        size: 64,
-                                        color: Colors.white70,
-                                      ),
-                                    )
-                                  : const Icon(
+                    padding: const EdgeInsets.all(12),
+                    child: Builder(
+                      builder: (ctx) {
+                        final animPath = gungeoneerAnimatedCardPath(character.name);
+                        return animPath.isNotEmpty
+                            ? Image.asset(
+                                animPath,
+                                fit: BoxFit.contain,
+                                filterQuality: FilterQuality.none,
+                                gaplessPlayback: true,
+                                errorBuilder: (_, __, ___) => Image.asset(
+                                  character.icon,
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.none,
+                                  errorBuilder: (_, __, ___) => const Icon(
+                                    Icons.person,
+                                    size: 64,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              )
+                            : (character.icon.startsWith('assets/')
+                                ? Image.asset(
+                                    character.icon,
+                                    fit: BoxFit.contain,
+                                    filterQuality: FilterQuality.none,
+                                    errorBuilder: (_, __, ___) => const Icon(
                                       Icons.person,
                                       size: 64,
                                       color: Colors.white70,
                                     ),
-                            ),
-                          ),
-                        );
+                                  )
+                                : const Icon(
+                                    Icons.person,
+                                    size: 64,
+                                    color: Colors.white70,
+                                  ));
                       },
                     ),
                   ),

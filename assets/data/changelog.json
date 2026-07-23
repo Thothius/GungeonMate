@@ -1,5 +1,14 @@
 [
   {
+    "version": "v1.6.3",
+    "title": "\ud83c\udfa8 THEME PICKER REDESIGN \u2014 DASHBOARD PREVIEW + BIG PALETTE BUTTONS",
+    "date": "July 23, 2026",
+    "items": [
+      "Dashboard Preview: Theme picker now shows a mini GungeoneerHeader mockup with portrait, stat capsules (COOL/CURSE/SYN/DPS), and sample inventory rows \u2014 see exactly how the theme looks on your active run before applying.",
+      "Big Palette Selector: Replaced small text chips with large tappable cards showing actual color swatches (scaffold/primary/accent) for each Unicorn palette and theme remix \u2014 much easier to tap and visually compare."
+    ]
+  },
+  {
     "version": "v1.6.2",
     "title": "\ud83c\udfa8 THEME-ACCENT DASHBOARD BORDER + CURSE SHEET POLISH + MENU RESTRUCTURE",
     "date": "July 23, 2026",
