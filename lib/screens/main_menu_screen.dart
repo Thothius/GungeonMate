@@ -349,8 +349,8 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // Language toggle pill
-                  _LanguageToggle(),
+                  // Language toggle pill — hidden for now (feature disabled)
+                  // _LanguageToggle(),
                   const Spacer(flex: 1),
                 ],
               ),

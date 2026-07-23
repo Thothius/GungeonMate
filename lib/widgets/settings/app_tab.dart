@@ -28,12 +28,12 @@ class AppTabState extends State<AppTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // =ƒîÉ Language
-          _sectionHeader('=ƒîÉ LANGUAGE'),
-          _buildLanguageCard(flair),
-          const SizedBox(height: 12),
+          // Language section — hidden for now (Goopian feature disabled)
+          // _sectionHeader('=ƒîÉ LANGUAGE'),
+          // _buildLanguageCard(flair),
+          // const SizedBox(height: 12),
 
-          // =ƒÆ¼ Dialogue
+          // Dialogue
           _sectionHeader('=ƒÆ¼ DIALOGUE'),
           _buildDialogueCard(flair),
           const SizedBox(height: 12),

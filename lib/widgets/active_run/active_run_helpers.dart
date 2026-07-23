@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/player.dart';
-import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
 import '../../services/effect_tagger.dart';
 import '../../services/multiplayer_session.dart';
@@ -277,10 +276,11 @@ class HeaderMenu extends StatelessWidget {
               }
             }));
             break;
-          case 'toggle_dashboards':
-            VisualPrefs.setShowDashboards(!VisualPrefs.notifier.value.showDashboards);
-            Haptics.selection();
-            break;
+          // toggle_dashboards — hidden for now (dashboards always on)
+          // case 'toggle_dashboards':
+          //   VisualPrefs.setShowDashboards(!VisualPrefs.notifier.value.showDashboards);
+          //   Haptics.selection();
+          //   break;
           case 'dice_roll':
             showDiceRollDialog(context);
             break;
@@ -312,16 +312,16 @@ class HeaderMenu extends StatelessWidget {
             GoopText('Codex'),
           ]),
         ),
-        // Dashboards toggle
-        PopupMenuItem(
-          value: 'toggle_dashboards',
-          child: Row(children: [
-            Icon(Icons.dashboard_customize_rounded, size: 18,
-                color: VisualPrefs.notifier.value.showDashboards ? Colors.amberAccent : Colors.white38),
-            const SizedBox(width: 10),
-            GoopText(VisualPrefs.notifier.value.showDashboards ? 'Hide Dashboards' : 'Show Dashboards'),
-          ]),
-        ),
+        // Dashboards toggle — hidden for now (dashboards always on)
+        // PopupMenuItem(
+        //   value: 'toggle_dashboards',
+        //   child: Row(children: [
+        //     Icon(Icons.dashboard_customize_rounded, size: 18,
+        //         color: VisualPrefs.notifier.value.showDashboards ? Colors.amberAccent : Colors.white38),
+        //     const SizedBox(width: 10),
+        //     GoopText(VisualPrefs.notifier.value.showDashboards ? 'Hide Dashboards' : 'Show Dashboards'),
+        //   ]),
+        // ),
         const PopupMenuDivider(),
 
         // --- Actions ---
