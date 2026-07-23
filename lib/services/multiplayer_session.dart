@@ -379,6 +379,8 @@ class MultiplayerSession extends ChangeNotifier {
   MpRole? get myRole => _myRole;
   String get myNickname => _myNickname;
   String get myCharacterName => _myCharacterName;
+  Gungeoneer? get lastCharacter => _lastCharacter;
+  String get lastNickname => _lastNickname;
   int? get sessionStartedAtMs => _sessionStartedAtMs;
 
   MpRole? get peerRole => _peerRole;

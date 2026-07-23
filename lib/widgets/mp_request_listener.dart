@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/gungeoneer.dart';
 import '../models/multiplayer_messages.dart';
+import '../providers/run_provider.dart';
 import '../services/multiplayer_session.dart';
+import '../utils/asset_paths.dart';
 
 /// Invisible widget that listens to [MultiplayerSession] for inbound
 /// requests + response toasts and surfaces them as a global confirm/deny
@@ -109,12 +112,15 @@ class _MpRequestListenerState extends State<MpRequestListener> {
     // Auto-save immediately so both devices have a fresh restore point.
     unawaited(session.saveCurrentSession());
 
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogCtx) {
-        return _ReconnectHubDialog(session: session);
-      },
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierColor: const Color(0xFF0D1117),
+        transitionDuration: const Duration(milliseconds: 250),
+        pageBuilder: (_, __, ___) => _ReconnectScreen(session: session),
+        transitionsBuilder: (_, anim, __, child) =>
+            FadeTransition(opacity: anim, child: child),
+      ),
     ).whenComplete(() {
       _reconnectHubShowing = false;
     });
@@ -344,21 +350,22 @@ class _MpRequestListenerState extends State<MpRequestListener> {
   }
 }
 
-/// Reconnection Hub dialog — shown when the user taps FIX LINK or
-/// RE-PAIR. Provides a manual re-pair flow:
+/// Fullscreen Reconnection screen — shown when the user taps FIX LINK
+/// or RE-PAIR. Provides a manual re-pair flow with animated gungeoneer
+/// portraits, big buttons, and PIN display/entry.
 /// - Main Player: displays their PIN for the Sidekick to enter
 /// - Sidekick: enters the Main's PIN, then taps RECONNECT
-/// Both sides auto-save before the dialog opens. Auto-closes when
+/// Both sides auto-save before the screen opens. Auto-closes when
 /// connection is restored.
-class _ReconnectHubDialog extends StatefulWidget {
+class _ReconnectScreen extends StatefulWidget {
   final MultiplayerSession session;
-  const _ReconnectHubDialog({required this.session});
+  const _ReconnectScreen({required this.session});
 
   @override
-  State<_ReconnectHubDialog> createState() => _ReconnectHubDialogState();
+  State<_ReconnectScreen> createState() => _ReconnectScreenState();
 }
 
-class _ReconnectHubDialogState extends State<_ReconnectHubDialog> {
+class _ReconnectScreenState extends State<_ReconnectScreen> {
   final _pinCtrl = TextEditingController();
   bool _isMain = false;
   bool _reconnecting = false;
@@ -422,205 +429,506 @@ class _ReconnectHubDialogState extends State<_ReconnectHubDialog> {
           final searching = status == MpStatus.searching;
           final handshaking = status == MpStatus.handshaking;
 
-          return AlertDialog(
-            backgroundColor: const Color(0xFF1E1E22),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(
-                color: connected ? const Color(0xFF00E676) : Colors.cyanAccent,
-                width: 1.5,
-              ),
-            ),
-            icon: Icon(
-              connected ? Icons.wifi_protected_setup : Icons.link,
-              size: 36,
-              color: connected ? const Color(0xFF00E676) : Colors.cyanAccent,
-            ),
-            title: Text(
-              connected ? 'Connected!' : 'Reconnection Hub',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: 18,
-                letterSpacing: 0.5,
-              ),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  connected
-                      ? 'Link restored with ${session.peerNickname ?? 'peer'}!'
-                      : searching
-                          ? 'Searching for peer…'
-                          : handshaking
-                              ? 'Handshaking with peer…'
-                              : 'Run saved locally. Ready to re-pair.',
-                  style: TextStyle(
-                    color: connected ? const Color(0xFF00E676) : Colors.white70,
-                    fontSize: 12.5,
-                    fontWeight: connected ? FontWeight.w700 : FontWeight.w400,
+          // Resolve both players' character + nickname
+          final myChar = session.lastCharacter;
+          final myNick = session.lastNickname;
+          final peerCharName = session.peerCharacterName;
+          final peerNick = session.peerNickname;
+
+          // For peer character, try to resolve from name; fallback null
+          Gungeoneer? peerChar;
+          if (peerCharName != null && peerCharName.isNotEmpty) {
+            try {
+              final rp = context.read<RunProvider>();
+              peerChar = rp.gungeoneerByName(peerCharName);
+            } catch (_) {}
+          }
+
+          final accent = connected ? const Color(0xFF00E676) : Colors.cyanAccent;
+
+          return Scaffold(
+            backgroundColor: const Color(0xFF0D1117),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  // Top bar — title + close
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              connected ? Icons.wifi_protected_setup : Icons.link,
+                              color: accent,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              connected ? 'Connected!' : 'Reconnection Hub',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 18,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white54),
+                          onPressed: () {
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Icon(Icons.save_outlined,
-                        size: 14,
-                        color: Colors.green.withValues(alpha: 0.7)),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Run state saved to device',
-                      style: TextStyle(
-                        color: Colors.green.withValues(alpha: 0.7),
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
+                  // Player portraits row
+                  Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _PortraitCard(
+                            character: myChar,
+                            nickname: myNick,
+                            slotLabel: _isMain ? 'P1 · MAIN' : 'P2 · SIDEKICK',
+                            accent: _isMain ? Colors.cyanAccent : Colors.purpleAccent,
+                            isMe: true,
+                          ),
+                          // VS divider
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                connected ? Icons.link : Icons.link_off,
+                                color: connected ? const Color(0xFF00E676) : Colors.white24,
+                                size: 32,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                connected ? 'LINKED' : 'BROKEN',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.5,
+                                  color: connected ? const Color(0xFF00E676) : Colors.white24,
+                                ),
+                              ),
+                            ],
+                          ),
+                          _PortraitCard(
+                            character: peerChar,
+                            nickname: peerNick ?? 'Waiting…',
+                            slotLabel: _isMain ? 'P2 · SIDEKICK' : 'P1 · MAIN',
+                            accent: _isMain ? Colors.purpleAccent : Colors.cyanAccent,
+                            isMe: false,
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                if (_isMain) ...[
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.cyanAccent.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.3), width: 1),
-                    ),
+                  ),
+                  // Status + save indicator
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
                       children: [
-                        const Text(
-                          'YOUR CONNECTION PIN',
+                        Text(
+                          connected
+                              ? 'Link restored with ${session.peerNickname ?? 'peer'}!'
+                              : searching
+                                  ? 'Searching for peer…'
+                                  : handshaking
+                                      ? 'Handshaking with peer…'
+                                      : 'Run saved locally. Ready to re-pair.',
                           style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.cyanAccent,
-                            letterSpacing: 1.5,
+                            color: connected ? const Color(0xFF00E676) : Colors.white70,
+                            fontSize: 14,
+                            fontWeight: connected ? FontWeight.w700 : FontWeight.w400,
                           ),
                         ),
-                        const SizedBox(height: 6),
-                        Text(
-                          session.pinCode ?? '----',
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.white,
-                            letterSpacing: 8,
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.save_outlined,
+                                size: 16,
+                                color: Colors.green.withValues(alpha: 0.7)),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Run state saved to device',
+                              style: TextStyle(
+                                color: Colors.green.withValues(alpha: 0.7),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (session.autoReconnectAttempts > 0 && !connected) ...[
+                          const SizedBox(height: 6),
+                          Text(
+                            'Auto-retry attempt #${session.autoReconnectAttempts}',
+                            style: TextStyle(
+                              color: Colors.orange.withValues(alpha: 0.7),
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  // PIN display / entry
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                      child: _isMain ? _buildPinDisplay(session, accent) : _buildPinEntry(connected),
+                    ),
+                  ),
+                  // Big action buttons
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          height: 56,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: connected
+                                  ? const Color(0xFF00E676)
+                                  : Colors.cyanAccent,
+                              foregroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 4,
+                              shadowColor: accent.withValues(alpha: 0.4),
+                            ),
+                            icon: _reconnecting
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2.5, color: Colors.black),
+                                  )
+                                : Icon(
+                                    connected ? Icons.check_circle : Icons.refresh,
+                                    size: 24,
+                                  ),
+                            label: Text(
+                              connected ? 'DONE' : 'RECONNECT',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            onPressed: connected
+                                ? () {
+                                    if (Navigator.of(context).canPop()) {
+                                      Navigator.of(context).pop();
+                                    }
+                                  }
+                                : _reconnecting
+                                    ? null
+                                    : _doReconnect,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.redAccent,
+                              side: const BorderSide(color: Colors.redAccent, width: 1.5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                            icon: const Icon(Icons.close, size: 20),
+                            label: const Text(
+                              'DISCONNECT',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            onPressed: () {
+                              if (Navigator.of(context).canPop()) {
+                                Navigator.of(context).pop();
+                              }
+                              session.cancel();
+                            },
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Share this PIN with your Sidekick.\nBoth players should tap RECONNECT.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
-                  ),
-                ] else ...[
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'ENTER HOST PIN',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.cyanAccent,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _pinCtrl,
-                    keyboardType: TextInputType.number,
-                    maxLength: 4,
-                    enabled: !connected && !_reconnecting,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 8,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                    decoration: InputDecoration(
-                      counterText: '',
-                      hintText: '----',
-                      hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.2), letterSpacing: 8),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.cyanAccent.withValues(alpha: 0.3)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Colors.cyanAccent),
-                      ),
-                      filled: true,
-                      fillColor: Colors.cyanAccent.withValues(alpha: 0.05),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Ask the Main Player for their 4-digit PIN,\nthen tap RECONNECT.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white54, fontSize: 11, height: 1.4),
-                  ),
                 ],
-                if (session.autoReconnectAttempts > 0 && !connected) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    'Auto-retry attempt #${session.autoReconnectAttempts}',
-                    style: TextStyle(color: Colors.orange.withValues(alpha: 0.7), fontSize: 10),
-                  ),
-                ],
-              ],
+              ),
             ),
-            actionsAlignment: MainAxisAlignment.spaceBetween,
-            actions: [
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.redAccent,
-                  side: const BorderSide(color: Colors.redAccent),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                ),
-                icon: const Icon(Icons.close, size: 14),
-                label: const Text('CLOSE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: connected ? const Color(0xFF00E676) : Colors.cyanAccent,
-                  foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                ),
-                icon: _reconnecting
-                    ? const SizedBox(
-                        width: 14,
-                        height: 14,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
-                      )
-                    : Icon(connected ? Icons.check : Icons.refresh, size: 14),
-                label: Text(
-                  connected ? 'DONE' : 'RECONNECT',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900),
-                ),
-                onPressed: connected
-                    ? () {
-                        if (Navigator.of(context).canPop()) {
-                          Navigator.of(context).pop();
-                        }
-                      }
-                    : _reconnecting
-                        ? null
-                        : _doReconnect,
-              ),
-            ],
           );
         },
       ),
+    );
+  }
+
+  Widget _buildPinDisplay(MultiplayerSession session, Color accent) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'YOUR CONNECTION PIN',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
+            color: accent,
+            letterSpacing: 2,
+          ),
+        ),
+        const SizedBox(height: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+          decoration: BoxDecoration(
+            color: accent.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: accent.withValues(alpha: 0.3), width: 1.5),
+          ),
+          child: Text(
+            session.pinCode ?? '----',
+            style: const TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+              letterSpacing: 12,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        const Text(
+          'Share this PIN with your Sidekick.\nBoth players should tap RECONNECT.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white54, fontSize: 12, height: 1.4),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPinEntry(bool connected) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'ENTER HOST PIN',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
+            color: Colors.cyanAccent,
+            letterSpacing: 2,
+          ),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _pinCtrl,
+          keyboardType: TextInputType.number,
+          maxLength: 4,
+          enabled: !connected && !_reconnecting,
+          style: const TextStyle(
+            fontSize: 36,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 12,
+            color: Colors.white,
+          ),
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+            counterText: '',
+            hintText: '----',
+            hintStyle: TextStyle(
+                color: Colors.white.withValues(alpha: 0.2), letterSpacing: 12),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: Colors.cyanAccent.withValues(alpha: 0.3), width: 1.5),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: Colors.cyanAccent, width: 2),
+            ),
+            filled: true,
+            fillColor: Colors.cyanAccent.withValues(alpha: 0.05),
+            contentPadding: const EdgeInsets.symmetric(vertical: 16),
+          ),
+        ),
+        const SizedBox(height: 12),
+        const Text(
+          'Ask the Main Player for their 4-digit PIN,\nthen tap RECONNECT.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white54, fontSize: 12, height: 1.4),
+        ),
+      ],
+    );
+  }
+}
+
+/// Animated gungeoneer portrait card for the reconnect screen.
+class _PortraitCard extends StatelessWidget {
+  final Gungeoneer? character;
+  final String nickname;
+  final String slotLabel;
+  final Color accent;
+  final bool isMe;
+
+  const _PortraitCard({
+    required this.character,
+    required this.nickname,
+    required this.slotLabel,
+    required this.accent,
+    required this.isMe,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final charName = character?.name ?? 'Unknown';
+    final animPath = gungeoneerAnimatedCardPath(charName);
+    final gifPath = gungeoneerGifPath(charName);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Slot label badge
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: accent.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: accent.withValues(alpha: 0.4), width: 1),
+          ),
+          child: Text(
+            slotLabel,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
+              color: accent,
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Animated portrait
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            width: 120,
+            height: 150,
+            decoration: BoxDecoration(
+              color: const Color(0xFF161B22),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: accent.withValues(alpha: 0.3),
+                width: 2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.1),
+                  blurRadius: 16,
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // Try animated card first, then gif, then static icon, then placeholder
+                if (animPath.isNotEmpty)
+                  Image.asset(
+                    animPath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => gifPath.isNotEmpty
+                        ? Image.asset(
+                            gifPath,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => _placeholderIcon(accent),
+                          )
+                        : _placeholderIcon(accent),
+                  )
+                else if (gifPath.isNotEmpty)
+                  Image.asset(
+                    gifPath,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => _placeholderIcon(accent),
+                  )
+                else
+                  _placeholderIcon(accent),
+                // "YOU" badge overlay
+                if (isMe)
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: accent.withValues(alpha: 0.8),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text(
+                        'YOU',
+                        style: TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        // Character name
+        Text(
+          charName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w800,
+            color: Colors.white.withValues(alpha: 0.85),
+            letterSpacing: 0.3,
+          ),
+        ),
+        const SizedBox(height: 2),
+        // Nickname
+        Text(
+          nickname,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w900,
+            color: accent,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _placeholderIcon(Color accent) {
+    return Icon(
+      Icons.person,
+      size: 48,
+      color: accent.withValues(alpha: 0.4),
     );
   }
 }
