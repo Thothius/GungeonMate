@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// webview_flutter import removed (was unused)
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/run_provider.dart';
 import '../models/gun.dart';
@@ -362,30 +361,53 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final f = AppTheme.flair;
-    return Stack(
-      children: [
-        Container(
-          margin: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-          padding: const EdgeInsets.fromLTRB(18, 22, 48, 18),
-          decoration: BoxDecoration(
-            color: f.card,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: f.primary.withValues(alpha: 0.25),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: f.primary.withValues(alpha: 0.08),
-                blurRadius: 12,
-                spreadRadius: 2,
+    final isFav = context.watch<RunProvider>().isFavourite(name);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 22, 18, 18),
+      decoration: BoxDecoration(
+        color: f.card,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: f.primary.withValues(alpha: 0.08),
+            blurRadius: 12,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                icon: Icon(
+                  isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                  color: isFav ? Colors.pinkAccent : Colors.white38,
+                  size: 24,
+                ),
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                onPressed: () {
+                  final p = context.read<RunProvider>();
+                  final wasFav = p.isFavourite(name);
+                  p.toggleFavourite(name);
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: GoopText(wasFav
+                          ? '$name removed from favourites'
+                          : '$name added to favourites'),
+                      duration: const Duration(seconds: 1),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GameIcon(
+          GameIcon(
                 assetPath: iconPath,
                 fallback: isGun
                     ? Icons.gps_fixed
@@ -461,41 +483,7 @@ class _Header extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        Positioned(
-          top: 24,
-          right: 24,
-          child: IconButton(
-            icon: Icon(
-              context.watch<RunProvider>().isFavourite(name)
-                  ? Icons.favorite_rounded
-                  : Icons.favorite_border_rounded,
-              color: context.watch<RunProvider>().isFavourite(name)
-                  ? Colors.pinkAccent
-                  : Colors.white38,
-              size: 24,
-            ),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            onPressed: () {
-              final p = context.read<RunProvider>();
-              final wasFav = p.isFavourite(name);
-              p.toggleFavourite(name);
-              ScaffoldMessenger.of(context).clearSnackBars();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: GoopText(wasFav
-                      ? '$name removed from favourites'
-                      : '$name added to favourites'),
-                  duration: const Duration(seconds: 1),
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    );
+      );
   }
 
   static String _fmtStat(double v) =>

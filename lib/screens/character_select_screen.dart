@@ -5,8 +5,6 @@ import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/gungeoneer.dart';
-import '../widgets/game_icon.dart';
-import '../widgets/quality_badge.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
@@ -387,15 +385,12 @@ class _SimpleCharacterCardState extends State<_SimpleCharacterCard>
   Widget _buildCardArt() {
     final animPath = gungeoneerAnimatedCardPath(widget.character.name);
     if (animPath.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Image.asset(
-          animPath,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.none,
-          gaplessPlayback: true,
-          errorBuilder: (_, __, ___) => _buildFallbackIcon(),
-        ),
+      return Image.asset(
+        animPath,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        gaplessPlayback: true,
+        errorBuilder: (_, __, ___) => _buildFallbackIcon(),
       );
     }
     return _buildFallbackIcon();
@@ -404,51 +399,44 @@ class _SimpleCharacterCardState extends State<_SimpleCharacterCard>
   Widget _buildInGameSprite() {
     final char = widget.character;
     final gifPath = gungeoneerGifPath(char.name);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-      child: gifPath.isNotEmpty
-          ? Image.asset(
-              gifPath,
+    return gifPath.isNotEmpty
+        ? Image.asset(
+            gifPath,
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.none,
+            gaplessPlayback: true,
+            errorBuilder: (_, __, ___) => Image.asset(
+              char.icon,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.none,
-              gaplessPlayback: true,
-              errorBuilder: (_, __, ___) => Image.asset(
+              errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 96, color: Colors.white70),
+            ),
+          )
+        : (char.icon.startsWith('assets/')
+            ? Image.asset(
                 char.icon,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.none,
-                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
-              ),
-            )
-          : (char.icon.startsWith('assets/')
-              ? Image.asset(
-                  char.icon,
-                  fit: BoxFit.contain,
-                  filterQuality: FilterQuality.none,
-                  errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
-                )
-              : const Icon(Icons.person, size: 64, color: Colors.white70)),
-    );
+                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 96, color: Colors.white70),
+              )
+            : const Icon(Icons.person, size: 96, color: Colors.white70));
   }
 
   Widget _buildFallbackIcon() {
     final char = widget.character;
     if (char.icon.startsWith('assets/')) {
-      return Padding(
-        padding: const EdgeInsets.all(4),
-        child: Image.asset(
-          char.icon,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.none,
-          errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
-        ),
+      return Image.asset(
+        char.icon,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 96, color: Colors.white70),
       );
     }
-    return const Icon(Icons.person, size: 64, color: Colors.white70);
+    return const Icon(Icons.person, size: 96, color: Colors.white70);
   }
 }
 
-/// Interactive card for solo/coop — flip avatar to see in-game sprite,
-/// collapsible starting items panel.
+/// Interactive card for solo/coop — flip avatar to see in-game sprite.
 class _CharacterCard extends StatefulWidget {
   final Gungeoneer character;
   final ThemeFlair flair;
@@ -471,7 +459,6 @@ class _CharacterCard extends StatefulWidget {
 class _CharacterCardState extends State<_CharacterCard>
     with SingleTickerProviderStateMixin {
   bool _isFlipped = false;
-  bool _itemsExpanded = false;
   late final AnimationController _flipCtrl;
 
   @override
@@ -499,11 +486,6 @@ class _CharacterCardState extends State<_CharacterCard>
     }
   }
 
-  void _toggleItems() {
-    Haptics.selection();
-    setState(() => _itemsExpanded = !_itemsExpanded);
-  }
-
   @override
   Widget build(BuildContext context) {
     final flair = widget.flair;
@@ -522,15 +504,10 @@ class _CharacterCardState extends State<_CharacterCard>
         ),
       ),
       clipBehavior: Clip.antiAlias,
-      child: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        child: Column(
+      child: Column(
         children: [
           // --- Flip image area ---
-          // Fixed-height image area instead of Expanded to prevent
-          // overflow when the items panel expands.
-          SizedBox(
-            height: 220,
+          Expanded(
             child: Stack(
               children: [
                 // Gradient background
@@ -634,7 +611,7 @@ class _CharacterCardState extends State<_CharacterCard>
                   ),
                 ],
               ),
-            ),
+          ),
             // --- Name bar ---
             Container(
               width: double.infinity,
@@ -658,39 +635,6 @@ class _CharacterCardState extends State<_CharacterCard>
                 ),
               ),
             ),
-            // --- Collapsible starting items panel ---
-            InkWell(
-              onTap: _toggleItems,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      _itemsExpanded ? Icons.expand_less : Icons.expand_more,
-                      size: 14,
-                      color: Colors.white54,
-                    ),
-                    const SizedBox(width: 4),
-                    GoopText(
-                      'STARTING LOADOUT',
-                      style: TextStyle(
-                        fontSize: 8.5,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white54,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (_itemsExpanded)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                child: _buildStartingItems(),
-              ),
             // --- Select button ---
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
@@ -717,7 +661,6 @@ class _CharacterCardState extends State<_CharacterCard>
             ),
           ],
         ),
-      ),
       );
   }
 
@@ -725,15 +668,12 @@ class _CharacterCardState extends State<_CharacterCard>
     final char = widget.character;
     final animPath = gungeoneerAnimatedCardPath(char.name);
     if (animPath.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(10),
-        child: Image.asset(
-          animPath,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.none,
-          gaplessPlayback: true,
-          errorBuilder: (_, __, ___) => _buildFallbackIcon(),
-        ),
+      return Image.asset(
+        animPath,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        gaplessPlayback: true,
+        errorBuilder: (_, __, ___) => _buildFallbackIcon(),
       );
     }
     return _buildFallbackIcon();
@@ -742,125 +682,39 @@ class _CharacterCardState extends State<_CharacterCard>
   Widget _buildInGameSprite() {
     final char = widget.character;
     final gifPath = gungeoneerGifPath(char.name);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 2),
-      child: gifPath.isNotEmpty
-          ? Image.asset(
-              gifPath,
+    return gifPath.isNotEmpty
+        ? Image.asset(
+            gifPath,
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.none,
+            gaplessPlayback: true,
+            errorBuilder: (_, __, ___) => Image.asset(
+              char.icon,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.none,
-              gaplessPlayback: true,
-              errorBuilder: (_, __, ___) => Image.asset(
+              errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 96, color: Colors.white70),
+            ),
+          )
+        : (char.icon.startsWith('assets/')
+            ? Image.asset(
                 char.icon,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.none,
-                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
-              ),
-            )
-          : (char.icon.startsWith('assets/')
-              ? Image.asset(
-                  char.icon,
-                  fit: BoxFit.contain,
-                  filterQuality: FilterQuality.none,
-                  errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
-                )
-              : const Icon(Icons.person, size: 64, color: Colors.white70)),
-    );
+                errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 96, color: Colors.white70),
+              )
+            : const Icon(Icons.person, size: 96, color: Colors.white70));
   }
 
   Widget _buildFallbackIcon() {
     final char = widget.character;
     if (char.icon.startsWith('assets/')) {
-      return Padding(
-        padding: const EdgeInsets.all(4),
-        child: Image.asset(
-          char.icon,
-          fit: BoxFit.contain,
-          filterQuality: FilterQuality.none,
-          errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 64, color: Colors.white70),
-        ),
+      return Image.asset(
+        char.icon,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 96, color: Colors.white70),
       );
     }
-    return const Icon(Icons.person, size: 64, color: Colors.white70);
-  }
-
-  Widget _buildStartingItems() {
-    final char = widget.character;
-    final provider = widget.provider;
-
-    // Look up actual gun/item objects from provider data
-    final guns = provider.allGuns
-        .where((g) => char.startingGuns.contains(g.name))
-        .toList();
-    final items = provider.allItems
-        .where((i) => char.startingItems.contains(i.name))
-        .toList();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (guns.isNotEmpty) ...[
-          _buildItemRow('Guns', guns.map((g) => _EntityChip(name: g.name, iconPath: g.icon, quality: g.quality)).toList()),
-          const SizedBox(height: 4),
-        ],
-        if (items.isNotEmpty) ...[
-          _buildItemRow('Items', items.map((i) => _EntityChip(name: i.name, iconPath: i.icon, quality: i.quality)).toList()),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildItemRow(String label, List<_EntityChip> chips) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GoopText(
-          label.toUpperCase(),
-          style: TextStyle(
-            fontSize: 8,
-            fontWeight: FontWeight.w900,
-            color: Colors.white38,
-            letterSpacing: 0.8,
-          ),
-        ),
-        const SizedBox(height: 3),
-        Wrap(
-          spacing: 4,
-          runSpacing: 4,
-          children: chips.map((c) => c.build(widget.flair)).toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class _EntityChip {
-  final String name;
-  final String iconPath;
-  final String quality;
-
-  _EntityChip({required this.name, required this.iconPath, required this.quality});
-
-  Widget build(ThemeFlair flair) {
-    return Tooltip(
-      message: name,
-      preferBelow: false,
-      child: Container(
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: QualityBadge.colorFor(quality).withValues(alpha: 0.4),
-            width: 1.0,
-          ),
-        ),
-        child: GameIcon(
-          assetPath: iconPath,
-          quality: quality,
-          size: 28,
-          showRing: false,
-        ),
-      ),
-    );
+    return const Icon(Icons.person, size: 96, color: Colors.white70);
   }
 }

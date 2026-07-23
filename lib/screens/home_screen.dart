@@ -133,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // Always drop the soft keyboard when swapping tabs so the
               // search field in Browse can never haunt other tabs.
               FocusManager.instance.primaryFocus?.unfocus();
+              GoopAnimationManager.instance.pulse();
               setState(() {
                 _selectedIndex = index;
               });

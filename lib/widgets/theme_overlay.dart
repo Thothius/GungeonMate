@@ -152,7 +152,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   effectiveGlow,
                 )
               : const Color(0x00000000);
-          final isWallpaperActive = !isHomeScreen && prefs.wallpaperMode != WallpaperMode.themeDefault;
           final particlesOn = prefs.particlesEnabled;
           final particleBackdropBg = !particlesOn
               ? null
@@ -203,22 +202,12 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                     ),
                   ),
 
-                // 0.5. Custom Still or Animated Wallpaper (non-Home screens only)
-                if (!isHomeScreen && prefs.wallpaperMode == WallpaperMode.customStill)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: _StillWallpaperBackground(
-                        assetName: prefs.selectedStillWallpaper,
-                        parallaxEnabled: prefs.parallaxMotionEnabled,
-                      ),
-                    ),
-                  ),
-                // 0.6. Custom Wallpaper Contrast Backing (prevents background detail bleeding through UI panels)
-                if (isWallpaperActive || isHomeScreen)
+                // 0.6. Home Screen Contrast Backing (prevents galaxy video detail bleeding through UI panels)
+                if (isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
-                        color: Colors.black.withValues(alpha: isHomeScreen ? 0.62 : 0.50),
+                        color: Colors.black.withValues(alpha: 0.62),
                       ),
                     ),
                   ),
@@ -264,9 +253,9 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   ),
                 ),
 
-                // 3.6. Enhanced Readability Scrim — when any wallpaper or
-                // Galaxy bg is active, lay down a semi-opaque dark veil so
-                // that foreground cards, text, and panels stay crisp.
+                // 3.6. Enhanced Readability Scrim — when the Galaxy bg is
+                // active on the Home screen, lay down a semi-opaque dark veil
+                // so foreground cards, text, and panels stay crisp.
                 if (isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
@@ -280,26 +269,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                               Colors.black.withValues(alpha: 0.08),
                               Colors.black.withValues(alpha: 0.14),
                               Colors.black.withValues(alpha: 0.28),
-                            ],
-                            stops: const [0.0, 0.3, 0.6, 1.0],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                else if (isWallpaperActive)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.black.withValues(alpha: 0.12),
-                              Colors.black.withValues(alpha: 0.04),
-                              Colors.black.withValues(alpha: 0.08),
-                              Colors.black.withValues(alpha: 0.18),
                             ],
                             stops: const [0.0, 0.3, 0.6, 1.0],
                           ),
@@ -871,82 +840,6 @@ class _CuriousCatStareWidgetState extends State<_CuriousCatStareWidget>
   }
 }
 
-class _StillWallpaperBackground extends StatefulWidget {
-  final String assetName;
-  final bool parallaxEnabled;
-
-  const _StillWallpaperBackground({
-    required this.assetName,
-    required this.parallaxEnabled,
-  });
-
-  @override
-  State<_StillWallpaperBackground> createState() => _StillWallpaperBackgroundState();
-}
-
-class _StillWallpaperBackgroundState extends State<_StillWallpaperBackground>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _ticker;
-  Offset _displayedTilt = Offset.zero;
-  Offset _targetTilt = Offset.zero;
-
-  @override
-  void initState() {
-    super.initState();
-    _ticker = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..addListener(_onTick)..repeat();
-  }
-
-  @override
-  void dispose() {
-    _ticker.dispose();
-    super.dispose();
-  }
-
-  void _onTick() {
-    // Frame-synchronized exponential lerp toward target tilt.
-    // 0.12 per frame at 60fps reaches ~99% of target in ~0.6s,
-    // producing buttery-smooth motion without sensor jitter.
-    _displayedTilt = Offset(
-      _displayedTilt.dx + (_targetTilt.dx - _displayedTilt.dx) * 0.12,
-      _displayedTilt.dy + (_targetTilt.dy - _displayedTilt.dy) * 0.12,
-    );
-    if (mounted) setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final imageWidget = Image.asset(
-      'assets/images/wallpapers/still/${widget.assetName}',
-      fit: BoxFit.cover,
-      filterQuality: FilterQuality.low,
-    );
-
-    if (!widget.parallaxEnabled) {
-      return imageWidget;
-    }
-
-    // Read the current sensor tilt as our target, then render with
-    // the smoothly-interpolated _displayedTilt.
-    _targetTilt = ThemeOverlay.tiltNotifier.value;
-
-    final screenSize = MediaQuery.of(context).size;
-    final double dx = _displayedTilt.dx * screenSize.width * 0.015;
-    final double dy = _displayedTilt.dy * screenSize.height * 0.015;
-
-    return Transform.scale(
-      scale: 1.08,
-      alignment: Alignment.center,
-      child: Transform.translate(
-        offset: Offset(dx, dy),
-        child: imageWidget,
-      ),
-    );
-  }
-}
-
 class _AnimatedWallpaperBackground extends StatefulWidget {
   final String assetName;
 
@@ -1036,17 +929,11 @@ class _AnimatedWallpaperBackgroundState extends State<_AnimatedWallpaperBackgrou
   Widget build(BuildContext context) {
     final controller = _controller;
     if (_hasError || controller == null) {
-      return _StillWallpaperBackground(
-        assetName: '001.png',
-        parallaxEnabled: true,
-      );
+      return const SizedBox.shrink();
     }
 
     if (!_initialized) {
-      return _StillWallpaperBackground(
-        assetName: '001.png',
-        parallaxEnabled: false,
-      );
+      return const SizedBox.shrink();
     }
 
     return FittedBox(

@@ -183,10 +183,11 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                       ),
                       const Spacer(flex: 2),
                       // The Tailor — floating mascot with tilt parallax + idle bob
-                      Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.bottomCenter,
-                        children: [
+                      Center(
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                          children: [
                           // Subtle glow halo behind character (no circle border)
                           AnimatedBuilder(
                             animation: _floatCtrl,
@@ -267,6 +268,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                               ),
                             ),
                         ],
+                        ),
                       ),
                       const Spacer(flex: 1),
                   // Local Run = single device solo play

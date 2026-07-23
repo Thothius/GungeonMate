@@ -23,6 +23,7 @@ import 'effects_summary_screen.dart';
 import 'shrine_picker_screen.dart';
 import 'favourites_screen.dart';
 import 'settings_screen.dart';
+import 'codex_screen.dart';
 import '../services/app_theme.dart';
 import '../services/effect_tagger.dart';
 import '../services/damage_calculator.dart';
@@ -2411,7 +2412,9 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Row(
@@ -2461,6 +2464,7 @@ class _RobotDashboardSliverState extends State<_RobotDashboardSliver> {
                       ],
                     ),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -2984,7 +2988,7 @@ class _JunkanDashboardSliverState extends State<_JunkanDashboardSliver> {
                 onTap: () => setState(() => _expanded = !_expanded),
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -3277,7 +3281,7 @@ class _GunderfuryDashboardSliverState extends State<_GunderfuryDashboardSliver> 
                 onTap: () => setState(() => _expanded = !_expanded),
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -3494,7 +3498,7 @@ class _TripleGunDashboardSliverState extends State<_TripleGunDashboardSliver> {
                 onTap: () => setState(() => _expanded = !_expanded),
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -3705,7 +3709,7 @@ class _EvolverDashboardSliverState extends State<_EvolverDashboardSliver> {
                 onTap: () => setState(() => _expanded = !_expanded),
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -4558,7 +4562,9 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
                     const SizedBox(width: 8),
@@ -4574,6 +4580,7 @@ class _ShellegunDashboardState extends State<_ShellegunDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -4663,7 +4670,9 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
                     const SizedBox(width: 8),
@@ -4679,6 +4688,7 @@ class _ChamberGunDashboardState extends State<_ChamberGunDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amberAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -4773,7 +4783,9 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
                     const SizedBox(width: 8),
@@ -4789,6 +4801,7 @@ class _PlatinumBulletsDashboardState extends State<_PlatinumBulletsDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.purpleAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -4911,7 +4924,9 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
                     const SizedBox(width: 8),
@@ -4927,6 +4942,7 @@ class _IronCoinDashboardState extends State<_IronCoinDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amber.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5025,7 +5041,9 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.spa, color: Colors.redAccent, size: 18),
                     const SizedBox(width: 8),
@@ -5041,6 +5059,7 @@ class _SpiceDashboardState extends State<_SpiceDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.redAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5140,7 +5159,9 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.speed, color: Colors.tealAccent, size: 18),
                     const SizedBox(width: 8),
@@ -5156,6 +5177,7 @@ class _MetronomeDashboardState extends State<_MetronomeDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.tealAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5265,7 +5287,9 @@ class _SprunDashboardState extends State<_SprunDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     Icon(Icons.radar, color: Colors.cyanAccent.shade200, size: 18),
                     const SizedBox(width: 8),
@@ -5295,6 +5319,7 @@ class _SprunDashboardState extends State<_SprunDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5391,7 +5416,9 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.sports_mma_rounded, color: Colors.orangeAccent, size: 18),
                     const SizedBox(width: 8),
@@ -5407,6 +5434,7 @@ class _BoxingGloveDashboardState extends State<_BoxingGloveDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.orangeAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5494,7 +5522,9 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.smoking_rooms, color: Colors.blueGrey, size: 18),
                     const SizedBox(width: 8),
@@ -5510,6 +5540,7 @@ class _CigarettesDashboardState extends State<_CigarettesDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.blueGrey.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5614,7 +5645,9 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.auto_awesome, color: Colors.amberAccent, size: 18),
                     const SizedBox(width: 8),
@@ -5638,6 +5671,7 @@ class _PolarisDashboardState extends State<_PolarisDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amberAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5773,7 +5807,9 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     const Icon(Icons.chat_bubble, color: Colors.purpleAccent, size: 18),
                     const SizedBox(width: 8),
@@ -5797,6 +5833,7 @@ class _GuntherDashboardState extends State<_GuntherDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.purpleAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -5915,7 +5952,9 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
               InkWell(
                 onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
                 borderRadius: BorderRadius.circular(8),
-                child: Row(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
                   children: [
                     Icon(
                       activated ? Icons.local_fire_department : Icons.shield,
@@ -5949,6 +5988,7 @@ class _GunSoulDashboardState extends State<_GunSoulDashboard>
                     const SizedBox(width: 8),
                     Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.deepOrangeAccent.withValues(alpha: 0.6)),
                   ],
+                ),
                 ),
               ),
               if (!_collapsed) ...[
@@ -6192,6 +6232,12 @@ class _HeaderMenu extends StatelessWidget {
               fastRoute(const SettingsScreen()),
             );
             break;
+          case 'codex':
+            Navigator.push(
+              context,
+              fastRoute(const CodexScreen(showBackButton: true)),
+            );
+            break;
           case 'end_run':
             _confirmEndRun(context, p);
             break;
@@ -6269,6 +6315,14 @@ class _HeaderMenu extends StatelessWidget {
             Icon(Icons.settings_rounded, size: 18, color: Colors.cyanAccent),
             SizedBox(width: 10),
             GoopText('Settings'),
+          ]),
+        ),
+        const PopupMenuItem(
+          value: 'codex',
+          child: Row(children: [
+            Icon(Icons.menu_book_rounded, size: 18, color: Colors.tealAccent),
+            SizedBox(width: 10),
+            GoopText('Codex'),
           ]),
         ),
         // Dashboards toggle

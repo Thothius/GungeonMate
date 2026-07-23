@@ -376,36 +376,39 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                     Haptics.selection();
                     setState(() => _sessionsCollapsed = !_sessionsCollapsed);
                   },
-                  child: Row(
-                    children: [
-                      _SectionLabel('LOAD SAVED SESSION'),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '${_savedSessions.length}',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white.withValues(alpha: 0.5),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Row(
+                      children: [
+                        _SectionLabel('LOAD SAVED SESSION'),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '${_savedSessions.length}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white.withValues(alpha: 0.5),
+                            ),
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                      AnimatedRotation(
-                        turns: _sessionsCollapsed ? 0 : 0.5,
-                        duration: const Duration(milliseconds: 180),
-                        child: Icon(
-                          Icons.expand_more_rounded,
-                          size: 18,
-                          color: Colors.white.withValues(alpha: 0.4),
+                        const Spacer(),
+                        AnimatedRotation(
+                          turns: _sessionsCollapsed ? 0 : 0.5,
+                          duration: const Duration(milliseconds: 180),
+                          child: Icon(
+                            Icons.expand_more_rounded,
+                            size: 18,
+                            color: Colors.white.withValues(alpha: 0.4),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 if (!_sessionsCollapsed) ...[
@@ -1502,46 +1505,49 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                   Haptics.selection();
                   setState(() => _consoleCollapsed = !_consoleCollapsed);
                 },
-                child: Row(
-                  children: [
-                    const Icon(Icons.terminal_rounded, size: 14, color: Colors.greenAccent),
-                    const SizedBox(width: 6),
-                    GoopText(
-                      'DIAGNOSTIC CONSOLE',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
-                        color: Colors.greenAccent.withValues(alpha: 0.8),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        '${session.connectionLogs.length}',
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.terminal_rounded, size: 14, color: Colors.greenAccent),
+                      const SizedBox(width: 6),
+                      GoopText(
+                        'DIAGNOSTIC CONSOLE',
                         style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.5),
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.0,
+                          color: Colors.greenAccent.withValues(alpha: 0.8),
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    AnimatedRotation(
-                      turns: _consoleCollapsed ? 0 : 0.5,
-                      duration: const Duration(milliseconds: 180),
-                      child: Icon(
-                        Icons.expand_more_rounded,
-                        size: 16,
-                        color: Colors.white.withValues(alpha: 0.4),
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '${session.connectionLogs.length}',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white.withValues(alpha: 0.5),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                      const Spacer(),
+                      AnimatedRotation(
+                        turns: _consoleCollapsed ? 0 : 0.5,
+                        duration: const Duration(milliseconds: 180),
+                        child: Icon(
+                          Icons.expand_more_rounded,
+                          size: 16,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               if (!_consoleCollapsed) ...[

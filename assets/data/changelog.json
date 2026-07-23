@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.7.2",
+    "title": "Still Wallpaper Removal + Bughunt Cleanup",
+    "date": "July 23, 2026",
+    "items": [
+      "Removed still wallpaper system — 16 PNG wallpapers, WallpaperMode enum, kStillWallpapers, parallax motion setting, and _StillWallpaperBackground widget all removed. Home screen animated galaxy wallpaper retained.",
+      "Removed dead webview_flutter dependency from pubspec.yaml (was listed but never imported).",
+      "Comprehensive bughunt completed — 18 new bugs logged (BUG-017 through BUG-034) covering UX, UI/navigation, and data completeness issues.",
+      "Reorg plan updated with current file sizes — active_run_screen.dart grew to 391KB/9953 lines."
+    ]
+  },
+  {
     "version": "v1.7.1",
     "title": "UI Polish: Detail View Redesign + Damage Calc Sizing",
     "date": "July 23, 2026",

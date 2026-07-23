@@ -62,6 +62,19 @@ class GoopAnimationManager {
     }
   }
 
+  /// Re-trigger the sponge translation animation (Goopian → English).
+  /// Called on each new view so users see the cool text-scramble effect
+  /// rather than static English when sponge is active.
+  void pulse() {
+    final prefs = VisualPrefs.notifier.value;
+    if (!prefs.isGoopianLanguage || !prefs.spongeActive) return;
+    _spongeDelayTimer?.cancel();
+    _animateTo(0.0, instant: true);
+    _spongeDelayTimer = Timer(const Duration(milliseconds: 500), () {
+      _animateTo(1.0, instant: false);
+    });
+  }
+
   void _animateTo(double target, {required bool instant}) {
     _animTimer?.cancel();
     if (instant || (progress.value - target).abs() < 0.001) {

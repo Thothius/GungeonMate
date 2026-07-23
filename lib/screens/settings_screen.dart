@@ -92,8 +92,8 @@ class _ThemeVisualsTab extends StatefulWidget {
 class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
   bool _particlesExpanded = false;
   bool _typographyExpanded = false;
-  bool _wallpaperExpanded = false;
   bool _inventoryExpanded = false;
+  bool _glowExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -467,8 +467,16 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
               const SizedBox(height: 16),
 
               // =============================================================
-              // Screen Glow Section (slider + color picker)
+              // Screen Glow Section (collapsible, collapsed by default)
               // =============================================================
+              _collapsibleSectionHeader(
+                'SCREEN GLOW',
+                flair,
+                _glowExpanded,
+                () => setState(() => _glowExpanded = !_glowExpanded),
+              ),
+              if (_glowExpanded) ...[
+              const SizedBox(height: 8),
               _prefSectionTitleWithInfo('SCREEN GLOW', flair, tooltip: 'Set the opacity of the ambient screen glow and choose from 12 deep, curated colors.'),
               const SizedBox(height: 8),
               Card(
@@ -546,134 +554,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // =============================================================
-              // Wallpaper Section (collapsible)
-              // =============================================================
-              _collapsibleSectionHeader(
-                'WALLPAPER',
-                flair,
-                _wallpaperExpanded,
-                () => setState(() => _wallpaperExpanded = !_wallpaperExpanded),
-              ),
-              if (_wallpaperExpanded) ...[
-                const SizedBox(height: 8),
-                Card(
-                  color: flair.card.withValues(alpha: 0.92),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                    child: Column(
-                      children: [
-                        // Wallpaper mode picker
-                        _SwipePicker<WallpaperMode>(
-                          items: WallpaperMode.values,
-                          value: prefs.wallpaperMode,
-                          onChanged: (m) => VisualPrefs.setWallpaperMode(m),
-                          height: 56,
-                          itemBuilder: (mode, isSelected) => Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? flair.card.withValues(alpha: 0.9)
-                                  : flair.card.withValues(alpha: 0.5),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
-                                width: isSelected ? 1.5 : 1.0,
-                              ),
-                            ),
-                            child: Center(
-                              child: GoopText(
-                                mode.label,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w900,
-                                  color: isSelected ? Colors.white : Colors.white54,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        if (prefs.wallpaperMode == WallpaperMode.customStill) ...[
-                          const SizedBox(height: 14),
-                          // Still wallpaper grid picker
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: GoopText(
-                              'STILL WALLPAPER',
-                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.white54, letterSpacing: 1.0),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              mainAxisSpacing: 8,
-                              crossAxisSpacing: 8,
-                              childAspectRatio: 1.0,
-                            ),
-                            itemCount: kStillWallpapers.length,
-                            itemBuilder: (_, i) {
-                              final w = kStillWallpapers[i];
-                              final isSelected = w['asset'] == prefs.selectedStillWallpaper;
-                              return GestureDetector(
-                                onTap: () {
-                                  Haptics.selection();
-                                  VisualPrefs.setSelectedStillWallpaper(w['asset']!);
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: isSelected ? flair.primary : Colors.white.withValues(alpha: 0.12),
-                                      width: isSelected ? 2.0 : 1.0,
-                                    ),
-                                    boxShadow: isSelected
-                                        ? [BoxShadow(color: flair.primary.withValues(alpha: 0.4), blurRadius: 8, spreadRadius: 1)]
-                                        : null,
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(7),
-                                    child: Image.asset(
-                                      'assets/images/wallpapers/still/${w['asset']}',
-                                      fit: BoxFit.cover,
-                                      filterQuality: FilterQuality.low,
-                                      errorBuilder: (_, __, ___) => Container(
-                                        color: Colors.white12,
-                                        child: const Icon(Icons.broken_image_outlined, size: 20, color: Colors.white24),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 14),
-                          // Parallax motion toggle
-                          _buildSwitchRow(
-                            context: context,
-                            icon: Icons.gps_not_fixed_outlined,
-                            label: 'Parallax Motion',
-                            value: prefs.parallaxMotionEnabled,
-                            onChanged: VisualPrefs.setParallaxMotionEnabled,
-                            flair: flair,
-                            tooltip: 'Tilt your device to shift the wallpaper slightly for a 3D depth effect.',
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 16),
+              ], // end if (_glowExpanded)
 
               // =============================================================
               // Inventory Layout Section (collapsible)
@@ -813,7 +694,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
         onTap();
       },
       child: Padding(
-        padding: const EdgeInsets.only(left: 4, bottom: 4),
+        padding: const EdgeInsets.only(left: 4, top: 10, bottom: 10),
         child: Row(
           children: [
             GoopText(
@@ -854,7 +735,7 @@ class _ThemeVisualsTabState extends State<_ThemeVisualsTab> {
         onTap();
       },
       child: Padding(
-        padding: const EdgeInsets.only(left: 4, bottom: 4),
+        padding: const EdgeInsets.only(left: 4, top: 10, bottom: 10),
         child: Row(
           children: [
             GoopText(

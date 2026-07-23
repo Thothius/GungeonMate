@@ -36,9 +36,6 @@ dependencies:
   # URL launcher for opening wiki pages
   url_launcher: ^6.3.1
 
-  # Webview for in-app wiki
-  webview_flutter: ^4.10.0
-
   # Declarative animations
   flutter_animate: ^4.5.0
 
@@ -110,7 +107,6 @@ flutter:
     - assets/animations/gun_types/
     - assets/animations/dog/
     - assets/animations/bosses/
-    - assets/images/wallpapers/still/
     - assets/images/wallpapers/animated/
 
   fonts:

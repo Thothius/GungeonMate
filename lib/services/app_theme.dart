@@ -1422,34 +1422,6 @@ enum InventoryDisplayMode {
   tacticalStats,
 }
 
-enum WallpaperMode {
-  themeDefault(label: 'Theme Default'),
-  customStill(label: 'Custom Still');
-
-  final String label;
-  const WallpaperMode({required this.label});
-}
-
-// Still wallpapers — 16 curated PNG scenes.
-const List<Map<String, String>> kStillWallpapers = [
-  {'asset': '001.png', 'name': 'Wallpaper 001'},
-  {'asset': '002.png', 'name': 'Wallpaper 002'},
-  {'asset': '003.png', 'name': 'Wallpaper 003'},
-  {'asset': '004.png', 'name': 'Wallpaper 004'},
-  {'asset': '005.png', 'name': 'Wallpaper 005'},
-  {'asset': '006.png', 'name': 'Wallpaper 006'},
-  {'asset': '007.png', 'name': 'Wallpaper 007'},
-  {'asset': '008.png', 'name': 'Wallpaper 008'},
-  {'asset': '009.png', 'name': 'Wallpaper 009'},
-  {'asset': '010.png', 'name': 'Wallpaper 010'},
-  {'asset': '011.png', 'name': 'Wallpaper 011'},
-  {'asset': '012.png', 'name': 'Wallpaper 012'},
-  {'asset': '013.png', 'name': 'Wallpaper 013'},
-  {'asset': '014.png', 'name': 'Wallpaper 014'},
-  {'asset': '015.png', 'name': 'Wallpaper 015'},
-  {'asset': '016.png', 'name': 'Wallpaper 016'},
-];
-
 /// Data model for custom theme settings persisted to SharedPreferences.
 /// Allows users to create their own color palette with optional backdrop/aura/font.
 class CustomThemeData {
@@ -1992,10 +1964,6 @@ class VisualPrefs {
   /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
   final int periodicGridColumnCount;
 
-  /// Custom wallpaper configuration
-  final WallpaperMode wallpaperMode;
-  final String selectedStillWallpaper;
-  final bool parallaxMotionEnabled;
 
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
@@ -2047,9 +2015,6 @@ class VisualPrefs {
     this.showShrinePanel = false,
     this.showDashboards = true,
     this.periodicGridColumnCount = 0,
-    this.wallpaperMode = WallpaperMode.themeDefault,
-    this.selectedStillWallpaper = '001.png',
-    this.parallaxMotionEnabled = true,
   });
 
   static const _kGlow     = 'vp.glow_v1';
@@ -2080,9 +2045,6 @@ class VisualPrefs {
   static const _kShowShrinePanel = 'vp.show_shrine_panel_v1';
   static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
-  static const _kWallpaperMode = 'vp.wallpaper_mode_v1';
-  static const _kSelectedStill = 'vp.selected_still_v1';
-  static const _kParallaxEnabled = 'vp.parallax_enabled_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
       ValueNotifier(const VisualPrefs());
@@ -2142,15 +2104,6 @@ class VisualPrefs {
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
 
-      final wallpaperModeIdx = p.getInt(_kWallpaperMode) ?? 0;
-      final wallpaperMode = WallpaperMode.values[wallpaperModeIdx.clamp(0, WallpaperMode.values.length - 1)];
-      var selectedStill = p.getString(_kSelectedStill) ?? '001.png';
-      // Migration: if persisted still wallpaper no longer exists in
-      // kStillWallpapers, fall back to the first available.
-      if (!kStillWallpapers.any((w) => w['asset'] == selectedStill)) {
-        selectedStill = '001.png';
-      }
-      final parallaxEnabled = p.getBool(_kParallaxEnabled) ?? true;
 
       notifier.value = VisualPrefs(
         glowIntensity:    p.getDouble(_kGlow)     ?? 0.0,
@@ -2178,9 +2131,6 @@ class VisualPrefs {
         showShrinePanel: showShrinePanel,
         showDashboards: showDashboards,
         periodicGridColumnCount: periodicGridColumnCount,
-        wallpaperMode: wallpaperMode,
-        selectedStillWallpaper: selectedStill,
-        parallaxMotionEnabled: parallaxEnabled,
       );
     } catch (_) {}
   }
@@ -2312,20 +2262,6 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setWallpaperMode(WallpaperMode v) async {
-    notifier.value = notifier.value._with(wallpaperMode: v);
-    _persist();
-  }
-
-  static Future<void> setSelectedStillWallpaper(String v) async {
-    notifier.value = notifier.value._with(selectedStillWallpaper: v);
-    _persist();
-  }
-
-  static Future<void> setParallaxMotionEnabled(bool v) async {
-    notifier.value = notifier.value._with(parallaxMotionEnabled: v);
-    _persist();
-  }
 
   static Future<void> _persist() async {
     try {
@@ -2357,9 +2293,6 @@ class VisualPrefs {
       await p.setBool(_kShowShrinePanel, v.showShrinePanel);
       await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
-      await p.setInt(_kWallpaperMode, v.wallpaperMode.index);
-      await p.setString(_kSelectedStill, v.selectedStillWallpaper);
-      await p.setBool(_kParallaxEnabled, v.parallaxMotionEnabled);
     } catch (_) {}
   }
 
@@ -2389,9 +2322,6 @@ class VisualPrefs {
     bool?   showShrinePanel,
     bool?   showDashboards,
     int?    periodicGridColumnCount,
-    WallpaperMode? wallpaperMode,
-    String? selectedStillWallpaper,
-    bool?   parallaxMotionEnabled,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -2418,9 +2348,6 @@ class VisualPrefs {
     showShrinePanel: showShrinePanel ?? this.showShrinePanel,
     showDashboards: showDashboards ?? this.showDashboards,
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
-    wallpaperMode:    wallpaperMode     ?? this.wallpaperMode,
-    selectedStillWallpaper: selectedStillWallpaper ?? this.selectedStillWallpaper,
-    parallaxMotionEnabled: parallaxMotionEnabled ?? this.parallaxMotionEnabled,
   );
 }
 

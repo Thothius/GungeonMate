@@ -460,7 +460,7 @@ class _CoolnessEffectsState extends State<_CoolnessEffects> {
             setState(() => _alsoExpanded = !_alsoExpanded);
           },
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+            padding: const EdgeInsets.fromLTRB(4, 12, 4, 10),
             child: Row(
               children: [
                 GoopText(
@@ -602,7 +602,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
             setState(() => _tableExpanded = !_tableExpanded);
           },
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+            padding: const EdgeInsets.fromLTRB(4, 12, 4, 10),
             child: Row(
               children: [
                 GoopText(
@@ -1029,7 +1029,7 @@ class _EventLogState extends State<_EventLog> {
                   setState(() => _collapsed = !_collapsed);
                 },
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+            padding: const EdgeInsets.fromLTRB(4, 12, 4, 10),
             child: Row(
               children: [
                 GoopText(
