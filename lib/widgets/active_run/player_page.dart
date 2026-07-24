@@ -306,11 +306,11 @@ class PlayerPageState extends State<PlayerPage> {
                           Haptics.selection();
                         },
                         icon: Icon(
-                          Icons.dashboard_customize_rounded,
+                          isOn ? Icons.view_agenda_rounded : Icons.view_agenda_outlined,
                           size: 20,
                           color: isOn ? Colors.amberAccent : Colors.white38,
                         ),
-                        tooltip: isOn ? 'Dashboards: ON' : 'Dashboards: OFF',
+                        tooltip: isOn ? 'Special Panels: ON' : 'Special Panels: OFF',
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                       );

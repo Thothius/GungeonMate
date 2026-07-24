@@ -131,7 +131,7 @@ class CharacterSelectScreen extends StatelessWidget {
   }
 }
 
-/// Unified character card â€” static art, tap-to-select.
+/// Unified character card — static art, tap-to-select.
 class _CharacterCard extends StatelessWidget {
   final Gungeoneer character;
   final ThemeFlair flair;

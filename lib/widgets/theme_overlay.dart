@@ -37,7 +37,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
   StreamSubscription? _sensorSub;
   Offset _smoothedTilt = Offset.zero;
 
-  // Scale a color's alpha by [scale] (0.0â€“1.0).
+  // Scale a color's alpha by [scale] (0.0–1.0).
   static Color _scaleAlpha(Color c, double scale) =>
       c.withValues(alpha: (c.a * scale).clamp(0.0, 1.0));
 
@@ -179,7 +179,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   child: Container(color: f.scaffold),
                 ),
 
-                // 0.4. Home Screen Galaxy â€” always plays on the Home/ActiveRun screen
+                // 0.4. Home Screen Galaxy — always plays on the Home/ActiveRun screen
                 if (isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
@@ -207,7 +207,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 if (particleBackdropBg != null)
                   Positioned.fill(child: IgnorePointer(child: particleBackdropBg)),
 
-                // 1c. Ambient Glow â€” behind content so it glows behind panels,
+                // 1c. Ambient Glow — behind content so it glows behind panels,
                 //     not covering layered content on top.
                 if (showGlow)
                   Positioned.fill(
@@ -244,7 +244,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   ),
                 ),
 
-                // 3.6. Enhanced Readability Scrim â€” when the Galaxy bg is
+                // 3.6. Enhanced Readability Scrim — when the Galaxy bg is
                 // active on the Home screen, lay down a semi-opaque dark veil
                 // so foreground cards, text, and panels stay crisp.
                 if (isHomeScreen)

@@ -152,7 +152,7 @@ class _BrowseScreenState extends State<BrowseScreen>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
-        // No screen title â€” the tab strip already labels the section
+        // No screen title — the tab strip already labels the section
         // and the redundant "Browse" word ate vertical space testers
         // wanted back. The (add to P2) hint moves into the tab strip
         // sub-line below when relevant.
@@ -192,7 +192,7 @@ class _BrowseScreenState extends State<BrowseScreen>
                   height: 52,
                   iconMargin: const EdgeInsets.only(bottom: 2),
                   icon: const Icon(Icons.apps, size: 20),
-                  text: isCoop ? 'All Â· P2' : 'All',
+                  text: isCoop ? 'All · P2' : 'All',
                 ),
                 const Tab(
                   height: 52,
@@ -353,7 +353,7 @@ class _BrowseScreenState extends State<BrowseScreen>
           fastRoute(ItemDetailScreen(gun: g)),
         );
         if (!mounted) return;
-        // Drop the keyboard again on return â€” Flutter likes to restore
+        // Drop the keyboard again on return — Flutter likes to restore
         // focus to the search field, which would re-open the IME.
         FocusManager.instance.primaryFocus?.unfocus();
       },
@@ -381,7 +381,7 @@ class _BrowseScreenState extends State<BrowseScreen>
     if (session.status != MpStatus.disconnected) return false;
     ScaffoldMessenger.of(c).showSnackBar(
       const SnackBar(
-        content: GoopText('Reconnecting to peerâ€¦ try again in a moment.'),
+        content: GoopText('Reconnecting to peer… try again in a moment.'),
         duration: Duration(milliseconds: 1400),
       ),
     );

@@ -149,7 +149,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           // Rendered as collapsible accordion cards. Hidden when empty so
           // entries with no wiki coverage just keep the existing layout.
           // We inject a zero-height anchor sliver *before* the group so
-          // `_scrollTo(_wikiKey)` has a target â€” `buildWikiSlivers`
+          // `_scrollTo(_wikiKey)` has a target — `buildWikiSlivers`
           // returns a list of slivers we can't wrap with a box-level
           // KeyedSubtree.
           if (wiki.hasAny) ...[
@@ -200,7 +200,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               // Back one step (e.g. back to Browse when coming from
               // Browse, or back to the previous detail view when
               // navigating through synergies). The old `Character`
-              // shortcut lived here too but was removed â€” it only did a
+              // shortcut lived here too but was removed — it only did a
               // `popUntil((r) => r.isFirst)` which on the bottom-nav
               // flow felt identical to Back and confused users who
               // expected it to jump to a character-specific screen.
