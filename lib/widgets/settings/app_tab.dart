@@ -29,22 +29,22 @@ class AppTabState extends State<AppTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Language section — hidden for now (Goopian feature disabled)
-          // _sectionHeader('=ƒîÉ LANGUAGE'),
+          // _sectionHeader('LANGUAGE'),
           // _buildLanguageCard(flair),
           // const SizedBox(height: 12),
 
           // Dialogue
-          _sectionHeader('=ƒÆ¼ DIALOGUE'),
+          _sectionHeader('DIALOGUE'),
           _buildDialogueCard(flair),
           const SizedBox(height: 12),
 
-          // =ƒÄ¦ Dice
-          _sectionHeader('=ƒÄ¦ DICE'),
+          // Dice
+          _sectionHeader('DICE'),
           _buildDiceCard(flair),
           const SizedBox(height: 12),
 
-          // =ƒô£ Changelog
-          _sectionHeader('=ƒô£ ABOUT'),
+          // Changelog
+          _sectionHeader('ABOUT'),
           _utilTile(
             title: 'View Changelog',
             subtitle: 'See version history and recent updates.',
@@ -54,8 +54,8 @@ class AppTabState extends State<AppTab> {
           ),
           const SizedBox(height: 12),
 
-          // GÜán+Å Data
-          _sectionHeader('GÜán+Å DATA MANAGEMENT'),
+          // Data
+          _sectionHeader('DATA MANAGEMENT'),
           _utilTile(
             title: 'Reset All App Data',
             subtitle: 'Wipes everything: run state, favourites, theme prefs, settings. Restarts the app.',
@@ -346,7 +346,7 @@ class AppTabState extends State<AppTab> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('GÇó ', style: TextStyle(color: Colors.white54, fontSize: 11)),
+                    const Text('• ', style: TextStyle(color: Colors.white54, fontSize: 11)),
                     Expanded(child: GoopText(it, style: const TextStyle(fontSize: 11, color: Colors.white70, height: 1.25))),
                   ],
                 ),
@@ -364,11 +364,11 @@ class AppTabState extends State<AppTab> {
         title: const GoopText('Reset All App Data?'),
         content: const GoopText(
           'This permanently erases ALL saved data:\n\n'
-          'GÇó Active run & inventory\n'
-          'GÇó Favourites\n'
-          'GÇó Theme & visual preferences\n'
-          'GÇó Special weapon upgrades\n'
-          'GÇó Multiplayer session data\n\n'
+          '• Active run & inventory\n'
+          '• Favourites\n'
+          '• Theme & visual preferences\n'
+          '• Special weapon upgrades\n'
+          '• Multiplayer session data\n\n'
           'The app will restart. This cannot be undone.',
         ),
         actions: [

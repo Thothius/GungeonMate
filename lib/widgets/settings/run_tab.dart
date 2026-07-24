@@ -182,8 +182,8 @@ class RunTabState extends State<RunTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // =ƒæÑ Multiplayer & Co-op
-          _sectionHeader('=ƒæÑ MULTIPLAYER & CO-OP'),
+          // Multiplayer & Co-op
+          _sectionHeader('MULTIPLAYER & CO-OP'),
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -269,8 +269,8 @@ class RunTabState extends State<RunTab> {
           ],
           const SizedBox(height: 12),
 
-          // =ƒº¦ Inventory Maintenance
-          _sectionHeader('=ƒº¦ INVENTORY MAINTENANCE'),
+          // Inventory Maintenance
+          _sectionHeader('INVENTORY MAINTENANCE'),
           _utilTile(
             title: 'Reset $player1Name Items',
             subtitle: 'Wipes P1 loadout back to default starter gear.',
@@ -288,8 +288,8 @@ class RunTabState extends State<RunTab> {
             ),
           const SizedBox(height: 12),
 
-          // =ƒ¢É Gameplay Actions
-          _sectionHeader('=ƒ¢É GAMEPLAY ACTIONS'),
+          // Gameplay Actions
+          _sectionHeader('GAMEPLAY ACTIONS'),
           _utilTile(
             title: 'Use Shrine',
             subtitle: 'Apply a shrine effect to the active player.',
@@ -302,8 +302,8 @@ class RunTabState extends State<RunTab> {
           ),
           const SizedBox(height: 12),
 
-          // =ƒô£ Run Data
-          _sectionHeader('=ƒô£ RUN DATA'),
+          // Run Data
+          _sectionHeader('RUN DATA'),
           _utilTile(
             title: 'View Event History',
             subtitle: 'See all pickups, stat changes, shrines, synergies & manual actions.',
@@ -316,8 +316,8 @@ class RunTabState extends State<RunTab> {
           ),
           const SizedBox(height: 12),
 
-          // GÜán+Å Core Actions
-          _sectionHeader('GÜán+Å CORE ACTIONS'),
+          // Core Actions
+          _sectionHeader('CORE ACTIONS'),
           _utilTile(
             title: 'End Active Run',
             subtitle: 'Resets the current session. WARNING: Wipes all active passive logging.',
