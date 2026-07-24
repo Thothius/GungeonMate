@@ -9,6 +9,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../screens/character_select_screen.dart';
 import '../../utils/fast_route.dart';
 import 'swipe_picker.dart';
+import 'debug_tab.dart';
 
 class AppTab extends StatefulWidget {
   const AppTab({super.key});
@@ -51,6 +52,30 @@ class AppTabState extends State<AppTab> {
             icon: Icons.history_edu_rounded,
             color: const Color(0xFFFFD740),
             onTap: () => _showChangelogDialog(context),
+          ),
+          const SizedBox(height: 12),
+
+          // Dev Tools
+          _sectionHeader('DEV TOOLS'),
+          _utilTile(
+            title: 'Special Items & Guns',
+            subtitle: 'Spawn all 18 dashboard-triggering items/guns into your inventory.',
+            icon: Icons.grid_view_rounded,
+            color: Colors.greenAccent,
+            onTap: () {
+              if (p.runState.main.character != null) {
+                Haptics.selection();
+                Navigator.push(context, fastRoute(const SpecialItemsGridScreen()));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: GoopText('Start a run first to spawn special items.'),
+                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            },
           ),
           const SizedBox(height: 12),
 

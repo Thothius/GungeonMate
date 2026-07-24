@@ -88,7 +88,7 @@ class DebugTab extends StatelessWidget {
 }
 
 // =============================================================================
-// Special Items Grid GÇö 4-column picker with add/remove + Add All
+// Special Items Grid — 4-column picker with add/remove + Add All
 // =============================================================================
 
 class SpecialItemsGridScreen extends StatefulWidget {

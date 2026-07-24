@@ -4,13 +4,11 @@ import '../services/goop_talk_engine.dart';
 import '../widgets/settings/theme_visuals_tab.dart';
 import '../widgets/settings/run_tab.dart';
 import '../widgets/settings/app_tab.dart';
-import '../widgets/settings/debug_tab.dart';
 
 /// Central control room for Gungeon Mate.
 /// - Tab 1: VISUALS — Theme, typography, particles, glow, wallpaper, inventory layout
 /// - Tab 2: RUN — Co-op, inventory maintenance, shrines, event log, end run
 /// - Tab 3: APP — Language, dialogue, dice, changelog, data reset
-/// - Tab 4: DEBUG — Special items & guns spawner
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -24,7 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final flair = AppTheme.flair;
 
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -46,7 +44,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Tab(text: 'VISUALS'),
               Tab(text: 'RUN'),
               Tab(text: 'APP'),
-              Tab(text: 'DEBUG'),
             ],
           ),
         ),
@@ -55,7 +52,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ThemeVisualsTab(),
             RunTab(),
             AppTab(),
-            DebugTab(),
           ],
         ),
       ),
