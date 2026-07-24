@@ -1,5 +1,22 @@
 [
   {
+    "version": "v1.8.22",
+    "title": "🎨 UI Polish + Bug Fixes + New App Logo",
+    "date": "July 24, 2026",
+    "items": [
+      "Replaced app launcher icon with new GungeonMate logo across Android and iOS.",
+      "Item detail header: type (Active/Passive/Companion/gun type) and elemental effects now displayed as labeled chips below the quality rank badge.",
+      "Sell price metadata chip moved to last position after Synergies in item detail header.",
+      "Quality rank badge added to item detail header below the quote.",
+      "Fixed missing elements parameter in ItemDetailHeader call site (would crash on item detail open).",
+      "Fixed broken InkWell with empty child in Huntress dashboard (syntax error).",
+      "Settings gear moved to top-right corner of home screen; Changelog button centered at bottom and enlarged 15%.",
+      "Grid weapon/item icons scaled 15% bigger with circular borders removed for a cleaner look.",
+      "Gun type tags expanded for full readability in periodic tiles.",
+      "Merged coder/synergy-ui and coder/playwright-setup branches."
+    ]
+  },
+  {
     "version": "v1.8.21",
     "title": "⛩️ Shrine Picker UX",
     "date": "July 24, 2026",

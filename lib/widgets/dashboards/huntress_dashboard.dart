@@ -99,11 +99,6 @@ class HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                     ),
                   ),
                   const SizedBox(width: 6),
-                  InkWell(
-                    onTap: null,
-                    borderRadius: BorderRadius.circular(4),
-                    child: 
-                  ),
                 ],
               ),
               if (!_collapsed) ...[

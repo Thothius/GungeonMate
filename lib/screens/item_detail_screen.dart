@@ -6,6 +6,7 @@ import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
 import '../services/app_theme.dart';
+import '../services/elemental_tagger.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/wiki_sections.dart';
 import '../widgets/item_detail/header.dart';
@@ -130,6 +131,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     synergyCount: synergyStatuses.length,
                     curse: gun?.curse ?? item?.curse ?? 0.0,
                     coolness: gun?.coolness ?? item?.coolness ?? 0.0,
+                    elements: gun != null
+                        ? ElementalTagger.elementsOfGun(gun)
+                        : ElementalTagger.elementsOfItem(item!),
                   ),
                   KeyedSubtree(
                     key: _statsKey,
