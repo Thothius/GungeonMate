@@ -1,5 +1,26 @@
 [
   {
+    "version": "v1.8.21",
+    "title": "⛩️ Shrine Picker UX",
+    "date": "July 24, 2026",
+    "items": [
+      "Added a USE button to each shrine row for one-tap activation.",
+      "Top-right shrines-used counter is now larger, tappable, and opens a popup log of used shrines with their effects and use counts.",
+      "Shrine activation sheet now emphasizes the main effect and breaks complex effects (especially Dice) into readable cards and bullet points."
+    ]
+  },
+  {
+    "version": "v1.8.20",
+    "title": "⬛ Minimalist Theme — Metallic White, Black & Grey",
+    "date": "July 24, 2026",
+    "items": [
+      "Added Minimalist theme: a stripped-back metallic interface of pure black, clean white, and cold grey with no glow and crisp information.",
+      "Minimalist includes five switchable palettes: Original, Graphite, Platinum, Charcoal, and Obsidian.",
+      "Minimalist is now the default theme for new installs and for users with no saved theme preference.",
+      "Theme picker shows Minimalist at the front of the visible themes list."
+    ]
+  },
+  {
     "version": "v1.8.19",
     "title": "🎲 Dice Roll UX: Cancel, Sparkles, and VS Overflow",
     "date": "July 24, 2026",
