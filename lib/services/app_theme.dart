@@ -676,6 +676,40 @@ enum AppThemeMode {
     elem: 'BULLET',
     whimsicalDescription: 'A blank canvas of absolute personal madness. Paint the town in your own choice of radioactive colors. Godspeed, designer!',
     staticFlair: null,
+  ),
+  minimalist(
+    label: 'Minimalist',
+    vibe: 'CLEAN',
+    diff: 'NORMAL',
+    elem: 'METAL',
+    whimsicalDescription: 'A stripped-back metallic interface: pure black, clean white, and cold grey. No glow, no noise — just crisp information.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0A0A),
+      card: Color(0xFF121212),
+      primary: Color(0xFFE0E0E0),
+      secondary: Color(0xFF9E9E9E),
+      headlineStat: Color(0xFFFFFFFF),
+      bulletColor: Color(0xFFBDBDBD),
+      bulletGlyph: '—',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      numberStyle: FontStyle.normal,
+      chipRadius: 4,
+      cardRadius: 6,
+      cardBorderColor: Color(0x33FFFFFF),
+      cardBorderWidth: 1.0,
+      chipFilled: false,
+      dividerColor: Color(0x22FFFFFF),
+      dividerThickness: 0.5,
+      glowPrimary: Color(0x11FFFFFF),
+      glowSecondary: Color(0x08FFFFFF),
+      auraStyle: AvatarAuraStyle.none,
+      headerGlyph: null,
+      headerAllCaps: true,
+      headerUnderlineColor: Color(0x44FFFFFF),
+      pageFrame: true,
+    ),
   );
 
   final String label;
@@ -1058,6 +1092,7 @@ extension AppFontLabel on AppFont {
 /// are no longer offered to users; on app init we migrate any persisted
 /// value not in this list onto the first entry below.
 const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
+  AppThemeMode.minimalist,
   AppThemeMode.unicorn,
   AppThemeMode.forgeMaster,
   AppThemeMode.robotsCore,
@@ -1147,6 +1182,8 @@ extension AppThemeModeLabel on AppThemeMode {
         return "Lich's Tomb";
       case AppThemeMode.winchestersGame:
         return "Winchester's Game";
+      case AppThemeMode.minimalist:
+        return 'Minimalist';
       case AppThemeMode.custom:
         return AppTheme._customThemeName;
     }
@@ -1196,6 +1233,8 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Final Stand — bone white, phantom teal, crypt charcoal';
       case AppThemeMode.winchestersGame:
         return 'Target Practice — fairground green, ticket orange, wood brown';
+      case AppThemeMode.minimalist:
+        return 'Stripped Back — pure black, clean white, cold grey';
       case AppThemeMode.custom:
         return 'Custom — your personal palette';
     }
@@ -1917,6 +1956,121 @@ const kThemeRemixes = <AppThemeMode, List<ThemeRemix>>{
       ),
     ),
   ],
+  AppThemeMode.minimalist: [
+    ThemeRemix(label: 'Original'),
+    ThemeRemix(
+      label: 'Graphite',
+      flair: ThemeFlair(
+        scaffold: Color(0xFF0F0F0F),
+        card: Color(0xFF1A1A1A),
+        primary: Color(0xFFB0B0B0),
+        secondary: Color(0xFF808080),
+        headlineStat: Color(0xFFE0E0E0),
+        bulletColor: Color(0xFFB0B0B0),
+        bulletGlyph: '—',
+        tabularFigures: true,
+        numberSizeScale: 1.0,
+        numberWeight: FontWeight.w800,
+        chipRadius: 4,
+        cardRadius: 6,
+        cardBorderColor: Color(0x33B0B0B0),
+        cardBorderWidth: 1.0,
+        chipFilled: false,
+        dividerColor: Color(0x22B0B0B0),
+        dividerThickness: 0.5,
+        glowPrimary: Color(0x11B0B0B0),
+        glowSecondary: Color(0x08808080),
+        auraStyle: AvatarAuraStyle.none,
+        headerAllCaps: true,
+        headerUnderlineColor: Color(0x44B0B0B0),
+        pageFrame: true,
+      ),
+    ),
+    ThemeRemix(
+      label: 'Platinum',
+      flair: ThemeFlair(
+        scaffold: Color(0xFF151515),
+        card: Color(0xFF202020),
+        primary: Color(0xFFF5F5F5),
+        secondary: Color(0xFFC0C0C0),
+        headlineStat: Color(0xFFFFFFFF),
+        bulletColor: Color(0xFFF5F5F5),
+        bulletGlyph: '—',
+        tabularFigures: true,
+        numberSizeScale: 1.0,
+        numberWeight: FontWeight.w800,
+        chipRadius: 4,
+        cardRadius: 6,
+        cardBorderColor: Color(0x33F5F5F5),
+        cardBorderWidth: 1.0,
+        chipFilled: false,
+        dividerColor: Color(0x22F5F5F5),
+        dividerThickness: 0.5,
+        glowPrimary: Color(0x11F5F5F5),
+        glowSecondary: Color(0x08C0C0C0),
+        auraStyle: AvatarAuraStyle.none,
+        headerAllCaps: true,
+        headerUnderlineColor: Color(0x44F5F5F5),
+        pageFrame: true,
+      ),
+    ),
+    ThemeRemix(
+      label: 'Charcoal',
+      flair: ThemeFlair(
+        scaffold: Color(0xFF050505),
+        card: Color(0xFF0D0D0D),
+        primary: Color(0xFF9E9E9E),
+        secondary: Color(0xFF616161),
+        headlineStat: Color(0xFFBDBDBD),
+        bulletColor: Color(0xFF9E9E9E),
+        bulletGlyph: '—',
+        tabularFigures: true,
+        numberSizeScale: 1.0,
+        numberWeight: FontWeight.w800,
+        chipRadius: 4,
+        cardRadius: 6,
+        cardBorderColor: Color(0x339E9E9E),
+        cardBorderWidth: 1.0,
+        chipFilled: false,
+        dividerColor: Color(0x229E9E9E),
+        dividerThickness: 0.5,
+        glowPrimary: Color(0x119E9E9E),
+        glowSecondary: Color(0x08616161),
+        auraStyle: AvatarAuraStyle.none,
+        headerAllCaps: true,
+        headerUnderlineColor: Color(0x449E9E9E),
+        pageFrame: true,
+      ),
+    ),
+    ThemeRemix(
+      label: 'Obsidian',
+      flair: ThemeFlair(
+        scaffold: Color(0xFF000000),
+        card: Color(0xFF080808),
+        primary: Color(0xFF757575),
+        secondary: Color(0xFF424242),
+        headlineStat: Color(0xFFBDBDBD),
+        bulletColor: Color(0xFF757575),
+        bulletGlyph: '—',
+        tabularFigures: true,
+        numberSizeScale: 1.0,
+        numberWeight: FontWeight.w800,
+        chipRadius: 4,
+        cardRadius: 6,
+        cardBorderColor: Color(0x33757575),
+        cardBorderWidth: 1.0,
+        chipFilled: false,
+        dividerColor: Color(0x22757575),
+        dividerThickness: 0.5,
+        glowPrimary: Color(0x11757575),
+        glowSecondary: Color(0x08424242),
+        auraStyle: AvatarAuraStyle.none,
+        headerAllCaps: true,
+        headerUnderlineColor: Color(0x44757575),
+        pageFrame: true,
+      ),
+    ),
+  ],
 };
 
 
@@ -2424,7 +2578,7 @@ class AppTheme {
   static const String _legacyKey = 'theme.mode';
 
   static final RefreshableValueNotifier<AppThemeMode> notifier =
-      RefreshableValueNotifier<AppThemeMode>(AppThemeMode.unicorn);
+      RefreshableValueNotifier<AppThemeMode>(AppThemeMode.minimalist);
 
   static final ValueNotifier<AppThemeMode?> previewNotifier =
       ValueNotifier<AppThemeMode?>(null);
