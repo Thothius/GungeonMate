@@ -41,6 +41,8 @@ class DiceRollDialogState extends State<DiceRollDialog>
   final List<int> _myDice = [1, 1, 1];
   final List<bool> _diceStopped = [false, false, false];
   final GlobalKey _diceRowKey = GlobalKey();
+  final List<GlobalKey> _dieKeys = List.generate(3, (_) => GlobalKey());
+  final GlobalKey _particleKey = GlobalKey();
   int _myScore = 0;
   bool _hasRolled = false;
 
@@ -57,6 +59,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
   void Function(String challengerName)? _prevChallenge;
   void Function()? _prevAccept;
   void Function()? _prevDecline;
+  void Function()? _prevCancel;
   void Function(int peerScore, List<int> peerDice)? _prevResult;
 
   @override
@@ -77,6 +80,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
     _prevChallenge = _mp.onDiceChallenge;
     _prevAccept = _mp.onDiceAccept;
     _prevDecline = _mp.onDiceDecline;
+    _prevCancel = _mp.onDiceCancel;
     _prevResult = _mp.onDiceResult;
 
     if (widget.isChallenged) {
@@ -119,6 +123,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
     _mp.onDiceChallenge = _prevChallenge;
     _mp.onDiceAccept = _prevAccept;
     _mp.onDiceDecline = _prevDecline;
+    _mp.onDiceCancel = _prevCancel;
     _mp.onDiceResult = _prevResult;
     super.dispose();
   }
@@ -163,6 +168,11 @@ class DiceRollDialogState extends State<DiceRollDialog>
     _mp.sendDiceChallenge(_mp.myNickname);
   }
 
+  void _cancelChallenge() {
+    _mp.sendDiceCancel();
+    if (mounted) Navigator.of(context).pop();
+  }
+
   void _startRolling() {
     if (_hasRolled) return;
     final rand = math.Random();
@@ -199,15 +209,17 @@ class DiceRollDialogState extends State<DiceRollDialog>
       }
       _myScore = sum;
 
-      // Spawn satisfying sparkles at actual die position
-      // ponytail: y is still hardcoded — would need a per-die GlobalKey for exact y.
-      // x is now accurate via _diceRowKey RenderBox. Upgrade path: GlobalKey per die.
-      final renderBox =
-          _diceRowKey.currentContext?.findRenderObject() as RenderBox?;
-      if (renderBox != null) {
-        final rowWidth = renderBox.size.width;
-        final xPos = rowWidth * (index + 0.5) / 3;
-        _spawnSparkles(xPos, 160.0, particleColor);
+      // Spawn satisfying sparkles at the exact die position.
+      final particleBox =
+          _particleKey.currentContext?.findRenderObject() as RenderBox?;
+      final dieBox =
+          _dieKeys[index].currentContext?.findRenderObject() as RenderBox?;
+      if (particleBox != null && dieBox != null) {
+        final globalCenter = dieBox.localToGlobal(
+          dieBox.size.center(Offset.zero),
+        );
+        final local = particleBox.globalToLocal(globalCenter);
+        _spawnSparkles(local.dx, local.dy, particleColor);
       }
       Haptics.heavy();
 
@@ -272,7 +284,10 @@ class DiceRollDialogState extends State<DiceRollDialog>
     final myDiceStyle = _getDiceStyle(prefs.customDiceType, f);
 
     return PopScope(
-      canPop: _status == DiceStatus.idle || _status == DiceStatus.finished,
+      canPop:
+          _status == DiceStatus.idle ||
+          _status == DiceStatus.challenging ||
+          _status == DiceStatus.finished,
       child: Dialog(
         backgroundColor: const Color(0xFF151211),
         insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -382,6 +397,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 Positioned.fill(
                   child: IgnorePointer(
                     child: CustomPaint(
+                      key: _particleKey,
                       painter: DialogParticlePainter(particles: _particles),
                     ),
                   ),
@@ -463,20 +479,28 @@ class DiceRollDialogState extends State<DiceRollDialog>
     }
 
     if (_status == DiceStatus.challenging) {
-      return const Column(
-        key: ValueKey('challenging'),
+      return Column(
+        key: const ValueKey('challenging'),
         children: [
-          SizedBox(height: 10),
-          CircularProgressIndicator(color: Colors.amberAccent),
-          SizedBox(height: 16),
-          GoopText(
+          const SizedBox(height: 10),
+          const CircularProgressIndicator(color: Colors.amberAccent),
+          const SizedBox(height: 16),
+          const GoopText(
             'Waiting for partner to accept...',
             style: TextStyle(
               fontWeight: FontWeight.w800,
               color: Colors.white70,
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          TextButton(
+            onPressed: _cancelChallenge,
+            style: TextButton.styleFrom(foregroundColor: Colors.white38),
+            child: const GoopText(
+              'CANCEL CHALLENGE',
+              style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.5),
+            ),
+          ),
         ],
       );
     }
@@ -512,6 +536,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               children: List.generate(3, (index) {
                 final isStopped = _diceStopped[index];
                 return DiceWidget(
+                  dieKey: _dieKeys[index],
                   value: _myDice[index],
                   isRolling: !isStopped,
                   infiniteController: _infiniteController,
@@ -545,6 +570,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(3, (index) {
                 return DiceWidget(
+                  dieKey: _dieKeys[index],
                   value: _myDice[index],
                   isRolling: false,
                   infiniteController: _infiniteController,
@@ -670,18 +696,23 @@ class DiceRollDialogState extends State<DiceRollDialog>
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      '$_myScore',
-                      style: const TextStyle(
-                        fontSize: 38,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        height: 1.0,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '$_myScore',
+                        style: const TextStyle(
+                          fontSize: 38,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          height: 1.0,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 4),
                     GoopText(
                       '(${_myDice.join("-")})',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 11,
                         color: Colors.white38,
@@ -720,18 +751,23 @@ class DiceRollDialogState extends State<DiceRollDialog>
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        '$_peerScore',
-                        style: const TextStyle(
-                          fontSize: 38,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white,
-                          height: 1.0,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          '$_peerScore',
+                          style: const TextStyle(
+                            fontSize: 38,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.white,
+                            height: 1.0,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 4),
                       GoopText(
                         '(${_peerDice?.join("-") ?? ""})',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 11,
                           color: Colors.white38,
@@ -844,6 +880,7 @@ class DiceWidget extends StatefulWidget {
   final int index;
   final DiceStyle style;
   final VoidCallback? onTap;
+  final GlobalKey? dieKey;
 
   const DiceWidget({
     super.key,
@@ -853,6 +890,7 @@ class DiceWidget extends StatefulWidget {
     required this.index,
     required this.style,
     required this.onTap,
+    this.dieKey,
   });
 
   @override
@@ -890,6 +928,7 @@ class DiceWidgetState extends State<DiceWidget>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: widget.dieKey,
       onTap: widget.onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(

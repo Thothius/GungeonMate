@@ -20,15 +20,15 @@ enum MpRole { main, sidekick }
 
 extension MpRoleWire on MpRole {
   String get wire => switch (this) {
-        MpRole.main => 'main',
-        MpRole.sidekick => 'sidekick',
-      };
+    MpRole.main => 'main',
+    MpRole.sidekick => 'sidekick',
+  };
 
   static MpRole parse(String s) => switch (s) {
-        'main' => MpRole.main,
-        'sidekick' => MpRole.sidekick,
-        _ => throw FormatException('Unknown MpRole: $s'),
-      };
+    'main' => MpRole.main,
+    'sidekick' => MpRole.sidekick,
+    _ => throw FormatException('Unknown MpRole: $s'),
+  };
 }
 
 /// Base type for every transport message. Subclasses are `final` so
@@ -73,6 +73,7 @@ sealed class MpMessage {
       'diceChallenge' => MpDiceChallenge.fromJson(map),
       'diceAccept' => const MpDiceAccept(),
       'diceDecline' => const MpDiceDecline(),
+      'diceCancel' => const MpDiceCancel(),
       'diceResult' => MpDiceResult.fromJson(map),
       _ => throw FormatException('MpMessage: unknown type "$t"'),
     };
@@ -110,26 +111,26 @@ final class MpHello extends MpMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'role': role.wire,
-        'character': character,
-        'userLabel': userLabel,
-        'appVersion': appVersion,
-        'protocolVersion': protocolVersion,
-        'sessionName': sessionName,
-        'sessionId': sessionId,
-        if (pinCode != null) 'pinCode': pinCode,
-      };
+    'role': role.wire,
+    'character': character,
+    'userLabel': userLabel,
+    'appVersion': appVersion,
+    'protocolVersion': protocolVersion,
+    'sessionName': sessionName,
+    'sessionId': sessionId,
+    if (pinCode != null) 'pinCode': pinCode,
+  };
 
   factory MpHello.fromJson(Map<String, dynamic> j) => MpHello(
-        role: MpRoleWire.parse(j['role'] as String),
-        character: j['character'] as String? ?? '',
-        userLabel: j['userLabel'] as String? ?? 'Player',
-        appVersion: j['appVersion'] as String? ?? '',
-        protocolVersion: j['protocolVersion'] as int? ?? 1,
-        sessionName: j['sessionName'] as String?,
-        sessionId: j['sessionId'] as String?,
-        pinCode: j['pinCode'] as String?,
-      );
+    role: MpRoleWire.parse(j['role'] as String),
+    character: j['character'] as String? ?? '',
+    userLabel: j['userLabel'] as String? ?? 'Player',
+    appVersion: j['appVersion'] as String? ?? '',
+    protocolVersion: j['protocolVersion'] as int? ?? 1,
+    sessionName: j['sessionName'] as String?,
+    sessionId: j['sessionId'] as String?,
+    pinCode: j['pinCode'] as String?,
+  );
 }
 
 /// Full state of the sender's local player (names only) + shared
@@ -159,25 +160,24 @@ final class MpSnapshot extends MpMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'character': character,
-        'guns': gunNames,
-        'items': itemNames,
-        'coolness': coolness,
-        'curse': curse,
-        'shrinesUsed': shrinesUsed,
-        'ts': tsMs,
-      };
+    'character': character,
+    'guns': gunNames,
+    'items': itemNames,
+    'coolness': coolness,
+    'curse': curse,
+    'shrinesUsed': shrinesUsed,
+    'ts': tsMs,
+  };
 
   factory MpSnapshot.fromJson(Map<String, dynamic> j) => MpSnapshot(
-        character: j['character'] as String? ?? '',
-        gunNames: (j['guns'] as List?)?.cast<String>() ?? const [],
-        itemNames: (j['items'] as List?)?.cast<String>() ?? const [],
-        coolness: (j['coolness'] as num?)?.toDouble() ?? 0,
-        curse: (j['curse'] as num?)?.toDouble() ?? 0,
-        shrinesUsed:
-            (j['shrinesUsed'] as List?)?.cast<String>() ?? const [],
-        tsMs: (j['ts'] as num?)?.toInt() ?? 0,
-      );
+    character: j['character'] as String? ?? '',
+    gunNames: (j['guns'] as List?)?.cast<String>() ?? const [],
+    itemNames: (j['items'] as List?)?.cast<String>() ?? const [],
+    coolness: (j['coolness'] as num?)?.toDouble() ?? 0,
+    curse: (j['curse'] as num?)?.toDouble() ?? 0,
+    shrinesUsed: (j['shrinesUsed'] as List?)?.cast<String>() ?? const [],
+    tsMs: (j['ts'] as num?)?.toInt() ?? 0,
+  );
 }
 
 /// "I'm giving you this." Sender has already removed it from their own
@@ -195,13 +195,17 @@ final class MpGift extends MpMessage {
   String get type => 'gift';
 
   @override
-  Map<String, dynamic> toJson() => {'kind': kind, 'name': name, 'giftId': giftId};
+  Map<String, dynamic> toJson() => {
+    'kind': kind,
+    'name': name,
+    'giftId': giftId,
+  };
 
   factory MpGift.fromJson(Map<String, dynamic> j) => MpGift(
-        kind: j['kind'] as String? ?? '',
-        name: j['name'] as String? ?? '',
-        giftId: j['giftId'] as String? ?? '',
-      );
+    kind: j['kind'] as String? ?? '',
+    name: j['name'] as String? ?? '',
+    giftId: j['giftId'] as String? ?? '',
+  );
 }
 
 /// "Can I have this?" Fires a bottom-sheet on the recipient. They
@@ -222,17 +226,13 @@ final class MpRequest extends MpMessage {
   String get type => 'request';
 
   @override
-  Map<String, dynamic> toJson() => {
-        'reqId': reqId,
-        'kind': kind,
-        'name': name,
-      };
+  Map<String, dynamic> toJson() => {'reqId': reqId, 'kind': kind, 'name': name};
 
   factory MpRequest.fromJson(Map<String, dynamic> j) => MpRequest(
-        reqId: j['reqId'] as String? ?? '',
-        kind: j['kind'] as String? ?? '',
-        name: j['name'] as String? ?? '',
-      );
+    reqId: j['reqId'] as String? ?? '',
+    kind: j['kind'] as String? ?? '',
+    name: j['name'] as String? ?? '',
+  );
 }
 
 final class MpRequestResp extends MpMessage {
@@ -245,15 +245,12 @@ final class MpRequestResp extends MpMessage {
   String get type => 'requestResp';
 
   @override
-  Map<String, dynamic> toJson() => {
-        'reqId': reqId,
-        'approved': approved,
-      };
+  Map<String, dynamic> toJson() => {'reqId': reqId, 'approved': approved};
 
   factory MpRequestResp.fromJson(Map<String, dynamic> j) => MpRequestResp(
-        reqId: j['reqId'] as String? ?? '',
-        approved: j['approved'] as bool? ?? false,
-      );
+    reqId: j['reqId'] as String? ?? '',
+    approved: j['approved'] as bool? ?? false,
+  );
 }
 
 /// Either player hit "End run" — both sides clear the run together so
@@ -275,9 +272,14 @@ final class MpPing extends MpMessage {
   @override
   String get type => 'ping';
   @override
-  Map<String, dynamic> toJson() => {'ts': tsMs, if (lastSeq != null) 'lastSeq': lastSeq};
-  factory MpPing.fromJson(Map<String, dynamic> j) =>
-      MpPing((j['ts'] as num?)?.toInt() ?? 0, lastSeq: (j['lastSeq'] as num?)?.toInt());
+  Map<String, dynamic> toJson() => {
+    'ts': tsMs,
+    if (lastSeq != null) 'lastSeq': lastSeq,
+  };
+  factory MpPing.fromJson(Map<String, dynamic> j) => MpPing(
+    (j['ts'] as num?)?.toInt() ?? 0,
+    lastSeq: (j['lastSeq'] as num?)?.toInt(),
+  );
 }
 
 final class MpPong extends MpMessage {
@@ -287,9 +289,14 @@ final class MpPong extends MpMessage {
   @override
   String get type => 'pong';
   @override
-  Map<String, dynamic> toJson() => {'ts': tsMs, if (lastSeq != null) 'lastSeq': lastSeq};
-  factory MpPong.fromJson(Map<String, dynamic> j) =>
-      MpPong((j['ts'] as num?)?.toInt() ?? 0, lastSeq: (j['lastSeq'] as num?)?.toInt());
+  Map<String, dynamic> toJson() => {
+    'ts': tsMs,
+    if (lastSeq != null) 'lastSeq': lastSeq,
+  };
+  factory MpPong.fromJson(Map<String, dynamic> j) => MpPong(
+    (j['ts'] as num?)?.toInt() ?? 0,
+    lastSeq: (j['lastSeq'] as num?)?.toInt(),
+  );
 }
 
 /// Dice Roll Challenge: Sent to initiate a dice challenge.
@@ -301,8 +308,8 @@ final class MpDiceChallenge extends MpMessage {
   @override
   Map<String, dynamic> toJson() => {'challengerName': challengerName};
   factory MpDiceChallenge.fromJson(Map<String, dynamic> j) => MpDiceChallenge(
-        challengerName: j['challengerName'] as String? ?? 'Challenger',
-      );
+    challengerName: j['challengerName'] as String? ?? 'Challenger',
+  );
 }
 
 /// Dice Roll Accept: Sent to accept the challenge.
@@ -323,6 +330,15 @@ final class MpDiceDecline extends MpMessage {
   Map<String, dynamic> toJson() => const {};
 }
 
+/// Dice Roll Cancel: Sent by the challenger to withdraw a pending challenge.
+final class MpDiceCancel extends MpMessage {
+  const MpDiceCancel();
+  @override
+  String get type => 'diceCancel';
+  @override
+  Map<String, dynamic> toJson() => const {};
+}
+
 /// Dice Roll Result: Sent when the player rolls their dice.
 final class MpDiceResult extends MpMessage {
   final int score;
@@ -333,7 +349,7 @@ final class MpDiceResult extends MpMessage {
   @override
   Map<String, dynamic> toJson() => {'score': score, 'dice': dice};
   factory MpDiceResult.fromJson(Map<String, dynamic> j) => MpDiceResult(
-        score: j['score'] as int? ?? 0,
-        dice: (j['dice'] as List?)?.cast<int>() ?? const [],
-      );
+    score: j['score'] as int? ?? 0,
+    dice: (j['dice'] as List?)?.cast<int>() ?? const [],
+  );
 }
