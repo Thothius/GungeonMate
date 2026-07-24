@@ -228,12 +228,26 @@ class _ChestChip extends StatelessWidget {
     final color = _colors[key] ?? Colors.white38;
     final rank = _ranks[key];
 
+    final isS = key == 'black';
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: color.withValues(alpha: 0.45), width: 0.8),
+        border: Border.all(
+          color: isS ? Colors.white54 : color.withValues(alpha: 0.45),
+          width: isS ? 1.2 : 0.8,
+        ),
+        boxShadow: isS
+            ? [
+                BoxShadow(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  blurRadius: 6,
+                  spreadRadius: 1,
+                ),
+              ]
+            : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
