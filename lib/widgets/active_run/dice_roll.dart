@@ -15,7 +15,7 @@ import '../../services/goop_talk_engine.dart';
 void showDiceRollDialog(BuildContext context, {bool isChallenged = false}) {
   showDialog<void>(
     context: context,
-    barrierDismissible: true,
+    barrierDismissible: false,
     builder: (_) => DiceRollDialog(isChallenged: isChallenged),
   );
 }
@@ -30,7 +30,8 @@ class DiceRollDialog extends StatefulWidget {
   State<DiceRollDialog> createState() => DiceRollDialogState();
 }
 
-class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderStateMixin {
+class DiceRollDialogState extends State<DiceRollDialog>
+    with TickerProviderStateMixin {
   late final AnimationController _infiniteController;
   late final MultiplayerSession _mp;
   DiceStatus _status = DiceStatus.idle;
@@ -143,13 +144,15 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
     for (int i = 0; i < 12; i++) {
       final angle = rand.nextDouble() * 2 * math.pi;
       final speed = 1.0 + rand.nextDouble() * 3.5;
-      _particles.add(DialogParticle(
-        x: x,
-        y: y,
-        vx: math.cos(angle) * speed,
-        vy: math.sin(angle) * speed - 2.0, // slight upward bias
-        color: color,
-      ));
+      _particles.add(
+        DialogParticle(
+          x: x,
+          y: y,
+          vx: math.cos(angle) * speed,
+          vy: math.sin(angle) * speed - 2.0, // slight upward bias
+          color: color,
+        ),
+      );
     }
   }
 
@@ -186,7 +189,7 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
     setState(() {
       _diceStopped[index] = true;
       _myDice[index] = _actualDice[index];
-      
+
       // Update running sum in real-time
       int sum = 0;
       for (int i = 0; i < 3; i++) {
@@ -199,7 +202,8 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
       // Spawn satisfying sparkles at actual die position
       // ponytail: y is still hardcoded — would need a per-die GlobalKey for exact y.
       // x is now accurate via _diceRowKey RenderBox. Upgrade path: GlobalKey per die.
-      final renderBox = _diceRowKey.currentContext?.findRenderObject() as RenderBox?;
+      final renderBox =
+          _diceRowKey.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox != null) {
         final rowWidth = renderBox.size.width;
         final xPos = rowWidth * (index + 0.5) / 3;
@@ -214,7 +218,8 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
           if (!mounted) return;
           setState(() {
             if (_mp.isActive && _mp.isConnected) {
-              _status = DiceStatus.rollingScreen; // stay on roll screen but rolled
+              _status =
+                  DiceStatus.rollingScreen; // stay on roll screen but rolled
               _mp.sendDiceResult(_myScore, List<int>.from(_myDice));
             } else {
               _status = DiceStatus.finished;
@@ -234,7 +239,8 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
         if (_myScore > _peerScore!) {
           _announcement = 'GUNFORTUNA DECLARES YOU VICTORIOUS!';
         } else if (_myScore < _peerScore!) {
-          _announcement = 'GUNFORTUNA DECLARES ${_mp.peerNickname?.toUpperCase() ?? "PEER"} VICTORIOUS!';
+          _announcement =
+              'GUNFORTUNA DECLARES ${_mp.peerNickname?.toUpperCase() ?? "PEER"} VICTORIOUS!';
         } else {
           _announcement = "IT'S A DRAW! THE FATES ARE IN PERFECT BALANCE!";
         }
@@ -265,102 +271,123 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
     final prefs = VisualPrefs.notifier.value;
     final myDiceStyle = _getDiceStyle(prefs.customDiceType, f);
 
-    return Dialog(
-      backgroundColor: const Color(0xFF151211),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: f.primary, width: 2.0),
-      ),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 440),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Header
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.casino_rounded, color: f.primary, size: 26),
-                          const SizedBox(width: 10),
-                          GoopText(
-                            'GUNFORTUNA\'S DUEL',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
+    return PopScope(
+      canPop: _status == DiceStatus.idle || _status == DiceStatus.finished,
+      child: Dialog(
+        backgroundColor: const Color(0xFF151211),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: f.primary, width: 2.0),
+        ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 440),
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 24,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.casino_rounded,
                               color: f.primary,
-                              letterSpacing: 1.5,
+                              size: 26,
+                            ),
+                            const SizedBox(width: 10),
+                            GoopText(
+                              'GUNFORTUNA\'S DUEL',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                                color: f.primary,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white38,
+                            size: 20,
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Flavour text (Only show in idle state!)
+                    if (_status == DiceStatus.idle) ...[
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.03),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.06),
+                          ),
+                        ),
+                        child: const GoopText(
+                          '“Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.”',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.white54,
+                            height: 1.4,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                    ],
+
+                    // Content body
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      transitionBuilder: (child, anim) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: const Offset(1.0, 0.0),
+                            end: Offset.zero,
+                          ).animate(
+                            CurvedAnimation(
+                              parent: anim,
+                              curve: Curves.easeOutCubic,
                             ),
                           ),
-                        ],
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.white38, size: 20),
-                        onPressed: () => Navigator.pop(context),
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 14),
-
-                  // Flavour text (Only show in idle state!)
-                  if (_status == DiceStatus.idle) ...[
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.03),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
-                      ),
-                      child: const GoopText(
-                        '“Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.”',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white54,
-                          height: 1.4,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                          child: child,
+                        );
+                      },
+                      child: _buildCurrentBody(connected, myDiceStyle, f),
                     ),
-                    const SizedBox(height: 18),
                   ],
-
-                  // Content body
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 350),
-                    transitionBuilder: (child, anim) {
-                      return SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(1.0, 0.0),
-                          end: Offset.zero,
-                        ).animate(CurvedAnimation(parent: anim, curve: Curves.easeOutCubic)),
-                        child: child,
-                      );
-                    },
-                    child: _buildCurrentBody(connected, myDiceStyle, f),
-                  ),
-                ],
-              ),
-            ),
-            // Particle Layer Paint
-            if (_particles.isNotEmpty)
-              Positioned.fill(
-                child: IgnorePointer(
-                  child: CustomPaint(
-                    painter: DialogParticlePainter(particles: _particles),
-                  ),
                 ),
               ),
-          ],
+              // Particle Layer Paint
+              if (_particles.isNotEmpty)
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: CustomPaint(
+                      painter: DialogParticlePainter(particles: _particles),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -374,7 +401,11 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
         children: [
           const GoopText(
             'Challenge your sidekick or main partner to a high-stakes dice duel! 3x dice will decide who gets Gunfortuna\'s favor!',
-            style: TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.4),
+            style: TextStyle(
+              fontSize: 12.5,
+              color: Colors.white70,
+              height: 1.4,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
@@ -386,31 +417,43 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
                 child: ElevatedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.casino_outlined, size: 18),
-                  label: const GoopText('CHALLENGE PARTNER', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.0)),
+                  label: const GoopText(
+                    'CHALLENGE PARTNER',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: f.primary,
                     foregroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
           const SizedBox(height: 10),
-          ScaleButton(
-            onTap: _startRolling,
-            child: IgnorePointer(
-              child: SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
+          Center(
+            child: ScaleButton(
+              onTap: _startRolling,
+              child: IgnorePointer(
+                child: TextButton(
                   onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    side: const BorderSide(color: Colors.white24),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.white54,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
-                  child: const GoopText('ROLL SOLO INSTEAD', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
+                  child: const GoopText(
+                    'or roll solo',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -426,7 +469,13 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
           SizedBox(height: 10),
           CircularProgressIndicator(color: Colors.amberAccent),
           SizedBox(height: 16),
-          GoopText('Waiting for partner to accept...', style: TextStyle(fontWeight: FontWeight.w800, color: Colors.white70)),
+          GoopText(
+            'Waiting for partner to accept...',
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: Colors.white70,
+            ),
+          ),
           SizedBox(height: 10),
         ],
       );
@@ -438,12 +487,21 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
         children: [
           const GoopText(
             'THE CYLINDERS ARE SPINNING!',
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white54, letterSpacing: 1.0),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w900,
+              color: Colors.white54,
+              letterSpacing: 1.0,
+            ),
           ),
           const SizedBox(height: 4),
           const GoopText(
             'Tap each die individually to stop its spin!',
-            style: TextStyle(fontSize: 10, color: Colors.amberAccent, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 10,
+              color: Colors.amberAccent,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 18),
           FittedBox(
@@ -467,7 +525,11 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
           const SizedBox(height: 20),
           GoopText(
             'Current Sum: $_myScore',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+            ),
           ),
         ],
       );
@@ -494,17 +556,45 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
             ),
           ),
           const SizedBox(height: 24),
-          const GoopText('ROLLED!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, color: Color(0xFF66E07A))),
+          const GoopText(
+            'ROLLED!',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w900,
+              color: Color(0xFF66E07A),
+            ),
+          ),
           const SizedBox(height: 6),
-          GoopText('Your Score: $_myScore', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white)),
+          GoopText(
+            'Your Score: $_myScore',
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+            ),
+          ),
           const SizedBox(height: 8),
           if (_peerScore == null)
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.cyanAccent)),
+                SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.cyanAccent,
+                  ),
+                ),
                 SizedBox(width: 10),
-                GoopText('Waiting for partner to finish rolling...', style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: Colors.cyanAccent)),
+                GoopText(
+                  'Waiting for partner to finish rolling...',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.cyanAccent,
+                  ),
+                ),
               ],
             ),
         ],
@@ -516,11 +606,12 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
       final isDraw = _peerScore != null && _myScore == _peerScore!;
       final isSolo = _peerScore == null;
 
-      final Color bannerColor = isSolo
-          ? const Color(0xFFFFD54F) // Majestic Gold for Solo fate
-          : (isDraw
-              ? Colors.white54
-              : (isMyVictory ? Colors.greenAccent : Colors.redAccent));
+      final Color bannerColor =
+          isSolo
+              ? const Color(0xFFFFD54F) // Majestic Gold for Solo fate
+              : (isDraw
+                  ? Colors.white54
+                  : (isMyVictory ? Colors.greenAccent : Colors.redAccent));
 
       return Column(
         key: const ValueKey('finished_results'),
@@ -531,10 +622,7 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
             decoration: BoxDecoration(
               color: bannerColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: bannerColor,
-                width: 1.5,
-              ),
+              border: Border.all(color: bannerColor, width: 1.5),
               boxShadow: [
                 BoxShadow(
                   color: bannerColor.withValues(alpha: 0.08),
@@ -548,7 +636,8 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
-                color: bannerColor == Colors.white54 ? Colors.white : bannerColor,
+                color:
+                    bannerColor == Colors.white54 ? Colors.white : bannerColor,
                 letterSpacing: 1.0,
               ),
               textAlign: TextAlign.center,
@@ -564,48 +653,90 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
               Expanded(
                 child: Column(
                   children: [
-                    const Icon(Icons.person, color: Colors.cyanAccent, size: 24),
+                    const Icon(
+                      Icons.person,
+                      color: Colors.cyanAccent,
+                      size: 24,
+                    ),
                     const SizedBox(height: 4),
                     GoopText(
                       _mp.myNickname.toUpperCase(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70),
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '$_myScore',
-                      style: const TextStyle(fontSize: 38, fontWeight: FontWeight.w900, color: Colors.white, height: 1.0),
+                      style: const TextStyle(
+                        fontSize: 38,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white,
+                        height: 1.0,
+                      ),
                     ),
                     const SizedBox(height: 4),
-                    GoopText('(${_myDice.join("-")})', style: const TextStyle(fontSize: 11, color: Colors.white38)),
+                    GoopText(
+                      '(${_myDice.join("-")})',
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.white38,
+                      ),
+                    ),
                   ],
                 ),
               ),
               if (_peerScore != null) ...[
                 const GoopText(
                   'VS',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Colors.white24),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white24,
+                  ),
                 ),
                 // Player 2 (Peer)
                 Expanded(
                   child: Column(
                     children: [
-                      const Icon(Icons.person_outline, color: Colors.pinkAccent, size: 24),
+                      const Icon(
+                        Icons.person_outline,
+                        color: Colors.pinkAccent,
+                        size: 24,
+                      ),
                       const SizedBox(height: 4),
                       GoopText(
                         (_mp.peerNickname ?? 'Partner').toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70),
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         '$_peerScore',
-                        style: const TextStyle(fontSize: 38, fontWeight: FontWeight.w900, color: Colors.white, height: 1.0),
+                        style: const TextStyle(
+                          fontSize: 38,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.white,
+                          height: 1.0,
+                        ),
                       ),
                       const SizedBox(height: 4),
-                      GoopText('(${_peerDice?.join("-") ?? ""})', style: const TextStyle(fontSize: 11, color: Colors.white38)),
+                      GoopText(
+                        '(${_peerDice?.join("-") ?? ""})',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.white38,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -621,20 +752,42 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
               style: ElevatedButton.styleFrom(
                 backgroundColor: f.primary,
                 foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: const GoopText('ROLL AGAIN', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+              child: const GoopText(
+                'ROLL AGAIN',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
+              ),
             )
           else
             OutlinedButton(
               onPressed: () => Navigator.pop(context),
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 12,
+                ),
                 side: const BorderSide(color: Colors.white24),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: const GoopText('CLOSE', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700)),
+              child: const GoopText(
+                'CLOSE',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ),
         ],
       );
@@ -659,12 +812,21 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
               child: ElevatedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.casino_outlined, size: 20),
-                label: const GoopText('ROLL THE DICE!', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1.0)),
+                label: const GoopText(
+                  'ROLL THE DICE!',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.0,
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: f.primary,
                   foregroundColor: Colors.black,
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
             ),
@@ -683,7 +845,8 @@ class DiceWidget extends StatefulWidget {
   final DiceStyle style;
   final VoidCallback? onTap;
 
-  const DiceWidget({super.key, 
+  const DiceWidget({
+    super.key,
     required this.value,
     required this.isRolling,
     required this.infiniteController,
@@ -696,7 +859,8 @@ class DiceWidget extends StatefulWidget {
   State<DiceWidget> createState() => DiceWidgetState();
 }
 
-class DiceWidgetState extends State<DiceWidget> with SingleTickerProviderStateMixin {
+class DiceWidgetState extends State<DiceWidget>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _impactController;
 
   @override
@@ -732,35 +896,49 @@ class DiceWidgetState extends State<DiceWidget> with SingleTickerProviderStateMi
         padding: const EdgeInsets.all(14),
         color: Colors.transparent,
         child: AnimatedBuilder(
-          animation: Listenable.merge([widget.infiniteController, _impactController]),
+          animation: Listenable.merge([
+            widget.infiniteController,
+            _impactController,
+          ]),
           builder: (context, child) {
             final t = widget.infiniteController.value;
             final impact = _impactController.value;
 
             // Compute 3D rotation tumbling
-            final rotX = widget.isRolling ? (t * (4 + widget.index * 2) * math.pi) : 0.0;
-            final rotY = widget.isRolling ? (t * (3 + widget.index * 3) * math.pi) : 0.0;
-            final rotZ = widget.isRolling ? (t * (2 + widget.index * 4) * math.pi) : 0.0;
+            final rotX =
+                widget.isRolling ? (t * (4 + widget.index * 2) * math.pi) : 0.0;
+            final rotY =
+                widget.isRolling ? (t * (3 + widget.index * 3) * math.pi) : 0.0;
+            final rotZ =
+                widget.isRolling ? (t * (2 + widget.index * 4) * math.pi) : 0.0;
 
             // Vertical floating/bobbing during roll to look organic
-            final double bobY = widget.isRolling ? (math.sin(t * 2 * math.pi + widget.index * 1.5) * 8.0) : 0.0;
+            final double bobY =
+                widget.isRolling
+                    ? (math.sin(t * 2 * math.pi + widget.index * 1.5) * 8.0)
+                    : 0.0;
 
             // Rapid cycling face value while rolling
-            final faceVal = widget.isRolling ? ((widget.index + (t * 40).round()) % 6 + 1) : widget.value;
+            final faceVal =
+                widget.isRolling
+                    ? ((widget.index + (t * 40).round()) % 6 + 1)
+                    : widget.value;
 
             // Impact pop scale (up to 1.35x and bounces back quickly)
-            final double scale = widget.isRolling 
-                ? 1.0 
-                : 1.0 + math.sin(impact * math.pi) * 0.35;
+            final double scale =
+                widget.isRolling
+                    ? 1.0
+                    : 1.0 + math.sin(impact * math.pi) * 0.35;
 
             return Transform(
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.0018) // 3D projection
-                ..translate(0.0, bobY)
-                ..scale(scale)
-                ..rotateX(rotX)
-                ..rotateY(rotY)
-                ..rotateZ(rotZ),
+              transform:
+                  Matrix4.identity()
+                    ..setEntry(3, 2, 0.0018) // 3D projection
+                    ..translate(0.0, bobY)
+                    ..scale(scale)
+                    ..rotateX(rotX)
+                    ..rotateY(rotY)
+                    ..rotateZ(rotZ),
               alignment: Alignment.center,
               child: Container(
                 width: 72,
