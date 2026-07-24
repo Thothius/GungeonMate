@@ -266,24 +266,6 @@ class _PeriodicTileState extends State<PeriodicTile>
     return 'Item';
   }
 
-  String get _typeTagCompacted {
-    final full = _typeTag;
-    if (widget.wideMode) return full;
-    switch (full) {
-      case 'Companion': return 'Comp';
-      case 'Passive': return 'Pass';
-      case 'Active': return 'Act';
-      case 'Explosive': return 'Expl';
-      case 'Shotgun': return 'Shtg';
-      case 'Pistol': return 'Pist';
-      case 'Rifle': return 'Rifl';
-      case 'Charge': return 'Chrg';
-      case 'Semiauto': return 'Semi';
-      case 'Automatic': return 'Auto';
-      default: return full;
-    }
-  }
-
   Color _typeColor() {
     if (widget.gun != null) {
       final cls = widget.gun!.gunClass.toUpperCase();
@@ -613,7 +595,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                           assetPath: _iconPath,
                           fallback: isGun ? Icons.gps_fixed : Icons.extension,
                           quality: _quality,
-                          size: 34,
+                          size: 39,
                           showRing: false,
                         ),
                       ),
@@ -728,7 +710,8 @@ class _PeriodicTileState extends State<PeriodicTile>
                                         ? Icons.flash_on
                                         : Icons.inventory_2_outlined),
                                 quality: _quality,
-                                size: 58,
+                                size: 66,
+                                showRing: false,
                               ),
                             ),
                           ),
@@ -748,11 +731,12 @@ class _PeriodicTileState extends State<PeriodicTile>
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            if (_typeTagCompacted.isNotEmpty)
+                            if (_typeTag.isNotEmpty)
                               Container(
+                                width: 72,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 5,
-                                  vertical: 1,
+                                  horizontal: 4,
+                                  vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
                                   color: _typeColor().withValues(alpha: 0.18),
@@ -762,17 +746,19 @@ class _PeriodicTileState extends State<PeriodicTile>
                                     width: 0.7,
                                   ),
                                 ),
-                                child: GoopText(
-                                  _typeTagCompacted,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.visible,
-                                  softWrap: false,
-                                  style: TextStyle(
-                                    fontSize: 8.5,
-                                    fontWeight: FontWeight.w700,
-                                    color: _typeColor(),
-                                    letterSpacing: 0.2,
-                                    height: 1.1,
+                                alignment: Alignment.center,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: GoopText(
+                                    _typeTag,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      fontSize: 8.5,
+                                      fontWeight: FontWeight.w700,
+                                      color: _typeColor(),
+                                      letterSpacing: 0.2,
+                                      height: 1.1,
+                                    ),
                                   ),
                                 ),
                               )

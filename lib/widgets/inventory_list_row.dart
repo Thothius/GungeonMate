@@ -173,6 +173,7 @@ class _InventoryListRowState extends State<InventoryListRow>
                     : Icons.inventory_2_outlined,
                 quality: _quality,
                 size: 48,
+                showRing: false,
               ),
               const SizedBox(width: 12),
               Expanded(

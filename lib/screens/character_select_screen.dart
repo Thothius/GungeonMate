@@ -183,7 +183,14 @@ class _CharacterCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Center(child: _buildCardArt()),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Transform.scale(
+                      scale: 1.35,
+                      alignment: Alignment.bottomCenter,
+                      child: _buildCardArt(),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -26,27 +26,29 @@ class GameIcon extends StatelessWidget {
         ? Colors.white24
         : QualityBadge.colorFor(quality);
 
+    final imgScale = showRing ? 0.72 : 0.83;
+    final iconScale = showRing ? 0.58 : 0.67;
     final inner = (assetPath.isNotEmpty && assetPath.startsWith('assets/'))
         ? Image.asset(
             assetPath,
-            width: size * 0.72,
-            height: size * 0.72,
+            width: size * imgScale,
+            height: size * imgScale,
             fit: BoxFit.contain,
             filterQuality: FilterQuality.none, // crisp pixel art
             errorBuilder: (_, __, ___) =>
-                Icon(fallback, size: size * 0.58, color: Colors.white),
+                Icon(fallback, size: size * iconScale, color: Colors.white),
           )
         : (assetPath.isNotEmpty && assetPath.startsWith('http'))
             ? Image.network(
                 assetPath,
-                width: size * 0.72,
-                height: size * 0.72,
+                width: size * imgScale,
+                height: size * imgScale,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.none, // crisp pixel art
                 errorBuilder: (_, __, ___) =>
-                    Icon(fallback, size: size * 0.58, color: Colors.white),
+                    Icon(fallback, size: size * iconScale, color: Colors.white),
               )
-            : Icon(fallback, size: size * 0.58, color: Colors.white);
+            : Icon(fallback, size: size * iconScale, color: Colors.white);
 
     if (!showRing) {
       return SizedBox(width: size, height: size, child: Center(child: inner));

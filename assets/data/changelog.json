@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.8.21",
+    "title": "⛩️ Shrine Picker UX",
+    "date": "July 24, 2026",
+    "items": [
+      "Added a USE button to each shrine row for one-tap activation.",
+      "Top-right shrines-used counter is now larger, tappable, and opens a popup log of used shrines with their effects and use counts.",
+      "Shrine activation sheet now emphasizes the main effect and breaks complex effects (especially Dice) into readable cards and bullet points.",
+      "End-active-run dialog is now larger (~15%) with bigger buttons, larger text, and a clearer warning icon.",
+      "Character picker gungeoneer art is now ~35% larger and bottom-aligned inside cards, filling the rectangular panel better."
+    ]
+  },
+  {
     "version": "v1.8.20",
     "title": "⬛ Minimalist Theme — Metallic White, Black & Grey",
     "date": "July 24, 2026",

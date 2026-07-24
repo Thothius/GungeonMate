@@ -4,88 +4,7 @@ import '../../providers/run_provider.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/asset_paths.dart';
-import '../../utils/fast_route.dart';
 import '../quality_badge.dart';
-
-class DebugTab extends StatelessWidget {
-  const DebugTab({super.key});
-
-  // Names exactly matching _DashboardSwiper trigger conditions.
-  static const _specialGunNames = [
-    'Gunderfury', 'Triple Gun', 'Evolver', 'Shellegun',
-    'Chamber Gun', 'Boxing Glove', 'Polaris', 'Gunther',
-  ];
-  static const _specialItemNames = [
-    'Ser Junkan', 'Platinum Bullets', 'Iron Coin', 'Spice',
-    'Metronome', 'Sprun', 'Cigarettes', 'Gun Soul',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final hasRun = p.runState.main.character != null;
-
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Icon(Icons.bug_report_rounded, size: 48, color: Colors.greenAccent.withValues(alpha: 0.6)),
-        const SizedBox(height: 12),
-        const GoopText(
-          'DEBUG MODE',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, letterSpacing: 1.5, color: Colors.greenAccent),
-        ),
-        const SizedBox(height: 6),
-        GoopText(
-          'Testing tools for dashboards and special item interactions.',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.5)),
-        ),
-        const SizedBox(height: 24),
-        _utilTile(
-          context,
-          icon: Icons.grid_view_rounded,
-          title: 'Special Items & Guns',
-          subtitle: 'Spawn all 18 dashboard-triggering items/guns into your inventory',
-          onTap: hasRun
-              ? () {
-                  Haptics.selection();
-                  Navigator.push(context, fastRoute(const SpecialItemsGridScreen()));
-                }
-              : null,
-        ),
-        if (!hasRun) ...[
-          const SizedBox(height: 12),
-          GoopText(
-            'Start a run first to use debug tools.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 10, color: Colors.orangeAccent.withValues(alpha: 0.7)),
-          ),
-        ],
-      ],
-    );
-  }
-
-  Widget _utilTile(BuildContext context, {required IconData icon, required String title, required String subtitle, VoidCallback? onTap}) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
-      ),
-      child: ListTile(
-        dense: true,
-        visualDensity: VisualDensity.compact,
-        leading: Icon(icon, color: Colors.greenAccent, size: 20),
-        title: GoopText(title, style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white)),
-        subtitle: GoopText(subtitle, style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.54))),
-        trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Colors.white38),
-        onTap: onTap,
-      ),
-    );
-  }
-}
 
 // =============================================================================
 // Special Items Grid — 4-column picker with add/remove + Add All
@@ -93,6 +12,15 @@ class DebugTab extends StatelessWidget {
 
 class SpecialItemsGridScreen extends StatefulWidget {
   const SpecialItemsGridScreen({super.key});
+
+  static const specialGunNames = [
+    'Gunderfury', 'Triple Gun', 'Evolver', 'Shellegun',
+    'Chamber Gun', 'Boxing Glove', 'Polaris', 'Gunther',
+  ];
+  static const specialItemNames = [
+    'Ser Junkan', 'Platinum Bullets', 'Iron Coin', 'Spice',
+    'Metronome', 'Sprun', 'Cigarettes', 'Gun Soul',
+  ];
 
   @override
   State<SpecialItemsGridScreen> createState() => SpecialItemsGridScreenState();
@@ -108,7 +36,7 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
 
     final entries = <_SpecialEntry>[];
 
-    for (final name in DebugTab._specialGunNames) {
+    for (final name in SpecialItemsGridScreen.specialGunNames) {
       final gun = p.gunByName(name);
       entries.add(_SpecialEntry(
         name: name,
@@ -118,7 +46,7 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
         quality: gun?.quality ?? '',
       ));
     }
-    for (final name in DebugTab._specialItemNames) {
+    for (final name in SpecialItemsGridScreen.specialItemNames) {
       final item = p.itemByName(name);
       entries.add(_SpecialEntry(
         name: name,
@@ -147,26 +75,26 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
             onPressed: () {
               Haptics.selection();
               if (allOwned) {
-                for (final name in DebugTab._specialGunNames) {
+                for (final name in SpecialItemsGridScreen.specialGunNames) {
                   final gun = p.gunByName(name);
                   if (gun != null && ownedGunNames.contains(name.toLowerCase())) {
                     p.removeGun(gun, force: true);
                   }
                 }
-                for (final name in DebugTab._specialItemNames) {
+                for (final name in SpecialItemsGridScreen.specialItemNames) {
                   final item = p.itemByName(name);
                   if (item != null && ownedItemNames.contains(name.toLowerCase())) {
                     p.removeItem(item, force: true);
                   }
                 }
               } else {
-                for (final name in DebugTab._specialGunNames) {
+                for (final name in SpecialItemsGridScreen.specialGunNames) {
                   final gun = p.gunByName(name);
                   if (gun != null && !ownedGunNames.contains(name.toLowerCase())) {
                     p.addGun(gun, force: true);
                   }
                 }
-                for (final name in DebugTab._specialItemNames) {
+                for (final name in SpecialItemsGridScreen.specialItemNames) {
                   final item = p.itemByName(name);
                   if (item != null && !ownedItemNames.contains(name.toLowerCase())) {
                     p.addItem(item, force: true);

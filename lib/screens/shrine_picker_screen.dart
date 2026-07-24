@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'dart:math' as math;
 
 import '../providers/run_provider.dart';
 import '../models/shrine.dart';
+import '../services/haptics.dart';
 
 /// Resolves the correct shrine icon asset, applying bundled art overrides
 /// (updated Ammo/Angel shrine graphics) over the default data-driven icon.
@@ -50,6 +52,7 @@ class ShrinePickerScreen extends StatelessWidget {
     for (final s in provider.runState.shrinesUsed) {
       used[s] = (used[s] ?? 0) + 1;
     }
+    final double currentCurse = provider.runState.totalCurse;
     final List<Shrine> shrines = List.from(rawShrines)..sort((a, b) {
       // Cleanse shrine floats to top (most commonly needed).
       final aCleanse = a.name.toLowerCase().contains('cleanse');
@@ -69,30 +72,41 @@ class ShrinePickerScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         title: const GoopText('Use a Shrine'),
         actions: [
-          if (provider.runState.shrinesUsed.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Center(
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Center(
+              child: InkWell(
+                onTap: () => _showUsedShrinesLog(context, provider),
+                borderRadius: BorderRadius.circular(24),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
+                      horizontal: 14, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.amber.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(24),
                     border: Border.all(
                         color: Colors.amber.withValues(alpha: 0.4)),
                   ),
-                  child: GoopText(
-                    '${provider.runState.shrinesUsed.length} used',
-                    style: const TextStyle(
-                      color: Colors.amber,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.temple_buddhist_outlined,
+                          color: Colors.amber, size: 16),
+                      const SizedBox(width: 6),
+                      GoopText(
+                        '${provider.runState.shrinesUsed.length} used',
+                        style: const TextStyle(
+                          color: Colors.amber,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
+          ),
         ],
       ),
       body: shrines.isEmpty
@@ -106,6 +120,13 @@ class ShrinePickerScreen extends StatelessWidget {
                   shrine: s,
                   usageCount: used[s.name] ?? 0,
                   onTap: () => _openActivationSheet(context, s),
+                  onUse: s.name.toLowerCase() == 'hero' && currentCurse >= 9
+                      ? null
+                      : () {
+                          Haptics.selection();
+                          final result = provider.applyShrine(s);
+                          _showShrineResult(context, result);
+                        },
                 ).animate().fadeIn(
                       duration: 200.ms,
                       delay: (i * 30).ms,
@@ -158,11 +179,13 @@ class _ShrineListTile extends StatelessWidget {
   final Shrine shrine;
   final int usageCount;
   final VoidCallback onTap;
+  final VoidCallback? onUse;
 
   const _ShrineListTile({
     required this.shrine,
     required this.usageCount,
     required this.onTap,
+    this.onUse,
   });
 
   @override
@@ -321,13 +344,29 @@ class _ShrineListTile extends StatelessWidget {
                 ),
               ),
 
-              // Chevron
+              // Use button
               Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.white.withValues(alpha: 0.25),
-                  size: 22,
+                padding: const EdgeInsets.only(left: 8, top: 4),
+                child: FilledButton(
+                  onPressed: onUse,
+                  style: FilledButton.styleFrom(
+                    backgroundColor:
+                        onUse == null ? Colors.white24 : Colors.amber,
+                    foregroundColor: Colors.black,
+                    disabledBackgroundColor: Colors.white12,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 6),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    minimumSize: Size.zero,
+                  ),
+                  child: const GoopText(
+                    'USE',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.6,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -536,11 +575,8 @@ class ShrineActivationSheet extends StatelessWidget {
                   const SizedBox(height: 14),
                   const _SectionHeader(
                       icon: Icons.auto_awesome, title: 'EFFECT'),
-                  const SizedBox(height: 6),
-                  GoopText(
-                    shrine.effect,
-                    style: const TextStyle(fontSize: 13.5, height: 1.4),
-                  ),
+                  const SizedBox(height: 10),
+                  _buildEffectBody(shrine),
                   const SizedBox(height: 16),
                   _WillApplyCard(shrine: shrine, currentCurse: currentCurse),
                   if (heroBlocked) ...[
@@ -578,7 +614,7 @@ class ShrineActivationSheet extends StatelessWidget {
                           : () {
                               final result = provider.applyShrine(shrine);
                               Navigator.pop(context);
-                              _showResultSnackbar(parentContext, result);
+                              _showShrineResult(parentContext, result);
                             },
                       style: FilledButton.styleFrom(
                         padding:
@@ -607,57 +643,6 @@ class ShrineActivationSheet extends StatelessWidget {
     );
   }
 
-  void _showResultSnackbar(BuildContext c, ShrineApplyResult r) {
-    final lines = <String>[];
-    if (r.applied.isNotEmpty) lines.add(r.applied.join(' · '));
-    if (r.manual.isNotEmpty) lines.add(r.manual.first);
-    final label = lines.isEmpty
-        ? '${r.shrine.name} marked as used'
-        : '${r.shrine.name}: ${lines.join(' · ')}';
-    ScaffoldMessenger.of(c).showSnackBar(
-      SnackBar(
-        content: GoopText(label),
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(milliseconds: 2600),
-        action: r.manual.length > 1
-            ? SnackBarAction(
-                label: 'Details',
-                onPressed: () {
-                  showDialog(
-                    context: c,
-                    builder: (_) => AlertDialog(
-                      title: GoopText('${r.shrine.name} · what to do'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (r.applied.isNotEmpty) ...[
-                            const GoopText('Auto-applied:',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w700)),
-                            for (final a in r.applied) GoopText('  · $a'),
-                            const SizedBox(height: 10),
-                          ],
-                          const GoopText('You do it in-game:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700)),
-                          for (final m in r.manual) GoopText('  · $m'),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(c),
-                          child: const GoopText('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              )
-            : null,
-      ),
-    );
-  }
 }
 
 class _SectionHeader extends StatelessWidget {
@@ -815,6 +800,413 @@ class _BlockedNotice extends StatelessWidget {
             child: GoopText(
               message,
               style: const TextStyle(fontSize: 13, height: 1.35),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Top-level shrine UX helpers
+void _showShrineResult(BuildContext c, ShrineApplyResult r) {
+  final lines = <String>[];
+  if (r.applied.isNotEmpty) lines.add(r.applied.join(' · '));
+  if (r.manual.isNotEmpty) lines.add(r.manual.first);
+  final label = lines.isEmpty
+      ? '${r.shrine.name} marked as used'
+      : '${r.shrine.name}: ${lines.join(' · ')}';
+  ScaffoldMessenger.of(c).showSnackBar(
+    SnackBar(
+      content: GoopText(label),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(milliseconds: 2600),
+      action: r.manual.length > 1
+          ? SnackBarAction(
+              label: 'Details',
+              onPressed: () {
+                showDialog(
+                  context: c,
+                  builder: (_) => AlertDialog(
+                    title: GoopText('${r.shrine.name} · what to do'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (r.applied.isNotEmpty) ...[
+                          const GoopText('Auto-applied:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w700)),
+                          for (final a in r.applied) GoopText('  · $a'),
+                          const SizedBox(height: 10),
+                        ],
+                        const GoopText('You do it in-game:',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700)),
+                        for (final m in r.manual) GoopText('  · $m'),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(c),
+                        child: const GoopText('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            )
+          : null,
+    ),
+  );
+}
+
+void _showUsedShrinesLog(BuildContext c, RunProvider p) {
+  final used = p.runState.shrinesUsed;
+  final counts = <String, int>{};
+  for (final name in used) {
+    counts[name] = (counts[name] ?? 0) + 1;
+  }
+  final names = counts.keys.toList();
+
+  showDialog(
+    context: c,
+    builder: (c) => AlertDialog(
+      backgroundColor: const Color(0xFF1E1E22),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      title: Row(
+        children: [
+          const Icon(Icons.temple_buddhist, color: Colors.amber),
+          const SizedBox(width: 8),
+          GoopText(
+            used.isEmpty ? 'Shrines used' : '${used.length} shrines used',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      ),
+      content: Container(
+        width: double.maxFinite,
+        constraints: BoxConstraints(
+          maxHeight: math.min(
+            420,
+            MediaQuery.of(c).size.height * 0.5,
+          ),
+        ),
+        child: used.isEmpty
+            ? const Center(
+                child: GoopText('No shrines used yet this run.'),
+              )
+            : ListView.builder(
+                itemCount: names.length,
+                itemBuilder: (c, i) {
+                  final name = names[i];
+                  final count = counts[name]!;
+                  final s = p.shrineByName(name);
+                  return Card(
+                    color: Colors.amber.withValues(alpha: 0.06),
+                    elevation: 0,
+                    margin: const EdgeInsets.only(bottom: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(
+                        color: Colors.amber.withValues(alpha: 0.2),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: GoopText(
+                                  name,
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ),
+                              if (count > 1)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Colors.amber.withValues(alpha: 0.2),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: GoopText(
+                                    'x$count',
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.amber,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          if (s != null)
+                            GoopText(
+                              _shortEffect(s),
+                              style: TextStyle(
+                                fontSize: 12.5,
+                                height: 1.35,
+                                color: Colors.white.withValues(alpha: 0.75),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(c),
+          child: const GoopText('Close'),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildEffectBody(Shrine shrine) {
+  if (shrine.name.toLowerCase() == 'dice') {
+    return _DiceEffectBody(effect: shrine.effect);
+  }
+  return _GenericEffectBody(effect: shrine.effect);
+}
+
+Widget _GenericEffectBody({required String effect}) {
+  final sentences = effect
+      .split('. ')
+      .map((s) => s.trim())
+      .where((s) => s.isNotEmpty)
+      .toList();
+
+  if (sentences.isEmpty) return const SizedBox.shrink();
+
+  for (var i = 0; i < sentences.length; i++) {
+    if (!sentences[i].endsWith('.') &&
+        !sentences[i].endsWith('!') &&
+        !sentences[i].endsWith('?')) {
+      sentences[i] = '${sentences[i]}.';
+    }
+  }
+
+  final main = sentences.first;
+  final rest = sentences.length > 1 ? sentences.sublist(1) : <String>[];
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.amber.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.amber.withValues(alpha: 0.3),
+          ),
+        ),
+        child: GoopText(
+          main,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w800,
+            height: 1.35,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      const SizedBox(height: 10),
+      for (final s in rest)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '•  ',
+                style: TextStyle(
+                  color: Colors.amber,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  s,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    height: 1.35,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+    ],
+  );
+}
+
+const _diceEffectNames = [
+  'Renewed',
+  'Pained',
+  'Bolstered',
+  'Enfeebled',
+  'Paid',
+  'Robbed',
+  'Cleansed',
+  'Cursed',
+  'Blanked',
+  'De-Blanked',
+  'Gift',
+  'Disarmed',
+  'Reloaded',
+  'Limited',
+  'Hasted',
+  'Unsteady',
+  'Shielded',
+  'Priceless',
+];
+
+Widget _DiceEffectBody({required String effect}) {
+  var text = effect;
+  if (text.startsWith('Good Effects Bad Effects ')) {
+    text = text.substring('Good Effects Bad Effects '.length);
+  }
+
+  final pattern = _diceEffectNames.map(RegExp.escape).join('|');
+  final re = RegExp(
+    r'(' + pattern + r')(.*?)(?=(' + pattern + r')|$)',
+    dotAll: true,
+  );
+  final matches = re.allMatches(text).toList();
+  final lastEnd = matches.isNotEmpty ? matches.last.end : 0;
+  final tail = text.substring(lastEnd).trim();
+  final notes = tail
+      .split('. ')
+      .map((s) => s.trim())
+      .where((s) => s.isNotEmpty)
+      .toList();
+
+  for (var i = 0; i < notes.length; i++) {
+    if (!notes[i].endsWith('.') &&
+        !notes[i].endsWith('!') &&
+        !notes[i].endsWith('?')) {
+      notes[i] = '${notes[i]}.';
+    }
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const GoopText(
+        'One positive and one negative effect:',
+        style: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w800,
+          color: Colors.white,
+        ),
+      ),
+      const SizedBox(height: 10),
+      for (var i = 0; i < matches.length; i++) ...[
+        _DiceEffectCard(
+          name: matches[i].group(1)!,
+          body: matches[i].group(2)!.trim(),
+          isGood: i.isEven,
+        ),
+        const SizedBox(height: 6),
+      ],
+      if (notes.isNotEmpty) ...[
+        const _SectionHeader(icon: Icons.info_outline, title: 'NOTES'),
+        const SizedBox(height: 6),
+        for (final n in notes)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '•  ',
+                  style: TextStyle(
+                    color: Colors.amber,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    n,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      height: 1.35,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    ],
+  );
+}
+
+class _DiceEffectCard extends StatelessWidget {
+  final String name;
+  final String body;
+  final bool isGood;
+  const _DiceEffectCard({
+    required this.name,
+    required this.body,
+    required this.isGood,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isGood ? Colors.lightGreenAccent : Colors.redAccent;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(8),
+        border: Border(
+          left: BorderSide(color: color, width: 3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+              color: color,
+              letterSpacing: 0.3,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            body,
+            style: const TextStyle(
+              fontSize: 13,
+              height: 1.35,
             ),
           ),
         ],

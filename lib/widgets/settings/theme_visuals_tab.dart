@@ -480,7 +480,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                 ),
               ),
               const SizedBox(height: 16),
-              ], // end if (_glowExpanded)
+              ], // end glow section
 
               // =============================================================
               // Inventory Layout Section (collapsible)
@@ -683,14 +683,6 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GoopText(
-                'CUSTOM DICE STYLE',
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.white54, letterSpacing: 1.0),
-              ),
-            ),
-            const SizedBox(height: 8),
             SwipePicker<CustomDiceType>(
               items: CustomDiceType.values,
               value: prefs.customDiceType,
@@ -768,7 +760,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
       case CustomDiceType.toxicOoze:
         return (const Color(0xFF102C13), const Color(0xFF00E676), const Color(0xFF00E676), const Color(0x3300E676));
       case CustomDiceType.themeDefault:
-        return (const Color(0xFF161413), flair.primary, flair.primary, flair.primary.withValues(alpha: 0.2));
+        return (const Color(0xFF161413), flair.primary, flair.primary, flair.primary.withValues(alpha: 0.3));
     }
   }
 

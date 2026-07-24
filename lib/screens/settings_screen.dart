@@ -6,9 +6,9 @@ import '../widgets/settings/run_tab.dart';
 import '../widgets/settings/app_tab.dart';
 
 /// Central control room for Gungeon Mate.
-/// - Tab 1: VISUALS — Theme, typography, particles, glow, wallpaper, inventory layout
+/// - Tab 1: VISUALS — Theme, typography, particles, glow, wallpaper, inventory layout, dice
 /// - Tab 2: RUN — Co-op, inventory maintenance, shrines, event log, end run
-/// - Tab 3: APP — Language, dialogue, dice, changelog, data reset
+/// - Tab 3: APP — Dialogue, changelog, dev tools, data reset
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 

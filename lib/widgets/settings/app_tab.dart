@@ -8,7 +8,6 @@ import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/character_select_screen.dart';
 import '../../utils/fast_route.dart';
-import 'swipe_picker.dart';
 import 'debug_tab.dart';
 
 class AppTab extends StatefulWidget {
@@ -37,11 +36,6 @@ class AppTabState extends State<AppTab> {
           // Dialogue
           _sectionHeader('DIALOGUE'),
           _buildDialogueCard(flair),
-          const SizedBox(height: 12),
-
-          // Dice
-          _sectionHeader('DICE'),
-          _buildDiceCard(flair),
           const SizedBox(height: 12),
 
           // Changelog
@@ -221,63 +215,6 @@ class AppTabState extends State<AppTab> {
               14,
               flair.headlineStat,
               (v) => VisualPrefs.setDialogueTextSpeedMs(v.toInt()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDiceCard(ThemeFlair flair) {
-    final prefs = VisualPrefs.notifier.value;
-    return Card(
-      color: flair.card.withValues(alpha: 0.92),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: GoopText(
-                'CUSTOM DICE STYLE',
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.white54, letterSpacing: 1.0),
-              ),
-            ),
-            const SizedBox(height: 8),
-            SwipePicker<CustomDiceType>(
-              items: CustomDiceType.values,
-              value: prefs.customDiceType,
-              onChanged: (t) => VisualPrefs.setCustomDiceType(t),
-              height: 56,
-              itemBuilder: (type, isSelected) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? flair.card.withValues(alpha: 0.9)
-                      : flair.card.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
-                    width: isSelected ? 1.5 : 1.0,
-                  ),
-                ),
-                child: Center(
-                  child: GoopText(
-                    type.label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      color: isSelected ? Colors.white : Colors.white54,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-              ),
             ),
           ],
         ),
