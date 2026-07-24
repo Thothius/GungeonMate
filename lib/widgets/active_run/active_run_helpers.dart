@@ -432,17 +432,36 @@ class HeaderMenu extends StatelessWidget {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-        title: GoopText(isSidekick ? 'End Run & Disconnect?' : 'End Run?'),
-        content: GoopText(isSidekick
-            ? 'This will disconnect you from the host, reset the current session, and return you to the main menu.'
-            : 'This resets the current run and returns to the main menu.'),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
+        titlePadding: const EdgeInsets.fromLTRB(28, 28, 28, 12),
+        contentPadding: const EdgeInsets.fromLTRB(28, 12, 28, 24),
+        actionsPadding: const EdgeInsets.fromLTRB(28, 12, 28, 28),
+        icon: const Icon(Icons.warning_rounded, color: Colors.redAccent, size: 32),
+        title: GoopText(
+          isSidekick ? 'End Run & Disconnect?' : 'End Run?',
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+        ),
+        content: GoopText(
+          isSidekick
+              ? 'This will disconnect you from the host, reset the current session, and return you to the main menu.'
+              : 'This resets the current run and returns to the main menu.',
+          style: const TextStyle(fontSize: 15, height: 1.45),
+        ),
         actions: [
           TextButton(
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+              textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+            ),
             onPressed: () => Navigator.pop(c),
             child: const GoopText('Cancel'),
           ),
           FilledButton.tonal(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.red.shade900,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+              textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
+            ),
             onPressed: () async {
               Navigator.pop(c);
               if (session.isActive) {
