@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.8.38",
+    "title": "❤️ Huntress Health Stats Toggle",
+    "date": "July 24, 2026",
+    "items": [
+      "Huntress dashboard now has an ALL/HP toggle button next to the header label.",
+      "ALL mode shows the full pickup weight distribution (heart, key, shield, box, blank).",
+      "HP mode shows health-focused stats: heart drop chance per room, lost health without dog, heart weight, and rooms needed per heart drop.",
+      "Toggle uses animated container with filled/outlined heart icon for clear visual state.",
+      "Special Panels toggle icon changed to view_agenda (stacked panels) for better recognizability."
+    ]
+  },
+  {
     "version": "v1.8.22",
     "title": "🎨 UI Polish + Bug Fixes + New App Logo",
     "date": "July 24, 2026",

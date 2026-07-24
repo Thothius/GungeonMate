@@ -374,7 +374,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.8.22',
+                    'v1.8.38',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -442,7 +442,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                         Icon(Icons.history_edu_rounded, size: 16, color: Color(0xFFFFD54F)),
                         SizedBox(width: 7),
                         GoopText(
-                          'Changelog (v1.8.22)',
+                          'Changelog (v1.8.38)',
                           style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -496,7 +496,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.8.22 — UI Polish + Bug Fixes + New App Logo',
+                            'v1.8.38 — Huntress Health Stats + Item Detail Redesign + UI Polish',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
