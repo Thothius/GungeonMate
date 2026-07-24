@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/elemental_tagger.dart';
 import '../game_icon.dart';
+import '../quality_badge.dart';
 
 class ItemDetailHeader extends StatelessWidget {
   final String name;
@@ -17,6 +19,7 @@ class ItemDetailHeader extends StatelessWidget {
   final int synergyCount;
   final double curse;
   final double coolness;
+  final Set<ElementKind> elements;
   const ItemDetailHeader({
     super.key,
     required this.name,
@@ -31,6 +34,7 @@ class ItemDetailHeader extends StatelessWidget {
     required this.synergyCount,
     required this.curse,
     required this.coolness,
+    required this.elements,
   });
 
   @override
@@ -103,13 +107,31 @@ class ItemDetailHeader extends StatelessWidget {
                 ),
               ],
               const SizedBox(height: 14),
+              // Quality / rank badge
+              if (quality.isNotEmpty)
+                QualityBadge(quality: quality, size: 22),
+              // Type + elemental effects — fully written out below the rank tag
+              const SizedBox(height: 10),
+              _TypeAndElementsRow(
+                subtitle: subtitle,
+                isGun: isGun,
+                isActive: isActive,
+                elements: elements,
+              ),
+              const SizedBox(height: 14),
+              // Metadata chips: chest, synergies, sell, curse, coolness
               Wrap(
                 alignment: WrapAlignment.center,
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  if (chestColor.isNotEmpty)
-                    _ChestChip(chestColor: chestColor),
+                  if (chestColor.isNotEmpty) _ChestChip(chestColor: chestColor),
+                  MetadataChip(
+                    icon: Icons.hub_outlined,
+                    label: 'Synergies',
+                    value: '$synergyCount',
+                    color: Colors.cyanAccent,
+                  ),
                   if (sellPrice.isNotEmpty)
                     MetadataChip(
                       icon: Icons.payments_outlined,
@@ -117,12 +139,6 @@ class ItemDetailHeader extends StatelessWidget {
                       value: sellPrice,
                       color: Colors.yellowAccent,
                     ),
-                  MetadataChip(
-                    icon: Icons.hub_outlined,
-                    label: 'Synergies',
-                    value: '$synergyCount',
-                    color: Colors.cyanAccent,
-                  ),
                   if (curse > 0)
                     MetadataChip(
                       icon: Icons.mood_bad_outlined,
@@ -146,6 +162,90 @@ class ItemDetailHeader extends StatelessWidget {
 
   static String _fmtStat(double v) =>
       v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
+}
+
+class _TypeAndElementsRow extends StatelessWidget {
+  final String subtitle;
+  final bool isGun;
+  final bool isActive;
+  final Set<ElementKind> elements;
+
+  const _TypeAndElementsRow({
+    required this.subtitle,
+    required this.isGun,
+    required this.isActive,
+    required this.elements,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final typeLabel = isGun
+        ? subtitle.toUpperCase()
+        : (isActive ? 'ACTIVE' : (subtitle.isNotEmpty ? subtitle.toUpperCase() : 'PASSIVE'));
+    final typeColor = isGun
+        ? Colors.deepOrangeAccent
+        : (isActive ? Colors.lightBlueAccent : Colors.lightGreenAccent);
+    final typeIcon = isGun
+        ? Icons.gps_fixed
+        : (isActive ? Icons.flash_on : Icons.inventory_2_outlined);
+
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 8,
+      runSpacing: 6,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: typeColor.withValues(alpha: 0.10),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: typeColor.withValues(alpha: 0.35), width: 0.8),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(typeIcon, size: 14, color: typeColor),
+              const SizedBox(width: 5),
+              GoopText(
+                typeLabel,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  color: typeColor,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+        for (final e in elements)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: e.color.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: e.color.withValues(alpha: 0.35), width: 0.8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(e.icon, size: 14, color: e.color),
+                const SizedBox(width: 5),
+                GoopText(
+                  e.label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
+                    color: e.color,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 class MetadataChip extends StatelessWidget {
@@ -177,15 +277,17 @@ class MetadataChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 14, color: color),
-          const SizedBox(width: 5),
-          GoopText(
-            '$label ',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: color.withValues(alpha: 0.85),
+          if (label.isNotEmpty) ...[
+            const SizedBox(width: 5),
+            GoopText(
+              '$label ',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: color.withValues(alpha: 0.85),
+              ),
             ),
-          ),
+          ],
           GoopText(
             value,
             style: const TextStyle(
