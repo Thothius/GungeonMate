@@ -6,6 +6,23 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.8.19 — Dice Roll UX: Cancel, Sparkles, and VS Overflow (July 24, 2026)
+**Build:** 74
+**APK:** `gungeon-mate-v1.8.19.apk`
+
+### Changes
+- **MpDiceCancel protocol** — new `MpDiceCancel` message, `MultiplayerSession.onDiceCancel` callback, and `sendDiceCancel()` outgoing operation. The incoming-challenge dialog in `active_run_screen.dart` now closes if the challenger cancels before the peer responds.
+- **Cancel-challenge UI** — `DiceRollDialog` shows a "CANCEL CHALLENGE" button while waiting for the peer, and `PopScope` now allows dismissal in the `challenging` state.
+- **Per-die sparkle positioning** — each `DiceWidget` receives a `GlobalKey`; `DiceRollDialog` uses these plus a particle-layer `GlobalKey` to convert die center from global to particle-local coordinates so sparkles spawn exactly on the tapped die.
+- **VS score overflow** — finished-duel score `Text` widgets are wrapped in `FittedBox` and nickname/dice join strings use `maxLines: 1` + `TextOverflow.ellipsis` to avoid clipping on narrow screens.
+- **Analyzer cleanup** — added missing curly braces to 7 multi-line `if` bodies in `multiplayer_session.dart`; `flutter analyze` on modified files is clean.
+
+### Verification
+- `flutter analyze lib/models/multiplayer_messages.dart lib/services/multiplayer_session.dart lib/screens/active_run_screen.dart lib/widgets/active_run/dice_roll.dart` — 0 issues
+- `git status` clean before release build
+
+---
+
 ## v1.8.0 — Codebase Reorg: 5 Megafiles Split into 39 Widget Files (July 23, 2026)
 **Build:** 73
 

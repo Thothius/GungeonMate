@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.8.19",
+    "title": "🎲 Dice Roll UX: Cancel, Sparkles, and VS Overflow",
+    "date": "July 24, 2026",
+    "items": [
+      "Added MpDiceCancel protocol and cancel-challenge button for pending dice challenges, so challengers can withdraw before the peer accepts.",
+      "Sparkle particles now spawn at each die's exact on-screen position using per-die GlobalKeys and a particle-layer GlobalKey.",
+      "VS score row in the finished duel state uses FittedBox + overflow to prevent nickname/score clipping on narrow screens.",
+      "Minor curly-braces cleanup in multiplayer_session.dart to keep analyzer info warnings at zero."
+    ]
+  },
+  {
     "version": "v1.8.0",
     "title": "🏗️ Codebase Reorg: 5 Megafiles Split into 39 Widget Files",
     "date": "July 23, 2026",
