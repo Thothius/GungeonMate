@@ -177,7 +177,7 @@ extension ParticlePresetX on ParticlePreset {
             rotate: true,
           ),
         ParticlePreset.cosmicDust => PresetConfig(
-            colors: [const Color(0xFF1A237E), const Color(0xFF311B92), const Color(0xFF00838F), const Color(0xFF1DE9F6)],
+            colors: [const Color(0xFF5C6BC0), const Color(0xFF7E57C2), const Color(0xFF26C6DA), const Color(0xFF80DEEA)],
             shape: ParticleShape.circle,
             sizeMin: 1.0, sizeMax: 3.5,
             speedMin: 2.0, speedMax: 8.0,

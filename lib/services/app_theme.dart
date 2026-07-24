@@ -702,7 +702,9 @@ enum AppThemeMode {
       final remixes = kThemeRemixes[this]!;
       final idx = AppTheme.remixFor(this);
       if (idx > 0 && idx < remixes.length) {
-        return _hueShiftFlair(_staticFlair!, remixes[idx].hueShift);
+        final remix = remixes[idx];
+        if (remix.flair != null) return remix.flair!;
+        return _hueShiftFlair(_staticFlair!, remix.hueShift);
       }
     }
     if (this == AppThemeMode.custom) {
@@ -1842,20 +1844,78 @@ ThemeFlair _hueShiftFlair(ThemeFlair f, double degrees) {
   );
 }
 
-/// Per-theme remix options. Each entry is `(label, hueShiftDegrees)`.
-/// Unicorn uses [UnicornPalette] instead — not listed here.
-const kThemeRemixes = <AppThemeMode, List<({String label, double hueShift})>>{
+/// A single remix variant. When [flair] is non-null it replaces the
+/// theme's static flair entirely; otherwise [hueShift] is applied.
+class ThemeRemix {
+  final String label;
+  final double hueShift;
+  final ThemeFlair? flair;
+  const ThemeRemix({required this.label, this.hueShift = 0, this.flair});
+}
+
+/// Per-theme remix options. Unicorn uses [UnicornPalette] instead.
+const kThemeRemixes = <AppThemeMode, List<ThemeRemix>>{
   AppThemeMode.forgeMaster: [
-    (label: 'Original', hueShift: 0),
-    (label: 'Ember', hueShift: 18),
-    (label: 'Ash', hueShift: -35),
-    (label: 'Magma', hueShift: 35),
+    ThemeRemix(label: 'Original'),
+    ThemeRemix(label: 'Ember', hueShift: 12),
+    ThemeRemix(label: 'Magma', hueShift: 30),
+    ThemeRemix(label: 'Inferno', hueShift: -12),
   ],
   AppThemeMode.robotsCore: [
-    (label: 'Original', hueShift: 0),
-    (label: 'Overclock', hueShift: 55),
-    (label: 'Rust', hueShift: -25),
-    (label: 'Plasma', hueShift: 175),
+    ThemeRemix(label: 'Original'),
+    ThemeRemix(label: 'Rust', hueShift: -25),
+    ThemeRemix(
+      label: 'Arc Flash',
+      flair: ThemeFlair(
+        scaffold: Color(0xFF080A12),
+        card: Color(0xFF0F1424),
+        primary: Color(0xFF42A5F5),
+        secondary: Color(0xFF90CAF9),
+        headlineStat: Color(0xFFE3F2FD),
+        bulletColor: Color(0xFF42A5F5),
+        bulletGlyph: '⚡',
+        tabularFigures: true,
+        numberSizeScale: 1.0,
+        numberWeight: FontWeight.w800,
+        chipRadius: 6,
+        cardRadius: 8,
+        cardBorderColor: Color(0x4442A5F5),
+        cardBorderWidth: 1.0,
+        dividerColor: Color(0x5542A5F5),
+        dividerThickness: 1.0,
+        glowPrimary: Color(0x4D42A5F5),
+        glowSecondary: Color(0x2E90CAF9),
+        auraStyle: AvatarAuraStyle.frostRing,
+        headerGlyph: '⚡',
+        headerUnderlineColor: Color(0x8842A5F5),
+      ),
+    ),
+    ThemeRemix(
+      label: 'Voltage',
+      flair: ThemeFlair(
+        scaffold: Color(0xFF0C0814),
+        card: Color(0xFF161020),
+        primary: Color(0xFFAB47BC),
+        secondary: Color(0xFFCE93D8),
+        headlineStat: Color(0xFFE1BEE7),
+        bulletColor: Color(0xFFAB47BC),
+        bulletGlyph: '⚡',
+        tabularFigures: true,
+        numberSizeScale: 1.0,
+        numberWeight: FontWeight.w800,
+        chipRadius: 6,
+        cardRadius: 8,
+        cardBorderColor: Color(0x44AB47BC),
+        cardBorderWidth: 1.0,
+        dividerColor: Color(0x55AB47BC),
+        dividerThickness: 1.0,
+        glowPrimary: Color(0x4DAB47BC),
+        glowSecondary: Color(0x2ECE93D8),
+        auraStyle: AvatarAuraStyle.frostRing,
+        headerGlyph: '⚡',
+        headerUnderlineColor: Color(0x88AB47BC),
+      ),
+    ),
   ],
 };
 

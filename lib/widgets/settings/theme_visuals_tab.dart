@@ -40,10 +40,10 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Theme card launcher
-              // Active Theme Premium Dashboard Card
+              // Active Theme Premium Dashboard Card — extra prominent
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -53,16 +53,16 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(18),
                   border: Border.all(
-                    color: flair.primary.withValues(alpha: 0.35),
-                    width: 1.5,
+                    color: flair.primary.withValues(alpha: 0.4),
+                    width: 2.0,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: flair.primary.withValues(alpha: 0.08),
-                      blurRadius: 10,
-                      spreadRadius: 2,
+                      color: flair.primary.withValues(alpha: 0.12),
+                      blurRadius: 16,
+                      spreadRadius: 3,
                     ),
                   ],
                 ),
@@ -72,15 +72,15 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                       children: [
                         // Pulsing colored palette icon with active primary glow!
                         Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
                             color: flair.primary.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
-                            border: Border.all(color: flair.primary.withValues(alpha: 0.4), width: 1.5),
+                            border: Border.all(color: flair.primary.withValues(alpha: 0.5), width: 2.0),
                           ),
-                          child: Icon(Icons.palette_rounded, size: 24, color: flair.secondary),
+                          child: Icon(Icons.palette_rounded, size: 32, color: flair.secondary),
                         ),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,17 +88,17 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                               const GoopText(
                                 'ACTIVE PALETTE',
                                 style: TextStyle(
-                                  fontSize: 9.5,
+                                  fontSize: 10,
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white38,
                                   letterSpacing: 1.5,
                                 ),
                               ),
-                              const SizedBox(height: 3),
+                              const SizedBox(height: 4),
                               GoopText(
                                 activeTheme.label.toUpperCase(),
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white,
                                   letterSpacing: 0.5,
@@ -111,24 +111,25 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                         Row(
                           children: [
                             _colorBead(flair.primary),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 5),
                             _colorBead(flair.secondary),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 5),
                             _colorBead(flair.headlineStat),
                           ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    // Choose Theme Action Button
+                    const SizedBox(height: 16),
+                    // Choose Theme Action Button — 2x height
                     SizedBox(
                       width: double.infinity,
+                      height: 56,
                       child: FilledButton.icon(
-                        icon: const Icon(Icons.tune_rounded, size: 16),
+                        icon: const Icon(Icons.tune_rounded, size: 20),
                         label: const GoopText(
                           'CHOOSE THEME PALETTE',
                           style: TextStyle(
-                            fontSize: 11.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0.8,
                           ),
@@ -137,9 +138,8 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                           backgroundColor: flair.primary,
                           foregroundColor: Colors.white,
                           elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 11),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         onPressed: () {
@@ -618,29 +618,49 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
         Haptics.selection();
         onTap();
       },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4, top: 10, bottom: 10),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: flair.card.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: expanded
+                ? flair.primary.withValues(alpha: 0.3)
+                : Colors.white.withValues(alpha: 0.08),
+            width: 1.2,
+          ),
+        ),
         child: Row(
           children: [
+            Icon(
+              expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+              size: 18,
+              color: expanded ? flair.primary : Colors.white.withValues(alpha: 0.4),
+            ),
+            const SizedBox(width: 10),
             GoopText(
               title,
-              style: const TextStyle(
-                fontSize: 11.5,
+              style: TextStyle(
+                fontSize: 12.5,
                 fontWeight: FontWeight.w900,
-                color: Colors.white38,
+                color: expanded ? Colors.white70 : Colors.white38,
                 letterSpacing: 0.6,
               ),
             ),
             const Spacer(),
-            AnimatedRotation(
-              turns: expanded ? 0.5 : 0,
-              duration: const Duration(milliseconds: 180),
-              child: Icon(
-                Icons.expand_more_rounded,
-                size: 16,
-                color: Colors.white.withValues(alpha: 0.4),
+            if (expanded)
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(color: flair.primary.withValues(alpha: 0.4), blurRadius: 4),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -659,16 +679,33 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
         Haptics.selection();
         onTap();
       },
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4, top: 10, bottom: 10),
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: flair.card.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: expanded
+                ? flair.primary.withValues(alpha: 0.3)
+                : Colors.white.withValues(alpha: 0.08),
+            width: 1.2,
+          ),
+        ),
         child: Row(
           children: [
+            Icon(
+              expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+              size: 18,
+              color: expanded ? flair.primary : Colors.white.withValues(alpha: 0.4),
+            ),
+            const SizedBox(width: 10),
             GoopText(
               title,
-              style: const TextStyle(
-                fontSize: 11.5,
+              style: TextStyle(
+                fontSize: 12.5,
                 fontWeight: FontWeight.w900,
-                color: Colors.white38,
+                color: expanded ? Colors.white70 : Colors.white38,
                 letterSpacing: 0.6,
               ),
             ),
@@ -703,15 +740,18 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
               ),
             ],
             const Spacer(),
-            AnimatedRotation(
-              turns: expanded ? 0.5 : 0,
-              duration: const Duration(milliseconds: 180),
-              child: Icon(
-                Icons.expand_more_rounded,
-                size: 16,
-                color: Colors.white.withValues(alpha: 0.4),
+            if (expanded)
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(color: flair.primary.withValues(alpha: 0.4), blurRadius: 4),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -758,16 +798,16 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
 
   Widget _colorBead(Color color) {
     return Container(
-      width: 10,
-      height: 10,
+      width: 14,
+      height: 14,
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white24, width: 1),
+        border: Border.all(color: Colors.white24, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: color.withValues(alpha: 0.3),
-            blurRadius: 4,
+            color: color.withValues(alpha: 0.4),
+            blurRadius: 6,
             spreadRadius: 1,
           ),
         ],

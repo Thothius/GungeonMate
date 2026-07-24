@@ -283,10 +283,15 @@ class _ImmersiveThemePage extends StatelessWidget {
                   final active = AppTheme.remixFor(mode);
                   return _PaletteSelector(
                     flair: f,
-                    items: remixes.map((r) => (
-                      label: r.label,
-                      colors: [f.scaffold, f.primary, f.headlineStat],
-                    )).toList(),
+                    items: remixes.map((r) {
+                      final rf = r.flair;
+                      return (
+                        label: r.label,
+                        colors: rf != null
+                            ? [rf.scaffold, rf.primary, rf.headlineStat]
+                            : [f.scaffold, f.primary, f.headlineStat],
+                      );
+                    }).toList(),
                     activeIndex: active,
                     onTap: (i) {
                       AppTheme.setRemix(mode, i);
@@ -388,6 +393,217 @@ const _kCustomColorPalette = <Color>[
   Color(0xFFB71C1C), Color(0xFF1B5E20), Color(0xFF1A237E), Color(0xFF4A148C),
 ];
 
+/// Simple HSV color picker dialog — hue/saturation/lightness sliders.
+class _HsvColorPickerDialog extends StatefulWidget {
+  final Color initial;
+  const _HsvColorPickerDialog({required this.initial});
+
+  @override
+  State<_HsvColorPickerDialog> createState() => _HsvColorPickerDialogState();
+}
+
+class _HsvColorPickerDialogState extends State<_HsvColorPickerDialog> {
+  late double _hue;
+  late double _saturation;
+  late double _value;
+
+  @override
+  void initState() {
+    super.initState();
+    final hsv = HSVColor.fromColor(widget.initial);
+    _hue = hsv.hue;
+    _saturation = hsv.saturation;
+    _value = hsv.value;
+  }
+
+  Color get _color => HSVColor.fromAHSV(1.0, _hue, _saturation, _value).toColor();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: const Color(0xFF1E1E22),
+      title: const Text('Pick Color', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Color preview
+          Container(
+            width: double.infinity,
+            height: 48,
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: _color,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white24, width: 1.5),
+            ),
+          ),
+          // Hue slider
+          _HueSlider(
+            value: _hue,
+            onChanged: (v) => setState(() => _hue = v),
+          ),
+          const SizedBox(height: 12),
+          // Saturation slider
+          _SatSlider(
+            hue: _hue,
+            value: _saturation,
+            onChanged: (v) => setState(() => _saturation = v),
+          ),
+          const SizedBox(height: 12),
+          // Value slider
+          _ValSlider(
+            hue: _hue,
+            saturation: _saturation,
+            value: _value,
+            onChanged: (v) => setState(() => _value = v),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, _color),
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  }
+}
+
+class _HueSlider extends StatelessWidget {
+  final double value;
+  final ValueChanged<double> onChanged;
+  const _HueSlider({required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Hue', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white70)),
+        Slider(
+          value: value,
+          min: 0,
+          max: 360,
+          activeColor: HSVColor.fromAHSV(1.0, value, 1.0, 1.0).toColor(),
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _SatSlider extends StatelessWidget {
+  final double hue;
+  final double value;
+  final ValueChanged<double> onChanged;
+  const _SatSlider({required this.hue, required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Saturation', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white70)),
+        Slider(
+          value: value,
+          activeColor: HSVColor.fromAHSV(1.0, hue, value, 1.0).toColor(),
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+class _ValSlider extends StatelessWidget {
+  final double hue;
+  final double saturation;
+  final double value;
+  final ValueChanged<double> onChanged;
+  const _ValSlider({required this.hue, required this.saturation, required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Lightness', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white70)),
+        Slider(
+          value: value,
+          activeColor: HSVColor.fromAHSV(1.0, hue, saturation, value).toColor(),
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+/// Font picker for the custom theme editor.
+class _FontSlotPicker extends StatelessWidget {
+  final AppFont current;
+  final ValueChanged<AppFont> onPicked;
+  const _FontSlotPicker({required this.current, required this.onPicked});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'FONT TYPE',
+            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white70, letterSpacing: 0.4),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 44,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: AppFont.values.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (_, i) {
+                final font = AppFont.values[i];
+                final selected = font == current;
+                return GestureDetector(
+                  onTap: () {
+                    onPicked(font);
+                    Haptics.selection();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: selected ? Colors.white.withValues(alpha: 0.12) : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: selected ? Colors.white70 : Colors.white12,
+                        width: selected ? 1.5 : 1.0,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        font.label,
+                        style: font.textStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          color: selected ? Colors.white : Colors.white54,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _CustomThemeEditorSheet extends StatefulWidget {
   const _CustomThemeEditorSheet();
 
@@ -487,6 +703,13 @@ class _CustomThemeEditorSheetState extends State<_CustomThemeEditorSheet> {
               onPicked: (c) => setState(() => _data = _data.copyWith(bulletColor: c)),
             ),
             const SizedBox(height: 16),
+
+            // Font type picker
+            _FontSlotPicker(
+              current: _data.font,
+              onPicked: (f) => setState(() => _data = _data.copyWith(font: f)),
+            ),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               height: 42,
@@ -547,9 +770,36 @@ class _ColorSlotPicker extends StatelessWidget {
             height: 36,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: _kCustomColorPalette.length,
+              itemCount: _kCustomColorPalette.length + 1,
               separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (_, i) {
+                // Last item: custom color picker button
+                if (i == _kCustomColorPalette.length) {
+                  return GestureDetector(
+                    onTap: () async {
+                      final picked = await showDialog<Color>(
+                        context: context,
+                        builder: (_) => _HsvColorPickerDialog(initial: current),
+                      );
+                      if (picked != null) {
+                        onPicked(picked);
+                        Haptics.selection();
+                      }
+                    },
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.white30,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: const Icon(Icons.add, size: 18, color: Colors.white70),
+                    ),
+                  );
+                }
                 final c = _kCustomColorPalette[i];
                 final selected = c.toARGB32() == current.toARGB32();
                 return GestureDetector(

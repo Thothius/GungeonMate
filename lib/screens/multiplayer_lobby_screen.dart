@@ -275,46 +275,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-              // Role selection
-              _SectionLabel('CHOOSE ROLE'),
-              const SizedBox(height: 12),
-              _RoleCard(
-                title: 'Main Player',
-                subtitle: 'Host the session, pick any Gungeoneer',
-                icon: Icons.person,
-                selected: _isMain,
-                onTap: () {
-                  Haptics.selection();
-                  setState(() => _isMain = true);
-                },
-              ),
-              const SizedBox(height: 10),
-              _RoleCard(
-                title: 'Sidekick',
-                subtitle: 'Join a host, play as The Cultist',
-                icon: Icons.bluetooth_searching,
-                selected: !_isMain,
-                onTap: () {
-                  Haptics.selection();
-                  setState(() => _isMain = false);
-                },
-              ),
-              const SizedBox(height: 24),
-              // Character / Nickname section
-              _SectionLabel(_isMain ? 'YOUR CHARACTER' : 'SIDEKICK'),
-              const SizedBox(height: 12),
-              if (_isMain)
-                _CharacterPickerTile(
-                  character: _selectedCharacter,
-                  onTap: () {
-                    Haptics.selection();
-                    _pickCharacter();
-                  },
-                )
-              else
-                _ForcedCultistTile(cultist: cultist),
-              const SizedBox(height: 20),
-              // Nickname field
+              // Nickname field — at the very top
               _SectionLabel('NICKNAME'),
               const SizedBox(height: 8),
               TextField(
@@ -333,28 +294,83 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   ),
                 ),
               ),
-              if (!_isMain) ...[
-                const SizedBox(height: 20),
-                const _SectionLabel('CONNECTION PIN'),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _pinCtrl,
-                  keyboardType: TextInputType.number,
-                  maxLength: 4,
-                  style: const TextStyle(fontSize: 16),
-                  decoration: InputDecoration(
-                    hintText: 'Enter 4-digit code from host',
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
+              const SizedBox(height: 24),
+              // Role selection — 1x2 grid
+              _SectionLabel('CHOOSE ROLE'),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: _RoleCard(
+                      title: 'Main',
+                      subtitle: 'Host the session',
+                      icon: Icons.person,
+                      selected: _isMain,
+                      onTap: () {
+                        Haptics.selection();
+                        setState(() => _isMain = true);
+                      },
                     ),
                   ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _RoleCard(
+                      title: 'Sidekick',
+                      subtitle: 'Join a host',
+                      icon: Icons.bluetooth_searching,
+                      selected: !_isMain,
+                      onTap: () {
+                        Haptics.selection();
+                        setState(() => _isMain = false);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              // Character section
+              _SectionLabel(_isMain ? 'YOUR CHARACTER' : 'SIDEKICK'),
+              const SizedBox(height: 12),
+              if (_isMain)
+                _CharacterPickerTile(
+                  character: _selectedCharacter,
+                  onTap: () {
+                    Haptics.selection();
+                    _pickCharacter();
+                  },
+                )
+              else
+                _ForcedCultistTile(cultist: cultist),
+              const SizedBox(height: 20),
+              // Connection PIN — always visible, locked when Main
+              _SectionLabel('CONNECTION PIN'),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: _PinField(
+                      controller: _pinCtrl,
+                      locked: _isMain,
+                    ),
+                  ),
+                ],
+              ),
+              if (_isMain)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: GoopText(
+                    'PIN is auto-generated when you start hosting.',
+                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
+                  ),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: GoopText(
+                    'Enter the 4-digit PIN from the host.',
+                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
+                  ),
                 ),
-              ],
               const SizedBox(height: 32),
               // Start button
               SizedBox(
@@ -365,6 +381,26 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   label: GoopText(_isMain ? 'Start Hosting' : 'Find Host'),
                   onPressed: () {
                     Haptics.selection();
+                    _start();
+                  },
+                ),
+              ),
+              const SizedBox(height: 12),
+              // Local Sidekick — quick access to simulated co-op
+              SizedBox(
+                width: double.infinity,
+                height: 44,
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.smart_toy_outlined, size: 18),
+                  label: const GoopText('Add Local Sidekick (Solo Co-op)'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.pinkAccent,
+                    side: const BorderSide(color: Colors.pinkAccent, width: 1),
+                  ),
+                  onPressed: () {
+                    Haptics.selection();
+                    _pinCtrl.text = '0000';
+                    setState(() => _isMain = false);
                     _start();
                   },
                 ),
@@ -634,10 +670,12 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               ],
             ),
             const Divider(color: Colors.white12, height: 24),
-            _buildGuideStep('1. Set up Player Roles', 'Decide who will be the HOST (Main Player) and who will be the SIDEKICK (Co-op Cultist). The Host controls character selection, while the Sidekick plays as the Cultist.'),
-            _buildGuideStep('2. Verify Wireless Settings', 'Ensure BOTH devices have Bluetooth and Wi-Fi toggled ON. For optimal speed, put both phones on the SAME local Wi-Fi router network!'),
-            _buildGuideStep('3. Host Starts Hosting', 'The HOST picks their character, enters their Nickname, sets the Role to "Main Player", and taps "Start Hosting". A 4-digit PIN code will be generated.'),
-            _buildGuideStep('4. Sidekick Enters PIN', 'The SIDEKICK enters their Nickname, selects "Sidekick", types the HOST\'s 4-digit PIN, and taps "Find Host". They will immediately connect device-to-device!'),
+            _buildGuideStep('1. Connect Wi-Fi', 'Put both phones on the SAME Wi-Fi network. Enable Bluetooth on both.'),
+            _buildGuideStep('2. Host: Pick Main', 'One phone selects "Main", picks a character, enters a nickname, and taps "Start Hosting". A 4-digit PIN appears.'),
+            _buildGuideStep('3. Sidekick: Enter PIN', 'Other phone selects "Sidekick", enters nickname, types the host\'s 4-digit PIN, taps "Find Host".'),
+            _buildGuideStep('4. Play!', 'Devices pair automatically. Host controls the run. Sidekick plays as The Cultist. Items can be gifted between players.'),
+            const SizedBox(height: 20),
+            _buildGuideStep('Local Sidekick', 'Want to try co-op solo? Enter PIN 0000 as Sidekick to spawn a simulated AI partner on this device.'),
             const SizedBox(height: 32),
             Center(
               child: TextButton.icon(
@@ -1729,6 +1767,243 @@ class _ConnectPortrait extends StatelessWidget {
       Icons.person,
       size: 36,
       color: accent.withValues(alpha: 0.4),
+    );
+  }
+}
+
+/// Custom 4-digit PIN entry field with individual digit boxes.
+/// When [locked] is true, shows a read-only locked state.
+class _PinField extends StatefulWidget {
+  final TextEditingController controller;
+  final bool locked;
+
+  const _PinField({required this.controller, this.locked = false});
+
+  @override
+  State<_PinField> createState() => _PinFieldState();
+}
+
+class _PinFieldState extends State<_PinField> {
+  final _focusNode = FocusNode();
+  final _layerLink = LayerLink();
+  OverlayEntry? _overlay;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_sync);
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_sync);
+    _focusNode.removeListener(_onFocusChange);
+    _focusNode.dispose();
+    _removeOverlay();
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    if (_focusNode.hasFocus && !widget.locked) {
+      _showOverlay();
+    } else {
+      _removeOverlay();
+    }
+    if (mounted) setState(() {});
+  }
+
+  void _sync() {
+    if (mounted) setState(() {});
+  }
+
+  void _showOverlay() {
+    _removeOverlay();
+    _overlay = OverlayEntry(
+      builder: (context) => _PinKeypad(
+        onKey: (digit) {
+          final text = widget.controller.text;
+          if (text.length < 4) {
+            widget.controller.text = text + digit;
+          }
+        },
+        onBackspace: () {
+          final text = widget.controller.text;
+          if (text.isNotEmpty) {
+            widget.controller.text = text.substring(0, text.length - 1);
+          }
+        },
+        onDone: () {
+          _focusNode.unfocus();
+        },
+      ),
+    );
+    Overlay.of(context).insert(_overlay!);
+  }
+
+  void _removeOverlay() {
+    _overlay?.remove();
+    _overlay = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final text = widget.controller.text;
+    final digits = List.generate(4, (i) => i < text.length ? text[i] : '');
+
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: GestureDetector(
+        onTap: widget.locked ? null : () => _focusNode.requestFocus(),
+        child: AbsorbPointer(
+          absorbing: !widget.locked,
+          child: Focus(
+            focusNode: _focusNode,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(4, (i) {
+                final isFilled = digits[i].isNotEmpty;
+                final isCurrent = !widget.locked && _focusNode.hasFocus && i == text.length;
+
+                return Container(
+                  width: 56,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: widget.locked
+                        ? Colors.white.withValues(alpha: 0.03)
+                        : Colors.white.withValues(alpha: 0.06),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: widget.locked
+                          ? Colors.white.withValues(alpha: 0.08)
+                          : isCurrent
+                              ? Colors.amber.withValues(alpha: 0.6)
+                              : isFilled
+                                  ? Colors.amber.withValues(alpha: 0.3)
+                                  : Colors.white.withValues(alpha: 0.15),
+                      width: isCurrent ? 2.0 : 1.5,
+                    ),
+                  ),
+                  child: Center(
+                    child: widget.locked
+                        ? Icon(Icons.lock, size: 18, color: Colors.white.withValues(alpha: 0.2))
+                        : GoopText(
+                            digits[i],
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w900,
+                              color: isFilled ? Colors.amber : Colors.white.withValues(alpha: 0.3),
+                            ),
+                          ),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PinKeypad extends StatelessWidget {
+  final ValueChanged<String> onKey;
+  final VoidCallback onBackspace;
+  final VoidCallback onDone;
+
+  const _PinKeypad({
+    required this.onKey,
+    required this.onBackspace,
+    required this.onDone,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E1E22),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const GoopText(
+                    'ENTER PIN',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.white54, letterSpacing: 1),
+                  ),
+                  TextButton(
+                    onPressed: onDone,
+                    child: const GoopText('Done', style: TextStyle(color: Colors.amberAccent, fontWeight: FontWeight.bold)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              for (final row in [
+                ['1', '2', '3'],
+                ['4', '5', '6'],
+                ['7', '8', '9'],
+              ]) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (final d in row) _keyButton(d),
+                  ],
+                ),
+                const SizedBox(height: 10),
+              ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(width: 72),
+                  _keyButton('0'),
+                  SizedBox(
+                    width: 72,
+                    height: 56,
+                    child: OutlinedButton(
+                      onPressed: onBackspace,
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Icon(Icons.backspace_outlined, size: 20, color: Colors.white54),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _keyButton(String digit) {
+    return SizedBox(
+      width: 72,
+      height: 56,
+      child: FilledButton(
+        onPressed: () => onKey(digit),
+        style: FilledButton.styleFrom(
+          backgroundColor: Colors.white.withValues(alpha: 0.08),
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        child: GoopText(
+          digit,
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+        ),
+      ),
     );
   }
 }
