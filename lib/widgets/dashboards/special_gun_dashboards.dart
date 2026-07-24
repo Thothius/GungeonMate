@@ -15,7 +15,7 @@ class GunderfuryDashboardSliver extends StatefulWidget {
 }
 
 class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
-  bool _expanded = false;
+  bool _expanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () => setState(() => _expanded = !_expanded),
+                onTap: null,
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -110,12 +110,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                            size: 18,
-                            color: Colors.white30,
-                          ),
+                          
                         ],
                       ),
                     ],
@@ -249,7 +244,7 @@ class TripleGunDashboardSliver extends StatefulWidget {
 }
 
 class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
-  bool _expanded = false;
+  bool _expanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -288,7 +283,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () => setState(() => _expanded = !_expanded),
+                onTap: null,
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -327,12 +322,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                            size: 18,
-                            color: Colors.white30,
-                          ),
+                          
                         ],
                       ),
                     ],
@@ -462,7 +452,7 @@ class EvolverDashboardSliver extends StatefulWidget {
 }
 
 class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
-  bool _expanded = false;
+  bool _expanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -499,7 +489,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () => setState(() => _expanded = !_expanded),
+                onTap: null,
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -538,12 +528,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                            size: 18,
-                            color: Colors.white30,
-                          ),
+                          
                         ],
                       ),
                     ],

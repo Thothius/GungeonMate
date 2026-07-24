@@ -231,10 +231,7 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
           decoration: BoxDecoration(
             color: AppTheme.flair.scaffold.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: AppTheme.flair.primary.withValues(alpha: 0.2),
-              width: 1.0,
-            ),
+            
           ),
           child: Column(
             children: [

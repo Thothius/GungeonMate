@@ -295,27 +295,27 @@ class PlayerPageState extends State<PlayerPage> {
                       );
                     },
                   ),
-                  // Dashboards toggle — hidden for now (dashboards always on)
-                  // ListenableBuilder(
-                  //   listenable: VisualPrefs.notifier,
-                  //   builder: (context, _) {
-                  //     final isOn = VisualPrefs.notifier.value.showDashboards;
-                  //     return IconButton(
-                  //       onPressed: () {
-                  //         VisualPrefs.setShowDashboards(!isOn);
-                  //         Haptics.selection();
-                  //       },
-                  //       icon: Icon(
-                  //         Icons.dashboard_customize_rounded,
-                  //         size: 20,
-                  //         color: isOn ? Colors.amberAccent : Colors.white38,
-                  //       ),
-                  //       tooltip: isOn ? 'Dashboards: ON' : 'Dashboards: OFF',
-                  //       padding: EdgeInsets.zero,
-                  //       constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                  //     );
-                  //   },
-                  // ),
+                  // Dashboards toggle
+                  ListenableBuilder(
+                    listenable: VisualPrefs.notifier,
+                    builder: (context, _) {
+                      final isOn = VisualPrefs.notifier.value.showDashboards;
+                      return IconButton(
+                        onPressed: () {
+                          VisualPrefs.setShowDashboards(!isOn);
+                          Haptics.selection();
+                        },
+                        icon: Icon(
+                          Icons.dashboard_customize_rounded,
+                          size: 20,
+                          color: isOn ? Colors.amberAccent : Colors.white38,
+                        ),
+                        tooltip: isOn ? 'Dashboards: ON' : 'Dashboards: OFF',
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      );
+                    },
+                  ),
                   const SizedBox(width: 4),
                   const HeaderMenu(),
                 ],

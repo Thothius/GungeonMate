@@ -21,7 +21,7 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -68,8 +68,7 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
                       'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -131,7 +130,7 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   static const _floors = [
     'Keep of the Lead Lord', 'Oubliette', 'Gungeon Proper', 'Abbey of the True Gun',
@@ -159,7 +158,7 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -176,8 +175,7 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
                       'DPS: ${_dps[floor].toStringAsFixed(1)}',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amberAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -239,7 +237,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +270,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -289,8 +287,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                       '${seconds}s fired',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.purpleAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -391,7 +388,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -413,7 +410,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -430,8 +427,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                       '$uses/3 uses',
                       style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amber.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -496,7 +492,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -530,7 +526,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -547,8 +543,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                       '+$damageBonus% DMG',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.redAccent),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.redAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -624,7 +619,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -648,7 +643,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -665,8 +660,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                       '+$damageBonus% DMG',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.tealAccent),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.tealAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -745,7 +739,7 @@ class SprunDashboardState extends State<SprunDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   static const _triggers = [
     'Activating a Map Blank',
@@ -776,7 +770,7 @@ class SprunDashboardState extends State<SprunDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -807,8 +801,7 @@ class SprunDashboardState extends State<SprunDashboard>
                         idx >= 0 ? 'REVEALED' : 'UNKNOWN',
                         style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
                       ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -883,7 +876,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -905,7 +898,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -922,8 +915,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                       stars == 3 ? 'SUPER PUNCH READY' : '$stars/3 stars',
                       style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: stars == 3 ? Colors.orangeAccent : Colors.white.withValues(alpha: 0.5)),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.orangeAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -989,7 +981,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1011,7 +1003,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1028,8 +1020,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                       '+$uses Cool',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.blueGrey),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.blueGrey.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -1100,7 +1091,7 @@ class PolarisDashboardState extends State<PolarisDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1134,7 +1125,7 @@ class PolarisDashboardState extends State<PolarisDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1159,8 +1150,7 @@ class PolarisDashboardState extends State<PolarisDashboard>
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.amberAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -1268,7 +1258,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1296,7 +1286,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1321,8 +1311,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.purpleAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),
@@ -1416,7 +1405,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1441,7 +1430,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1476,8 +1465,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.deepOrangeAccent.withValues(alpha: 0.6)),
+                    
                   ],
                 ),
                 ),

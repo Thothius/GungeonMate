@@ -18,7 +18,7 @@ class HuntressDashboardSliver extends StatefulWidget {
 class HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
   int _petCount = 0;
   int _treatCount = 0;
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   void initState() {
@@ -100,16 +100,9 @@ class HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                   ),
                   const SizedBox(width: 6),
                   InkWell(
-                    onTap: () {
-                      Haptics.selection();
-                      setState(() => _collapsed = !_collapsed);
-                    },
+                    onTap: null,
                     borderRadius: BorderRadius.circular(4),
-                    child: Icon(
-                      _collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded,
-                      color: Colors.lightGreenAccent.withValues(alpha: 0.7),
-                      size: 18,
-                    ),
+                    child: 
                   ),
                 ],
               ),

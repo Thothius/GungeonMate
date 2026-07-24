@@ -15,7 +15,7 @@ class JunkanDashboardSliver extends StatefulWidget {
 }
 
 class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
-  bool _expanded = false;
+  bool _expanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +118,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () => setState(() => _expanded = !_expanded),
+                onTap: null,
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -161,12 +161,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                            size: 18,
-                            color: Colors.white30,
-                          ),
+                          
                         ],
                       ),
                     ],

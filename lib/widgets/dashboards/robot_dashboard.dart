@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/gun.dart';
-import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 
 
@@ -14,8 +13,8 @@ class RobotDashboardSliver extends StatefulWidget {
 }
 
 class RobotDashboardSliverState extends State<RobotDashboardSliver> {
-  bool _terminalExpanded = false;
-  bool _collapsed = true;
+  bool _terminalExpanded = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
             children: [
               // Header Row with big DMG boost badge
               InkWell(
-                onTap: () { Haptics.selection(); setState(() => _collapsed = !_collapsed); },
+                onTap: null,
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -96,8 +95,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        Icon(_collapsed ? Icons.expand_more_rounded : Icons.expand_less_rounded, size: 18, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                        
                       ],
                     ),
                   ],
@@ -272,45 +270,28 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
   }
 
   Widget _buildTerminalToggle() {
-    return GestureDetector(
-      onTap: () {
-        setState(() => _terminalExpanded = !_terminalExpanded);
-        Haptics.selection();
-      },
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: const Color(0xFF001100),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.green.withValues(alpha: 0.3), width: 1.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.terminal_rounded, size: 16, color: Colors.green.withValues(alpha: 0.8)),
-                const SizedBox(width: 8),
-                GoopText(
-                  'DAMAGE CALCULATOR',
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.green.withValues(alpha: 0.8),
-                    letterSpacing: 0.8,
-                    fontFamily: 'monospace',
-                  ),
-                ),
-              ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFF001100),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.green.withValues(alpha: 0.3), width: 1.0),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.terminal_rounded, size: 16, color: Colors.green.withValues(alpha: 0.8)),
+          const SizedBox(width: 8),
+          GoopText(
+            'DAMAGE CALCULATOR',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+              color: Colors.green.withValues(alpha: 0.8),
+              letterSpacing: 0.8,
+              fontFamily: 'monospace',
             ),
-            Icon(
-              _terminalExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-              size: 18,
-              color: Colors.green.withValues(alpha: 0.6),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
