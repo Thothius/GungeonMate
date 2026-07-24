@@ -321,7 +321,7 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
                         border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
                       ),
                       child: const GoopText(
-                        'ΓÇ£Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.ΓÇ¥',
+                        '“Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.”',
                         style: TextStyle(
                           fontSize: 11,
                           fontStyle: FontStyle.italic,
