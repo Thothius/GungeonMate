@@ -393,66 +393,65 @@ class _MainMenuScreenState extends State<MainMenuScreen>
         ),
           ),
           ),
-          // Small bottom-center Settings + Changelog buttons
+          // Settings gear — top-right corner
           Positioned(
-              bottom: 16,
-              left: 0,
-              right: 0,
-              child: SafeArea(
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Settings gear icon (compact, icon-only)
-                      InkWell(
-                        onTap: () {
-                          Haptics.selection();
-                          Navigator.push(
-                            context,
-                            fastRoute(const SettingsScreen()),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.white24, width: 1.2),
-                          ),
-                          child: const Icon(Icons.settings_rounded, size: 16, color: Colors.cyanAccent),
+            top: 12,
+            right: 12,
+            child: SafeArea(
+              child: InkWell(
+                onTap: () {
+                  Haptics.selection();
+                  Navigator.push(
+                    context,
+                    fastRoute(const SettingsScreen()),
+                  );
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white24, width: 1.2),
+                  ),
+                  child: const Icon(Icons.settings_rounded, size: 16, color: Colors.cyanAccent),
+                ),
+              ),
+            ),
+          ),
+          // Changelog button — centered at bottom, 15% bigger
+          Positioned(
+            bottom: 16,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Center(
+                child: InkWell(
+                  onTap: () => _showChangelogDialog(context),
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white24, width: 1.2),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.history_edu_rounded, size: 16, color: Color(0xFFFFD54F)),
+                        SizedBox(width: 7),
+                        GoopText(
+                          'Changelog (v1.8.19)',
+                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      // Changelog button
-                      InkWell(
-                        onTap: () => _showChangelogDialog(context),
-                        borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: Colors.white24, width: 1.2),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.history_edu_rounded, size: 14, color: Color(0xFFFFD54F)),
-                              SizedBox(width: 6),
-                              GoopText(
-                                'Changelog (v1.8.19)',
-                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
+          ),
           ],
         ),
     );
