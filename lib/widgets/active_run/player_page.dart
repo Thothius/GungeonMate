@@ -27,6 +27,7 @@ import 'summary_tab.dart';
 import '../../screens/item_detail_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
 import '../../screens/synergies_overview_screen.dart';
+import '../../screens/all_synergies_screen.dart';
 import '../game_icon.dart';
 
 /// A single player's loadout view. Re-usable for main + coop.
@@ -214,6 +215,10 @@ class PlayerPageState extends State<PlayerPage> {
                   _showStatAdjuster(context, isCool: true),
               onLongPressCurse: () =>
                   _showStatAdjuster(context, isCool: false),
+              onTapSynergies: () => Navigator.push(
+                context,
+                fastRoute(const AllSynergiesScreen()),
+              ),
               trailing: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -412,16 +417,6 @@ class PlayerPageState extends State<PlayerPage> {
             return DashboardSwiper(slot: _slot);
           },
         ),
-        // Synergies — vertical list of all partial+active synergies with big item pills
-        if (isMain) ...[
-          SliverToBoxAdapter(
-            child: _SynergyPanel(
-              allSynergies: p.allSynergies,
-              ownedLower: state.allItemNames.map((n) => n.toLowerCase()).toSet(),
-              provider: p,
-            ),
-          ),
-        ],
         SectionHeaderSliver(
           title: 'Guns',
           count: guns.length,
@@ -1045,6 +1040,7 @@ class TransferSheet extends StatelessWidget {
 /// (at least one required item owned). Each row shows the synergy name,
 /// effect text, and big item pills with graphics. Owned items are full-color
 /// with a glow; unowned items are greyed but still visible.
+// ignore: unused_element
 class _SynergyPanel extends StatelessWidget {
   final List<Synergy> allSynergies;
   final Set<String> ownedLower;

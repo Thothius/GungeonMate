@@ -1099,7 +1099,6 @@ class GunStats extends StatelessWidget {
     ].where((e) => e.value.isNotEmpty).toList();
     final meta = <MapEntry<String, String>>[
       MapEntry('Class', gun.gunClass),
-      MapEntry('Sell', gun.sellPrice),
     ].where((e) => e.value.isNotEmpty).toList();
 
     final p = context.watch<RunProvider>();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
-import '../quality_badge.dart';
 import '../game_icon.dart';
 
 class ItemDetailHeader extends StatelessWidget {
@@ -14,6 +13,7 @@ class ItemDetailHeader extends StatelessWidget {
   final bool isActive;
   final String iconPath;
   final String chestColor;
+  final String sellPrice;
   final int synergyCount;
   final double curse;
   final double coolness;
@@ -27,6 +27,7 @@ class ItemDetailHeader extends StatelessWidget {
     required this.isActive,
     required this.iconPath,
     required this.chestColor,
+    required this.sellPrice,
     required this.synergyCount,
     required this.curse,
     required this.coolness,
@@ -107,15 +108,15 @@ class ItemDetailHeader extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  if (quality.isNotEmpty)
-                    MetadataChip(
-                      icon: Icons.star_rounded,
-                      label: 'Rank',
-                      value: quality.toUpperCase(),
-                      color: QualityBadge.colorFor(quality),
-                    ),
                   if (chestColor.isNotEmpty)
                     _ChestChip(chestColor: chestColor),
+                  if (sellPrice.isNotEmpty)
+                    MetadataChip(
+                      icon: Icons.payments_outlined,
+                      label: 'Sell',
+                      value: sellPrice,
+                      color: Colors.yellowAccent,
+                    ),
                   MetadataChip(
                     icon: Icons.hub_outlined,
                     label: 'Synergies',

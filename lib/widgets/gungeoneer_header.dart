@@ -40,6 +40,9 @@ class GungeoneerHeader extends StatefulWidget {
   final VoidCallback? onLongPressCoolness;
   final VoidCallback? onLongPressCurse;
 
+  /// Tapped to open a compact grid of all possible synergies.
+  final VoidCallback? onTapSynergies;
+
   /// Recognized passive effects (damage up, flight, dodge roll up, etc.)
   /// surfaced as compact chips with their extracted numeric stat where
   /// we can isolate one. Renders below the stats strip, toggled by the
@@ -66,6 +69,7 @@ class GungeoneerHeader extends StatefulWidget {
     this.onTapCurse,
     this.onLongPressCoolness,
     this.onLongPressCurse,
+    this.onTapSynergies,
     this.effectChips = const <EffectChip>[],
     this.shrinesUsed = const <String>[],
   });
@@ -368,6 +372,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                       color: widget.activeSynergies > 0 ? const Color(0xFFFFD740) : Colors.white38,
                       value: '${widget.activeSynergies}',
                       label: 'SYN',
+                      onTap: widget.onTapSynergies,
                       isActive: widget.activeSynergies > 0,
                     ),
                   ),

@@ -126,6 +126,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     isActive: item?.isActive ?? false,
                     iconPath: gun?.icon ?? item?.icon ?? '',
                     chestColor: gun?.chestColorDisplay ?? item?.chestColorDisplay ?? '',
+                    sellPrice: gun?.sellPrice ?? item?.sellPrice ?? '',
                     synergyCount: synergyStatuses.length,
                     curse: gun?.curse ?? item?.curse ?? 0.0,
                     coolness: gun?.coolness ?? item?.coolness ?? 0.0,
@@ -154,11 +155,14 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             ...buildWikiSlivers(wiki),
           ],
           SliverToBoxAdapter(
-            child: KeyedSubtree(
+            child: SizedBox(
               key: _synergyKey,
-              child: SynergiesSection(
-                statuses: synergyStatuses,
-                currentName: name,
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: SingleChildScrollView(
+                child: SynergiesSection(
+                  statuses: synergyStatuses,
+                  currentName: name,
+                ),
               ),
             ),
           ),
