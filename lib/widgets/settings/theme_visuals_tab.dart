@@ -7,6 +7,8 @@ import '../../screens/theme_picker_screen.dart';
 import '../../utils/fast_route.dart';
 import 'swipe_picker.dart';
 
+enum _VisualCategory { font, particles, glow, inventory, dice }
+
 class ThemeVisualsTab extends StatefulWidget {
   const ThemeVisualsTab({super.key});
 
@@ -15,10 +17,7 @@ class ThemeVisualsTab extends StatefulWidget {
 }
 
 class ThemeVisualsTabState extends State<ThemeVisualsTab> {
-  bool _particlesExpanded = false;
-  bool _typographyExpanded = false;
-  bool _inventoryExpanded = false;
-  bool _glowExpanded = false;
+  _VisualCategory _selectedCategory = _VisualCategory.font;
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +153,8 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                 ),
               ),
               const SizedBox(height: 16),
+              _buildCategoryChips(flair),
+              const SizedBox(height: 16),
 
               // =============================================================
               // Typography Tuning Section (collapsible)
@@ -161,10 +162,10 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
               _collapsibleSectionHeader(
                 'APP TYPOGRAPHY TUNING',
                 flair,
-                _typographyExpanded,
-                () => setState(() => _typographyExpanded = !_typographyExpanded),
+                _selectedCategory == _VisualCategory.font,
+                () => setState(() => _selectedCategory = _VisualCategory.font),
               ),
-              if (_typographyExpanded) ...[
+              if (_selectedCategory == _VisualCategory.font) ...[
               const SizedBox(height: 8),
               Card(
                 color: flair.card.withValues(alpha: 0.92),
@@ -259,11 +260,11 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
               _collapsibleSectionHeaderWithInfo(
                 'PARTICLE SYSTEM',
                 flair,
-                _particlesExpanded,
-                () => setState(() => _particlesExpanded = !_particlesExpanded),
+                _selectedCategory == _VisualCategory.particles,
+                () => setState(() => _selectedCategory = _VisualCategory.particles),
                 tooltip: 'Enable and customize the background particle engine. Swipe through live previews to pick a preset, then fine-tune count, size, opacity, glow effect, and line links.',
               ),
-              if (_particlesExpanded) ...[
+              if (_selectedCategory == _VisualCategory.particles) ...[
               const SizedBox(height: 8),
               Card(
                 color: flair.card.withValues(alpha: 0.92),
@@ -397,10 +398,10 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
               _collapsibleSectionHeader(
                 'SCREEN GLOW',
                 flair,
-                _glowExpanded,
-                () => setState(() => _glowExpanded = !_glowExpanded),
+                _selectedCategory == _VisualCategory.glow,
+                () => setState(() => _selectedCategory = _VisualCategory.glow),
               ),
-              if (_glowExpanded) ...[
+              if (_selectedCategory == _VisualCategory.glow) ...[
               const SizedBox(height: 8),
               _prefSectionTitleWithInfo('SCREEN GLOW', flair, tooltip: 'Set the opacity of the ambient screen glow and choose from 12 deep, curated colors.'),
               const SizedBox(height: 8),
@@ -426,7 +427,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                         (v) => VisualPrefs.setGlow(v),
                       ),
                       const SizedBox(height: 14),
-                      // Glow color picker GÇö 4x3 grid
+                      // Glow color picker — 4x3 grid
                       Align(
                         alignment: Alignment.centerLeft,
                         child: GoopText(
@@ -487,10 +488,10 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
               _collapsibleSectionHeader(
                 'INVENTORY LAYOUT',
                 flair,
-                _inventoryExpanded,
-                () => setState(() => _inventoryExpanded = !_inventoryExpanded),
+                _selectedCategory == _VisualCategory.inventory,
+                () => setState(() => _selectedCategory = _VisualCategory.inventory),
               ),
-              if (_inventoryExpanded) ...[
+              if (_selectedCategory == _VisualCategory.inventory) ...[
                 const SizedBox(height: 8),
                 Card(
                   color: flair.card.withValues(alpha: 0.92),
@@ -600,11 +601,175 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                 ),
               ],
               const SizedBox(height: 16),
+
+              // =============================================================
+              // Dice Style Section
+              // =============================================================
+              _collapsibleSectionHeader(
+                'DICE STYLE',
+                flair,
+                _selectedCategory == _VisualCategory.dice,
+                () => setState(() => _selectedCategory = _VisualCategory.dice),
+              ),
+              if (_selectedCategory == _VisualCategory.dice) ...[
+                const SizedBox(height: 8),
+                _buildDicePanel(flair),
+              ],
             ],
           ),
         );
       },
     );
+  }
+
+  Widget _buildCategoryChips(ThemeFlair flair) {
+    final categories = [
+      (_VisualCategory.font, 'FONT', Icons.font_download_rounded),
+      (_VisualCategory.particles, 'PARTICLES', Icons.auto_awesome_outlined),
+      (_VisualCategory.glow, 'GLOW', Icons.wb_sunny_rounded),
+      (_VisualCategory.inventory, 'INVENTORY', Icons.grid_view_rounded),
+      (_VisualCategory.dice, 'DICE', Icons.casino_rounded),
+    ];
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: categories.map((c) {
+        final selected = _selectedCategory == c.$1;
+        return ChoiceChip(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+          label: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(c.$3, size: 14, color: selected ? Colors.black : Colors.white70),
+              const SizedBox(width: 6),
+              GoopText(
+                c.$2,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  color: selected ? Colors.black : Colors.white70,
+                  letterSpacing: 0.6,
+                ),
+              ),
+            ],
+          ),
+          selected: selected,
+          selectedColor: flair.primary,
+          backgroundColor: flair.card.withValues(alpha: 0.6),
+          side: BorderSide(
+            color: selected ? flair.primary : Colors.white.withValues(alpha: 0.08),
+            width: 1.2,
+          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          onSelected: (_) {
+            Haptics.selection();
+            setState(() => _selectedCategory = c.$1);
+          },
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _buildDicePanel(ThemeFlair flair) {
+    final prefs = VisualPrefs.notifier.value;
+    return Card(
+      color: flair.card.withValues(alpha: 0.92),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: GoopText(
+                'CUSTOM DICE STYLE',
+                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.white54, letterSpacing: 1.0),
+              ),
+            ),
+            const SizedBox(height: 8),
+            SwipePicker<CustomDiceType>(
+              items: CustomDiceType.values,
+              value: prefs.customDiceType,
+              onChanged: (t) => VisualPrefs.setCustomDiceType(t),
+              height: 56,
+              itemBuilder: (type, isSelected) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? flair.card.withValues(alpha: 0.9)
+                      : flair.card.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                    width: isSelected ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Center(
+                  child: GoopText(
+                    type.label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      color: isSelected ? Colors.white : Colors.white54,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Center(child: _dicePreview(type: prefs.customDiceType, flair: flair)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _dicePreview({required CustomDiceType type, required ThemeFlair flair, int value = 5}) {
+    final colors = _diceColors(type, flair);
+    return Container(
+      width: 120,
+      height: 120,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: colors.$1,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: colors.$2, width: 3),
+        boxShadow: [BoxShadow(color: colors.$4, blurRadius: 12, spreadRadius: 3)],
+      ),
+      child: Text(
+        '$value',
+        style: TextStyle(
+          fontSize: 56,
+          fontWeight: FontWeight.w900,
+          color: colors.$3,
+        ),
+      ),
+    );
+  }
+
+  (Color, Color, Color, Color) _diceColors(CustomDiceType type, ThemeFlair flair) {
+    switch (type) {
+      case CustomDiceType.classicWhite:
+        return (const Color(0xFFFAFAFA), const Color(0xFF90A4AE), const Color(0xFF263238), Colors.white24);
+      case CustomDiceType.goldGlimmer:
+        return (const Color(0xFF2C2210), const Color(0xFFFFD54F), const Color(0xFFFFD54F), const Color(0x33FFD54F));
+      case CustomDiceType.frostShard:
+        return (const Color(0xFF101C2C), const Color(0xFF00E5FF), const Color(0xFF00E5FF), const Color(0x3300E5FF));
+      case CustomDiceType.moltenAmber:
+        return (const Color(0xFF2C1010), const Color(0xFFFF3D00), const Color(0xFFFF3D00), const Color(0x33FF3D00));
+      case CustomDiceType.voidPurple:
+        return (const Color(0xFF1F102C), const Color(0xFFD500F9), const Color(0xFFD500F9), const Color(0x33D500F9));
+      case CustomDiceType.toxicOoze:
+        return (const Color(0xFF102C13), const Color(0xFF00E676), const Color(0xFF00E676), const Color(0x3300E676));
+      case CustomDiceType.themeDefault:
+        return (const Color(0xFF161413), flair.primary, flair.primary, flair.primary.withValues(alpha: 0.2));
+    }
   }
 
   Widget _collapsibleSectionHeader(
