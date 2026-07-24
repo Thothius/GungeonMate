@@ -3388,7 +3388,13 @@
       "M1911"
     ],
     "Reload Roll": [
-      "Magnum"
+      "Magnum",
+      "M1911",
+      "Dungeon Eagle",
+      "38 Special",
+      "Colt 1851",
+      "Makarov",
+      "SAA"
     ],
     "Detective Magnum": [
       "Magnum"

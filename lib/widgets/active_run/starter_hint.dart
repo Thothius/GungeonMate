@@ -13,7 +13,7 @@ enum StarterKind { guns, items }
 /// Empty-state hint shown when a player has no guns or no items in
 /// inventory. For most characters it surfaces the *starting loadout*
 /// (e.g. The Marine starts with Marine Sidearm) as ghosted, tappable
-/// tiles ΓÇö taping a ghost adds that starter to the player's loadout
+/// tiles — taping a ghost adds that starter to the player's loadout
 /// without leaving the screen. Falls back to a plain message for
 /// The Paradox (random starter) and any character whose starting list
 /// is empty.
@@ -39,7 +39,7 @@ class StarterHint extends StatelessWidget {
     final isGuns = kind == StarterKind.guns;
 
     // Paradox specifically starts with a *random* loadout, so the hint
-    // doesn't apply ΓÇö leave them with a clear message instead of showing
+    // doesn't apply — leave them with a clear message instead of showing
     // 0 ghosts.
     final isParadox = character.name == 'The Paradox';
 
@@ -69,11 +69,11 @@ class StarterHint extends StatelessWidget {
             child: Center(
               child: GoopText(
                 isParadox
-                    ? 'The Paradox starts with a random loadout ΓÇö '
+                    ? 'The Paradox starts with a random loadout — '
                         'add ${isGuns ? "guns" : "items"} as you pick them up.'
                     : isGuns
-                        ? 'No guns yet ΓÇö hit ADD to bring in your first.'
-                        : 'No items yet ΓÇö pick some up!',
+                        ? 'No guns yet — hit ADD to bring in your first.'
+                        : 'No items yet — pick some up!',
                 textAlign: TextAlign.center,
                 style:
                     TextStyle(color: Colors.white.withValues(alpha: 0.7)),
@@ -116,7 +116,7 @@ class StarterHint extends StatelessWidget {
             ),
           ),
           // Render starters in the same grid layout as the real loadout
-          // so the ghost preview slots into the same visual rhythm ΓÇö the
+          // so the ghost preview slots into the same visual rhythm — the
           // user instantly recognises "this is what a filled grid will
           // look like".
           GridView.builder(
@@ -140,7 +140,7 @@ class StarterHint extends StatelessWidget {
                         onTap: () {
                           // Tile's own _handleTap already fires a light
                           // haptic, so we don't buzz twice. Capture the
-                          // messenger *before* mutating the loadout ΓÇö
+                          // messenger *before* mutating the loadout —
                           // addGun triggers a rebuild that unmounts this
                           // ghost sub-tree, so looking up the messenger
                           // via `c` afterwards would be fragile.

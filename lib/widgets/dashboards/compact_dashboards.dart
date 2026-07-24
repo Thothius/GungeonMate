@@ -189,7 +189,7 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
                 style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
               ),
               const SizedBox(height: 8),
-              // Floor selector ΓÇö horizontal scrollable row
+              // Floor selector — horizontal scrollable row
               SizedBox(
                 height: 32,
                 child: ListView.separated(
@@ -1085,7 +1085,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
 }
 
 // =============================================================================
-// Polaris Dashboard ΓÇö 3-level kill tracker with damage penalty
+// Polaris Dashboard — 3-level kill tracker with damage penalty
 // =============================================================================
 
 class PolarisDashboard extends StatefulWidget {
@@ -1253,7 +1253,7 @@ class PolarisDashboardState extends State<PolarisDashboard>
 }
 
 // =============================================================================
-// Gunther Dashboard ΓÇö 3-stage friendship tracker
+// Gunther Dashboard — 3-stage friendship tracker
 // =============================================================================
 
 class GuntherDashboard extends StatefulWidget {
@@ -1346,7 +1346,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                   style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
                 ),
               ] else
-                GoopText('MAX STAGE ΓÇö Sentient & Homing', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.purpleAccent.withValues(alpha: 0.8))),
+                GoopText('MAX STAGE — Sentient & Homing', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.purpleAccent.withValues(alpha: 0.8))),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1359,7 +1359,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
               const SizedBox(height: 10),
               GoopText(
                 stage == 3
-                    ? 'L3: 12 dmg, homing bullets. Fully sentient ΓÇö talks frequently.'
+                    ? 'L3: 12 dmg, homing bullets. Fully sentient — talks frequently.'
                     : stage == 2
                         ? 'L2: 9 dmg, bullets bounce twice. Growing personality.'
                         : 'L1: 6 dmg, piercing bullets. Clear rooms to gain friendship.',
@@ -1401,7 +1401,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
 }
 
 // =============================================================================
-// Gun Soul Dashboard ΓÇö death/respawn toggle
+// Gun Soul Dashboard — death/respawn toggle
 // =============================================================================
 
 class GunSoulDashboard extends StatefulWidget {
@@ -1486,7 +1486,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
               const SizedBox(height: 10),
               GoopText(
                 activated
-                    ? 'You died and respawned at floor start. Gun Soul is removed from your inventory. Reach the location of your death and interact with your soul to reclaim it ΓÇö dying now will end the run.'
+                    ? 'You died and respawned at floor start. Gun Soul is removed from your inventory. Reach the location of your death and interact with your soul to reclaim it — dying now will end the run.'
                     : 'Grants +1 heart container. Upon death, respawns you at the start of the current floor with all items and guns retained. Enemies respawn.',
                 style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
@@ -1502,7 +1502,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                       color: activated ? Colors.greenAccent : Colors.orangeAccent,
                     ),
                     label: GoopText(
-                      activated ? 'Soul Reclaimed' : 'Died ΓÇö Respawned',
+                      activated ? 'Soul Reclaimed' : 'Died — Respawned',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,

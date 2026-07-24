@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/goop_talk_engine.dart';
 
 /// Compact Huntress HUD: dig chance, item weights, mimic alert, and
-/// treat/pet counters. No tabs ΓÇö single concise card.
+/// treat/pet counters. No tabs — single concise card.
 class HuntressDashboardSliver extends StatefulWidget {
   const HuntressDashboardSliver({super.key});
 
@@ -117,7 +117,7 @@ class HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                 Padding(
                   padding: const EdgeInsets.only(top: 6),
                   child: GoopText(
-                    'Γ£¿ Baby Good Mimic active ΓÇö dig rate doubled',
+                    '✨ Baby Good Mimic active — dig rate doubled',
                     style: TextStyle(fontSize: 9.5, fontStyle: FontStyle.italic, color: Colors.purpleAccent.shade100),
                   ),
                 ),

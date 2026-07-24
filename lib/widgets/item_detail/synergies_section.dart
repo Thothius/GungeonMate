@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
-import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import '../../utils/fast_route.dart';
-import '../game_icon.dart';
 import '../rich_link_text.dart';
 import '../../screens/item_detail_screen.dart';
 
@@ -23,7 +21,7 @@ class SynergiesSection extends StatefulWidget {
 }
 
 class _SynergiesSectionState extends State<SynergiesSection> {
-  bool _collapsed = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -154,13 +152,13 @@ class SynergyCard extends StatelessWidget {
     final ownedLower = context.read<RunProvider>().currentOwnedLower;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 6),
+      margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: color, width: status.active ? 1.2 : 0.5),
-        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: color, width: status.active ? 1.5 : 0.8),
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+        padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -169,10 +167,10 @@ class SynergyCard extends StatelessWidget {
               children: [
                 Icon(
                   status.active ? Icons.link : Icons.link_off_outlined,
-                  size: 16,
+                  size: 18,
                   color: status.active ? Colors.amber : Colors.white38,
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Row(
                     children: [
@@ -181,15 +179,15 @@ class SynergyCard extends StatelessWidget {
                           s.name,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 5),
+                      const SizedBox(width: 6),
                       const Icon(
                         Icons.verified,
-                        size: 13,
+                        size: 14,
                         color: Colors.cyan,
                       ),
                     ],
@@ -197,10 +195,10 @@ class SynergyCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Wrap(
-              spacing: 6,
-              runSpacing: 4,
+              spacing: 8,
+              runSpacing: 6,
               children: s.items
                   .where((i) => i.toLowerCase() != currentLower)
                   .map((i) => SynergyChip(
@@ -296,85 +294,57 @@ class SynergyChip extends StatelessWidget {
     final item = resolved.item;
     final resolvable = gun != null || item != null;
 
-    final flair = AppTheme.flair;
-    final filled = flair.chipFilled;
-    final accent = filled
-        ? Colors.amber.withValues(alpha: 0.4)
-        : Colors.amber.withValues(alpha: 0.85);
-    final mutedRule = Colors.white.withValues(alpha: 0.18);
-    final bg = !filled
-        ? null
-        : (missing
-            ? Colors.white.withValues(alpha: 0.05)
-            : Colors.amber.withValues(alpha: 0.15));
-    final border = filled
-        ? (missing ? Colors.white.withValues(alpha: 0.15) : accent)
-        : null;
-
     final iconPath = gun?.icon ?? item?.icon ?? '';
-    final quality = gun?.quality ?? item?.quality ?? '';
-    final label = Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (resolvable && iconPath.isNotEmpty) ...[
-          Opacity(
-            opacity: missing ? 0.5 : 1.0,
-            child: GameIcon(
-              assetPath: iconPath,
-              fallback: gun != null
-                  ? Icons.gps_fixed
-                  : Icons.inventory_2_outlined,
-              quality: quality,
-              size: 18,
-              showRing: false,
-            ),
-          ),
-          const SizedBox(width: 4),
-        ],
-        GoopText(
-          name,
-          style: TextStyle(
-            fontSize: 11.5,
-            color: missing ? Colors.white54 : Colors.white,
-          ),
-        ),
-        if (resolvable) ...[
-          const SizedBox(width: 2),
-          Icon(
-            Icons.chevron_right,
-            size: 14,
-            color: missing ? Colors.white38 : Colors.amber,
-          ),
-        ],
-      ],
-    );
+    final pillColor = missing
+        ? Colors.white.withValues(alpha: 0.08)
+        : Colors.amber.withValues(alpha: 0.4);
 
-    final body = Container(
-      padding: filled
-          ? const EdgeInsets.symmetric(horizontal: 8, vertical: 3)
-          : const EdgeInsets.fromLTRB(2, 2, 2, 1),
-      decoration: filled
-          ? BoxDecoration(
-              color: bg,
-              borderRadius: BorderRadius.circular(flair.chipRadius),
-              border: Border.all(color: border!),
-            )
-          : BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: missing ? mutedRule : accent,
-                  width: 1,
-                ),
+    final body = Opacity(
+      opacity: missing ? 0.4 : 1.0,
+      child: Container(
+        width: 72,
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: missing
+              ? const Color(0xFF0D1117)
+              : Colors.amber.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: pillColor, width: 1.8),
+          boxShadow: !missing
+              ? [BoxShadow(color: Colors.amber.withValues(alpha: 0.12), blurRadius: 6)]
+              : null,
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: SizedBox(
+                width: 52,
+                height: 52,
+                child: _buildImage(iconPath, resolvable),
               ),
             ),
-      child: label,
+            const SizedBox(height: 6),
+            GoopText(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 9.5,
+                fontWeight: FontWeight.w700,
+                color: missing ? Colors.white30 : Colors.white70,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
 
     if (!resolvable) return body;
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(flair.chipRadius),
+        borderRadius: BorderRadius.circular(10),
         onTap: () {
           FocusManager.instance.primaryFocus?.unfocus();
           Navigator.push(
@@ -387,6 +357,36 @@ class SynergyChip extends StatelessWidget {
           showEntityPeekSheet(context, gun: gun, item: item);
         },
         child: body,
+      ),
+    );
+  }
+
+  Widget _buildImage(String path, bool resolvable) {
+    if (path.isEmpty) return _fallback();
+    if (path.startsWith('http')) {
+      return Image.network(
+        path,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        errorBuilder: (_, __, ___) => _fallback(),
+      );
+    }
+    return Image.asset(
+      path,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.none,
+      errorBuilder: (_, __, ___) => _fallback(),
+    );
+  }
+
+  Widget _fallback() {
+    return Container(
+      color: const Color(0xFF0D1117),
+      child: Center(
+        child: GoopText(
+          name.isNotEmpty ? name[0].toUpperCase() : '?',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white38),
+        ),
       ),
     );
   }

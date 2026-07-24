@@ -13,7 +13,7 @@ class ItemDetailHeader extends StatelessWidget {
   final bool isGun;
   final bool isActive;
   final String iconPath;
-  final String sellPrice;
+  final String chestColor;
   final int synergyCount;
   final double curse;
   final double coolness;
@@ -26,7 +26,7 @@ class ItemDetailHeader extends StatelessWidget {
     required this.isGun,
     required this.isActive,
     required this.iconPath,
-    required this.sellPrice,
+    required this.chestColor,
     required this.synergyCount,
     required this.curse,
     required this.coolness,
@@ -114,13 +114,8 @@ class ItemDetailHeader extends StatelessWidget {
                       value: quality.toUpperCase(),
                       color: QualityBadge.colorFor(quality),
                     ),
-                  if (sellPrice.isNotEmpty)
-                    MetadataChip(
-                      icon: Icons.monetization_on_outlined,
-                      label: 'Sell',
-                      value: sellPrice,
-                      color: Colors.amber,
-                    ),
+                  if (chestColor.isNotEmpty)
+                    _ChestChip(chestColor: chestColor),
                   MetadataChip(
                     icon: Icons.hub_outlined,
                     label: 'Synergies',
@@ -198,6 +193,80 @@ class MetadataChip extends StatelessWidget {
               color: Colors.white,
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ChestChip extends StatelessWidget {
+  final String chestColor;
+  const _ChestChip({required this.chestColor});
+
+  static const Map<String, Color> _colors = {
+    'red': Color(0xFFE53935),
+    'blue': Color(0xFF1E88E5),
+    'green': Color(0xFF43A047),
+    'black': Color(0xFF222222),
+    'brown': Color(0xFF8D6E63),
+    'rainbow': Colors.pinkAccent,
+  };
+
+  static const Map<String, String> _ranks = {
+    'brown': 'D',
+    'blue': 'C',
+    'green': 'B',
+    'red': 'A',
+    'black': 'S',
+    'rainbow': '★',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final key = chestColor.toLowerCase();
+    final color = _colors[key] ?? Colors.white38;
+    final rank = _ranks[key];
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.45), width: 0.8),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.inventory_2_outlined, size: 14, color: color),
+          const SizedBox(width: 5),
+          GoopText(
+            'Chest ',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: color.withValues(alpha: 0.85),
+            ),
+          ),
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white24, width: 0.8),
+            ),
+          ),
+          if (rank != null) ...[
+            const SizedBox(width: 5),
+            GoopText(
+              rank,
+              style: TextStyle(
+                fontSize: 12.5,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ],
       ),
     );

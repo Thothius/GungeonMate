@@ -24,9 +24,9 @@ extension GunSortLabel on GunSort {
       case GunSort.quality:
         return 'Quality';
       case GunSort.name:
-        return 'Name (AΓåÆZ)';
+        return 'Name (A→Z)';
       case GunSort.dps:
-        return 'DPS (highΓåÆlow)';
+        return 'DPS (high→low)';
     }
   }
 
@@ -52,7 +52,7 @@ extension ItemSortLabel on ItemSort {
       case ItemSort.quality:
         return 'Quality';
       case ItemSort.name:
-        return 'Name (AΓåÆZ)';
+        return 'Name (A→Z)';
       case ItemSort.type:
         return 'Type';
     }
@@ -73,7 +73,7 @@ extension ItemSortLabel on ItemSort {
 }
 
 /// Convert quality letter ('S' / '1S' / 'A' / 'B' / 'C' / 'D' / 'N' / '')
-/// into a sortable rank ΓÇö lower = appears first.
+/// into a sortable rank — lower = appears first.
 int _qualityRank(String q) {
   switch (q.toUpperCase()) {
     case 'S':
@@ -95,7 +95,7 @@ int _qualityRank(String q) {
 }
 
 /// Returns a sorted view of [src] according to [mode].
-/// `GunSort.pickup` short-circuits and returns [src] unchanged ΓÇö the
+/// `GunSort.pickup` short-circuits and returns [src] unchanged — the
 /// player's pickup order is the natural list order, so we avoid both
 /// the allocation and the sort cost on every rebuild. Callers must not
 /// mutate the returned list (they don't).
@@ -246,7 +246,7 @@ class SortPickerSheet<T> extends StatelessWidget {
 }
 
 /// Quick-actions sheet for solo-mode long-press on an inventory tile.
-/// Three large tap targets ΓÇö Open, Favourite, Remove ΓÇö plus a passive
+/// Three large tap targets — Open, Favourite, Remove — plus a passive
 /// header that shows what tile we're acting on.
 class TileActionsSheet extends StatelessWidget {
   final Gun? gun;

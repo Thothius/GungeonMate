@@ -107,7 +107,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
               if (!_collapsed) ...[
               const Divider(color: Colors.white12, height: 16),
 
-              // Junk counter ΓÇö full width, no overflow
+              // Junk counter — full width, no overflow
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                 decoration: BoxDecoration(
@@ -172,7 +172,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
               ),
               const SizedBox(height: 8),
 
-              // Toggle row ΓÇö full width, two big compact tap targets
+              // Toggle row — full width, two big compact tap targets
               Row(
                 children: [
                   Expanded(
@@ -341,7 +341,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
               ),
               const Spacer(),
               GoopText(
-                '├ù${multiplier.toStringAsFixed(2)}',
+                '×${multiplier.toStringAsFixed(2)}',
                 style: TextStyle(
                   fontSize: 9,
                   color: Colors.greenAccent,
@@ -493,7 +493,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                 ),
               ),
               GoopText(
-                '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} ΓåÆ ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
+                '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
                 style: TextStyle(
                   fontSize: 10,
                   color: Colors.greenAccent,

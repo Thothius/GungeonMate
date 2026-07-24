@@ -181,7 +181,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final onMyMpPage = isMpActive
         ? _currentPage == myMpPage
         : true;
-    // onCoop tracking removed ΓÇö was unused
+    // onCoop tracking removed — was unused
 
     void navigateTo(int i) => _page.animateToPage(i,
         duration: const Duration(milliseconds: 260), curve: Curves.easeOut);
@@ -459,7 +459,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                     ),
                                   ),
                                   subtitle: GoopText(
-                                    isGun ? 'Gun ΓÇó Quality $quality' : 'Item ΓÇó Quality $quality',
+                                    isGun ? 'Gun • Quality $quality' : 'Item • Quality $quality',
                                     style: const TextStyle(
                                       color: Colors.white38,
                                       fontSize: 10.5,

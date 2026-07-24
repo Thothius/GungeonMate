@@ -29,27 +29,27 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
     if (lvl < 20) {
       formName = 'Base Form';
       description = 'Fires wide shotgun-like energy blasts.';
-      statsDesc = 'Damage: 4.5 ΓÇó Reload: 1.5s ΓÇó Capacity: 450 ΓÇó Spread: 10┬░';
+      statsDesc = 'Damage: 4.5 • Reload: 1.5s • Capacity: 450 • Spread: 10°';
     } else if (lvl < 30) {
       formName = 'Automatic Form';
       description = 'Increases fire rate and becomes fully automatic.';
-      statsDesc = 'Damage: 4.5 ΓÇó Reload: 1.5s ΓÇó Capacity: 450 ΓÇó Spread: 10┬░ (Auto)';
+      statsDesc = 'Damage: 4.5 • Reload: 1.5s • Capacity: 450 • Spread: 10° (Auto)';
     } else if (lvl < 40) {
       formName = 'Defender Form';
       description = 'Shoots larger, high-velocity energy spheres.';
-      statsDesc = 'Damage: 6.5 ΓÇó Reload: 1.1s ΓÇó Capacity: 550 ΓÇó Spread: 5┬░';
+      statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 5°';
     } else if (lvl < 50) {
       formName = 'Vindicator Form';
       description = 'Fires faster with elevated accuracy and tighter groupings.';
-      statsDesc = 'Damage: 6.5 ΓÇó Reload: 1.1s ΓÇó Capacity: 550 ΓÇó Spread: 3┬░';
+      statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 3°';
     } else if (lvl < 60) {
       formName = 'Laser Rifle';
       description = 'Fires sustained continuous rapid energy laser pulses.';
-      statsDesc = 'Damage: 6.5 ΓÇó Reload: 1.1s ΓÇó Capacity: 550 ΓÇó Spread: 2┬░';
+      statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 2°';
     } else {
       formName = 'Awakened Gunderfury';
-      description = 'Legendary form of the Blessed Gunseeker. Rapidly shoots twin light beams with absolute 0┬░ spread, bouncing, and piercing!';
-      statsDesc = 'Damage: 10.0 ΓÇó Reload: 0.6s ΓÇó Capacity: 650 ΓÇó Spread: 0┬░ (Perfect, Piercing, Bouncing)';
+      description = 'Legendary form of the Blessed Gunseeker. Rapidly shoots twin light beams with absolute 0° spread, bouncing, and piercing!';
+      statsDesc = 'Damage: 10.0 • Reload: 0.6s • Capacity: 650 • Spread: 0° (Perfect, Piercing, Bouncing)';
     }
 
     return SliverToBoxAdapter(
@@ -582,7 +582,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             GoopText(
-                              'Stage $activeStage: ${currentSpec.name} ΓÇó ${currentSpec.dps}',
+                              'Stage $activeStage: ${currentSpec.name} • ${currentSpec.dps}',
                               style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: currentSpec.color),
                             ),
                             const SizedBox(height: 4),
@@ -680,7 +680,7 @@ class EvolverStageSpec {
 }
 
 
-/// Damage Calculator bottom sheet ΓÇö opened via the calc icon in the
+/// Damage Calculator bottom sheet — opened via the calc icon in the
 /// GungeoneerHeader trailing row. Sums quantifiable "Damage Up"/"Damage
 /// Down" effects from the player's current guns + items via
 /// [DamageCalculator] and applies the resulting multiplier to every

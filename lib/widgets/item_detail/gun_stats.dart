@@ -1100,7 +1100,6 @@ class GunStats extends StatelessWidget {
     final meta = <MapEntry<String, String>>[
       MapEntry('Class', gun.gunClass),
       MapEntry('Sell', gun.sellPrice),
-      MapEntry('Chest', gun.chestColorDisplay),
     ].where((e) => e.value.isNotEmpty).toList();
 
     final p = context.watch<RunProvider>();
@@ -1124,6 +1123,8 @@ class GunStats extends StatelessWidget {
         : null;
 
     final String animationAsset;
+    final bool isGunderfury = gun.name.toLowerCase() == 'gunderfury';
+    final String displayType = isGunderfury ? '???' : gun.type;
     final String typeLower = gun.type.toLowerCase();
     if (typeLower.contains('charged') || typeLower.contains('charge')) {
       animationAsset = 'assets/animations/gun_types/Chargeweapon_demo.gif';
@@ -1167,7 +1168,7 @@ class GunStats extends StatelessWidget {
                               const SizedBox(width: 4),
                               Flexible(
                                 child: GoopText(
-                                  gun.type.toUpperCase(),
+                                  displayType.toUpperCase(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -1192,7 +1193,7 @@ class GunStats extends StatelessWidget {
                                 height: 80,
                                 alignment: Alignment.center,
                                 child: GoopText(
-                                  gun.type,
+                                  displayType,
                                   style: const TextStyle(color: Colors.white54, fontSize: 10),
                                 ),
                               ),
@@ -1237,7 +1238,9 @@ class GunStats extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           GoopText(
-                            gun.dpsValue > 0 ? gun.dpsValue.toStringAsFixed(1) : (gun.dps.isEmpty ? '0.0' : gun.dps),
+                            isGunderfury
+                                ? gun.getDynamicDps(gunderLevel: p.gunderfuryLevel).toStringAsFixed(1)
+                                : (gun.dpsValue > 0 ? gun.dpsValue.toStringAsFixed(1) : (gun.dps.isEmpty ? '0.0' : gun.dps)),
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.w900,

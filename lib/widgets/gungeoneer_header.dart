@@ -267,28 +267,17 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                       // static icon → in-game GIF → animated card art)
                       GestureDetector(
                         onTap: _onAvatarTapped,
-                        child: Container(
-                          width: 56,
+                        child: SizedBox(
+                          width: 72,
                           height: 56,
-                          decoration: BoxDecoration(
-                            color: f.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: f.primary.withValues(alpha: 0.35),
-                              width: 1.2,
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(1.2),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.8),
-                            child: _buildAvatarContent(iconPath),
-                          ),
+                          child: _buildAvatarContent(iconPath),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
 
                       if (trailingWidget != null) ...[
-                        Flexible(child: trailingWidget),
+                        const Spacer(),
+                        trailingWidget,
                       ],
                     ],
                   ),

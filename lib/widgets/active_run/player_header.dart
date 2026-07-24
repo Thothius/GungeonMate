@@ -211,13 +211,13 @@ class MpHeader extends StatelessWidget {
       statusText = 'Connected';
     } else if (isReconnecting) {
       final att = session.autoReconnectAttempts;
-      statusText = att > 0 ? 'Reconnecting (attempt $att)ΓÇª' : 'ReconnectingΓÇª';
+      statusText = att > 0 ? 'Reconnecting (attempt $att)…' : 'Reconnecting…';
     } else if (isSearching) {
-      statusText = 'SearchingΓÇª';
+      statusText = 'Searching…';
     } else if (session.status == MpStatus.handshaking) {
-      statusText = 'ConnectingΓÇª';
+      statusText = 'Connecting…';
     } else if (isAutoRetrying) {
-      statusText = 'Retrying (attempt ${session.autoReconnectAttempts})ΓÇª';
+      statusText = 'Retrying (attempt ${session.autoReconnectAttempts})…';
     } else {
       statusText = 'Offline';
     }
@@ -320,7 +320,7 @@ class MpHeader extends StatelessWidget {
                         onPressed: () => session.reconnect(),
                       )
                     else
-                      // Session name ΓÇö stays constant across reconnects so
+                      // Session name — stays constant across reconnects so
                       // both players can verbally confirm they're paired.
                       Row(
                         mainAxisSize: MainAxisSize.min,

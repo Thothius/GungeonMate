@@ -157,7 +157,7 @@ class StatAdjusterSheet extends StatelessWidget {
 }
 
 // =============================================================================
-// Coolness hub sheet ΓÇö stat adjuster + quick actions + details link
+// Coolness hub sheet — stat adjuster + quick actions + details link
 // =============================================================================
 
 class CoolnessSheet extends StatelessWidget {
@@ -308,10 +308,11 @@ class CoolnessSheet extends StatelessWidget {
             ),
             const SizedBox(height: 14),
 
-            // Compact live effects at current coolness level
+            // Compact live effects at current coolness level — centered
             Wrap(
-              spacing: 6,
-              runSpacing: 6,
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 _coolEffectChip('CD SPEEDUP', '+${rechargeReduction.toStringAsFixed(0)}%', accent),
                 _coolEffectChip('FUSE REDUCTION', '${fuseReduction.toStringAsFixed(1)}%', accent),
@@ -437,7 +438,7 @@ class CoolnessSheet extends StatelessWidget {
 }
 
 // =============================================================================
-// Curse hub sheet ΓÇö stat adjuster + curse actions + details link
+// Curse hub sheet — stat adjuster + curse actions + details link
 // =============================================================================
 
 class CurseSheet extends StatelessWidget {
@@ -585,7 +586,7 @@ class CurseSheet extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // Curse meter bar ΓÇö visual 0-10 scale
+            // Curse meter bar — visual 0-10 scale
             Builder(builder: (context) {
               final clamped = value.clamp(0.0, 10.0);
               final pct = clamped / 10.0;
@@ -664,7 +665,7 @@ class CurseSheet extends StatelessWidget {
                 ),
               ),
             ),
-            // 3├ù2 grid of effect chips ΓÇö perfectly aligned
+            // 3×2 grid of effect chips — perfectly aligned
             Builder(builder: (context) {
               final currentIdx = value.floor().clamp(0, 10);
               final row = curseTable[currentIdx];

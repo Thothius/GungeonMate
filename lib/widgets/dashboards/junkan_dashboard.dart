@@ -34,48 +34,48 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
     if (hasGoldJunk) {
       rankName = 'MECHA JUNKAN (GOLD SUIT)';
       description = 'High-tech gold mechsuit! Jammed enemies struck by his machine gun become normal. Bypasses boss DPS cap.';
-      stats = 'DMG: 2.2/shot (Machine Gun) ΓÇó 20.0 (Laser Blade) ΓÇó 8.0/rocket';
+      stats = 'DMG: 2.2/shot (Machine Gun) • 20.0 (Laser Blade) • 8.0/rocket';
     } else {
       switch (junkCount) {
         case 0:
           rankName = 'PEASANT';
           description = 'Junkan harmlessly pushes enemies around.';
-          stats = 'DMG: 0.0 ΓÇó Role: Companion ΓÇó Speed: Steady';
+          stats = 'DMG: 0.0 • Role: Companion • Speed: Steady';
           break;
         case 1:
           rankName = 'SQUIRE';
           description = 'Gains helmet. Headbutts enemies slowly.';
-          stats = 'DMG: 3.0 ΓÇó Attack: Headbutt ΓÇó Armor: Helmet';
+          stats = 'DMG: 3.0 • Attack: Headbutt • Armor: Helmet';
           break;
         case 2:
           rankName = 'HEDGE KNIGHT';
           description = 'Gains shield. Attacks more frequently by shield-bashing.';
-          stats = 'DMG: 5.0 ΓÇó Attack: Shield-bash ΓÇó Armor: Shield';
+          stats = 'DMG: 5.0 • Attack: Shield-bash • Armor: Shield';
           break;
         case 3:
           rankName = 'KNIGHT';
           description = 'Gains sword. Attacks more frequently by slicing enemies.';
-          stats = 'DMG: 7.0 ΓÇó Attack: Sword-slice ΓÇó Armor: Sword';
+          stats = 'DMG: 7.0 • Attack: Sword-slice • Armor: Sword';
           break;
         case 4:
           rankName = 'KNIGHT LIEUTENANT';
           description = 'Gains helmet adornment. Sword attacks are faster and deal more damage.';
-          stats = 'DMG: 9.0 ΓÇó Attack: Upgraded Slice ΓÇó Armor: Plated';
+          stats = 'DMG: 9.0 • Attack: Upgraded Slice • Armor: Plated';
           break;
         case 5:
           rankName = 'KNIGHT COMMANDER';
           description = 'Gains cape. Spin-attacks multiple enemies simultaneously.';
-          stats = 'DMG: 10.0 ├ù 2 (Double Spin) ΓÇó Attack: Spin ΓÇó Armor: Cape';
+          stats = 'DMG: 10.0 × 2 (Double Spin) • Attack: Spin • Armor: Cape';
           break;
         case 6:
           rankName = 'HOLY KNIGHT';
           description = 'Occasionally Blanks. Sacrifices himself to revive you at full health if you die.';
-          stats = 'DMG: 13.33 ΓÇó Attack: Holy Slice ΓÇó Ability: Blank & Revive';
+          stats = 'DMG: 13.33 • Attack: Holy Slice • Ability: Blank & Revive';
           break;
         default:
           rankName = 'ANGELIC KNIGHT';
           description = 'Gains wings. Flying. Fires rapid pink homing projectile shots.';
-          stats = 'DMG: 10.0/shot ΓÇó Attack: Ranged Projectiles ΓÇó Ability: Flying';
+          stats = 'DMG: 10.0/shot • Attack: Ranged Projectiles • Ability: Flying';
           break;
       }
     }

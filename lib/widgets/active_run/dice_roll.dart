@@ -197,7 +197,7 @@ class DiceRollDialogState extends State<DiceRollDialog> with TickerProviderState
       _myScore = sum;
 
       // Spawn satisfying sparkles at actual die position
-      // ponytail: y is still hardcoded ΓÇö would need a per-die GlobalKey for exact y.
+      // ponytail: y is still hardcoded — would need a per-die GlobalKey for exact y.
       // x is now accurate via _diceRowKey RenderBox. Upgrade path: GlobalKey per die.
       final renderBox = _diceRowKey.currentContext?.findRenderObject() as RenderBox?;
       if (renderBox != null) {
@@ -898,5 +898,5 @@ DiceStyle _getDiceStyle(CustomDiceType type, ThemeFlair flair) {
   }
 }
 
-// _InteractiveDogStrip and DogBehavior/Facing enums removed ΓÇö Huntress HUD
+// _InteractiveDogStrip and DogBehavior/Facing enums removed — Huntress HUD
 // simplified to compact single-card layout without animated dog strip.

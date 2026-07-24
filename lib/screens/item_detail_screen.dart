@@ -125,7 +125,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     isGun: gun != null,
                     isActive: item?.isActive ?? false,
                     iconPath: gun?.icon ?? item?.icon ?? '',
-                    sellPrice: gun?.sellPrice ?? item?.sellPrice ?? '',
+                    chestColor: gun?.chestColorDisplay ?? item?.chestColorDisplay ?? '',
                     synergyCount: synergyStatuses.length,
                     curse: gun?.curse ?? item?.curse ?? 0.0,
                     coolness: gun?.coolness ?? item?.coolness ?? 0.0,

@@ -78,7 +78,7 @@ class SummaryTab extends StatelessWidget {
   }
 }
 
-/// Multiplayer Summary page ΓÇö swipe right from P2 to reach it.
+/// Multiplayer Summary page — swipe right from P2 to reach it.
 /// Shows both gungeoneers as animated GIFs with usernames, a compact
 /// stats grid, and a collapsible synergy overview with visual icon pairs.
 class MpSummaryPage extends StatefulWidget {
@@ -314,7 +314,7 @@ class MpSummaryPageState extends State<MpSummaryPage> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: GoopText(
-                          'Peer data may be stale ΓÇö showing last known loadout.',
+                          'Peer data may be stale — showing last known loadout.',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
@@ -344,7 +344,7 @@ class MpSummaryPageState extends State<MpSummaryPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Tappable header ΓÇö tap to expand/collapse
+                    // Tappable header — tap to expand/collapse
                     InkWell(
                       onTap: () {
                         Haptics.selection();
@@ -662,9 +662,9 @@ class GungeoneerPortrait extends StatelessWidget {
   }
 }
 
-// _StatComparisonRow removed ΓÇö replaced by compact _statChip grid in MpSummaryPageState.
+// _StatComparisonRow removed — replaced by compact _statChip grid in MpSummaryPageState.
 
-/// One row in the synergy overview panel ΓÇö visual icon pairs.
+/// One row in the synergy overview panel — visual icon pairs.
 /// Owned items show full-color with a glow; missing items are greyed out.
 class SynergySummaryRow extends StatelessWidget {
   final Synergy synergy;
@@ -694,25 +694,25 @@ class SynergySummaryRow extends StatelessWidget {
     final allItems = <String>[...synergy.items, ...synergy.anyOf];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: isActive
-              ? Colors.green.withValues(alpha: 0.04)
-              : Colors.white.withValues(alpha: 0.02),
-          borderRadius: BorderRadius.circular(8),
+              ? Colors.green.withValues(alpha: 0.05)
+              : Colors.white.withValues(alpha: 0.03),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: statusColor.withValues(alpha: isActive ? 0.2 : 0.06),
-            width: 1,
+            color: statusColor.withValues(alpha: isActive ? 0.25 : 0.08),
+            width: 1.2,
           ),
         ),
         child: Row(
           children: [
             // Status dot
             Container(
-              width: 6,
-              height: 6,
+              width: 8,
+              height: 8,
               decoration: BoxDecoration(
                 color: statusColor,
                 shape: BoxShape.circle,
@@ -721,21 +721,21 @@ class SynergySummaryRow extends StatelessWidget {
                     : null,
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 10),
             // Synergy name
             GoopText(
               synergy.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.w800,
                 color: isActive
                     ? Colors.white
                     : Colors.white.withValues(alpha: 0.7),
               ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 10),
             // Visual icon pairs
             Expanded(
               child: SingleChildScrollView(
@@ -746,7 +746,7 @@ class SynergySummaryRow extends StatelessWidget {
                       if (i > 0) ...[
                         // Connecting line between items
                         Container(
-                          width: 12,
+                          width: 14,
                           height: 2,
                           margin: const EdgeInsets.symmetric(horizontal: 2),
                           decoration: BoxDecoration(
@@ -770,12 +770,12 @@ class SynergySummaryRow extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 8),
             // Status badge
             GoopText(
               isActive ? 'ACTIVE' : isPartial ? 'PARTIAL' : 'LOCKED',
               style: TextStyle(
-                fontSize: 8.5,
+                fontSize: 9.5,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 0.5,
                 color: statusColor,
@@ -788,7 +788,7 @@ class SynergySummaryRow extends StatelessWidget {
   }
 }
 
-/// A single item icon inside a synergy row ΓÇö lit if owned, greyed if missing.
+/// A single item icon inside a synergy row — lit if owned, greyed if missing.
 class SynergyItemIcon extends StatelessWidget {
   final String itemName;
   final bool isOwned;
@@ -816,17 +816,17 @@ class SynergyItemIcon extends StatelessWidget {
     return Opacity(
       opacity: isOwned ? 1.0 : 0.35,
       child: Container(
-        width: 28,
-        height: 28,
+        width: 36,
+        height: 36,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: ringColor, width: 1.5),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: ringColor, width: 1.8),
           boxShadow: isOwned && isActive
               ? [BoxShadow(color: Colors.greenAccent.withValues(alpha: 0.15), blurRadius: 4)]
               : null,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(6),
           child: _buildImage(iconPath),
         ),
       ),

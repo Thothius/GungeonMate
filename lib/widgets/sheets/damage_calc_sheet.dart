@@ -98,7 +98,7 @@ class DamageCalcSheet extends StatelessWidget {
                     ),
                     GoopText(
                       c.percent == 0
-                          ? 'ΓÇö'
+                          ? '—'
                           : '${c.percent >= 0 ? '+' : ''}${c.percent.toStringAsFixed(0)}%',
                       style: TextStyle(
                         fontSize: 11,
@@ -138,7 +138,7 @@ class DamageCalcSheet extends StatelessWidget {
                     ),
                     const Spacer(),
                     GoopText(
-                      '├ù${multiplier.toStringAsFixed(2)}',
+                      '×${multiplier.toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontSize: 9,
                         color: Colors.greenAccent,
@@ -211,7 +211,7 @@ class DamageCalcSheet extends StatelessWidget {
                       ),
                     ),
                     GoopText(
-                      '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} ΓåÆ ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
+                      '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
                       style: const TextStyle(
                         fontSize: 10,
                         color: Colors.greenAccent,

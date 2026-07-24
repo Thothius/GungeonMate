@@ -146,16 +146,17 @@ class _SynergyRow extends StatelessWidget {
     final s = status.synergy;
     return Container(
       margin: const EdgeInsets.only(top: 6),
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: status.active
             ? Colors.amber.withValues(alpha: 0.08)
             : Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: status.active
               ? Colors.amber.withValues(alpha: 0.5)
               : Colors.white.withValues(alpha: 0.08),
+          width: 1.2,
         ),
       ),
       child: Column(
@@ -167,16 +168,16 @@ class _SynergyRow extends StatelessWidget {
                 status.active
                     ? Icons.check_circle
                     : Icons.radio_button_unchecked,
-                size: 15,
+                size: 16,
                 color: status.active ? Colors.amber : Colors.white54,
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   s.name,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13.5,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -191,14 +192,14 @@ class _SynergyRow extends StatelessWidget {
             ],
           ),
           if (status.missing.isNotEmpty) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Wrap(
-              spacing: 6,
-              runSpacing: 4,
+              spacing: 8,
+              runSpacing: 6,
               children: status.missing
                   .map((m) => Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 7, vertical: 2),
+                            horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(10),

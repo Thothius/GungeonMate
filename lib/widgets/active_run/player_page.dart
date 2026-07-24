@@ -5,6 +5,7 @@ import '../../providers/run_provider.dart';
 import '../../models/gun.dart';
 import '../../models/item.dart';
 import '../../models/player.dart';
+import '../../models/synergy.dart';
 import '../periodic_tile.dart';
 import '../gungeoneer_header.dart';
 import '../inventory_list_row.dart';
@@ -25,12 +26,14 @@ import 'starter_hint.dart';
 import 'summary_tab.dart';
 import '../../screens/item_detail_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
+import '../../screens/synergies_overview_screen.dart';
+import '../game_icon.dart';
 
 /// A single player's loadout view. Re-usable for main + coop.
 /// Coop view hides coolness/curse/synergies (those are run-scope).
 ///
 /// Stateful so each tab can hold its own gun/item sort preference. Sort
-/// state intentionally does *not* persist across app restarts ΓÇö it's a
+/// state intentionally does *not* persist across app restarts — it's a
 /// glance preference, not a saved configuration.
 class PlayerPage extends StatefulWidget {
   final PlayerSlot slot;
@@ -44,7 +47,7 @@ class PlayerPageState extends State<PlayerPage> {
   // Sort modes are persisted per-slot via SharedPreferences so the
   // user's choice survives player switches *and* app restarts. We
   // initialise to `pickup` (the natural order) and asynchronously
-  // hydrate from prefs in initState ΓÇö the brief flash of pickup-order
+  // hydrate from prefs in initState — the brief flash of pickup-order
   // before hydration is unnoticeable in practice and avoids blocking
   // the first frame on a disk read.
   GunSort _gunSort = GunSort.pickup;
@@ -55,7 +58,7 @@ class PlayerPageState extends State<PlayerPage> {
   InvView _invView = InvView.grid;
 
   /// True once the user has explicitly picked a sort *or* the prefs
-  /// hydration has resolved ΓÇö whichever came first. Prevents a slow
+  /// hydration has resolved — whichever came first. Prevents a slow
   /// initial load from clobbering a fast tap on the sort sheet (rare,
   /// but cheap to defend against).
   bool _sortHydrated = false;
@@ -94,7 +97,7 @@ class PlayerPageState extends State<PlayerPage> {
       });
     } catch (_) {
       // SharedPreferences failed to materialise (rare platform issue).
-      // We just keep the in-memory defaults ΓÇö no UI surface needed.
+      // We just keep the in-memory defaults — no UI surface needed.
       _sortHydrated = true;
     }
   }
@@ -116,7 +119,7 @@ class PlayerPageState extends State<PlayerPage> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt(_itemSortKey, s.index);
     } catch (_) {
-      // Same rationale as _saveGunSort ΓÇö persistence is best-effort.
+      // Same rationale as _saveGunSort — persistence is best-effort.
     }
   }
 
@@ -171,16 +174,22 @@ class PlayerPageState extends State<PlayerPage> {
 
     // Identify the highest-DPS gun in this player's loadout so both
     // grid and list views can surface it subtly (gold crown tint).
+    double effectiveDps(Gun g) {
+      if (g.name.toLowerCase() == 'gunderfury') {
+        return g.getDynamicDps(gunderLevel: p.gunderfuryLevel);
+      }
+      return g.dpsValue;
+    }
     final topDpsName = player.guns.isEmpty
         ? ''
         : player.guns
-            .reduce((a, b) => a.dpsValue > b.dpsValue ? a : b)
+            .reduce((a, b) => effectiveDps(a) > effectiveDps(b) ? a : b)
             .name;
     final topDps = player.guns.isEmpty
         ? 0.0
-        : player.guns.map((g) => g.dpsValue).reduce((a, b) => a > b ? a : b);
+        : player.guns.map(effectiveDps).reduce((a, b) => a > b ? a : b);
 
-    // Synergy glow: map of lowercased name ΓåÆ Color for every item/gun
+    // Synergy glow: map of lowercased name → Color for every item/gun
     // that is part of a currently-active synergy (combined inventories).
     final glowColors = p.activeSynergyGlowColors;
 
@@ -211,7 +220,7 @@ class PlayerPageState extends State<PlayerPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                   const SpongeButton(),
-                  // Damage calc toggle ΓÇö tap to show/hide DPS terminal on dashboard,
+                  // Damage calc toggle — tap to show/hide DPS terminal on dashboard,
                   // long-press to open the full DPS breakdown sheet.
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
@@ -234,7 +243,7 @@ class PlayerPageState extends State<PlayerPage> {
                       );
                     },
                   ),
-                  // Effects panel toggle ΓÇö tap to show/hide the effects accordion.
+                  // Effects panel toggle — tap to show/hide the effects accordion.
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
@@ -255,7 +264,7 @@ class PlayerPageState extends State<PlayerPage> {
                       );
                     },
                   ),
-                  // Shrine tracker ΓÇö tap to open the shrine picker,
+                  // Shrine tracker — tap to open the shrine picker,
                   // long-press to toggle the shrine usage panel.
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
@@ -315,7 +324,7 @@ class PlayerPageState extends State<PlayerPage> {
             ),
           ),
         ),
-        // Compact DPS readout ΓÇö visible when Damage Calculator toggle is ON
+        // Compact DPS readout — visible when Damage Calculator toggle is ON
         SliverToBoxAdapter(
           child: ListenableBuilder(
             listenable: VisualPrefs.notifier,
@@ -403,6 +412,16 @@ class PlayerPageState extends State<PlayerPage> {
             return DashboardSwiper(slot: _slot);
           },
         ),
+        // Synergies — vertical list of all partial+active synergies with big item pills
+        if (isMain) ...[
+          SliverToBoxAdapter(
+            child: _SynergyPanel(
+              allSynergies: p.allSynergies,
+              ownedLower: state.allItemNames.map((n) => n.toLowerCase()).toSet(),
+              provider: p,
+            ),
+          ),
+        ],
         SectionHeaderSliver(
           title: 'Guns',
           count: guns.length,
@@ -592,7 +611,7 @@ class PlayerPageState extends State<PlayerPage> {
     );
   }
 
-  /// Inline +/- bottom sheet for a quick coolness/curse tweak ΓÇö opened
+  /// Inline +/- bottom sheet for a quick coolness/curse tweak — opened
   /// by long-pressing either bubble in the [GungeoneerHeader]. Live-rebinds
   /// to the latest provider state so the displayed number updates after
   /// each tap without dismissing the sheet.
@@ -607,7 +626,7 @@ class PlayerPageState extends State<PlayerPage> {
     );
   }
 
-  /// Coolness hub ΓÇö mirrors the curse sheet: live effects, stat adjuster,
+  /// Coolness hub — mirrors the curse sheet: live effects, stat adjuster,
   /// quick actions, and a link to the full stats breakdown.
   void _showCoolnessSheet(BuildContext c) {
     Haptics.selection();
@@ -622,7 +641,7 @@ class PlayerPageState extends State<PlayerPage> {
     );
   }
 
-  /// Curse hub ΓÇö combines stat adjuster, curse-raising actions, and a
+  /// Curse hub — combines stat adjuster, curse-raising actions, and a
   /// link to the full curse stats breakdown. Opened by tapping the curse
   /// capsule on the dashboard.
   void _showCurseSheet(BuildContext c) {
@@ -723,10 +742,10 @@ class PlayerPageState extends State<PlayerPage> {
           Navigator.pop(bc);
           if (mpActive) {
             if (isMyInv) {
-              // Send via MP ΓÇö sendGift removes locally + ships the gift,
+              // Send via MP — sendGift removes locally + ships the gift,
               // rolling back if the send fails.
               await session.sendGift(kind: 'gun', name: g.name);
-              if (c.mounted) _toast(c, '${g.name} ΓåÆ $peerName');
+              if (c.mounted) _toast(c, '${g.name} → $peerName');
             } else {
               final reqId =
                   await session.sendRequest(kind: 'gun', name: g.name);
@@ -734,18 +753,18 @@ class PlayerPageState extends State<PlayerPage> {
               _toast(
                 c,
                 reqId != null
-                    ? 'Asked $peerName for ${g.name}ΓÇª'
-                    : 'Could not send request ΓÇö check connection.',
+                    ? 'Asked $peerName for ${g.name}…'
+                    : 'Could not send request — check connection.',
               );
             }
           } else {
-            // Local co-op ΓÇö just shuffle slots in RunProvider.
+            // Local co-op — just shuffle slots in RunProvider.
             final ok = p.transferGun(g, _slot);
             if (c.mounted) {
               _toast(
                 c,
                 ok
-                    ? '${g.name} ΓåÆ $peerName'
+                    ? '${g.name} → $peerName'
                     : '$peerName already has ${g.name}',
               );
             }
@@ -786,7 +805,7 @@ class PlayerPageState extends State<PlayerPage> {
           if (mpActive) {
             if (isMyInv) {
               await session.sendGift(kind: 'item', name: it.name);
-              if (c.mounted) _toast(c, '${it.name} ΓåÆ $peerName');
+              if (c.mounted) _toast(c, '${it.name} → $peerName');
             } else {
               final reqId =
                   await session.sendRequest(kind: 'item', name: it.name);
@@ -794,8 +813,8 @@ class PlayerPageState extends State<PlayerPage> {
               _toast(
                 c,
                 reqId != null
-                    ? 'Asked $peerName for ${it.name}ΓÇª'
-                    : 'Could not send request ΓÇö check connection.',
+                    ? 'Asked $peerName for ${it.name}…'
+                    : 'Could not send request — check connection.',
               );
             }
           } else {
@@ -804,7 +823,7 @@ class PlayerPageState extends State<PlayerPage> {
               _toast(
                 c,
                 ok
-                    ? '${it.name} ΓåÆ $peerName'
+                    ? '${it.name} → $peerName'
                     : '$peerName already has ${it.name}',
               );
             }
@@ -922,7 +941,7 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   /// Remove [g] from the loadout and surface a 5-second snackbar with an
-  /// UNDO action. UNDO simply re-adds the gun via [RunProvider.addGun] ΓÇö
+  /// UNDO action. UNDO simply re-adds the gun via [RunProvider.addGun] —
   /// pickup-order is lost (it goes to the end of the list), but every
   /// other piece of state is preserved.
   ///
@@ -1016,6 +1035,307 @@ class TransferSheet extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Vertical synergy panel — lists all synergies that are active or partial
+/// (at least one required item owned). Each row shows the synergy name,
+/// effect text, and big item pills with graphics. Owned items are full-color
+/// with a glow; unowned items are greyed but still visible.
+class _SynergyPanel extends StatelessWidget {
+  final List<Synergy> allSynergies;
+  final Set<String> ownedLower;
+  final RunProvider provider;
+
+  const _SynergyPanel({
+    required this.allSynergies,
+    required this.ownedLower,
+    required this.provider,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final ownedList = ownedLower.toList();
+    final relevant = allSynergies.where((s) {
+      final allItems = [...s.items, ...s.anyOf];
+      return allItems.any((n) => ownedLower.contains(n.toLowerCase()));
+    }).toList();
+
+    relevant.sort((a, b) {
+      final aActive = a.matchesItems(ownedList);
+      final bActive = b.matchesItems(ownedList);
+      if (aActive && !bActive) return -1;
+      if (!aActive && bActive) return 1;
+      return 0;
+    });
+
+    if (relevant.isEmpty) return const SizedBox.shrink();
+
+    final activeCount = relevant.where((s) => s.matchesItems(ownedList)).length;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.auto_awesome, size: 18, color: Colors.amberAccent),
+              const SizedBox(width: 8),
+              const GoopText(
+                'SYNERGIES',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white54,
+                  letterSpacing: 0.8,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
+                ),
+                child: GoopText(
+                  '$activeCount active',
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Colors.amberAccent),
+                ),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  fastRoute(const SynergiesOverviewScreen()),
+                ),
+                child: const GoopText(
+                  'View All',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white60),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          for (final syn in relevant) ...[
+            _SynergyRow(
+              synergy: syn,
+              isActive: syn.matchesItems(ownedList),
+              ownedLower: ownedLower,
+              provider: provider,
+            ),
+            const SizedBox(height: 10),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _SynergyRow extends StatelessWidget {
+  final Synergy synergy;
+  final bool isActive;
+  final Set<String> ownedLower;
+  final RunProvider provider;
+
+  const _SynergyRow({
+    required this.synergy,
+    required this.isActive,
+    required this.ownedLower,
+    required this.provider,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final allItems = [...synergy.items, ...synergy.anyOf];
+    final statusColor = isActive ? Colors.greenAccent : Colors.amberAccent;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: isActive
+            ? Colors.green.withValues(alpha: 0.07)
+            : Colors.amber.withValues(alpha: 0.04),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: statusColor.withValues(alpha: isActive ? 0.3 : 0.15),
+          width: 1.2,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              if (synergy.icon.isNotEmpty)
+                GameIcon(assetPath: synergy.icon, size: 26, showRing: false)
+              else
+                Icon(Icons.auto_awesome, size: 20, color: statusColor),
+              const SizedBox(width: 10),
+              Expanded(
+                child: GoopText(
+                  synergy.name,
+                  style: TextStyle(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w800,
+                    color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.8),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: statusColor.withValues(alpha: 0.35), width: 1.2),
+                ),
+                child: GoopText(
+                  isActive ? 'ACTIVE' : 'PARTIAL',
+                  style: TextStyle(
+                    fontSize: 9.5,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                    color: statusColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          GoopText(
+            synergy.prettyEffect.isNotEmpty ? synergy.prettyEffect : synergy.effect,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white.withValues(alpha: 0.55),
+              height: 1.35,
+            ),
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              for (int i = 0; i < allItems.length; i++) ...[
+                if (i > 0 && i < synergy.items.length)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: Icon(Icons.add, size: 12, color: Colors.white.withValues(alpha: 0.2)),
+                  ),
+                _SynergyItemPill(
+                  itemName: allItems[i],
+                  isOwned: ownedLower.contains(allItems[i].toLowerCase()),
+                  isActive: isActive,
+                  provider: provider,
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SynergyItemPill extends StatelessWidget {
+  final String itemName;
+  final bool isOwned;
+  final bool isActive;
+  final RunProvider provider;
+
+  const _SynergyItemPill({
+    required this.itemName,
+    required this.isOwned,
+    required this.isActive,
+    required this.provider,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final gun = provider.gunByName(itemName);
+    final item = provider.itemByName(itemName);
+    final iconPath = gun?.icon ?? item?.icon ?? '';
+
+    final pillColor = isActive
+        ? Colors.greenAccent.withValues(alpha: 0.4)
+        : isOwned
+            ? Colors.white.withValues(alpha: 0.3)
+            : Colors.white.withValues(alpha: 0.08);
+
+    return Opacity(
+      opacity: isOwned ? 1.0 : 0.4,
+      child: Container(
+        width: 72,
+        padding: const EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: isOwned
+              ? Colors.white.withValues(alpha: 0.08)
+              : const Color(0xFF0D1117),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: pillColor, width: 1.8),
+          boxShadow: isOwned && isActive
+              ? [BoxShadow(color: Colors.greenAccent.withValues(alpha: 0.15), blurRadius: 8)]
+              : null,
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: SizedBox(
+                width: 52,
+                height: 52,
+                child: _buildImage(iconPath),
+              ),
+            ),
+            const SizedBox(height: 6),
+            GoopText(
+              itemName,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.w700,
+                color: isOwned ? Colors.white70 : Colors.white30,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImage(String path) {
+    if (path.isEmpty) return _fallback();
+    if (path.startsWith('http')) {
+      return Image.network(
+        path,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        errorBuilder: (_, __, ___) => _fallback(),
+      );
+    }
+    return Image.asset(
+      path,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.none,
+      errorBuilder: (_, __, ___) => _fallback(),
+    );
+  }
+
+  Widget _fallback() {
+    return Container(
+      color: const Color(0xFF0D1117),
+      child: Center(
+        child: GoopText(
+          itemName.isNotEmpty ? itemName[0].toUpperCase() : '?',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white38),
         ),
       ),
     );

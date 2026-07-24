@@ -47,7 +47,7 @@ class EffectsTileState extends State<EffectsTile> {
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
-            // Header bar ΓÇö always visible, single compact line.
+            // Header bar — always visible, single compact line.
             InkWell(
               onTap: totalTags == 0
                   ? null
@@ -123,7 +123,7 @@ class EffectsTileState extends State<EffectsTile> {
                 ),
               ),
             ),
-            // Body ΓÇö only mounted when expanded; full chip wall.
+            // Body — only mounted when expanded; full chip wall.
             AnimatedSize(
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeOut,
@@ -189,8 +189,8 @@ class HeaderMenu extends StatelessWidget {
     final mpActive = mpSession.isActive;
     return PopupMenuButton<String>(
       tooltip: 'Run options',
-      // Big single-icon target ΓÇö gear is universally read as "options".
-      // Bigger hit-rect than the old "Run Γû╝" chip (44├ù44 vs 28├ù24).
+      // Big single-icon target — gear is universally read as "options".
+      // Bigger hit-rect than the old "Run ▼" chip (44×44 vs 28×24).
       padding: EdgeInsets.zero,
       offset: const Offset(0, 44),
       child: Container(

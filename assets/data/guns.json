@@ -14296,7 +14296,7 @@
     "notes": "Killing enemies evolves the gun through 6 forms.",
     "quote": "Tamagunchi",
     "quality": "C",
-    "type": "Semiautomatic Semiautomatic Semiautomatic Semiautomatic Beam Automatic",
+    "type": "Semiautomatic",
     "dps": "13.5 19.1 25.8 43.125 23.0 93.8",
     "magazine_size": "24 24 24 8 300 200",
     "ammo_capacity": "300 300 300 300 300 150",

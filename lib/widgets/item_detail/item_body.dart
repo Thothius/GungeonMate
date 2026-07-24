@@ -1041,7 +1041,6 @@ class ItemBody extends StatelessWidget {
       if (chargeStr != null) MapEntry('Charge', chargeStr),
       if (durationStr != null) MapEntry('Duration', durationStr),
       MapEntry('Sell', item.sellPrice),
-      MapEntry('Chest', item.chestColorDisplay),
     ].where((e) => e.value.isNotEmpty).toList();
 
     final junkanInfo = item.name.toLowerCase() == 'ser junkan'

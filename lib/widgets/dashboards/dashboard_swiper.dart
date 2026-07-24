@@ -2,27 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/player.dart';
+import '../../utils/asset_paths.dart';
+import '../../services/app_theme.dart';
 import '../../services/haptics.dart';
-import '../../services/goop_talk_engine.dart';
 import 'robot_dashboard.dart';
 import 'junkan_dashboard.dart';
 import 'special_gun_dashboards.dart';
 import 'huntress_dashboard.dart';
 import 'compact_dashboards.dart';
 
-// Special Dashboard Swiper ΓÇö AnimatedSwitcher carousel for all active special dashboards
+// Special Dashboard Tab System — swipeable panels with tappable tab chips
 // =============================================================================
+
+class _DashboardTab {
+  final String label;
+  final String iconPath;
+  final Color color;
+  final Widget widget;
+  const _DashboardTab({
+    required this.label,
+    required this.iconPath,
+    required this.color,
+    required this.widget,
+  });
+}
 
 class DashboardSwiper extends StatefulWidget {
   final PlayerSlot slot;
   const DashboardSwiper({super.key, required this.slot});
 
   @override
-  State<DashboardSwiper> createState() => DashboardSwiperState();
+  State<DashboardSwiper> createState() => _DashboardSwiperState();
 }
 
-class DashboardSwiperState extends State<DashboardSwiper> {
-  int _page = 0;
+class _DashboardSwiperState extends State<DashboardSwiper> {
+  int _selectedIndex = 0;
+  PageController? _pageController;
+
+  @override
+  void dispose() {
+    _pageController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,91 +55,162 @@ class DashboardSwiperState extends State<DashboardSwiper> {
     final ownedItemNames = player.items.map((i) => i.name.toLowerCase()).toSet();
     final charName = player.character?.name.toLowerCase() ?? '';
 
-    // Build list of active dashboards
-    final dashboards = <Widget>[];
-    final labels = <String>[];
+    final tabs = <_DashboardTab>[];
 
     if (charName.contains('robot')) {
-      dashboards.add(const RobotDashboardSliver());
-      labels.add('ROBOT');
+      tabs.add(_DashboardTab(
+        label: 'Robot',
+        iconPath: localGungeoneerIcon('The Robot'),
+        color: Colors.greenAccent,
+        widget: const RobotDashboardSliver(),
+      ));
     }
     if (charName.contains('hunter')) {
-      dashboards.add(const HuntressDashboardSliver());
-      labels.add('HUNTRESS');
+      tabs.add(_DashboardTab(
+        label: 'Huntress',
+        iconPath: localGungeoneerIcon('The Hunter'),
+        color: Colors.amberAccent,
+        widget: const HuntressDashboardSliver(),
+      ));
     }
     if (ownedItemNames.any((n) => n.contains('ser junkan'))) {
-      dashboards.add(JunkanDashboardSliver(slot: widget.slot));
-      labels.add('JUNKAN');
+      tabs.add(_DashboardTab(
+        label: 'Junkan',
+        iconPath: localItemIcon('Ser Junkan'),
+        color: Colors.tealAccent,
+        widget: JunkanDashboardSliver(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('gunderfury')) {
-      dashboards.add(GunderfuryDashboardSliver(slot: widget.slot));
-      labels.add('GUNDERFURY');
+      tabs.add(_DashboardTab(
+        label: 'Gunderfury',
+        iconPath: localGunIcon('Gunderfury'),
+        color: Colors.purpleAccent,
+        widget: GunderfuryDashboardSliver(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('triple gun')) {
-      dashboards.add(TripleGunDashboardSliver(slot: widget.slot));
-      labels.add('TRIPLE GUN');
+      tabs.add(_DashboardTab(
+        label: 'Triple Gun',
+        iconPath: localGunIcon('Triple Gun'),
+        color: Colors.blueAccent,
+        widget: TripleGunDashboardSliver(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('evolver')) {
-      dashboards.add(EvolverDashboardSliver(slot: widget.slot));
-      labels.add('EVOLVER');
+      tabs.add(_DashboardTab(
+        label: 'Evolver',
+        iconPath: localGunIcon('Evolver'),
+        color: Colors.greenAccent,
+        widget: EvolverDashboardSliver(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('shellegun')) {
-      dashboards.add(ShellegunDashboard(slot: widget.slot));
-      labels.add('SHELLEGUN');
+      tabs.add(_DashboardTab(
+        label: 'Shellegun',
+        iconPath: localGunIcon('Shellegun'),
+        color: Colors.cyanAccent,
+        widget: ShellegunDashboard(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('chamber gun')) {
-      dashboards.add(ChamberGunDashboard(slot: widget.slot));
-      labels.add('CHAMBER GUN');
+      tabs.add(_DashboardTab(
+        label: 'Chamber Gun',
+        iconPath: localGunIcon('Chamber Gun'),
+        color: Colors.amberAccent,
+        widget: ChamberGunDashboard(slot: widget.slot),
+      ));
     }
     if (ownedItemNames.contains('platinum bullets')) {
-      dashboards.add(PlatinumBulletsDashboard(slot: widget.slot));
-      labels.add('PLATINUM');
+      tabs.add(_DashboardTab(
+        label: 'Platinum',
+        iconPath: localItemIcon('Platinum Bullets'),
+        color: Colors.white70,
+        widget: PlatinumBulletsDashboard(slot: widget.slot),
+      ));
     }
     if (ownedItemNames.contains('iron coin')) {
-      dashboards.add(IronCoinDashboard(slot: widget.slot));
-      labels.add('IRON COIN');
+      tabs.add(_DashboardTab(
+        label: 'Iron Coin',
+        iconPath: localItemIcon('Iron Coin'),
+        color: Colors.amber,
+        widget: IronCoinDashboard(slot: widget.slot),
+      ));
     }
     if (ownedItemNames.contains('spice')) {
-      dashboards.add(SpiceDashboard(slot: widget.slot));
-      labels.add('SPICE');
+      tabs.add(_DashboardTab(
+        label: 'Spice',
+        iconPath: localItemIcon('Spice'),
+        color: Colors.redAccent,
+        widget: SpiceDashboard(slot: widget.slot),
+      ));
     }
     if (ownedItemNames.contains('metronome')) {
-      dashboards.add(MetronomeDashboard(slot: widget.slot));
-      labels.add('METRONOME');
+      tabs.add(_DashboardTab(
+        label: 'Metronome',
+        iconPath: localItemIcon('Metronome'),
+        color: Colors.purpleAccent,
+        widget: MetronomeDashboard(slot: widget.slot),
+      ));
     }
     if (ownedItemNames.contains('sprun')) {
-      dashboards.add(SprunDashboard(slot: widget.slot));
-      labels.add('SPRUN');
+      tabs.add(_DashboardTab(
+        label: 'Sprun',
+        iconPath: localItemIcon('Sprun'),
+        color: Colors.cyanAccent,
+        widget: SprunDashboard(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('boxing glove')) {
-      dashboards.add(BoxingGloveDashboard(slot: widget.slot));
-      labels.add('BOXING');
+      tabs.add(_DashboardTab(
+        label: 'Boxing Glove',
+        iconPath: localGunIcon('Boxing Glove'),
+        color: Colors.redAccent,
+        widget: BoxingGloveDashboard(slot: widget.slot),
+      ));
     }
     if (ownedItemNames.contains('cigarettes')) {
-      dashboards.add(CigarettesDashboard(slot: widget.slot));
-      labels.add('CIGARETTES');
+      tabs.add(_DashboardTab(
+        label: 'Cigarettes',
+        iconPath: localItemIcon('Cigarettes'),
+        color: Colors.orangeAccent,
+        widget: CigarettesDashboard(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('polaris')) {
-      dashboards.add(PolarisDashboard(slot: widget.slot));
-      labels.add('POLARIS');
+      tabs.add(_DashboardTab(
+        label: 'Polaris',
+        iconPath: localGunIcon('Polaris'),
+        color: Colors.blueAccent,
+        widget: PolarisDashboard(slot: widget.slot),
+      ));
     }
     if (ownedGunNames.contains('gunther')) {
-      dashboards.add(GuntherDashboard(slot: widget.slot));
-      labels.add('GUNTHER');
+      tabs.add(_DashboardTab(
+        label: 'Gunther',
+        iconPath: localGunIcon('Gunther'),
+        color: Colors.purpleAccent,
+        widget: GuntherDashboard(slot: widget.slot),
+      ));
     }
     if (ownedItemNames.contains('gun soul')) {
-      dashboards.add(GunSoulDashboard(slot: widget.slot));
-      labels.add('GUN SOUL');
+      tabs.add(_DashboardTab(
+        label: 'Gun Soul',
+        iconPath: localItemIcon('Gun Soul'),
+        color: Colors.greenAccent,
+        widget: GunSoulDashboard(slot: widget.slot),
+      ));
     }
-    if (dashboards.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
 
-    // Clamp page index
-    if (_page >= dashboards.length) _page = 0;
+    if (tabs.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
 
-    // Render each dashboard sliver at its full content height ΓÇö no
-    // internal scrolling, no fixed height. shrinkWrap sizes to content;
-    // NeverScrollableScrollPhysics prevents nested scroll jank.
-    Widget dashboardChild(Widget sliver) {
+    // Clamp selectedIndex if dashboards changed
+    if (_selectedIndex >= tabs.length) _selectedIndex = 0;
+
+    // Lazy-init PageController when first dashboard appears
+    _pageController ??= PageController(initialPage: _selectedIndex);
+
+    Widget extractChild(Widget sliver) {
       if (sliver is SliverToBoxAdapter && sliver.child != null) {
         return sliver.child!;
       }
@@ -129,56 +221,146 @@ class DashboardSwiperState extends State<DashboardSwiper> {
       );
     }
 
+    final screenHeight = MediaQuery.of(context).size.height;
+    final panelHeight = screenHeight * 0.22;
+
     return SliverToBoxAdapter(
-      child: Column(
-        children: [
-          // Dashboard content ΓÇö height scales to content, no fixed height.
-          GestureDetector(
-            onHorizontalDragEnd: (details) {
-              final v = details.primaryVelocity ?? 0;
-              if (v < -200 && _page < dashboards.length - 1) {
-                setState(() => _page++);
-                Haptics.selection();
-              } else if (v > 200 && _page > 0) {
-                setState(() => _page--);
-                Haptics.selection();
-              }
-            },
-            child: KeyedSubtree(
-              key: ValueKey(_page),
-              child: dashboardChild(dashboards[_page]),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppTheme.flair.scaffold.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: AppTheme.flair.primary.withValues(alpha: 0.2),
+              width: 1.0,
             ),
           ),
-          const SizedBox(height: 6),
-          // Dot indicators (tappable) + label
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
             children: [
-              for (int i = 0; i < dashboards.length; i++)
-                GestureDetector(
-                  onTap: () {
-                    setState(() => _page = i);
-                    Haptics.selection();
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    width: i == _page ? 18 : 6,
-                    height: 6,
-                    decoration: BoxDecoration(
-                      color: i == _page ? Colors.lightGreenAccent : Colors.white.withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                  ),
+              // Tab row — fat tappable chips, up to 3 per row before wrapping
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: List.generate(tabs.length, (i) {
+                    final tab = tabs[i];
+                    final isActive = i == _selectedIndex;
+                    return _DashboardTabChip(
+                      tab: tab,
+                      isActive: isActive,
+                      onTap: () {
+                        Haptics.selection();
+                        _pageController!.animateToPage(
+                          i,
+                          duration: const Duration(milliseconds: 260),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                    );
+                  }),
                 ),
+              ),
+              // Swipeable content panel
+              SizedBox(
+                height: panelHeight,
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (i) {
+                    Haptics.selection();
+                    setState(() => _selectedIndex = i);
+                  },
+                  children: tabs
+                      .map((t) => SingleChildScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                              child: extractChild(t.widget),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 4),
-          GoopText(
-            labels.isNotEmpty && _page < labels.length ? labels[_page] : '',
-            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Colors.white54, letterSpacing: 1.2),
+        ),
+      ),
+    );
+  }
+}
+
+class _DashboardTabChip extends StatelessWidget {
+  final _DashboardTab tab;
+  final bool isActive;
+  final VoidCallback onTap;
+  const _DashboardTabChip({
+    required this.tab,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = tab.color;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+        decoration: BoxDecoration(
+          color: isActive
+              ? color.withValues(alpha: 0.18)
+              : color.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isActive
+                ? color.withValues(alpha: 0.7)
+                : color.withValues(alpha: 0.25),
+            width: isActive ? 1.4 : 0.8,
           ),
-          const SizedBox(height: 8),
-        ],
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.12),
+                    blurRadius: 6,
+                    spreadRadius: 1,
+                  ),
+                ]
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (tab.iconPath.isNotEmpty)
+              Image.asset(
+                tab.iconPath,
+                width: 18,
+                height: 18,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.none,
+                errorBuilder: (_, __, ___) => Icon(
+                  Icons.dashboard_outlined,
+                  size: 16,
+                  color: color,
+                ),
+              )
+            else
+              Icon(Icons.dashboard_outlined, size: 16, color: color),
+            const SizedBox(width: 6),
+            Text(
+              tab.label,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+                color: isActive
+                    ? color
+                    : color.withValues(alpha: 0.6),
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
