@@ -9,7 +9,8 @@
       "🔗 Multiplayer reconnect now announces itself — a floating 'Connection restored — sync resumed' snackbar fires with a success haptic the moment the link comes back, instead of silently closing the drop dialog. Teardowns (disconnect/cancel) stay quiet so you only hear from it on a real recovery.",
       "✨ Quality tier cleanup — 36 entries across guns (19) and items (17) were showing '1S' instead of 'S' in UI metadata chips, a data-pipeline artifact. All corrected to 'S'; the Browse quality-sort special case simplified.",
       "🎯 More fixes incoming as part of the Bullet Hell Edition rollout — see the edition plan for the full lineup.",
-      "🧹 Removed the Multiplayer Summary tab from the MP header — the P1/P2 header is now cleaner with just the two player tabs. The Summary page code is left dormant on disk for potential future re-introduction."
+      "🧹 Removed the Multiplayer Summary tab from the MP header — the P1/P2 header is now cleaner with just the two player tabs. The Summary page code is left dormant on disk for potential future re-introduction.",
+      "⚙️ Active-run gear menu restructured — 'Reset P1 Items' (and 'Reset P2 Items' in coop) now available as a quick action directly in the menu. Settings moved to the bottom so the top prioritizes in-run actions. The confirm dialog is now shared between the menu and the Settings Run tab."
     ]
   },
   {

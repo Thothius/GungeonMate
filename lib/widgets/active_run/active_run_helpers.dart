@@ -16,6 +16,45 @@ import '../../screens/favourites_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/codex_screen.dart';
 
+/// Shared confirm dialog for clearing a player's inventory.
+/// Used by both the active-run HeaderMenu and the Settings Run tab.
+void confirmClearInventoryDialog(
+    BuildContext context, RunProvider p, PlayerSlot slot) {
+  final player = slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
+  if (player == null || player.character == null) return;
+  final name = player.character!.name;
+
+  showDialog(
+    context: context,
+    builder: (c) => AlertDialog(
+      icon: const Icon(Icons.delete_sweep_rounded, color: Colors.redAccent),
+      title: GoopText("Clear $name's inventory?"),
+      content: const GoopText(
+        'Removes all guns and items except their starter loadout. '
+        'Coolness, curse, and shrine status are unchanged.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(c),
+          child: const GoopText('Cancel'),
+        ),
+        FilledButton.tonal(
+          style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
+          onPressed: () {
+            p.clearInventory(slot: slot);
+            Navigator.pop(c);
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: GoopText("$name's items cleared!"),
+              duration: const Duration(seconds: 1),
+            ));
+          },
+          child: const GoopText('Clear Inventory'),
+        ),
+      ],
+    ),
+  );
+}
+
 /// Compact, always-visible effects accordion that sits right under the
 /// character header. Closed by default so it stays out of the way; tap
 /// the header bar to expand and inspect every active passive/effect.
@@ -284,24 +323,22 @@ class HeaderMenu extends StatelessWidget {
           case 'dice_roll':
             showDiceRollDialog(context);
             break;
+          case 'reset_items_p1':
+            confirmClearInventoryDialog(context, p, PlayerSlot.main);
+            break;
+          case 'reset_items_p2':
+            confirmClearInventoryDialog(context, p, PlayerSlot.coop);
+            break;
         }
       },
       itemBuilder: (ctx) => [
-        // --- Top: Favourites & Settings ---
+        // --- Top: Favourites & Codex ---
         const PopupMenuItem(
           value: 'favourites',
           child: Row(children: [
             Icon(Icons.favorite_rounded, size: 18, color: Colors.pinkAccent),
             SizedBox(width: 10),
             GoopText('My Favourites'),
-          ]),
-        ),
-        const PopupMenuItem(
-          value: 'settings',
-          child: Row(children: [
-            Icon(Icons.settings_rounded, size: 18, color: Colors.cyanAccent),
-            SizedBox(width: 10),
-            GoopText('Settings'),
           ]),
         ),
         const PopupMenuItem(
@@ -312,16 +349,6 @@ class HeaderMenu extends StatelessWidget {
             GoopText('Codex'),
           ]),
         ),
-        // Dashboards toggle — hidden for now (dashboards always on)
-        // PopupMenuItem(
-        //   value: 'toggle_dashboards',
-        //   child: Row(children: [
-        //     Icon(Icons.dashboard_customize_rounded, size: 18,
-        //         color: VisualPrefs.notifier.value.showDashboards ? Colors.amberAccent : Colors.white38),
-        //     const SizedBox(width: 10),
-        //     GoopText(VisualPrefs.notifier.value.showDashboards ? 'Hide Dashboards' : 'Show Dashboards'),
-        //   ]),
-        // ),
         const PopupMenuDivider(),
 
         // --- Actions ---
@@ -333,6 +360,26 @@ class HeaderMenu extends StatelessWidget {
             GoopText('Gunfortuna Dice Roll'),
           ]),
         ),
+        const PopupMenuDivider(),
+
+        // --- Reset Items (quick action) ---
+        const PopupMenuItem(
+          value: 'reset_items_p1',
+          child: Row(children: [
+            Icon(Icons.restart_alt_rounded, size: 18, color: Colors.cyanAccent),
+            SizedBox(width: 10),
+            GoopText('Reset P1 Items'),
+          ]),
+        ),
+        if (p.runState.hasCoop)
+          const PopupMenuItem(
+            value: 'reset_items_p2',
+            child: Row(children: [
+              Icon(Icons.restart_alt_rounded, size: 18, color: Colors.pinkAccent),
+              SizedBox(width: 10),
+              GoopText('Reset P2 Items'),
+            ]),
+          ),
         const PopupMenuDivider(),
 
         // --- Save & Session ---
@@ -386,6 +433,17 @@ class HeaderMenu extends StatelessWidget {
             ]),
           ),
         ],
+        const PopupMenuDivider(),
+
+        // --- Settings (moved to bottom) ---
+        const PopupMenuItem(
+          value: 'settings',
+          child: Row(children: [
+            Icon(Icons.settings_rounded, size: 18, color: Colors.cyanAccent),
+            SizedBox(width: 10),
+            GoopText('Settings'),
+          ]),
+        ),
       ],
     );
   }

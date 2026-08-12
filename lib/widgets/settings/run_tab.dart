@@ -9,6 +9,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../screens/character_select_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
 import '../../utils/fast_route.dart';
+import '../active_run/active_run_helpers.dart';
 import 'run_log_screen.dart';
 
 class RunTab extends StatefulWidget {
@@ -67,39 +68,7 @@ class RunTabState extends State<RunTab> {
   }
 
   void _confirmClearInventory(BuildContext context, RunProvider p, PlayerSlot slot) {
-    final player = slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
-    if (player == null || player.character == null) return;
-    final name = player.character!.name;
-
-    showDialog(
-      context: context,
-      builder: (c) => AlertDialog(
-        icon: const Icon(Icons.delete_sweep_rounded, color: Colors.redAccent),
-        title: GoopText("Clear $name's inventory?"),
-        content: const GoopText(
-          'Removes all guns and items except their starter loadout. '
-          'Coolness, curse, and shrine status are unchanged.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const GoopText('Cancel'),
-          ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
-            onPressed: () {
-              p.clearInventory(slot: slot);
-              Navigator.pop(c);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: GoopText("$name's items cleared!"),
-                duration: const Duration(seconds: 1),
-              ));
-            },
-            child: const GoopText('Clear Inventory'),
-          ),
-        ],
-      ),
-    );
+    confirmClearInventoryDialog(context, p, slot);
   }
 
   void _confirmEndRun(BuildContext context, RunProvider p) {
