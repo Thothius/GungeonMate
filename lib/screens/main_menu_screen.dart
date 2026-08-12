@@ -175,7 +175,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.0',
+                    'v1.9.2',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -244,7 +244,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16, color: Color(0xFFFFD54F)),
                         SizedBox(width: 7),
                         GoopText(
-                          'Changelog (v1.9.0)',
+                          'Changelog (v1.9.2)',
                           style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -298,7 +298,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.1 — BULLET HELL EDITION',
+                            'v1.9.2 — BULLET HELL EDITION',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -714,7 +714,7 @@ class _BulletHellHeadingState extends State<_BulletHellHeading>
                 const SizedBox(width: 8),
                 // Version tag
                 GoopText(
-                  'v1.9.1',
+                  'v1.9.2',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

@@ -6,6 +6,23 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.2 — 🎨 Particle Customization + Codex Nav + Fixes (August 2026)
+**Build:** 81
+
+> Particle color schemas, speed control, Megrim font repositioned, critical MP particle fix, codex scroll/nav fixes, beam gun data corrections.
+
+### Changes
+- **NEW — 16 Particle Color Schemas:** Inferno, Glacier, Toxic, Void Storm, Gilded, Rainbow, Monochrome, Blood Moon, Synthwave, Forest, Candy, Steel, Sunset, Abyss, Preset Default, Theme Match. All work with every theme and palette. Selectable from the theme picker as a horizontal pill strip with mini color preview dots. Theme Match uses the active flair's primary/secondary/glow colors.
+- **NEW — Particle Speed Control:** 5 discrete steps — Very Slow (0.3x), Slow (0.6x), Normal (1.0x default), Fast (1.6x), Very Fast (2.5x). Speed multiplier applied to particle delta-time in `ParticleField`. Selectable from the theme picker.
+- **NEW — Megrim font repositioned:** Moved from position 42 to position 2 in the `AppFont` enum, right after the Gungeon default font.
+- **CRITICAL FIX — MP particles disappearing:** Entering a multiplayer run caused particles to disappear until app restart. Root cause: `ThemeOverlay.currentScreenIndex` was set via `addPostFrameCallback` in `home_screen.dart`, leaving a stale frame where the home-screen galaxy + contrast backing + readability scrim stayed painted over particles. Nothing forced a repaint until the user minimized/restored the app. Fix: set `currentScreenIndex` synchronously in `build()`.
+- **FIX — Codex special page scroll:** All 6 special codex pages (Paradox, Gunslinger, Bullet Hell, Drake, Challenge Mode, Rat) wrapped their `CustomScrollView` in a nested `Scaffold` inside `Expanded`, blocking scroll. `Scaffold` wrapper removed — `CustomScrollView` now returns directly.
+- **FIX — Codex nav strip:** Compact 56px height (was 76), `BouncingScrollPhysics` with `ScrollDecelerationRate.fast` for smooth & quick horizontal scrolling. Category tiles made more compact (icon 18px, font 11px, padding 12x8).
+- **FIX — Beam gun reload_time:** 4 beam guns (Demon Head, Disintegrator, Gamma Ray, Raiden Coil) had `reload_time` `'/A'` instead of `'N/A'`. All corrected.
+- **FIX — Gun data corrections:** BSG damage prefixed with `Impact:`, range set to `∞`. Composite Gun damage prefixed with `Uncharged:`, range set to `∞`. Dark Marker range set to `∞`, damage `40 x2` → `40x2`.
+
+---
+
 ## v1.9.1 — 🔥 BULLET HELL EDITION (August 2026)
 **Build:** 80
 

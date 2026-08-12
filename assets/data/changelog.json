@@ -1,5 +1,20 @@
 [
   {
+    "version": "v1.9.2",
+    "title": "🎨 Particle Customization + Codex Nav + Fixes",
+    "date": "August 2026",
+    "items": [
+      "🎨 NEW: 16 particle color schemas — Inferno, Glacier, Toxic, Void Storm, Gilded, Rainbow, Monochrome, Blood Moon, Synthwave, Forest, Candy, Steel, Sunset, Abyss, plus Preset Default and Theme Match. All work with every theme and palette. Selectable from the theme picker as a horizontal pill strip with mini color preview dots.",
+      "⚡ NEW: Particle speed control — 5 discrete steps from Very Slow (0.3x) to Very Fast (2.5x). Normal (1.0x) is the default. Selectable from the theme picker.",
+      "🔤 Megrim font moved to second position in font selection (right after Gungeon default).",
+      "🔧 CRITICAL FIX — MP particles: Entering a multiplayer run caused particles to disappear until app restart. Root cause: currentScreenIndex was set via addPostFrameCallback, leaving a stale frame where the home-screen galaxy + scrim painted over particles. Fix: set synchronously in build().",
+      "🔧 FIX — Codex special page scroll: All 6 special codex pages (Paradox, Gunslinger, Bullet Hell, Drake, Challenge Mode, Rat) wrapped their CustomScrollView in a nested Scaffold inside Expanded, blocking scroll. Scaffold wrapper removed — CustomScrollView now returns directly.",
+      "🔧 FIX — Codex nav strip: Compact 56px height (was 76), BouncingScrollPhysics with fast deceleration for smooth & quick horizontal scrolling. Tiles made more compact (icon 18px, font 11px).",
+      "🔫 FIX — Beam gun reload_time: 4 beam guns (Demon Head, Disintegrator, Gamma Ray, Raiden Coil) had reload_time '/A' instead of 'N/A'. All corrected.",
+      "🔫 FIX — Gun data: BSG damage prefixed with 'Impact:', range set to ∞. Composite Gun damage prefixed with 'Uncharged:', range set to ∞. Dark Marker range set to ∞, damage '40 x2' → '40x2'."
+    ]
+  },
+  {
     "version": "v1.9.1",
     "title": "🔥 BULLET HELL EDITION — Hotfix",
     "date": "August 2026",
