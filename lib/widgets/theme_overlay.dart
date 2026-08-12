@@ -143,15 +143,19 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   effectiveGlow,
                 )
               : const Color(0x00000000);
-          // ponytail: auto-bind particles to unicorn theme — forces unicornSparkles
-          //           preset + particles on when unicorn is active, without clobbering
-          //           the user's global preset. Respects an explicit non-default preset
-          //           choice (only auto-applies if still on the default gungeonDust).
-          final isUnicorn = mode == AppThemeMode.unicorn;
-          final effectivePreset = isUnicorn && prefs.particlePreset == ParticlePreset.gungeonDust
-              ? ParticlePreset.unicornSparkles
-              : prefs.particlePreset;
-          final particlesOn = prefs.particlesEnabled || isUnicorn;
+          // ponytail: auto-bind particles to the active theme. Every visible
+          //           theme has a default preset in kThemeParticleDefaults. When
+          //           the user hasn't explicitly chosen a preset (still on
+          //           gungeonDust), the theme's default is used. Particles are
+          //           also auto-enabled for any theme with a non-dust default so
+          //           each theme shows its identity out of the box. An explicit
+          //           user preset choice is always respected.
+          final themeDefault = kThemeParticleDefaults[mode] ??
+              ParticlePreset.gungeonDust;
+          final userOnDefault = prefs.particlePreset == ParticlePreset.gungeonDust;
+          final effectivePreset = userOnDefault ? themeDefault : prefs.particlePreset;
+          final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
+          final particlesOn = prefs.particlesEnabled || themeAutoOn;
           final particleBackdropBg = !particlesOn
               ? null
               : ParticleField(
@@ -161,7 +165,9 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   opacity: prefs.particleOpacity,
                   glowOverride: prefs.particleGlowEffect,
                   lineLinksOverride: prefs.particleLineLinks ? true : null,
-                  colorsOverride: isUnicorn ? AppTheme.unicornPalette.particleColors : null,
+                  colorsOverride: mode == AppThemeMode.unicorn
+                      ? AppTheme.unicornPalette.particleColors
+                      : null,
                   bounce: prefs.particleBounce,
                 );
           Widget content = widget.child;

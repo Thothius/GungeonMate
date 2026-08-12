@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
+import 'theme_picker_screen.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
@@ -359,6 +360,33 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           ),
         ),
           ),
+          ),
+          // Palette quick-launch — top-right corner. Opens the theme
+          // picker directly so the user can switch themes in 1 tap.
+          Positioned(
+            top: 12,
+            right: 12,
+            child: SafeArea(
+              child: InkWell(
+                onTap: () {
+                  Haptics.selection();
+                  Navigator.push(
+                    context,
+                    fastRoute(const ThemePickerScreen()),
+                  );
+                },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.white24, width: 1.2),
+                  ),
+                  child: const Icon(Icons.palette_rounded, size: 16, color: Colors.pinkAccent),
+                ),
+              ),
+            ),
           ),
           // Changelog button — centered at bottom, 15% bigger
           Positioned(

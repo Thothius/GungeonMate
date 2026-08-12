@@ -1111,6 +1111,20 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.custom,
 ];
 
+/// Per-theme default particle preset. When a theme is active and the user
+/// hasn't explicitly chosen a different preset (still on [ParticlePreset.gungeonDust]),
+/// the theme overlay auto-applies the preset listed here. This gives every
+/// visible theme a distinct particle identity out of the box without
+/// clobbering an explicit user choice.
+const Map<AppThemeMode, ParticlePreset> kThemeParticleDefaults =
+    <AppThemeMode, ParticlePreset>{
+  AppThemeMode.minimalist: ParticlePreset.gungeonDust,
+  AppThemeMode.unicorn: ParticlePreset.unicornSparkles,
+  AppThemeMode.forgeMaster: ParticlePreset.forgeEmbers,
+  AppThemeMode.robotsCore: ParticlePreset.brassCasings,
+  AppThemeMode.custom: ParticlePreset.cosmicStars,
+};
+
 /// Animated avatar-border treatment. Painted by `AvatarAura` around
 /// any character portrait so each theme has a distinct "aura" the user
 /// can recognise from across the room.

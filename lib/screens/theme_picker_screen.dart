@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
+import '../widgets/particle_engine.dart' show ParticlePreset, ParticlePresetX;
 
 /// Full-screen immersive theme picker. Each page fills the entire screen
 /// with the theme's scaffold colour, showcasing a large palette and a
@@ -44,7 +45,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
     setState(() => _activeMode = m);
     Haptics.success();
     if (Navigator.of(context).canPop()) {
-      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.of(context).pop();
     }
   }
 
@@ -105,32 +106,170 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   },
                 ),
               ),
-              // Page indicator dots
+              // Quick theme strip — tap any circle to jump directly
+              // to that theme's immersive page. No need to swipe through all.
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(modes.length, (i) {
                     final on = i == _index;
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 280),
-                      curve: Curves.easeOutCubic,
-                      margin: const EdgeInsets.symmetric(horizontal: 4),
-                      width: on ? 24 : 7,
-                      height: 7,
-                      decoration: BoxDecoration(
-                        color: on
-                            ? AppTheme.flairFor(modes[i]).primary
-                                .withValues(alpha: 0.9)
-                            : Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(4),
+                    final f = AppTheme.flairFor(modes[i]);
+                    return GestureDetector(
+                      onTap: () {
+                        _pc.animateToPage(
+                          i,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOutCubic,
+                        );
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 280),
+                        curve: Curves.easeOutCubic,
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        width: on ? 32 : 22,
+                        height: on ? 32 : 22,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: f.scaffold,
+                          border: Border.all(
+                            color: on
+                                ? f.primary
+                                : Colors.white.withValues(alpha: 0.2),
+                            width: on ? 2.5 : 1.2,
+                          ),
+                          boxShadow: on
+                              ? [
+                                  BoxShadow(
+                                    color: f.primary.withValues(alpha: 0.4),
+                                    blurRadius: 8,
+                                    spreadRadius: 1,
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: on ? 14 : 10,
+                            height: on ? 14 : 10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: f.primary,
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   }),
                 ),
               ),
+              // Quick particle preset strip — cycle through presets
+              // for the focused theme without leaving the picker.
+              ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder: (context, prefs, _) {
+                  return _QuickParticleStrip(
+                    activeMode: modes[_index],
+                    currentPreset: prefs.particlePreset,
+                    onPreset: (p) {
+                      VisualPrefs.setParticlePreset(p);
+                      Haptics.selection();
+                    },
+                  );
+                },
+              ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Quick particle preset strip — a horizontally scrollable row of
+/// preset chips at the bottom of the theme picker. Tapping a chip
+/// immediately changes the particle effect visible behind the picker.
+/// Shows the theme's default preset first (highlighted) so the user
+/// can quickly restore the curated pairing.
+class _QuickParticleStrip extends StatelessWidget {
+  final AppThemeMode activeMode;
+  final ParticlePreset currentPreset;
+  final ValueChanged<ParticlePreset> onPreset;
+
+  const _QuickParticleStrip({
+    required this.activeMode,
+    required this.currentPreset,
+    required this.onPreset,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final themeDefault = kThemeParticleDefaults[activeMode] ??
+        ParticlePreset.gungeonDust;
+
+    // Show the theme's default first, then a curated subset of the rest.
+    // ponytail: not all 18 presets — that's overwhelming. Show the
+    // theme default + 7 hand-picked complementary presets, deduped.
+    final seen = <ParticlePreset>{};
+    final curated = <ParticlePreset>[
+      themeDefault,
+      ParticlePreset.cosmicStars,
+      ParticlePreset.forgeEmbers,
+      ParticlePreset.frostShards,
+      ParticlePreset.unicornSparkles,
+      ParticlePreset.goldenSparkle,
+      ParticlePreset.cursedSmoke,
+      ParticlePreset.bulletHell,
+    ].where((p) => seen.add(p)).toList();
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 2, 12, 10),
+      child: SizedBox(
+        height: 38,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: curated.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 6),
+          itemBuilder: (_, i) {
+            final preset = curated[i];
+            final isActive = preset == currentPreset ||
+                (currentPreset == ParticlePreset.gungeonDust &&
+                    preset == themeDefault);
+            final f = AppTheme.flairFor(activeMode);
+            return GestureDetector(
+              onTap: () => onPreset(preset),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? f.primary.withValues(alpha: 0.18)
+                      : Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isActive
+                        ? f.primary.withValues(alpha: 0.7)
+                        : Colors.white.withValues(alpha: 0.1),
+                    width: isActive ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Center(
+                  child: GoopText(
+                    preset.label,
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+                      color: isActive
+                          ? f.primary
+                          : Colors.white.withValues(alpha: 0.5),
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
