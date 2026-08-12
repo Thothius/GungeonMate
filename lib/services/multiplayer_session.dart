@@ -23,6 +23,7 @@ const String _kMpPersistNick = 'mp_last_nickname';
 const String _kMpPersistActive = 'mp_session_active';
 const String _kMpPersistPin = 'mp_last_pin';
 const String _kMpPersistPreSidekick = 'mp_pre_sidekick';
+const String _kMpPersistPaused = 'mp_paused';
 
 /// High-level state of the session from the UI's point of view. The
 /// multiplayer screen routes to a different view per value, so keep
@@ -304,8 +305,18 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
       await prefs.remove(_kMpPersistActive);
       await prefs.remove(_kMpPersistPin);
       await prefs.remove(_kMpPersistPreSidekick);
+      await prefs.remove(_kMpPersistPaused);
     } catch (_) {
       // ignore
+    }
+  }
+
+  Future<void> _setPausedPref(bool paused) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_kMpPersistPaused, paused);
+    } catch (_) {
+      // Best-effort persistence.
     }
   }
 
@@ -379,6 +390,15 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
         }
       } else {
         await startAsSidekick(nickname: nick, pinCode: savedPin ?? '');
+      }
+
+      // If the session was paused when the app died, restore the paused
+      // state — stop the search that startAsMain/Sidekick just kicked
+      // off and wait for the user to manually resume.
+      final wasPaused = prefs.getBool(_kMpPersistPaused) ?? false;
+      if (wasPaused) {
+        _log('Restoring paused state from persisted session...');
+        await pauseRun();
       }
     } catch (_) {
       // ignore
@@ -759,6 +779,13 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     if (role == null || char == null) return;
     _log('Initiating reconnection sequence...');
     _busyTransition = true;
+    // Manual reconnect (FIX LINK or auto-reconnect loop) is an explicit
+    // user/system intent to reconnect — clear the paused flag so the
+    // watchdog and auto-reconnect work normally after a successful
+    // reconnect. Without this, a manual reconnect while paused would
+    // succeed but leave _isPaused=true, so the next disconnect wouldn't
+    // trigger auto-reconnect.
+    _isPaused = false;
     try {
       // Reset transport state but DON'T touch the run/inventory.
       // Keep status as-is (disconnected/error) until startAsMain/Sidekick
@@ -772,9 +799,13 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
       await Future.delayed(
         const Duration(milliseconds: 800),
       ); // Crucial Native Radio Cooldown delay!
-      // Abort if user cancelled during the cooldown delay.
+      // Abort if user cancelled or paused during the cooldown delay.
       if (_cancelled) {
         _log('Reconnect aborted: user cancelled during radio cooldown.');
+        return;
+      }
+      if (_isPaused) {
+        _log('Reconnect aborted: user paused during radio cooldown.');
         return;
       }
       _log('Cooldown complete. Restarting transport services...');
@@ -829,10 +860,16 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     _helloRetryTimer?.cancel();
     // Save the session so it survives an app-kill while paused.
     unawaited(saveCurrentSession());
-    // If we were connected, drop the transport cleanly — the peer will
-    // see a normal disconnect and can wait for us to resume.
-    if (_status == MpStatus.connected || _status == MpStatus.handshaking) {
-      await _service.disconnect();
+    // Persist the paused flag so an app-kill while paused doesn't
+    // auto-reconnect on next launch.
+    unawaited(_setPausedPref(true));
+    // Tear down transport regardless of state — connected, handshaking,
+    // or searching. If we don't stop an active search, the peer could
+    // come into range and connect despite the user thinking they're paused.
+    if (_status == MpStatus.connected ||
+        _status == MpStatus.handshaking ||
+        _status == MpStatus.searching) {
+      await _service.stopAll();
       _status = MpStatus.disconnected;
       _wasDisconnected = true;
       _runProvider.mpDisconnected = true;
@@ -846,6 +883,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     if (!_isPaused) return;
     _log('Resuming MP run — restarting auto-reconnect...');
     _isPaused = false;
+    unawaited(_setPausedPref(false));
     if (_status == MpStatus.disconnected && canReconnect) {
       _startAutoReconnect();
     }
