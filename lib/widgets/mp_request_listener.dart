@@ -322,10 +322,12 @@ class _MpRequestListenerState extends State<MpRequestListener> {
       barrierDismissible: false,
       builder: (dialogCtx) => AlertDialog(
         icon: const Icon(Icons.swap_horiz, size: 32),
-        title: GoopText('$peerName wants ${req.name}'),
+        title: GoopText('$peerName wants ${req.name}', maxLines: 1, overflow: TextOverflow.ellipsis),
         content: GoopText(
           'Send your ${req.kind == 'gun' ? 'gun' : 'item'} '
           '"${req.name}" to $peerName?',
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         actions: [
           TextButton(

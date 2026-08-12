@@ -199,6 +199,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     } else {
       final pinCode = _pinCtrl.text.trim();
       if (pinCode.length != 4 || int.tryParse(pinCode) == null) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: GoopText('Please enter a valid 4-digit Connection PIN from the host!'),
@@ -858,7 +859,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const GoopText('Delete Save?'),
-        content: GoopText('Are you sure you want to delete the saved session "${session.sessionName}"? This cannot be undone.'),
+        content: GoopText('Are you sure you want to delete the saved session "${session.sessionName}"? This cannot be undone.', maxLines: 3, overflow: TextOverflow.ellipsis),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),

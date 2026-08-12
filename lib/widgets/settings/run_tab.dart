@@ -35,7 +35,7 @@ class _CombinedRunAppTabState extends State<CombinedRunAppTab> {
     if (cultist != null) {
       p.startCoopPlayer(cultist);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: GoopText('${cultist.name} joined as Player 2!'),
+        content: GoopText('${cultist.name} joined as Player 2!', maxLines: 1, overflow: TextOverflow.ellipsis),
         duration: const Duration(milliseconds: 1400),
         action: SnackBarAction(
           label: 'CHANGE',

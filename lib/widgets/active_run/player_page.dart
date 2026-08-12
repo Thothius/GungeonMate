@@ -938,7 +938,7 @@ class PlayerPageState extends State<PlayerPage> {
     final messenger = ScaffoldMessenger.of(c);
     messenger.hideCurrentSnackBar();
     messenger.showSnackBar(SnackBar(
-      content: GoopText('Removed ${g.name}'),
+      content: GoopText('Removed ${g.name}', maxLines: 1, overflow: TextOverflow.ellipsis),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: 'UNDO',
@@ -956,7 +956,7 @@ class PlayerPageState extends State<PlayerPage> {
     final messenger = ScaffoldMessenger.of(c);
     messenger.hideCurrentSnackBar();
     messenger.showSnackBar(SnackBar(
-      content: GoopText('Removed ${it.name}'),
+      content: GoopText('Removed ${it.name}', maxLines: 1, overflow: TextOverflow.ellipsis),
       duration: const Duration(seconds: 5),
       action: SnackBarAction(
         label: 'UNDO',

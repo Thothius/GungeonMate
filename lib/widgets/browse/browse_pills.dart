@@ -37,14 +37,19 @@ Widget metaPill(String text, Color color, {IconData? icon}) {
 
 Widget qualityPill(String quality) {
   if (quality.isEmpty) return const SizedBox.shrink();
-  final color = QualityBadge.colorFor(quality);
+  final rawColor = QualityBadge.colorFor(quality);
   final letter = quality.toUpperCase() == '1S' ? 'S' : quality.toUpperCase();
+  final isS = letter == 'S';
+  // S-tier uses near-black for the filled badge circle (white text on black),
+  // but near-black chrome (border/text/bg tint) is invisible on dark panels.
+  // Use gold as the pill accent for S-tier so it reads on any background.
+  final accent = isS ? const Color(0xFFFFD700) : rawColor;
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
     decoration: BoxDecoration(
-      color: color.withValues(alpha: 0.14),
+      color: accent.withValues(alpha: 0.14),
       borderRadius: BorderRadius.circular(6),
-      border: Border.all(color: color.withValues(alpha: 0.7), width: 0.8),
+      border: Border.all(color: accent.withValues(alpha: 0.7), width: 0.8),
     ),
     child: Row(
       mainAxisSize: MainAxisSize.min,
@@ -53,7 +58,11 @@ Widget qualityPill(String quality) {
           width: 15,
           height: 15,
           alignment: Alignment.center,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          decoration: BoxDecoration(
+            color: rawColor,
+            shape: BoxShape.circle,
+            border: isS ? Border.all(color: const Color(0xFFE0E0E0), width: 1.0) : null,
+          ),
           child: GoopText(
             letter,
             style: const TextStyle(
@@ -72,7 +81,7 @@ Widget qualityPill(String quality) {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: color,
+              color: accent,
               letterSpacing: 0.2,
               height: 1.1,
             ),

@@ -828,7 +828,7 @@ void _showShrineResult(BuildContext c, ShrineApplyResult r) {
                 showDialog(
                   context: c,
                   builder: (_) => AlertDialog(
-                    title: GoopText('${r.shrine.name} · what to do'),
+                    title: GoopText('${r.shrine.name} · what to do', maxLines: 1, overflow: TextOverflow.ellipsis),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,

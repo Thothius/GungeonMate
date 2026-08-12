@@ -360,21 +360,25 @@ class _ChestChip extends StatelessWidget {
     final rank = _ranks[key];
 
     final isS = key == 'black';
+    // S-tier: gold accent for border/glow so it reads on any background.
+    // The chest color swatch stays near-black (the actual chest color),
+    // but the chip chrome uses gold to match the QualityBadge S-tier glow.
+    final accent = isS ? const Color(0xFFFFD700) : color;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: accent.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: isS ? Colors.white54 : color.withValues(alpha: 0.45),
+          color: isS ? accent.withValues(alpha: 0.7) : color.withValues(alpha: 0.45),
           width: isS ? 1.2 : 0.8,
         ),
         boxShadow: isS
             ? [
                 BoxShadow(
-                  color: Colors.white.withValues(alpha: 0.12),
-                  blurRadius: 6,
+                  color: accent.withValues(alpha: 0.25),
+                  blurRadius: 8,
                   spreadRadius: 1,
                 ),
               ]
@@ -383,14 +387,14 @@ class _ChestChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.inventory_2_outlined, size: 14, color: isS ? Colors.white70 : color),
+          Icon(Icons.inventory_2_outlined, size: 14, color: isS ? accent : color),
           const SizedBox(width: 5),
           GoopText(
             'Chest ',
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: isS ? Colors.white : color.withValues(alpha: 0.85),
+              color: isS ? accent : color.withValues(alpha: 0.85),
             ),
           ),
           Container(
@@ -399,7 +403,10 @@ class _ChestChip extends StatelessWidget {
             decoration: BoxDecoration(
               color: color,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white24, width: 0.8),
+              border: Border.all(
+                color: isS ? accent.withValues(alpha: 0.6) : Colors.white24,
+                width: 0.8,
+              ),
             ),
           ),
           if (rank != null) ...[

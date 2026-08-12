@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
-              GoopText('Error: ${runProvider.error}'),
+              GoopText('Error: ${runProvider.error}', maxLines: 3, overflow: TextOverflow.ellipsis),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => runProvider.loadData(),

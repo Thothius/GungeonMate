@@ -181,7 +181,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: GoopText('${item.name} destroyed on use'),
+                      content: GoopText('${item.name} destroyed on use', maxLines: 1, overflow: TextOverflow.ellipsis),
                       duration: const Duration(milliseconds: 1400),
                       behavior: SnackBarBehavior.floating,
                     ),

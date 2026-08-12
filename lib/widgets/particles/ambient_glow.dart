@@ -44,10 +44,8 @@ class _AmbientGlowState extends State<AmbientGlow>
         final cx = 0.5 + 0.28 * math.cos(t);
         final cy = 0.5 + 0.20 * math.sin(t);
 
-        // ignore: deprecated_member_use
-        final pColor = widget.primary.withOpacity((widget.primary.opacity * 1.55).clamp(0.0, 0.95));
-        // ignore: deprecated_member_use
-        final sColor = widget.secondary.withOpacity((widget.secondary.opacity * 1.55).clamp(0.0, 0.95));
+        final pColor = widget.primary.withValues(alpha: (widget.primary.a * 1.55).clamp(0.0, 0.95));
+        final sColor = widget.secondary.withValues(alpha: (widget.secondary.a * 1.55).clamp(0.0, 0.95));
 
         return Stack(
           children: [

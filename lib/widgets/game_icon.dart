@@ -22,9 +22,14 @@ class GameIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = quality.isEmpty
+    final rawColor = quality.isEmpty
         ? Colors.white24
         : QualityBadge.colorFor(quality);
+    // S-tier uses near-black for the filled badge, but near-black ring
+    // chrome is invisible on dark panels. Use gold for the ring so S-tier
+    // items/guns are clearly framed on any background.
+    final isS = quality.toUpperCase() == 'S' || quality.toUpperCase() == '1S';
+    final ringColor = isS ? const Color(0xFFFFD700) : rawColor;
 
     final imgScale = showRing ? 0.72 : 0.83;
     final iconScale = showRing ? 0.58 : 0.67;
@@ -59,8 +64,11 @@ class GameIcon extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color.withValues(alpha: 0.18),
-        border: Border.all(color: color.withValues(alpha: 0.55), width: 1.5),
+        color: ringColor.withValues(alpha: 0.18),
+        border: Border.all(
+          color: ringColor.withValues(alpha: isS ? 0.85 : 0.55),
+          width: isS ? 2.0 : 1.5,
+        ),
       ),
       child: inner,
     );
