@@ -9,6 +9,7 @@ import 'challenge_mode_codex_screen.dart';
 import 'drake_codex_screen.dart';
 import 'paradox_codex_screen.dart';
 import 'gunslinger_codex_screen.dart';
+import 'rat_codex_screen.dart';
 import 'codex_detail_screen.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
@@ -32,8 +33,8 @@ class _CodexScreenState extends State<CodexScreen> {
   final TextEditingController _searchCtrl = TextEditingController();
   String _query = '';
 
-  // Currently selected category index (0-based). 0-4 are special pages,
-  // 5-9 are data categories.
+  // Currently selected category index (0-based). 0-5 are special pages,
+  // 6-10 are data categories.
   int _selected = 0;
 
   // Loaded data
@@ -75,6 +76,12 @@ class _CodexScreenState extends State<CodexScreen> {
       label: 'Challenge',
       icon: Icons.casino,
       color: Color(0xFFAB47BC),
+      isSpecial: true,
+    ),
+    _CategoryDef(
+      label: 'Rat',
+      icon: Icons.pest_control,
+      color: Color(0xFFFFB300),
       isSpecial: true,
     ),
     _CategoryDef(
@@ -172,15 +179,15 @@ class _CodexScreenState extends State<CodexScreen> {
   /// Returns the data entries for the selected data category.
   List<CodexEntry> _entriesFor(int index) {
     switch (index) {
-      case 5:
-        return _filter(_objects);
       case 6:
-        return _filter(_pickups);
+        return _filter(_objects);
       case 7:
-        return _filter(_npcs);
+        return _filter(_pickups);
       case 8:
-        return _filter(_enemies);
+        return _filter(_npcs);
       case 9:
+        return _filter(_enemies);
+      case 10:
         return _filter(_bosses);
       default:
         return [];
@@ -189,13 +196,13 @@ class _CodexScreenState extends State<CodexScreen> {
 
   CodexSection _sectionFor(int index) {
     switch (index) {
-      case 5:
-        return CodexSection.objects;
       case 6:
-        return CodexSection.pickups;
+        return CodexSection.objects;
       case 7:
-        return CodexSection.npcs;
+        return CodexSection.pickups;
       case 8:
+        return CodexSection.npcs;
+      case 9:
         return CodexSection.enemies;
       default:
         return CodexSection.bosses;
@@ -328,6 +335,8 @@ class _CodexScreenState extends State<CodexScreen> {
         return const DrakeCodexScreen();
       case 4:
         return const ChallengeModeCodexScreen();
+      case 5:
+        return const RatCodexScreen();
       default:
         return const SizedBox.shrink();
     }
