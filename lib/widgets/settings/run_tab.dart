@@ -357,6 +357,33 @@ class _CombinedRunAppTabState extends State<CombinedRunAppTab> {
                   }));
                 },
               ),
+            if (mpActive)
+              _TileData(
+                icon: mpSession.isPaused
+                    ? Icons.play_circle_fill_rounded
+                    : Icons.pause_circle_filled_rounded,
+                label: mpSession.isPaused ? 'Resume Run' : 'Pause Run',
+                color: mpSession.isPaused ? Colors.greenAccent : Colors.orangeAccent,
+                onTap: () {
+                  unawaited(
+                    (mpSession.isPaused ? mpSession.resumeRun() : mpSession.pauseRun()).then((_) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: GoopText(
+                              mpSession.isPaused
+                                  ? 'MP run resumed — searching for peer...'
+                                  : 'MP run paused — tap Resume when back in range.',
+                            ),
+                            duration: const Duration(seconds: 2),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    }),
+                  );
+                },
+              ),
             if (mpActive && mpSession.myRole == MpRole.sidekick)
               _TileData(
                 icon: Icons.bluetooth_disabled,

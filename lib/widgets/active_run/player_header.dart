@@ -194,19 +194,25 @@ class MpHeader extends StatelessWidget {
     final isSearching = session.status == MpStatus.searching;
     final isReconnecting = isSearching && session.canReconnect;
     final isAutoRetrying = session.isAutoReconnecting;
-    final statusColor = isConnected
-        ? const Color(0xFF00E676) // vibrant green
-        : (isSearching || session.status == MpStatus.handshaking)
-            ? const Color(0xFFFF9100) // warm orange
-            : const Color(0xFFFF1744); // sharp red
+    final isPaused = session.isPaused;
+    final statusColor = isPaused
+        ? const Color(0xFFFFAB40) // amber — paused, waiting for user
+        : isConnected
+            ? const Color(0xFF00E676) // vibrant green
+            : (isSearching || session.status == MpStatus.handshaking)
+                ? const Color(0xFFFF9100) // warm orange
+                : const Color(0xFFFF1744); // sharp red
 
     final showManualReconnect = session.canReconnect &&
         (session.status == MpStatus.disconnected ||
             session.status == MpStatus.error) &&
-        !session.isAutoReconnecting;
+        !session.isAutoReconnecting &&
+        !isPaused;
 
     String statusText;
-    if (isConnected) {
+    if (isPaused) {
+      statusText = 'Paused — tap Resume when back in range';
+    } else if (isConnected) {
       statusText = 'Connected';
     } else if (isReconnecting) {
       final att = session.autoReconnectAttempts;

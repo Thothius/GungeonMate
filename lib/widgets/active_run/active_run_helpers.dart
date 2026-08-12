@@ -329,6 +329,32 @@ class HeaderMenu extends StatelessWidget {
           case 'reset_items_p2':
             confirmClearInventoryDialog(context, p, PlayerSlot.coop);
             break;
+          case 'pause_mp':
+            unawaited(mpSession.pauseRun().then((_) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: GoopText('MP run paused — auto-reconnect stopped. Tap Resume when back in range.'),
+                    duration: Duration(seconds: 3),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            }));
+            break;
+          case 'resume_mp':
+            unawaited(mpSession.resumeRun().then((_) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: GoopText('MP run resumed — searching for peer...'),
+                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            }));
+            break;
         }
       },
       itemBuilder: (ctx) => [
@@ -392,6 +418,26 @@ class HeaderMenu extends StatelessWidget {
               GoopText('Save MP Session'),
             ]),
           ),
+          // Pause/Resume MP run — stops auto-reconnect while carrier is
+          // out of BT/Wi-Fi range, resumes when they're back in the room.
+          if (mpSession.isPaused)
+            const PopupMenuItem(
+              value: 'resume_mp',
+              child: Row(children: [
+                Icon(Icons.play_circle_fill_rounded, size: 18, color: Colors.greenAccent),
+                SizedBox(width: 10),
+                GoopText('Resume MP Run', style: TextStyle(color: Colors.greenAccent)),
+              ]),
+            )
+          else
+            const PopupMenuItem(
+              value: 'pause_mp',
+              child: Row(children: [
+                Icon(Icons.pause_circle_filled_rounded, size: 18, color: Colors.orangeAccent),
+                SizedBox(width: 10),
+                GoopText('Pause MP Run', style: TextStyle(color: Colors.orangeAccent)),
+              ]),
+            ),
         ] else ...[
           const PopupMenuItem(
             value: 'save_run',

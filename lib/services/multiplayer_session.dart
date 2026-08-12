@@ -183,6 +183,13 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
   /// distinguish fresh connections from reconnections).
   bool _wasDisconnected = false;
 
+  /// True when the user has manually paused the MP run — stops
+  /// auto-reconnect, watchdog, and heartbeat so the carrier can
+  /// leave BT/Wi-Fi range without the app burning battery retrying.
+  /// Resume with [resumeRun].
+  bool _isPaused = false;
+  bool get isPaused => _isPaused;
+
   final List<String> _connectionLogs = [
     '[SYSTEM] Multiplayer Diagnostic Log Initialized.',
   ];
@@ -692,6 +699,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     _peerLastSnapshotTs = 0;
     _protocolError = false;
     _wasDisconnected = false;
+    _isPaused = false;
     _runProvider.mpDisconnected = false;
     _cancelled = false;
     _status = MpStatus.idle;
@@ -807,6 +815,44 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  /// Manually pause the MP run — stops auto-reconnect, watchdog, and
+  /// heartbeat so the carrier can leave BT/Wi-Fi range without the app
+  /// burning battery on endless reconnect attempts. The run state
+  /// (inventory, coolness, etc.) is preserved. Resume with [resumeRun].
+  Future<void> pauseRun() async {
+    if (_isPaused) return;
+    _log('Pausing MP run — stopping auto-reconnect, watchdog, and heartbeat...');
+    _isPaused = true;
+    _cancelAutoReconnect();
+    _stopHeartbeat();
+    _searchTimeout?.cancel();
+    _helloRetryTimer?.cancel();
+    // Save the session so it survives an app-kill while paused.
+    unawaited(saveCurrentSession());
+    // If we were connected, drop the transport cleanly — the peer will
+    // see a normal disconnect and can wait for us to resume.
+    if (_status == MpStatus.connected || _status == MpStatus.handshaking) {
+      await _service.disconnect();
+      _status = MpStatus.disconnected;
+      _wasDisconnected = true;
+      _runProvider.mpDisconnected = true;
+    }
+    notifyListeners();
+    _log('MP run paused. Tap Resume when back in range.');
+  }
+
+  /// Resume a paused MP run — restarts auto-reconnect to find the peer.
+  Future<void> resumeRun() async {
+    if (!_isPaused) return;
+    _log('Resuming MP run — restarting auto-reconnect...');
+    _isPaused = false;
+    if (_status == MpStatus.disconnected && canReconnect) {
+      _startAutoReconnect();
+    }
+    notifyListeners();
+    _log('MP run resumed. Searching for peer...');
+  }
+
   /// User wants to drop the current peer but NOT leave the multiplayer
   /// screen — we stay in `disconnected` so they can tap Reconnect.
   Future<void> disconnect() async {
@@ -888,7 +934,8 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed &&
         _status == MpStatus.disconnected &&
         canReconnect &&
-        !_busyTransition) {
+        !_busyTransition &&
+        !_isPaused) {
       _log('App resumed — triggering immediate reconnect attempt...');
       _cancelAutoReconnect();
       _startAutoReconnect();
@@ -1168,7 +1215,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
           // auto-reconnect is retrying in the background, a fresh
           // restore point already exists.
           unawaited(saveCurrentSession());
-          _startAutoReconnect();
+          if (!_isPaused) _startAutoReconnect();
         } else {
           _stopHeartbeat();
           notifyListeners();
@@ -1190,7 +1237,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
           _stopHeartbeat();
           notifyListeners();
           unawaited(saveCurrentSession());
-          _startAutoReconnect();
+          if (!_isPaused) _startAutoReconnect();
         } else {
           notifyListeners();
         }
@@ -1607,7 +1654,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
         // point already exists — the user never has to remember to tap
         // SAVE RUN manually.
         unawaited(saveCurrentSession());
-        _startAutoReconnect();
+        if (!_isPaused) _startAutoReconnect();
       }
     });
     // Automatic run save every 20s while connected. Silent/best-effort —
