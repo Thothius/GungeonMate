@@ -59,6 +59,9 @@ enum AppThemeMode {
       auraStyle: AvatarAuraStyle.pastelPulse,
       headerGlyph: '\u2661', // ♡ open heart
       headerUnderlineColor: Color(0x88FF69B4),
+      statGroupCombat: Color(0xFFFF69B4), // pink
+      statGroupHandling: Color(0xFFF06292), // rose
+      statGroupMeta: Color(0xFFE8A7F0), // lavender
     ),
   ),
   unicornII(
@@ -217,6 +220,9 @@ enum AppThemeMode {
       auraStyle: AvatarAuraStyle.forgeGlow,
       headerGlyph: '🔥',
       headerUnderlineColor: Color(0x88FF4500),
+      statGroupCombat: Color(0xFFFF4500), // dragun orange
+      statGroupHandling: Color(0xFFFFB74D), // sulfur orange
+      statGroupMeta: Color(0xFFFFCC00), // gold
     ),
   ),
   hollowChill(
@@ -247,6 +253,9 @@ enum AppThemeMode {
       auraStyle: AvatarAuraStyle.frostRing,
       headerGlyph: '\u2744',
       headerUnderlineColor: Color(0x8800D2FF),
+      statGroupCombat: Color(0xFF00D2FF), // cyan
+      statGroupHandling: Color(0xFF90A4AE), // slate
+      statGroupMeta: Color(0xFFE0F7FA), // ice white
     ),
   ),
   lordJammed(
@@ -276,6 +285,9 @@ enum AppThemeMode {
       auraStyle: AvatarAuraStyle.oxbloodBreath,
       headerGlyph: '\u2020', // †
       headerUnderlineColor: Color(0xAAFF0033),
+      statGroupCombat: Color(0xFFFF0033), // curse red
+      statGroupHandling: Color(0xFFCE93D8), // corrupted violet
+      statGroupMeta: Color(0xFFFF007F), // curse neon
     ),
   ),
   theBreach(
@@ -337,6 +349,9 @@ enum AppThemeMode {
       auraStyle: AvatarAuraStyle.cosmicTemporal,
       headerGlyph: '☠',
       headerUnderlineColor: Color(0xAA39FF14),
+      statGroupCombat: Color(0xFF39FF14), // neon green
+      statGroupHandling: Color(0xFFB388FF), // violet
+      statGroupMeta: Color(0xFFCCFF00), // acid yellow
     ),
   ),
   resourcefulRat(
@@ -517,6 +532,9 @@ enum AppThemeMode {
       auraStyle: AvatarAuraStyle.frostRing,
       headerGlyph: '🤖',
       headerUnderlineColor: Color(0x8800F5D4),
+      statGroupCombat: Color(0xFF00F5D4), // electric teal
+      statGroupHandling: Color(0xFF69F0AE), // neon green
+      statGroupMeta: Color(0xFFB2DFDB), // pale teal
     ),
   ),
   cultOfGundead(
@@ -1830,6 +1848,14 @@ class ThemeFlair {
   /// "printed page" signature — every other theme leaves this false.
   final bool pageFrame;
 
+  /// Optional per-stat-group accent colors for the gun detail screen.
+  /// When null, [StatGroup] falls back to semantic defaults
+  /// (Combat=red, Handling=cyan, Meta=amber). Themes opt in to
+  /// palette-tied group colors by setting these.
+  final Color? statGroupCombat;
+  final Color? statGroupHandling;
+  final Color? statGroupMeta;
+
   const ThemeFlair({
     required this.scaffold,
     required this.card,
@@ -1862,6 +1888,9 @@ class ThemeFlair {
     this.headerAllCaps = false,
     this.headerUnderlineColor,
     this.pageFrame = false,
+    this.statGroupCombat,
+    this.statGroupHandling,
+    this.statGroupMeta,
   });
 }
 
@@ -1906,6 +1935,9 @@ ThemeFlair _hueShiftFlair(ThemeFlair f, double degrees) {
     headerAllCaps: f.headerAllCaps,
     headerUnderlineColor: f.headerUnderlineColor != null ? _hueShift(f.headerUnderlineColor!, degrees) : null,
     pageFrame: f.pageFrame,
+    statGroupCombat: f.statGroupCombat != null ? _hueShift(f.statGroupCombat!, degrees) : null,
+    statGroupHandling: f.statGroupHandling != null ? _hueShift(f.statGroupHandling!, degrees) : null,
+    statGroupMeta: f.statGroupMeta != null ? _hueShift(f.statGroupMeta!, degrees) : null,
   );
 }
 
