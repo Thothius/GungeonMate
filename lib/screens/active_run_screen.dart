@@ -12,7 +12,6 @@ import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/player_header.dart';
 import '../widgets/active_run/player_page.dart';
-import '../widgets/active_run/summary_tab.dart';
 import '../widgets/active_run/dice_roll.dart';
 
 class ActiveRunScreen extends StatefulWidget {
@@ -196,7 +195,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final isMpActive = session.isActive;
     final hasCoop = state.hasCoop;
     // Snap back if current page no longer exists (coop removed or MP ended)
-    final maxPage = (hasCoop ? 1 : 0) + (isMpActive && hasCoop ? 1 : 0);
+    final maxPage = hasCoop ? 1 : 0;
     if (_currentPage > maxPage) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _page.hasClients) {
@@ -206,7 +205,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       });
     }
 
-    // Pages: 0=P1, 1=P2 (only when coop), 2=Summary (MP only).
+    // Pages: 0=P1, 1=P2 (only when coop).
     // In MP, "my" page is whichever slot belongs to me.
     final myMpPage = isMpActive ? (session.myRole == MpRole.main ? 0 : 1) : 0;
     final onMyMpPage = isMpActive ? _currentPage == myMpPage : true;
@@ -221,9 +220,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton:
-          (isMpActive && hasCoop && _currentPage >= 2)
-              ? null
-              : FloatingActionButton(
+          FloatingActionButton(
                 heroTag: 'fab_add',
                 tooltip:
                     isMpActive && !onMyMpPage
@@ -278,7 +275,6 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               children: [
                 const PlayerPage(slot: PlayerSlot.main),
                 if (hasCoop) const PlayerPage(slot: PlayerSlot.coop),
-                if (isMpActive && hasCoop) const MpSummaryPage(),
               ],
             ),
           ),

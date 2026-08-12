@@ -14,6 +14,9 @@ import '../../utils/asset_paths.dart';
 import '../../services/goop_talk_engine.dart';
 
 /// Compact tab button for the Summary page in the MP header.
+// TODO(BUG-037): Summary tab removed from MP header in v1.9.0. This class
+// is now dormant — not referenced anywhere. Re-evaluate before re-introducing.
+// ignore: unused_element
 class SummaryTab extends StatelessWidget {
   final bool active;
   final VoidCallback onTap;
@@ -81,6 +84,9 @@ class SummaryTab extends StatelessWidget {
 /// Multiplayer Summary page — swipe right from P2 to reach it.
 /// Shows both gungeoneers as animated GIFs with usernames, a compact
 /// stats grid, and a collapsible synergy overview with visual icon pairs.
+// TODO(BUG-037): Summary page removed from MP PageView in v1.9.0. This class
+// is now dormant — not referenced anywhere. Re-evaluate before re-introducing.
+// ignore: unused_element
 class MpSummaryPage extends StatefulWidget {
   const MpSummaryPage({super.key});
 

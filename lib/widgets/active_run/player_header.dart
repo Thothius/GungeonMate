@@ -5,7 +5,6 @@ import '../../services/app_theme.dart';
 import '../../services/multiplayer_session.dart';
 import '../../models/multiplayer_messages.dart';
 import '../../services/goop_talk_engine.dart';
-import 'summary_tab.dart';
 
 /// Two-up player switcher used when local co-op is active (not MP).
 /// Each tab is equal-width, large enough to read at a glance, and shows
@@ -349,8 +348,7 @@ class MpHeader extends StatelessWidget {
               ),
             ),
             // ΓöÇΓöÇ Player tabs (only when the coop slot exists) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
-            // P1 + P2 equal-width tabs, plus a compact Summary tab.
-            // The peer tab dims when disconnected.
+            // P1 + P2 equal-width tabs. The peer tab dims when disconnected.
             if (hasCoop) ...[
               const SizedBox(height: 4),
               Row(
@@ -376,14 +374,6 @@ class MpHeader extends StatelessWidget {
                       onTap: () => onPick(1),
                       showYouDot: tab1IsYou,
                       opacity: peerDimmed && !tab1IsYou ? 0.45 : 1.0,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 2,
-                    child: SummaryTab(
-                      active: currentPage == 2,
-                      onTap: () => onPick(2),
                     ),
                   ),
                 ],
