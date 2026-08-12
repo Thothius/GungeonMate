@@ -236,20 +236,14 @@ class _CodexScreenState extends State<CodexScreen> {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                // ── Category grid ──────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 4, 10, 8),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 6,
-                      crossAxisSpacing: 6,
-                      childAspectRatio: 0.92,
-                    ),
+                // ── Category strip — horizontal scroll ─────────────────
+                SizedBox(
+                  height: 76,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.fromLTRB(10, 4, 10, 8),
                     itemCount: _categories.length,
+                    separatorBuilder: (_, __) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       final c = _categories[index];
                       final isSelected = index == _selected;
@@ -386,11 +380,12 @@ class _CategoryTile extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected
               ? color.withValues(alpha: 0.18)
               : AppTheme.flair.card,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? color.withValues(alpha: 0.8)
@@ -407,19 +402,19 @@ class _CategoryTile extends StatelessWidget {
                 ]
               : null,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
               size: 22,
               color: isSelected ? color : color.withValues(alpha: 0.55),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(width: 8),
             GoopText(
               label,
               style: TextStyle(
-                fontSize: 9.5,
+                fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                 color: isSelected
                     ? Colors.white
