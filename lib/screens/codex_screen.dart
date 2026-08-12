@@ -74,7 +74,7 @@ class _CodexScreenState extends State<CodexScreen> {
     ),
     _CategoryDef(
       label: 'Challenge',
-      icon: Icons.casino,
+      icon: Icons.shuffle,
       color: Color(0xFFAB47BC),
       isSpecial: true,
     ),
