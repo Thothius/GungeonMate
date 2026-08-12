@@ -5526,7 +5526,8 @@
   {
     "name": "Max Pane",
     "items": [
-      "Glass Cannon"
+      "Glass Cannon",
+      "Glass Guon Stone"
     ],
     "effect": "Glass Guon Stone If hit, Glass Guon Stone breaks, but Glass Cannon retains its ammo.",
     "icon": "",

@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.8.39",
+    "title": "🐛 Bugfixes: Synergy Data, MP Reconnect Feedback, Quality Cleanup",
+    "date": "August 12, 2026",
+    "items": [
+      "Fixed 'Max Pane' synergy never flagging active — it required both Glass Cannon and Glass Guon Stone but only listed Glass Cannon in its items array. Now correctly activates when both are owned.",
+      "Multiplayer reconnect now shows a brief 'Connection restored — sync resumed' snackbar with a success haptic when the link comes back, instead of silently closing the drop dialog.",
+      "Replaced 36 'quality: 1S' values with 'S' across guns.json (19) and items.json (17). The '1' prefix was a data pipeline artifact that surfaced as '1S' in UI metadata chips.",
+      "Simplified the Browse quality-sort special case — the '1S' alias is no longer needed in the order map."
+    ]
+  },
+  {
     "version": "v1.8.38",
     "title": "❤️ Huntress Health Stats Toggle",
     "date": "July 24, 2026",

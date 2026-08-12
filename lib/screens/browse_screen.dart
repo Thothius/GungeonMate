@@ -49,7 +49,6 @@ class _BrowseScreenState extends State<BrowseScreen>
 
   static const Map<String, int> _qualityOrder = {
     'S': 0,
-    '1S': 0,
     'A': 1,
     'B': 2,
     'C': 3,

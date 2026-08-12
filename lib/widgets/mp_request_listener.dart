@@ -7,6 +7,7 @@ import '../models/gungeoneer.dart';
 import '../models/multiplayer_messages.dart';
 import '../providers/run_provider.dart';
 import '../services/multiplayer_session.dart';
+import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../services/goop_talk_engine.dart';
 
@@ -285,6 +286,22 @@ class _MpRequestListenerState extends State<MpRequestListener> {
       final ctx = _dropDialogCtx;
       if (ctx != null && Navigator.of(ctx).canPop()) {
         Navigator.of(ctx).pop();
+      }
+      // Distinguish a real reconnect from a teardown/cancel: only the
+      // former transitions back into handshaking/connected. Teardown goes
+      // to idle/error — no "restored" feedback there.
+      final s = session.status;
+      if (s == MpStatus.connected || s == MpStatus.handshaking) {
+        Haptics.success();
+        final messenger = ScaffoldMessenger.maybeOf(context);
+        messenger?.showSnackBar(SnackBar(
+          content: const GoopText(
+            'Connection restored — sync resumed',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+          duration: const Duration(milliseconds: 1800),
+          behavior: SnackBarBehavior.floating,
+        ));
       }
     }
   }

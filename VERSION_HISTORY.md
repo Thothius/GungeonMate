@@ -6,6 +6,20 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.8.39 — Bugfixes: Synergy Data, MP Reconnect Feedback, Quality Cleanup (August 12, 2026)
+**Build:** 78
+
+### Changes
+- **BUG-017 (HIGH):** `Max Pane` synergy in `assets/data/synergies.json` listed only `Glass Cannon` in its `items` array, but the effect text references both `Glass Cannon` and `Glass Guon Stone`. `matchesItems()` requires all listed items, so the synergy never flagged active. Added `Glass Guon Stone` to the array.
+- **BUG-019 (HIGH):** `mp_request_listener.dart` closed the "Connection lost" drop dialog silently on reconnect — no snackbar, no haptic. Now distinguishes a real reconnect (status → `connected`/`handshaking`) from a teardown (status → `idle`/`error`) and shows a floating "Connection restored — sync resumed" snackbar with `Haptics.success()` only on the former.
+- **BUG-020 (MEDIUM):** 36 entries across `guns.json` (19) and `items.json` (17) used `"quality": "1S"` instead of `"S"` — a data pipeline artifact that surfaced as "1S" in UI metadata chips. Global replace to `"S"`. Simplified the `_qualityOrder` map in `browse_screen.dart` (removed the `'1S': 0` alias).
+
+### Verification
+- `node -e JSON.parse(...)` confirms all 3 modified JSON files are well-formed.
+- `flutter analyze` on modified Dart files (pending — see bughunt step).
+
+---
+
 ## v1.8.19 — Dice Roll UX: Cancel, Sparkles, and VS Overflow (July 24, 2026)
 **Build:** 74
 **APK:** `gungeon-mate-v1.8.19.apk`
