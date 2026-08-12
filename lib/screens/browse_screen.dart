@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
+import '../services/app_theme.dart';
 import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
@@ -317,6 +318,7 @@ class _BrowseScreenState extends State<BrowseScreen>
 
   Widget _gunsList(RunProvider p) {
     final items = _sortedGuns(p);
+    if (items.isEmpty) return _emptyState();
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -461,6 +463,7 @@ class _BrowseScreenState extends State<BrowseScreen>
       return c != 0 ? c : a.name.compareTo(b.name);
     });
 
+    if (entries.isEmpty) return _emptyState();
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -476,11 +479,41 @@ class _BrowseScreenState extends State<BrowseScreen>
 
   Widget _itemsList(RunProvider p) {
     final items = _sortedItems(p);
+    if (items.isEmpty) return _emptyState();
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemCount: items.length,
       itemBuilder: (c, i) => _itemRow(c, p, items[i]),
+    );
+  }
+
+  Widget _emptyState() {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.search_off_rounded,
+              size: 48,
+              color: AppTheme.flair.secondary.withValues(alpha: 0.4),
+            ),
+            const SizedBox(height: 12),
+            GoopText(
+              _query.isEmpty
+                  ? 'No guns or items to show.'
+                  : 'No results for "$_query".',
+              style: TextStyle(
+                fontSize: 14,
+                color: AppTheme.flair.secondary.withValues(alpha: 0.6),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

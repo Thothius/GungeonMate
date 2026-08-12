@@ -24,7 +24,11 @@
       "👁️ Contrast fixes — 8 dim text colors (white24/white30/white38) on important content bumped to white54/white60/white70 for readability on dark panels. Affected: stat labels in tactical grid, evolver formula text, inactive spec names, fallback item letters, shrine USE button, no-results message.",
       "🎭 Multiplayer lobby now theme-aware — guide titles, help icons, sidekick button, and session history icons use theme-derived colors (flair.primary/secondary) instead of hardcoded amber/pink/cyan. Semantic colors (ice=coolness, fire=curse) stay hardcoded as they represent game meaning.",
       "📐 Main menu rebalanced — spacer flex reduced from 3+4 to 2+2 after mascot removal, bringing the action buttons closer to the Bullet Hell heading for a more balanced vertical layout.",
-      "💊 Browse pill padding standardized — all quality/coin/synergy/meta pills now use consistent 8x3 padding for a uniform visual rhythm."
+      "💊 Browse pill padding standardized — all quality/coin/synergy/meta pills now use consistent 8x3 padding for a uniform visual rhythm.",
+      "🔍 Browse empty-search state — when a search yields no results in Guns, Items, or All tabs, a 'No results' message with a search-off icon appears instead of a blank screen.",
+      "👆 Browse add-button tap target enlarged — the + button in browse rows now has a 44x44 dp hit area (up from ~14px), making it much easier to tap on mobile while keeping the same visual size.",
+      "📳 Item detail haptic feedback — the remove, add, and favourite buttons in item detail now fire Haptics.selection()/light() on tap, matching the rest of the app.",
+      "🔕 Favourite toggle no longer clears other snackbars — removed the clearSnackBars() call so synergy-activated or other important snackbars stay visible when toggling a favourite."
     ]
   },
   {

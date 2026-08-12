@@ -8,6 +8,7 @@ import '../models/player.dart';
 import '../services/app_theme.dart';
 import '../services/elemental_tagger.dart';
 import '../services/goop_talk_engine.dart';
+import '../services/haptics.dart';
 import '../widgets/wiki_sections.dart';
 import '../widgets/item_detail/header.dart';
 import '../widgets/item_detail/gun_stats.dart';
@@ -281,6 +282,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           backgroundColor: Colors.red.withValues(alpha: 0.08),
                         ),
                         onPressed: () {
+                          Haptics.selection();
                           // Remove from the owning slot (or the resolved
                           // owner if we don't know which it is).
                           final slot = ownerSlot ??
@@ -316,6 +318,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           ),
                         ),
                         onPressed: () {
+                          Haptics.selection();
                           // Add to the originating slot if known, else main.
                           final slot = ownerSlot ?? PlayerSlot.main;
                           if (gun != null) {

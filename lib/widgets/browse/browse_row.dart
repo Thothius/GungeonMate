@@ -139,25 +139,32 @@ class BrowseRow extends StatelessWidget {
               const SizedBox(width: 8),
               GestureDetector(
                 onTap: inRun ? null : onAdd,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: inRun
-                        ? Colors.green.withValues(alpha: 0.15)
-                        : AppTheme.flair.primary.withValues(alpha: 0.12),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: inRun
-                          ? Colors.green.withValues(alpha: 0.5)
-                          : AppTheme.flair.primary.withValues(alpha: 0.4),
-                      width: 1.5,
+                behavior: HitTestBehavior.opaque,
+                child: SizedBox(
+                  width: 44,
+                  height: 44,
+                  child: Center(
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: inRun
+                            ? Colors.green.withValues(alpha: 0.15)
+                            : AppTheme.flair.primary.withValues(alpha: 0.12),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: inRun
+                              ? Colors.green.withValues(alpha: 0.5)
+                              : AppTheme.flair.primary.withValues(alpha: 0.4),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Icon(
+                        inRun ? Icons.check : Icons.add_rounded,
+                        color: inRun ? Colors.green : AppTheme.flair.primary,
+                        size: 24,
+                      ),
                     ),
-                  ),
-                  child: Icon(
-                    inRun ? Icons.check : Icons.add_rounded,
-                    color: inRun ? Colors.green : AppTheme.flair.primary,
-                    size: 24,
                   ),
                 ),
               ),

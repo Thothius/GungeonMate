@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/elemental_tagger.dart';
+import '../../services/haptics.dart';
 import '../game_icon.dart';
 import '../quality_badge.dart';
 
@@ -110,10 +111,10 @@ class ItemDetailHeader extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
                 onPressed: () {
+                  Haptics.light();
                   final p = context.read<RunProvider>();
                   final wasFav = p.isFavourite(name);
                   p.toggleFavourite(name);
-                  ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: GoopText(wasFav
