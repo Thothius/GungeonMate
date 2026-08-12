@@ -362,7 +362,7 @@ class _CategoryTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? color.withValues(alpha: 0.18)
-              : const Color(0xFF1E1E22),
+              : AppTheme.flair.card,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isSelected
@@ -502,7 +502,7 @@ class _CodexCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF1E1E22),
+          color: AppTheme.flair.card,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color: flair.primary.withValues(alpha: 0.12),
