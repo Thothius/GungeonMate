@@ -4,18 +4,18 @@
     "title": "🔥 BULLET HELL EDITION",
     "date": "August 2026",
     "items": [
-      "� NEW: Bullet Hell codex page — a themed special page under the Codex tab with the official header graphic, presenting Chamber 6 lore, entry conditions, the 'No Loot' survival rules, the three-loop procedural layout, hazards, and the Lich's three-phase boss fight in a clean, scrollable dark-neon layout.",
-      "�💥 Max Pane synergy fixed — now correctly activates when you hold both Glass Cannon and Glass Guon Stone. It was listed with only Glass Cannon in its items array, so the synergy never flagged active. Both items now required, as the effect text always implied.",
+      "🔥 NEW: Bullet Hell codex page — a themed special page under the Codex tab with the official header graphic, presenting Chamber 6 lore, entry conditions, the 'No Loot' survival rules, the three-loop procedural layout, hazards, and the Lich's three-phase boss fight in a clean, scrollable dark-neon layout.",
+      "💥 Max Pane synergy fixed — now correctly activates when you hold both Glass Cannon and Glass Guon Stone. It was listed with only Glass Cannon in its items array, so the synergy never flagged active. Both items now required, as the effect text always implied.",
       "🔗 Multiplayer reconnect now announces itself — a floating 'Connection restored — sync resumed' snackbar fires with a success haptic the moment the link comes back, instead of silently closing the drop dialog. Teardowns (disconnect/cancel) stay quiet so you only hear from it on a real recovery.",
       "✨ Quality tier cleanup — 36 entries across guns (19) and items (17) were showing '1S' instead of 'S' in UI metadata chips, a data-pipeline artifact. All corrected to 'S'; the Browse quality-sort special case simplified.",
-      "🎯 More fixes incoming as part of the Bullet Hell Edition rollout — see the edition plan for the full lineup.",
       "🧹 Removed the Multiplayer Summary tab from the MP header — the P1/P2 header is now cleaner with just the two player tabs. The Summary page code is left dormant on disk for potential future re-introduction.",
       "⚙️ Active-run gear menu restructured — 'Reset P1 Items' (and 'Reset P2 Items' in coop) now available as a quick action directly in the menu. Settings moved to the bottom so the top prioritizes in-run actions. The confirm dialog is now shared between the menu and the Settings Run tab.",
       "🦄 Unicorn theme particles fixed — selecting the Unicorn theme now auto-enables unicorn sparkle particles with per-palette colors (cotton candy, neon, dreamy, sunset, bubblegum, mulberry each get their own particle color set). The palette selector no longer requires horizontal scrolling — all 6 palettes are visible in a wrap layout. ParticleField gained a colorsOverride param for per-palette color injection without bloating the preset enum.",
       "🖤 S-tier quality badge reverted to its documented design — black pill, white letter, animated golden glow. The gold-pill drift (white-on-gold, low contrast) is gone. The S chest chip label and icon are now white instead of dark-on-dark, so 'Chest S' is actually readable.",
       "🔫 Periodic grid gun tiles reworked — gun type (Pistol/Shotgun/Rifle/Beam/etc.) now sits as a centered subtitle below the item name instead of a tiny corner tag. RANGE is now shown alongside DPS in the bottom-center badge. Tile aspect ratio bumped from 0.80 to 0.75 to fit the new subtitle row.",
       "⚙️ Settings merged — the old 3-tab Settings (VISUALS / RUN / APP) is now 2 tabs (VISUALS / RUN & APP). The Run & App tab uses a compact 2-column grid of icon+label action tiles grouped into RUN SESSION, INVENTORY & DATA, and DANGER ZONE. The dialogue card (haptics + text speed) stays full-width at the top. Old AppTab left dormant on disk.",
-      "📊 Stat-group tags upgraded — Combat / Handling / Meta labels in the gun detail screen are now bigger (15px, w800) and color-coded. Each group gets a signature accent color (Combat=red, Handling=cyan, Meta=amber by default) that themes can override to match their palette. Filled-pill header for filled-chip themes, accent-bar for minimalist themes. Stat pills in each group get a subtle label tint in the group color."
+      "📊 Stat-group tags upgraded — Combat / Handling / Meta labels in the gun detail screen are now bigger (15px, w800) and color-coded. Each group gets a signature accent color (Combat=red, Handling=cyan, Meta=amber by default) that themes can override to match their palette. Filled-pill header for filled-chip themes, accent-bar for minimalist themes. Stat pills in each group get a subtle label tint in the group color.",
+      "🎨 Theme + particle picking streamlined — every visible theme now auto-binds a curated particle preset (Forge Master→embers, Robot's Core→casings, Custom→cosmic stars) instead of only Unicorn getting particles. The theme picker has a quick-access strip of 5 tappable theme circles (no more swiping through all 5 full-screen pages) and a horizontal particle preset strip for instant effect switching. Applying a theme now returns you to where you launched from instead of kicking you to the home screen. A palette quick-launch button (pink icon) replaces the old Settings gear on the main menu top-right corner."
     ]
   },
   {
@@ -219,41 +219,41 @@
   },
   {
     "version": "v1.6.3",
-    "title": "\ud83c\udfa8 THEME PICKER REDESIGN \u2014 DASHBOARD PREVIEW + BIG PALETTE BUTTONS",
+    "title": "🎨 THEME PICKER REDESIGN — DASHBOARD PREVIEW + BIG PALETTE BUTTONS",
     "date": "July 23, 2026",
     "items": [
-      "Dashboard Preview: Theme picker now shows a mini GungeoneerHeader mockup with portrait, stat capsules (COOL/CURSE/SYN/DPS), and sample inventory rows \u2014 see exactly how the theme looks on your active run before applying.",
-      "Big Palette Selector: Replaced small text chips with large tappable cards showing actual color swatches (scaffold/primary/accent) for each Unicorn palette and theme remix \u2014 much easier to tap and visually compare."
+      "Dashboard Preview: Theme picker now shows a mini GungeoneerHeader mockup with portrait, stat capsules (COOL/CURSE/SYN/DPS), and sample inventory rows — see exactly how the theme looks on your active run before applying.",
+      "Big Palette Selector: Replaced small text chips with large tappable cards showing actual color swatches (scaffold/primary/accent) for each Unicorn palette and theme remix — much easier to tap and visually compare."
     ]
   },
   {
     "version": "v1.6.2",
-    "title": "\ud83c\udfa8 THEME-ACCENT DASHBOARD BORDER + CURSE SHEET POLISH + MENU RESTRUCTURE",
+    "title": "🎨 THEME-ACCENT DASHBOARD BORDER + CURSE SHEET POLISH + MENU RESTRUCTURE",
     "date": "July 23, 2026",
     "items": [
-      "Animated Theme-Accent Dashboard Border: The player dashboard (GungeoneerHeader) now pulses with a slow 4.5s breathing border using the current theme's primary accent color \u2014 subtle glow that shifts alpha 0.15\u20130.40 with a matching box shadow, so every theme paints its signature on the dashboard edges.",
-      "Curse Sheet UX Polish: Redesigned the curse slide-up view with a visual 0\u201310 curse meter bar, a 3\u00d72 effect chip grid for perfect alignment, section labels (EFFECTS, ADJUST CURSE, QUICK ACTIONS), and a full-width breakdown button \u2014 everything fits and is clearly visible now.",
+      "Animated Theme-Accent Dashboard Border: The player dashboard (GungeoneerHeader) now pulses with a slow 4.5s breathing border using the current theme's primary accent color — subtle glow that shifts alpha 0.15–0.40 with a matching box shadow, so every theme paints its signature on the dashboard edges.",
+      "Curse Sheet UX Polish: Redesigned the curse slide-up view with a visual 0–10 curse meter bar, a 3×2 effect chip grid for perfect alignment, section labels (EFFECTS, ADJUST CURSE, QUICK ACTIONS), and a full-width breakdown button — everything fits and is clearly visible now.",
       "Header Menu Restructure: Removed 'Use Shrine' (now a dashboard button), added 'Save Run' for manual persistence, and ensured 'End Run' is available for both local and MP host scenarios.",
-      "Panel Opacity Fix: Settings utility tiles, MP section, and toggle chips were using heavy black 45% opacity overlays causing a dim appearance \u2014 switched to light white 6% tint with brighter borders for a crisp, readable look. MP summary panel borders also brightened."
+      "Panel Opacity Fix: Settings utility tiles, MP section, and toggle chips were using heavy black 45% opacity overlays causing a dim appearance — switched to light white 6% tint with brighter borders for a crisp, readable look. MP summary panel borders also brightened."
     ]
   },
   {
     "version": "v1.6.1",
-    "title": "\ud83c\udfae MP SUMMARY OVERHAUL \u2014 COMPACT STATS + COLLABORATIVE SYNERGY ICONS",
+    "title": "🎮 MP SUMMARY OVERHAUL — COMPACT STATS + COLLABORATIVE SYNERGY ICONS",
     "date": "July 22, 2026",
     "items": [
-      "Compact Stat Chips: MP summary page now shows P1 (cyan) vs P2 (purple) values in a tight 3-column grid with icons \u2014 guns, items, active syns, max DPS, damage bonus, and combined coolness/curse all visible at a glance.",
-      "Collapsible Synergy Overview: The synergy panel on the MP summary page is now collapsed by default with a tap-to-expand header \u2014 shows active count and next-pickup hint when collapsed, full breakdown when expanded.",
-      "Visual Synergy Icon Pairs: Synergy rows now display actual item/gun pixel-art icons in a horizontal scroll instead of text 'Need: X, Y' hints \u2014 owned items are full-color with glow, missing items are greyed out, with connecting lines between paired items."
+      "Compact Stat Chips: MP summary page now shows P1 (cyan) vs P2 (purple) values in a tight 3-column grid with icons — guns, items, active syns, max DPS, damage bonus, and combined coolness/curse all visible at a glance.",
+      "Collapsible Synergy Overview: The synergy panel on the MP summary page is now collapsed by default with a tap-to-expand header — shows active count and next-pickup hint when collapsed, full breakdown when expanded.",
+      "Visual Synergy Icon Pairs: Synergy rows now display actual item/gun pixel-art icons in a horizontal scroll instead of text 'Need: X, Y' hints — owned items are full-color with glow, missing items are greyed out, with connecting lines between paired items."
     ]
   },
   {
     "version": "v1.6.0",
-    "title": "\u2728 UNICORN MEGA THEME + SPARKLE NUMBERS + CUSTOM THEME EDITOR",
+    "title": "✨ UNICORN MEGA THEME + SPARKLE NUMBERS + CUSTOM THEME EDITOR",
     "date": "July 22, 2026",
     "items": [
-      "3 New Unicorn Palettes: Rainbow (full spectrum pink/purple/gold), Aurora (northern lights green/violet), and Galaxy (deep space purple/cyan/gold) \u2014 bringing the Unicorn megapack to 7 switchable palettes.",
-      "Sparkle Numbers: All Unicorn palettes now render tiny twinkling star glyphs around headline numbers with staggered phase animations \u2014 stats feel magical.",
+      "3 New Unicorn Palettes: Rainbow (full spectrum pink/purple/gold), Aurora (northern lights green/violet), and Galaxy (deep space purple/cyan/gold) — bringing the Unicorn megapack to 7 switchable palettes.",
+      "Sparkle Numbers: All Unicorn palettes now render tiny twinkling star glyphs around headline numbers with staggered phase animations — stats feel magical.",
       "Number Glow: Headline numbers in Unicorn themes now have a soft coloured halo behind the digits, tinted to match each palette's primary colour.",
       "4 New Particle Presets: Unicorn Sparkles (pink/purple/cyan stars with pulse glow), Cosmic Dust (deep blue/violet with ripple rings and line links), Golden Sparkle (gold/amber stars with smokey glow), and Rainbow Confetti (multi-color tumbling confetti).",
       "Custom Theme Editor: A new 'Customize Colors' button on the Custom theme card opens a bottom sheet with 6 color slots (Background, Card, Primary, Secondary, Accent, Bullet) and 24 curated Gungeon colors per slot, plus a Randomize button.",
@@ -262,56 +262,56 @@
   },
   {
     "version": "v1.5.3",
-    "title": "\u26a1 TRANSITION POLISH + EMPTY DASHBOARD FIX",
+    "title": "⚡ TRANSITION POLISH + EMPTY DASHBOARD FIX",
     "date": "July 21, 2026",
     "items": [
-      "Snappy Page Transitions: All Navigator.push calls now use a custom 180ms fade+scale route instead of the default 300ms MaterialPageRoute slide \u2014 no more ghosting of the previous screen when opening item details, shrines, stats, or theme picker.",
-      "Empty Dashboard Fix: The special dashboards swiper area no longer reserves 320px of empty space when the DPS calculator is disabled or the player has no guns \u2014 the container collapses to zero height when no dashboards are active."
+      "Snappy Page Transitions: All Navigator.push calls now use a custom 180ms fade+scale route instead of the default 300ms MaterialPageRoute slide — no more ghosting of the previous screen when opening item details, shrines, stats, or theme picker.",
+      "Empty Dashboard Fix: The special dashboards swiper area no longer reserves 320px of empty space when the DPS calculator is disabled or the player has no guns — the container collapses to zero height when no dashboards are active."
     ]
   },
   {
     "version": "v1.5.0",
-    "title": "\ud83c\udfae CODEX + SPECIAL DASHBOARDS + TACTICAL GRID + EVENT LOG",
+    "title": "🎮 CODEX + SPECIAL DASHBOARDS + TACTICAL GRID + EVENT LOG",
     "date": "July 21, 2026",
     "items": [
-      "Codex Browser: New tabbed browser for Objects, Pickups, and NPCs scraped from wiki.gg \u2014 90+ images, detail view, accessible from main menu.",
-      "Special Gun/Item Dashboards: Shellegun (3-mode switcher), Chamber Gun (10-floor selector), Platinum Bullets (kill counter), Iron Coin (3-use tracker), Casey, and Kill the Past tracker \u2014 all with persistent state.",
-      "Tactical Stats Grid: Refactored PeriodicTile tactical view to clean 2x3 grid layout \u2014 no more overlapping rank/quality badges, bigger fonts, clearer stats.",
+      "Codex Browser: New tabbed browser for Objects, Pickups, and NPCs scraped from wiki.gg — 90+ images, detail view, accessible from main menu.",
+      "Special Gun/Item Dashboards: Shellegun (3-mode switcher), Chamber Gun (10-floor selector), Platinum Bullets (kill counter), Iron Coin (3-use tracker), Casey, and Kill the Past tracker — all with persistent state.",
+      "Tactical Stats Grid: Refactored PeriodicTile tactical view to clean 2x3 grid layout — no more overlapping rank/quality badges, bigger fonts, clearer stats.",
       "Run Event Log: New logging system with category colors, legend, synergy detection, transfer logging, and player names. Curse/coolness tracking integrated.",
       "Character Select Polish: Scale animation, gradient overlay, loadout badges, border accents, and haptic feedback on the character selection screen.",
       "MP Session Names: Replaced generic animal names with 30+ Gungeon bosses, NPCs, and enemies for multiplayer session nicknames.",
       "Quick Action Cards: Category-colored cards with deduplicated hint text for cleaner inventory actions.",
-      "Capsule Polish: Removed redundant icons, enlarged stat values (14\u219216) and labels (8\u21929.5), preserved COOL/CURSE glow on value text.",
+      "Capsule Polish: Removed redundant icons, enlarged stat values (14→16) and labels (8→9.5), preserved COOL/CURSE glow on value text.",
       "Dead Code Removal: Removed neckbearApproved from Gun/Item models, deleted BugReporter utility and NeckbearMedal widget, cleaned all imports and references."
     ]
   },
   {
     "version": "v1.4.0",
-    "title": "\ud83e\uddf9 CODE CLEANUP + MP SUMMARY FIXES",
+    "title": "🧹 CODE CLEANUP + MP SUMMARY FIXES",
     "date": "July 21, 2026",
     "items": [
       "MP Summary Bughunt: Active synergy counts now show per-player (P1/P2) instead of a shared total. Coolness/Curse rows consolidated to single centered display. Super Serum partial-synergy hint now filters out already-owned items.",
-      "Summary Tab Text Fix: 'SUMMARY' tab label no longer truncates on narrow phone screens \u2014 replaced Flexible+ellipsis with FittedBox for clean scale-down.",
-      "Dead Code Removed: 160 lines of unused widgets deleted \u2014 _ThemeLauncherTile (97 lines, never referenced) from settings_sheet.dart and _ElementRow (63 lines, marked unused_element) from gungeoneer_header.dart.",
+      "Summary Tab Text Fix: 'SUMMARY' tab label no longer truncates on narrow phone screens — replaced Flexible+ellipsis with FittedBox for clean scale-down.",
+      "Dead Code Removed: 160 lines of unused widgets deleted — _ThemeLauncherTile (97 lines, never referenced) from settings_sheet.dart and _ElementRow (63 lines, marked unused_element) from gungeoneer_header.dart.",
       "Deprecated API Fixed: 2x .withOpacity() calls in gungeoneer_header.dart updated to .withValues(alpha:) per Flutter 3.27+ deprecation."
     ]
   },
   {
     "version": "v1.3.0",
-    "title": "\ud83d\udcdd WIKI DATA ENRICHMENT: 100% AMMONOMICON COVERAGE",
+    "title": "📝 WIKI DATA ENRICHMENT: 100% AMMONOMICON COVERAGE",
     "date": "July 21, 2026",
     "items": [
       "Ammonomicon Entries for ALL 239 Guns: Every gun now has its full wiki Ammonomicon description, scraped from enterthegungeon.wiki.gg infoboxes. Was 0/239, now 239/239.",
       "Ammonomicon Entries for ALL 270 Items: Every item now has its Ammonomicon description. 163 extracted from wiki infoboxes, 107 from effect text where wiki had no infobox. Was 0/270, now 270/270.",
-      "Spread Formatting Fixed: 56 gun spread values corrected to include the degree symbol (\u00b0). Multi-mode spreads (e.g. '7 (Rifle) 0 (Energy Ball)') left as-is.",
-      "Synergy Cross-Validation: All 395 synergies validated against the wiki master Synergies table. 391 perfect match, 4 broken references fixed (IBomb case mismatch, Master Round expanded to I-V, Ser Junkan naming), 2 missing items added (Wood Beam \u2192 Pea Cannon, Grasschopper \u2192 To Serve Android).",
-      "Comprehensive Gun Data Audit: Full field coverage verified \u2014 tags, class, type, DPS, sell_price, curse, coolness, special mechanics catalogued. 30 charge guns, 32 reload-special, 8 transform/switch, 4 level/progression, 4 reflect/bullet-clear, plus elemental/melee/homing/beam categories mapped.",
+      "Spread Formatting Fixed: 56 gun spread values corrected to include the degree symbol (°). Multi-mode spreads (e.g. '7 (Rifle) 0 (Energy Ball)') left as-is.",
+      "Synergy Cross-Validation: All 395 synergies validated against the wiki master Synergies table. 391 perfect match, 4 broken references fixed (IBomb case mismatch, Master Round expanded to I-V, Ser Junkan naming), 2 missing items added (Wood Beam → Pea Cannon, Grasschopper → To Serve Android).",
+      "Comprehensive Gun Data Audit: Full field coverage verified — tags, class, type, DPS, sell_price, curse, coolness, special mechanics catalogued. 30 charge guns, 32 reload-special, 8 transform/switch, 4 level/progression, 4 reflect/bullet-clear, plus elemental/melee/homing/beam categories mapped.",
       "Data Integrity Verified: 0 structural errors, 0 broken back-references, 0 duplicate names, all JSON files valid. Wiki cross-check confirms our data is more complete than the wiki infobox in 4 cases."
     ]
   },
   {
     "version": "v1.2.0",
-    "title": "\ud83c\udfae MP SUMMARY PAGE + ANIMATED GUNGEONEER GIFS",
+    "title": "🎮 MP SUMMARY PAGE + ANIMATED GUNGEONEER GIFS",
     "date": "July 21, 2026",
     "items": [
       "Multiplayer Summary Page: Swipe right from P2 to reach a new Summary tab in multiplayer. Shows both players side-by-side with animated in-game Gungeoneer GIFs, usernames, and a full stats comparison panel (guns, items, active synergies, max DPS, damage bonus, coolness, curse).",
@@ -322,7 +322,7 @@
   },
   {
     "version": "v1.1.1",
-    "title": "\ud83d\udd01 MP RECONNECTION OVERHAUL: 10 BUG FIXES",
+    "title": "🔁 MP RECONNECTION OVERHAUL: 10 BUG FIXES",
     "date": "July 21, 2026",
     "items": [
       "PIN Code Persistence (CRITICAL): The MP session PIN is now saved to SharedPreferences and restored on app-kill recovery. Without this, the Main generated a new random PIN on restart and the Sidekick's endpoint filter silently rejected it — reconnection after app-kill was impossible.",
@@ -339,10 +339,10 @@
   },
   {
     "version": "v1.1.0",
-    "title": "\ud83e\uddee UNIVERSAL DAMAGE CALCULATOR + UI CONTRAST OVERHAUL",
+    "title": "🧮 UNIVERSAL DAMAGE CALCULATOR + UI CONTRAST OVERHAUL",
     "date": "July 7, 2026",
     "items": [
-      "Universal Damage Calculator: Every Gungeoneer (not just Robot) can now see a live Damage Calculator terminal on their dashboard, summing quantifiable damage bonuses from equipped guns and items into a single DPS multiplier. Toggle it on/off in Settings \u2192 Run Utilities \u2192 Dashboard Display.",
+      "Universal Damage Calculator: Every Gungeoneer (not just Robot) can now see a live Damage Calculator terminal on their dashboard, summing quantifiable damage bonuses from equipped guns and items into a single DPS multiplier. Toggle it on/off in Settings → Run Utilities → Dashboard Display.",
       "Tactical Stats Card Redesign: Removed the low-opacity ghost background icon on tactical-stats inventory cards (it was muddying the stat readout against busy wallpapers). Cards are now solid-backed with a crisp small icon next to the item/gun name.",
       "Settings Screen Contrast Pass: Boosted background opacity across wallpaper pickers, font pickers, and utility panels in Settings so text and controls stay legible over any custom wallpaper.",
       "Dashboard Header Contrast: Stat chips (Coolness, Curse, CD, Ammo, Synergies, DPS) on the active-run header now use a solid dark backing instead of a near-invisible 2-8% tint."
@@ -350,7 +350,7 @@
   },
   {
     "version": "v1.0.1",
-    "title": "\ud83d\udd27 BUG FIXES: BG, WALLPAPER & PARTICLE CLEANUP, MP RECONNECT",
+    "title": "🔧 BUG FIXES: BG, WALLPAPER & PARTICLE CLEANUP, MP RECONNECT",
     "date": "July 7, 2026",
     "items": [
       "Background Disappears on Tap: Fixed a stale screen-index mutation in HomeScreen that caused the animated background to vanish when tapping anywhere after starting a new run.",
@@ -362,10 +362,10 @@
   },
   {
     "version": "v1.0.0",
-    "title": "\ud83e\uddf8 NECKBEAR'S APPROVAL FOR ITEMS + SCRAPER FIXES",
+    "title": "🧸 NECKBEAR'S APPROVAL FOR ITEMS + SCRAPER FIXES",
     "date": "July 6, 2026",
     "items": [
-      "Neckbear's Approval Medal for Items: All 270 items are now checked field-by-field (type, chest color, sell price, recharge time, quality) against the official wiki and stamped with the bear medal \ud83d\udc3b on both the Browse list and Item Detail screen. 268/270 passed clean; the remaining 2 (Drill, Duct Tape) have special non-numeric recharge conditions the wiki itself doesn't tabulate as plain text.",
+      "Neckbear's Approval Medal for Items: All 270 items are now checked field-by-field (type, chest color, sell price, recharge time, quality) against the official wiki and stamped with the bear medal 🐻 on both the Browse list and Item Detail screen. 268/270 passed clean; the remaining 2 (Drill, Duct Tape) have special non-numeric recharge conditions the wiki itself doesn't tabulate as plain text.",
       "Legacy Wiki Page Support: The scraper (enrich_from_wikigg.py) previously only understood the newer 'druid-infobox' wiki layout and silently failed on ~140 items still using the older 'infoboxtable' format, leaving them uncached. Added a fallback parser for the legacy layout so every item's page is now readable.",
       "Parenthetical Item Names Fixed: Items with disambiguation suffixes like 'C4 (Item)' were being looked up under the wrong cache filename and treated as missing. The lookup now strips the parenthetical suffix before fetching.",
       "N/A Sell Price Detection: The wiki marks unsellable items with an image icon (alt=\"N/A\") instead of text, which the scraper was missing entirely, leaving sell_price blank for items like Busted Television, Sponge, Trusty Lockpicks, and 8 others. Now correctly detected and filled in on both new-style and legacy-style wiki pages.",
@@ -374,7 +374,7 @@
   },
   {
     "version": "v0.9.999",
-    "title": "\ud83c\udf0d ROOT-CAUSE FIX: EXIT-THE-GUNGEON DATA CONTAMINATION",
+    "title": "🌍 ROOT-CAUSE FIX: EXIT-THE-GUNGEON DATA CONTAMINATION",
     "date": "July 6, 2026",
     "items": [
       "Wiki Scraper Root Cause Fix: The wiki.gg infobox scraper (enrich_from_wikigg.py) was silently gluing Enter the Gungeon stats together with Exit the Gungeon (and other game-mode toggle) stats into a single string whenever a stat had multiple tabs on the wiki page. Fixed the parser to always extract ETG-only values, while carefully preserving legitimate in-game state toggles (like AC-15's Armored/Unarmored stats, which are both real ETG data).",
