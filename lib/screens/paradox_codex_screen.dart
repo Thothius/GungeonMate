@@ -31,12 +31,19 @@ class ParadoxCodexScreen extends StatelessWidget {
                 children: [
                   _SectionTitle(
                     icon: Icons.auto_stories,
-                    title: 'Lore',
+                    title: 'Lore & Identity',
                     color: _rift,
                   ),
                   _InfoBlock(
+                    heading: 'The Anomaly',
                     body:
-                        'The Paradox is a consequence of the other Gungeoneers recklessly using the Gun That Can Kill The Past. It serves as a physical representation of the temporal paradoxes which would invariably result from carelessly wounding the timestream.',
+                        'The Paradox isn\'t a true Gungeoneer, but rather a cosmic glitch — a shifting tear in reality caused by the repeated killing of the past. It represents the timeline collapsing in on itself, a physical manifestation of the temporal paradoxes which would invariably result from carelessly wounding the timestream.',
+                    accent: _rift,
+                  ),
+                  _InfoBlock(
+                    heading: 'Visual Identity',
+                    body:
+                        'Visually, The Paradox is a swirling, static-filled silhouette that rapidly shifts shapes between the original four Gungeoneers. Every dodge-roll, table flip, or barrel roll changes its appearance to a random Gungeoneer and outfit.',
                     accent: _rift,
                   ),
                   _InfoBlock(
@@ -47,44 +54,38 @@ class ParadoxCodexScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 22),
                   _SectionTitle(
-                    icon: Icons.lock_open,
-                    title: 'How to Unlock',
-                    color: _cosmic,
-                  ),
-                  _InfoBlock(
-                    heading: 'Prerequisite',
-                    body:
-                        'At least one Gungeoneer\'s past must be killed before the Paradox can be unlocked.',
-                    accent: _cosmic,
-                  ),
-                  _InfoBlock(
-                    heading: 'The Cosmic Rift',
-                    body:
-                        'After the prerequisite is met, there is a 20% chance that a cosmic rift will appear in a random room on the Gungeon Proper, Black Powder Mine, or the Hollow. Interacting with this rift will coat the player in the cosmic texture of the Paradox.',
-                    accent: _cosmic,
-                  ),
-                  _InfoBlock(
-                    heading: 'The Kill',
-                    body:
-                        'Kill the past OR the Lich while coated in this paradox goop to unlock The Paradox permanently. The Paradox costs 5 Hegemony Credits to play.',
-                    accent: _cosmic,
-                  ),
-                  const SizedBox(height: 22),
-                  _SectionTitle(
                     icon: Icons.casino,
-                    title: 'Starter Loadout',
+                    title: 'Mechanical Loadout',
                     color: _rift,
                   ),
                   _InfoBlock(
-                    heading: 'Random Everything',
+                    heading: 'The Ultimate Test of Adaptability',
                     body:
-                        'The Paradox starts with a random starting sidearm from the other Gungeoneers (excluding the Slinger), plus another random gun and a random passive item. The items are chosen when you select the character — you can check what guns you have in the Breach, but the item won\'t appear until the run starts.',
+                        'The Paradox is the ultimate test of adaptability. Every run is a completely random roll of the dice. Costs 5 Hegemony Credits per run.',
+                    accent: _rift,
+                  ),
+                  _InfoBlock(
+                    heading: 'Starter Weapon',
+                    body:
+                        'One random starter weapon from any unlocked character (e.g. Marine Sidearm, Robot\'s Right Hand, Blasphemy). The Paradox can even start with a weapon from a Gungeoneer that hasn\'t been unlocked yet.',
+                    accent: _rift,
+                  ),
+                  _InfoBlock(
+                    heading: 'Secondary Weapon',
+                    body:
+                        'One completely random gun from the player\'s unlocked loot pool. This can be anything from a D-tier peashooter to an S-tier powerhouse.',
+                    accent: _rift,
+                  ),
+                  _InfoBlock(
+                    heading: 'Passive Item',
+                    body:
+                        'One completely random passive item from the loot pool. The items are chosen when you select the character — you can check what guns you have in the Breach, but the item won\'t appear until the run starts.',
                     accent: _rift,
                   ),
                   _InfoBlock(
                     heading: 'No Past',
                     body:
-                        'The Paradox has no past. The Blacksmith will speak with them but will not give them the Bullet That Can Kill The Past. If Bullet Hell has been unlocked, the Lich\'s hand will always drag the player down — the Paradox cannot reach the Gun until the Gunslinger is unlocked.',
+                        'The Paradox has no past to kill. Reaching the Gun That Can Kill The Past immediately forces the player into Chamber 6 (Bullet Hell) to face the Lich. The Blacksmith will speak with them but will not give them the Bullet That Can Kill The Past. If Bullet Hell has been unlocked, the Lich\'s hand will always drag the player down — the Paradox cannot reach the Gun until the Gunslinger is unlocked.',
                     accent: _rift,
                   ),
                   const SizedBox(height: 22),

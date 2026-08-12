@@ -32,12 +32,13 @@ class GunslingerCodexScreen extends StatelessWidget {
                 children: [
                   _SectionTitle(
                     icon: Icons.auto_stories,
-                    title: 'Story',
+                    title: 'Lore & Identity',
                     color: _gold,
                   ),
                   _InfoBlock(
+                    heading: 'The Master of the Gungeon',
                     body:
-                        'The Gunslinger is the ancient gunslinging wizard who constructed The Gungeon out of a concern that the way of guns would out-compete the old magics. He is the pre-mortem version of the Lich, whose presence in the present is only possible thanks to the paradoxical timestream.',
+                        'The Gunslinger is the ultimate reward for mastering the game. He is the pre-cursed form of the Lich himself — the ancient gunslinging wizard who constructed The Gungeon out of a concern that the way of guns would out-compete the old magics. He fights through the Gungeon to prevent his own dark future.',
                     accent: _gold,
                   ),
                   _InfoBlock(
@@ -60,33 +61,81 @@ class GunslingerCodexScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 22),
                   _SectionTitle(
-                    icon: Icons.lock_open,
-                    title: 'How to Unlock',
+                    icon: Icons.casino,
+                    title: 'Mechanical Loadout',
                     color: _ember,
                   ),
                   _InfoBlock(
-                    heading: 'Step 1 — Play as The Paradox',
+                    heading: 'Fundamentally Overpowered',
                     body:
-                        'Defeat the Lich as The Paradox. This will immediately launch you into a new run as The Gunslinger at the beginning of the first chamber (or wherever the Paradox started, if the elevator was used).',
+                        'The Gunslinger is fundamentally overpowered by design, breaking the game\'s synergy math. He is generally considered the easiest Gungeoneer to play. Costs 7 Hegemony Credits per run — the most expensive in the game.',
                     accent: _ember,
                   ),
                   _InfoBlock(
-                    heading: 'Step 2 — A Single Attempt',
+                    heading: 'Starter Weapon — Slinger',
                     body:
-                        'This is only a single attempt at unlocking him permanently. If you die, quick restart, or exit the game without saving before finishing his run, you will have to start the entire process over with another Paradox run.',
+                        'A highly accurate, fast-firing revolver. When thrown upon reloading (like a Tediore weapon in Borderlands), it deals massive damage. This embodies his legendary technique of throwing the empty gun at his foe and drawing a new one from his magical belt.',
                     accent: _ember,
                   ),
                   _InfoBlock(
-                    heading: 'Step 3 — Get the Bullet',
+                    heading: 'Passive Item — Lich\'s Eye Bullets',
                     body:
-                        'Play through the game again, making SURE to get the Bullet That Can Kill The Past from the Blacksmith in the Forge. If you don\'t get the Bullet before entering the Aimless Void, firing the Gun will send you straight to the credits — and you\'ll have to begin again with another Paradox run.',
+                        'The most broken passive item in the game. It instantly grants every possible synergy for any gun the Gunslinger holds, bypassing the need to find the matching synergy items. A mediocre D-tier weapon instantly becomes a boss-melting powerhouse in his hands. He cannot drop this item.',
                     accent: _ember,
                   ),
+                  const SizedBox(height: 22),
+                  _SectionTitle(
+                    icon: Icons.lock_open,
+                    title: 'The Gauntlet — How to Unlock',
+                    color: _gold,
+                  ),
                   _InfoBlock(
-                    heading: 'Step 4 — Kill His Past',
+                    heading: 'The Chain',
                     body:
-                        'Traveling to the past takes you to Bullet Hell. Unlike other pasts, you keep your health and all items gathered during the run. Everything is identical to normal Bullet Hell until the Lich boss fight — which is special. See "The Past Kill" below.',
-                    accent: _ember,
+                        'Unlocking these two characters requires a highly specific, consecutive chain of events. Failing at any step after the Paradox is unlocked means you have to start all over with a new Paradox run.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Step 1 — Spawn the Cosmic Rift',
+                    body:
+                        'Prerequisite: you must have killed at least one character\'s Past. Play a standard run. On Chamber 2, 3, or 4, explore until you find a room with a swirling cosmic puddle on the floor (20% spawn chance).',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Step 2 — Absorb the Paradox',
+                    body:
+                        'Walk over the cosmic rift and press the interact button. Your character will absorb the rift, gaining a permanent, static-like cosmic visual effect for the rest of the run.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Step 3 — Defeat the Lich (Unlocks The Paradox)',
+                    body:
+                        'With the cosmic effect active, complete the run and defeat the Lich in Bullet Hell. Upon victory, The Paradox is permanently unlocked.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Step 4 — Start a Paradox Run',
+                    body:
+                        'Costs 5 Hegemony Credits. Start a new run specifically playing as The Paradox. You are at the mercy of the random loadout generation here.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Step 5 — Defeat the Lich Again (The Transition)',
+                    body:
+                        'Survive Bullet Hell and defeat the Lich as The Paradox. Do NOT turn off the game. Instead of a victory screen, the game will instantly pull you back to Chamber 1.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Step 6 — Survive the Gunslinger Run',
+                    body:
+                        'You will instantly start a new run playing as The Gunslinger. You must play entirely through Chambers 1–5 again in this single sitting. Make SURE to get the Bullet That Can Kill The Past from the Blacksmith in the Forge — without it, firing the Gun sends you to the credits and you start over.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Step 7 — Defeat the Gunslinger\'s Past',
+                    body:
+                        'Grab the Bullet and shoot yourself with the Gun That Can Kill The Past. You will be transported to the Gunslinger\'s past, where you must defeat two Liches simultaneously (one of which is Jammed). Survive this, and The Gunslinger is permanently unlocked.',
+                    accent: _gold,
                   ),
                   const SizedBox(height: 22),
                   _SectionTitle(
@@ -95,9 +144,15 @@ class GunslingerCodexScreen extends StatelessWidget {
                     color: _gold,
                   ),
                   _InfoBlock(
-                    heading: 'Two Liches',
+                    heading: 'An Anomalous Past',
                     body:
-                        'Instead of fighting a normal three-phase Lich, you fight TWO Liches simultaneously — similar to the Glitch Chest boss. One Lich is normal, and the other has the same visual effect as The Paradox.',
+                        'His "Past" is an anomaly. Because he IS the Lich, killing his past requires fighting two Liches simultaneously in a terrifying showdown — one normal, one Jammed/Paradox-glitched. Unlike other pasts, you keep your health and all items gathered during the run.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'The Dual Fight',
+                    body:
+                        'Instead of a normal three-phase Lich, you fight TWO Liches at once — similar to the Glitch Chest boss. One Lich is normal, and the other has the same visual effect as The Paradox. The Paradox Lich fires Jammed bullets and has increased health. Luckily, both Liches use only their first phase, and the player wins once both are defeated.',
                     accent: _gold,
                   ),
                   _InfoBlock(
@@ -111,30 +166,6 @@ class GunslingerCodexScreen extends StatelessWidget {
                     body:
                         'The final scene shows the Gungeon as it looked before the Bullet crashed into it. The victory screen shows the Gunslinger throwing away his gun — implying that time was rewritten and the Gungeon was never created. This leads directly into the events of Exit the Gungeon.',
                     accent: _gold,
-                  ),
-                  const SizedBox(height: 22),
-                  _SectionTitle(
-                    icon: Icons.casino,
-                    title: 'Starter Loadout & Strategy',
-                    color: _ember,
-                  ),
-                  _InfoBlock(
-                    heading: 'Starter Gun — Slinger',
-                    body:
-                        'The Gunslinger starts with the Slinger, a unique weapon that embodies his legendary reloading technique. He also carries Lich\'s Eye Bullets as his passive item.',
-                    accent: _ember,
-                  ),
-                  _InfoBlock(
-                    heading: 'Lich\'s Eye Bullets',
-                    body:
-                        'This passive grants the player every synergy a gun could have without needing the counterpart item. For example, you can have the Cactus and get the Cactus Flower synergy without needing Broccoli or Orange. This renders many weak weapons much more powerful and makes cheap shop guns excellent options.',
-                    accent: _ember,
-                  ),
-                  _InfoBlock(
-                    heading: 'Easiest Gungeoneer',
-                    body:
-                        'The Gunslinger is generally considered the easiest Gungeoneer to play, thanks to Lich\'s Eye Bullets making nearly any gun viable. He costs 7 Hegemony Credits to play and cannot drop Lich\'s Eye Bullets.',
-                    accent: _ember,
                   ),
                   const SizedBox(height: 22),
                   _SectionTitle(
