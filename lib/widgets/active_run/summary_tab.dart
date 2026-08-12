@@ -219,7 +219,7 @@ class MpSummaryPageState extends State<MpSummaryPage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E1E22),
+                  color: AppTheme.flair.card,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.12),
@@ -340,7 +340,7 @@ class MpSummaryPageState extends State<MpSummaryPage> {
               padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E1E22),
+                  color: AppTheme.flair.card,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color: Colors.amber.withValues(alpha: 0.20),

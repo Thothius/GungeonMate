@@ -397,7 +397,7 @@ class AppTabState extends State<AppTab> {
                     padding: const EdgeInsets.all(12),
                     margin: const EdgeInsets.symmetric(horizontal: 24),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1E1E22),
+                      color: AppTheme.flair.card,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: flair.primary.withValues(alpha: 0.65), width: 1.2),
                       boxShadow: [BoxShadow(color: flair.primary.withValues(alpha: 0.15), blurRadius: 8)],

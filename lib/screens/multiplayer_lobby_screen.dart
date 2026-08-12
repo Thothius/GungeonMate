@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -1929,7 +1930,7 @@ class _PinKeypad extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 40),
           decoration: BoxDecoration(
-            color: const Color(0xFF1E1E22),
+            color: AppTheme.flair.card,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
           ),

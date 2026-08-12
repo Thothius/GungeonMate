@@ -294,7 +294,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerPr
                         duration: const Duration(milliseconds: 150),
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E1E22), // Solid dark grey background
+                          color: AppTheme.flair.card, // Solid dark grey background
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(color: f.primary.withValues(alpha: 0.5), width: 1.0),
                           boxShadow: [

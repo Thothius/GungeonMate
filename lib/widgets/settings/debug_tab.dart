@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
+import '../../services/app_theme.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/asset_paths.dart';
@@ -60,7 +61,7 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
     final allOwned = entries.every((e) => e.owned);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF1E1E22),
+      backgroundColor: AppTheme.flair.card,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,

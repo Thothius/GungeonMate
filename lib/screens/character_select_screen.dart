@@ -149,7 +149,7 @@ class _CharacterCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final char = character;
     return Card(
-      color: const Color(0xFF1E1E22),
+      color: AppTheme.flair.card,
       elevation: 4,
       shadowColor: flair.primary.withValues(alpha: 0.12),
       shape: RoundedRectangleBorder(

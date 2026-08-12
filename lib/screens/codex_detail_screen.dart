@@ -54,7 +54,7 @@ class CodexDetailScreen extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1E1E22),
+                    color: AppTheme.flair.card,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: flair.primary.withValues(alpha: 0.3),
@@ -165,7 +165,7 @@ class CodexDetailScreen extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E1E22),
+                  color: AppTheme.flair.card,
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: flair.primary.withValues(alpha: 0.1),

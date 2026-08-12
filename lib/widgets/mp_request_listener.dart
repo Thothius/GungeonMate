@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../services/app_theme.dart';
 
 import '../models/gungeoneer.dart';
 import '../models/multiplayer_messages.dart';
@@ -83,7 +84,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
             GoopText('Connection restored!', style: TextStyle(fontWeight: FontWeight.w700)),
           ],
         ),
-        backgroundColor: const Color(0xFF1E1E22),
+        backgroundColor: AppTheme.flair.card,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 3),
         shape: RoundedRectangleBorder(
@@ -160,7 +161,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
           return PopScope(
             canPop: false,
             child: AlertDialog(
-              backgroundColor: const Color(0xFF1E1E22),
+              backgroundColor: AppTheme.flair.card,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
                 side: const BorderSide(color: Colors.orangeAccent, width: 1.5),

@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../services/app_theme.dart';
 import 'theme_overlay.dart' show ThemeOverlay;
 import '../services/goop_talk_engine.dart';
 
@@ -964,7 +965,7 @@ class _ParticlePreviewPickerState extends State<ParticlePreviewPicker> {
                 child: Stack(
                   children: [
                     // Dark backing
-                    Positioned.fill(child: Container(color: const Color(0xFF1E1E22))),
+                    Positioned.fill(child: Container(color: AppTheme.flair.card)),
                     // Live particle preview only on the selected page
                     if (isSelected)
                       Positioned.fill(

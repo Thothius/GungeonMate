@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/synergy.dart';
+import '../services/app_theme.dart';
 import '../providers/run_provider.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/game_icon.dart';
@@ -173,7 +174,7 @@ class _SynergyCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF1E1E22),
+        color: AppTheme.flair.card,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: cardColor.withValues(alpha: 0.45),

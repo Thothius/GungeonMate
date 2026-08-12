@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
+import '../services/app_theme.dart';
 import '../models/gun.dart';
 import '../models/player.dart';
 import '../widgets/game_icon.dart';
@@ -447,7 +448,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                 )
                                 : null,
                         filled: true,
-                        fillColor: const Color(0xFF1E1E22),
+                        fillColor: AppTheme.flair.card,
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 10,
                         ),
@@ -591,9 +592,8 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                           )
                                           : ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: const Color(
-                                                0xFF1E1E22,
-                                              ),
+                                              backgroundColor:
+                                                AppTheme.flair.card,
                                               foregroundColor:
                                                   Colors.amberAccent,
                                               elevation: 0,

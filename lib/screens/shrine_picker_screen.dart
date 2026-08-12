@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -872,7 +873,7 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
   showDialog(
     context: c,
     builder: (c) => AlertDialog(
-      backgroundColor: const Color(0xFF1E1E22),
+      backgroundColor: AppTheme.flair.card,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),

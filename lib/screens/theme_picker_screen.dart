@@ -449,7 +449,7 @@ class _ImmersiveThemePage extends StatelessWidget {
                     await showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      backgroundColor: const Color(0xFF1E1E22),
+                      backgroundColor: AppTheme.flair.card,
                       shape: const RoundedRectangleBorder(
                         borderRadius:
                             BorderRadius.vertical(top: Radius.circular(18)),
@@ -560,7 +560,7 @@ class _HsvColorPickerDialogState extends State<_HsvColorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF1E1E22),
+      backgroundColor: AppTheme.flair.card,
       title: const Text('Pick Color', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
