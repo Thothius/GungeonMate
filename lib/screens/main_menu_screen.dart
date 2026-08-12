@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'character_select_screen.dart';
@@ -297,7 +298,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.0 — BULLET HELL EDITION',
+                            'v1.9.1 — BULLET HELL EDITION',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -610,24 +611,17 @@ class _BulletHellHeading extends StatefulWidget {
 class _BulletHellHeadingState extends State<_BulletHellHeading>
     with SingleTickerProviderStateMixin {
   late final AnimationController _burn;
-  late final Animation<double> _wobble;
-  late final Animation<double> _glow;
 
   @override
   void initState() {
     super.initState();
+    // Cycle: 2.8s wobble + 6s pause = 8.8s total per loop.
+    // The wobble plays for the first 2.8s, then the heading sits still
+    // for 6s before the next fiery burst.
     _burn = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2800),
-    )..repeat(reverse: true);
-
-    // Wobble: -2.5° → +2.5° rotation, eased
-    _wobble = Tween<double>(begin: -0.044, end: 0.044)
-        .animate(CurvedAnimation(parent: _burn, curve: Curves.easeInOutSine));
-
-    // Glow: 0.3 → 0.7 opacity pulse for the ember halo
-    _glow = Tween<double>(begin: 0.25, end: 0.65)
-        .animate(CurvedAnimation(parent: _burn, curve: Curves.easeInOutSine));
+      duration: const Duration(milliseconds: 8800),
+    )..repeat();
   }
 
   @override
@@ -636,27 +630,45 @@ class _BulletHellHeadingState extends State<_BulletHellHeading>
     super.dispose();
   }
 
+  // Wobble only during the first ~32% of the cycle (2.8s / 8.8s).
+  double get _wobbleValue {
+    final t = _burn.value;
+    if (t > 0.318) return 0.0; // resting phase
+    // Map 0..0.318 → 0..1 for the wobble curve
+    final wobbleT = t / 0.318;
+    return -0.044 * math.sin(wobbleT * math.pi * 2);
+  }
+
+  double get _glowValue {
+    final t = _burn.value;
+    if (t > 0.318) return 0.25; // resting glow during pause
+    final wobbleT = t / 0.318;
+    return 0.25 + 0.40 * (0.5 - 0.5 * math.cos(wobbleT * math.pi * 2));
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _burn,
       builder: (context, _) {
+        final wobble = _wobbleValue;
+        final glow = _glowValue;
         return Transform.rotate(
-          angle: _wobble.value,
+          angle: wobble,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: const Color(0xFFFF5252).withValues(alpha: 0.5),
-                width: 1.2,
+                width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFFFF5252)
-                      .withValues(alpha: _glow.value * 0.5),
-                  blurRadius: 12 + _glow.value * 16,
-                  spreadRadius: 1 + _glow.value * 3,
+                      .withValues(alpha: glow * 0.5),
+                  blurRadius: 12 + glow * 16,
+                  spreadRadius: 1 + glow * 3,
                 ),
               ],
             ),
@@ -666,31 +678,31 @@ class _BulletHellHeadingState extends State<_BulletHellHeading>
                 // Flickering fire icon
                 Icon(
                   Icons.local_fire_department,
-                  size: 16,
+                  size: 22,
                   color: const Color(0xFFFF5252)
-                      .withValues(alpha: 0.7 + _glow.value * 0.3),
+                      .withValues(alpha: 0.7 + glow * 0.3),
                   shadows: [
                     Shadow(
                       color: const Color(0xFFFF5252)
-                          .withValues(alpha: _glow.value),
+                          .withValues(alpha: glow),
                       blurRadius: 8,
                     ),
                   ],
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 8),
                 // "BULLET HELL" text with ember glow shadow
                 GoopText(
                   'BULLET HELL',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 18,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 2.5,
+                    letterSpacing: 3.0,
                     color: Colors.white,
                     shadows: [
                       Shadow(
                         color: const Color(0xFFFF5252)
-                            .withValues(alpha: _glow.value),
-                        blurRadius: 6 + _glow.value * 8,
+                            .withValues(alpha: glow),
+                        blurRadius: 6 + glow * 8,
                       ),
                       const Shadow(
                         color: Color(0xFFB71C1C),
@@ -699,12 +711,12 @@ class _BulletHellHeadingState extends State<_BulletHellHeading>
                     ],
                   ),
                 ),
-                const SizedBox(width: 6),
+                const SizedBox(width: 8),
                 // Version tag
                 GoopText(
-                  'v1.9.0',
+                  'v1.9.1',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFFFFD54F).withValues(alpha: 0.7),
                     letterSpacing: 1.0,

@@ -1,5 +1,20 @@
 [
   {
+    "version": "v1.9.1",
+    "title": "🔥 BULLET HELL EDITION — Hotfix",
+    "date": "August 2026",
+    "items": [
+      "🔧 CRITICAL: Particles and glow were not showing on most themes — only 5 of 22 themes had particle defaults mapped. Bullet Hell, Lord Jammed, Resourceful Rat, and 14 others fell back to invisible dust. All 22 themes now have curated particle presets. Themes with glow colors also get a subtle auto-glow out of the box.",
+      "📊 Special dashboard panels no longer scroll — all panels now size to their full content height instead of being capped at 22% of screen. Robot's damage calculator terminal removed (took too much space with many guns).",
+      "📋 Codex categories now scroll horizontally as pill-style tiles instead of a cramped 4-column grid.",
+      "🔫 Periodic tile DMG/RANGE badges now split 50/50 — no more overflow on wider tiles.",
+      "🔤 Inventory Font Size slider moved next to global Font Size in the Typography settings section.",
+      "💕 MP Emotes — tap your own character tab in multiplayer to send a Kiss (6s floating heart) or Slap (2s screen shake) to the other player. Purely visual.",
+      "🐀 New Codex entry: The Resourceful Rat. 🐉 New Codex entry: The Drake. 🎲 New Codex entry: Challenge Mode.",
+      "🔥 Bullet Hell title on home screen is now bigger (18px) and wobbles in a fiery burst every 6s instead of continuously."
+    ]
+  },
+  {
     "version": "v1.9.0",
     "title": "🔥 BULLET HELL EDITION",
     "date": "August 2026",

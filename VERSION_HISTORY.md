@@ -6,6 +6,25 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.1 — 🔥 BULLET HELL EDITION (August 2026)
+**Build:** 80
+
+> Hotfix follow-up to v1.9.0. Critical particle/glow fix, dashboard panel scroll fix, codex horizontal scroll, MP emotes, and more.
+
+### Changes
+- **CRITICAL FIX — Particles & glow not showing on most themes:** `kThemeParticleDefaults` only had 5 of 22 themes mapped. Themes like Bullet Hell, Lord Jammed, Resourceful Rat, and 14 others fell back to `gungeonDust` with `themeAutoOn = false`, so particles never auto-enabled. Added all 22 themes with sensible preset matches. Also added auto-glow for themes with non-transparent `glowPrimary` — a subtle 0.15 ambient glow out of the box, overridable by user's explicit `glowIntensity`.
+- **FIX — Special dashboard panels no longer scroll:** All 16 special character/gun dashboards now render at full natural content height instead of being capped at 22% of screen height with `SingleChildScrollView`. Replaced fixed-height `PageView` with `AnimatedSwitcher`. Robot's damage calculator terminal removed (grew unbounded with gun count).
+- **FIX — Codex categories horizontal scroll:** Replaced cramped 4-column `GridView` (10 categories wrapping to 3 rows) with horizontal scrollable `ListView` of pill-style tiles.
+- **FIX — Periodic tile DMG/RANGE 50/50 split:** `_buildGunStatsBadge` now uses `Expanded(50/50)` for DMG and RANGE badges instead of `MainAxisSize.min` Row. No more overflow on wider tiles.
+- **FIX — Inventory font size slider moved:** Relocated from Inventory visual category to App Typography Tuning section, next to the global Font Size slider.
+- **NEW FEATURE — MP Emotes (Kiss/Slap):** Tap your own character tab in multiplayer while already viewing it to open the emote menu. Kiss: pink heart floats up on peer's screen for 6s. Slap: angry face slams down + screen shake for 2s. Purely visual, renders above all dialogs via root `Overlay`.
+- **NEW CODEX — Resourceful Rat:** Thief, merchant, and secret boss. 6 sections, 24 info blocks.
+- **NEW CODEX — Drake:** Serpent/Baby Dragun companion chain.
+- **NEW CODEX — Challenge Mode:** All 24 modifiers from wiki.
+- **POLISH — Bullet Hell heading bigger + 6s pause wobble:** Title bumped from 13px to 18px. Wobble now fires in a 2.8s burst then rests for 6s before the next fiery shake, instead of continuously wobbling.
+
+---
+
 ## v1.9.0 — 🔥 BULLET HELL EDITION (August 2026)
 **Build:** 79
 
