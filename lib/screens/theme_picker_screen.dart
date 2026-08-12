@@ -5,7 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
-import '../widgets/particle_engine.dart' show ParticlePreset, ParticlePresetX;
+import '../widgets/particle_engine.dart'
+    show
+        ParticlePreset,
+        ParticlePresetX,
+        ParticleColorSchema,
+        ParticleColorSchemaX,
+        ParticleSpeed,
+        ParticleSpeedX;
 
 /// Full-screen immersive theme picker. Each page fills the entire screen
 /// with the theme's scaffold colour, showcasing a large palette and a
@@ -173,6 +180,33 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                     currentPreset: prefs.particlePreset,
                     onPreset: (p) {
                       VisualPrefs.setParticlePreset(p);
+                      Haptics.selection();
+                    },
+                  );
+                },
+              ),
+              // Particle color schema strip — 16 named color palettes
+              // that override the preset's default colors.
+              ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder: (context, prefs, _) {
+                  return _ParticleColorSchemaStrip(
+                    currentSchema: prefs.particleColorSchema,
+                    onSchema: (s) {
+                      VisualPrefs.setParticleColorSchema(s);
+                      Haptics.selection();
+                    },
+                  );
+                },
+              ),
+              // Particle speed selector — 5 discrete steps
+              ValueListenableBuilder<VisualPrefs>(
+                valueListenable: VisualPrefs.notifier,
+                builder: (context, prefs, _) {
+                  return _ParticleSpeedStrip(
+                    currentSpeed: prefs.particleSpeed,
+                    onSpeed: (s) {
+                      VisualPrefs.setParticleSpeed(s);
                       Haptics.selection();
                     },
                   );
@@ -1322,6 +1356,218 @@ class _PaletteSelector extends StatelessWidget {
             ),
           );
         }),
+      ),
+    );
+  }
+}
+
+/// Particle color schema strip — a horizontally scrollable row of 16
+/// named color palette pills. Each pill shows a mini color preview
+/// (3-4 dots) + the schema name. Tapping immediately overrides the
+/// particle colors for the current preset. Works with ALL themes.
+class _ParticleColorSchemaStrip extends StatelessWidget {
+  final ParticleColorSchema currentSchema;
+  final ValueChanged<ParticleColorSchema> onSchema;
+
+  const _ParticleColorSchemaStrip({
+    required this.currentSchema,
+    required this.onSchema,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final schemas = ParticleColorSchema.values;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+      child: SizedBox(
+        height: 36,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: schemas.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 6),
+          itemBuilder: (_, i) {
+            final schema = schemas[i];
+            final isActive = schema == currentSchema;
+            final colors = schema.colors;
+            return GestureDetector(
+              onTap: () => onSchema(schema),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? Colors.white.withValues(alpha: 0.12)
+                      : Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isActive
+                        ? Colors.white.withValues(alpha: 0.5)
+                        : Colors.white.withValues(alpha: 0.08),
+                    width: isActive ? 1.4 : 0.8,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Mini color preview dots
+                    if (colors != null) ...[
+                      ...colors.take(3).map((c) => Padding(
+                            padding: const EdgeInsets.only(right: 3),
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: c,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: c.withValues(alpha: 0.5),
+                                    blurRadius: 3,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )),
+                    ] else if (schema == ParticleColorSchema.themeMatch) ...[
+                      // Theme match — show theme primary + secondary dots
+                      Padding(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppTheme.flair.primary,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 3),
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppTheme.flair.secondary,
+                          ),
+                        ),
+                      ),
+                    ] else
+                      // Preset default — show a small dash icon
+                      const Padding(
+                        padding: EdgeInsets.only(right: 3),
+                        child: Icon(Icons.auto_awesome, size: 10,
+                            color: Colors.white54),
+                      ),
+                    const SizedBox(width: 2),
+                    GoopText(
+                      schema.label,
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        fontWeight:
+                            isActive ? FontWeight.w800 : FontWeight.w600,
+                        color: isActive
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.5),
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ).animate().fadeIn(duration: 120.ms, delay: 20.ms * i);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/// Particle speed selector — 5 discrete speed pills from Very Slow to
+/// Very Fast. Normal is the default (middle). Tapping immediately
+/// changes the particle animation speed visible behind the picker.
+class _ParticleSpeedStrip extends StatelessWidget {
+  final ParticleSpeed currentSpeed;
+  final ValueChanged<ParticleSpeed> onSpeed;
+
+  const _ParticleSpeedStrip({
+    required this.currentSpeed,
+    required this.onSpeed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final speeds = ParticleSpeed.values;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+      child: SizedBox(
+        height: 32,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(
+            decelerationRate: ScrollDecelerationRate.fast,
+          ),
+          itemCount: speeds.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 6),
+          itemBuilder: (_, i) {
+            final speed = speeds[i];
+            final isActive = speed == currentSpeed;
+            // Speed icon — more bars = faster
+            final icon = switch (speed) {
+              ParticleSpeed.verySlow => Icons.speed,
+              ParticleSpeed.slow => Icons.speed,
+              ParticleSpeed.normal => Icons.speed,
+              ParticleSpeed.fast => Icons.speed,
+              ParticleSpeed.veryFast => Icons.speed,
+            };
+            return GestureDetector(
+              onTap: () => onSpeed(speed),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? Colors.white.withValues(alpha: 0.12)
+                      : Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isActive
+                        ? Colors.white.withValues(alpha: 0.5)
+                        : Colors.white.withValues(alpha: 0.08),
+                    width: isActive ? 1.4 : 0.8,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      icon,
+                      size: 12,
+                      color: isActive
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.4),
+                    ),
+                    const SizedBox(width: 4),
+                    GoopText(
+                      speed.label,
+                      style: TextStyle(
+                        fontSize: 9.5,
+                        fontWeight:
+                            isActive ? FontWeight.w800 : FontWeight.w600,
+                        color: isActive
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.5),
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ).animate().fadeIn(duration: 120.ms, delay: 20.ms * i);
+          },
+        ),
       ),
     );
   }

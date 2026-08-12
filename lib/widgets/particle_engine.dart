@@ -29,6 +29,202 @@ enum ParticlePreset {
   jamHexes,
 }
 
+// =============================================================================
+// Particle Color Schemas — 16 named color palettes that can override any
+// preset's default colors. Works with ALL themes and palettes.
+// =============================================================================
+
+/// Particle speed multiplier — 5 discrete steps from very slow to very fast.
+enum ParticleSpeed {
+  verySlow,   // 0.3x
+  slow,       // 0.6x
+  normal,     // 1.0x (default)
+  fast,       // 1.6x
+  veryFast,   // 2.5x
+}
+
+extension ParticleSpeedX on ParticleSpeed {
+  String get label => switch (this) {
+        ParticleSpeed.verySlow => 'Very Slow',
+        ParticleSpeed.slow => 'Slow',
+        ParticleSpeed.normal => 'Normal',
+        ParticleSpeed.fast => 'Fast',
+        ParticleSpeed.veryFast => 'Very Fast',
+      };
+
+  double get multiplier => switch (this) {
+        ParticleSpeed.verySlow => 0.3,
+        ParticleSpeed.slow => 0.6,
+        ParticleSpeed.normal => 1.0,
+        ParticleSpeed.fast => 1.6,
+        ParticleSpeed.veryFast => 2.5,
+      };
+}
+
+enum ParticleColorSchema {
+  /// Use the preset's built-in colors (default).
+  presetDefault,
+
+  /// Match the active theme's primary/secondary colors.
+  themeMatch,
+
+  /// Warm fire palette — reds, oranges, golds.
+  inferno,
+
+  /// Cool ice palette — cyans, whites, pale blues.
+  glacier,
+
+  /// Toxic waste — greens, yellows, acid tones.
+  toxic,
+
+  /// Deep void — purples, dark blues, magenta.
+  voidStorm,
+
+  /// Golden luxury — golds, ambers, warm whites.
+  gilded,
+
+  /// Rainbow spectrum — full hue rotation.
+  rainbow,
+
+  /// Monochrome — greys and whites only.
+  monochrome,
+
+  /// Blood moon — deep reds, dark crimsons.
+  bloodMoon,
+
+  /// Neon synthwave — magenta, cyan, electric blue.
+  synthwave,
+
+  /// Forest — greens, browns, earthy tones.
+  forest,
+
+  /// Candy — pinks, pastels, light purples.
+  candy,
+
+  /// Steel — metallic greys, silvers, cool whites.
+  steel,
+
+  /// Sunset — oranges, pinks, warm purples.
+  sunset,
+
+  /// Abyss — deep blues, blacks, dark teals.
+  abyss,
+}
+
+extension ParticleColorSchemaX on ParticleColorSchema {
+  String get label => switch (this) {
+        ParticleColorSchema.presetDefault => 'Preset Default',
+        ParticleColorSchema.themeMatch => 'Theme Match',
+        ParticleColorSchema.inferno => 'Inferno',
+        ParticleColorSchema.glacier => 'Glacier',
+        ParticleColorSchema.toxic => 'Toxic',
+        ParticleColorSchema.voidStorm => 'Void Storm',
+        ParticleColorSchema.gilded => 'Gilded',
+        ParticleColorSchema.rainbow => 'Rainbow',
+        ParticleColorSchema.monochrome => 'Monochrome',
+        ParticleColorSchema.bloodMoon => 'Blood Moon',
+        ParticleColorSchema.synthwave => 'Synthwave',
+        ParticleColorSchema.forest => 'Forest',
+        ParticleColorSchema.candy => 'Candy',
+        ParticleColorSchema.steel => 'Steel',
+        ParticleColorSchema.sunset => 'Sunset',
+        ParticleColorSchema.abyss => 'Abyss',
+      };
+
+  /// Returns the color list for this schema, or null if the preset's
+  /// default colors should be used.
+  List<Color>? get colors => switch (this) {
+        ParticleColorSchema.presetDefault => null,
+        ParticleColorSchema.themeMatch => null, // handled by caller — uses theme flair
+        ParticleColorSchema.inferno => const [
+            Color(0xFFFF1744),
+            Color(0xFFFF6D00),
+            Color(0xFFFFAB00),
+            Color(0xFFFFD600),
+          ],
+        ParticleColorSchema.glacier => const [
+            Color(0xFF00E5FF),
+            Color(0xFF4FC3F7),
+            Color(0xFFB3E5FC),
+            Color(0xFFFFFFFF),
+          ],
+        ParticleColorSchema.toxic => const [
+            Color(0xFF76FF03),
+            Color(0xFF64DD17),
+            Color(0xFFAEEA00),
+            Color(0xFFCCFF00),
+          ],
+        ParticleColorSchema.voidStorm => const [
+            Color(0xFF7B1FA2),
+            Color(0xFF512DA8),
+            Color(0xFF4527A0),
+            Color(0xFFAB47BC),
+          ],
+        ParticleColorSchema.gilded => const [
+            Color(0xFFFFD700),
+            Color(0xFFFFC107),
+            Color(0xFFFFB300),
+            Color(0xFFFFE082),
+          ],
+        ParticleColorSchema.rainbow => const [
+            Color(0xFFFF1744),
+            Color(0xFFFF9100),
+            Color(0xFFFFEA00),
+            Color(0xFF00E676),
+            Color(0xFF00B0FF),
+            Color(0xFFD500F9),
+          ],
+        ParticleColorSchema.monochrome => const [
+            Color(0xFFFFFFFF),
+            Color(0xFFE0E0E0),
+            Color(0xFFBDBDBD),
+            Color(0xFF9E9E9E),
+          ],
+        ParticleColorSchema.bloodMoon => const [
+            Color(0xFFB71C1C),
+            Color(0xFFD32F2F),
+            Color(0xFFE53935),
+            Color(0xFF880E4F),
+          ],
+        ParticleColorSchema.synthwave => const [
+            Color(0xFFD500F9),
+            Color(0xFF00E5FF),
+            Color(0xFF304FFE),
+            Color(0xFFFF4081),
+          ],
+        ParticleColorSchema.forest => const [
+            Color(0xFF2E7D32),
+            Color(0xFF4CAF50),
+            Color(0xFF81C784),
+            Color(0xFFA1887F),
+          ],
+        ParticleColorSchema.candy => const [
+            Color(0xFFFF69B4),
+            Color(0xFFFFB6C1),
+            Color(0xFFE1BEE7),
+            Color(0xFFB39DDB),
+          ],
+        ParticleColorSchema.steel => const [
+            Color(0xFFB0BEC5),
+            Color(0xFF90A4AE),
+            Color(0xFF78909C),
+            Color(0xFFECEFF1),
+          ],
+        ParticleColorSchema.sunset => const [
+            Color(0xFFFF6E40),
+            Color(0xFFFFAB40),
+            Color(0xFFFF80AB),
+            Color(0xFFCE93D8),
+          ],
+        ParticleColorSchema.abyss => const [
+            Color(0xFF0D47A1),
+            Color(0xFF1565C0),
+            Color(0xFF006064),
+            Color(0xFF263238),
+          ],
+      };
+}
+
 extension ParticlePresetX on ParticlePreset {
   String get label => switch (this) {
         ParticlePreset.gungeonDust => 'Gungeon Dust',
@@ -359,6 +555,7 @@ class ParticleField extends StatefulWidget {
   final bool? lineLinksOverride;
   final List<Color>? colorsOverride; // per-theme/per-palette color injection
   final bool bounce;
+  final double speedMultiplier; // 0.3 (very slow) to 2.5 (very fast)
 
   const ParticleField({
     super.key,
@@ -370,6 +567,7 @@ class ParticleField extends StatefulWidget {
     this.lineLinksOverride,
     this.colorsOverride,
     this.bounce = false,
+    this.speedMultiplier = 1.0,
   });
 
   @override
@@ -491,7 +689,7 @@ class _ParticleFieldState extends State<ParticleField>
   }
 
   void _update(double t, Size size) {
-    final dt = (t - _lastT).clamp(0.001, 0.05);
+    final dt = (t - _lastT).clamp(0.001, 0.05) * widget.speedMultiplier;
     _lastT = t;
     final tilt = ThemeOverlay.tiltNotifier.value;
 

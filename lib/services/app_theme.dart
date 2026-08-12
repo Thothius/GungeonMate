@@ -4,7 +4,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../widgets/particle_engine.dart' show ParticlePreset, GlowEffect;
+import '../widgets/particle_engine.dart'
+    show ParticlePreset, GlowEffect, ParticleColorSchema, ParticleSpeed;
 
 /// Eight lore-named palettes. Each is a hand-tuned palette + a
 /// [ThemeFlair] record carrying extra styling knobs (numeric typography,
@@ -880,6 +881,7 @@ enum UnicornPalette {
 
 enum AppFont {
   gungeon,
+  megrim,
   pressStart2p,
   silkscreen,
   vt323,
@@ -939,7 +941,6 @@ enum AppFont {
   coustard,
   architectsDaughter,
   cinzel,
-  megrim,
   rockSalt,
   shadowsIntoLight,
   lobster,
@@ -2254,6 +2255,12 @@ class VisualPrefs {
   /// User-defined column count for the classic Periodic grid. 0 = Auto, or 2, 3, 4.
   final int periodicGridColumnCount;
 
+  /// User-selected particle color schema (overrides preset colors).
+  final ParticleColorSchema particleColorSchema;
+
+  /// User-selected particle speed multiplier.
+  final ParticleSpeed particleSpeed;
+
 
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
@@ -2305,6 +2312,8 @@ class VisualPrefs {
     this.showShrinePanel = false,
     this.showDashboards = true,
     this.periodicGridColumnCount = 0,
+    this.particleColorSchema = ParticleColorSchema.presetDefault,
+    this.particleSpeed = ParticleSpeed.normal,
   });
 
   static const _kGlow     = 'vp.glow_v1';
@@ -2335,6 +2344,8 @@ class VisualPrefs {
   static const _kShowShrinePanel = 'vp.show_shrine_panel_v1';
   static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
+  static const _kParticleColorSchema = 'vp.particle_color_schema_v1';
+  static const _kParticleSpeed = 'vp.particle_speed_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
       ValueNotifier(const VisualPrefs());
@@ -2393,6 +2404,10 @@ class VisualPrefs {
       final showShrinePanel = p.getBool(_kShowShrinePanel) ?? false;
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
+      final particleColorSchemaIdx = p.getInt(_kParticleColorSchema) ?? 0;
+      final particleColorSchema = ParticleColorSchema.values[particleColorSchemaIdx.clamp(0, ParticleColorSchema.values.length - 1)];
+      final particleSpeedIdx = p.getInt(_kParticleSpeed) ?? 2;
+      final particleSpeed = ParticleSpeed.values[particleSpeedIdx.clamp(0, ParticleSpeed.values.length - 1)];
 
 
       notifier.value = VisualPrefs(
@@ -2421,6 +2436,8 @@ class VisualPrefs {
         showShrinePanel: showShrinePanel,
         showDashboards: showDashboards,
         periodicGridColumnCount: periodicGridColumnCount,
+        particleColorSchema: particleColorSchema,
+        particleSpeed: particleSpeed,
       );
     } catch (_) {}
   }
@@ -2552,6 +2569,16 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setParticleColorSchema(ParticleColorSchema v) async {
+    notifier.value = notifier.value._with(particleColorSchema: v);
+    _persist();
+  }
+
+  static Future<void> setParticleSpeed(ParticleSpeed v) async {
+    notifier.value = notifier.value._with(particleSpeed: v);
+    _persist();
+  }
+
 
   static Future<void> _persist() async {
     try {
@@ -2583,6 +2610,8 @@ class VisualPrefs {
       await p.setBool(_kShowShrinePanel, v.showShrinePanel);
       await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
+      await p.setInt(_kParticleColorSchema, v.particleColorSchema.index);
+      await p.setInt(_kParticleSpeed, v.particleSpeed.index);
     } catch (_) {}
   }
 
@@ -2612,6 +2641,8 @@ class VisualPrefs {
     bool?   showShrinePanel,
     bool?   showDashboards,
     int?    periodicGridColumnCount,
+    ParticleColorSchema? particleColorSchema,
+    ParticleSpeed? particleSpeed,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -2638,6 +2669,8 @@ class VisualPrefs {
     showShrinePanel: showShrinePanel ?? this.showShrinePanel,
     showDashboards: showDashboards ?? this.showDashboards,
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
+    particleColorSchema: particleColorSchema ?? this.particleColorSchema,
+    particleSpeed: particleSpeed ?? this.particleSpeed,
   );
 }
 

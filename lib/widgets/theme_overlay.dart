@@ -166,6 +166,19 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           final effectivePreset = userOnDefault ? themeDefault : prefs.particlePreset;
           final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
           final particlesOn = prefs.particlesEnabled || themeAutoOn;
+          // ponytail: color schema priority — explicit user schema > unicorn
+          // palette > preset default. themeMatch uses the active flair's
+          // primary/secondary/glow colors so particles always harmonize.
+          List<Color>? colorOverride;
+          if (prefs.particleColorSchema != ParticleColorSchema.presetDefault) {
+            if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
+              colorOverride = [f.primary, f.secondary, f.glowPrimary, f.headlineStat];
+            } else {
+              colorOverride = prefs.particleColorSchema.colors;
+            }
+          } else if (mode == AppThemeMode.unicorn) {
+            colorOverride = AppTheme.unicornPalette.particleColors;
+          }
           final particleBackdropBg = !particlesOn
               ? null
               : ParticleField(
@@ -175,10 +188,9 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   opacity: prefs.particleOpacity,
                   glowOverride: prefs.particleGlowEffect,
                   lineLinksOverride: prefs.particleLineLinks ? true : null,
-                  colorsOverride: mode == AppThemeMode.unicorn
-                      ? AppTheme.unicornPalette.particleColors
-                      : null,
+                  colorsOverride: colorOverride,
                   bounce: prefs.particleBounce,
+                  speedMultiplier: prefs.particleSpeed.multiplier,
                 );
           Widget content = widget.child;
 
