@@ -280,26 +280,50 @@ class DrakeCodexScreen extends StatelessWidget {
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: DecoratedBox(
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(18),
+            bottomRight: Radius.circular(18),
+          ),
+          child: Image.asset(
+            'assets/images/codex/Drake_header.png',
+            width: double.infinity,
+            height: 200,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              height: 200,
+              color: DrakeCodexScreen._void,
+              child: Center(
+                child: Icon(Icons.pets,
+                    size: 48,
+                    color: Colors.white.withValues(alpha: 0.2)),
+              ),
+            ),
+          ),
+        ),
+        Positioned.fill(
+          child: IgnorePointer(
+            child: Container(
               decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(18),
+                  bottomRight: Radius.circular(18),
+                ),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    DrakeCodexScreen._void,
-                    DrakeCodexScreen._panel,
                     Colors.transparent,
+                    DrakeCodexScreen._void.withValues(alpha: 0.4),
+                    DrakeCodexScreen._void.withValues(alpha: 0.95),
                   ],
-                  stops: const [0.3, 0.7, 1.0],
                 ),
               ),
             ),
           ),
+        ),
           Positioned(
             left: 0,
             right: 0,
@@ -336,10 +360,12 @@ class _Header extends StatelessWidget {
             ),
           ),
         ],
-      ),
     ).animate().fadeIn(duration: 400.ms);
   }
 }
+
+// =============================================================================
+// Section title — icon + label with accent underline
 
 // =============================================================================
 // Section title — icon + label with accent underline

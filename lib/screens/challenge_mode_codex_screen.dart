@@ -11,7 +11,6 @@ class ChallengeModeCodexScreen extends StatelessWidget {
 
   // Challenge Mode's arcade/dice aesthetic — purple/amber neon on near-black.
   static const Color _dice = Color(0xFFAB47BC);
-  static const Color _diceDim = Color(0xFF6A1B9A);
   static const Color _amber = Color(0xFFFFD54F);
   static const Color _void = Color(0xFF0A0A12);
   static const Color _panel = Color(0xFF14101E);
@@ -323,89 +322,97 @@ class ChallengeModeCodexScreen extends StatelessWidget {
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            ChallengeModeCodexScreen._diceDim.withValues(alpha: 0.3),
-            ChallengeModeCodexScreen._void,
-          ],
+    return Stack(
+      children: [
+        // Hero image — Daisuke in the Breach with the Sorceress
+        ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(18),
+            bottomRight: Radius.circular(18),
+          ),
+          child: Image.asset(
+            'assets/images/codex/Challenge_header.png',
+            width: double.infinity,
+            height: 200,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              height: 200,
+              color: ChallengeModeCodexScreen._void,
+              child: Center(
+                child: Icon(Icons.casino,
+                    size: 48,
+                    color: Colors.white.withValues(alpha: 0.2)),
+              ),
+            ),
+          ),
         ),
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(18),
-          bottomRight: Radius.circular(18),
+        // Gradient scrim for readability
+        Positioned.fill(
+          child: IgnorePointer(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(18),
+                  bottomRight: Radius.circular(18),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    ChallengeModeCodexScreen._void.withValues(alpha: 0.4),
+                    ChallengeModeCodexScreen._void.withValues(alpha: 0.95),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
-      child: Stack(
-        children: [
-          // Decorative dice icons
-          Positioned(
-            top: 30,
-            right: 24,
-            child: Icon(
-              Icons.casino,
-              size: 80,
-              color: ChallengeModeCodexScreen._dice.withValues(alpha: 0.12),
-            ),
-          ),
-          Positioned(
-            top: 50,
-            left: 20,
-            child: Icon(
-              Icons.casino,
-              size: 50,
-              color: ChallengeModeCodexScreen._amber.withValues(alpha: 0.08),
-            ),
-          ),
-          // Title overlay
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 16,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GoopText(
-                  'SPECIAL MODE',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 4,
-                    color: ChallengeModeCodexScreen._amber.withValues(alpha: 0.8),
-                  ),
+        // Title overlay
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 16,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GoopText(
+                'SPECIAL MODE',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 4,
+                  color: ChallengeModeCodexScreen._amber.withValues(alpha: 0.8),
                 ),
-                const SizedBox(height: 4),
-                GoopText(
-                  'CHALLENGE MODE',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 3,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        color: ChallengeModeCodexScreen._dice,
-                        blurRadius: 18,
-                      ),
-                    ],
-                  ),
+              ),
+              const SizedBox(height: 4),
+              GoopText(
+                'CHALLENGE MODE',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 3,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      color: ChallengeModeCodexScreen._dice,
+                      blurRadius: 18,
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                GoopText(
-                  '20 Room Modifiers + 4 Boss Modifiers',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: ChallengeModeCodexScreen._dice.withValues(alpha: 0.7),
-                  ),
+              ),
+              const SizedBox(height: 4),
+              GoopText(
+                '20 Room Modifiers + 4 Boss Modifiers',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: ChallengeModeCodexScreen._dice.withValues(alpha: 0.7),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     ).animate().fadeIn(duration: 400.ms);
   }
 }
