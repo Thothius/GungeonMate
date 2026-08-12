@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math' as math;
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'character_select_screen.dart';
@@ -10,7 +8,6 @@ import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
-import '../widgets/theme_overlay.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -20,83 +17,7 @@ class MainMenuScreen extends StatefulWidget {
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen>
-    with SingleTickerProviderStateMixin {
-  String? _mascotQuote;
-  Timer? _quoteTimer;
-  late final AnimationController _floatCtrl;
-
-  void _onMascotTapped() {
-    _quoteTimer?.cancel();
-    Haptics.selection();
-    
-    final quotes = [
-      "Mind the grease, Gungeoneer! Heavy machinery at work.",
-      "Need a shortcut to Chamber 3? Bring me 3 Master Rounds!",
-      "Weld, hammer, build... the elevator shafts never rest.",
-      "I like a foreman with hands-on grit. Let's make this cable hold!",
-      "Is the floor going down, or are we flying upwards? Mechanical philosophy!",
-      "Did you know? The High Dragun at Chamber 5 is made of pure, molten bullets! Watch out for his intense final-stage screen-clearing waves.",
-      "Lich's Eye Trigger is the ultimate passive! It instantly activates ALL synergies for whatever gun you hold. Outrageous!",
-      "Bullet Kin might look cute, but don't let their blank expressions fool you. They are trained, trigger-happy cultists!",
-      "If you see a chest with its lock wiggling, breathing, or licking its lips... STOP! It's a Mimic. Shoot it once before opening!",
-      "To access the Sewer (Oubliette), douse the fireplace in Chamber 1 with a water barrel, pull the hidden switch inside, and save 2 keys.",
-      "Sir Manuel thinks he's a grand defensive master, but he hasn't even breached Chamber 2 yet. Hilarious!",
-      "Watch your Curse level! If it hits 10.0, the Lord of the Jammed will spawn. He is unkillable and will stalk you across rooms.",
-      "Casey is just a wooden baseball bat, but with 100 base damage, it can reflect enemy bullets back at them! Truly a home-run weapon.",
-      "Gunderfury grows more powerful the more enemies you defeat with it. It has three distinct stages of progressive bullet chaos!",
-      "Ser Junkan starts as a useless pile of junk, but collect 6 pieces of junk and he becomes a fully-armored, holy knight of defense!",
-      "Daisuke's double-challenge modifiers are pure madness! Adrenaline, high tension, thermal clips... only for veteran gun-masters.",
-      "The Resourceful Rat is a master thief. Leave any items on the floor and he will swipe them immediately. Punch those vents!",
-      "S-Tier black chests contain legendary Gungeon weapons like the Yari Launcher, Fightsabre, or the infinite-growth Gunther!",
-      "Coolness reduces your active item recharge times, while Curse increases Jammed enemy spawn rates. Balance is key!",
-      "Winchester's target shooting requires extreme precision. Learn to bounce bullets off the blue blocks to strike the floating bullseyes!",
-      "The Old Crest armor from the Sewer must be carried safely to Chamber 2's altar to open the Abbey. Do NOT get hit along the way!",
-      "*cough*... *wheeze*... too much elevator shaft grease in my lungs today!",
-      "Shhh! Don't let the Resourceful Rat hear you, or he will sneak into your inventory and swap your favorite gun for a half-eaten piece of cheese!",
-      "Huh? What's that noise? *clank* *clank*... Ah, just Ser Junkan polishing his shield again.",
-      "The Glass Guon Stones are extremely fragile! Getting hit breaks them instantly, but having multiple creates an impenetrable rotating orbit shield.",
-      "A high Magnificence rating reduces the drop rates of future high-tier S and A chests. Don't hoard S-tier items if you want more S-tier chests!",
-      "Cigarettes increase your Coolness stat by 1 every time you use them, but they cost you half a heart of HP. Absolute smoke-filled tactical madness!",
-      "Wielding the Shell or Bullet gun while holding the other triggers the 'Bullet-Shell' synergy. They swap roles and fire each other as ammo!",
-      "Chamber Gun adapts its weapon profile dynamically on every floor you enter! It is a shotgun in the Forge, a laser in the Hollow, and a freeze-gun in the Glacier.",
-      "Master Rounds are awarded for defeating floor bosses without taking a single hit of damage. They grant you an entire extra empty heart container!",
-      "The Spice active item is highly addictive! Every use raises your damage, speed, and accuracy, but lowers your max HP and raises your Curse rating.",
-      "Hold onto your blanks! If you have fewer than 2 blanks at the end of a chamber, the elevator will graciously restock you back to 2 on the next floor.",
-      "Sling deals double damage to bosses and bounces bullets off walls. A humble pebble-thrower capable of bringing down the High Dragun in seconds!",
-      "The Prime Primer costs 110 shells in Chamber 2 shop. It is a critical component to forge the Bullet That Can Kill The Past!",
-    ];
-    
-    final rand = math.Random().nextInt(quotes.length);
-    setState(() {
-      _mascotQuote = quotes[rand];
-    });
-    
-    _quoteTimer = Timer(const Duration(milliseconds: 4000), () {
-      if (mounted) {
-        setState(() {
-          _mascotQuote = null;
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _floatCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 3200),
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _quoteTimer?.cancel();
-    _floatCtrl.dispose();
-    super.dispose();
-  }
-
+class _MainMenuScreenState extends State<MainMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +34,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Spacer(flex: 2),
+                      const Spacer(flex: 3),
                       // REDESIGNED STYLISH GUNGEON MATE TITLE HEADER
                       Column(
                         children: [
@@ -183,96 +104,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                       const SizedBox(height: 10),
                       // 🔥 Bullet Hell Edition — animated wobble + burn heading
                       const _BulletHellHeading(),
-                      const Spacer(flex: 2),
-                      // The Tailor — floating mascot with tilt parallax + idle bob
-                      Center(
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.center,
-                          children: [
-                          // Subtle glow halo behind character (no circle border)
-                          AnimatedBuilder(
-                            animation: _floatCtrl,
-                            builder: (context, floatChild) {
-                              return ValueListenableBuilder<Offset>(
-                                valueListenable: ThemeOverlay.tiltNotifier,
-                                builder: (context, tilt, _) {
-                                  // Gentle idle bob + tilt-driven parallax drift
-                                  final floatY = math.sin(_floatCtrl.value * math.pi) * 6.0;
-                                  final tiltX = tilt.dx * 2.5;
-                                  final tiltY = tilt.dy * 2.0;
-                                  return Transform.translate(
-                                    offset: Offset(tiltX, floatY + tiltY),
-                                    child: floatChild,
-                                  );
-                                },
-                              );
-                            },
-                            child: ScaleButton(
-                              onTap: _onMascotTapped,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(0xFFFFD54F).withValues(alpha: 0.06),
-                                      blurRadius: 28,
-                                      spreadRadius: 8,
-                                    ),
-                                  ],
-                                ),
-                                child: Image.asset(
-                                  'assets/animations/Tailor_idle.gif',
-                                  width: 120,
-                                  height: 120,
-                                  fit: BoxFit.contain,
-                                  filterQuality: FilterQuality.none,
-                                  gaplessPlayback: true,
-                                  errorBuilder: (_, __, ___) => const Icon(
-                                    Icons.backpack_rounded,
-                                    size: 72,
-                                    color: Color(0xFFFFD54F),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (_mascotQuote != null)
-                            Positioned(
-                              bottom: 140, // Height of the mascot circle (130) + 10px spacing
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF1A1A1F), // Charcoal Gungeon bubble
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: const Color(0xFFFFD54F), width: 1.5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.5),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                constraints: const BoxConstraints(maxWidth: 240),
-                                child: GoopText(
-                                  _mascotQuote!,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontStyle: FontStyle.italic,
-                                    color: Color(0xFFFFD54F),
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 0.2,
-                                    height: 1.35,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                        ),
-                      ),
-                      const Spacer(flex: 1),
+                      const Spacer(flex: 4),
                   // Local Run = single device solo play
                   ScaleButton(
                     onTap: () {
