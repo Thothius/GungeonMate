@@ -143,16 +143,25 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   effectiveGlow,
                 )
               : const Color(0x00000000);
-          final particlesOn = prefs.particlesEnabled;
+          // ponytail: auto-bind particles to unicorn theme — forces unicornSparkles
+          //           preset + particles on when unicorn is active, without clobbering
+          //           the user's global preset. Respects an explicit non-default preset
+          //           choice (only auto-applies if still on the default gungeonDust).
+          final isUnicorn = mode == AppThemeMode.unicorn;
+          final effectivePreset = isUnicorn && prefs.particlePreset == ParticlePreset.gungeonDust
+              ? ParticlePreset.unicornSparkles
+              : prefs.particlePreset;
+          final particlesOn = prefs.particlesEnabled || isUnicorn;
           final particleBackdropBg = !particlesOn
               ? null
               : ParticleField(
-                  preset: prefs.particlePreset,
+                  preset: effectivePreset,
                   count: prefs.particleCount,
                   sizeScale: prefs.particleSizeScale,
                   opacity: prefs.particleOpacity,
                   glowOverride: prefs.particleGlowEffect,
                   lineLinksOverride: prefs.particleLineLinks ? true : null,
+                  colorsOverride: isUnicorn ? AppTheme.unicornPalette.particleColors : null,
                   bounce: prefs.particleBounce,
                 );
           Widget content = widget.child;

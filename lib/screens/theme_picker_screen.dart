@@ -1104,91 +1104,85 @@ class _PaletteSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: SizedBox(
-        height: 64,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          itemCount: items.length,
-          separatorBuilder: (_, __) => const SizedBox(width: 10),
-          itemBuilder: (context, i) {
-            final item = items[i];
-            final isActive = i == activeIndex;
-            return GestureDetector(
-              onTap: () => onTap(i),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeOutCubic,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: List.generate(items.length, (i) {
+          final item = items[i];
+          final isActive = i == activeIndex;
+          return GestureDetector(
+            onTap: () => onTap(i),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCubic,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: isActive
+                    ? flair.primary.withValues(alpha: 0.15)
+                    : Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
                   color: isActive
-                      ? flair.primary.withValues(alpha: 0.15)
-                      : Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: isActive
-                        ? flair.primary
-                        : Colors.white.withValues(alpha: 0.08),
-                    width: isActive ? 2.0 : 1.0,
-                  ),
-                  boxShadow: isActive
-                      ? [
-                          BoxShadow(
-                            color: flair.primary.withValues(alpha: 0.2),
-                            blurRadius: 8,
-                            spreadRadius: 0,
-                          ),
-                        ]
-                      : null,
+                      ? flair.primary
+                      : Colors.white.withValues(alpha: 0.08),
+                  width: isActive ? 2.0 : 1.0,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Color swatch stack
-                    Row(
-                      children: [
-                        for (int c = 0; c < item.colors.length; c++) ...[
-                          if (c > 0) const SizedBox(width: 3),
-                          Container(
-                            width: 16,
-                            height: 32,
-                            decoration: BoxDecoration(
-                              color: item.colors[c],
-                              borderRadius: BorderRadius.horizontal(
-                                left: c == 0 ? const Radius.circular(4) : Radius.zero,
-                                right: c == item.colors.length - 1
-                                    ? const Radius.circular(4)
-                                    : Radius.zero,
-                              ),
+                boxShadow: isActive
+                    ? [
+                        BoxShadow(
+                          color: flair.primary.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          spreadRadius: 0,
+                        ),
+                      ]
+                    : null,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Color swatch stack
+                  Row(
+                    children: [
+                      for (int c = 0; c < item.colors.length; c++) ...[
+                        if (c > 0) const SizedBox(width: 2),
+                        Container(
+                          width: 14,
+                          height: 28,
+                          decoration: BoxDecoration(
+                            color: item.colors[c],
+                            borderRadius: BorderRadius.horizontal(
+                              left: c == 0 ? const Radius.circular(3) : Radius.zero,
+                              right: c == item.colors.length - 1
+                                  ? const Radius.circular(3)
+                                  : Radius.zero,
                             ),
                           ),
-                        ],
+                        ),
                       ],
-                    ),
-                    const SizedBox(width: 10),
-                    // Label
-                    GoopText(
-                      item.label,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: isActive ? FontWeight.w900 : FontWeight.w700,
-                        color: isActive
-                            ? flair.primary
-                            : Colors.white.withValues(alpha: 0.65),
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    if (isActive) ...[
-                      const SizedBox(width: 6),
-                      Icon(Icons.check_circle_rounded, size: 14, color: flair.primary),
                     ],
+                  ),
+                  const SizedBox(width: 8),
+                  // Label
+                  GoopText(
+                    item.label,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isActive ? FontWeight.w900 : FontWeight.w700,
+                      color: isActive
+                          ? flair.primary
+                          : Colors.white.withValues(alpha: 0.65),
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                  if (isActive) ...[
+                    const SizedBox(width: 5),
+                    Icon(Icons.check_circle_rounded, size: 13, color: flair.primary),
                   ],
-                ),
+                ],
               ),
-            );
-          },
-        ),
+            ),
+          );
+        }),
       ),
     );
   }

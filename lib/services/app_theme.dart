@@ -846,6 +846,18 @@ enum UnicornPalette {
           headerUnderlineColor: Color(0x77C2185B),
         ),
       };
+
+  /// Per-palette particle colors for the unicorn sparkle effect.
+  /// Derived from each palette's flair colors for visual coherence.
+  /// Used via ParticleField's colorsOverride when the unicorn theme is active.
+  List<Color> get particleColors => switch (this) {
+        cottonCandy => const [Color(0xFFFF69B4), Color(0xFFE8A7F0), Color(0xFFF06292), Color(0xFF00E5FF)],
+        neon => const [Color(0xFFFF1493), Color(0xFFDA70D6), Color(0xFFE040FB), Color(0xFF00E5FF)],
+        dreamy => const [Color(0xFFF8BBD0), Color(0xFFD1C4E9), Color(0xFFCE93D8), Color(0xFFB39DDB)],
+        sunset => const [Color(0xFFFF6B9D), Color(0xFFFFAB91), Color(0xFFFFD1DC), Color(0xFFFFCC80)],
+        bubblegum => const [Color(0xFFFF80AB), Color(0xFFE040FB), Color(0xFFB388FF), Color(0xFFFFD700)],
+        mulberry => const [Color(0xFFC2185B), Color(0xFF9C27B0), Color(0xFFF06292), Color(0xFFE040FB)],
+      };
 }
 
 enum AppFont {

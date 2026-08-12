@@ -356,6 +356,7 @@ class ParticleField extends StatefulWidget {
   final double opacity; // 0.0 to 1.0
   final GlowEffect? glowOverride;
   final bool? lineLinksOverride;
+  final List<Color>? colorsOverride; // per-theme/per-palette color injection
   final bool bounce;
 
   const ParticleField({
@@ -366,6 +367,7 @@ class ParticleField extends StatefulWidget {
     this.opacity = 0.7,
     this.glowOverride,
     this.lineLinksOverride,
+    this.colorsOverride,
     this.bounce = false,
   });
 
@@ -397,7 +399,8 @@ class _ParticleFieldState extends State<ParticleField>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.preset != widget.preset ||
         oldWidget.count != widget.count ||
-        oldWidget.sizeScale != widget.sizeScale) {
+        oldWidget.sizeScale != widget.sizeScale ||
+        oldWidget.colorsOverride != widget.colorsOverride) {
       _particles.clear();
       _lastSize = null;
     }
@@ -408,10 +411,30 @@ class _ParticleFieldState extends State<ParticleField>
     _particles.clear();
     _lastSize = size;
 
-    final cfg = widget.preset.config;
+    final cfg = widget.colorsOverride != null
+        ? _withColors(widget.preset.config, widget.colorsOverride!)
+        : widget.preset.config;
     for (var i = 0; i < widget.count; i++) {
       _spawnParticle(size, cfg);
     }
+  }
+
+  /// ponytail: shallow copy of [PresetConfig] with replaced colors.
+  /// Used for per-palette particle color injection without adding new enum values.
+  static PresetConfig _withColors(PresetConfig base, List<Color> colors) {
+    return PresetConfig(
+      colors: colors,
+      shape: base.shape,
+      sizeMin: base.sizeMin,
+      sizeMax: base.sizeMax,
+      speedMin: base.speedMin,
+      speedMax: base.speedMax,
+      glowEffect: base.glowEffect,
+      lineLinks: base.lineLinks,
+      drift: base.drift,
+      wobble: base.wobble,
+      rotate: base.rotate,
+    );
   }
 
   void _spawnParticle(Size size, PresetConfig cfg) {
@@ -530,7 +553,9 @@ class _ParticleFieldState extends State<ParticleField>
                 painter: _ParticlePainter(
                   t: t,
                   particles: _particles,
-                  config: widget.preset.config,
+                  config: widget.colorsOverride != null
+                      ? _withColors(widget.preset.config, widget.colorsOverride!)
+                      : widget.preset.config,
                   sizeScale: widget.sizeScale,
                   opacity: widget.opacity,
                   glowEffect: widget.glowOverride ?? widget.preset.config.glowEffect,
