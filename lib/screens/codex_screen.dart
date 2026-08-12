@@ -6,6 +6,7 @@ import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import 'bullet_hell_codex_screen.dart';
 import 'challenge_mode_codex_screen.dart';
+import 'drake_codex_screen.dart';
 import 'paradox_codex_screen.dart';
 import 'gunslinger_codex_screen.dart';
 import 'codex_detail_screen.dart';
@@ -62,6 +63,12 @@ class _CodexScreenState extends State<CodexScreen> {
       label: 'Bullet Hell',
       icon: Icons.local_fire_department,
       color: Color(0xFFFF5252),
+      isSpecial: true,
+    ),
+    _CategoryDef(
+      label: 'Drake',
+      icon: Icons.pets,
+      color: Color(0xFF00E676),
       isSpecial: true,
     ),
     _CategoryDef(
@@ -165,15 +172,15 @@ class _CodexScreenState extends State<CodexScreen> {
   /// Returns the data entries for the selected data category.
   List<CodexEntry> _entriesFor(int index) {
     switch (index) {
-      case 4:
-        return _filter(_objects);
       case 5:
-        return _filter(_pickups);
+        return _filter(_objects);
       case 6:
-        return _filter(_npcs);
+        return _filter(_pickups);
       case 7:
-        return _filter(_enemies);
+        return _filter(_npcs);
       case 8:
+        return _filter(_enemies);
+      case 9:
         return _filter(_bosses);
       default:
         return [];
@@ -182,13 +189,13 @@ class _CodexScreenState extends State<CodexScreen> {
 
   CodexSection _sectionFor(int index) {
     switch (index) {
-      case 4:
-        return CodexSection.objects;
       case 5:
-        return CodexSection.pickups;
+        return CodexSection.objects;
       case 6:
-        return CodexSection.npcs;
+        return CodexSection.pickups;
       case 7:
+        return CodexSection.npcs;
+      case 8:
         return CodexSection.enemies;
       default:
         return CodexSection.bosses;
@@ -318,6 +325,8 @@ class _CodexScreenState extends State<CodexScreen> {
       case 2:
         return const BulletHellCodexScreen();
       case 3:
+        return const DrakeCodexScreen();
+      case 4:
         return const ChallengeModeCodexScreen();
       default:
         return const SizedBox.shrink();
