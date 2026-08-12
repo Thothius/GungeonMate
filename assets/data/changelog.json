@@ -21,7 +21,10 @@
       "✨ S-tier readability fixed on all backgrounds — S-tier quality pills, game icon rings, and chest chips now use gold accents (border, text, glow) instead of near-black, which was invisible on dark panels. The filled badge circle stays near-black with white text (matching the in-game S chest), but the surrounding chrome is gold so S-tier items and guns are clearly framed everywhere.",
       "🔧 Bughunt fixes — missing mounted check in multiplayer lobby, deprecated withOpacity replaced with withValues, 8 dynamic GoopText widgets now have maxLines+overflow protection to prevent clipping on narrow screens.",
       "🎨 Theme consistency pass — 22 hardcoded dark-grey card backgrounds across 14 files replaced with theme-derived AppTheme.flair.card so dialogs, cards, and panels now match the active theme palette (Unicorn pink, Forge warm, Frostbite blue, etc.) instead of clashing with a fixed grey.",
-      "👁️ Contrast fixes — 8 dim text colors (white24/white30/white38) on important content bumped to white54/white60/white70 for readability on dark panels. Affected: stat labels in tactical grid, evolver formula text, inactive spec names, fallback item letters, shrine USE button, no-results message."
+      "👁️ Contrast fixes — 8 dim text colors (white24/white30/white38) on important content bumped to white54/white60/white70 for readability on dark panels. Affected: stat labels in tactical grid, evolver formula text, inactive spec names, fallback item letters, shrine USE button, no-results message.",
+      "🎭 Multiplayer lobby now theme-aware — guide titles, help icons, sidekick button, and session history icons use theme-derived colors (flair.primary/secondary) instead of hardcoded amber/pink/cyan. Semantic colors (ice=coolness, fire=curse) stay hardcoded as they represent game meaning.",
+      "📐 Main menu rebalanced — spacer flex reduced from 3+4 to 2+2 after mascot removal, bringing the action buttons closer to the Bullet Hell heading for a more balanced vertical layout.",
+      "💊 Browse pill padding standardized — all quality/coin/synergy/meta pills now use consistent 8x3 padding for a uniform visual rhythm."
     ]
   },
   {
