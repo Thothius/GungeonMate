@@ -1286,7 +1286,7 @@ class _SynergyItemPill extends StatelessWidget {
               style: TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w700,
-                color: isOwned ? Colors.white70 : Colors.white30,
+                color: isOwned ? Colors.white70 : Colors.white60,
               ),
             ),
           ],
@@ -1319,7 +1319,7 @@ class _SynergyItemPill extends StatelessWidget {
       child: Center(
         child: GoopText(
           itemName.isNotEmpty ? itemName[0].toUpperCase() : '?',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white38),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white70),
         ),
       ),
     );

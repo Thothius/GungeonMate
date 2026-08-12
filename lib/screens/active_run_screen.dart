@@ -478,7 +478,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                         child: GoopText(
                           'No matching guns or items found.',
                           style: TextStyle(
-                            color: Colors.white38,
+                            color: Colors.white60,
                             fontSize: 12.5,
                           ),
                         ),

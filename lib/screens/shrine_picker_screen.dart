@@ -351,7 +351,7 @@ class _ShrineListTile extends StatelessWidget {
                   onPressed: onUse,
                   style: FilledButton.styleFrom(
                     backgroundColor:
-                        onUse == null ? Colors.white24 : Colors.amber,
+                        onUse == null ? Colors.white38 : Colors.amber,
                     foregroundColor: Colors.black,
                     disabledBackgroundColor: Colors.white12,
                     padding: const EdgeInsets.symmetric(

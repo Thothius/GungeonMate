@@ -809,7 +809,7 @@ class GunStats extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 9,
                                 fontWeight: isActive ? FontWeight.w900 : FontWeight.bold,
-                                color: isActive ? spec.color : Colors.white38,
+                                color: isActive ? spec.color : Colors.white60,
                               ),
                             ),
                           ],
@@ -866,7 +866,7 @@ class GunStats extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 9, 
                               fontWeight: FontWeight.bold, 
-                              color: isThresholdNode ? Colors.greenAccent.withValues(alpha: 0.4) : Colors.white24
+                              color: isThresholdNode ? Colors.greenAccent.withValues(alpha: 0.4) : Colors.white54
                             ),
                           ),
                   ),
@@ -926,7 +926,7 @@ class GunStats extends StatelessWidget {
                 const SizedBox(height: 3),
                 GoopText(
                   'Formula: ${activeStage == 6 ? "Ultimate Form Unlocked!" : "Requires ${(activeStage * 5) - totalKills} more unique kills to force-evolve."}',
-                  style: const TextStyle(fontSize: 10.5, color: Colors.white38),
+                  style: const TextStyle(fontSize: 10.5, color: Colors.white60),
                 ),
               ],
             ),
