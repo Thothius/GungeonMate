@@ -341,14 +341,32 @@ class _PeriodicTileState extends State<PeriodicTile>
                     ? Border.all(color: const Color(0xFFFFD700), width: 1)
                     : null,
               ),
-              child: GoopText(
-                dps,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w900,
-                  color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
-                  height: 1.1,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GoopText(
+                    dps,
+                    style: TextStyle(
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w900,
+                      color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
+                      height: 1.1,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  GoopText(
+                    'DMG',
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w700,
+                      color: widget.isTopDps
+                          ? const Color(0xFFFFD700).withValues(alpha: 0.7)
+                          : Colors.white60,
+                      height: 1.1,
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                ],
               ),
             );
             if (widget.isTopDps) {
@@ -368,14 +386,30 @@ class _PeriodicTileState extends State<PeriodicTile>
               color: Colors.black.withValues(alpha: 0.55),
               borderRadius: BorderRadius.circular(4),
             ),
-            child: GoopText(
-              range,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: Colors.white70,
-                height: 1.1,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GoopText(
+                  range,
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white70,
+                    height: 1.1,
+                  ),
+                ),
+                const SizedBox(width: 2),
+                GoopText(
+                  'RNG',
+                  style: const TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white54,
+                    height: 1.1,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
             ),
           );
 

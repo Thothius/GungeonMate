@@ -231,20 +231,17 @@ class PlayerPageState extends State<PlayerPage> {
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
                       final isOn = VisualPrefs.notifier.value.showDamageCalculator;
-                      return IconButton(
-                        onPressed: () {
+                      final color = isOn ? Colors.amberAccent : Colors.white38;
+                      return _LabeledIconButton(
+                        icon: Icons.calculate_rounded,
+                        label: 'Calc',
+                        color: color,
+                        tooltip: isOn ? 'Damage Calculator: ON' : 'Damage Calculator: OFF',
+                        onTap: () {
                           VisualPrefs.setShowDamageCalculator(!isOn);
                           Haptics.selection();
                         },
                         onLongPress: () => _showDamageCalcSheet(context, _slot),
-                        icon: Icon(
-                          Icons.calculate_rounded,
-                          size: 20,
-                          color: isOn ? Colors.amberAccent : Colors.white38,
-                        ),
-                        tooltip: isOn ? 'Damage Calculator: ON' : 'Damage Calculator: OFF',
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                       );
                     },
                   ),
@@ -253,19 +250,16 @@ class PlayerPageState extends State<PlayerPage> {
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
                       final isOn = VisualPrefs.notifier.value.showEffectsPanel;
-                      return IconButton(
-                        onPressed: () {
+                      final color = isOn ? Colors.amberAccent : Colors.white38;
+                      return _LabeledIconButton(
+                        icon: Icons.auto_awesome,
+                        label: 'Effects',
+                        color: color,
+                        tooltip: isOn ? 'Effects Panel: ON' : 'Effects Panel: OFF',
+                        onTap: () {
                           VisualPrefs.setShowEffectsPanel(!isOn);
                           Haptics.selection();
                         },
-                        icon: Icon(
-                          Icons.auto_awesome,
-                          size: 20,
-                          color: isOn ? Colors.amberAccent : Colors.white38,
-                        ),
-                        tooltip: isOn ? 'Effects Panel: ON' : 'Effects Panel: OFF',
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                       );
                     },
                   ),
@@ -275,8 +269,13 @@ class PlayerPageState extends State<PlayerPage> {
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
                       final isOn = VisualPrefs.notifier.value.showShrinePanel;
-                      return IconButton(
-                        onPressed: () {
+                      final color = isOn ? Colors.amberAccent : Colors.white38;
+                      return _LabeledIconButton(
+                        icon: Icons.temple_buddhist,
+                        label: 'Shrine',
+                        color: color,
+                        tooltip: 'Shrine Picker',
+                        onTap: () {
                           Haptics.selection();
                           Navigator.push(context, fastRoute(const ShrinePickerScreen()));
                         },
@@ -284,14 +283,6 @@ class PlayerPageState extends State<PlayerPage> {
                           VisualPrefs.setShowShrinePanel(!isOn);
                           Haptics.selection();
                         },
-                        icon: Icon(
-                          Icons.temple_buddhist,
-                          size: 20,
-                          color: isOn ? Colors.amberAccent : Colors.white38,
-                        ),
-                        tooltip: 'Shrine Picker',
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                       );
                     },
                   ),
@@ -300,19 +291,16 @@ class PlayerPageState extends State<PlayerPage> {
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
                       final isOn = VisualPrefs.notifier.value.showDashboards;
-                      return IconButton(
-                        onPressed: () {
+                      final color = isOn ? Colors.amberAccent : Colors.white38;
+                      return _LabeledIconButton(
+                        icon: isOn ? Icons.view_agenda_rounded : Icons.view_agenda_outlined,
+                        label: 'Panels',
+                        color: color,
+                        tooltip: isOn ? 'Special Panels: ON' : 'Special Panels: OFF',
+                        onTap: () {
                           VisualPrefs.setShowDashboards(!isOn);
                           Haptics.selection();
                         },
-                        icon: Icon(
-                          isOn ? Icons.view_agenda_rounded : Icons.view_agenda_outlined,
-                          size: 20,
-                          color: isOn ? Colors.amberAccent : Colors.white38,
-                        ),
-                        tooltip: isOn ? 'Special Panels: ON' : 'Special Panels: OFF',
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                       );
                     },
                   ),
@@ -1334,6 +1322,54 @@ class _SynergyItemPill extends StatelessWidget {
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white38),
         ),
       ),
+    );
+  }
+}
+
+/// Compact icon button with a tiny text label below it, for the
+/// active-run header toggle row. Keeps the same 36×36 hit target
+/// but adds a ~8px label for discoverability.
+class _LabeledIconButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final String tooltip;
+  final VoidCallback onTap;
+  final VoidCallback? onLongPress;
+
+  const _LabeledIconButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.tooltip,
+    required this.onTap,
+    this.onLongPress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          onPressed: onTap,
+          onLongPress: onLongPress,
+          icon: Icon(icon, size: 20, color: color),
+          tooltip: tooltip,
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 32),
+        ),
+        GoopText(
+          label,
+          style: TextStyle(
+            fontSize: 8,
+            fontWeight: FontWeight.w600,
+            color: color,
+            letterSpacing: 0.5,
+            height: 1.0,
+          ),
+        ),
+      ],
     );
   }
 }
