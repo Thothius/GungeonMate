@@ -32,8 +32,8 @@ class _CodexScreenState extends State<CodexScreen> {
   final TextEditingController _searchCtrl = TextEditingController();
   String _query = '';
 
-  // Currently selected category index (0-based). 0-2 are special pages,
-  // 3-7 are data categories.
+  // Currently selected category index (0-based). 0-4 are special pages,
+  // 5-9 are data categories.
   int _selected = 0;
 
   // Loaded data

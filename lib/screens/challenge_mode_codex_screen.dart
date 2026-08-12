@@ -324,7 +324,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
+      height: 200,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -381,9 +381,9 @@ class _Header extends StatelessWidget {
                 GoopText(
                   'CHALLENGE MODE',
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 28,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 2,
+                    letterSpacing: 3,
                     color: Colors.white,
                     shadows: [
                       Shadow(

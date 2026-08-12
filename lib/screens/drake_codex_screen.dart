@@ -280,9 +280,8 @@ class DrakeCodexScreen extends StatelessWidget {
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     return SizedBox(
-      height: screenHeight * 0.22,
+      height: 200,
       child: Stack(
         children: [
           Positioned.fill(
