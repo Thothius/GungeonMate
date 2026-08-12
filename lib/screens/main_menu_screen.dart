@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
-import 'settings_screen.dart';
-import 'codex_screen.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
@@ -341,41 +339,6 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  // Codex — full-width menu button
-                  ScaleButton(
-                    onTap: () {
-                      Haptics.selection();
-                      Navigator.push(
-                        context,
-                        fastRoute(const CodexScreen(showBackButton: true)),
-                      );
-                    },
-                    child: IgnorePointer(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 54,
-                        child: OutlinedButton.icon(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.18),
-                              width: 1.2,
-                            ),
-                          ),
-                          icon: const Icon(Icons.menu_book_rounded, size: 22),
-                          label: const GoopText(
-                            'Codex',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 12),
                   GoopText(
                     'v1.9.0',
@@ -396,32 +359,6 @@ class _MainMenuScreenState extends State<MainMenuScreen>
           ),
         ),
           ),
-          ),
-          // Settings gear — top-right corner
-          Positioned(
-            top: 12,
-            right: 12,
-            child: SafeArea(
-              child: InkWell(
-                onTap: () {
-                  Haptics.selection();
-                  Navigator.push(
-                    context,
-                    fastRoute(const SettingsScreen()),
-                  );
-                },
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white24, width: 1.2),
-                  ),
-                  child: const Icon(Icons.settings_rounded, size: 16, color: Colors.cyanAccent),
-                ),
-              ),
-            ),
           ),
           // Changelog button — centered at bottom, 15% bigger
           Positioned(

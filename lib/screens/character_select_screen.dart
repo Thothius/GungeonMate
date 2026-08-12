@@ -84,12 +84,12 @@ class CharacterSelectScreen extends StatelessWidget {
               ),
               Expanded(
                 child: GridView.builder(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: isMultiplayerPick ? 0.62 : 0.64,
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
+                    crossAxisCount: 4,
+                    childAspectRatio: isMultiplayerPick ? 0.52 : 0.54,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 10,
                   ),
                   itemCount: p.allGungeoneers.length,
                   itemBuilder: (c, i) {
@@ -150,19 +150,19 @@ class _CharacterCard extends StatelessWidget {
     final char = character;
     return Card(
       color: const Color(0xFF1E1E22),
-      elevation: 6,
+      elevation: 4,
       shadowColor: flair.primary.withValues(alpha: 0.12),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         side: BorderSide(
           color: flair.primary.withValues(alpha: 0.2),
-          width: 1.2,
+          width: 1.0,
         ),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         child: Column(
           children: [
             Expanded(
@@ -186,7 +186,7 @@ class _CharacterCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Transform.scale(
-                      scale: 1.35,
+                      scale: 1.1,
                       alignment: Alignment.bottomCenter,
                       child: _buildCardArt(),
                     ),
@@ -196,7 +196,7 @@ class _CharacterCard extends StatelessWidget {
             ),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
+              padding: const EdgeInsets.fromLTRB(4, 5, 4, 6),
               decoration: BoxDecoration(
                 color: flair.primary.withValues(alpha: 0.08),
                 border: Border(
@@ -209,9 +209,9 @@ class _CharacterCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: prefs.font.textStyle.copyWith(
-                  fontSize: 13,
+                  fontSize: 10.5,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
+                  letterSpacing: 0.3,
                   color: Colors.white,
                 ),
               ),
