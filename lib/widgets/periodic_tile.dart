@@ -320,6 +320,75 @@ class _PeriodicTileState extends State<PeriodicTile>
     return clean;
   }
 
+  /// Builds the bottom-center stats badge for guns on the periodic grid.
+  /// Shows DPS (with top-DPS shimmer if applicable) alongside RANGE.
+  Widget _buildGunStatsBadge() {
+    final dps = _corner;
+    final range = _cleanStat(widget.gun!.range);
+    if (dps.isEmpty && range.isEmpty) return const SizedBox.shrink();
+
+    final dpsBadge = dps.isEmpty
+        ? const SizedBox.shrink()
+        : (() {
+            final badge = Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: widget.isTopDps
+                    ? const Color(0xFFFFD700).withValues(alpha: 0.25)
+                    : Colors.black.withValues(alpha: 0.55),
+                borderRadius: BorderRadius.circular(4),
+                border: widget.isTopDps
+                    ? Border.all(color: const Color(0xFFFFD700), width: 1)
+                    : null,
+              ),
+              child: GoopText(
+                dps,
+                style: TextStyle(
+                  fontSize: 12.5,
+                  fontWeight: FontWeight.w900,
+                  color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
+                  height: 1.1,
+                ),
+              ),
+            );
+            if (widget.isTopDps) {
+              return badge.animate(
+                onPlay: (controller) => controller.repeat(reverse: true),
+              ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
+               .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
+            }
+            return badge;
+          })();
+
+    final rangeBadge = range.isEmpty
+        ? const SizedBox.shrink()
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.55),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: GoopText(
+              range,
+              style: const TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+                color: Colors.white70,
+                height: 1.1,
+              ),
+            ),
+          );
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        dpsBadge,
+        if (dps.isNotEmpty && range.isNotEmpty) const SizedBox(width: 4),
+        rangeBadge,
+      ],
+    );
+  }
+
   /// Elemental effect icons for the tile — shown top-right, max 3.
   /// Delegates detection to [ElementalTagger] so both guns *and* items
   /// surface the same badges (e.g. Frost Bullets shows a freeze icon,
@@ -723,92 +792,55 @@ class _PeriodicTileState extends State<PeriodicTile>
                         child: maybeQualityBadge(),
                       ),
                       maybeFastActiveDot(),
-                      // Top-right: type tag + elemental icons stacked
+                      // Top-right: elemental icons only (type moved to subtitle below name)
                       Positioned(
                         top: 3,
                         right: 3,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            if (_typeTag.isNotEmpty)
-                              Container(
-                                width: 72,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: _typeColor().withValues(alpha: 0.18),
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(
-                                    color: _typeColor().withValues(alpha: 0.55),
-                                    width: 0.7,
-                                  ),
-                                ),
-                                alignment: Alignment.center,
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: GoopText(
-                                    _typeTag,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 8.5,
-                                      fontWeight: FontWeight.w700,
-                                      color: _typeColor(),
-                                      letterSpacing: 0.2,
-                                      height: 1.1,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            else
-                              const SizedBox.shrink(),
-                            maybeElements(),
-                          ],
-                        ),
+                        child: maybeElements(),
                       ),
-                      // Bottom-center: DPS / corner badge
+                      // Bottom-center: DPS + RANGE (guns) / corner badge (items)
                       Positioned(
                         left: 4,
                         right: 4,
                         bottom: 4,
                         child: Center(
-                          child: _corner.isNotEmpty
-                              ? (() {
-                                  final badge = Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 5,
-                                      vertical: 1,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: widget.isTopDps 
-                                          ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-                                          : Colors.black.withValues(alpha: 0.55),
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: widget.isTopDps
-                                          ? Border.all(color: const Color(0xFFFFD700), width: 1)
-                                          : null,
-                                    ),
-                                    child: GoopText(
-                                      _corner,
-                                      style: TextStyle(
-                                        fontSize: 12.5,
-                                        fontWeight: FontWeight.w900,
-                                        color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
-                                        height: 1.1,
-                                      ),
-                                    ),
-                                  );
-                                  if (widget.isTopDps) {
-                                    return badge.animate(
-                                      onPlay: (controller) => controller.repeat(reverse: true),
-                                    ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
-                                     .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
-                                  }
-                                  return badge;
-                                })()
-                              : const SizedBox.shrink(),
+                          child: isGun
+                              ? _buildGunStatsBadge()
+                              : (_corner.isNotEmpty
+                                  ? (() {
+                                      final badge = Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 5,
+                                          vertical: 1,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: widget.isTopDps
+                                              ? const Color(0xFFFFD700).withValues(alpha: 0.25)
+                                              : Colors.black.withValues(alpha: 0.55),
+                                          borderRadius: BorderRadius.circular(4),
+                                          border: widget.isTopDps
+                                              ? Border.all(color: const Color(0xFFFFD700), width: 1)
+                                              : null,
+                                        ),
+                                        child: GoopText(
+                                          _corner,
+                                          style: TextStyle(
+                                            fontSize: 12.5,
+                                            fontWeight: FontWeight.w900,
+                                            color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
+                                            height: 1.1,
+                                          ),
+                                        ),
+                                      );
+                                      if (widget.isTopDps) {
+                                        return badge.animate(
+                                          onPlay: (controller) => controller.repeat(reverse: true),
+                                        ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
+                                         .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
+                                      }
+                                      return badge;
+                                    })()
+                                  : const SizedBox.shrink()),
                         ),
                       ),
                     ],
@@ -817,18 +849,39 @@ class _PeriodicTileState extends State<PeriodicTile>
               ),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(4, 4, 4, 6),
+                  padding: const EdgeInsets.fromLTRB(4, 3, 4, 5),
                   color: Colors.white.withValues(alpha: 0.03),
-                  child: GoopText(
-                    _name,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: prefs.inventoryFontSize,
-                      fontWeight: FontWeight.w600,
-                      height: 1.15,
-                    ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GoopText(
+                        _name,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: prefs.inventoryFontSize,
+                          fontWeight: FontWeight.w600,
+                          height: 1.15,
+                        ),
+                      ),
+                      // Type subtitle — centered addon-panel below the name
+                      if (_typeTag.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        GoopText(
+                          _typeTag,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 8.5,
+                            fontWeight: FontWeight.w700,
+                            color: _typeColor(),
+                            letterSpacing: 0.3,
+                            height: 1.1,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ],

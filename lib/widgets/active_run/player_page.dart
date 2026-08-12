@@ -839,7 +839,7 @@ class PlayerPageState extends State<PlayerPage> {
       case InventoryDisplayMode.classicPeriodic:
         final savedColCount = VisualPrefs.notifier.value.periodicGridColumnCount;
         cross = (savedColCount > 0) ? savedColCount : (w < 360 ? 3 : w < 600 ? 4 : 6);
-        ratio = 0.80;
+        ratio = 0.75; // BUG-035: bumped from 0.80 to fit type subtitle + RANGE
         break;
       case InventoryDisplayMode.tacticalStats:
         cross = w < 500 ? 2 : w < 850 ? 3 : 4;
