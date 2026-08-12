@@ -34,7 +34,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Spacer(flex: 3),
+                      const Spacer(flex: 2),
                       // REDESIGNED STYLISH GUNGEON MATE TITLE HEADER
                       Column(
                         children: [
@@ -104,7 +104,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       const SizedBox(height: 10),
                       // 🔥 Bullet Hell Edition — animated wobble + burn heading
                       const _BulletHellHeading(),
-                      const Spacer(flex: 4),
+                      const Spacer(flex: 2),
                   // Local Run = single device solo play
                   ScaleButton(
                     onTap: () {

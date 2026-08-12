@@ -45,7 +45,7 @@ Widget qualityPill(String quality) {
   // Use gold as the pill accent for S-tier so it reads on any background.
   final accent = isS ? const Color(0xFFFFD700) : rawColor;
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
     decoration: BoxDecoration(
       color: accent.withValues(alpha: 0.14),
       borderRadius: BorderRadius.circular(6),
@@ -94,7 +94,7 @@ Widget qualityPill(String quality) {
 
 Widget coinPill(String price) {
   return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
     decoration: BoxDecoration(
       color: const Color(0xFFFFC857).withValues(alpha: 0.12),
       borderRadius: BorderRadius.circular(6),
@@ -159,7 +159,7 @@ Widget coinPill(String price) {
 Widget synergyPill(int count) {
   if (count == 0) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(6),

@@ -146,18 +146,18 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
         children: [
           GoopText(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13.5,
               fontWeight: FontWeight.bold,
-              color: Colors.amberAccent,
+              color: AppTheme.flair.primary,
             ),
           ),
           const SizedBox(height: 4),
           GoopText(
             body,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11.5,
-              color: Colors.white70,
+              color: AppTheme.flair.secondary.withValues(alpha: 0.7),
               height: 1.3,
             ),
           ),
@@ -396,8 +396,8 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   icon: const Icon(Icons.smart_toy_outlined, size: 18),
                   label: const GoopText('Add Local Sidekick (Solo Co-op)'),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.pinkAccent,
-                    side: const BorderSide(color: Colors.pinkAccent, width: 1),
+                    foregroundColor: AppTheme.flair.secondary,
+                    side: BorderSide(color: AppTheme.flair.secondary, width: 1),
                   ),
                   onPressed: () {
                     Haptics.selection();
@@ -490,7 +490,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                     Icon(
                                       Icons.history_edu_rounded,
                                       size: 16,
-                                      color: isMainSession ? Colors.cyanAccent : Colors.purpleAccent,
+                                      color: isMainSession ? AppTheme.flair.primary : AppTheme.flair.secondary,
                                     ),
                                     const SizedBox(width: 6),
                                     Expanded(
@@ -603,17 +603,17 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Row(
+                      Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.help_outline_rounded, size: 14, color: Colors.amberAccent),
-                          SizedBox(width: 6),
+                          Icon(Icons.help_outline_rounded, size: 14, color: AppTheme.flair.primary),
+                          const SizedBox(width: 6),
                           GoopText(
                             'How to Play',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white70,
+                              color: AppTheme.flair.secondary.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -644,17 +644,17 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
+                Row(
                   children: [
-                    Icon(Icons.help_outline_rounded, color: Colors.amberAccent, size: 24),
-                    SizedBox(width: 10),
+                    Icon(Icons.help_outline_rounded, color: AppTheme.flair.primary, size: 24),
+                    const SizedBox(width: 10),
                     GoopText(
                       'MULTIPLAYER GUIDE',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1,
-                        color: Colors.white,
+                        color: AppTheme.flair.secondary,
                       ),
                     ),
                   ],
