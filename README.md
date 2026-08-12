@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version" src="https://img.shields.io/badge/version-1.8.0-00E5FF?style=flat-square&logo=flutter">
+  <img alt="Version" src="https://img.shields.io/badge/version-1.9.1-00E5FF?style=flat-square&logo=flutter">
   <img alt="Platform" src="https://img.shields.io/badge/platform-Android-FF007F?style=flat-square">
   <img alt="Data" src="https://img.shields.io/badge/wiki_data-509_verified-E040FB?style=flat-square">
 </p>
@@ -20,8 +20,8 @@
 ## 📥 DOWNLOAD
 
 <p align="center">
-  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/GungeonMate-v1.8.0.apk">
-    <img src="https://img.shields.io/badge/⬇_DOWNLOAD_APK-v1.8.0-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="72" alt="Download APK">
+  <a href="https://github.com/Thothius/GungeonMate/releases/latest/download/GungeonMate-v1.9.1.apk">
+    <img src="https://img.shields.io/badge/⬇_DOWNLOAD_APK-v1.9.1-FF007F?style=for-the-badge&labelColor=1E1E22&color=FF007F" height="72" alt="Download APK">
   </a>
 </p>
 
@@ -42,17 +42,20 @@
 - 270 items with effects, synergies, recharge times, quality badges
 - 395 synergies with active detection, visual icon pairs, next-pickup hints
 - Codex bestiary: 146 enemies, 27 bosses, objects, pickups, NPCs
+- Special codex pages: Paradox, Gunslinger, Bullet Hell, Drake, Resourceful Rat, Challenge Mode
 
 **Multiplayer**
 - Bluetooth co-op via BLE/Wi-Fi Direct, live snapshot sync, gift items/guns, auto-reconnect
 - Side-by-side MP stats comparison with synergy overview
 - Local co-op with second player loadout and item transfer
 - Gunfortuna dice game
+- MP Emotes — send a Kiss or Slap to the other player (purely visual, no gameplay effect)
 
 **Themes**
-- 12+ themes including Forge Master, Robot's Core, Unicorn (7 palettes), custom color editor
+- 22 themes including Bullet Hell, Forge Master, Robot's Core, Unicorn (7 palettes), Resourceful Rat, Lord Jammed, custom color editor
 - Goopian language mode (English to animated alien text)
-- 15+ particle presets, 10 curated wallpapers with gyro parallax
+- 18 particle presets auto-bound to each theme, 10 curated wallpapers with gyro parallax
+- Auto-glow: themes with glow colors show a subtle ambient glow out of the box
 - Full-screen theme picker with live preview
 
 **Utilities**
