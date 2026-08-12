@@ -4,7 +4,8 @@
     "title": "🔥 BULLET HELL EDITION",
     "date": "August 2026",
     "items": [
-      "💥 Max Pane synergy fixed — now correctly activates when you hold both Glass Cannon and Glass Guon Stone. It was listed with only Glass Cannon in its items array, so the synergy never flagged active. Both items now required, as the effect text always implied.",
+      "� NEW: Bullet Hell codex page — a themed special page under the Codex tab with the official header graphic, presenting Chamber 6 lore, entry conditions, the 'No Loot' survival rules, the three-loop procedural layout, hazards, and the Lich's three-phase boss fight in a clean, scrollable dark-neon layout.",
+      "�💥 Max Pane synergy fixed — now correctly activates when you hold both Glass Cannon and Glass Guon Stone. It was listed with only Glass Cannon in its items array, so the synergy never flagged active. Both items now required, as the effect text always implied.",
       "🔗 Multiplayer reconnect now announces itself — a floating 'Connection restored — sync resumed' snackbar fires with a success haptic the moment the link comes back, instead of silently closing the drop dialog. Teardowns (disconnect/cancel) stay quiet so you only hear from it on a real recovery.",
       "✨ Quality tier cleanup — 36 entries across guns (19) and items (17) were showing '1S' instead of 'S' in UI metadata chips, a data-pipeline artifact. All corrected to 'S'; the Browse quality-sort special case simplified.",
       "🎯 More fixes incoming as part of the Bullet Hell Edition rollout — see the edition plan for the full lineup."

@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../models/codex_entry.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
+import 'bullet_hell_codex_screen.dart';
 import 'codex_detail_screen.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
@@ -37,7 +38,7 @@ class _CodexScreenState extends State<CodexScreen>
   @override
   void initState() {
     super.initState();
-    _tab = TabController(length: 5, vsync: this);
+    _tab = TabController(length: 6, vsync: this);
     _searchCtrl.addListener(_onSearchChanged);
     _loadData();
   }
@@ -173,6 +174,12 @@ class _CodexScreenState extends State<CodexScreen>
                   icon: const Icon(Icons.emoji_events_outlined, size: 18),
                   text: 'Bosses',
                 ),
+                Tab(
+                  height: 42,
+                  iconMargin: const EdgeInsets.only(bottom: 2),
+                  icon: const Icon(Icons.local_fire_department, size: 18),
+                  text: 'Bullet Hell',
+                ),
               ],
             ),
           ),
@@ -245,6 +252,8 @@ class _CodexScreenState extends State<CodexScreen>
                         entries: _filter(_bosses, CodexSection.bosses),
                         section: CodexSection.bosses,
                       ),
+                      // Bullet Hell — themed special page (no search filter)
+                      const BulletHellCodexScreen(),
                     ],
                   ),
                 ),

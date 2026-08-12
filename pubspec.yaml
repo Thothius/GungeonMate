@@ -103,6 +103,7 @@ flutter:
     - assets/images/npcs/
     - assets/images/enemies/
     - assets/images/bosses/
+    - assets/images/codex/
     - assets/animations/
     - assets/animations/gun_types/
     - assets/animations/dog/
