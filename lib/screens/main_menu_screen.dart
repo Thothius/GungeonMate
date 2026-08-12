@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
 import 'settings_screen.dart';
@@ -180,6 +181,9 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                           ),
                         ],
                       ),
+                      const SizedBox(height: 10),
+                      // 🔥 Bullet Hell Edition — animated wobble + burn heading
+                      const _BulletHellHeading(),
                       const Spacer(flex: 2),
                       // The Tailor — floating mascot with tilt parallax + idle bob
                       Center(
@@ -374,7 +378,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v2.0.0',
+                    'v1.9.0',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -442,7 +446,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                         Icon(Icons.history_edu_rounded, size: 16, color: Color(0xFFFFD54F)),
                         SizedBox(width: 7),
                         GoopText(
-                          'Changelog (v2.0.0)',
+                          'Changelog (v1.9.0)',
                           style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -496,7 +500,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v2.0.0 — BULLET HELL EDITION',
+                            'v1.9.0 — BULLET HELL EDITION',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -790,3 +794,139 @@ class _MainMenuScreenState extends State<MainMenuScreen>
 //     );
 //   }
 // }
+
+// =============================================================================
+// 🔥 Bullet Hell Edition — animated wobble + burn heading
+// =============================================================================
+
+/// A themed sub-update banner for the main menu. The "BULLET HELL" text
+/// wobbles gently (rotation oscillation) while an ember glow pulses behind
+/// it, giving a "burning" feel. Fire icon flickers. Uses a single
+/// repeating AnimationController — disposed properly.
+class _BulletHellHeading extends StatefulWidget {
+  const _BulletHellHeading();
+
+  @override
+  State<_BulletHellHeading> createState() => _BulletHellHeadingState();
+}
+
+class _BulletHellHeadingState extends State<_BulletHellHeading>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _burn;
+  late final Animation<double> _wobble;
+  late final Animation<double> _glow;
+
+  @override
+  void initState() {
+    super.initState();
+    _burn = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2800),
+    )..repeat(reverse: true);
+
+    // Wobble: -2.5° → +2.5° rotation, eased
+    _wobble = Tween<double>(begin: -0.044, end: 0.044)
+        .animate(CurvedAnimation(parent: _burn, curve: Curves.easeInOutSine));
+
+    // Glow: 0.3 → 0.7 opacity pulse for the ember halo
+    _glow = Tween<double>(begin: 0.25, end: 0.65)
+        .animate(CurvedAnimation(parent: _burn, curve: Curves.easeInOutSine));
+  }
+
+  @override
+  void dispose() {
+    _burn.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _burn,
+      builder: (context, _) {
+        return Transform.rotate(
+          angle: _wobble.value,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: const Color(0xFFFF5252).withValues(alpha: 0.5),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFFFF5252)
+                      .withValues(alpha: _glow.value * 0.5),
+                  blurRadius: 12 + _glow.value * 16,
+                  spreadRadius: 1 + _glow.value * 3,
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Flickering fire icon
+                Icon(
+                  Icons.local_fire_department,
+                  size: 16,
+                  color: const Color(0xFFFF5252)
+                      .withValues(alpha: 0.7 + _glow.value * 0.3),
+                  shadows: [
+                    Shadow(
+                      color: const Color(0xFFFF5252)
+                          .withValues(alpha: _glow.value),
+                      blurRadius: 8,
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 6),
+                // "BULLET HELL" text with ember glow shadow
+                GoopText(
+                  'BULLET HELL',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2.5,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        color: const Color(0xFFFF5252)
+                            .withValues(alpha: _glow.value),
+                        blurRadius: 6 + _glow.value * 8,
+                      ),
+                      const Shadow(
+                        color: Color(0xFFB71C1C),
+                        blurRadius: 2,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 6),
+                // Version tag
+                GoopText(
+                  'v1.9.0',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(0xFFFFD54F).withValues(alpha: 0.7),
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ).animate().fadeIn(
+          duration: 600.ms,
+          delay: 300.ms,
+        ).slideY(
+          begin: 0.3,
+          end: 0,
+          duration: 600.ms,
+          delay: 300.ms,
+          curve: Curves.easeOutBack,
+        );
+  }
+}

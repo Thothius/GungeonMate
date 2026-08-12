@@ -6,7 +6,7 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
-## v2.0.0 — 🔥 BULLET HELL EDITION (August 2026)
+## v1.9.0 — 🔥 BULLET HELL EDITION (August 2026)
 **Build:** 79
 
 > **The big one.** A branded milestone release bundling the v1.8.39 hotfixes together with the upcoming UX/visual rework (BUG-035–039) under one banner. The v1.8.39 patch fixes are folded in — no separate v1.8.39 ship. See `docs/bullet_hell_edition_plan.md` for the full edition scope and styling direction.
