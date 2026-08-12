@@ -28,7 +28,8 @@
       "🔍 Browse empty-search state — when a search yields no results in Guns, Items, or All tabs, a 'No results' message with a search-off icon appears instead of a blank screen.",
       "👆 Browse add-button tap target enlarged — the + button in browse rows now has a 44x44 dp hit area (up from ~14px), making it much easier to tap on mobile while keeping the same visual size.",
       "📳 Item detail haptic feedback — the remove, add, and favourite buttons in item detail now fire Haptics.selection()/light() on tap, matching the rest of the app.",
-      "🔕 Favourite toggle no longer clears other snackbars — removed the clearSnackBars() call so synergy-activated or other important snackbars stay visible when toggling a favourite."
+      "🔕 Favourite toggle no longer clears other snackbars — removed the clearSnackBars() call so synergy-activated or other important snackbars stay visible when toggling a favourite.",
+      "🎲 New Codex entry: Challenge Mode — all 20 room modifiers and 4 boss-specific modifiers from the wiki, each with mechanics, exclusivity rules, and trivia. Accessible from the Codex grid as a new special page tile."
     ]
   },
   {

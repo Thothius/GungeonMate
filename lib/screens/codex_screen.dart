@@ -5,6 +5,7 @@ import '../models/codex_entry.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import 'bullet_hell_codex_screen.dart';
+import 'challenge_mode_codex_screen.dart';
 import 'paradox_codex_screen.dart';
 import 'gunslinger_codex_screen.dart';
 import 'codex_detail_screen.dart';
@@ -61,6 +62,12 @@ class _CodexScreenState extends State<CodexScreen> {
       label: 'Bullet Hell',
       icon: Icons.local_fire_department,
       color: Color(0xFFFF5252),
+      isSpecial: true,
+    ),
+    _CategoryDef(
+      label: 'Challenge',
+      icon: Icons.casino,
+      color: Color(0xFFAB47BC),
       isSpecial: true,
     ),
     _CategoryDef(
@@ -158,15 +165,15 @@ class _CodexScreenState extends State<CodexScreen> {
   /// Returns the data entries for the selected data category.
   List<CodexEntry> _entriesFor(int index) {
     switch (index) {
-      case 3:
-        return _filter(_objects);
       case 4:
-        return _filter(_pickups);
+        return _filter(_objects);
       case 5:
-        return _filter(_npcs);
+        return _filter(_pickups);
       case 6:
-        return _filter(_enemies);
+        return _filter(_npcs);
       case 7:
+        return _filter(_enemies);
+      case 8:
         return _filter(_bosses);
       default:
         return [];
@@ -175,13 +182,13 @@ class _CodexScreenState extends State<CodexScreen> {
 
   CodexSection _sectionFor(int index) {
     switch (index) {
-      case 3:
-        return CodexSection.objects;
       case 4:
-        return CodexSection.pickups;
+        return CodexSection.objects;
       case 5:
-        return CodexSection.npcs;
+        return CodexSection.pickups;
       case 6:
+        return CodexSection.npcs;
+      case 7:
         return CodexSection.enemies;
       default:
         return CodexSection.bosses;
@@ -310,6 +317,8 @@ class _CodexScreenState extends State<CodexScreen> {
         return const GunslingerCodexScreen();
       case 2:
         return const BulletHellCodexScreen();
+      case 3:
+        return const ChallengeModeCodexScreen();
       default:
         return const SizedBox.shrink();
     }
