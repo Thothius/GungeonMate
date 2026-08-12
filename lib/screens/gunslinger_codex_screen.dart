@@ -36,15 +36,15 @@ class GunslingerCodexScreen extends StatelessWidget {
                     color: _gold,
                   ),
                   _InfoBlock(
-                    heading: 'The Master of the Gungeon',
+                    heading: 'The Gungeon\'s Architect',
                     body:
-                        'The Gunslinger is the ultimate reward for mastering the game. He is the pre-cursed form of the Lich himself — the ancient gunslinging wizard who constructed The Gungeon out of a concern that the way of guns would out-compete the old magics. He fights through the Gungeon to prevent his own dark future.',
+                        'The Gunslinger is the pre-mortem, human version of the Lich. Long before the Great Bullet fell from the sky, he was an ancient gunslinging wizard who originally constructed the Gungeon. Concerned that firearms would make the old magics of the world obsolete, he hired the Blacksmith and dedicated his life to arcane experiments, fusing magic directly into guns. He fights through the Gungeon to prevent his own dark future.',
                     accent: _gold,
                   ),
                   _InfoBlock(
                     heading: 'The Legendary Gunfighter',
                     body:
-                        'Known by enemies and friends alike for his unusual reloading technique — simply throwing the empty gun at his foe and drawing a new one from his magical belt. He was also a powerful wizard who combined his two hobbies via arcane experiments, infusing magic into the firearms of his fascination.',
+                        'His enemies called him "the gunslinger" not just for his aim, but because of his reload technique. When the magazine is empty, he physically throws the gun at enemies (dealing damage) and magically pulls a fully loaded duplicate from his belt. He was also a powerful wizard who combined his two hobbies via arcane experiments, infusing magic into the firearms of his fascination.',
                     accent: _gold,
                   ),
                   _InfoBlock(
@@ -81,6 +81,30 @@ class GunslingerCodexScreen extends StatelessWidget {
                     heading: 'Passive Item — Lich\'s Eye Bullets',
                     body:
                         'The most broken passive item in the game. It instantly grants every possible synergy for any gun the Gunslinger holds, bypassing the need to find the matching synergy items. A mediocre D-tier weapon instantly becomes a boss-melting powerhouse in his hands. He cannot drop this item.',
+                    accent: _ember,
+                  ),
+                  const SizedBox(height: 22),
+                  _SectionTitle(
+                    icon: Icons.bolt,
+                    title: 'The Mechanics of Lich\'s Eye Bullets',
+                    color: _ember,
+                  ),
+                  _InfoBlock(
+                    heading: 'Flipping the Meta',
+                    body:
+                        'In standard Gungeon gameplay, players usually prioritize high-tier (Red and Black) chests. The Gunslinger flips this meta entirely on its head. Because Lich\'s Eye Bullets activate all synergies simultaneously, low-tier (Brown and Blue chest) weapons frequently become the most powerful guns in the game.',
+                    accent: _ember,
+                  ),
+                  _InfoBlock(
+                    heading: 'The Cactus Example',
+                    body:
+                        'Normally a terrible D-tier weapon. In the Gunslinger\'s hands, it immediately activates its synergies, causing it to rapidly fire a screen-filling wave of bouncing needles, piercing spikes, and exploding vegetables.',
+                    accent: _ember,
+                  ),
+                  _InfoBlock(
+                    heading: 'Shop Economy',
+                    body:
+                        'The shop frequently sells low-quality guns for very cheap. The Gunslinger can buy these cheap weapons and instantly transform them into boss-melting powerhouses, leaving him with plenty of casings to buy armor, keys, and blanks.',
                     accent: _ember,
                   ),
                   const SizedBox(height: 22),
@@ -158,8 +182,14 @@ class GunslingerCodexScreen extends StatelessWidget {
                   _InfoBlock(
                     heading: 'The Paradox Lich',
                     body:
-                        'The Paradox Lich fires Jammed bullets and has increased health. Luckily, both Liches use only their first phase, and the player wins once both are defeated.',
+                        'The Paradox Lich is permanently Jammed — dealing double damage and firing faster, darker bullets. Luckily, both Liches use only their first phase, and the player wins once both are defeated.',
                     accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Secret Exploit — The Un-Jamming Trick',
+                    body:
+                        'If the player manages to bring the Heck Blaster gun or the Mecha Junkan familiar into the Past, they can actually "Un-Jam" the Paradox Lich. Shooting the Paradox Lich with the Heck Blaster reverts him into a normal Lich — causing him to fire standard bullets and take normal damage, massively reducing the difficulty of the dual-fight.',
+                    accent: _ember,
                   ),
                   _InfoBlock(
                     heading: 'The Ending',
@@ -180,15 +210,27 @@ class GunslingerCodexScreen extends StatelessWidget {
                     accent: _gold,
                   ),
                   _InfoBlock(
+                    heading: 'The Rat Fight',
+                    body:
+                        'During the Punch-Out phase of the Resourceful Rat boss fight, the Gunslinger has completely unique animations. Instead of punching, he hip-fires revolvers from his left or right side. His special move is a pistol-whip followed by firing a bullet at the Rat\'s chin.',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
+                    heading: 'Bullet Eyes',
+                    body:
+                        'When he gets hit in the Rat fight, his injured portrait reveals that his eyes are literally bullets — foreshadowing his transformation into the skeletal Lich and explaining why he is "the man with no eyes."',
+                    accent: _gold,
+                  ),
+                  _InfoBlock(
                     heading: 'The Living Poncho',
                     body:
                         'His poncho appears to be alive — it has a face on it which blinks during his idle animation. When petting the Dog, the poncho will smile.',
                     accent: _gold,
                   ),
                   _InfoBlock(
-                    heading: 'Bullet Eyes',
+                    heading: 'The Blacksmith\'s Dialogue',
                     body:
-                        'His injured portrait during the Punchout fight with the Resourceful Rat shows his eyes to be bullets, suggesting he used bullets as prosthetic eyes even before he became the Lich.',
+                        'When the Gunslinger speaks to the Blacksmith in Chamber 5, her dialogue changes. She mentions that she\'s never been happier to forge the Bullet That Can Kill The Past, noting that if he succeeds, the Gungeon will never have existed. She ponders where everyone will be after this is all over, and wishes him good luck.',
                     accent: _gold,
                   ),
                   _InfoBlock(
