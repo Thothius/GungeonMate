@@ -17,9 +17,7 @@ class ParadoxCodexScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: CustomScrollView(
+    return CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(child: _Header()),
@@ -143,7 +141,6 @@ class ParadoxCodexScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
     );
   }
 }

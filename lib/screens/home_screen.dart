@@ -74,16 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final hasActiveRun = runProvider.runState.selectedCharacter != null;
 
-    // Screen-index changes must never be applied synchronously inside
-    // build(): ThemeOverlay is an ancestor that already painted this
-    // frame with the old index, so mutating it here leaves a stale
-    // background visible until some unrelated event (e.g. a tap)
-    // forces the next repaint. Defer to a post-frame callback instead.
+    // ponytail: set synchronously. The old post-frame approach caused a
+    // stale frame where the home-screen galaxy + contrast backing + scrim
+    // stayed painted over the particles after entering an MP run, and
+    // nothing forced a repaint until the user minimized/restored the app.
+    // Setting synchronously means the overlay rebuilds in the same frame
+    // with the correct index, so particles/glow show immediately.
     final desiredScreenIndex = hasActiveRun ? -1 : 0;
     if (ThemeOverlay.currentScreenIndex.value != desiredScreenIndex) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ThemeOverlay.currentScreenIndex.value = desiredScreenIndex;
-      });
+      ThemeOverlay.currentScreenIndex.value = desiredScreenIndex;
     }
 
     if (!hasActiveRun) {
