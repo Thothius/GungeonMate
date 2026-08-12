@@ -35,38 +35,88 @@ class StatGroup extends StatelessWidget {
     required this.stats,
   });
 
+  /// Resolves the group's accent color: theme override if set, else
+  /// semantic defaults (Combat=red, Handling=cyan, Meta=amber).
+  Color _groupColor() {
+    final f = AppTheme.flair;
+    switch (label.toLowerCase()) {
+      case 'combat':
+        return f.statGroupCombat ?? const Color(0xFFFF5252);
+      case 'handling':
+        return f.statGroupHandling ?? const Color(0xFF40C4FF);
+      case 'meta':
+        return f.statGroupMeta ?? const Color(0xFFFFD54F);
+      default:
+        return f.primary;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final color = _groupColor();
+    final flair = AppTheme.flair;
+    final useFilledPill = flair.chipFilled;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                size: 14,
-                color: Colors.white.withValues(alpha: 0.6),
-              ),
-              const SizedBox(width: 6),
-              GoopText(
-                label.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  color: Colors.white.withValues(alpha: 0.65),
+          child: useFilledPill
+              ? Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: color.withValues(alpha: 0.5), width: 1.0),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(icon, size: 18, color: color),
+                      const SizedBox(width: 7),
+                      GoopText(
+                        label.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 1.5,
+                          color: color,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Row(
+                  children: [
+                    Container(
+                      width: 3,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(icon, size: 18, color: color),
+                    const SizedBox(width: 7),
+                    GoopText(
+                      label.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.5,
+                        color: color,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
         Wrap(
           spacing: 10,
           runSpacing: 8,
           children: stats
-              .map((e) => StatPill(label: e.key, value: e.value))
+              .map((e) => StatPill(label: e.key, value: e.value, groupColor: color))
               .toList(),
         ),
       ],
@@ -77,7 +127,8 @@ class StatGroup extends StatelessWidget {
 class StatPill extends StatelessWidget {
   final String label;
   final String value;
-  const StatPill({super.key, required this.label, required this.value});
+  final Color? groupColor;
+  const StatPill({super.key, required this.label, required this.value, this.groupColor});
 
   static const Map<String, Color> _chestColors = {
     'red': Color(0xFFE53935),
@@ -147,6 +198,7 @@ class StatPill extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               color: accentColor?.withValues(alpha: 0.85) ??
+                  groupColor?.withValues(alpha: 0.75) ??
                   Colors.white.withValues(alpha: 0.6),
             ),
           ),
