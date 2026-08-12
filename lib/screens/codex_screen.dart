@@ -5,13 +5,18 @@ import '../models/codex_entry.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import 'bullet_hell_codex_screen.dart';
+import 'paradox_codex_screen.dart';
+import 'gunslinger_codex_screen.dart';
 import 'codex_detail_screen.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
 
 /// The GungeonMate Codex — a browseable encyclopedia of Objects, Pickups,
-/// NPCs, Enemies, and Bosses from Enter the Gungeon. Accessed as a
-/// bottom-nav tab during an active run.
+/// NPCs, Enemies, and Bosses from Enter the Gungeon, plus themed special
+/// pages for Bullet Hell, The Paradox, and The Gunslinger.
+///
+/// Categories are presented as a grid of tappable tiles at the top for
+/// quick, visual access. Special pages come first, then data categories.
 class CodexScreen extends StatefulWidget {
   final bool showBackButton;
 
@@ -21,11 +26,13 @@ class CodexScreen extends StatefulWidget {
   State<CodexScreen> createState() => _CodexScreenState();
 }
 
-class _CodexScreenState extends State<CodexScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tab;
+class _CodexScreenState extends State<CodexScreen> {
   final TextEditingController _searchCtrl = TextEditingController();
   String _query = '';
+
+  // Currently selected category index (0-based). 0-2 are special pages,
+  // 3-7 are data categories.
+  int _selected = 0;
 
   // Loaded data
   List<CodexEntry> _objects = [];
@@ -35,10 +42,62 @@ class _CodexScreenState extends State<CodexScreen>
   List<CodexEntry> _bosses = [];
   bool _loaded = false;
 
+  // Category definitions — special pages first, then data categories.
+  // The order here determines the grid order.
+  static const _categories = [
+    _CategoryDef(
+      label: 'Paradox',
+      icon: Icons.auto_awesome,
+      color: Color(0xFF00E5FF),
+      isSpecial: true,
+    ),
+    _CategoryDef(
+      label: 'Gunslinger',
+      icon: Icons.casino,
+      color: Color(0xFFFFD54F),
+      isSpecial: true,
+    ),
+    _CategoryDef(
+      label: 'Bullet Hell',
+      icon: Icons.local_fire_department,
+      color: Color(0xFFFF5252),
+      isSpecial: true,
+    ),
+    _CategoryDef(
+      label: 'Objects',
+      icon: Icons.widgets,
+      color: Color(0xFF66BB6A),
+      isSpecial: false,
+    ),
+    _CategoryDef(
+      label: 'Pickups',
+      icon: Icons.inventory_2_outlined,
+      color: Color(0xFF42A5F5),
+      isSpecial: false,
+    ),
+    _CategoryDef(
+      label: 'NPCs',
+      icon: Icons.person_outline,
+      color: Color(0xFFEF5350),
+      isSpecial: false,
+    ),
+    _CategoryDef(
+      label: 'Enemies',
+      icon: Icons.dangerous_outlined,
+      color: Color(0xFFFF7043),
+      isSpecial: false,
+    ),
+    _CategoryDef(
+      label: 'Bosses',
+      icon: Icons.emoji_events_outlined,
+      color: Color(0xFFAB47BC),
+      isSpecial: false,
+    ),
+  ];
+
   @override
   void initState() {
     super.initState();
-    _tab = TabController(length: 6, vsync: this);
     _searchCtrl.addListener(_onSearchChanged);
     _loadData();
   }
@@ -81,13 +140,12 @@ class _CodexScreenState extends State<CodexScreen>
 
   @override
   void dispose() {
-    _tab.dispose();
     _searchCtrl.removeListener(_onSearchChanged);
     _searchCtrl.dispose();
     super.dispose();
   }
 
-  List<CodexEntry> _filter(List<CodexEntry> entries, CodexSection section) {
+  List<CodexEntry> _filter(List<CodexEntry> entries) {
     if (_query.isEmpty) return entries;
     return entries
         .where((e) =>
@@ -97,9 +155,43 @@ class _CodexScreenState extends State<CodexScreen>
         .toList();
   }
 
+  /// Returns the data entries for the selected data category.
+  List<CodexEntry> _entriesFor(int index) {
+    switch (index) {
+      case 3:
+        return _filter(_objects);
+      case 4:
+        return _filter(_pickups);
+      case 5:
+        return _filter(_npcs);
+      case 6:
+        return _filter(_enemies);
+      case 7:
+        return _filter(_bosses);
+      default:
+        return [];
+    }
+  }
+
+  CodexSection _sectionFor(int index) {
+    switch (index) {
+      case 3:
+        return CodexSection.objects;
+      case 4:
+        return CodexSection.pickups;
+      case 5:
+        return CodexSection.npcs;
+      case 6:
+        return CodexSection.enemies;
+      default:
+        return CodexSection.bosses;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
+    final cat = _categories[_selected];
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -118,148 +210,200 @@ class _CodexScreenState extends State<CodexScreen>
                 style: TextStyle(
                     fontWeight: FontWeight.w900, letterSpacing: 1.2))
             : const SizedBox.shrink(),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(52),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
-            child: TabBar(
-              controller: _tab,
-              labelStyle: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.4,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
-              indicator: BoxDecoration(
-                color: flair.primary.withValues(alpha: 0.22),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: flair.primary.withValues(alpha: 0.7),
-                  width: 1.2,
-                ),
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              dividerHeight: 0,
-              tabs: [
-                Tab(
-                  height: 42,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: const Icon(Icons.widgets, size: 18),
-                  text: 'Objects',
-                ),
-                Tab(
-                  height: 42,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: const Icon(Icons.inventory_2_outlined, size: 18),
-                  text: 'Pickups',
-                ),
-                Tab(
-                  height: 42,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: const Icon(Icons.person_outline, size: 18),
-                  text: 'NPCs',
-                ),
-                Tab(
-                  height: 42,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: const Icon(Icons.dangerous_outlined, size: 18),
-                  text: 'Enemies',
-                ),
-                Tab(
-                  height: 42,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: const Icon(Icons.emoji_events_outlined, size: 18),
-                  text: 'Bosses',
-                ),
-                Tab(
-                  height: 42,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: const Icon(Icons.local_fire_department, size: 18),
-                  text: 'Bullet Hell',
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
       body: !_loaded
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                // Search bar
+                // ── Category grid ──────────────────────────────────────
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
-                  child: SizedBox(
-                    height: 44,
-                    child: TextField(
-                      controller: _searchCtrl,
-                      decoration: InputDecoration(
-                        hintText: 'Search codex...',
-                        prefixIcon: const Icon(Icons.search, size: 20),
-                        isDense: true,
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 6),
-                        suffixIcon: _searchCtrl.text.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.clear, size: 18),
-                                onPressed: () {
-                                  _searchCtrl.clear();
-                                  _onSearchChanged();
-                                },
-                              )
-                            : null,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: flair.primary.withValues(alpha: 0.3),
+                  padding: const EdgeInsets.fromLTRB(10, 4, 10, 8),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 6,
+                      crossAxisSpacing: 6,
+                      childAspectRatio: 0.92,
+                    ),
+                    itemCount: _categories.length,
+                    itemBuilder: (context, index) {
+                      final c = _categories[index];
+                      final isSelected = index == _selected;
+                      return _CategoryTile(
+                        label: c.label,
+                        icon: c.icon,
+                        color: c.color,
+                        isSelected: isSelected,
+                        onTap: () {
+                          Haptics.selection();
+                          setState(() {
+                            _selected = index;
+                            _searchCtrl.clear();
+                            _query = '';
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ),
+                // ── Search bar (data categories only) ──────────────────
+                if (!cat.isSpecial)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+                    child: SizedBox(
+                      height: 40,
+                      child: TextField(
+                        controller: _searchCtrl,
+                        decoration: InputDecoration(
+                          hintText: 'Search ${cat.label.toLowerCase()}...',
+                          prefixIcon: const Icon(Icons.search, size: 18),
+                          isDense: true,
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 4),
+                          suffixIcon: _searchCtrl.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear, size: 16),
+                                  onPressed: () {
+                                    _searchCtrl.clear();
+                                    _onSearchChanged();
+                                  },
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: flair.primary.withValues(alpha: 0.3),
+                            ),
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: flair.primary.withValues(alpha: 0.7),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                              color: flair.primary.withValues(alpha: 0.7),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                // Tab content
+                // ── Content ────────────────────────────────────────────
                 Expanded(
-                  child: TabBarView(
-                    controller: _tab,
-                    children: [
-                      _CodexList(
-                        entries: _filter(_objects, CodexSection.objects),
-                        section: CodexSection.objects,
-                      ),
-                      _CodexList(
-                        entries: _filter(_pickups, CodexSection.pickups),
-                        section: CodexSection.pickups,
-                      ),
-                      _CodexList(
-                        entries: _filter(_npcs, CodexSection.npcs),
-                        section: CodexSection.npcs,
-                      ),
-                      _CodexList(
-                        entries: _filter(_enemies, CodexSection.enemies),
-                        section: CodexSection.enemies,
-                      ),
-                      _CodexList(
-                        entries: _filter(_bosses, CodexSection.bosses),
-                        section: CodexSection.bosses,
-                      ),
-                      // Bullet Hell — themed special page (no search filter)
-                      const BulletHellCodexScreen(),
-                    ],
-                  ),
+                  child: cat.isSpecial
+                      ? _specialPage(_selected)
+                      : _CodexList(
+                          entries: _entriesFor(_selected),
+                          section: _sectionFor(_selected),
+                        ),
                 ),
               ],
             ),
     );
+  }
+
+  Widget _specialPage(int index) {
+    switch (index) {
+      case 0:
+        return const ParadoxCodexScreen();
+      case 1:
+        return const GunslingerCodexScreen();
+      case 2:
+        return const BulletHellCodexScreen();
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+}
+
+// =============================================================================
+// Category definition
+// =============================================================================
+
+class _CategoryDef {
+  final String label;
+  final IconData icon;
+  final Color color;
+  final bool isSpecial;
+
+  const _CategoryDef({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.isSpecial,
+  });
+}
+
+// =============================================================================
+// Category tile — tappable grid card with icon + label
+// =============================================================================
+
+class _CategoryTile extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final Color color;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _CategoryTile({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? color.withValues(alpha: 0.18)
+              : const Color(0xFF1E1E22),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected
+                ? color.withValues(alpha: 0.8)
+                : color.withValues(alpha: 0.15),
+            width: isSelected ? 1.4 : 0.8,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    spreadRadius: 0,
+                  ),
+                ]
+              : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              size: 22,
+              color: isSelected ? color : color.withValues(alpha: 0.55),
+            ),
+            const SizedBox(height: 4),
+            GoopText(
+              label,
+              style: TextStyle(
+                fontSize: 9.5,
+                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                color: isSelected
+                    ? Colors.white
+                    : Colors.white.withValues(alpha: 0.6),
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 150.ms, delay: 30.ms);
   }
 }
 
@@ -299,7 +443,7 @@ class _CodexList extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 10, 24),
+          padding: const EdgeInsets.fromLTRB(10, 4, 10, 24),
           sliver: SliverGrid(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
