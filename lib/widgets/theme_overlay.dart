@@ -126,11 +126,21 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
               builder: (_, screenIndex, __) {
                 final isHomeScreen = screenIndex == 0;
             final f = AppTheme.displayedFlair;
-          final showGlow = prefs.glowIntensity > 0.001;
+          // Auto-glow: themes with a non-transparent glowPrimary get a
+          // subtle ambient glow even if the user hasn't manually enabled
+          // it. This ensures every themed mode "feels" alive out of the
+          // box. The user's explicit glowIntensity always overrides/
+          // enhances the auto-glow.
+          final themeHasGlow = f.glowPrimary.a > 0.01;
+          final autoGlowIntensity = themeHasGlow ? 0.15 : 0.0;
+          final effectiveUserGlow = prefs.glowIntensity > 0.001
+              ? prefs.glowIntensity
+              : autoGlowIntensity;
+          final showGlow = effectiveUserGlow > 0.001;
           // ponytail: cap effective glow at 0.6 so max doesn't wash out UI.
           //           Now behind content, so even at cap it glows behind panels.
           final userGlowColor = VisualPrefs.glowColors[prefs.glowColorIndex];
-          final effectiveGlow = prefs.glowIntensity * 0.6;
+          final effectiveGlow = effectiveUserGlow * 0.6;
           final gP = showGlow
               ? _scaleAlpha(
                   Color.lerp(f.glowPrimary, userGlowColor, 0.5) ?? f.glowPrimary,
