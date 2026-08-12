@@ -1,3 +1,6 @@
+// TODO: remove after CombinedRunAppTab is verified — AppTab is now dormant.
+// Its content was merged into CombinedRunAppTab (run_tab.dart) in v1.9.0.
+// This file is left on disk per Safety S4. Do not delete without user OK.
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

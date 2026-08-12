@@ -3,12 +3,10 @@ import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/settings/theme_visuals_tab.dart';
 import '../widgets/settings/run_tab.dart';
-import '../widgets/settings/app_tab.dart';
 
 /// Central control room for Gungeon Mate.
 /// - Tab 1: VISUALS — Theme, typography, particles, glow, wallpaper, inventory layout, dice
-/// - Tab 2: RUN — Co-op, inventory maintenance, shrines, event log, end run
-/// - Tab 3: APP — Dialogue, changelog, dev tools, data reset
+/// - Tab 2: RUN & APP — Co-op, inventory, shrines, event log, dialogue, changelog, dev tools, end run, data reset
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -22,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final flair = AppTheme.flair;
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -42,16 +40,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             labelPadding: const EdgeInsets.symmetric(horizontal: 4),
             tabs: const [
               Tab(text: 'VISUALS'),
-              Tab(text: 'RUN'),
-              Tab(text: 'APP'),
+              Tab(text: 'RUN & APP'),
             ],
           ),
         ),
         body: const TabBarView(
           children: [
             ThemeVisualsTab(),
-            RunTab(),
-            AppTab(),
+            CombinedRunAppTab(),
           ],
         ),
       ),
