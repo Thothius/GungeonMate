@@ -75,6 +75,7 @@ sealed class MpMessage {
       'diceDecline' => const MpDiceDecline(),
       'diceCancel' => const MpDiceCancel(),
       'diceResult' => MpDiceResult.fromJson(map),
+      'emote' => MpEmote.fromJson(map),
       _ => throw FormatException('MpMessage: unknown type "$t"'),
     };
   }
@@ -351,5 +352,26 @@ final class MpDiceResult extends MpMessage {
   factory MpDiceResult.fromJson(Map<String, dynamic> j) => MpDiceResult(
     score: j['score'] as int? ?? 0,
     dice: (j['dice'] as List?)?.cast<int>() ?? const [],
+  );
+}
+
+/// Lightweight player-to-player emote (kiss, slap, etc.). Purely visual —
+/// no gameplay effect. The receiver shows a floating overlay animation.
+/// `action` discriminates the visual; `from` is the sender's nickname.
+final class MpEmote extends MpMessage {
+  final String from;
+  final String action; // 'kiss' | 'slap' | future emotes
+
+  const MpEmote({required this.from, required this.action});
+
+  @override
+  String get type => 'emote';
+
+  @override
+  Map<String, dynamic> toJson() => {'from': from, 'action': action};
+
+  factory MpEmote.fromJson(Map<String, dynamic> j) => MpEmote(
+    from: j['from'] as String? ?? 'Player',
+    action: j['action'] as String? ?? 'kiss',
   );
 }

@@ -31,7 +31,8 @@
       "🔕 Favourite toggle no longer clears other snackbars — removed the clearSnackBars() call so synergy-activated or other important snackbars stay visible when toggling a favourite.",
       "🎲 New Codex entry: Challenge Mode — all 20 room modifiers and 4 boss-specific modifiers from the wiki, each with mechanics, exclusivity rules, and trivia. Accessible from the Codex grid as a new special page tile.",
       "🐉 New Codex entry: The Drake — the secret Serpent/Baby Dragun companion. Full chain from Weird Egg hatching through Resourceful Rat boss fight to Advanced Dragun transformation. Includes lore, mechanics, rewards, Rat Keys, and trivia.",
-      "🖼️ Codex special page headers unified — all 5 special pages (Paradox, Gunslinger, Bullet Hell, Drake, Challenge) now have hero images with gradient scrims and consistent title sizing (28px, letterSpacing 3, height 200)."
+      "🖼️ Codex special page headers unified — all 5 special pages (Paradox, Gunslinger, Bullet Hell, Drake, Challenge) now have hero images with gradient scrims and consistent title sizing (28px, letterSpacing 3, height 200).",
+      "💕 MP Emotes — tap your own character tab in multiplayer to send a Kiss or Slap to the other player. Kiss: a pink heart floats up on their screen for 6s with your name. Slap: an angry face slams down and shakes their screen for 2s. Purely visual, no gameplay effect. Renders above all dialogs via root Overlay."
     ]
   },
   {

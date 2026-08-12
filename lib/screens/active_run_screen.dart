@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
@@ -14,6 +15,7 @@ import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/player_header.dart';
 import '../widgets/active_run/player_page.dart';
 import '../widgets/active_run/dice_roll.dart';
+import '../widgets/active_run/emote_animations.dart';
 
 class ActiveRunScreen extends StatefulWidget {
   final VoidCallback? onRequestBrowse;
@@ -34,6 +36,10 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
   MultiplayerSession? _mpSession;
   String? _lastShownError;
 
+  // Emote overlay state — kiss/slap animations shown via root Overlay.
+  Timer? _emoteTimer;
+  OverlayEntry? _emoteOverlayEntry;
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +50,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       _mpSession = Provider.of<MultiplayerSession>(context, listen: false);
       _mpSession?.addListener(_onMpSessionChanged);
       _mpSession?.onDiceChallenge = _handleIncomingDiceChallenge;
+      _mpSession?.onEmote = _handleIncomingEmote;
     });
   }
 
@@ -105,14 +112,133 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     Navigator.of(context).pop();
   }
 
+  // ---- MP Emotes (kiss / slap) ------------------------------------------
+
+  /// Tab tap handler for MP — if the user taps their own tab while
+  /// already viewing it, open the emote menu. Otherwise navigate.
+  void mpTabTap(int i) {
+    final session = _mpSession;
+    if (session == null) return;
+    final myMpPage = session.myRole == MpRole.main ? 0 : 1;
+    if (i == myMpPage && _currentPage == myMpPage) {
+      _showEmoteMenu();
+    } else {
+      _page.animateToPage(i,
+          duration: const Duration(milliseconds: 260),
+          curve: Curves.easeOut);
+    }
+  }
+
+  void _showEmoteMenu() {
+    final session = _mpSession;
+    if (session == null || !session.isConnected) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: GoopText('Not connected — can\'t send emote'),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    Haptics.selection();
+    final peerName = session.peerNickname ?? 'peer';
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppTheme.flair.card,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GoopText(
+              'Send to $peerName',
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: Colors.white70,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _EmoteButton(
+                  icon: Icons.favorite,
+                  label: 'Kiss',
+                  color: Colors.pinkAccent,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    session.sendEmote('kiss');
+                    Haptics.light();
+                  },
+                ),
+                _EmoteButton(
+                  icon: Icons.sentiment_very_dissatisfied,
+                  label: 'Slap',
+                  color: Colors.orangeAccent,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    session.sendEmote('slap');
+                    Haptics.heavy();
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handleIncomingEmote(String from, String action) {
+    if (!mounted) return;
+    // Unknown actions from future versions are ignored gracefully.
+    final duration = switch (action) {
+      'kiss' => const Duration(seconds: 6),
+      'slap' => const Duration(seconds: 2),
+      _ => null,
+    };
+    if (duration == null) return;
+    Haptics.light();
+    // Cancel any previous emote timer + overlay before showing a new one.
+    _emoteTimer?.cancel();
+    _emoteOverlayEntry?.remove();
+    final entry = OverlayEntry(
+      builder: (_) => IgnorePointer(
+        child: Material(
+          color: Colors.transparent,
+          child: action == 'slap'
+              ? SlapAnimation(from: from)
+              : KissAnimation(from: from),
+        ),
+      ),
+    );
+    _emoteOverlayEntry = entry;
+    Overlay.of(context).insert(entry);
+    _emoteTimer = Timer(duration, () {
+      _emoteTimer = null;
+      entry.remove();
+      _emoteOverlayEntry = null;
+    });
+  }
+
   @override
   void dispose() {
+    _emoteTimer?.cancel();
+    _emoteOverlayEntry?.remove();
     if (_mpSession != null) {
       if (_mpSession!.onDiceChallenge == _handleIncomingDiceChallenge) {
         _mpSession!.onDiceChallenge = null;
       }
       if (_mpSession!.onDiceCancel == _handleIncomingDiceCancel) {
         _mpSession!.onDiceCancel = null;
+      }
+      if (_mpSession!.onEmote == _handleIncomingEmote) {
+        _mpSession!.onEmote = null;
       }
       _mpSession!.removeListener(_onMpSessionChanged);
     }
@@ -247,7 +373,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               currentPage: _currentPage,
               hasCoop: hasCoop,
               session: session,
-              onPick: navigateTo,
+              onPick: mpTabTap,
             )
           else if (hasCoop)
             PlayerSwitcher(
@@ -705,6 +831,52 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
           ),
           const SizedBox(width: 8),
           const Icon(Icons.flash_on, color: Colors.white, size: 16),
+        ],
+      ),
+    );
+  }
+}
+
+/// Circular icon button used in the emote menu.
+class _EmoteButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _EmoteButton({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color.withValues(alpha: 0.12),
+              border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
+            ),
+            child: Icon(icon, size: 32, color: color),
+          ),
+          const SizedBox(height: 8),
+          GoopText(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
         ],
       ),
     );

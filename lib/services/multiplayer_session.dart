@@ -116,6 +116,10 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
   void Function()? onDiceCancel;
   void Function(int peerScore, List<int> peerDice)? onDiceResult;
 
+  /// Incoming emote (kiss, slap, etc.) from peer. The UI shows a
+  /// floating overlay animation. Purely visual — no gameplay effect.
+  void Function(String from, String action)? onEmote;
+
   /// Requests we've sent that are still waiting for a response. Keyed
   /// by reqId. Cleared on resp or after a 30s timeout.
   final Map<String, _OutgoingRequest> _outgoingRequests = {};
@@ -1019,6 +1023,17 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  /// Send a lightweight emote (kiss, slap, etc.) to the peer. Purely
+  /// visual — the receiver shows a floating overlay animation. No
+  /// gameplay effect. Follows the same isConnected-guard pattern as
+  /// the dice methods; the caller checks connection before showing
+  /// the emote menu.
+  Future<void> sendEmote(String action) async {
+    if (isConnected) {
+      await _service.sendMessage(MpEmote(from: _myNickname, action: action));
+    }
+  }
+
   /// Add-to-peer: send a gift without removing from local inventory.
   /// Used when one player quick-adds an item to the peer's inventory
   /// via the FAB — no local removal needed, just ship the gift.
@@ -1363,6 +1378,8 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
         onDiceCancel?.call();
       case MpDiceResult():
         onDiceResult?.call(msg.score, msg.dice);
+      case MpEmote():
+        onEmote?.call(msg.from, msg.action);
     }
   }
 
