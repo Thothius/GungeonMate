@@ -1,0 +1,81 @@
+{
+  "_meta": {
+    "description": "Gun-by-gun verification log against multiple sources. Each entry records which sources were checked, which fields matched, and any discrepancies found.",
+    "sources": [
+      "https://enterthegungeon.wiki.gg/wiki/{Gun_Name} — primary, community-maintained",
+      "https://enterthegungeon.fandom.com/wiki/{Gun_Name} — legacy, original icon source",
+      "https://enterthegungeon.wiki.gg/wiki/Patch_Notes — official stat changes",
+      "Steam community guides — community-verified DPS breakdowns",
+      "Reddit r/EnterTheGungeon — edge cases, post-patch discussions"
+    ],
+    "fields_verified": ["type", "dps", "damage", "magazine_size", "ammo_capacity", "fire_rate", "reload_time", "shot_speed", "range", "force", "spread", "quality", "class", "sell_price", "quote", "ammonomicon_entry", "notes", "synergies"],
+    "verification_order": "S-tier first (19 guns), then A (44), B (70), C (68), D (30), N (8)",
+    "last_updated": "2026-08-13"
+  },
+  "guns": {
+    "AKEY-47": {
+      "verified": true,
+      "verified_date": "2026-08-13",
+      "sources_checked": ["wiki.gg"],
+      "wiki_url": "https://enterthegungeon.wiki.gg/wiki/AKEY-47",
+      "fields_matched": ["type", "dps", "damage", "magazine_size", "ammo_capacity", "fire_rate", "reload_time", "shot_speed", "range", "force", "quality", "class", "sell_price", "quote", "ammonomicon_entry"],
+      "discrepancies": [],
+      "synergies_verified": ["Akey Breaky (Shelleton Key)"],
+      "notes": "All stats match wiki.gg exactly. Spread degree symbol is correctly encoded as U+00B0 (PowerShell console display issue was a false alarm)."
+    },
+    "AU Gun": {
+      "verified": true,
+      "verified_date": "2026-08-13",
+      "sources_checked": ["wiki.gg"],
+      "wiki_url": "https://enterthegungeon.wiki.gg/wiki/AU_Gun",
+      "fields_matched": ["type", "dps", "damage", "magazine_size", "ammo_capacity", "fire_rate", "reload_time", "shot_speed", "range", "force", "spread", "quality", "class", "sell_price", "quote", "ammonomicon_entry"],
+      "discrepancies": [],
+      "synergies_verified": ["Klobbering Time (Klobbe)"],
+      "notes": "All stats match wiki.gg exactly. 22 ammo references 22 karat crown gold. Reference to James Bond Golden Gun."
+    },
+    "BSG": {
+      "verified": true,
+      "verified_date": "2026-08-13",
+      "sources_checked": ["wiki.gg"],
+      "wiki_url": "https://enterthegungeon.wiki.gg/wiki/BSG",
+      "fields_matched": ["type", "dps", "magazine_size", "ammo_capacity", "fire_rate", "reload_time", "shot_speed", "force", "quality", "class", "sell_price", "quote", "ammonomicon_entry"],
+      "discrepancies": [
+        {
+          "field": "damage",
+          "our_value": "50 Explosion: 70x2 (140)",
+          "wiki_value": "Impact: 50, Explosion: 70x2 (140)",
+          "severity": "low",
+          "status": "FIXED",
+          "fix": "Added 'Impact:' prefix"
+        },
+        {
+          "field": "range",
+          "our_value": "(empty)",
+          "wiki_value": "Infinity",
+          "severity": "medium",
+          "status": "FIXED",
+          "fix": "Set range to '∞'"
+        }
+      ],
+      "synergies_verified": ["Big Shotgun Gun (Big Shotgun)", "In The Mood! (Thunderclap or Strafe Gun)"],
+      "notes": "BSG = Big Shooty Gun, reference to DOOM's BFG 9000. Slowest fire rate in game (4.00). Explosion damage unaffected by passive items. Damage and range fixed during verification."
+    }
+  },
+  "_progress": {
+    "S_tier_total": 19,
+    "S_tier_verified": 3,
+    "S_tier_remaining": ["Composite Gun", "Dark Marker", "Disintegrator", "Elimentaler", "Fightsabre", "Gilded Hydra", "Gungine", "Gunther", "Makeshift Cannon", "Mourning Star", "Particulator", "Patriot", "Railgun", "Strafe Gun", "Vulcan Cannon", "Yari Launcher"],
+    "A_tier_total": 44,
+    "A_tier_verified": 0,
+    "B_tier_total": 70,
+    "B_tier_verified": 0,
+    "C_tier_total": 68,
+    "C_tier_verified": 0,
+    "D_tier_total": 30,
+    "D_tier_verified": 0,
+    "N_tier_total": 8,
+    "N_tier_verified": 0,
+    "grand_total": 239,
+    "grand_verified": 3
+  }
+}
