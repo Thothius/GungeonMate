@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/gun.dart';
@@ -67,7 +67,7 @@ class _OutgoingRequest {
 /// One instance lives for the whole app lifetime, created in `main.dart`
 /// and exposed via Provider. `idle` until the user enters the
 /// multiplayer screen and picks a role.
-class MultiplayerSession extends ChangeNotifier {
+class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
   final MultiplayerService _service;
   RunProvider _runProvider;
 
@@ -236,6 +236,7 @@ class MultiplayerSession extends ChangeNotifier {
   MultiplayerSession(this._service, this._runProvider) {
     _eventSub = _service.events.listen(_onServiceEvent);
     _runProvider.addListener(_onRunChanged);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   /// Update the RunProvider reference (used by ProxyProvider when the
@@ -857,6 +858,7 @@ class MultiplayerSession extends ChangeNotifier {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _eventSub?.cancel();
     _runProvider.removeListener(_onRunChanged);
     _broadcastDebounce?.cancel();
@@ -874,6 +876,23 @@ class MultiplayerSession extends ChangeNotifier {
     showReconnectHubNotifier.dispose();
     unawaited(_service.dispose());
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // BUG-043: When the app returns to foreground after being backgrounded
+    // (OS doze mode stops Dart timers), trigger an immediate reconnect
+    // attempt if we were disconnected and auto-reconnect was stalled.
+    // Without this, the user has to wait for the next scheduled timer
+    // (which may be far in the future or already expired during background).
+    if (state == AppLifecycleState.resumed &&
+        _status == MpStatus.disconnected &&
+        canReconnect &&
+        !_busyTransition) {
+      _log('App resumed — triggering immediate reconnect attempt...');
+      _cancelAutoReconnect();
+      _startAutoReconnect();
+    }
   }
 
   // ---- Outgoing operations (called by UI) ------------------------------
@@ -1652,7 +1671,18 @@ class MultiplayerSession extends ChangeNotifier {
     _autoReconnectTimer = Timer(delay, () {
       _autoReconnectTimer = null;
       if (_status != MpStatus.disconnected) return;
-      if (_busyTransition) return;
+      // BUG-042: If a previous reconnect() is still running (800ms native
+      // radio cooldown + async permission checks), reschedule a short
+      // retry instead of bailing — otherwise the auto-reconnect loop
+      // dies silently and the user can never reconnect.
+      if (_busyTransition) {
+        _log('Auto-reconnect: previous attempt still busy — retrying in 2s...');
+        _autoReconnectTimer = Timer(
+          const Duration(seconds: 2),
+          _tryAutoReconnect,
+        );
+        return;
+      }
       // Try to reconnect using the last known role/character
       _log(
         'Executing scheduled auto-reconnect attempt #$_autoReconnectAttempts...',
