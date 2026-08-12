@@ -29,7 +29,7 @@ class QualityBadge extends StatefulWidget {
     switch (q.toUpperCase()) {
       case 'S':
       case '1S':
-        return const Color(0xFFFFD700); // Bright premium gold instead of dark near-black
+        return const Color(0xFF1A1A1A); // Near-black pill — golden glow animates around it
       case 'A':
         return const Color(0xFFE53935); // red
       case 'B':
@@ -126,7 +126,7 @@ class _QualityBadgeState extends State<QualityBadge>
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFFFFFF).withValues(alpha: 0.3 + 0.4 * t), // Silver/white glow
+                color: const Color(0xFFFFD700).withValues(alpha: 0.25 + 0.45 * t), // Golden glow
                 blurRadius: 4 + 8 * t,
                 spreadRadius: 0.5 + t,
               ),

@@ -54,7 +54,8 @@ class ItemDetailHeader extends StatelessWidget {
         : (isActive ? Icons.flash_on : Icons.inventory_2_outlined);
 
     final tags = <Widget>[
-      _TagChip(icon: typeIcon, label: typeLabel, color: typeColor),
+      if (!isGun)
+        _TagChip(icon: typeIcon, label: typeLabel, color: typeColor),
       for (final e in elements)
         _TagChip(icon: e.icon, label: e.label, color: e.color),
       if (chestColor.isNotEmpty) _ChestChip(chestColor: chestColor),
@@ -382,14 +383,14 @@ class _ChestChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.inventory_2_outlined, size: 14, color: color),
+          Icon(Icons.inventory_2_outlined, size: 14, color: isS ? Colors.white70 : color),
           const SizedBox(width: 5),
           GoopText(
             'Chest ',
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: color.withValues(alpha: 0.85),
+              color: isS ? Colors.white : color.withValues(alpha: 0.85),
             ),
           ),
           Container(
