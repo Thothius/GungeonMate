@@ -6,17 +6,26 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
-## v1.8.39 — Bugfixes: Synergy Data, MP Reconnect Feedback, Quality Cleanup (August 12, 2026)
-**Build:** 78
+## v2.0.0 — 🔥 BULLET HELL EDITION (August 2026)
+**Build:** 79
 
-### Changes
+> **The big one.** A branded milestone release bundling the v1.8.39 hotfixes together with the upcoming UX/visual rework (BUG-035–039) under one banner. The v1.8.39 patch fixes are folded in — no separate v1.8.39 ship. See `docs/bullet_hell_edition_plan.md` for the full edition scope and styling direction.
+
+### Landed so far
 - **BUG-017 (HIGH):** `Max Pane` synergy in `assets/data/synergies.json` listed only `Glass Cannon` in its `items` array, but the effect text references both `Glass Cannon` and `Glass Guon Stone`. `matchesItems()` requires all listed items, so the synergy never flagged active. Added `Glass Guon Stone` to the array.
 - **BUG-019 (HIGH):** `mp_request_listener.dart` closed the "Connection lost" drop dialog silently on reconnect — no snackbar, no haptic. Now distinguishes a real reconnect (status → `connected`/`handshaking`) from a teardown (status → `idle`/`error`) and shows a floating "Connection restored — sync resumed" snackbar with `Haptics.success()` only on the former.
 - **BUG-020 (MEDIUM):** 36 entries across `guns.json` (19) and `items.json` (17) used `"quality": "1S"` instead of `"S"` — a data pipeline artifact that surfaced as "1S" in UI metadata chips. Global replace to `"S"`. Simplified the `_qualityOrder` map in `browse_screen.dart` (removed the `'1S': 0` alias).
 
-### Verification
-- `node -e JSON.parse(...)` confirms all 3 modified JSON files are well-formed.
-- `flutter analyze` on modified Dart files (pending — see bughunt step).
+### Coming in the edition (in progress)
+- **BUG-035 (UX):** PeriodicTile gun panel rework — gun type below title + RANGE on the periodic grid.
+- **BUG-036 (UX):** Active run HeaderMenu — quick "Reset Player Items" + Settings moved to bottom section.
+- **BUG-037 (UX):** Remove MP Summary panel/tab.
+- **BUG-038 (HIGH):** Unicorn theme particles + palette selector + per-palette particle previews.
+- **BUG-039 (MEDIUM):** S-tier chest/quality colors — revert to black pill + white text + gold glow.
+
+### Verification (landed changes)
+- `node -e JSON.parse(...)` confirms all modified JSON files are well-formed.
+- `flutter analyze` on modified Dart files — see bughunt step.
 
 ---
 

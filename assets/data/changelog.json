@@ -1,13 +1,13 @@
 [
   {
-    "version": "v1.8.39",
-    "title": "🐛 Bugfixes: Synergy Data, MP Reconnect Feedback, Quality Cleanup",
-    "date": "August 12, 2026",
+    "version": "v2.0.0",
+    "title": "🔥 BULLET HELL EDITION",
+    "date": "August 2026",
     "items": [
-      "Fixed 'Max Pane' synergy never flagging active — it required both Glass Cannon and Glass Guon Stone but only listed Glass Cannon in its items array. Now correctly activates when both are owned.",
-      "Multiplayer reconnect now shows a brief 'Connection restored — sync resumed' snackbar with a success haptic when the link comes back, instead of silently closing the drop dialog.",
-      "Replaced 36 'quality: 1S' values with 'S' across guns.json (19) and items.json (17). The '1' prefix was a data pipeline artifact that surfaced as '1S' in UI metadata chips.",
-      "Simplified the Browse quality-sort special case — the '1S' alias is no longer needed in the order map."
+      "💥 Max Pane synergy fixed — now correctly activates when you hold both Glass Cannon and Glass Guon Stone. It was listed with only Glass Cannon in its items array, so the synergy never flagged active. Both items now required, as the effect text always implied.",
+      "🔗 Multiplayer reconnect now announces itself — a floating 'Connection restored — sync resumed' snackbar fires with a success haptic the moment the link comes back, instead of silently closing the drop dialog. Teardowns (disconnect/cancel) stay quiet so you only hear from it on a real recovery.",
+      "✨ Quality tier cleanup — 36 entries across guns (19) and items (17) were showing '1S' instead of 'S' in UI metadata chips, a data-pipeline artifact. All corrected to 'S'; the Browse quality-sort special case simplified.",
+      "🎯 More fixes incoming as part of the Bullet Hell Edition rollout — see the edition plan for the full lineup."
     ]
   },
   {

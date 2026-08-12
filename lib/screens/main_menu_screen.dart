@@ -374,7 +374,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.8.39',
+                    'v2.0.0',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -442,7 +442,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                         Icon(Icons.history_edu_rounded, size: 16, color: Color(0xFFFFD54F)),
                         SizedBox(width: 7),
                         GoopText(
-                          'Changelog (v1.8.39)',
+                          'Changelog (v2.0.0)',
                           style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -496,7 +496,7 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.8.39 — Synergy Data Fix + MP Reconnect Feedback + Quality Cleanup',
+                            'v2.0.0 — BULLET HELL EDITION',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
