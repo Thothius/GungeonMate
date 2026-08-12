@@ -414,11 +414,9 @@ class _PeriodicTileState extends State<PeriodicTile>
           );
 
     return Row(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        dpsBadge,
-        if (dps.isNotEmpty && range.isNotEmpty) const SizedBox(width: 4),
-        rangeBadge,
+        Expanded(child: Center(child: dpsBadge)),
+        Expanded(child: Center(child: rangeBadge)),
       ],
     );
   }

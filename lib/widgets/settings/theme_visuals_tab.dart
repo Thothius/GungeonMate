@@ -236,6 +236,20 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                       ),
                       const SizedBox(height: 10),
 
+                      // Inventory Font Size — moved here from Inventory section
+                      // so both font size controls live together.
+                      _buildCompactSliderRow(
+                        'Inventory Font Size',
+                        '${prefs.inventoryFontSize.toStringAsFixed(0)} pt',
+                        prefs.inventoryFontSize,
+                        6.0,
+                        20.0,
+                        14,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setInventoryFontSize(v),
+                      ),
+                      const SizedBox(height: 10),
+
                       // Compact Font Weight Bias Slider
                       _buildCompactSliderRow(
                         'Weight Bias',
@@ -544,18 +558,6 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                           ),
                         ),
                         const Divider(color: Colors.white12, height: 20),
-                        // Inventory font size slider
-                        _buildCompactSliderRow(
-                          'Inventory Font Size',
-                          '${prefs.inventoryFontSize.toStringAsFixed(0)} pt',
-                          prefs.inventoryFontSize,
-                          6.0,
-                          20.0,
-                          14,
-                          flair.headlineStat,
-                          (v) => VisualPrefs.setInventoryFontSize(v),
-                        ),
-                        const SizedBox(height: 10),
                         // Periodic grid column count
                         Align(
                           alignment: Alignment.centerLeft,
