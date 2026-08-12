@@ -9,20 +9,22 @@ All production APK builds are archived in `../app-releases/` with proper version
 ## v1.9.0 — 🔥 BULLET HELL EDITION (August 2026)
 **Build:** 79
 
-> **The big one.** A branded milestone release bundling the v1.8.39 hotfixes together with the upcoming UX/visual rework (BUG-035–039) under one banner. The v1.8.39 patch fixes are folded in — no separate v1.8.39 ship. See `docs/bullet_hell_edition_plan.md` for the full edition scope and styling direction.
+> **The big one.** A branded milestone release bundling the v1.8.39 hotfixes together with the UX/visual rework (BUG-035–039) and feature upgrades under one banner. The v1.8.39 patch fixes are folded in — no separate v1.8.39 ship. See `docs/bullet_hell_edition_plan.md` for the full edition scope and styling direction.
 
-### Landed so far
+### Changes
 - **NEW FEATURE — Bullet Hell codex page:** A themed special page under the Codex tab (6th tab, fire icon). Shows the official `Bullethell_header.png` hero image with a "CHAMBER 6 / BULLET HELL" title overlay, then scrollable dark-neon sections for: Lore & Entry (access trigger, the descent), Survival — The "No Loot" Rule (resource starvation, drop reliance, high jammed rate), The Three-Loop Layout (junction 1/2/3 cards + boss door rule), Hazards & Enemies (flesh cubes, shotgrubs, environmental traps), and The Boss: The Lich (three numbered phase cards). Includes a wiki.gg external link. Built in `lib/screens/bullet_hell_codex_screen.dart`; tab wired in `codex_screen.dart`; image at `assets/images/codex/Bullethell_header.png`.
 - **BUG-017 (HIGH):** `Max Pane` synergy in `assets/data/synergies.json` listed only `Glass Cannon` in its `items` array, but the effect text references both `Glass Cannon` and `Glass Guon Stone`. `matchesItems()` requires all listed items, so the synergy never flagged active. Added `Glass Guon Stone` to the array.
 - **BUG-019 (HIGH):** `mp_request_listener.dart` closed the "Connection lost" drop dialog silently on reconnect — no snackbar, no haptic. Now distinguishes a real reconnect (status → `connected`/`handshaking`) from a teardown (status → `idle`/`error`) and shows a floating "Connection restored — sync resumed" snackbar with `Haptics.success()` only on the former.
 - **BUG-020 (MEDIUM):** 36 entries across `guns.json` (19) and `items.json` (17) used `"quality": "1S"` instead of `"S"` — a data pipeline artifact that surfaced as "1S" in UI metadata chips. Global replace to `"S"`. Simplified the `_qualityOrder` map in `browse_screen.dart` (removed the `'1S': 0` alias).
-
-### Coming in the edition (in progress)
-- **BUG-035 (UX):** PeriodicTile gun panel rework — gun type below title + RANGE on the periodic grid.
-- **BUG-036 (UX):** Active run HeaderMenu — quick "Reset Player Items" + Settings moved to bottom section.
-- **BUG-037 (UX):** Remove MP Summary panel/tab.
-- **BUG-038 (HIGH):** Unicorn theme particles + palette selector + per-palette particle previews.
-- **BUG-039 (MEDIUM):** S-tier chest/quality colors — revert to black pill + white text + gold glow.
+- **BUG-035 (UX):** PeriodicTile gun panel rework — gun type now sits as a centered subtitle below the item name instead of a tiny corner tag. RANGE is now shown alongside DPS in the bottom-center badge. Tile aspect ratio adjusted to fit the new subtitle row.
+- **BUG-036 (UX):** Active run HeaderMenu — "Reset P1 Items" (and "Reset P2 Items" in coop) now available as a quick action directly in the menu. Settings moved to the bottom section so the top prioritizes in-run actions. Confirm dialog shared between menu and Settings Run tab.
+- **BUG-037 (UX):** Removed the Multiplayer Summary tab from the MP header — the P1/P2 header is now cleaner with just the two player tabs. Summary page code left dormant on disk.
+- **BUG-038 (HIGH):** Unicorn theme particles fixed — auto-enables unicorn sparkle particles with per-palette colors. Palette selector no longer requires horizontal scrolling (all 6 visible in a wrap layout). ParticleField gained a `colorsOverride` param for per-palette color injection.
+- **BUG-039 (MEDIUM):** S-tier quality badge reverted to its documented design — black pill, white letter, animated golden glow. S chest chip label and icon now white instead of dark-on-dark.
+- **Feature — Stat-group tag upgrade:** Combat/Handling/Meta labels in the gun detail screen are now bigger (15px, w800) and color-coded. Each group gets a signature accent color that themes can override via `ThemeFlair.statGroupCombat/Handling/Meta`. Filled-pill header for filled-chip themes, accent-bar for minimalist themes.
+- **Feature — Quick theme selection + particle streamlining:** Every visible theme now auto-binds a curated particle preset (Forge Master→embers, Robot's Core→casings, Custom→cosmic stars). Theme picker has a quick-access strip of 5 tappable theme circles + a horizontal particle preset strip for instant effect switching. Applying a theme returns to the launch point instead of kicking to home. Palette quick-launch button on the main menu.
+- **Feature — Compact combined Settings:** The old 3-tab Settings (VISUALS / RUN / APP) is now 2 tabs (VISUALS / RUN & APP). The Run & App tab uses a compact 2-column grid of action tiles grouped into RUN SESSION, INVENTORY & DATA, and DANGER ZONE. Old AppTab left dormant on disk.
+- **Main menu cleanup:** Removed Codex button and Settings gear from the home screen. Codex and Settings remain reachable from the active-run gear menu. Character select grid changed from 2-column to 4-column for faster picking.
 
 ### Verification (landed changes)
 - `node -e JSON.parse(...)` confirms all modified JSON files are well-formed.
