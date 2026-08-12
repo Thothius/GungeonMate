@@ -37,11 +37,9 @@ class DashboardSwiper extends StatefulWidget {
 
 class _DashboardSwiperState extends State<DashboardSwiper> {
   int _selectedIndex = 0;
-  PageController? _pageController;
 
   @override
   void dispose() {
-    _pageController?.dispose();
     super.dispose();
   }
 
@@ -207,9 +205,6 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
     // Clamp selectedIndex if dashboards changed
     if (_selectedIndex >= tabs.length) _selectedIndex = 0;
 
-    // Lazy-init PageController when first dashboard appears
-    _pageController ??= PageController(initialPage: _selectedIndex);
-
     Widget extractChild(Widget sliver) {
       if (sliver is SliverToBoxAdapter && sliver.child != null) {
         return sliver.child!;
@@ -221,9 +216,6 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
       );
     }
 
-    final screenHeight = MediaQuery.of(context).size.height;
-    final panelHeight = screenHeight * 0.22;
-
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
@@ -231,7 +223,7 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
           decoration: BoxDecoration(
             color: AppTheme.flair.scaffold.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(14),
-            
+
           ),
           child: Column(
             children: [
@@ -249,34 +241,24 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
                       isActive: isActive,
                       onTap: () {
                         Haptics.selection();
-                        _pageController!.animateToPage(
-                          i,
-                          duration: const Duration(milliseconds: 260),
-                          curve: Curves.easeOut,
-                        );
+                        setState(() => _selectedIndex = i);
                       },
                     );
                   }),
                 ),
               ),
-              // Swipeable content panel
-              SizedBox(
-                height: panelHeight,
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (i) {
-                    Haptics.selection();
-                    setState(() => _selectedIndex = i);
-                  },
-                  children: tabs
-                      .map((t) => SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                              child: extractChild(t.widget),
-                            ),
-                          ))
-                      .toList(),
+              // Content panel — sizes to current tab's content, no scroll.
+              // AnimatedSwitcher cross-fades between tabs.
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  child: KeyedSubtree(
+                    key: ValueKey(_selectedIndex),
+                    child: extractChild(tabs[_selectedIndex].widget),
+                  ),
                 ),
               ),
             ],

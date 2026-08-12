@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
-import '../../models/gun.dart';
 import '../../services/goop_talk_engine.dart';
 
 
@@ -13,16 +12,12 @@ class RobotDashboardSliver extends StatefulWidget {
 }
 
 class RobotDashboardSliverState extends State<RobotDashboardSliver> {
-  bool _terminalExpanded = true;
   bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
-    final player = p.runState.main;
     final double damageBoost = (p.robotJunk + (p.robotLies ? 1 : 0)) * 5.0 + (p.robotGoldJunk ? 500.0 : 0.0);
-    final double multiplier = 1.0 + damageBoost / 100.0;
-    final guns = player.guns;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -195,12 +190,10 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                 ],
               ),
 
-              // Expandable Damage Terminal
-              if (guns.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                _buildTerminalToggle(),
-                if (_terminalExpanded) _buildDamageTerminal(guns, multiplier),
-              ],
+              // Damage Terminal hidden — takes too much vertical space in
+              // the dashboard panel. The +DMG% badge in the header already
+              // shows the boost. Users can use the universal Damage Calculator
+              // toggle in settings for per-gun breakdowns.
               ],
             ],
           ),
@@ -265,226 +258,6 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTerminalToggle() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFF001100),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.green.withValues(alpha: 0.3), width: 1.0),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.terminal_rounded, size: 16, color: Colors.green.withValues(alpha: 0.8)),
-          const SizedBox(width: 8),
-          GoopText(
-            'DAMAGE CALCULATOR',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w900,
-              color: Colors.green.withValues(alpha: 0.8),
-              letterSpacing: 0.8,
-              fontFamily: 'monospace',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDamageTerminal(List<Gun> guns, double multiplier) {
-    return Container(
-      margin: const EdgeInsets.only(top: 6),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF000800),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.green.withValues(alpha: 0.25), width: 1.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Terminal header
-          Row(
-            children: [
-              GoopText(
-                '> ROBOT_DMG_CALC v1.0',
-                style: TextStyle(
-                  fontSize: 9,
-                  color: Colors.green.withValues(alpha: 0.5),
-                  fontFamily: 'monospace',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              GoopText(
-                '×${multiplier.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: 9,
-                  color: Colors.greenAccent,
-                  fontFamily: 'monospace',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          // Column headers
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: GoopText(
-                    'WEAPON',
-                    style: TextStyle(
-                      fontSize: 8,
-                      color: Colors.green.withValues(alpha: 0.4),
-                      fontFamily: 'monospace',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: GoopText(
-                    'BASE',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 8,
-                      color: Colors.green.withValues(alpha: 0.4),
-                      fontFamily: 'monospace',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: GoopText(
-                    'ROBOT',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 8,
-                      color: Colors.green.withValues(alpha: 0.4),
-                      fontFamily: 'monospace',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: GoopText(
-                    '╬ö',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize: 8,
-                      color: Colors.green.withValues(alpha: 0.4),
-                      fontFamily: 'monospace',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Divider line
-          Container(height: 1, color: Colors.green.withValues(alpha: 0.15)),
-          const SizedBox(height: 4),
-          // Gun rows
-          for (final gun in guns)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: GoopText(
-                      gun.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.green.withValues(alpha: 0.85),
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: GoopText(
-                      gun.dpsValue.toStringAsFixed(1),
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.green.withValues(alpha: 0.6),
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: GoopText(
-                      (gun.dpsValue * multiplier).toStringAsFixed(1),
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.greenAccent,
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: GoopText(
-                      '+${(gun.dpsValue * multiplier - gun.dpsValue).toStringAsFixed(1)}',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.green.withValues(alpha: 0.5),
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          // Terminal footer
-          const SizedBox(height: 6),
-          Container(height: 1, color: Colors.green.withValues(alpha: 0.15)),
-          const SizedBox(height: 4),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GoopText(
-                'TOTAL DPS',
-                style: TextStyle(
-                  fontSize: 9,
-                  color: Colors.green.withValues(alpha: 0.5),
-                  fontFamily: 'monospace',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GoopText(
-                '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.greenAccent,
-                  fontFamily: 'monospace',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
