@@ -6,6 +6,7 @@ import '../../services/elemental_tagger.dart';
 import '../../services/haptics.dart';
 import '../game_icon.dart';
 import '../quality_badge.dart';
+import '../../utils/responsive.dart';
 
 class ItemDetailHeader extends StatelessWidget {
   final String name;
@@ -42,6 +43,7 @@ class ItemDetailHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final isFav = context.watch<RunProvider>().isFavourite(name);
     final favColor = isFav ? Colors.pinkAccent : Colors.white38;
+    final sf = Responsive.factor(context);
 
     // Build all tag chips in one list for a single inline Wrap
     final typeLabel = isGun
@@ -144,8 +146,8 @@ class ItemDetailHeader extends StatelessWidget {
           GoopText(
             name,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 28,
+            style: TextStyle(
+              fontSize: 28 * sf,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
             ),

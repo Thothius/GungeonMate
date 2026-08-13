@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/responsive.dart';
 
 /// Themed Codex page for the Resourceful Rat — the omnipresent thief,
 /// shortcut merchant, and secret boss of the Gungeon. Covers stealing
@@ -305,6 +306,7 @@ class RatCodexScreen extends StatelessWidget {
 class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final sf = Responsive.factor(context);
     return Stack(
       children: [
         ClipRRect(
@@ -369,7 +371,7 @@ class _Header extends StatelessWidget {
               GoopText(
                 'THE RESOURCEFUL RAT',
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 28 * sf,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 3,
                   color: Colors.white,

@@ -12,6 +12,7 @@ import '../services/haptics.dart';
 import '../widgets/wiki_sections.dart';
 import '../widgets/item_detail/header.dart';
 import '../widgets/item_detail/gun_stats.dart';
+import '../utils/responsive.dart';
 import '../widgets/item_detail/item_body.dart';
 import '../widgets/item_detail/synergies_section.dart';
 import '../widgets/item_detail/destroy_banner.dart';
@@ -53,6 +54,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final item = widget.item;
     final ownerSlot = widget.ownerSlot;
     final runProvider = context.watch<RunProvider>();
+    final sf = Responsive.factor(context);
+    final actionBtnSize = 68 * sf;
     final name = gun?.name ?? item!.name;
     final quality = gun?.quality ?? item!.quality;
     final subtitle = gun != null ? gun.type : item!.type;
@@ -207,13 +210,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               // expected it to jump to a character-specific screen.
               Expanded(
                 child: SizedBox(
-                  height: 68,
+                  height: actionBtnSize,
                   child: OutlinedButton.icon(
-                    icon: const Icon(Icons.arrow_back, size: 24),
-                    label: const GoopText(
+                    icon: Icon(Icons.arrow_back, size: 24 * sf),
+                    label: GoopText(
                       'Back',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16 * sf,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.3,
                       ),
@@ -237,8 +240,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               const SizedBox(width: 10),
               // Themed Wiki button inside the button group
               SizedBox(
-                width: 68,
-                height: 68,
+                width: actionBtnSize,
+                height: actionBtnSize,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.zero,
@@ -258,7 +261,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   },
                   child: Icon(
                     Icons.open_in_browser_rounded,
-                    size: 26,
+                    size: 26 * sf,
                     color: AppTheme.flair.primary,
                   ),
                 ),
@@ -266,8 +269,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               const SizedBox(width: 10),
               // Compact action square on the right (trash if in run, + if not)
               SizedBox(
-                width: 68,
-                height: 68,
+                width: actionBtnSize,
+                height: actionBtnSize,
                 child: isInRun
                     ? OutlinedButton(
                         style: OutlinedButton.styleFrom(

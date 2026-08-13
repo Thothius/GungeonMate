@@ -1,5 +1,19 @@
 [
   {
+    "version": "v1.9.4",
+    "title": "📱 Responsive Polish — Final Pass",
+    "date": "August 2026",
+    "items": [
+      "📱 Browse screen tab bar — tab height, icon size now scale with screen width.",
+      "📱 Item detail screen — Back/Wiki/Action button sizes and font now scale with screen width.",
+      "📱 Multiplayer lobby — Start Hosting / Find Host button height scales with screen width.",
+      "📱 Settings theme visuals — all 4 action buttons (Choose Theme, Particle Preset, Glow Color, Font) height and font sizes scale with screen width. Theme label font scales too.",
+      "📱 Item detail header — item/gun name title font scales with screen width.",
+      "📱 Codex special page headers — all 6 special page title fonts (Paradox, Gunslinger, Bullet Hell, Drake, Challenge Mode, Rat) scale with screen width.",
+      "📱 Character select grid — column count adapts: 3 on <360dp, 4 on <500dp, 5 on 500dp+ (was fixed at 4)."
+    ]
+  },
+  {
     "version": "v1.9.3",
     "title": "📱 Responsive Layout — Bigger Screens",
     "date": "August 2026",

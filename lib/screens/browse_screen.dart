@@ -10,6 +10,7 @@ import 'item_detail_screen.dart';
 import 'favourites_screen.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
+import '../utils/responsive.dart';
 import '../widgets/browse/any_entry.dart';
 import '../widgets/browse/browse_pills.dart';
 import '../widgets/browse/browse_row.dart';
@@ -147,6 +148,8 @@ class _BrowseScreenState extends State<BrowseScreen>
 
   Widget _buildScaffold(
       BuildContext context, RunProvider p, bool isAll, bool isGuns, bool isFavs, bool isCoop) {
+    final sf = Responsive.factor(context);
+    final tabHeight = 52 * sf;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -189,27 +192,27 @@ class _BrowseScreenState extends State<BrowseScreen>
               dividerHeight: 0,
               tabs: [
                 Tab(
-                  height: 52,
+                  height: tabHeight,
                   iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: const Icon(Icons.apps, size: 20),
+                  icon: Icon(Icons.apps, size: 20 * sf),
                   text: isCoop ? 'All · P2' : 'All',
                 ),
-                const Tab(
-                  height: 52,
-                  iconMargin: EdgeInsets.only(bottom: 2),
-                  icon: Icon(Icons.gps_fixed, size: 20),
+                Tab(
+                  height: tabHeight,
+                  iconMargin: const EdgeInsets.only(bottom: 2),
+                  icon: Icon(Icons.gps_fixed, size: 20 * sf),
                   text: 'Guns',
                 ),
-                const Tab(
-                  height: 52,
-                  iconMargin: EdgeInsets.only(bottom: 2),
-                  icon: Icon(Icons.inventory_2_outlined, size: 20),
+                Tab(
+                  height: tabHeight,
+                  iconMargin: const EdgeInsets.only(bottom: 2),
+                  icon: Icon(Icons.inventory_2_outlined, size: 20 * sf),
                   text: 'Items',
                 ),
-                const Tab(
-                  height: 52,
-                  iconMargin: EdgeInsets.only(bottom: 2),
-                  icon: Icon(Icons.favorite, size: 20),
+                Tab(
+                  height: tabHeight,
+                  iconMargin: const EdgeInsets.only(bottom: 2),
+                  icon: Icon(Icons.favorite, size: 20 * sf),
                   text: 'Favs',
                 ),
               ],

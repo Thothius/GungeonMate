@@ -5,6 +5,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../widgets/particle_engine.dart';
 import '../../screens/theme_picker_screen.dart';
 import '../../utils/fast_route.dart';
+import '../../utils/responsive.dart';
 import 'swipe_picker.dart';
 
 enum _VisualCategory { font, particles, glow, inventory, dice }
@@ -21,6 +22,8 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
 
   @override
   Widget build(BuildContext context) {
+    final sf = Responsive.factor(context);
+    final btnHeight = 56 * sf;
     return ListenableBuilder(
       listenable: Listenable.merge([
         AppTheme.notifier,
@@ -96,8 +99,8 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                               const SizedBox(height: 4),
                               GoopText(
                                 activeTheme.label.toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 20,
+                                style: TextStyle(
+                                  fontSize: 20 * sf,
                                   fontWeight: FontWeight.w900,
                                   color: Colors.white,
                                   letterSpacing: 0.5,
@@ -122,7 +125,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                     // Choose Theme Action Button — 2x height
                     SizedBox(
                       width: double.infinity,
-                      height: 56,
+                      height: btnHeight,
                       child: FilledButton.icon(
                         icon: const Icon(Icons.tune_rounded, size: 20),
                         label: const GoopText(
@@ -203,7 +206,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                                 GoopText(
                                   font.label,
                                   style: font.textStyle.copyWith(
-                                    fontSize: 16,
+                                    fontSize: 16 * sf,
                                     fontWeight: FontWeight.bold,
                                     color: isSelected ? flair.primary : Colors.white70,
                                   ),
@@ -350,7 +353,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                           items: GlowEffect.values,
                           value: prefs.particleGlowEffect,
                           onChanged: (e) => VisualPrefs.setParticleGlowEffect(e),
-                          height: 56,
+                          height: btnHeight,
                           itemBuilder: (effect, isSelected) => Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
@@ -530,7 +533,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                           items: InventoryDisplayMode.values,
                           value: prefs.inventoryDisplayMode,
                           onChanged: (m) => VisualPrefs.setInventoryDisplayMode(m),
-                          height: 56,
+                          height: btnHeight,
                           itemBuilder: (mode, isSelected) => Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
@@ -571,7 +574,7 @@ class ThemeVisualsTabState extends State<ThemeVisualsTab> {
                           items: const [0, 2, 3, 4],
                           value: prefs.periodicGridColumnCount,
                           onChanged: (c) => VisualPrefs.setPeriodicGridColumnCount(c),
-                          height: 56,
+                          height: btnHeight,
                           itemBuilder: (cols, isSelected) => Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(

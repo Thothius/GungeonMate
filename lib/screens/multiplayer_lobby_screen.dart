@@ -15,6 +15,7 @@ import '../services/multiplayer_session.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
+import '../utils/responsive.dart';
 import '../widgets/avatar_aura.dart';
 import 'character_select_screen.dart';
 import 'home_screen.dart';
@@ -258,6 +259,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     final runProvider = context.watch<RunProvider>();
     final cultist = runProvider.gungeoneerByName('The Cultist') ??
         runProvider.gungeoneerByName('Cultist');
+    final sf = Responsive.factor(context);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -377,7 +379,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               // Start button
               SizedBox(
                 width: double.infinity,
-                height: 54,
+                height: 54 * sf,
                 child: FilledButton.icon(
                   icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth),
                   label: GoopText(_isMain ? 'Start Hosting' : 'Find Host'),

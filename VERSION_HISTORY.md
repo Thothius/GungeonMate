@@ -6,6 +6,22 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.4 — 📱 Responsive Polish — Final Pass (August 2026)
+**Build:** 83
+
+> Final responsive scaling pass across remaining screens.
+
+### Changes
+- **FIX — Browse screen tab bar:** Tab height (52→52*sf) and icon sizes (20→20*sf) now scale with screen width.
+- **FIX — Item detail screen:** Back/Wiki/Action button sizes (68→68*sf) and Back label font (16→16*sf) scale with screen width.
+- **FIX — Multiplayer lobby:** Start Hosting / Find Host button height (54→54*sf) scales with screen width.
+- **FIX — Settings theme visuals:** All 4 action buttons (Choose Theme, Particle Preset, Glow Color, Font) height (56→56*sf) and theme label font (20→20*sf) scale with screen width. Font picker label font (16→16*sf) scales too.
+- **FIX — Item detail header:** Item/gun name title font (28→28*sf) scales with screen width.
+- **FIX — Codex special page headers:** All 6 special page title fonts (28→28*sf) scale with screen width.
+- **FIX — Character select grid:** Column count adapts — 3 on <360dp, 4 on <500dp, 5 on 500dp+ (was fixed at 4).
+
+---
+
 ## v1.9.3 — 📱 Responsive Layout for Bigger Screens (August 2026)
 **Build:** 82
 
