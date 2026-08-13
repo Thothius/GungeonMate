@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.3",
+    "title": "📱 Responsive Layout — Bigger Screens",
+    "date": "August 2026",
+    "items": [
+      "📱 NEW: Responsive scaling — all UI elements now scale proportionally to screen width. Baseline is 400dp (OnePlus 8). On wider screens (450dp+), buttons, fonts, tiles, and badges scale up up to 1.25x so they don't look tiny. On narrower screens, they scale down to 0.85x.",
+      "🔫 Periodic grid tiles — DPS/DMG/RNG badge font sizes, item name, and type subtitle now scale with screen width. Removed the textScaler clamp (0.8-1.05) that prevented fonts from growing on bigger screens.",
+      "🏠 Main menu buttons — Local Run and Multiplayer button heights, font sizes, and icon sizes now scale with screen width. Palette button and Changelog button also scale.",
+      "🎨 Theme picker — theme dot circles, theme name, tagline, flavour description, and Apply button all scale with screen width.",
+      "📋 Codex grid — column count now adapts: 3 columns on <360dp, 4 on <500dp, 6 on 500dp+ (was fixed at 4)."
+    ]
+  },
+  {
     "version": "v1.9.2",
     "title": "🎨 Particle Customization + Codex Nav + Fixes",
     "date": "August 2026",

@@ -490,8 +490,8 @@ class _CodexList extends StatelessWidget {
               },
               childCount: entries.length,
             ),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: MediaQuery.of(context).size.width < 360 ? 3 : MediaQuery.of(context).size.width < 500 ? 4 : 6,
               mainAxisSpacing: 6,
               crossAxisSpacing: 6,
               childAspectRatio: 0.82,

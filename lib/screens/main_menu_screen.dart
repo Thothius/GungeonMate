@@ -9,6 +9,7 @@ import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
+import '../utils/responsive.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -21,6 +22,10 @@ class MainMenuScreen extends StatefulWidget {
 class _MainMenuScreenState extends State<MainMenuScreen> {
   @override
   Widget build(BuildContext context) {
+    final sf = Responsive.factor(context);
+    final btnHeight = 54 * sf;
+    final btnFontSize = 16 * sf;
+    final btnIconSize = 24 * sf;
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -118,18 +123,18 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     child: IgnorePointer(
                       child: SizedBox(
                         width: double.infinity,
-                        height: 54,
+                        height: btnHeight,
                         child: FilledButton.icon(
                           onPressed: () {},
                           style: FilledButton.styleFrom(
                             elevation: 3,
                             shadowColor: const Color(0xFFFFD54F).withValues(alpha: 0.15),
                           ),
-                          icon: const Icon(Icons.play_arrow_rounded, size: 24),
-                          label: const GoopText(
+                          icon: Icon(Icons.play_arrow_rounded, size: btnIconSize),
+                          label: GoopText(
                             'Local Run',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: btnFontSize,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 1.2,
                             ),
@@ -151,7 +156,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     child: IgnorePointer(
                       child: SizedBox(
                         width: double.infinity,
-                        height: 54,
+                        height: btnHeight,
                         child: OutlinedButton.icon(
                           onPressed: () {},
                           style: OutlinedButton.styleFrom(
@@ -160,11 +165,11 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               width: 1.2,
                             ),
                           ),
-                          icon: const Icon(Icons.bluetooth_searching, size: 22),
-                          label: const GoopText(
+                          icon: Icon(Icons.bluetooth_searching, size: 22 * sf),
+                          label: GoopText(
                             'Multiplayer',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: btnFontSize,
                               fontWeight: FontWeight.w700,
                               letterSpacing: 1.2,
                             ),
@@ -175,7 +180,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.2',
+                    'v1.9.3',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -210,13 +215,13 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 },
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(8 * sf),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: Colors.white24, width: 1.2),
                   ),
-                  child: const Icon(Icons.palette_rounded, size: 16, color: Colors.pinkAccent),
+                  child: Icon(Icons.palette_rounded, size: 16 * sf, color: Colors.pinkAccent),
                 ),
               ),
             ),
@@ -232,20 +237,20 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   onTap: () => _showChangelogDialog(context),
                   borderRadius: BorderRadius.circular(20),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                    padding: EdgeInsets.symmetric(horizontal: 16 * sf, vertical: 9 * sf),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Colors.white24, width: 1.2),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.history_edu_rounded, size: 16, color: Color(0xFFFFD54F)),
-                        SizedBox(width: 7),
+                        Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
+                        SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.2)',
-                          style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
+                          'Changelog (v1.9.3)',
+                          style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
                     ),
@@ -298,7 +303,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.2 — BULLET HELL EDITION',
+                            'v1.9.3 — BULLET HELL EDITION',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -714,7 +719,7 @@ class _BulletHellHeadingState extends State<_BulletHellHeading>
                 const SizedBox(width: 8),
                 // Version tag
                 GoopText(
-                  'v1.9.2',
+                  'v1.9.3',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
+import '../utils/responsive.dart';
 import '../widgets/particle_engine.dart'
     show
         ParticlePreset,
@@ -122,6 +123,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   children: List.generate(modes.length, (i) {
                     final on = i == _index;
                     final f = AppTheme.flairFor(modes[i]);
+                    final sf = Responsive.factor(context);
                     return GestureDetector(
                       onTap: () {
                         _pc.animateToPage(
@@ -133,9 +135,9 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 280),
                         curve: Curves.easeOutCubic,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        width: on ? 32 : 22,
-                        height: on ? 32 : 22,
+                        margin: EdgeInsets.symmetric(horizontal: 5 * sf),
+                        width: (on ? 32 : 22) * sf,
+                        height: (on ? 32 : 22) * sf,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: f.scaffold,
@@ -157,8 +159,8 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                         ),
                         child: Center(
                           child: Container(
-                            width: on ? 14 : 10,
-                            height: on ? 14 : 10,
+                            width: (on ? 14 : 10) * sf,
+                            height: (on ? 14 : 10) * sf,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: f.primary,
@@ -342,11 +344,12 @@ class _ImmersiveThemePage extends StatelessWidget {
 
   Widget _buildPage(BuildContext context) {
     final f = AppTheme.flairFor(mode);
+    final sf = Responsive.factor(context);
 
     return Container(
       color: f.scaffold,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20 * sf),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -357,7 +360,7 @@ class _ImmersiveThemePage extends StatelessWidget {
               mode.label.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 28 * sf,
                 fontWeight: FontWeight.w900,
                 color: f.headlineStat,
                 letterSpacing: 4,
@@ -383,7 +386,7 @@ class _ImmersiveThemePage extends StatelessWidget {
               mode.tagline,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 12 * sf,
                 fontWeight: FontWeight.w500,
                 color: f.secondary.withValues(alpha: 0.7),
                 letterSpacing: 1.2,
@@ -404,12 +407,12 @@ class _ImmersiveThemePage extends StatelessWidget {
 
             // Flavour description — 1-2 sentences, italic, centered
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: EdgeInsets.symmetric(horizontal: 8 * sf),
               child: GoopText(
                 mode.whimsicalDescription,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 13 * sf,
                   fontWeight: FontWeight.w500,
                   height: 1.4,
                   fontStyle: FontStyle.italic,
@@ -516,10 +519,10 @@ class _ImmersiveThemePage extends StatelessWidget {
 
             // Apply button — the single call to action
             Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.only(bottom: 16 * sf),
               child: SizedBox(
                 width: double.infinity,
-                height: 52,
+                height: 52 * sf,
                 child: FilledButton(
                   onPressed: onApply,
                   style: FilledButton.styleFrom(
@@ -536,7 +539,7 @@ class _ImmersiveThemePage extends StatelessWidget {
                   child: GoopText(
                     isActive ? '✓ Active' : 'Use This Palette',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 15 * sf,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.2,
                     ),

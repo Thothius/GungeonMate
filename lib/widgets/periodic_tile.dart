@@ -12,6 +12,7 @@ import '../services/goop_talk_engine.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
+import '../utils/responsive.dart';
 
 /// Periodic-table inspired tile for Active Run inventory.
 ///
@@ -326,6 +327,7 @@ class _PeriodicTileState extends State<PeriodicTile>
     final dps = _corner;
     final range = _cleanStat(widget.gun!.range);
     if (dps.isEmpty && range.isEmpty) return const SizedBox.shrink();
+    final sf = Responsive.factor(context);
 
     final dpsBadge = dps.isEmpty
         ? const SizedBox.shrink()
@@ -347,7 +349,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                   GoopText(
                     dps,
                     style: TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 12.5 * sf,
                       fontWeight: FontWeight.w900,
                       color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
                       height: 1.1,
@@ -357,7 +359,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                   GoopText(
                     'DMG',
                     style: TextStyle(
-                      fontSize: 8,
+                      fontSize: 8 * sf,
                       fontWeight: FontWeight.w700,
                       color: widget.isTopDps
                           ? const Color(0xFFFFD700).withValues(alpha: 0.7)
@@ -391,8 +393,8 @@ class _PeriodicTileState extends State<PeriodicTile>
               children: [
                 GoopText(
                   range,
-                  style: const TextStyle(
-                    fontSize: 10,
+                  style: TextStyle(
+                    fontSize: 10 * sf,
                     fontWeight: FontWeight.w700,
                     color: Colors.white70,
                     height: 1.1,
@@ -401,8 +403,8 @@ class _PeriodicTileState extends State<PeriodicTile>
                 const SizedBox(width: 2),
                 GoopText(
                   'RNG',
-                  style: const TextStyle(
-                    fontSize: 7,
+                  style: TextStyle(
+                    fontSize: 7 * sf,
                     fontWeight: FontWeight.w700,
                     color: Colors.white54,
                     height: 1.1,
@@ -478,12 +480,10 @@ class _PeriodicTileState extends State<PeriodicTile>
   @override
   Widget build(BuildContext context) {
     final body = _buildBody(context);
-    final constrainedBody = MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaler: TextScaler.linear(MediaQuery.of(context).textScaler.scale(1).clamp(0.8, 1.05)),
-      ),
-      child: body,
-    );
+    // ponytail: removed the textScaler clamp (0.8–1.05) that prevented
+    // fonts from scaling on bigger screens. Font sizes are now scaled
+    // individually via Responsive.font() in _buildCard.
+    final constrainedBody = body;
     if (widget.onLongPress == null) {
       // No long-press wiring needed — the inner InkWell handles the tap
       // (and its haptic) by itself, no outer GestureDetector required.
@@ -567,6 +567,7 @@ class _PeriodicTileState extends State<PeriodicTile>
   Widget _buildCard(BuildContext context) {
     final prefs = VisualPrefs.notifier.value;
     final displayMode = prefs.inventoryDisplayMode;
+    final sf = Responsive.factor(context);
 
     final rawQColor = _qualityColor;
     final isS = _quality.toUpperCase() == 'S' || _quality.toUpperCase() == '1S';
@@ -857,7 +858,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                                         child: GoopText(
                                           _corner,
                                           style: TextStyle(
-                                            fontSize: 12.5,
+                                            fontSize: 12.5 * sf,
                                             fontWeight: FontWeight.w900,
                                             color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
                                             height: 1.1,
@@ -892,7 +893,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: prefs.inventoryFontSize,
+                          fontSize: prefs.inventoryFontSize * sf,
                           fontWeight: FontWeight.w600,
                           height: 1.15,
                         ),
@@ -905,7 +906,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 8.5,
+                            fontSize: 8.5 * sf,
                             fontWeight: FontWeight.w700,
                             color: _typeColor(),
                             letterSpacing: 0.3,

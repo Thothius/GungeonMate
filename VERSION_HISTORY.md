@@ -6,6 +6,20 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.3 — 📱 Responsive Layout for Bigger Screens (August 2026)
+**Build:** 82
+
+> UI elements now scale proportionally to screen width so they look right on bigger phones.
+
+### Changes
+- **NEW — Responsive scaling helper (`Responsive`):** Baseline is 400dp (OnePlus 8). Scale factor clamped to 0.85x–1.25x based on screen width. Used across main menu, theme picker, periodic tiles, and codex grid.
+- **FIX — Periodic grid tiles:** DPS/DMG/RNG badge font sizes, item name, and type subtitle now scale with screen width. Removed the `textScaler` clamp (0.8–1.05) that prevented fonts from growing on bigger screens.
+- **FIX — Main menu buttons:** Local Run and Multiplayer button heights (54→54*sf), font sizes (16→16*sf), and icon sizes now scale. Palette button and Changelog button also scale.
+- **FIX — Theme picker:** Theme dot circles (22/32px → scaled), theme name (28→28*sf), tagline, flavour description, and Apply button (52→52*sf) all scale with screen width.
+- **FIX — Codex grid:** Column count now adapts — 3 columns on <360dp, 4 on <500dp, 6 on 500dp+ (was fixed at 4 regardless of screen size).
+
+---
+
 ## v1.9.2 — 🎨 Particle Customization + Codex Nav + Fixes (August 2026)
 **Build:** 81
 
