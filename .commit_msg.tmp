@@ -1,0 +1,14 @@
+v1.9.10: BUG-022 synergy icons + BUG-046-050 dashboard/data fixes
+
+- BUG-022: 287 missing synergy icons filled with generic Synergy.png fallback
+  (108 unique sprites + 287 fallback = 395 total, no more letter placeholders)
+- BUG-046: Fix inverted _expanded variable in Junkan + 3 special gun dashboards
+  (rename to _collapsed, fix chevron direction, default expanded)
+- BUG-047: Add 4 missing Robot dashboard fields (Armor, Fireplace, Battery, Fuse Disarmer)
+- BUG-048: Rad Gun empty type -> "Semiautomatic"
+- BUG-049: Gunderfury garbage type -> "Variable", remove isGunderfury special case
+- BUG-050: Deck4rd + Mr. Accretion Jr. non-standard types -> "Semiautomatic"
+
+Generated with [Devin](https://devin.ai)
+
+Co-Authored-By: Devin <158243242+devin-ai-integration[bot]@users.noreply.github.com>

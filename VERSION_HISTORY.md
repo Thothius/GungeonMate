@@ -6,6 +6,21 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.10 — 🔧 Synergy Icons + Dashboard Fixes + Gun Type Data (August 2026)
+**Build:** 87
+
+> 6 bugs fixed: synergy icon coverage, dashboard expansion logic, Robot dashboard fields, gun type data.
+
+### Changes
+- **FIX (BUG-022) — Synergy icons:** All 395 synergies now have icons. 108 unique sprites + 287 using the generic blue synergy arrow as fallback. No more letter placeholders.
+- **FIX (BUG-046) — Dashboard expansion:** Junkan + 3 special gun dashboards (Gunderfury, Triple Gun, Evolver) — fixed inverted `_expanded` variable. Renamed to `_collapsed`, dashboards now start expanded, chevron points correct way.
+- **FIX (BUG-047) — Robot dashboard:** Added 4 missing tracked fields: Armor counter (+/-), Fireplace Extinguished toggle, Battery Bullets Synergy toggle, Fuse Disarmer toggle. All were persisted in RunProvider but had no UI.
+- **FIX (BUG-048) — Rad Gun type:** Empty `type` field set to "Semiautomatic".
+- **FIX (BUG-049) — Gunderfury type:** Garbage `type` field set to "Variable". Removed `isGunderfury` special case in `gun_stats.dart`.
+- **FIX (BUG-050) — Type normalization:** Deck4rd + Mr. Accretion Jr. non-standard type variants normalized to "Semiautomatic".
+
+---
+
 ## v1.9.9 — 🧹 Code Hygiene — Dead Code + Silent Error Logging (August 2026)
 **Build:** 86
 

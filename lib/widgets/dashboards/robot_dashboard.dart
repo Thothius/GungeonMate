@@ -174,7 +174,72 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
               ),
               const SizedBox(height: 8),
 
-              // Toggle row — full width, two big compact tap targets
+              // Armor counter — Robot starts with 6 armor, gains from HP ups
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.02),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GoopText(
+                          'ARMOR',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.cyanAccent,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        GoopText(
+                          'Hits before HP loss',
+                          style: TextStyle(fontSize: 9, color: Colors.white38),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                          icon: const Icon(Icons.remove_circle_outline, color: Colors.cyanAccent, size: 24),
+                          onPressed: p.robotArmor > 0 ? () => p.setRobotArmor(p.robotArmor - 1) : null,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            '${p.robotArmor}',
+                            style: const TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              height: 1.0,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                          icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent, size: 24),
+                          onPressed: () => p.setRobotArmor(p.robotArmor + 1),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+
+              // Toggle row 1 — Gold Junk + Lies
               Row(
                 children: [
                   Expanded(
@@ -197,6 +262,42 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 8),
+
+              // Toggle row 2 — Fireplace + Battery
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildCompactToggle(
+                      label: 'FIREPLACE OUT',
+                      subtitle: 'Extinguished',
+                      value: p.fireplaceExtinguished,
+                      activeColor: Colors.blueAccent,
+                      onChanged: p.setFireplaceExtinguished,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildCompactToggle(
+                      label: 'BATTERY',
+                      subtitle: 'Bullets synergy',
+                      value: p.batteryBulletsSynergy,
+                      activeColor: Colors.greenAccent,
+                      onChanged: p.setBatteryBulletsSynergy,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+
+              // Toggle row 3 — Fuse Disarmer (full width)
+              _buildCompactToggle(
+                label: 'FUSE DISARMER',
+                subtitle: 'Disables bomb fuses',
+                value: p.fuseDisarmer,
+                activeColor: Colors.orangeAccent,
+                onChanged: p.setFuseDisarmer,
               ),
 
               // Damage Terminal hidden — takes too much vertical space in

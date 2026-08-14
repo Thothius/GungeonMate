@@ -16,7 +16,7 @@ class JunkanDashboardSliver extends StatefulWidget {
 }
 
 class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
-  bool _expanded = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +119,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () { setState(() => _expanded = !_expanded); Haptics.selection(); },
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -163,7 +163,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
+                          Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],
@@ -173,7 +173,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _expanded
+                child: _collapsed
                   ? const SizedBox.shrink()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

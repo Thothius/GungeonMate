@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.9.10",
+    "title": "🔧 Synergy Icons + Dashboard Fixes + Gun Type Data",
+    "date": "August 2026",
+    "items": [
+      "🎨 FIX (BUG-022): All 395 synergies now have icons. 108 unique sprites + 287 using the generic blue synergy arrow as fallback. No more letter placeholders.",
+      "🔧 FIX (BUG-046): Junkan + 3 special gun dashboards (Gunderfury, Triple Gun, Evolver) — fixed inverted _expanded variable. Dashboards now start expanded and chevron points the correct way.",
+      "🔧 FIX (BUG-047): Robot dashboard — added 4 missing tracked fields: Armor counter, Fireplace Extinguished toggle, Battery Bullets Synergy toggle, Fuse Disarmer toggle. All were persisted in RunProvider but had no UI.",
+      "📋 FIX (BUG-048): Rad Gun — empty type field set to 'Semiautomatic'. Now shows type pill in browse and subtitle in detail.",
+      "📋 FIX (BUG-049): Gunderfury — garbage type field ('Semiautomatic Automatic Semiautomatic...') set to 'Variable'. Removed isGunderfury special case in gun_stats.dart.",
+      "📋 FIX (BUG-050): Deck4rd + Mr. Accretion Jr. — non-standard type variants normalized to 'Semiautomatic'."
+    ]
+  },
+  {
     "version": "v1.9.9",
     "title": "🧹 Code Hygiene — Dead Code + Silent Error Logging",
     "date": "August 2026",

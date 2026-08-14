@@ -1174,8 +1174,7 @@ class GunStats extends StatelessWidget {
         : null;
 
     final String animationAsset;
-    final bool isGunderfury = gun.name.toLowerCase() == 'gunderfury';
-    final String displayType = isGunderfury ? '???' : gun.type;
+    final String displayType = gun.type;
     final String typeLower = gun.type.toLowerCase();
     if (typeLower.contains('charged') || typeLower.contains('charge')) {
       animationAsset = 'assets/animations/gun_types/Chargeweapon_demo.gif';
@@ -1289,7 +1288,7 @@ class GunStats extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           GoopText(
-                            isGunderfury
+                            gun.name.toLowerCase() == 'gunderfury'
                                 ? gun.getDynamicDps(gunderLevel: p.gunderfuryLevel).toStringAsFixed(1)
                                 : (gun.dpsValue > 0 ? gun.dpsValue.toStringAsFixed(1) : (gun.dps.isEmpty ? '0.0' : gun.dps)),
                             style: TextStyle(

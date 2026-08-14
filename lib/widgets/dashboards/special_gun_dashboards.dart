@@ -16,7 +16,7 @@ class GunderfuryDashboardSliver extends StatefulWidget {
 }
 
 class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
-  bool _expanded = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () { setState(() => _expanded = !_expanded); Haptics.selection(); },
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -112,7 +112,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
+                          Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],
@@ -122,7 +122,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _expanded
+                child: _collapsed
                   ? const SizedBox.shrink()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +255,7 @@ class TripleGunDashboardSliver extends StatefulWidget {
 }
 
 class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
-  bool _expanded = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +294,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () { setState(() => _expanded = !_expanded); Haptics.selection(); },
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -334,7 +334,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
+                          Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],
@@ -344,7 +344,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _expanded
+                child: _collapsed
                   ? const SizedBox.shrink()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -473,7 +473,7 @@ class EvolverDashboardSliver extends StatefulWidget {
 }
 
 class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
-  bool _expanded = true;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -510,7 +510,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () { setState(() => _expanded = !_expanded); Haptics.selection(); },
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -550,7 +550,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
+                          Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],
@@ -560,7 +560,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _expanded
+                child: _collapsed
                   ? const SizedBox.shrink()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
