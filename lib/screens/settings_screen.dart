@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/settings/theme_visuals_tab.dart';
+import '../widgets/settings/gameplay_tab.dart';
 import '../widgets/settings/run_tab.dart';
 
 /// Central control room for Gungeon Mate.
-/// - Tab 1: VISUALS — Theme, typography, particles, glow, wallpaper, inventory layout, dice
-/// - Tab 2: RUN & APP — Co-op, inventory, shrines, event log, dialogue, changelog, dev tools, end run, data reset
+/// - Tab 1: APPEARANCE — Theme, typography, screen glow, inventory layout
+/// - Tab 2: GAMEPLAY — Dialogue, dice style, shrines, event log
+/// - Tab 3: APP — MP status, run session, inventory reset, changelog, dev tools, danger zone
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -20,7 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final flair = AppTheme.flair;
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -39,15 +41,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             indicatorColor: flair.headlineStat,
             labelPadding: const EdgeInsets.symmetric(horizontal: 4),
             tabs: const [
-              Tab(text: 'VISUALS'),
-              Tab(text: 'RUN & APP'),
+              Tab(text: 'APPEARANCE'),
+              Tab(text: 'GAMEPLAY'),
+              Tab(text: 'APP'),
             ],
           ),
         ),
         body: const TabBarView(
           children: [
-            ThemeVisualsTab(),
-            CombinedRunAppTab(),
+            AppearanceTab(),
+            GameplayTab(),
+            AppTab(),
           ],
         ),
       ),

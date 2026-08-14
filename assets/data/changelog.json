@@ -1,5 +1,19 @@
 [
   {
+    "version": "v1.9.5",
+    "title": "⚙️ Settings Reorganization + Particle Studio + Menu Groups",
+    "date": "August 2026",
+    "items": [
+      "⚙️ NEW: Settings reorganized from 2 tabs to 3 logical tabs — APPEARANCE (theme, typography, glow, inventory layout), GAMEPLAY (dialogue, dice style, shrines, event log), APP (MP status, run session, inventory reset, changelog, dev tools, danger zone).",
+      "🎨 NEW: Particle Studio — all advanced particle controls (enable, count, size, opacity, glow effect, line links, edge bounce) now live inside an expandable panel in the theme picker. One place for all particle customization. Collapsed by default so the 3 quick strips (preset, color schema, speed) stay compact.",
+      "📋 NEW: Active run popup menu reorganized with labeled section headers — BROWSE, ACTIONS, SESSION, END, SETTINGS. The 12-item flat list is now scannable at a glance.",
+      "🧹 Removed particle section from Settings → Appearance (moved to theme picker Particle Studio).",
+      "🧹 Removed dice style from Settings → Appearance (moved to Settings → Gameplay).",
+      "🧹 Removed dialogue card from Settings → App (moved to Settings → Gameplay).",
+      "🧹 Cleaned up unused helper methods and imports from refactored tabs."
+    ]
+  },
+  {
     "version": "v1.9.4",
     "title": "📱 Responsive Polish — Final Pass",
     "date": "August 2026",

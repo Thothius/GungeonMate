@@ -6,6 +6,22 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.5 — ⚙️ Settings Reorganization + Particle Studio + Menu Groups (August 2026)
+**Build:** 84
+
+> Settings reorganized into 3 logical tabs. All particle controls unified in theme picker. Active run menu grouped with labels.
+
+### Changes
+- **NEW — 3 settings tabs:** APPEARANCE (theme, typography, glow, inventory layout), GAMEPLAY (dialogue, dice, shrines, event log), APP (MP, session, reset, changelog, dev, danger zone). Was 2 tabs with mixed concerns.
+- **NEW — Particle Studio in theme picker:** Expandable panel with all advanced particle controls (enable, count, size, opacity, glow effect, line links, bounce). Collapsed by default. One place for all particle customization.
+- **NEW — Grouped popup menu:** Active run gear menu now has labeled section headers (BROWSE, ACTIONS, SESSION, END, SETTINGS) instead of a flat 12-item list.
+- **REFACTOR — AppearanceTab:** Renamed from ThemeVisualsTab. Removed particle section (→ theme picker) and dice section (→ GameplayTab).
+- **REFACTOR — AppTab:** Renamed from CombinedRunAppTab. Removed dialogue card (→ GameplayTab).
+- **NEW — GameplayTab:** New settings tab with dialogue card, dice style panel, shrine tile, event log tile.
+- **CLEANUP:** Removed unused helper methods, imports, and dead code from refactored tabs.
+
+---
+
 ## v1.9.4 — 📱 Responsive Polish — Final Pass (August 2026)
 **Build:** 83
 

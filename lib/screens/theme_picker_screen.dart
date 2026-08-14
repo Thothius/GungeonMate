@@ -13,7 +13,9 @@ import '../widgets/particle_engine.dart'
         ParticleColorSchema,
         ParticleColorSchemaX,
         ParticleSpeed,
-        ParticleSpeedX;
+        ParticleSpeedX,
+        GlowEffect,
+        GlowEffectX;
 
 /// Full-screen immersive theme picker. Each page fills the entire screen
 /// with the theme's scaffold colour, showcasing a large palette and a
@@ -29,6 +31,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
   late final PageController _pc;
   late int _index;
   late AppThemeMode _activeMode;
+  bool _particleStudioOpen = false;
 
   @override
   void initState() {
@@ -214,10 +217,275 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   );
                 },
               ),
+              // Particle Studio — expandable advanced controls
+              _buildParticleStudio(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  /// Particle Studio — expandable panel with all advanced particle
+  /// controls (enable, count, size, opacity, glow, line links, bounce).
+  /// Collapsed by default so the 3 quick strips stay compact.
+  Widget _buildParticleStudio() {
+    final flair = AppTheme.flair;
+    return Column(
+      children: [
+        // Toggle header
+        InkWell(
+          onTap: () {
+            Haptics.selection();
+            setState(() => _particleStudioOpen = !_particleStudioOpen);
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: flair.card.withValues(alpha: 0.6),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: _particleStudioOpen
+                    ? flair.primary.withValues(alpha: 0.3)
+                    : Colors.white.withValues(alpha: 0.08),
+                width: 1.2,
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  _particleStudioOpen
+                      ? Icons.expand_less_rounded
+                      : Icons.expand_more_rounded,
+                  size: 18,
+                  color: _particleStudioOpen
+                      ? flair.primary
+                      : Colors.white.withValues(alpha: 0.4),
+                ),
+                const SizedBox(width: 10),
+                GoopText(
+                  'PARTICLE STUDIO',
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w900,
+                    color: _particleStudioOpen ? Colors.white70 : Colors.white38,
+                    letterSpacing: 0.6,
+                  ),
+                ),
+                const Spacer(),
+                Icon(Icons.tune_rounded, size: 14, color: flair.primary.withValues(alpha: 0.5)),
+              ],
+            ),
+          ),
+        ),
+        // Expanded panel
+        if (_particleStudioOpen)
+          ValueListenableBuilder<VisualPrefs>(
+            valueListenable: VisualPrefs.notifier,
+            builder: (context, prefs, _) {
+              return Container(
+                margin: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                decoration: BoxDecoration(
+                  color: flair.card.withValues(alpha: 0.92),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: flair.primary.withValues(alpha: 0.18)),
+                ),
+                child: Column(
+                  children: [
+                    // Enable toggle
+                    _studioSwitchRow(
+                      icon: Icons.auto_awesome_outlined,
+                      label: 'Enable Particles',
+                      value: prefs.particlesEnabled,
+                      onChanged: VisualPrefs.setParticles,
+                      flair: flair,
+                    ),
+                    if (prefs.particlesEnabled) ...[
+                      const Divider(color: Colors.white12, height: 20),
+                      // Count
+                      _studioSliderRow(
+                        'Particle Count',
+                        '${prefs.particleCount}',
+                        prefs.particleCount.toDouble(),
+                        1.0, 32.0, 31,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setParticleCount(v.toInt()),
+                      ),
+                      const SizedBox(height: 10),
+                      // Size
+                      _studioSliderRow(
+                        'Particle Size',
+                        '${prefs.particleSizeScale.toStringAsFixed(1)}x',
+                        prefs.particleSizeScale,
+                        0.3, 2.0, 17,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setParticleSizeScale(v),
+                      ),
+                      const SizedBox(height: 10),
+                      // Opacity
+                      _studioSliderRow(
+                        'Particle Opacity',
+                        '${(prefs.particleOpacity * 100).toStringAsFixed(0)}%',
+                        prefs.particleOpacity,
+                        0.0, 1.0, 20,
+                        flair.headlineStat,
+                        (v) => VisualPrefs.setParticleOpacity(v),
+                      ),
+                      const SizedBox(height: 12),
+                      // Glow effect picker
+                      SizedBox(
+                        height: 48,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: GlowEffect.values.map((e) {
+                            final sel = e == prefs.particleGlowEffect;
+                            return GestureDetector(
+                              onTap: () {
+                                VisualPrefs.setParticleGlowEffect(e);
+                                Haptics.selection();
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: sel
+                                      ? flair.card.withValues(alpha: 0.9)
+                                      : flair.card.withValues(alpha: 0.5),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: sel ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                                    width: sel ? 1.5 : 1.0,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: GoopText(
+                                    e.label,
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w900,
+                                      color: sel ? Colors.white : Colors.white54,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Line links toggle
+                      _studioSwitchRow(
+                        icon: Icons.timeline_outlined,
+                        label: 'Line Links',
+                        value: prefs.particleLineLinks,
+                        onChanged: VisualPrefs.setParticleLineLinks,
+                        flair: flair,
+                      ),
+                      const SizedBox(height: 6),
+                      // Bounce toggle
+                      _studioSwitchRow(
+                        icon: Icons.sports_baseball_outlined,
+                        label: 'Edge Bounce',
+                        value: prefs.particleBounce,
+                        onChanged: VisualPrefs.setParticleBounce,
+                        flair: flair,
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            },
+          ),
+      ],
+    );
+  }
+
+  Widget _studioSwitchRow({
+    required IconData icon,
+    required String label,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+    required ThemeFlair flair,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: flair.card.withValues(alpha: 0.65),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: flair.primary.withValues(alpha: 0.20)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 16, color: Colors.white54),
+          const SizedBox(width: 10),
+          Expanded(
+            child: GoopText(
+              label.toUpperCase(),
+              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70, letterSpacing: 0.5),
+            ),
+          ),
+          Switch(
+            value: value,
+            activeColor: flair.primary,
+            activeTrackColor: flair.primary.withValues(alpha: 0.25),
+            inactiveThumbColor: Colors.white54,
+            inactiveTrackColor: Colors.white10,
+            onChanged: (val) {
+              onChanged(val);
+              Haptics.selection();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _studioSliderRow(
+    String label,
+    String displayValue,
+    double value,
+    double min,
+    double max,
+    int divisions,
+    Color color,
+    ValueChanged<double> onChanged,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GoopText(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Colors.white70)),
+            GoopText(displayValue, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: color)),
+          ],
+        ),
+        SizedBox(
+          height: 32,
+          child: SliderTheme(
+            data: SliderThemeData(
+              trackHeight: 3.0,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 12.0),
+              activeTrackColor: color,
+              inactiveTrackColor: Colors.white12,
+              thumbColor: Colors.white,
+              valueIndicatorColor: color,
+            ),
+            child: Slider(
+              value: value,
+              min: min,
+              max: max,
+              divisions: divisions,
+              onChanged: onChanged,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

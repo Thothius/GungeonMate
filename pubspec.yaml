@@ -1,7 +1,7 @@
 name: gungeon_mate
 description: "Gungeon Mate - Enter the Gungeon companion app for tracking runs, items, guns, and synergies"
 publish_to: 'none'
-version: 1.9.4+83
+version: 1.9.5+84
 
 environment:
   sdk: ^3.7.0

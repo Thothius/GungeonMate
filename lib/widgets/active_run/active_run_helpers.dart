@@ -358,7 +358,8 @@ class HeaderMenu extends StatelessWidget {
         }
       },
       itemBuilder: (ctx) => [
-        // --- Top: Favourites & Codex ---
+        // ── BROWSE ──
+        _menuLabel('BROWSE'),
         const PopupMenuItem(
           value: 'favourites',
           child: Row(children: [
@@ -375,9 +376,9 @@ class HeaderMenu extends StatelessWidget {
             GoopText('Codex'),
           ]),
         ),
-        const PopupMenuDivider(),
 
-        // --- Actions ---
+        // ── ACTIONS ──
+        _menuLabel('ACTIONS'),
         const PopupMenuItem(
           value: 'dice_roll',
           child: Row(children: [
@@ -386,9 +387,6 @@ class HeaderMenu extends StatelessWidget {
             GoopText('Gunfortuna Dice Roll'),
           ]),
         ),
-        const PopupMenuDivider(),
-
-        // --- Reset Items (quick action) ---
         const PopupMenuItem(
           value: 'reset_items_p1',
           child: Row(children: [
@@ -406,10 +404,10 @@ class HeaderMenu extends StatelessWidget {
               GoopText('Reset P2 Items'),
             ]),
           ),
-        const PopupMenuDivider(),
 
-        // --- Save & Session ---
+        // ── SESSION ──
         if (mpActive) ...[
+          _menuLabel('SESSION'),
           const PopupMenuItem(
             value: 'save_mp_session',
             child: Row(children: [
@@ -418,8 +416,6 @@ class HeaderMenu extends StatelessWidget {
               GoopText('Save MP Session'),
             ]),
           ),
-          // Pause/Resume MP run — stops auto-reconnect while carrier is
-          // out of BT/Wi-Fi range, resumes when they're back in the room.
           if (mpSession.isPaused)
             const PopupMenuItem(
               value: 'resume_mp',
@@ -439,6 +435,7 @@ class HeaderMenu extends StatelessWidget {
               ]),
             ),
         ] else ...[
+          _menuLabel('SESSION'),
           const PopupMenuItem(
             value: 'save_run',
             child: Row(children: [
@@ -448,9 +445,9 @@ class HeaderMenu extends StatelessWidget {
             ]),
           ),
         ],
-        const PopupMenuDivider(),
 
-        // --- End & Leave ---
+        // ── END ──
+        _menuLabel('END'),
         if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
           const PopupMenuItem(
             value: 'leave_mp',
@@ -479,9 +476,9 @@ class HeaderMenu extends StatelessWidget {
             ]),
           ),
         ],
-        const PopupMenuDivider(),
 
-        // --- Settings (moved to bottom) ---
+        // ── SETTINGS ──
+        _menuLabel('SETTINGS'),
         const PopupMenuItem(
           value: 'settings',
           child: Row(children: [
@@ -491,6 +488,35 @@ class HeaderMenu extends StatelessWidget {
           ]),
         ),
       ],
+    );
+  }
+
+  /// Non-interactive section label for the popup menu.
+  /// Renders as a small uppercase header with a divider, so the 12-item
+  /// menu is scannable at a glance instead of a flat list.
+  PopupMenuItem<String> _menuLabel(String label) {
+    return PopupMenuItem<String>(
+      enabled: false,
+      value: '__label__',
+      child: Padding(
+        padding: const EdgeInsets.only(top: 6, bottom: 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Divider(color: Colors.white12, height: 1, thickness: 0.5),
+            const SizedBox(height: 6),
+            GoopText(
+              label,
+              style: const TextStyle(
+                fontSize: 9,
+                fontWeight: FontWeight.w900,
+                color: Colors.white38,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

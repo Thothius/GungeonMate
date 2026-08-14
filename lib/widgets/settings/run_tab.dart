@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/multiplayer_messages.dart';
 import '../../models/player.dart';
 import '../../providers/run_provider.dart';
-import '../../services/app_theme.dart';
 import '../../services/multiplayer_session.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
@@ -17,17 +16,17 @@ import '../active_run/active_run_helpers.dart';
 import 'debug_tab.dart';
 import 'run_log_screen.dart';
 
-/// Combined Run + App settings tab.
-/// Replaces the old separate RunTab + AppTab with a single compact
-/// 2-column grid of action tiles + the dialogue card.
-class CombinedRunAppTab extends StatefulWidget {
-  const CombinedRunAppTab({super.key});
+/// App settings tab — MP status, run session, inventory reset, changelog,
+/// dev tools, danger zone. Part of the 3-tab settings reorganization
+/// (Appearance / Gameplay / App).
+class AppTab extends StatefulWidget {
+  const AppTab({super.key});
 
   @override
-  State<CombinedRunAppTab> createState() => _CombinedRunAppTabState();
+  State<AppTab> createState() => _AppTabState();
 }
 
-class _CombinedRunAppTabState extends State<CombinedRunAppTab> {
+class _AppTabState extends State<AppTab> {
   // ── Confirm dialogs (lifted from old RunTab + AppTab) ──────────────
 
   void _addCoopPlayer(BuildContext context, RunProvider p) {
@@ -286,7 +285,6 @@ class _CombinedRunAppTabState extends State<CombinedRunAppTab> {
 
   @override
   Widget build(BuildContext context) {
-    final flair = AppTheme.flair;
     final p = context.watch<RunProvider>();
     final hasCoop = p.runState.hasCoop;
     final player1Name = p.runState.main.character?.name ?? 'Player 1';
@@ -299,10 +297,6 @@ class _CombinedRunAppTabState extends State<CombinedRunAppTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Dialogue card (full-width, has interactive controls) ──
-          _buildDialogueCard(flair),
-          const SizedBox(height: 16),
-
           // ── MP & Co-op status bar (slim full-width) ──
           _buildMpStatusBar(context, p, hasCoop, player2Name, mpActive),
           const SizedBox(height: 16),
@@ -527,129 +521,6 @@ class _CombinedRunAppTabState extends State<CombinedRunAppTab> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDialogueCard(ThemeFlair flair) {
-    final prefs = VisualPrefs.notifier.value;
-    return Card(
-      color: flair.card.withValues(alpha: 0.92),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        child: Column(
-          children: [
-            _buildSwitchRow(
-              context: context,
-              icon: Icons.vibration_rounded,
-              label: 'Dialogue Haptics',
-              value: prefs.dialogueHapticsEnabled,
-              onChanged: VisualPrefs.setDialogueHapticsEnabled,
-              flair: flair,
-            ),
-            const Divider(color: Colors.white12, height: 20),
-            _buildCompactSliderRow(
-              'Text Speed',
-              '${prefs.dialogueTextSpeedMs}ms',
-              prefs.dialogueTextSpeedMs.toDouble(),
-              10.0,
-              80.0,
-              14,
-              flair.headlineStat,
-              (v) => VisualPrefs.setDialogueTextSpeedMs(v.toInt()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSwitchRow({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required bool value,
-    required ValueChanged<bool> onChanged,
-    required ThemeFlair flair,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: flair.card.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: flair.primary.withValues(alpha: 0.20)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 16, color: Colors.white54),
-          const SizedBox(width: 10),
-          Expanded(
-            child: GoopText(
-              label.toUpperCase(),
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70, letterSpacing: 0.5),
-            ),
-          ),
-          Switch(
-            value: value,
-            activeColor: flair.primary,
-            activeTrackColor: flair.primary.withValues(alpha: 0.25),
-            inactiveThumbColor: Colors.white54,
-            inactiveTrackColor: Colors.white10,
-            onChanged: (val) {
-              onChanged(val);
-              Haptics.selection();
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCompactSliderRow(
-    String label,
-    String displayValue,
-    double value,
-    double min,
-    double max,
-    int divisions,
-    Color color,
-    ValueChanged<double> onChanged,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GoopText(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Colors.white70)),
-            GoopText(displayValue, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: color)),
-          ],
-        ),
-        SizedBox(
-          height: 32,
-          child: SliderTheme(
-            data: SliderThemeData(
-              trackHeight: 3.0,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 12.0),
-              activeTrackColor: color,
-              inactiveTrackColor: Colors.white12,
-              thumbColor: Colors.white,
-              valueIndicatorColor: color,
-            ),
-            child: Slider(
-              value: value,
-              min: min,
-              max: max,
-              divisions: divisions,
-              onChanged: onChanged,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
