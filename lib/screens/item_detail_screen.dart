@@ -257,7 +257,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     try {
                       final uri = Uri.parse(wikiUrlString);
                       await launchUrl(uri, mode: LaunchMode.externalApplication);
-                    } catch (_) {}
+                    } catch (e) { debugPrint('[ItemDetail] url launch error: $e'); }
                   },
                   child: Icon(
                     Icons.open_in_browser_rounded,

@@ -193,7 +193,7 @@ class CodexDetailScreen extends StatelessWidget {
                     try {
                       final uri = Uri.parse(entry.wikiUrl);
                       await launchUrl(uri, mode: LaunchMode.externalApplication);
-                    } catch (_) {}
+                    } catch (e) { debugPrint('[CodexDetail] url launch error: $e'); }
                   },
                   onLongPress: () {
                     Clipboard.setData(ClipboardData(text: entry.wikiUrl));

@@ -119,8 +119,6 @@ class Item {
     switch (quality.toUpperCase()) {
       case 'S':
         return 'S-Tier';
-      case '1S':
-        return 'S-Tier';
       case 'A':
         return 'A-Tier';
       case 'B':
@@ -174,7 +172,7 @@ class Item {
 
   /// Chest color for display. Uses the explicit field if present,
   /// otherwise derives from quality (D=brown, C=blue, B=green, A=red,
-  /// S/1S=black). Returns empty for N (starting) items.
+  /// S=black). Returns empty for N (starting) items.
   String get chestColorDisplay {
     if (chestColor.isNotEmpty) return chestColor;
     switch (quality.toUpperCase()) {
@@ -187,7 +185,6 @@ class Item {
       case 'A':
         return 'red';
       case 'S':
-      case '1S':
         return 'black';
     }
     return '';

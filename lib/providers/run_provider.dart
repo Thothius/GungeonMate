@@ -508,7 +508,7 @@ class RunProvider with ChangeNotifier {
       // Huntress specific values
       _huntressRoomClears = prefs.getInt('special.huntress.roomclears') ?? 0;
       _huntressInjured = prefs.getBool('special.huntress.injured') ?? false;
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
   }
 
   Future<void> setHuntressRoomClears(int clears) async {
@@ -516,7 +516,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.huntress.roomclears', _huntressRoomClears);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -525,7 +525,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.huntress.injured', _huntressInjured);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -534,7 +534,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.robot.armor', _robotArmor);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -543,7 +543,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.robot.junk', _robotJunk);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -552,7 +552,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.goldjunk', _robotGoldJunk);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -561,7 +561,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.lies', _robotLies);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -570,7 +570,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.fireplace', _fireplaceExtinguished);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -579,7 +579,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.battery', _batteryBulletsSynergy);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -588,7 +588,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.fusedisarmer', _fuseDisarmer);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -597,7 +597,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.gunderfury.level', _gunderfuryLevel);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -606,7 +606,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.triple_gun.form', _tripleGunForm);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -620,7 +620,7 @@ class RunProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.evolver.kills', _evolverKills);
       await prefs.setInt('special.evolver.form', _evolverForm);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -631,7 +631,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.sprun.trigger', _sprunTriggerIndex);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -666,7 +666,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.shellegun.mode', _shellegunMode);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -675,7 +675,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.chambergun.floor', _chamberGunFloor);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -684,7 +684,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.platinum.seconds', _platinumBulletsSeconds);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -693,7 +693,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.ironcoin.uses', _ironCoinUses);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -702,7 +702,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.polaris.kills', _polarisKills);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -711,7 +711,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.polaris.hits', _polarisDamageHits);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -720,7 +720,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.gunther.friendship', _guntherFriendship);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -729,7 +729,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.gunsoul.activated', _gunSoulActivated);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -738,7 +738,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.evolver.form', _evolverForm);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -747,7 +747,7 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.spice.count', _spiceUsageCount);
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
     notifyListeners();
   }
 
@@ -1523,11 +1523,10 @@ class RunProvider with ChangeNotifier {
     return total;
   }
 
-  /// Quality points: S/1S=5, A=4, B=3, C=2, D=1, N/other=0.
+  /// Quality points: S=5, A=4, B=3, C=2, D=1, N/other=0.
   int _qualityPoints(String q) {
     switch (q.toUpperCase()) {
       case 'S':
-      case '1S':
         return 5;
       case 'A':
         return 4;
@@ -1559,17 +1558,15 @@ class RunProvider with ChangeNotifier {
     return ((combinedQualityScore / max) * 100).round().clamp(0, 100);
   }
 
-  /// Count of each quality tier across both players (normalises 1S→S).
+  /// Count of each quality tier across both players.
   Map<String, int> get combinedQualityBreakdown {
     final out = <String, int>{'S': 0, 'A': 0, 'B': 0, 'C': 0, 'D': 0, 'N': 0};
-    String normal(String q) =>
-        q.toUpperCase() == '1S' ? 'S' : q.toUpperCase();
     for (final g in _allGunsInRun) {
-      final k = normal(g.quality);
+      final k = g.quality.toUpperCase();
       if (out.containsKey(k)) out[k] = out[k]! + 1;
     }
     for (final i in _allItemsInRun) {
-      final k = normal(i.quality);
+      final k = i.quality.toUpperCase();
       if (out.containsKey(k)) out[k] = out[k]! + 1;
     }
     return out;

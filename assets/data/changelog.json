@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.9",
+    "title": "🧹 Code Hygiene — Dead Code + Silent Error Logging",
+    "date": "August 2026",
+    "items": [
+      "🧹 FIX: Removed 20+ dead '1S' quality normalisation branches across 9 files — the data no longer contains '1S' values (fixed in BUG-020), so these defensive branches were dead code in run_provider, gun, item, quality_badge, periodic_tile, browse_pills, game_icon, inventory_list_row, and sort_picker.",
+      "🔧 FIX (BUG-032): All 42 silent `catch (_) {}` error swallows now log errors via debugPrint with file-specific tags. Persistence failures (SharedPreferences disk-full, permissions) are no longer invisible — they appear in debug console across run_provider, app_theme, multiplayer_lobby, and 5 other files.",
+      "📋 FIX: Version desync corrected — pubspec.yaml bumped from 1.9.5 to 1.9.8+85 to match changelog entries v1.9.6–v1.9.8. All version strings in main_menu updated."
+    ]
+  },
+  {
     "version": "v1.9.8",
     "title": "🎨 Theme Palette Assessment Fixes",
     "date": "August 2026",

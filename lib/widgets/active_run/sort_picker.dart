@@ -72,12 +72,11 @@ extension ItemSortLabel on ItemSort {
   }
 }
 
-/// Convert quality letter ('S' / '1S' / 'A' / 'B' / 'C' / 'D' / 'N' / '')
+/// Convert quality letter ('S' / 'A' / 'B' / 'C' / 'D' / 'N' / '')
 /// into a sortable rank — lower = appears first.
 int _qualityRank(String q) {
   switch (q.toUpperCase()) {
     case 'S':
-    case '1S':
       return 0;
     case 'A':
       return 1;

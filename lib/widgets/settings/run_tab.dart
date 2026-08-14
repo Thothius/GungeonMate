@@ -175,7 +175,7 @@ class _AppTabState extends State<AppTab> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
-    } catch (_) {}
+    } catch (e) { debugPrint('[RunTab] prefs clear error: $e'); }
     if (!context.mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       fastRoute(const CharacterSelectScreen()),

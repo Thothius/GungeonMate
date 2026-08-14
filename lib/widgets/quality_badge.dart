@@ -13,22 +13,14 @@ class QualityBadge extends StatefulWidget {
   final double size;
   const QualityBadge({super.key, required this.quality, this.size = 20});
 
-  static String _displayLetter(String q) {
-    final u = q.toUpperCase();
-    if (u == '1S') return 'S';
-    return u;
-  }
+  static String _displayLetter(String q) => q.toUpperCase();
 
-  static bool _isS(String q) {
-    final u = q.toUpperCase();
-    return u == 'S' || u == '1S';
-  }
+  static bool _isS(String q) => q.toUpperCase() == 'S';
 
   /// Pill background color. S returns near-black; others return their tier hue.
   static Color colorFor(String q) {
     switch (q.toUpperCase()) {
       case 'S':
-      case '1S':
         return const Color(0xFF1A1A1A); // Near-black pill — golden glow animates around it
       case 'A':
         return const Color(0xFFE53935); // red

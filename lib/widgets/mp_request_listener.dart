@@ -64,7 +64,7 @@ class _MpRequestListenerState extends State<MpRequestListener> {
       final session = context.read<MultiplayerSession>();
       session.reconnectSuccessNotifier.removeListener(_onReconnectSuccess);
       session.showReconnectHubNotifier.removeListener(_onReconnectHubRequest);
-    } catch (_) {}
+    } catch (e) { debugPrint('[MpRequestListener] error: $e'); }
     super.dispose();
   }
 
@@ -462,7 +462,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
             try {
               final rp = context.read<RunProvider>();
               peerChar = rp.gungeoneerByName(peerCharName);
-            } catch (_) {}
+            } catch (e) { debugPrint('[MpRequestListener] error: $e'); }
           }
 
           final accent = connected ? const Color(0xFF00E676) : Colors.cyanAccent;

@@ -1568,7 +1568,7 @@ class CustomThemeData {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_prefsKey);
-    } catch (_) {}
+    } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
   /// Async load for actual usage in flairFor()
@@ -1590,7 +1590,7 @@ class CustomThemeData {
           font: AppFont.values[json['font'] as int? ?? 0], // Default to Gungeon (index 0)
         );
       }
-    } catch (_) {}
+    } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
     return defaultTheme;
   }
 
@@ -1610,7 +1610,7 @@ class CustomThemeData {
         'font': data.font.index,
       });
       await prefs.setString(_prefsKey, json);
-    } catch (_) {}
+    } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
   /// Default custom theme (fallback).
@@ -2439,7 +2439,7 @@ class VisualPrefs {
         particleColorSchema: particleColorSchema,
         particleSpeed: particleSpeed,
       );
-    } catch (_) {}
+    } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
   static Future<void> setGlow(double v) async {
@@ -2612,7 +2612,7 @@ class VisualPrefs {
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kParticleColorSchema, v.particleColorSchema.index);
       await p.setInt(_kParticleSpeed, v.particleSpeed.index);
-    } catch (_) {}
+    } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
   VisualPrefs _with({
@@ -2711,7 +2711,7 @@ class AppTheme {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt(_unicornPaletteKey, p.index);
-    } catch (_) {}
+    } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
   /// Per-theme remix index (0 = original). Persisted.
@@ -2727,7 +2727,7 @@ class AppTheme {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('theme.remix.${m.index}', idx);
-    } catch (_) {}
+    } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
   /// Cached custom theme name for synchronous label access.

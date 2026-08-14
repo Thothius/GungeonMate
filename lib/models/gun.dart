@@ -167,8 +167,6 @@ class Gun {
     switch (quality.toUpperCase()) {
       case 'S':
         return 'S-Tier';
-      case '1S':
-        return 'S-Tier';
       case 'A':
         return 'A-Tier';
       case 'B':
@@ -198,7 +196,6 @@ class Gun {
       case 'A':
         return 'red';
       case 'S':
-      case '1S':
         return 'black';
     }
     return '';

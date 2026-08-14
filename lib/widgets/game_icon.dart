@@ -28,7 +28,7 @@ class GameIcon extends StatelessWidget {
     // S-tier uses near-black for the filled badge, but near-black ring
     // chrome is invisible on dark panels. Use gold for the ring so S-tier
     // items/guns are clearly framed on any background.
-    final isS = quality.toUpperCase() == 'S' || quality.toUpperCase() == '1S';
+    final isS = quality.toUpperCase() == 'S';
     final ringColor = isS ? const Color(0xFFFFD700) : rawColor;
 
     final imgScale = showRing ? 0.72 : 0.83;

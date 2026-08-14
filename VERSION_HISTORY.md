@@ -6,6 +6,54 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.9 — 🧹 Code Hygiene — Dead Code + Silent Error Logging (August 2026)
+**Build:** 86
+
+> Dead 1S branches removed, silent error catches now log, version desync fixed.
+
+### Changes
+- **CLEANUP — Dead 1S branches:** Removed 20+ defensive `1S` quality normalisation branches across 9 files (run_provider, gun, item, quality_badge, periodic_tile, browse_pills, game_icon, inventory_list_row, sort_picker). Data no longer contains `1S` values (fixed in BUG-020).
+- **FIX (BUG-032) — Silent error logging:** All 42 `catch (_) {}` blocks now log errors via `debugPrint` with file-specific tags. SharedPreferences failures are no longer invisible.
+- **FIX — Version desync:** pubspec bumped from 1.9.5 to 1.9.9+86 to match changelog. All version strings in main_menu updated.
+
+---
+
+## v1.9.8 — 🎨 Theme Palette Assessment Fixes (August 2026)
+**Build:** 85
+
+> Theme palette quality fixes from critical assessment — distinct color identities, correct particle defaults, visible remix hue shifts.
+
+### Changes
+- **FIX — Oubliette theme:** Primary (#39FF14) and headline (#CCFF00) were identical to Bullet Hell — changed to sickly sewer green (#64DD17) and pale toxic lime (#B2FF59). (Hidden theme — code quality fix.)
+- **FIX — Cult of Gundead theme:** Primary was harsh pure #FF0000 — softened to styled #FF1744 (Material red A400). (Hidden theme — code quality fix.)
+- **FIX — Robot's Core particles:** Default was brassCasings (brass shells — doesn't fit cyber aesthetic) — changed to cosmicStars (cyan/gold/white twinkling stars) to match the teal/green circuit identity.
+- **FIX — Forge Master remixes:** Ember (+12°) and Inferno (-12°) were too subtle — increased to +25° and -25°. Magma kept at +35°.
+
+---
+
+## v1.9.7 — 🎨 Compact Theme Picker + Particle Visibility Fix (August 2026)
+**Build:** 84
+
+> Theme picker massively compacted. Particles now visible in picker.
+
+### Changes
+- **REDESIGN — Theme picker:** Full-screen immersive pages replaced with compact horizontal swipeable card carousel (100px tall). Dot indicator replaces circle strip.
+- **FIX — Particle visibility:** Old immersive pages had opaque scaffold backgrounds blocking particles. New compact cards use semi-transparent backgrounds so particles show through.
+- **CLEANUP — Removed dead _DashboardPreview widget.**
+
+---
+
+## v1.9.6 — 🌀 Portal Vortex Animation (August 2026)
+**Build:** 84
+
+> Home screen portal vortex + last_played_character persistence.
+
+### Changes
+- **NEW — Portal vortex animation:** Looping custom-painted animation on home screen — bright glow orbits in a circular path, pulsing brighter at top/bottom. Deep purple radial gradient, vortex rings, comet-like particle trail. 14-second cycle.
+- **NEW — last_played_character persistence:** Survives run end and app kill, updates on character pick for SP or MP.
+
+---
+
 ## v1.9.5 — ⚙️ Settings Reorganization + Particle Studio + Menu Groups (August 2026)
 **Build:** 84
 

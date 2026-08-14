@@ -56,14 +56,14 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
       for (final s in list) {
         try {
           sessions.add(SavedMpSession.fromJson(json.decode(s)));
-        } catch (_) {}
+        } catch (e) { debugPrint('[MP Lobby] error: $e'); }
       }
       // Sort: newest saved first
       sessions.sort((a, b) => b.savedAtMs.compareTo(a.savedAtMs));
       if (mounted) {
         setState(() => _savedSessions = sessions);
       }
-    } catch (_) {}
+    } catch (e) { debugPrint('[MP Lobby] error: $e'); }
   }
 
   Future<void> _deleteSavedSession(String sessionId) async {
@@ -83,7 +83,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
       }
       await prefs.setStringList('saved_mp_sessions', updatedList);
       await _loadSavedSessions();
-    } catch (_) {}
+    } catch (e) { debugPrint('[MP Lobby] error: $e'); }
   }
 
   Future<void> _loadSession(SavedMpSession saved, MpRole role) async {
@@ -128,7 +128,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_nickPrefsKey, v);
-    } catch (_) {}
+    } catch (e) { debugPrint('[MP Lobby] error: $e'); }
   }
 
   @override
@@ -1285,7 +1285,7 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
       try {
         final rp = context.read<RunProvider>();
         peerChar = rp.gungeoneerByName(peerCharName);
-      } catch (_) {}
+      } catch (e) { debugPrint('[MP Lobby] error: $e'); }
     }
 
     final accent = status == MpStatus.connected

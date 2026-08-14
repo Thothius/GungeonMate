@@ -269,7 +269,7 @@ class _InventoryListRowState extends State<InventoryListRow>
       ),
     );
 
-    final isS = _quality.toUpperCase() == 'S' || _quality.toUpperCase() == '1S';
+    final isS = _quality.toUpperCase() == 'S';
     final rawQColor = _quality.isEmpty ? Colors.white24 : QualityBadge.colorFor(_quality);
     final qColor = isS ? const Color(0xFFFFD700) : rawQColor;
     final isHighTier = isS || _quality.toUpperCase() == 'A';

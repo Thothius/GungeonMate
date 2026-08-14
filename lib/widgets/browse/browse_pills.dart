@@ -38,7 +38,7 @@ Widget metaPill(String text, Color color, {IconData? icon}) {
 Widget qualityPill(String quality) {
   if (quality.isEmpty) return const SizedBox.shrink();
   final rawColor = QualityBadge.colorFor(quality);
-  final letter = quality.toUpperCase() == '1S' ? 'S' : quality.toUpperCase();
+  final letter = quality.toUpperCase();
   final isS = letter == 'S';
   // S-tier uses near-black for the filled badge circle (white text on black),
   // but near-black chrome (border/text/bg tint) is invisible on dark panels.
