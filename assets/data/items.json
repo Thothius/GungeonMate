@@ -387,7 +387,7 @@
       ]
     },
     "sell_price": "41",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "duration": "5 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Briefly stops time. This bell appears to be made of different materials at different times. The mournful tones it emits echo forwards and backwards. Some claim that they can hear it before it rings."
@@ -466,7 +466,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Calls down a bombardment on a large rectangular area."
   },
@@ -1763,7 +1763,7 @@
         }
       ]
     },
-    "recharge_time": "",
+    "recharge_time": "Cannot be used",
     "neckbear_approved": true,
     "ammonomicon_entry": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master."
   },
@@ -5107,7 +5107,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "450 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Nuclear arms were forbidden by the Third Interstellar Armistice, but as large sections of the Gungeon existed before that accord was signed, it is a bit of a grey area legally."
   },
@@ -7260,7 +7260,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "200 dmg",
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "Explodes after a short delay.\n\nCountless experienced adventurers have brought Bombs to the Gungeon seeking secret doors, only to be foiled by the existence of Blanks. Still, explosives have their place."
@@ -7705,7 +7705,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "85 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Boomerangs predate Gun technology, but can still be useful in a pinch. A good throw is quite stunning!"
   },
@@ -8297,7 +8297,7 @@
         }
       ]
     },
-    "recharge_time": "",
+    "recharge_time": "100 dmg",
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "If the player enters a room while under the box, enemies will not target the player. Firing a weapon will remove the box. Has no effect if used while enemies are already targeting the player. Can be used to steal items from shops."
@@ -8496,7 +8496,7 @@
       ]
     },
     "sell_price": "54",
-    "recharge_time": "",
+    "recharge_time": "325 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Deals a large amount of damage to all enemies in a room.\n\nA remnant from when the Gungeon was being built. Gungeon architects would use these artifacts to quickly make their way through Gundead infested chambers. Though this one has lost a portion of its power to the ages, it is still a potent weapon."
   },
@@ -9312,7 +9312,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "400 dmg",
     "duration": "6 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Slows down time while active."
@@ -9839,7 +9839,7 @@
       ]
     },
     "sell_price": "N/A",
-    "recharge_time": "",
+    "recharge_time": "None",
     "neckbear_approved": true,
     "ammonomicon_entry": "Upon use, the television is thrown in the direction of the cursor. Dropped upon dodge rolling."
   },
@@ -9853,7 +9853,7 @@
     "curse": 0.0,
     "coolness": 0.0,
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "250 dmg",
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "C4 can be placed and then triggered remotely. More useful than a standard time bomb, but less convenient than a proximity mine, plastic explosives can be manually triggered."
@@ -10337,7 +10337,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "",
+    "recharge_time": "500 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Stuns all enemies. This grenade is full of small, shiny particles. Any enemies caught in the blast radius will be completely enthralled for a short time. Popular with special ops units and children's entertainers!"
   },
@@ -11483,7 +11483,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "200 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "When blown, this horn will call those nearby to aid you.\n\nThere are strange inconsistencies in the behavior of the Gundead. Originally thought to be heartless killing machines, they have been known to capture certain invaders for unknown purposes. Furthermore, evidence of a crude religion has been discovered. Perhaps, one day, they could be reasoned with?"
   },
@@ -11898,7 +11898,7 @@
       ]
     },
     "sell_price": "41",
-    "recharge_time": "",
+    "recharge_time": "500 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Teleports a chest to the next floor, with a chance to upgrade its quality."
   },
@@ -13820,7 +13820,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "",
+    "recharge_time": "400 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Places 5 small mines that explode when an enemy comes into contact with them."
   },
@@ -14434,7 +14434,7 @@
         }
       ]
     },
-    "recharge_time": "",
+    "recharge_time": "300 dmg",
     "neckbear_approved": true,
     "sell_price": "N/A",
     "ammonomicon_entry": "Sprays water forward."
@@ -15218,7 +15218,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "100 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Can be used immediately after dodging a bullet to activate a blank effect."
   },
@@ -15414,7 +15414,7 @@
         }
       ]
     },
-    "recharge_time": "",
+    "recharge_time": "400 dmg",
     "chest_color": "blue",
     "sell_price": "16",
     "neckbear_approved": true,
@@ -16290,7 +16290,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "200 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Temporarily doubles gun output. The favored brew of Two-Shot Erias. During her time in the Gungeon, she claimed that drinking before a gunfight would double her effectiveness in combat, but for obvious reasons was not taken too seriously. Perhaps there was some truth to her tales."
@@ -18010,7 +18010,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "300 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Unlike normal blanks, the Elder Blank may be reused.\n\nFeared strongly by the Order of the True Gun. Anathema to all Gunkind."
   },
@@ -18442,7 +18442,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "1000 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Use to escape from a sealed room. Another standard adventurer's tool rendered less useful by the Gungeon's mysterious topology. Instead of returning to the surface, this rope will only provide an escape from a single room. Sometimes, though, that's all you need."
   },
@@ -18630,7 +18630,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "",
+    "recharge_time": "500 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Places a decoy that enemies will target. The decoy will explode after taking enough damage. Can be used to steal from shops."
   },
@@ -19836,7 +19836,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "duration": "8 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "While active, bullets will curve around the player."
@@ -27960,7 +27960,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "200 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Throws a bomb that freezes enemies."
   },
@@ -28762,7 +28762,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "",
+    "recharge_time": "500 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "These bees have been carefully trained to hunt down enemy munitions... and destroy them."
   },
@@ -29715,7 +29715,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "300 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Knife Shield is a shield made of blasphemous knives.\n\nBe wary of using it, as it is believed to bring upon the anger of the Jammed."
   },
@@ -30106,7 +30106,7 @@
       ]
     },
     "sell_price": "41",
-    "recharge_time": "",
+    "recharge_time": "666 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "This puzzle box plays beautiful, melodic tones as it is solved.\n\nWho knows what mysterious wonders it contains?"
   },
@@ -32376,7 +32376,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "",
+    "recharge_time": "450 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Place to create a zone of infinite ammo."
@@ -36072,7 +36072,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Molotov cocktails aren't guns, and so they are frowned upon by long-dwelling Gungeoneers. They get the job done regardless.\nKnowing the Hegemony wouldn't let her bring her own weaponry to the Gungeon, the Convict smuggled these few bottles in with the transport's cargo."
   },
@@ -36951,7 +36951,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "The pinnacle of Gungeon air support."
   },
@@ -40059,7 +40059,7 @@
       ]
     },
     "sell_price": "41",
-    "recharge_time": "",
+    "recharge_time": "300 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "While active, the player is invincible and instantly kills enemies they come in contact with."
@@ -40844,7 +40844,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "300 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Creates a pool of poisonous goop. Stolen from the Witches' storehouse, this jar contains Essence of Poisbulon. Toxic to Gundead and Gungeoneer alike!"
   },
@@ -41017,7 +41017,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "150 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Advanced polymers reinforce this state-of-the-art handheld dining surface."
   },
@@ -41174,7 +41174,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "325 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Places a stationary turret that shoots at enemies. The turret will be destroyed if it takes enough damage."
   },
@@ -41338,7 +41338,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "400 dmg",
     "duration": "10 seconds",
     "chest_color": "blue",
     "neckbear_approved": true,
@@ -41440,7 +41440,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Temporary invulnerability.\n\nA product of Professor Goopton's rigorous research."
@@ -41697,7 +41697,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "300 dmg",
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "This mine activates when an enemy gets close."
@@ -42436,7 +42436,7 @@
       ]
     },
     "sell_price": "54",
-    "recharge_time": "",
+    "recharge_time": "500 dmg",
     "duration": "6 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Halves reload times. While active, the player absorbs enemy bullets and regains ammo."
@@ -43522,7 +43522,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Temporary incorporeality.\n\nThis mysterious ring briefly allows one to traverse the etheral planes. In addition to incorporeality, this bestows flight. Take care not to fall upon return!"
@@ -47531,7 +47531,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "",
+    "recharge_time": "250 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Creates a copy of the player that mimics their movements in reverse and fires alongside them."
   },
@@ -48937,7 +48937,7 @@
         }
       ]
     },
-    "recharge_time": "",
+    "recharge_time": "750 dmg",
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Creates a small black hole, damaging any enemies and destroying any projectiles caught in its gravitational pull. First pioneered by the Hegemony of Man during the Ten Days' War, the Portable Star Crusher was deemed too dangerous for broad deployment."
@@ -49376,7 +49376,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "",
+    "recharge_time": "500 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Temporarily become invisible to enemies. Can be used to steal from the Shop."
   },
@@ -51620,7 +51620,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "600 dmg",
     "duration": "9 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Provides temporary invulnerability.\n\nThis is a shooting star which has been embalmed and stuffed with soft fuzz. Tape several to your body and be safe from harm."
@@ -54295,7 +54295,7 @@
       ]
     },
     "sell_price": "30",
-    "recharge_time": "",
+    "recharge_time": "450 dmg",
     "neckbear_approved": true,
     "ammonomicon_entry": "Teleports the user.\n\nA Gungeoneer who became annoyed with the Gungeon's inconvenient rules on teleportation developed this prototype. While it can be used at any time, its aim is unpredictable."
   },
@@ -54514,7 +54514,7 @@
       ]
     },
     "sell_price": "41",
-    "recharge_time": "",
+    "recharge_time": "400 dmg",
     "duration": "20 seconds",
     "neckbear_approved": true,
     "ammonomicon_entry": "Summons Gatling Gull as a temporary ally for the current room. Recharges after he leave or die."
@@ -54682,7 +54682,7 @@
         }
       ]
     },
-    "recharge_time": "",
+    "recharge_time": "100 dmg",
     "neckbear_approved": true,
     "sell_price": "N/A",
     "ammonomicon_entry": "Chance to pick locks. Can only be used once per lock.\n\nThese lockpicks have never let the Pilot down, except for the many times they did."
