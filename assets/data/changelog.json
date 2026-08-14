@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.11",
+    "title": "♿ Accessibility + UX Polish — Tap Targets, Tooltips, Haptics",
+    "date": "August 2026",
+    "items": [
+      "♿ FIX (BUG-051): 3 IconButtons with sub-minimum tap targets fixed — delete session (16px→44px), MP diagnostics close (20px→44px), favorite toggle (36px→44px). All now meet Material Design minimum.",
+      "♿ FIX (BUG-052): 21 IconButtons across 11 files now have tooltips for screen reader accessibility. Covers all dashboard +/- buttons, close/back buttons, search clear, favorite toggle.",
+      "🔧 FIX (BUG-053): 10 dashboard GestureDetector controls now call Haptics.light() on tap — Robot toggles, Junkan junk +/-, Gunderfury/Triple Gun/Evolver +/-. Consistent with compact_dashboards pattern.",
+      "🔧 FIX (BUG-054): Emote bottom sheet now uses useSafeArea: true — no more risk of system nav bar obscuring emote buttons on devices with tall nav bars.",
+      "🔧 FIX (BUG-055): Stats detail screen large stat value (fontSize 52) wrapped in FittedBox(scaleDown) — shrinks gracefully on narrow screens / high text scale settings."
+    ]
+  },
+  {
     "version": "v1.9.10",
     "title": "🔧 Synergy Icons + Dashboard Fixes + Gun Type Data",
     "date": "August 2026",

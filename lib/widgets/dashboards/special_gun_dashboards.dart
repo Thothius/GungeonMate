@@ -191,7 +191,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                         Row(
                                           children: [
                                             GestureDetector(
-                                              onTap: lvl > 1 ? () => p.setGunderfuryLevel(lvl - 1) : null,
+                                              onTap: lvl > 1 ? () { Haptics.light(); p.setGunderfuryLevel(lvl - 1); } : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -210,7 +210,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: lvl < 60 ? () => p.setGunderfuryLevel(lvl + 1) : null,
+                                              onTap: lvl < 60 ? () { Haptics.light(); p.setGunderfuryLevel(lvl + 1); } : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -409,7 +409,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                         Row(
                                           children: [
                                             GestureDetector(
-                                              onTap: form > 1 ? () => p.setTripleGunForm(form - 1) : null,
+                                              onTap: form > 1 ? () { Haptics.light(); p.setTripleGunForm(form - 1); } : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -428,7 +428,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: form < 3 ? () => p.setTripleGunForm(form + 1) : null,
+                                              onTap: form < 3 ? () { Haptics.light(); p.setTripleGunForm(form + 1); } : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -625,7 +625,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                         Row(
                                           children: [
                                             GestureDetector(
-                                              onTap: activeStage > 1 ? () => p.setEvolverForm(activeStage - 1) : null,
+                                              onTap: activeStage > 1 ? () { Haptics.light(); p.setEvolverForm(activeStage - 1); } : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
@@ -644,7 +644,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                               ),
                                             ),
                                             GestureDetector(
-                                              onTap: activeStage < 6 ? () => p.setEvolverForm(activeStage + 1) : null,
+                                              onTap: activeStage < 6 ? () { Haptics.light(); p.setEvolverForm(activeStage + 1); } : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(
                                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),

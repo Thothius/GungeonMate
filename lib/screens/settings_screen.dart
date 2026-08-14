@@ -30,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           scrolledUnderElevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: Colors.white70),
+            tooltip: 'Back',
             onPressed: () => Navigator.of(context).maybePop(),
           ),
           title: const GoopText('SETTINGS',

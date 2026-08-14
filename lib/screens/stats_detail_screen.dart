@@ -193,14 +193,17 @@ class _ValueCard extends StatelessWidget {
                   color: color,
                 ),
                 const SizedBox(height: 6),
-                GoopText(
-                  value.toStringAsFixed(1),
-                  style: TextStyle(
-                    fontSize: 52,
-                    fontWeight: FontWeight.w900,
-                    color: color,
-                    height: 1.0,
-                    letterSpacing: -1,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: GoopText(
+                    value.toStringAsFixed(1),
+                    style: TextStyle(
+                      fontSize: 52,
+                      fontWeight: FontWeight.w900,
+                      color: color,
+                      height: 1.0,
+                      letterSpacing: -1,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 6),

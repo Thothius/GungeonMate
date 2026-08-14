@@ -215,6 +215,7 @@ class _AppTabState extends State<AppTab> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.close, color: Colors.white54),
+                      tooltip: 'Close',
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],

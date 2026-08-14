@@ -86,6 +86,7 @@ class AllSynergiesScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.close, color: Colors.white70),
+            tooltip: 'Close',
             onPressed: () => Navigator.of(context).pop(),
           ),
         ],

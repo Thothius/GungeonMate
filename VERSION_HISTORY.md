@@ -6,6 +6,20 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.11 — ♿ Accessibility + UX Polish — Tap Targets, Tooltips, Haptics (August 2026)
+**Build:** 88
+
+> 5 UI bugs fixed: tap targets, tooltips, haptics, SafeArea, responsive text.
+
+### Changes
+- **FIX (BUG-051) — Tap targets:** 3 IconButtons with sub-minimum tap targets fixed — delete session (16px→44px), MP diagnostics close (20px→44px), favorite toggle (36px→44px).
+- **FIX (BUG-052) — Tooltips:** 21 IconButtons across 11 files now have tooltips for screen reader accessibility.
+- **FIX (BUG-053) — Haptics:** 10 dashboard GestureDetector controls now call `Haptics.light()` on tap — Robot toggles, Junkan junk +/-, Gunderfury/Triple Gun/Evolver +/-.
+- **FIX (BUG-054) — SafeArea:** Emote bottom sheet now uses `useSafeArea: true` — no more risk of system nav bar obscuring emote buttons.
+- **FIX (BUG-055) — Responsive text:** Stats detail screen large stat value (fontSize 52) wrapped in `FittedBox(scaleDown)` — shrinks gracefully on narrow screens / high text scale.
+
+---
+
 ## v1.9.10 — 🔧 Synergy Icons + Dashboard Fixes + Gun Type Data (August 2026)
 **Build:** 87
 

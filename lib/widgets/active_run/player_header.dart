@@ -487,8 +487,8 @@ class MpHeader extends StatelessWidget {
                       const SizedBox(width: 12),
                       IconButton(
                         icon: const Icon(Icons.close, size: 20, color: Colors.white54),
-                        constraints: const BoxConstraints(),
-                        padding: EdgeInsets.zero,
+                        tooltip: 'Close',
+                        constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                         onPressed: () => Navigator.pop(ctx),
                       ),
                     ],

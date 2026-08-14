@@ -249,7 +249,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                           children: [
                                             GestureDetector(
                                               onTap: junkCount > 0 && junkItem != null
-                                                  ? () => p.removeItem(junkItem, slot: widget.slot)
+                                                  ? () { Haptics.light(); p.removeItem(junkItem, slot: widget.slot); }
                                                   : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(
@@ -270,7 +270,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                             ),
                                             GestureDetector(
                                               onTap: junkItem != null
-                                                  ? () => p.addItem(junkItem, slot: widget.slot)
+                                                  ? () { Haptics.light(); p.addItem(junkItem, slot: widget.slot); }
                                                   : null,
                                               behavior: HitTestBehavior.opaque,
                                               child: Padding(

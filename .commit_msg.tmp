@@ -1,0 +1,12 @@
+v1.9.11: Accessibility + UX polish — BUG-051 to BUG-055
+
+- BUG-051: 3 IconButtons with sub-minimum tap targets fixed (16/20/36px -> 44px)
+- BUG-052: 21 IconButtons across 11 files now have tooltips (accessibility)
+- BUG-053: 10 dashboard GestureDetector controls now call Haptics.light()
+- BUG-054: Emote bottom sheet uses useSafeArea: true
+- BUG-055: Stats detail fontSize 52 wrapped in FittedBox(scaleDown)
+- flutter analyze: 0 issues on all 16 modified files
+
+Generated with [Devin](https://devin.ai)
+
+Co-Authored-By: Devin <158243242+devin-ai-integration[bot]@users.noreply.github.com>

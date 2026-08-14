@@ -182,7 +182,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.10',
+                    'v1.9.11',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -251,7 +251,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.10)',
+                          'Changelog (v1.9.11)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -306,7 +306,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.10 — BULLET HELL EDITION',
+                            'v1.9.11 — BULLET HELL EDITION',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -319,6 +319,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                     IconButton(
                       icon: const Icon(Icons.close, color: Colors.white54),
+                      tooltip: 'Close',
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -722,7 +723,7 @@ class _BulletHellHeadingState extends State<_BulletHellHeading>
                 const SizedBox(width: 8),
                 // Version tag
                 GoopText(
-                  'v1.9.10',
+                  'v1.9.11',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,

@@ -80,6 +80,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   children: [
                     IconButton(
                       onPressed: () => Navigator.of(context).maybePop(),
+                      tooltip: 'Back',
                       icon: const Icon(Icons.arrow_back_ios_new_rounded,
                           size: 20, color: Colors.white70),
                     ),

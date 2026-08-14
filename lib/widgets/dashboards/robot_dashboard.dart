@@ -146,7 +146,8 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.remove_circle_outline, color: Colors.cyanAccent, size: 24),
-                          onPressed: p.robotJunk > 0 ? () => p.setRobotJunk(p.robotJunk - 1) : null,
+                          tooltip: 'Decrease junk',
+                          onPressed: p.robotJunk > 0 ? () { Haptics.light(); p.setRobotJunk(p.robotJunk - 1); } : null,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -165,7 +166,8 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent, size: 24),
-                          onPressed: () => p.setRobotJunk(p.robotJunk + 1),
+                          tooltip: 'Increase junk',
+                          onPressed: () { Haptics.light(); p.setRobotJunk(p.robotJunk + 1); },
                         ),
                       ],
                     ),
@@ -211,7 +213,8 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.remove_circle_outline, color: Colors.cyanAccent, size: 24),
-                          onPressed: p.robotArmor > 0 ? () => p.setRobotArmor(p.robotArmor - 1) : null,
+                          tooltip: 'Decrease armor',
+                          onPressed: p.robotArmor > 0 ? () { Haptics.light(); p.setRobotArmor(p.robotArmor - 1); } : null,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -230,7 +233,8 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent, size: 24),
-                          onPressed: () => p.setRobotArmor(p.robotArmor + 1),
+                          tooltip: 'Increase armor',
+                          onPressed: () { Haptics.light(); p.setRobotArmor(p.robotArmor + 1); },
                         ),
                       ],
                     ),
@@ -322,7 +326,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
     required ValueChanged<bool> onChanged,
   }) {
     return GestureDetector(
-      onTap: () => onChanged(!value),
+      onTap: () { Haptics.light(); onChanged(!value); },
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

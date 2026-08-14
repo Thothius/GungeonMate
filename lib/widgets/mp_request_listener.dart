@@ -499,6 +499,7 @@ class _ReconnectScreenState extends State<_ReconnectScreen> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.close, color: Colors.white54),
+                          tooltip: 'Close',
                           onPressed: () {
                             if (Navigator.of(context).canPop()) {
                               Navigator.of(context).pop();

@@ -146,11 +146,12 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppTheme.flair.card,
+      useSafeArea: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
       builder: (ctx) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -565,6 +566,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                     color: Colors.white54,
                                     size: 18,
                                   ),
+                                  tooltip: 'Clear search',
                                   onPressed: () {
                                     quickAddController.clear();
                                     setModalState(() {

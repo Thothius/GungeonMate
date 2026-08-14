@@ -110,8 +110,8 @@ class ItemDetailHeader extends StatelessWidget {
                   color: favColor,
                   size: 36,
                 ),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
+                tooltip: isFav ? 'Remove from favourites' : 'Add to favourites',
+                constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                 onPressed: () {
                   Haptics.light();
                   final p = context.read<RunProvider>();

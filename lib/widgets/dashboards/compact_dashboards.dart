@@ -339,12 +339,14 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                   IconButton(
                     onPressed: seconds > 0 ? () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds - 30).clamp(0, 999)); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 24),
+                    tooltip: 'Decrease platinum bullets',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   GoopText('${seconds}s', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds + 30).clamp(0, 999)); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 24),
+                    tooltip: 'Increase platinum bullets',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   const SizedBox(width: 8),
@@ -496,11 +498,13 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                   IconButton(
                     onPressed: uses < 3 ? () { Haptics.light(); p.setIronCoinUses(uses + 1); } : null,
                     icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 24),
+                    tooltip: 'Increase iron coin uses',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   IconButton(
                     onPressed: uses > 0 ? () { Haptics.light(); p.setIronCoinUses(uses - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.amber, size: 24),
+                    tooltip: 'Decrease iron coin uses',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
@@ -627,12 +631,14 @@ class SpiceDashboardState extends State<SpiceDashboard>
                   IconButton(
                     onPressed: count > 0 ? () { Haptics.light(); p.setSpiceUsageCount(count - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 24),
+                    tooltip: 'Decrease spice uses',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$count', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.redAccent)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setSpiceUsageCount(count + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.redAccent, size: 24),
+                    tooltip: 'Increase spice uses',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
@@ -761,12 +767,14 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                   IconButton(
                     onPressed: kills > 0 ? () { Haptics.light(); p.setMetronomeKills(kills - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.tealAccent, size: 24),
+                    tooltip: 'Decrease metronome kills',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$kills', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
                   IconButton(
                     onPressed: kills < 75 ? () { Haptics.light(); p.setMetronomeKills(kills + 1); } : null,
                     icon: const Icon(Icons.add_circle_outline, color: Colors.tealAccent, size: 24),
+                    tooltip: 'Increase metronome kills',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   const SizedBox(width: 8),
@@ -1028,12 +1036,14 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                   IconButton(
                     onPressed: stars > 0 ? () { Haptics.light(); p.setBoxingGloveStars(stars - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.orangeAccent, size: 24),
+                    tooltip: 'Decrease boxing glove stars',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$stars', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
                   IconButton(
                     onPressed: stars < 3 ? () { Haptics.light(); p.setBoxingGloveStars(stars + 1); } : null,
                     icon: const Icon(Icons.add_circle_outline, color: Colors.orangeAccent, size: 24),
+                    tooltip: 'Increase boxing glove stars',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
@@ -1135,12 +1145,14 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                   IconButton(
                     onPressed: uses > 0 ? () { Haptics.light(); p.setCigarettesUses(uses - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.blueGrey, size: 24),
+                    tooltip: 'Decrease cigarette uses',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$uses', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setCigarettesUses(uses + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.blueGrey, size: 24),
+                    tooltip: 'Increase cigarette uses',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],
@@ -1298,12 +1310,14 @@ class PolarisDashboardState extends State<PolarisDashboard>
                   IconButton(
                     onPressed: kills > 0 ? () { Haptics.light(); p.setPolarisKills(kills - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.amberAccent, size: 24),
+                    tooltip: 'Decrease Polaris kills',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   GoopText('$kills kills', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPolarisKills(kills + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.amberAccent, size: 24),
+                    tooltip: 'Increase Polaris kills',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   const SizedBox(width: 12),
@@ -1469,12 +1483,14 @@ class GuntherDashboardState extends State<GuntherDashboard>
                   IconButton(
                     onPressed: friendship > 0 ? () { Haptics.light(); p.setGuntherFriendship(friendship - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 24),
+                    tooltip: 'Decrease Gunther friendship',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                   Text('$friendship', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setGuntherFriendship(friendship + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 24),
+                    tooltip: 'Increase Gunther friendship',
                     constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                   ),
                 ],

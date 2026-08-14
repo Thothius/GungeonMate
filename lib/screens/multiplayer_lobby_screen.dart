@@ -521,8 +521,8 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                     const SizedBox(width: 8),
                                     IconButton(
                                       icon: const Icon(Icons.delete_outline_rounded, size: 16, color: Colors.redAccent),
-                                      constraints: const BoxConstraints(),
-                                      padding: EdgeInsets.zero,
+                                      tooltip: 'Delete session',
+                                      constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
                                       onPressed: () {
                                         _confirmDeleteSession(context, s);
                                       },
@@ -665,6 +665,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.keyboard_arrow_up_rounded, color: Colors.white60),
+                  tooltip: 'Back to lobby',
                   onPressed: () {
                     _pageController.animateToPage(
                       0,
