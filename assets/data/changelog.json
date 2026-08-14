@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.8",
+    "title": "🎨 Theme Palette Assessment Fixes",
+    "date": "August 2026",
+    "items": [
+      "🎨 FIX: Oubliette primary (#39FF14) and headline (#CCFF00) were identical to Bullet Hell — changed to sickly sewer green (#64DD17) and pale toxic lime (#B2FF59) for distinct identity.",
+      "🎨 FIX: Cult of Gundead primary was harsh pure #FF0000 — softened to styled #FF1744 (Material red A400) to match the tuned quality of every other theme.",
+      "🔮 FIX: Robot's Core particle default was brassCasings (doesn't fit cyber aesthetic) — changed to voidRift for a tech/circuit particle identity.",
+      "🔥 FIX: Forge Master Ember (+12°) and Inferno (-12°) remixes were too subtle to distinguish — increased to +25° and -25° for clearly visible hue shifts. Magma increased from +30° to +45°.",
+      "🦄 FIX: Unicorn Bubblegum primary (#FF80AB) was too close to Neon (#FF1493) — shifted to magenta-pink (#FF40B5) for a distinct palette identity. Particle colors updated to match."
+    ]
+  },
+  {
     "version": "v1.9.7",
     "title": "🎨 Compact Theme Picker + Particle Visibility Fix",
     "date": "August 2026",

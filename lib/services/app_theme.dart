@@ -424,25 +424,25 @@ enum AppThemeMode {
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF0A0F08),
       card: Color(0xFF141A10),
-      primary: Color(0xFF39FF14),
+      primary: Color(0xFF64DD17), // sickly sewer green (distinct from Bullet Hell's neon green)
       secondary: Color(0xFF795548),
-      headlineStat: Color(0xFFCCFF00),
-      bulletColor: Color(0xFF39FF14),
+      headlineStat: Color(0xFFB2FF59), // pale toxic lime (distinct from Bullet Hell's acid yellow)
+      bulletColor: Color(0xFF64DD17),
       bulletGlyph: '☣',
       tabularFigures: true,
       numberSizeScale: 1.0,
       numberWeight: FontWeight.w800,
       chipRadius: 8,
       cardRadius: 10,
-      cardBorderColor: Color(0x4439FF14),
+      cardBorderColor: Color(0x4464DD17),
       cardBorderWidth: 1.0,
-      dividerColor: Color(0x5539FF14),
+      dividerColor: Color(0x5564DD17),
       dividerThickness: 1.0,
-      glowPrimary: Color(0x4D39FF14),
+      glowPrimary: Color(0x4D64DD17),
       glowSecondary: Color(0x2E795548),
       auraStyle: AvatarAuraStyle.toxicOoze,
       headerGlyph: '☣',
-      headerUnderlineColor: Color(0x8839FF14),
+      headerUnderlineColor: Color(0x8864DD17),
     ),
   ),
   pastParadox(
@@ -547,7 +547,7 @@ enum AppThemeMode {
     staticFlair: ThemeFlair(
       scaffold: Color(0xFF0D0B08),
       card: Color(0xFF1A1610),
-      primary: Color(0xFFFF0000),
+      primary: Color(0xFFFF1744), // styled target red (not harsh pure #FF0000)
       secondary: Color(0xFFCD9F73),
       headlineStat: Color(0xFFFFD700),
       bulletColor: Color(0xFFCD9F73),
@@ -561,7 +561,7 @@ enum AppThemeMode {
       cardBorderWidth: 1.0,
       dividerColor: Color(0x55CD9F73),
       dividerThickness: 1.0,
-      glowPrimary: Color(0x4DFF0000),
+      glowPrimary: Color(0x4DFF1744),
       glowSecondary: Color(0x2ECD9F73),
       auraStyle: AvatarAuraStyle.brassConic,
       headerGlyph: '🎯',
@@ -817,27 +817,27 @@ enum UnicornPalette {
         bubblegum => const ThemeFlair(
           scaffold: Color(0xFF1A0F1E),
           card: Color(0xFF2A1A30),
-          primary: Color(0xFFFF80AB), // bubblegum pink
+          primary: Color(0xFFFF40B5), // magenta-pink (distinct from Neon's #FF1493 hot pink)
           secondary: Color(0xFFE040FB), // magenta
           headlineStat: Color(0xFFB388FF), // light violet
-          bulletColor: Color(0xFFFF80AB),
+          bulletColor: Color(0xFFFF40B5),
           bulletGlyph: '✦',
           twinkleBullets: true,
           sparkleNumbers: true,
-          numberGlowColor: Color(0xFFFF80AB),
+          numberGlowColor: Color(0xFFFF40B5),
           tabularFigures: false,
           numberSizeScale: 1.06,
           numberWeight: FontWeight.w700,
           numberStyle: FontStyle.italic,
           chipRadius: 18,
           cardRadius: 18,
-          dividerColor: Color(0x55FF80AB),
+          dividerColor: Color(0x55FF40B5),
           dividerThickness: 1.0,
-          glowPrimary: Color(0x44FF80AB),
+          glowPrimary: Color(0x44FF40B5),
           glowSecondary: Color(0x33B388FF),
           auraStyle: AvatarAuraStyle.pastelPulse,
           headerGlyph: '\u2661',
-          headerUnderlineColor: Color(0x88FF80AB),
+          headerUnderlineColor: Color(0x88FF40B5),
         ),
         mulberry => const ThemeFlair(
           scaffold: Color(0xFF1C0A18),
@@ -874,7 +874,7 @@ enum UnicornPalette {
         neon => const [Color(0xFFFF1493), Color(0xFFDA70D6), Color(0xFFE040FB), Color(0xFF00E5FF)],
         dreamy => const [Color(0xFFF8BBD0), Color(0xFFD1C4E9), Color(0xFFCE93D8), Color(0xFFB39DDB)],
         sunset => const [Color(0xFFFF6B9D), Color(0xFFFFAB91), Color(0xFFFFD1DC), Color(0xFFFFCC80)],
-        bubblegum => const [Color(0xFFFF80AB), Color(0xFFE040FB), Color(0xFFB388FF), Color(0xFFFFD700)],
+        bubblegum => const [Color(0xFFFF40B5), Color(0xFFE040FB), Color(0xFFB388FF), Color(0xFFFFD700)],
         mulberry => const [Color(0xFFC2185B), Color(0xFF9C27B0), Color(0xFFF06292), Color(0xFFE040FB)],
       };
 }
@@ -1153,7 +1153,7 @@ const Map<AppThemeMode, ParticlePreset> kThemeParticleDefaults =
   AppThemeMode.theOubliette: ParticlePreset.cursedSmoke,
   AppThemeMode.pastParadox: ParticlePreset.cosmicStars,
   AppThemeMode.highPriestVoid: ParticlePreset.voidRift,
-  AppThemeMode.robotsCore: ParticlePreset.brassCasings,
+  AppThemeMode.robotsCore: ParticlePreset.voidRift,
   AppThemeMode.cultOfGundead: ParticlePreset.cursedSkulls,
   AppThemeMode.synergySurge: ParticlePreset.cosmicDust,
   AppThemeMode.glitchedChest: ParticlePreset.rainbowConfetti,
@@ -1973,9 +1973,9 @@ class ThemeRemix {
 const kThemeRemixes = <AppThemeMode, List<ThemeRemix>>{
   AppThemeMode.forgeMaster: [
     ThemeRemix(label: 'Original'),
-    ThemeRemix(label: 'Ember', hueShift: 12),
-    ThemeRemix(label: 'Magma', hueShift: 30),
-    ThemeRemix(label: 'Inferno', hueShift: -12),
+    ThemeRemix(label: 'Ember', hueShift: 25),
+    ThemeRemix(label: 'Magma', hueShift: 45),
+    ThemeRemix(label: 'Inferno', hueShift: -25),
   ],
   AppThemeMode.robotsCore: [
     ThemeRemix(label: 'Original'),
