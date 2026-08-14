@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/haptics.dart';
 
 
 class RobotDashboardSliver extends StatefulWidget {
@@ -41,7 +42,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
             children: [
               // Header Row with big DMG boost badge
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),

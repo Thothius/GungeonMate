@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/player.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/haptics.dart';
 
 
 
@@ -118,7 +119,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _expanded = !_expanded); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(12),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
