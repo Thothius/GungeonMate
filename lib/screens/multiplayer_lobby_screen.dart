@@ -175,6 +175,8 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     if (!mounted) return;
     if (picked != null) {
       setState(() => _selectedCharacter = picked);
+      // Persist for the home screen fall animation.
+      context.read<RunProvider>().saveLastPlayedCharacter(picked.name);
     }
   }
 

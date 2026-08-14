@@ -10,6 +10,7 @@ import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
+import '../widgets/backgrounds/gungeon_fall_animation.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -28,8 +29,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     final btnIconSize = 24 * sf;
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
+      body: GungeonFallAnimation(
+        child: Stack(
+          children: [
           Positioned.fill(
               child: SafeArea(
             child: Center(
@@ -261,6 +263,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           ),
           ],
         ),
+      ),
     );
   }
 

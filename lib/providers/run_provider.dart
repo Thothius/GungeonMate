@@ -68,6 +68,10 @@ class RunProvider with ChangeNotifier {
   int _polarisKills = 0;
   int _polarisDamageHits = 0;
 
+  /// Last played character name — persists across run end and app kill.
+  /// Used by the home screen fall animation to show the right sprite.
+  String _lastPlayedCharName = '';
+
   // Gunther: friendship points (rooms cleared with chance to gain friendship)
   // Stage 1: 0-2, Stage 2: 3-5, Stage 3: 6+
   int _guntherFriendship = 0;
@@ -173,6 +177,12 @@ class RunProvider with ChangeNotifier {
         ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
   List<Shrine> get allShrines => _allShrines;
   List<Gungeoneer> get allGungeoneers => _allGungeoneers;
+
+  /// The last played character, or null if no history exists.
+  /// Persists across run end and app kill — only updates when a new
+  /// character is picked for SP or MP.
+  Gungeoneer? get lastPlayedCharacter =>
+      _lastPlayedCharName.isEmpty ? null : gungeoneerByName(_lastPlayedCharName);
   BackRefs get backRefs => _backRefs;
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -298,6 +308,7 @@ class RunProvider with ChangeNotifier {
       await _loadSavedRun();
       await _loadFavourites();
       await _loadSpecialUpgrades();
+      await _loadLastPlayedChar();
 
       _isLoading = false;
       _error = null;
@@ -439,6 +450,31 @@ class RunProvider with ChangeNotifier {
 // Removed debugPrint for production
     }
   }
+
+  // --- Last Played Character -----------------------------------------------
+
+  Future<void> _loadLastPlayedChar() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      _lastPlayedCharName = prefs.getString('last_played_character') ?? '';
+    } catch (e) {
+// Removed debugPrint for production
+    }
+  }
+
+  Future<void> _saveLastPlayedChar(String name) async {
+    _lastPlayedCharName = name;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('last_played_character', name);
+    } catch (e) {
+// Removed debugPrint for production
+    }
+  }
+
+  /// Public hook for MP character selection to persist the last played
+  /// character without starting a full run.
+  void saveLastPlayedCharacter(String name) => _saveLastPlayedChar(name);
 
   // --- Special Upgrades ----------------------------------------------------
 
@@ -786,6 +822,7 @@ class RunProvider with ChangeNotifier {
 
   void startNewRun(Gungeoneer character) {
     _runState = RunState(main: _buildPlayerFor(character));
+    _saveLastPlayedChar(character.name);
     _saveRun();
     notifyListeners();
   }

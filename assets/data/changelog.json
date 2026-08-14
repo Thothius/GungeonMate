@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.6",
+    "title": "🌀 Gungeon Fall Animation",
+    "date": "August 2026",
+    "items": [
+      "🌀 NEW: Home screen now features a looping vortex/portal animation with a Gungeoneer tumbling endlessly down the hole — referencing the true ending fall sequence of Enter the Gungeon. The vortex is custom-painted (6 rotating logarithmic spiral arms) and theme-matched to the active palette.",
+      "🎭 The falling character is dynamically selected based on your last played character (SP or MP). If no history exists, a random Gungeoneer from the roster is chosen. The sprite tumbles (rotate), pulses (scale for depth), and drifts (moveY) simultaneously via flutter_animate.",
+      "💾 New 'last_played_character' persistence — survives run end and app kill, updates whenever you pick a character for SP or MP."
+    ]
+  },
+  {
     "version": "v1.9.5",
     "title": "⚙️ Settings Reorganization + Particle Studio + Menu Groups",
     "date": "August 2026",
