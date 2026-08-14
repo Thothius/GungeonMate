@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.9.7",
+    "title": "🎨 Compact Theme Picker + Particle Visibility Fix",
+    "date": "August 2026",
+    "items": [
+      "🎨 REDESIGN: Theme picker massively compacted — full-screen immersive pages replaced with a compact horizontal swipeable card carousel (100px tall). Each card shows the theme's color swatches and name. Dot indicator replaces the old circle strip.",
+      "📋 Theme details (name, tagline, apply button) now fit in a single compact row below the carousel instead of taking the entire screen.",
+      "🔮 FIX: Particles now visible in theme picker — old immersive pages had opaque scaffold backgrounds that blocked the particle layer. New compact cards use semi-transparent backgrounds so particles show through from the ThemeOverlay behind.",
+      "🧹 Removed dead _DashboardPreview widget (no longer referenced after compaction)."
+    ]
+  },
+  {
     "version": "v1.9.6",
     "title": "🌀 Gungeon Fall Animation",
     "date": "August 2026",

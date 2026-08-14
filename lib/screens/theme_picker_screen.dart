@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
-import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
 import '../widgets/particle_engine.dart'
     show
@@ -74,9 +73,9 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              // Minimal top bar — back + title
+              // ── Top bar ────────────────────────────────────────────
               Padding(
-                padding: const EdgeInsets.only(top: 8, left: 4, right: 16),
+                padding: const EdgeInsets.only(top: 4, left: 4, right: 16),
                 child: Row(
                   children: [
                     IconButton(
@@ -97,8 +96,9 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   ],
                 ),
               ),
-              // Full-screen swipe area
-              Expanded(
+              // ── Compact horizontal swipeable theme cards ────────────
+              SizedBox(
+                height: 100,
                 child: PageView.builder(
                   controller: _pc,
                   itemCount: modes.length,
@@ -109,24 +109,23 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   },
                   itemBuilder: (context, i) {
                     final m = modes[i];
-                    return _ImmersiveThemePage(
+                    return _CompactThemeCard(
                       mode: m,
                       isActive: m == _activeMode,
-                      onApply: () => _select(m),
+                      isFocused: i == _index,
+                      onTap: () => _select(m),
                     );
                   },
                 ),
               ),
-              // Quick theme strip — tap any circle to jump directly
-              // to that theme's immersive page. No need to swipe through all.
+              // ── Dot indicator ───────────────────────────────────────
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                padding: const EdgeInsets.only(top: 2, bottom: 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(modes.length, (i) {
                     final on = i == _index;
                     final f = AppTheme.flairFor(modes[i]);
-                    final sf = Responsive.factor(context);
                     return GestureDetector(
                       onTap: () {
                         _pc.animateToPage(
@@ -138,45 +137,25 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 280),
                         curve: Curves.easeOutCubic,
-                        margin: EdgeInsets.symmetric(horizontal: 5 * sf),
-                        width: (on ? 32 : 22) * sf,
-                        height: (on ? 32 : 22) * sf,
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        width: on ? 22 : 8,
+                        height: 8,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: f.scaffold,
-                          border: Border.all(
-                            color: on
-                                ? f.primary
-                                : Colors.white.withValues(alpha: 0.2),
-                            width: on ? 2.5 : 1.2,
-                          ),
-                          boxShadow: on
-                              ? [
-                                  BoxShadow(
-                                    color: f.primary.withValues(alpha: 0.4),
-                                    blurRadius: 8,
-                                    spreadRadius: 1,
-                                  ),
-                                ]
-                              : null,
-                        ),
-                        child: Center(
-                          child: Container(
-                            width: (on ? 14 : 10) * sf,
-                            height: (on ? 14 : 10) * sf,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: f.primary,
-                            ),
-                          ),
+                          borderRadius: BorderRadius.circular(4),
+                          color: on ? f.primary : Colors.white.withValues(alpha: 0.2),
                         ),
                       ),
                     );
                   }),
                 ),
               ),
-              // Quick particle preset strip — cycle through presets
-              // for the focused theme without leaving the picker.
+              // ── Theme details: name + tagline + apply ───────────────
+              _CompactThemeDetails(
+                mode: modes[_index],
+                isActive: modes[_index] == _activeMode,
+                onApply: () => _select(modes[_index]),
+              ),
+              // ── Particle strips ─────────────────────────────────────
               ValueListenableBuilder<VisualPrefs>(
                 valueListenable: VisualPrefs.notifier,
                 builder: (context, prefs, _) {
@@ -190,8 +169,6 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   );
                 },
               ),
-              // Particle color schema strip — 16 named color palettes
-              // that override the preset's default colors.
               ValueListenableBuilder<VisualPrefs>(
                 valueListenable: VisualPrefs.notifier,
                 builder: (context, prefs, _) {
@@ -204,7 +181,6 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   );
                 },
               ),
-              // Particle speed selector — 5 discrete steps
               ValueListenableBuilder<VisualPrefs>(
                 valueListenable: VisualPrefs.notifier,
                 builder: (context, prefs, _) {
@@ -217,7 +193,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   );
                 },
               ),
-              // Particle Studio — expandable advanced controls
+              // ── Particle Studio (expandable) ────────────────────────
               _buildParticleStudio(),
             ],
           ),
@@ -582,11 +558,135 @@ class _QuickParticleStrip extends StatelessWidget {
 
 /// A single full-screen theme page. The background is the theme's
 /// scaffold colour, so the user immediately feels the palette.
-class _ImmersiveThemePage extends StatelessWidget {
+/// Compact horizontal theme card — a small tappable card showing the
+/// theme's color swatches and name. Transparent background so particles
+/// show through from the ThemeOverlay behind it.
+class _CompactThemeCard extends StatelessWidget {
+  final AppThemeMode mode;
+  final bool isActive;
+  final bool isFocused;
+  final VoidCallback onTap;
+
+  const _CompactThemeCard({
+    required this.mode,
+    required this.isActive,
+    required this.isFocused,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isUnicorn = mode == AppThemeMode.unicorn;
+    final hasRemix = kThemeRemixes.containsKey(mode);
+    final listenable = isUnicorn
+        ? AppTheme.unicornPaletteNotifier
+        : hasRemix
+            ? AppTheme.remixNotifier
+            : null;
+    if (listenable != null) {
+      return ListenableBuilder(
+        listenable: listenable,
+        builder: (context, _) => _buildCard(context),
+      );
+    }
+    return _buildCard(context);
+  }
+
+  Widget _buildCard(BuildContext context) {
+    final f = AppTheme.flairFor(mode);
+    final sf = Responsive.factor(context);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 6 * sf, vertical: 4),
+        decoration: BoxDecoration(
+          // Transparent — particles show through
+          color: f.card.withValues(alpha: isFocused ? 0.35 : 0.15),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isFocused
+                ? f.primary.withValues(alpha: 0.7)
+                : Colors.white.withValues(alpha: 0.08),
+            width: isFocused ? 2.0 : 1.0,
+          ),
+          boxShadow: isFocused
+              ? [
+                  BoxShadow(
+                    color: f.primary.withValues(alpha: 0.15),
+                    blurRadius: 12,
+                    spreadRadius: 0,
+                  ),
+                ]
+              : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Color swatch row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _swatch(f.scaffold, radiusLeft: true),
+                _swatch(f.primary),
+                _swatch(f.secondary),
+                _swatch(f.headlineStat, radiusRight: true),
+              ],
+            ),
+            const SizedBox(height: 6),
+            // Theme name
+            GoopText(
+              mode.label.toUpperCase(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11 * sf,
+                fontWeight: FontWeight.w900,
+                color: isFocused ? f.headlineStat : Colors.white.withValues(alpha: 0.6),
+                letterSpacing: 1.2,
+              ),
+            ),
+            if (isActive) ...[
+              const SizedBox(height: 2),
+              GoopText(
+                '✓ ACTIVE',
+                style: TextStyle(
+                  fontSize: 8 * sf,
+                  fontWeight: FontWeight.w900,
+                  color: f.primary,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _swatch(Color color, {bool radiusLeft = false, bool radiusRight = false}) {
+    return Container(
+      width: 22,
+      height: 28,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.horizontal(
+          left: radiusLeft ? const Radius.circular(5) : Radius.zero,
+          right: radiusRight ? const Radius.circular(5) : Radius.zero,
+        ),
+      ),
+    );
+  }
+}
+
+/// Compact theme details — name, tagline, and apply button in a
+/// single compact row below the card carousel. Transparent background.
+class _CompactThemeDetails extends StatelessWidget {
   final AppThemeMode mode;
   final bool isActive;
   final VoidCallback onApply;
-  const _ImmersiveThemePage({
+
+  const _CompactThemeDetails({
     required this.mode,
     required this.isActive,
     required this.onApply,
@@ -604,222 +704,168 @@ class _ImmersiveThemePage extends StatelessWidget {
     if (listenable != null) {
       return ListenableBuilder(
         listenable: listenable,
-        builder: (context, _) => _buildPage(context),
+        builder: (context, _) => _build(context),
       );
     }
-    return _buildPage(context);
+    return _build(context);
   }
 
-  Widget _buildPage(BuildContext context) {
+  Widget _build(BuildContext context) {
     final f = AppTheme.flairFor(mode);
     final sf = Responsive.factor(context);
 
-    return Container(
-      color: f.scaffold,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20 * sf),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Spacer(flex: 1),
-
-            // Theme name — large, bold, in the theme's headline colour
-            GoopText(
-              mode.label.toUpperCase(),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 28 * sf,
-                fontWeight: FontWeight.w900,
-                color: f.headlineStat,
-                letterSpacing: 4,
-                height: 1.1,
-                shadows: f.numberGlowColor != null
-                    ? [
-                        Shadow(
-                          color: f.numberGlowColor!,
-                          blurRadius: 16,
-                        ),
-                      ]
-                    : null,
-              ),
-            )
-            .animate()
-            .fadeIn(duration: 400.ms, delay: 100.ms)
-            .slideY(begin: 0.08, end: 0, duration: 400.ms),
-
-            const SizedBox(height: 4),
-
-            // Tagline — small, muted
-            GoopText(
-              mode.tagline,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12 * sf,
-                fontWeight: FontWeight.w500,
-                color: f.secondary.withValues(alpha: 0.7),
-                letterSpacing: 1.2,
-              ),
-            ),
-
-            const Spacer(flex: 1),
-
-            // ═══════════════════════════════════════════
-            // DASHBOARD PREVIEW — mini GungeoneerHeader mockup
-            // ═══════════════════════════════════════════
-            _DashboardPreview(f: f)
-                .animate()
-                .fadeIn(duration: 500.ms, delay: 200.ms)
-                .slideY(begin: 0.1, end: 0, duration: 500.ms),
-
-            const Spacer(flex: 1),
-
-            // Flavour description — 1-2 sentences, italic, centered
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8 * sf),
-              child: GoopText(
-                mode.whimsicalDescription,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 13 * sf,
-                  fontWeight: FontWeight.w500,
-                  height: 1.4,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.white.withValues(alpha: 0.55),
-                  letterSpacing: 0.3,
-                ),
-              ),
-            )
-            .animate()
-            .fadeIn(duration: 600.ms, delay: 400.ms),
-
-            const Spacer(flex: 1),
-
-            // ═══════════════════════════════════════════
-            // PALETTE / REMIX SELECTOR — big tappable cards
-            // ═══════════════════════════════════════════
-            if (mode == AppThemeMode.unicorn)
-              ListenableBuilder(
-                listenable: AppTheme.unicornPaletteNotifier,
-                builder: (context, _) {
-                  final active = AppTheme.unicornPalette;
-                  return _PaletteSelector(
-                    flair: f,
-                    items: UnicornPalette.values.map((p) {
-                      final pf = p.flair;
-                      return (
-                        label: p.label,
-                        colors: [pf.scaffold, pf.primary, pf.headlineStat],
-                      );
-                    }).toList(),
-                    activeIndex: active.index,
-                    onTap: (i) {
-                      AppTheme.setUnicornPalette(UnicornPalette.values[i]);
-                      Haptics.selection();
-                    },
-                  );
-                },
-              )
-            else if (kThemeRemixes.containsKey(mode))
-              ListenableBuilder(
-                listenable: AppTheme.remixNotifier,
-                builder: (context, _) {
-                  final remixes = kThemeRemixes[mode]!;
-                  final active = AppTheme.remixFor(mode);
-                  return _PaletteSelector(
-                    flair: f,
-                    items: remixes.map((r) {
-                      final rf = r.flair;
-                      return (
-                        label: r.label,
-                        colors: rf != null
-                            ? [rf.scaffold, rf.primary, rf.headlineStat]
-                            : [f.scaffold, f.primary, f.headlineStat],
-                      );
-                    }).toList(),
-                    activeIndex: active,
-                    onTap: (i) {
-                      AppTheme.setRemix(mode, i);
-                      Haptics.selection();
-                    },
-                  );
-                },
-              ),
-
-            // Custom theme editor button
-            if (mode == AppThemeMode.custom)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: OutlinedButton.icon(
-                  onPressed: () async {
-                    await showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: AppTheme.flair.card,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(18)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Column(
+        children: [
+          // Name + tagline + apply button
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      mode.label.toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16 * sf,
+                        fontWeight: FontWeight.w900,
+                        color: f.headlineStat,
+                        letterSpacing: 2,
+                        height: 1.1,
+                        shadows: f.numberGlowColor != null
+                            ? [Shadow(color: f.numberGlowColor!, blurRadius: 10)]
+                            : null,
                       ),
-                      builder: (sheetCtx) => const _CustomThemeEditorSheet(),
-                    );
-                    if (context.mounted) AppTheme.refresh();
-                  },
-                  icon: Icon(Icons.tune_rounded, size: 18, color: f.primary),
-                  label: GoopText(
-                    'Customize Colors',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: f.primary,
-                      letterSpacing: 0.4,
                     ),
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                        color: f.primary.withValues(alpha: 0.5), width: 1.2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(f.chipRadius),
+                    GoopText(
+                      mode.tagline,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 10 * sf,
+                        fontWeight: FontWeight.w500,
+                        color: f.secondary.withValues(alpha: 0.7),
+                        letterSpacing: 0.8,
+                      ),
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  ),
+                  ],
                 ),
               ),
-
-            // Apply button — the single call to action
-            Padding(
-              padding: EdgeInsets.only(bottom: 16 * sf),
-              child: SizedBox(
-                width: double.infinity,
-                height: 52 * sf,
+              const SizedBox(width: 12),
+              SizedBox(
+                height: 38 * sf,
                 child: FilledButton(
                   onPressed: onApply,
                   style: FilledButton.styleFrom(
                     backgroundColor: f.primary,
                     foregroundColor:
-                        f.primary.computeLuminance() > 0.5
-                            ? Colors.black87
-                            : Colors.white,
+                        f.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 0,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
                   child: GoopText(
-                    isActive ? '✓ Active' : 'Use This Palette',
+                    isActive ? '✓ Active' : 'Apply',
                     style: TextStyle(
-                      fontSize: 15 * sf,
+                      fontSize: 12 * sf,
                       fontWeight: FontWeight.w800,
-                      letterSpacing: 1.2,
+                      letterSpacing: 0.8,
                     ),
                   ),
                 ),
               ),
+            ],
+          ),
+          // Palette / remix selector — compact, only for themes that have it
+          if (mode == AppThemeMode.unicorn)
+            ListenableBuilder(
+              listenable: AppTheme.unicornPaletteNotifier,
+              builder: (context, _) {
+                final active = AppTheme.unicornPalette;
+                return _PaletteSelector(
+                  flair: f,
+                  items: UnicornPalette.values.map((p) {
+                    final pf = p.flair;
+                    return (
+                      label: p.label,
+                      colors: [pf.scaffold, pf.primary, pf.headlineStat],
+                    );
+                  }).toList(),
+                  activeIndex: active.index,
+                  onTap: (i) {
+                    AppTheme.setUnicornPalette(UnicornPalette.values[i]);
+                    Haptics.selection();
+                  },
+                );
+              },
             )
-            .animate()
-            .fadeIn(duration: 400.ms, delay: 600.ms)
-            .slideY(begin: 0.1, end: 0, duration: 400.ms),
-          ],
-        ),
+          else if (kThemeRemixes.containsKey(mode))
+            ListenableBuilder(
+              listenable: AppTheme.remixNotifier,
+              builder: (context, _) {
+                final remixes = kThemeRemixes[mode]!;
+                final active = AppTheme.remixFor(mode);
+                return _PaletteSelector(
+                  flair: f,
+                  items: remixes.map((r) {
+                    final rf = r.flair;
+                    return (
+                      label: r.label,
+                      colors: rf != null
+                          ? [rf.scaffold, rf.primary, rf.headlineStat]
+                          : [f.scaffold, f.primary, f.headlineStat],
+                    );
+                  }).toList(),
+                  activeIndex: active,
+                  onTap: (i) {
+                    AppTheme.setRemix(mode, i);
+                    Haptics.selection();
+                  },
+                );
+              },
+            ),
+          // Custom theme editor button
+          if (mode == AppThemeMode.custom)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: OutlinedButton.icon(
+                onPressed: () async {
+                  await showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: AppTheme.flair.card,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+                    ),
+                    builder: (sheetCtx) => const _CustomThemeEditorSheet(),
+                  );
+                  if (context.mounted) AppTheme.refresh();
+                },
+                icon: Icon(Icons.tune_rounded, size: 16, color: f.primary),
+                label: GoopText(
+                  'Customize Colors',
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: f.primary,
+                    letterSpacing: 0.4,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: f.primary.withValues(alpha: 0.5), width: 1.2),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(f.chipRadius),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -1265,259 +1311,6 @@ class _ColorSlotPicker extends StatelessWidget {
                   ),
                 );
               },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════
-// _DashboardPreview — Mini GungeoneerHeader mockup that shows how
-// the theme looks on the actual active run screen.
-// ═══════════════════════════════════════════════════════════════
-class _DashboardPreview extends StatelessWidget {
-  final ThemeFlair f;
-  const _DashboardPreview({required this.f});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: f.card,
-        borderRadius: BorderRadius.circular(f.cardRadius),
-        border: Border.all(
-          color: f.primary.withValues(alpha: 0.25),
-          width: 1.2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: f.primary.withValues(alpha: 0.08),
-            blurRadius: 10,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Row 1: Portrait + Name + trailing dots
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-            child: Row(
-              children: [
-                // Portrait
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: f.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(
-                      color: f.primary.withValues(alpha: 0.35),
-                      width: 1.2,
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      localGungeoneerIcon('The Marine'),
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.none,
-                      errorBuilder: (_, __, ___) => Icon(
-                        Icons.person,
-                        size: 22,
-                        color: f.primary.withValues(alpha: 0.5),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                // Name
-                Expanded(
-                  child: GoopText(
-                    'THE MARINE',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      letterSpacing: 1.0,
-                      height: 1.1,
-                    ),
-                  ),
-                ),
-                // Trailing menu icon
-                Icon(Icons.more_vert_rounded, size: 18, color: f.primary.withValues(alpha: 0.5)),
-              ],
-            ),
-          ),
-          // Row 2: Stat capsules
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 4, 12, 10),
-            child: Row(
-              children: [
-                _previewCapsule(f, const Color(0xFF00E5FF), '+3.0', 'COOL', true),
-                const SizedBox(width: 4),
-                _previewCapsule(f, const Color(0xFFE040FB), '+1.5', 'CURSE', true),
-                const SizedBox(width: 4),
-                _previewCapsule(f, const Color(0xFFFFD740), '4', 'SYN', true),
-                const SizedBox(width: 4),
-                _previewCapsule(f, const Color(0xFFFF9100), '52', 'DPS', true),
-              ],
-            ),
-          ),
-          // Divider
-          Container(
-            height: 1,
-            width: double.infinity,
-            color: Colors.white.withValues(alpha: 0.05),
-          ),
-          // Row 3: Mini inventory rows
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                _previewInventoryRow(f, 'Marine Sidearm', 'A', const Color(0xFF00E5FF)),
-                const SizedBox(height: 4),
-                _previewInventoryRow(f, 'Supply Drop', 'B', const Color(0xFF00E676)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _previewCapsule(
-    ThemeFlair f,
-    Color color,
-    String value,
-    String label,
-    bool isActive,
-  ) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
-        decoration: BoxDecoration(
-          color: isActive
-              ? color.withValues(alpha: 0.16)
-              : Colors.black.withValues(alpha: 0.28),
-          borderRadius: BorderRadius.circular(f.chipRadius),
-          border: Border.all(
-            color: isActive
-                ? color.withValues(alpha: 0.45)
-                : Colors.white.withValues(alpha: 0.10),
-            width: 1.0,
-          ),
-        ),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Column(
-            children: [
-              GoopText(
-                value,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w900,
-                  color: isActive ? Colors.white : Colors.white38,
-                  height: 1.1,
-                ),
-              ),
-              const SizedBox(height: 2),
-              GoopText(
-                label,
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w900,
-                  color: isActive ? color : Colors.white24,
-                  letterSpacing: 0.5,
-                  height: 1.0,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _previewInventoryRow(
-    ThemeFlair f,
-    String name,
-    String quality,
-    Color qualityColor,
-  ) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: f.primary.withValues(alpha: 0.08),
-          width: 0.8,
-        ),
-      ),
-      child: Row(
-        children: [
-          // Quality badge dot
-          Container(
-            width: 18,
-            height: 18,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: qualityColor.withValues(alpha: 0.18),
-              border: Border.all(color: qualityColor.withValues(alpha: 0.55), width: 1.2),
-            ),
-            child: Center(
-              child: GoopText(
-                quality,
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w900,
-                  color: qualityColor,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          // Icon placeholder
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              color: f.primary.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Icon(Icons.inventory_2_outlined, size: 12, color: f.primary.withValues(alpha: 0.4)),
-          ),
-          const SizedBox(width: 8),
-          // Name
-          Expanded(
-            child: GoopText(
-              name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: Colors.white.withValues(alpha: 0.8),
-              ),
-            ),
-          ),
-          // DPS / stat number
-          Text(
-            '14.2',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w900,
-              color: f.headlineStat,
-              shadows: f.numberGlowColor != null
-                  ? [Shadow(color: f.numberGlowColor!, blurRadius: 6)]
-                  : null,
             ),
           ),
         ],
