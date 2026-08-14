@@ -99,7 +99,14 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const Divider(color: Colors.white12, height: 16),
 
               // Junk counter — full width, no overflow
@@ -196,7 +203,9 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
               // the dashboard panel. The +DMG% badge in the header already
               // shows the boost. Users can use the universal Damage Calculator
               // toggle in settings for per-gun breakdowns.
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),

@@ -170,7 +170,14 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                   ),
                 ),
               ),
-              if (_expanded) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _expanded
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
                   padding: const EdgeInsets.all(12),
@@ -333,7 +340,9 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                     ],
                   ),
                 ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),

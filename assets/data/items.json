@@ -9856,6 +9856,77 @@
     "recharge_time": "250 dmg",
     "chest_color": "blue",
     "neckbear_approved": true,
+    "wiki": {
+      "effects": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Places explosives on the ground which then can be detonated by using the item again, dealing 60 damage to nearby enemies. Unlike "
+            },
+            {
+              "t": "ref",
+              "v": "Bomb",
+              "kind": "item"
+            },
+            {
+              "t": "text",
+              "v": ", does not open secret rooms."
+            }
+          ]
+        }
+      ],
+      "item_interactions": [
+        {
+          "tokens": [
+            {
+              "t": "ref",
+              "v": "Blank Companion's Ring",
+              "kind": "item"
+            },
+            {
+              "t": "text",
+              "v": " / "
+            },
+            {
+              "t": "ref",
+              "v": "Ring of Triggers",
+              "kind": "item"
+            },
+            {
+              "t": "text",
+              "v": " - These items only trigger their effects on the initial use of C4, which places down the explosive. The follow-up use of the item to detonate the bomb does not cause them to trigger."
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "The C4 in game is based on the real-life plastic explosive. C4 is often known for its moldable clay-like quality; however, this doesn't appear in-game."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "After placing down the C4 charge, the items appearance in the players UI will change to a transmitter switch until the mine is detonated."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Dropping C4 after placing down a mine, but before triggering it will automatically detonate the charge, reverting the item back to its regular appearance."
+            }
+          ]
+        }
+      ]
+    },
     "ammonomicon_entry": "C4 can be placed and then triggered remotely. More useful than a standard time bomb, but less convenient than a proximity mine, plastic explosives can be manually triggered."
   },
   {
@@ -46653,6 +46724,77 @@
     "recharge_time": "",
     "sell_price": "21",
     "neckbear_approved": true,
+    "wiki": {
+      "effects": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Junkan changes form depending on how many pieces of "
+            },
+            {
+              "t": "ref",
+              "v": "Junk",
+              "kind": "item"
+            },
+            {
+              "t": "text",
+              "v": " (or Lies) the player is holding. Each form is progressively more powerful than the last, incentivising the breaking of chests rather than opening them."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Losing Junk, such as dropping it, selling it, or giving it to Tailor to complete the Hollow shortcut will result in Junkan de-leveling down to the appropriate form."
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Ser Junkan cannot appear for sale in the Shop."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Ser Junkan is listed as 'Junk' in the Ammonomicon rather than Ser Junkan."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "The blanks from Ser Junkan's Holy Knight form are affected by items that modify blanks, such as Gold Ammolet."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "If the player defeats the Lich or ends the run by using The Gun That Can Kill The Past without The Bullet when Ser Junkan is at his final level, the normal win screen will be overridden with an image of Ser Junkan, with the player in the background giving a thumbs up."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Ser Junkan's name is a reference to Ser Duncan the Tall, the main character from the Tales of Dunk and Egg series set in the world of George RR Martin's A Song of Ice and Fire."
+            }
+          ]
+        }
+      ]
+    },
     "ammonomicon_entry": "Summons Ser Junkan, who follows the player, attacks enemies, and becomes stronger for each Junk picked up."
   },
   {

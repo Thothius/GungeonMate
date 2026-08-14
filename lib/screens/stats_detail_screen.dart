@@ -1073,11 +1073,20 @@ class _EventLogState extends State<_EventLog> {
             ),
           ),
         ),
-        if (!_collapsed && entries.isNotEmpty) ...[
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          child: (!_collapsed && entries.isNotEmpty)
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
           ...entries.take(20).map((e) => _LogTile(entry: e, isCool: widget.isCool)),
           const SizedBox(height: 8),
           _LogLegend(entries: entries),
-        ],
+                ],
+              )
+            : const SizedBox.shrink(),
+        ),
         if (_collapsed && entries.isEmpty)
           Container(
             width: double.infinity,

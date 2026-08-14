@@ -31027,6 +31027,32 @@
             }
           ]
         }
+      ],
+      "notes": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "Despite the Poxcannon poisoning enemies, the gun is not a member of the POISON gun class."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "This weapon is a reference to the 'Pax Pox', a blanket term for diseases contracted at conventions, named after the Penny Arcade Expo (PAX) convention."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "The tagline refers to the merchandising meme \"I achieved something and all I got was this lousy t-shirt\"."
+            }
+          ]
+        }
       ]
     },
     "sell_price": "21",
@@ -35157,6 +35183,24 @@
             }
           ]
         }
+      ],
+      "notes": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "This gun is a reference to the SBC Cannon from Serious Sam. Its item name \"Seriously MENTAL\" is a reference to Mental, the series' main villain."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "The synergy Serious Sam Publishing Contract is a reference to Serious Sam: Kamikaze Attack!, another game published by Devolver Digital."
+            }
+          ]
+        }
       ]
     },
     "sell_price": "41",
@@ -36525,6 +36569,32 @@
             {
               "t": "text",
               "v": " series."
+            }
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "This gun is a reference to the myth of pillows being used as makeshift silencers."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "300 Dead Count is a pun on \"Thread Count\", a term often used to measure the quality of sheets. It is also a reference to an episode of American Dad, where the phrase \"200 thread count, 200 dead count\" is used."
+            }
+          ]
+        },
+        {
+          "tokens": [
+            {
+              "t": "text",
+              "v": "The character of Alben Smallbore mentioned in the Ammonomicon entry of this and the Flame Hand is a reference to Headmaster Albus Dumbledore from the Harry Potter series."
             }
           ]
         }

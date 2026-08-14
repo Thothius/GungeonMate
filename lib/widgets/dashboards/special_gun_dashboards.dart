@@ -119,7 +119,14 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                   ),
                 ),
               ),
-              if (_expanded) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _expanded
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
                   padding: const EdgeInsets.all(12),
@@ -228,7 +235,9 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                     ],
                   ),
                 ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -332,7 +341,14 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                   ),
                 ),
               ),
-              if (_expanded) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _expanded
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
                   padding: const EdgeInsets.all(12),
@@ -437,7 +453,9 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                     ],
                   ),
                 ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -539,7 +557,14 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                   ),
                 ),
               ),
-              if (_expanded) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _expanded
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
                   padding: const EdgeInsets.all(12),
@@ -644,7 +669,9 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                     ],
                   ),
                 ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),

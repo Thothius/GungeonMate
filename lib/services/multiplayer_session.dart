@@ -168,6 +168,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
   /// transport handshakes in parallel.
   bool _busyTransition = false;
   bool _cancelled = false;
+  bool _isReconnecting = false;
 
   /// Pending gifts: items removed from inventory and sent but not yet
   /// confirmed via peer snapshot. If the connection drops mid-transit,
@@ -243,7 +244,8 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
   /// explicitly tearing down (End Run / Disconnect / cancel) is the only
   /// way out. Backoff still grows with attempts but is capped at 30s.
   static const int _maxAutoReconnectBackoffSec = 30;
-  static const int _searchTimeoutMs = 60000; // 60 seconds
+  static const int _searchTimeoutMs = 60000; // 60 seconds (fresh search)
+  static const int _reconnectSearchTimeoutMs = 20000; // 20 seconds (reconnect)
 
   MultiplayerSession(this._service, this._runProvider) {
     _eventSub = _service.events.listen(_onServiceEvent);
@@ -783,6 +785,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     if (role == null || char == null) return;
     _log('Initiating reconnection sequence...');
     _busyTransition = true;
+    _isReconnecting = true;
     // Manual reconnect (FIX LINK or auto-reconnect loop) is an explicit
     // user/system intent to reconnect — clear the paused flag so the
     // watchdog and auto-reconnect work normally after a successful
@@ -1429,6 +1432,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
       if (h.sessionId != null) _cachedSessionId = h.sessionId;
     }
     _status = MpStatus.connected;
+    _isReconnecting = false;
     _runProvider.mpDisconnected = false;
     if (_wasDisconnected) {
       _wasDisconnected = false;
@@ -1732,12 +1736,20 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
 
   void _startSearchTimeout() {
     _searchTimeout?.cancel();
-    _searchTimeout = Timer(Duration(milliseconds: _searchTimeoutMs), () {
+    final timeoutMs = _isReconnecting ? _reconnectSearchTimeoutMs : _searchTimeoutMs;
+    _searchTimeout = Timer(Duration(milliseconds: timeoutMs), () {
       if (_status == MpStatus.searching) {
-        _fail(
-          'No peer found. Make sure both devices have Bluetooth enabled and are close together.',
-        );
-        unawaited(_service.stopSearching());
+        if (_isReconnecting) {
+          // Reconnect search expired — silently retry via auto-reconnect loop
+          _isReconnecting = false;
+          _log('Reconnect search timed out (${timeoutMs ~/ 1000}s) — will retry...');
+          unawaited(_service.stopSearching());
+        } else {
+          _fail(
+            'No peer found. Make sure both devices have Bluetooth enabled and are close together.',
+          );
+          unawaited(_service.stopSearching());
+        }
       }
     });
   }

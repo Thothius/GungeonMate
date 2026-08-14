@@ -74,7 +74,14 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,7 +101,9 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
                 descriptions[mode - 1],
                 style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -182,7 +191,14 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 8),
               GoopText(
                 'FLOOR ${floor + 1}: ${_floors[floor]}',
@@ -218,7 +234,9 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
                   },
                 ),
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -295,7 +313,14 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               // Damage multiplier row
               _buildMultRow('DMG', dmgMult, seconds, 750, Colors.redAccent, tierLabel(dmgMult)),
@@ -329,7 +354,9 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -436,7 +463,14 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               // Coin icons row
               Row(
@@ -471,7 +505,9 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -553,7 +589,14 @@ class SpiceDashboardState extends State<SpiceDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -594,7 +637,9 @@ class SpiceDashboardState extends State<SpiceDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -671,7 +716,14 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               // Progress bar
               ClipRRect(
@@ -724,7 +776,9 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -813,7 +867,14 @@ class SprunDashboardState extends State<SprunDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               if (idx >= 0)
                 Container(
@@ -862,7 +923,9 @@ class SprunDashboardState extends State<SprunDashboard>
                   ],
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -928,7 +991,14 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               // Star icons
               Row(
@@ -968,7 +1038,9 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -1034,7 +1106,14 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1066,7 +1145,9 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -1165,7 +1246,14 @@ class PolarisDashboardState extends State<PolarisDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               // Level progress bar
               if (nextThreshold != null) ...[
@@ -1234,7 +1322,9 @@ class PolarisDashboardState extends State<PolarisDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -1327,7 +1417,14 @@ class GuntherDashboardState extends State<GuntherDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               // Friendship progress
               if (nextFriendship != null) ...[
@@ -1382,7 +1479,9 @@ class GuntherDashboardState extends State<GuntherDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),
@@ -1482,7 +1581,14 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                 ),
                 ),
               ),
-              if (!_collapsed) ...[
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                  ? const SizedBox.shrink()
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
               const SizedBox(height: 10),
               GoopText(
                 activated
@@ -1512,7 +1618,9 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                   ),
                 ],
               ),
-              ],
+                      ],
+                    ),
+              ),
             ],
           ),
         ),

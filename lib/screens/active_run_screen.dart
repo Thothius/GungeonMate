@@ -458,7 +458,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               return aName.compareTo(bName);
             });
 
-            final results = combinedResults.take(6).toList();
+            final results = combinedResults;
 
             return AnimatedPadding(
               duration: const Duration(milliseconds: 100),
@@ -598,6 +598,19 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                     ),
 
                     const SizedBox(height: 12),
+
+                    if (results.length > 6)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: GoopText(
+                          '${results.length} results — scroll to see more',
+                          style: TextStyle(
+                            fontSize: 10.5,
+                            color: Colors.white.withValues(alpha: 0.4),
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
 
                     if (results.isEmpty)
                       const Padding(
