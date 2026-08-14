@@ -162,7 +162,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                               ),
                             ),
                           ),
-                          
+                          const SizedBox(width: 6),
+                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],

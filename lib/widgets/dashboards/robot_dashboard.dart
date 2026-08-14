@@ -91,7 +91,8 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                             ),
                           ),
                         ),
-                        
+                        const SizedBox(width: 6),
+                      Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                       ],
                     ),
                   ],

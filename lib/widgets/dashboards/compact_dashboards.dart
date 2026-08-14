@@ -51,7 +51,7 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -68,7 +68,8 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
                       'DPS: ${dpsValues[mode - 1].toStringAsFixed(1)}',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -158,7 +159,7 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -175,7 +176,8 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
                       'DPS: ${_dps[floor].toStringAsFixed(1)}',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -270,7 +272,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -287,7 +289,8 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                       '${seconds}s fired',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -410,7 +413,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -427,7 +430,8 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                       '$uses/3 uses',
                       style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: uses > 0 ? Colors.amber : Colors.white30),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -526,7 +530,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -543,7 +547,8 @@ class SpiceDashboardState extends State<SpiceDashboard>
                       '+$damageBonus% DMG',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.redAccent),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -643,7 +648,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -660,7 +665,8 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                       '+$damageBonus% DMG',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.tealAccent),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -770,7 +776,7 @@ class SprunDashboardState extends State<SprunDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -801,7 +807,8 @@ class SprunDashboardState extends State<SprunDashboard>
                         idx >= 0 ? 'REVEALED' : 'UNKNOWN',
                         style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
                       ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -898,7 +905,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -915,7 +922,8 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                       stars == 3 ? 'SUPER PUNCH READY' : '$stars/3 stars',
                       style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: stars == 3 ? Colors.orangeAccent : Colors.white.withValues(alpha: 0.5)),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -1003,7 +1011,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1020,7 +1028,8 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                       '+$uses Cool',
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.blueGrey),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -1125,7 +1134,7 @@ class PolarisDashboardState extends State<PolarisDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1150,7 +1159,8 @@ class PolarisDashboardState extends State<PolarisDashboard>
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.amberAccent),
                       ),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -1286,7 +1296,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1311,7 +1321,8 @@ class GuntherDashboardState extends State<GuntherDashboard>
                         style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.purpleAccent),
                       ),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),
@@ -1430,7 +1441,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: null,
+                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
                 borderRadius: BorderRadius.circular(8),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -1465,7 +1476,8 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                         ),
                       ),
                     ),
-                    
+                    const SizedBox(width: 6),
+                    Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
                   ],
                 ),
                 ),

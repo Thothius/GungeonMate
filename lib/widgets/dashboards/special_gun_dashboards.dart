@@ -111,7 +111,8 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                               ),
                             ),
                           ),
-                          
+                          const SizedBox(width: 6),
+                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],
@@ -323,7 +324,8 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                               ),
                             ),
                           ),
-                          
+                          const SizedBox(width: 6),
+                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],
@@ -529,7 +531,8 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                               ),
                             ),
                           ),
-                          
+                          const SizedBox(width: 6),
+                          Icon(_expanded ? Icons.expand_less : Icons.expand_more, size: 16, color: Colors.white54),
                         ],
                       ),
                     ],
