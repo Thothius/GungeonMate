@@ -1,23 +1,14 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
-import '../../models/gungeoneer.dart';
-import '../../providers/run_provider.dart';
-import '../../services/app_theme.dart';
-import '../../utils/asset_paths.dart';
-import '../../utils/responsive.dart';
 
-/// A looping "falling down the Gungeon" animation for the home screen.
+/// A looping portal vortex animation for the home screen.
 ///
-/// Layers a custom-painted vortex/portal behind a tumbling Gungeoneer
-/// sprite, referencing the true ending fall sequence of Enter the Gungeon.
-/// The character shown is the player's last played character, or a random
-/// pick from the roster if no history exists.
+/// A bright glow orbits in a circular path around the center of the
+/// screen, pulsing brighter at the top and bottom of its orbit. Deep
+/// purple background, ~14 second cycle. Purely decorative — wrapped
+/// in [IgnorePointer], no tap interactions.
 ///
-/// Purely decorative — wrapped in [IgnorePointer], no easter eggs, no
-/// tap interactions. The [child] (main menu content) is layered on top
-/// and receives all input.
+/// Reference: gungeonmate-animation-02.mp4
 class GungeonFallAnimation extends StatefulWidget {
   final Widget child;
 
@@ -29,228 +20,160 @@ class GungeonFallAnimation extends StatefulWidget {
 
 class _GungeonFallAnimationState extends State<GungeonFallAnimation>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _vortexCtrl;
-  String _spritePath = '';
-  bool _picked = false;
+  late final AnimationController _ctrl;
 
   @override
   void initState() {
     super.initState();
-    _vortexCtrl = AnimationController(
+    _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 14),
     )..repeat();
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Pick once after first frame so RunProvider is available.
-    if (!_picked) {
-      _pickCharacter();
-      _picked = true;
-    }
-  }
-
-  void _pickCharacter() {
-    final p = context.read<RunProvider>();
-    // 1. Try last played character
-    final last = p.lastPlayedCharacter;
-    if (last != null) {
-      _setSprite(last);
-      return;
-    }
-    // 2. Fallback: RNG from all gungeoneers
-    final all = p.allGungeoneers;
-    if (all.isEmpty) return; // data not loaded yet — vortex shows alone
-    _setSprite(all[math.Random().nextInt(all.length)]);
-  }
-
-  void _setSprite(Gungeoneer char) {
-    final gif = gungeoneerGifPath(char.name);
-    if (gif.isNotEmpty) {
-      _spritePath = gif;
-      return;
-    }
-    // Fallback to static webp icon
-    final icon = localGungeoneerIcon(char.name);
-    if (icon.isNotEmpty) {
-      _spritePath = icon;
-    }
-  }
-
-  @override
   void dispose() {
-    _vortexCtrl.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final sf = Responsive.factor(context);
-    final flair = AppTheme.flair;
     return Stack(
       children: [
-        // ── Layer 1: Vortex ──────────────────────────────────────────
+        // ── Portal vortex ──────────────────────────────────────────
         Positioned.fill(
           child: IgnorePointer(
             child: AnimatedBuilder(
-              animation: _vortexCtrl,
+              animation: _ctrl,
               builder: (_, __) => CustomPaint(
-                painter: _VortexPainter(
-                  progress: _vortexCtrl.value,
-                  colors: _vortexColors(flair),
-                ),
+                painter: _PortalPainter(progress: _ctrl.value),
               ),
             ),
           ),
         ),
-        // ── Layer 2: Vignette scrim ──────────────────────────────────
-        Positioned.fill(
-          child: IgnorePointer(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  center: Alignment.center,
-                  radius: 0.85,
-                  colors: [
-                    Colors.transparent,
-                    Colors.black.withValues(alpha: 0.35),
-                  ],
-                  stops: const [0.3, 1.0],
-                ),
-              ),
-            ),
-          ),
-        ),
-        // ── Layer 3: Falling Gungeoneer ──────────────────────────────
-        if (_spritePath.isNotEmpty)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: Center(
-                child: SizedBox(
-                  width: 72 * sf,
-                  height: 72 * sf,
-                  child: Image.asset(
-                    _spritePath,
-                    fit: BoxFit.contain,
-                    filterQuality: FilterQuality.none,
-                    gaplessPlayback: true,
-                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                  )
-                      .animate(onPlay: (c) => c.repeat())
-                      // Endless tumble
-                      .rotate(
-                        begin: 0,
-                        end: 2 * math.pi,
-                        duration: 3.seconds,
-                        curve: Curves.linear,
-                      )
-                      // Depth pulse — simulates falling closer/farther
-                      .scale(
-                        begin: const Offset(0.8, 0.8),
-                        end: const Offset(1.1, 1.1),
-                        duration: 4.seconds,
-                        curve: Curves.easeInOutSine,
-                      )
-                      // Slow downward drift + reset (the "fall")
-                      .moveY(
-                        begin: -20 * sf,
-                        end: 20 * sf,
-                        duration: 6.seconds,
-                        curve: Curves.easeInOut,
-                      ),
-                ),
-              ),
-            ),
-          ),
-        // ── Layer 4: Main menu content ───────────────────────────────
+        // ── Main menu content ──────────────────────────────────────
         widget.child,
       ],
     );
   }
-
-  /// Pull vortex colors from the active theme so it always harmonizes.
-  List<Color> _vortexColors(ThemeFlair flair) {
-    return [
-      flair.primary.withValues(alpha: 0.5),
-      flair.secondary.withValues(alpha: 0.4),
-      flair.glowPrimary.withValues(alpha: 0.3),
-      const Color(0xFF4527A0).withValues(alpha: 0.35), // deep purple base
-      flair.primary.withValues(alpha: 0.25),
-    ];
-  }
 }
 
 // =============================================================================
-// VortexPainter — rotating logarithmic spiral arms with radial gradient hole
+// _PortalPainter — orbiting glow on deep purple vortex background
+//
+// The glow travels in a circular orbit around the screen center.
+// It pulses brighter and larger at the top and bottom of the orbit
+// (vertical extremes), dimmer and smaller at the sides.
+//
+// Orbit: counter-clockwise (right → top → left → bottom → right)
+// Cycle: 14 seconds
 // =============================================================================
 
-class _VortexPainter extends CustomPainter {
+class _PortalPainter extends CustomPainter {
   final double progress;
-  final List<Color> colors;
 
-  const _VortexPainter({required this.progress, required this.colors});
-
-  static const _armCount = 6;
-  static const _turns = 3.0;
-  static const _steps = 60;
+  const _PortalPainter({required this.progress});
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final maxRadius = math.max(size.width, size.height) * 0.75;
-    final rotation = progress * 2 * math.pi;
+    final maxDim = math.max(size.width, size.height);
 
-    // ── Background: radial gradient "hole" ──────────────────────────
+    // ── Background: deep purple radial gradient ───────────────────
+    // Darker at edges, slightly lighter at center (the "portal")
     final bgPaint = Paint()
       ..shader = RadialGradient(
         center: Alignment.center,
+        radius: 0.9,
         colors: [
-          Colors.black.withValues(alpha: 0.5),
-          colors.first.withValues(alpha: 0.12),
-          Colors.transparent,
+          const Color(0xFF1A0D2E), // deep purple center
+          const Color(0xFF0D0719), // darker mid
+          const Color(0xFF05030A), // near-black edges
         ],
-        stops: const [0.0, 0.45, 1.0],
-      ).createShader(Rect.fromCircle(center: center, radius: maxRadius));
+        stops: const [0.0, 0.5, 1.0],
+      ).createShader(Rect.fromCircle(center: center, radius: maxDim * 0.7));
     canvas.drawRect(Offset.zero & size, bgPaint);
 
-    // ── Spiral arms ─────────────────────────────────────────────────
-    for (var arm = 0; arm < _armCount; arm++) {
-      final armOffset = (arm / _armCount) * 2 * math.pi;
-      final path = Path();
-      for (var i = 0; i <= _steps; i++) {
-        final t = i / _steps;
-        // Logarithmic spiral: r grows exponentially with theta
-        final theta = t * _turns * 2 * math.pi + armOffset + rotation;
-        final r = t * maxRadius;
-        final x = center.dx + r * math.cos(theta);
-        final y = center.dy + r * math.sin(theta);
-        if (i == 0) {
-          path.moveTo(x, y);
-        } else {
-          path.lineTo(x, y);
-        }
-      }
-      // Fade alpha based on arm index for depth variation
-      final color = colors[arm % colors.length];
-      final paint = Paint()
-        ..color = color
+    // ── Faint vortex rings (subtle structure) ─────────────────────
+    for (var i = 1; i <= 4; i++) {
+      final ringRadius = maxDim * 0.15 * i;
+      final ringPaint = Paint()
+        ..color = const Color(0xFF4A2C6E).withValues(alpha: 0.08)
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2.0
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 1.5);
-      canvas.drawPath(path, paint);
+        ..strokeWidth = 1.0;
+      canvas.drawCircle(center, ringRadius, ringPaint);
     }
 
-    // ── Inner glow ring — the "portal edge" ─────────────────────────
-    final ringPaint = Paint()
-      ..color = colors.first.withValues(alpha: 0.15)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.0
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8);
-    canvas.drawCircle(center, maxRadius * 0.12, ringPaint);
+    // ── Orbiting glow ─────────────────────────────────────────────
+    // The glow travels in a circle around the center.
+    // Angle: 0 = right, pi/2 = top, pi = left, 3pi/2 = bottom
+    // We start at the right side and go counter-clockwise (upward first)
+    final angle = progress * 2 * math.pi;
+
+    // Orbit radii — slightly elliptical, centered on screen
+    final orbitRadiusX = size.width * 0.22;
+    final orbitRadiusY = size.height * 0.22;
+
+    // Glow position on the orbit
+    final glowX = center.dx + orbitRadiusX * math.cos(angle);
+    final glowY = center.dy - orbitRadiusY * math.sin(angle); // negative because screen y is down
+    final glowPos = Offset(glowX, glowY);
+
+    // Pulse intensity: brightest at top and bottom (|sin(angle)|)
+    // sin(angle) = 1 at top (pi/2), -1 at bottom (3pi/2), 0 at sides
+    final pulse = math.sin(angle).abs(); // 0 at sides, 1 at top/bottom
+
+    // Glow size: expands at flash points (top/bottom), contracts at sides
+    final glowRadius = (maxDim * 0.06) + (maxDim * 0.08) * pulse;
+
+    // Glow brightness: 0.4 at sides, 1.0 at top/bottom
+    final glowAlpha = 0.4 + 0.6 * pulse;
+
+    // ── Outer glow halo (large, soft) ─────────────────────────────
+    final haloPaint = Paint()
+      ..shader = RadialGradient(
+        center: Alignment.center,
+        colors: [
+          const Color(0xFFE0B0FF).withValues(alpha: glowAlpha * 0.6),
+          const Color(0xFF9D5CDB).withValues(alpha: glowAlpha * 0.3),
+          const Color(0xFF6A3BAB).withValues(alpha: 0.0),
+        ],
+        stops: const [0.0, 0.3, 1.0],
+      ).createShader(Rect.fromCircle(center: glowPos, radius: glowRadius * 2.5));
+    canvas.drawCircle(glowPos, glowRadius * 2.5, haloPaint);
+
+    // ── Inner bright core ────────────────────────────────────────
+    final corePaint = Paint()
+      ..shader = RadialGradient(
+        center: Alignment.center,
+        colors: [
+          const Color(0xFFFFFFFF).withValues(alpha: glowAlpha),
+          const Color(0xFFF0D0FF).withValues(alpha: glowAlpha * 0.8),
+          const Color(0xFFB388E0).withValues(alpha: glowAlpha * 0.4),
+          const Color(0xFF7A4DBE).withValues(alpha: 0.0),
+        ],
+        stops: const [0.0, 0.2, 0.5, 1.0],
+      ).createShader(Rect.fromCircle(center: glowPos, radius: glowRadius));
+    canvas.drawCircle(glowPos, glowRadius, corePaint);
+
+    // ── Trailing particles behind the glow ────────────────────────
+    // Small dots that trail behind the orbiting glow
+    for (var t = 1; t <= 8; t++) {
+      final trailAngle = angle - (t * 0.08);
+      final trailX = center.dx + orbitRadiusX * math.cos(trailAngle);
+      final trailY = center.dy - orbitRadiusY * math.sin(trailAngle);
+      final trailPos = Offset(trailX, trailY);
+      final trailAlpha = glowAlpha * (1.0 - t / 8) * 0.3;
+      final trailRadius = glowRadius * (1.0 - t / 10) * 0.15;
+
+      final trailPaint = Paint()
+        ..color = const Color(0xFFD4A8FF).withValues(alpha: trailAlpha)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2.0);
+      canvas.drawCircle(trailPos, trailRadius, trailPaint);
+    }
   }
 
   @override
-  bool shouldRepaint(_VortexPainter old) => old.progress != progress;
+  bool shouldRepaint(_PortalPainter old) => old.progress != progress;
 }
