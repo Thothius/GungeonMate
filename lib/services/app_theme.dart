@@ -817,27 +817,27 @@ enum UnicornPalette {
         bubblegum => const ThemeFlair(
           scaffold: Color(0xFF1A0F1E),
           card: Color(0xFF2A1A30),
-          primary: Color(0xFFFF40B5), // magenta-pink (distinct from Neon's #FF1493 hot pink)
+          primary: Color(0xFFFF80AB), // bubblegum pink (pastel — distinct from Neon's dark hot pink)
           secondary: Color(0xFFE040FB), // magenta
           headlineStat: Color(0xFFB388FF), // light violet
-          bulletColor: Color(0xFFFF40B5),
+          bulletColor: Color(0xFFFF80AB),
           bulletGlyph: '✦',
           twinkleBullets: true,
           sparkleNumbers: true,
-          numberGlowColor: Color(0xFFFF40B5),
+          numberGlowColor: Color(0xFFFF80AB),
           tabularFigures: false,
           numberSizeScale: 1.06,
           numberWeight: FontWeight.w700,
           numberStyle: FontStyle.italic,
           chipRadius: 18,
           cardRadius: 18,
-          dividerColor: Color(0x55FF40B5),
+          dividerColor: Color(0x55FF80AB),
           dividerThickness: 1.0,
-          glowPrimary: Color(0x44FF40B5),
+          glowPrimary: Color(0x44FF80AB),
           glowSecondary: Color(0x33B388FF),
           auraStyle: AvatarAuraStyle.pastelPulse,
           headerGlyph: '\u2661',
-          headerUnderlineColor: Color(0x88FF40B5),
+          headerUnderlineColor: Color(0x88FF80AB),
         ),
         mulberry => const ThemeFlair(
           scaffold: Color(0xFF1C0A18),
@@ -874,7 +874,7 @@ enum UnicornPalette {
         neon => const [Color(0xFFFF1493), Color(0xFFDA70D6), Color(0xFFE040FB), Color(0xFF00E5FF)],
         dreamy => const [Color(0xFFF8BBD0), Color(0xFFD1C4E9), Color(0xFFCE93D8), Color(0xFFB39DDB)],
         sunset => const [Color(0xFFFF6B9D), Color(0xFFFFAB91), Color(0xFFFFD1DC), Color(0xFFFFCC80)],
-        bubblegum => const [Color(0xFFFF40B5), Color(0xFFE040FB), Color(0xFFB388FF), Color(0xFFFFD700)],
+        bubblegum => const [Color(0xFFFF80AB), Color(0xFFE040FB), Color(0xFFB388FF), Color(0xFFFFD700)],
         mulberry => const [Color(0xFFC2185B), Color(0xFF9C27B0), Color(0xFFF06292), Color(0xFFE040FB)],
       };
 }
@@ -1153,7 +1153,7 @@ const Map<AppThemeMode, ParticlePreset> kThemeParticleDefaults =
   AppThemeMode.theOubliette: ParticlePreset.cursedSmoke,
   AppThemeMode.pastParadox: ParticlePreset.cosmicStars,
   AppThemeMode.highPriestVoid: ParticlePreset.voidRift,
-  AppThemeMode.robotsCore: ParticlePreset.voidRift,
+  AppThemeMode.robotsCore: ParticlePreset.cosmicStars,
   AppThemeMode.cultOfGundead: ParticlePreset.cursedSkulls,
   AppThemeMode.synergySurge: ParticlePreset.cosmicDust,
   AppThemeMode.glitchedChest: ParticlePreset.rainbowConfetti,
@@ -1974,7 +1974,7 @@ const kThemeRemixes = <AppThemeMode, List<ThemeRemix>>{
   AppThemeMode.forgeMaster: [
     ThemeRemix(label: 'Original'),
     ThemeRemix(label: 'Ember', hueShift: 25),
-    ThemeRemix(label: 'Magma', hueShift: 45),
+    ThemeRemix(label: 'Magma', hueShift: 35),
     ThemeRemix(label: 'Inferno', hueShift: -25),
   ],
   AppThemeMode.robotsCore: [
