@@ -1066,7 +1066,7 @@
   {
     "name": "AK-47",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f8/AK-47.png",
-    "notes": "",
+    "notes": "Standard automatic rifle. Reliable and affordable, with a large magazine and moderate spread.",
     "quote": "Accept No Substitutes",
     "quality": "B",
     "type": "Automatic",
@@ -12716,7 +12716,7 @@
   {
     "name": "Derringer",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/01/Derringer.png/revision/latest?cb=20160310050559",
-    "notes": "",
+    "notes": "Tiny pistol with only two shots per magazine. If fired after dodge rolling, all bullets can be fired rapidly.",
     "quote": "One Last Trick",
     "quality": "D",
     "type": "Semiautomatic",
@@ -24551,7 +24551,7 @@
   {
     "name": "M1911",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b2/M1911.png",
-    "notes": "",
+    "notes": "Standard semiautomatic pistol firing simple lead projectiles. Can be fired manually or automatically.",
     "quote": "Classic",
     "quality": "C",
     "type": "Semiautomatic",
@@ -24994,7 +24994,7 @@
   {
     "name": "Machine Pistol",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/63/Machine_Pistol.png",
-    "notes": "",
+    "notes": "Compact automatic pistol with a high rate of fire and large spread. Favored by Bandana Bullet Kin.",
     "quote": "Rapid Fire",
     "quality": "D",
     "type": "Automatic",
@@ -25377,7 +25377,7 @@
   {
     "name": "Magnum",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/90/Magnum.png",
-    "notes": "",
+    "notes": "6-round revolver dealing decent damage with a high fire rate. The most commonly used enemy weapon in the Gungeon.",
     "quote": "5 Shots Or 6?",
     "quality": "B",
     "type": "Semiautomatic",
@@ -25916,7 +25916,7 @@
   {
     "name": "Makarov",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4c/Makarov.png",
-    "notes": "",
+    "notes": "Standard semiautomatic pistol. No better or worse than any other gun.",
     "quote": "The People's Gun",
     "quality": "D",
     "type": "Semiautomatic",
@@ -33047,7 +33047,7 @@
   {
     "name": "Regular Shotgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c6/Regular_Shotgun.png",
-    "notes": "",
+    "notes": "Standard shotgun firing a spread of 6 pellets. Favored by Shotgun Kin.",
     "quote": "Cocked and Locked",
     "quality": "D",
     "type": "Semiautomatic",
@@ -41946,7 +41946,7 @@
   {
     "name": "Thompson Sub-Machinegun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/62/Thompson_Sub-Machinegun.png",
-    "notes": "",
+    "notes": "Classic automatic sub-machinegun with a high rate of fire and infinite range.",
     "quote": "Myeah, See!",
     "quality": "C",
     "type": "Automatic",
@@ -42464,7 +42464,7 @@
   {
     "name": "Trank Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/af/Trank_Gun.png/revision/latest?cb=20190406104939",
-    "notes": "",
+    "notes": "Standard semiautomatic pistol. Despite its name, it fires normal rounds, not tranquilizers.",
     "quote": "Non Non Lethal",
     "quality": "C",
     "type": "Semiautomatic",
@@ -44690,7 +44690,7 @@
   {
     "name": "Void Marshal",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/84/Void_Marshal.png",
-    "notes": "",
+    "notes": "Fires fast-moving laser projectiles. Compact and highly accurate, favored by smugglers and rogues.",
     "quote": "Acquired Under The Table",
     "quality": "B",
     "type": "Semiautomatic",
@@ -45239,7 +45239,7 @@
   {
     "name": "Vulcan Cannon",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/cf/Vulcan_Cannon.png",
-    "notes": "",
+    "notes": "High-rate-of-fire minigun with a massive 900-round magazine. Most effective at close range due to large spread.",
     "quote": "Boundless Slaughter",
     "quality": "S",
     "type": "Automatic",
@@ -45546,7 +45546,7 @@
   {
     "name": "Winchester Rifle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/80/Winchester_Rifle.png",
-    "notes": "",
+    "notes": "Repeating rifle with high damage. Functionally automatic despite being classified as semiautomatic.",
     "quote": "Guns And Deviltry.",
     "quality": "D",
     "type": "Semiautomatic",

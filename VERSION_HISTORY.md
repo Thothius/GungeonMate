@@ -6,6 +6,18 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.12 — 📋 Data Integrity — Truncated Text, Empty Gun Notes, Synergy Name Fix (August 2026)
+**Build:** 89
+
+> 3 data bugs fixed: truncated item effect, 12 empty gun notes, synergy name mismatch.
+
+### Changes
+- **FIX (BUG-056) — Truncated effect:** Briefcase of Cash effect text was `'Grants 250 and 3 .'` — restored to `'Grants 250 coins and 3 Hegemony Credits.'`
+- **FIX (BUG-057) — Empty gun notes:** 12 guns (AK-47, Derringer, M1911, Machine Pistol, Magnum, Makarov, Regular Shotgun, Thompson Sub-Machinegun, Trank Gun, Void Marshal, Vulcan Cannon, Winchester Rifle) had empty `notes` fields — populated with wiki-sourced descriptions.
+- **FIX (BUG-058) — Synergy name:** 'Thermal Imaging' corrected to official wiki name 'Thermal Imagine'.
+
+---
+
 ## v1.9.11 — ♿ Accessibility + UX Polish — Tap Targets, Tooltips, Haptics (August 2026)
 **Build:** 88
 

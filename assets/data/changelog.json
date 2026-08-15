@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.12",
+    "title": "📋 Data Integrity — Truncated Text, Empty Gun Notes, Synergy Name Fix",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-056): Briefcase of Cash effect text was truncated — 'Grants 250 and 3 .' restored to 'Grants 250 coins and 3 Hegemony Credits.'",
+      "📋 FIX (BUG-057): 12 guns with empty notes fields populated with wiki-sourced descriptions — AK-47, Derringer, M1911, Machine Pistol, Magnum, Makarov, Regular Shotgun, Thompson Sub-Machinegun, Trank Gun, Void Marshal, Vulcan Cannon, Winchester Rifle.",
+      "📋 FIX (BUG-058): Synergy name 'Thermal Imaging' corrected to official wiki name 'Thermal Imagine'."
+    ]
+  },
+  {
     "version": "v1.9.11",
     "title": "♿ Accessibility + UX Polish — Tap Targets, Tooltips, Haptics",
     "date": "August 2026",
