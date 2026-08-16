@@ -619,7 +619,7 @@
       "Trank Gun",
       "Void Marshal"
     ],
-    "effect": "Increases damage by 30%, magazine size by 50%, spread by 50%, decreases reload time by 33%, and slows down enemy bullets by 20% when one of the guns is held. When Eye of the Beholster is held, the other five guns rotate around the player and shoot at nearby enemies, still using up ammo from each gun. Obtainable through the Beholster Shrine , although it can be activated without.",
+    "effect": "Increases damage by 30%, magazine size by 50%, spread by 50%, decreases reload time by 33%, and slows down enemy bullets by 20% when one of the guns is held. When Eye of the Beholster is held, the other five guns rotate around the player and shoot at nearby enemies, still using up ammo from each gun. Obtainable through the Beholster Shrine, although it can be activated without.",
     "icon": "",
     "effect_tokens": [
       {
@@ -1816,7 +1816,7 @@
       "Gunknight Gauntlet",
       "Gunknight Greaves"
     ],
-    "effect": "Transforms the player into Cormorant . Removes reload times from all guns entirely. Increases curse by 3.",
+    "effect": "Transforms the player into Cormorant. Removes reload times from all guns entirely. Increases curse by 3.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/96/Cormorant.png",
     "effect_tokens": [
       {
@@ -2744,7 +2744,7 @@
       "Bow",
       "Bomb"
     ],
-    "effect": "Halves the charge time of Bow and adds a chance of firing an extra arrow, similar to the effect of Shadow Bullets .",
+    "effect": "Halves the charge time of Bow and adds a chance of firing an extra arrow, similar to the effect of Shadow Bullets.",
     "icon": "",
     "effect_tokens": [
       {
@@ -2907,7 +2907,7 @@
     "items": [
       "Crestfaller"
     ],
-    "effect": "Reloading will fire a glass bottle that will stun enemies it hits. Reloading while standing on a liquid replenishes the ammo missing in the current magazine, similar to Gungine .",
+    "effect": "Reloading will fire a glass bottle that will stun enemies it hits. Reloading while standing on a liquid replenishes the ammo missing in the current magazine, similar to Gungine.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e6/Five_O%27Clock_Somewhere.png",
     "any_of": [
       "Old Knight's Flask",
@@ -5140,7 +5140,7 @@
       "Rad Gun",
       "Sunglasses"
     ],
-    "effect": "Increases Rad Gun's magazine size to 20, and decreases its reload speed, giving more time to hit the mark. Also grants 1.33 coolness , makes the skateboard pink, and turns the hat backwards.",
+    "effect": "Increases Rad Gun's magazine size to 20, and decreases its reload speed, giving more time to hit the mark. Also grants 1.33 coolness, makes the skateboard pink, and turns the hat backwards.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/79/Kung_Fu_Hippie%2C_Rappin%27_Surfer.png",
     "effect_tokens": [
       {
@@ -6354,7 +6354,7 @@
     "items": [
       "Pink Guon Stone"
     ],
-    "effect": "Enemies that damage the player become temporarily charmed .",
+    "effect": "Enemies that damage the player become temporarily charmed.",
     "icon": "",
     "any_of": [
       "+1 Bullets",
@@ -6913,7 +6913,7 @@
       "Partially-Eaten Cheese",
       "Rat Boots"
     ],
-    "effect": "Player becomes the Resourceful Rat . This prevents items from being stolen when they're left behind in rooms.",
+    "effect": "Player becomes the Resourceful Rat. This prevents items from being stolen when they're left behind in rooms.",
     "icon": "",
     "effect_tokens": [
       {
@@ -6952,7 +6952,7 @@
       "RUBE-ADYNE Prototype",
       "RUBE-ADYNE MK.II"
     ],
-    "effect": "The two guns are combined to form Rubenstein's Monster .",
+    "effect": "The two guns are combined to form Rubenstein's Monster.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/08/Rubenstein%27s_Monster.png",
     "effect_tokens": [
       {
@@ -7542,7 +7542,7 @@
       "Knight's Gun",
       "Shield of the Maiden"
     ],
-    "effect": "Reloading Knight's Gun places a shield, similar to Betrayer's Shield .",
+    "effect": "Reloading Knight's Gun places a shield, similar to Betrayer's Shield.",
     "icon": "",
     "effect_tokens": [
       {
@@ -8395,7 +8395,7 @@
       "Tear Jerker",
       "Bloody Eye"
     ],
-    "effect": "Tear Jerker's tears turn red and inflict slow .",
+    "effect": "Tear Jerker's tears turn red and inflict slow.",
     "icon": "",
     "effect_tokens": [
       {
@@ -9290,7 +9290,7 @@
     "items": [
       "White Guon Stone"
     ],
-    "effect": "Increases the size of White Guon Stone. If the player has Daruma , its cooldown is halved.",
+    "effect": "Increases the size of White Guon Stone. If the player has Daruma, its cooldown is halved.",
     "icon": "",
     "any_of": [
       "+1 Bullets",

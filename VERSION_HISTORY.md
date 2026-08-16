@@ -6,6 +6,22 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.14 — 📋 Deep Data Audit Round 2 — Synergy Ref Tokens, Infinite Range/Shot Speed Stats (August 2026)
+**Build:** 91
+
+> Round 2 of deep audit: 11 synergy ref tokens cleaned, 56 gun range fields set to ∞, 6 beam weapon shot_speed set to ∞.
+
+### Changes
+- **FIX (BUG-065) — Synergy ref tokens:** 11 synergy effects had `' .'` and `' ,'` patterns from stripped wiki ref tokens. All cleaned (Behold!, Cormorant, Fairy Bow, Five O'Clock Somewhere, Kung Fu Hippie Rappin' Surfer, Pinker Guon Stone, Resourceful Indeed, Rubenstein's Monster, Shield Night, Tears of Blood, Whiter Guon Stone).
+- **FIX (BUG-066) — Empty gun range fields:** 56 guns had `"range": ""` — all now set to `"∞"` (infinite range). Confirmed against wiki.gg which shows `[Infinity.png]` for these guns. Includes AK-47, Bullet Bore, Deck4rd, Eye of the Beholster, Pitchfork, and 52 more.
+- **FIX (BUG-067) — Empty beam shot_speed:** 6 beam weapons had `"shot_speed": ""` — all now set to `"∞"` (instant beam travel). Abyssal Tentacle, Gamma Ray, Life Orb, Moonscraper, Mourning Star, Raiden Coil.
+
+### Audit Notes
+- Remaining empty stat fields (shot_speed for 18 non-beam guns, spread for 25 guns, force for 17 guns) are confirmed correct — the wiki does not list these stats for those guns.
+- Casey quote "Batting .50" is intentional (baseball batting average reference), not a formatting bug.
+
+---
+
 ## v1.9.13 — 📋 Deep Data Audit — Stripped Ref Tokens, Empty Gun Classes, Missing Icons (August 2026)
 **Build:** 90
 

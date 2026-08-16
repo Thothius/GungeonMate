@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.14",
+    "title": "📋 Deep Data Audit Round 2 — Synergy Ref Tokens, Infinite Range/Shot Speed Stats",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-065): 11 synergy effects had stripped wiki ref tokens causing ' .' and ' ,' patterns. All cleaned — e.g. 'charmed .' → 'charmed.', 'Resourceful Rat .' → 'Resourceful Rat.'",
+      "📋 FIX (BUG-066): 56 guns had empty range fields. All now set to '∞' (infinite range) — confirmed against wiki.gg which shows [Infinity.png] for these guns. Includes AK-47, Bullet Bore, Deck4rd, Eye of the Beholster, Pitchfork, and 52 more.",
+      "📋 FIX (BUG-067): 6 beam weapons had empty shot_speed fields. All now set to '∞' (instant beam travel) — Abyssal Tentacle, Gamma Ray, Life Orb, Moonscraper, Mourning Star, Raiden Coil."
+    ]
+  },
+  {
     "version": "v1.9.13",
     "title": "📋 Deep Data Audit — Stripped Ref Tokens, Empty Gun Classes, Missing Icons",
     "date": "August 2026",
