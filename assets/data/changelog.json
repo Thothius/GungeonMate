@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.13",
+    "title": "📋 Deep Data Audit — Stripped Ref Tokens, Empty Gun Classes, Missing Icons",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-062): 22 guns and 9 items had stripped wiki ref tokens causing ' .' and ' ,' patterns (space before punctuation). All 31 entries cleaned — e.g. 'chance to stun .' → 'chance to stun.'",
+      "📋 FIX (BUG-063): 12 guns had empty 'class' fields. Populated with wiki-verified gun classes — A.W.P. (RIFLE), Alien Sidearm (PISTOL), Anvillain (CHARGE), Balloon Gun (FULLAUTO), Bee Hive (SILLY), Big Iron (PISTOL), Big Shotgun (EXPLOSIVE), Blunderbuss (CHARGE), Brick Breaker (SILLY), Budget Revolver (SHITTY), Bullet (PISTOL), Cold 45 (ICE).",
+      "📋 FIX (BUG-064): 3 entries with missing icon URLs — Master Round I, Master Round II, and Rusty Sidearm now have correct wiki image URLs."
+    ]
+  },
+  {
     "version": "v1.9.12",
     "title": "📋 Data Integrity — Truncated Text, Empty Gun Notes, Synergy Name Fix",
     "date": "August 2026",

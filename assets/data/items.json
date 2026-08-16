@@ -1587,7 +1587,7 @@
     "type": "Active",
     "quote": "From The Deep",
     "quality": "N",
-    "effect": "Ingredient for the Bullet That Can Kill The Past , cannot be used.",
+    "effect": "Ingredient for the Bullet That Can Kill The Past, cannot be used.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -20821,7 +20821,7 @@
     "type": "Passive",
     "quote": "Courage Increased",
     "quality": "B",
-    "effect": "Deal more damage to Bosses . Increases reload speed and accuracy.",
+    "effect": "Deal more damage to Bosses. Increases reload speed and accuracy.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -28181,7 +28181,7 @@
     "type": "Passive",
     "quote": "You've Been Had...",
     "quality": "N",
-    "effect": "Useless on its own. Has six variants, each of which reveals one of the directions necessary to make it through the maze in the Resourceful Rat's Lair .",
+    "effect": "Useless on its own. Has six variants, each of which reveals one of the directions necessary to make it through the maze in the Resourceful Rat's Lair.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -33001,7 +33001,7 @@
   },
   {
     "name": "Master Round I",
-    "icon": "",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/0c/Master_Round_I.png/revision/latest?cb=20160310052346",
     "type": "Passive",
     "quote": "First Chamber",
     "quality": "N",
@@ -33357,7 +33357,7 @@
   },
   {
     "name": "Master Round II",
-    "icon": "",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1f/Master_Round_II.png/revision/latest?cb=20160310052352",
     "type": "Passive",
     "quote": "Second Chamber",
     "quality": "N",
@@ -35633,7 +35633,7 @@
     "type": "Passive",
     "quote": "Chomp",
     "quality": "A",
-    "effect": "Every chest is guaranteed to be a Mimic .",
+    "effect": "Every chest is guaranteed to be a Mimic.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -37249,7 +37249,7 @@
     "type": "Passive",
     "quote": "Indestructible",
     "quality": "N",
-    "effect": "Ingredient for the Bullet That Can Kill The Past .",
+    "effect": "Ingredient for the Bullet That Can Kill The Past.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -40583,7 +40583,7 @@
     "type": "Passive",
     "quote": "Astral Slug",
     "quality": "N",
-    "effect": "Ingredient for the Bullet That Can Kill The Past .",
+    "effect": "Ingredient for the Bullet That Can Kill The Past.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -41522,7 +41522,7 @@
     "type": "Passive",
     "quote": "Old Magic",
     "quality": "N",
-    "effect": "Ingredient for the Bullet That Can Kill The Past .",
+    "effect": "Ingredient for the Bullet That Can Kill The Past.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -43766,7 +43766,7 @@
     "type": "Passive",
     "quote": "Unlikely Allies",
     "quality": "D",
-    "effect": "Chests will not turn into Mimics .",
+    "effect": "Chests will not turn into Mimics.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -56466,7 +56466,7 @@
     "type": "Active",
     "quote": "Miracle of Gun",
     "quality": "D",
-    "effect": "Using the egg while missing health fully heals the player and consumes it. Dropping the egg and shooting it spawns a gun, item, or yolk creature. Dropping the egg into fire spawns a serpent .",
+    "effect": "Using the egg while missing health fully heals the player and consumes it. Dropping the egg and shooting it spawns a gun, item, or yolk creature. Dropping the egg into fire spawns a serpent.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {

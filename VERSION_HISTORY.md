@@ -6,6 +6,28 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.13 — 📋 Deep Data Audit — Stripped Ref Tokens, Empty Gun Classes, Missing Icons (August 2026)
+**Build:** 90
+
+> Deep audit found 3 data quality issues: 31 stripped ref tokens, 12 empty gun classes, 3 missing icons.
+
+### Changes
+- **FIX (BUG-062) — Stripped ref tokens:** 22 guns and 9 items had `' .'` and `' ,'` patterns caused by wiki ref tokens being stripped during data import. All 31 entries cleaned.
+- **FIX (BUG-063) — Empty gun classes:** 12 guns had empty `class` fields. Populated with wiki-verified values: A.W.P. (RIFLE), Alien Sidearm (PISTOL), Anvillain (CHARGE), Balloon Gun (FULLAUTO), Bee Hive (SILLY), Big Iron (PISTOL), Big Shotgun (EXPLOSIVE), Blunderbuss (CHARGE), Brick Breaker (SILLY), Budget Revolver (SHITTY), Bullet (PISTOL), Cold 45 (ICE).
+- **FIX (BUG-064) — Missing icons:** Master Round I, Master Round II, and Rusty Sidearm had empty icon URLs — now populated with correct wiki image URLs.
+
+### Audit Summary (no issues found)
+- 0 invalid synergy references (all 395 synergies reference valid guns/items)
+- 0 duplicate synergy/gun/item names
+- 0 unresolved wiki tokens remaining
+- 0 missing type/quality/wiki fields
+- 0 active items missing recharge_time (all 67 complete)
+- 14 items with no sell_price — all quality N quest items (intentional, unsellable)
+- 291 synergies without custom icons — expected (use generic Synergy.png)
+- 20 unreferenced guns + 54 unreferenced items — confirmed via wiki (no active synergies exist)
+
+---
+
 ## v1.9.12 — 📋 Data Integrity — Truncated Text, Empty Gun Notes, Synergy Name Fix (August 2026)
 **Build:** 89
 

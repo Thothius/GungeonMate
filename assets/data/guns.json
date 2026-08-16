@@ -327,7 +327,7 @@
     "range": "60",
     "force": "25",
     "spread": "5°",
-    "class": "",
+    "class": "RIFLE",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -1875,7 +1875,7 @@
     "range": "15",
     "force": "10",
     "spread": "5°",
-    "class": "",
+    "class": "PISTOL",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -1981,7 +1981,7 @@
   {
     "name": "Anvillain",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/28/Anvillain.png",
-    "notes": "Fires piercing anvils with strong knockback and a chance to stun .",
+    "notes": "Fires piercing anvils with strong knockback and a chance to stun.",
     "quote": "Practical And Safe",
     "quality": "C",
     "type": "Charged",
@@ -1995,7 +1995,7 @@
     "range": "1000",
     "force": "8",
     "spread": "5°",
-    "class": "",
+    "class": "CHARGE",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -2488,7 +2488,7 @@
     "range": "20",
     "force": "30",
     "spread": "",
-    "class": "",
+    "class": "FULLAUTO",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -3028,7 +3028,7 @@
     "range": "150",
     "force": "2",
     "spread": "90°",
-    "class": "",
+    "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -3277,7 +3277,7 @@
     "range": "16",
     "force": "10",
     "spread": "4°",
-    "class": "",
+    "class": "PISTOL",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -3437,7 +3437,7 @@
     "range": "1000",
     "force": "9",
     "spread": "10° / 20° / 30°",
-    "class": "",
+    "class": "EXPLOSIVE",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -3852,7 +3852,7 @@
   {
     "name": "Blasphemy",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/22/Blasphemy.png/revision/latest?cb=20160310050332",
-    "notes": "Starting weapon of The Bullet . Swings destroy nearby bullets. At full health, swings send out a piercing sword projectile. Does not crack secret walls .",
+    "notes": "Starting weapon of The Bullet. Swings destroy nearby bullets. At full health, swings send out a piercing sword projectile. Does not crack secret walls.",
     "quote": "To The Point",
     "quality": "B",
     "type": "Semiautomatic",
@@ -4733,7 +4733,7 @@
     "range": "12",
     "force": "25",
     "spread": "20°",
-    "class": "",
+    "class": "CHARGE",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -4995,7 +4995,7 @@
   {
     "name": "Boxing Glove",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e1/Boxing_Glove.png",
-    "notes": "Shoots a boxing glove with a chance to stun . Gains a star each time it kills an enemy, up to 3. When at 3 stars, can be charged to consume the stars and fire a high-damage super punch. Increases curse by 1.",
+    "notes": "Shoots a boxing glove with a chance to stun. Gains a star each time it kills an enemy, up to 3. When at 3 stars, can be charged to consume the stars and fire a high-damage super punch. Increases curse by 1.",
     "quote": "Pistol Hondo",
     "quality": "C",
     "type": "Charged",
@@ -5450,7 +5450,7 @@
     "range": "1,000",
     "force": "10",
     "spread": "2°",
-    "class": "",
+    "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -6287,7 +6287,7 @@
   {
     "name": "Budget Revolver",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/30/Budget_Revolver.png/revision/latest?cb=20160310052406",
-    "notes": "Starting gun of The Convict . Does not crack secret walls .",
+    "notes": "Starting gun of The Convict. Does not crack secret walls.",
     "quote": "Affordable Arms",
     "quality": "N",
     "type": "Semiautomatic",
@@ -6301,7 +6301,7 @@
     "range": "18",
     "force": "10",
     "spread": "10°",
-    "class": "",
+    "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -6438,7 +6438,7 @@
     "range": "",
     "force": "",
     "spread": "",
-    "class": "",
+    "class": "PISTOL",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -7287,7 +7287,7 @@
   {
     "name": "Camera",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/80/Camera.png",
-    "notes": "Damages all enemies in the room, with a chance to stun .",
+    "notes": "Damages all enemies in the room, with a chance to stun.",
     "quote": "Say Cheese",
     "quality": "C",
     "type": "Charged",
@@ -7506,7 +7506,7 @@
   {
     "name": "Casey",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1e/Casey.png/revision/latest?cb=20161220033905",
-    "notes": "Charged swings reflect nearby bullets. Does not crack secret walls . Increases curse by 2.",
+    "notes": "Charged swings reflect nearby bullets. Does not crack secret walls. Increases curse by 2.",
     "quote": "Batting .50",
     "quality": "D",
     "type": "Charged",
@@ -9183,7 +9183,7 @@
     "range": "35",
     "force": "10",
     "spread": "6°",
-    "class": "",
+    "class": "ICE",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -11419,7 +11419,7 @@
   {
     "name": "Crossbow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/79/Crossbow.png",
-    "notes": "Fires bolts. Starting gun of The Hunter .",
+    "notes": "Fires bolts. Starting gun of The Hunter.",
     "quote": "The Original",
     "quality": "D",
     "type": "Semiautomatic",
@@ -12368,7 +12368,7 @@
   {
     "name": "Dart Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/43/Dart_Gun.png/revision/latest?cb=20160310050541",
-    "notes": "Fires sticky darts. Starting gun of The Cultist . Does not crack secret walls . Only available in co-op.",
+    "notes": "Fires sticky darts. Starting gun of The Cultist. Does not crack secret walls. Only available in co-op.",
     "quote": "Sticky",
     "quality": "N",
     "type": "Semiautomatic",
@@ -13409,7 +13409,7 @@
   {
     "name": "Dragunfire",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c9/Dragunfire.png",
-    "notes": "Rapidly fires burning bullets that have a chance to inflict Burn .",
+    "notes": "Rapidly fires burning bullets that have a chance to inflict Burn.",
     "quote": "Roar",
     "quality": "A",
     "type": "Automatic",
@@ -14772,7 +14772,7 @@
   {
     "name": "Eye of the Beholster",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4c/Eye_of_the_Beholster.png",
-    "notes": "The last shot of each clip spawns a friendly Beadie .",
+    "notes": "The last shot of each clip spawns a friendly Beadie.",
     "quote": "What A Beauty!",
     "quality": "B",
     "type": "Semiautomatic",
@@ -16199,7 +16199,7 @@
   {
     "name": "Fossilized Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/77/Fossilized_Gun.png",
-    "notes": "Fires a stream of oil that leaves oil puddles on floor. Reloading spits fire , which can ignite the oil.",
+    "notes": "Fires a stream of oil that leaves oil puddles on floor. Reloading spits fire, which can ignite the oil.",
     "quote": "Proof That Guns Once Existed",
     "quality": "D",
     "type": "Beam",
@@ -16453,7 +16453,7 @@
   {
     "name": "Frost Giant",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/99/Frost_Giant.png",
-    "notes": "Fires big bullets that have a chance to freeze .",
+    "notes": "Fires big bullets that have a chance to freeze.",
     "quote": "Icy Grasp",
     "quality": "B",
     "type": "Semiautomatic",
@@ -16566,7 +16566,7 @@
   {
     "name": "Gamma Ray",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/30/Gamma_Ray.png",
-    "notes": "Fires a continuous green laser beam that slightly curves towards enemies and can poison .",
+    "notes": "Fires a continuous green laser beam that slightly curves towards enemies and can poison.",
     "quote": "Mean Green",
     "quality": "C",
     "type": "Beam",
@@ -18208,7 +18208,7 @@
   {
     "name": "Gungeon Ant",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/8d/Gungeon_Ant.png",
-    "notes": "In oil mode, creates oil puddles on impact. In fire mode, fires fireballs that pierce and burn . Reloading switches modes.",
+    "notes": "In oil mode, creates oil puddles on impact. In fire mode, fires fireballs that pierce and burn. Reloading switches modes.",
     "quote": "What Army?",
     "quality": "C",
     "type": "Semiautomatic",
@@ -25794,7 +25794,7 @@
   {
     "name": "Mailbox",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/88/Mailbox.png",
-    "notes": "Fires mail at enemies. The last bullet of each magazine is a package, which can explode, leave confetti, burn , or poison .",
+    "notes": "Fires mail at enemies. The last bullet of each magazine is a package, which can explode, leave confetti, burn, or poison.",
     "quote": "Special Delivery",
     "quality": "D",
     "type": "Semiautomatic",
@@ -26294,7 +26294,7 @@
   {
     "name": "Marine Sidearm",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/90/Marine_Sidearm.png/revision/latest?cb=20160310051052",
-    "notes": "Starting gun of The Marine . Does not crack secret walls .",
+    "notes": "Starting gun of The Marine. Does not crack secret walls.",
     "quote": "Always With You",
     "quality": "N",
     "type": "Semiautomatic",
@@ -30143,7 +30143,7 @@
   {
     "name": "Pitchfork",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1c/Pitchfork.png",
-    "notes": "Fires piercing fireballs that burn .",
+    "notes": "Fires piercing fireballs that burn.",
     "quote": "Get Forked!",
     "quality": "C",
     "type": "Semiautomatic",
@@ -33351,7 +33351,7 @@
   {
     "name": "Robot's Right Hand",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b0/Robot%27s_Right_Hand.png/revision/latest?cb=20160310052417",
-    "notes": "Starting gun of The Robot . Does not crack secret walls .",
+    "notes": "Starting gun of The Robot. Does not crack secret walls.",
     "quote": "Built To Kill",
     "quality": "N",
     "type": "Semiautomatic",
@@ -33473,7 +33473,7 @@
   {
     "name": "Rogue Special",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/ae/Rogue_Special.png/revision/latest?cb=20160305235517",
-    "notes": "Fires short-range, inaccurate lasers. Starting gun of The Pilot . Does not crack secret walls .",
+    "notes": "Fires short-range, inaccurate lasers. Starting gun of The Pilot. Does not crack secret walls.",
     "quote": "Underhanded And Efficient",
     "quality": "N",
     "type": "Semiautomatic",
@@ -34356,8 +34356,8 @@
   },
   {
     "name": "Rusty Sidearm",
-    "icon": "",
-    "notes": "Starting gun of The Hunter . Does not crack secret walls .",
+    "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/ce/Rusty_Sidearm.png/revision/latest?cb=20200410183300",
+    "notes": "Starting gun of The Hunter. Does not crack secret walls.",
     "quote": "Still works, mostly.",
     "quality": "N",
     "type": "Semiautomatic",
@@ -34676,7 +34676,7 @@
   {
     "name": "Sawed-Off",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/87/Sawed-Off.png",
-    "notes": "Starting gun of The Convict .",
+    "notes": "Starting gun of The Convict.",
     "quote": "No Butts About It",
     "quality": "D",
     "type": "Semiautomatic",
@@ -37097,7 +37097,7 @@
   {
     "name": "Slinger",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f4/Slinger.png/revision/latest?cb=20190406101659",
-    "notes": "Starting weapon of The Gunslinger . Reloading an empty clip throws the gun, which has a chance to stun enemies. Does not crack secret walls .",
+    "notes": "Starting weapon of The Gunslinger. Reloading an empty clip throws the gun, which has a chance to stun enemies. Does not crack secret walls.",
     "quote": "Farewell to arms",
     "quality": "N",
     "type": "Semiautomatic",
