@@ -6,6 +6,28 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.20 — 📋 Items Wiki Audit Round 4 — Bullet Upgrades, Guon Stone, Table Tech (August 2026)
+**Build:** 97
+
+> Fourth pass of items wiki comparison: 12 more item effects enriched with specific values.
+
+### Changes
+- **FIX (BUG-079) — 12 more items with vague effects enriched:**
+  - Frost Bullets: chance higher for slower-firing weapons
+  - Devolver Rounds: devolves into Arrowkin, beam guns gain double damage chance
+  - Hungry Bullets: blue bullets eat projectiles within 1.5 tiles, +10% dmg/size per bullet, cap 80%, doubles beam damage
+  - Magic Bullets: 4% chance to transmogrify into chickens, multiplied by gun's effect chance scalar
+  - Zombie Bullets: 33% chance to refund 1 ammo, no effect on beam weapons
+  - Chance Bullets: shots from other guns don't consume ammo from source gun
+  - Katana Bullets: curse +1, 100% chance for beam guns on kill, 50%/s beam double damage
+  - Table Tech Sight: 3 second duration, grammar fix (triples not triple)
+  - Green Guon Stone: 20% heal chance, 50% if damage would have killed
+  - Ruby Bracelet: 30 damage to nearby enemies, doesn't destroy guns
+  - Mustache: Bello's shop 15% cheaper
+  - Ice Bomb: 8 damage
+
+---
+
 ## v1.9.19 — 📋 Items Wiki Audit Round 3 — Ammolets, Companions, Active Items (August 2026)
 **Build:** 96
 

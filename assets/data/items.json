@@ -10418,7 +10418,7 @@
     "type": "Passive",
     "quote": "Good RNG",
     "quality": "B",
-    "effect": "Upon firing, adds a chance to fire projectiles from the player's other guns.",
+    "effect": "Upon firing, adds a chance to fire projectiles from the player's other guns. Shots fired this way do not consume ammo from the source gun.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -15497,7 +15497,7 @@
     "type": "Passive",
     "quote": "Two Steps Back",
     "quality": "B",
-    "effect": "Bullets have a chance to devolve enemies into simpler enemies.",
+    "effect": "Bullets have a chance to devolve enemies into Arrowkin. Beam guns gain a chance for double damage each second.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -20178,7 +20178,7 @@
     "type": "Passive",
     "quote": "Icy Fire",
     "quality": "A",
-    "effect": "Adds a chance to fire bullets that freeze enemies.",
+    "effect": "Adds a chance to fire bullets that freeze enemies. Chance is higher for slower-firing weapons.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -22280,7 +22280,7 @@
     "type": "Passive",
     "quote": "Chance To Heal",
     "quality": "A",
-    "effect": "Orbits the player, blocking enemy shots on contact. Chance to heal upon taking damage.",
+    "effect": "Orbits the player, blocking enemy shots on contact. 20% chance to heal upon taking damage, increasing to 50% if the damage would have killed the player.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -27398,7 +27398,7 @@
     "type": "Passive",
     "quote": "Hungry Hungry",
     "quality": "A",
-    "effect": "Adds a chance for the player's bullets to block enemy projectiles, growing in damage and size as they do so.",
+    "effect": "Adds a chance for bullets to become blue and eat enemy projectiles within 1.5 tiles. +10% damage and size per bullet eaten, cap 80%. Doubles beam damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -27870,7 +27870,7 @@
     "type": "Active",
     "quote": "Cool It!",
     "quality": "D",
-    "effect": "Throws a bomb that freezes enemies.",
+    "effect": "Throws a bomb that deals 8 damage and freezes enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -29233,7 +29233,7 @@
     "type": "Passive",
     "quote": "Folded Lead",
     "quality": "C",
-    "effect": "Upon killing an enemy, bullets have a chance to unleash a flurry of slashes along the path of the original bullet, damaging enemies. Increases curse by 1.",
+    "effect": "Increases curse by 1. On kill, bullets have a chance to unleash a flurry of slashes (100% for beam guns). Beam guns gain 50% chance per second for double damage.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -32458,7 +32458,7 @@
     "type": "Passive",
     "quote": "Sufficiently Advanced",
     "quality": "B",
-    "effect": "Grants all of the player's bullets a small chance to transmogrify enemies into chickens.",
+    "effect": "Every bullet has a 4% chance to transmogrify enemies into harmless chickens. Chance is multiplied by the gun's effect chance scalar.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -36337,7 +36337,7 @@
     "type": "Passive",
     "quote": "A Familiar Face",
     "quality": "C",
-    "effect": "Heals the player half a heart upon purchasing an item.",
+    "effect": "Grants a chance to heal half a heart upon purchasing an item. Makes Bello's shop items 15% cheaper.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -45640,7 +45640,7 @@
     "type": "Passive",
     "quote": "Thrown Guns Explode",
     "quality": "D",
-    "effect": "Thrown guns will explode.",
+    "effect": "Thrown guns will explode, dealing 30 damage to nearby enemies without destroying them.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -53826,7 +53826,7 @@
     "type": "Passive",
     "quote": "Flip Multiplier",
     "quality": "D",
-    "effect": "Flipping a table briefly slows down time and triple the player's shots.",
+    "effect": "Flipping a table briefly slows down time and triples the number of bullets fired for 3 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -57685,7 +57685,7 @@
     "type": "Passive",
     "quote": "Unfinished Business",
     "quality": "C",
-    "effect": "Adds a chance to refund ammo when a shot misses.",
+    "effect": "33% chance for missed shots to refund 1 ammo to the source gun. Has no effect on beam weapons.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {

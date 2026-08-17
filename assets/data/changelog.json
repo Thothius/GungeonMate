@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.20",
+    "title": "📋 Items Wiki Audit Round 4 — Bullet Upgrades, Guon Stone, Table Tech Enriched",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-079): 12 more items enriched with wiki-accurate mechanics. Bullet upgrades: Frost Bullets (slower weapons higher chance), Devolver Rounds (Arrowkin, beam double dmg), Hungry Bullets (blue, 1.5 tiles, +10%/bullet, cap 80%, beam x2), Magic Bullets (4% transmog), Zombie Bullets (33% refund, no beam), Chance Bullets (no ammo cost), Katana Bullets (curse +1, 100% beam, 50%/s beam double). Table Tech Sight (3s duration, grammar fix). Green Guon Stone (20% heal, 50% lethal). Ruby Bracelet (30 dmg). Mustache (Bello 15% cheaper). Ice Bomb (8 dmg)."
+    ]
+  },
+  {
     "version": "v1.9.19",
     "title": "📋 Items Wiki Audit Round 3 — Ammolets, Companions, Active Items Enriched",
     "date": "August 2026",
