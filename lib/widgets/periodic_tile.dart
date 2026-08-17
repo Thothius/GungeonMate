@@ -321,6 +321,47 @@ class _PeriodicTileState extends State<PeriodicTile>
     return clean;
   }
 
+  /// Compact formatter for the periodic tile stat badges.
+  /// Produces short, readable labels that always fit:
+  ///   "600 dmg"      → "600d"
+  ///   "3 seconds"    → "3s"
+  ///   "10 seconds"   → "10s"
+  ///   "Cannot be used" → "—"
+  ///   "Room cleared" → "room"
+  ///   "Single-Use"   → "1use"
+  ///   "None"         → "—"
+  String _compactStat(String raw) {
+    if (raw.isEmpty) return '';
+    var s = raw.trim();
+    // Strip parenthetical and slash suffixes first
+    if (s.contains('(')) s = s.split('(').first.trim();
+    if (s.contains('/')) s = s.split('/').first.trim();
+    final lower = s.toLowerCase();
+    // Unusable / none
+    if (lower.contains('cannot') || lower == 'none' || lower.contains('n/a')) {
+      return '—';
+    }
+    // "<N> dmg" → "<N>d"
+    final dmgMatch = RegExp(r'^(\d+)\s*dmg', caseSensitive: false).firstMatch(s);
+    if (dmgMatch != null) return '${dmgMatch.group(1)}d';
+    // "<N> kills" → "<N>k"
+    final killMatch = RegExp(r'^(\d+)\s*kill', caseSensitive: false).firstMatch(s);
+    if (killMatch != null) return '${killMatch.group(1)}k';
+    // "<N> seconds" → "<N>s"
+    final secMatch = RegExp(r'^([\d.]+)\s*sec', caseSensitive: false).firstMatch(s);
+    if (secMatch != null) {
+      final n = double.tryParse(secMatch.group(1)!) ?? 0;
+      return n == n.roundToDouble() ? '${n.toInt()}s' : '${n}s';
+    }
+    // "Room cleared" / "Per room" → "room"
+    if (lower.contains('room')) return 'room';
+    // "Single-Use" / "Single use" → "1use"
+    if (lower.contains('single')) return '1use';
+    // Fallback: truncate at 5 chars
+    if (s.length > 5) s = s.substring(0, 5).trim();
+    return s;
+  }
+
   /// Builds the bottom-center stats badge for guns on the periodic grid.
   /// Shows DPS (with top-DPS shimmer if applicable) alongside RANGE.
   Widget _buildGunStatsBadge() {
@@ -415,11 +456,22 @@ class _PeriodicTileState extends State<PeriodicTile>
             ),
           );
 
-    return Row(
-      children: [
-        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: dpsBadge))),
-        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: rangeBadge))),
-      ],
+    // Single FittedBox wraps both badges so they scale together as a
+    // unit — maintaining relative proportions and never clipping.
+    return Center(
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            dpsBadge,
+            if (rangeBadge is! SizedBox) ...[
+              const SizedBox(width: 3),
+              rangeBadge,
+            ],
+          ],
+        ),
+      ),
     );
   }
 
@@ -434,8 +486,8 @@ class _PeriodicTileState extends State<PeriodicTile>
     // Ser Junkan uses the corner badge (special rank text).
     if (it.name.toLowerCase() == 'ser junkan') return _buildLegacyItemBadge();
 
-    final recharge = _cleanStat(it.rechargeTime);
-    final duration = _cleanStat(it.duration);
+    final recharge = _compactStat(it.rechargeTime);
+    final duration = _compactStat(it.duration);
 
     // No recharge at all → nothing to show (passive/companion).
     if (recharge.isEmpty) return const SizedBox.shrink();
@@ -487,7 +539,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                 GoopText(
                   duration,
                   style: TextStyle(
-                    fontSize: 8.5 * sf,
+                    fontSize: 10.5 * sf,
                     fontWeight: FontWeight.w700,
                     color: Colors.lightBlueAccent,
                     height: 1.1,
@@ -508,11 +560,22 @@ class _PeriodicTileState extends State<PeriodicTile>
             ),
           );
 
-    return Row(
-      children: [
-        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: rechargeBadge))),
-        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: durationBadge))),
-      ],
+    // Single FittedBox wraps both badges so they scale together as a
+    // unit — maintaining relative proportions and never clipping.
+    return Center(
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            rechargeBadge,
+            if (durationBadge is! SizedBox) ...[
+              const SizedBox(width: 3),
+              durationBadge,
+            ],
+          ],
+        ),
+      ),
     );
   }
 
