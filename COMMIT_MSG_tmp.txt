@@ -1,24 +1,13 @@
-v1.9.29: 4 UI reworks — Run Tools, Settings, Theme Picker, Multiplayer
+v1.9.30: Gungeoneer detail views + design polish
 
-Rework 1 — Run Tools popup: accent-colored section headers replace
-disabled-button look. Renamed to "Run Tools". Added Shrine Picker and
-Add/Remove Co-op Player (moved from Settings).
-
-Rework 2 — Settings App tab: removed Add Co-op and Use Shrine (moved
-to Run Tools). New sections: MP SESSION, ACCOUNT & DATA, DEVELOPER,
-DANGER ZONE. Accent-colored labels.
-
-Rework 3 — Theme Picker: carousel 100px to 140px with swipe arrows.
-Wide pill dot indicators. SWIPE TO BROWSE THEMES hint. Section labels:
-PARTICLE PRESET, COLOR SCHEMA, ANIMATION SPEED.
-
-Rework 4 — Multiplayer Lobby: single-page 3-step flow replaces 2-page
-PageView. Compact HOST/JOIN buttons. PIN only for JOIN, character only
-for HOST. Guide as dialog. Saved sessions as bottom sheet. Solo Co-op
-with or divider.
-
-Also cleaned up junk files: bar_kitchen_app.iml, build_output.txt,
-check_hardcoded.ps1, DOCUMENTATION.md, documentation/ folder.
+- Gungeoneer detail screen with ? button on character cards
+- SpoilerTag widget for collapsible spoiler sections
+- Codex Gungeoneers category (grid of all 9 gungeoneers)
+- Enriched gungeoneers.json: lore, playstyle, tips, past details, unlocks
+- Fixed 3 data discrepancies: Marine +Military Training +armor, Paradox Random, Gunslinger +Lich's Eye Bullets
+- Phase 4: removed redundant My Favourites from Run Tools
+- Phase 6: removed custom BACK TO RUN buttons, standard AppBar back
+- Phase 7: Codex subtitle, first category visible on load
 
 Generated with [Devin](https://devin.ai)
 

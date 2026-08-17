@@ -6,6 +6,22 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.30 — 🗺️ Gungeoneer Detail Views + Design Polish (August 2026)
+**Build:** 107
+
+> Gungeoneer detail screen with spoiler-gated lore/past/unlocks, Codex Gungeoneers category, and 3 design plan phases implemented.
+
+### Changes
+- **Gungeoneer detail screen** — `?` button on character cards opens rich scrollable page: art, short desc, lore intro, playstyle, tips, starting loadout (tappable tiles link to gun/item detail), 5 spoiler sections (Past Story, Past Kill Details, Past Kill Unlocks, Unlock Method, Alternate Unlocks). Special badges for co-op only, Hegemony cost, Robot mechanics.
+- **SpoilerTag widget** — reusable collapsible amber warning section. Tap to reveal/collapse with AnimatedSize. Hides when content empty.
+- **Codex Gungeoneers category** — new first tile in Codex. Grid of all 9 gungeoneers, tap for detail view.
+- **Gungeoneer data enriched** — all 9 characters now have: short_desc, lore_intro, playstyle, tips[], nicknames[], voice, hegemony_cost, past_name/summary/loadout/details/unlocks, alt_costume_name/unlock, alt_weapon_skin_unlock, wiki_url. 3 data discrepancies fixed: Marine +Military Training +1 armor, Paradox Random placeholders, Gunslinger +Lich's Eye Bullets.
+- **Phase 4 — Unify Favourites** — removed redundant "My Favourites" from Run Tools popup. Favourites accessed via Browse → Favs tab (single entry point, same FavouritesScreen widget).
+- **Phase 6 — Nav consistency** — removed custom "BACK TO RUN" buttons from Stats Detail, Shrine Picker, Browse screens. Standard AppBar back arrow used everywhere.
+- **Phase 7 — Codex first impression** — subtitle "Encyclopedia of the Gungeon" below title. First category (Gungeoneers) content visible on load.
+
+---
+
 ## v1.9.29 — 🎨 UI Reworks — Run Tools, Settings, Theme Picker, Multiplayer (August 2026)
 **Build:** 106
 

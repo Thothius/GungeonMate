@@ -12,7 +12,6 @@ import '../../services/goop_talk_engine.dart';
 import 'dice_roll.dart';
 import 'sort_picker.dart';
 import '../../screens/effects_summary_screen.dart';
-import '../../screens/favourites_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/codex_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
@@ -247,12 +246,6 @@ class HeaderMenu extends StatelessWidget {
       ),
       onSelected: (v) {
         switch (v) {
-          case 'favourites':
-            Navigator.push(
-              context,
-              fastRoute(const FavouritesScreen(embedded: false)),
-            );
-            break;
           case 'settings':
             Navigator.push(
               context,
@@ -371,14 +364,6 @@ class HeaderMenu extends StatelessWidget {
       itemBuilder: (ctx) => [
         // ── NAVIGATION ──
         _menuLabel('NAVIGATION'),
-        const PopupMenuItem(
-          value: 'favourites',
-          child: Row(children: [
-            Icon(Icons.favorite_rounded, size: 18, color: Colors.pinkAccent),
-            SizedBox(width: 10),
-            GoopText('My Favourites'),
-          ]),
-        ),
         const PopupMenuItem(
           value: 'codex',
           child: Row(children: [

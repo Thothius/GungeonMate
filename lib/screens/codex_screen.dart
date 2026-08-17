@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
 import '../models/codex_entry.dart';
+import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import 'bullet_hell_codex_screen.dart';
@@ -11,6 +13,8 @@ import 'paradox_codex_screen.dart';
 import 'gunslinger_codex_screen.dart';
 import 'rat_codex_screen.dart';
 import 'codex_detail_screen.dart';
+import 'gungeoneer_detail_screen.dart';
+import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
 
@@ -48,6 +52,12 @@ class _CodexScreenState extends State<CodexScreen> {
   // Category definitions — special pages first, then data categories.
   // The order here determines the grid order.
   static const _categories = [
+    _CategoryDef(
+      label: 'Gungeoneers',
+      icon: Icons.person,
+      color: Color(0xFF42A5F5),
+      isSpecial: true,
+    ),
     _CategoryDef(
       label: 'Paradox',
       icon: Icons.auto_awesome,
@@ -179,15 +189,15 @@ class _CodexScreenState extends State<CodexScreen> {
   /// Returns the data entries for the selected data category.
   List<CodexEntry> _entriesFor(int index) {
     switch (index) {
-      case 6:
-        return _filter(_objects);
       case 7:
-        return _filter(_pickups);
+        return _filter(_objects);
       case 8:
-        return _filter(_npcs);
+        return _filter(_pickups);
       case 9:
-        return _filter(_enemies);
+        return _filter(_npcs);
       case 10:
+        return _filter(_enemies);
+      case 11:
         return _filter(_bosses);
       default:
         return [];
@@ -196,13 +206,13 @@ class _CodexScreenState extends State<CodexScreen> {
 
   CodexSection _sectionFor(int index) {
     switch (index) {
-      case 6:
-        return CodexSection.objects;
       case 7:
-        return CodexSection.pickups;
+        return CodexSection.objects;
       case 8:
-        return CodexSection.npcs;
+        return CodexSection.pickups;
       case 9:
+        return CodexSection.npcs;
+      case 10:
         return CodexSection.enemies;
       default:
         return CodexSection.bosses;
@@ -227,9 +237,21 @@ class _CodexScreenState extends State<CodexScreen> {
               )
             : null,
         title: widget.showBackButton
-            ? const GoopText('CODEX',
-                style: TextStyle(
-                    fontWeight: FontWeight.w900, letterSpacing: 1.2))
+            ? const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GoopText('CODEX',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+                  GoopText('Encyclopedia of the Gungeon',
+                      style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white54,
+                          letterSpacing: 0.3)),
+                ],
+              )
             : const SizedBox.shrink(),
       ),
       body: !_loaded
@@ -323,16 +345,18 @@ class _CodexScreenState extends State<CodexScreen> {
   Widget _specialPage(int index) {
     switch (index) {
       case 0:
-        return const ParadoxCodexScreen();
+        return const _GungeoneersCodexPage();
       case 1:
-        return const GunslingerCodexScreen();
+        return const ParadoxCodexScreen();
       case 2:
-        return const BulletHellCodexScreen();
+        return const GunslingerCodexScreen();
       case 3:
-        return const DrakeCodexScreen();
+        return const BulletHellCodexScreen();
       case 4:
-        return const ChallengeModeCodexScreen();
+        return const DrakeCodexScreen();
       case 5:
+        return const ChallengeModeCodexScreen();
+      case 6:
         return const RatCodexScreen();
       default:
         return const SizedBox.shrink();
@@ -612,5 +636,109 @@ class _CodexCard extends StatelessWidget {
       default:
         return Icons.widgets;
     }
+  }
+}
+
+// =============================================================================
+// Gungeoneers codex page — grid of all gungeoneers, tap for detail
+// =============================================================================
+
+class _GungeoneersCodexPage extends StatelessWidget {
+  const _GungeoneersCodexPage();
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final gungeoneers = p.allGungeoneers;
+    final flair = AppTheme.flair;
+
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(10, 4, 10, 24),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final g = gungeoneers[index];
+                return GestureDetector(
+                  onTap: () {
+                    Haptics.selection();
+                    Navigator.push(
+                      context,
+                      fastRoute(GungeoneerDetailScreen(gungeoneer: g)),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: flair.card,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: flair.primary.withValues(alpha: 0.12),
+                        width: 0.8,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: _buildGungeoneerArt(g.name),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(3, 0, 3, 4),
+                          child: GoopText(
+                            g.name,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 8.5,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              height: 1.1,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ).animate().fadeIn(duration: 200.ms, delay: (index * 40).ms);
+              },
+              childCount: gungeoneers.length,
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount:
+                  MediaQuery.of(context).size.width < 360 ? 3 : 4,
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 6,
+              childAspectRatio: 0.82,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGungeoneerArt(String name) {
+    final animPath = gungeoneerAnimatedCardPath(name);
+    if (animPath.isNotEmpty) {
+      return Image.asset(
+        animPath,
+        fit: BoxFit.contain,
+        filterQuality: FilterQuality.none,
+        errorBuilder: (_, __, ___) => Icon(
+          Icons.person,
+          size: 32,
+          color: AppTheme.flair.primary.withValues(alpha: 0.5),
+        ),
+      );
+    }
+    return Icon(
+      Icons.person,
+      size: 32,
+      color: AppTheme.flair.primary.withValues(alpha: 0.5),
+    );
   }
 }

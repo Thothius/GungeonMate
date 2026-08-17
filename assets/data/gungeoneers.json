@@ -1,93 +1,287 @@
 [
   {
     "name": "The Marine",
-    "starting_guns": [
-      "Marine Sidearm"
+    "starting_guns": ["Marine Sidearm"],
+    "starting_items": ["Supply Drop", "Military Training"],
+    "starting_armor": 1,
+    "icon": "",
+    "short_desc": "A reliable soldier who starts with extra armor and accurate weaponry.",
+    "lore_intro": "The Marine was a guard stationed at Primerdyne R&D when an experiment went awry, unleashing an Interdimensional Horror into the facility. He chose to flee, abandoning his fellow guardsmen. Wracked by guilt, he travelled to the Gungeon to undo the past.",
+    "playstyle": "Reliable and durable. The Marine has the least variance in playstyle — his starting weapon has high clip size, decent damage, and high accuracy. The extra armor makes him more forgiving for new players.",
+    "tips": [
+      "Military Training increases accuracy and reload speed — use it at mid-range",
+      "Supply Drop provides emergency ammo — save it for boss fights",
+      "The extra armor absorbs one hit — play slightly more aggressively early"
     ],
-    "starting_items": [
-      "Supply Drop"
-    ],
-    "icon": ""
+    "nicknames": ["Tough Guy", "Soldier", "Meathead"],
+    "voice": "manly",
+    "hegemony_cost": 0,
+    "unlock_method": "Available from the start",
+    "is_default": true,
+    "is_coop_only": false,
+    "past_name": "Primerdyne R&D",
+    "past_summary": "The Marine returns to Primerdyne R&D before he left for the escape pods. He must defeat the Interdimensional Horror to save his fellow soldiers.",
+    "past_loadout": "Marine Sidearm, Hegemony Carbine, Military Training",
+    "past_details": "An injured scientist reveals something came through a dimensional opening. The Marine enters the lab to find soldiers taking cover. The Interdimensional Horror emerges from a portal. Defeating it saves everyone (except the hallway scientist).",
+    "past_unlocks": "Galactic Medal of Valor + Military Training (for all characters)",
+    "alt_costume_name": "Knight",
+    "alt_costume_unlock": "Kill The Marine's past",
+    "alt_weapon_skin_unlock": "Kill The Marine's past with alternate costume equipped",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Marine"
   },
   {
     "name": "The Pilot",
-    "starting_guns": [
-      "Rogue Special"
+    "starting_guns": ["Rogue Special"],
+    "starting_items": ["Trusty Lockpicks", "Disarming Personality", "Hidden Compartment"],
+    "starting_armor": 0,
+    "icon": "",
+    "short_desc": "A roguish smuggler who trades safety for utility — lockpicks, discounts, and extra active item slots.",
+    "lore_intro": "The Pilot is a smuggler who was hired to retrieve a special briefcase. After successfully completing his mission, his client refused to pay and instead reported him to the Hegemony of Man. He entered the Gungeon to erase the debt and the betrayal.",
+    "playstyle": "High utility, high risk. The Pilot's Rogue Special is weak but his items are powerful: lockpicks open locked chests for free, Disarming Personality reduces shop prices, and Hidden Compartment lets him carry extra active items. He's for players who prefer resourcefulness over raw firepower.",
+    "tips": [
+      "Lockpicks can open any locked chest — but may break the lock permanently, so choose wisely",
+      "Disarming Personality reduces shop prices — always check shops before buying",
+      "Hidden Compartment gives extra active item slots and ammo capacity — carry two actives",
+      "Rogue Special is weak early — find a better gun quickly"
     ],
-    "starting_items": [
-      "Trusty Lockpicks",
-      "Disarming Personality",
-      "Hidden Compartment"
-    ],
-    "icon": ""
+    "nicknames": ["Flyboy", "Rogue", "Taffer", "Scoundrel"],
+    "voice": "spacerogue",
+    "hegemony_cost": 0,
+    "unlock_method": "Available from the start",
+    "is_default": true,
+    "is_coop_only": false,
+    "past_name": "The Client's Ship",
+    "past_summary": "The Pilot confronts the client who betrayed him after delivering the briefcase. The client turns out to be a Hegemony official.",
+    "past_loadout": "Rogue Special, Trusty Lockpicks",
+    "past_details": "The Pilot delivers the briefcase to his client, who reveals himself as a Hegemony official and refuses to pay, instead calling security. The Pilot must fight his way through the ship to escape.",
+    "past_unlocks": "Wingman + Trusty Lockpicks & Disarming Personality (for all characters)",
+    "alt_costume_name": "Alternate",
+    "alt_costume_unlock": "Kill The Pilot's past",
+    "alt_weapon_skin_unlock": "Kill The Pilot's past with alternate costume equipped",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Pilot"
   },
   {
     "name": "The Convict",
-    "starting_guns": [
-      "Sawed-Off",
-      "Budget Revolver"
+    "starting_guns": ["Budget Revolver", "Sawed-Off"],
+    "starting_items": ["Molotov", "Enraging Photo"],
+    "starting_armor": 0,
+    "icon": "",
+    "short_desc": "A fierce close-range fighter who rewards aggressive play with damage and reload boosts.",
+    "lore_intro": "The Convict, formerly known as Laser Lily, was a Hegemony citizen imprisoned for unknown crimes. She carries a photo of her former life that enrages her when she takes damage, boosting her combat capabilities.",
+    "playstyle": "High risk, high reward at close range. The Sawed-Off shotgun devastates up close, and the Budget Revolver handles mid-range. Enraging Photo boosts damage and reload speed when she takes damage — rewarding aggressive, risky play.",
+    "tips": [
+      "Sawed-Off is devastating point-blank — get in close for maximum damage",
+      "Enraging Photo triggers on damage taken — the riskier you play, the stronger you get",
+      "Molotov is great for crowd control and damaging groups",
+      "Budget Revolver is your fallback for ranged encounters"
     ],
-    "starting_items": [
-      "Molotov",
-      "Enraging Photo"
-    ],
-    "icon": ""
+    "nicknames": ["Jumpsuit", "Jailbird", "Lawbreaker"],
+    "voice": "convict",
+    "hegemony_cost": 0,
+    "unlock_method": "Available from the start",
+    "is_default": true,
+    "is_coop_only": false,
+    "past_name": "Hegemony Prison",
+    "past_summary": "The Convict returns to the Hegemony prison where she was held. She must defeat the warden who incarcerated her.",
+    "past_loadout": "Budget Revolver, Sawed-Off",
+    "past_details": "The Convict wakes up in her cell. She fights through the prison, confronting guards and the warden. The past reveals more about her identity as Laser Lily, a former Hegemony citizen.",
+    "past_unlocks": "Briefcase of Cash + Enraging Photo (for all characters)",
+    "alt_costume_name": "Alternate",
+    "alt_costume_unlock": "Kill The Convict's past",
+    "alt_weapon_skin_unlock": "Kill The Convict's past with alternate costume equipped",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Convict"
   },
   {
     "name": "The Hunter",
-    "starting_guns": [
-      "Rusty Sidearm",
-      "Crossbow"
+    "starting_guns": ["Rusty Sidearm", "Crossbow"],
+    "starting_items": ["Dog"],
+    "starting_armor": 0,
+    "icon": "",
+    "short_desc": "A ranged specialist with a loyal dog companion who finds items and spots mimics.",
+    "lore_intro": "The Hunter is a scholar and explorer who ventured into the Gungeon seeking knowledge. She is accompanied by her faithful Dog, who helps her find hidden items and warns her of danger.",
+    "playstyle": "Ranged precision with companion support. The Crossbow deals high damage at range — excellent for early floors. The Dog digs up pickups after clearing rooms and barks at mimics, making them easy to identify. The Rusty Sidearm is a reliable backup.",
+    "tips": [
+      "Crossbow deals high damage — use it for tough enemies and early bosses",
+      "Dog digs up pickups after clearing rooms — always check the room after combat",
+      "Dog barks at mimics — if your dog barks at a chest, it's a mimic",
+      "Save Crossbow bolts for high-value targets — ammo is limited"
     ],
-    "starting_items": [
-      "Dog"
-    ],
-    "icon": ""
+    "nicknames": ["Pilgrim", "Prof", "Lady", "Ma'am"],
+    "voice": "convict",
+    "hegemony_cost": 0,
+    "unlock_method": "Available from the start",
+    "is_default": true,
+    "is_coop_only": false,
+    "past_name": "The Expedition",
+    "past_summary": "The Hunter returns to the expedition where she was separated from her companions. She must find out what happened to them.",
+    "past_loadout": "Rusty Sidearm, Crossbow",
+    "past_details": "The Hunter was part of an expedition team that entered a dangerous area. Her companions were lost. She returns to the moment of separation to uncover the truth and potentially save them.",
+    "past_unlocks": "Wolf + Dog (for all characters)",
+    "alt_costume_name": "Alternate",
+    "alt_costume_unlock": "Kill The Hunter's past",
+    "alt_weapon_skin_unlock": "Kill The Hunter's past with alternate costume equipped",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Hunter"
   },
   {
     "name": "The Bullet",
-    "starting_guns": [
-      "Blasphemy"
+    "starting_guns": ["Blasphemy"],
+    "starting_items": ["Live Ammo"],
+    "starting_armor": 0,
+    "icon": "",
+    "short_desc": "A bullet-shaped hero who cleaves bullets with a sword and is immune to contact damage.",
+    "lore_intro": "The Bullet is a sentient bullet kin who defected from the Gungeon's forces. Armed with Blasphemy, a sword that can cleave incoming bullets, The Bullet fights to undo the past of a fellow bullet kin.",
+    "playstyle": "Melee-focused with bullet-cleaving sword. Blasphemy cleaves bullets with every swing and fires a piercing projectile at full health. Live Ammo grants complete immunity to contact damage, making Spent, Blobulons, and cubes completely harmless. Excellent for earning Master Rounds.",
+    "tips": [
+      "Blasphemy cleaves bullets — swing into incoming fire to clear paths",
+      "At full health, Blasphemy fires a ranged projectile — stay healed to keep ranged attack",
+      "Live Ammo makes you immune to contact damage — walk freely through enemies",
+      "Losing even 1 heart piece halves your damage and removes ranged attack — top off health",
+      "Swinging causes a slight forward lunge — don't swing near pits"
     ],
-    "starting_items": [
-      "Live Ammo"
-    ],
-    "icon": ""
+    "nicknames": ["Slug", "Ammo", "Round", "Shell", "Little guy", "Betrayer"],
+    "voice": "",
+    "hegemony_cost": 0,
+    "unlock_method": "Spare five Red-Caped Bullet Kin — let them teleport away instead of killing them. After sparing five, The Bullet unlocks.",
+    "is_default": false,
+    "is_coop_only": false,
+    "past_name": "The Bullet Kin Barracks",
+    "past_summary": "The Bullet returns to the barracks to help a fellow bullet kin. The past involves the Bullet's betrayal of their kind.",
+    "past_loadout": "Blasphemy",
+    "past_details": "The Bullet enters the bullet kin barracks and encounters a fellow bullet kin in distress. The past reveals the Bullet's choice to defect from the Gungeon's forces and the consequences of that decision.",
+    "past_unlocks": "Chicken Flute + Blasphemy & Live Ammo (for all characters)",
+    "alt_costume_name": "Alternate",
+    "alt_costume_unlock": "Kill The Bullet's past",
+    "alt_weapon_skin_unlock": "Kill The Bullet's past with alternate costume equipped",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Bullet"
   },
   {
     "name": "The Robot",
-    "starting_guns": [
-      "Robot's Right Hand"
+    "starting_guns": ["Robot's Right Hand"],
+    "starting_items": ["Battery Bullets", "Coolant Leak"],
+    "starting_armor": 6,
+    "icon": "",
+    "short_desc": "A mechanical gungeoneer with 6 armor instead of hearts. Junk boosts damage permanently. Immune to electricity.",
+    "lore_intro": "The Robot was built by the Hegemony of Man as a combat unit. It entered the Gungeon seeking to understand its own existence and origins. Unlike other gungeoneers, it runs on armor instead of hearts.",
+    "playstyle": "Armor-based survival with scaling damage. The Robot starts with 6 armor and 0 hearts — it cannot gain heart containers. Each piece of Junk or Gold Junk grants a permanent +5% damage increase. Battery Bullets grants electricity immunity. Armor acts as health and provides a free blank effect when hit, revealing secret rooms.",
+    "tips": [
+      "You have 6 armor and no hearts — armor IS your health",
+      "Each Junk/Gold Junk gives permanent +5% damage — always pick up junk",
+      "Battery Bullets makes you immune to electricity — walk on electrified water safely",
+      "Armor grants a free blank when hit — use it to reveal secret rooms",
+      "Master Rounds give 1 armor (not heart) — collect them to extend your survival",
+      "Heart-container items give shells instead — don't waste them"
     ],
-    "starting_items": [
-      "Battery Bullets",
-      "Coolant Leak"
-    ],
-    "icon": ""
+    "nicknames": ["Machine", "Automaton", "Android", "Mechano-man", "Can-opener", "Robert", "Number 4", "Toaster", "Metal Head"],
+    "voice": "computer",
+    "hegemony_cost": 0,
+    "unlock_method": "Reach the Forge and deliver the Bullet That Can Kill The Past to the Blacksmith. Then defeat the High Dragun with The Robot.",
+    "is_default": false,
+    "is_coop_only": false,
+    "past_name": "The Hegemony Factory",
+    "past_summary": "The Robot returns to the factory where it was created. It must confront its creator and discover the truth of its origin.",
+    "past_loadout": "Robot's Right Hand",
+    "past_details": "The Robot enters the Hegemony factory where it was manufactured. It encounters other robots and its creator. The past reveals the purpose for which the Robot was built and the reason it gained sentience.",
+    "past_unlocks": "Robot's Left Hand + Chest Teleporter + Robot's Right Hand (for all characters)",
+    "alt_costume_name": "Alternate",
+    "alt_costume_unlock": "Kill The Robot's past",
+    "alt_weapon_skin_unlock": "Kill The Robot's past with alternate costume equipped (bullets become bones)",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Robot"
   },
   {
     "name": "The Cultist",
-    "starting_guns": [
-      "Dart Gun"
+    "starting_guns": ["Dart Gun"],
+    "starting_items": ["Friendship Cookie", "Number 2"],
+    "starting_armor": 0,
+    "icon": "",
+    "short_desc": "A co-op-only companion character. Plays as Player 2 in multiplayer runs.",
+    "lore_intro": "The Cultist is a mysterious companion who joins the main gungeoneer in their run. They are only playable in co-op mode and serve as the second player.",
+    "playstyle": "Co-op support. The Cultist is only playable as Player 2 in co-op. The Dart Gun is weak but the Friendship Cookie and Number 2 provide support utility. The Cultist's past is a PvP duel against Player 1.",
+    "tips": [
+      "Only playable in co-op — select from Player 2 slot",
+      "Dart Gun is weak — find better guns quickly",
+      "Coordinate with Player 1 — you're the support player",
+      "Your past is a PvP duel against Player 1 using Magnums"
     ],
-    "starting_items": [
-      "Friendship Cookie",
-      "Number 2"
-    ],
-    "icon": ""
+    "nicknames": ["Somebody", "Some guy", "Rando", "Extra", "Guy next to the protagonist"],
+    "voice": "coop",
+    "hegemony_cost": 0,
+    "unlock_method": "Available from the start (co-op only)",
+    "is_default": true,
+    "is_coop_only": true,
+    "past_name": "The Breach (PvP Duel)",
+    "past_summary": "The Cultist's past is a PvP duel against Player 1 in The Breach using Magnums. Both players have 3 hearts and 2 blanks.",
+    "past_loadout": "Magnum (both players)",
+    "past_details": "Unlike other gungeoneers, the Cultist's past is a PvP duel. Both players spawn in The Breach with Magnums, 3 hearts, and 2 blanks. The winner gets a special reward. The duel is optional and can be skipped.",
+    "past_unlocks": "Alternate costume unlocks regardless of duel outcome",
+    "alt_costume_name": "Alternate",
+    "alt_costume_unlock": "Complete the Cultist's past duel (win or lose)",
+    "alt_weapon_skin_unlock": "N/A — Cultist has no weapon skin",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Cultist"
   },
   {
     "name": "The Paradox",
-    "starting_guns": [],
-    "starting_items": [],
-    "icon": ""
+    "starting_guns": ["Random"],
+    "starting_items": ["Random"],
+    "starting_armor": 0,
+    "icon": "",
+    "short_desc": "A temporal anomaly with a random loadout. Costs 5 Hegemony Credits to play. No traditional past.",
+    "lore_intro": "The Paradox is a temporal anomaly — a glitch in the Gungeon's timeline. It appears as a purple, shifting figure whose form changes randomly. It has no past of its own, but can access the pasts of others through the Lich.",
+    "playstyle": "Randomized chaos. The Paradox starts with a random gun, a random non-starter gun, and a random passive item. Appearance changes randomly on dodge-roll, table flip, or barrel roll. Cannot reach the Gun That Can Kill The Past until The Gunslinger is unlocked.",
+    "tips": [
+      "Your loadout is random — adapt to what you get",
+      "Appearance changes on dodge-roll, table flip, and barrel roll (cosmetic only)",
+      "You may spawn with synergies between your random gun and item",
+      "You can get weapons from other gungeoneers' loadouts (e.g. Robot's Right Hand)",
+      "Killing the Lich without Gunslinger unlocked does NOT count — no Ammonomicon entry",
+      "The Blacksmith won't give you the Bullet That Can Kill The Past"
+    ],
+    "nicknames": ["Whatever you are", "Time blob", "Glitch", "Temporal horror", "Purple ghost"],
+    "voice": "manly",
+    "hegemony_cost": 5,
+    "unlock_method": "Defeat the Lich at least once with any character. The Paradox then appears in The Breach.",
+    "is_default": false,
+    "is_coop_only": false,
+    "past_name": "No Past (Bullet Hell)",
+    "past_summary": "The Paradox has no past. Instead, killing the High Dragun drags you to Bullet Hell to fight the Lich. If The Gunslinger is unlocked, this leads to the Gunslinger's past.",
+    "past_loadout": "Keeps current run loadout",
+    "past_details": "After defeating the High Dragun, the Lich's hand drags the Paradox to Bullet Hell. The Paradox fights the Lich. If The Gunslinger is unlocked, defeating the Lich transitions to The Gunslinger's past (fighting two Liches). If not, the run simply ends without unlocking anything.",
+    "past_unlocks": "The Gunslinger (defeat Lich + kill past) + The Fat Line (defeat High Dragun)",
+    "alt_costume_name": "N/A",
+    "alt_costume_unlock": "N/A — Paradox has no alternate costume",
+    "alt_weapon_skin_unlock": "N/A — Paradox has no weapon skin",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Paradox"
   },
   {
     "name": "The Gunslinger",
-    "starting_guns": [
-      "Slinger"
+    "starting_guns": ["Slinger"],
+    "starting_items": ["Lich's Eye Bullets"],
+    "starting_armor": 0,
+    "icon": "",
+    "short_desc": "The legendary hero who created the Gungeon. Lich's Eye Bullets grant all synergies. Costs 7 Hegemony Credits.",
+    "lore_intro": "The Gunslinger is the legendary hero who originally created the Gungeon. He is the past self of the Lich. Armed with Slinger and Lich's Eye Bullets, he fights to undo the creation of the Gungeon itself.",
+    "playstyle": "Synergy powerhouse. Lich's Eye Bullets grants any synergy without needing the counterpart item — effectively giving access to every gun synergy in the game. Slinger is thrown on reload (can stun enemies) and draws a new one from a magical belt. Keeps all items when entering past. Generally considered the easiest gungeoneer to play.",
+    "tips": [
+      "Lich's Eye Bullets grants ALL synergies — every gun can use its synergy",
+      "Slinger is thrown on reload — it can stun enemies, then you draw a new one",
+      "You keep all health and items when entering your past — unique to Gunslinger",
+      "Your past is Bullet Hell — you fight two Liches simultaneously",
+      "Both Liches use only their first phase, but the Paradox Lich fires jammed bullets",
+      "Considered the easiest gungeoneer — great for new players after unlock"
     ],
-    "starting_items": [],
-    "icon": ""
+    "nicknames": ["Slinger"],
+    "voice": "manly",
+    "hegemony_cost": 7,
+    "unlock_method": "Defeat the Lich as The Paradox. This transitions to The Gunslinger's past. Defeat both Liches to unlock The Gunslinger permanently.",
+    "is_default": false,
+    "is_coop_only": false,
+    "past_name": "Bullet Hell (Two Liches)",
+    "past_summary": "The Gunslinger's past is Bullet Hell — he fights two Liches simultaneously (one normal, one Paradox-jammed). Winning rewrites time so the Gungeon was never created.",
+    "past_loadout": "Keeps current run loadout (unique — all items and health preserved)",
+    "past_details": "The Gunslinger enters Bullet Hell and faces two Liches at once: the normal Lich and a Paradox-jammed Lich with increased health that fires jammed bullets. Both use only their first phase. Defeating both rewrites time — the Gungeon is never created, leading into the events of Exit the Gungeon.",
+    "past_unlocks": "Lich's Eye Bullets (already starts with it) — ending rewrites time",
+    "alt_costume_name": "N/A",
+    "alt_costume_unlock": "N/A — Gunslinger has no alternate costume",
+    "alt_weapon_skin_unlock": "N/A — Gunslinger has no weapon skin",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Gunslinger"
   }
 ]

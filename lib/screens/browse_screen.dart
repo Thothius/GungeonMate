@@ -155,12 +155,13 @@ class _BrowseScreenState extends State<BrowseScreen>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
-        // No screen title — the tab strip already labels the section
-        // and the redundant "Browse" word ate vertical space testers
-        // wanted back. The (add to P2) hint moves into the tab strip
-        // sub-line below when relevant.
-        toolbarHeight: 0,
-        title: const SizedBox.shrink(),
+        // When pushed as a route (showBackButton), show the standard
+        // AppBar back arrow. When inside the bottom-nav IndexedStack,
+        // keep toolbarHeight 0 — the tab strip labels the section.
+        toolbarHeight: widget.showBackButton ? kToolbarHeight : 0,
+        title: widget.showBackButton
+            ? const GoopText('Browse')
+            : const SizedBox.shrink(),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(64),
           child: Padding(
@@ -284,35 +285,6 @@ class _BrowseScreenState extends State<BrowseScreen>
               ],
             ),
           ),
-          if (widget.showBackButton && Navigator.canPop(context)) ...[
-            Container(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              color: Colors.black.withValues(alpha: 0.2),
-              child: SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton.icon(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white70,
-                    side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  icon: const Icon(Icons.arrow_back, size: 20),
-                  label: const GoopText(
-                    'BACK TO RUN',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ),
-            ),
-          ],
         ],
       ),
       ),

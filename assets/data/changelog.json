@@ -1,5 +1,19 @@
 [
   {
+    "version": "v1.9.30",
+    "title": "🗺️ Gungeoneer Detail Views + Design Polish",
+    "date": "August 2026",
+    "items": [
+      "🗺️ Gungeoneer detail screen — tap ? on any character card to see full info: art, lore, playstyle, tips, starting loadout (tappable tiles link to gun/item detail), spoiler-gated past story/kill details/unlocks/alt costumes.",
+      "🗺️ New SpoilerTag widget — collapsible amber warning sections for spoiler content. Tap to reveal/collapse with smooth animation.",
+      "🗺️ Codex gains 'Gungeoneers' category as first tile — grid of all 9 gungeoneers, tap for detail view.",
+      "🗺️ Gungeoneer data enriched — all 9 characters now have short_desc, lore_intro, playstyle, tips, nicknames, hegemony_cost, past details, unlock methods, alt costume info. 3 data discrepancies fixed: Marine now has Military Training + 1 armor, Paradox has Random placeholders, Gunslinger has Lich's Eye Bullets.",
+      "🎨 Phase 4 — Removed redundant 'My Favourites' from Run Tools popup. Favourites now accessed via Browse → Favs tab (single entry point).",
+      "🎨 Phase 6 — Removed custom 'BACK TO RUN' buttons from Stats Detail, Shrine Picker, and Browse screens. Standard AppBar back arrow used everywhere.",
+      "🎨 Phase 7 — Codex shows subtitle 'Encyclopedia of the Gungeon' below title. First category content visible on load."
+    ]
+  },
+  {
     "version": "v1.9.29",
     "title": "🎨 UI Reworks — Run Tools, Settings, Theme Picker, Multiplayer",
     "date": "August 2026",

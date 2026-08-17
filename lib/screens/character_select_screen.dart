@@ -7,6 +7,8 @@ import '../models/gungeoneer.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
+import '../utils/fast_route.dart';
+import 'gungeoneer_detail_screen.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
 
@@ -189,6 +191,39 @@ class _CharacterCard extends StatelessWidget {
                       scale: 1.1,
                       alignment: Alignment.bottomCenter,
                       child: _buildCardArt(),
+                    ),
+                  ),
+                  // ── ? info button — opens Gungeoneer detail screen ──
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: GestureDetector(
+                      onTap: () {
+                        Haptics.selection();
+                        Navigator.push(
+                          context,
+                          fastRoute(GungeoneerDetailScreen(
+                            gungeoneer: character,
+                          )),
+                        );
+                      },
+                      child: Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.5),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            width: 0.8,
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.help_outline,
+                          size: 14,
+                          color: Colors.white70,
+                        ),
+                      ),
                     ),
                   ),
                 ],
