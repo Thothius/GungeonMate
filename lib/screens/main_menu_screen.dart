@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
 import 'theme_picker_screen.dart';
@@ -10,7 +8,6 @@ import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
-import '../widgets/backgrounds/gungeon_fall_animation.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -29,8 +26,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     final btnIconSize = 24 * sf;
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: GungeonFallAnimation(
-        child: Stack(
+      body: Stack(
           children: [
           Positioned.fill(
               child: SafeArea(
@@ -110,8 +106,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      // 🔥 Bullet Hell Edition — animated wobble + burn heading
-                      const _BulletHellHeading(),
                       const Spacer(flex: 2),
                   // Local Run = single device solo play
                   ScaleButton(
@@ -182,7 +176,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.18',
+                    'v1.9.20',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -251,7 +245,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.18)',
+                          'Changelog (v1.9.20)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -263,7 +257,6 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           ),
           ],
         ),
-      ),
     );
   }
 
@@ -306,7 +299,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.18 — BULLET HELL EDITION',
+                            'v1.9.20',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -602,149 +595,3 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 //   }
 // }
 
-// =============================================================================
-// 🔥 Bullet Hell Edition — animated wobble + burn heading
-// =============================================================================
-
-/// A themed sub-update banner for the main menu. The "BULLET HELL" text
-/// wobbles gently (rotation oscillation) while an ember glow pulses behind
-/// it, giving a "burning" feel. Fire icon flickers. Uses a single
-/// repeating AnimationController — disposed properly.
-class _BulletHellHeading extends StatefulWidget {
-  const _BulletHellHeading();
-
-  @override
-  State<_BulletHellHeading> createState() => _BulletHellHeadingState();
-}
-
-class _BulletHellHeadingState extends State<_BulletHellHeading>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _burn;
-
-  @override
-  void initState() {
-    super.initState();
-    // Cycle: 2.8s wobble + 6s pause = 8.8s total per loop.
-    // The wobble plays for the first 2.8s, then the heading sits still
-    // for 6s before the next fiery burst.
-    _burn = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 8800),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _burn.dispose();
-    super.dispose();
-  }
-
-  // Wobble only during the first ~32% of the cycle (2.8s / 8.8s).
-  double get _wobbleValue {
-    final t = _burn.value;
-    if (t > 0.318) return 0.0; // resting phase
-    // Map 0..0.318 → 0..1 for the wobble curve
-    final wobbleT = t / 0.318;
-    return -0.044 * math.sin(wobbleT * math.pi * 2);
-  }
-
-  double get _glowValue {
-    final t = _burn.value;
-    if (t > 0.318) return 0.25; // resting glow during pause
-    final wobbleT = t / 0.318;
-    return 0.25 + 0.40 * (0.5 - 0.5 * math.cos(wobbleT * math.pi * 2));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _burn,
-      builder: (context, _) {
-        final wobble = _wobbleValue;
-        final glow = _glowValue;
-        return Transform.rotate(
-          angle: wobble,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: const Color(0xFFFF5252).withValues(alpha: 0.5),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFFFF5252)
-                      .withValues(alpha: glow * 0.5),
-                  blurRadius: 12 + glow * 16,
-                  spreadRadius: 1 + glow * 3,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Flickering fire icon
-                Icon(
-                  Icons.local_fire_department,
-                  size: 22,
-                  color: const Color(0xFFFF5252)
-                      .withValues(alpha: 0.7 + glow * 0.3),
-                  shadows: [
-                    Shadow(
-                      color: const Color(0xFFFF5252)
-                          .withValues(alpha: glow),
-                      blurRadius: 8,
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 8),
-                // "BULLET HELL" text with ember glow shadow
-                GoopText(
-                  'BULLET HELL',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 3.0,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        color: const Color(0xFFFF5252)
-                            .withValues(alpha: glow),
-                        blurRadius: 6 + glow * 8,
-                      ),
-                      const Shadow(
-                        color: Color(0xFFB71C1C),
-                        blurRadius: 2,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // Version tag
-                GoopText(
-                  'v1.9.18',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFFFFD54F).withValues(alpha: 0.7),
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    ).animate().fadeIn(
-          duration: 600.ms,
-          delay: 300.ms,
-        ).slideY(
-          begin: 0.3,
-          end: 0,
-          duration: 600.ms,
-          delay: 300.ms,
-          curve: Curves.easeOutBack,
-        );
-  }
-}

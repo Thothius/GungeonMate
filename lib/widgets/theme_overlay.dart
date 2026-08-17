@@ -23,8 +23,9 @@ class ThemeOverlay extends StatefulWidget {
   /// Used to force the Galaxy animated background on the Home screen only.
   static final ValueNotifier<int> currentScreenIndex = ValueNotifier(0);
 
-  /// The Galaxy animated wallpaper asset that always plays on the Home screen.
-  static const String kHomeGalaxyAsset = 'wp_anim_01_galaxy.mp4';
+  /// The animated wallpaper asset that always plays on the Home screen.
+  /// This is the orbiting purple vortex from gungeonmate-animation-02.mp4.
+  static const String kHomeGalaxyAsset = 'gungeonmate-animation-02.mp4';
 
   @override
   State<ThemeOverlay> createState() => _ThemeOverlayState();
@@ -216,26 +217,26 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   child: Container(color: f.scaffold),
                 ),
 
-                // 0.4. Home Screen Galaxy — always plays on the Home/ActiveRun screen
+                // 0.4. Home Screen Vortex — the orbiting purple portal animation
                 if (isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Opacity(
-                        opacity: 0.55,
+                        opacity: 0.85,
                         child: AnimatedWallpaperBackground(
-                          key: const ValueKey('home_galaxy'),
+                          key: const ValueKey('home_vortex'),
                           assetName: ThemeOverlay.kHomeGalaxyAsset,
                         ),
                       ),
                     ),
                   ),
 
-                // 0.6. Home Screen Contrast Backing (prevents galaxy video detail bleeding through UI panels)
+                // 0.6. Home Screen Contrast Backing (subtle — lets vortex glow show through)
                 if (isHomeScreen)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
-                        color: Colors.black.withValues(alpha: 0.62),
+                        color: Colors.black.withValues(alpha: 0.35),
                       ),
                     ),
                   ),

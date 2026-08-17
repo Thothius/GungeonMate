@@ -86,7 +86,7 @@ class CharacterSelectScreen extends StatelessWidget {
                 child: GridView.builder(
                   padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: MediaQuery.of(context).size.width < 360 ? 3 : MediaQuery.of(context).size.width < 500 ? 4 : 5,
+                    crossAxisCount: 3,
                     childAspectRatio: isMultiplayerPick ? 0.52 : 0.54,
                     crossAxisSpacing: 8,
                     mainAxisSpacing: 10,
