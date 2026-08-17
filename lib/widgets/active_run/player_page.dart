@@ -219,11 +219,9 @@ class PlayerPageState extends State<PlayerPage> {
                 context,
                 fastRoute(const AllSynergiesScreen()),
               ),
-              trailing: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   const SpongeButton(),
                   // Damage calc toggle — tap to show/hide DPS terminal on dashboard,
                   // long-press to open the full DPS breakdown sheet.
@@ -307,7 +305,6 @@ class PlayerPageState extends State<PlayerPage> {
                   const SizedBox(width: 4),
                   const HeaderMenu(),
                 ],
-              ),
               ),
               effectChips: EffectTagger.summaryChips(
                 guns: player.guns,

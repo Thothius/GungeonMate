@@ -268,12 +268,15 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                   Row(
                     children: [
                       // Clean, flat Avatar (Tappable — cycles through
-                      // static icon → in-game GIF → animated card art)
+                      // static icon → in-game GIF → animated card art).
+                      // Slightly smaller than before (64×50 vs 72×56) so
+                      // the visual weight of the avatar block balances
+                      // the trailing options row on the right.
                       GestureDetector(
                         onTap: _onAvatarTapped,
                         child: SizedBox(
-                          width: 72,
-                          height: 56,
+                          width: 64,
+                          height: 50,
                           child: _buildAvatarContent(iconPath),
                         ),
                       ),
@@ -287,8 +290,8 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                   ),
                   if (_quickComment != null)
                     Positioned(
-                      top: 48,
-                      left: 68,
+                      top: 42,
+                      left: 60,
                       child: IgnorePointer(
                         child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),

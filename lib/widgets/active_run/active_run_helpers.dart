@@ -227,23 +227,29 @@ class HeaderMenu extends StatelessWidget {
     final p = context.read<RunProvider>();
     final mpSession = context.watch<MultiplayerSession>();
     final mpActive = mpSession.isActive;
-    return PopupMenuButton<String>(
-      tooltip: 'Run tools',
-      // Big single-icon target — gear is universally read as "options".
-      // Bigger hit-rect than the old "Run ▼" chip (44×44 vs 28×24).
-      padding: EdgeInsets.zero,
-      offset: const Offset(0, 44),
-      child: Container(
-        width: 36,
-        height: 36,
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.06),
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-        ),
-        child: const Icon(Icons.tune_rounded, size: 18, color: Colors.white70),
-      ),
+    // Wrap in a Column to match the _LabeledIconButton pattern used by
+    // the 4 toggle icons (Calc/Effects/Shrine/Panels) so the trailing
+    // row is perfectly symmetrical — every item has an icon + label.
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        PopupMenuButton<String>(
+          tooltip: 'Run tools',
+          // Big single-icon target — gear is universally read as "options".
+          // Bigger hit-rect than the old "Run ▼" chip (44×44 vs 28×24).
+          padding: EdgeInsets.zero,
+          offset: const Offset(0, 44),
+          child: Container(
+            width: 36,
+            height: 36,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.06),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+            ),
+            child: const Icon(Icons.tune_rounded, size: 18, color: Colors.white70),
+          ),
       onSelected: (v) {
         switch (v) {
           case 'settings':
@@ -502,6 +508,19 @@ class HeaderMenu extends StatelessWidget {
             SizedBox(width: 10),
             GoopText('Settings'),
           ]),
+        ),
+      ],
+    ),
+        const SizedBox(height: 2),
+        const GoopText(
+          'More',
+          style: TextStyle(
+            fontSize: 8,
+            fontWeight: FontWeight.w600,
+            color: Colors.white70,
+            letterSpacing: 0.5,
+            height: 1.0,
+          ),
         ),
       ],
     );

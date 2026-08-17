@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.9.38",
+    "title": "Active Run Header Symmetry Polish",
+    "date": "August 2026",
+    "items": [
+      "POLISH: HeaderMenu gear icon now has a 'More' label below it, matching the Calc/Effects/Shrine/Panels toggle pattern so every trailing option is symmetrical.",
+      "POLISH: SpongeButton now has a 'Sponge' label when visible, matching the other labeled options.",
+      "POLISH: Removed horizontal scroll from the trailing options row — all 5 options are now always visible and aligned, matching the always-visible stats row below.",
+      "POLISH: Shrunk the gungeoneer avatar slightly (72×56 → 64×50) to balance visual weight left-to-right in the header row."
+    ]
+  },
+  {
     "version": "v1.9.37",
     "title": "Theme Studio UX — Quick Apply",
     "date": "August 2026",

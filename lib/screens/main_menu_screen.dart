@@ -180,7 +180,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.37',
+                    'v1.9.38',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -249,7 +249,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.37)',
+                          'Changelog (v1.9.38)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -303,7 +303,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.37',
+                            'v1.9.38',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
