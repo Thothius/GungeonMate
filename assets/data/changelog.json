@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.23",
+    "title": "📋 Items Wiki Audit Round 6 — Comprehensive Sweep of 130 Remaining Items",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-081): 27 more item effects enriched with wiki-accurate mechanics in the final comprehensive sweep. Companions: Space Friend (5 dmg lasers), Orange Guon Stone (5 dmg, 1s cooldown), Red Guon Stone (dodge speed+distance), Owl (mini-blanks, blocks bullets). Bullets: Blank Bullets (beam x2, curse 1.5), Vorpal Bullets (100 dmg, beam double), Bouncy Bullets (2 bounces), Scattershot (55% dmg, +65% effective). Active items: Roll Bomb (5+20 dmg), C4 (60 dmg, no secret rooms), Boomerang (5s stun), Relodestone (6s duration), Bracket Key (150 dmg, no waves), Bottle (store/drop mechanic), Coolant Leak (Robot starter). Passives: Bloodied Scarf (-30% reload), Sprun (random trigger, ~10s), Ice Cube (recharge while active), Metronome (+2%/kill, max +150%), Scouter (+10% dmg, -10% spread), Broccoli (+1 speed), Gunboots (8 dmg, +1 speed), Sunglasses (55% slow, 25% dodge, 2s, 10s CD), Cloranthy Ring (15.8% dodge speed), Hip Holster (perfect accuracy), Brick of Cash (Snitch Brick), Portable Turret (blocks bullets, room clear)."
+    ]
+  },
+  {
     "version": "v1.9.22",
     "title": "🎨 Home Screen Vortex Video + Character Grid Fix",
     "date": "August 2026",

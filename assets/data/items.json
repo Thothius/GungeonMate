@@ -5255,7 +5255,7 @@
     "type": "Passive",
     "quote": "The Best Defense...",
     "quality": "S",
-    "effect": "Projectile impacts can trigger a short range blank. Increases curse by 1.5.",
+    "effect": "Bullets have a chance to trigger a short-range blank on impact. Doubles beam damage. Increases curse by 1.5.",
     "curse": 1.5,
     "coolness": 0.0,
     "wiki": {
@@ -6261,7 +6261,7 @@
     "type": "Passive",
     "quote": "Blink Away",
     "quality": "B",
-    "effect": "Replaces the dodge roll with a teleport. Increases reload speed.",
+    "effect": "Replaces the dodge roll with a teleport. Decreases reload times by 30%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -7601,7 +7601,7 @@
     "type": "Active",
     "quote": "Usually Comes Back",
     "quality": "B",
-    "effect": "Throws a boomerang that travels around the room and attempts to stun all enemies.",
+    "effect": "Throws a boomerang that stuns all enemies for 5 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -7715,7 +7715,7 @@
     "type": "Active",
     "quote": "Heart Container",
     "quality": "D",
-    "effect": "Holds hearts or ammo for use later.",
+    "effect": "Use once to store a pickup (hearts, ammo, etc). Use again to drop or consume it.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -7905,7 +7905,7 @@
     "type": "Passive",
     "quote": "Boiyoiyoing!",
     "quality": "C",
-    "effect": "Grants bullets the ability to bounce off objects.",
+    "effect": "Allows bullets to bounce off objects twice.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -8308,7 +8308,7 @@
     "type": "Active",
     "quote": "`debugkill",
     "quality": "S",
-    "effect": "Deals a large amount of damage to all enemies in a room. Increases curse by 1 while held.",
+    "effect": "Deals 150 damage to all enemies in the room. Prevents additional waves from spawning. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -8506,7 +8506,7 @@
     "type": "Passive",
     "quote": "Secrets Of The Masons",
     "quality": "B",
-    "effect": "Reveals secret rooms.",
+    "effect": "Causes a Snitch Brick to appear outside secret room entrances, revealing their location.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -8813,7 +8813,7 @@
     "type": "Passive",
     "quote": "Makes You Strong",
     "quality": "A",
-    "effect": "Increases damage by 10%, adds a 10% chance to negate damage, and increases movement speed.",
+    "effect": "Increases damage by 10%, adds 10% chance to negate damage, and increases movement speed by 1.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -9849,7 +9849,7 @@
     "type": "Active",
     "quote": "Stick Boom",
     "quality": "D",
-    "effect": "Places explosives on the ground which then can be detonated by using the item again.",
+    "effect": "Places explosives which can be detonated by using again, dealing 60 damage. Does not open secret rooms.",
     "curse": 0.0,
     "coolness": 0.0,
     "sell_price": "16",
@@ -13368,7 +13368,7 @@
     "type": "Passive",
     "quote": "Dodge Power Up",
     "quality": "C",
-    "effect": "Greatly shortens the time at the end of a dodge roll where the player is vulnerable.",
+    "effect": "Increases dodge roll speed by 15.8% and extends invulnerability time during dodge rolls.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -14365,7 +14365,7 @@
     "type": "Active",
     "quote": "Don't Overheat!",
     "quality": "N",
-    "effect": "Sprays water forward.",
+    "effect": "Sprays water forward. The Robot starts with this item. Can put out fires and electrify water.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -22852,7 +22852,7 @@
     "type": "Passive",
     "quote": "They Go Down Well",
     "quality": "C",
-    "effect": "Dodge rolling fires a spread of five bullets backwards. Slightly increases movement speed.",
+    "effect": "Dodge rolling fires 5 bullets backwards dealing 8 damage each. Increases movement speed by 1.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -26306,7 +26306,7 @@
     "type": "Passive",
     "quote": "Quickdraw",
     "quality": "B",
-    "effect": "Reloading a weapon fires it once for free.",
+    "effect": "Reloading fires a single perfectly accurate bullet for free. Multi-bullet guns fire only one bullet.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -28041,7 +28041,7 @@
     "type": "Passive",
     "quote": "Items Recharge While Active",
     "quality": "B",
-    "effect": "Reduces the cooldown timer of active items. Increases coolness by 3.",
+    "effect": "Allows active items to recharge while active. Increases coolness by 3.",
     "curse": 0.0,
     "coolness": 3.0,
     "wiki": {
@@ -35185,7 +35185,7 @@
     "type": "Passive",
     "quote": "Better And Better",
     "quality": "B",
-    "effect": "Grants a damage bonus for each enemy killed. The bonus is reset if the player takes damage or changes guns.",
+    "effect": "Grants +2% damage per kill, maxing at +150% (75 kills). Reset on taking damage or changing guns.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -38674,7 +38674,7 @@
     "type": "Passive",
     "quote": "Hot Rock",
     "quality": "A",
-    "effect": "Orbits the player, blocking enemy shots on contact. Shoots at enemies.",
+    "effect": "Orbits the player, blocking enemy shots. Fires at enemies dealing 5 damage per shot with 1 second cooldown.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -39653,7 +39653,7 @@
     "type": "Passive",
     "quote": "Hoots And More",
     "quality": "S",
-    "effect": "Follows the player, firing bullets at enemies and occasionally using short-ranged blanks.",
+    "effect": "Follows the player, firing bullets at enemies and occasionally triggering mini-blanks. Blocks enemy bullets.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -41098,7 +41098,7 @@
     "type": "Active",
     "quote": "Some Assembly Required",
     "quality": "B",
-    "effect": "Places a stationary turret that shoots at enemies. The turret will be destroyed if it takes enough damage.",
+    "effect": "Places a stationary turret that shoots at enemies and blocks bullets. Disappears after room clear.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -42283,7 +42283,7 @@
     "type": "Passive",
     "quote": "Dodge Up",
     "quality": "B",
-    "effect": "Orbits the player, blocking enemy shots on contact. Improves dodging.",
+    "effect": "Orbits the player, blocking enemy shots. Increases dodge roll speed and distance.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -42345,7 +42345,7 @@
     "type": "Active",
     "quote": "Magunetic North",
     "quality": "S",
-    "effect": "Halves reload times. While active, the player absorbs enemy bullets and regains ammo.",
+    "effect": "Halves reload times. While active for 6 seconds, absorbs enemy bullets and converts them to ammo.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -44778,7 +44778,7 @@
     "type": "Passive",
     "quote": "Power Charge",
     "quality": "C",
-    "effect": "Dodge rolling leaves behind a bomb.",
+    "effect": "Dodge rolling leaves behind a bomb dealing 5 contact damage and 20 explosion damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -45863,7 +45863,7 @@
     "type": "Passive",
     "quote": "Quantity Over Quality",
     "quality": "B",
-    "effect": "Guns fire a spread of tripled bullets which deal less damage.",
+    "effect": "Guns fire triple the projectiles, each dealing 55% of original damage. If all hit, effective +65% damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -46409,7 +46409,7 @@
     "type": "Passive",
     "quote": "Quality Assured",
     "quality": "C",
-    "effect": "Shows enemy health and damage done. Increases damage and accuracy. Increases curse by 1.",
+    "effect": "Shows enemy health and damage. Increases damage by 10%, decreases spread by 10%. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -49668,7 +49668,7 @@
     "type": "Passive",
     "quote": "A Friend From The Space",
     "quality": "B",
-    "effect": "Follows the player, firing lasers at enemies and blocking enemy bullets.",
+    "effect": "Follows the player, firing lasers that deal 5 damage. Blocks enemy bullets.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -50869,7 +50869,7 @@
     "type": "Passive",
     "quote": "The Way of Guns",
     "quality": "A",
-    "effect": "Temporarily transforms into Windgunner under special circumstances.",
+    "effect": "Summons a sprite that grants Windgunner for ~10 seconds when a random trigger is met. Trigger is chosen on pickup and remains fixed.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -51773,7 +51773,7 @@
     "type": "Passive",
     "quote": "Bright Future",
     "quality": "C",
-    "effect": "Slows down time and increases dodge power during explosions. Increases coolness by 2.",
+    "effect": "Slows time by 55% and increases dodge roll distance/speed by 25% for 2 seconds after an explosion. 10s cooldown. Increases coolness by 2.",
     "curse": 0.0,
     "coolness": 2.0,
     "wiki": {
@@ -55963,7 +55963,7 @@
     "type": "Passive",
     "quote": "Through and Through",
     "quality": "A",
-    "effect": "Whenever the player fires, occasionally fires a special high-damage bullet.",
+    "effect": "Occasionally fires a special bullet dealing 100 damage that instantly strikes the nearest enemy. Beam guns gain a chance for double damage each second.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {

@@ -6,6 +6,43 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.23 — 📋 Items Wiki Audit Round 6 — Comprehensive Sweep (August 2026)
+**Build:** 100
+
+> Final comprehensive sweep of all 130 remaining potentially enrichable items: 27 more effects enriched with wiki-accurate mechanics.
+
+### Changes
+- **FIX (BUG-081) — 27 more items enriched in the comprehensive sweep:**
+  - Space Friend: 5 damage lasers
+  - Orange Guon Stone: 5 damage per shot, 1 second cooldown
+  - Red Guon Stone: increases dodge roll speed and distance
+  - Owl: mini-blanks, blocks enemy bullets
+  - Blank Bullets: doubles beam damage, curse 1.5
+  - Vorpal Bullets: 100 damage crit, beam double damage chance
+  - Bouncy Bullets: bounce twice
+  - Scattershot: 55% damage per bullet, +65% effective if all hit
+  - Roll Bomb: 5 contact + 20 explosion damage
+  - C4: 60 damage, does not open secret rooms
+  - Boomerang: 5 second stun
+  - Relodestone: 6 second duration
+  - Bracket Key: 150 damage, prevents additional waves
+  - Bottle: store/drop pickup mechanic
+  - Coolant Leak: Robot starter, puts out fires
+  - Bloodied Scarf: -30% reload time
+  - Sprun: random trigger, ~10 second Windgunner
+  - Ice Cube: recharge while active
+  - Metronome: +2% per kill, max +150% (75 kills)
+  - Scouter: +10% damage, -10% spread
+  - Broccoli: +1 movement speed
+  - Gunboots: 8 damage per bullet, +1 movement speed
+  - Sunglasses: 55% time slow, 25% dodge boost, 2s, 10s cooldown
+  - Cloranthy Ring: 15.8% dodge speed, extended invulnerability
+  - Hip Holster: perfectly accurate, single bullet
+  - Brick of Cash: Snitch Brick reveals secret rooms
+  - Portable Turret: blocks bullets, disappears after room clear
+
+---
+
 ## v1.9.22 — 🎨 Home Screen Vortex Video + Character Grid Fix (August 2026)
 **Build:** 99
 
