@@ -15,6 +15,8 @@ import '../../screens/effects_summary_screen.dart';
 import '../../screens/favourites_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/codex_screen.dart';
+import '../../screens/shrine_picker_screen.dart';
+import '../../screens/character_select_screen.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -227,7 +229,7 @@ class HeaderMenu extends StatelessWidget {
     final mpSession = context.watch<MultiplayerSession>();
     final mpActive = mpSession.isActive;
     return PopupMenuButton<String>(
-      tooltip: 'Run options',
+      tooltip: 'Run tools',
       // Big single-icon target — gear is universally read as "options".
       // Bigger hit-rect than the old "Run ▼" chip (44×44 vs 28×24).
       padding: EdgeInsets.zero,
@@ -262,6 +264,15 @@ class HeaderMenu extends StatelessWidget {
               context,
               fastRoute(const CodexScreen(showBackButton: true)),
             );
+            break;
+          case 'shrine_picker':
+            Navigator.push(
+              context,
+              fastRoute(const ShrinePickerScreen()),
+            );
+            break;
+          case 'add_coop':
+            _handleAddCoop(context, p);
             break;
           case 'end_run':
             _confirmEndRun(context, p);
@@ -358,8 +369,8 @@ class HeaderMenu extends StatelessWidget {
         }
       },
       itemBuilder: (ctx) => [
-        // ── BROWSE ──
-        _menuLabel('BROWSE'),
+        // ── NAVIGATION ──
+        _menuLabel('NAVIGATION'),
         const PopupMenuItem(
           value: 'favourites',
           child: Row(children: [
@@ -376,6 +387,14 @@ class HeaderMenu extends StatelessWidget {
             GoopText('Codex'),
           ]),
         ),
+        PopupMenuItem(
+          value: 'shrine_picker',
+          child: const Row(children: [
+            Icon(Icons.temple_buddhist, size: 18, color: Colors.amber),
+            SizedBox(width: 10),
+            GoopText('Shrine Picker'),
+          ]),
+        ),
 
         // ── ACTIONS ──
         _menuLabel('ACTIONS'),
@@ -385,6 +404,18 @@ class HeaderMenu extends StatelessWidget {
             Icon(Icons.casino_outlined, size: 18, color: Color(0xFFFFD54F)),
             SizedBox(width: 10),
             GoopText('Gunfortuna Dice Roll'),
+          ]),
+        ),
+        PopupMenuItem(
+          value: 'add_coop',
+          child: Row(children: [
+            Icon(
+              p.runState.hasCoop ? Icons.remove_circle_outline : Icons.person_add_alt_1,
+              size: 18,
+              color: p.runState.hasCoop ? Colors.redAccent : Colors.pinkAccent,
+            ),
+            const SizedBox(width: 10),
+            GoopText(p.runState.hasCoop ? 'Remove Co-op Player' : 'Add Co-op Player'),
           ]),
         ),
         const PopupMenuItem(
@@ -446,8 +477,8 @@ class HeaderMenu extends StatelessWidget {
           ),
         ],
 
-        // ── END ──
-        _menuLabel('END'),
+        // ── END SESSION ──
+        _menuLabel('END SESSION'),
         if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
           const PopupMenuItem(
             value: 'leave_mp',
@@ -492,8 +523,8 @@ class HeaderMenu extends StatelessWidget {
   }
 
   /// Non-interactive section label for the popup menu.
-  /// Renders as a small uppercase header with a divider, so the 12-item
-  /// menu is scannable at a glance instead of a flat list.
+  /// Renders as a small uppercase header with accent color and a divider,
+  /// so the menu is scannable at a glance instead of a flat list.
   PopupMenuItem<String> _menuLabel(String label) {
     return PopupMenuItem<String>(
       enabled: false,
@@ -507,10 +538,10 @@ class HeaderMenu extends StatelessWidget {
             const SizedBox(height: 6),
             GoopText(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 9,
                 fontWeight: FontWeight.w900,
-                color: Colors.white38,
+                color: AppTheme.flair.primary.withValues(alpha: 0.8),
                 letterSpacing: 1.2,
               ),
             ),
@@ -606,6 +637,48 @@ class HeaderMenu extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Handle Add/Remove Co-op player from the Run Tools popup.
+  void _handleAddCoop(BuildContext context, RunProvider p) {
+    if (p.runState.hasCoop) {
+      // Confirm removal
+      showDialog(
+        context: context,
+        builder: (c) => AlertDialog(
+          icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent),
+          title: const GoopText('Remove Co-op Player?'),
+          content: GoopText(
+            'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(c),
+              child: const GoopText('Cancel'),
+            ),
+            FilledButton.tonal(
+              style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
+              onPressed: () {
+                p.endCoopPlayer();
+                Navigator.pop(c);
+              },
+              child: const GoopText('Remove'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Add co-op player — pick character first
+      final cultist = p.gungeoneerByName('The Cultist') ??
+          p.gungeoneerByName('Cultist');
+      if (cultist != null) {
+        p.startCoopPlayer(cultist);
+      }
+      Navigator.push(
+        context,
+        fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
+      );
+    }
   }
 }
 

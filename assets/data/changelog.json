@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.9.29",
+    "title": "🎨 UI Reworks — Run Tools, Settings, Theme Picker, Multiplayer",
+    "date": "August 2026",
+    "items": [
+      "🎨 Rework 1 — Run Tools popup: section headers now use accent color instead of disabled-button look. Renamed from 'Run options' to 'Run tools'. Added Shrine Picker, Add/Remove Co-op Player to the popup (moved from Settings). Sections: NAVIGATION, ACTIONS, SESSION, END SESSION, SETTINGS.",
+      "🎨 Rework 2 — Settings App tab reorganized: removed 'Add Co-op' and 'Use Shrine' (moved to Run Tools popup). New sections: MP SESSION (only when active), ACCOUNT & DATA (reset items, changelog, event log), DEVELOPER (dev tools with amber warning color), DANGER ZONE (end run, reset all data). Section labels now use accent color.",
+      "🎨 Rework 3 — Theme Picker: carousel height increased from 100px to 140px with left/right swipe arrows. Dot indicators changed to wide pill style (active = elongated bar). Added 'SWIPE TO BROWSE THEMES' hint text. Added section labels above each particle strip: PARTICLE PRESET, COLOR SCHEMA, ANIMATION SPEED.",
+      "🎨 Rework 4 — Multiplayer Lobby: replaced 2-page vertical PageView with single-page 3-step flow (WHO ARE YOU → HOST OR JOIN → CHARACTER/PIN). Role selection changed from cards to compact buttons. PIN field only shows for JOIN mode. Character picker only shows for HOST mode. 'How to Play' guide moved from hidden page 2 to dialog. Saved Sessions moved from collapsible list to bottom sheet. Solo Co-op promoted with 'or' divider and clear description."
+    ]
+  },
+  {
     "version": "v1.9.28",
     "title": "🔗 Synergies Deep Audit — 5 More Effects Corrected",
     "date": "August 2026",

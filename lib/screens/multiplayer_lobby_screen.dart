@@ -33,13 +33,11 @@ class MultiplayerLobbyScreen extends StatefulWidget {
 class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
   static const _nickPrefsKey = 'mp.nickname';
 
-  final _pageController = PageController();
   final _nickCtrl = TextEditingController(text: 'Player');
   final _pinCtrl = TextEditingController();
   bool _isMain = true; // true = Main Player, false = Sidekick
   Gungeoneer? _selectedCharacter;
   List<SavedMpSession> _savedSessions = [];
-  bool _sessionsCollapsed = true;
 
   @override
   void initState() {
@@ -133,7 +131,6 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
 
   @override
   void dispose() {
-    _pageController.dispose();
     _nickCtrl.dispose();
     _pinCtrl.dispose();
     super.dispose();
@@ -262,55 +259,53 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     final cultist = runProvider.gungeoneerByName('The Cultist') ??
         runProvider.gungeoneerByName('Cultist');
     final sf = Responsive.factor(context);
+    final flair = AppTheme.flair;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const GoopText('Multiplayer'),
+        title: const GoopText('MULTIPLAYER',
+            style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2)),
         centerTitle: true,
       ),
-      body: PageView(
-        controller: _pageController,
-        scrollDirection: Axis.vertical,
-        children: [
-          // Page 1: Active Lobby Setup Form
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-              // Nickname field — at the very top
-              _SectionLabel('NICKNAME'),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── STEP 1 — NICKNAME ──────────────────────────────────
+              _StepLabel('STEP 1 — WHO ARE YOU?'),
               const SizedBox(height: 8),
               TextField(
                 controller: _nickCtrl,
                 maxLength: 24,
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 15),
                 decoration: InputDecoration(
                   hintText: 'Enter your nickname',
-                  prefixIcon: const Icon(Icons.person_outline),
+                  prefixIcon: const Icon(Icons.person_outline, size: 20),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
+                    horizontal: 14,
+                    vertical: 12,
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-              // Role selection — 1x2 grid
-              _SectionLabel('CHOOSE ROLE'),
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
+
+              // ── STEP 2 — HOST OR JOIN ──────────────────────────────
+              _StepLabel('STEP 2 — HOST OR JOIN?'),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
-                    child: _RoleCard(
-                      title: 'Main',
-                      subtitle: 'Host the session',
-                      icon: Icons.person,
+                    child: _RoleButton(
+                      icon: Icons.campaign,
+                      label: 'HOST',
+                      subtitle: 'Host a game',
                       selected: _isMain,
                       onTap: () {
                         Haptics.selection();
@@ -320,10 +315,10 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: _RoleCard(
-                      title: 'Sidekick',
-                      subtitle: 'Join a host',
+                    child: _RoleButton(
                       icon: Icons.bluetooth_searching,
+                      label: 'JOIN',
+                      subtitle: 'Join a game',
                       selected: !_isMain,
                       onTap: () {
                         Haptics.selection();
@@ -333,75 +328,93 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-              // Character section
-              _SectionLabel(_isMain ? 'YOUR CHARACTER' : 'SIDEKICK'),
-              const SizedBox(height: 12),
-              if (_isMain)
+              const SizedBox(height: 20),
+
+              // ── STEP 3 — CHARACTER (Host) or PIN (Join) ───────────
+              if (_isMain) ...[
+                _StepLabel('STEP 3 — YOUR CHARACTER'),
+                const SizedBox(height: 8),
                 _CharacterPickerTile(
                   character: _selectedCharacter,
                   onTap: () {
                     Haptics.selection();
                     _pickCharacter();
                   },
-                )
-              else
-                _ForcedCultistTile(cultist: cultist),
-              const SizedBox(height: 20),
-              // Connection PIN — always visible, locked when Main
-              _SectionLabel('CONNECTION PIN'),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: _PinField(
-                      controller: _pinCtrl,
-                      locked: _isMain,
-                    ),
-                  ),
-                ],
-              ),
-              if (_isMain)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: GoopText(
-                    'PIN is auto-generated when you start hosting.',
-                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
-                  ),
-                )
-              else
-                Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: GoopText(
-                    'Enter the 4-digit PIN from the host.',
-                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
-                  ),
                 ),
-              const SizedBox(height: 32),
-              // Start button
+              ] else ...[
+                _StepLabel('STEP 3 — CONNECTION PIN'),
+                const SizedBox(height: 8),
+                _PinField(
+                  controller: _pinCtrl,
+                  locked: false,
+                ),
+                const SizedBox(height: 4),
+                GoopText(
+                  'Enter the 4-digit PIN from the host.',
+                  style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
+                ),
+                const SizedBox(height: 12),
+                // Cultist info for Sidekick
+                _ForcedCultistTile(cultist: cultist),
+              ],
+              const SizedBox(height: 24),
+
+              // ── Primary CTA ────────────────────────────────────────
               SizedBox(
                 width: double.infinity,
-                height: 54 * sf,
+                height: 52 * sf,
                 child: FilledButton.icon(
-                  icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth),
-                  label: GoopText(_isMain ? 'Start Hosting' : 'Find Host'),
+                  icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth, size: 20),
+                  label: GoopText(
+                    _isMain ? 'START HOSTING' : 'FIND HOST',
+                    style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                  ),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: flair.primary,
+                  ),
                   onPressed: () {
                     Haptics.selection();
                     _start();
                   },
                 ),
               ),
-              const SizedBox(height: 12),
-              // Local Sidekick — quick access to simulated co-op
+              const SizedBox(height: 16),
+
+              // ── Divider ────────────────────────────────────────────
+              Row(
+                children: [
+                  const Expanded(child: Divider(color: Colors.white12, height: 1)),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: GoopText(
+                      'or',
+                      style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.3)),
+                    ),
+                  ),
+                  const Expanded(child: Divider(color: Colors.white12, height: 1)),
+                ],
+              ),
+              const SizedBox(height: 16),
+
+              // ── Solo Co-op ─────────────────────────────────────────
               SizedBox(
                 width: double.infinity,
-                height: 44,
+                height: 48,
                 child: OutlinedButton.icon(
                   icon: const Icon(Icons.smart_toy_outlined, size: 18),
-                  label: const GoopText('Add Local Sidekick (Solo Co-op)'),
+                  label: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GoopText('Solo Co-op', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                      GoopText('Play with AI partner', style: TextStyle(fontSize: 10, color: Colors.white54)),
+                    ],
+                  ),
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: AppTheme.flair.secondary,
-                    side: BorderSide(color: AppTheme.flair.secondary, width: 1),
+                    foregroundColor: flair.secondary,
+                    side: BorderSide(color: flair.secondary.withValues(alpha: 0.5), width: 1),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    alignment: Alignment.centerLeft,
                   ),
                   onPressed: () {
                     Haptics.selection();
@@ -411,301 +424,233 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                   },
                 ),
               ),
-              if (_savedSessions.isNotEmpty) ...[
-                const SizedBox(height: 36),
-                InkWell(
-                  onTap: () {
-                    Haptics.selection();
-                    setState(() => _sessionsCollapsed = !_sessionsCollapsed);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Row(
-                      children: [
-                        _SectionLabel('LOAD SAVED SESSION'),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            '${_savedSessions.length}',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white.withValues(alpha: 0.5),
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        AnimatedRotation(
-                          turns: _sessionsCollapsed ? 0 : 0.5,
-                          duration: const Duration(milliseconds: 180),
-                          child: Icon(
-                            Icons.expand_more_rounded,
-                            size: 18,
-                            color: Colors.white.withValues(alpha: 0.4),
-                          ),
-                        ),
-                      ],
+
+              // ── Bottom links ───────────────────────────────────────
+              const SizedBox(height: 24),
+              Container(
+                decoration: const BoxDecoration(
+                  border: Border(top: BorderSide(color: Colors.white12, width: 0.5)),
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                      leading: Icon(Icons.help_outline_rounded, size: 20, color: flair.primary.withValues(alpha: 0.7)),
+                      title: GoopText('How to Play', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.7))),
+                      trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
+                      onTap: () => _showGuideDialog(context),
                     ),
+                    if (_savedSessions.isNotEmpty)
+                      ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                        leading: Icon(Icons.save_outlined, size: 20, color: flair.secondary.withValues(alpha: 0.7)),
+                        title: GoopText(
+                          'Saved Sessions (${_savedSessions.length})',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.7)),
+                        ),
+                        trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
+                        onTap: () => _showSavedSessionsSheet(context),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Multiplayer guide as a dialog (replaces the old page 2).
+  void _showGuideDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1B1B1E),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(Icons.help_outline_rounded, color: AppTheme.flair.primary, size: 24),
+            const SizedBox(width: 10),
+            const GoopText('MULTIPLAYER GUIDE',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1)),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildGuideStep('1. Connect Wi-Fi', 'Put both phones on the SAME Wi-Fi network. Enable Bluetooth on both.'),
+              _buildGuideStep('2. Host: Pick Main', 'One phone selects "Host", picks a character, enters a nickname, and taps "Start Hosting". A 4-digit PIN appears.'),
+              _buildGuideStep('3. Sidekick: Enter PIN', 'Other phone selects "Join", enters nickname, types the host\'s 4-digit PIN, taps "Find Host".'),
+              _buildGuideStep('4. Play!', 'Devices pair automatically. Host controls the run. Sidekick plays as The Cultist. Items can be gifted between players.'),
+              const SizedBox(height: 16),
+              _buildGuideStep('Solo Co-op', 'Want to try co-op solo? Tap "Solo Co-op" to spawn a simulated AI partner on this device.'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const GoopText('GOT IT', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Saved sessions as a bottom sheet (replaces the old collapsible list).
+  void _showSavedSessionsSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1B1B1E),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) {
+        return SafeArea(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(ctx).size.height * 0.7,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 6),
+                  width: 40, height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                if (!_sessionsCollapsed) ...[
-                  const SizedBox(height: 12),
-                  ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _savedSessions.length,
-                  itemBuilder: (context, idx) {
-                    final s = _savedSessions[idx];
-                    final runState = RunState.fromJson(s.runStateJson);
-                    final isMainSession = s.savedByRole == MpRole.main;
-                    
-                    final mainEquip = [...runState.main.guns.map((g) => g.name), ...runState.main.items.map((i) => i.name)];
-                    final coopEquip = runState.coop != null ? [...runState.coop!.guns.map((g) => g.name), ...runState.coop!.items.map((i) => i.name)] : <String>[];
-                    
-                    final p1Char = runState.main.character?.name ?? 'P1';
-                    final p2Char = runState.coop?.character?.name ?? 'P2';
-
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF161619),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: InkWell(
-                          onTap: () {
-                            _confirmLoadSession(context, s);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Top row: Icon, Session Name, and Trash button
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.history_edu_rounded,
-                                      size: 16,
-                                      color: isMainSession ? AppTheme.flair.primary : AppTheme.flair.secondary,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Expanded(
-                                      child: GoopText(
-                                        s.sessionName.toUpperCase(),
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w900,
-                                          color: Colors.white,
-                                          letterSpacing: 0.5,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    GoopText(
-                                      '${_formatDuration(s.durationMs)} PLAYED',
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white.withValues(alpha: 0.5),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete_outline_rounded, size: 16, color: Colors.redAccent),
-                                      tooltip: 'Delete session',
-                                      constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
-                                      onPressed: () {
-                                        _confirmDeleteSession(context, s);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
-                                // Subtitle row: Characters and Quick Stats
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: GoopText(
-                                        'CO-OP: $p1Char (Host) ✕ $p2Char (Sidekick)',
-                                        style: const TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white70,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white.withValues(alpha: 0.04),
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          const Icon(Icons.ac_unit_rounded, size: 10, color: Colors.cyanAccent),
-                                          const SizedBox(width: 2),
-                                          GoopText(
-                                            '+${runState.coolness.toStringAsFixed(0)}',
-                                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          const Icon(Icons.local_fire_department_rounded, size: 10, color: Colors.redAccent),
-                                          const SizedBox(width: 2),
-                                          GoopText(
-                                            '+${runState.curse.toStringAsFixed(0)}',
-                                            style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.redAccent),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                // Footer row: Equipment details
-                                GoopText(
-                                  'P1 Items: ${mainEquip.length} · P2 Items: ${coopEquip.length}',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Colors.white.withValues(alpha: 0.4),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                ], // end if (!_sessionsCollapsed)
-              ],
-            const SizedBox(height: 32),
-            Center(
-              child: InkWell(
-                onTap: () {
-                  _pageController.animateToPage(
-                    1,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                borderRadius: BorderRadius.circular(12),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                  child: Row(
                     children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.help_outline_rounded, size: 14, color: AppTheme.flair.primary),
-                          const SizedBox(width: 6),
-                          GoopText(
-                            'How to Play',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.flair.secondary.withValues(alpha: 0.7),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      const Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: 20,
-                        color: Colors.white38,
+                      Icon(Icons.save_outlined, color: AppTheme.flair.secondary, size: 20),
+                      const SizedBox(width: 10),
+                      const GoopText('SAVED SESSIONS',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 18, color: Colors.white54),
+                        onPressed: () => Navigator.pop(ctx),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-
-    // Page 2: Helpful Multiplayer Guide & How-to
-    SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.help_outline_rounded, color: AppTheme.flair.primary, size: 24),
-                    const SizedBox(width: 10),
-                    GoopText(
-                      'MULTIPLAYER GUIDE',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                        color: AppTheme.flair.secondary,
-                      ),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  icon: const Icon(Icons.keyboard_arrow_up_rounded, color: Colors.white60),
-                  tooltip: 'Back to lobby',
-                  onPressed: () {
-                    _pageController.animateToPage(
-                      0,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                    );
-                  },
+                const Divider(color: Colors.white12, height: 1),
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(12),
+                    itemCount: _savedSessions.length,
+                    itemBuilder: (context, idx) {
+                      final s = _savedSessions[idx];
+                      final runState = RunState.fromJson(s.runStateJson);
+                      final isMainSession = s.savedByRole == MpRole.main;
+                      final mainEquip = [...runState.main.guns.map((g) => g.name), ...runState.main.items.map((i) => i.name)];
+                      final coopEquip = runState.coop != null ? [...runState.coop!.guns.map((g) => g.name), ...runState.coop!.items.map((i) => i.name)] : <String>[];
+                      final p1Char = runState.main.character?.name ?? 'P1';
+                      final p2Char = runState.coop?.character?.name ?? 'P2';
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF161619),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pop(ctx);
+                              _confirmLoadSession(context, s);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.history_edu_rounded, size: 16,
+                                          color: isMainSession ? AppTheme.flair.primary : AppTheme.flair.secondary),
+                                      const SizedBox(width: 6),
+                                      Expanded(
+                                        child: GoopText(
+                                          s.sessionName.toUpperCase(),
+                                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 0.5),
+                                          maxLines: 1, overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      GoopText(
+                                        '${_formatDuration(s.durationMs)} PLAYED',
+                                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white.withValues(alpha: 0.5)),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_outline_rounded, size: 16, color: Colors.redAccent),
+                                        tooltip: 'Delete session',
+                                        constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                                        onPressed: () => _confirmDeleteSession(context, s),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: GoopText(
+                                          'CO-OP: $p1Char (Host) ✕ $p2Char (Sidekick)',
+                                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white70),
+                                          maxLines: 1, overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withValues(alpha: 0.04),
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.ac_unit_rounded, size: 10, color: Colors.cyanAccent),
+                                            const SizedBox(width: 2),
+                                            GoopText('+${runState.coolness.toStringAsFixed(0)}',
+                                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent)),
+                                            const SizedBox(width: 6),
+                                            const Icon(Icons.local_fire_department_rounded, size: 10, color: Colors.redAccent),
+                                            const SizedBox(width: 2),
+                                            GoopText('+${runState.curse.toStringAsFixed(0)}',
+                                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  GoopText(
+                                    'P1 Items: ${mainEquip.length} · P2 Items: ${coopEquip.length}',
+                                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4), fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
-            const Divider(color: Colors.white12, height: 24),
-            _buildGuideStep('1. Connect Wi-Fi', 'Put both phones on the SAME Wi-Fi network. Enable Bluetooth on both.'),
-            _buildGuideStep('2. Host: Pick Main', 'One phone selects "Main", picks a character, enters a nickname, and taps "Start Hosting". A 4-digit PIN appears.'),
-            _buildGuideStep('3. Sidekick: Enter PIN', 'Other phone selects "Sidekick", enters nickname, types the host\'s 4-digit PIN, taps "Find Host".'),
-            _buildGuideStep('4. Play!', 'Devices pair automatically. Host controls the run. Sidekick plays as The Cultist. Items can be gifted between players.'),
-            const SizedBox(height: 20),
-            _buildGuideStep('Local Sidekick', 'Want to try co-op solo? Enter PIN 0000 as Sidekick to spawn a simulated AI partner on this device.'),
-            const SizedBox(height: 32),
-            Center(
-              child: TextButton.icon(
-                icon: const Icon(Icons.keyboard_arrow_up_rounded, color: Colors.amberAccent),
-                label: const GoopText(
-                  'Swipe Up or Tap to go back',
-                  style: TextStyle(color: Colors.amberAccent, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  _pageController.animateToPage(
-                    0,
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -885,81 +830,86 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
   }
 }
 
-class _SectionLabel extends StatelessWidget {
+/// Step label — accent-colored uppercase text for the 3-step flow.
+class _StepLabel extends StatelessWidget {
   final String text;
-  const _SectionLabel(this.text);
+  const _StepLabel(this.text);
 
   @override
   Widget build(BuildContext context) {
     return GoopText(
       text,
       style: TextStyle(
-        fontSize: 12,
+        fontSize: 9,
         fontWeight: FontWeight.w800,
-        letterSpacing: 1.4,
-        color: Colors.white.withValues(alpha: 0.65),
+        letterSpacing: 2,
+        color: AppTheme.flair.primary.withValues(alpha: 0.8),
       ),
     );
   }
 }
 
-class _RoleCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
+/// Compact role button — big tappable button for HOST or JOIN.
+class _RoleButton extends StatelessWidget {
   final IconData icon;
+  final String label;
+  final String subtitle;
   final bool selected;
   final VoidCallback onTap;
 
-  const _RoleCard({
-    required this.title,
-    required this.subtitle,
+  const _RoleButton({
     required this.icon,
+    required this.label,
+    required this.subtitle,
     required this.selected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final accent = selected ? Colors.amber : Colors.white70;
+    final flair = AppTheme.flair;
     return Material(
       color: selected
-          ? Colors.amber.withValues(alpha: 0.1)
-          : Colors.white.withValues(alpha: 0.05),
+          ? flair.primary.withValues(alpha: 0.12)
+          : Colors.white.withValues(alpha: 0.04),
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: selected
+                  ? flair.primary.withValues(alpha: 0.7)
+                  : Colors.white.withValues(alpha: 0.08),
+              width: selected ? 2.0 : 1.0,
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
             children: [
-              Icon(icon, color: accent, size: 28),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GoopText(
-                      title,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                        color: selected ? Colors.amber : Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    GoopText(
-                      subtitle,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.white.withValues(alpha: 0.6),
-                      ),
-                    ),
-                  ],
+              Icon(icon,
+                  size: 26,
+                  color: selected ? flair.primary : Colors.white.withValues(alpha: 0.4)),
+              const SizedBox(height: 6),
+              GoopText(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                  color: selected ? flair.primary : Colors.white.withValues(alpha: 0.5),
                 ),
               ),
-              if (selected)
-                const Icon(Icons.check_circle, color: Colors.amber, size: 24),
+              const SizedBox(height: 2),
+              GoopText(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 9,
+                  color: Colors.white.withValues(alpha: 0.35),
+                ),
+              ),
             ],
           ),
         ),

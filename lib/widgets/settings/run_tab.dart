@@ -8,9 +8,9 @@ import '../../models/player.dart';
 import '../../providers/run_provider.dart';
 import '../../services/multiplayer_session.dart';
 import '../../services/haptics.dart';
+import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/character_select_screen.dart';
-import '../../screens/shrine_picker_screen.dart';
 import '../../utils/fast_route.dart';
 import '../active_run/active_run_helpers.dart';
 import 'debug_tab.dart';
@@ -28,53 +28,6 @@ class AppTab extends StatefulWidget {
 
 class _AppTabState extends State<AppTab> {
   // ── Confirm dialogs (lifted from old RunTab + AppTab) ──────────────
-
-  void _addCoopPlayer(BuildContext context, RunProvider p) {
-    final cultist = p.gungeoneerByName('The Cultist') ?? p.gungeoneerByName('Cultist');
-    if (cultist != null) {
-      p.startCoopPlayer(cultist);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: GoopText('${cultist.name} joined as Player 2!', maxLines: 1, overflow: TextOverflow.ellipsis),
-        duration: const Duration(milliseconds: 1400),
-        action: SnackBarAction(
-          label: 'CHANGE',
-          onPressed: () => Navigator.push(
-            context,
-            fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
-          ),
-        ),
-      ));
-      return;
-    }
-    Navigator.push(
-      context,
-      fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
-    );
-  }
-
-  void _confirmRemoveCoop(BuildContext context, RunProvider p) {
-    showDialog(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: const GoopText('Remove Player 2 (Co-op)?'),
-        content: const GoopText('Their loadout will be discarded. Items are not transferred to Player 1.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const GoopText('Cancel'),
-          ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
-            onPressed: () {
-              p.endCoopPlayer();
-              Navigator.pop(c);
-            },
-            child: const GoopText('Remove'),
-          ),
-        ],
-      ),
-    );
-  }
 
   void _confirmEndRun(BuildContext context, RunProvider p) {
     showDialog(
@@ -302,28 +255,10 @@ class _AppTabState extends State<AppTab> {
           _buildMpStatusBar(context, p, hasCoop, player2Name, mpActive),
           const SizedBox(height: 16),
 
-          // ── RUN SESSION grid ──
-          _groupLabel('RUN SESSION'),
-          _buildGrid([
-            _TileData(
-              icon: hasCoop ? Icons.remove_circle_outline : Icons.person_add_alt_1,
-              label: hasCoop ? 'Remove P2' : 'Add Co-op',
-              color: hasCoop ? Colors.redAccent : Colors.pinkAccent,
-              onTap: () => hasCoop ? _confirmRemoveCoop(context, p) : _addCoopPlayer(context, p),
-            ),
-            _TileData(
-              icon: Icons.temple_buddhist,
-              label: 'Use Shrine',
-              color: Colors.amber,
-              onTap: () => Navigator.push(context, fastRoute(const ShrinePickerScreen())),
-            ),
-            _TileData(
-              icon: Icons.history_edu_rounded,
-              label: 'Event Log',
-              color: const Color(0xFFFFD740),
-              onTap: () => Navigator.push(context, fastRoute(const RunLogScreen())),
-            ),
-            if (mpActive)
+          // ── MP SESSION grid (only when MP active) ──
+          if (mpActive) ...[
+            _groupLabel('MP SESSION'),
+            _buildGrid([
               _TileData(
                 icon: Icons.save_outlined,
                 label: 'Save MP',
@@ -352,7 +287,6 @@ class _AppTabState extends State<AppTab> {
                   }));
                 },
               ),
-            if (mpActive)
               _TileData(
                 icon: mpSession.isPaused
                     ? Icons.play_circle_fill_rounded
@@ -379,18 +313,19 @@ class _AppTabState extends State<AppTab> {
                   );
                 },
               ),
-            if (mpActive && mpSession.myRole == MpRole.sidekick)
-              _TileData(
-                icon: Icons.bluetooth_disabled,
-                label: 'Leave MP',
-                color: Colors.lightBlueAccent,
-                onTap: () => _confirmLeaveMp(context, mpSession),
-              ),
-          ]),
-          const SizedBox(height: 16),
+              if (mpSession.myRole == MpRole.sidekick)
+                _TileData(
+                  icon: Icons.bluetooth_disabled,
+                  label: 'Leave MP',
+                  color: Colors.lightBlueAccent,
+                  onTap: () => _confirmLeaveMp(context, mpSession),
+                ),
+            ]),
+            const SizedBox(height: 16),
+          ],
 
-          // ── INVENTORY & DATA grid ──
-          _groupLabel('INVENTORY & DATA'),
+          // ── ACCOUNT & DATA grid ──
+          _groupLabel('ACCOUNT & DATA'),
           _buildGrid([
             _TileData(
               icon: Icons.restart_alt_rounded,
@@ -412,9 +347,21 @@ class _AppTabState extends State<AppTab> {
               onTap: () => _showChangelogDialog(context),
             ),
             _TileData(
+              icon: Icons.receipt_long_rounded,
+              label: 'Event Log',
+              color: const Color(0xFFFFD740),
+              onTap: () => Navigator.push(context, fastRoute(const RunLogScreen())),
+            ),
+          ]),
+          const SizedBox(height: 16),
+
+          // ── DEVELOPER grid ──
+          _groupLabel('DEVELOPER'),
+          _buildGrid([
+            _TileData(
               icon: Icons.grid_view_rounded,
               label: 'Dev Tools',
-              color: Colors.greenAccent,
+              color: Colors.amber,
               onTap: () {
                 if (p.runState.main.character != null) {
                   Haptics.selection();
@@ -463,10 +410,10 @@ class _AppTabState extends State<AppTab> {
       padding: const EdgeInsets.only(left: 4, bottom: 8),
       child: GoopText(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 10,
           fontWeight: FontWeight.w900,
-          color: Colors.white38,
+          color: AppTheme.flair.primary.withValues(alpha: 0.8),
           letterSpacing: 0.8,
         ),
       ),

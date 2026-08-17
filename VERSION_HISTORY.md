@@ -6,6 +6,19 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.29 — 🎨 UI Reworks — Run Tools, Settings, Theme Picker, Multiplayer (August 2026)
+**Build:** 106
+
+> Four approved UI reworks implemented based on design assessment and comparison gallery review.
+
+### Changes
+- **Rework 1 — Run Tools popup:** Section headers use accent color instead of disabled-button look. Renamed to "Run Tools". Added Shrine Picker and Add/Remove Co-op Player (moved from Settings). Sections: NAVIGATION, ACTIONS, SESSION, END SESSION, SETTINGS.
+- **Rework 2 — Settings App tab:** Removed "Add Co-op" and "Use Shrine" (moved to Run Tools). New sections: MP SESSION (conditional), ACCOUNT & DATA, DEVELOPER, DANGER ZONE. Accent-colored section labels.
+- **Rework 3 — Theme Picker:** Carousel 100px → 140px with swipe arrows. Wide pill dot indicators. "SWIPE TO BROWSE THEMES" hint. Section labels: PARTICLE PRESET, COLOR SCHEMA, ANIMATION SPEED.
+- **Rework 4 — Multiplayer Lobby:** Single-page 3-step flow replaces 2-page PageView. Compact HOST/JOIN buttons. PIN only for JOIN, character only for HOST. Guide as dialog. Saved sessions as bottom sheet. Solo Co-op with "or" divider.
+
+---
+
 ## v1.9.28 — 🔗 Synergies Deep Audit — 5 More Effects Corrected (August 2026)
 **Build:** 105
 

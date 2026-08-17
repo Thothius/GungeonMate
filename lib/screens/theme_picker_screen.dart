@@ -97,31 +97,60 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   ],
                 ),
               ),
-              // ── Compact horizontal swipeable theme cards ────────────
+              // ── Tall swipeable theme carousel with arrows ───────────
               SizedBox(
-                height: 100,
-                child: PageView.builder(
-                  controller: _pc,
-                  itemCount: modes.length,
-                  onPageChanged: (i) {
-                    setState(() => _index = i);
-                    AppTheme.previewNotifier.value = modes[i];
-                    Haptics.selection();
-                  },
-                  itemBuilder: (context, i) {
-                    final m = modes[i];
-                    return _CompactThemeCard(
-                      mode: m,
-                      isActive: m == _activeMode,
-                      isFocused: i == _index,
-                      onTap: () => _select(m),
-                    );
-                  },
+                height: 140,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    PageView.builder(
+                      controller: _pc,
+                      itemCount: modes.length,
+                      onPageChanged: (i) {
+                        setState(() => _index = i);
+                        AppTheme.previewNotifier.value = modes[i];
+                        Haptics.selection();
+                      },
+                      itemBuilder: (context, i) {
+                        final m = modes[i];
+                        return _CompactThemeCard(
+                          mode: m,
+                          isActive: m == _activeMode,
+                          isFocused: i == _index,
+                          onTap: () => _select(m),
+                        );
+                      },
+                    ),
+                    // Left swipe arrow
+                    if (_index > 0)
+                      Positioned(
+                        left: 2,
+                        child: _SwipeArrow(
+                          icon: Icons.chevron_left_rounded,
+                          onTap: () => _pc.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOutCubic,
+                          ),
+                        ),
+                      ),
+                    // Right swipe arrow
+                    if (_index < modes.length - 1)
+                      Positioned(
+                        right: 2,
+                        child: _SwipeArrow(
+                          icon: Icons.chevron_right_rounded,
+                          onTap: () => _pc.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOutCubic,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              // ── Dot indicator ───────────────────────────────────────
+              // ── Dot indicator + swipe hint ──────────────────────────
               Padding(
-                padding: const EdgeInsets.only(top: 2, bottom: 2),
+                padding: const EdgeInsets.only(top: 2, bottom: 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(modes.length, (i) {
@@ -139,15 +168,27 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                         duration: const Duration(milliseconds: 280),
                         curve: Curves.easeOutCubic,
                         margin: const EdgeInsets.symmetric(horizontal: 3),
-                        width: on ? 22 : 8,
-                        height: 8,
+                        width: on ? 24 : 8,
+                        height: 4,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(2),
                           color: on ? f.primary : Colors.white.withValues(alpha: 0.2),
                         ),
                       ),
                     );
                   }),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: GoopText(
+                  '← SWIPE TO BROWSE THEMES →',
+                  style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white.withValues(alpha: 0.25),
+                    letterSpacing: 1.5,
+                  ),
                 ),
               ),
               // ── Theme details: name + tagline + apply ───────────────
@@ -156,7 +197,8 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                 isActive: modes[_index] == _activeMode,
                 onApply: () => _select(modes[_index]),
               ),
-              // ── Particle strips ─────────────────────────────────────
+              // ── Particle strips with section labels ─────────────────
+              _SectionLabel('PARTICLE PRESET'),
               ValueListenableBuilder<VisualPrefs>(
                 valueListenable: VisualPrefs.notifier,
                 builder: (context, prefs, _) {
@@ -170,6 +212,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   );
                 },
               ),
+              _SectionLabel('COLOR SCHEMA'),
               ValueListenableBuilder<VisualPrefs>(
                 valueListenable: VisualPrefs.notifier,
                 builder: (context, prefs, _) {
@@ -182,6 +225,7 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
                   );
                 },
               ),
+              _SectionLabel('ANIMATION SPEED'),
               ValueListenableBuilder<VisualPrefs>(
                 valueListenable: VisualPrefs.notifier,
                 builder: (context, prefs, _) {
@@ -472,6 +516,52 @@ class _ThemePickerScreenState extends State<ThemePickerScreen> {
 /// immediately changes the particle effect visible behind the picker.
 /// Shows the theme's default preset first (highlighted) so the user
 /// can quickly restore the curated pairing.
+/// Section label for the particle strips — small uppercase accent text.
+class _SectionLabel extends StatelessWidget {
+  final String text;
+  const _SectionLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, top: 6, bottom: 2),
+      child: GoopText(
+        text,
+        style: TextStyle(
+          fontSize: 8,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 2,
+          color: AppTheme.flair.primary.withValues(alpha: 0.7),
+        ),
+      ),
+    );
+  }
+}
+
+/// Swipe arrow button for the theme carousel.
+class _SwipeArrow extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _SwipeArrow({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.4),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+        child: Icon(icon, size: 18, color: Colors.white.withValues(alpha: 0.5)),
+      ),
+    );
+  }
+}
+
 class _QuickParticleStrip extends StatelessWidget {
   final AppThemeMode activeMode;
   final ParticlePreset currentPreset;

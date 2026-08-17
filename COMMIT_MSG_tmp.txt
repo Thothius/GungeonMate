@@ -1,0 +1,25 @@
+v1.9.29: 4 UI reworks — Run Tools, Settings, Theme Picker, Multiplayer
+
+Rework 1 — Run Tools popup: accent-colored section headers replace
+disabled-button look. Renamed to "Run Tools". Added Shrine Picker and
+Add/Remove Co-op Player (moved from Settings).
+
+Rework 2 — Settings App tab: removed Add Co-op and Use Shrine (moved
+to Run Tools). New sections: MP SESSION, ACCOUNT & DATA, DEVELOPER,
+DANGER ZONE. Accent-colored labels.
+
+Rework 3 — Theme Picker: carousel 100px to 140px with swipe arrows.
+Wide pill dot indicators. SWIPE TO BROWSE THEMES hint. Section labels:
+PARTICLE PRESET, COLOR SCHEMA, ANIMATION SPEED.
+
+Rework 4 — Multiplayer Lobby: single-page 3-step flow replaces 2-page
+PageView. Compact HOST/JOIN buttons. PIN only for JOIN, character only
+for HOST. Guide as dialog. Saved sessions as bottom sheet. Solo Co-op
+with or divider.
+
+Also cleaned up junk files: bar_kitchen_app.iml, build_output.txt,
+check_hardcoded.ps1, DOCUMENTATION.md, documentation/ folder.
+
+Generated with [Devin](https://devin.ai)
+
+Co-Authored-By: Devin <158243242+devin-ai-integration[bot]@users.noreply.github.com>
