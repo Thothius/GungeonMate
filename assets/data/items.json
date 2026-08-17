@@ -17874,7 +17874,7 @@
       ]
     },
     "sell_price": "41",
-    "recharge_time": "Single Use",
+    "recharge_time": "Single-Use",
     "ammonomicon_entry": "Combines the currently equipped gun with the next carried gun.\n\nIt isn't pretty, but sometimes wondrous things can be accomplished with a roll of tape. Just look at the Bundle of Wands, or the Magitek Hybrid!"
   },
   {
@@ -20821,7 +20821,7 @@
     "type": "Passive",
     "quote": "Courage Increased",
     "quality": "B",
-    "effect": "Deal more damage to Bosses. Increases reload speed and accuracy.",
+    "effect": "Deals 30% more damage to Bosses. Halves reload time and shot spread. Cannot be dropped.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -23375,7 +23375,7 @@
     "type": "Passive",
     "quote": "The Heat Is On!",
     "quality": "C",
-    "effect": "Deals damage to nearby enemies.",
+    "effect": "Continuously deals 5 damage per second to nearby enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -34881,7 +34881,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "-Use",
+    "recharge_time": "Single-Use",
     "neckbear_approved": true,
     "ammonomicon_entry": "Heals for a small amount. Increases damage dealt until injured.\n\nA delicious, freshly baked roll! Sometimes, things just work out."
   },
@@ -34959,7 +34959,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "-Use",
+    "recharge_time": "Single-Use",
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "Medkits provides substantial healing when used. Contains a small piece of fairy.\n\nSeeking a place that would provide a near constant flow of the desperate and injured, Médecins Sans Diplôme recognized the Gungeon as the perfect place to found their practice."
@@ -37032,7 +37032,7 @@
     "type": "Passive",
     "quote": "Sidekick No More",
     "quality": "A",
-    "effect": "Boosts stats when alone. Only available in co-op, where The Cultist starts with this item.",
+    "effect": "Increases movement speed by 2 and damage by 41% when co-op partner is dead. Cannot be dropped.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -42272,7 +42272,7 @@
       ]
     },
     "sell_price": "21",
-    "recharge_time": "-Use",
+    "recharge_time": "Single-Use",
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "Provides healing on use. If equipped, will be used automatically on death.\n\nThis MRE comes in the form of a dry and dense cookie. It doesn't taste great, but it delivers the calories the body needs."
@@ -50506,7 +50506,7 @@
       ]
     },
     "sell_price": "41",
-    "recharge_time": "-Use",
+    "recharge_time": "Single-Use",
     "neckbear_approved": true,
     "ammonomicon_entry": "Increases combat prowess, with absolutely no downside!\n\nA potent gun-enhancing drug from the far reaches of the galaxy. It is known to be extremely addictive, and extremely expensive."
   },
@@ -52832,7 +52832,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "-Use",
+    "recharge_time": "Single-Use",
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "Calls in an ammo drop."
@@ -56680,7 +56680,7 @@
       ]
     },
     "sell_price": "16",
-    "recharge_time": "-Use",
+    "recharge_time": "Single-Use",
     "neckbear_approved": true,
     "ammonomicon_entry": "Gestates over time. Use to acquire... something. A strange egg found in the Gungeon. High in protein."
   },

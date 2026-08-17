@@ -6,6 +6,29 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.15 — 📋 Wiki Accuracy Audit — Number Formatting, Recharge Consistency, Vague Effects (August 2026)
+**Build:** 92
+
+> Wiki comparison audit: 5 formatting and content bugs fixed across guns and items.
+
+### Changes
+- **FIX (BUG-068) — Number spacing:** 10 guns had spaces inside number values (e.g. `"16. 6"` → `"16.6"`) in DPS, damage, and spread fields. Affected Flare Gun, Lower Case r, Mailbox, Makarov, Pea Shooter, Shellegun, Sling, Starpew, Trashcannon, Triple Gun.
+- **FIX (BUG-069) — Double degree symbols:** 3 guns had `°°` in spread field — Crescent Crossbow, Gunbow, M1911. Fixed to single `°`.
+- **FIX (BUG-070) — Recharge time consistency:** 7 active items had inconsistent `recharge_time` — 6 had `"-Use"` (truncated from `"Single-Use"`) and 1 had `"Single Use"` (missing hyphen). All normalized to `"Single-Use"`. Affected Duct Tape, Meatbun, Medkit, Ration, Spice, Supply Drop, Weird Egg.
+- **FIX (BUG-071) — Reload time suffix:** 10 guns had `reload_time` missing `"s"` suffix (e.g. `"1.2"` → `"1.2s"`). Affected Barrel, Cold 45, Devolver, Directional Pad, Evolver, Flash Ray, Railgun, Sawed-Off, Strafe Gun, Vorpal Gun.
+- **FIX (BUG-072) — Vague item effects:** 3 items had vague effect text missing key mechanics, confirmed by wiki.gg comparison:
+  - Galactic Medal of Valor: now includes "30% more damage", "halves reload time and shot spread", "cannot be dropped"
+  - Number 2: now includes "movement speed +2, damage +41%"
+  - Gungeon Pepper: now includes "5 damage per second"
+
+### Wiki Comparison Results (stats verified correct)
+- AK-47, Void Marshal, Cold 45, Flare Gun, Makarov, M1911 — all stats match wiki.gg exactly
+- 12 items with "N/A" sell_price — all confirmed correct (cannot be dropped/sold)
+- 14 items with undefined sell_price — all quality N quest items (intentional)
+- Unusual recharge_time values ("Cannot be used", "None", "Toggled", "Room cleared", "3 Uses") — all confirmed correct per wiki
+
+---
+
 ## v1.9.14 — 📋 Deep Data Audit Round 2 — Synergy Ref Tokens, Infinite Range/Shot Speed Stats (August 2026)
 **Build:** 91
 

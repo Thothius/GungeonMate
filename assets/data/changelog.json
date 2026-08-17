@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.15",
+    "title": "📋 Wiki Accuracy Audit — Number Formatting, Recharge Consistency, Vague Effects",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-068): 10 guns had spaces inside number values (e.g. '16. 6' → '16.6') in DPS, damage, and spread fields. Affected Flare Gun, Lower Case r, Mailbox, Makarov, Pea Shooter, Shellegun, Sling, Starpew, Trashcannon, Triple Gun.",
+      "📋 FIX (BUG-069): 3 guns had double degree symbols (°°) in spread field — Crescent Crossbow, Gunbow, M1911. Fixed to single °.",
+      "📋 FIX (BUG-070): 7 active items had inconsistent recharge_time values — 6 had '-Use' (truncated from 'Single-Use') and 1 had 'Single Use' (missing hyphen). All normalized to 'Single-Use'. Affected Duct Tape, Meatbun, Medkit, Ration, Spice, Supply Drop, Weird Egg.",
+      "📋 FIX (BUG-071): 10 guns had reload_time missing 's' suffix (e.g. '1.2' → '1.2s'). Affected Barrel, Cold 45, Devolver, Directional Pad, Evolver, Flash Ray, Railgun, Sawed-Off, Strafe Gun, Vorpal Gun.",
+      "📋 FIX (BUG-072): 3 items had vague effect text missing key mechanics. Galactic Medal of Valor now includes '30% more damage', 'halves reload time and shot spread', 'cannot be dropped'. Number 2 now includes 'movement speed +2, damage +41%'. Gungeon Pepper now includes '5 damage per second'."
+    ]
+  },
+  {
     "version": "v1.9.14",
     "title": "📋 Deep Data Audit Round 2 — Synergy Ref Tokens, Infinite Range/Shot Speed Stats",
     "date": "August 2026",
