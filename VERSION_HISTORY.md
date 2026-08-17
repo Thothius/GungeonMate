@@ -6,6 +6,61 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.17 — 📋 Items Wiki Accuracy Audit — Vague Effects Enriched with Specific Mechanics (August 2026)
+**Build:** 94
+
+> Items-focused wiki comparison audit: 33 item effects enriched with wiki-accurate mechanics and values.
+
+### Changes
+- **FIX (BUG-073) — 13 passive items with vague effects:** Added specific values from wiki.gg:
+  - Ballistic Boots: +2 movement speed
+  - Shotga Cola: +1.5 movement speed
+  - Shotgun Coffee: +1.2 movement speed
+  - Bionic Leg: +1.5 movement speed, grants armor
+  - Military Training: 20% reload, 17% spread, 16.7% charge time
+  - Battle Standard: 80% companion/charmed enemy damage
+  - Coin Crown: 10% chance, 5 shells, no damage taken
+  - Gold Ammolet: 60 damage, 25 tile radius, stun, extra blank
+  - Wolf: 5 damage per bite
+  - Bullet Idol: 45 damage to all enemies in room
+  - Eyepatch: 35% damage, 65% shot spread
+  - Unity: 2% flat damage from non-equipped guns
+  - Book of Chest Anatomy: 45% pickup, 50% item, 5% same quality
+
+- **FIX (BUG-074) — 6 bullet upgrades with missing percentages:**
+  - Charming Rounds: 7.5% chance to charm
+  - Hot Lead: 20% chance to ignite
+  - Homing Bullets: 20% chance to home
+  - Irradiated Lead: 50% chance to poison for 2.5s
+  - Explosive Rounds: 8.5% chance, 25 damage
+  - Shadow Bullets: 15% chance for extra projectile
+
+- **FIX (BUG-075) — 4 active items with missing durations:**
+  - Stuffed Star: 9s duration, pits/traps still harm
+  - Double Vision: 10s duration, reduces accuracy
+  - Bullet Time: 3s duration
+  - Potion of Lead Skin: 6s duration
+
+- **FIX (BUG-076) — 10 more items with vague effects:**
+  - Pig: sacrifices itself, removes item from inventory
+  - Heart of Ice: 8-12 ice bullets, freeze effect
+  - Cat Bullet King Throne: flight, roll direction bullets
+  - Table Tech Rage: 3s duration
+  - Omega Bullets: final two shots (not just final shot)
+  - Shock Rounds: connects bullets, damages in path
+  - Snowballets: further travel (not just "as they travel")
+  - Angry Bullets: no ammo cost
+  - Macho Brace: double damage (not just "more powerful")
+  - Turkey: same gun requirement
+
+### Wiki Comparison Results (verified correct)
+- Heart of Ice quality C with sell_price 41 — confirmed (multi-quality item, always sold at A price)
+- All N/A sell_price items — confirmed correct (cannot be dropped/sold)
+- All quality N items with undefined sell_price — confirmed (quest items)
+- Frost Bullets, Devolver Rounds — wiki doesn't list specific percentages, left as-is
+
+---
+
 ## v1.9.16 — 🔧 Playwright QA Fixes — Ticker Crash, Version Strings, Synergy Typo (August 2026)
 **Build:** 93
 

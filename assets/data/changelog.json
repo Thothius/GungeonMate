@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.9.17",
+    "title": "📋 Items Wiki Accuracy Audit — Vague Effects Enriched with Specific Mechanics",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-073): 13 passive items had vague effects missing specific values. Added wiki-accurate mechanics: Ballistic Boots (+2 speed), Shotga Cola (+1.5 speed), Shotgun Coffee (+1.2 speed), Bionic Leg (+1.5 speed, armor), Military Training (20% reload, 17% spread, 16.7% charge), Battle Standard (80% companion damage), Coin Crown (10% chance, 5 shells), Gold Ammolet (60 damage, 25 tile radius, stun), Wolf (5 damage per bite), Bullet Idol (45 damage to all enemies), Eyepatch (35% damage, 65% spread), Unity (2% flat damage), Book of Chest Anatomy (45% pickup, 50% item, 5% same quality).",
+      "📋 FIX (BUG-074): 6 bullet upgrade items had vague 'chance' without percentages. Added wiki-accurate values: Charming Rounds (7.5%), Hot Lead (20%), Homing Bullets (20%), Irradiated Lead (50%, 2.5s), Explosive Rounds (8.5%, 25 damage), Shadow Bullets (15%).",
+      "📋 FIX (BUG-075): 4 active items had vague effects missing duration and key mechanics. Stuffed Star (9s, pits/traps still harm), Double Vision (10s, reduces accuracy), Bullet Time (3s), Potion of Lead Skin (6s).",
+      "📋 FIX (BUG-076): 10 more items had vague effects missing key details. Pig (sacrifices itself, removes item), Heart of Ice (8-12 ice bullets, freeze), Cat Bullet King Throne (flight, roll direction), Table Tech Rage (3s), Omega Bullets (final two shots), Shock Rounds (connects bullets), Snowballets (further travel), Angry Bullets (no ammo cost), Macho Brace (double damage), Turkey (same gun)."
+    ]
+  },
+  {
     "version": "v1.9.16",
     "title": "🔧 Playwright QA Fixes — Ticker Crash, Version Strings, Synergy Typo",
     "date": "August 2026",

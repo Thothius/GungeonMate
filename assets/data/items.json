@@ -1355,7 +1355,7 @@
     "type": "Passive",
     "quote": "Hungry For More",
     "quality": "C",
-    "effect": "Hitting an enemy refires the projectile at a nearby enemy.",
+    "effect": "Hitting an enemy refires the projectile at a nearby enemy at no ammo cost.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -3976,7 +3976,7 @@
     "type": "Passive",
     "quote": "Speedier Than A Bullet",
     "quality": "B",
-    "effect": "Increases movement speed.",
+    "effect": "Increases movement speed by 2.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -4406,7 +4406,7 @@
     "type": "Passive",
     "quote": "Set Your Own!",
     "quality": "D",
-    "effect": "Increases the damage of companions and charmed enemies.",
+    "effect": "Increases the damage of most companions and charmed enemies by 80%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -5117,7 +5117,7 @@
     "type": "Passive",
     "quote": "More Machine Than Man",
     "quality": "C",
-    "effect": "Increases movement speed and grants a piece of armor.",
+    "effect": "Increases movement speed by 1.5 and grants a piece of armor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -7271,7 +7271,7 @@
     "type": "Passive",
     "quote": "Controlled Demolition",
     "quality": "C",
-    "effect": "Improves the contents of broken chests.",
+    "effect": "Improves drops from broken chests. 45% chance to drop a pickup, 50% chance to drop an item, 5% chance to drop an item of the same quality.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -9061,7 +9061,7 @@
     "type": "Passive",
     "quote": "Vengeful Spirit",
     "quality": "B",
-    "effect": "Deals 45 damage to enemies upon taking damage.",
+    "effect": "Taking damage deals 45 damage to all enemies in the room.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -9208,7 +9208,7 @@
     "type": "Active",
     "quote": "Dodge This",
     "quality": "D",
-    "effect": "Slows down time while active.",
+    "effect": "Slows down time for 3 seconds while active.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -9990,7 +9990,7 @@
     "type": "Passive",
     "quote": "A Cat Throne",
     "quality": "B",
-    "effect": "Shoots miniature bullets upon rolling and grants flight.",
+    "effect": "Grants flight. Dodge rolling shoots miniature bullets in the roll direction.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -11564,7 +11564,7 @@
     "type": "Passive",
     "quote": "Made With Love",
     "quality": "B",
-    "effect": "Adds a chance to fire bullets that charm enemies.",
+    "effect": "Bullets have a 7.5% chance to charm enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -14129,7 +14129,7 @@
     "type": "Passive",
     "quote": "Play Well, Get Money",
     "quality": "C",
-    "effect": "Increases the chance to find shells upon completing rooms.",
+    "effect": "Has a 10% chance to give 5 shells upon clearing a room without taking damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -16144,7 +16144,7 @@
     "type": "Active",
     "quote": "One For Each Of You",
     "quality": "D",
-    "effect": "While active, doubles the player's bullets.",
+    "effect": "While active for 10 seconds, doubles all bullets fired by the player, but reduces accuracy.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -18711,7 +18711,7 @@
     "type": "Passive",
     "quote": "Mega Blast",
     "quality": "A",
-    "effect": "Adds a chance to fire bullets that explode upon hitting an enemy or object.",
+    "effect": "Bullets have an 8.5% chance to explode upon hitting an enemy or object, dealing 25 damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -19092,7 +19092,7 @@
     "type": "Passive",
     "quote": "Hit Harder Less Often",
     "quality": "A",
-    "effect": "Increases damage by 35% but decreases accuracy.",
+    "effect": "Increases damage by 35% but increases shot spread by 65%, decreasing accuracy.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -21644,7 +21644,7 @@
     "type": "Passive",
     "quote": "Blank Damage Up",
     "quality": "B",
-    "effect": "Increases blank damage. Grants an extra blank per floor.",
+    "effect": "When a blank is triggered, all enemies within a 25 tile radius are stunned and dealt 60 damage. Grants an extra blank per floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -24602,7 +24602,7 @@
     "type": "Passive",
     "quote": "That's Cold",
     "quality": "C",
-    "effect": "Grants a heart container. Taking damage releases bouncing ice bullets. Increases coolness by 2.",
+    "effect": "Grants a heart container. Taking damage releases 8-12 bouncing ice bullets that freeze enemies. Increases coolness by 2.",
     "curse": 0.0,
     "coolness": 2.0,
     "wiki": {
@@ -26843,7 +26843,7 @@
     "type": "Passive",
     "quote": "Fire And Forget",
     "quality": "B",
-    "effect": "Bullets have a chance to home in on enemies.",
+    "effect": "Bullets have a 20% chance to home in on enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -27100,7 +27100,7 @@
     "type": "Passive",
     "quote": "Chance To Ignite",
     "quality": "B",
-    "effect": "Adds a chance to fire bullets that ignite enemies.",
+    "effect": "Bullets have a 20% chance to ignite enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -28632,7 +28632,7 @@
     "type": "Passive",
     "quote": "Poison Shot",
     "quality": "B",
-    "effect": "Adds a chance to fire bullets that poison enemies.",
+    "effect": "Bullets have a 50% chance to poison enemies for 2.5 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -31999,7 +31999,7 @@
     "type": "Passive",
     "quote": "Value For Effort",
     "quality": "C",
-    "effect": "Shots are more powerful when coming out of a dodge roll.",
+    "effect": "Shots fired immediately after a dodge roll deal double damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -35521,7 +35521,7 @@
     "type": "Passive",
     "quote": "Hold Facing Enemy",
     "quality": "C",
-    "effect": "Increases weapon accuracy and reload speed.",
+    "effect": "Decreases reload times by 20%. Reduces weapon spread by 17%. Decreases charge times for charged guns by 16.7%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -38178,7 +38178,7 @@
     "type": "Passive",
     "quote": "Last!",
     "quality": "A",
-    "effect": "The final shot of each magazine deals double damage.",
+    "effect": "The final two shots of each magazine deal double damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -40141,7 +40141,7 @@
     "type": "Passive",
     "quote": "Shifty",
     "quality": "A",
-    "effect": "Upon death, instantly revives the player with full health.",
+    "effect": "If the player dies, the pig sacrifices itself to spare the player, fully healing them and removing the item from the inventory.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -41421,7 +41421,7 @@
     "type": "Active",
     "quote": "I'm Invincible!",
     "quality": "D",
-    "effect": "While active, the player reflects enemy bullets.",
+    "effect": "While active for 6 seconds, the player reflects enemy bullets.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -47177,7 +47177,7 @@
     "type": "Passive",
     "quote": "Double Tap",
     "quality": "B",
-    "effect": "Firing a weapon has a chance to fire an additional projectile.",
+    "effect": "Firing a weapon has a 15% chance to fire an additional projectile.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -48147,7 +48147,7 @@
     "type": "Passive",
     "quote": "Electrified!",
     "quality": "A",
-    "effect": "Creates a beam of electricity between fired bullets.",
+    "effect": "Creates a beam of electricity between fired bullets, connecting them and damaging enemies in the path.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -48627,7 +48627,7 @@
     "type": "Passive",
     "quote": "Speed Up",
     "quality": "C",
-    "effect": "Increases movement speed.",
+    "effect": "Increases movement speed by 1.5.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -48768,7 +48768,7 @@
     "type": "Passive",
     "quote": "Speed Up",
     "quality": "C",
-    "effect": "Increases movement speed.",
+    "effect": "Increases movement speed by 1.2.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -49528,7 +49528,7 @@
     "type": "Passive",
     "quote": "Powder Power",
     "quality": "A",
-    "effect": "Bullets increase in size and damage as they travel.",
+    "effect": "Bullets increase in size and damage the further they travel.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -51629,7 +51629,7 @@
     "type": "Active",
     "quote": "Protective Plush",
     "quality": "B",
-    "effect": "While active, the player is invincible.",
+    "effect": "While active, the player is invincible to most forms of damage for 9 seconds. Pits and flame traps can still harm the player.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -53278,7 +53278,7 @@
     "type": "Passive",
     "quote": "Flips Of Fury",
     "quality": "D",
-    "effect": "Flipping a table briefly doubles the player's damage.",
+    "effect": "Flipping a table briefly doubles the player's damage for 3 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -54835,7 +54835,7 @@
     "type": "Passive",
     "quote": "Triple Tap",
     "quality": "C",
-    "effect": "Recovers 1 ammo after landing three sequential hits.",
+    "effect": "Recovers 1 ammo after landing three sequential hits with the same gun.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -55301,7 +55301,7 @@
     "type": "Passive",
     "quote": "Our Powers Combined",
     "quality": "B",
-    "effect": "Increases damage based on the other guns the player has.",
+    "effect": "Increases damage based on the other guns the player has. 2% of total damage of non-equipped guns is added as flat damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -57013,7 +57013,7 @@
     "type": "Passive",
     "quote": "Junior",
     "quality": "B",
-    "effect": "Chases and bites enemies.",
+    "effect": "Summons a wolf companion who chases and bites enemies, dealing 5 damage per bite.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
