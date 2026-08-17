@@ -4,118 +4,217 @@
     "category": "Currency",
     "description": "Shells are the game's main form of currency, and are often dropped by enemies upon their death. They stay on the ground until retrieved or until combat finishes, at which point they will slide across the floor to the player. They can be used to purchase items in Shops and make wagers with various NPCs. Shells that fall into pits will reappear on top of the player.",
     "icon": "money.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (dropped by enemies)",
+    "tips": [
+      "Shells slide to you after combat ends — no need to chase them during fights.",
+      "Shells in pits reappear on you — don't risk falling to grab them.",
+      "Save shells for shops and NPC wagers (Gunsling King, Winchester, etc.)."
+    ]
   },
   {
     "name": "Copper Casing",
     "category": "Currency",
     "description": "Worth 1 shell. The most common currency pickup, dropped by enemies upon death.",
     "icon": "money.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money",
+    "location": "All floors (dropped by enemies)",
+    "tips": [
+      "Worth 1 shell — the most common pickup.",
+      "Don't risk damage chasing individual casings during combat — they come to you."
+    ]
   },
   {
     "name": "Silver Casing",
     "category": "Currency",
     "description": "Worth 5 shells. Less common than copper casings but more valuable.",
     "icon": "money_5.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money",
+    "location": "All floors (less common)",
+    "tips": [
+      "Worth 5 shells — 5x more valuable than copper.",
+      "Prioritize picking these up during combat — worth the risk."
+    ]
   },
   {
     "name": "Gold Casing",
     "category": "Currency",
     "description": "Worth 50 shells. The most valuable currency pickup.",
     "icon": "golden_shell.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Money",
+    "location": "All floors (rare)",
+    "tips": [
+      "Worth 50 shells — the most valuable casing.",
+      "Always grab these — they can fund a whole shop purchase."
+    ]
   },
   {
     "name": "Half Heart",
     "category": "Health",
     "description": "Restores half a heart of health. If the player has full health, they can interact with health pickups to save them for later at a health dispenser. The Robot cannot pick up hearts.",
     "icon": "half_heart.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (from enemies, chests, shops)",
+    "tips": [
+      "Store at health dispensers if at full health — save for later.",
+      "The Robot cannot pick up hearts — they're useless to it.",
+      "Grab during combat if you're missing health — don't wait."
+    ]
   },
   {
     "name": "Full Heart",
     "category": "Health",
     "description": "Restores a full heart of health. If the player picks up a full heart while missing only half a heart, the second half will not be stored. Hearts can be stored at health dispensers at the entrance to the next floor and at shops.",
     "icon": "heart.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (from enemies, chests, shops)",
+    "tips": [
+      "If missing only half a heart, the other half is wasted — grab a half heart instead.",
+      "Store at health dispensers at floor entrances and shops.",
+      "Prioritize picking up over half hearts when significantly damaged."
+    ]
   },
   {
     "name": "Armor",
     "category": "Defense",
     "description": "Armor is appended to the end of the player's health bar upon pickup, and the player can carry multiple pieces. Armor absorbs one hit, after which it is destroyed. Whenever armor is destroyed, a Blank is activated for free. Armor will be stolen by the Resourceful Rat if the player leaves the room.",
     "icon": "armor.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (from chests, shops, enemies)",
+    "tips": [
+      "Armor absorbs one hit and triggers a free Blank when destroyed.",
+      "Multiple armor pieces stack — collect as many as possible.",
+      "The Resourceful Rat steals armor if left on the floor — pick it up immediately."
+    ]
   },
   {
     "name": "Blank",
     "category": "Utility",
     "description": "Blanks clear all enemy projectiles on screen and push enemies away. A core pickup for survival in the Gungeon.",
     "icon": "blank.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blank"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blank",
+    "location": "All floors (from chests, shops, enemies)",
+    "tips": [
+      "Clears all projectiles on screen — save for emergency situations.",
+      "Use to find secret rooms — shoot walls or use blanks near cracks.",
+      "Armor destruction triggers a free blank — synergy with armor pickups."
+    ]
   },
   {
     "name": "Key",
     "category": "Utility",
     "description": "Keys are used to open locked chests and doors, as well as the trapdoor to the Oubliette and the trapdoor to the passageway to the Resourceful Rat's Lair. Every Shop apart from the Forge's shop will always have at least one key for sale.",
     "icon": "key.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (from enemies, chests, shops)",
+    "tips": [
+      "Always buy the key from the shop — you can never have too many.",
+      "Used for chests, doors, Oubliette trapdoor, and Resourceful Rat's Lair.",
+      "Prioritize opening higher-quality chests when keys are limited."
+    ]
   },
   {
     "name": "Cell Key",
     "category": "Utility",
     "description": "Cell keys are used to open cells to free NPCs. On any floor with a cell, a cell key will drop from a random enemy on the floor (including the boss). They cannot be used as regular keys. Cell keys are automatically collected if the player attempts to leave them behind.",
     "icon": "cell_key.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "Floors with cells (dropped by random enemy)",
+    "tips": [
+      "Drops from a random enemy on floors with cells — kill all enemies to find it.",
+      "Cannot be used as a regular key — only opens cells.",
+      "Automatically collected if left behind — don't worry about missing it."
+    ]
   },
   {
     "name": "Rat Key",
     "category": "Utility",
     "description": "Rat keys are used to open Rat Chests and certain doors. They are obtained from the third phase of the Resourceful Rat fight. They cannot be used as regular keys. Rat Keys are automatically collected if the player attempts to leave them behind.",
     "icon": "ratkey.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "Resourceful Rat's Lair (boss fight phase 3)",
+    "tips": [
+      "Only obtained from the Resourceful Rat boss fight (phase 3).",
+      "Used to open Rat Chests and certain doors — not a regular key.",
+      "Automatically collected — don't worry about leaving it behind."
+    ]
   },
   {
     "name": "Ammo",
     "category": "Ammo",
     "description": "Ammo fully replenishes the player's currently held weapon's ammunition upon picking it up. Ammo cannot be picked up if the weapon the player is holding has full or infinite ammo. Ammo will be stolen by the Resourceful Rat if the player leaves the room, unless it is a secret room.",
     "icon": "ammo.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (from enemies, chests, shops)",
+    "tips": [
+      "Refills the currently held weapon — switch to the gun that needs ammo most.",
+      "Cannot pick up if current weapon has full or infinite ammo — switch first.",
+      "The Resourceful Rat steals ammo if left in non-secret rooms — grab it quickly."
+    ]
   },
   {
     "name": "Spread Ammo",
     "category": "Ammo",
     "description": "The Spread Ammo box restores 50% of the ammo of the currently held weapon and 20% to all other weapons (rounded up). In co-op, the spread ammo will give 20% ammo to all other weapons the other player has, too. Also stealable by the Resourceful Rat.",
     "icon": "spread_ammo.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (rarer than regular ammo)",
+    "tips": [
+      "Restores 50% to current weapon and 20% to all others — best ammo pickup.",
+      "Switch to your most depleted gun before picking up — maximizes the benefit.",
+      "In co-op, also gives 20% to the other player's weapons."
+    ]
   },
   {
     "name": "Hegemony Credit",
     "category": "Currency",
     "description": "Hegemony Credits are a special currency used to unlock items and guns from the shops between runs. They are earned by defeating bosses for the first time.",
     "icon": "hegemony_credit.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Hegemony_Credit"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Hegemony_Credit",
+    "location": "Dropped by bosses (first kill only)",
+    "tips": [
+      "Only dropped by bosses on first kill — farm different bosses to earn more.",
+      "Used in the Breach to unlock new guns and items from Ox, Doug, Goopton, Trorc.",
+      "Cannot be stolen by the Resourceful Rat — safe to leave on the floor."
+    ]
   },
   {
     "name": "Map",
     "category": "Utility",
     "description": "Maps reveal the layout of the current floor, showing all rooms, secret rooms, and special rooms. A rare pickup that can be found in chests or dropped by certain enemies.",
     "icon": "map.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (rare — from chests or enemies)",
+    "tips": [
+      "Reveals the entire floor layout — rooms, secret rooms, and special rooms.",
+      "Counts as completing the Lost Adventurer's mapping quest.",
+      "Rare — prioritize picking up when found."
+    ]
   },
   {
     "name": "Supply Drop",
     "category": "Utility",
     "description": "Calls down a single regular ammo box in a supply crate. A rare pickup that can appear in the room clear loot table.",
     "icon": "supply_drop.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Supply_Drop"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Supply_Drop",
+    "location": "All floors (rare — room clear loot)",
+    "tips": [
+      "Calls down a regular ammo box — useful when ammo is scarce.",
+      "Rare room clear loot — not guaranteed to appear.",
+      "Use when your current weapon is low on ammo."
+    ]
   },
   {
     "name": "Glass Guon Stone",
     "category": "Defense",
     "description": "Glass Guon Stones orbit the player and block enemy bullets. They are destroyed upon blocking a bullet. Multiple Glass Guon Stones can be collected. A rare pickup that can appear in the room clear loot table.",
     "icon": "glass_guon_stone.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pickups",
+    "location": "All floors (rare — room clear loot, shrines)",
+    "tips": [
+      "Orbits the player and blocks one bullet — temporary shield.",
+      "Multiple stones stack — collect as many as possible for bullet coverage.",
+      "Destroyed on blocking a bullet — they're expendable, not permanent."
+    ]
   }
 ]
