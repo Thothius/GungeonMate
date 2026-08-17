@@ -464,6 +464,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     required String nickname,
     required Gungeoneer character,
   }) async {
+    if (_busyTransition) return;
     if (_status == MpStatus.searching ||
         _status == MpStatus.connected ||
         _status == MpStatus.handshaking) {
@@ -531,6 +532,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     required String nickname,
     String pinCode = '',
   }) async {
+    if (_busyTransition) return;
     if (_status == MpStatus.searching ||
         _status == MpStatus.connected ||
         _status == MpStatus.handshaking) {
@@ -1637,6 +1639,11 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     }
   }
 
+  /// App version sent in hello for diagnostic purposes. Extracted from
+  /// the package info at startup — falls back to 'unknown' if not yet
+  /// loaded. Informational only; protocolVersion is the real compat gate.
+  static String appVersionString = 'unknown';
+
   Future<void> _sendHello() async {
     final role = _myRole;
     if (role == null) return;
@@ -1647,7 +1654,7 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
           character: _myCharacterName,
           userLabel: _myNickname,
           // Informational only; protocolVersion is the real compat gate.
-          appVersion: 'app',
+          appVersion: appVersionString,
           sessionName: sessionName,
           sessionId: sessionId,
           pinCode: _pinCode,
@@ -1740,10 +1747,22 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     _searchTimeout = Timer(Duration(milliseconds: timeoutMs), () {
       if (_status == MpStatus.searching) {
         if (_isReconnecting) {
-          // Reconnect search expired — silently retry via auto-reconnect loop
+          // Reconnect search expired — reset to disconnected so the
+          // auto-reconnect loop can re-arm. Previously this only cleared
+          // _isReconnecting and stopped searching, but left _status at
+          // 'searching' — which caused _tryAutoReconnect to bail at its
+          // status check, silently killing the retry loop forever.
           _isReconnecting = false;
-          _log('Reconnect search timed out (${timeoutMs ~/ 1000}s) — will retry...');
+          _busyTransition = false;
+          _status = MpStatus.disconnected;
+          _log('Reconnect search timed out (${timeoutMs ~/ 1000}s) — resetting to disconnected for auto-retry...');
+          notifyListeners();
           unawaited(_service.stopSearching());
+          // Re-arm auto-reconnect immediately — don't wait for the next
+          // scheduled backoff, the search already consumed 20s.
+          if (canReconnect && !_isPaused) {
+            _startAutoReconnect();
+          }
         } else {
           _fail(
             'No peer found. Make sure both devices have Bluetooth enabled and are close together.',
@@ -1771,11 +1790,13 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     if (_status != MpStatus.disconnected) return;
     _autoReconnectTimer?.cancel();
     _autoReconnectAttempts++;
-    // Exponential backoff capped at 30s. Sequence: 2, 4, 8, 16, 30, 30, ...
+    // Exponential backoff capped at 30s. Sequence: 1, 2, 4, 8, 16, 30, 30, ...
+    // Starts at 1s for the fastest possible first retry — the most common
+    // disconnect is a transient BT hiccup that resolves in under 2s.
     // No upper limit on attempts: the session keeps trying until the
     // user explicitly ends the run or disconnects, so an accidental
     // app-kill or transient BT/Wi-Fi drop never silently strands them.
-    final raw = 1 << _autoReconnectAttempts; // 2, 4, 8, 16, 32, 64...
+    final raw = 1 << (_autoReconnectAttempts - 1); // 1, 2, 4, 8, 16, 32...
     final secs =
         raw > _maxAutoReconnectBackoffSec ? _maxAutoReconnectBackoffSec : raw;
     _log(
@@ -2074,6 +2095,20 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
 
     _startSearchTimeout();
+
+    // Request permissions before starting transport — without this, a
+    // saved session restore after the user revoked BT permissions in
+    // system settings would silently fail with a confusing "could not
+    // start advertising" error instead of prompting for permissions.
+    final permsOk = await _service.requestPermissions();
+    if (!permsOk) {
+      _searchTimeout?.cancel();
+      await _service.stopSearching();
+      _status = MpStatus.permissionDenied;
+      _error = 'Bluetooth / Nearby permissions are required for multiplayer.';
+      notifyListeners();
+      return;
+    }
 
     if (roleToUse == MpRole.main) {
       final started = await _service.startAdvertising('$_myNickname#$_pinCode');

@@ -15,6 +15,9 @@ void main() async {
   // failures internally — a broken plugin can't block app startup.
   await AppTheme.init();
   await VisualPrefs.init();
+  // Expose the current app version for MP hello diagnostics. This is
+  // hardcoded to match pubspec.yaml; update on version bump.
+  MultiplayerSession.appVersionString = '1.9.35';
   runApp(const GungeonMateApp());
 }
 
