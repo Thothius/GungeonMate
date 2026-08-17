@@ -5,7 +5,12 @@
     "description": "Slowly walks towards the player, rapidly firing bullets.",
     "health": "15",
     "icon": "Bandana_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bandana_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bandana_Bullet_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fires rapidly — keep moving and use cover.",
+      "Basic enemy, low health — one or two shots from most guns."
+    ]
   },
   {
     "name": "Veteran Bullet Kin",
@@ -13,15 +18,25 @@
     "description": "Slowly walks towards the player, firing multiple bullets in quick succession with 62% predictive aim.",
     "health": "15",
     "icon": "Veteran_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Veteran_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Veteran_Bullet_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Has 62% predictive aim — don't dodge roll in a straight line.",
+      "Fires in quick succession — wait for the full volley before repositioning."
+    ]
   },
   {
     "name": "Tanker",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, rapidly firing bullets.",
+    "description": "Slowly walks towards the player, rapidly firing bullets. A tougher variant of the Bandana Bullet Kin with higher health.",
     "health": "18.8",
     "icon": "Tanker.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tanker"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tanker",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Rapid-fires bullets — similar to Bandana Bullet Kin but tankier.",
+      "Moderate health (18.8) — use sustained fire."
+    ]
   },
   {
     "name": "Minelet",
@@ -29,7 +44,12 @@
     "description": "Slowly walks towards the player, firing bullets with 40% predictive aim. Occasionally hides under its hard hat, temporarily deflecting bullets, then pops out and releases bullets in all directions.",
     "health": "15",
     "icon": "Minelet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Minelet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Minelet",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper, Black Powder Mine",
+    "tips": [
+      "Hide under its hard hat to deflect bullets — wait for it to pop out.",
+      "Releases a radial burst when emerging — keep distance when it surfaces."
+    ]
   },
   {
     "name": "Cardinal",
@@ -37,7 +57,12 @@
     "description": "Slowly walks towards the player, firing bullets. Occasionally fires a cluster of 5 bullets that homes in on the player.",
     "health": "22.5",
     "icon": "Cardinal.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cardinal"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cardinal",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fires a homing cluster of 5 bullets — break line of sight or dodge sideways.",
+      "The homing bullets persist — don't stop moving after they're fired."
+    ]
   },
   {
     "name": "Shroomer",
@@ -45,7 +70,12 @@
     "description": "Slowly walks towards the player, firing two bullets in a V shape.",
     "health": "30",
     "icon": "Shroomer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shroomer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shroomer",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fires two bullets in a V shape — dodge between or around the V.",
+      "Moderate health (30) — slightly tankier than basic Bullet Kin."
+    ]
   },
   {
     "name": "Ashen Bullet Kin",
@@ -53,7 +83,12 @@
     "description": "Slowly walks towards the player, firing fast-moving bullets. Fires six times total before reloading, with the last three bullets having a 40% chance each to be fired with 100% predictive aim.\nWhen spawning in a room containing decorative ash bullet kin breakables, there is a 30% chance that the Ashen Bullet Kin will not spawn normally. Instead, the Ashen Bullet Kin will disguise itself as one of the harmless breakables, only bursting out and becoming active when the breakable is broken, or after 2-6 seconds have passed.",
     "health": "15",
     "icon": "Ashen_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ashen_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ashen_Bullet_Kin",
+    "location": "Oubliette, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Can disguise as harmless breakables — watch for ash decorations in rooms.",
+      "Disguise breaks after 2-6 seconds or when the breakable is shot."
+    ]
   },
   {
     "name": "Mutant Bullet Kin",
@@ -61,7 +96,12 @@
     "description": "Slowly walks towards the player, firing bullets. Occasionally spits out a small cone of poison creep.",
     "health": "20",
     "icon": "Mutant_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mutant_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mutant_Bullet_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Leaves poison creep — avoid walking through its cone of poison.",
+      "The poison creep lingers — don't dodge roll through it."
+    ]
   },
   {
     "name": "Fallen Bullet Kin",
@@ -69,7 +109,12 @@
     "description": "Slowly walks towards the player, firing spreads of three fast-moving bullets. Leaves behind fire upon death.",
     "health": "20",
     "icon": "Fallen_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fallen_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fallen_Bullet_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Leaves fire upon death — don't stand where it dies.",
+      "Fire spreads — clear the area before finishing it off."
+    ]
   },
   {
     "name": "Office Bullet",
@@ -77,47 +122,77 @@
     "description": "Slowly walks towards the player, firing bullets.",
     "health": "20",
     "icon": "Office_Bullet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Office_Bullet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Office_Bullet",
+    "location": "Keep of the Lead Lord (Boss Room)",
+    "tips": [
+      "Found in the Bullet King's boss room — fires standard bullets.",
+      "Support enemy during the boss fight — clear quickly or ignore."
+    ]
   },
   {
     "name": "Office Bullette",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, firing bullets.",
+    "description": "Slowly walks towards the player, firing bullets. A smaller variant of the Office Bullet found in the Bullet King boss room.",
     "health": "20",
     "icon": "Office_Bullette.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Office_Bullette"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Office_Bullette",
+    "location": "Keep of the Lead Lord (Boss Room)",
+    "tips": [
+      "Found in the Bullet King's boss room — smaller variant of Office Bullet.",
+      "Low threat — clear if convenient during the boss fight."
+    ]
   },
   {
     "name": "Western Bullet Kin",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, firing bullets.",
+    "description": "Slowly walks towards the player, firing bullets. A variant of the Bullet Kin that appears on mid-tier floors.",
     "health": "22.5",
     "icon": "Western_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Western_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Western_Bullet_Kin",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Standard bullet kin variant — appears on mid floors.",
+      "No special mechanics — basic threat management."
+    ]
   },
   {
     "name": "Pirate Bullet Kin",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, firing bullets.",
+    "description": "Slowly walks towards the player, firing bullets. A pirate-themed variant of the Bullet Kin found on early floors.",
     "health": "15",
     "icon": "Pirate_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pirate_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pirate_Bullet_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Standard bullet kin variant — basic threat.",
+      "Appears on early floors alongside regular Bullet Kin."
+    ]
   },
   {
     "name": "Bullet Fish",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, firing bullets.",
+    "description": "Slowly walks towards the player, firing bullets. A fish-themed variant of the Bullet Kin.",
     "health": "15",
     "icon": "Bullet_Fish.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Fish"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Fish",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Basic enemy — fires standard bullets while approaching.",
+      "Low threat — easily dispatched."
+    ]
   },
   {
     "name": "Red Bullet Fish",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, firing bullets.",
+    "description": "Slowly walks towards the player, firing bullets. A red variant of the Bullet Fish.",
     "health": "15",
     "icon": "Red_Bullet_Fish.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Bullet_Fish"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Bullet_Fish",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Same as Bullet Fish — basic approaching enemy with standard fire.",
+      "Slightly tougher variant — same strategy applies."
+    ]
   },
   {
     "name": "Knight Bullet Kin",
@@ -125,7 +200,12 @@
     "description": "Walks sluggishly towards the player, occasionally firing an extremely slow pointy bullet.",
     "health": "25",
     "icon": "Knight_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Knight_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Knight_Bullet_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fires extremely slow bullets — easy to dodge but don't forget they're there.",
+      "The pointy bullet can be easy to lose track of in busy rooms."
+    ]
   },
   {
     "name": "Brollet",
@@ -133,7 +213,12 @@
     "description": "Slowly walks towards the player, firing bullets. Explodes violently upon death, or if the player comes too close.",
     "health": "15",
     "icon": "Brollet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Brollet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Brollet",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Explodes on death or if you get close — kill it from range.",
+      "Keep your distance — the explosion radius is larger than it looks."
+    ]
   },
   {
     "name": "Chancellor",
@@ -141,7 +226,13 @@
     "description": "Sits stationary in the Bullet Kings bossroom.After taking any damage, the Chancellor's health is set to 1 and he will run madly towards the player.If the Bullet King is killed without harming the Chancellor, his health is set to 1 and he will no longer charge.",
     "health": "1000",
     "icon": "Chancellor.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancellor"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancellor",
+    "location": "Keep of the Lead Lord (Bullet King's room)",
+    "tips": [
+      "Spared Chancellor appears on the next floor with revenge — kill or avoid.",
+      "If Bullet King is killed without harming the Chancellor, he stops charging.",
+      "Has 1000 HP initially — drops to 1 HP after any damage or when the boss dies."
+    ]
   },
   {
     "name": "Chancellor",
@@ -149,7 +240,13 @@
     "description": "Sits stationary in the Gungeon Proper's bossroom if the Chancellor was spared on the previous floor.After taking any damage, or if 5 seconds have passed, the Chancellor's health is set to 20 and he will run madly towards the player.",
     "health": "1000",
     "icon": "Chancellor_Revenge.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancellor"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancellor",
+    "location": "Keep of the Lead Lord (Bullet King's room)",
+    "tips": [
+      "Spared Chancellor appears on the next floor with revenge — kill or avoid.",
+      "If Bullet King is killed without harming the Chancellor, he stops charging.",
+      "Has 1000 HP initially — drops to 1 HP after any damage or when the boss dies."
+    ]
   },
   {
     "name": "Old Chancellor",
@@ -157,7 +254,12 @@
     "description": "Sits stationary in the Old Kings bossroom.After taking any damage, the Chancellor's health is set to 1 and he will run madly towards the player.If the Old King is killed without harming the Chancellor, his health is set to 1 and he will no longer charge.",
     "health": "1000",
     "icon": "Old_Chancellor.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Chancellor"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Chancellor",
+    "location": "Bullet Hell (Old King's room)",
+    "tips": [
+      "Same mechanic as the regular Chancellor — drops to 1 HP after any damage.",
+      "Spares if Old King is killed without harming him."
+    ]
   },
   {
     "name": "Red-Caped Bullet Kin",
@@ -165,7 +267,13 @@
     "description": "Chance to appear in random rooms after at least one Past has been killed. Does not attack the player, wandering aimlessly around the room.Does not deal contact damage unless it is jammed.If not killed in a room, it will eventually teleport away. Allowing 5 red-caped bullet kin to escape unlocks The Bullet.",
     "health": "15",
     "icon": "Red-Caped_Bullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red-Caped_Bullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red-Caped_Bullet_Kin",
+    "location": "Random rooms (after killing at least one Past)",
+    "tips": [
+      "Does NOT attack — let it teleport away to unlock The Bullet.",
+      "Allow 5 to escape total to unlock The Bullet character.",
+      "Only appears after at least one Past has been killed."
+    ]
   },
   {
     "name": "Chance Kin",
@@ -173,7 +281,12 @@
     "description": "Runs away from the player and disappears if not killed. Turns into a cube which drops a random pickup upon death.",
     "health": "20",
     "icon": "Chance_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chance_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chance_Kin",
+    "location": "All floors",
+    "tips": [
+      "Runs away — kill quickly or it disappears.",
+      "Drops a random pickup (hearts, keys, blanks, ammo) upon death."
+    ]
   },
   {
     "name": "Keybullet Kin",
@@ -181,7 +294,12 @@
     "description": "Runs away from the player and disappears if not killed. Drops a key upon death.",
     "health": "20",
     "icon": "Keybullet_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Keybullet_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Keybullet_Kin",
+    "location": "All floors",
+    "tips": [
+      "Runs away — kill quickly or it disappears.",
+      "Always drops a key — prioritize over regular enemies."
+    ]
   },
   {
     "name": "Confirmed",
@@ -189,7 +307,12 @@
     "description": "Slowly walks towards the player, periodically firing four slithering lines of bullets.",
     "health": "45",
     "icon": "Confirmed.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Confirmed"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Confirmed",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Fires four slithering bullet lines — find gaps between them.",
+      "High health (45) — focus fire to take it down quickly."
+    ]
   },
   {
     "name": "Red Shotgun Kin",
@@ -197,7 +320,12 @@
     "description": "Slowly walks towards the player, occasionally firing a tight spread of 5 bullets. Has a chance to fire 6 bullets in all directions upon death.",
     "health": "30",
     "icon": "Red_Shotgun_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Shotgun_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Shotgun_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fires tight 5-bullet spreads — dodge through the gap.",
+      "Chance of 6-bullet death burst — maintain distance."
+    ]
   },
   {
     "name": "Blue Shotgun Kin",
@@ -205,7 +333,12 @@
     "description": "Slowly walks towards the player, occasionally firing a wide spread of 5 bullets quickly followed by a wide spread of 4 bullets. Has a chance to fire 6 bullets in all directions upon death.",
     "health": "40",
     "icon": "Blue_Shotgun_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blue_Shotgun_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blue_Shotgun_Kin",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires two quick spreads (5 then 4) — dodge between the volleys.",
+      "Chance of 6-bullet death burst — maintain distance."
+    ]
   },
   {
     "name": "Veteran Shotgun Kin",
@@ -213,7 +346,12 @@
     "description": "Slowly walks towards the player, occasionally firing a V-shaped spread of 5 fast-moving bullets with 100% predictive aim. Fires many bullets in all directions upon death that travel at varying speeds.",
     "health": "33.8",
     "icon": "Veteran_Shotgun_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Veteran_Shotgun_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Veteran_Shotgun_Kin",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "100% predictive aim on V-spread — dodge roll perpendicular to the spread.",
+      "Death burst fires at varying speeds — the slow bullets can surprise you."
+    ]
   },
   {
     "name": "Mutant Shotgun Kin",
@@ -221,7 +359,12 @@
     "description": "Slowly walks towards the player, firing tight spreads of 5 fast-moving bullets. Always fires 6 bullets in all directions upon death.",
     "health": "32",
     "icon": "Mutant_Shotgun_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mutant_Shotgun_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mutant_Shotgun_Kin",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Always fires 6 bullets in all directions upon death — clear the area first.",
+      "Fast-moving tight spreads — use cover or dodge between bullets."
+    ]
   },
   {
     "name": "Executioner",
@@ -229,7 +372,12 @@
     "description": "Slowly walks towards the player, firing chaotic spreads of bullets. Occasionally stops to fire 3 bullet chains towards the player, attaching them to walls. These chains disappear shortly afterwards.\nSometimes fires a bullet chain upon death, accompanied by a burst of 6 bullets in all directions.",
     "health": "55",
     "icon": "Executioner.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Executioner"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Executioner",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Attaches bullet chains to walls — avoid touching them.",
+      "Death burst of 6 bullets plus a chain — finish it from range."
+    ]
   },
   {
     "name": "Ashen Shotgun Kin",
@@ -237,7 +385,12 @@
     "description": "Slowly walks towards the player, firing 3 tight spreads of 5 fast-moving bullets.\nWhen spawning in a room containing decorative ash shotgun kin breakables, there is a 30% chance that the Ashen Shotgun Kin will not spawn normally. Instead, the Ashen Shotgun Kin will disguise itself as one of the harmless breakables, only bursting out and becoming active when the breakable is broken, or after 2-6 seconds have passed.",
     "health": "20",
     "icon": "Ashen_Shotgun_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ashen_Shotgun_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ashen_Shotgun_Kin",
+    "location": "Oubliette, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Can disguise as breakables — watch for ash decorations.",
+      "Same disguise mechanic as Ashen Bullet Kin but with shotgun spreads."
+    ]
   },
   {
     "name": "Shotgrub",
@@ -245,7 +398,12 @@
     "description": "Slowly walks towards the player, firing spreads of bullets which release more waving bullets upon hitting an obstacle.",
     "health": "20",
     "icon": "Shotgrub_%28Enemy%29.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shotgrub_(Enemy)"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shotgrub_(Enemy)",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Bullets split into waving patterns on hitting obstacles — stay in open areas.",
+      "Don't hide behind cover — the splits will reach you."
+    ]
   },
   {
     "name": "Pirate Shotgun Kin",
@@ -253,7 +411,12 @@
     "description": "Slowly walks towards the player, occasionally firing a tight spread of 5 bullets.",
     "health": "30",
     "icon": "Pirate_Shotgun_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pirate_Shotgun_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pirate_Shotgun_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fires tight 5-bullet spreads — dodge roll through the gap.",
+      "Standard shotgun kin variant on early floors."
+    ]
   },
   {
     "name": "Western Shotgun Kin",
@@ -261,7 +424,12 @@
     "description": "Slowly walks towards the player, occasionally firing a wide spread of 5 bullets quickly followed by a wide spread of 4 bullets. Fires many bullets in all directions upon death that travel at varying speeds, as well as two giant bullets angled towards the player.",
     "health": "40",
     "icon": "Western_Shotgun_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Western_Shotgun_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Western_Shotgun_Kin",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires two spreads plus two giant bullets on death — the giant bullets are the threat.",
+      "Death burst is large — clear the area before finishing."
+    ]
   },
   {
     "name": "Sniper Shell",
@@ -269,7 +437,12 @@
     "description": "Periodically aims at the player with a red laser, then fires a single high-speed bullet.",
     "health": "18.8",
     "icon": "Sniper_Shell.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Sniper_Shell"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Sniper_Shell",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Red laser telegraphs the shot — dodge roll when the bullet fires.",
+      "The bullet is high-speed — react to the laser, not the bullet."
+    ]
   },
   {
     "name": "Professional",
@@ -277,7 +450,12 @@
     "description": "Periodically aims at the player with a green laser, then fires a single high-speed bullet that explodes into bullets in all directions upon impact.",
     "health": "21",
     "icon": "Professional.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Professional"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Professional",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Green laser telegraphs an exploding bullet — dodge the impact zone.",
+      "The explosion releases bullets in all directions — keep distance."
+    ]
   },
   {
     "name": "Gummy",
@@ -285,7 +463,12 @@
     "description": "Slowly walks towards the player, rapidly firing bullets. Occasionally pauses to summon a large jammed Spent that periodically shoots a spread of bullets in all directions.",
     "health": "26.3",
     "icon": "Gummy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gummy"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gummy",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Summons jammed Spent — kill the Gummy first to stop summons.",
+      "Jammed Spent shoots bullet spreads — clear them after the Gummy."
+    ]
   },
   {
     "name": "Skullet",
@@ -293,15 +476,25 @@
     "description": "Slowly walks towards the player, occasionally firing two spreads of triangular bullets.",
     "health": "15.8",
     "icon": "Skullet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skullet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skullet",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires two spreads of triangular bullets — dodge between volleys.",
+      "Low health — quick to kill if focused."
+    ]
   },
   {
     "name": "Skullmet",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, occasionally firing two spreads of triangular bullets.",
+    "description": "Slowly walks towards the player, occasionally firing two spreads of triangular bullets. A tougher variant of the Skullet found on later floors.",
     "health": "21.1",
     "icon": "Skullmet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skullmet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skullmet",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Same as Skullet but higher health — two triangular bullet spreads.",
+      "Tougher variant found on later floors."
+    ]
   },
   {
     "name": "Spent",
@@ -309,7 +502,13 @@
     "description": "Runs towards the player and attempts to deal contact damage. Lunges when close enough to the player with a brief burst of speed.Killing a Spent will cause waves of more Spent to emerge from the ground.",
     "health": "4.2",
     "icon": "Spent.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spent"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spent",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Killing one spawns waves of more — don't ignore them.",
+      "Very low health (4.2) — AoE weapons or rapid fire clear them fast.",
+      "They lunge when close — keep your distance."
+    ]
   },
   {
     "name": "Zombullet",
@@ -317,7 +516,13 @@
     "description": "Spawned by Gummies, always jammed.Sprints towards the player, periodically performing a close-range lunging bite attack (if they are close) or a radial burst of irregular bullets (if they are far).",
     "health": "4.2",
     "icon": "Zombullet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Zombullet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Zombullet",
+    "location": "Summoned by Gummies",
+    "tips": [
+      "Always jammed — deals full heart damage.",
+      "Lunges at close range or fires radial burst at long range — keep mid-distance.",
+      "Only spawned by Gummies — kill the Gummy to stop the spawn."
+    ]
   },
   {
     "name": "Bomb Bot",
@@ -325,7 +530,12 @@
     "description": "Summoned by Fuselier.Waddles towards the player, attempting to deal contact damage.",
     "health": "10",
     "icon": "Bomb_Bot.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bomb_Bot"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bomb_Bot",
+    "location": "Summoned by Fuselier",
+    "tips": [
+      "Summoned by Fuselier — waddles towards you for contact damage.",
+      "Low health (10) — clear them quickly during the Fuselier fight."
+    ]
   },
   {
     "name": "Mouser",
@@ -333,7 +543,13 @@
     "description": "Spawns in huge groups.Sprints towards the player, attempting to deal contact damage. Moves slower the closer it comes to the player.",
     "health": "1",
     "icon": "Mouser.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mouser"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mouser",
+    "location": "Keep of the Lead Lord (Boss Room)",
+    "tips": [
+      "Spawns in huge groups — use AoE or rapid fire.",
+      "Very low health (1) — any hit kills them.",
+      "Slows down as it gets close — easy to pick off at range."
+    ]
   },
   {
     "name": "Creech",
@@ -341,7 +557,12 @@
     "description": "Walks towards the player, periodically releasing very fast bouncing bullets in all directions.",
     "health": "20",
     "icon": "Creech.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Creech"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Creech",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Releases very fast bouncing bullets — hard to dodge in enclosed spaces.",
+      "Bounces off walls — stay in the open to track them."
+    ]
   },
   {
     "name": "Hollowpoint",
@@ -349,7 +570,12 @@
     "description": "Floats towards the player, rapidly firing bullets. Periodically disappears and reappears elsewhere in the room.",
     "health": "25",
     "icon": "Hollowpoint.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Hollowpoint"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Hollowpoint",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine, Hollow",
+    "tips": [
+      "Teleports around the room — track its reappearance.",
+      "Fires rapidly after teleporting — be ready to dodge."
+    ]
   },
   {
     "name": "Bombshee",
@@ -357,7 +583,13 @@
     "description": "Follows other enemies around, frequently emitting a short-ranged shriek that destroys the player's bullets. If all the other enemies die, the Bombshee will launch itself at the player, exploding on contact.",
     "health": "45",
     "icon": "Bombshee.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bombshee"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bombshee",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine, Hollow",
+    "tips": [
+      "Destroys your bullets with its shriek — shoot between shrieks.",
+      "Kamikazes when alone — kill other enemies first or last, your choice.",
+      "The shriek is short-ranged — snipe from afar."
+    ]
   },
   {
     "name": "High Priest Candle Man",
@@ -365,15 +597,26 @@
     "description": "Summoned by the High Priest in Challenge Mode.Sits motionless, and does not deal contact damage. Dies immediately upon touching the player.When killed, bursts into a pool of infinitely burning napalm goop that lasts until the High Priest is defeated.",
     "health": "1",
     "icon": "High_Priest_Candle_Man.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest_Candle_Man"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest_Candle_Man",
+    "location": "Forge (High Priest fight, Challenge Mode)",
+    "tips": [
+      "Dies on contact with the player — don't touch it.",
+      "Creates permanent napalm goop on death — avoid the pool.",
+      "Only in Challenge Mode High Priest fight — plan your movement."
+    ]
   },
   {
     "name": "Candle Guy",
     "category": "Enemy",
-    "description": "Slowly walks towards the player, firing bullets.",
+    "description": "Slowly walks towards the player, firing bullets. A candle-themed variant of the Bullet Kin found on early floors.",
     "health": "15",
     "icon": "Candle_Guy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Candle_Guy"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Candle_Guy",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Standard bullet kin variant — fires basic bullets.",
+      "Low threat — appears on early floors."
+    ]
   },
   {
     "name": "Cactus",
@@ -381,7 +624,12 @@
     "description": "Walks towards the player, releasing rings of spiky bullets around its body.",
     "health": "30",
     "icon": "Cactus_Enemy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cactus_(Enemy)"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cactus_(Enemy)",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Releases rings of spiky bullets — find gaps and dodge through.",
+      "Walks towards you — keep distance to give yourself time."
+    ]
   },
   {
     "name": "Rubber Kin",
@@ -389,7 +637,13 @@
     "description": "Attempts to launch itself towards the player, knocking the player back upon contact. Cannot deal direct damage to players, but does predict players’ movements.",
     "health": "13",
     "icon": "Rubber_Kin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Rubber_Kin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Rubber_Kin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Cannot deal direct damage — only knockback.",
+      "Predicts your movement — can knock you into other dangers.",
+      "Don't let it push you into pits or other enemies."
+    ]
   },
   {
     "name": "Tazie",
@@ -397,15 +651,25 @@
     "description": "Launches itself towards the predicted location of the player, dealing damage upon contact.",
     "health": "12",
     "icon": "Tazie.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tazie"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tazie",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Launches itself at your predicted position — dodge roll perpendicular.",
+      "Low health (12) — kill before it reaches you."
+    ]
   },
   {
     "name": "Musket Ball Guy",
     "category": "Enemy",
-    "description": "Launches itself towards the predicted location of the player, dealing damage upon contact.",
+    "description": "Launches itself towards the predicted location of the player, dealing damage upon contact. Similar to the Tazie but with a different appearance.",
     "health": "12",
     "icon": "Musket_Ball_Guy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Musket_Ball_Guy"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Musket_Ball_Guy",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Launches itself at your predicted position — dodge roll perpendicular.",
+      "Low health (12) — similar to Tazie but with a different appearance."
+    ]
   },
   {
     "name": "King Bullat",
@@ -413,15 +677,25 @@
     "description": "Periodically fires bouncing bullets in all directions. Spawns 3-4 Bullats and Shotgats upon death.",
     "health": "26",
     "icon": "King_Bullat.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/King_Bullat"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/King_Bullat",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires bouncing bullets in all directions — the bounces are unpredictable.",
+      "Spawns 3-4 Bullats and Shotgats on death — clear the spawns."
+    ]
   },
   {
     "name": "Bullat Gargoyle",
     "category": "Enemy",
-    "description": "Frequently fires bullets in all directions in a diamond shape.",
+    "description": "Frequently fires bullets in all directions in a diamond shape. A gargoyle-themed variant that fires in a diamond pattern with higher health.",
     "health": "45",
     "icon": "Bullat_Gargoyle.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullat_Gargoyle"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullat_Gargoyle",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires diamond-shaped bullet patterns — stand in the gaps.",
+      "High health (45) — use stronger weapons."
+    ]
   },
   {
     "name": "Pinhead",
@@ -429,7 +703,12 @@
     "description": "Walks towards the player and explodes upon death. If the player gets too close, it will leap towards the player and explode.",
     "health": "13",
     "icon": "Pinhead.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pinhead"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Pinhead",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Explodes on death or when close — kill from range.",
+      "Leaps at you when nearby — dodge roll away from the leap."
+    ]
   },
   {
     "name": "Nitra",
@@ -437,7 +716,12 @@
     "description": "Walks towards the player and creates a line of explosions upon death, away from the player. If the player gets too close, it will detonate itself and the line of explosions will try to aim towards the player.",
     "health": "10",
     "icon": "Nitra.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Nitra"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Nitra",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Creates a line of explosions on death — don't stand in its line.",
+      "Detonates early if you get close — keep your distance."
+    ]
   },
   {
     "name": "Claymore",
@@ -445,7 +729,13 @@
     "description": "Summoned by the Mine Flayer.Walks clockwise or counterclockwise around the Mine Flayer's boss room, exploding if the player comes too close.Invulnerable to most forms of attack.",
     "health": "15",
     "icon": "Claymore.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Claymore"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Claymore",
+    "location": "Black Powder Mine (Mine Flayer fight)",
+    "tips": [
+      "Invulnerable to most attacks — just avoid it.",
+      "Walks around the Mine Flayer's room — stay out of its path.",
+      "Explodes on contact — maintain distance."
+    ]
   },
   {
     "name": "m80 Guy",
@@ -453,7 +743,13 @@
     "description": "Walks towards the player and creates a long line of explosions upon death, away from the player. If the player gets too close, it will detonate itself and the line of explosions will try to aim towards the player.",
     "health": "10",
     "icon": "M80_Guy.png",
-    "wiki_url": ""
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/M80_Guy",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Creates a long line of explosions on death — do not stand in its path.",
+      "Detonates early if you get close — keep your distance.",
+      "Same mechanic as Nitra but with a longer explosion line."
+    ]
   },
   {
     "name": "Mine Flayer Bell",
@@ -461,7 +757,12 @@
     "description": "Summoned by the Mine Flayer. Wanders around the room aimlessly.Releases a ring of bullets on death.",
     "health": "15",
     "icon": "Mine_Flayer_Bell.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer_Bell"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer_Bell",
+    "location": "Black Powder Mine (Mine Flayer fight)",
+    "tips": [
+      "Wanders aimlessly — low threat but don't ignore it.",
+      "Releases a bullet ring on death — finish it from range."
+    ]
   },
   {
     "name": "Arrowkin",
@@ -469,7 +770,12 @@
     "description": "Walks towards the player then stops at a distance. Charges and fires arrows towards the player.",
     "health": "15",
     "icon": "Arrowkin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Arrowkin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Arrowkin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Stops at a distance and fires arrows — close the gap to dodge.",
+      "Arrows are charged — dodge roll when you see the release."
+    ]
   },
   {
     "name": "Blobulin",
@@ -477,7 +783,12 @@
     "description": "Quickly moves towards the player and attempts to deal contact damage.",
     "health": "1",
     "icon": "Blobulin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fast-moving contact damage enemy — very low health (1).",
+      "Any hit kills it — use rapid fire or AoE to clear groups."
+    ]
   },
   {
     "name": "Blobuloid",
@@ -485,7 +796,12 @@
     "description": "Moves towards the player and attempts to deal contact damage. Splits into two Blobulins upon death.",
     "health": "10",
     "icon": "Blobuloid.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobuloid"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobuloid",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Splits into 2 Blobulins on death — clear the splits.",
+      "Chain: Blobuloid -> 2 Blobulins. Plan your ammo accordingly."
+    ]
   },
   {
     "name": "Blobulon",
@@ -493,7 +809,12 @@
     "description": "Moves towards the player and attempts to deal contact damage. Splits into two Blobuloids upon death.",
     "health": "20",
     "icon": "Blobulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulon",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Splits into 2 Blobuloids on death — clear the splits too.",
+      "Chain: Blobulon → 2 Blobuloids → 4 Blobulins. Plan your ammo."
+    ]
   },
   {
     "name": "Blobulord Death Crawler",
@@ -501,7 +822,13 @@
     "description": "Left behind by the Blobulord upon his defeat.Crawls slowly towards the player. Cannot deal contact damage unless it is jammed.",
     "health": "15",
     "icon": "Blobulord_Death_Crawler.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord",
+    "location": "Oubliette (after Blobulord defeat)",
+    "tips": [
+      "Left behind after defeating the Blobulord — crawls towards you.",
+      "Cannot deal contact damage unless jammed — low threat.",
+      "Only appears in the Oubliette after the Blobulord fight."
+    ]
   },
   {
     "name": "Poisbulin",
@@ -509,7 +836,12 @@
     "description": "Quickly moves towards the player, leaving a trail of poison creep.",
     "health": "1",
     "icon": "Poisbulin.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbulin"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbulin",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fast-moving — leaves poison creep trail.",
+      "Very low health (1) — any hit kills it."
+    ]
   },
   {
     "name": "Poisbuloid",
@@ -517,7 +849,12 @@
     "description": "Moves towards the player, leaving a trail of poison creep. Splits into two Poisbulins upon death.",
     "health": "10.8",
     "icon": "Poisbuloid.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbuloid"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbuloid",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Splits into 2 Poisbulins on death — clear the splits.",
+      "Leaves poison creep — avoid the trail."
+    ]
   },
   {
     "name": "Poisbulon",
@@ -525,7 +862,12 @@
     "description": "Moves towards the player, leaving a trail of poison creep. Turns into one Poisbuloid upon death.",
     "health": "19.2",
     "icon": "Poisbulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poisbulon",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Turns into 1 Poisbuloid on death — less splitting than Blobulon.",
+      "Leaves poison creep — avoid the trail."
+    ]
   },
   {
     "name": "Blizzbulon",
@@ -533,7 +875,12 @@
     "description": "Fires triangular bullets in all directions, followed by 2 spreads of 3 triangular bullets towards the player.",
     "health": "21.1",
     "icon": "Blizzbulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blizzbulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blizzbulon",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Fires triangular bullets in all directions then 2 spreads of 3 at you.",
+      "Dodge the radial burst first, then the aimed spreads."
+    ]
   },
   {
     "name": "Leadbulon",
@@ -541,7 +888,13 @@
     "description": "Moves towards the player and attempts to deal contact damage. Becomes enraged after taking enough damage, moving faster and leaving a trail of fire. Once enraged, will slowly shrink and lose health.",
     "health": "22.7",
     "icon": "Leadbulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Leadbulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Leadbulon",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Enrages after taking damage — moves faster and leaves fire.",
+      "Once enraged, it slowly shrinks and loses health — just survive.",
+      "Don't get close when it's enraged — fire trail damage."
+    ]
   },
   {
     "name": "Poopulon",
@@ -549,7 +902,12 @@
     "description": "Occasionally spins, releasing a large amount of spiraling bullets in all directions.",
     "health": "20",
     "icon": "Poopulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poopulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Poopulon",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Spins and releases spiraling bullets in all directions — find gaps.",
+      "The spiral rotates — keep moving to stay in the gaps."
+    ]
   },
   {
     "name": "Bloodbulon",
@@ -557,7 +915,12 @@
     "description": "Moves towards the player and attempts to deal contact damage. Becomes larger and slower as it takes damage. Releases many bullets in all directions upon death.",
     "health": "30",
     "icon": "Bloodbulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bloodbulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bloodbulon",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Gets larger and slower as it takes damage — easier to dodge over time.",
+      "Large death burst — maintain distance when finishing."
+    ]
   },
   {
     "name": "Skusket",
@@ -565,7 +928,12 @@
     "description": "Has two lines of bullets orbiting it. Slowly floats towards the player, firing skulls that home in on the player and split into 6 bullets upon being destroyed.",
     "health": "13",
     "icon": "Skusket.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skusket"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Skusket",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Orbiting bullet lines — don't get caught between them.",
+      "Homing skulls split into 6 bullets when destroyed — shoot them early."
+    ]
   },
   {
     "name": "Bookllet",
@@ -573,7 +941,12 @@
     "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes.",
     "health": "25",
     "icon": "Bookllet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bookllet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bookllet",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires letter-shaped bullet patterns (R, N, Φ) — learn the shapes.",
+      "The patterns are predictable — find the safe spots in each shape."
+    ]
   },
   {
     "name": "Blue Bookllet",
@@ -581,7 +954,12 @@
     "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes or rings of bullets that pulse back and forth.",
     "health": "25",
     "icon": "Blue_Bookllet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blue_Bookllet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blue_Bookllet",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Fires R, N, Φ patterns plus pulsing rings — the rings expand and contract.",
+      "Time your dodge for when the ring is at its thinnest."
+    ]
   },
   {
     "name": "Green Bookllet",
@@ -589,15 +967,25 @@
     "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes or a large clover shape.",
     "health": "25",
     "icon": "Green_Bookllet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Green_Bookllet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Green_Bookllet",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Fires R, N, Φ patterns plus a large clover shape — the clover has gaps.",
+      "Find the gaps in the clover and position there."
+    ]
   },
   {
     "name": "Angry Tablet",
     "category": "Enemy",
-    "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes.",
+    "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Phi shapes. A tablet-shaped variant of the Bookllet.",
     "health": "25",
     "icon": "Angry_Tablet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Angry_Tablet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Angry_Tablet",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires R, N, Φ patterns — same as Bookllet but different appearance.",
+      "Moderate threat — learn the safe spots in each pattern."
+    ]
   },
   {
     "name": "Angry Necronomicon",
@@ -605,7 +993,13 @@
     "description": "Occasionally fires bullets towards the player in various patterns, such as R, N, and Φ shapes, rotating squares, circles, triangles, or Xs that predict the player's movements, or loose spreads of bullets in the players direction.",
     "health": "35",
     "icon": "Angry_Necronomicon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Angry_Necronomicon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Angry_Necronomicon",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Most complex Bookllet variant — multiple pattern types.",
+      "Includes predictive patterns — don't rely on static dodging.",
+      "High health (35) — use strong weapons."
+    ]
   },
   {
     "name": "Gigi",
@@ -613,15 +1007,25 @@
     "description": "Flies towards the player, periodically spitting an egg that releases a swarm of squirming bullets towards the player.",
     "health": "12",
     "icon": "Gigi.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gigi"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gigi",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Spits eggs that release swarming bullets — shoot the eggs before they hatch.",
+      "Flies towards you — keep distance and focus fire."
+    ]
   },
   {
     "name": "Parrot",
     "category": "Enemy",
-    "description": "Flies towards the player, periodically spitting an egg that releases a swarm of squirming bullets towards the player.",
+    "description": "Flies towards the player, periodically spitting an egg that releases a swarm of squirming bullets towards the player. A tougher variant of the Gigi that appears on later floors.",
     "health": "12",
     "icon": "Parrot.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Parrot"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Parrot",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Same as Gigi but appears on later floors — spits swarming bullet eggs.",
+      "Shoot the eggs before they release the swarm."
+    ]
   },
   {
     "name": "Muzzle Wisp",
@@ -629,7 +1033,13 @@
     "description": "Dashes three times in random directions, then releases a ring of flaming bullets. Leaves behind a patch of fire upon death. Sets the player on fire upon contact.",
     "health": "19",
     "icon": "Muzzle_Wisp.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Muzzle_Wisp"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Muzzle_Wisp",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Dashes 3 times then releases a ring of flaming bullets — dodge the ring.",
+      "Sets you on fire on contact — avoid touching it.",
+      "Leaves fire on death — don't stand on its death spot."
+    ]
   },
   {
     "name": "Muzzle Flare",
@@ -637,15 +1047,25 @@
     "description": "Dashes three times in random directions, firing three bullets towards the player with each dash, then releases a ring of flaming bullets. Leaves behind a patch of fire upon death. Sets the player on fire upon contact.",
     "health": "15.9",
     "icon": "Muzzle_Flare.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Muzzle_Flare"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Muzzle_Flare",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Fires 3 bullets with each dash — more aggressive than Muzzle Wisp.",
+      "Sets you on fire on contact — avoid touching it."
+    ]
   },
   {
     "name": "Cubulon",
     "category": "Enemy",
-    "description": "Frequently fires bullets in all directions in a diamond shape.",
+    "description": "Frequently fires bullets in all directions in a diamond shape. A cube-shaped enemy that appears on mid-tier floors.",
     "health": "30",
     "icon": "Cubulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cubulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cubulon",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires diamond-shaped bullet patterns — stand in the gaps.",
+      "The diamond rotates — adjust your position as it turns."
+    ]
   },
   {
     "name": "Chancebulon",
@@ -653,7 +1073,13 @@
     "description": "Fires random attacks from other Blobulon enemies, along with groups of bullets that look like dice. Has a chance to fire multiple attacks at the same time, and has a chance to die instead of attacking.",
     "health": "50",
     "icon": "Chancebulon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancebulon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chancebulon",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires random attacks from other Blobulon enemies — unpredictable.",
+      "Has a chance to die instead of attacking — sometimes gets itself killed.",
+      "High health (50) — be patient and react to each random attack."
+    ]
   },
   {
     "name": "Cubulead",
@@ -661,7 +1087,12 @@
     "description": "Fires bullets in all directions in a diamond shape, then pulls its bullets back towards itself.",
     "health": "18.2",
     "icon": "Cubulead.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cubulead"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cubulead",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Fires diamond patterns then pulls bullets back — don't stand where they return.",
+      "The recall phase is the dangerous part — keep moving after the initial fire."
+    ]
   },
   {
     "name": "Apprentice Gunjurer",
@@ -669,7 +1100,12 @@
     "description": "Fires bullets in a variety of rotating shapes, such as a square, circle, triangle, or X that predict the player's movements. Occasionally disappears and reappears elsewhere in the room.Predictive aim is only applied if the player is more than 4.5 tiles away from the Apprentice Gunjurer, Otherwise, no shot leading is used.[1]",
     "health": "18.8",
     "icon": "Apprentice_Gunjurer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Apprentice_Gunjurer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Apprentice_Gunjurer",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires rotating shapes (square, circle, triangle, X) that predict movement.",
+      "Predictive aim only applies beyond 4.5 tiles — get close to avoid leading."
+    ]
   },
   {
     "name": "Gunjurer",
@@ -677,7 +1113,12 @@
     "description": "Summons 6 bullets, during which time any bullets fired at it will be absorbed. The 6 bullets along with any absorbed bullets are then fired at the player. Occasionally disappears and reappears elsewhere in the room.",
     "health": "15.8",
     "icon": "Gunjurer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunjurer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunjurer",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Absorbs your bullets during its summoning phase — don't waste ammo then.",
+      "Fires absorbed bullets back at you — the more you shot, the more return."
+    ]
   },
   {
     "name": "High Gunjurer",
@@ -685,7 +1126,12 @@
     "description": "Fires large rings of bullets at the player. Occasionally disappears and reappears elsewhere in the room.",
     "health": "24",
     "icon": "High_Gunjurer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Gunjurer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Gunjurer",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Fires large bullet rings — find gaps and dodge through.",
+      "Teleports away — track its position after each teleport."
+    ]
   },
   {
     "name": "Lore Gunjurer",
@@ -693,7 +1139,13 @@
     "description": "Summons one of 4 bullet familiars, each with distinct behaviors.\nWarrior: The bullet will home in on the player until it vanishes.\nRogue: The bullet will home in on the player and then teleport behind them in an attempt to catch them off-guard.\nMage: The bullet follows the player closely and will shoot smaller bullets at them.\nBard: The bullet will home in on the player, bouncing off of walls until it vanishes.",
     "health": "30",
     "icon": "Lore_Gunjurer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lore_Gunjurer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lore_Gunjurer",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Summons 4 types of bullet familiars — each has different behavior.",
+      "Warrior homes directly; Rogue teleports behind you; Mage shoots; Bard bounces.",
+      "Kill the familiars or the Gunjurer to stop the summons."
+    ]
   },
   {
     "name": "Gunsinger",
@@ -701,7 +1153,12 @@
     "description": "Buffs an enemy in the room, increasing their health and speed. They will cancel their spell and run away if the player is too close or they take damage.",
     "health": "15",
     "icon": "Gunsinger.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunsinger"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunsinger",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Buffs a single enemy — kill the Gunsinger to cancel the buff.",
+      "Runs away when approached or damaged — chase it down quickly."
+    ]
   },
   {
     "name": "Aged Gunsinger",
@@ -709,7 +1166,12 @@
     "description": "Buffs all enemies in the room, increasing their health and speed. They will cancel their spell and run away if the player is too close or they take damage.",
     "health": "17.5",
     "icon": "Aged_Gunsinger.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Aged_Gunsinger"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Aged_Gunsinger",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Buffs ALL enemies in the room — highest priority target.",
+      "Cancel the spell by dealing damage or getting close."
+    ]
   },
   {
     "name": "Ammomancer",
@@ -717,7 +1179,12 @@
     "description": "Attempts to summon Shelletons. They will cancel their summoning ritual and run away if the player is too close or they take damage. If the Ammonancer is killed while their Shelleton is still alive, then the Shelleton will collapse.",
     "health": "20",
     "icon": "Ammomancer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammomancer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammomancer",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Summons Shelletons — kill the Ammomancer to collapse active Shelletons.",
+      "Interrupt the summoning by getting close or dealing damage."
+    ]
   },
   {
     "name": "Jammomancer",
@@ -725,7 +1192,12 @@
     "description": "Jams an enemy in the room, increasing their health, speed, and damage. They will cancel their spell and run away if the player gets too close or they take damage.",
     "health": "15",
     "icon": "Jammomancer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Jammomancer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Jammomancer",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Jams a single enemy — jammed enemies deal full heart damage.",
+      "Kill the Jammomancer to stop the jamming — it runs when approached."
+    ]
   },
   {
     "name": "Jamerlengo",
@@ -733,7 +1205,12 @@
     "description": "Jams all enemies in the room, increasing their health, speed, and damage. They will cancel their spell and run away if the player gets too close or they take damage.",
     "health": "15",
     "icon": "Jamerlengo.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Jamerlengo"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Jamerlengo",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Jams ALL enemies in the room — kill it immediately.",
+      "Runs away when approached — corner it or use rapid-fire weapons."
+    ]
   },
   {
     "name": "Wizbang",
@@ -741,7 +1218,12 @@
     "description": "Teleports around the room, occasionally creating a projection of itself near the player that explodes into bullets in all directions.",
     "health": "25",
     "icon": "Wizbang.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Wizbang"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Wizbang",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Creates exploding projections near you — keep moving.",
+      "Teleports around — track its position to avoid projections."
+    ]
   },
   {
     "name": "Mimic",
@@ -749,7 +1231,13 @@
     "description": "Rapidly fires bullets towards the player with different patterns depending on the quality of the chest. Drops items and/or pickups upon death. When the player attempts to open a Mimic or shoot it for the first time, it will shoot a jammed shot at the player that explodes into six bullets on contact with a wall or after traveling a certain distance.",
     "health": "Varies",
     "icon": "Mimic.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mimic"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mimic",
+    "location": "Any floor (disguised as chests)",
+    "tips": [
+      "Quality of the chest determines its health and bullet patterns.",
+      "First shot triggers a jammed bullet — dodge immediately.",
+      "Shoot chests from a distance to reveal mimics safely."
+    ]
   },
   {
     "name": "Gun Fairy",
@@ -757,7 +1245,13 @@
     "description": "Wanders around the room, rapidly firing bullets towards the player. Occasionally spawned by breaking pots.",
     "health": "15",
     "icon": "Gun_Fairy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Fairy"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Fairy",
+    "location": "All floors (from breaking pots)",
+    "tips": [
+      "Spawns from breaking pots — be cautious around decorative pots.",
+      "Fires rapidly — low health, kill quickly.",
+      "Can be captured with the Bottle for later healing."
+    ]
   },
   {
     "name": "Bullat",
@@ -765,7 +1259,12 @@
     "description": "Launches itself at the player, dying in the process.",
     "health": "1",
     "icon": "Bullat.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullat"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullat",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Launches itself at you and dies — dodge roll perpendicular.",
+      "Very low health (1) — dies on contact with anything."
+    ]
   },
   {
     "name": "Shotgat",
@@ -773,7 +1272,12 @@
     "description": "Launches two projectiles in a V shape at the player, dying in the process.",
     "health": "2",
     "icon": "Shotgat.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shotgat"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shotgat",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Launches a V-shaped projectile pair then dies — dodge the V.",
+      "Very low health (2) — minimal threat individually."
+    ]
   },
   {
     "name": "Grenat",
@@ -781,7 +1285,12 @@
     "description": "Launches an exploding projectile at the player, dying in the process.",
     "health": "3",
     "icon": "Grenat.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Grenat"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Grenat",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Launches an exploding projectile then dies — dodge the projectile.",
+      "The explosion is the only threat — avoid the impact zone."
+    ]
   },
   {
     "name": "Spirat",
@@ -789,7 +1298,12 @@
     "description": "Launches itself at the player, dying in the process. Predicts the player's movements, and can reposition itself several times before hitting walls.",
     "health": "5",
     "icon": "Spirat.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spirat"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spirat",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Predicts your movement and repositions — don't dodge in a straight line.",
+      "Launches itself at you — dodge roll perpendicular to its charge."
+    ]
   },
   {
     "name": "Coaler",
@@ -797,7 +1311,12 @@
     "description": "Occasionally fires bullets at the player. Catches on fire upon taking damage, running around erratically and sending flaming bullets out in random directions.",
     "health": "19.2",
     "icon": "Coaler.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Coaler"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Coaler",
+    "location": "Black Powder Mine",
+    "tips": [
+      "Catches fire when damaged — runs erratically and fires flaming bullets.",
+      "Kill it quickly before it sets the room on fire."
+    ]
   },
   {
     "name": "Gat",
@@ -805,7 +1324,12 @@
     "description": "Bounces around the room and deflects bullets. Occasionally opens up to fire three spreads of four bullets towards the player.",
     "health": "12",
     "icon": "Gat.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gat"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gat",
+    "location": "Black Powder Mine",
+    "tips": [
+      "Deflects bullets when closed — only shoot when it opens.",
+      "Bounces around the room — track its movement to avoid contact."
+    ]
   },
   {
     "name": "Det",
@@ -813,7 +1337,12 @@
     "description": "Periodically fires four lasers in a + or × formation. Explodes upon death.",
     "health": "18",
     "icon": "Det.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Det"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Det",
+    "location": "Black Powder Mine",
+    "tips": [
+      "Fires 4 lasers in + or × formation — stand in the gaps.",
+      "Explodes on death — maintain distance when finishing it."
+    ]
   },
   {
     "name": "Gunzookie",
@@ -821,7 +1350,12 @@
     "description": "Periodically spits up bubbles that, upon popping, fire a bullet that predicts the player's movements.",
     "health": "15",
     "icon": "Gunzookie.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunzookie"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunzookie",
+    "location": "Black Powder Mine",
+    "tips": [
+      "Bubbles predict your movement — don't walk into the bubble pop zone.",
+      "Pop the bubbles before they fire — shoot them from range."
+    ]
   },
   {
     "name": "Gunzockie",
@@ -829,7 +1363,12 @@
     "description": "Periodically spits up four bubbles that, upon popping, fire a bullet that predicts the player's movements.",
     "health": "15",
     "icon": "Gunzockie.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunzockie"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunzockie",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Spits 4 bubbles at once — more coverage than Gunzookie.",
+      "Pop bubbles quickly — they fire predicting bullets."
+    ]
   },
   {
     "name": "Bullet Shark",
@@ -837,7 +1376,12 @@
     "description": "Charges towards the player, releasing bullets to the sides of itself.",
     "health": "15",
     "icon": "Bullet_Shark.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Shark"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Shark",
+    "location": "Black Powder Mine, Hollow",
+    "tips": [
+      "Charges and releases bullets to its sides — dodge the charge and the side fire.",
+      "Moderate threat — appears in Black Powder Mine and Hollow."
+    ]
   },
   {
     "name": "Great Bullet Shark",
@@ -845,7 +1389,12 @@
     "description": "Charges towards the player, releasing many bullets to the sides of itself.",
     "health": "18.2",
     "icon": "Great_Bullet_Shark.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Great_Bullet_Shark"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Great_Bullet_Shark",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Charges and releases many bullets to the sides — avoid its flanks.",
+      "Tougher than Bullet Shark — appears on later floors."
+    ]
   },
   {
     "name": "Tombstoner",
@@ -853,15 +1402,25 @@
     "description": "Walks towards the player, firing bullets in a cross formation.",
     "health": "20",
     "icon": "Tombstoner.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tombstoner"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tombstoner",
+    "location": "Black Powder Mine, Hollow, Forge, Bullet Hell",
+    "tips": [
+      "Fires bullets in a cross formation — stand diagonal to it.",
+      "The cross has 4 lines — dodge roll through one line."
+    ]
   },
   {
     "name": "KBullet",
     "category": "Enemy",
-    "description": "Walks towards the player, firing bullets in a cross formation.",
+    "description": "Walks towards the player, firing bullets in a cross formation. A Bullet Hell variant of the Tombstoner, found only in the deepest chamber.",
     "health": "20",
     "icon": "KBullet.png",
-    "wiki_url": ""
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/KBullet",
+    "location": "Bullet Hell",
+    "tips": [
+      "Fires bullets in a cross formation — same as Tombstoner.",
+      "Found only in Bullet Hell — tougher variant."
+    ]
   },
   {
     "name": "Kalibullet",
@@ -869,7 +1428,12 @@
     "description": "Slowly walks towards the player, occasionally firing two spreads of bullets.",
     "health": "20",
     "icon": "Kalibullet.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kalibullet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kalibullet",
+    "location": "Bullet Hell",
+    "tips": [
+      "Fires two spreads of bullets — dodge between the volleys.",
+      "Found in Bullet Hell — related to Kaliber lore."
+    ]
   },
   {
     "name": "Gun Cultist",
@@ -877,7 +1441,12 @@
     "description": "Erratically moves around the room and wildly shoots at the player. Has the ability to dodge roll.",
     "health": "22.7",
     "icon": "Gun_Cultist.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Cultist"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Cultist",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Can dodge roll — time your shots for after their dodge.",
+      "Erratic movement and wild shooting — unpredictable, keep distance."
+    ]
   },
   {
     "name": "Beadie",
@@ -885,7 +1454,12 @@
     "description": "Fires bullets towards the player and explodes upon death.",
     "health": "20",
     "icon": "Beadie.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Beadie"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Beadie",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires bullets and explodes on death — finish from range.",
+      "The death explosion can catch you off guard — maintain distance."
+    ]
   },
   {
     "name": "Snake Guy",
@@ -893,7 +1467,12 @@
     "description": "Slowly walks towards the player, occasionally firing a V-shaped spread of 5 fast-moving bullets and predicting the player's movements.",
     "health": "30",
     "icon": "Snake_Enemy.png",
-    "wiki_url": ""
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Snake_Guy",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires V-shaped spreads with predictive aim — dodge perpendicular.",
+      "Fast-moving bullets — react quickly to the spread."
+    ]
   },
   {
     "name": "Ammoconda Ball",
@@ -901,7 +1480,13 @@
     "description": "Summoned by the Ammoconda.Sits stationary, occasionally firing a single bullet towards the player.The Ammoconda can eat the ball, killing it and buffing itself.",
     "health": "75",
     "icon": "Ammoconda_Ball.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda_Ball"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda_Ball",
+    "location": "Keep of the Lead Lord (Ammoconda fight)",
+    "tips": [
+      "Stationary — fires single bullets periodically.",
+      "The Ammoconda eats it to buff itself — kill the balls to prevent buffs.",
+      "High health (75) — not worth the ammo to kill, focus the Ammoconda instead."
+    ]
   },
   {
     "name": "Cylinder",
@@ -909,15 +1494,25 @@
     "description": "Drifts towards the player, firing semi-random spreads of triangle shaped bullets.",
     "health": "15",
     "icon": "Cylinder_Enemy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cylinder"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cylinder",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Drifts towards you firing triangle spreads — semi-random patterns.",
+      "The spreads are unpredictable — keep mobile."
+    ]
   },
   {
     "name": "Red Cylinder",
     "category": "Enemy",
-    "description": "Drifts towards the player, firing semi-random spreads of triangle shaped bullets.",
+    "description": "Drifts towards the player, firing semi-random spreads of triangle shaped bullets. A tougher variant of the Cylinder that appears on later floors.",
     "health": "15",
     "icon": "Red_Cylinder_Enemy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Cylinder"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Red_Cylinder",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Same as Cylinder but appears on later floors — semi-random triangle spreads.",
+      "Tougher variant — found in Black Powder Mine and beyond."
+    ]
   },
   {
     "name": "Gun Nut",
@@ -925,7 +1520,13 @@
     "description": "Periodically strikes the ground with its sword, releasing a wide 90 degree arc of bullets towards the player. Can only aim in the eight compass directions.",
     "health": "100",
     "icon": "Gun_Nut.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Nut"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gun_Nut",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Sword arc covers 90 degrees — dodge roll through the gap.",
+      "Can only aim in 8 compass directions — stay diagonal to it.",
+      "High health (100) — use high-DPS weapons."
+    ]
   },
   {
     "name": "Spectral Gun Nut",
@@ -933,7 +1534,12 @@
     "description": "Periodically fires a wide 90 degree arc of bullets towards the player, along with a larger jammed bullet that explodes into bullets in all directions upon impact.",
     "health": "54",
     "icon": "Spectral_Gun_Nut.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spectral_Gun_Nut"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spectral_Gun_Nut",
+    "location": "Black Powder Mine, Hollow, Forge, Bullet Hell",
+    "tips": [
+      "Fires a jammed bullet that explodes on impact — dodge the explosion zone.",
+      "The jammed bullet deals full heart damage — prioritize dodging it."
+    ]
   },
   {
     "name": "Chain Gunner",
@@ -941,7 +1547,12 @@
     "description": "Slowly walks towards the player while swinging a ball and chain made of bullets. If it is the only enemy left in the room, its eyes will glow red and it will launch the ball and chain at the player.",
     "health": "90",
     "icon": "Chain_Gunner.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chain_Gunner"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Chain_Gunner",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Swings a ball-and-chain of bullets — stay outside the swing radius.",
+      "Launches the chain when alone — dodge roll when its eyes glow red."
+    ]
   },
   {
     "name": "Fungun",
@@ -949,7 +1560,12 @@
     "description": "Periodically releases clouds of bullets. Leaves a small pool of poison creep upon death.",
     "health": "15",
     "icon": "Fungun.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fungun"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fungun",
+    "location": "Keep of the Lead Lord, Oubliette, Gungeon Proper",
+    "tips": [
+      "Releases clouds of bullets — find gaps and dodge through.",
+      "Leaves poison creep on death — avoid its death spot."
+    ]
   },
   {
     "name": "Spogre",
@@ -957,7 +1573,13 @@
     "description": "Periodically releases large clouds of bullets. Releases a smaller cloud of bullets upon death.",
     "health": "60",
     "icon": "Spogre.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spogre"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Spogre",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Releases large clouds of bullets — find gaps in the clouds.",
+      "Also releases a smaller cloud on death — don't stand near it when finishing.",
+      "High health (60) — use strong weapons."
+    ]
   },
   {
     "name": "Mountain Cube",
@@ -965,7 +1587,13 @@
     "description": "Slides towards the player if they line up with it horizontally or vertically. Can be killed, causing it to explode and freeze any other enemies inside the blast radius. The explosion cannot damage the player. Dies upon completing the room.",
     "health": "21.1",
     "icon": "Mountain_Cube.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mountain_Cube"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mountain_Cube",
+    "location": "Black Powder Mine",
+    "tips": [
+      "Slides along rows/columns — don't line up with it.",
+      "Can be killed to freeze other enemies in the blast — use it strategically.",
+      "The freeze blast doesn't damage you — safe to trigger."
+    ]
   },
   {
     "name": "Lead Cube",
@@ -973,7 +1601,12 @@
     "description": "Slides towards the player if they line up with it horizontally or vertically. Cannot be killed until the room is completed.",
     "health": "20",
     "icon": "Lead_Cube.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lead_Cube"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lead_Cube",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Invulnerable until the room is completed — just avoid it.",
+      "Slides along rows/columns — stay off its axes."
+    ]
   },
   {
     "name": "Flesh Cube",
@@ -981,7 +1614,13 @@
     "description": "Slides towards the player if they line up with it horizontally or vertically, leaving behind a trail of fire. Releases bullets in all directions upon colliding with an obstacle. Cannot be killed. Dies when the room is completed.",
     "health": "N/A",
     "icon": "Flesh_Cube.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Flesh_Cube"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Flesh_Cube",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Invincible — cannot be killed, only dies when the room is cleared.",
+      "Leaves a trail of fire — avoid its path.",
+      "Releases bullets on wall collisions — don't corner yourself."
+    ]
   },
   {
     "name": "Dead Blow",
@@ -989,7 +1628,13 @@
     "description": "Pounds the ground, leaving a patch of fire and sending fire bullets in all directions. Cannot be killed, and disappears when the room is completed. In some rooms, the Dead Blow will follow the player.",
     "health": "N/A",
     "icon": "Dead_Blow.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dead_Blow"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dead_Blow",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Invincible — only disappears when the room is cleared.",
+      "Pounds the ground creating fire patches and fire bullets — keep moving.",
+      "May follow you in some rooms — stay ahead of it."
+    ]
   },
   {
     "name": "Lead Maiden",
@@ -997,15 +1642,26 @@
     "description": "Hops around, then opens up and fires three rings of triangular bullets that stick to walls, then fire towards the player. Cannot be damaged while closed. Explodes upon death.",
     "health": "60",
     "icon": "Lead_Maiden.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lead_Maiden"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lead_Maiden",
+    "location": "Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Invulnerable while closed — only damage when open.",
+      "Bullets stick to walls then fire at you — keep moving after they stick.",
+      "Explodes on death — don't stand next to it when finishing it."
+    ]
   },
   {
     "name": "Fridge Maiden",
     "category": "Enemy",
-    "description": "Hops around, then opens up and fires three rings of triangular bullets that stick to walls, then fire towards the player. Cannot be damaged while closed. Explodes upon death.",
+    "description": "Hops around, then opens up and fires three rings of triangular bullets that stick to walls, then fire towards the player. Cannot be damaged while closed. Explodes upon death. A tougher variant of the Lead Maiden found on later floors.",
     "health": "60",
     "icon": "Fridge_Maiden.png",
-    "wiki_url": ""
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fridge_Maiden",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Same as Lead Maiden but appears on later floors — invulnerable while closed.",
+      "Explodes on death — maintain distance when finishing."
+    ]
   },
   {
     "name": "Misfire Beast",
@@ -1013,7 +1669,12 @@
     "description": "Camouflages itself and creates projections that attack the player with bullet whips.",
     "health": "48",
     "icon": "Misfire_Beast.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Misfire_Beast"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Misfire_Beast",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Camouflages itself — watch for shimmer or movement.",
+      "Creates projections that attack with bullet whips — track the real one."
+    ]
   },
   {
     "name": "Phaser Spider",
@@ -1021,7 +1682,13 @@
     "description": "Fires large web-shaped sprays of bullets at the player that leave slowing cobwebs on the floor. Frequently burrows into the ground and reappears elsewhere in the room.",
     "health": "60",
     "icon": "Phaser_Spider.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Phaser_Spider"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Phaser_Spider",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Fires web-shaped bullet sprays — avoid the web pattern.",
+      "Leaves slowing cobwebs on the floor — don't walk through them.",
+      "Burrows and reappears — track its emergence point."
+    ]
   },
   {
     "name": "Killithid",
@@ -1029,7 +1696,13 @@
     "description": "Summons portals around the room that fire bullets towards the player. Occasionally splits into three copies of itself, two of which are illusions.",
     "health": "45",
     "icon": "Killithid.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Killithid"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Killithid",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Creates bullet portals — avoid standing in their line of fire.",
+      "Splits into 3 copies (2 illusions) — hit the real one to damage it.",
+      "Illusions disappear when hit — shoot all three to find the real one."
+    ]
   },
   {
     "name": "Gripmaster",
@@ -1037,7 +1710,13 @@
     "description": "Hovers over the player and attempts to grab them. If the player is successfully grabbed, it will shoot the player to a previously cleared room, which will be reset and have all enemies respawned. Automatically dies if all other enemies in the room are killed.",
     "health": "30",
     "icon": "Gripmaster.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gripmaster"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gripmaster",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Grabs you and sends you to a previously cleared room — avoid its shadow.",
+      "Dies automatically when all other enemies are killed — ignore it if possible.",
+      "The grabbed room resets all enemies — avoid getting grabbed at all costs."
+    ]
   },
   {
     "name": "Dragun Knifeguy",
@@ -1045,7 +1724,13 @@
     "description": "Thrown by the High Dragun. Sticks into the wall, periodically firing rapid arcing bursts of bullets away from themselves.Does not actively target the player.",
     "health": "60",
     "icon": "Dragun_Knifeguy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dragun_Knifeguy"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dragun_Knifeguy",
+    "location": "Forge (High Dragun fight)",
+    "tips": [
+      "Sticks into walls and fires arcing bursts away from itself.",
+      "Doesn't target you directly — avoid standing in its firing arc.",
+      "Summoned by the High Dragun — ignore unless in your path."
+    ]
   },
   {
     "name": "Advanced Dragun Knifeguy",
@@ -1053,7 +1738,12 @@
     "description": "Thrown by the Advanced Dragun. Sticks into the wall, periodically firing a loose spread of extremely rapid kunai towards the player, telegraphed by red trajectory lines.",
     "health": "60",
     "icon": "Advanced_Dragun_Knifeguy.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Advanced_Dragun_Knifeguy"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Advanced_Dragun_Knifeguy",
+    "location": "Forge (Advanced Dragun fight)",
+    "tips": [
+      "Fires kunai towards you with red trajectory lines — dodge the lines.",
+      "Telegraphed by red lines — react to the telegraph, not the kunai."
+    ]
   },
   {
     "name": "Tarnisher",
@@ -1061,7 +1751,13 @@
     "description": "Sinks into the floor and chases the player.  If it successfully catches the player, it will deal damage, partially drain the current gun's ammo, and reduce the magazine size of all of the player's guns until they pick up ammo.",
     "health": "30",
     "icon": "Tarnisher.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tarnisher"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tarnisher",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Hides under the floor and chases you — watch for the ground ripple.",
+      "Drains ammo and reduces magazine size — avoid at all costs.",
+      "Deals contact damage plus the ammo drain — very disruptive."
+    ]
   },
   {
     "name": "Shambling Round",
@@ -1069,7 +1765,13 @@
     "description": "Has three stages that it progresses through as it takes damage. In its first stage, it fires rings of bullets in all directions. In its second stage, it rapidly alternates between firing bullets out of its left and right sides. In its third stage, it sprays numerous bullets in all directions. Upon death, it leaves behind a cap that explodes after a short delay.",
     "health": "96",
     "icon": "Shambling_Round.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shambling_Round"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shambling_Round",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Three stages — each more aggressive than the last.",
+      "Stage 1: radial rings. Stage 2: side-alternating fire. Stage 3: omni-directional spray.",
+      "Death cap explodes after a delay — don't stand on it."
+    ]
   },
   {
     "name": "Shelleton",
@@ -1077,7 +1779,13 @@
     "description": "Slowly walks towards the player, frequently firing two wide bursts of bullets at the player. Occasionally fires a laser at the player. Collapses upon death, and will revive if not destroyed after a short period of time.",
     "health": "78",
     "icon": "Shelleton.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shelleton"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shelleton",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine, Hollow, Forge",
+    "tips": [
+      "Revives if not destroyed after death — shoot the corpse.",
+      "Fires wide bursts and a laser — dodge the laser by staying mobile.",
+      "High health (78) — use high-DPS weapons."
+    ]
   },
   {
     "name": "Agonizer",
@@ -1085,7 +1793,12 @@
     "description": "Periodically spews bullets in all directions.",
     "health": "50",
     "icon": "Agonizer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agonizer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agonizer",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Spews bullets in all directions — find gaps and stay mobile.",
+      "Moderate health (50) — manageable with sustained fire."
+    ]
   },
   {
     "name": "Revolvenant",
@@ -1093,7 +1806,13 @@
     "description": "Stretches its arm towards the player, attaching it to a wall. The arm will then release bullets perpendicular to itself. The arms might also form a circle around the player, which follows the movement of the player and will shoot bullets at them.",
     "health": "90",
     "icon": "Revolvenant.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Revolvenant"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Revolvenant",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine, Hollow",
+    "tips": [
+      "Arms attach to walls and fire perpendicular bullets — avoid the arm lines.",
+      "Can form a circle around you — break out before it closes.",
+      "High health (90) — prioritize or use cover."
+    ]
   },
   {
     "name": "Bullet Mech",
@@ -1101,7 +1820,12 @@
     "description": "Lumbers towards the player, periodically pausing to jump twice in a row.On the first jump, it releases a diamond-shaped blast of bullets similar to a Cubulon's attack. On the second jump it releases a circular ring of 12 bullets.",
     "health": "60",
     "icon": "Bullet_Mech.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Mech"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Mech",
+    "location": "Hollow, Forge",
+    "tips": [
+      "Double jump: first releases a diamond blast, second a 12-bullet ring.",
+      "Dodge between the two jumps — the ring is the harder one to avoid."
+    ]
   },
   {
     "name": "Gunreaper",
@@ -1109,7 +1833,13 @@
     "description": "Swings its scythe, sending a homing arc of bullets towards the player. Cannot be killed, and disappears upon completing the room.",
     "health": "N/A",
     "icon": "Gunreaper.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunreaper"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunreaper",
+    "location": "Bullet Hell",
+    "tips": [
+      "Invincible — cannot be killed, only disappears when the room is cleared.",
+      "Sends homing bullet arcs — keep moving and dodge perpendicular.",
+      "Focus on clearing other enemies to make it vanish."
+    ]
   },
   {
     "name": "Lord of the Jammed",
@@ -1117,7 +1847,13 @@
     "description": "Swings its scythe, sending bullets in all directions. Cannot be killed, and follows the player through rooms and across floors.",
     "health": "N/A",
     "icon": "Lord_of_the_Jammed.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lord_of_the_Jammed"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lord_of_the_Jammed",
+    "location": "All floors (at high Curse)",
+    "tips": [
+      "Appears at 10+ Curse — invincible and follows you through rooms and floors.",
+      "Sends bullets in all directions — keep your distance.",
+      "Reduce curse to make it disappear — or kill the High Dragun fast."
+    ]
   },
   {
     "name": "Bullet Kin Titan",
@@ -1125,7 +1861,12 @@
     "description": "Walks slowly towards the player, firing large, slow-moving bullets in spreads of fire.",
     "health": "80",
     "icon": "Bullet_Kin_Titan.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Kin_Titan"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Kin_Titan",
+    "location": "Gungeon Proper, Abbey of the True Gun, Black Powder Mine",
+    "tips": [
+      "Fires large slow-moving bullets — easy to see but hard to dodge in groups.",
+      "High health (80) — use high-DPS weapons."
+    ]
   },
   {
     "name": "Bullet Kin Titan Boss",
@@ -1133,15 +1874,26 @@
     "description": "Walks slowly towards the player, firing large bullets in three-way spreads, in bursts of three.\nWill occasionally fire with predictive aim, taking the player's movement into account.",
     "health": "100",
     "icon": "Bullet_Kin_Titan_Boss.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Kin_Titan_Boss"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Kin_Titan_Boss",
+    "location": "Gungeon Proper (miniboss)",
+    "tips": [
+      "Miniboss (100 HP) — fires 3-way spreads in bursts of 3.",
+      "Occasionally uses predictive aim — don't move in straight lines.",
+      "Large slow bullets — easier to see but harder to dodge in groups."
+    ]
   },
   {
     "name": "Bullet Gal Titan Boss",
     "category": "Enemy",
-    "description": "Walks slowly towards the player, firing large bullets in three-way spreads, in bursts of three.\nWill occasionally fire with predictive aim, taking the player's movement into account.",
+    "description": "Walks slowly towards the player, firing large bullets in three-way spreads, in bursts of three. A female variant of the Bullet Kin Titan Boss with slightly lower health. Will occasionally fire with predictive aim, taking the player movement into account.",
     "health": "80",
     "icon": "Bullet_Gal_Titan_Boss.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Gal_Titan_Boss"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_Gal_Titan_Boss",
+    "location": "Gungeon Proper (miniboss)",
+    "tips": [
+      "Miniboss (80 HP) — same attacks as Bullet Kin Titan Boss.",
+      "Slightly lower health — but still a significant threat."
+    ]
   },
   {
     "name": "Fuselier",
@@ -1149,7 +1901,13 @@
     "description": "A mini-boss that flies around the top of the screen and rains down various attacks.",
     "health": "450",
     "icon": "Fuselier.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fuselier"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Fuselier",
+    "location": "Oubliette (miniboss)",
+    "tips": [
+      "Mini-boss (450 HP) — flies at the top of the screen.",
+      "Rains various attacks — stay mobile and look up.",
+      "Summons Bomb Bots — clear them before they reach you."
+    ]
   },
   {
     "name": "Blockner",
@@ -1157,7 +1915,13 @@
     "description": "A mini-boss that can appear after killing Blockner in Black Powder Mine. Has the same attacks that Blockner has, except he does not start with two Gun Nuts present in the room.",
     "health": "450",
     "icon": "Blockner%27s_Ghost.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner",
+    "location": "Black Powder Mine (miniboss, after Ser Manuel's quest)",
+    "tips": [
+      "Mini-boss (450 HP) — Ser Manuel's rival, found in Black Powder Mine.",
+      "Same attacks as the Blockner boss fight but without Gun Nut bodyguards.",
+      "Appears as a ghost in later runs after the initial quest kill."
+    ]
   },
   {
     "name": "Shadow Magician",
@@ -1165,6 +1929,12 @@
     "description": "Fires bullets in magical spell patterns and twirls across the room.",
     "health": "450",
     "icon": "Shadow_Magician.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shadow_Magician"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Shadow_Magician",
+    "location": "Hollow (miniboss)",
+    "tips": [
+      "Mini-boss (450 HP) — fires magical spell patterns.",
+      "Twirls across the room — track its movement to dodge.",
+      "Found in the Hollow — appears as a random miniboss."
+    ]
   }
 ]
