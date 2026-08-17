@@ -10,6 +10,8 @@ class CodexEntry {
   final String? location;
   final String? game;
   final String? health;
+  final String? ammonomicon;
+  final List<String> tips;
 
   CodexEntry({
     required this.name,
@@ -20,6 +22,8 @@ class CodexEntry {
     this.location,
     this.game,
     this.health,
+    this.ammonomicon,
+    this.tips = const [],
   });
 
   factory CodexEntry.fromJson(Map<String, dynamic> j) {
@@ -32,6 +36,11 @@ class CodexEntry {
       location: j['location'] as String?,
       game: j['game'] as String?,
       health: j['health'] as String?,
+      ammonomicon: j['ammonomicon'] as String?,
+      tips: (j['tips'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
   }
 

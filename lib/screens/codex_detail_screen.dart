@@ -54,7 +54,7 @@ class CodexDetailScreen extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: AppTheme.flair.card,
+                    color: flair.card,
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: flair.primary.withValues(alpha: 0.3),
@@ -151,27 +151,10 @@ class CodexDetailScreen extends StatelessWidget {
 
             // Description
             if (entry.description.isNotEmpty) ...[
-              GoopText(
-                'DESCRIPTION',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.0,
-                  color: flair.secondary.withValues(alpha: 0.8),
-                ),
-              ),
+              _sectionLabel(flair, 'DESCRIPTION'),
               const SizedBox(height: 6),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppTheme.flair.card,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: flair.primary.withValues(alpha: 0.1),
-                    width: 1,
-                  ),
-                ),
+              _infoCard(
+                flair,
                 child: GoopText(
                   entry.description,
                   style: TextStyle(
@@ -179,6 +162,70 @@ class CodexDetailScreen extends StatelessWidget {
                     height: 1.4,
                     color: Colors.white.withValues(alpha: 0.85),
                   ),
+                ),
+              ),
+            ],
+
+            // Ammonomicon (bosses only)
+            if (entry.ammonomicon != null &&
+                entry.ammonomicon!.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              _sectionLabel(flair, 'AMMONOMICON',
+                  icon: Icons.menu_book_rounded),
+              const SizedBox(height: 6),
+              _infoCard(
+                flair,
+                accent: flair.secondary,
+                child: GoopText(
+                  entry.ammonomicon!,
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.4,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white.withValues(alpha: 0.8),
+                  ),
+                ),
+              ),
+            ],
+
+            // Tips
+            if (entry.tips.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              _sectionLabel(flair, 'TIPS', icon: Icons.lightbulb_outline_rounded),
+              const SizedBox(height: 6),
+              _infoCard(
+                flair,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < entry.tips.length; i++) ...[
+                      if (i > 0) const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Icon(
+                              Icons.bolt_rounded,
+                              size: 12,
+                              color: flair.secondary.withValues(alpha: 0.7),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: GoopText(
+                              entry.tips[i],
+                              style: TextStyle(
+                                fontSize: 12,
+                                height: 1.35,
+                                color: Colors.white.withValues(alpha: 0.75),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
                 ),
               ),
             ],
@@ -247,6 +294,50 @@ class CodexDetailScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  // ── Themed section helpers ──────────────────────────────────────
+
+  Widget _sectionLabel(ThemeFlair flair, String text, {IconData? icon}) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (icon != null) ...[
+          Icon(icon, size: 12, color: flair.secondary.withValues(alpha: 0.8)),
+          const SizedBox(width: 5),
+        ],
+        GoopText(
+          text,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.0,
+            color: flair.secondary.withValues(alpha: 0.8),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _infoCard(
+    ThemeFlair flair, {
+    required Widget child,
+    Color? accent,
+  }) {
+    final border = accent ?? flair.primary;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: flair.card,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: border.withValues(alpha: 0.15),
+          width: 1,
+        ),
+      ),
+      child: child,
     );
   }
 }
