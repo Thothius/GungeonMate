@@ -1,36 +1,507 @@
 [
-  {"name": "Bello", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs shops in the Gungeon.", "icon": "shopkeeper.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bello"},
-  {"name": "Ox and Cadence", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Store clerk and owner of the shop in The Breach.", "icon": "ox.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ox_and_Cadence"},
-  {"name": "Drunkard", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Tells stories about the Bosses and the NPCs of The Breach.", "icon": "drunkard.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Drunkard"},
-  {"name": "Tinker", "category": "Major NPC", "game": "Enter the Gungeon", "description": "In charge of operating and fixing the shortcut elevators.", "icon": "sherpa.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tinker"},
-  {"name": "Frifle and the Grey Mauser", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Hand out hunting quests in The Breach. Quests can be completed to unlock new items.", "icon": "frifle.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Frifle_and_the_Grey_Mauser"},
-  {"name": "Bowler", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Allows the player to enter a Rainbow run instead of a normal run.", "icon": "bowler.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bowler"},
-  {"name": "Winchester", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shooting range in the Gungeon. Rewards the player with chests of different rarities based on their performance.", "icon": "npc_winchester.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Winchester"},
-  {"name": "Gunsling King and Manservantes", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Issues room challenges in the Gungeon. Rewards players with items upon completion.", "icon": "gunsling_king.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunsling_King_and_Manservantes"},
-  {"name": "Ser Manuel", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Teaches players how to survive the Gungeon. Occasionally appears in secret rooms as Monster Manuel and gifts players an item or gun.", "icon": "ser_manuel.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ser_Manuel"},
-  {"name": "Blockner", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Ser Manuel's rival.", "icon": "npc_blockner.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"},
-  {"name": "Sell Creep", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Found in shops, takes items and guns and gives shells in return.", "icon": "the_sell_creep.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Sell_Creep"},
-  {"name": "The Lost Adventurer", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Rewards players with items for completing the current dungeon map.", "icon": "the_lost_adventurer.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Lost_Adventurer"},
-  {"name": "Ledge Goblin", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Hangs around a ledge.", "icon": "ledge_goblin.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ledge_Goblin"},
-  {"name": "Blacksmith", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in the Forge. Collects the ingredients for The Bullet That Can Kill The Past from players.", "icon": "blacksmith.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blacksmith"},
-  {"name": "Resourceful Rat", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Steals the player's items in the Gungeon. Offers up to three free guns if the player has taken a shortcut.", "icon": "resourceful_rat.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Resourceful_Rat"},
-  {"name": "Professor Goopton", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in The Breach and another in the Gungeon.", "icon": "professor_goopton.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Professor_Goopton"},
-  {"name": "Trorc", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in The Breach and another in the Gungeon.", "icon": "truck_shopkeeper.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Trorc"},
-  {"name": "Old Red", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in the Gungeon.", "icon": "blank_shopkeeper.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Red"},
-  {"name": "Cursula", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in the Gungeon.", "icon": "curse_shopkeeper.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cursula"},
-  {"name": "Flynt", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in the Gungeon.", "icon": "key_shopkeeper.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Flynt"},
-  {"name": "Doug", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in The Breach.", "icon": "doug.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Doug"},
-  {"name": "Sorceress", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Grants players a blessing for their next run.", "icon": "sorceress.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Sorceress"},
-  {"name": "Tonic", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Allows the player to toggle Turbo Mode, which increases game speed.", "icon": "tonic.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tonic"},
-  {"name": "Daisuke", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Enables Challenge Mode for the next run.", "icon": "daisuke.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Daisuke"},
-  {"name": "Patches and Mendy", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Run the smash tent in the Gungeon. Fully heals the player. Gives the Robot either one Junk, the Bottle, or a piece of armor.", "icon": "doctors.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Patches_and_Mendy"},
-  {"name": "Synergrace", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Runs a shop in the Gungeon where the player can purchase a synergy chest.", "icon": "synergrace.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Synergrace"},
-  {"name": "Vampire", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Appears in the Gungeon and allows the player to trade half a heart for shells. Gives 20 shells multiplied by the floor's price multiplier for each half heart.", "icon": "vampire.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Vampire"},
-  {"name": "Witches", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Allows the player to exchange a gun for a different gun and 2 curse. The new gun will either be the same quality or one quality higher.", "icon": "witches.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Witches"},
-  {"name": "Old Man", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Gifts players one item or a gun. Refuses to give the player an item or gun if playing in co-op.", "icon": "old_man.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Man"},
-  {"name": "Brother Albern", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Asks the player a question and rewards them with a pickup, item, or gun.", "icon": "brother_albern.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Brother_Albern"},
-  {"name": "Save Button", "category": "Major NPC", "game": "Enter the Gungeon", "description": "Option to save and exit at the end of each floor, resuming the run at a later time.", "icon": "save_button.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Save_Button"},
-  {"name": "Gunknights", "category": "Minor NPC", "game": "Enter the Gungeon", "description": "Guards the entrance to the Gungeon, barring entry to the player until they play (or skip) the tutorial.", "icon": "gunknights_gungeon.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunknights"},
-  {"name": "Circle Knight and Square Knight", "category": "Minor NPC", "game": "Enter the Gungeon", "description": "Stand to the left and right of the Sorceress, protecting her.", "icon": "circle_knight.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Circle_Knight_and_Square_Knight"},
-  {"name": "Union Mimic Chest", "category": "Minor NPC", "game": "Enter the Gungeon", "description": "Can be encountered in the Resourceful Rat's Lair, in the chest room, if the player is wearing the Mimic Tooth Necklace.", "icon": "mimic_union_chest.png", "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Union_Mimic_Chest"}
+  {
+    "name": "Bello",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Shops on all floors except the Forge",
+    "description": "The primary shopkeeper of the Gungeon, appearing in a special shop room on almost every floor. Sells items, guns, and pickups for casings, with at least one key always in stock. Becomes enraged if the player shoots in his shop. Any unlocked item or gun (except Ser Junkan) can appear in his shop.",
+    "tips": [
+      "The shop always stocks at least one key — buy it early when chests are plentiful.",
+      "First theft has a 100% chance of success (unless using Grappling Hook). Second is 50%, subsequent are 20%.",
+      "If caught stealing, Bello closes shop for the rest of the run and on all subsequent floors.",
+      "S-tier and A-tier items can never appear in the shop — only D through B quality.",
+      "Prices scale with floor depth and magnificence."
+    ],
+    "icon": "shopkeeper.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bello"
+  },
+  {
+    "name": "Ox and Cadence",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — Gungeon Acquisitions Department",
+    "description": "A duo rescued from a cell in the Keep of the Lead Lord or Gungeon Proper. Cadence is a bratty girl and Ox is a golem built by the Blacksmith (Cadence's sister) to protect her. They operate the Hegemony Credit shop in the Breach, selling gun and item unlocks. A total of 682 Hegemony Credits buys everything.",
+    "tips": [
+      "Buy out entire rows to trigger restocking — the Breach reloads when you enter and exit the Gungeon.",
+      "Prioritize high-cost items like the Freeze Ray (7 credits) early since they're powerful.",
+      "Rescue them early to start earning Hegemony Credits from boss kills."
+    ],
+    "icon": "ox.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ox_and_Cadence"
+  },
+  {
+    "name": "Drunkard",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — lower left region",
+    "description": "A crestfallen reptile who sits in the Breach drinking, modeled after the Crestfallen Warrior from Dark Souls. Provides lore, context, and commentary after killing bosses, minibosses, secret bosses, and rescuing NPCs. Speaking to him after milestones reveals story details about the Gungeon's inhabitants.",
+    "tips": [
+      "Talk to him after every new boss kill or NPC rescue for lore and story context.",
+      "His dialogue hints at deeper lore — the Kill Pillars dialogue references Kaliber.",
+      "He references the Lich and Bullet Hell if you've been there — a sign of endgame progress."
+    ],
+    "icon": "drunkard.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Drunkard"
+  },
+  {
+    "name": "Tinker",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — elevator room; also appears in elevator shafts",
+    "description": "Tailor the Tinker operates the shortcut elevator system. After speaking to him in the Breach, he appears in elevator shafts on floors. The player must step away from the elevator until it disappears, then drop down the hole to find him. Completing shortcut quests unlocks the ability to start runs on later floors, and each completed shortcut unlocks a new gun or item.",
+    "tips": [
+      "Materials (except Hegemony Credits) can be given before he asks — stockpile ahead of time.",
+      "Completing all 4 shortcut quests unlocks the Boss Rush elevator.",
+      "Each shortcut requires: Bells/Keys+Casings/Credits/Master Round. The Forge shortcut needs 6 filled heart containers.",
+      "Using a shortcut triggers the Resourceful Rat to appear with free guns."
+    ],
+    "icon": "sherpa.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tinker"
+  },
+  {
+    "name": "Frifle and the Grey Mauser",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — lower right area",
+    "description": "A jolly hunter and his elderly companion who offer hunting quests to track down and slay specific enemies. After rescuing them from a cell, they appear in the Breach and assign set contracts with fixed rewards (5 Hegemony Credits + item/gun unlock). After all set contracts are done, they offer random repeat contracts for credits only.",
+    "tips": [
+      "Unlock all shortcuts first — certain enemies only appear on specific floors, making shortcuts faster for hunting.",
+      "Hunt progress saves regardless of run outcome — you can die, quit, or restart and keep progress.",
+      "Rainbow Runs are effective for quickly gaining powerful gear for hunts.",
+      "Turbo Mode and 'Increase Speed Out Of Combat' greatly speed up enemy hunts."
+    ],
+    "icon": "frifle.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Frifle_and_the_Grey_Mauser"
+  },
+  {
+    "name": "Bowler",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — top right room (with the Sorceress)",
+    "description": "An eccentric NPC who toggles Rainbow Mode on and off. When active, a Rainbow Chest spawns at the start of each chamber, but the player can only take one item. Bowler appears on all non-rainbow chests, replacing their loot with notes. Rescued from a cell that only appears after the Sorceress is rescued.",
+    "tips": [
+      "Rainbow Mode replaces ALL chest loot — boss drops, shop items, and pedestal items are affected.",
+      "You can only take ONE item from each Rainbow Chest — choose wisely.",
+      "Rainbow Mode is great for hunting quests since you get guaranteed high-quality loot each floor.",
+      "The cell to rescue Bowler only spawns after the Sorceress has been rescued."
+    ],
+    "icon": "bowler.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bowler"
+  },
+  {
+    "name": "Winchester",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon (after 90 min playtime + 3 Gungeon Proper visits)",
+    "description": "A gambler NPC who runs a shooting gallery minigame. The player pays casings to get four shots at moving targets, with chest rewards based on accuracy. Hitting all 4 targets on floors 3-5 awards an S-tier chest. Acing three of his minigames unlocks the Seven-Leaf Clover.",
+    "tips": [
+      "Bounce bullets off walls and moving blockers to hit hard-to-reach targets.",
+      "On floors 3-5, hitting all 4 targets gives an S-tier chest — worth the investment.",
+      "Acing 3 minigames unlocks the Seven-Leaf Clover — prioritize this for better loot odds.",
+      "The reward chest can be a mimic, but Mimic Tooth Necklace doesn't affect it."
+    ],
+    "icon": "npc_winchester.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Winchester_(NPC)"
+  },
+  {
+    "name": "Gunsling King and Manservantes",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — upper left; also random rooms in the Gungeon",
+    "description": "A pompous nobleman and his resentful servant who offer room challenges with a casing wager (18-22 casings). Four challenge types: no damage, no dodge rolling, use a given gun, or Challenge Mode. Success returns the wager plus a gun/item reward; failure loses the collateral. Completing 10 challenges unlocks the Owl.",
+    "tips": [
+      "The challenge is optional — you can skip the room without paying.",
+      "If given Casey as the challenge gun, the curse from Casey isn't removed after completion.",
+      "Using blanks during the 'use a given gun' challenge fails the quest — familiars don't.",
+      "Completing 10 challenges and speaking to the Gunsling King in the Breach unlocks the Owl."
+    ],
+    "icon": "gunsling_king.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunsling_King_and_Manservantes"
+  },
+  {
+    "name": "Ser Manuel",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Halls of Knowledge (tutorial); The Breach after avenging; Secret Rooms as Monster Manuel",
+    "description": "The tutorial knight who teaches players mechanics in the Halls of Knowledge, culminating in a boss fight (100 HP). After finding his Old Knight's Shield in a secret room and defeating him, he reveals his past with Blockner and sends the player on a vengeance quest. After the quest, he appears as 'Monster Manuel' in secret rooms, giving free items/guns.",
+    "tips": [
+      "Find the secret room in the Halls of Knowledge (pre-cracked wall) for Old Knight's Shield and Helm.",
+      "Bring the shield to Ser Manuel after defeating him to trigger the Blockner questline.",
+      "After avenging Manuel, Monster Manuel appears rarely in secret rooms with free loot.",
+      "He's the tutorial boss with only 100 HP — an easy fight to practice mechanics."
+    ],
+    "icon": "ser_manuel.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ser_Manuel"
+  },
+  {
+    "name": "Blockner",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Black Powder Mine (after Ser Manuel's quest)",
+    "description": "Ser Manuel's former partner who betrayed and killed him. A secret boss found in the Black Powder Mine after completing Ser Manuel's quest. Spawns with two Gun Nuts as bodyguards. Believes blocking is superior to dodge rolling. After defeat, his ghost can appear as a miniboss in later runs.",
+    "tips": [
+      "Must find Old Knight's Helm and Shield in the Halls of Knowledge secret room first.",
+      "Defeat Ser Manuel while holding the shield to trigger the quest.",
+      "Blockner spawns with two Gun Nuts — clear them first to reduce pressure.",
+      "After slaying Blockner, return to Ser Manuel to unlock items and enable Monster Manuel encounters."
+    ],
+    "icon": "npc_blockner.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"
+  },
+  {
+    "name": "Sell Creep",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random in shop annexes; guaranteed room in the Hollow (with a Master Round)",
+    "description": "A pit-dwelling NPC who buys items and guns for 45% of their base cost in casings. Appears randomly in shop annexes and in a guaranteed room in the Hollow if the player has a Master Round. Secretly the alternate identity of the dark wizard Agunim. Selling a Master Round plus two other items in the Hollow opens the entrance to the R&G Dept.",
+    "tips": [
+      "Sell unwanted items for casings — D-tier sells for 16, S-tier for 54.",
+      "Special/excluded items (Junk, Master Rounds, Gnawed Key) always sell for 3 casings.",
+      "In the Hollow, sell a Master Round + 2 items to access the R&G Dept. — but sell everything else first, as the grate is destroyed after.",
+      "Sponge, Ring of Miserly Protection, Busted Television, and Trusty Lockpicks cannot be sold."
+    ],
+    "icon": "the_sell_creep.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Sell_Creep"
+  },
+  {
+    "name": "The Lost Adventurer",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon; The Breach — center left (after 5 floors mapped)",
+    "description": "An NPC named Lonk who asks the player to help map out the current floor by exploring every room (except boss and secret rooms). Rewards with a random gun or item upon completion. After helping map all five main chambers, he appears in the Breach and unlocks Excaliber. A reference to Link from The Legend of Zelda.",
+    "tips": [
+      "Map pickups, Cartographer's Ring, and Gungeon Blueprint count as completing the floor map.",
+      "Black Markets must be explored to count — even if the entrance is in a secret room.",
+      "Completing all 5 floors unlocks Excaliber for future runs.",
+      "In the Breach, he gives hints on how to access the Oubliette and Abbey of the True Gun."
+    ],
+    "icon": "the_lost_adventurer.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Lost_Adventurer"
+  },
+  {
+    "name": "Ledge Goblin",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — lower right ledge; cells in progressively deeper floors",
+    "description": "Loblina the Ledge Goblin sits on a ledge in the Breach. Interacting with her helmet kicks it into the Gungeon, sending her to retrieve it. She must then be rescued from a cell on progressively deeper floors (Gungeon Proper, Black Powder Mine, Hollow). After the fourth rescue, she chains her helmet down and unlocks the Blast Helmet. In Exit the Gungeon, she hosts the Helmet Kicko minigame.",
+    "tips": [
+      "Kick her helmet to trigger the rescue chain — each rescue is on a deeper floor.",
+      "After the 4th rescue (Hollow), she chains her helmet and unlocks Blast Helmet.",
+      "Each rescue requires finding a cell key on the same floor.",
+      "She can also appear in NPC rooms in the Gungeon after being rescued."
+    ],
+    "icon": "ledge_goblin.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ledge_Goblin"
+  },
+  {
+    "name": "Blacksmith",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Forge",
+    "description": "Cadence's sister and the builder of Ox, the Blacksmith runs the shop on the Forge (replacing Bello). She sells three items and three pickups, and can sell items not found in regular shops. She collects the four ingredients needed to build the Bullet That Can Kill The Past: Prime Primer, Arcane Gunpowder, Planar Lead, and Obsidian Shell Casing.",
+    "tips": [
+      "Deliver all 4 ingredients to unlock the Bullet That Can Kill The Past — each can be given over multiple runs.",
+      "The Prime Primer is in the Keep of the Lead Lord, Arcane Gunpowder in the Black Powder Mine, Planar Lead in the Hollow, Obsidian Shell Casing in the Forge.",
+      "She can sell Old Knight's Helm and Old Knight's Shield — items not available in regular shops.",
+      "Molten metal on the Forge floor sets you on fire but doesn't affect enemies."
+    ],
+    "icon": "blacksmith.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blacksmith"
+  },
+  {
+    "name": "Resourceful Rat",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Throughout the Gungeon (stealing); elevator rooms (shortcut merchant); Resourceful Rat's Lair (boss)",
+    "description": "A thieving rat who steals armor, ammo, items, and guns left on the floor when the player leaves the room. Leaves a thank-you note with a random insult. Health, blanks, keys, Hegemony credits, and Glass Guon Stones are never stolen. Also appears as a shortcut merchant offering free guns, and as a secret three-phase boss in the Resourceful Rat's Lair.",
+    "tips": [
+      "Quickly re-enter a room after leaving to catch him mid-theft — he'll flee without the item.",
+      "Items are safe if you're only 1 room away — visit adjacent rooms without risk.",
+      "Shortcut guns don't change until you defeat a boss on that floor — keep a good starter gun.",
+      "Shoot him while he's stealing to call him a 'Jerk!' — he teleports away but doesn't retaliate.",
+      "Defeating his boss form stops him from stealing in future runs."
+    ],
+    "icon": "resourceful_rat.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Resourceful_Rat"
+  },
+  {
+    "name": "Professor Goopton",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon; The Breach — upper right (after purchase)",
+    "description": "A goop-themed merchant who speaks in an alternative cipher font called Gleepglorpenese. Sells goop and slime themed items at a 20% discount in the Gungeon. After purchasing from his Gungeon shop, he opens a Hegemony Credit shop in the Breach for goop-themed unlocks. The Sponge item translates his dialogue.",
+    "tips": [
+      "20% discount on all items — great value for goop-themed builds.",
+      "Carry the Sponge to understand his dialogue — it reverts to normal font.",
+      "After buying from him in the Gungeon, he appears in the Breach for Hegemony Credit unlocks.",
+      "In Exit the Gungeon, he operates at a 33% discount after being rescued with a Rat Key."
+    ],
+    "icon": "professor_goopton.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Professor_Goopton"
+  },
+  {
+    "name": "Trorc",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon; The Breach — near Halls of Knowledge (after purchase)",
+    "description": "A military-themed merchant who sells realism and military items at a 20% discount in the Gungeon. After purchasing from his Gungeon shop, he opens a Hegemony Credit shop in the Breach near the Halls of Knowledge entrance for military-themed unlocks.",
+    "tips": [
+      "20% discount on military-themed items — good for weapon-focused builds.",
+      "Buy from him in the Gungeon to unlock his Breach shop for Hegemony Credit unlocks.",
+      "His Breach shop is near the Halls of Knowledge entrance."
+    ],
+    "icon": "truck_shopkeeper.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Trorc"
+  },
+  {
+    "name": "Old Red",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon",
+    "description": "A blank-themed merchant who sells blank-related items and guns in the Gungeon. One of the random merchants who can appear in NPC rooms or secret rooms throughout the Gungeon.",
+    "tips": [
+      "Sells blank-themed items — useful for builds that rely on blanks.",
+      "Appears randomly — check all NPC rooms and secret rooms to find him.",
+      "Standard shop prices apply (no discount)."
+    ],
+    "icon": "blank_shopkeeper.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Red"
+  },
+  {
+    "name": "Cursula",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon",
+    "description": "A magic and occult-themed merchant who sells items at a steep 50% discount, but each purchase increases the player's Curse by 2.5 (in addition to any curse the items inherently carry). Sells charm weapons, heart containers, and occult items. Stealing from her only adds 1 curse — less than purchasing.",
+    "tips": [
+      "50% discount is the best in the game — but watch your curse level.",
+      "Each purchase adds 2.5 curse — at 10 curse, the Lord of the Jammed spawns.",
+      "Stealing from Cursula only adds 1 curse instead of 2.5 — consider theft if you have the tools.",
+      "Life Orb appears half as often as other items in her shop."
+    ],
+    "icon": "curse_shopkeeper.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cursula"
+  },
+  {
+    "name": "Flynt",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon",
+    "description": "A key and lock-themed merchant who sells chest, key, and lock themed items. The only merchant to use keys as currency instead of casings — D/C/B items cost 1 key, A items cost 2, S items cost 3. Sells the AKEY-47, Shelleton Key, Vorpal Gun, and other lock-related items.",
+    "tips": [
+      "Save keys for Flynt — his items are unique and powerful.",
+      "AKEY-47 shoots locked chests/doors to unlock them — infinite keys.",
+      "Shelleton Key opens any chest without a key — but increases curse while held.",
+      "His name is a pun on 'flintlock' — he's a lock that trades for keys."
+    ],
+    "icon": "key_shopkeeper.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Flynt"
+  },
+  {
+    "name": "Doug",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — lower center (random appearance)",
+    "description": "An alien resembling a dung beetle who operates a travelling shop in the Breach, selling item and gun unlocks for Hegemony Credits. His shop is a large ball of collected items. Only offers 2 items at a time, restocking when both are purchased. A total of 852 Hegemony Credits buys everything. Purchasing all unlocks Gilded Bullets.",
+    "tips": [
+      "Doug's appearance in the Breach is random — reload the Breach if he's not there.",
+      "Buy both items to trigger restocking — only 2 are shown at a time.",
+      "Purchasing everything from Doug unlocks Gilded Bullets.",
+      "He's the only NPC with unique dialogue after buying everything — he comments on how rich he is."
+    ],
+    "icon": "doug.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Doug"
+  },
+  {
+    "name": "Sorceress",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — top right room",
+    "description": "A magic user rescued from a cell who grants the player a blessing (Blessed Mode) for their next run in exchange for 6 Hegemony Credits. Blessed Mode makes the run easier. Her room also houses Daisuke, Tonic, and Bowler once they're unlocked. Circle Knight and Square Knight stand beside her as guards.",
+    "tips": [
+      "Blessed Mode costs 6 Hegemony Credits — useful for difficult runs or hunting quests.",
+      "Rescuing the Sorceress is required before Bowler's cell appears.",
+      "Her room becomes the hub for Daisuke (Challenge Mode), Tonic (Turbo Mode), and Bowler (Rainbow Mode)."
+    ],
+    "icon": "sorceress.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Sorceress"
+  },
+  {
+    "name": "Tonic",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — top right room (with the Sorceress)",
+    "description": "An NPC who toggles Turbo Mode on and off for free. Turbo Mode increases game speed, making runs faster. Found in the Sorceress's room after being rescued from a cell in the Gungeon.",
+    "tips": [
+      "Turbo Mode is free — toggle it on for faster runs and quicker hunting quest progress.",
+      "Combine with 'Increase Speed Out Of Combat' in options for maximum speed.",
+      "Turbo Mode doesn't affect difficulty — purely a time-saving feature."
+    ],
+    "icon": "tonic.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Tonic"
+  },
+  {
+    "name": "Daisuke",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — top right room (with the Sorceress)",
+    "description": "An NPC resembling a D20 die who activates Challenge Mode for 6 Hegemony Credits. Challenge Mode applies 1-3 random gameplay modifiers to each combat room, with more modifiers on deeper floors. After 30 failed attempts, the cost drops to 1 credit. Beating Challenge Mode once unlocks Double Challenge Mode.",
+    "tips": [
+      "Challenge Mode costs 6 credits — after 30 failed attempts, it drops to 1 credit.",
+      "Modifiers increase with floor depth — deeper floors get harder modifiers.",
+      "Beating the High Dragun with Challenge Mode unlocks Chaos Bullets.",
+      "Beating it once unlocks Double Challenge Mode (double the modifiers, extra cost).",
+      "If Challenge Mode is enabled, shortcuts are boarded up — you must start from Chamber 1."
+    ],
+    "icon": "daisuke.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Daisuke"
+  },
+  {
+    "name": "Patches and Mendy",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon (smash tent)",
+    "description": "Two doctors who run a smash tent in the Gungeon, fully healing the player for free. When playing as the Robot, they give either one Junk, the Bottle, or a piece of armor instead of healing (since the Robot has no hearts). A reference to the doctors in Punch-Out!!.",
+    "tips": [
+      "Free full heal — always visit when found, even if at high health (to top off).",
+      "As the Robot, they give Junk (5% damage increase each), the Bottle, or armor — all useful.",
+      "The Bottle can capture Gun Fairies for later healing — very valuable.",
+      "They can give the Robot the Bottle even if it hasn't been unlocked yet."
+    ],
+    "icon": "doctors.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Patches_and_Mendy"
+  },
+  {
+    "name": "Synergrace",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon",
+    "description": "An NPC flanked by two Synerscope arcade machines who sells synergy chests for casings. The synergy chest is not guaranteed to produce a synergy item, and can even be a Glitch Chest. Purchasing from her 3 times unlocks the Macho Brace. A reference to the 'love on the battlefield' quote from Metal Gear Solid.",
+    "tips": [
+      "The synergy chest is not guaranteed to have a synergy item — it's a gamble.",
+      "Purchasing 3 times unlocks the Macho Brace.",
+      "The chest can be a Glitch Chest — which triggers the Glitched Beholster fight.",
+      "In Rainbow Mode, the synergy chest won't provide an item (Bowler replaces it)."
+    ],
+    "icon": "synergrace.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Synergrace"
+  },
+  {
+    "name": "Vampire",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Random rooms in the Gungeon (after rescue)",
+    "description": "An NPC who trades health for casings — 20 casings multiplied by the floor's price multiplier for each half heart. Has a small chance of granting the same effect as a Blood Shrine. Trading with the Vampire 3 times unlocks the Wood Beam. The Vampire gives more money for a full heart than it costs to buy one from the shop.",
+    "tips": [
+      "Trade health when you have excess hearts — the casings can buy keys, items, and ammo.",
+      "20 casings × floor multiplier per half heart — deeper floors pay more.",
+      "Trading 3 times unlocks the Wood Beam.",
+      "Small chance of a Blood Shrine effect (full heal + damage boost) — a pleasant surprise.",
+      "The Vampire pays more for a full heart than a shop charges to buy one back — profitable exchange."
+    ],
+    "icon": "vampire.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Vampire"
+  },
+  {
+    "name": "Witches",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Secret rooms only (after 4 hours playtime + 5 Gungeon Proper visits)",
+    "description": "Three witches (Squintie, Beakie, and Hunchie) who appear exclusively in NPC secret rooms. They allow the player to toss their current gun into a cauldron, receiving a random gun of the same or one quality tier higher in exchange, plus 2 curse. Only one exchange per encounter. A reference to the Weird Sisters from Macbeth.",
+    "tips": [
+      "Exchange a low-quality gun for a chance at a higher tier — always a good trade.",
+      "Each exchange adds 2 curse — be mindful of your curse level.",
+      "Only one use per encounter — make it count.",
+      "Appears only in secret rooms — blank walls to find them.",
+      "Function is unchanged in Rainbow Mode — the exchanged gun is not replaced by Bowler."
+    ],
+    "icon": "witches.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Witches"
+  },
+  {
+    "name": "Old Man",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Secret rooms only",
+    "description": "An elderly NPC who appears exclusively in NPC secret rooms. Gifts the player one free random item or gun. Refuses to give anything if playing in co-op mode. A simple but generous encounter.",
+    "tips": [
+      "Free item or gun — always interact when found.",
+      "Does not appear in co-op — solo runs only.",
+      "Found only in secret rooms — use blanks on cracked walls to find him.",
+      "The item is random from the general pool — could be any quality."
+    ],
+    "icon": "old_man.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_Man"
+  },
+  {
+    "name": "Brother Albern",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "Secret rooms; guaranteed extra secret room in the Abbey of the True Gun",
+    "description": "A monk-like NPC who appears with a Truth Chest that cannot be opened normally. Speaking to him prompts a question, and regardless of the answer, he unlocks the chest and vanishes. The Truth Chest contains 1-2 guns, items, or pickups from a special pool. Breaking the chest before speaking to him drops the item Lies instead.",
+    "tips": [
+      "Always speak to Albern before opening the Truth Chest — the answer doesn't matter.",
+      "Breaking the Truth Chest without speaking to him drops Lies — usually not worth it.",
+      "Guaranteed to appear in the Abbey of the True Gun — check all secret rooms there.",
+      "The Truth Chest can be a Rainbow or Glitched Chest — rare but possible.",
+      "In co-op revival form, breaking the Truth Chest revives the teammate instead of dropping Lies."
+    ],
+    "icon": "brother_albern.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Brother_Albern"
+  },
+  {
+    "name": "Save Button",
+    "category": "Major NPC",
+    "game": "Enter the Gungeon",
+    "location": "End of each floor (elevator room)",
+    "description": "An NPC that appears at the end of each floor, offering the option to save and exit the run. The saved run can be resumed at a later time from the title screen. A quality-of-life feature for players who can't complete a full run in one sitting.",
+    "tips": [
+      "Save and exit anytime at the end of a floor — the run resumes exactly where you left off.",
+      "Useful for long runs that span multiple play sessions.",
+      "The save is deleted once the run ends (death or victory)."
+    ],
+    "icon": "save_button.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Save_Button"
+  },
+  {
+    "name": "Gunknights",
+    "category": "Minor NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — Gungeon entrance",
+    "description": "Two guardian knights who flank the entrance to the Gungeon, barring entry until the player completes or skips the tutorial with Ser Manuel. If the player ignores their advice, they allow entry anyway. They also appear in Exit the Gungeon and House of the Gundead.",
+    "tips": [
+      "Complete Ser Manuel's tutorial to pass without issue — or skip it and they'll let you through.",
+      "They claim guns aren't 'allowed in the Breach' — but this doesn't apply to all NPCs.",
+      "Purely a tutorial gate — no mechanical function after the first run."
+    ],
+    "icon": "gunknights_gungeon.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gunknights"
+  },
+  {
+    "name": "Circle Knight and Square Knight",
+    "category": "Minor NPC",
+    "game": "Enter the Gungeon",
+    "location": "The Breach — flanking the Sorceress",
+    "description": "Two decorative guardians who stand to the left and right of the Sorceress, protecting her. They have no gameplay function and exist purely as part of the Sorceress's entourage in her room in the Breach.",
+    "tips": [
+      "No interaction or gameplay function — purely decorative.",
+      "They only appear after the Sorceress is rescued from her cell."
+    ],
+    "icon": "circle_knight.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Circle_Knight_and_Square_Knight"
+  },
+  {
+    "name": "Union Mimic Chest",
+    "category": "Minor NPC",
+    "game": "Enter the Gungeon",
+    "location": "Resourceful Rat's Lair — reward room (with Mimic Tooth Necklace)",
+    "description": "The Gungeon Mimic Union Representative, a green chest mimic with googly eyes who only appears in the reward room after the Resourceful Rat boss fight if the player is wearing the Mimic Tooth Necklace. Offers an apology on behalf of the Gungeon Mimic Union for being unable to replace all the Rat Chests with mimics. A purely cosmetic NPC.",
+    "tips": [
+      "Only appears if you wear the Mimic Tooth Necklace during the Resourceful Rat boss fight.",
+      "Purely cosmetic — no gameplay function or reward.",
+      "A humorous NPC that apologizes for the Mimic Union's inability to replace Rat Chests with mimics."
+    ],
+    "icon": "mimic_union_chest.png",
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Union_Mimic"
+  }
 ]
