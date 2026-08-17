@@ -6,6 +6,23 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.27 — 🔫 Gun Stats Audit — 105 Missing Stats Filled (August 2026)
+**Build:** 104
+
+> Comprehensive gun stats audit. 105 missing stat fields filled across 56 guns with wiki-accurate values.
+
+### Changes
+- **FIX (BUG-085) — 105 missing gun stats filled:**
+  - **Infinite ammo guns:** Casey, Blasphemy, Dueling Laser, Dart Gun, Elimentaler, Gunther, Marine Sidearm, Robot's Right Hand, Rogue Special, Rusty Sidearm, Slinger, Budget Revolver — all now show `∞` for ammo
+  - **Beam weapons reload_time:** Abyssal Tentacle, Freeze Ray, Science Cannon, Mega Douser, Moonscraper, Mutation, Proton Backpack, Unicorn Horn, Fossilized Gun, Plunger — all now show `N/A`
+  - **Special guns:** Microtransaction Gun (magazine/ammo = "Equal to coins held"), Wood Beam (damage = "Varies"), Mr. Accretion Jr. (damage/force = "Varies"), Life Orb (fire_rate/reload/force/spread = "N/A")
+  - **Missing fire_rate:** Crown of Guns (0.04), Gungeon Ant (0.15), The Exotic (2.0), Charmed Bow (0.2-0.7), Mourning Star (0.3)
+  - **Missing shot_speed/force/spread:** 30+ guns filled with N/A where not applicable
+  - **Damage correction:** Yari Launcher 8/8 → 10/15 per wiki
+  - **DPS filled:** Big Shotgun (63.1), Yari Launcher (221.2)
+
+---
+
 ## v1.9.26 — 🔫 Gun Notes Wiki Audit — 30 Gun Descriptions Enriched (August 2026)
 **Build:** 103
 

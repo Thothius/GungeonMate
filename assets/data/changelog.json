@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.27",
+    "title": "🔫 Gun Stats Audit — 105 Missing Stats Filled",
+    "date": "August 2026",
+    "items": [
+      "🔫 FIX (BUG-085): 105 missing gun stats filled with wiki-accurate values. Infinite-ammo guns (Casey, Blasphemy, Dueling Laser, starters) now show ∞ for ammo. Beam weapons (Freeze Ray, Mutation, Mega Douser, Moonscraper, etc.) now show N/A for reload_time. Special guns (Microtransaction Gun, Wood Beam, Mr. Accretion Jr.) now have appropriate values. Yari Launcher damage corrected from 8/8 to 10/15 per wiki. Big Shotgun and Yari Launcher DPS filled. Crown of Guns fire_rate, Gungeon Ant fire_rate, The Exotic fire_rate, Charmed Bow fire_rate, Mourning Star fire_rate all filled."
+    ]
+  },
+  {
     "version": "v1.9.26",
     "title": "🔫 Gun Notes Wiki Audit — 30 Gun Descriptions Enriched",
     "date": "August 2026",
