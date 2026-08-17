@@ -423,6 +423,134 @@ class _PeriodicTileState extends State<PeriodicTile>
     );
   }
 
+  /// Builds the bottom-center stats badge for active items on the periodic
+  /// grid. Shows RCHRG (recharge) and DUR (duration) side by side, mirroring
+  /// the gun DPS/RANGE pattern. Passives/companions without recharge fall
+  /// back to the legacy single corner badge.
+  Widget _buildItemStatsBadge() {
+    final it = widget.item!;
+    final sf = Responsive.factor(context);
+
+    // Ser Junkan uses the corner badge (special rank text).
+    if (it.name.toLowerCase() == 'ser junkan') return _buildLegacyItemBadge();
+
+    final recharge = _cleanStat(it.rechargeTime);
+    final duration = _cleanStat(it.duration);
+
+    // No recharge at all → nothing to show (passive/companion).
+    if (recharge.isEmpty) return const SizedBox.shrink();
+
+    final rechargeBadge = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GoopText(
+            recharge,
+            style: TextStyle(
+              fontSize: 10.5 * sf,
+              fontWeight: FontWeight.w900,
+              color: Colors.orangeAccent,
+              height: 1.1,
+            ),
+          ),
+          const SizedBox(width: 1),
+          GoopText(
+            'RCHRG',
+            style: TextStyle(
+              fontSize: 6 * sf,
+              fontWeight: FontWeight.w700,
+              color: Colors.orangeAccent.withValues(alpha: 0.6),
+              height: 1.1,
+              letterSpacing: 0.3,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    final durationBadge = duration.isEmpty
+        ? const SizedBox.shrink()
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.55),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GoopText(
+                  duration,
+                  style: TextStyle(
+                    fontSize: 8.5 * sf,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.lightBlueAccent,
+                    height: 1.1,
+                  ),
+                ),
+                const SizedBox(width: 1),
+                GoopText(
+                  'DUR',
+                  style: TextStyle(
+                    fontSize: 6 * sf,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.lightBlueAccent.withValues(alpha: 0.6),
+                    height: 1.1,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
+          );
+
+    return Row(
+      children: [
+        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: rechargeBadge))),
+        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: durationBadge))),
+      ],
+    );
+  }
+
+  /// Legacy single-badge fallback for items that don't use the RCHRG/DUR
+  /// layout (e.g. Ser Junkan rank text, isTopDps shimmer).
+  Widget _buildLegacyItemBadge() {
+    final sf = Responsive.factor(context);
+    if (_corner.isEmpty) return const SizedBox.shrink();
+    final badge = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+      decoration: BoxDecoration(
+        color: widget.isTopDps
+            ? const Color(0xFFFFD700).withValues(alpha: 0.25)
+            : Colors.black.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(4),
+        border: widget.isTopDps
+            ? Border.all(color: const Color(0xFFFFD700), width: 1)
+            : null,
+      ),
+      child: GoopText(
+        _corner,
+        style: TextStyle(
+          fontSize: 10.5 * sf,
+          fontWeight: FontWeight.w900,
+          color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
+          height: 1.1,
+        ),
+      ),
+    );
+    if (widget.isTopDps) {
+      return badge.animate(
+        onPlay: (controller) => controller.repeat(reverse: true),
+      ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
+       .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
+    }
+    return badge;
+  }
+
   /// Elemental effect icons for the tile — shown top-right, max 3.
   /// Delegates detection to [ElementalTagger] so both guns *and* items
   /// surface the same badges (e.g. Frost Bullets shows a freeze icon,
@@ -839,41 +967,9 @@ class _PeriodicTileState extends State<PeriodicTile>
                         child: Center(
                           child: isGun
                               ? _buildGunStatsBadge()
-                              : (_corner.isNotEmpty
-                                  ? (() {
-                                      final badge = Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 5,
-                                          vertical: 1,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: widget.isTopDps
-                                              ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-                                              : Colors.black.withValues(alpha: 0.55),
-                                          borderRadius: BorderRadius.circular(4),
-                                          border: widget.isTopDps
-                                              ? Border.all(color: const Color(0xFFFFD700), width: 1)
-                                              : null,
-                                        ),
-                                        child: GoopText(
-                                          _corner,
-                                          style: TextStyle(
-                                            fontSize: 12.5 * sf,
-                                            fontWeight: FontWeight.w900,
-                                            color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
-                                            height: 1.1,
-                                          ),
-                                        ),
-                                      );
-                                      if (widget.isTopDps) {
-                                        return badge.animate(
-                                          onPlay: (controller) => controller.repeat(reverse: true),
-                                        ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
-                                         .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
-                                      }
-                                      return badge;
-                                    })()
-                                  : const SizedBox.shrink()),
+                              : (widget.item != null && widget.item!.isActive
+                                  ? _buildItemStatsBadge()
+                                  : _buildLegacyItemBadge()),
                         ),
                       ),
                     ],
