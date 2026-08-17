@@ -957,12 +957,12 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
 
 Widget _buildEffectBody(Shrine shrine) {
   if (shrine.name.toLowerCase() == 'dice') {
-    return _DiceEffectBody(effect: shrine.effect);
+    return _diceEffectBody(effect: shrine.effect);
   }
-  return _GenericEffectBody(effect: shrine.effect);
+  return _genericEffectBody(effect: shrine.effect);
 }
 
-Widget _GenericEffectBody({required String effect}) {
+Widget _genericEffectBody({required String effect}) {
   final sentences = effect
       .split('. ')
       .map((s) => s.trim())
@@ -1057,7 +1057,7 @@ const _diceEffectNames = [
   'Priceless',
 ];
 
-Widget _DiceEffectBody({required String effect}) {
+Widget _diceEffectBody({required String effect}) {
   var text = effect;
   if (text.startsWith('Good Effects Bad Effects ')) {
     text = text.substring('Good Effects Bad Effects '.length);
