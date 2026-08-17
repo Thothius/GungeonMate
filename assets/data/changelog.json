@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.19",
+    "title": "📋 Items Wiki Audit Round 3 — Ammolets, Companions, Active Items Enriched",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-078): 14 more items enriched with wiki-accurate mechanics. Ammolets: Copper/Frost/Uranium (stun 1s, 25 tiles, 50% chance), Lodestone (stun 3s, 400% knockback). Companions: Wingman (20 dmg rockets, 5s), R2G2 (6 bullets, 5 dmg, 4s cooldown), Super Space Turtle (5 dmg bullets). Active items: Melted Rock (15 dmg), Singularity (8s duration), Air Strike (25 dmg per explosion), Fortune's Favor (8s duration), Proximity Mine (60 dmg). Bullets: Bumbullets (bee every second, 3 dmg + 1/s for 2s), Crutch (slight homing)."
+    ]
+  },
+  {
     "version": "v1.9.18",
     "title": "📋 Items Wiki Audit Round 2 — Bullet Upgrades, Synthesizers, Ammolets Enriched",
     "date": "August 2026",

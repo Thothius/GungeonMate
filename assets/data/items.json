@@ -398,7 +398,7 @@
     "type": "Active",
     "quote": "Superior!",
     "quality": "B",
-    "effect": "Calls down a bombardment on a large rectangular area.",
+    "effect": "Calls down a series of explosions over a long rectangular area. Each explosion deals 25 damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -9323,7 +9323,7 @@
     "type": "Passive",
     "quote": "Bumblecore",
     "quality": "B",
-    "effect": "Upon firing, adds a chance to fire a bee, which homes in on and damages enemies.",
+    "effect": "While firing, launches a homing bee projectile every second. Bees deal 3 damage on impact plus 1 damage per second for 2 seconds. Does not consume ammo.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -14516,7 +14516,7 @@
     "type": "Passive",
     "quote": "Blanks Ignite",
     "quality": "B",
-    "effect": "Blanks have a chance to ignite enemies. Grants an extra blank per floor.",
+    "effect": "When a blank is triggered, all enemies within a 25 tile radius are stunned for 1s and have a 50% chance to be set on fire. Grants an extra blank per floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -14929,7 +14929,7 @@
     "type": "Passive",
     "quote": "You Need It",
     "quality": "B",
-    "effect": "Causes bullets to slightly curve towards enemies.",
+    "effect": "All bullets fired by the player slightly home in towards enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -19820,7 +19820,7 @@
     "type": "Active",
     "quote": "Use For Luck",
     "quality": "B",
-    "effect": "While active, bullets will curve around the player.",
+    "effect": "While active for 8 seconds, enemy bullets are repulsed from the player, curving around them.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -19973,7 +19973,7 @@
     "type": "Passive",
     "quote": "Chance To Freeze",
     "quality": "B",
-    "effect": "Blanks have a chance to freeze enemies. Grants an extra blank per floor.",
+    "effect": "When a blank is triggered, all enemies within a 25 tile radius are stunned for 1s and have a 50% chance to be frozen. Grants an extra blank per floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -31539,7 +31539,7 @@
     "type": "Passive",
     "quote": "Blank Knockback Up",
     "quality": "D",
-    "effect": "Increases the knockback of blanks. Grants an extra blank per floor.",
+    "effect": "When a blank is triggered, all enemies within a 25 tile radius are stunned for 3s. Increases blank knockback by 400%. Grants an extra blank per floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -34970,7 +34970,7 @@
     "type": "Active",
     "quote": "Corpses Explode",
     "quality": "C",
-    "effect": "Causes enemy corpses to explode on use.",
+    "effect": "Causes enemy corpses to explode on use, dealing 15 damage to nearby enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -41716,7 +41716,7 @@
     "type": "Active",
     "quote": "Use To Place",
     "quality": "D",
-    "effect": "Places a mine that explodes when an enemy comes near it.",
+    "effect": "Places a mine that explodes when an enemy comes near it, dealing 60 damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -41779,7 +41779,7 @@
     "type": "Passive",
     "quote": "Gunmech Robot",
     "quality": "S",
-    "effect": "Follows the player, firing bullets at enemies.",
+    "effect": "Follows the player, firing bursts of 6 bullets at enemies. Each bullet deals 5 damage, with a 4 second cooldown.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -48977,7 +48977,7 @@
     "type": "Active",
     "quote": "Sucks",
     "quality": "C",
-    "effect": "Spawns a black hole that attracts enemies and bullets.",
+    "effect": "Spawns a black hole that sucks enemies, bullets, and items into it for 8 seconds. Enemies take damage; bullets are destroyed.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -52298,7 +52298,7 @@
     "type": "Passive",
     "quote": "Hero From Space",
     "quality": "B",
-    "effect": "Follows the player, firing bullets at enemies.",
+    "effect": "Follows the player, firing bullets that deal 5 damage each at enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -55592,7 +55592,7 @@
     "type": "Passive",
     "quote": "Blanks Poison",
     "quality": "B",
-    "effect": "Blanks have a chance to poison enemies. Grants an extra blank per floor.",
+    "effect": "When a blank is triggered, all enemies within a 25 tile radius are stunned for 1s and have a 50% chance to be poisoned. Grants an extra blank per floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -56830,7 +56830,7 @@
     "type": "Passive",
     "quote": "Got Your Back",
     "quality": "A",
-    "effect": "Orbits the player, firing rockets at enemies.",
+    "effect": "Orbits the player, firing homing 20-damage rockets at enemies every 5 seconds. Blocks bullets.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {

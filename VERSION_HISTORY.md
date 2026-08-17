@@ -6,6 +6,28 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.19 — 📋 Items Wiki Audit Round 3 — Ammolets, Companions, Active Items (August 2026)
+**Build:** 96
+
+> Third pass of items wiki comparison: 14 more item effects enriched with specific values.
+
+### Changes
+- **FIX (BUG-078) — 14 more items with vague effects enriched:**
+  - Copper/Frost/Uranium Ammolet: stun 1s, 25 tile radius, 50% chance to ignite/freeze/poison
+  - Lodestone Ammolet: stun 3s, 25 tile radius, 400% knockback increase
+  - Wingman: homing 20-damage rockets every 5 seconds, blocks bullets
+  - R2G2: bursts of 6 bullets, 5 damage each, 4 second cooldown
+  - Super Space Turtle: 5 damage bullets
+  - Melted Rock: 15 damage to nearby enemies
+  - Singularity: 8 second duration, sucks enemies/bullets/items
+  - Air Strike: 25 damage per explosion
+  - Fortune's Favor: 8 second duration, repulses enemy bullets
+  - Proximity Mine: 60 damage
+  - Bumbullets: bee every second, 3 damage + 1/s for 2 seconds, no ammo cost
+  - Crutch: slight homing towards enemies
+
+---
+
 ## v1.9.18 — 📋 Items Wiki Audit Round 2 — Bullet Upgrades, Synthesizers, Ammolets (August 2026)
 **Build:** 95
 
