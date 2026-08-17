@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
-import 'theme_picker_screen.dart';
+import 'experience_studio_screen.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../services/goop_talk_engine.dart';
@@ -176,7 +176,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.30',
+                    'v1.9.31',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -206,7 +206,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   Haptics.selection();
                   Navigator.push(
                     context,
-                    fastRoute(const ThemePickerScreen()),
+                    fastRoute(const ExperienceStudioScreen()),
                   );
                 },
                 borderRadius: BorderRadius.circular(20),
@@ -245,7 +245,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.30)',
+                          'Changelog (v1.9.31)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -299,7 +299,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.30',
+                            'v1.9.31',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.9.31",
+    "title": "🎨 Experience Studio — Step-by-Step Theme & Visuals Wizard",
+    "date": "August 2026",
+    "items": [
+      "🎨 NEW: Experience Studio replaces the cluttered theme picker with a 5-step wizard: Theme → Palette → Particles → Typography → Ambiance. One category per step, no more 30+ pill strips fighting for space.",
+      "🎨 Persistent live preview at the top shows a mini app scene (item card with quality badge, sample text in your font/size, sample button + chip, stat capsules) that updates instantly as you change any setting.",
+      "🎨 Progress dots show your current step — tap to jump between steps. Back/Next navigation for linear flow. Apply button on the last step commits everything.",
+      "🎨 Typography step now includes font size (slider with 10 discrete steps 6-32pt + live preview text), inventory font size, font family picker, and weight bias — all previously hidden in settings.",
+      "🎨 Ambiance step surfaces screen glow (intensity + 12 colors) and dialogue settings (haptics toggle + text speed) — previously buried in settings tabs.",
+      "🎨 Reset button restores all defaults with confirmation dialog."
+    ]
+  },
+  {
     "version": "v1.9.30",
     "title": "🗺️ Gungeoneer Detail Views + Design Polish",
     "date": "August 2026",

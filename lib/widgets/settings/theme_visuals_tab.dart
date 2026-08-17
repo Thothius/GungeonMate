@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../services/app_theme.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
-import '../../screens/theme_picker_screen.dart';
+import '../../screens/experience_studio_screen.dart';
 import '../../utils/fast_route.dart';
 import '../../utils/responsive.dart';
 import 'swipe_picker.dart';
@@ -146,7 +146,7 @@ class AppearanceTabState extends State<AppearanceTab> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            fastRoute(const ThemePickerScreen()),
+                            fastRoute(const ExperienceStudioScreen()),
                           );
                         },
                       ),

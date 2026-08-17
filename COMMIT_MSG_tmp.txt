@@ -1,13 +1,11 @@
-v1.9.30: Gungeoneer detail views + design polish
+v1.9.31: Experience Studio — step-by-step theme wizard with live preview
 
-- Gungeoneer detail screen with ? button on character cards
-- SpoilerTag widget for collapsible spoiler sections
-- Codex Gungeoneers category (grid of all 9 gungeoneers)
-- Enriched gungeoneers.json: lore, playstyle, tips, past details, unlocks
-- Fixed 3 data discrepancies: Marine +Military Training +armor, Paradox Random, Gunslinger +Lich's Eye Bullets
-- Phase 4: removed redundant My Favourites from Run Tools
-- Phase 6: removed custom BACK TO RUN buttons, standard AppBar back
-- Phase 7: Codex subtitle, first category visible on load
+- Replaces cluttered theme picker with 5-step wizard: Theme → Palette → Particles → Typography → Ambiance
+- Persistent live preview at top (mini app scene: card, text, button, stats)
+- Typography step: font family + size slider (10 steps) + inventory size + weight
+- Ambiance step: glow intensity + 12 colors + dialogue haptics + text speed
+- Progress dots with tap-to-jump, Back/Next nav, Apply on last step
+- Reset button with confirmation dialog
 
 Generated with [Devin](https://devin.ai)
 

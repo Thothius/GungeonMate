@@ -6,6 +6,25 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.31 — 🎨 Experience Studio — Step-by-Step Theme & Visuals Wizard (August 2026)
+**Build:** 108
+
+> The cluttered theme picker is replaced by a 5-step wizard with a persistent live preview. One category per step, no more 30+ pill strips.
+
+### Changes
+- **Experience Studio** — new `experience_studio_screen.dart` (1700+ lines). Replaces `ThemePickerScreen` as the entry point from home screen and settings.
+- **5-step wizard flow:** Theme → Palette → Particles → Typography → Ambiance. Progress dots with tap-to-jump. Back/Next navigation. Apply on last step.
+- **Persistent live preview** — mini app scene at top (always visible, ~160px): item card with quality badge, sample text in selected font/size, sample button + chip, stat capsules. Updates instantly on any change.
+- **Step 1 — Theme:** 2-column grid of all visible themes with color swatches. Tap to preview.
+- **Step 2 — Palette:** Unicorn palettes, remix variants, or custom color editor (6 color slots + HSV picker + randomize). Shows "no variants" message for themes without variants.
+- **Step 3 — Particles:** Enable toggle, preset grid (8), color schema strip (16), speed row (5), studio sliders (count/size/opacity), glow effect picker, line links + bounce toggles.
+- **Step 4 — Typography:** Font family picker (all AppFonts), base font size slider with 10 discrete steps + live preview text, inventory font size slider, weight bias (5 options).
+- **Step 5 — Ambiance:** Screen glow intensity slider, 12 glow color swatches, dialogue haptics toggle, dialogue text speed slider.
+- **Reset button** in AppBar — confirmation dialog, restores all defaults.
+- Old `theme_picker_screen.dart` kept for reference but no longer navigated to.
+
+---
+
 ## v1.9.30 — 🗺️ Gungeoneer Detail Views + Design Polish (August 2026)
 **Build:** 107
 
