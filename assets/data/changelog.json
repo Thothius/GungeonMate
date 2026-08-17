@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.37",
+    "title": "Theme Studio UX — Quick Apply",
+    "date": "August 2026",
+    "items": [
+      "IMPROVE: Apply button is now always visible in the Experience Studio nav bar — no need to traverse all 5 wizard steps just to commit a theme choice. Next and Apply sit side-by-side on every step.",
+      "IMPROVE: Long-press a theme card in Step 1 to apply it instantly and close the studio. Tap still previews; long-press commits.",
+      "IMPROVE: Added a discoverability hint on the theme picker step: 'Tap to preview · Long-press to apply instantly'."
+    ]
+  },
+  {
     "version": "v1.9.36",
     "title": "🔌 Multiplayer Reconnect Hardening",
     "date": "August 2026",

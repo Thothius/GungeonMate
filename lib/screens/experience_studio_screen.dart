@@ -235,6 +235,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             setState(() => _previewMode = m);
             AppTheme.previewNotifier.value = m;
           },
+          // Long-press a theme card: commit it immediately and close the
+          // studio. Skips the rest of the wizard for users who just want
+          // to switch themes.
+          onQuickApply: (m) {
+            setState(() => _previewMode = m);
+            AppTheme.previewNotifier.value = m;
+            _applyAndClose();
+          },
         );
       case 1:
         return _PaletteStep(
@@ -255,6 +263,26 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   Widget _buildNavBar() {
     final isLast = _step == _stepLabels.length - 1;
     final flair = AppTheme.flair;
+    final onPrimary = flair.primary.computeLuminance() > 0.5
+        ? Colors.black87
+        : Colors.white;
+
+    // Shared button styles — Apply always uses the theme's primary color
+    // so it reads as the affirmative action from any step.
+    FilledButton applyButton({bool expanded = false}) => FilledButton.icon(
+          onPressed: _applyAndClose,
+          icon: const Icon(Icons.check_rounded, size: 16),
+          label: const GoopText('Apply',
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+          style: FilledButton.styleFrom(
+            backgroundColor: flair.primary,
+            foregroundColor: onPrimary,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+        );
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
       child: Row(
@@ -278,41 +306,32 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           else
             const Spacer(),
           const SizedBox(width: 12),
-          Expanded(
-            child: isLast
-                ? FilledButton.icon(
-                    onPressed: _applyAndClose,
-                    icon: const Icon(Icons.check_rounded, size: 16),
-                    label: const GoopText('Apply',
-                        style:
-                            TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: flair.primary,
-                      foregroundColor: flair.primary.computeLuminance() > 0.5
-                          ? Colors.black87
-                          : Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  )
-                : FilledButton.icon(
-                    onPressed: () => _goTo(_step + 1),
-                    icon: const Icon(Icons.arrow_forward, size: 16),
-                    label: const GoopText('Next',
-                        style:
-                            TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: flair.primary,
-                      foregroundColor: flair.primary.computeLuminance() > 0.5
-                          ? Colors.black87
-                          : Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-          ),
+          // On the last step, Apply takes the full trailing width (as
+          // before). On every other step, Next and Apply share the row so
+          // the user can commit their theme choice immediately without
+          // traversing the rest of the wizard.
+          if (isLast)
+            Expanded(child: applyButton(expanded: true))
+          else ...[
+            Expanded(
+              child: FilledButton.icon(
+                onPressed: () => _goTo(_step + 1),
+                icon: const Icon(Icons.arrow_forward, size: 16),
+                label: const GoopText('Next',
+                    style:
+                        TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
+                style: FilledButton.styleFrom(
+                  backgroundColor: flair.primary.withValues(alpha: 0.35),
+                  foregroundColor: onPrimary,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            applyButton(),
+          ],
         ],
       ),
     );
@@ -667,34 +686,62 @@ class _LivePreview extends StatelessWidget {
 class _ThemeStep extends StatelessWidget {
   final AppThemeMode previewMode;
   final ValueChanged<AppThemeMode> onPreview;
+  final ValueChanged<AppThemeMode> onQuickApply;
 
-  const _ThemeStep({required this.previewMode, required this.onPreview});
+  const _ThemeStep({
+    required this.previewMode,
+    required this.onPreview,
+    required this.onQuickApply,
+  });
 
   @override
   Widget build(BuildContext context) {
     final modes = kVisibleThemes;
     final activeMode = AppTheme.mode;
 
-    return GridView.builder(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 1.4,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: modes.length,
-      itemBuilder: (context, i) {
-        final m = modes[i];
-        final f = AppTheme.flairFor(m);
-        final isPreview = m == previewMode;
-        final isActive = m == activeMode;
+    return Column(
+      children: [
+        // Discoverability hint — tells users the long-press shortcut
+        // exists so they don't have to traverse the full wizard just to
+        // switch themes.
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+          child: GoopText(
+            'Tap to preview  ·  Long-press to apply instantly',
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: Colors.white.withValues(alpha: 0.4),
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 1.4,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: modes.length,
+            itemBuilder: (context, i) {
+              final m = modes[i];
+              final f = AppTheme.flairFor(m);
+              final isPreview = m == previewMode;
+              final isActive = m == activeMode;
 
-        return GestureDetector(
-          onTap: () {
-            onPreview(m);
-            Haptics.selection();
-          },
+              return GestureDetector(
+                onTap: () {
+                  onPreview(m);
+                  Haptics.selection();
+                },
+                onLongPress: () {
+                  // _applyAndClose (called inside onQuickApply) already
+                  // fires Haptics.success() — no duplicate haptic here.
+                  onQuickApply(m);
+                },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeOutCubic,
@@ -745,7 +792,10 @@ class _ThemeStep extends StatelessWidget {
             ),
           ),
         ).animate().fadeIn(duration: 200.ms, delay: (i * 40).ms);
-      },
+            },
+          ),
+        ),
+      ],
     );
   }
 
