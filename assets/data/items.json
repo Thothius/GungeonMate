@@ -476,7 +476,7 @@
     "type": "Passive",
     "quote": "First!",
     "quality": "A",
-    "effect": "The first shot of a weapon's magazine will deal 80% more damage.",
+    "effect": "The first shot of a weapon's magazine deals 80% more damage. No effect on beam guns.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -1773,7 +1773,7 @@
     "type": "Passive",
     "quote": "Your Body Is A Weapon",
     "quality": "C",
-    "effect": "Provides immunity to contact damage, and increases damage dealt by dodge rolling into enemies. Grants armor upon pickup.",
+    "effect": "Grants 1 armor. Immunity to contact damage. Dodge roll damage multiplied by 7 (21 damage).",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -2173,7 +2173,7 @@
     "type": "Passive",
     "quote": "Imitation Love",
     "quality": "B",
-    "effect": "If no other familiars are present, follows the player and attacks enemies. If familiars are present, transforms into another one of the player's familiars.",
+    "effect": "If no other familiars present, follows and attacks. If familiars present, transforms into one of them.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -3136,7 +3136,7 @@
     "type": "Passive",
     "quote": "Watch Your Back",
     "quality": "B",
-    "effect": "With each shot fired, a second bullet will be fired in the opposite direction that the player is aiming.",
+    "effect": "Fires a second bullet in the opposite direction with each shot. Less accurate than forward shots.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -3637,7 +3637,7 @@
     "type": "Passive",
     "quote": "By The Book",
     "quality": "A",
-    "effect": "Summons a police officer that follows the player, firing bullets at enemies. Can be talked to. Can die after taking too much damage. Talking to him after he dies increases the player's damage by 20% and curse by 2.",
+    "effect": "Summons a police officer firing 5 damage bullets. Talking to him after death grants +20% damage and +2 curse permanently.",
     "curse": 2.0,
     "coolness": 0.0,
     "wiki": {
@@ -4073,7 +4073,7 @@
     "type": "Passive",
     "quote": "Vote Of Confidence!",
     "quality": "C",
-    "effect": "Increases the player's coolness by 3, which decreases the cooldown of active items and increases luck.",
+    "effect": "Increases coolness by 3, decreasing active item cooldowns and increasing room drop chance.",
     "curse": 0.0,
     "coolness": 3.0,
     "wiki": {
@@ -4163,7 +4163,7 @@
     "type": "Passive",
     "quote": "Zap!",
     "quality": "D",
-    "effect": "Causes water that bullets pass over to become electrified, damaging enemies. Decreases shot spread by 50%.",
+    "effect": "Causes water that bullets pass over to become electrified, dealing 10 DPS. Decreases shot spread by 50%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -4762,7 +4762,7 @@
     "type": "Active",
     "quote": "Set The World On Fire",
     "quality": "B",
-    "effect": "Calls down a missile at the crosshair, causing a large explosion that leaves behind a large pool of poison creep. Increases curse by 1 while held.",
+    "effect": "Calls down a missile dealing 150 damage in a large explosion, leaving poison goop. Transforms nearby enemies into Mutant Bullet Kin. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -5660,7 +5660,7 @@
     "type": "Passive",
     "quote": "He Tries",
     "quality": "A",
-    "effect": "Activates a blank each time an active item is used.",
+    "effect": "Spawns a blank familiar that activates a blank each time an active item is used. 10 second cooldown.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -5779,7 +5779,7 @@
     "type": "Passive",
     "quote": "Duck And Cover",
     "quality": "D",
-    "effect": "Decreases the radius that explosions will hurt the player in. Grants immunity to contact damage.",
+    "effect": "Decreases explosion radius that hurts the player. Grants contact damage immunity. Increases dodge roll damage by 200% (9 damage).",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -6073,7 +6073,7 @@
     "type": "Passive",
     "quote": "What Music They Make!",
     "quality": "A",
-    "effect": "Heals the player after dealing 1200 damage to enemies. Increases Curse by 1.",
+    "effect": "Heals half a heart for every 1200 damage dealt to enemies. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -8071,7 +8071,7 @@
     "type": "Active",
     "quote": "Just A Box",
     "quality": "A",
-    "effect": "If the player enters a room while under the box, enemies will not target the player. Firing a weapon will remove the box. Has no effect if used while enemies are already targeting the player. Can be used to steal items from shops.",
+    "effect": "While under the box, enemies won't target the player. Firing deals double damage and removes the box. No effect if enemies already targeting.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -8612,7 +8612,7 @@
     "type": "Passive",
     "quote": "Avarice",
     "quality": "A",
-    "effect": "Grants 250 coins and 3 Hegemony Credits.",
+    "effect": "Grants 250 coins and 3 Hegemony Credits on pickup.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -8949,7 +8949,7 @@
     "type": "Passive",
     "quote": "Yikes!",
     "quality": "B",
-    "effect": "Dodge rolling leaves a trail of poison creep. Makes the player immune to poison.",
+    "effect": "Dodge rolling leaves a trail of poison goop. Grants immunity to poison.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -9563,7 +9563,7 @@
     "type": "Active",
     "quote": "Broken And Heavy",
     "quality": "N",
-    "effect": "Upon use, the television is thrown in the direction of the cursor. Dropped upon dodge rolling.",
+    "effect": "Throws in cursor direction. Dropped upon dodge rolling. Give to Blacksmith to unlock The Robot.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -11689,7 +11689,7 @@
     "type": "Active",
     "quote": "Zap",
     "quality": "A",
-    "effect": "Teleports a chest to the next floor, with a chance to upgrade its quality.",
+    "effect": "Teleports a chest to the next floor's starting or boss room. Chance to upgrade chest quality.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -11979,7 +11979,7 @@
     "type": "Passive",
     "quote": "Fowl Play",
     "quality": "B",
-    "effect": "Summons a chicken that follows the player and blocks bullets. After taking a certain amount of damage, it summons an army of chickens to attack enemies.",
+    "effect": "Summons a chicken that blocks bullets. After 8 hits, summons 20 chickens dealing 5 damage each (100 total).",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -12327,7 +12327,7 @@
     "type": "Active",
     "quote": "Hazardous To Health",
     "quality": "D",
-    "effect": "Damages the player for half a heart and increases their coolness by 1 per use. Coolness decreases the cooldown of active items and increases luck.",
+    "effect": "Damages player for half a heart and permanently increases coolness by 1 per use.",
     "curse": 0.0,
     "coolness": 1.0,
     "wiki": {
@@ -12781,7 +12781,7 @@
     "type": "Passive",
     "quote": "Pure",
     "quality": "D",
-    "effect": "Orbits the player, blocking enemy shots on contact. Negates poison damage.",
+    "effect": "Orbits the player, blocking enemy shots. Negates poison damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -12885,7 +12885,7 @@
     "type": "Passive",
     "quote": "The Real Me",
     "quality": "S",
-    "effect": "Upon death, the player is revived in the starting room of the first floor, retaining all items and guns.",
+    "effect": "Upon death, revives at the start of the first floor with full health, retaining all items and guns except Clone.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -13476,7 +13476,7 @@
     "type": "Passive",
     "quote": "Anonymity Aid",
     "quality": "B",
-    "effect": "Summons a random familiar with a clown mask who either stuns enemies, protects the player with mini blanks, or attacks enemies with a shotgun. An additional familiar is spawned for each additional Payday item the player has.",
+    "effect": "Summons a clown-masked companion (Wolf stuns, Houston blanks, Chains shoots 5 dmg shotgun). +1 per Payday item.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -13901,7 +13901,7 @@
     "type": "Passive",
     "quote": "Active Reload",
     "quality": "C",
-    "effect": "When reloading, pressing reload again when the indicator passes a certain mark on the reload bar will instantly reload the weapon, decreasing the reload time and increasing the damage and accuracy of the next magazine.",
+    "effect": "Active reload: pressing reload at the right mark instantly reloads and grants +75% damage and increased accuracy to next magazine.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -14728,7 +14728,7 @@
     "type": "Passive",
     "quote": "Reload. Reload. Reload.",
     "quality": "A",
-    "effect": "The player is invulnerable while reloading an empty magazine.",
+    "effect": "Grants invulnerability while reloading an empty magazine.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -15034,7 +15034,7 @@
     "type": "Passive",
     "quote": "Too Spooky",
     "quality": "C",
-    "effect": "Increases damage depending on how much curse the player has. Increases curse by 1 while held.",
+    "effect": "Increases damage by 10% per curse point, max +100% at 10 curse. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -15299,7 +15299,7 @@
     "type": "Active",
     "quote": "Get Him!",
     "quality": "D",
-    "effect": "Places a decoy that enemies will target. The decoy will be destroyed after taking enough damage. Can be used to steal from shops.",
+    "effect": "Places a decoy that enemies target. Destroyed after taking enough damage. Can steal from shops while placed.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -15839,7 +15839,7 @@
     "type": "Passive",
     "quote": "Junior II",
     "quality": "D",
-    "effect": "Follows the player around, occasionally digs up a pickup upon completing a room, and barks at mimic chests.",
+    "effect": "Follows the player, digs up pickups on room clear, and barks at mimic chests. The Hunter starts with this.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -16372,7 +16372,7 @@
     "type": "Active",
     "quote": "Sawgeant",
     "quality": "D",
-    "effect": "If used on a locked chest, forces the player to fight two waves of enemies and unlocks the chest if they survive. If used on a locked door, opens it for free.",
+    "effect": "On locked chest: fight 1-5 waves of enemies to unlock. On locked door: opens for free. Cannot open Gnawed Key lock.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -16750,7 +16750,7 @@
     "type": "Passive",
     "quote": "One Size Fits All",
     "quality": "B",
-    "effect": "Increases the magazine size of all weapons by 50%.",
+    "effect": "Increases the magazine size of all weapons by 50%. Does not affect single-round magazines.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -16838,7 +16838,7 @@
     "type": "Active",
     "quote": "Friend Of Gunsmiths",
     "quality": "A",
-    "effect": "Single use. Combines 2 guns by granting one gun the projectiles that the other gun fires.",
+    "effect": "Single use. Combines two guns: first gun's projectiles fire alongside second gun. Ammo capacities combine.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -17969,7 +17969,7 @@
     "type": "Active",
     "quote": "Excommunicate Bullets",
     "quality": "B",
-    "effect": "Activates a blank. Increases curse by 2 while held.",
+    "effect": "Activates a blank. Can be used while dodge rolling. Increases curse by 2 while held.",
     "curse": 2.0,
     "coolness": 0.0,
     "wiki": {
@@ -18230,7 +18230,7 @@
     "type": "Active",
     "quote": "Works Anywhere!",
     "quality": "D",
-    "effect": "Teleport out of the current room into the shop of the current floor.",
+    "effect": "Teleports the player to the shop of the current floor. Resets current room if in combat.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -18523,7 +18523,7 @@
     "type": "Active",
     "quote": "KABOOM!",
     "quality": "C",
-    "effect": "Places a decoy that enemies will target. The decoy will explode after taking enough damage. Can be used to steal from shops.",
+    "effect": "Places a decoy that enemies target. Explodes after ~11 seconds or enough damage, dealing 30 damage. Can steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -19216,7 +19216,7 @@
     "type": "Passive",
     "quote": "Fatter = Stronger",
     "quality": "A",
-    "effect": "Doubles bullet size and knockback, increases damage by 30%, and decreases maximum ammo by 10%.",
+    "effect": "Doubles bullet size and knockback, increases damage by 30%, decreases maximum ammo by 10%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -19533,7 +19533,7 @@
     "type": "Passive",
     "quote": "Catch Some!",
     "quality": "C",
-    "effect": "Whenever a bullet hits an enemy or wall, it splits into several smaller, lower-damage bullets.",
+    "effect": "Bullets split into smaller bullets on impact, each dealing equal share of original damage. Doubles beam damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -19918,7 +19918,7 @@
     "type": "Active",
     "quote": "It's Delicious",
     "quality": "N",
-    "effect": "Single use. Resurrects your co-op partner with full health.",
+    "effect": "Single use. Resurrects co-op partner with full health. Co-op only.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -20450,7 +20450,7 @@
     "type": "Passive",
     "quote": "Automated Defenses",
     "quality": "B",
-    "effect": "Automatically activates one of the player's blanks when they are about to take damage.",
+    "effect": "Automatically uses a blank when about to take damage, preventing it. Can negate contact damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -20821,7 +20821,7 @@
     "type": "Passive",
     "quote": "Courage Increased",
     "quality": "B",
-    "effect": "Deals 30% more damage to Bosses. Halves reload time and shot spread. Cannot be dropped.",
+    "effect": "Deals 30% more damage to bosses. Halves reload time and shot spread. Cannot be dropped.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -21091,7 +21091,7 @@
     "type": "Passive",
     "quote": "Shoot Through",
     "quality": "C",
-    "effect": "Bullets pass through enemies and obstacles.",
+    "effect": "Bullets pierce through one enemy and pass through obstacles. Pierced bullets deal half damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -21428,7 +21428,7 @@
     "type": "Passive",
     "quote": "Fleeting Defense",
     "quality": "N",
-    "effect": "Orbits the player, blocking enemy shots on contact. Destroyed upon taking damage.",
+    "effect": "Orbits the player, blocking enemy shots. Breaks if the player takes damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -22030,7 +22030,7 @@
     "type": "Active",
     "quote": "Rapid Transit",
     "quality": "D",
-    "effect": "Allows players to hook onto and then pull themselves towards walls at a fast speed. Hitting enemies with the hook will deal minor damage and stun them for a short duration. Allows players to steal items from the shop. The hook has an unlimited range.",
+    "effect": "Hook onto walls to pull yourself. Hitting enemies deals 10 damage and stuns. Unlimited range. Can steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -22394,7 +22394,7 @@
     "type": "Passive",
     "quote": "YOU DEFEATED",
     "quality": "A",
-    "effect": "Adds a heart container. Upon death, the player respawns at the start of the current floor with one heart container, while retaining all of their items and guns. All enemies previously killed will respawn, and if the player reaches the location where they died, they will return to normal.",
+    "effect": "Adds a heart container. On death, respawn at floor start with 1 heart. Reclaim your soul at death location to restore hearts.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -23520,7 +23520,7 @@
     "type": "Passive",
     "quote": "Armor Every Floor",
     "quality": "B",
-    "effect": "Grants a piece of armor upon pickup and another piece of armor every floor.",
+    "effect": "Grants 1 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -23642,7 +23642,7 @@
     "type": "Passive",
     "quote": "Armor Every Floor",
     "quality": "C",
-    "effect": "Grants a piece of armor upon pickup and another piece of armor every floor.",
+    "effect": "Grants 1 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -23736,7 +23736,7 @@
     "type": "Passive",
     "quote": "Armor Every Floor",
     "quality": "C",
-    "effect": "Grants a piece of armor upon pickup and another piece of armor every floor.",
+    "effect": "Grants 1 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -23888,7 +23888,7 @@
     "type": "Passive",
     "quote": "Armor Every Floor",
     "quality": "A",
-    "effect": "Grants two pieces of armor upon pickup and one piece of armor every floor.",
+    "effect": "Grants 2 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -25170,7 +25170,7 @@
     "type": "Passive",
     "quote": "Low Center Of Mass",
     "quality": "D",
-    "effect": "Prevents the player from being affected by enemy knockback, gun recoil, and conveyor belts.",
+    "effect": "Prevents knockback from enemies, gun recoil, and conveyor belts.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -25270,7 +25270,7 @@
     "type": "Passive",
     "quote": "Thunk!",
     "quality": "C",
-    "effect": "Increases damage by 25% and doubles knockback, but halves bullet speed.",
+    "effect": "Increases damage by 25%, doubles knockback, increases bullet size by 25%, but halves bullet speed.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -25459,7 +25459,7 @@
     "type": "Passive",
     "quote": "Praise Be",
     "quality": "B",
-    "effect": "Doubles fired bullets and makes them move in a helix pattern, but slightly decreases damage.",
+    "effect": "Doubles bullets and makes them travel in a helix pattern. Each bullet deals 66% damage (net +32%).",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -26576,7 +26576,7 @@
     "type": "Passive",
     "quote": "Withered Vessel",
     "quality": "D",
-    "effect": "Upon taking damage, triggers a blank effect and refills 50% of the ammo of all the player's guns. Increases curse by 1.",
+    "effect": "Upon taking damage, triggers a blank effect and refills 50% of ammo for all guns. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -27619,7 +27619,7 @@
     "type": "Active",
     "quote": "One For That",
     "quality": "C",
-    "effect": "Detonates all explosives and explosive enemies in the room.",
+    "effect": "Detonates all explosives, explosive enemies, and exploding enemy bullets in the room.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -28181,7 +28181,7 @@
     "type": "Passive",
     "quote": "You've Been Had...",
     "quality": "N",
-    "effect": "Useless on its own. Has six variants, each of which reveals one of the directions necessary to make it through the maze in the Resourceful Rat's Lair.",
+    "effect": "One of six variants, each revealing a direction for the Resourceful Rat's Lair maze. Collect all six to navigate.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -28329,7 +28329,7 @@
     "type": "Active",
     "quote": "Valar Morgunis",
     "quality": "C",
-    "effect": "3 uses. Kills all enemies in a random room on the floor. Increases coolness by 2 and grants a 20% discount at shops while held.",
+    "effect": "3 uses. Kills all enemies in a random unexplored room. Increases coolness by 2 and grants 20% shop discount. Increases curse by 1.",
     "curse": 0.0,
     "coolness": 2.0,
     "wiki": {
@@ -28843,7 +28843,7 @@
     "type": "Active",
     "quote": "To Fly",
     "quality": "C",
-    "effect": "Can be toggled. While active, the player has increased movement speed and flight, but cannot dodge roll. Passing over puddles of oil will set them on fire.",
+    "effect": "Toggle for flight and +movement speed. Cannot dodge roll while active. Passing over oil sets it on fire.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -29668,7 +29668,7 @@
     "type": "Active",
     "quote": "Use Again To Launch!",
     "quality": "D",
-    "effect": "Creates a ring of knives around the player that damage enemies and block enemy bullets. Knives vanish after taking enough damage. If used again while the shield is active, the knives are launched forward. Increases curse by 1 while held.",
+    "effect": "Creates a ring of knives that damage enemies and block bullets. Use again to launch them forward. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -29796,7 +29796,7 @@
     "type": "Active",
     "quote": "Shellraiser",
     "quality": "B",
-    "effect": "Upon use, spawns several enemies and has a chance to spawn a gun or item (which has a chance to damage the character). Increases curse by 1 while held.",
+    "effect": "Spawns 3-5 enemies on use. Spawns gun/item on 2nd, 5th, 9th, 14th, 20th... use. 25% chance to damage player on reward. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -30440,7 +30440,7 @@
     "type": "Passive",
     "quote": "Iron Sights",
     "quality": "S",
-    "effect": "Makes all guns act as if they have all their synergies.",
+    "effect": "Makes all guns act as if they have all their synergies. Some synergies have additional requirements.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -31175,7 +31175,7 @@
     "type": "Passive",
     "quote": "I'm A Bullet Too!",
     "quality": "N",
-    "effect": "Provides immunity to contact damage, and dodge rolls deal increased damage to enemies.",
+    "effect": "Immunity to contact damage. Dodge roll damage increased by 400% (15 damage, 20 for Robot).",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -31621,7 +31621,7 @@
     "type": "Passive",
     "quote": "Doesn't Float",
     "quality": "C",
-    "effect": "Enemies drop more money, but the player drops money upon taking damage. Selling other items to the Sell Creep grants twice as much money.",
+    "effect": "Doubles money from enemies and Sell Creep. Taking damage drops 15-30% of money (max 120). Dropped money disappears after a short time.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -32624,7 +32624,7 @@
     "type": "Passive",
     "quote": "Free Stats",
     "quality": "A",
-    "effect": "Grants a heart container, increases damage by 15%, increases movement speed, and increases coolness by 1.",
+    "effect": "Grants a heart container, +15% damage, +1.5 movement speed, and +1 coolness.",
     "curse": 0.0,
     "coolness": 1.0,
     "wiki": {
@@ -34785,7 +34785,7 @@
     "type": "Active",
     "quote": "On A Roll",
     "quality": "D",
-    "effect": "Single use. Heals the player for one heart. Grants double damage until the player takes damage.",
+    "effect": "Single use. Heals 1 heart. Grants double damage until the player takes damage. Stacks with multiple uses.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -36153,7 +36153,7 @@
     "type": "Passive",
     "quote": "Twist To Open",
     "quality": "C",
-    "effect": "Taking damage spawns a pool of poison creep. Grants immunity to poison creep and a heart container.",
+    "effect": "Taking damage spawns poison creep. Grants immunity to poison and a heart container.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -36639,7 +36639,7 @@
     "type": "Passive",
     "quote": "Son",
     "quality": "B",
-    "effect": "Grants two pieces of armor upon pickup. Grants a piece of armor every 4 times damage is taken.",
+    "effect": "Grants 2 armor on pickup. Grants 1 armor every 4 times damage is taken.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -36927,7 +36927,7 @@
     "type": "Active",
     "quote": "Smells Great!",
     "quality": "C",
-    "effect": "Sets a large rectangular area on fire.",
+    "effect": "Sets a large rectangular area on fire, igniting and damaging enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -37032,7 +37032,7 @@
     "type": "Passive",
     "quote": "Sidekick No More",
     "quality": "A",
-    "effect": "Increases movement speed by 2 and damage by 41% when co-op partner is dead. Cannot be dropped.",
+    "effect": "Increases movement speed by 2 and damage by 41% when co-op partner is dead (always active in singleplayer). Cannot be dropped.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -37556,7 +37556,7 @@
     "type": "Active",
     "quote": "Heals Per Floor",
     "quality": "A",
-    "effect": "Heals the player for one heart upon use. Gains 2 charges each floor.",
+    "effect": "Heals 1 heart per use. Starts with 2 charges, refills to 2 each floor. Does not recharge by damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -39927,7 +39927,7 @@
     "type": "Active",
     "quote": "Aged Almost 40 Years",
     "quality": "A",
-    "effect": "While active, the player is invincible and instantly kills enemies they come in contact with.",
+    "effect": "While active, player becomes invincible Pac-Man with flight, instantly killing enemies on contact. Bosses take 30 damage instead.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -40451,7 +40451,7 @@
     "type": "Passive",
     "quote": "Increased Health",
     "quality": "B",
-    "effect": "Orbits the player, blocking enemy shots on contact. Grants one extra heart container.",
+    "effect": "Orbits the player, blocking enemy shots. Grants one extra heart container.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -40871,7 +40871,7 @@
     "type": "Active",
     "quote": "For External Use Only",
     "quality": "D",
-    "effect": "Creates a pool of poison creep.",
+    "effect": "Throws a vial that breaks to create a puddle of poison goop. Does not work in the Gorgun's arena.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -41987,7 +41987,7 @@
     "type": "Passive",
     "quote": "Hover Craft",
     "quality": "C",
-    "effect": "Grants temporary invulnerability and flight when the player steps over a pit.",
+    "effect": "Grants temporary invulnerability and flight for ~1 second when stepping over a pit. Increases movement speed by 1.5.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -42143,7 +42143,7 @@
     "type": "Active",
     "quote": "Calories, Mate",
     "quality": "C",
-    "effect": "Single use. Heals the player for two hearts. Automatically used if the player runs out of health.",
+    "effect": "Single use. Heals 2 hearts. Automatically used if the player runs out of health.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -42808,7 +42808,7 @@
     "type": "Active",
     "quote": "Pack Rat's Rat Pack",
     "quality": "A",
-    "effect": "Rolling through bullets collects them in the sack. Using the sack empties the sack and fires a piece of explosive cheese for every bullet collected. Grants 3 extra active item slots.",
+    "effect": "Rolling through bullets collects them (max 30). Use to fire explosive cheese per bullet. Grants 3 extra active slots.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -42997,7 +42997,7 @@
     "type": "Passive",
     "quote": "This You Can Trust",
     "quality": "S",
-    "effect": "Grants a heart container, fully heals the player, increases damage by 30%, increases dodge roll speed by 15%, increases movement speed by 10%, and adds a chance to negate damage.",
+    "effect": "Grants a heart container, full heal, +30% damage, +15% dodge speed, +10% movement speed. At 1 heart or less, 50% chance to negate damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -43335,7 +43335,7 @@
     "type": "Active",
     "quote": "Get Ethereal!",
     "quality": "B",
-    "effect": "While active, the player is invincible and has flight. Allows user to steal items from shops.",
+    "effect": "While active for 10 seconds, player is invincible, can walk through enemies/obstacles, and has flight. Cannot dodge roll. Can steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -43931,7 +43931,7 @@
     "type": "Passive",
     "quote": "Aids The Fiscally Responsible",
     "quality": "C",
-    "effect": "Grants two heart containers. Disappears upon spending money.",
+    "effect": "Grants 2 heart containers. Disappears upon purchasing anything from any shop.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -44207,7 +44207,7 @@
     "type": "Passive",
     "quote": "Fufufufufufu",
     "quality": "B",
-    "effect": "Once per floor, if the Resourceful Rat takes an item or gun, he will give another item or gun of equal quality in return. Unused trades carry over to subsequent floors.",
+    "effect": "Once per floor, if the Rat steals an item/gun, he drops one of equal quality in return. Unused trades carry over.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -44452,7 +44452,7 @@
     "type": "Passive",
     "quote": "Items == Guns",
     "quality": "A",
-    "effect": "Using an active item fires the currently held weapon in all directions.",
+    "effect": "Using an active item rapidly fires the held weapon in a ring. Does not consume ammo.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -44690,7 +44690,7 @@
     "type": "Passive",
     "quote": "Faster Bullets",
     "quality": "B",
-    "effect": "Increases the player's bullet speed by 50%, increases damage by 10%, and increases rate of fire by 10%.",
+    "effect": "Increases bullet speed by 50%, damage by 10%, and rate of fire by 10%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -45305,7 +45305,7 @@
     "type": "Passive",
     "quote": "Back At You",
     "quality": "C",
-    "effect": "Rolling through bullets reflects them at enemies.",
+    "effect": "Rolling through bullets reflects them at enemies. Reflected bullets deal 10 damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -46592,7 +46592,7 @@
     "type": "Active",
     "quote": "Surprisingly Rare.",
     "quality": "D",
-    "effect": "Points in the direction of the floor's exit.",
+    "effect": "Upon use, an arrow appears pointing toward the floor's exit.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -46803,7 +46803,7 @@
     "type": "Passive",
     "quote": "Lucky!",
     "quality": "S",
-    "effect": "Increases the quality of chests found in chest rooms to an equal chance of red or black.",
+    "effect": "Increases chest quality in chest rooms to 50-50 red or black. No effect on the floor where it is found.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -47450,7 +47450,7 @@
     "type": "Active",
     "quote": "No Jutsu",
     "quality": "D",
-    "effect": "Creates a copy of the player that mimics their movements in reverse and fires alongside them.",
+    "effect": "Spawns a clone with reversed movements that fires alongside the player. Clone blocks enemies and bullets.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -47683,7 +47683,7 @@
     "type": "Passive",
     "quote": "Locks Are Dead To You",
     "quality": "S",
-    "effect": "Allows any chest or lock to be opened without using a key. Increases curse by 1 while held.",
+    "effect": "Opens any chest or locked door without using a key. Increases curse by 1 while held.",
     "curse": 1.0,
     "coolness": 0.0,
     "wiki": {
@@ -47896,7 +47896,7 @@
     "type": "Active",
     "quote": "Block And Load",
     "quality": "C",
-    "effect": "Pulls up a shield to protect players from bullets. Players are immobile while using the shield.",
+    "effect": "Pulls up a shield blocking bullets and contact damage for 4 seconds. Player is immobile. Firing or rolling cancels.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -48812,7 +48812,7 @@
     "type": "Passive",
     "quote": "Blessed Metal",
     "quality": "C",
-    "effect": "Increases damage to jammed enemies by 225% and Increases damage to bosses by 25%.",
+    "effect": "Increases damage to jammed enemies by 225% (total x3.25) and to bosses by 25%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -49090,7 +49090,7 @@
     "type": "Passive",
     "quote": "Blessing Of Kaliber",
     "quality": "A",
-    "effect": "Increases Coolness by 2 for each point of Curse the player has. Increases curse by 2 while held. Removes the usual curse penalty towards getting a room clearing reward.",
+    "effect": "Reduces active item cooldown by 5% per curse (max 50%). Each curse point increases room drop chance by 2%. Increases curse by 2.",
     "curse": 2.0,
     "coolness": 2.0,
     "wiki": {
@@ -49378,7 +49378,7 @@
     "type": "Active",
     "quote": "Vanish!",
     "quality": "C",
-    "effect": "Temporarily become invisible to enemies. Can be used to steal from the Shop.",
+    "effect": "Temporarily become invisible to enemies. Any action besides walking and stealing removes invisibility. Can steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -49885,7 +49885,7 @@
     "type": "Active",
     "quote": "A tantalizing cube of power.",
     "quality": "A",
-    "effect": "Single use. Increases certain stats upon use, depending on how many times it has been used. Each time a spice cube is used, more spice cubes will spawn in place of items or pickups.",
+    "effect": "Single use. Stats increase per use: 1st (+1 heart, +20% speed, -25% spread), 2nd (+1 heart, -10% enemy bullets, +20% fire rate), 3rd (-1 heart, +20% dmg), 4th+ (-1 heart, +15% dmg).",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -50516,7 +50516,7 @@
     "type": "Passive",
     "quote": "Godliness",
     "quality": "C",
-    "effect": "Removes all liquids near the player and allows the player to understand Professor Goopton",
+    "effect": "Removes all liquids near the player. Allows understanding Professor Goopton's speech.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -51973,7 +51973,7 @@
     "type": "Passive",
     "quote": "Suuuuuuper",
     "quality": "S",
-    "effect": "Slows down time immensely while standing still. Moving speeds up time back to normal.",
+    "effect": "Slows time by 99% when standing still. Moving speeds time back to normal.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -52709,7 +52709,7 @@
     "type": "Active",
     "quote": "I Need Mags!",
     "quality": "D",
-    "effect": "Single use. Spawns ammo box.",
+    "effect": "Single use. Calls in an ammo crate at the player's position. Cannot be used at full ammo.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -53952,7 +53952,7 @@
     "type": "Passive",
     "quote": "Flip Showmanship",
     "quality": "C",
-    "effect": "Flipping a table briefly stuns nearby enemies.",
+    "effect": "Flipping a table stuns nearby enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -54068,7 +54068,7 @@
     "type": "Active",
     "quote": "Teleport?!",
     "quality": "B",
-    "effect": "Teleports the player to a random room.",
+    "effect": "Teleports the player to a random room. Small chance for secret room, next floor, or eyeball room.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -54447,7 +54447,7 @@
     "type": "Active",
     "quote": "Do You Have Yours?",
     "quality": "A",
-    "effect": "Summons Gatling Gull as a temporary ally for the current room. Recharges after he leave or die.",
+    "effect": "Summons friendly Gatling Gull who fires bullet spreads and blocks damage. Flies off when room is cleared.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -54667,7 +54667,7 @@
     "type": "Active",
     "quote": "Who Needs Keys?",
     "quality": "D",
-    "effect": "Has a 50% chance to unlock a lock or locked chest. If it fails, the lock will no longer function.",
+    "effect": "50% chance to unlock a lock or chest. If it fails, the lock no longer functions. Can open Rat Chests.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -55106,7 +55106,7 @@
     "type": "Passive",
     "quote": "Is This Normal?",
     "quality": "C",
-    "effect": "Clearing a room spawns a turtle companion. Turtles block enemy bullets and die after taking enough damage.",
+    "effect": "Clearing a room spawns a turtle companion that blocks bullets and deals contact damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -56466,7 +56466,7 @@
     "type": "Active",
     "quote": "Miracle of Gun",
     "quality": "D",
-    "effect": "Using the egg while missing health fully heals the player and consumes it. Dropping the egg and shooting it spawns a gun, item, or yolk creature. Dropping the egg into fire spawns a serpent.",
+    "effect": "Single use. Heals if missing health. Drop and shoot for gun/item (quality increases with floors carried). Drop in fire for Serpent.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -56690,7 +56690,7 @@
     "type": "Passive",
     "quote": "Kindles Blanks",
     "quality": "B",
-    "effect": "Orbits the player, blocking enemy shots on contact. Grants an extra blank per floor.",
+    "effect": "Orbits the player, blocking enemy shots. Grants an extra blank per floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -57274,7 +57274,7 @@
     "type": "Passive",
     "quote": "\"the jammed thing\"",
     "quality": "S",
-    "effect": "Grants 2 heart containers. Upon entering a room, there is a chance that an enemy will be charmed for the duration of the room. Increases fire rate by 15%. Increase curse by 2 while held.",
+    "effect": "Grants 2 heart containers. 60% chance to charm an enemy on room entry. Increases fire rate by 15%. Increases curse by 2.",
     "curse": 2.0,
     "coolness": 0.0,
     "wiki": {

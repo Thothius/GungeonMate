@@ -6,6 +6,21 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.24 — 📋 Items Wiki Audit Round 6 (Complete) — All 130 Items Reviewed (August 2026)
+**Build:** 101
+
+> Final batch of the comprehensive sweep: 98 more item effects enriched with wiki-accurate mechanics. All 130 remaining potentially enrichable items have now been reviewed and updated.
+
+### Changes
+- **FIX (BUG-082) — 98 final items enriched in the complete sweep:**
+  - **Bullets (12):** Alpha Bullet, Heavy Bullets, Helix Bullets, Fat Bullets, Flak Bullets, Cursed Bullets, Silver Bullets, Remote Bullets, Battery Bullets, Backup Gun, Rocket-Powered Bullets, Ghost Bullets
+  - **Companions (6):** Dog, Turtle Problem, Baby Good Mimic, Chicken Flute, Badge, Clown Mask
+  - **Guon Stones (4):** Clear, Pink, White, Glass
+  - **Active items (35):** Supply Drop, Poison Vial, Napalm Strike, Smoke Bomb, Boomerang, C4, Relodestone, Bracket Key, Bottle, Coolant Leak, Big Boy, Lament Configurum, Iron Coin, Spice, Resourceful Sack, Weird Egg, Partially-Eaten Cheese, Ring of Ethereal Form, Explosive Decoy, Decoy, Cigarettes, Duct Tape, Shadow Clone, Busted Television, Box, Ticket, Shield of the Maiden, Meatbun, Ration, Trusty Lockpicks, Old Knight's Flask, Friendship Cookie, iBomb Companion App, Sense of Direction, Teleporter Prototype, Chest Teleporter, Escape Rope, Grappling Hook, Knife Shield, Drill
+  - **Passives (41):** Crisis Stone, Bloodied Scarf, Sprun, Ice Cube, Metronome, Scouter, Broccoli, Gunboots, Sunglasses, Cloranthy Ring, Hip Holster, Brick of Cash, Portable Turret, Cog of Battle, Galactic Medal of Valor, Seven-Leaf Clover, Super Hot Watch, Full Metal Jacket, Nanomachines, Gunknight Helmet/Armor/Gauntlet/Greaves, Jetpack, Heavy Boots, Shelleton Key, Number 2, Magic Sweet, Clone, Monster Blood, Ballot, Infuriating Note, Rat Boots, Bug Boots, Blast Helmet, Sponge, Blood Brooch, Gungeon Pepper, Old Crest, Ring of Miserly Protection, Lich's Eye Bullets, Drum Clip, Rolling Eye, Ring of Triggers, Blank Companion's Ring, Elder Blank, Yellow Chamber, Gun Soul, Ring of the Resourceful Rat, Sixth Chamber, Riddle of Lead, Loot Bag, Holey Grail, Armor of Thorns, Live Ammo, Table Tech Blanks, Table Tech Stun, Medkit, Jar of Bees, Briefcase of Cash, Mimic Tooth Necklace
+
+---
+
 ## v1.9.23 — 📋 Items Wiki Audit Round 6 — Comprehensive Sweep (August 2026)
 **Build:** 100
 
