@@ -77,8 +77,8 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
       for (var i = _touchParticles.length - 1; i >= 0; i--) {
         final p = _touchParticles[i];
         p.pos += p.vel;
-        p.vel = Offset(p.vel.dx * 0.92, p.vel.dy * 0.92); // deceleration
-        p.life -= 0.05; // decays in 20 frames (~0.3 seconds)
+        p.vel = Offset(p.vel.dx * 0.85, p.vel.dy * 0.85); // deceleration
+        p.life -= 0.08; // decays in ~12 frames (~0.2 seconds)
         if (p.life <= 0) {
           _touchParticles.removeAt(i);
         }
@@ -94,14 +94,14 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
       final activeFlair = AppTheme.flair;
       final color = activeFlair.primary;
       setState(() {
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 5; i++) {
           final angle = _rng.nextDouble() * 2 * math.pi;
-          final speed = 1.0 + _rng.nextDouble() * 3.5;
+          final speed = 0.5 + _rng.nextDouble() * 1.5;
           _touchParticles.add(TouchParticle(
             pos: localPos,
             vel: Offset(math.cos(angle) * speed, math.sin(angle) * speed),
             color: color,
-            size: 4.0 + _rng.nextDouble() * 5.0,
+            size: 3.0 + _rng.nextDouble() * 3.0,
           ));
         }
       });

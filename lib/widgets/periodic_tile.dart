@@ -333,7 +333,7 @@ class _PeriodicTileState extends State<PeriodicTile>
         ? const SizedBox.shrink()
         : (() {
             final badge = Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
               decoration: BoxDecoration(
                 color: widget.isTopDps
                     ? const Color(0xFFFFD700).withValues(alpha: 0.25)
@@ -349,17 +349,17 @@ class _PeriodicTileState extends State<PeriodicTile>
                   GoopText(
                     dps,
                     style: TextStyle(
-                      fontSize: 12.5 * sf,
+                      fontSize: 10.5 * sf,
                       fontWeight: FontWeight.w900,
                       color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
                       height: 1.1,
                     ),
                   ),
-                  const SizedBox(width: 2),
+                  const SizedBox(width: 1),
                   GoopText(
                     'DMG',
                     style: TextStyle(
-                      fontSize: 8 * sf,
+                      fontSize: 7 * sf,
                       fontWeight: FontWeight.w700,
                       color: widget.isTopDps
                           ? const Color(0xFFFFD700).withValues(alpha: 0.7)
@@ -383,7 +383,7 @@ class _PeriodicTileState extends State<PeriodicTile>
     final rangeBadge = range.isEmpty
         ? const SizedBox.shrink()
         : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.55),
               borderRadius: BorderRadius.circular(4),
@@ -394,17 +394,17 @@ class _PeriodicTileState extends State<PeriodicTile>
                 GoopText(
                   range,
                   style: TextStyle(
-                    fontSize: 10 * sf,
+                    fontSize: 8.5 * sf,
                     fontWeight: FontWeight.w700,
                     color: Colors.white70,
                     height: 1.1,
                   ),
                 ),
-                const SizedBox(width: 2),
+                const SizedBox(width: 1),
                 GoopText(
                   'RNG',
                   style: TextStyle(
-                    fontSize: 7 * sf,
+                    fontSize: 6 * sf,
                     fontWeight: FontWeight.w700,
                     color: Colors.white54,
                     height: 1.1,
@@ -417,8 +417,8 @@ class _PeriodicTileState extends State<PeriodicTile>
 
     return Row(
       children: [
-        Expanded(child: Center(child: dpsBadge)),
-        Expanded(child: Center(child: rangeBadge)),
+        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: dpsBadge))),
+        Expanded(child: Center(child: FittedBox(fit: BoxFit.scaleDown, child: rangeBadge))),
       ],
     );
   }
