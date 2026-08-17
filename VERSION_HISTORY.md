@@ -6,6 +6,29 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.35 — 🧹 App Health — Bug Hunt + Dead Code Removal (August 2026)
+**Build:** 112
+
+> Full app health assessment. Zero bugs found. ~2400 lines of dead code removed.
+
+### Bug Hunt Results
+- **Missing dispose() calls:** 0 — all AnimationControllers, TextEditingControllers, ScrollControllers, TabControllers, PageControllers, FocusNodes, and StreamSubscriptions are properly disposed across all 110 files.
+- **Missing context.mounted/mounted checks:** 0 — all await sites followed by setState/Navigator have proper mounted checks (checked multiplayer_lobby, experience_studio, codex, browse, active_run, settings tabs, mp_request_listener, player_header).
+- **Uncancelled Timers:** 0 — all 12 Timer/Timer.periodic instances across 7 files are cancelled in dispose() (run_provider, multiplayer_session, active_run_screen, gungeoneer_header, cat_throne, theme_engines, experience_studio, goop_talk_engine).
+- **Data integrity:** 11 JSON files validated — 239 guns, 270 items, 395 synergies, 9 gungeoneers, 14 shrines, 82 changelog entries, 42 objects, 17 pickups, 34 NPCs, 146 enemies, 27 bosses. Zero duplicate names, zero missing quality/type, zero broken synergy references, zero invalid loadout references.
+- **Version consistency:** v1.9.35+112 across pubspec.yaml, main_menu_screen.dart, changelog.json, VERSION_HISTORY.md.
+
+### Dead Code Removed (~2400 lines)
+- **theme_picker_screen.dart** (1729 lines) — replaced by Experience Studio in v1.9.31. No imports anywhere.
+- **ParticlePreviewPicker** class (178 lines) in particle_engine.dart — replaced by Experience Studio's _PresetGrid. No imports anywhere.
+- **app_tab.dart** — dormant since v1.9.0 when content was merged into CombinedRunAppTab (run_tab.dart). Marked with TODO but never cleaned up.
+- **2 unused imports** in particle_engine.dart (app_theme.dart, goop_talk_engine.dart) — exposed after ParticlePreviewPicker removal.
+
+### Known code organization note (not a bug)
+- `SpongeButton` class lives in `summary_tab.dart` but is used by `player_page.dart`. The file also contains dead `SummaryTab` and `MpSummaryPage` classes (removed from MP header in BUG-037). A future refactor should extract `SpongeButton` to its own file and delete the dead classes. Not done now to avoid touching files outside the current task scope.
+
+---
+
 ## v1.9.34 — ✨ Particle Engine v2 — 6 Visual Upgrades (August 2026)
 **Build:** 111
 

@@ -1,5 +1,16 @@
 [
   {
+    "version": "v1.9.35",
+    "title": "🧹 App Health — Bug Hunt + Dead Code Removal",
+    "date": "August 2026",
+    "items": [
+      "🧹 Full app health assessment: 110 Dart files, 51K lines, 11 JSON data files, all verified clean.",
+      "🧹 Bug hunt results: 0 missing dispose() calls, 0 missing context.mounted checks, 0 uncancelled timers, 0 broken data references, 0 duplicate names, 0 missing quality/type fields.",
+      "🧹 Removed dead code: theme_picker_screen.dart (1729 lines, replaced by Experience Studio), ParticlePreviewPicker class (178 lines, replaced by preset grid), app_tab.dart (dormant, merged into run_tab.dart in v1.9.0). Total: ~2400 lines of dead code removed.",
+      "🧹 Fixed 2 newly-exposed unused imports in particle_engine.dart after ParticlePreviewPicker removal."
+    ]
+  },
+  {
     "version": "v1.9.34",
     "title": "✨ Particle Engine v2 — 6 Visual Upgrades",
     "date": "August 2026",

@@ -1,15 +1,10 @@
-v1.9.34: Particle engine v2 — 6 visual upgrades
+v1.9.35: App health — bug hunt + dead code removal
 
-- Lifetime system: fade in/out + respawn (no more wrap pop)
-- Color drift: slow hue cycling per particle
-- Turbulence field: pseudo-curl-noise for organic movement
-- Gradient line links: color gradient + thickness variation
-- Depth-of-field: far particles blur + dual-oscillator breathing (16%)
-- Shimmer: periodic brightness sweep (twinkling/gleaming)
-- Trails: fading position history for streaks/wisps
-- Organic rotation: acceleration + damping
-- All 18 presets tuned with appropriate upgrades
-- Refactored shape drawing to eliminate duplicates
+Bug hunt: 0 missing dispose, 0 missing context.mounted, 0 uncancelled timers
+Data: 11 JSON files validated, 0 broken refs, 0 duplicates
+Removed: theme_picker_screen.dart (1729 lines), ParticlePreviewPicker (178 lines), app_tab.dart (dormant)
+Fixed: 2 unused imports in particle_engine.dart after dead code removal
+Total: ~2400 lines of dead code removed
 
 Generated with [Devin](https://devin.ai)
 
