@@ -3,7 +3,15 @@
     "name": "Bullet King",
     "category": "Boss",
     "health": "950",
-    "description": "",
+    "location": "Keep of the Lead Lord",
+    "description": "The ruler of the Leadfort's Gundead, found at the end of the Keep of the Lead Lord. He slowly drifts toward the player on his throne, stringing together bullet attacks in quick succession. Accompanied by his Chancellor, who charges if provoked.",
+    "ammonomicon": "A Blast of Bullets — Seated atop the Lead Throne, the Bullet King rules over the Leadfort's Gundead. He will hold court with any brave enough to reach his sanctum. Beware his Chancellor, for he holds back a terrible rage.",
+    "tips": [
+      "Keep your distance — his spin attack is easier to dodge when bullets have room to fan out.",
+      "Shoot the goblet he throws to knock it out of the air and control where the fire goop lands.",
+      "Destroy his Bullet Cluster's initial large bullet (e.g. with Blasphemy) to prevent it from splitting.",
+      "Leave the Chancellor unprovoked — he becomes harmless at the end of the fight."
+    ],
     "icon": "Bullet_King.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_King"
   },
@@ -11,7 +19,15 @@
     "name": "Gatling Gull",
     "category": "Boss",
     "health": "700",
-    "description": "",
+    "location": "Keep of the Lead Lord",
+    "description": "A bird boss found in the Keep of the Lead Lord. Chases the player while firing bullet spreads, charging large bullets, jumping across the arena, and launching missiles. Will melee attack if the player gets too close.",
+    "ammonomicon": "Rapid Fire Raptor — Nesting in the first Chamber, this bird repels intruders with its signature weapon. Changed by the magic of the Gungeon, it has long forgotten what it was like before the great Bullet struck.",
+    "tips": [
+      "Stay at range and circle him — his bullet spread is hard to dodge up close.",
+      "Avoid dodge rolling at close range; the end lag will propel you into bullets.",
+      "When he fires missiles, deal enough damage to cancel the attack early.",
+      "Use the large arena's pillars to break line of sight and gain distance."
+    ],
     "icon": "Gatling_Gull.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gatling_Gull"
   },
@@ -19,7 +35,14 @@
     "name": "Trigger Twins",
     "category": "Boss",
     "health": "400+400",
-    "description": "",
+    "location": "Keep of the Lead Lord",
+    "description": "A pair of bullet brothers (Smiley and Shades) found in the Keep of the Lead Lord. Each twin has 400 HP and attacks independently with bullet spreads and volleys. They move as a pair but can be separated and fought one at a time.",
+    "ammonomicon": "Good Bullet / Bad Bullet — Smiley is a little younger and more carefree than his brother, in charge of training young Bullet Kin. Shades was cast in the same mold, and the two have always stuck together. Larger and more imposing than common Gundead, the Trigger Twins guard the first Chamber.",
+    "tips": [
+      "Focus one twin down first to reduce the number of simultaneous attacks.",
+      "Shades fires more aggressively — prioritize him if you want less pressure.",
+      "Use the arena's cover to separate their attack patterns."
+    ],
     "icon": "Trigger_Twins.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Trigger_Twins"
   },
@@ -27,7 +50,15 @@
     "name": "Ammoconda",
     "category": "Boss",
     "health": "899.6",
-    "description": "",
+    "location": "Gungeon Proper",
+    "description": "A multi-segmented snake boss found in the Gungeon Proper. Each segment fires independently. It slithers around the room, growing longer and healing by eating turrets that spawn periodically. Considered by many the most annoying boss in the game.",
+    "ammonomicon": "Shell Serpent — The Ammoconda is composed of segments, each capable of firing independently. Ravenously hungry, this snake of shells grows in length and power as it consumes.",
+    "tips": [
+      "Destroy turrets before the Ammoconda eats them — it heals and grows a new segment from each.",
+      "Damaging turrets reduces the healing gained even if you don't destroy them.",
+      "Focus damage on one segment at a time to disable its attacks.",
+      "Bring high-DPS weapons — its random patterns and self-healing make it a tough fight."
+    ],
     "icon": "Ammoconda.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda"
   },
@@ -35,7 +66,15 @@
     "name": "Beholster",
     "category": "Boss",
     "health": "1072.5",
-    "description": "",
+    "location": "Gungeon Proper",
+    "description": "A massive eyeball monster found in the Gungeon Proper. Wields six guns simultaneously, firing eyeball bullets, lasers, homing missiles, and a sweeping eye beam. Spawns Beadies from the floor.",
+    "ammonomicon": "Sphere of Many Guns — A fiend from the deep. The Beholster wields six guns simultaneously, with each more fearsome than the last. Its great eye is capable of emitting a beam of great energy, but it cannot turn quickly while firing.",
+    "tips": [
+      "Dodge roll back and forth across the eye laser — its slow rotation can't catch quick direction changes.",
+      "Destroy homing missiles by shooting them twice — beam guns destroy them instantly.",
+      "Walk through gaps in bullet spreads rather than dodge rolling to maintain precise positioning.",
+      "Use tables in the arena to block the laser attack."
+    ],
     "icon": "Beholster.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Beholster"
   },
@@ -43,7 +82,15 @@
     "name": "Gorgun",
     "category": "Boss",
     "health": "975",
-    "description": "",
+    "location": "Gungeon Proper",
+    "description": "A Medusa-like boss found in the Gungeon Proper. Fights in a water-filled arena. Attacks include a petrifying wave that prevents firing, underwater charges leaving poison trails, and bullet rings with closing gaps.",
+    "ammonomicon": "Vengeful Gunwitch — The Gorgun, Meduzi, has been the end of many novice Gungeoneers. Her presence can temporarily turn firing mechanisms to stone, and her shrieks call forth bullets from beyond the Curtain.",
+    "tips": [
+      "Keep her against a wall to make her bullet spam more manageable.",
+      "Wait until she submerges, then stay near a wall — she'll emerge close to it, limiting her range.",
+      "Roll through the petrifying wave or face away to avoid being unable to fire.",
+      "Physics-based items (Bomb, Molotov, Poison Vial) don't work in her water arena."
+    ],
     "icon": "The_Gorgun.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Gorgun"
   },
@@ -51,7 +98,15 @@
     "name": "Cannonbalrog",
     "category": "Boss",
     "health": "1520",
-    "description": "",
+    "location": "Black Powder Mine",
+    "description": "A massive floating skull boss found in the Black Powder Mine. Attacks by rolling around the room, teleporting in darkness while firing bouncing bullets, shooting spiraling bullet streams, and hopping in circles firing rings. A reference to the Balrog from Lord of the Rings.",
+    "ammonomicon": "Guns in the Deep — The leader of the Skusket, this massive skull is wreathed in dark clouds of gunpowder and hatred. It will not permit anyone to pass.",
+    "tips": [
+      "Dodge roll through the waves when it rolls into walls.",
+      "During the teleport attack, stand where bullet lines meet and roll through both.",
+      "Roll sideways through spiraling bullets for more reaction time.",
+      "Can be damaged by bombs and Blasphemy during its teleporting attack."
+    ],
     "icon": "Cannonbalrog.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannonbalrog"
   },
@@ -59,7 +114,15 @@
     "name": "Mine Flayer",
     "category": "Boss",
     "health": "1760",
-    "description": "",
+    "location": "Black Powder Mine",
+    "description": "A tentacled horror boss found in the Black Powder Mine. Stays near the center of the arena, attacking with expanding rings, rotating bullet streams, claymore mines, bouncing bullets, and a bell-based disappearing act. A Killithid capable of dominating guns.",
+    "ammonomicon": "Sinister Bell — An unfathomable horror from the abyss, feared by even the strongest Gundead. Killithid have the ability to dominate the guns of others, turning them against their wielders. Only the most iron-willed gunslingers can hope to escape being enslaved by their power.",
+    "tips": [
+      "Keep moving in circles during the mine attack — roll toward mines to cross their path safely.",
+      "Take out bells one at a time during the disappear attack — you can't tell which is the real one.",
+      "Stay near walls during rotating bullet streams where gaps are largest.",
+      "Don't drop Devolver Rounds — they affect the bells and spawn persistent Arrowkin."
+    ],
     "icon": "Mine_Flayer.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer"
   },
@@ -67,7 +130,15 @@
     "name": "Treadnaught",
     "category": "Boss",
     "health": "1520",
-    "description": "",
+    "location": "Black Powder Mine",
+    "description": "A tank boss found in the Black Powder Mine. Drives in straight lines with four corner turrets that fire independently. Attacks include spawning Tankers, explosive shells, scatter bullets, homing rockets, and sticky pulse bombs. Can launch a Tank Man from its turret.",
+    "ammonomicon": "100% Weapon — The Gundead have learned to control this powerful piece of military hardware, and are capable of launching themselves from its powerful turret. A relic of the Hegemony's failed occupation of the Gungeon.",
+    "tips": [
+      "Prioritize Tankers — they stack up quickly and complicate other attack patterns.",
+      "Dodge roll through explosive shell blasts — the first half of a roll is invulnerable to explosions.",
+      "Use blanks to remove sticky pulse bombs before they burst.",
+      "The tank's explosions can destroy pillars in the arena, reducing your cover over time."
+    ],
     "icon": "Treadnaught.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Treadnaught"
   },
@@ -75,7 +146,15 @@
     "name": "High Priest",
     "category": "Boss",
     "health": "1757.5",
-    "description": "",
+    "location": "Hollow",
+    "description": "A robed figure boss found in the Hollow. Drifts toward the player while attacking with homing skulls, bullet rings, darkening the room with invisible bullet waves, rotating bullet streams, and wide spreads. Invulnerable while faded from view. The avatar of Kaliber in the mortal plane.",
+    "ammonomicon": "First of the Order — The avatar of Kaliber in the mortal plane, the High Priest leads the Order of the True Gun.",
+    "tips": [
+      "Shoot homing skulls with fast-firing guns or beam weapons to destroy them early.",
+      "During the dark room attack, stay in a corner and dodge roll against walls when waves approach.",
+      "Blasphemy's swing, Bullet Bore's explosion, and fire/poison can damage the High Priest while invisible.",
+      "Potion of Lead Skin is extremely effective during the rotating bullet stream attack."
+    ],
     "icon": "High_Priest.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest"
   },
@@ -83,7 +162,15 @@
     "name": "Kill Pillars",
     "category": "Boss",
     "health": "555x4 (2220)",
-    "description": "",
+    "location": "Hollow",
+    "description": "A group of four stone pillar bosses found in the Hollow. They move as a group, attacking with spinning bullet volleys, jumping attacks, and synchronized landings. When only one pillar remains, it transforms, heals to full, and attempts to crush the player. A reference to the Armos Knights from The Legend of Zelda.",
+    "ammonomicon": "Hearts of Stone — Ancient effigies of discharged Gundead heroes animated by vengeful spirits. Few Gundead can match the malice of these forgotten idols. Perhaps they are bound by a yet darker power...?",
+    "tips": [
+      "Circle the pillars closely during the spinning volley to avoid damage.",
+      "Dodge roll over the rings when they jump.",
+      "Kill the final two pillars at the same time to skip the final phase entirely.",
+      "Explosive weapons can clear the spinning bullet volley."
+    ],
     "icon": "Kill_Pillars.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kill_Pillars"
   },
@@ -91,7 +178,15 @@
     "name": "Wallmonger",
     "category": "Boss",
     "health": "1757.5",
-    "description": "",
+    "location": "Hollow",
+    "description": "A massive wall boss found in the Hollow. Spans the entire room width and constantly crawls downward, forcing the player to retreat. Attacks with fire goop and bullet blocks, alternating spreads, expanding rectangles, and a dense oscillating line of bullets. Instantly kills if it pins the player against the bottom wall.",
+    "ammonomicon": "Demon Mortar — An infernal barrier preventing passage to the Forge. After the first Gungeoneer surmounted the Hollow, powerful Gunjurers shaped the Wallmonger from the shells of hundreds of discharged Gundead.",
+    "tips": [
+      "Keep moving upward — if pinned against the bottom wall, it's an instant kill.",
+      "Dodge roll directly upward through bullet blocks just before they hit.",
+      "Fire immunity or flight turns the center fire goop into a safe zone.",
+      "Use blanks or Blasphemy to destroy the dense oscillating line attack."
+    ],
     "icon": "Wallmonger.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Wallmonger"
   },
@@ -99,7 +194,15 @@
     "name": "High Dragun",
     "category": "Boss",
     "health": "2767.8 (Phase 1), 500 (Phase 2)",
-    "description": "",
+    "location": "Forge",
+    "description": "The sole boss of the Forge. A giant shelldrake with two phases. Phase 1 features fire breath, dual pistols, uzis, rockets, bouncing bullets, homing skulls, fire bullets, and thrown knives. Phase 2 fills the room with moving bullets and exposes its heart between waves. Can transform into the Advanced Dragun if the player holds the Serpent.",
+    "ammonomicon": "Ancient and Venerable — Until disturbed, Draguns prefer to sit atop mountains of ammo, jealously guarding their hoard. All Draguns descend from Gunrax, the first Shelldrake. Though once thought to be invincible, it has been confirmed that the terrible creatures can be slain.",
+    "tips": [
+      "Stay near the back of the arena in Phase 1 for easier dodging.",
+      "Kill thrown knives quickly — their attacks overlap with the Dragun's.",
+      "Use explosive weapons in Phase 2 to clear bullets for easier dodging.",
+      "Blasphemy can thin the fire breath and enlarge safe zones in Phase 2."
+    ],
     "icon": "High_Dragun.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Dragun"
   },
@@ -107,7 +210,14 @@
     "name": "Blockner",
     "category": "Boss",
     "health": "1200",
-    "description": "",
+    "location": "Secret — Black Powder Mine",
+    "description": "A secret boss in the Black Powder Mine, encountered after completing Ser Manuel's quest. Spawns with two Gun Nuts as bodyguards. Attacks with rapid fire, wide spreads, and a shield-shaped bullet pattern with a spinning cross. Believes blocking is superior to dodge rolling.",
+    "ammonomicon": "Formerly Ser Blockner, this traitorous rat betrayed his friend and sought glory alone in the Gungeon. Known for using shields and expressing a casual disdain for all dodge rolls. Eventually met his end at the hands of one of Ser Manuel's pupils.",
+    "tips": [
+      "Deal with the two Gun Nuts first to reduce pressure.",
+      "Find the secret room in the Halls of Knowledge and bring Old Knight's Helm and Shield to trigger this encounter.",
+      "His shield-shaped attack has gaps — weave through them rather than dodge rolling."
+    ],
     "icon": "Blockner.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"
   },
@@ -115,7 +225,15 @@
     "name": "Door Lord",
     "category": "Boss",
     "health": "1430 (Floor 2), 1760 (Floor 3), 2035 (Floor 4)",
-    "description": "",
+    "location": "Secret — Gungeon Proper, Black Powder Mine, or Hollow",
+    "description": "A rare secret boss with a 1.33% chance to replace any boss on floors 2-4. A massive door mimic that attacks with expanding bullet rings, triangular spreads, a flaming cone, a spinning laser that ignites the ground, and a teleport-and-reappear attack.",
+    "ammonomicon": "A massive door Mimic that actively hunts Gungeoneers. Mimics are an incredibly old and venerable species. Gungeonologists estimate that the oldest of Mimics perhaps even predate the Gungeon itself.",
+    "tips": [
+      "Dodge roll through the expanding rings before they drift too far.",
+      "Stay mobile during the laser spin — keep moving to avoid the ignited ground.",
+      "During the teleport attack, position between the two ring spawn points.",
+      "Can be cheesed by hiding behind the smaller door at the entrance with long-reach weapons."
+    ],
     "icon": "Door_Lord.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Door_Lord"
   },
@@ -123,7 +241,15 @@
     "name": "Blobulord",
     "category": "Boss",
     "health": "1333.3",
-    "description": "",
+    "location": "Secret — Oubliette",
+    "description": "The sole boss of the Oubliette. A massive Blobulon that attacks with outward bullet rings, wave-like bullet streams, random rapid fire, bouncing Blobulon-faced bullets, and a splitting attack where it becomes untargetable. Does not drop a Master Round.",
+    "ammonomicon": "The ranking officer of the Blobulon Army in the Gungeon. This vicious strategist carries centuries of experience in cruelty and subjugation. A threat not only to the Gungeon, but to the entire galaxy.",
+    "tips": [
+      "No Master Round for a flawless kill — this is a secret floor boss.",
+      "During the split attack, focus on dodging — Blobulord is untargetable until it reforms.",
+      "Keep moving to avoid the bouncing Blobulon-faced bullets.",
+      "Bring high-DPS weapons to burn it down between split phases."
+    ],
     "icon": "Blobulord.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord"
   },
@@ -131,7 +257,15 @@
     "name": "Old King",
     "category": "Boss",
     "health": "3333.2",
-    "description": "",
+    "location": "Secret — Abbey of the True Gun",
+    "description": "A secret boss in the Abbey of the True Gun. A darker, more powerful version of the Bullet King with enhanced attacks including returning spirals, scrambled bullet lines, homing skull swarms, and jammed bullet rings that deal a full heart of damage. Accompanied by his own Old Chancellor. The third most durable boss in the game.",
+    "ammonomicon": "Eternal Warrior — A much fiercer ruler than the Bullet King. His attacks resemble the Bullet King's but are more complex, including jammed bullets that deal a full heart of damage.",
+    "tips": [
+      "Hit the Old Chancellor with Casey from close range — his body will one-shot the Old King (unless jammed).",
+      "Watch for jammed rings — they deal a full heart of damage.",
+      "No Master Round for a flawless kill — this is a secret floor boss.",
+      "Bring high-DPS weapons — he has more health than the normal High Dragun."
+    ],
     "icon": "Old_King.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_King"
   },
@@ -139,7 +273,15 @@
     "name": "Resourceful Rat",
     "category": "Boss",
     "health": "1480 (Phase 1), 3515 (Phase 2)",
-    "description": "",
+    "location": "Secret — Resourceful Rat's Lair",
+    "description": "A three-phase secret boss in the Resourceful Rat's Lair. Phase 1 is a chase battle. Phase 2 pits the player against a mech made of stolen items with destroyable shoulder weapons. Phase 3 is a Punch-Out!! style boxing match where the Rat drops loot when hit. Defeating him stops him from stealing items in future runs.",
+    "ammonomicon": "Say cheese and die! — The Resourceful Rat is an exceptionally difficult boss consisting of three different phases, with phase two being a mech he created out of all the items and guns he has stolen.",
+    "tips": [
+      "Destroy the mech's shoulder weapons in Phase 2 to exchange hard attacks for easier ones.",
+      "In Phase 3, learn the punch-out patterns — each sub-phase has different attacks.",
+      "Rat Keys dropped in Phase 3 open Rat Chests containing unique items (Elimentaler, Partially-Eaten Cheese, Resourceful Sack, Rat Boots).",
+      "Nudge hearts from the maze into the boss foyer before Phase 2 — it's the only way to heal between phases."
+    ],
     "icon": "Boss_Resourceful_Rat.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Resourceful_Rat_(Boss)"
   },
@@ -147,7 +289,15 @@
     "name": "Agunim",
     "category": "Boss",
     "health": "N/A (3 hits)",
-    "description": "",
+    "location": "Secret — R&G Dept.",
+    "description": "A dark wizard boss in the R&G Dept., fought on a rooftop arena. A reference to Agahnim from The Legend of Zelda. Requires three hits to defeat. After defeating him, the player must jump off the rooftop to reach the Forge. The Sell Creep is secretly his alternate identity.",
+    "ammonomicon": "Cam Clarke As Agunim — A dark wizard who once served the demon lord Cannon. Imprisoned in a cell deep beneath the Gungeon after his defeat at the hands of The Bullet. Some say he still remains, gathering resources to summon Cannon once more.",
+    "tips": [
+      "Only three hits are needed — focus on dodging and landing precise shots.",
+      "After the fight, jump off the rooftop to return to the Forge.",
+      "Accessed by selling a Master Round plus two other items to the Sell Creep in the Hollow.",
+      "The boss foyer has a unique interactable ladder instead of a corridor."
+    ],
     "icon": "Heligunim.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agunim"
   },
@@ -155,7 +305,14 @@
     "name": "Black Stache",
     "category": "Boss",
     "health": "1200",
-    "description": "",
+    "location": "Past — Convict (Nightclub 'Confession')",
+    "description": "The boss of the Convict's past, fought in the nightclub 'Confession'. A Hegemony official who betrayed the Convict's criminal organization. Fought alongside Hegemony Soldiers in a nightclub setting.",
+    "ammonomicon": "The Hegemony official that betrayed the criminal mastermind Laser Lily, crippling her organization. After accepting a fortune in bribes to overlook their less-than-legal dealings, Black Stache used his knowledge to conduct a sweeping sting operation.",
+    "tips": [
+      "Clear the Hegemony Soldiers first to reduce pressure.",
+      "Watch for his Molotov Cocktail attack — it creates fire hazards.",
+      "Use cover in the nightclub to avoid crossfire from multiple enemies."
+    ],
     "icon": "Black_Stache.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Black_Stache"
   },
@@ -163,7 +320,15 @@
     "name": "Dr. Wolf's Monster",
     "category": "Boss",
     "health": "N/A",
-    "description": "",
+    "location": "Past — Hunter (Blacksword Manor)",
+    "description": "The boss of the Hunter's past, fought in Blacksword Manor. Dr. Wolfenclaw summons his monster to fight while he runs away and buffs its defenses. The monster attacks with lightning-bolt bullets, a flying bird-shaped bullet formation, and a bullet-sword. A reference to Wolfenstein's Mecha Hitler.",
+    "ammonomicon": "Dr. Wolfenclaw's monstrous creation, unleashed upon the Hunter in Blacksword Manor. The doctor buffs the monster's defenses if left alive while the monster attacks with lightning, birds, and swords made of bullets.",
+    "tips": [
+      "Prioritize Dr. Wolfenclaw — if left alive, he buffs the monster's defenses.",
+      "Back up and let the bird-shaped bullets spread before dodging through.",
+      "Keep your distance — the bullet-sword is most dangerous up close.",
+      "The Wolf item accompanies you in this past fight."
+    ],
     "icon": "Dr._Wolf%27s_Monster.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dr._Wolf%27s_Monster"
   },
@@ -171,7 +336,15 @@
     "name": "HS Absolution",
     "category": "Boss",
     "health": "5200",
-    "description": "",
+    "location": "Past — Pilot (Hegemony Space)",
+    "description": "The boss of the Pilot's past, fought in Hegemony Space. A massive Hegemony battleship that fires lasers, homing rockets, and summons smaller ships. The player pilots a small freighter with a blaster and missiles. Note: the boss intro calls it HM Absolution, while the Ammonomicon says HS Absolution.",
+    "ammonomicon": "The massive dreadnaught that cornered the Pilot and his mate while they salvaged a derelict space hulk in Hegemony space. The Hegemony fields hundreds of these vessels to police the regions of space it holds dominion over.",
+    "tips": [
+      "Shoot down the six homing rockets — they can be destroyed.",
+      "Stay in the middle of the arena to avoid the two large trapping lasers.",
+      "Use missiles on the mothership and your blaster on smaller ships.",
+      "Your heart containers, armor, blanks, keys, and casings are reset for this fight."
+    ],
     "icon": "HS_Absolution.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/HM_Absolution"
   },
@@ -179,23 +352,29 @@
     "name": "Interdimensional Horror",
     "category": "Boss",
     "health": "1150",
-    "description": "",
+    "location": "Past — Marine (Primerdyne R&D)",
+    "description": "The boss of the Marine's past, fought at Primerdyne R&D. An interdimensional entity that attacks with bullet patterns and summons imp-like minions. A reference to the Doom series. Its minions are among the only enemies in the game to visibly bleed when damaged.",
+    "ammonomicon": "An interdimensional entity that invaded Primerdyne R&D. Its imp-like minions resemble creatures from classic FPS games, and are among the only enemies in the game to visibly bleed upon taking damage.",
+    "tips": [
+      "Kill summoned minions quickly — they clutter the battlefield.",
+      "Save blanks for dense bullet patterns when minions are active.",
+      "Keep your distance and circle the arena to avoid overlapping attacks."
+    ],
     "icon": "Interdimensional_Horror.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Interdimensional_Horror"
-  },
-  {
-    "name": "Agunim",
-    "category": "Boss",
-    "health": "N/A (3 hits)",
-    "description": "",
-    "icon": "Agunim.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agunim"
   },
   {
     "name": "Cannon",
     "category": "Boss",
     "health": "700",
-    "description": "",
+    "location": "Past — Bullet (Gungeon Proper)",
+    "description": "The second of two bosses in the Bullet's past, fought in the Gungeon Proper. A demonic entity that fires orbiting bullets which expand outward, then retract, before transforming into homing bats. A reference to Ganon from The Legend of Zelda.",
+    "ammonomicon": "A mysterious demon lord who once usurped the power of the Gungeon. Cannon held a deep and burning desire to rule the Gungeon with a sweaty iron hoof. While Cannon reigned, the Past was never killed and no Chamber could be reloaded.",
+    "tips": [
+      "Watch the orbiting bullets carefully — they expand, retract, then become homing bats.",
+      "Keep moving to avoid the bat phase of the orbiting bullet attack.",
+      "Defeat Agunim first — Cannon is the second phase of the Bullet's past boss fight."
+    ],
     "icon": "Cannon.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannon"
   },
@@ -203,7 +382,15 @@
     "name": "The Last Human",
     "category": "Boss",
     "health": "1200",
-    "description": "",
+    "location": "Past — Robot (Emperor's Arena)",
+    "description": "The boss of the Robot's past, fought in Emperor's Arena. A human resistance fighter who attacks with random bullets, summoned shotgun-wielding humans, grenade salvos, bullet spirals, and poison clouds. She teleports between attacks. A reference to Sarah Connor from The Terminator.",
+    "ammonomicon": "The last human, fought in the gladiatorial arena of the robot overlord EMP-R0R. She fights back against the killbot army with bullets, grenades, poison, and summoned human fighters.",
+    "tips": [
+      "Dodge roll is the only way to escape poison clouds if caught in them.",
+      "Don't rely on cover — it'll be destroyed in the first 15 seconds.",
+      "Kill summoned humans quickly to reduce battlefield chaos.",
+      "Armor is reset to 6 for this past fight."
+    ],
     "icon": "The_Last_Human.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Last_Human"
   },
@@ -211,7 +398,16 @@
     "name": "Lich",
     "category": "Boss",
     "health": "1995 (Phase 1), 2100 (Phase 2), 2100 (Phase 3)",
-    "description": "",
+    "location": "Bullet Hell",
+    "description": "The true final boss of Enter the Gungeon, found at the end of Bullet Hell. A three-phase fight: Phase 1 features bullet patterns and Tombstoner summons, Phase 2 has dense scattered bullets and crossing bullet rows, and Phase 3 is fought on a small platform with movement-limiting AoE attacks. The Lich is the Gunslinger who mastered the Gungeon and became its ruler.",
+    "ammonomicon": "The cursed gunslinger who mastered the Gungeon and commands its undead legions. The Lich is the true final boss, residing in Bullet Hell — the hidden sixth chamber beneath the Gungeon.",
+    "tips": [
+      "Save high-DPS ammo for the Lich — Bullet Hell wears down your resources before you reach him.",
+      "Kill Tombstoners quickly in Phase 1 — their bullet crosses clutter the battlefield.",
+      "In Phase 2, don't stay where bullet rows cross in the middle — run to the edges.",
+      "In Phase 3, minimize dodge rolls — they leave you open. Use explosive weapons to clear bullets.",
+      "Save blanks for Phase 3 AoE attacks that limit your movement."
+    ],
     "icon": "Lich.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lich"
   }
