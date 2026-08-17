@@ -6,6 +6,39 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.21 — 📋 Items Wiki Audit Round 5 (Final) — Table Techs, Active Items, Companions, Rings (August 2026)
+**Build:** 98
+
+> Final pass of items wiki comparison: 23 more item effects enriched with specific values. Completes the items accuracy audit.
+
+### Changes
+- **FIX (BUG-080) — 23 final items with vague effects enriched:**
+  - Table Tech Heat: 5 tile radius, 10 second duration
+  - Table Tech Money: 40% chance to drop 1-4 coins per table flipped
+  - Table Tech Rocket: 30 damage on impact + 30 explosion damage
+  - Table Tech Shotgun: 10 homing bullets, 6 damage each, 4 bounces
+  - Bomb: 60 damage to nearby enemies
+  - Molotov: 4 DPS for 4 seconds
+  - Magazine Rack: 10 second duration, guns need 1+ ammo
+  - Charm Horn: 10 second charm duration
+  - Aged Bell: 5 second freeze
+  - Potion of Gun Friendship: +30% damage, 2x fire rate, -70% reload, 10x knockback
+  - Cluster Mine: 60 damage per mine
+  - Chaff Grenade: 10 second stun
+  - Daruma: recharges by damaging enemies
+  - Orbital Bullets: wall-hit trigger, bounce fallback at max
+  - Ring of Chest Vampirism: half a heart, includes Mimics
+  - Cartographer's Ring: 50% chance, no secret rooms
+  - Chaos Bullets: 10% pierce/bounce/status, 25% beam per second
+  - Gundromeda Strain: affects bosses too
+  - Baby Good Shelleton: 12.5 DPS laser
+  - Honeycomb: 12-20 bees, 3 damage + 1/s for 2s
+  - Enraging Photo: 4 second duration
+  - Blue Guon Stone: 33% enemy shot speed reduction, 5 seconds
+  - Portable Table Device: triggers Table Tech effects
+
+---
+
 ## v1.9.20 — 📋 Items Wiki Audit Round 4 — Bullet Upgrades, Guon Stone, Table Tech (August 2026)
 **Build:** 97
 

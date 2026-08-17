@@ -200,7 +200,7 @@
     "type": "Active",
     "quote": "Lacuna",
     "quality": "A",
-    "effect": "Briefly stops enemies and enemy bullets. Can be used to steal from shops.",
+    "effect": "Freezes enemies and enemy bullets in time for 5 seconds. Can be used to steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -2790,7 +2790,7 @@
     "type": "Passive",
     "quote": "Grave Lad",
     "quality": "S",
-    "effect": "Follows the player and attacks enemies with a green laser.",
+    "effect": "Follows the player, firing a green laser that deals 12.5 DPS for 3.86s with 4.9s downtime.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -7042,7 +7042,7 @@
     "type": "Passive",
     "quote": "On My Side",
     "quality": "B",
-    "effect": "Orbits the player, blocking enemy shots on contact. Upon taking damage, briefly slows time.",
+    "effect": "Orbits the player, blocking enemy shots. Upon taking damage, decreases enemy shot speed by 33% for 5 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -7138,7 +7138,7 @@
     "type": "Active",
     "quote": "Use For Boom",
     "quality": "D",
-    "effect": "Throws a bomb that explodes after a short delay.",
+    "effect": "Throws a bomb that explodes after a short delay, dealing 60 damage to nearby enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -9935,7 +9935,7 @@
     "type": "Passive",
     "quote": "Some Floors Are Familiar",
     "quality": "C",
-    "effect": "New floors have a chance to be mapped out.",
+    "effect": "New floors have a 50% chance to be mapped out. Does not reveal secret rooms.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -10253,7 +10253,7 @@
     "type": "Active",
     "quote": "Dazed And Confused",
     "quality": "C",
-    "effect": "Can be used 3 times. Stuns enemies. Can be used to steal items from shops.",
+    "effect": "Stuns enemies in the room for 10 seconds. Can be used 3 times. Can be used to steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -11133,7 +11133,7 @@
     "type": "Passive",
     "quote": "Taste The Painbow",
     "quality": "A",
-    "effect": "Adds random bullet effects to the player's bullets.",
+    "effect": "Each shot has a 10% chance to gain piercing or bouncing (stacks up to 10), and a 10% chance to inflict a random status effect. Beam guns gain 25% chance per second for status.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -11416,7 +11416,7 @@
     "type": "Active",
     "quote": "The Call Of Duty",
     "quality": "B",
-    "effect": "Charms enemies around the player upon use. Can be used to steal from shops.",
+    "effect": "Charms enemies around the player for 10 seconds. Can be used to steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -13788,7 +13788,7 @@
     "type": "Active",
     "quote": "Area Hazard",
     "quality": "C",
-    "effect": "Places 5 small mines that explode when an enemy comes into contact with them.",
+    "effect": "Places 5 small mines that explode when an enemy comes into contact, dealing 60 damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -15140,7 +15140,7 @@
     "type": "Active",
     "quote": "Good Fortune",
     "quality": "B",
-    "effect": "Can be used immediately after dodging a bullet to activate a blank effect.",
+    "effect": "Can be used after dodge rolling through a bullet to activate a blank effect. Recharges by damaging enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -18091,7 +18091,7 @@
     "type": "Passive",
     "quote": "Don't Believe His Lies",
     "quality": "D",
-    "effect": "Taking damage makes the player briefly deal double damage and instantly reloads their weapon.",
+    "effect": "Upon taking damage, instantly reloads all guns and deals double damage for 4 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -23129,7 +23129,7 @@
     "type": "Passive",
     "quote": "All Enemies Weaker!",
     "quality": "S",
-    "effect": "Decreases health of all enemies encountered by 25%.",
+    "effect": "Reduces the health of all enemies and bosses by 25%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -26935,7 +26935,7 @@
     "type": "Passive",
     "quote": "Bee Prepared",
     "quality": "C",
-    "effect": "Taking damage spawns bees that seek out and damage enemies.",
+    "effect": "Taking damage spawns 12-20 homing bees that deal 3 damage on impact plus 1 damage per second for 2 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -32275,7 +32275,7 @@
     "type": "Active",
     "quote": "Instant Mail Order",
     "quality": "C",
-    "effect": "Place to create a zone of infinite ammo.",
+    "effect": "Creates a zone of infinite ammo for 10 seconds. Guns must have at least 1 ammo to fire.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -36014,7 +36014,7 @@
     "type": "Active",
     "quote": "Feel The Burn",
     "quality": "D",
-    "effect": "Throws a Molotov that sets an area on fire.",
+    "effect": "Throws a Molotov that sets a large area on fire, dealing 4 DPS for 4 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -38802,7 +38802,7 @@
     "type": "Passive",
     "quote": "Deadly Revolution",
     "quality": "A",
-    "effect": "Missed shots orbit the player.",
+    "effect": "Missed shots that hit a wall orbit the player. When the max is reached, next shots bounce instead.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -40925,7 +40925,7 @@
     "type": "Active",
     "quote": "Know When To Fold 'Em",
     "quality": "D",
-    "effect": "Can be used 3 times for each charged. Spawns a small table that can be flipped.",
+    "effect": "Spawns a small folding table that can be flipped. Triggers Table Tech effects on flip.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -41255,7 +41255,7 @@
     "type": "Active",
     "quote": "Temporary +1 To Gun",
     "quality": "D",
-    "effect": "While active, increases damage, fire rate, knockback, and reload speed.",
+    "effect": "While active, increases damage by 30%, doubles fire rate, decreases reload times by 70%, and multiplies knockback by 10.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -43255,7 +43255,7 @@
     "type": "Passive",
     "quote": "Blood From Wood",
     "quality": "C",
-    "effect": "Breaking chests heals the player.",
+    "effect": "Breaking chests and killing Mimics heals the player for half a heart.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -53004,7 +53004,7 @@
     "type": "Passive",
     "quote": "Hot Flips",
     "quality": "D",
-    "effect": "Flipping a table creates a large area in which all enemies will be set on fire.",
+    "effect": "Flipping a table creates a burning aura with a 5 tile radius for 10 seconds, setting enemies on fire.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -53154,7 +53154,7 @@
     "type": "Passive",
     "quote": "Flip Prosperity",
     "quality": "D",
-    "effect": "Flipping a table flips all other tables in the room, and flipping a table has a chance to spawn money.",
+    "effect": "Flipping a table flips all other tables in the room. Each table flipped has a 40% chance to drop 1-4 coins.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -53425,7 +53425,7 @@
     "type": "Passive",
     "quote": "End Table",
     "quality": "C",
-    "effect": "Flipping a table causes it to launch forward and explode.",
+    "effect": "Flipping a table launches it forward, dealing 30 damage on impact and 30 explosion damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -53622,7 +53622,7 @@
     "type": "Passive",
     "quote": "Flip Out",
     "quality": "D",
-    "effect": "Tables release a homing shotgun blast of bullets when flipped.",
+    "effect": "Flipping a table releases 10 homing bullets dealing 6 damage each, bouncing up to 4 times.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {

@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.21",
+    "title": "📋 Items Wiki Audit Round 5 (Final) — Table Techs, Active Items, Companions, Rings Enriched",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-080): 23 final item effects enriched with wiki-accurate mechanics. Table Techs: Heat (5 tiles, 10s), Money (40%, 1-4 coins), Rocket (30+30 dmg), Shotgun (10 bullets, 6 dmg, 4 bounces). Active items: Bomb (60 dmg), Molotov (4 DPS, 4s), Magazine Rack (10s), Charm Horn (10s), Aged Bell (5s), Potion of Gun Friendship (+30% dmg, x2 fire rate, -70% reload, x10 knockback), Cluster Mine (60 dmg), Chaff Grenade (10s stun), Daruma (recharge). Passives: Orbital Bullets (wall hit, bounce fallback), Ring of Chest Vampirism (half heart, mimics), Cartographer's Ring (50%, no secret rooms), Chaos Bullets (10% pierce/bounce/status, 25% beam), Gundromeda Strain (bosses too), Baby Good Shelleton (12.5 DPS), Honeycomb (12-20 bees, 3+1/s), Enraging Photo (4s), Blue Guon Stone (33% shot speed, 5s), Portable Table Device (Table Tech trigger)."
+    ]
+  },
+  {
     "version": "v1.9.20",
     "title": "📋 Items Wiki Audit Round 4 — Bullet Upgrades, Guon Stone, Table Tech Enriched",
     "date": "August 2026",
