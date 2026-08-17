@@ -175,7 +175,7 @@ Widget synergyPill(int count) {
       ),
     );
   }
-  return metaPill('$count synergy${count == 1 ? "" : "s"}',
+  return metaPill('$count ${count == 1 ? 'synergy' : 'synergies'}',
       Colors.blueAccent,
       icon: Icons.hub);
 }

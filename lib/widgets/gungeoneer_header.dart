@@ -78,7 +78,7 @@ class GungeoneerHeader extends StatefulWidget {
   State<GungeoneerHeader> createState() => _GungeoneerHeaderState();
 }
 
-class _GungeoneerHeaderState extends State<GungeoneerHeader> with SingleTickerProviderStateMixin {
+class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProviderStateMixin {
   String? _quickComment;
   Timer? _commentTimer;
   late final AnimationController _wobbleController;
