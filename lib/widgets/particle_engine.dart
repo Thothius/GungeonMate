@@ -31,6 +31,10 @@ enum ParticlePreset {
   paradoxShards,
   gunpowderSmoke,
   dragunScales,
+  circuitTraces,
+  shellCasings,
+  heroicBlades,
+  boneShards,
 }
 
 // =============================================================================
@@ -255,6 +259,10 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.paradoxShards => 'Paradox Shards',
         ParticlePreset.gunpowderSmoke => 'Gunpowder Smoke',
         ParticlePreset.dragunScales => 'Dragun Scales',
+        ParticlePreset.circuitTraces => 'Circuit Traces',
+        ParticlePreset.shellCasings => 'Shell Casings',
+        ParticlePreset.heroicBlades => 'Heroic Blades',
+        ParticlePreset.boneShards => 'Bone Shards',
       };
 
   String get description => switch (this) {
@@ -282,6 +290,10 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.paradoxShards => 'Fractured crystal shards spinning through a time rift with cursed glow',
         ParticlePreset.gunpowderSmoke => 'Dark smoke puffs drifting upward with sulfurous ember glow',
         ParticlePreset.dragunScales => 'Reptilian dragon scales falling with molten orange-red glow',
+        ParticlePreset.circuitTraces => 'Circuit-board traces connecting with electric green-blue line links',
+        ParticlePreset.shellCasings => 'Spent brass shell casings falling with warm metallic clink',
+        ParticlePreset.heroicBlades => 'Heroic blade tips spinning upward with gold-red valor glow',
+        ParticlePreset.boneShards => 'Fractured bone shards drifting with eerie crypt-teal cursed glow',
       };
 
   PresetConfig get config => switch (this) {
@@ -626,6 +638,63 @@ extension ParticlePresetX on ParticlePreset {
             // Upgrades: shimmer for molten glint, medium life
             shimmer: true,
             lifetimeMin: 4.0, lifetimeMax: 8.0,
+          ),
+        ParticlePreset.circuitTraces => PresetConfig(
+            colors: [const Color(0xFF69F0AE), const Color(0xFF40C4FF), const Color(0xFF00E676), const Color(0xFF82B1FF)],
+            shape: ParticleShape.edge,
+            sizeMin: 2.0, sizeMax: 5.0,
+            speedMin: 1.0, speedMax: 5.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.2,
+            rotate: false,
+            // Upgrades: shimmer for electric pulse, long life for persistent circuit
+            shimmer: true,
+            lifetimeMin: 8.0, lifetimeMax: 14.0,
+          ),
+        ParticlePreset.shellCasings => PresetConfig(
+            colors: [const Color(0xFFFFB74D), const Color(0xFFD7CCC8), const Color(0xFFBCAAA4), const Color(0xFFFFCC80)],
+            shape: ParticleShape.edge,
+            sizeMin: 2.5, sizeMax: 5.5,
+            speedMin: 8.0, speedMax: 20.0,
+            glowEffect: GlowEffect.none,
+            lineLinks: false,
+            drift: DriftDirection.down,
+            wobble: 0.6,
+            rotate: true,
+            // Upgrades: trails for casing spin, short life (they hit the ground)
+            trailLength: 0.3,
+            lifetimeMin: 2.0, lifetimeMax: 4.0,
+          ),
+        ParticlePreset.heroicBlades => PresetConfig(
+            colors: [const Color(0xFFFFD740), const Color(0xFFEF5350), const Color(0xFFFFE57F), const Color(0xFFFFCDD2)],
+            shape: ParticleShape.triangle,
+            sizeMin: 3.0, sizeMax: 7.0,
+            speedMin: 3.0, speedMax: 10.0,
+            glowEffect: GlowEffect.pulse,
+            lineLinks: false,
+            drift: DriftDirection.up,
+            wobble: 0.4,
+            rotate: true,
+            // Upgrades: shimmer for heroic gleam, medium life
+            shimmer: true,
+            lifetimeMin: 5.0, lifetimeMax: 9.0,
+          ),
+        ParticlePreset.boneShards => PresetConfig(
+            colors: [const Color(0xFFE0E0E0), const Color(0xFF2EC4B6), const Color(0xFFF5F5DC), const Color(0xFF80CBC4)],
+            shape: ParticleShape.shard,
+            sizeMin: 2.5, sizeMax: 6.0,
+            speedMin: 2.0, speedMax: 8.0,
+            glowEffect: GlowEffect.cursed,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.5,
+            rotate: true,
+            // Upgrades: turbulence for necrotic drift, hue drift for decay
+            turbulence: 0.4,
+            hueDriftSpeed: 15.0,
+            lifetimeMin: 6.0, lifetimeMax: 11.0,
           ),
       };
 }
