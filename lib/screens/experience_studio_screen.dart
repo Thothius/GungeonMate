@@ -15,7 +15,8 @@ import '../widgets/particle_engine.dart'
         ParticleSpeed,
         ParticleSpeedX,
         GlowEffect,
-        GlowEffectX;
+        GlowEffectX,
+        ParticleField;
 
 /// Experience Studio — a step-by-step wizard for creating your Gungeon
 /// Mate experience. A persistent live preview at the top shows exactly
@@ -411,6 +412,24 @@ class _LivePreview extends StatelessWidget {
   }
 
   Widget _buildPreview(ThemeFlair flair, VisualPrefs prefs, double sf) {
+    // Resolve particle colors — mirrors ThemeOverlay's logic so the
+    // preview shows the same colors as the real background.
+    List<Color>? particleColors;
+    if (prefs.particleColorSchema != ParticleColorSchema.presetDefault) {
+      if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
+        particleColors = [flair.primary, flair.secondary, flair.glowPrimary, flair.headlineStat];
+      } else {
+        particleColors = prefs.particleColorSchema.colors;
+      }
+    }
+
+    // Determine if particles should show: either explicitly enabled or
+    // the theme has an auto-on default (non-gungeonDust themes).
+    final themeDefault = kThemeParticleDefaults[AppTheme.displayedMode] ??
+        ParticlePreset.gungeonDust;
+    final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
+    final particlesOn = prefs.particlesEnabled || themeAutoOn;
+
     return Container(
           height: 160 * sf,
           margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
@@ -422,8 +441,24 @@ class _LivePreview extends StatelessWidget {
               width: 1.0,
             ),
           ),
+          clipBehavior: Clip.hardEdge,
           child: Stack(
             children: [
+              // ── Mini particle engine (behind everything) ──
+              if (particlesOn)
+                Positioned.fill(
+                  child: ParticleField(
+                    preset: prefs.particlePreset,
+                    count: (prefs.particleCount * 0.5).round().clamp(4, 16),
+                    sizeScale: prefs.particleSizeScale * 0.7,
+                    opacity: prefs.particleOpacity,
+                    glowOverride: prefs.particleGlowEffect,
+                    lineLinksOverride: prefs.particleLineLinks ? true : null,
+                    colorsOverride: particleColors,
+                    bounce: prefs.particleBounce,
+                    speedMultiplier: prefs.particleSpeed.multiplier,
+                  ),
+                ),
               // Glow overlay
               if (prefs.glowIntensity > 0)
                 Positioned.fill(
@@ -441,6 +476,21 @@ class _LivePreview extends StatelessWidget {
                     ),
                   ),
                 ),
+              // Subtle scrim behind content for readability over particles
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        flair.scaffold.withValues(alpha: 0.3),
+                        flair.scaffold.withValues(alpha: 0.5),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               // Content
               Padding(
                 padding: const EdgeInsets.all(12),

@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.33",
+    "title": "✨ Experience Studio — Mini Particle Engine in Preview",
+    "date": "August 2026",
+    "items": [
+      "✨ Live preview now renders a real mini particle engine inside the preview card — you see your chosen preset, colors, speed, count, size, opacity, glow, and bounce all animating in the preview, not just in the background.",
+      "✨ Particles are clipped to the preview card bounds and sit behind a subtle readability scrim so text stays legible.",
+      "✨ Particle count scaled to 50% for the small preview area (4-16 particles) so it's not overcrowded."
+    ]
+  },
+  {
     "version": "v1.9.32",
     "title": "🎨 Experience Studio — Critical Refinements",
     "date": "August 2026",

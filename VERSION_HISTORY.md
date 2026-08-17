@@ -6,6 +6,20 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.33 — ✨ Experience Studio — Mini Particle Engine in Preview (August 2026)
+**Build:** 110
+
+> The live preview now renders a real particle engine inside the preview card, not just in the background.
+
+### Changes
+- **Mini particle engine in preview** — Embedded `ParticleField` inside the preview card's `Stack`, behind the content. Renders the actual selected preset, colors, speed, count, size, opacity, glow, and bounce — all animating live in the preview.
+- **Color resolution mirrors ThemeOverlay** — `themeMatch` schema uses the previewed theme's flair colors. Other schemas use their own palettes. Same logic as the real background.
+- **Particle count scaled** — 50% of the user's setting (4-16 particles) so the small preview area isn't overcrowded. Size scale also reduced by 30%.
+- **Readability scrim** — Linear gradient overlay (scaffold color at 30-50% alpha) between particles and content so text stays legible over animated particles.
+- **Clip behavior** — Preview card uses `Clip.hardEdge` so particles don't bleed outside the rounded corners.
+
+---
+
 ## v1.9.32 — 🎨 Experience Studio — Critical Refinements (August 2026)
 **Build:** 109
 

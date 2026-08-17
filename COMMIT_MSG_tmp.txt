@@ -1,11 +1,11 @@
-v1.9.32: Experience Studio critical refinements
+v1.9.33: Mini particle engine in Experience Studio preview
 
-- FIX: Live preview now updates on theme change (was using committed not preview theme)
-- FIX: Step 2 auto-skips for themes without variants (no dead-end)
-- FIX: Step transitions animate with slide+fade
-- FIX: Custom color saves debounced (500ms) instead of every tap
-- FIX: Reset restores user's original theme, not arbitrary defaults
-- FIX: Progress dots 44px tap targets + hide Step 2 when N/A
+- Live preview now renders a real ParticleField inside the preview card
+- Shows actual preset, colors, speed, count, size, opacity, glow, bounce
+- Color resolution mirrors ThemeOverlay logic (themeMatch uses flair)
+- Particle count scaled to 50% for small area (4-16 particles)
+- Readability scrim between particles and text content
+- Clip.hardEdge so particles stay within rounded corners
 
 Generated with [Devin](https://devin.ai)
 
