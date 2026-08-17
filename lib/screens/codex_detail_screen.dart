@@ -95,52 +95,27 @@ class CodexDetailScreen extends StatelessWidget {
                 const SizedBox(width: 14),
                 // Category + location badges stacked
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    crossAxisAlignment: WrapCrossAlignment.start,
                     children: [
                       if (entry.category.isNotEmpty)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: flair.primary.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: flair.primary.withValues(alpha: 0.4),
-                              width: 1,
-                            ),
-                          ),
-                          child: GoopText(
-                            entry.category.toUpperCase(),
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.8,
-                              color: flair.secondary,
-                            ),
-                          ),
-                        ),
-                      if (entry.health != null && entry.health!.isNotEmpty) ...[
-                        const SizedBox(height: 6),
-                        GoopText(
-                          'Base HP: ${entry.health}',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w700,
-                            color: flair.secondary.withValues(alpha: 0.7),
-                          ),
-                        ),
-                      ],
-                      if (entry.location != null && entry.location!.isNotEmpty) ...[
-                        const SizedBox(height: 6),
-                        GoopText(
-                          'Location: ${entry.location}',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white.withValues(alpha: 0.5),
-                          ),
-                        ),
-                      ],
+                        _badge(flair, entry.category.toUpperCase(),
+                            accent: flair.primary),
+                      if (entry.game != null && entry.game!.isNotEmpty)
+                        _badge(flair, entry.game!,
+                            accent: const Color(0xFF42A5F5),
+                            icon: Icons.videogame_asset_outlined),
+                      if (entry.health != null && entry.health!.isNotEmpty)
+                        _badge(flair, 'HP: ${entry.health}',
+                            accent: const Color(0xFFEF5350),
+                            icon: Icons.favorite_outline),
+                      if (entry.location != null &&
+                          entry.location!.isNotEmpty)
+                        _badge(flair, entry.location!,
+                            accent: const Color(0xFF66BB6A),
+                            icon: Icons.place_outlined),
                     ],
                   ),
                 ),
@@ -298,6 +273,43 @@ class CodexDetailScreen extends StatelessWidget {
   }
 
   // ── Themed section helpers ──────────────────────────────────────
+
+  Widget _badge(ThemeFlair flair, String text,
+      {required Color accent, IconData? icon}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: accent.withValues(alpha: 0.4),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 10, color: accent.withValues(alpha: 0.8)),
+            const SizedBox(width: 4),
+          ],
+          Flexible(
+            child: GoopText(
+              text,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 9.5,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.4,
+                color: accent.withValues(alpha: 0.9),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _sectionLabel(ThemeFlair flair, String text, {IconData? icon}) {
     return Row(

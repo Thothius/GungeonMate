@@ -178,12 +178,18 @@ class _CodexScreenState extends State<CodexScreen> {
 
   List<CodexEntry> _filter(List<CodexEntry> entries) {
     if (_query.isEmpty) return entries;
-    return entries
-        .where((e) =>
-            e.name.toLowerCase().contains(_query) ||
-            e.category.toLowerCase().contains(_query) ||
-            e.description.toLowerCase().contains(_query))
-        .toList();
+    return entries.where((e) {
+      if (e.name.toLowerCase().contains(_query) ||
+          e.category.toLowerCase().contains(_query) ||
+          e.description.toLowerCase().contains(_query)) {
+        return true;
+      }
+      if (e.ammonomicon != null &&
+          e.ammonomicon!.toLowerCase().contains(_query)) {
+        return true;
+      }
+      return e.tips.any((t) => t.toLowerCase().contains(_query));
+    }).toList();
   }
 
   /// Returns the data entries for the selected data category.
