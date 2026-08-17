@@ -732,7 +732,7 @@
   {
     "name": "AC-15",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f6/AC-15.png",
-    "notes": "Becomes more powerful if the player has armor.",
+    "notes": "Without armor, fires low-damage purple lasers. With armor, fires piercing blue blasts (up to 3 enemies) with high knockback.",
     "quote": "Armor Class Non-Zero",
     "quality": "B",
     "type": "Automatic",
@@ -1861,7 +1861,7 @@
   {
     "name": "Alien Sidearm",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c6/Alien_Sidearm.png",
-    "notes": "Charged shots are larger and deal more damage.",
+    "notes": "Tap fires small, weak projectiles. Charge to fire larger, more powerful blasts.",
     "quote": "Shield Breaker",
     "quality": "D",
     "type": "Charged",
@@ -2061,7 +2061,7 @@
   {
     "name": "AU Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/04/AU_Gun.png",
-    "notes": "Fires a single powerful bullet.",
+    "notes": "Fires a single powerful 100-damage bullet. Very limited ammo.",
     "quote": "Some Assembly Required",
     "quality": "S",
     "type": "Semiautomatic",
@@ -4831,7 +4831,7 @@
   {
     "name": "Bow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/65/Bow.png",
-    "notes": "Charges to fire powerful piercing shot.",
+    "notes": "Charges to fire a powerful piercing shot.",
     "quote": "Hold Fire To Charge",
     "quality": "C",
     "type": "Charged",
@@ -6735,7 +6735,7 @@
   {
     "name": "Bundle of Wands",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b5/Bundle_of_Wands.png",
-    "notes": "Has a chance to transmogrify.",
+    "notes": "Fires a spread of three magic projectiles, each with a 10% chance to transmogrify enemies into chickens.",
     "quote": "Dark Arts",
     "quality": "C",
     "type": "Semiautomatic",
@@ -8306,7 +8306,7 @@
   {
     "name": "Chamber Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/16/Chamber_Gun.png",
-    "notes": "Transforms based on the current chamber.",
+    "notes": "Transforms into one of 10 forms based on the current chamber. Master rounds can also influence its form.",
     "quote": "Product of Environment",
     "quality": "C",
     "type": "Semiautomatic",
@@ -8858,7 +8858,7 @@
   {
     "name": "Charmed Bow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a5/Charmed_Bow.png",
-    "notes": "Charm s enemies when fully charged.",
+    "notes": "Charges to fire shots that charm enemies.",
     "quote": "<3-----<<<",
     "quality": "B",
     "type": "Charged",
@@ -9169,7 +9169,7 @@
   {
     "name": "Cold 45",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c2/Cold_45.png",
-    "notes": "Fires bullets that freeze enemies.",
+    "notes": "Fires bullets that can freeze enemies.",
     "quote": "Shatterday Night Special",
     "quality": "B",
     "type": "Semiautomatic",
@@ -13749,7 +13749,7 @@
   {
     "name": "Dueling Pistol",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/95/Dueling_Pistol.png",
-    "notes": "Fires a large piercing bullet that bounce twice.",
+    "notes": "Fires large, piercing musket balls that bounce twice.",
     "quote": "Ricochet",
     "quality": "D",
     "type": "Semiautomatic",
@@ -13836,7 +13836,7 @@
   {
     "name": "Dungeon Eagle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f6/Dungeon_Eagle.png",
-    "notes": "Can be charged to fire more powerful shots.",
+    "notes": "Can be charged to fire a more powerful shot, or tap fired for more frequent, weaker projectiles.",
     "quote": "Caw!",
     "quality": "C",
     "type": "Charged",
@@ -14293,7 +14293,7 @@
   {
     "name": "Evolver",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/98/Evolver.png",
-    "notes": "Killing enemies evolves the gun through 6 forms.",
+    "notes": "Evolves through 6 forms (amoeba to dragon) every 5 unique enemy types killed. Ammo refills on each evolution.",
     "quote": "Tamagunchi",
     "quality": "C",
     "type": "Semiautomatic",
@@ -15856,7 +15856,7 @@
   {
     "name": "Flare Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/57/Flare_Gun.png",
-    "notes": "Fires bullets that have a chance to burn enemies.",
+    "notes": "Fires bullets that inflict burning on enemies.",
     "quote": "Over Here",
     "quality": "D",
     "type": "Semiautomatic",
@@ -16453,7 +16453,7 @@
   {
     "name": "Frost Giant",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/99/Frost_Giant.png",
-    "notes": "Fires big bullets that have a chance to freeze.",
+    "notes": "Fires large bullets and creates a short-ranged cone of ice that can freeze enemies.",
     "quote": "Icy Grasp",
     "quality": "B",
     "type": "Semiautomatic",
@@ -22185,7 +22185,7 @@
   {
     "name": "JK-47",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/06/JK-47.png",
-    "notes": "Reloading inflicts fear on nearby enemies.",
+    "notes": "Reloading inflicts fear on nearby enemies, causing them to flee but continue shooting.",
     "quote": "Substitute",
     "quality": "C",
     "type": "Automatic",
@@ -27007,7 +27007,7 @@
   {
     "name": "Megahand",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3e/Megahand.png",
-    "notes": "Charges to fire a larger powerful bullet.",
+    "notes": "Fires small pellets (6 dmg). Charges to fire a powerful blast (45 dmg) with knockback. Reload with full magazine to switch modes via synergies.",
     "quote": "-P-",
     "quality": "B",
     "type": "Charged",
@@ -28229,7 +28229,7 @@
   {
     "name": "Mourning Star",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/36/Mourning_Star.png",
-    "notes": "Calls down a controllable orbital laser.",
+    "notes": "Calls down a controllable orbital laser strike on targeted enemies. Leaves a trail of fire.",
     "quote": "Satellite Rain",
     "quality": "S",
     "type": "Beam",
@@ -29093,7 +29093,7 @@
   {
     "name": "Origuni",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/09/Origuni.png",
-    "notes": "Fires paper planes that guided by cursor.",
+    "notes": "Fires piercing paper planes that follow the player's crosshair (Remote Bullets effect).",
     "quote": "Thousand Cuts",
     "quality": "C",
     "type": "Semiautomatic",
@@ -29811,7 +29811,7 @@
   {
     "name": "Pea Shooter",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/09/Pea_Shooter.png/revision/latest?cb=20160305235549",
-    "notes": "Fires peas.",
+    "notes": "Fires low-damage peas.",
     "quote": "Baby's First Gun",
     "quality": "D",
     "type": "Semiautomatic",
@@ -30143,7 +30143,7 @@
   {
     "name": "Pitchfork",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1c/Pitchfork.png",
-    "notes": "Fires piercing fireballs that burn.",
+    "notes": "Fires piercing fireballs that burn enemies.",
     "quote": "Get Forked!",
     "quality": "C",
     "type": "Semiautomatic",
@@ -30244,7 +30244,7 @@
   {
     "name": "Plague Pistol",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ed/Plague_Pistol.png",
-    "notes": "Bullets create poison puddles on impact.",
+    "notes": "Bullets have a 50% chance to inflict poison and leave a small pool of poison goop on impact.",
     "quote": "Chemical Warfare",
     "quality": "D",
     "type": "Semiautomatic",
@@ -31062,7 +31062,7 @@
   {
     "name": "Proton Backpack",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b0/Proton_Backpack.png",
-    "notes": "Fires a continuous, slow-moving, homing stream.",
+    "notes": "Fires a slow, homing laser stream that locks onto enemies. Deals extra damage to ghostly enemies.",
     "quote": "Crossing Streams",
     "quality": "B",
     "type": "Beam",
@@ -31227,7 +31227,7 @@
   {
     "name": "Prototype Railgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/43/Prototype_Railgun.png",
-    "notes": "Charges to fire a high-velocity, piercing bullet.",
+    "notes": "Charges to fire a high-velocity, piercing 150-damage slug. The charge beam can reveal secret rooms.",
     "quote": "DANGER: HIGH VOLTAGE",
     "quality": "A",
     "type": "Charged",
@@ -31446,7 +31446,7 @@
   {
     "name": "Pulse Cannon",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ef/Pulse_Cannon.png",
-    "notes": "Fires a shotgun blast spread of 6 bullets.",
+    "notes": "Fires a spread of 6 projectiles.",
     "quote": "Time Of Death...",
     "quality": "C",
     "type": "Semiautomatic",
@@ -32515,7 +32515,7 @@
   {
     "name": "RC Rocket",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/75/RC_Rocket.png",
-    "notes": "Fires a slow-moving rocket guided by cursor.",
+    "notes": "Fires slow-moving rockets guided by the player's cursor. 100 impact damage, 30 explosion damage.",
     "quote": "Avoid User Error",
     "quality": "A",
     "type": "Semiautomatic",
@@ -33655,7 +33655,7 @@
   {
     "name": "RPG",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6f/RPG.png",
-    "notes": "Fires a rocket-penetrated grenade.",
+    "notes": "Fires explosive rocket-propelled grenades that accelerate over a short distance.",
     "quote": "Leveled Up",
     "quality": "B",
     "type": "Semiautomatic",
@@ -36286,7 +36286,7 @@
   {
     "name": "Shotgun Full of Love",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/2d/Shotgun_Full_of_Love.png",
-    "notes": "Has a chance to Charm enemies.",
+    "notes": "Has a chance to charm enemies.",
     "quote": "Kill With Kindness",
     "quality": "A",
     "type": "Semiautomatic",
@@ -37400,7 +37400,7 @@
   {
     "name": "Snakemaker",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9c/Snakemaker.png",
-    "notes": "Has a chance to transmogrify enemies into snakes.",
+    "notes": "Has a 25% chance to transmogrify enemies into harmless snakes.",
     "quote": "SSSSSSSSSSS",
     "quality": "A",
     "type": "Semiautomatic",
@@ -39941,7 +39941,7 @@
   {
     "name": "Teapot",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/81/Teapot.png",
-    "notes": "While reloading, ignites nearby enemies.",
+    "notes": "While reloading, ignites nearby enemies. The final shot of every magazine is pink and deals extra damage.",
     "quote": "Monocular Monster",
     "quality": "C",
     "type": "Semiautomatic",
@@ -40058,7 +40058,7 @@
   {
     "name": "Tear Jerker",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/2b/Tear_Jerker.png",
-    "notes": "Fires tears that leave behind puddles of water.",
+    "notes": "Fires tears that leave behind puddles of water. Can extinguish chest fuses and the fireplace.",
     "quote": "Q_Q",
     "quality": "C",
     "type": "Semiautomatic",
@@ -43421,7 +43421,7 @@
   {
     "name": "Triple Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a0/Triple_Gun.png",
-    "notes": "Changes form based on how much ammo it has left.",
+    "notes": "Transforms between three forms based on ammo: revolver (full), machine gun (175/250), and beam weapon (50/500).",
     "quote": "Bullet the Stampede",
     "quality": "B",
     "type": "Semiautomatic",

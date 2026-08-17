@@ -6,6 +6,35 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.26 — 🔫 Gun Notes Wiki Audit — 30 Gun Descriptions Enriched (August 2026)
+**Build:** 103
+
+> First gun notes accuracy audit. 30 of 62 short gun notes enriched with wiki-accurate mechanics, adding missing damage values, mechanics, conditions, and form details.
+
+### Changes
+- **FIX (BUG-084) — 30 gun notes enriched:**
+  - **AU Gun:** Added "100-damage" and "very limited ammo"
+  - **Bundle of Wands:** Added "spread of three" and "10% chance to transmogrify into chickens"
+  - **Chamber Gun:** Added "10 forms" and "master rounds can influence"
+  - **Triple Gun:** Added specific ammo thresholds for each form
+  - **Evolver:** Added "6 forms (amoeba to dragon)", "every 5 unique enemy types", "ammo refills"
+  - **AC-15:** Added both forms (purple lasers vs piercing blue blasts, 3 enemies, knockback)
+  - **Frost Giant:** Added "short-ranged cone of ice"
+  - **Megahand:** Added damage values (6/45), mode switching via synergies
+  - **Origuni:** Added "piercing" and "Remote Bullets effect"
+  - **Proton Backpack:** Added "locks onto enemies" and "extra damage to ghostly enemies"
+  - **Plague Pistol:** Added "50% chance to inflict poison" and "poison goop"
+  - **Teapot:** Added "final shot is pink and deals extra damage"
+  - **RC Rocket:** Added "100 impact damage, 30 explosion damage"
+  - **Prototype Railgun:** Added "150-damage slug" and "charge beam can reveal secret rooms"
+  - **Snakemaker:** Added "25% chance" and "harmless"
+  - **JK-47:** Added "causing them to flee but continue shooting"
+  - **Dungeon Eagle:** Added tap-fire vs charge distinction
+  - **Mourning Star:** Added "leaves a trail of fire"
+  - **And 12 more:** Pea Shooter, Charmed Bow, Cold 45, Dueling Pistol, Flare Gun, Pitchfork, Pulse Cannon, RPG, Shotgun Full of Love, Tear Jerker, Bow, Alien Sidearm
+
+---
+
 ## v1.9.25 — 🔗 Synergies Wiki Audit — 16 Synergy Effects Enriched (August 2026)
 **Build:** 102
 

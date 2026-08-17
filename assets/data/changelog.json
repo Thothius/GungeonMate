@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.26",
+    "title": "🔫 Gun Notes Wiki Audit — 30 Gun Descriptions Enriched",
+    "date": "August 2026",
+    "items": [
+      "🔫 FIX (BUG-084): 30 gun notes enriched with wiki-accurate mechanics. Key additions: AU Gun (100 dmg), Bundle of Wands (10% transmogrify, 3 projectiles), Chamber Gun (10 forms, master rounds), Triple Gun (3 forms, ammo thresholds), Evolver (6 forms, 5 kills each, ammo refills), AC-15 (purple lasers vs piercing blue blasts), Frost Giant (ice cone), Megahand (6 dmg pellets, 45 dmg charge, mode switching), Origuni (piercing, Remote Bullets), Proton Backpack (locks on, ghost bonus), Plague Pistol (50% poison, goop), Teapot (final shot pink, extra dmg), RC Rocket (100 impact, 30 explosion), Prototype Railgun (150 dmg, reveals secret rooms), Snakemaker (25% chance), JK-47 (flee but keep shooting), Dungeon Eagle (tap vs charge), Mourning Star (fire trail), and more."
+    ]
+  },
+  {
     "version": "v1.9.25",
     "title": "🔗 Synergies Wiki Audit — 16 Synergy Effects Enriched",
     "date": "August 2026",
