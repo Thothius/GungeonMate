@@ -6,6 +6,27 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.18 — 📋 Items Wiki Audit Round 2 — Bullet Upgrades, Synthesizers, Ammolets (August 2026)
+**Build:** 95
+
+> Second pass of items wiki comparison: 11 more item effects enriched with specific values.
+
+### Changes
+- **FIX (BUG-077) — 11 more items with vague effects enriched:**
+  - Gilded Bullets: up to 100% damage at 500 shells (formula-based)
+  - Platinum Bullets: fire rate doubles every 250s to max triple, damage doubles every 500s to max triple
+  - Stout Bullets: 50% larger bullets, 12.5%-75% more damage at close range, halved after 7 tiles, -30% bullet speed
+  - Ammo Synthesizer: 10% chance to regain 5% of max ammo on kill
+  - Armor Synthesizer: 10% chance to gain armor on room clear without damage
+  - Heart Synthesizer: 20% chance to gain half heart on room clear without damage (if not at full health)
+  - Master of Unlocking: 20% chance to give free key on room clear if no damage taken
+  - Ring of Chest Friendship: 50% increased chest chance, halves D-tier, redistributes to C/B
+  - Chaos Ammolet: 50% chance to ignite/poison/freeze, stun 1s, 25 tile radius, extra blank
+  - Antibody: 50% chance to heal extra half heart on any healing
+  - Bloody 9mm: 8% chance per second for homing/piercing/bouncing bullet
+
+---
+
 ## v1.9.17 — 📋 Items Wiki Accuracy Audit — Vague Effects Enriched with Specific Mechanics (August 2026)
 **Build:** 94
 

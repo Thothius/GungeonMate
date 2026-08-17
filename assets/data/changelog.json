@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.18",
+    "title": "📋 Items Wiki Audit Round 2 — Bullet Upgrades, Synthesizers, Ammolets Enriched",
+    "date": "August 2026",
+    "items": [
+      "📋 FIX (BUG-077): 11 more items with vague effects enriched with wiki-accurate mechanics. Gilded Bullets (up to 100% at 500 shells), Platinum Bullets (fire rate doubles every 250s, damage every 500s, max triple), Stout Bullets (50% larger, 12.5%-75% more damage, halved after 7 tiles, -30% speed), Ammo Synthesizer (10% chance, 5% max ammo), Armor Synthesizer (10% chance, no damage), Heart Synthesizer (20% chance, half heart, not at full health), Master of Unlocking (20% chance, free key), Ring of Chest Friendship (50% more chests, halves D-tier), Chaos Ammolet (50% fire/poison/freeze, stun 1s, 25 tiles), Antibody (50% chance, extra half heart), Bloody 9mm (8% per second, homing/piercing/bouncing)."
+    ]
+  },
+  {
     "version": "v1.9.17",
     "title": "📋 Items Wiki Accuracy Audit — Vague Effects Enriched with Specific Mechanics",
     "date": "August 2026",

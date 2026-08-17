@@ -816,7 +816,7 @@
     "type": "Passive",
     "quote": "Ammo Chance On Kills",
     "quality": "D",
-    "effect": "Adds a chance to regain ammo upon killing an enemy.",
+    "effect": "10% chance to regain 5% of the current gun's maximum ammo upon killing an enemy.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -1523,7 +1523,7 @@
     "type": "Passive",
     "quote": "Heals Up",
     "quality": "B",
-    "effect": "Adds a chance to heal the player for an extra half a heart whenever they receive healing.",
+    "effect": "50% chance to heal the player for an extra half a heart whenever they receive healing.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -2092,7 +2092,7 @@
     "type": "Passive",
     "quote": "Play Well, Get Armor",
     "quality": "A",
-    "effect": "Adds a chance to get armor upon completing a room.",
+    "effect": "10% chance to gain armor upon completing a room without taking damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -6780,7 +6780,7 @@
     "type": "Passive",
     "quote": "Be Realistic",
     "quality": "B",
-    "effect": "Adds a chance to fire a fast, homing bullet that flies around the room damaging enemies.",
+    "effect": "8% chance per second for a bullet to be replaced by a fast, homing, piercing, bouncing bullet that flies around the room damaging enemies.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -10646,7 +10646,7 @@
     "type": "Passive",
     "quote": "What Can Will",
     "quality": "A",
-    "effect": "Blanks have a chance to poison, freeze, and ignite enemies. Grants an extra blank per floor.",
+    "effect": "Blanks stun enemies in a 25 tile radius for 1s, with a 50% chance to ignite, poison, or freeze each enemy. Grants an extra blank per floor.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -21207,7 +21207,7 @@
     "type": "Passive",
     "quote": "The Gun Percent",
     "quality": "B",
-    "effect": "Increases damage based on the amount of money the player has.",
+    "effect": "Increases damage based on money held, up to 100% at 500 shells.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -25081,7 +25081,7 @@
     "type": "Passive",
     "quote": "Play Well, Get Hearts",
     "quality": "A",
-    "effect": "Adds a chance to get hearts upon completing a room.",
+    "effect": "If not at full health, 20% chance to gain a half heart upon completing a room without taking damage.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -32890,7 +32890,7 @@
     "type": "Passive",
     "quote": "Play Well, Get Keys",
     "quality": "B",
-    "effect": "Adds a chance to get keys upon completing a room.",
+    "effect": "20% chance to give a free key upon clearing a room if no damage was taken.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -40697,7 +40697,7 @@
     "type": "Passive",
     "quote": "Over One Million Served",
     "quality": "S",
-    "effect": "Increases damage and fire rate with every bullet that hits an enemy.",
+    "effect": "Increases damage and fire rate with every bullet that hits an enemy. Fire rate doubles every 250s to max triple. Damage doubles every 500s to max triple.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -43142,7 +43142,7 @@
     "type": "Passive",
     "quote": "Chest Friends Forever",
     "quality": "B",
-    "effect": "Increases the chance of finding chests.",
+    "effect": "Increases the chance of finding a chest on room clear by 50%. Halves D-tier chest chance, redistributing to C and B tier.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
@@ -51447,7 +51447,7 @@
     "type": "Passive",
     "quote": "Up Close and Personal",
     "quality": "B",
-    "effect": "Increases damage at close range and decreases as bullets travel.",
+    "effect": "At close range, bullets are 50% larger and deal 12.5%-75% more damage. After 7 tiles, damage is halved. Decreases bullet speed by 30%.",
     "curse": 0.0,
     "coolness": 0.0,
     "wiki": {
