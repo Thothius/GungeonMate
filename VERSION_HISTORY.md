@@ -6,6 +6,22 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.32 — 🎨 Experience Studio — Critical Refinements (August 2026)
+**Build:** 109
+
+> Self-critical review found 7 issues in the v1.9.31 wizard. All fixed.
+
+### Changes
+- **FIX: Live preview didn't update on theme change** — was using `AppTheme.flair` (committed theme) instead of `AppTheme.displayedFlair` (preview theme). Now listens to both `previewNotifier` and `VisualPrefs.notifier` so the preview card updates instantly when tapping any theme.
+- **FIX: Step 2 dead-end** — Palette step showed "no variants" for themes without variants. Now auto-skips: `_goTo()` jumps past Step 2, progress dots hide it.
+- **FIX: Step transitions** — Added `AnimatedSwitcher` with slide+fade. Incoming step slides from right, outgoing fades left. 300ms duration.
+- **FIX: Custom color saves** — Was writing to SharedPreferences on every color tap. Now debounced with 500ms timer. Flushes on dispose.
+- **FIX: Reset behavior** — Was resetting to `kVisibleThemes.first` (minimalist). Now restores to user's original theme (`_originalMode`). Reset dialog text clarified.
+- **FIX: Progress dot tap targets** — Were ~24px. Now 44px minimum via `BoxConstraints`.
+- **FIX: Progress dots hide Step 2** when theme has no palette variants.
+
+---
+
 ## v1.9.31 — 🎨 Experience Studio — Step-by-Step Theme & Visuals Wizard (August 2026)
 **Build:** 108
 

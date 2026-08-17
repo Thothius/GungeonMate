@@ -1,11 +1,11 @@
-v1.9.31: Experience Studio — step-by-step theme wizard with live preview
+v1.9.32: Experience Studio critical refinements
 
-- Replaces cluttered theme picker with 5-step wizard: Theme → Palette → Particles → Typography → Ambiance
-- Persistent live preview at top (mini app scene: card, text, button, stats)
-- Typography step: font family + size slider (10 steps) + inventory size + weight
-- Ambiance step: glow intensity + 12 colors + dialogue haptics + text speed
-- Progress dots with tap-to-jump, Back/Next nav, Apply on last step
-- Reset button with confirmation dialog
+- FIX: Live preview now updates on theme change (was using committed not preview theme)
+- FIX: Step 2 auto-skips for themes without variants (no dead-end)
+- FIX: Step transitions animate with slide+fade
+- FIX: Custom color saves debounced (500ms) instead of every tap
+- FIX: Reset restores user's original theme, not arbitrary defaults
+- FIX: Progress dots 44px tap targets + hide Step 2 when N/A
 
 Generated with [Devin](https://devin.ai)
 

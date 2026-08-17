@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,11 +38,16 @@ class ExperienceStudioScreen extends StatefulWidget {
 class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   int _step = 0;
   late AppThemeMode _previewMode;
+  // Store original state so Reset restores to what the user had, not
+  // to hardcoded defaults. Prevents data loss if Reset is tapped by
+  // accident.
+  late final AppThemeMode _originalMode;
 
   @override
   void initState() {
     super.initState();
     _previewMode = AppTheme.mode;
+    _originalMode = AppTheme.mode;
     AppTheme.previewNotifier.value = _previewMode;
   }
 
@@ -58,12 +64,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     'Typography',
     'Ambiance',
   ];
-
-  void _goTo(int i) {
-    if (i < 0 || i >= _stepLabels.length) return;
-    Haptics.selection();
-    setState(() => _step = i);
-  }
 
   void _applyAndClose() {
     Haptics.success();
@@ -88,11 +88,40 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               // ── AppBar ──
               _buildTopBar(),
               // ── Live preview (always visible) ──
-              const _LivePreview(),
+              _LivePreview(),
               // ── Progress dots ──
               _buildProgressDots(),
-              // ── Step content ──
-              Expanded(child: _buildStepContent()),
+              // ── Step content (animated transition between steps) ──
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  switchInCurve: Curves.easeOutCubic,
+                  switchOutCurve: Curves.easeInCubic,
+                  transitionBuilder: (child, anim) {
+                    // Slide + fade: incoming slides from right, outgoing fades left
+                    final offset = child.key == ValueKey(_step)
+                        ? Tween<Offset>(
+                            begin: const Offset(0.15, 0),
+                            end: Offset.zero,
+                          ).animate(anim)
+                        : Tween<Offset>(
+                            begin: Offset.zero,
+                            end: const Offset(-0.15, 0),
+                          ).animate(anim);
+                    return FadeTransition(
+                      opacity: anim,
+                      child: SlideTransition(
+                        position: offset,
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: KeyedSubtree(
+                    key: ValueKey(_step),
+                    child: _buildStepContent(),
+                  ),
+                ),
+              ),
               // ── Navigation bar ──
               _buildNavBar(),
             ],
@@ -138,18 +167,27 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 
   Widget _buildProgressDots() {
     final flair = AppTheme.flair;
+    // Build the list of visible step indices — skip Palette (index 1)
+    // when the current theme has no variants.
+    final visibleIndices = List.generate(_stepLabels.length, (i) => i)
+        .where((i) => i != 1 || _hasVariants())
+        .toList();
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(_stepLabels.length, (i) {
+        children: visibleIndices.map((i) {
           final on = i == _step;
           final done = i < _step;
           return GestureDetector(
             onTap: () => _goTo(i),
+            behavior: HitTestBehavior.opaque,
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 6),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              // 44px minimum tap target per accessibility guidelines
+              constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -182,7 +220,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               ),
             ),
           );
-        }),
+        }).toList(),
       ),
     );
   }
@@ -287,7 +325,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         title: const GoopText('Reset to defaults?',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
         content: const GoopText(
-          'Restores all theme, particle, font, and ambiance settings to their defaults. This cannot be undone.',
+          'Reverts your preview back to the theme you started with. Your saved settings won\'t change until you Apply.',
           style: TextStyle(fontSize: 13, height: 1.4),
         ),
         actions: [
@@ -311,28 +349,37 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 
   void _resetAll() {
     Haptics.selection();
-    VisualPrefs.setParticlePreset(ParticlePreset.gungeonDust);
-    VisualPrefs.setParticleColorSchema(ParticleColorSchema.presetDefault);
-    VisualPrefs.setParticleSpeed(ParticleSpeed.normal);
-    VisualPrefs.setParticles(false);
-    VisualPrefs.setParticleCount(16);
-    VisualPrefs.setParticleSizeScale(1.0);
-    VisualPrefs.setParticleOpacity(0.7);
-    VisualPrefs.setParticleGlowEffect(GlowEffect.none);
-    VisualPrefs.setParticleLineLinks(false);
-    VisualPrefs.setParticleBounce(false);
-    VisualPrefs.setFont(AppFont.gungeon);
-    VisualPrefs.setFontSize(12.0);
-    VisualPrefs.setInventoryFontSize(12.0);
-    VisualPrefs.setFontWeightBias(0);
-    VisualPrefs.setGlow(0.0);
-    VisualPrefs.setGlowColorIndex(0);
-    VisualPrefs.setDialogueHapticsEnabled(true);
-    VisualPrefs.setDialogueTextSpeedMs(30);
+    // Restore to the user's original state, not to arbitrary defaults.
+    // This prevents accidental data loss from the Reset button.
     setState(() {
-      _previewMode = kVisibleThemes.first;
-      AppTheme.previewNotifier.value = kVisibleThemes.first;
+      _previewMode = _originalMode;
+      AppTheme.previewNotifier.value = _originalMode;
     });
+  }
+
+  /// Check if the current preview theme has palette variants (Step 2).
+  bool _hasVariants() {
+    return _previewMode == AppThemeMode.unicorn ||
+        kThemeRemixes.containsKey(_previewMode) ||
+        _previewMode == AppThemeMode.custom;
+  }
+
+  /// Navigate to a step, auto-skipping Step 2 (Palette) when the
+  /// current theme has no variants. Prevents the dead-end "no variants"
+  /// screen from being shown.
+  void _goTo(int i) {
+    if (i < 0 || i >= _stepLabels.length) return;
+    // Skip Step 2 (Palette) if no variants available
+    if (i == 1 && !_hasVariants()) {
+      // Skip forward or backward past it
+      if (i > _step) {
+        i = 2; // skip to Particles
+      } else {
+        i = 0; // skip back to Theme
+      }
+    }
+    Haptics.selection();
+    setState(() => _step = i);
   }
 }
 
@@ -341,17 +388,30 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 // =============================================================================
 
 class _LivePreview extends StatelessWidget {
-  const _LivePreview();
-
   @override
   Widget build(BuildContext context) {
-    final flair = AppTheme.flair;
     final sf = Responsive.factor(context);
 
-    return ValueListenableBuilder<VisualPrefs>(
-      valueListenable: VisualPrefs.notifier,
-      builder: (context, prefs, _) {
-        return Container(
+    // Listen to BOTH previewNotifier (theme changes) and VisualPrefs
+    // (particle/font/glow changes) so the preview updates instantly on
+    // any setting change. Uses displayedFlair (preview mode) not flair
+    // (committed mode) so the preview reflects the un-applied theme.
+    return ValueListenableBuilder<AppThemeMode?>(
+      valueListenable: AppTheme.previewNotifier,
+      builder: (context, previewMode, _) {
+        final flair = AppTheme.displayedFlair;
+        return ValueListenableBuilder<VisualPrefs>(
+          valueListenable: VisualPrefs.notifier,
+          builder: (context, prefs, _) {
+            return _buildPreview(flair, prefs, sf);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildPreview(ThemeFlair flair, VisualPrefs prefs, double sf) {
+    return Container(
           height: 160 * sf,
           margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
           decoration: BoxDecoration(
@@ -521,8 +581,6 @@ class _LivePreview extends StatelessWidget {
             ],
           ),
         );
-      },
-    );
   }
 
   Widget _miniStat(String label, String value, ThemeFlair flair, double sf) {
@@ -867,6 +925,7 @@ class _CustomColorsStep extends StatefulWidget {
 class _CustomColorsStepState extends State<_CustomColorsStep> {
   late CustomThemeData _data;
   bool _loaded = false;
+  Timer? _saveTimer;
 
   @override
   void initState() {
@@ -874,18 +933,33 @@ class _CustomColorsStepState extends State<_CustomColorsStep> {
     _loadData();
   }
 
+  @override
+  void dispose() {
+    _saveTimer?.cancel();
+    // Flush any pending save on dispose
+    if (_loaded) {
+      CustomThemeData.save(_data);
+      AppTheme.setCustomThemeData(_data);
+    }
+    super.dispose();
+  }
+
   Future<void> _loadData() async {
     _data = await CustomThemeData.loadAsync();
     if (mounted) setState(() => _loaded = true);
   }
 
-  Future<void> _save() async {
-    await CustomThemeData.save(_data);
+  /// Debounced save — updates in-memory data instantly for live preview,
+  /// but only writes to disk 500ms after the last change. Prevents
+  /// excessive SharedPreferences writes when rapidly tapping colors.
+  void _scheduleSave() {
     AppTheme.setCustomThemeData(_data);
-    if (mounted) {
-      AppTheme.refresh();
-      widget.onRefresh();
-    }
+    AppTheme.refresh();
+    widget.onRefresh();
+    _saveTimer?.cancel();
+    _saveTimer = Timer(const Duration(milliseconds: 500), () {
+      CustomThemeData.save(_data);
+    });
   }
 
   @override
@@ -910,7 +984,7 @@ class _CustomColorsStepState extends State<_CustomColorsStep> {
               TextButton.icon(
                 onPressed: () {
                   setState(() => _data = CustomThemeData.random());
-                  _save();
+                  _scheduleSave();
                   Haptics.selection();
                 },
                 icon: const Icon(Icons.casino, size: 14),
@@ -921,17 +995,17 @@ class _CustomColorsStepState extends State<_CustomColorsStep> {
           ),
           const SizedBox(height: 12),
           _ColorSlot('Background', _data.scaffold,
-              (c) { setState(() => _data = _data.copyWith(scaffold: c)); _save(); }),
+              (c) { setState(() => _data = _data.copyWith(scaffold: c)); _scheduleSave(); }),
           _ColorSlot('Card', _data.card,
-              (c) { setState(() => _data = _data.copyWith(card: c)); _save(); }),
+              (c) { setState(() => _data = _data.copyWith(card: c)); _scheduleSave(); }),
           _ColorSlot('Primary', _data.primary,
-              (c) { setState(() => _data = _data.copyWith(primary: c)); _save(); }),
+              (c) { setState(() => _data = _data.copyWith(primary: c)); _scheduleSave(); }),
           _ColorSlot('Secondary', _data.secondary,
-              (c) { setState(() => _data = _data.copyWith(secondary: c)); _save(); }),
+              (c) { setState(() => _data = _data.copyWith(secondary: c)); _scheduleSave(); }),
           _ColorSlot('Accent / Headline', _data.headlineStat,
-              (c) { setState(() => _data = _data.copyWith(headlineStat: c)); _save(); }),
+              (c) { setState(() => _data = _data.copyWith(headlineStat: c)); _scheduleSave(); }),
           _ColorSlot('Bullet', _data.bulletColor,
-              (c) { setState(() => _data = _data.copyWith(bulletColor: c)); _save(); }),
+              (c) { setState(() => _data = _data.copyWith(bulletColor: c)); _scheduleSave(); }),
         ],
       ),
     );

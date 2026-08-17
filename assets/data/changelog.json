@@ -1,5 +1,19 @@
 [
   {
+    "version": "v1.9.32",
+    "title": "🎨 Experience Studio — Critical Refinements",
+    "date": "August 2026",
+    "items": [
+      "🎨 FIX: Live preview now actually updates when you change themes — was using committed theme instead of preview theme.",
+      "🎨 FIX: Step 2 (Palette) auto-skips for themes without variants — no more dead-end 'no variants' screen.",
+      "🎨 FIX: Step transitions now animate with slide+fade instead of snapping.",
+      "🎨 FIX: Custom color picker debounces disk saves (500ms) instead of writing on every tap.",
+      "🎨 FIX: Reset button restores to user's original theme instead of arbitrary defaults.",
+      "🎨 FIX: Progress dots now have 44px tap targets (accessibility minimum).",
+      "🎨 FIX: Progress dots hide Step 2 when not applicable."
+    ]
+  },
+  {
     "version": "v1.9.31",
     "title": "🎨 Experience Studio — Step-by-Step Theme & Visuals Wizard",
     "date": "August 2026",
