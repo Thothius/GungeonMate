@@ -512,7 +512,7 @@
     "items": [
       "Shock Rifle"
     ],
-    "effect": "Shock Rifle slowly regenerates ammo over time.",
+    "effect": "Shock Rifle regenerates 1 ammo every 4 seconds.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3a/Battery_Powered.png",
     "any_of": [
       "R2G2",
@@ -643,7 +643,7 @@
       "Gamma Ray",
       "Irradiated Lead"
     ],
-    "effect": "Gamma Ray's beam grows larger and deals more damage.",
+    "effect": "Gamma Ray's beam grows larger and deals more damage, but no longer travels instantaneously.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/66/Beta_Ray.png",
     "effect_tokens": [
       {
@@ -1480,7 +1480,7 @@
       "Gunderfury",
       "Silver Bullets"
     ],
-    "effect": "Gunderfury shots have a chance to slow enemies.",
+    "effect": "Gunderfury shots have a chance to slow enemies and act like they have Shock Rounds.",
     "icon": "",
     "effect_tokens": [
       {
@@ -1541,7 +1541,7 @@
     "items": [
       "Magic Bullets"
     ],
-    "effect": "Increases the chance for the guns to transmogrify enemies.",
+    "effect": "Increases bullet size and transmogrification chance for the guns.",
     "icon": "",
     "any_of": [
       "Bundle of Wands",
@@ -4053,7 +4053,7 @@
     "items": [
       "Table Tech Sight"
     ],
-    "effect": "Flipping a table briefly stops time.",
+    "effect": "Flipping a table briefly stops time. Only enemies currently on screen are stopped; new spawns are unaffected.",
     "icon": "",
     "any_of": [
       "Liquid Valkyrie",
@@ -4560,7 +4560,7 @@
     "items": [
       "Big Iron"
     ],
-    "effect": "Big Iron fires a single high-damage slug.",
+    "effect": "Big Iron fires one large, explosive, high-damage slug.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/55/Iron_Slug.png",
     "any_of": [
       "Scope",
@@ -4937,7 +4937,7 @@
     "items": [
       "Dragunfire"
     ],
-    "effect": "Dragunfire turns grey and has an increased rate of fire.",
+    "effect": "Dragunfire turns grey, gains increased rate of fire and knockback, but loses piercing.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/03/Kalibreath.png",
     "any_of": [
       "Yellow Chamber",
@@ -5101,7 +5101,7 @@
     "items": [
       "Klobbe"
     ],
-    "effect": "Klobbe is doubled.",
+    "effect": "Klobbe fires two shots at a time.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/75/Klobbering_Time.png",
     "any_of": [
       "AU Gun",
@@ -5447,7 +5447,7 @@
     "items": [
       "Mass Shotgun"
     ],
-    "effect": "Significantly increases the size of Mass Shotgun's shots.",
+    "effect": "Mass Shotgun fires a massive bullet that explodes into more projectiles than normal.",
     "icon": "",
     "any_of": [
       "Stout Bullets",
@@ -5794,7 +5794,7 @@
     "items": [
       "Nail Gun"
     ],
-    "effect": "Nails deal triple damage.",
+    "effect": "Nails are larger and deal triple damage.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f9/Nailed_It%21.png",
     "any_of": [
       "Heavy Bullets",
@@ -6354,7 +6354,7 @@
     "items": [
       "Pink Guon Stone"
     ],
-    "effect": "Enemies that damage the player become temporarily charmed.",
+    "effect": "Pink Guon Stone grows in size, rotates at fixed distance, and enemies that damage the player become temporarily charmed.",
     "icon": "",
     "any_of": [
       "+1 Bullets",
@@ -7353,7 +7353,7 @@
       "Flash Ray",
       "Camera"
     ],
-    "effect": "Flash Ray's shots gain unlimited piercing, a thicker beam, one bounce, and increased fire rate. When reloaded from an empty clip, Flash Ray produces a flash that hits all enemies in the room, like Camera. Camera fires 2 laser beams when fired.",
+    "effect": "Flash Ray gains double magazine size, unlimited piercing, a thicker beam, one bounce, and increased fire rate. When reloaded from an empty clip, Flash Ray produces a flash that hits all enemies in the room, like Camera. Camera fires 2 laser beams when fired.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c4/Savior_Of_The_Universe.png",
     "effect_tokens": [
       {
@@ -7794,7 +7794,7 @@
     "items": [
       "Wolf"
     ],
-    "effect": "Reduces reload times of the guns by 30%. Standing still for a short time (around 1–2 seconds) causes the player to glow yellow, increasing the damage of the guns by 50%. This effect persists until the player switches weapons or moves. Sniper Shells and Professionals are permanently charmed.",
+    "effect": "Reduces reload times of the guns by 30%. Standing still for 1 second causes the player to glow yellow, increasing the damage of the guns by 50%. This effect persists until the player switches weapons or moves. Sniper Shells and Professionals are permanently charmed.",
     "icon": "",
     "any_of": [
       "A.W.P.",
@@ -7892,7 +7892,7 @@
       "Mr. Accretion Jr.",
       "Flare Gun"
     ],
-    "effect": "Flare Gun pierces enemies and explodes when hitting a wall.",
+    "effect": "Flare Gun fires a meteor that pierces enemies and explodes.",
     "icon": "",
     "effect_tokens": [
       {
@@ -8415,7 +8415,7 @@
       "Chest Teleporter",
       "Teleporter Prototype"
     ],
-    "effect": "If Teleporter Prototype teleports the player to a room with enemies, all enemies in the room will be killed instantly. If it teleports the player to a special room, Teleporter Prototype's cooldown is decreased.",
+    "effect": "If Teleporter Prototype teleports the player to a room with enemies, all enemies in the room will be killed instantly. If it teleports the player to a special room, Teleporter Prototype's cooldown is decreased. Also grants an extra active item slot.",
     "icon": "",
     "effect_tokens": [
       {
@@ -8955,7 +8955,7 @@
       "Knight's Gun",
       "Colt 1851"
     ],
-    "effect": "Improves the items and pickups dug up by Knight's Gun.",
+    "effect": "Increases Knight's Gun's good digs to 10, improves loot quality, and always results in a drop. Bomb and Ice Bomb no longer appear.",
     "icon": "",
     "effect_tokens": [
       {

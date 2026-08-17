@@ -6,6 +6,32 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.25 — 🔗 Synergies Wiki Audit — 16 Synergy Effects Enriched (August 2026)
+**Build:** 102
+
+> First synergies accuracy audit. 16 synergy effects enriched with wiki-accurate mechanics, adding missing details like specific values, conditions, and side effects.
+
+### Changes
+- **FIX (BUG-083) — 16 synergy effects enriched:**
+  - **Klobbering Time:** "Klobbe is doubled" → "Klobbe fires two shots at a time"
+  - **Nailed It!:** Added "larger nails" detail
+  - **Iron Slug:** Added "large, explosive" to the slug description
+  - **Kalibreath:** Added "knockback" and "loses piercing" mechanics
+  - **Beta Ray:** Added "no longer travels instantaneously" caveat
+  - **Two Kinds of People:** Added specific mechanics (10 good digs, improved loot quality, always drops, no Bomb/Ice Bomb)
+  - **Chance On Hit:** Added "acts like they have Shock Rounds"
+  - **Battery Powered:** Added "1 ammo every 4 seconds" specific rate
+  - **Massive Effect:** Added "explodes into more projectiles than normal"
+  - **Chicken Arise:** Added "bullet size" increase
+  - **Pinker Guon Stone:** Added "grows in size, rotates at fixed distance"
+  - **Solar Flare:** Clarified as "fires a meteor" instead of just piercing
+  - **Hidden Tech Time:** Added "Only enemies currently on screen are stopped; new spawns are unaffected"
+  - **Telefrag:** Added "Also grants an extra active item slot"
+  - **Savior of the Universe:** Added "double magazine size"
+  - **Sniper Woof:** Clarified "1 second" instead of "around 1-2 seconds"
+
+---
+
 ## v1.9.24 — 📋 Items Wiki Audit Round 6 (Complete) — All 130 Items Reviewed (August 2026)
 **Build:** 101
 

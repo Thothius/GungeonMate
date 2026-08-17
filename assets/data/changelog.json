@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.25",
+    "title": "🔗 Synergies Wiki Audit — 16 Synergy Effects Enriched",
+    "date": "August 2026",
+    "items": [
+      "🔗 FIX (BUG-083): 16 synergy effects enriched with wiki-accurate mechanics. Klobbering Time (fires two shots), Nailed It! (larger nails), Iron Slug (large explosive slug), Kalibreath (loses piercing, +knockback), Beta Ray (no longer instant), Two Kinds of People (10 good digs, better loot, no bombs), Chance On Hit (acts like Shock Rounds), Battery Powered (1 ammo/4s), Massive Effect (explodes into more projectiles), Chicken Arise (+bullet size), Pinker Guon Stone (grows, fixed rotation), Solar Flare (meteor), Hidden Tech Time (only on-screen enemies stopped), Telefrag (+extra active slot), Savior of the Universe (+double magazine size), Sniper Woof (1s stand still)."
+    ]
+  },
+  {
     "version": "v1.9.24",
     "title": "📋 Items Wiki Audit Round 6 (Complete) — All 130 Remaining Items Reviewed",
     "date": "August 2026",
