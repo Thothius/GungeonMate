@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.28",
+    "title": "🔗 Synergies Deep Audit — 5 More Effects Corrected",
+    "date": "August 2026",
+    "items": [
+      "🔗 FIX (BUG-086): 5 more synergy effects corrected with wiki-accurate text. blade (added 'and bosses' to reversion), Praise the Gun (added 'Old Crest room' to bonfire locations), Firing With Flair (corrected to Green Fire 120s 4 DPS instead of 'permanently burning'), Why's Bullet Crying? (added 75 damage value and no-repeat-yeti mechanic), Jotun Time (added 'rapidly' and 'Frost Giant' specificity). Also verified 20+ long effects as already accurate."
+    ]
+  },
+  {
     "version": "v1.9.27",
     "title": "🔫 Gun Stats Audit — 105 Missing Stats Filled",
     "date": "August 2026",

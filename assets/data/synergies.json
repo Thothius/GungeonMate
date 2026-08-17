@@ -776,7 +776,7 @@
     "items": [
       "Kruller Glaive"
     ],
-    "effect": "Kruller Glaive's damage is increased by 20%, enemies hit will visually bleed, and jammed enemies will revert to normal on hit.",
+    "effect": "Kruller Glaive's damage is increased by 20%, enemies hit will visually bleed, and jammed enemies and bosses will revert to normal on hit.",
     "icon": "",
     "any_of": [
       "Blood Brooch",
@@ -2882,7 +2882,7 @@
     "items": [
       "Flare Gun"
     ],
-    "effect": "Flare Gun sets green fire, which leaves enemies permanently burning.",
+    "effect": "Flare Gun turns green and is guaranteed to inflict enemies with Green Fire (120s, 4 DPS), which has a massively increased duration.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fe/Firing_With_Flair.png",
     "any_of": [
       "Copper Ammolet",
@@ -4715,7 +4715,7 @@
       "Frost Giant",
       "Heart of Ice"
     ],
-    "effect": "Reloading chills and freezes nearby enemies. Thrown guns deal 180% more damage.",
+    "effect": "Reloading Frost Giant rapidly chills and freezes nearby enemies. Thrown guns deal 180% more damage.",
     "icon": "",
     "effect_tokens": [
       {
@@ -6551,7 +6551,7 @@
       "Gun Soul",
       "Old Knight's Flask"
     ],
-    "effect": "Dodge roll recovery time is reduced. A bonfire spawns in every Shop and elevator to the next floor. If the player dies, they will respawn at the last bonfire they activated instead of at the start of the floor.",
+    "effect": "Dodge roll recovery time is reduced. A bonfire spawns in every Shop, elevator, and Old Crest room. If the player dies, they will respawn at the last bonfire they activated instead of at the start of the floor.",
     "icon": "",
     "effect_tokens": [
       {
@@ -9328,7 +9328,7 @@
       "Cold 45",
       "Frost Giant"
     ],
-    "effect": "Attacking a frozen enemy with one of the guns causes a yeti to attack it, dealing high damage.",
+    "effect": "Attacking a frozen enemy with one of the guns causes a yeti to attack it, dealing 75 damage. Shooting a frozen enemy after the yeti has attacked will not result in more yetis.",
     "icon": "",
     "effect_tokens": [
       {

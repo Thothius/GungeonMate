@@ -6,6 +6,21 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.28 — 🔗 Synergies Deep Audit — 5 More Effects Corrected (August 2026)
+**Build:** 105
+
+> Deeper synergies audit focusing on long effects accuracy. 5 more synergy effects corrected, 20+ verified as already accurate.
+
+### Changes
+- **FIX (BUG-086) — 5 synergy effects corrected:**
+  - **blade:** Added "and bosses" to the reversion effect
+  - **Praise the Gun:** Added "Old Crest room" to bonfire spawn locations
+  - **Firing With Flair:** Corrected from "permanently burning" to "Green Fire (120s, 4 DPS), massively increased duration"
+  - **Why's Bullet Crying?:** Added "75 damage" specific value and "no repeat yeti" mechanic
+  - **Jotun Time:** Added "rapidly" and "Frost Giant" specificity
+
+---
+
 ## v1.9.27 — 🔫 Gun Stats Audit — 105 Missing Stats Filled (August 2026)
 **Build:** 104
 
