@@ -271,12 +271,6 @@ class RatCodexScreen extends StatelessWidget {
                     accent: _amber,
                   ),
                   _InfoBlock(
-                    heading: 'The Rat in Exit the Gungeon',
-                    body:
-                        'In Exit the Gungeon, the Rat doesn\'t steal items (since you can\'t drop them). He appears in the side area of the Shop, offering a Rat Key — used to free Daisuke from his cell.',
-                    accent: _amber,
-                  ),
-                  _InfoBlock(
                     heading: 'Unused Store Tab',
                     body:
                         'An unused "store" tab exists for the Resourceful Rat in the assets of the International Mobile Version of ETG. This is unique — the Rat is the only character given a store tab who is not a Gungeoneer.',

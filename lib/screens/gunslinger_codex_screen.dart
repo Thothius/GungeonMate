@@ -193,7 +193,7 @@ class GunslingerCodexScreen extends StatelessWidget {
                   _InfoBlock(
                     heading: 'The Ending',
                     body:
-                        'The final scene shows the Gungeon as it looked before the Bullet crashed into it. The victory screen shows the Gunslinger throwing away his gun — implying that time was rewritten and the Gungeon was never created. This leads directly into the events of Exit the Gungeon.',
+                        'The final scene shows the Gungeon as it looked before the Bullet crashed into it. The victory screen shows the Gunslinger throwing away his gun — implying that time was rewritten and the Gungeon was never created.',
                     accent: _gold,
                   ),
                   const SizedBox(height: 22),

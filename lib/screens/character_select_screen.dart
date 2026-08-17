@@ -195,8 +195,8 @@ class _CharacterCard extends StatelessWidget {
                   ),
                   // ── ? info button — opens Gungeoneer detail screen ──
                   Positioned(
-                    top: 4,
-                    right: 4,
+                    top: 2,
+                    right: 2,
                     child: GestureDetector(
                       onTap: () {
                         Haptics.selection();
@@ -207,20 +207,21 @@ class _CharacterCard extends StatelessWidget {
                           )),
                         );
                       },
+                      behavior: HitTestBehavior.opaque,
                       child: Container(
-                        width: 22,
-                        height: 22,
+                        width: 28,
+                        height: 28,
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.5),
+                          color: Colors.black.withValues(alpha: 0.55),
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.3),
+                            color: Colors.white.withValues(alpha: 0.35),
                             width: 0.8,
                           ),
                         ),
                         child: const Icon(
                           Icons.help_outline,
-                          size: 14,
+                          size: 16,
                           color: Colors.white70,
                         ),
                       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/gungeoneer.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
@@ -53,6 +55,25 @@ class GungeoneerDetailScreen extends StatelessWidget {
         slivers: [
           // ── Hero art + short desc ──
           SliverToBoxAdapter(child: _HeroSection(gungeoneer: g, flair: flair)),
+
+          // ── Lore intro ──
+          if (g.loreIntro.isNotEmpty)
+            SliverToBoxAdapter(
+              child: _Section(
+                label: 'LORE',
+                icon: Icons.auto_stories,
+                color: Colors.purpleAccent,
+                child: GoopText(
+                  g.loreIntro,
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.5,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white.withValues(alpha: 0.8),
+                  ),
+                ),
+              ),
+            ),
 
           // ── Starting loadout ──
           SliverToBoxAdapter(
@@ -190,15 +211,20 @@ class GungeoneerDetailScreen extends StatelessWidget {
   }
 
   void _launchWiki(BuildContext context, String url) {
-    // Use url_launcher if available; otherwise show a snackbar with the URL.
-    // The app doesn't currently depend on url_launcher, so we show the URL
-    // for the user to copy. Adding url_launcher is a future enhancement.
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: GoopText('Wiki: $url'),
-        duration: const Duration(seconds: 5),
-        behavior: SnackBarBehavior.floating,
-      ),
+    launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication).catchError(
+      (e) {
+        debugPrint('[GungeoneerDetail] url launch error: $e');
+        if (context.mounted) {
+          Clipboard.setData(ClipboardData(text: url));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: GoopText('Could not open — URL copied to clipboard'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+        return false;
+      },
     );
   }
 }

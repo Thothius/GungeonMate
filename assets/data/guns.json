@@ -1228,23 +1228,6 @@
               "v": ", a graphic novel by Alan Moore."
             }
           ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "The name 'AP-13' in the Apple Arcade version of Exit the Gungeon may be a vague "
-            },
-            {
-              "t": "ext",
-              "v": "leet",
-              "url": "https://en.wikipedia.org/wiki/Leet"
-            },
-            {
-              "t": "text",
-              "v": " translation of the word 'apple'."
-            }
-          ]
         }
       ]
     },
@@ -1446,23 +1429,6 @@
             {
               "t": "text",
               "v": " popularized by Billy Ray Cyrus."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "While the AKEY-47 does not appear in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": ", its sprites and description are present in the games assets."
             }
           ]
         }
@@ -9275,51 +9241,6 @@
     "coolness": 0.0,
     "wiki": {
       "notes": [
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "The description and pickup quote are referencing the gun's use in the film, "
-            },
-            {
-              "t": "ext",
-              "v": "The Good, the Bad, and the Ugly",
-              "url": "http://www.imfdb.org/wiki/The_Good,_The_Bad,_and_The_Ugly#Colt_1851_Navy_.28Cartridge_Conversion.29"
-            },
-            {
-              "t": "text",
-              "v": ".\n"
-            }
-          ],
-          "sub": [
-            {
-              "tokens": [
-                {
-                  "t": "text",
-                  "v": "The name 'Blondie' used for the Colt 1851 in the "
-                },
-                {
-                  "t": "text",
-                  "v": "Apple Arcade",
-                  "style": "i"
-                },
-                {
-                  "t": "text",
-                  "v": " version of Exit the Gungeon is a reference to the nickname given to the "
-                },
-                {
-                  "t": "ext",
-                  "v": "Man With No Name",
-                  "url": "https://en.wikipedia.org/wiki/Man_with_No_Name"
-                },
-                {
-                  "t": "text",
-                  "v": " in the film by the character Tuco."
-                }
-              ]
-            }
-          ]
-        },
         {
           "tokens": [
             {
@@ -24328,23 +24249,6 @@
           "tokens": [
             {
               "t": "text",
-              "v": "There are several real guns with the name 'M1', however the shape (such as the band around the rifle's forend), distinctive pinging reload sound, and Ammonomicon entry of the weapon (Coupled with the fact that it is referred to as the 'Grand Rifle' in the Apple Arcade version of Exit the Gungeon) suggest that this rifle is the "
-            },
-            {
-              "t": "ext",
-              "v": "M1 Garand",
-              "url": "https://en.wikipedia.org/wiki/M1_Garand"
-            },
-            {
-              "t": "text",
-              "v": ", a famous semi-automatic rifle that served as the mainstay of the US Army in World War 2."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
               "v": "The synergy  "
             },
             {
@@ -24705,32 +24609,6 @@
               "v": " synergy is likely a reference to the distinctive guitar notes prefacing each verse in \"Fortunate Son\" by Creedence Clearwater Revival. Both the song and all three guns are heavily associated with the Vietnam War."
             }
           ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "The M1911 does not appear in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": ", however it still exists in the assets and text string database of the game. Like all real-world guns in Exit the Gungeon, the unused M1911 has a different name in the "
-            },
-            {
-              "t": "text",
-              "v": "Apple Arcade",
-              "style": "i"
-            },
-            {
-              "t": "text",
-              "v": " string database, where it is called the Standard Issue."
-            }
-          ]
         }
       ]
     },
@@ -24809,32 +24687,6 @@
             {
               "t": "text",
               "v": "."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "The MAC10 does not appear in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": ", however it still exists in the assets and text string database of the game. Like all real-world guns in Exit the Gungeon, the unused MAC-10 has a different name in the "
-            },
-            {
-              "t": "text",
-              "v": "Apple Arcade",
-              "style": "i"
-            },
-            {
-              "t": "text",
-              "v": " string database, where it is called the APP-10."
             }
           ]
         },
@@ -29816,8 +29668,8 @@
     "quality": "D",
     "type": "Semiautomatic",
     "dps": "10.6",
-    "magazine_size": "6 ETG / 10 XTG",
-    "ammo_capacity": "1000 ETG / 140 XTG",
+    "magazine_size": "6",
+    "ammo_capacity": "1000",
     "damage": "4",
     "fire_rate": "0.15 (Manual) 0.25 (Automatic)",
     "reload_time": "1.5s",
@@ -31897,32 +31749,6 @@
                   "v": "Increasing the reload speed will decrease the number of times it can be reloaded in a row as it reaches the reload meter's maximum speed faster."
                 }
               ]
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "The hat worn by the Rad Gun appears to be the basis for  "
-            },
-            {
-              "t": "ref",
-              "v": "The Brimsly",
-              "kind": "unresolved"
-            },
-            {
-              "t": "text",
-              "v": " in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": "."
             }
           ]
         },
@@ -34609,33 +34435,6 @@
                 {
                   "t": "text",
                   "v": "The SAA's spinning animation is a reference to Ocelot's tendency to twirl his guns."
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "In Exit the Gungeon the Ammonomicon entry of the SAA is slightly altered to exclude the word 'Army'.\n"
-            }
-          ],
-          "sub": [
-            {
-              "tokens": [
-                {
-                  "t": "text",
-                  "v": "While the resulting name of "
-                },
-                {
-                  "t": "text",
-                  "v": "Single Action",
-                  "style": "i"
-                },
-                {
-                  "t": "text",
-                  "v": " matches with the name of the SAA in the Apple Arcade version of Exit the Gungeon, this description change affects all versions of Exit the Gungeon."
                 }
               ]
             }
@@ -42045,32 +41844,6 @@
           "tokens": [
             {
               "t": "text",
-              "v": "The Thompson Sub-Machinegun does not appear in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": ", however it still exists in the assets and text string database of the game. Like all real-world guns in Exit the Gungeon, the unused Thompson Sub-Machinegun has a different name in the "
-            },
-            {
-              "t": "text",
-              "v": "Apple Arcade",
-              "style": "i"
-            },
-            {
-              "t": "text",
-              "v": " string database, where it is called the Gungeon Typewriter."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
               "v": "The entry for the Thompson Sub-Machinegun in the "
             },
             {
@@ -44759,8 +44532,8 @@
     "quality": "B",
     "type": "Semiautomatic",
     "dps": "50.0",
-    "magazine_size": "4 ETG / 6 HoTG",
-    "ammo_capacity": "120 ETG / 48 HoTG",
+    "magazine_size": "4",
+    "ammo_capacity": "120",
     "damage": "5x6 (30)",
     "fire_rate": "0.40",
     "reload_time": "1.2s",
@@ -45392,23 +45165,6 @@
           "tokens": [
             {
               "t": "text",
-              "v": "The Vulcan Cannon one of the few guns in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": " with a resprite."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
               "v": "The entry for the Vulcan Cannon in the "
             },
             {
@@ -45657,32 +45413,6 @@
             {
               "t": "text",
               "v": ", the animations of the Winchester Rifle are physically inconsistent, with empty casings being ejected both on reload and the chambering of each new round."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "The Winchester Rifle does not appear in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": ", however it still exists in the assets and text string database of the game. Like all real-world guns in Exit the Gungeon, the unused Winchester Rifle has a different name in the "
-            },
-            {
-              "t": "text",
-              "v": "Apple Arcade",
-              "style": "i"
-            },
-            {
-              "t": "text",
-              "v": " string database, where it is called the Repeating Rifle."
             }
           ]
         }

@@ -231,12 +231,6 @@ class DrakeCodexScreen extends StatelessWidget {
                     color: _emerald,
                   ),
                   _InfoBlock(
-                    heading: 'The Baby Hat',
-                    body:
-                        'In Exit the Gungeon, "The Baby" hat is based on the Serpent. This confirms the Serpent\'s identity as a baby version of the Dragun.',
-                    accent: _emerald,
-                  ),
-                  _InfoBlock(
                     heading: 'Multiple Serpents',
                     body:
                         'If you acquire multiple Serpents (via Weird Egg + Rat\'s Lair, or Clone), only one joins the High Dragun during the boss fight. The others disappear, reappearing when you enter a new chamber. Bringing two Serpents into the fight results in one vanishing for the rest of the floor, but it returns in Bullet Hell.',

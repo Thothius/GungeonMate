@@ -2729,32 +2729,6 @@
           "tokens": [
             {
               "t": "text",
-              "v": "Baby Good Mimic appears in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": " as  "
-            },
-            {
-              "t": "ref",
-              "v": "The Mimic",
-              "kind": "unresolved"
-            },
-            {
-              "t": "text",
-              "v": " hat."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
               "v": " Bug If the player starts the run as "
             },
             {
@@ -31959,32 +31933,6 @@
               ]
             }
           ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "Loot Bag is the only member of the "
-            },
-            {
-              "t": "text",
-              "v": "PAYDAY 2",
-              "style": "i"
-            },
-            {
-              "t": "text",
-              "v": " item set which appears in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": "."
-            }
-          ]
         }
       ]
     },
@@ -40628,32 +40576,6 @@
           "tokens": [
             {
               "t": "text",
-              "v": "A hidden (possibly bugged) text string that may appear in the "
-            },
-            {
-              "t": "ref",
-              "v": "Diginomocon",
-              "kind": "unresolved"
-            },
-            {
-              "t": "text",
-              "v": " in "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": " describes the Planar Lead as being bestowed upon a telepathic bullet who would lead the kin to the 'Great Reloading'. The canonicity of this text is unknown."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
               "v": "After giving the Planar Lead to the "
             },
             {
@@ -48105,32 +48027,6 @@
             {
               "t": "text",
               "v": " series, who eat Link's shield."
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "The shield shares a sprite with the  "
-            },
-            {
-              "t": "ref",
-              "v": "Flying Disc",
-              "kind": "unresolved"
-            },
-            {
-              "t": "text",
-              "v": " from "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": "."
             }
           ]
         }

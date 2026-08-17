@@ -183,7 +183,7 @@
     "category": "Major NPC",
     "game": "Enter the Gungeon",
     "location": "The Breach — lower right ledge; cells in progressively deeper floors",
-    "description": "Loblina the Ledge Goblin sits on a ledge in the Breach. Interacting with her helmet kicks it into the Gungeon, sending her to retrieve it. She must then be rescued from a cell on progressively deeper floors (Gungeon Proper, Black Powder Mine, Hollow). After the fourth rescue, she chains her helmet down and unlocks the Blast Helmet. In Exit the Gungeon, she hosts the Helmet Kicko minigame.",
+    "description": "Loblina the Ledge Goblin sits on a ledge in the Breach. Interacting with her helmet kicks it into the Gungeon, sending her to retrieve it. She must then be rescued from a cell on progressively deeper floors (Gungeon Proper, Black Powder Mine, Hollow). After the fourth rescue, she chains her helmet down and unlocks the Blast Helmet.",
     "tips": [
       "Kick her helmet to trigger the rescue chain — each rescue is on a deeper floor.",
       "After the 4th rescue (Hollow), she chains her helmet and unlocks Blast Helmet.",
@@ -233,8 +233,7 @@
     "tips": [
       "20% discount on all items — great value for goop-themed builds.",
       "Carry the Sponge to understand his dialogue — it reverts to normal font.",
-      "After buying from him in the Gungeon, he appears in the Breach for Hegemony Credit unlocks.",
-      "In Exit the Gungeon, he operates at a 33% discount after being rescued with a Rat Key."
+      "After buying from him in the Gungeon, he appears in the Breach for Hegemony Credit unlocks."
     ],
     "icon": "professor_goopton.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Professor_Goopton"
@@ -468,7 +467,7 @@
     "category": "Minor NPC",
     "game": "Enter the Gungeon",
     "location": "The Breach — Gungeon entrance",
-    "description": "Two guardian knights who flank the entrance to the Gungeon, barring entry until the player completes or skips the tutorial with Ser Manuel. If the player ignores their advice, they allow entry anyway. They also appear in Exit the Gungeon and House of the Gundead.",
+    "description": "Two guardian knights who flank the entrance to the Gungeon, barring entry until the player completes or skips the tutorial with Ser Manuel. If the player ignores their advice, they allow entry anyway.",
     "tips": [
       "Complete Ser Manuel's tutorial to pass without issue — or skip it and they'll let you through.",
       "They claim guns aren't 'allowed in the Breach' — but this doesn't apply to all NPCs.",
