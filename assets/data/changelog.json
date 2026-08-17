@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.39",
+    "title": "Visual Polish — BG Flicker Fix + Touch Sparkles + Tile Badges",
+    "date": "August 2026",
+    "items": [
+      "FIX: Eliminated galaxy background flicker when starting or ending a run. The animated vortex now stays mounted with AnimatedOpacity controlling visibility, so returning to the home screen is instant — no ~200ms blank flash from video re-initialization.",
+      "FIX: Background switching is now synchronous — ThemeOverlay reads RunProvider directly instead of relying on a child-set ValueNotifier that caused a 1-frame stale background flash.",
+      "FIX: Stale multiplayer version string (was reporting 1.9.36 instead of 1.9.38 in MP hello diagnostics).",
+      "POLISH: Touch sparkle particles toned down — reduced count (8→5), velocity (1.0-4.5→0.5-2.0), size (4-9px→3-6px), and lifetime (~300ms→~200ms) for a gentle puff instead of a chaotic burst.",
+      "POLISH: DMG and RANGE badges on periodic inventory tiles now always fit — wrapped in FittedBox(scaleDown) with reduced font sizes and tighter padding so they never overflow on narrow screens."
+    ]
+  },
+  {
     "version": "v1.9.38",
     "title": "EtG Data Scrub + Gungeoneer Detail Polish + Header Symmetry",
     "date": "August 2026",
