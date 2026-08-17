@@ -5,7 +5,6 @@ import '../providers/run_provider.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/multiplayer_session.dart';
 import '../widgets/mp_request_listener.dart';
-import '../widgets/theme_overlay.dart';
 import 'main_menu_screen.dart';
 import 'active_run_screen.dart';
 import 'browse_screen.dart';
@@ -74,16 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final hasActiveRun = runProvider.runState.selectedCharacter != null;
 
-    // ponytail: set synchronously. The old post-frame approach caused a
-    // stale frame where the home-screen galaxy + contrast backing + scrim
-    // stayed painted over the particles after entering an MP run, and
-    // nothing forced a repaint until the user minimized/restored the app.
-    // Setting synchronously means the overlay rebuilds in the same frame
-    // with the correct index, so particles/glow show immediately.
-    final desiredScreenIndex = hasActiveRun ? -1 : 0;
-    if (ThemeOverlay.currentScreenIndex.value != desiredScreenIndex) {
-      ThemeOverlay.currentScreenIndex.value = desiredScreenIndex;
-    }
+    // ThemeOverlay now reads RunProvider directly to determine
+    // isHomeScreen, so the galaxy background swaps in the same frame
+    // as the run state change — no 1-frame flicker.
 
     if (!hasActiveRun) {
       // Home screen (MainMenu) — Galaxy animated bg plays here

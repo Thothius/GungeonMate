@@ -1,8 +1,10 @@
 ﻿import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import 'theme_engines.dart';
 import 'particle_engine.dart';
@@ -122,10 +124,18 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
         return ValueListenableBuilder<VisualPrefs>(
           valueListenable: VisualPrefs.notifier,
           builder: (_, prefs, __) {
-            return ValueListenableBuilder<int>(
-              valueListenable: ThemeOverlay.currentScreenIndex,
-              builder: (_, screenIndex, __) {
-                final isHomeScreen = screenIndex == 0;
+            // Determine isHomeScreen directly from RunProvider so the
+            // galaxy background disappears the instant a run starts —
+            // no 1-frame lag from a child-set ValueNotifier.
+            final runProvider = context.watch<RunProvider>();
+            final isHomeScreen = runProvider.isLoading ||
+                runProvider.runState.selectedCharacter == null;
+            // Keep the static notifier in sync for the touch-sparkle
+            // guard below (which runs outside the build path).
+            final desiredIndex = isHomeScreen ? 0 : -1;
+            if (ThemeOverlay.currentScreenIndex.value != desiredIndex) {
+              ThemeOverlay.currentScreenIndex.value = desiredIndex;
+            }
             final f = AppTheme.displayedFlair;
           // Auto-glow: themes with a non-transparent glowPrimary get a
           // subtle ambient glow even if the user hasn't manually enabled
@@ -217,19 +227,22 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   child: Container(color: f.scaffold),
                 ),
 
-                // 0.4. Home Screen Vortex — the orbiting purple portal animation
-                if (isHomeScreen)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: Opacity(
-                        opacity: 0.85,
-                        child: AnimatedWallpaperBackground(
-                          key: const ValueKey('home_vortex'),
-                          assetName: ThemeOverlay.kHomeGalaxyAsset,
-                        ),
+                // 0.4. Home Screen Vortex — the orbiting purple portal animation.
+                // Always mounted (keeps the video controller warm so returning
+                // to the home screen is instant — no re-init flicker), but only
+                // visible when on the home screen.
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: AnimatedOpacity(
+                      opacity: isHomeScreen ? 0.85 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: const AnimatedWallpaperBackground(
+                        key: ValueKey('home_vortex'),
+                        assetName: ThemeOverlay.kHomeGalaxyAsset,
                       ),
                     ),
                   ),
+                ),
 
                 // 0.6. Home Screen Contrast Backing (subtle — lets vortex glow show through)
                 if (isHomeScreen)
@@ -339,8 +352,6 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
               ],
             ),
           );
-              },
-            );
         },
       );
     },
