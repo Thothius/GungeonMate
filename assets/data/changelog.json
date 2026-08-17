@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.22",
+    "title": "🎨 Home Screen Vortex Video + Character Grid Fix",
+    "date": "August 2026",
+    "items": [
+      "🎨 Removed the 'BULLET HELL EDITION' animated heading from the home screen for a cleaner look.",
+      "🎨 Character select screen now always shows 3 gungeoneers per row (was 3/4/5 depending on width) — uniform 3x3 grid for all 9 gungeoneers.",
+      "🎨 Home screen now plays the actual gungeonmate-animation-02.mp4 vortex video as its background (was a galaxy wallpaper + canvas-painted replica). Video opacity boosted for better visibility."
+    ]
+  },
+  {
     "version": "v1.9.21",
     "title": "📋 Items Wiki Audit Round 5 (Final) — Table Techs, Active Items, Companions, Rings Enriched",
     "date": "August 2026",

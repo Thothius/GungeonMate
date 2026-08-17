@@ -6,6 +6,19 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.22 — 🎨 Home Screen Vortex Video + Character Grid Fix (August 2026)
+**Build:** 99
+
+> UI polish: removed BULLET HELL heading, fixed character grid to 3 columns, swapped home background to the actual vortex video.
+
+### Changes
+- **Removed BULLET HELL heading:** The animated "BULLET HELL EDITION" wobble+burn banner was removed from the home screen for a cleaner look. The `_BulletHellHeading` widget class and all related code was deleted.
+- **Character grid fixed to 3 columns:** Character select screen now always uses 3 columns (was 3/4/5 based on screen width). With 9 gungeoneers, this gives a uniform 3x3 grid on all devices.
+- **Home screen vortex video:** Swapped the home screen background from `wp_anim_01_galaxy.mp4` (galaxy wallpaper) to `gungeonmate-animation-02.mp4` (the actual orbiting purple portal vortex). Opacity boosted from 0.55 to 0.85, black overlay reduced from 0.62 to 0.35. Removed the redundant `GungeonFallAnimation` canvas vortex that was replicating the video in code.
+- **Version strings synced** to v1.9.22.
+
+---
+
 ## v1.9.21 — 📋 Items Wiki Audit Round 5 (Final) — Table Techs, Active Items, Companions, Rings (August 2026)
 **Build:** 98
 
