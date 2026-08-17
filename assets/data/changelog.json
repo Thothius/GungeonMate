@@ -1,5 +1,30 @@
 [
   {
+    "version": "v1.9.40",
+    "title": "10 New Themes + Active Item Badges",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: 10 new fully-themed experiences with custom particles, unique avatar auras, and cohesive palette identities:",
+      "  • Cat Lady — warm amber paw prints drifting upward, paw trail aura, cozy rounded cards",
+      "  • Moonlit Chamber — silver crescent moons with pulse glow, lunar breathing aura, sparkling numbers",
+      "  • Storm Caller — electric lightning bolts striking down, crackling arc border, shimmering headlines",
+      "  • Mr. Robot — circuit-board traces with line links, radar sweep aura, tech-glow stats",
+      "  • Valor of Marines — spent brass shell casings falling, tactical crosshair ring aura",
+      "  • The Bullet — heroic blade tips spinning upward, gold shimmer ring aura, shimmering headlines",
+      "  • The Paradox — fractured crystal shards in a time rift, 4 shards orbiting at different speeds",
+      "  • Gunpowder — dark smoke puffs billowing upward, ember breathing aura, explosion glyph",
+      "  • Dragunfire — reptilian dragon scales falling with molten glow, 5 scales orbiting the avatar",
+      "  • Lich's Domain — fractured bone shards with cursed glow, void pulse aura, necrotic palette",
+      "FEATURE: Active items now show RCHRG (recharge) and DUR (duration) badges on periodic inventory tiles, mirroring the gun DPS/RANGE layout.",
+      "POLISH: Compact stat labels — '600 dmg' → '600d', '10 seconds' → '10s', 'Cannot be used' → '—'. Max 5 chars, always fit.",
+      "POLISH: Single-FittedBox layout for all stat badges — both gun and item badges scale together proportionally, never clip.",
+      "POLISH: Touch sparkles now alternate between primary and secondary theme colors for richer tap effects across all themes.",
+      "INFRASTRUCTURE: 6 new ParticleShape enums (paw, crescent, bolt, shard, smoke, scale) with custom Path-based draw methods.",
+      "INFRASTRUCTURE: 7 new ParticlePreset entries with full PresetConfig (catPaws, moonlight, lightningBolts, paradoxShards, gunpowderSmoke, dragunScales, circuitTraces, shellCasings, heroicBlades, boneShards).",
+      "INFRASTRUCTURE: 6 new AvatarAuraStyle entries with custom paint methods (catPawTrail, moonGlow, lightningArc, paradoxRift, dragunScale, tacticalRing)."
+    ]
+  },
+  {
     "version": "v1.9.39",
     "title": "Visual Polish — BG Flicker Fix + Touch Sparkles + Tile Badges",
     "date": "August 2026",
