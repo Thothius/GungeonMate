@@ -216,6 +216,12 @@ class _AuraPainter extends CustomPainter {
         _paintMoonGlow(canvas, size, rrect);
       case AvatarAuraStyle.lightningArc:
         _paintLightningArc(canvas, size, rrect);
+      case AvatarAuraStyle.paradoxRift:
+        _paintParadoxRift(canvas, size, rrect);
+      case AvatarAuraStyle.dragunScale:
+        _paintDragunScale(canvas, size, rrect);
+      case AvatarAuraStyle.tacticalRing:
+        _paintTacticalRing(canvas, size, rrect);
     }
   }
 
@@ -675,6 +681,146 @@ class _AuraPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 0.8;
     canvas.drawRRect(rrect.deflate(1.0), inner);
+  }
+
+  // -- Paradox: fractured purple shards orbiting in a time rift -------
+  void _paintParadoxRift(Canvas canvas, Size size, RRect rrect) {
+    final center = _rectCenter(size);
+    final angle = t * 2 * math.pi;
+    final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
+
+    // Rift glow — pulsing purple-violet
+    final glow = Paint()
+      ..color = primary.withValues(alpha: 0.20 + 0.30 * tri)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3 + 2 * tri
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
+    canvas.drawRRect(rrect.inflate(2), glow);
+
+    // Inner fractured border — slight irregularity
+    final inner = Paint()
+      ..color = secondary.withValues(alpha: 0.4 + 0.2 * tri)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+    canvas.drawRRect(rrect.deflate(0.8), inner);
+
+    // 4 crystal shards orbiting at different speeds
+    final rx = size.width / 2 - 1;
+    final ry = size.height / 2 - 1;
+    final shardPaint = Paint()..color = primary.withValues(alpha: 0.6 + 0.3 * tri);
+    for (var i = 0; i < 4; i++) {
+      final theta = angle * (1 + i * 0.3) + (i / 4) * 2 * math.pi;
+      final sx = center.dx + math.cos(theta) * rx;
+      final sy = center.dy + math.sin(theta) * ry;
+      // Draw small shard (irregular polygon)
+      final shardR = 2.5 + 0.8 * tri;
+      final path = Path()
+        ..moveTo(sx, sy - shardR)
+        ..lineTo(sx + shardR * 0.6, sy - shardR * 0.3)
+        ..lineTo(sx + shardR * 0.4, sy + shardR * 0.5)
+        ..lineTo(sx - shardR * 0.2, sy + shardR * 0.7)
+        ..lineTo(sx - shardR * 0.7, sy + shardR * 0.1)
+        ..lineTo(sx - shardR * 0.5, sy - shardR * 0.5)
+        ..close();
+      canvas.drawPath(path, shardPaint);
+    }
+  }
+
+  // -- Dragun: molten orange-red scales rotating around the avatar -----
+  void _paintDragunScale(Canvas canvas, Size size, RRect rrect) {
+    final center = _rectCenter(size);
+    final angle = t * 2 * math.pi;
+    final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
+
+    // Molten glow — pulsing orange-red
+    final glow = Paint()
+      ..color = primary.withValues(alpha: 0.25 + 0.35 * tri)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3 + 2 * tri
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
+    canvas.drawRRect(rrect.inflate(2), glow);
+
+    // Inner ember hairline
+    final inner = Paint()
+      ..color = secondary.withValues(alpha: 0.5)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+    canvas.drawRRect(rrect.deflate(0.8), inner);
+
+    // 5 dragon scales orbiting the border
+    final rx = size.width / 2 - 1;
+    final ry = size.height / 2 - 1;
+    final scalePaint = Paint()..color = primary.withValues(alpha: 0.7);
+    for (var i = 0; i < 5; i++) {
+      final theta = angle + (i / 5) * 2 * math.pi;
+      final sx = center.dx + math.cos(theta) * rx;
+      final sy = center.dy + math.sin(theta) * ry;
+      // Draw scale (fan shape)
+      final sr = 3.0;
+      final path = Path()
+        ..moveTo(sx - sr, sy + sr * 0.3)
+        ..quadraticBezierTo(sx - sr, sy - sr * 0.8, sx, sy - sr * 0.9)
+        ..quadraticBezierTo(sx + sr, sy - sr * 0.8, sx + sr, sy + sr * 0.3)
+        ..quadraticBezierTo(sx, sy + sr * 0.6, sx - sr, sy + sr * 0.3)
+        ..close();
+      canvas.drawPath(path, scalePaint);
+    }
+  }
+
+  // -- Tactical: military green crosshair ring with sweep -------------
+  void _paintTacticalRing(Canvas canvas, Size size, RRect rrect) {
+    final center = _rectCenter(size);
+    final angle = t * 2 * math.pi;
+
+    // Steady military green glow — no pulse, tactical is precise
+    final glow = Paint()
+      ..color = primary.withValues(alpha: 0.25)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+    canvas.drawRRect(rrect.inflate(1.5), glow);
+
+    // Rotating sweep — like a radar/scanner
+    final shader = SweepGradient(
+      startAngle: 0,
+      endAngle: 2 * math.pi,
+      transform: GradientRotation(angle),
+      colors: [
+        primary.withValues(alpha: 0.0),
+        primary.withValues(alpha: 0.0),
+        primary.withValues(alpha: 0.6),
+        primary.withValues(alpha: 0.0),
+      ],
+      stops: const [0.0, 0.7, 0.85, 1.0],
+    ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
+    final sweepPaint = Paint()
+      ..shader = shader
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+    canvas.drawRRect(rrect, sweepPaint);
+
+    // Inner hairline
+    final inner = Paint()
+      ..color = primary.withValues(alpha: 0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.8;
+    canvas.drawRRect(rrect.deflate(1.0), inner);
+
+    // Crosshair ticks at 4 cardinal points
+    final tickPaint = Paint()
+      ..color = secondary.withValues(alpha: 0.6)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+    final rx = size.width / 2;
+    final ry = size.height / 2;
+    for (var i = 0; i < 4; i++) {
+      final theta = (i / 4) * 2 * math.pi;
+      final x1 = center.dx + math.cos(theta) * (rx - 3);
+      final y1 = center.dy + math.sin(theta) * (ry - 3);
+      final x2 = center.dx + math.cos(theta) * (rx + 2);
+      final y2 = center.dy + math.sin(theta) * (ry + 2);
+      canvas.drawLine(Offset(x1, y1), Offset(x2, y2), tickPaint);
+    }
   }
 
   Offset _rectCenter(Size s) => Offset(s.width / 2, s.height / 2);

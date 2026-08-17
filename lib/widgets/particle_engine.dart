@@ -28,6 +28,9 @@ enum ParticlePreset {
   catPaws,
   moonlight,
   lightningBolts,
+  paradoxShards,
+  gunpowderSmoke,
+  dragunScales,
 }
 
 // =============================================================================
@@ -249,6 +252,9 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.catPaws => 'Cat Paws',
         ParticlePreset.moonlight => 'Moonlight',
         ParticlePreset.lightningBolts => 'Lightning Bolts',
+        ParticlePreset.paradoxShards => 'Paradox Shards',
+        ParticlePreset.gunpowderSmoke => 'Gunpowder Smoke',
+        ParticlePreset.dragunScales => 'Dragun Scales',
       };
 
   String get description => switch (this) {
@@ -273,6 +279,9 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.catPaws => 'Tiny cat paw prints drifting upward with warm amber glow',
         ParticlePreset.moonlight => 'Crescent moons and stars drifting with silver glow and twinkle',
         ParticlePreset.lightningBolts => 'Electric lightning bolts striking downward with flash glow',
+        ParticlePreset.paradoxShards => 'Fractured crystal shards spinning through a time rift with cursed glow',
+        ParticlePreset.gunpowderSmoke => 'Dark smoke puffs drifting upward with sulfurous ember glow',
+        ParticlePreset.dragunScales => 'Reptilian dragon scales falling with molten orange-red glow',
       };
 
   PresetConfig get config => switch (this) {
@@ -575,10 +584,53 @@ extension ParticlePresetX on ParticlePreset {
             trailLength: 0.5,
             lifetimeMin: 1.0, lifetimeMax: 2.5,
           ),
+        ParticlePreset.paradoxShards => PresetConfig(
+            colors: [const Color(0xFFCE93D8), const Color(0xFFAB47BC), const Color(0xFF7E57C2), const Color(0xFFE1BEE7)],
+            shape: ParticleShape.shard,
+            sizeMin: 2.5, sizeMax: 6.0,
+            speedMin: 3.0, speedMax: 12.0,
+            glowEffect: GlowEffect.cursed,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.4,
+            rotate: true,
+            // Upgrades: turbulence for rift chaos, hue drift for time-warp
+            turbulence: 0.6,
+            hueDriftSpeed: 45.0,
+            lifetimeMin: 5.0, lifetimeMax: 10.0,
+          ),
+        ParticlePreset.gunpowderSmoke => PresetConfig(
+            colors: [const Color(0xFF424242), const Color(0xFF616161), const Color(0xFF757575), const Color(0xFFB71C1C)],
+            shape: ParticleShape.smoke,
+            sizeMin: 4.0, sizeMax: 9.0,
+            speedMin: 2.0, speedMax: 8.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: false,
+            drift: DriftDirection.up,
+            wobble: 0.7,
+            rotate: false,
+            // Upgrades: heavy turbulence for billowing, long life
+            turbulence: 0.5,
+            lifetimeMin: 6.0, lifetimeMax: 11.0,
+          ),
+        ParticlePreset.dragunScales => PresetConfig(
+            colors: [const Color(0xFFFF4500), const Color(0xFFFF6E40), const Color(0xFFFFAB40), const Color(0xFFD84315)],
+            shape: ParticleShape.scale,
+            sizeMin: 3.0, sizeMax: 7.0,
+            speedMin: 4.0, speedMax: 14.0,
+            glowEffect: GlowEffect.pulse,
+            lineLinks: false,
+            drift: DriftDirection.down,
+            wobble: 0.5,
+            rotate: true,
+            // Upgrades: shimmer for molten glint, medium life
+            shimmer: true,
+            lifetimeMin: 4.0, lifetimeMax: 8.0,
+          ),
       };
 }
 
-enum ParticleShape { circle, star, triangle, edge, bullet, heart, skull, hexagon, paw, crescent, bolt }
+enum ParticleShape { circle, star, triangle, edge, bullet, heart, skull, hexagon, paw, crescent, bolt, shard, smoke, scale }
 
 enum GlowEffect { none, smokey, ripple, pulse, cursed }
 
@@ -1363,6 +1415,15 @@ class _ParticlePainter extends CustomPainter {
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.15, paint);
         }
         break;
+      case ParticleShape.shard:
+        _drawShard(canvas, cx, cy, drawSize, paint);
+        break;
+      case ParticleShape.smoke:
+        _drawSmoke(canvas, cx, cy, drawSize, paint);
+        break;
+      case ParticleShape.scale:
+        _drawScale(canvas, cx, cy, drawSize, paint);
+        break;
     }
   }
 
@@ -1479,6 +1540,50 @@ class _ParticlePainter extends CustomPainter {
       ..lineTo(cx + r * 0.35, cy - r * 0.5)
       ..close();
     canvas.drawPath(path, paint);
+  }
+
+  /// Crystal shard: irregular polygon with sharp facets.
+  void _drawShard(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    final path = Path()
+      ..moveTo(cx, cy - r)
+      ..lineTo(cx + r * 0.6, cy - r * 0.3)
+      ..lineTo(cx + r * 0.4, cy + r * 0.5)
+      ..lineTo(cx - r * 0.2, cy + r * 0.7)
+      ..lineTo(cx - r * 0.7, cy + r * 0.1)
+      ..lineTo(cx - r * 0.5, cy - r * 0.5)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  /// Smoke puff: overlapping translucent circles for a soft cloud look.
+  void _drawSmoke(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    canvas.drawCircle(Offset(cx - r * 0.3, cy), r * 0.7, paint);
+    canvas.drawCircle(Offset(cx + r * 0.3, cy - r * 0.2), r * 0.6, paint);
+    canvas.drawCircle(Offset(cx, cy + r * 0.3), r * 0.65, paint);
+    canvas.drawCircle(Offset(cx + r * 0.15, cy - r * 0.1), r * 0.5, paint);
+  }
+
+  /// Dragon scale: overlapping semi-circles forming a reptilian scale pattern.
+  void _drawScale(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    // Main scale body — rounded fan shape
+    final path = Path()
+      ..moveTo(cx - r, cy + r * 0.3)
+      ..quadraticBezierTo(cx - r, cy - r * 0.8, cx, cy - r * 0.9)
+      ..quadraticBezierTo(cx + r, cy - r * 0.8, cx + r, cy + r * 0.3)
+      ..quadraticBezierTo(cx, cy + r * 0.6, cx - r, cy + r * 0.3)
+      ..close();
+    canvas.drawPath(path, paint);
+    // Inner ridge line for scale detail
+    final ridgePaint = Paint()
+      ..color = paint.color.withValues(alpha: paint.color.a * 0.5)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.5;
+    canvas.drawPath(
+      Path()
+        ..moveTo(cx, cy - r * 0.7)
+        ..quadraticBezierTo(cx, cy + r * 0.1, cx, cy + r * 0.4),
+      ridgePaint,
+    );
   }
 
   // ponytail: always-repaint is correct for animation-driven painters.

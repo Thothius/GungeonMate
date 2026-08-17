@@ -688,6 +688,241 @@ enum AppThemeMode {
       headerUnderlineColor: Color(0x88F77F00),
     ),
   ),
+  mrRobot(
+    label: "Mr. Robot",
+    vibe: 'CYBERNETIC',
+    diff: 'EXPERT',
+    elem: 'CIRCUIT',
+    whimsicalDescription: 'JUNK IS THE OPTIMAL SOURCE OF FUEL. A cold steel cybernetic interface with circuit-green accents and battery-blue highlights. The Robot\'s domain — efficient, calculating, and relentlessly logical.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0E0A),
+      card: Color(0xFF121812),
+      primary: Color(0xFF69F0AE), // circuit green
+      secondary: Color(0xFF40C4FF), // battery blue
+      headlineStat: Color(0xFFB9F6CA), // light green
+      bulletColor: Color(0xFF69F0AE),
+      bulletGlyph: '⚙',
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      chipRadius: 4,
+      cardRadius: 6,
+      cardBorderColor: Color(0x4469F0AE),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x4469F0AE),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x4469F0AE),
+      glowSecondary: Color(0x3340C4FF),
+      auraStyle: AvatarAuraStyle.tacticalRing,
+      headerGlyph: '⚙',
+      headerUnderlineColor: Color(0x8869F0AE),
+      statGroupCombat: Color(0xFF69F0AE),
+      statGroupHandling: Color(0xFF40C4FF),
+      statGroupMeta: Color(0xFFB9F6CA),
+    ),
+  ),
+  valorOfMarines(
+    label: 'Valor of Marines',
+    vibe: 'TACTICAL',
+    diff: 'NORMAL',
+    elem: 'DOG TAG',
+    whimsicalDescription: 'Stay frosty. A disciplined military aesthetic with olive drab, tactical amber, and steel gray. The Marine\'s domain — precise, reliable, and always by the book.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0F0F0A),
+      card: Color(0xFF1A1A14),
+      primary: Color(0xFFC5E1A5), // olive drab light
+      secondary: Color(0xFFFFB74D), // tactical amber
+      headlineStat: Color(0xFFE6EE9C), // light olive
+      bulletColor: Color(0xFFC5E1A5),
+      bulletGlyph: '★',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      chipRadius: 6,
+      cardRadius: 8,
+      cardBorderColor: Color(0x44C5E1A5),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x44C5E1A5),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x44C5E1A5),
+      glowSecondary: Color(0x33FFB74D),
+      auraStyle: AvatarAuraStyle.tacticalRing,
+      headerGlyph: '★',
+      headerUnderlineColor: Color(0x88C5E1A5),
+      statGroupCombat: Color(0xFFFFB74D),
+      statGroupHandling: Color(0xFFC5E1A5),
+      statGroupMeta: Color(0xFFE6EE9C),
+    ),
+  ),
+  theBullet(
+    label: 'The Bullet',
+    vibe: 'HEROIC',
+    diff: 'NORMAL',
+    elem: 'BLADE',
+    whimsicalDescription: 'For the glory of the Bullet-King! A brave bullet-kin aesthetic with polished brass gold, heroic red, and steel gray. The Bullet that dared to wield a blade — noble, bright, and defiant.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0F0D08),
+      card: Color(0xFF1A1610),
+      primary: Color(0xFFFFD740), // brass gold
+      secondary: Color(0xFFEF5350), // heroic red
+      headlineStat: Color(0xFFFFE57F), // light gold
+      bulletColor: Color(0xFFFFD740),
+      bulletGlyph: '⚔',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x44FFD740),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55FFD740),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55FFD740),
+      glowSecondary: Color(0x44EF5350),
+      auraStyle: AvatarAuraStyle.brassConic,
+      headerGlyph: '⚔',
+      headerUnderlineColor: Color(0xAAFFD740),
+      statGroupCombat: Color(0xFFEF5350),
+      statGroupHandling: Color(0xFFFFD740),
+      statGroupMeta: Color(0xFFFFE57F),
+    ),
+  ),
+  theParadox(
+    label: 'The Paradox',
+    vibe: 'FRACTURED',
+    diff: 'EXPERT',
+    elem: 'RIFT',
+    whimsicalDescription: 'Who... what... when... am I? A fractured reality aesthetic with swirling paradox purple, time-rift violet, and stardust white. Existence is a loop inside a cylinder — broken, beautiful, and unknowable.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0812),
+      card: Color(0xFF140F1F),
+      primary: Color(0xFFCE93D8), // paradox purple
+      secondary: Color(0xFF7E57C2), // rift violet
+      headlineStat: Color(0xFFE1BEE7), // stardust
+      bulletColor: Color(0xFFCE93D8),
+      bulletGlyph: '✦',
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFCE93D8),
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w700,
+      chipRadius: 14,
+      cardRadius: 16,
+      cardBorderColor: Color(0x44CE93D8),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55CE93D8),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55CE93D8),
+      glowSecondary: Color(0x447E57C2),
+      auraStyle: AvatarAuraStyle.paradoxRift,
+      headerGlyph: '✦',
+      headerUnderlineColor: Color(0xAACE93D8),
+      statGroupCombat: Color(0xFF7E57C2),
+      statGroupHandling: Color(0xFFCE93D8),
+      statGroupMeta: Color(0xFFE1BEE7),
+    ),
+  ),
+  gunpowder(
+    label: 'Gunpowder',
+    vibe: 'EXPLOSIVE',
+    diff: 'NORMAL',
+    elem: 'POWDER',
+    whimsicalDescription: 'Lock and load. A smoky gunpowder aesthetic with charcoal black, sulfurous gray, and ember red. The smell of spent casings and black powder — raw, industrial, and ready to detonate.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0A0A),
+      card: Color(0xFF141414),
+      primary: Color(0xFFB71C1C), // ember red
+      secondary: Color(0xFF9E9E9E), // sulfurous gray
+      headlineStat: Color(0xFFE57373), // light ember
+      bulletColor: Color(0xFFB71C1C),
+      bulletGlyph: '●',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w800,
+      chipRadius: 4,
+      cardRadius: 6,
+      cardBorderColor: Color(0x44B71C1C),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x44B71C1C),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x44B71C1C),
+      glowSecondary: Color(0x339E9E9E),
+      auraStyle: AvatarAuraStyle.oxbloodBreath,
+      headerGlyph: '●',
+      headerUnderlineColor: Color(0x88B71C1C),
+      statGroupCombat: Color(0xFFB71C1C),
+      statGroupHandling: Color(0xFF9E9E9E),
+      statGroupMeta: Color(0xFFE57373),
+    ),
+  ),
+  dragunfire(
+    label: 'Dragunfire',
+    vibe: 'MOLTEN',
+    diff: 'BRUTAL',
+    elem: 'FIRE',
+    whimsicalDescription: 'Face the High Dragun. A molten inferno aesthetic with dragun orange, scale amber, and ash black. The Fifth Chamber burns — scales glint, fire roars, and only the worthy survive.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0F0805),
+      card: Color(0xFF1C100A),
+      primary: Color(0xFFFF4500), // dragun orange
+      secondary: Color(0xFFFFAB40), // scale amber
+      headlineStat: Color(0xFFFFCC00), // molten gold
+      bulletColor: Color(0xFFFF4500),
+      bulletGlyph: '🐲',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.08,
+      numberWeight: FontWeight.w800,
+      chipRadius: 6,
+      cardRadius: 8,
+      cardBorderColor: Color(0x44FF4500),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55FF4500),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55FF4500),
+      glowSecondary: Color(0x44FFAB40),
+      auraStyle: AvatarAuraStyle.dragunScale,
+      headerGlyph: '🐲',
+      headerUnderlineColor: Color(0xAAFF4500),
+      statGroupCombat: Color(0xFFFF4500),
+      statGroupHandling: Color(0xFFFFAB40),
+      statGroupMeta: Color(0xFFFFCC00),
+    ),
+  ),
+  lichsDomain(
+    label: "Lich's Domain",
+    vibe: 'NECROTIC',
+    diff: 'EXTREME',
+    elem: 'BONE',
+    whimsicalDescription: 'The master of the gungeon awaits. A necrotic domain with bone white, crypt teal, and void black. The Lich\'s chamber — cold, eternal, and absolute in its finality.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF050808),
+      card: Color(0xFF0C1010),
+      primary: Color(0xFF2EC4B6), // crypt teal
+      secondary: Color(0xFFE0E0E0), // bone white
+      headlineStat: Color(0xFFF5F5DC), // antique bone
+      bulletColor: Color(0xFF2EC4B6),
+      bulletGlyph: '☠',
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w800,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x442EC4B6),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x552EC4B6),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x552EC4B6),
+      glowSecondary: Color(0x33E0E0E0),
+      auraStyle: AvatarAuraStyle.lichPurple,
+      headerGlyph: '☠',
+      headerUnderlineColor: Color(0xAA2EC4B6),
+      statGroupCombat: Color(0xFF2EC4B6),
+      statGroupHandling: Color(0xFFE0E0E0),
+      statGroupMeta: Color(0xFFF5F5DC),
+    ),
+  ),
   catLady(
     label: 'Cat Lady',
     vibe: 'COZY',
@@ -1232,6 +1467,13 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.catLady,
   AppThemeMode.moonlitChamber,
   AppThemeMode.stormCaller,
+  AppThemeMode.mrRobot,
+  AppThemeMode.valorOfMarines,
+  AppThemeMode.theBullet,
+  AppThemeMode.theParadox,
+  AppThemeMode.gunpowder,
+  AppThemeMode.dragunfire,
+  AppThemeMode.lichsDomain,
   AppThemeMode.custom,
 ];
 
@@ -1267,6 +1509,13 @@ const Map<AppThemeMode, ParticlePreset> kThemeParticleDefaults =
   AppThemeMode.catLady: ParticlePreset.catPaws,
   AppThemeMode.moonlitChamber: ParticlePreset.moonlight,
   AppThemeMode.stormCaller: ParticlePreset.lightningBolts,
+  AppThemeMode.mrRobot: ParticlePreset.cosmicStars,
+  AppThemeMode.valorOfMarines: ParticlePreset.gungeonDust,
+  AppThemeMode.theBullet: ParticlePreset.bulletKin,
+  AppThemeMode.theParadox: ParticlePreset.paradoxShards,
+  AppThemeMode.gunpowder: ParticlePreset.gunpowderSmoke,
+  AppThemeMode.dragunfire: ParticlePreset.dragunScales,
+  AppThemeMode.lichsDomain: ParticlePreset.cursedSkulls,
   AppThemeMode.custom: ParticlePreset.cosmicStars,
 };
 
@@ -1315,6 +1564,15 @@ enum AvatarAuraStyle {
 
   /// Lightning: crackling electric blue-yellow arc border.
   lightningArc,
+
+  /// Paradox: fractured purple-violet shards orbiting in a time rift.
+  paradoxRift,
+
+  /// Dragun: molten orange-red scales rotating around the avatar.
+  dragunScale,
+
+  /// Tactical: precise military green crosshair ring with sweep.
+  tacticalRing,
 }
 
 extension AppThemeModeLabel on AppThemeMode {
@@ -1368,6 +1626,20 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Moonlit Chamber';
       case AppThemeMode.stormCaller:
         return 'Storm Caller';
+      case AppThemeMode.mrRobot:
+        return 'Mr. Robot';
+      case AppThemeMode.valorOfMarines:
+        return 'Valor of Marines';
+      case AppThemeMode.theBullet:
+        return 'The Bullet';
+      case AppThemeMode.theParadox:
+        return 'The Paradox';
+      case AppThemeMode.gunpowder:
+        return 'Gunpowder';
+      case AppThemeMode.dragunfire:
+        return 'Dragunfire';
+      case AppThemeMode.lichsDomain:
+        return "Lich's Domain";
       case AppThemeMode.minimalist:
         return 'Minimalist';
       case AppThemeMode.custom:
@@ -1425,6 +1697,20 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Lunar Watch — silver-blue, pale moonlight, midnight dark';
       case AppThemeMode.stormCaller:
         return 'High Voltage — electric yellow, voltage blue, storm steel';
+      case AppThemeMode.mrRobot:
+        return 'Cybernetic — circuit green, battery blue, steel black';
+      case AppThemeMode.valorOfMarines:
+        return 'Stay Frosty — olive drab, tactical amber, steel gray';
+      case AppThemeMode.theBullet:
+        return 'Heroic Blade — brass gold, heroic red, steel gray';
+      case AppThemeMode.theParadox:
+        return 'Fractured Reality — paradox purple, rift violet, stardust';
+      case AppThemeMode.gunpowder:
+        return 'Explosive — ember red, sulfurous gray, charcoal black';
+      case AppThemeMode.dragunfire:
+        return 'Molten Inferno — dragun orange, scale amber, ash black';
+      case AppThemeMode.lichsDomain:
+        return 'Necrotic — crypt teal, bone white, void black';
       case AppThemeMode.minimalist:
         return 'Stripped Back — pure black, clean white, cold grey';
       case AppThemeMode.custom:
