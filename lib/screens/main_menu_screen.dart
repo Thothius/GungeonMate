@@ -303,7 +303,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.38',
+                            'v1.9.38 — EtG Data Scrub + Gungeoneer Detail Polish + Header Symmetry',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

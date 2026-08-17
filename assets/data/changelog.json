@@ -1,9 +1,14 @@
 [
   {
     "version": "v1.9.38",
-    "title": "Active Run Header Symmetry Polish",
+    "title": "EtG Data Scrub + Gungeoneer Detail Polish + Header Symmetry",
     "date": "August 2026",
     "items": [
+      "FIX: Scrubbed all Exit the Gungeon cross-game data from the app — Pea Shooter and Void Shotgun had corrupted dual-game stats (magazine size and ammo capacity), now showing only Enter the Gungeon values.",
+      "FIX: Removed 15 wiki note blocks referencing Exit the Gungeon across guns.json (11 guns) and items.json (4 items), plus EtG trivia from 3 NPC entries, the Gunslinger past details, and 3 special codex screens (Rat, Drake, Gunslinger).",
+      "FIX: Gungeoneer detail wiki button now actually launches the URL via url_launcher instead of just showing a snackbar. Falls back to clipboard copy on error.",
+      "IMPROVE: Added LORE section to the Gungeoneer detail screen — all 9 gungeoneers had lore_intro data that was loaded from JSON but never rendered.",
+      "IMPROVE: Enlarged the ? info button on character select cards (22px → 28px) for better tap target accessibility.",
       "POLISH: HeaderMenu gear icon now has a 'More' label below it, matching the Calc/Effects/Shrine/Panels toggle pattern so every trailing option is symmetrical.",
       "POLISH: SpongeButton now has a 'Sponge' label when visible, matching the other labeled options.",
       "POLISH: Removed horizontal scroll from the trailing options row — all 5 options are now always visible and aligned, matching the always-visible stats row below.",
