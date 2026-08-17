@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.16",
+    "title": "🔧 Playwright QA Fixes — Ticker Crash, Version Strings, Synergy Typo",
+    "date": "August 2026",
+    "items": [
+      "🔧 FIX (BUG-059): Critical crash after character select — GungeonHeader used SingleTickerProviderStateMixin with 2 AnimationControllers. Fixed to TickerProviderStateMixin.",
+      "🔧 FIX (BUG-060): Main menu showed stale 'v1.9.11' in 4 places. Updated to 'v1.9.15'.",
+      "🔧 FIX (BUG-061): Browse synergy pill said 'synergys' instead of 'synergies'. Fixed pluralization."
+    ]
+  },
+  {
     "version": "v1.9.15",
     "title": "📋 Wiki Accuracy Audit — Number Formatting, Recharge Consistency, Vague Effects",
     "date": "August 2026",

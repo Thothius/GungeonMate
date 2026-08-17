@@ -6,6 +6,18 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.16 — 🔧 Playwright QA Fixes — Ticker Crash, Version Strings, Synergy Typo (August 2026)
+**Build:** 93
+
+> 3 bugs found via Playwright full-views QA sweep and fixed. 24 screens tested, 0 JS errors after fix.
+
+### Changes
+- **FIX (BUG-059) — Critical ticker crash:** GungeonHeader used SingleTickerProviderStateMixin with 2 AnimationControllers, crashing the app after character select. Fixed to TickerProviderStateMixin.
+- **FIX (BUG-060) — Stale version strings:** Main menu had 4 hardcoded 'v1.9.11' strings while pubspec was v1.9.15. Updated all 4 to 'v1.9.15'.
+- **FIX (BUG-061) — Synergy plural typo:** Browse pill said 'synergys' instead of 'synergies'. Fixed pluralization logic.
+
+---
+
 ## v1.9.15 — 📋 Wiki Accuracy Audit — Number Formatting, Recharge Consistency, Vague Effects (August 2026)
 **Build:** 92
 
