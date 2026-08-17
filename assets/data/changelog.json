@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.36",
+    "title": "🔌 Multiplayer Reconnect Hardening",
+    "date": "August 2026",
+    "items": [
+      "🔌 FIX: Reconnect search timeout no longer leaves the session stuck in 'searching' — it resets to disconnected and re-arms the auto-reconnect loop.",
+      "🔌 FIX: Saved-session restore now requests Bluetooth/Nearby permissions first, so a revoked-permission state shows a clear message instead of a confusing adapter error.",
+      "🔌 FIX: startAsMain and startAsSidekick now guard against _busyTransition, preventing parallel transport handshakes during reconnect.",
+      "🔌 IMPROVE: First auto-reconnect attempt now waits only 1 second (down from 2 seconds) for faster recovery from transient BT drops.",
+      "🔌 IMPROVE: Hello message now reports the real app version for diagnostics."
+    ]
+  },
+  {
     "version": "v1.9.35",
     "title": "🧹 App Health — Bug Hunt + Dead Code Removal",
     "date": "August 2026",

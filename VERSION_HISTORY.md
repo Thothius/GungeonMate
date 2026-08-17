@@ -6,6 +6,19 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.36 — 🔌 Multiplayer Reconnect Hardening (August 2026)
+**Build:** 113
+**APK:** `gungeon-mate-v1.9.36.apk`
+
+> Hardened the multiplayer reconnection flow so transient Bluetooth/Wi-Fi drops and permission changes recover automatically instead of stranding the player in a stuck state.
+
+### Multiplayer Reconnect Fixes
+- **Reconnect search timeout now returns to `MpStatus.disconnected` and re-arms auto-reconnect.** Previously the timeout only cleared `_isReconnecting` and left `_status == searching`, which caused `_tryAutoReconnect()` to bail immediately and silently kill the retry loop. The session is now reset to `disconnected`, `_busyTransition` is cleared, and `_startAutoReconnect()` is called immediately to try again.
+- **Saved-session restore requests permissions first.** `loadSavedSession()` now calls `_service.requestPermissions()` before `startAdvertising`/`startDiscovery`. If the user revoked BT/Nearby permissions after the original session, the UI now shows `permissionDenied` with a clear message instead of a confusing "could not start advertising" error.
+- **Start methods guard `_busyTransition`.** `startAsMain()` and `startAsSidekick()` now return early while `_busyTransition` is true, preventing parallel transport handshakes during the 800 ms native radio cooldown between reconnect attempts.
+- **Faster first auto-reconnect backoff.** The exponential backoff sequence now starts at 1 s (was 2 s): `1, 2, 4, 8, 16, 30...` This catches the most common transient BT hiccups in under 2 s.
+- **Real app version in `MpHello`.** The hello message now sends `MultiplayerSession.appVersionString`, initialized to the current app version in `main.dart`, for diagnostic purposes.
+
 ## v1.9.35 — 🧹 App Health — Bug Hunt + Dead Code Removal (August 2026)
 **Build:** 112
 
