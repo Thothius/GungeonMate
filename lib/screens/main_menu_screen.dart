@@ -38,8 +38,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Spacer(flex: 2),
+                      const Spacer(flex: 1),
                       // REDESIGNED STYLISH GUNGEON MATE TITLE HEADER
+                      // Anchored in the upper third via flex ratio
+                      // (1 top : 4 middle : 1 bottom) so the logo reads
+                      // as the hero and the action buttons settle in the
+                      // lower half.
                       Column(
                         children: [
                           // Styled logo/title with an intense stroke outline and golden saloon look
@@ -52,12 +56,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                 GoopText(
                                   'GUNGEON MATE',
                                   style: TextStyle(
-                                    fontSize: 40,
+                                    fontSize: 54,
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 2.0,
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 6
+                                      ..strokeWidth = 7
                                       ..color = const Color(0xFFC62828), // Deep Gungeon Red
                                   ),
                                 ),
@@ -65,7 +69,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                 const GoopText(
                                   'GUNGEON MATE',
                                   style: TextStyle(
-                                    fontSize: 40,
+                                    fontSize: 54,
                                     fontWeight: FontWeight.w900,
                                     letterSpacing: 2.0,
                                     color: Color(0xFFFFD54F), // Bright Gold
@@ -81,10 +85,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 10),
                           // Premium Gungeon-style Ribbon Subtitle
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
                             decoration: BoxDecoration(
                               color: const Color(0xFFC62828).withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(6),
@@ -96,7 +100,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                             child: const GoopText(
                               'YOUR COMPANION IN THE GUNGEON',
                               style: TextStyle(
-                                fontSize: 12.5,
+                                fontSize: 13.5,
                                 fontWeight: FontWeight.w900,
                                 color: Color(0xFFE57373), // Soft active red
                                 letterSpacing: 1.8,
@@ -105,8 +109,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
-                      const Spacer(flex: 2),
+                      const SizedBox(height: 12),
+                      const Spacer(flex: 4),
                   // Local Run = single device solo play
                   ScaleButton(
                     onTap: () {
