@@ -94,7 +94,9 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
     if (box != null) {
       final localPos = box.globalToLocal(globalPosition);
       final activeFlair = AppTheme.flair;
-      final color = activeFlair.primary;
+      // Alternate between primary and secondary for a richer sparkle
+      // that uses both theme accent colors.
+      final colors = [activeFlair.primary, activeFlair.secondary];
       setState(() {
         for (var i = 0; i < 5; i++) {
           final angle = _rng.nextDouble() * 2 * math.pi;
@@ -102,7 +104,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           _touchParticles.add(TouchParticle(
             pos: localPos,
             vel: Offset(math.cos(angle) * speed, math.sin(angle) * speed),
-            color: color,
+            color: colors[i % 2],
             size: 3.0 + _rng.nextDouble() * 3.0,
           ));
         }

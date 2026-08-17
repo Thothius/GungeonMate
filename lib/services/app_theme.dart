@@ -688,6 +688,108 @@ enum AppThemeMode {
       headerUnderlineColor: Color(0x88F77F00),
     ),
   ),
+  catLady(
+    label: 'Cat Lady',
+    vibe: 'COZY',
+    diff: 'NORMAL',
+    elem: 'PAW',
+    whimsicalDescription: 'A warm hearth-lit den where a content gungeoneer and their nine lives nap between chambers. Amber paw prints padding across deep walnut, with soft copper accents and a gentle purr of warmth.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF1A1208),
+      card: Color(0xFF2A1E10),
+      primary: Color(0xFFFFB74D), // warm amber
+      secondary: Color(0xFFD7CCC8), // warm cream
+      headlineStat: Color(0xFFFFCC80), // light amber
+      bulletColor: Color(0xFFFFB74D),
+      bulletGlyph: '🐾',
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w700,
+      chipRadius: 14,
+      cardRadius: 16,
+      cardBorderColor: Color(0x44FFB74D),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x44FFB74D),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x44FFB74D),
+      glowSecondary: Color(0x33D7CCC8),
+      auraStyle: AvatarAuraStyle.catPawTrail,
+      headerGlyph: '🐾',
+      headerUnderlineColor: Color(0x88FFB74D),
+      statGroupCombat: Color(0xFFFFB74D), // amber
+      statGroupHandling: Color(0xFFD7CCC8), // cream
+      statGroupMeta: Color(0xFFFFCC80), // light amber
+    ),
+  ),
+  moonlitChamber(
+    label: 'Moonlit Chamber',
+    vibe: 'LUNAR',
+    diff: 'NORMAL',
+    elem: 'MOON',
+    whimsicalDescription: 'Silver light spills through the gungeon grates as a crescent moon watches from above. Cool midnight blues with silver-white crescents drifting in the dark — serene, watchful, and quietly powerful.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0E1A),
+      card: Color(0xFF121829),
+      primary: Color(0xFF90CAF9), // silver-blue
+      secondary: Color(0xFFE1F5FE), // pale moonlight
+      headlineStat: Color(0xFFB3E5FC), // light silver
+      bulletColor: Color(0xFF90CAF9),
+      bulletGlyph: '🌙',
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFF90CAF9),
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w700,
+      chipRadius: 12,
+      cardRadius: 14,
+      cardBorderColor: Color(0x4490CAF9),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x5590CAF9),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x4490CAF9),
+      glowSecondary: Color(0x33E1F5FE),
+      auraStyle: AvatarAuraStyle.moonGlow,
+      headerGlyph: '🌙',
+      headerUnderlineColor: Color(0x8890CAF9),
+      statGroupCombat: Color(0xFF90CAF9), // silver-blue
+      statGroupHandling: Color(0xFFE1F5FE), // moonlight
+      statGroupMeta: Color(0xFFB3E5FC), // light silver
+    ),
+  ),
+  stormCaller(
+    label: 'Storm Caller',
+    vibe: 'ELECTRIC',
+    diff: 'EXPERT',
+    elem: 'LIGHTNING',
+    whimsicalDescription: 'The gungeon trembles as thunder rolls through its corridors. Crackling electric yellow arcs against storm-grey steel, with voltage blue accents — a high-voltage aesthetic for the gungeoneer who shoots first and asks questions never.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0A12),
+      card: Color(0xFF14141F),
+      primary: Color(0xFFFFEB3B), // electric yellow
+      secondary: Color(0xFF42A5F5), // voltage blue
+      headlineStat: Color(0xFFFFFF00), // pure electric
+      bulletColor: Color(0xFFFFEB3B),
+      bulletGlyph: '⚡',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.08,
+      numberWeight: FontWeight.w800,
+      chipRadius: 6,
+      cardRadius: 8,
+      cardBorderColor: Color(0x44FFEB3B),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55FFEB3B),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55FFEB3B),
+      glowSecondary: Color(0x4442A5F5),
+      auraStyle: AvatarAuraStyle.lightningArc,
+      headerGlyph: '⚡',
+      headerUnderlineColor: Color(0xAAFFEB3B),
+      statGroupCombat: Color(0xFFFFEB3B), // electric yellow
+      statGroupHandling: Color(0xFF42A5F5), // voltage blue
+      statGroupMeta: Color(0xFFFFFF00), // pure electric
+    ),
+  ),
   custom(
     label: 'Custom',
     vibe: 'TACTICAL',
@@ -1127,6 +1229,9 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.unicorn,
   AppThemeMode.forgeMaster,
   AppThemeMode.robotsCore,
+  AppThemeMode.catLady,
+  AppThemeMode.moonlitChamber,
+  AppThemeMode.stormCaller,
   AppThemeMode.custom,
 ];
 
@@ -1159,6 +1264,9 @@ const Map<AppThemeMode, ParticlePreset> kThemeParticleDefaults =
   AppThemeMode.glitchedChest: ParticlePreset.rainbowConfetti,
   AppThemeMode.lichsTomb: ParticlePreset.cursedSkulls,
   AppThemeMode.winchestersGame: ParticlePreset.goldenSparkle,
+  AppThemeMode.catLady: ParticlePreset.catPaws,
+  AppThemeMode.moonlitChamber: ParticlePreset.moonlight,
+  AppThemeMode.stormCaller: ParticlePreset.lightningBolts,
   AppThemeMode.custom: ParticlePreset.cosmicStars,
 };
 
@@ -1198,6 +1306,15 @@ enum AvatarAuraStyle {
 
   /// Past Slayer: rotating celestial rings of neon cyan and gold sparkles.
   cosmicTemporal,
+
+  /// Cat: warm amber paw-print trail circling the avatar.
+  catPawTrail,
+
+  /// Moon: silver-blue crescent glow that breathes with lunar phases.
+  moonGlow,
+
+  /// Lightning: crackling electric blue-yellow arc border.
+  lightningArc,
 }
 
 extension AppThemeModeLabel on AppThemeMode {
@@ -1245,6 +1362,12 @@ extension AppThemeModeLabel on AppThemeMode {
         return "Lich's Tomb";
       case AppThemeMode.winchestersGame:
         return "Winchester's Game";
+      case AppThemeMode.catLady:
+        return 'Cat Lady';
+      case AppThemeMode.moonlitChamber:
+        return 'Moonlit Chamber';
+      case AppThemeMode.stormCaller:
+        return 'Storm Caller';
       case AppThemeMode.minimalist:
         return 'Minimalist';
       case AppThemeMode.custom:
@@ -1296,6 +1419,12 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Final Stand — bone white, phantom teal, crypt charcoal';
       case AppThemeMode.winchestersGame:
         return 'Target Practice — fairground green, ticket orange, wood brown';
+      case AppThemeMode.catLady:
+        return 'Cozy Den — warm amber, cream, walnut brown with paw prints';
+      case AppThemeMode.moonlitChamber:
+        return 'Lunar Watch — silver-blue, pale moonlight, midnight dark';
+      case AppThemeMode.stormCaller:
+        return 'High Voltage — electric yellow, voltage blue, storm steel';
       case AppThemeMode.minimalist:
         return 'Stripped Back — pure black, clean white, cold grey';
       case AppThemeMode.custom:

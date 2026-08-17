@@ -210,6 +210,12 @@ class _AuraPainter extends CustomPainter {
         _paintLichPurple(canvas, size, rrect);
       case AvatarAuraStyle.cosmicTemporal:
         _paintCosmicTemporal(canvas, size, rrect);
+      case AvatarAuraStyle.catPawTrail:
+        _paintCatPawTrail(canvas, size, rrect);
+      case AvatarAuraStyle.moonGlow:
+        _paintMoonGlow(canvas, size, rrect);
+      case AvatarAuraStyle.lightningArc:
+        _paintLightningArc(canvas, size, rrect);
     }
   }
 
@@ -545,6 +551,130 @@ class _AuraPainter extends CustomPainter {
       final sy = center.dy + math.sin(theta) * (radiusY - 1);
       canvas.drawCircle(Offset(sx, sy), 1.2 + 0.4 * tri, sparkle);
     }
+  }
+
+  // -- Cat: warm amber paw prints circling the avatar -------------------
+  void _paintCatPawTrail(Canvas canvas, Size size, RRect rrect) {
+    final center = _rectCenter(size);
+    final angle = t * 2 * math.pi;
+    final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
+
+    // Warm amber glow border
+    final glow = Paint()
+      ..color = primary.withValues(alpha: 0.25 + 0.2 * tri)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3 + 1.5 * tri
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * tri);
+    canvas.drawRRect(rrect.inflate(1.5), glow);
+
+    // Inner hairline
+    final inner = Paint()
+      ..color = primary.withValues(alpha: 0.5)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+    canvas.drawRRect(rrect.deflate(0.8), inner);
+
+    // 3 paw prints orbiting the border
+    final pawPaint = Paint()..color = primary.withValues(alpha: 0.7);
+    final rx = size.width / 2 - 1;
+    final ry = size.height / 2 - 1;
+    for (var i = 0; i < 3; i++) {
+      final theta = angle + (i / 3) * 2 * math.pi;
+      final px = center.dx + math.cos(theta) * rx;
+      final py = center.dy + math.sin(theta) * ry;
+      // Main pad
+      canvas.drawCircle(Offset(px, py), 2.5, pawPaint);
+      // Toe beans
+      for (var j = 0; j < 3; j++) {
+        final off = (j - 1) * 2.0;
+        canvas.drawCircle(Offset(px + off, py - 2.5), 1.0, pawPaint);
+      }
+    }
+  }
+
+  // -- Moon: silver-blue crescent glow with lunar breathing -------------
+  void _paintMoonGlow(Canvas canvas, Size size, RRect rrect) {
+    final center = _rectCenter(size);
+    // Lunar phase: 0 (new) → 0.5 (full) → 1 (new) over cycle
+    final phase = t < 0.5 ? t * 2 : (1 - t) * 2;
+    final glowAlpha = 0.20 + 0.35 * phase;
+
+    // Outer silver-blue glow
+    final outer = Paint()
+      ..color = primary.withValues(alpha: glowAlpha)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3 + 2 * phase
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * phase);
+    canvas.drawRRect(rrect.inflate(2), outer);
+
+    // Inner crescent highlight
+    final inner = Paint()
+      ..color = secondary.withValues(alpha: 0.4 + 0.3 * phase)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+    canvas.drawRRect(rrect.deflate(1.0), inner);
+
+    // Orbiting crescent moon
+    final angle = t * 2 * math.pi;
+    final rx = size.width / 2 - 1;
+    final ry = size.height / 2 - 1;
+    final mx = center.dx + math.cos(angle) * rx;
+    final my = center.dy + math.sin(angle) * ry;
+    // Crescent: filled circle minus offset circle
+    final moonPath = Path()
+      ..addOval(Rect.fromCircle(center: Offset(mx, my), radius: 3.5))
+      ..addOval(Rect.fromCircle(center: Offset(mx + 1.4, my - 0.5), radius: 3.0))
+      ..fillType = PathFillType.evenOdd;
+    final moonPaint = Paint()..color = primary.withValues(alpha: 0.6 + 0.3 * phase);
+    canvas.drawPath(moonPath, moonPaint);
+  }
+
+  // -- Lightning: crackling electric arc border -------------------------
+  void _paintLightningArc(Canvas canvas, Size size, RRect rrect) {
+    final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
+    // Electric flicker — random-ish sharp pulses
+    final flicker = (math.sin(t * 30) * 0.5 + 0.5) * (0.4 + 0.6 * tri);
+
+    // Outer electric glow
+    final glow = Paint()
+      ..color = primary.withValues(alpha: 0.25 + 0.35 * flicker)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3 + 2 * flicker
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * flicker);
+    canvas.drawRRect(rrect.inflate(1.5), glow);
+
+    // Crackling arc — jagged line segments around the border
+    final arcPaint = Paint()
+      ..color = secondary.withValues(alpha: 0.5 + 0.4 * flicker)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.0);
+    final center = _rectCenter(size);
+    final rx = size.width / 2;
+    final ry = size.height / 2;
+    final segments = 12;
+    final path = Path();
+    for (var i = 0; i <= segments; i++) {
+      final theta = (i / segments) * 2 * math.pi;
+      // Jagged offset perpendicular to the border
+      final jitter = (math.sin(t * 20 + i * 3.7) + math.sin(t * 13 + i * 5.3)) * 2.0 * flicker;
+      final px = center.dx + math.cos(theta) * (rx + jitter);
+      final py = center.dy + math.sin(theta) * (ry + jitter);
+      if (i == 0) {
+        path.moveTo(px, py);
+      } else {
+        path.lineTo(px, py);
+      }
+    }
+    path.close();
+    canvas.drawPath(path, arcPaint);
+
+    // Inner sharp hairline
+    final inner = Paint()
+      ..color = primary.withValues(alpha: 0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.8;
+    canvas.drawRRect(rrect.deflate(1.0), inner);
   }
 
   Offset _rectCenter(Size s) => Offset(s.width / 2, s.height / 2);

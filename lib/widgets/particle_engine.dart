@@ -25,6 +25,9 @@ enum ParticlePreset {
   cursedSkulls,
   masterRounds,
   jamHexes,
+  catPaws,
+  moonlight,
+  lightningBolts,
 }
 
 // =============================================================================
@@ -243,6 +246,9 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.cursedSkulls => 'Cursed Skulls',
         ParticlePreset.masterRounds => 'Master Rounds',
         ParticlePreset.jamHexes => 'Jam Swarm',
+        ParticlePreset.catPaws => 'Cat Paws',
+        ParticlePreset.moonlight => 'Moonlight',
+        ParticlePreset.lightningBolts => 'Lightning Bolts',
       };
 
   String get description => switch (this) {
@@ -264,6 +270,9 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.cursedSkulls => 'Eerie skull particles with shifting cursed aura',
         ParticlePreset.masterRounds => 'Spinning golden master rounds falling with smokey trail',
         ParticlePreset.jamHexes => 'Purple jam hexagons with cursed glow and connected network',
+        ParticlePreset.catPaws => 'Tiny cat paw prints drifting upward with warm amber glow',
+        ParticlePreset.moonlight => 'Crescent moons and stars drifting with silver glow and twinkle',
+        ParticlePreset.lightningBolts => 'Electric lightning bolts striking downward with flash glow',
       };
 
   PresetConfig get config => switch (this) {
@@ -523,10 +532,53 @@ extension ParticlePresetX on ParticlePreset {
             hueDriftSpeed: 22.0,
             lifetimeMin: 5.0, lifetimeMax: 9.0,
           ),
+        ParticlePreset.catPaws => PresetConfig(
+            colors: [const Color(0xFFFFB74D), const Color(0xFFFFCC80), const Color(0xFFFFE0B2), const Color(0xFFFF8A65)],
+            shape: ParticleShape.paw,
+            sizeMin: 3.0, sizeMax: 7.0,
+            speedMin: 3.0, speedMax: 10.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: false,
+            drift: DriftDirection.up,
+            wobble: 0.6,
+            rotate: false,
+            // Upgrades: gentle turbulence for playful drift, warm shimmer
+            turbulence: 0.3,
+            shimmer: true,
+            lifetimeMin: 5.0, lifetimeMax: 9.0,
+          ),
+        ParticlePreset.moonlight => PresetConfig(
+            colors: [const Color(0xFFE1F5FE), const Color(0xFFB3E5FC), const Color(0xFF90CAF9), const Color(0xFFE0F7FA)],
+            shape: ParticleShape.crescent,
+            sizeMin: 2.5, sizeMax: 6.0,
+            speedMin: 2.0, speedMax: 8.0,
+            glowEffect: GlowEffect.pulse,
+            lineLinks: false,
+            drift: DriftDirection.random,
+            wobble: 0.3,
+            rotate: true,
+            // Upgrades: shimmer for moonlight twinkle, long life
+            shimmer: true,
+            lifetimeMin: 7.0, lifetimeMax: 12.0,
+          ),
+        ParticlePreset.lightningBolts => PresetConfig(
+            colors: [const Color(0xFFFFEB3B), const Color(0xFFFFFF00), const Color(0xFF42A5F5), const Color(0xFF90CAF9)],
+            shape: ParticleShape.bolt,
+            sizeMin: 2.5, sizeMax: 6.0,
+            speedMin: 15.0, speedMax: 40.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: true,
+            drift: DriftDirection.down,
+            wobble: 0.2,
+            rotate: false,
+            // Upgrades: trails for electric streaks, very short lifetime
+            trailLength: 0.5,
+            lifetimeMin: 1.0, lifetimeMax: 2.5,
+          ),
       };
 }
 
-enum ParticleShape { circle, star, triangle, edge, bullet, heart, skull, hexagon }
+enum ParticleShape { circle, star, triangle, edge, bullet, heart, skull, hexagon, paw, crescent, bolt }
 
 enum GlowEffect { none, smokey, ripple, pulse, cursed }
 
@@ -1292,6 +1344,25 @@ class _ParticlePainter extends CustomPainter {
       case ParticleShape.hexagon:
         _drawHexagon(canvas, cx, cy, drawSize, paint);
         break;
+      case ParticleShape.paw:
+        _drawPaw(canvas, cx, cy, drawSize, paint);
+        break;
+      case ParticleShape.crescent:
+        _drawCrescent(canvas, cx, cy, drawSize, paint);
+        if (glow != GlowEffect.none) {
+          paint.maskFilter = null;
+          paint.color = Colors.white.withValues(alpha: alpha * 0.4);
+          canvas.drawCircle(Offset(cx - drawSize * 0.15, cy), drawSize * 0.12, paint);
+        }
+        break;
+      case ParticleShape.bolt:
+        _drawBolt(canvas, cx, cy, drawSize, paint);
+        if (glow != GlowEffect.none) {
+          paint.maskFilter = null;
+          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+          canvas.drawCircle(Offset(cx, cy), drawSize * 0.15, paint);
+        }
+        break;
     }
   }
 
@@ -1362,6 +1433,51 @@ class _ParticlePainter extends CustomPainter {
       }
     }
     path.close();
+    canvas.drawPath(path, paint);
+  }
+
+  /// Cat paw print: main pad + 4 toe beans.
+  void _drawPaw(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    // Main pad (larger ellipse at bottom)
+    final padRect = RRect.fromRectAndRadius(
+      Rect.fromCenter(center: Offset(cx, cy + r * 0.25), width: r * 1.1, height: r * 0.85),
+      Radius.circular(r * 0.4),
+    );
+    canvas.drawRRect(padRect, paint);
+    // Four toe beans (small circles above)
+    final toePaint = Paint()..color = paint.color;
+    for (var i = 0; i < 4; i++) {
+      final tx = cx + (i - 1.5) * r * 0.32;
+      final ty = cy - r * 0.35 + (i == 1 || i == 2 ? 0 : -r * 0.1);
+      canvas.drawCircle(Offset(tx, ty), r * 0.22, toePaint);
+    }
+  }
+
+  /// Crescent moon: filled circle with a smaller offset circle subtracted.
+  void _drawCrescent(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    // ponytail: Path-based crescent using arcDifference would be cleaner,
+    // but drawCircle with BlendMode.clear needs a separate layer. Simplest
+    // approach: two overlapping arcs via Path fill rule.
+    final path = Path()
+      ..addOval(Rect.fromCircle(center: Offset(cx, cy), radius: r))
+      ..addOval(Rect.fromCircle(center: Offset(cx + r * 0.4, cy - r * 0.15), radius: r * 0.85))
+      ..fillType = PathFillType.evenOdd;
+    canvas.drawPath(path, paint);
+  }
+
+  /// Lightning bolt: zigzag path from top to bottom.
+  void _drawBolt(Canvas canvas, double cx, double cy, double r, Paint paint) {
+    final path = Path()
+      ..moveTo(cx + r * 0.15, cy - r)
+      ..lineTo(cx - r * 0.35, cy - r * 0.1)
+      ..lineTo(cx - r * 0.05, cy - r * 0.1)
+      ..lineTo(cx - r * 0.25, cy + r * 0.3)
+      ..lineTo(cx + r * 0.1, cy + r * 0.05)
+      ..lineTo(cx - r * 0.05, cy + r)
+      ..lineTo(cx + r * 0.45, cy - r * 0.05)
+      ..lineTo(cx + r * 0.1, cy - r * 0.05)
+      ..lineTo(cx + r * 0.35, cy - r * 0.5)
+      ..close();
     canvas.drawPath(path, paint);
   }
 
