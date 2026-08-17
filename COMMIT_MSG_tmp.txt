@@ -1,11 +1,15 @@
-v1.9.33: Mini particle engine in Experience Studio preview
+v1.9.34: Particle engine v2 — 6 visual upgrades
 
-- Live preview now renders a real ParticleField inside the preview card
-- Shows actual preset, colors, speed, count, size, opacity, glow, bounce
-- Color resolution mirrors ThemeOverlay logic (themeMatch uses flair)
-- Particle count scaled to 50% for small area (4-16 particles)
-- Readability scrim between particles and text content
-- Clip.hardEdge so particles stay within rounded corners
+- Lifetime system: fade in/out + respawn (no more wrap pop)
+- Color drift: slow hue cycling per particle
+- Turbulence field: pseudo-curl-noise for organic movement
+- Gradient line links: color gradient + thickness variation
+- Depth-of-field: far particles blur + dual-oscillator breathing (16%)
+- Shimmer: periodic brightness sweep (twinkling/gleaming)
+- Trails: fading position history for streaks/wisps
+- Organic rotation: acceleration + damping
+- All 18 presets tuned with appropriate upgrades
+- Refactored shape drawing to eliminate duplicates
 
 Generated with [Devin](https://devin.ai)
 

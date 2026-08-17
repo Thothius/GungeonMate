@@ -278,6 +278,9 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.up,
             wobble: 0.5,
+            // Upgrades: gentle turbulence for organic drift, long lifetime
+            turbulence: 0.3,
+            lifetimeMin: 6.0, lifetimeMax: 10.0,
           ),
         ParticlePreset.forgeEmbers => PresetConfig(
             colors: [const Color(0xFFFF3D00), const Color(0xFFFF9100), const Color(0xFFFFD600), const Color(0xFFFF5722)],
@@ -288,6 +291,11 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.up,
             wobble: 1.5,
+            // Upgrades: trails for fire streaks, short lifetime, color drift
+            trailLength: 0.4,
+            turbulence: 0.5,
+            hueDriftSpeed: 15.0,
+            lifetimeMin: 2.5, lifetimeMax: 5.0,
           ),
         ParticlePreset.frostShards => PresetConfig(
             colors: [const Color(0xFF00B0FF), const Color(0xFF4FC3F7), const Color(0xFFE1F5FE)],
@@ -299,6 +307,9 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.down,
             wobble: 0.3,
             rotate: true,
+            // Upgrades: shimmer for ice sparkle, slow lifetime
+            shimmer: true,
+            lifetimeMin: 5.0, lifetimeMax: 8.0,
           ),
         ParticlePreset.toxicBubbles => PresetConfig(
             colors: [const Color(0xFF76FF03), const Color(0xFF64DD17), const Color(0xFFAEEA00), const Color(0xFF33691E)],
@@ -309,6 +320,10 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.up,
             wobble: 1.0,
+            // Upgrades: turbulence for bubble wobble, color drift
+            turbulence: 0.6,
+            hueDriftSpeed: 10.0,
+            lifetimeMin: 4.0, lifetimeMax: 7.0,
           ),
         ParticlePreset.cosmicStars => PresetConfig(
             colors: [const Color(0xFF00E5FF), const Color(0xFFFFD700), Colors.white],
@@ -320,6 +335,9 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.random,
             wobble: 0.2,
             rotate: true,
+            // Upgrades: shimmer for twinkling, long lifetime
+            shimmer: true,
+            lifetimeMin: 8.0, lifetimeMax: 14.0,
           ),
         ParticlePreset.cursedSmoke => PresetConfig(
             colors: [const Color(0xFF6A1B9A), const Color(0xFF4A148C), const Color(0xFF311B92), const Color(0xFF8E24AA)],
@@ -330,6 +348,11 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.up,
             wobble: 0.8,
+            // Upgrades: heavy turbulence for smoke swirl, color drift, trails
+            turbulence: 0.8,
+            hueDriftSpeed: 20.0,
+            trailLength: 0.3,
+            lifetimeMin: 4.0, lifetimeMax: 8.0,
           ),
         ParticlePreset.brassCasings => PresetConfig(
             colors: [const Color(0xFFB8860B), const Color(0xFFCD853F), const Color(0xFFDAA520)],
@@ -340,6 +363,8 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.down,
             rotate: true,
+            // Upgrades: short lifetime (casings fall and disappear)
+            lifetimeMin: 2.0, lifetimeMax: 4.0,
           ),
         ParticlePreset.voidRift => PresetConfig(
             colors: [const Color(0xFF7B1FA2), const Color(0xFF512DA8), const Color(0xFF4527A0), const Color(0xFF9575CD)],
@@ -351,6 +376,11 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.random,
             wobble: 0.6,
             rotate: true,
+            // Upgrades: turbulence for rift energy, color drift, shimmer
+            turbulence: 0.7,
+            hueDriftSpeed: 30.0,
+            shimmer: true,
+            lifetimeMin: 5.0, lifetimeMax: 9.0,
           ),
         ParticlePreset.bulletHell => PresetConfig(
             colors: [const Color(0xFFFF5252), const Color(0xFFFFEB3B), const Color(0xFFFFAB40)],
@@ -361,6 +391,9 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.random,
             wobble: 0.3,
+            // Upgrades: trails for bullet streaks, very short lifetime
+            trailLength: 0.5,
+            lifetimeMin: 1.0, lifetimeMax: 2.5,
           ),
         ParticlePreset.unicornSparkles => PresetConfig(
             colors: [const Color(0xFFFF69B4), const Color(0xFFE040FB), const Color(0xFF00E5FF), const Color(0xFFFFD700)],
@@ -372,6 +405,11 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.random,
             wobble: 0.4,
             rotate: true,
+            // Upgrades: shimmer for magical twinkle, color drift, turbulence
+            shimmer: true,
+            hueDriftSpeed: 25.0,
+            turbulence: 0.3,
+            lifetimeMin: 4.0, lifetimeMax: 7.0,
           ),
         ParticlePreset.cosmicDust => PresetConfig(
             colors: [const Color(0xFF5C6BC0), const Color(0xFF7E57C2), const Color(0xFF26C6DA), const Color(0xFF80DEEA)],
@@ -382,6 +420,10 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: true,
             drift: DriftDirection.random,
             wobble: 0.3,
+            // Upgrades: gentle turbulence, slow color drift, long life
+            turbulence: 0.4,
+            hueDriftSpeed: 15.0,
+            lifetimeMin: 8.0, lifetimeMax: 14.0,
           ),
         ParticlePreset.goldenSparkle => PresetConfig(
             colors: [const Color(0xFFFFD700), const Color(0xFFFFC107), const Color(0xFFFFEB3B), const Color(0xFFFF8F00)],
@@ -393,6 +435,10 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.random,
             wobble: 0.2,
             rotate: true,
+            // Upgrades: shimmer for golden gleam, slow color drift
+            shimmer: true,
+            hueDriftSpeed: 8.0,
+            lifetimeMin: 5.0, lifetimeMax: 9.0,
           ),
         ParticlePreset.rainbowConfetti => PresetConfig(
             colors: [const Color(0xFFFF5252), const Color(0xFFFFEB3B), const Color(0xFF69F0AE), const Color(0xFF40C4FF), const Color(0xFFE040FB), const Color(0xFFFFAB40)],
@@ -404,6 +450,10 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.down,
             wobble: 1.2,
             rotate: true,
+            // Upgrades: color drift for rainbow cycling, short life
+            hueDriftSpeed: 40.0,
+            turbulence: 0.4,
+            lifetimeMin: 2.0, lifetimeMax: 4.5,
           ),
         ParticlePreset.bulletKin => PresetConfig(
             colors: [const Color(0xFFDAA520), const Color(0xFFCD853F), const Color(0xFFB8860B), const Color(0xFFFFD700)],
@@ -414,6 +464,9 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.up,
             wobble: 0.8,
+            // Upgrades: gentle turbulence, long life
+            turbulence: 0.3,
+            lifetimeMin: 6.0, lifetimeMax: 10.0,
           ),
         ParticlePreset.heartContainers => PresetConfig(
             colors: [const Color(0xFFFF5252), const Color(0xFFE91E63), const Color(0xFFF06292), const Color(0xFFD32F2F)],
@@ -424,6 +477,9 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.up,
             wobble: 0.5,
+            // Upgrades: shimmer for heartbeat gleam
+            shimmer: true,
+            lifetimeMin: 5.0, lifetimeMax: 9.0,
           ),
         ParticlePreset.cursedSkulls => PresetConfig(
             colors: [const Color(0xFF6A1B9A), const Color(0xFF4A148C), const Color(0xFF8E24AA), const Color(0xFF2E7D32)],
@@ -434,6 +490,10 @@ extension ParticlePresetX on ParticlePreset {
             lineLinks: false,
             drift: DriftDirection.random,
             wobble: 0.6,
+            // Upgrades: heavy turbulence for eerie drift, color drift
+            turbulence: 0.6,
+            hueDriftSpeed: 18.0,
+            lifetimeMin: 5.0, lifetimeMax: 9.0,
           ),
         ParticlePreset.masterRounds => PresetConfig(
             colors: [const Color(0xFFFFD700), const Color(0xFFFFC107), const Color(0xFFFF8F00), const Color(0xFFFFEB3B)],
@@ -445,6 +505,10 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.down,
             wobble: 0.3,
             rotate: true,
+            // Upgrades: shimmer for golden gleam, trail for smokey fall
+            shimmer: true,
+            trailLength: 0.3,
+            lifetimeMin: 4.0, lifetimeMax: 7.0,
           ),
         ParticlePreset.jamHexes => PresetConfig(
             colors: [const Color(0xFF6A1B9A), const Color(0xFF4A148C), const Color(0xFF8E24AA), const Color(0xFFAB47BC)],
@@ -456,6 +520,10 @@ extension ParticlePresetX on ParticlePreset {
             drift: DriftDirection.random,
             wobble: 0.5,
             rotate: true,
+            // Upgrades: turbulence for swarm movement, color drift
+            turbulence: 0.5,
+            hueDriftSpeed: 22.0,
+            lifetimeMin: 5.0, lifetimeMax: 9.0,
           ),
       };
 }
@@ -493,6 +561,14 @@ class PresetConfig {
   final double wobble; // 0 = straight, 1.5 = strong sway
   final bool rotate; // true = shapes spin slowly
 
+  // ── New upgrade fields (all default to off/zero for backward compat) ──
+  final double trailLength;      // 0 = no trail, 0.3 = short, 0.6 = long
+  final double turbulence;       // 0 = none, 1 = strong organic swirl
+  final double hueDriftSpeed;    // deg/s — 0 = static, 20 = slow, 40 = fast
+  final bool shimmer;            // periodic brightness sweep
+  final double lifetimeMin;      // seconds — 0 = infinite (legacy wrap mode)
+  final double lifetimeMax;      // seconds
+
   const PresetConfig({
     required this.colors,
     required this.shape,
@@ -505,7 +581,56 @@ class PresetConfig {
     required this.drift,
     this.wobble = 0.0,
     this.rotate = false,
+    this.trailLength = 0.0,
+    this.turbulence = 0.0,
+    this.hueDriftSpeed = 0.0,
+    this.shimmer = false,
+    this.lifetimeMin = 0.0,
+    this.lifetimeMax = 0.0,
   });
+
+  /// Whether this config uses the lifetime system (vs legacy wrap).
+  bool get hasLifetime => lifetimeMax > 0.0;
+
+  PresetConfig copyWith({
+    List<Color>? colors,
+    ParticleShape? shape,
+    double? sizeMin,
+    double? sizeMax,
+    double? speedMin,
+    double? speedMax,
+    GlowEffect? glowEffect,
+    bool? lineLinks,
+    DriftDirection? drift,
+    double? wobble,
+    bool? rotate,
+    double? trailLength,
+    double? turbulence,
+    double? hueDriftSpeed,
+    bool? shimmer,
+    double? lifetimeMin,
+    double? lifetimeMax,
+  }) {
+    return PresetConfig(
+      colors: colors ?? this.colors,
+      shape: shape ?? this.shape,
+      sizeMin: sizeMin ?? this.sizeMin,
+      sizeMax: sizeMax ?? this.sizeMax,
+      speedMin: speedMin ?? this.speedMin,
+      speedMax: speedMax ?? this.speedMax,
+      glowEffect: glowEffect ?? this.glowEffect,
+      lineLinks: lineLinks ?? this.lineLinks,
+      drift: drift ?? this.drift,
+      wobble: wobble ?? this.wobble,
+      rotate: rotate ?? this.rotate,
+      trailLength: trailLength ?? this.trailLength,
+      turbulence: turbulence ?? this.turbulence,
+      hueDriftSpeed: hueDriftSpeed ?? this.hueDriftSpeed,
+      shimmer: shimmer ?? this.shimmer,
+      lifetimeMin: lifetimeMin ?? this.lifetimeMin,
+      lifetimeMax: lifetimeMax ?? this.lifetimeMax,
+    );
+  }
 }
 
 // =============================================================================
@@ -526,6 +651,16 @@ class _Particle {
   double rotation;
   double rotationSpeed;
 
+  // ── Upgrade fields ──
+  double age;            // seconds since spawn
+  double maxLifetime;    // 0 = infinite (legacy), >0 = finite lifetime
+  double hueOffset;      // current hue rotation in degrees
+  double hueDriftSpeed;  // deg/s
+  double rotationAccel;  // rotational acceleration
+  double shimmerPhase;   // random phase for shimmer effect
+  double turbulencePhase; // random phase for turbulence field
+  final List<_TrailPoint> trail; // past positions for trail effect
+
   _Particle({
     required this.x,
     required this.y,
@@ -539,7 +674,24 @@ class _Particle {
     this.wobblePhase = 0.0,
     this.rotation = 0.0,
     this.rotationSpeed = 0.0,
-  });
+    this.age = 0.0,
+    this.maxLifetime = 0.0,
+    this.hueOffset = 0.0,
+    this.hueDriftSpeed = 0.0,
+    this.rotationAccel = 0.0,
+    this.shimmerPhase = 0.0,
+    this.turbulencePhase = 0.0,
+    List<_TrailPoint>? trail,
+  }) : trail = trail ?? [];
+}
+
+/// A single point in a particle's trail history.
+class _TrailPoint {
+  final double x;
+  final double y;
+  double age; // seconds since this point was captured
+
+  _TrailPoint({required this.x, required this.y, required this.age});
 }
 
 // =============================================================================
@@ -603,6 +755,12 @@ class _ParticleFieldState extends State<ParticleField>
       _particles.clear();
       _lastSize = null;
     }
+    // Clear trails when preset changes (trail config may differ)
+    if (oldWidget.preset != widget.preset) {
+      for (final p in _particles) {
+        p.trail.clear();
+      }
+    }
   }
 
   void _ensureParticles(Size size) {
@@ -621,19 +779,7 @@ class _ParticleFieldState extends State<ParticleField>
   /// ponytail: shallow copy of [PresetConfig] with replaced colors.
   /// Used for per-palette particle color injection without adding new enum values.
   static PresetConfig _withColors(PresetConfig base, List<Color> colors) {
-    return PresetConfig(
-      colors: colors,
-      shape: base.shape,
-      sizeMin: base.sizeMin,
-      sizeMax: base.sizeMax,
-      speedMin: base.speedMin,
-      speedMax: base.speedMax,
-      glowEffect: base.glowEffect,
-      lineLinks: base.lineLinks,
-      drift: base.drift,
-      wobble: base.wobble,
-      rotate: base.rotate,
-    );
+    return base.copyWith(colors: colors);
   }
 
   void _spawnParticle(Size size, PresetConfig cfg) {
@@ -665,6 +811,11 @@ class _ParticleFieldState extends State<ParticleField>
         .withLightness((hsl.lightness * lightJitter).clamp(0.0, 1.0))
         .toColor();
 
+    // Lifetime: 0 = infinite (legacy wrap mode), >0 = finite with fade
+    final maxLife = cfg.hasLifetime
+        ? cfg.lifetimeMin + _rng.nextDouble() * (cfg.lifetimeMax - cfg.lifetimeMin)
+        : 0.0;
+
     _particles.add(_Particle(
       x: _rng.nextDouble() * size.width,
       y: _rng.nextDouble() * size.height,
@@ -678,7 +829,61 @@ class _ParticleFieldState extends State<ParticleField>
       wobblePhase: _rng.nextDouble() * 2 * math.pi,
       rotation: _rng.nextDouble() * 2 * math.pi,
       rotationSpeed: cfg.rotate ? (_rng.nextDouble() - 0.5) * 2.0 : 0.0,
+      // Upgrade fields:
+      age: 0.0,
+      maxLifetime: maxLife,
+      hueOffset: 0.0,
+      hueDriftSpeed: cfg.hueDriftSpeed * (0.7 + _rng.nextDouble() * 0.6),
+      rotationAccel: cfg.rotate ? (_rng.nextDouble() - 0.5) * 0.8 : 0.0,
+      shimmerPhase: _rng.nextDouble() * 2 * math.pi,
+      turbulencePhase: _rng.nextDouble() * 2 * math.pi,
     ));
+  }
+
+  /// Respawn a particle at a new random position with fresh lifetime.
+  /// Used when lifetime expires — smooth fade-in replaces the old wrap pop.
+  void _respawnParticle(_Particle p, Size size, PresetConfig cfg) {
+    final drift = cfg.drift;
+    double vx, vy;
+    switch (drift) {
+      case DriftDirection.up:
+        vx = (_rng.nextDouble() - 0.5) * cfg.speedMin;
+        vy = -(cfg.speedMin + _rng.nextDouble() * (cfg.speedMax - cfg.speedMin));
+        break;
+      case DriftDirection.down:
+        vx = (_rng.nextDouble() - 0.5) * cfg.speedMin;
+        vy = cfg.speedMin + _rng.nextDouble() * (cfg.speedMax - cfg.speedMin);
+        break;
+      case DriftDirection.random:
+        final angle = _rng.nextDouble() * 2 * math.pi;
+        final speed = cfg.speedMin + _rng.nextDouble() * (cfg.speedMax - cfg.speedMin);
+        vx = math.cos(angle) * speed;
+        vy = math.sin(angle) * speed;
+        break;
+    }
+    final baseColor = cfg.colors[_rng.nextInt(cfg.colors.length)];
+    final hsl = HSLColor.fromColor(baseColor);
+    final lightJitter = 0.85 + _rng.nextDouble() * 0.3;
+    p.x = _rng.nextDouble() * size.width;
+    p.y = _rng.nextDouble() * size.height;
+    p.vx = vx;
+    p.vy = vy;
+    p.color = hsl.withLightness((hsl.lightness * lightJitter).clamp(0.0, 1.0)).toColor();
+    p.baseSize = cfg.sizeMin + _rng.nextDouble() * (cfg.sizeMax - cfg.sizeMin);
+    p.phase = _rng.nextDouble();
+    p.depth = 0.4 + _rng.nextDouble() * 0.9;
+    p.rotation = _rng.nextDouble() * 2 * math.pi;
+    p.rotationSpeed = cfg.rotate ? (_rng.nextDouble() - 0.5) * 2.0 : 0.0;
+    p.age = 0.0;
+    p.maxLifetime = cfg.hasLifetime
+        ? cfg.lifetimeMin + _rng.nextDouble() * (cfg.lifetimeMax - cfg.lifetimeMin)
+        : 0.0;
+    p.hueOffset = 0.0;
+    p.hueDriftSpeed = cfg.hueDriftSpeed * (0.7 + _rng.nextDouble() * 0.6);
+    p.rotationAccel = cfg.rotate ? (_rng.nextDouble() - 0.5) * 0.8 : 0.0;
+    p.shimmerPhase = _rng.nextDouble() * 2 * math.pi;
+    p.turbulencePhase = _rng.nextDouble() * 2 * math.pi;
+    p.trail.clear();
   }
 
   @override
@@ -692,14 +897,37 @@ class _ParticleFieldState extends State<ParticleField>
     final dt = (t - _lastT).clamp(0.001, 0.05) * widget.speedMultiplier;
     _lastT = t;
     final tilt = ThemeOverlay.tiltNotifier.value;
+    final cfg = widget.colorsOverride != null
+        ? _withColors(widget.preset.config, widget.colorsOverride!)
+        : widget.preset.config;
 
-    // ponytail: tilt is applied as a per-frame offset, not accumulated velocity.
-    // Particles drift in the tilt direction and return via wrap/bounce when tilt
-    // stops. This is correct for ambient dust — upgrade to spring-back if physical
-    // inertia is ever needed.
     for (final p in _particles) {
+      p.age += dt;
+
+      // ── Lifetime system: fade out + respawn ──
+      if (p.maxLifetime > 0 && p.age >= p.maxLifetime) {
+        _respawnParticle(p, size, cfg);
+        continue;
+      }
+
       p.x += p.vx * dt;
       p.y += p.vy * dt;
+
+      // ── Turbulence field: organic noise-based velocity perturbation ──
+      if (cfg.turbulence > 0) {
+        // ponytail: cheap pseudo-curl-noise via layered sines. Not true
+        // Perlin but visually convincing for ambient drift. Upgrade to
+        // real curl noise if higher fidelity is ever needed.
+        final nx = math.sin(t * 0.7 + p.turbulencePhase + p.x * 0.01) +
+                   math.cos(t * 1.3 + p.turbulencePhase * 1.7 + p.y * 0.008);
+        final ny = math.cos(t * 0.5 + p.turbulencePhase * 1.3 + p.x * 0.012) +
+                   math.sin(t * 1.1 + p.turbulencePhase + p.y * 0.009);
+        p.vx += nx * cfg.turbulence * 8.0 * dt;
+        p.vy += ny * cfg.turbulence * 8.0 * dt;
+        // Damping so turbulence doesn't accelerate to infinity
+        p.vx *= 1.0 - 0.5 * dt;
+        p.vy *= 1.0 - 0.5 * dt;
+      }
 
       // Perpendicular wobble — sine offset at ~2 Hz, amplitude scaled by depth
       if (p.wobbleAmp > 0) {
@@ -711,15 +939,45 @@ class _ParticleFieldState extends State<ParticleField>
         }
       }
 
-      // Rotation
+      // ── Organic rotation: acceleration + damping ──
+      if (p.rotationAccel != 0) {
+        p.rotationSpeed += p.rotationAccel * dt;
+        // Damping toward zero + clamp
+        p.rotationSpeed *= 1.0 - 0.3 * dt;
+        p.rotationSpeed = p.rotationSpeed.clamp(-3.0, 3.0);
+      }
       if (p.rotationSpeed != 0) {
         p.rotation += p.rotationSpeed * dt;
+      }
+
+      // ── Color drift: slow hue cycling ──
+      if (p.hueDriftSpeed > 0) {
+        p.hueOffset += p.hueDriftSpeed * dt;
+      }
+
+      // ── Trail: capture past positions ──
+      if (cfg.trailLength > 0) {
+        p.trail.add(_TrailPoint(x: p.x, y: p.y, age: 0.0));
+        final maxTrailAge = cfg.trailLength * 0.5; // 0.15s - 0.3s
+        for (final tp in p.trail) {
+          tp.age += dt;
+        }
+        p.trail.removeWhere((tp) => tp.age > maxTrailAge);
+        // ponytail: O(n) per particle per frame for trail cleanup. At
+        // trailLength=0.6 and 60fps that's ~18 points per particle. Fine.
       }
 
       p.x += tilt.dx * 0.15 * p.depth;
       p.y += tilt.dy * 0.10 * p.depth;
 
-      if (widget.bounce) {
+      // ── Boundary handling ──
+      if (p.maxLifetime > 0) {
+        // Lifetime mode: wrap but respawn will handle fresh entry
+        if (p.x < -20 || p.x > size.width + 20 ||
+            p.y < -20 || p.y > size.height + 20) {
+          _respawnParticle(p, size, cfg);
+        }
+      } else if (widget.bounce) {
         if (p.x < 0) { p.x = 0; p.vx = -p.vx; }
         if (p.x > size.width) { p.x = size.width; p.vx = -p.vx; }
         if (p.y < 0) { p.y = 0; p.vy = -p.vy; }
@@ -798,6 +1056,27 @@ class _ParticlePainter extends CustomPainter {
     ..style = PaintingStyle.stroke
     ..strokeWidth = 1.0;
 
+  /// Apply hue rotation to a color (for color drift effect).
+  Color _applyHueOffset(Color color, double hueOffset) {
+    if (hueOffset == 0.0) return color;
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withHue((hsl.hue + hueOffset) % 360).toColor();
+  }
+
+  /// Lifetime fade: smoothstep in at birth, smoothstep out at death.
+  double _lifetimeAlpha(_Particle p) {
+    if (p.maxLifetime <= 0) return 1.0;
+    const fadeIn = 0.4;   // 0.4s fade in
+    final fadeOut = (p.maxLifetime * 0.25).clamp(0.3, 1.0); // 25% of life
+    double smoothstep(double e0, double e1, double x) {
+      final t = ((x - e0) / (e1 - e0)).clamp(0.0, 1.0);
+      return t * t * (3 - 2 * t);
+    }
+    final fadeInAlpha = smoothstep(0.0, fadeIn, p.age);
+    final fadeOutAlpha = smoothstep(0.0, fadeOut, p.maxLifetime - p.age);
+    return fadeInAlpha * fadeOutAlpha;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     if (particles.isEmpty || size == Size.zero) return;
@@ -806,6 +1085,7 @@ class _ParticlePainter extends CustomPainter {
     final h = size.height;
     final lineDist = (w * 0.12).clamp(60.0, 160.0);
 
+    // ── Gradient line links — color blends from A to B, thickness varies ──
     // ponytail: O(n²) pair check per frame. At count=32 that's 496 pairs — fine.
     // If max count ever increases above ~64, switch to spatial hashing.
     if (lineLinks && particles.length > 1) {
@@ -817,18 +1097,32 @@ class _ParticlePainter extends CustomPainter {
           final dy = a.y - b.y;
           final dist = math.sqrt(dx * dx + dy * dy);
           if (dist < lineDist) {
-            final linkAlpha = (1.0 - dist / lineDist) * opacity * 0.4;
-            _linePaint.color = a.color.withValues(alpha: linkAlpha);
+            final proximity = 1.0 - dist / lineDist;
+            final linkAlpha = proximity * opacity * 0.4;
+            // Gradient from A's color to B's color
+            final colorA = _applyHueOffset(a.color, a.hueOffset)
+                .withValues(alpha: linkAlpha);
+            final colorB = _applyHueOffset(b.color, b.hueOffset)
+                .withValues(alpha: linkAlpha);
+            _linePaint.shader = LinearGradient(
+              begin: Alignment(a.x / w * 2 - 1, a.y / h * 2 - 1),
+              end: Alignment(b.x / w * 2 - 1, b.y / h * 2 - 1),
+              colors: [colorA, colorB],
+            ).createShader(Offset.zero & size);
+            // Thickness varies by proximity — closer = thicker
+            _linePaint.strokeWidth = 0.5 + proximity * 1.5;
             canvas.drawLine(Offset(a.x, a.y), Offset(b.x, b.y), _linePaint);
           }
         }
       }
+      _linePaint.shader = null;
     }
 
-    // Draw particles
+    // ── Draw particles ──
     for (final p in particles) {
       final depthAlpha = 0.35 + 0.65 * p.depth;
-      final baseAlpha = opacity * depthAlpha;
+      final lifeAlpha = _lifetimeAlpha(p);
+      final baseAlpha = opacity * depthAlpha * lifeAlpha;
 
       // Edge fade — smoothstep for softer falloff
       double edgeFade = 1.0;
@@ -848,23 +1142,58 @@ class _ParticlePainter extends CustomPainter {
         edgeFade = math.min(edgeFade, smoothstep(0, edgeThreshold, h - p.y));
       }
 
-      final alpha = baseAlpha * edgeFade;
+      var alpha = baseAlpha * edgeFade;
       if (alpha <= 0.01) continue;
 
-      // Size with optional pulse effect + subtle breathing for all particles
+      // ── Shimmer: periodic brightness sweep ──
+      if (config.shimmer) {
+        final shimmerWave = math.sin(t * 2.0 + p.shimmerPhase);
+        // Sharp peak when shimmerWave > 0.7, brightens up to 2x
+        if (shimmerWave > 0.7) {
+          alpha *= 1.0 + (shimmerWave - 0.7) * 3.0;
+        }
+      }
+
+      // ── Improved breathing: dual oscillator, 16% amplitude ──
       var drawSize = p.baseSize * sizeScale * p.depth;
       if (glowEffect == GlowEffect.pulse) {
         drawSize *= 0.7 + 0.3 * math.sin(t * 3.0 + p.phase * 10).abs();
       } else {
-        drawSize *= 0.92 + 0.08 * math.sin(t * 1.5 + p.phase * 6);
+        // Dual oscillator: primary 1.5Hz + secondary 0.7Hz for organic variation
+        drawSize *= 0.84 + 0.10 * math.sin(t * 1.5 + p.phase * 6)
+                         + 0.06 * math.sin(t * 0.7 + p.phase * 3.5);
       }
 
-      final color = p.color.withValues(alpha: alpha);
+      // ── Color drift: apply hue rotation ──
+      final driftedColor = _applyHueOffset(p.color, p.hueOffset);
+      final color = driftedColor.withValues(alpha: alpha);
+
+      // ── Depth-of-field: far particles get slight blur ──
+      // depth 0.4 = far (blurry), depth 1.3 = near (sharp)
+      if (p.depth < 0.7 && config.glowEffect == GlowEffect.none) {
+        final dofBlur = (0.7 - p.depth) * 3.0; // 0-0.9px blur for far particles
+        _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, dofBlur);
+      } else {
+        _paint.maskFilter = null;
+      }
+
+      // ── Trails: draw fading trail behind particle ──
+      if (config.trailLength > 0 && p.trail.length > 1) {
+        final maxTrailAge = config.trailLength * 0.5;
+        for (var ti = 0; ti < p.trail.length - 1; ti++) {
+          final tp = p.trail[ti];
+          final trailAlpha = (1.0 - tp.age / maxTrailAge) * alpha * 0.5;
+          if (trailAlpha <= 0.01) continue;
+          final trailSize = drawSize * (1.0 - tp.age / maxTrailAge) * 0.6;
+          _paint.color = driftedColor.withValues(alpha: trailAlpha);
+          canvas.drawCircle(Offset(tp.x, tp.y), trailSize, _paint);
+        }
+      }
 
       // Apply glow effect
       switch (glowEffect) {
         case GlowEffect.none:
-          _paint.maskFilter = null;
+          // DOF blur already set above
           break;
         case GlowEffect.smokey:
           _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 0.8);
@@ -875,7 +1204,7 @@ class _ParticlePainter extends CustomPainter {
         case GlowEffect.cursed:
           // Hue-shifted outer aura — oscillates between purple and sickly green
           final cursedShift = math.sin(t * 1.5 + p.phase * 6) * 0.5 + 0.5;
-          final cursedHsl = HSLColor.fromColor(p.color)
+          final cursedHsl = HSLColor.fromColor(driftedColor)
               .withHue((270 + cursedShift * 60) % 360);
           _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 1.2);
           _paint.color = cursedHsl.toColor().withValues(alpha: alpha * 0.3);
@@ -888,7 +1217,7 @@ class _ParticlePainter extends CustomPainter {
             final ripplePhase = (t * 1.5 + p.phase + offset) % 1.0;
             final rippleR = drawSize * (1.5 + ripplePhase * 3.0);
             final rippleAlpha = alpha * (1.0 - ripplePhase) * 0.4;
-            _paint.color = p.color.withValues(alpha: rippleAlpha);
+            _paint.color = driftedColor.withValues(alpha: rippleAlpha);
             canvas.drawCircle(Offset(p.x, p.y), rippleR, _paint);
           }
           break;
@@ -901,105 +1230,70 @@ class _ParticlePainter extends CustomPainter {
         canvas.save();
         canvas.translate(p.x, p.y);
         canvas.rotate(p.rotation);
-        switch (config.shape) {
-          case ParticleShape.star:
-            _drawStar(canvas, 0, 0, drawSize, _paint);
-            if (glowEffect != GlowEffect.none) {
-              _paint.maskFilter = null;
-              _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
-              canvas.drawCircle(Offset.zero, drawSize * 0.2, _paint);
-            }
-            break;
-          case ParticleShape.triangle:
-            _drawTriangle(canvas, 0, 0, drawSize, _paint);
-            break;
-          case ParticleShape.edge:
-            final r = drawSize;
-            canvas.drawRect(
-              Rect.fromCenter(center: Offset.zero, width: r * 2, height: r * 1.4),
-              _paint,
-            );
-            break;
-          case ParticleShape.bullet:
-            _drawBullet(canvas, 0, 0, drawSize, _paint);
-            break;
-          case ParticleShape.heart:
-            _drawHeart(canvas, 0, 0, drawSize, _paint);
-            if (glowEffect != GlowEffect.none) {
-              _paint.maskFilter = null;
-              _paint.color = Colors.white.withValues(alpha: alpha * 0.5);
-              canvas.drawCircle(Offset.zero, drawSize * 0.15, _paint);
-            }
-            break;
-          case ParticleShape.skull:
-            _drawSkull(canvas, 0, 0, drawSize, _paint);
-            break;
-          case ParticleShape.hexagon:
-            _drawHexagon(canvas, 0, 0, drawSize, _paint);
-            break;
-          case ParticleShape.circle:
-            break; // handled below
-        }
+        _drawShape(canvas, config.shape, 0, 0, drawSize, _paint, alpha, glowEffect);
         canvas.restore();
       } else {
-        switch (config.shape) {
-          case ParticleShape.circle:
-            canvas.drawCircle(Offset(p.x, p.y), drawSize, _paint);
-            if (glowEffect != GlowEffect.none) {
-              // Bright core
-              _paint.maskFilter = null;
-              _paint.color = Colors.white.withValues(alpha: alpha * 0.5);
-              canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.3, _paint);
-            }
-            break;
-
-          case ParticleShape.star:
-            _drawStar(canvas, p.x, p.y, drawSize, _paint);
-            if (glowEffect != GlowEffect.none) {
-              _paint.maskFilter = null;
-              _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
-              canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.2, _paint);
-            }
-            break;
-
-          case ParticleShape.triangle:
-            _drawTriangle(canvas, p.x, p.y, drawSize, _paint);
-            break;
-
-          case ParticleShape.edge:
-            final r = drawSize;
-            canvas.drawRect(
-              Rect.fromCenter(center: Offset(p.x, p.y), width: r * 2, height: r * 1.4),
-              _paint,
-            );
-            break;
-          case ParticleShape.bullet:
-            _drawBullet(canvas, p.x, p.y, drawSize, _paint);
-            if (glowEffect != GlowEffect.none) {
-              _paint.maskFilter = null;
-              _paint.color = Colors.white.withValues(alpha: alpha * 0.4);
-              canvas.drawCircle(Offset(p.x, p.y - drawSize * 0.3), drawSize * 0.15, _paint);
-            }
-            break;
-          case ParticleShape.heart:
-            _drawHeart(canvas, p.x, p.y, drawSize, _paint);
-            if (glowEffect != GlowEffect.none) {
-              _paint.maskFilter = null;
-              _paint.color = Colors.white.withValues(alpha: alpha * 0.5);
-              canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.15, _paint);
-            }
-            break;
-          case ParticleShape.skull:
-            _drawSkull(canvas, p.x, p.y, drawSize, _paint);
-            break;
-          case ParticleShape.hexagon:
-            _drawHexagon(canvas, p.x, p.y, drawSize, _paint);
-            break;
-        }
+        _drawShape(canvas, config.shape, p.x, p.y, drawSize, _paint, alpha, glowEffect);
       }
 
       // Reset mask for next particle
       _paint.maskFilter = null;
+    }
+  }
+
+  /// Unified shape drawer — eliminates duplicated code between rotated
+  /// and non-rotated paths.
+  void _drawShape(Canvas canvas, ParticleShape shape, double cx, double cy,
+      double drawSize, Paint paint, double alpha, GlowEffect glow) {
+    switch (shape) {
+      case ParticleShape.circle:
+        canvas.drawCircle(Offset(cx, cy), drawSize, paint);
+        if (glow != GlowEffect.none) {
+          paint.maskFilter = null;
+          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+          canvas.drawCircle(Offset(cx, cy), drawSize * 0.3, paint);
+        }
+        break;
+      case ParticleShape.star:
+        _drawStar(canvas, cx, cy, drawSize, paint);
+        if (glow != GlowEffect.none) {
+          paint.maskFilter = null;
+          paint.color = Colors.white.withValues(alpha: alpha * 0.6);
+          canvas.drawCircle(Offset(cx, cy), drawSize * 0.2, paint);
+        }
+        break;
+      case ParticleShape.triangle:
+        _drawTriangle(canvas, cx, cy, drawSize, paint);
+        break;
+      case ParticleShape.edge:
+        final r = drawSize;
+        canvas.drawRect(
+          Rect.fromCenter(center: Offset(cx, cy), width: r * 2, height: r * 1.4),
+          paint,
+        );
+        break;
+      case ParticleShape.bullet:
+        _drawBullet(canvas, cx, cy, drawSize, paint);
+        if (glow != GlowEffect.none) {
+          paint.maskFilter = null;
+          paint.color = Colors.white.withValues(alpha: alpha * 0.4);
+          canvas.drawCircle(Offset(cx, cy - drawSize * 0.3), drawSize * 0.15, paint);
+        }
+        break;
+      case ParticleShape.heart:
+        _drawHeart(canvas, cx, cy, drawSize, paint);
+        if (glow != GlowEffect.none) {
+          paint.maskFilter = null;
+          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+          canvas.drawCircle(Offset(cx, cy), drawSize * 0.15, paint);
+        }
+        break;
+      case ParticleShape.skull:
+        _drawSkull(canvas, cx, cy, drawSize, paint);
+        break;
+      case ParticleShape.hexagon:
+        _drawHexagon(canvas, cx, cy, drawSize, paint);
+        break;
     }
   }
 

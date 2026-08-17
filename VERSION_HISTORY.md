@@ -6,6 +6,26 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.34 — ✨ Particle Engine v2 — 6 Visual Upgrades (August 2026)
+**Build:** 111
+
+> The particle engine gets 6 major visual upgrades: lifetime, color drift, turbulence, gradient links, DOF + breathing, shimmer + trails. All 18 presets tuned.
+
+### Changes
+- **Lifetime system** — Particles fade in at birth (0.4s smoothstep), fade out at death (25% of life), then respawn at new random positions. Removes the jarring wrap "pop" that occurred when particles teleported across the screen. Each particle has a 2-14s lifespan depending on preset.
+- **Color drift** — Slow hue cycling per particle. `hueOffset` accumulates at `hueDriftSpeed` deg/s. Applied before all color operations. Forge embers shift warm, cosmic dust cycles blue-violet, rainbow confetti rotates full spectrum, cursed smoke shifts purple-green.
+- **Turbulence field** — Pseudo-curl-noise via layered sines perturbs particle velocity each frame. Creates organic, swirling movement instead of straight lines + sine wobble. Cursed smoke billows (0.8), void rifts swirl (0.7), toxic bubbles wobble (0.6), gungeon dust drifts gently (0.3).
+- **Gradient line links** — Connections between particles use a `LinearGradient` shader from particle A's color to particle B's color. Thickness varies by proximity (0.5-2.0px). Richer visual network for cosmic stars, void rifts, cosmic dust, jam hexes.
+- **Depth-of-field + improved breathing** — Far particles (depth < 0.7) get subtle `MaskFilter.blur` proportional to their distance. Near particles stay sharp. Breathing upgraded from 8% single-oscillator to 16% dual-oscillator (1.5Hz primary + 0.7Hz secondary) for organic size variation.
+- **Shimmer** — Periodic brightness sweep. When `sin(t * 2 + phase) > 0.7`, particle brightens up to 2x. Creates twinkling stars, gleaming golden sparkles, flashing frost shards, beating heart containers.
+- **Trails** — Particles capture past positions in a `_TrailPoint` list. Trail points age and are removed after `trailLength * 0.5` seconds. Rendered as fading circles behind the particle. Forge embers streak (0.4), bullet hell leaves trails (0.5), cursed smoke wisps (0.3), master rounds leave smokey fall (0.3).
+- **Organic rotation** — `rotationAccel` + damping instead of constant `rotationSpeed`. Shapes spin up, slow down, and reverse naturally. Clamped to ±3.0 rad/s with 30%/s damping.
+- **Refactored shape drawing** — `_drawShape()` method eliminates duplicated switch cases between rotated and non-rotated paths.
+- **All 18 presets tuned** with appropriate upgrade combinations. Each preset gets the upgrades that make sense for its visual identity.
+- **`PresetConfig.copyWith()`** added for clean color override without losing upgrade fields.
+
+---
+
 ## v1.9.33 — ✨ Experience Studio — Mini Particle Engine in Preview (August 2026)
 **Build:** 110
 

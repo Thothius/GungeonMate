@@ -1,5 +1,21 @@
 [
   {
+    "version": "v1.9.34",
+    "title": "✨ Particle Engine v2 — 6 Visual Upgrades",
+    "date": "August 2026",
+    "items": [
+      "✨ Lifetime system: particles fade in at birth, fade out at death, then respawn at new positions. Removes the jarring wrap 'pop'. Each particle has a 2-14s lifespan depending on preset.",
+      "✨ Color drift: particles slowly cycle hue over time for living, breathing color palettes. Forge embers shift through warm tones, cosmic dust cycles blue-violet, rainbow confetti rotates through the full spectrum.",
+      "✨ Turbulence field: pseudo-curl-noise perturbs particle velocity for organic, swirling movement. Cursed smoke billows, toxic bubbles wobble, void rifts swirl — no more straight-line-only drift.",
+      "✨ Gradient line links: connections between particles now use a color gradient (particle A's color → particle B's color) with thickness varying by proximity. Richer visual network for cosmic stars, void rifts, jam hexes.",
+      "✨ Depth-of-field: far particles (low depth) get subtle blur, near particles stay sharp. Creates parallax depth perception. Improved breathing: dual-oscillator (1.5Hz + 0.7Hz) with 16% amplitude — more visible size variation.",
+      "✨ Shimmer: periodic brightness sweep — particles randomly flash 2x brighter then dim back. Stars twinkle, golden sparkles gleam, frost shards catch the light, heart containers beat.",
+      "✨ Trails: moving particles leave fading trails behind them. Forge embers streak, bullet hell leaves bullet trails, cursed smoke wisps, master rounds leave smokey fall trails.",
+      "✨ Organic rotation: rotational acceleration + damping instead of constant speed. Shapes spin up, slow down, reverse — more natural than mechanical rotation.",
+      "✨ All 18 presets tuned with appropriate upgrade combinations. Refactored shape drawing to eliminate duplicated code."
+    ]
+  },
+  {
     "version": "v1.9.33",
     "title": "✨ Experience Studio — Mini Particle Engine in Preview",
     "date": "August 2026",
