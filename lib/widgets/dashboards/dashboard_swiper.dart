@@ -67,6 +67,7 @@ class DashboardSwiper extends StatefulWidget {
 
 class _DashboardSwiperState extends State<DashboardSwiper> {
   int _selectedIndex = 0;
+  bool _collapsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -264,9 +265,19 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
                     return _DashboardTabChip(
                       tab: tab,
                       isActive: isActive,
+                      isCollapsed: _collapsed,
                       onTap: () {
                         Haptics.selection();
-                        setState(() => _selectedIndex = i);
+                        if (i == _selectedIndex) {
+                          // Tapping the active pill toggles collapse/expand.
+                          setState(() => _collapsed = !_collapsed);
+                        } else {
+                          // Switching to a new tab always expands.
+                          setState(() {
+                            _selectedIndex = i;
+                            _collapsed = false;
+                          });
+                        }
                       },
                     );
                   }),
@@ -274,17 +285,25 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
               ),
               // Content panel — sizes to current tab's content, no scroll.
               // AnimatedSwitcher cross-fades between tabs.
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  switchInCurve: Curves.easeOut,
-                  switchOutCurve: Curves.easeIn,
-                  child: KeyedSubtree(
-                    key: ValueKey(_selectedIndex),
-                    child: extractChild(tabs[_selectedIndex].widget),
-                  ),
-                ),
+              // Tapping the active pill toggles _collapsed, which hides
+              // the content area while keeping the tab chips visible.
+              AnimatedSize(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                child: _collapsed
+                    ? const SizedBox.shrink()
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          child: KeyedSubtree(
+                            key: ValueKey(_selectedIndex),
+                            child: extractChild(tabs[_selectedIndex].widget),
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),
@@ -297,10 +316,12 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
 class _DashboardTabChip extends StatelessWidget {
   final _DashboardTab tab;
   final bool isActive;
+  final bool isCollapsed;
   final VoidCallback onTap;
   const _DashboardTabChip({
     required this.tab,
     required this.isActive,
+    required this.isCollapsed,
     required this.onTap,
   });
 
@@ -363,6 +384,17 @@ class _DashboardTabChip extends StatelessWidget {
                 letterSpacing: 0.3,
               ),
             ),
+            // Show chevron on active pill to indicate collapse/expand state.
+            if (isActive) ...[
+              const SizedBox(width: 4),
+              Icon(
+                isCollapsed
+                    ? Icons.keyboard_arrow_down_rounded
+                    : Icons.keyboard_arrow_up_rounded,
+                size: 14,
+                color: color.withValues(alpha: 0.7),
+              ),
+            ],
           ],
         ),
       ),
