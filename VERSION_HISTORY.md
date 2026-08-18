@@ -6,6 +6,19 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.46 — ✨ Release Polish Pass (August 2026)
+**Build:** 122
+
+> Designer/polisher pass for big release readiness. Centralized the app version string, fixed sub-minimum tap targets, and cleaned up small layout/lifecycle issues.
+
+### Polish
+- **Centralized app version constant.** Added `kAppVersion` to `asset_paths.dart` as the single source of truth. Replaced 4 hardcoded copies across `main.dart`, `main_menu_screen.dart` (version label + changelog button), eliminating the maintenance trap of updating version strings in multiple places on every bump.
+- **Fixed sub-minimum tap targets.** `_LabeledIconButton` (Calc/Effects/Shrine/Panels) and `SpongeButton` had `minWidth: 36, minHeight: 32` — below the 44px accessibility minimum. Increased to `minWidth: 44, minHeight: 36`.
+- **Increased label legibility.** Calc/Effects/Shrine/Panels/Sponge button labels increased from 8px to 9px font size.
+- **Removed redundant double SizedBox on main menu** (was `SizedBox(height: 10)` + `SizedBox(height: 12)`, now just `12`).
+- **Removed empty `dispose()` override in `DashboardSwiper`** (no-op, just called super).
+- **Added missing haptics to synergies overview FilterChip** toggle.
+
 ## v1.9.36 — 🔌 Multiplayer Reconnect Hardening (August 2026)
 **Build:** 113
 **APK:** `gungeon-mate-v1.9.36.apk`
