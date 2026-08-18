@@ -84,8 +84,10 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
   late final AnimationController _wobbleController;
   late final AnimationController _borderPulseController;
 
-  /// 0 = static icon, 1 = in-game GIF, 2 = animated card art
-  int _avatarMode = 0;
+  /// 0 = static icon, 1 = in-game GIF, 2 = animated card art.
+  /// Defaults to 1 (in-game GIF) so the live sprite shows first —
+  /// the most recognisable Gungeon visual.
+  int _avatarMode = 1;
 
   void _onAvatarTapped() {
     _commentTimer?.cancel();

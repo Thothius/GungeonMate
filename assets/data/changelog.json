@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.43",
+    "title": "Active Run Calc UX + Avatar Default + Empty-State Info",
+    "date": "August 2026",
+    "items": [
+      "UX: Calc button now opens the full DPS breakdown sheet directly on tap (1 tap instead of 2). Long-press toggles the compact green DPS readout panel.",
+      "UX: Gungeoneer header avatar now defaults to the in-game GIF sprite (mode 1) instead of the static icon — the most recognisable Gungeon visual shows first.",
+      "UX: Panels toggle shows an RPG-styled 'No Panels' info dialog when no special dashboards exist (no Gunderfury, Ser Junkan, Spice, etc.) instead of silently toggling on an empty section.",
+      "UX: Effects toggle shows an RPG-styled 'No Effects' info dialog when no active effects are present instead of silently toggling on an empty panel.",
+      "STYLE: DPS Terminal readout panel restyled — green-accent glow border, bolt icon, wider letter spacing, taller min height for better tap target."
+    ]
+  },
+  {
     "version": "v1.9.42",
     "title": "Responsive Screen Profiles + Character Select No-Scroll Fix",
     "date": "August 2026",

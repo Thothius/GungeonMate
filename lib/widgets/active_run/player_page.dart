@@ -223,8 +223,9 @@ class PlayerPageState extends State<PlayerPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SpongeButton(),
-                  // Damage calc toggle — tap to show/hide DPS terminal on dashboard,
-                  // long-press to open the full DPS breakdown sheet.
+                  // Damage calc — tap opens the full DPS breakdown sheet
+                  // directly (the final view). Long-press toggles the
+                  // compact green DPS readout panel on the dashboard.
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
@@ -234,16 +235,21 @@ class PlayerPageState extends State<PlayerPage> {
                         icon: Icons.calculate_rounded,
                         label: 'Calc',
                         color: color,
-                        tooltip: isOn ? 'Damage Calculator: ON' : 'Damage Calculator: OFF',
+                        tooltip: 'Tap: DPS sheet · Long-press: toggle readout',
                         onTap: () {
+                          Haptics.selection();
+                          _showDamageCalcSheet(context, _slot);
+                        },
+                        onLongPress: () {
                           VisualPrefs.setShowDamageCalculator(!isOn);
                           Haptics.selection();
                         },
-                        onLongPress: () => _showDamageCalcSheet(context, _slot),
                       );
                     },
                   ),
-                  // Effects panel toggle — tap to show/hide the effects accordion.
+                  // Effects panel toggle — tap to show/hide the effects
+                  // accordion. If there are no active effects, shows an
+                  // info message instead of silently toggling.
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
@@ -255,8 +261,16 @@ class PlayerPageState extends State<PlayerPage> {
                         color: color,
                         tooltip: isOn ? 'Effects Panel: ON' : 'Effects Panel: OFF',
                         onTap: () {
-                          VisualPrefs.setShowEffectsPanel(!isOn);
                           Haptics.selection();
+                          final chips = EffectTagger.summaryChips(
+                            guns: player.guns,
+                            items: player.items,
+                          );
+                          if (chips.isEmpty) {
+                            _showGungeonInfo(context, 'No Effects', 'No active effects from current guns and items.');
+                            return;
+                          }
+                          VisualPrefs.setShowEffectsPanel(!isOn);
                         },
                       );
                     },
@@ -284,7 +298,8 @@ class PlayerPageState extends State<PlayerPage> {
                       );
                     },
                   ),
-                  // Dashboards toggle
+                  // Dashboards toggle — if no special panels exist, shows
+                  // an info message instead of silently toggling.
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
@@ -296,8 +311,24 @@ class PlayerPageState extends State<PlayerPage> {
                         color: color,
                         tooltip: isOn ? 'Special Panels: ON' : 'Special Panels: OFF',
                         onTap: () {
-                          VisualPrefs.setShowDashboards(!isOn);
                           Haptics.selection();
+                          final ownedGunNames = player.guns
+                              .map((g) => g.name.toLowerCase())
+                              .toSet();
+                          final ownedItemNames = player.items
+                              .map((i) => i.name.toLowerCase())
+                              .toSet();
+                          final charName = player.character?.name.toLowerCase() ?? '';
+                          final hasPanels = hasSpecialDashboards(
+                            ownedGunNames: ownedGunNames,
+                            ownedItemNames: ownedItemNames,
+                            charName: charName,
+                          );
+                          if (!hasPanels) {
+                            _showGungeonInfo(context, 'No Panels', 'No special dashboards available. Equip special guns or items (Gunderfury, Ser Junkan, Spice, etc.) to unlock tracking panels.');
+                            return;
+                          }
+                          VisualPrefs.setShowDashboards(!isOn);
                         },
                       );
                     },
@@ -334,27 +365,41 @@ class PlayerPageState extends State<PlayerPage> {
                 child: GestureDetector(
                   onTap: () => _showDamageCalcSheet(context, _slot),
                   child: Container(
-                    constraints: const BoxConstraints(minHeight: 48),
+                    constraints: const BoxConstraints(minHeight: 52),
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF000800),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.green.withValues(alpha: 0.25), width: 1.0),
+                      color: const Color(0xFF0A0F0A),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.greenAccent.withValues(alpha: 0.3),
+                        width: 1.2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.greenAccent.withValues(alpha: 0.08),
+                          blurRadius: 8,
+                          spreadRadius: 0,
+                        ),
+                      ],
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.terminal_rounded, size: 16, color: Colors.green.withValues(alpha: 0.7)),
+                            Icon(
+                              Icons.bolt_rounded,
+                              size: 18,
+                              color: Colors.greenAccent.withValues(alpha: 0.8),
+                            ),
                             const SizedBox(width: 8),
                             GoopText(
-                              'DPS CALC',
+                              'DPS TERMINAL',
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
-                                color: Colors.green.withValues(alpha: 0.7),
-                                letterSpacing: 0.5,
+                                color: Colors.greenAccent.withValues(alpha: 0.8),
+                                letterSpacing: 1.0,
                                 fontFamily: 'monospace',
                               ),
                             ),
@@ -689,6 +734,73 @@ class PlayerPageState extends State<PlayerPage> {
       content: GoopText(msg),
       duration: const Duration(milliseconds: 1500),
     ));
+  }
+
+  /// RPG-gungeon styled info dialog for empty-state warnings
+  /// ("No Panels", "No Effects"). Dismissed by tapping outside.
+  void _showGungeonInfo(BuildContext c, String title, String body) {
+    showDialog<void>(
+      context: c,
+      builder: (ctx) {
+        return Dialog(
+          backgroundColor: const Color(0xFF1E1E22),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: BorderSide(
+              color: Colors.amber.withValues(alpha: 0.4),
+              width: 1.4,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline_rounded,
+                      size: 22,
+                      color: Colors.amber.withValues(alpha: 0.8),
+                    ),
+                    const SizedBox(width: 10),
+                    GoopText(
+                      title.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: Colors.amber.withValues(alpha: 0.9),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                GoopText(
+                  body,
+                  style: TextStyle(
+                    fontSize: 12.5,
+                    color: Colors.white.withValues(alpha: 0.65),
+                    height: 1.35,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.amber,
+                    ),
+                    child: const GoopText('Got it'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _promptTransferGun(BuildContext c, Gun g) {

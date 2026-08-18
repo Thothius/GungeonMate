@@ -27,6 +27,36 @@ class _DashboardTab {
   });
 }
 
+/// Checks whether the given player has any special dashboards to show.
+/// Mirrors the tab-building logic in [_DashboardSwiperState.build] so
+/// the Panels toggle can proactively warn "No panels" instead of
+/// silently toggling on an empty section.
+bool hasSpecialDashboards({
+  required Set<String> ownedGunNames,
+  required Set<String> ownedItemNames,
+  required String charName,
+}) {
+  if (charName.contains('robot')) return true;
+  if (charName.contains('hunter')) return true;
+  if (ownedItemNames.any((n) => n.contains('ser junkan'))) return true;
+  if (ownedGunNames.contains('gunderfury')) return true;
+  if (ownedGunNames.contains('triple gun')) return true;
+  if (ownedGunNames.contains('evolver')) return true;
+  if (ownedGunNames.contains('shellegun')) return true;
+  if (ownedGunNames.contains('chamber gun')) return true;
+  if (ownedItemNames.contains('platinum bullets')) return true;
+  if (ownedItemNames.contains('iron coin')) return true;
+  if (ownedItemNames.contains('spice')) return true;
+  if (ownedItemNames.contains('metronome')) return true;
+  if (ownedItemNames.contains('sprun')) return true;
+  if (ownedGunNames.contains('boxing glove')) return true;
+  if (ownedItemNames.contains('cigarettes')) return true;
+  if (ownedGunNames.contains('polaris')) return true;
+  if (ownedGunNames.contains('gunther')) return true;
+  if (ownedItemNames.contains('gun soul')) return true;
+  return false;
+}
+
 class DashboardSwiper extends StatefulWidget {
   final PlayerSlot slot;
   const DashboardSwiper({super.key, required this.slot});
