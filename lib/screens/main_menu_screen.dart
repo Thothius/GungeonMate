@@ -516,7 +516,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.52 — Codex Book Mode',
+                            'v1.9.53 — Compact Run Mode',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

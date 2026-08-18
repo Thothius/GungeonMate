@@ -6,6 +6,20 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.53 — 📦 Active Run Rework Phase 3: Compact Run Mode (August 2026)
+**Build:** 129
+
+> Phase 3 of the Active Run Rework. Mode 2 (Compact Run) is now live — a tactical HUD layout for mid-fight glances.
+
+### New Features
+- **Compact Run Mode** — high-density layout that fits the core loadout in one screen-height. Top strip: character name + inline stat chips (COOL/CURSE/GUNS/ITEMS/TOP DPS). Middle: 2-column grid — left column guns (icon + name + DPS), right column items (icon + name + recharge). ~6 rows visible; overflow opens a scrollable bottom sheet. No section headers, no sort pickers — maximizes density. Top-DPS gun gets gold left-border accent. DepthTile 2.5D with flatter tilt. Dense monospace neon aesthetic.
+
+### Infrastructure
+- `lib/widgets/active_run/modes/compact_run_mode.dart` — the Compact Run layout widget.
+- `PlayerPage` routing — when `runDisplayMode == compact`, returns `CompactRunMode`. Classic scroll preserved as fallback for matrix mode (Phase 4).
+
+---
+
 ## v1.9.52 — 📖 Active Run Rework Phase 2: Mode Switcher + Codex Book (August 2026)
 **Build:** 128
 
