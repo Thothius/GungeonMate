@@ -6,6 +6,26 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.52 — 📖 Active Run Rework Phase 2: Mode Switcher + Codex Book (August 2026)
+**Build:** 128
+
+> Phase 2 of the Active Run Rework. A collapsible mode switcher bar on the active run screen lets you pick between three display modes. Mode 1 (Codex Book) is now live — a leather-and-brass compendium layout with 2.5D inventory tiles.
+
+### New Features
+- **Run Display Mode Bar** — collapsible 3-card switcher strip between the header and the player PageView. Cards: Codex Book / Compact Run / Gungeon Matrix. Selected card gets theme primary glow + scale. Collapsed by default to a single pill showing the current mode; tap to expand, tap a card to select + collapse. Persisted via `VisualPrefs.runDisplayModeBarCollapsed`.
+- **Codex Book Mode** — Mode 1 layout. Left page: character portrait in a brass locket frame + parchment stat cards (coolness, curse, gun count, item count). Right page: swipeable Guns / Items / Synergies pages with page-turn chevron bar at the bottom. Responsive: two-page spread on wide screens (>600px), stacked on narrow. Every gun/item row wrapped in `DepthTile` (2.5D tilt + depth shadow + synergy glow pulse). Top-DPS gun gets gold border accent. Coop player hides synergies page.
+
+### Infrastructure
+- `lib/widgets/active_run/modes/run_display_mode_bar.dart` — the switcher strip + collapse state.
+- `lib/widgets/active_run/modes/codex_book_mode.dart` — the Codex Book layout widget.
+- `PlayerPage` routing — when `runDisplayMode == codex`, returns `CodexBookMode` instead of the classic scroll. Classic view preserved as fallback for compact/matrix modes (Phase 3/4).
+- `active_run_screen.dart` — `RunDisplayModeBar` inserted between header and PageView. No existing callbacks touched.
+
+### Phase 1 merged
+- `coder/active-run-rework` branch rebased onto master and merged. Phase 1 foundation (`RunDisplayMode` enum, `VisualPrefs` fields, `DepthTile`, `mode_helpers.dart`) now on master.
+
+---
+
 ## v1.9.51 — 🌫️ Ambient Fragment Shaders (August 2026)
 **Build:** 127
 

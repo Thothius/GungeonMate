@@ -14,6 +14,7 @@ import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/player_header.dart';
 import '../widgets/active_run/player_page.dart';
+import '../widgets/active_run/modes/run_display_mode_bar.dart';
 import '../widgets/active_run/dice_roll.dart';
 import '../widgets/active_run/emote_animations.dart';
 
@@ -383,6 +384,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               coopName: state.coop!.character?.name ?? 'P2',
               onPick: navigateTo,
             ),
+          // Display mode switcher bar — run-scope, sits between the
+          // header and the per-player PageView. Collapsed by default.
+          const RunDisplayModeBar(),
           Expanded(
             child: PageView(
               controller: _page,

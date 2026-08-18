@@ -19,6 +19,7 @@ import '../../utils/fast_route.dart';
 import '../../services/goop_talk_engine.dart';
 import 'active_run_helpers.dart';
 import 'mode_helpers.dart' show TransferSheet;
+import 'modes/codex_book_mode.dart';
 import '../dashboards/dashboard_swiper.dart';
 import '../sheets/damage_calc_sheet.dart';
 import 'stat_sheets.dart';
@@ -178,6 +179,12 @@ class PlayerPageState extends State<PlayerPage> {
     return ValueListenableBuilder<VisualPrefs>(
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
+        // Route to the selected display mode. The classic scroll view
+        // below is the fallback (and the only view for compact/matrix
+        // until those modes are built in Phase 3/4).
+        if (prefs.runDisplayMode == RunDisplayMode.codex) {
+          return CodexBookMode(slot: _slot);
+        }
         // Apply the active sort modes. Pickup-order is a no-op pass-through.
         final guns = sortGuns(player.guns, _gunSort);
     final items = sortItems(player.items, _itemSort);

@@ -1,5 +1,14 @@
 [
   {
+    "version": "v1.9.52",
+    "title": "Active Run Rework Phase 2 — Mode Switcher + Codex Book",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Run Display Mode Bar — collapsible mode switcher on the active run screen. Three preview cards (Codex Book / Compact Run / Gungeon Matrix). Tap to switch instantly. Collapsed by default to a single pill; tap to expand. Persisted collapse state.",
+      "FEATURE: Codex Book Mode — leather-and-brass compendium layout. Left page: character portrait in a brass locket frame + stats cards. Right page: swipeable Guns / Items / Synergies pages with page-turn chevrons. Responsive: two-page spread on wide screens, stacked on narrow. 2.5D DepthTile on every row. Top-DPS gun gets gold accent. Synergy glow preserved."
+    ]
+  },
+  {
     "version": "v1.9.51",
     "title": "Ambient Fragment Shaders — GPU Digital Rain & Dark Neon Fog",
     "date": "August 2026",
