@@ -6,6 +6,21 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.54 — 🟣 Active Run Rework Phase 4: Gungeon Matrix Mode (August 2026)
+**Build:** 130
+
+> Phase 4 of the Active Run Rework. Mode 3 (Gungeon Matrix) is now live — all three display modes complete.
+
+### New Features
+- **Gungeon Matrix Mode** — deep purple-black background with falling glyph columns (purple digital rain). Active run data overlaid in translucent glassmorphic panels. Character portrait in a circular "terminal" frame with a scanning line animation. Stats as a vertical data readout panel (monospace purple text, live values). Guns + items as horizontal scrolling "data stream" chips with DepthTile 2.5D tilt + drop shadow. Central "focus panel" for the top-DPS gun with purple glow pulse. Rain capped at 24 columns x 18 glyphs, DPR-aware column reduction (18 on retina). Single AnimationController for rain + single for drift — no per-chip controllers.
+
+### Infrastructure
+- `lib/widgets/backgrounds/gungeon_matrix_rain.dart` — the matrix rain CustomPainter (24x18 glyph grid, varying column speeds, head-bright trail-fade).
+- `lib/widgets/active_run/modes/matrix_mode.dart` — the Matrix mode layout widget.
+- `PlayerPage` routing — when `runDisplayMode == matrix`, returns `MatrixMode`. All three modes now routed; classic scroll is fallback only.
+
+---
+
 ## v1.9.53 — 📦 Active Run Rework Phase 3: Compact Run Mode (August 2026)
 **Build:** 129
 

@@ -21,6 +21,7 @@ import 'active_run_helpers.dart';
 import 'mode_helpers.dart' show TransferSheet;
 import 'modes/codex_book_mode.dart';
 import 'modes/compact_run_mode.dart';
+import 'modes/matrix_mode.dart';
 import '../dashboards/dashboard_swiper.dart';
 import '../sheets/damage_calc_sheet.dart';
 import 'stat_sheets.dart';
@@ -188,6 +189,9 @@ class PlayerPageState extends State<PlayerPage> {
         }
         if (prefs.runDisplayMode == RunDisplayMode.compact) {
           return CompactRunMode(slot: _slot);
+        }
+        if (prefs.runDisplayMode == RunDisplayMode.matrix) {
+          return MatrixMode(slot: _slot);
         }
         // Apply the active sort modes. Pickup-order is a no-op pass-through.
         final guns = sortGuns(player.guns, _gunSort);

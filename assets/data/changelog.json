@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.54",
+    "title": "Active Run Rework Phase 4 — Gungeon Matrix Mode",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Gungeon Matrix Mode — purple digital rain background with active run data overlaid in glassmorphic panels. Character portrait in a circular terminal frame with scanning line animation. Stats as a vertical data readout panel (monospace purple). Guns + items as horizontal scrolling data stream chips with DepthTile 2.5D. Central focus panel for top-DPS gun with purple glow. Rain capped at 24x18 glyphs, DPR-aware column reduction. All three display modes now live."
+    ]
+  },
+  {
     "version": "v1.9.53",
     "title": "Active Run Rework Phase 3 — Compact Run Mode",
     "date": "August 2026",
