@@ -12,6 +12,7 @@ import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/character_select_screen.dart';
 import '../../utils/fast_route.dart';
+import '../active_run/end_run_confirm_dialog.dart';
 import '../active_run/active_run_helpers.dart';
 import 'debug_tab.dart';
 import 'run_log_screen.dart';
@@ -30,35 +31,19 @@ class _AppTabState extends State<AppTab> {
   // ── Confirm dialogs (lifted from old RunTab + AppTab) ──────────────
 
   void _confirmEndRun(BuildContext context, RunProvider p) {
-    showDialog(
-      context: context,
-      builder: (c) => AlertDialog(
-        icon: const Icon(Icons.warning_rounded, color: Colors.redAccent),
-        title: const GoopText('End Run?'),
-        content: const GoopText('This resets the current active run completely and returns you to the character select screen.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const GoopText('Cancel'),
-          ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
-            onPressed: () async {
-              final session = context.read<MultiplayerSession>();
-              Navigator.pop(c);
-              if (session.isActive) {
-                await session.notifyEndRunAndCancel();
-                if (session.myRole == MpRole.main) {
-                  p.endRun();
-                }
-              } else {
-                p.endRun();
-              }
-            },
-            child: const GoopText('End Run'),
-          ),
-        ],
-      ),
+    EndRunConfirmDialog.show(
+      context,
+      onConfirm: () async {
+        final session = context.read<MultiplayerSession>();
+        if (session.isActive) {
+          await session.notifyEndRunAndCancel();
+          if (session.myRole == MpRole.main) {
+            p.endRun();
+          }
+        } else {
+          p.endRun();
+        }
+      },
     );
   }
 
@@ -380,16 +365,12 @@ class _AppTabState extends State<AppTab> {
           ]),
           const SizedBox(height: 16),
 
-          // ── DANGER ZONE grid ──
+          // ── DANGER ZONE ──
           _groupLabel('DANGER ZONE'),
+          // End Run — full-width prominent button with Lord of the Jammed icon
+          _buildEndRunButton(context, p),
+          const SizedBox(height: 8),
           _buildGrid([
-            _TileData(
-              icon: Icons.cancel_presentation_rounded,
-              label: 'End Run',
-              color: Colors.redAccent,
-              isDanger: true,
-              onTap: () => _confirmEndRun(context, p),
-            ),
             _TileData(
               icon: Icons.restart_alt,
               label: 'Reset All Data',
@@ -415,6 +396,66 @@ class _AppTabState extends State<AppTab> {
           fontWeight: FontWeight.w900,
           color: AppTheme.flair.primary.withValues(alpha: 0.8),
           letterSpacing: 0.8,
+        ),
+      ),
+    );
+  }
+
+  /// Full-width, prominent End Run button styled with the Lord of the
+  /// Jammed sprite and red-accent danger styling.
+  Widget _buildEndRunButton(BuildContext context, RunProvider p) {
+    return GestureDetector(
+      onTap: () => _confirmEndRun(context, p),
+      child: Container(
+        height: 64,
+        decoration: BoxDecoration(
+          color: Colors.red.shade900.withValues(alpha: 0.25),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: Colors.redAccent.withValues(alpha: 0.4),
+            width: 1.4,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.redAccent.withValues(alpha: 0.1),
+              blurRadius: 8,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            const SizedBox(width: 14),
+            Image.asset(
+              'assets/images/end_run/Lord_of_the_Jammed.webp',
+              width: 36,
+              height: 36,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.none,
+              errorBuilder: (_, __, ___) => const Icon(
+                Icons.cancel_presentation_rounded,
+                size: 28,
+                color: Colors.redAccent,
+              ),
+            ),
+            const SizedBox(width: 12),
+            const GoopText(
+              'END RUN',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: Colors.redAccent,
+              ),
+            ),
+            const Spacer(),
+            const Icon(
+              Icons.chevron_right_rounded,
+              size: 22,
+              color: Colors.redAccent,
+            ),
+            const SizedBox(width: 10),
+          ],
         ),
       ),
     );
