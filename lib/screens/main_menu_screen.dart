@@ -8,6 +8,7 @@ import '../services/home_customization.dart';
 import '../widgets/scale_button.dart';
 import '../widgets/home/rotating_gungeoneer.dart';
 import '../widgets/home/junk_particle_field.dart';
+import '../widgets/home/vortex_lightning.dart';
 import '../widgets/home/home_customization_sheet.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
@@ -41,6 +42,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           const Positioned.fill(child: JunkParticleField()),
           // ── Rotating gungeoneer at the vortex center ──────────────────
           const Positioned.fill(child: RotatingGungeoneer(size: 240)),
+          // ── Vortex lightning strikes (cycle boundary + ambient) ──────
+          const Positioned.fill(child: VortexLightning()),
           Positioned.fill(
               child: SafeArea(
             child: Center(

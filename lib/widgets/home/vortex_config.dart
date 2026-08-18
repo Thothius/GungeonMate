@@ -262,24 +262,35 @@ class VortexConfig {
   /// Spin angle (radians) from elapsed time. The spin is continuous and
   /// always forward, but faster during descent (tumbling) and slower
   /// during ascent (gentle rotation).
+  ///
+  /// **Continuous across cycles:** the spin accumulates from completed
+  /// cycles plus the current partial cycle, so there is no visible
+  /// rotational "jump" at the cycle boundary. This eliminates the loop
+  /// seam that was visible when the spin reset to 0 at each cycle start.
   double spinFromElapsed(double elapsed) {
     final cycle = gungeoneerCycleDuration;
     if (cycle <= 0 || gungeoneerSpinDuration <= 0) return 0;
-    final t = elapsed % cycle;
     final baseOmega = 2 * math.pi / gungeoneerSpinDuration; // rad/s
+
+    // Spin accumulated from completed full cycles.
+    final cycleSpin = baseOmega * gungeoneerSpinDescentMultiplier *
+        gungeoneerDescentDuration + baseOmega * gungeoneerAscentDuration;
+    final cycleCount = (elapsed / cycle).floor();
+    final completedSpin = cycleCount * cycleSpin;
+
+    // Spin within the current partial cycle.
+    final t = elapsed % cycle;
+    double currentSpin;
     if (t < gungeoneerDescentDuration) {
       // Descent: faster spin (tumbling).
-      final descentSpin =
-          baseOmega * gungeoneerSpinDescentMultiplier * t;
-      return descentSpin;
+      currentSpin = baseOmega * gungeoneerSpinDescentMultiplier * t;
     } else {
-      // Ascent: normal spin. Continue from where descent left off.
-      final descentSpin =
-          baseOmega * gungeoneerSpinDescentMultiplier * gungeoneerDescentDuration;
-      final ascentSpin =
-          baseOmega * (t - gungeoneerDescentDuration);
-      return descentSpin + ascentSpin;
+      // Ascent: normal spin, continuing from where descent left off.
+      currentSpin = baseOmega * gungeoneerSpinDescentMultiplier *
+          gungeoneerDescentDuration + baseOmega * (t - gungeoneerDescentDuration);
     }
+
+    return completedSpin + currentSpin;
   }
 
   /// Horizontal sway from elapsed time, given the sway range (px).
