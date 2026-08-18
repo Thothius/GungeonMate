@@ -35,6 +35,17 @@ enum ParticlePreset {
   shellCasings,
   heroicBlades,
   boneShards,
+  // ── 6 new artful presets ──
+  auroraVeil,       // flowing hue-cycling ribbon of light
+  crystalLattice,   // geometric hexagonal lattice with line links
+  inkSplatter,      // bold ink drops with spectral echo
+  solarFlare,       // explosive corona bursts with ember glow
+  tidePool,         // liquid blob shapes with ripple glow
+  stainedGlass,     // prism-glow geometric shards
+  // ── 3 new Gungeon-unique presets ──
+  blankShells,      // Gungeon Blank starburst shells
+  hegemonyCredits,  // spinning Hegemony Credit coins
+  masterRoundAura,  // Master Ring halo orbit
 }
 
 // =============================================================================
@@ -263,6 +274,15 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.shellCasings => 'Shell Casings',
         ParticlePreset.heroicBlades => 'Heroic Blades',
         ParticlePreset.boneShards => 'Bone Shards',
+        ParticlePreset.auroraVeil => 'Aurora Veil',
+        ParticlePreset.crystalLattice => 'Crystal Lattice',
+        ParticlePreset.inkSplatter => 'Ink Splatter',
+        ParticlePreset.solarFlare => 'Solar Flare',
+        ParticlePreset.tidePool => 'Tide Pool',
+        ParticlePreset.stainedGlass => 'Stained Glass',
+        ParticlePreset.blankShells => 'Blank Shells',
+        ParticlePreset.hegemonyCredits => 'Hegemony Credits',
+        ParticlePreset.masterRoundAura => 'Master Round Aura',
       };
 
   String get description => switch (this) {
@@ -294,6 +314,15 @@ extension ParticlePresetX on ParticlePreset {
         ParticlePreset.shellCasings => 'Spent brass shell casings falling with warm metallic clink',
         ParticlePreset.heroicBlades => 'Heroic blade tips spinning upward with gold-red valor glow',
         ParticlePreset.boneShards => 'Fractured bone shards drifting with eerie crypt-teal cursed glow',
+        ParticlePreset.auroraVeil => 'Flowing hue-cycling ribbon of light with aurora glow',
+        ParticlePreset.crystalLattice => 'Geometric hexagonal lattice with line links and pulse glow',
+        ParticlePreset.inkSplatter => 'Bold ink drops with spectral echo and dark splatter trails',
+        ParticlePreset.solarFlare => 'Explosive corona bursts with ember flicker glow',
+        ParticlePreset.tidePool => 'Liquid blob shapes drifting with ripple glow',
+        ParticlePreset.stainedGlass => 'Prism-glow geometric shards refracting rainbow light',
+        ParticlePreset.blankShells => 'Gungeon Blank starburst shells expanding outward',
+        ParticlePreset.hegemonyCredits => 'Spinning Hegemony Credit coins falling with golden glow',
+        ParticlePreset.masterRoundAura => 'Master Round halo orbit with pulsing valor glow',
       };
 
   PresetConfig get config => switch (this) {
@@ -696,12 +725,157 @@ extension ParticlePresetX on ParticlePreset {
             hueDriftSpeed: 15.0,
             lifetimeMin: 6.0, lifetimeMax: 11.0,
           ),
+        // ── 6 new artful presets ──
+        ParticlePreset.auroraVeil => PresetConfig(
+            colors: [const Color(0xFF00E5FF), const Color(0xFF76FF03), const Color(0xFFE040FB), const Color(0xFFFFEB3B)],
+            shape: ParticleShape.circle,
+            sizeMin: 3.0, sizeMax: 7.0,
+            speedMin: 4.0, speedMax: 12.0,
+            glowEffect: GlowEffect.aurora,
+            lineLinks: false,
+            drift: DriftDirection.up,
+            wobble: 1.0,
+            // Upgrades: hue drift for full spectrum cycle, turbulence for ribbon flow
+            hueDriftSpeed: 45.0,
+            turbulence: 0.5,
+            lifetimeMin: 8.0, lifetimeMax: 14.0,
+          ),
+        ParticlePreset.crystalLattice => PresetConfig(
+            colors: [const Color(0xFFB3E5FC), const Color(0xFF80DEEA), const Color(0xFF26C6DA), const Color(0xFFE1F5FE)],
+            shape: ParticleShape.hexagon,
+            sizeMin: 3.0, sizeMax: 6.0,
+            speedMin: 2.0, speedMax: 6.0,
+            glowEffect: GlowEffect.pulse,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.2,
+            rotate: true,
+            // Upgrades: shimmer for crystal gleam, long life
+            shimmer: true,
+            lifetimeMin: 10.0, lifetimeMax: 16.0,
+          ),
+        ParticlePreset.inkSplatter => PresetConfig(
+            colors: [const Color(0xFF1A1A1A), const Color(0xFF212121), const Color(0xFF424242), const Color(0xFF616161)],
+            shape: ParticleShape.shard,
+            sizeMin: 3.0, sizeMax: 8.0,
+            speedMin: 5.0, speedMax: 18.0,
+            glowEffect: GlowEffect.spectral,
+            lineLinks: false,
+            drift: DriftDirection.random,
+            wobble: 0.7,
+            rotate: true,
+            // Upgrades: turbulence for splatter chaos, short life
+            turbulence: 0.7,
+            trailLength: 0.3,
+            lifetimeMin: 4.0, lifetimeMax: 8.0,
+          ),
+        ParticlePreset.solarFlare => PresetConfig(
+            colors: [const Color(0xFFFFAB00), const Color(0xFFFF6D00), const Color(0xFFFFD600), const Color(0xFFFF3D00)],
+            shape: ParticleShape.star,
+            sizeMin: 3.0, sizeMax: 7.0,
+            speedMin: 8.0, speedMax: 25.0,
+            glowEffect: GlowEffect.ember,
+            lineLinks: false,
+            drift: DriftDirection.up,
+            wobble: 0.6,
+            rotate: true,
+            // Upgrades: trail for corona streaks, short life, shimmer
+            trailLength: 0.5,
+            shimmer: true,
+            lifetimeMin: 3.0, lifetimeMax: 6.0,
+          ),
+        ParticlePreset.tidePool => PresetConfig(
+            colors: [const Color(0xFF00BCD4), const Color(0xFF26C6DA), const Color(0xFF80DEEA), const Color(0xFF0097A7)],
+            shape: ParticleShape.circle,
+            sizeMin: 4.0, sizeMax: 9.0,
+            speedMin: 3.0, speedMax: 9.0,
+            glowEffect: GlowEffect.ripple,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.8,
+            // Upgrades: turbulence for liquid motion, hue drift, long life
+            turbulence: 0.5,
+            hueDriftSpeed: 10.0,
+            lifetimeMin: 8.0, lifetimeMax: 14.0,
+          ),
+        ParticlePreset.stainedGlass => PresetConfig(
+            colors: [const Color(0xFFE91E63), const Color(0xFF9C27B0), const Color(0xFF2196F3), const Color(0xFFFFC107), const Color(0xFF4CAF50)],
+            shape: ParticleShape.triangle,
+            sizeMin: 3.0, sizeMax: 7.0,
+            speedMin: 3.0, speedMax: 10.0,
+            glowEffect: GlowEffect.prism,
+            lineLinks: true,
+            drift: DriftDirection.random,
+            wobble: 0.4,
+            rotate: true,
+            // Upgrades: hue drift for shifting refractions, shimmer
+            hueDriftSpeed: 20.0,
+            shimmer: true,
+            lifetimeMin: 7.0, lifetimeMax: 12.0,
+          ),
+        // ── 3 new Gungeon-unique presets ──
+        ParticlePreset.blankShells => PresetConfig(
+            colors: [const Color(0xFFFFFFFF), const Color(0xFFE0F7FA), const Color(0xFF80DEEA), const Color(0xFFB3E5FC)],
+            shape: ParticleShape.star,
+            sizeMin: 4.0, sizeMax: 9.0,
+            speedMin: 12.0, speedMax: 30.0,
+            glowEffect: GlowEffect.neon,
+            lineLinks: false,
+            drift: DriftDirection.random,
+            wobble: 0.3,
+            rotate: true,
+            // Upgrades: trail for starburst streaks, short life, shimmer for flash
+            trailLength: 0.6,
+            shimmer: true,
+            lifetimeMin: 2.0, lifetimeMax: 5.0,
+          ),
+        ParticlePreset.hegemonyCredits => PresetConfig(
+            colors: [const Color(0xFFFFD700), const Color(0xFFFFC107), const Color(0xFFB8860B), const Color(0xFFFFE082)],
+            shape: ParticleShape.hexagon,
+            sizeMin: 3.5, sizeMax: 7.0,
+            speedMin: 8.0, speedMax: 22.0,
+            glowEffect: GlowEffect.smokey,
+            lineLinks: false,
+            drift: DriftDirection.down,
+            wobble: 0.5,
+            rotate: true,
+            // Upgrades: shimmer for coin gleam, medium life
+            shimmer: true,
+            lifetimeMin: 4.0, lifetimeMax: 8.0,
+          ),
+        ParticlePreset.masterRoundAura => PresetConfig(
+            colors: [const Color(0xFFFFD700), const Color(0xFFFFC107), const Color(0xFFFF8F00), const Color(0xFFFFEB3B)],
+            shape: ParticleShape.circle,
+            sizeMin: 2.0, sizeMax: 5.0,
+            speedMin: 2.0, speedMax: 6.0,
+            glowEffect: GlowEffect.plasma,
+            lineLinks: true,
+            drift: DriftDirection.up,
+            wobble: 0.3,
+            // Upgrades: shimmer for valor gleam, slow hue drift, long life
+            shimmer: true,
+            hueDriftSpeed: 8.0,
+            lifetimeMin: 10.0, lifetimeMax: 18.0,
+          ),
       };
 }
 
 enum ParticleShape { circle, star, triangle, edge, bullet, heart, skull, hexagon, paw, crescent, bolt, shard, smoke, scale }
 
-enum GlowEffect { none, smokey, ripple, pulse, cursed }
+enum GlowEffect {
+  none,
+  smokey,
+  ripple,
+  pulse,
+  cursed,
+  // ── 6 new artful glow effects ──
+  neon,      // bright neon halo with crisp edge
+  aurora,    // shifting hue-cycling soft halo
+  ember,     // warm flickering fire glow
+  spectral,  // ghostly translucent double-image
+  plasma,    // swirling electric plasma rings
+  prism,     // rainbow prism refraction shards
+}
 
 extension GlowEffectX on GlowEffect {
   String get label => switch (this) {
@@ -710,6 +884,27 @@ extension GlowEffectX on GlowEffect {
         GlowEffect.ripple => 'Ripple',
         GlowEffect.pulse => 'Pulse',
         GlowEffect.cursed => 'Cursed',
+        GlowEffect.neon => 'Neon',
+        GlowEffect.aurora => 'Aurora',
+        GlowEffect.ember => 'Ember',
+        GlowEffect.spectral => 'Spectral',
+        GlowEffect.plasma => 'Plasma',
+        GlowEffect.prism => 'Prism',
+      };
+
+  /// Short visual description for picker UI.
+  String get blurb => switch (this) {
+        GlowEffect.none => 'No glow — pure particles',
+        GlowEffect.smokey => 'Soft diffuse blur',
+        GlowEffect.ripple => 'Expanding ring waves',
+        GlowEffect.pulse => 'Steady brightness pulse',
+        GlowEffect.cursed => 'Hue-shifting cursed aura',
+        GlowEffect.neon => 'Crisp bright neon halo',
+        GlowEffect.aurora => 'Cycling hue rainbow halo',
+        GlowEffect.ember => 'Warm flickering fire glow',
+        GlowEffect.spectral => 'Ghostly translucent echo',
+        GlowEffect.plasma => 'Swirling electric rings',
+        GlowEffect.prism => 'Rainbow refraction shards',
       };
 }
 
@@ -1390,6 +1585,73 @@ class _ParticlePainter extends CustomPainter {
             final rippleAlpha = alpha * (1.0 - ripplePhase) * 0.4;
             _paint.color = driftedColor.withValues(alpha: rippleAlpha);
             canvas.drawCircle(Offset(p.x, p.y), rippleR, _paint);
+          }
+          break;
+        case GlowEffect.neon:
+          // Crisp bright neon halo — tight blur + bright white core
+          _paint.maskFilter = MaskFilter.blur(BlurStyle.inner, drawSize * 0.15);
+          _paint.color = driftedColor.withValues(alpha: alpha * 0.7);
+          canvas.drawCircle(Offset(p.x, p.y), drawSize * 1.4, _paint);
+          _paint.maskFilter = null;
+          _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
+          canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.5, _paint);
+          break;
+        case GlowEffect.aurora:
+          // Hue-cycling soft halo — shifts through the spectrum over time
+          final auroraHue = (t * 60 + p.phase * 120) % 360;
+          final auroraColor = HSLColor.fromAHSL(alpha * 0.5, auroraHue, 0.7, 0.6).toColor();
+          _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 1.0);
+          _paint.color = auroraColor;
+          canvas.drawCircle(Offset(p.x, p.y), drawSize * 1.8, _paint);
+          break;
+        case GlowEffect.ember:
+          // Warm flickering fire glow — oscillating brightness + warm hue
+          final flicker = (math.sin(t * 8 + p.phase * 10) * 0.5 + 0.5);
+          final emberHue = (30 + flicker * 20) % 360; // 30-50deg = orange-gold
+          final emberColor = HSLColor.fromAHSL(alpha * (0.4 + flicker * 0.3), emberHue, 0.9, 0.5).toColor();
+          _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 0.9);
+          _paint.color = emberColor;
+          canvas.drawCircle(Offset(p.x, p.y), drawSize * (1.3 + flicker * 0.5), _paint);
+          break;
+        case GlowEffect.spectral:
+          // Ghostly translucent double-image — offset echo of the particle
+          _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 0.6);
+          _paint.color = driftedColor.withValues(alpha: alpha * 0.3);
+          canvas.drawCircle(Offset(p.x + drawSize * 0.4, p.y + drawSize * 0.3), drawSize * 1.2, _paint);
+          _paint.color = driftedColor.withValues(alpha: alpha * 0.2);
+          canvas.drawCircle(Offset(p.x - drawSize * 0.3, p.y - drawSize * 0.4), drawSize * 1.0, _paint);
+          break;
+        case GlowEffect.plasma:
+          // Swirling electric plasma rings — rotating offset circles
+          _paint.maskFilter = MaskFilter.blur(BlurStyle.solid, drawSize * 0.3);
+          for (final ring in [0, 1, 2]) {
+            final angle = t * 2 + p.phase * 6 + (ring * 2.094); // 120deg offset
+            final rx = p.x + math.cos(angle) * drawSize * 0.8;
+            final ry = p.y + math.sin(angle) * drawSize * 0.8;
+            _paint.color = driftedColor.withValues(alpha: alpha * 0.4 * (1.0 - ring * 0.25));
+            canvas.drawCircle(Offset(rx, ry), drawSize * 0.7, _paint);
+          }
+          break;
+        case GlowEffect.prism:
+          // Rainbow prism refraction — three offset color-split ghosts
+          _paint.maskFilter = MaskFilter.blur(BlurStyle.normal, drawSize * 0.4);
+          final prismColors = [
+            HSLColor.fromAHSL(alpha * 0.4, 0, 0.8, 0.5).toColor(),   // red
+            HSLColor.fromAHSL(alpha * 0.4, 120, 0.8, 0.5).toColor(), // green
+            HSLColor.fromAHSL(alpha * 0.4, 240, 0.8, 0.5).toColor(), // blue
+          ];
+          final offsets = [
+            (drawSize * 0.5, 0.0),
+            (-drawSize * 0.3, drawSize * 0.4),
+            (-drawSize * 0.3, -drawSize * 0.4),
+          ];
+          for (int i = 0; i < 3; i++) {
+            _paint.color = prismColors[i];
+            canvas.drawCircle(
+              Offset(p.x + offsets[i].$1, p.y + offsets[i].$2),
+              drawSize * 1.1,
+              _paint,
+            );
           }
           break;
       }

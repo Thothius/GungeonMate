@@ -17,6 +17,8 @@ import '../widgets/particle_engine.dart'
         ParticleSpeedX,
         GlowEffect,
         GlowEffectX,
+        ParticleShape,
+        PresetConfig,
         ParticleField;
 
 /// Experience Studio — a step-by-step wizard for creating your Gungeon
@@ -1669,22 +1671,32 @@ class _PresetGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Curated preset list — originals + 6 artful + 3 Gungeon-unique.
     final presets = [
+      // Originals
       ParticlePreset.gungeonDust, ParticlePreset.cosmicStars,
       ParticlePreset.forgeEmbers, ParticlePreset.frostShards,
       ParticlePreset.unicornSparkles, ParticlePreset.goldenSparkle,
       ParticlePreset.cursedSmoke, ParticlePreset.bulletHell,
+      // 6 artful
+      ParticlePreset.auroraVeil, ParticlePreset.crystalLattice,
+      ParticlePreset.inkSplatter, ParticlePreset.solarFlare,
+      ParticlePreset.tidePool, ParticlePreset.stainedGlass,
+      // 3 Gungeon-unique
+      ParticlePreset.blankShells, ParticlePreset.hegemonyCredits,
+      ParticlePreset.masterRoundAura,
     ];
     return Wrap(
       spacing: 10, runSpacing: 10,
       children: presets.map((p) {
         final isActive = p == current;
         final flair = AppTheme.flair;
+        final cfg = p.config;
         return GestureDetector(
           onTap: () { VisualPrefs.setParticlePreset(p); Haptics.selection(); },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: isActive ? flair.primary.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(10),
@@ -1696,16 +1708,79 @@ class _PresetGrid extends StatelessWidget {
                   ? [BoxShadow(color: flair.primary.withValues(alpha: 0.1), blurRadius: 6)]
                   : null,
             ),
-            child: GoopText(p.label,
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: isActive ? FontWeight.w900 : FontWeight.w700,
-                    color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.55))),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Visual representation: color swatches + shape icon
+                _PresetVisual(config: cfg, size: 18),
+                const SizedBox(width: 8),
+                GoopText(p.label,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: isActive ? FontWeight.w900 : FontWeight.w700,
+                        color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.55))),
+              ],
+            ),
           ),
         );
       }).toList(),
     );
   }
+}
+
+/// Compact visual representation of a preset — shows the preset's
+/// colors as a horizontal swatch strip + a tiny shape icon.
+class _PresetVisual extends StatelessWidget {
+  final PresetConfig config;
+  final double size;
+  const _PresetVisual({required this.config, required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size + (config.colors.length.clamp(0, 4) * 4),
+      height: size,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
+      ),
+      child: Stack(
+        children: [
+          // Color swatches as horizontal strip
+          Row(
+            children: config.colors.take(4).map((c) => Expanded(
+              child: Container(color: c),
+            )).toList(),
+          ),
+          // Shape icon overlay (centered, semi-transparent)
+          Center(
+            child: Icon(
+              _shapeIcon(config.shape),
+              size: size * 0.7,
+              color: Colors.white.withValues(alpha: 0.85),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconData _shapeIcon(ParticleShape s) => switch (s) {
+        ParticleShape.circle => Icons.circle,
+        ParticleShape.star => Icons.star,
+        ParticleShape.triangle => Icons.change_history,
+        ParticleShape.edge => Icons.square,
+        ParticleShape.bullet => Icons.water_drop,
+        ParticleShape.heart => Icons.favorite,
+        ParticleShape.skull => Icons.warning,
+        ParticleShape.hexagon => Icons.hexagon,
+        ParticleShape.paw => Icons.pets,
+        ParticleShape.crescent => Icons.nightlight,
+        ParticleShape.bolt => Icons.bolt,
+        ParticleShape.shard => Icons.diamond,
+        ParticleShape.smoke => Icons.cloud,
+        ParticleShape.scale => Icons.shield,
+      };
 }
 
 class _SchemaGrid extends StatelessWidget {
@@ -1715,56 +1790,75 @@ class _SchemaGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final schemas = ParticleColorSchema.values;
-    return SizedBox(
-      height: 44,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: schemas.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (_, i) {
-          final s = schemas[i];
-          final isActive = s == current;
-          final colors = s.colors;
-          return GestureDetector(
-            onTap: () { VisualPrefs.setParticleColorSchema(s); Haptics.selection(); },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-              decoration: BoxDecoration(
-                color: isActive ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.04),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: isActive ? Colors.white.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
-                  width: isActive ? 1.4 : 0.8,
-                ),
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: schemas.map((s) {
+        final isActive = s == current;
+        final colors = s.colors;
+        return GestureDetector(
+          onTap: () { VisualPrefs.setParticleColorSchema(s); Haptics.selection(); },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: isActive ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.04),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isActive ? Colors.white.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
+                width: isActive ? 1.4 : 0.8,
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (colors != null)
-                    ...colors.take(3).map((c) => Padding(
-                      padding: const EdgeInsets.only(right: 4),
-                      child: Container(
-                        width: 9, height: 9,
-                        decoration: BoxDecoration(shape: BoxShape.circle, color: c),
-                      ),
-                    ))
-                  else
-                    const Padding(
-                      padding: EdgeInsets.only(right: 4),
-                      child: Icon(Icons.auto_awesome, size: 12, color: Colors.white54),
-                    ),
-                  GoopText(s.label,
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                          color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.55))),
-                ],
-              ),
+              boxShadow: isActive
+                  ? [BoxShadow(color: Colors.white.withValues(alpha: 0.05), blurRadius: 4)]
+                  : null,
             ),
-          );
-        },
-      ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Visual representation: color swatch strip
+                if (colors != null)
+                  Container(
+                    width: 36,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: Row(
+                        children: colors.take(4).map((c) => Expanded(
+                          child: Container(color: c),
+                        )).toList(),
+                      ),
+                    ),
+                  )
+                else
+                  // "Preset Default" / "Theme Match" — icon instead of swatches
+                  Container(
+                    width: 36,
+                    height: 18,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
+                    ),
+                    child: Icon(
+                      s == ParticleColorSchema.presetDefault ? Icons.palette_outlined : Icons.auto_awesome,
+                      size: 12,
+                      color: Colors.white54,
+                    ),
+                  ),
+                const SizedBox(width: 8),
+                GoopText(s.label,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+                        color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.55))),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -1813,39 +1907,36 @@ class _GlowRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: GlowEffect.values.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (_, i) {
-          final e = GlowEffect.values[i];
-          final isActive = e == current;
-          final flair = AppTheme.flair;
-          return GestureDetector(
-            onTap: () { VisualPrefs.setParticleGlowEffect(e); Haptics.selection(); },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              decoration: BoxDecoration(
-                color: isActive ? flair.card.withValues(alpha: 0.9) : flair.card.withValues(alpha: 0.5),
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: isActive ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
-                  width: isActive ? 1.5 : 1.0,
-                ),
+    final flair = AppTheme.flair;
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: GlowEffect.values.map((e) {
+        final isActive = e == current;
+        return GestureDetector(
+          onTap: () { VisualPrefs.setParticleGlowEffect(e); Haptics.selection(); },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: isActive ? flair.card.withValues(alpha: 0.9) : flair.card.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isActive ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                width: isActive ? 1.5 : 1.0,
               ),
-              child: Center(
-                child: GoopText(e.label,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w900,
-                        color: isActive ? Colors.white : Colors.white54)),
-              ),
+              boxShadow: isActive
+                  ? [BoxShadow(color: flair.primary.withValues(alpha: 0.1), blurRadius: 6)]
+                  : null,
             ),
-          );
-        },
-      ),
+            child: GoopText(e.label,
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    color: isActive ? Colors.white : Colors.white54)),
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -2225,35 +2316,77 @@ class _GlowColorRow extends StatelessWidget {
   final int currentIndex;
   const _GlowColorRow({required this.currentIndex});
 
+  // Names for the 12 curated glow colors (mirrors VisualPrefs.glowColors
+  // order). Defined here because VisualPrefs.glowColors lives in
+  // app_theme.dart which is another agent's file-in-progress.
+  static const _names = [
+    'Abyssal Blue',
+    'Curse Crimson',
+    'Forge Amber',
+    'Frost Cyan',
+    'Toxic Green',
+    'Void Purple',
+    'Gungeon Gold',
+    'Shadow Indigo',
+    'Blood Rose',
+    'Ethereal Teal',
+    'Magenta Pulse',
+    'Obsidian Grey',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final colors = VisualPrefs.glowColors;
-    return SizedBox(
-      height: 40,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: colors.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
-        itemBuilder: (_, i) {
-          final c = colors[i];
-          final isSelected = i == currentIndex;
-          return GestureDetector(
-            onTap: () { VisualPrefs.setGlowColorIndex(i); Haptics.selection(); },
-            child: Container(
-              width: 36, height: 36,
-              decoration: BoxDecoration(
-                color: c,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.15),
-                  width: isSelected ? 2.5 : 1.0,
-                ),
-                boxShadow: isSelected ? [BoxShadow(color: c.withValues(alpha: 0.5), blurRadius: 8)] : null,
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: List.generate(colors.length, (i) {
+        final c = colors[i];
+        final isSelected = i == currentIndex;
+        final name = i < _names.length ? _names[i] : 'Color ${i + 1}';
+        return GestureDetector(
+          onTap: () { VisualPrefs.setGlowColorIndex(i); Haptics.selection(); },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.04),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.08),
+                width: isSelected ? 2.0 : 1.0,
               ),
+              boxShadow: isSelected
+                  ? [BoxShadow(color: c.withValues(alpha: 0.4), blurRadius: 8)]
+                  : null,
             ),
-          );
-        },
-      ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Color swatch
+                Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    color: c,
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(
+                      color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.15),
+                      width: isSelected ? 1.5 : 0.8,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                GoopText(name,
+                    style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                        color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.55))),
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }
