@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.9.45",
+    "title": "Synergy Pill + Robot DMG Badge + Big Stat Views + Panel Pills",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Synergy pill now shows active|partial count (e.g. 3|5) so users can see potential synergies at a glance. Partial count is lit up when > 0.",
+      "REWORK: AllSynergiesScreen redesigned with two-column layout — ACQUIRED (active + partial) on the left, NOT ACQUIRED (locked) on the right. Summary chips at top show counts.",
+      "FEATURE: Robot +DMG cyber badge next to avatar — monospace styled number with cyan glow, showing the Robot's damage boost percentage. Only appears when playing as Robot.",
+      "REWORK: Coolness and Curse sheets now show the number BIG (56px) with inline +/- circular buttons right next to it. No more middleman 'View Breakdown' button — the breakdown info is inline.",
+      "REWORK: Shrine pill now uses the same pill mechanic as other panels — tap toggles shrine panel on/off (with info dialog if no shrines used), long-press opens shrine picker.",
+      "INFRASTRUCTURE: RunProvider.getPartialSynergies() added for counting potential synergies."
+    ]
+  },
+  {
     "version": "v1.9.44",
     "title": "Home Screen Toggle Unification + 16 New Vortex Floaters",
     "date": "August 2026",

@@ -159,7 +159,15 @@ class PlayerPageState extends State<PlayerPage> {
     }
     final activeSynergies =
         isMain ? p.getActiveSynergies().length : 0;
+    final partialSynergies =
+        isMain ? p.getPartialSynergies().length : 0;
     final hasCoop = state.hasCoop;
+    // Robot +DMG boost for the cyber badge next to the avatar.
+    final isRobot = player.character!.name.toLowerCase().contains('robot');
+    final robotDmgBoost = isRobot
+        ? (p.robotJunk + (p.robotLies ? 1 : 0)) * 5.0 +
+            (p.robotGoldJunk ? 500.0 : 0.0)
+        : 0.0;
 
     // For multiplayer: only allow transfers when connected.
     // For local co-op: allow transfers whenever hasCoop.
@@ -206,9 +214,11 @@ class PlayerPageState extends State<PlayerPage> {
               gunCount: player.guns.length,
               itemCount: player.items.length,
               activeSynergies: activeSynergies,
+              partialSynergies: partialSynergies,
               showSynergies: isMain,
               coolness: state.totalCoolness,
               curse: state.totalCurse,
+              robotDamageBoost: robotDmgBoost,
               onTapCoolness: () => _showCoolnessSheet(context),
               onTapCurse: () => _showCurseSheet(context),
               onLongPressCoolness: () =>
@@ -275,8 +285,9 @@ class PlayerPageState extends State<PlayerPage> {
                       );
                     },
                   ),
-                  // Shrine tracker — tap to open the shrine picker,
-                  // long-press to toggle the shrine usage panel.
+                  // Shrine tracker — pill mechanic: tap toggles shrine
+                  // panel on/off (shows info if no shrines used yet).
+                  // Long-press opens the shrine picker screen.
                   ListenableBuilder(
                     listenable: VisualPrefs.notifier,
                     builder: (context, _) {
@@ -286,14 +297,18 @@ class PlayerPageState extends State<PlayerPage> {
                         icon: Icons.temple_buddhist,
                         label: 'Shrine',
                         color: color,
-                        tooltip: 'Shrine Picker',
+                        tooltip: 'Tap: toggle shrine panel · Long-press: shrine picker',
                         onTap: () {
                           Haptics.selection();
-                          Navigator.push(context, fastRoute(const ShrinePickerScreen()));
+                          if (state.shrinesUsed.isEmpty) {
+                            _showGungeonInfo(context, 'No Shrines', 'No shrines used yet. Long-press to open the shrine picker and track shrines you\'ve used this run.');
+                            return;
+                          }
+                          VisualPrefs.setShowShrinePanel(!isOn);
                         },
                         onLongPress: () {
-                          VisualPrefs.setShowShrinePanel(!isOn);
                           Haptics.selection();
+                          Navigator.push(context, fastRoute(const ShrinePickerScreen()));
                         },
                       );
                     },
