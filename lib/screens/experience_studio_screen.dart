@@ -21,17 +21,12 @@ import '../widgets/particle_engine.dart'
         PresetConfig,
         ParticleField;
 
-/// Experience Studio — a step-by-step wizard for creating your Gungeon
-/// Mate experience. A persistent live preview at the top shows exactly
-/// how your choices look together. Five focused steps:
-///
-/// 1. Theme — base palette (10 themes)
-/// 2. Palette — variants (Unicorn/remix/custom colors)
-/// 3. Particles — preset, color schema, speed, studio controls
-/// 4. Typography — font family, base size, inventory size, weight
-/// 5. Ambiance — glow, dialogue haptics, text speed
-///
-/// Changes preview instantly. Apply commits everything at the end.
+/// Experience Studio — a tabbed picker for creating your Gungeon Mate
+/// experience. Four tabs (Theme, Particles, Typography, Ambiance) sit
+/// on top. A side bookmark button on the right edge slides in a
+/// fullscreen preview showing the theme splash + sample UI scene in
+/// full glory. Tap anywhere to dismiss the preview and return to the
+/// picker. Apply commits everything.
 class ExperienceStudioScreen extends StatefulWidget {
   const ExperienceStudioScreen({super.key});
 
@@ -39,13 +34,21 @@ class ExperienceStudioScreen extends StatefulWidget {
   State<ExperienceStudioScreen> createState() => _ExperienceStudioScreenState();
 }
 
-class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
-  int _step = 0;
+class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
+    with SingleTickerProviderStateMixin {
+  int _tab = 0;
   late AppThemeMode _previewMode;
-  // Store original state so Reset restores to what the user had, not
-  // to hardcoded defaults. Prevents data loss if Reset is tapped by
-  // accident.
   late final AppThemeMode _originalMode;
+  bool _previewOpen = false;
+  late final AnimationController _previewAnim;
+
+  static const _tabLabels = ['Theme', 'Particles', 'Typography', 'Ambiance'];
+  static const _tabIcons = [
+    Icons.palette_rounded,
+    Icons.scatter_plot_rounded,
+    Icons.text_fields_rounded,
+    Icons.blur_on_rounded,
+  ];
 
   @override
   void initState() {
@@ -53,35 +56,34 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     _previewMode = AppTheme.mode;
     _originalMode = AppTheme.mode;
     AppTheme.previewNotifier.value = _previewMode;
+    _previewAnim = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
   }
 
   @override
   void dispose() {
     AppTheme.previewNotifier.value = null;
+    _previewAnim.dispose();
     super.dispose();
   }
-
-  static const _stepLabels = [
-    'Theme',
-    'Palette',
-    'Particles',
-    'Typography',
-    'Ambiance',
-  ];
-
-  static const _stepDescriptions = [
-    'Pick your base palette',
-    'Fine-tune color variants',
-    'Ambient particle effects',
-    'Fonts and text sizing',
-    'Screen glow and feel',
-  ];
 
   void _applyAndClose() {
     Haptics.success();
     AppTheme.previewNotifier.value = null;
     AppTheme.setMode(_previewMode);
     if (Navigator.of(context).canPop()) Navigator.of(context).pop();
+  }
+
+  void _togglePreview() {
+    Haptics.selection();
+    setState(() => _previewOpen = !_previewOpen);
+    if (_previewOpen) {
+      _previewAnim.forward();
+    } else {
+      _previewAnim.reverse();
+    }
   }
 
   @override
@@ -95,47 +97,25 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              // ── AppBar ──
-              _buildTopBar(),
-              // ── Live preview (always visible) ──
-              _LivePreview(),
-              // ── Step header with progress bar ──
-              _buildStepHeader(),
-              // ── Step content (animated transition between steps) ──
-              Expanded(
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  switchInCurve: Curves.easeOutCubic,
-                  switchOutCurve: Curves.easeInCubic,
-                  transitionBuilder: (child, anim) {
-                    // Slide + fade: incoming slides from right, outgoing fades left
-                    final offset = child.key == ValueKey(_step)
-                        ? Tween<Offset>(
-                            begin: const Offset(0.15, 0),
-                            end: Offset.zero,
-                          ).animate(anim)
-                        : Tween<Offset>(
-                            begin: Offset.zero,
-                            end: const Offset(-0.15, 0),
-                          ).animate(anim);
-                    return FadeTransition(
-                      opacity: anim,
-                      child: SlideTransition(
-                        position: offset,
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: KeyedSubtree(
-                    key: ValueKey(_step),
-                    child: _buildStepContent(),
-                  ),
-                ),
+              // ── Main picker layout ──
+              Column(
+                children: [
+                  _buildTopBar(),
+                  _buildTabBar(),
+                  Expanded(child: _buildTabContent()),
+                ],
               ),
-              // ── Navigation bar ──
-              _buildNavBar(),
+              // ── Side bookmark button (right edge) ──
+              Positioned(
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: _buildPreviewBookmark(),
+              ),
+              // ── Slide-in fullscreen preview ──
+              if (_previewOpen) _buildFullscreenPreview(),
             ],
           ),
         ),
@@ -167,7 +147,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           ),
           const Spacer(),
           ScaleButton(
-            onTap: () => _showResetDialog(),
+            onTap: _showResetDialog,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
@@ -196,158 +176,128 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               ),
             ),
           ),
+          const SizedBox(width: 8),
+          // Apply — always visible in top bar
+          ScaleButton(
+            onTap: _applyAndClose,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+              decoration: BoxDecoration(
+                color: flair.primary,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: flair.primary.withValues(alpha: 0.3),
+                    blurRadius: 8,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.check_rounded, size: 14, color: flair.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white),
+                  const SizedBox(width: 5),
+                  GoopText(
+                    'APPLY',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      color: flair.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  /// Build a clear, big step header that shows the current step number,
-  /// step name, a one-line description, and a progress bar. This replaces
-  /// the old tiny dot indicator — 2026 mobile UX demands the user always
-  /// knows where they are and what's next at a glance.
-  Widget _buildStepHeader() {
+  Widget _buildTabBar() {
     final flair = AppTheme.flair;
-    final visibleIndices = List.generate(_stepLabels.length, (i) => i)
-        .where((i) => i != 1 || _hasVariants())
-        .toList();
-    final visibleStep = visibleIndices.indexOf(_step);
-    final totalVisible = visibleIndices.length;
-    final progress = (visibleStep + 1) / totalVisible;
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 2, 16, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Step counter + step name
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              GoopText(
-                '${visibleStep + 1}',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  color: flair.primary,
-                  height: 1.0,
-                ),
-              ),
-              GoopText(
-                ' / $totalVisible',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.4),
-                  height: 1.0,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: GoopText(
-                  _stepLabels[_step].toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white.withValues(alpha: 0.85),
-                    letterSpacing: 1.2,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          // One-line description
-          GoopText(
-            _stepDescriptions[_step],
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.white.withValues(alpha: 0.45),
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 8),
-          // Progress bar — clean, thick, themed
-          ClipRRect(
-            borderRadius: BorderRadius.circular(3),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 4,
-              backgroundColor: Colors.white.withValues(alpha: 0.08),
-              valueColor: AlwaysStoppedAnimation(flair.primary),
-            ),
-          ),
-          // Tappable step chips for quick navigation
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 36,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: visibleIndices.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
-              itemBuilder: (context, idx) {
-                final stepIdx = visibleIndices[idx];
-                final isCurrent = stepIdx == _step;
-                final isDone = stepIdx < _step;
-                return GestureDetector(
-                  onTap: () => _goTo(stepIdx),
-                  behavior: HitTestBehavior.opaque,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-                    decoration: BoxDecoration(
-                      color: isCurrent
-                          ? flair.primary.withValues(alpha: 0.2)
-                          : isDone
-                              ? flair.primary.withValues(alpha: 0.08)
-                              : Colors.white.withValues(alpha: 0.04),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isCurrent
-                            ? flair.primary.withValues(alpha: 0.7)
-                            : isDone
-                                ? flair.primary.withValues(alpha: 0.25)
-                                : Colors.white.withValues(alpha: 0.1),
-                        width: isCurrent ? 1.4 : 1.0,
-                      ),
-                      boxShadow: isCurrent
-                          ? [
-                              BoxShadow(
-                                color: flair.primary.withValues(alpha: 0.15),
-                                blurRadius: 6,
-                                spreadRadius: 0,
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Center(
-                      child: GoopText(
-                        _stepLabels[stepIdx],
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: isCurrent ? FontWeight.w900 : FontWeight.w700,
-                          color: isCurrent
-                              ? flair.primary
-                              : isDone
-                                  ? flair.primary.withValues(alpha: 0.5)
-                                  : Colors.white.withValues(alpha: 0.4),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+    return Container(
+      margin: const EdgeInsets.fromLTRB(12, 2, 60, 4),
+      child: Row(
+        children: List.generate(_tabLabels.length, (i) {
+          final isCurrent = i == _tab;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Haptics.selection();
+                setState(() => _tab = i);
               },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: isCurrent
+                      ? flair.primary.withValues(alpha: 0.15)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isCurrent
+                        ? flair.primary.withValues(alpha: 0.5)
+                        : Colors.white.withValues(alpha: 0.08),
+                    width: isCurrent ? 1.2 : 1.0,
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _tabIcons[i],
+                      size: 18,
+                      color: isCurrent ? flair.primary : Colors.white.withValues(alpha: 0.4),
+                    ),
+                    const SizedBox(height: 4),
+                    GoopText(
+                      _tabLabels[i].toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w900,
+                        color: isCurrent ? flair.primary : Colors.white.withValues(alpha: 0.4),
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          );
+        }),
       ),
     );
   }
 
-  Widget _buildStepContent() {
-    switch (_step) {
+  Widget _buildTabContent() {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      transitionBuilder: (child, anim) {
+        return FadeTransition(
+          opacity: anim,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.1, 0),
+              end: Offset.zero,
+            ).animate(anim),
+            child: child,
+          ),
+        );
+      },
+      child: KeyedSubtree(
+        key: ValueKey(_tab),
+        child: _buildTabWidget(),
+      ),
+    );
+  }
+
+  Widget _buildTabWidget() {
+    switch (_tab) {
       case 0:
         return _ThemeStep(
           previewMode: _previewMode,
@@ -355,9 +305,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             setState(() => _previewMode = m);
             AppTheme.previewNotifier.value = m;
           },
-          // Long-press a theme card: commit it immediately and close the
-          // studio. Skips the rest of the wizard for users who just want
-          // to switch themes.
           onQuickApply: (m) {
             setState(() => _previewMode = m);
             AppTheme.previewNotifier.value = m;
@@ -365,225 +312,106 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           },
         );
       case 1:
-        return _PaletteStep(
-          previewMode: _previewMode,
-          onRefresh: () => setState(() {}),
-        );
-      case 2:
         return const _ParticlesStep();
-      case 3:
+      case 2:
         return const _TypographyStep();
-      case 4:
+      case 3:
         return const _AmbianceStep();
       default:
         return const SizedBox.shrink();
     }
   }
 
-  Widget _buildNavBar() {
-    final isLast = _step == _stepLabels.length - 1;
+  /// Side bookmark button on the right edge — tap to slide in the
+  /// fullscreen preview.
+  Widget _buildPreviewBookmark() {
     final flair = AppTheme.flair;
-    final onPrimary = flair.primary.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
-
-    // Figure out the next step name for context (e.g. "Next: Particles")
-    final visibleIndices = List.generate(_stepLabels.length, (i) => i)
-        .where((i) => i != 1 || _hasVariants())
-        .toList();
-    final currentVisibleIdx = visibleIndices.indexOf(_step);
-    final hasNext = currentVisibleIdx < visibleIndices.length - 1;
-    final nextStepName = hasNext ? _stepLabels[visibleIndices[currentVisibleIdx + 1]] : '';
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Primary action — big, full-width, clear
-          if (isLast)
-            // Last step: APPLY is the hero
-            ScaleButton(
-              onTap: _applyAndClose,
-              child: Container(
-                height: 52,
-                decoration: BoxDecoration(
-                  color: flair.primary,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: flair.primary, width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: flair.primary.withValues(alpha: 0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.check_circle_rounded, size: 20, color: onPrimary),
-                    const SizedBox(width: 8),
-                    GoopText(
-                      'APPLY & SAVE',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
-                        color: onPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          else
-            // Non-last step: NEXT is the hero, with context label.
-            // Extra glow + pulse animation so it's impossible to miss.
-            ScaleButton(
-              onTap: () => _goTo(_step + 1),
-              child: Container(
-                height: 52,
-                decoration: BoxDecoration(
-                  color: flair.primary,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: flair.primary, width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: flair.primary.withValues(alpha: 0.4),
-                      blurRadius: 16,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 3),
-                    ),
-                    BoxShadow(
-                      color: flair.primary.withValues(alpha: 0.2),
-                      blurRadius: 24,
-                      spreadRadius: 4,
-                      offset: Offset.zero,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GoopText(
-                      'NEXT',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                        color: onPrimary,
-                        shadows: [
-                          Shadow(
-                            color: onPrimary.withValues(alpha: 0.3),
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: onPrimary.withValues(alpha: 0.18),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: GoopText(
-                        nextStepName,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          color: onPrimary.withValues(alpha: 0.8),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Icon(Icons.arrow_forward_rounded, size: 20, color: onPrimary),
-                  ],
-                ),
-              ),
-            )
-                .animate(onPlay: (c) => c.repeat(reverse: true))
-                .shimmer(
-                  duration: 1800.ms,
-                  color: onPrimary.withValues(alpha: 0.15),
-                ),
-          const SizedBox(height: 8),
-          // Secondary row: Back (left) + Apply (right, smaller)
-          Row(
-            children: [
-              if (_step > 0)
-                ScaleButton(
-                  onTap: () => _goTo(_step - 1),
-                  child: Container(
-                    height: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.06),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.12),
-                        width: 1.0,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.arrow_back_rounded, size: 15, color: Colors.white60),
-                        const SizedBox(width: 6),
-                        GoopText(
-                          'BACK',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white60,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              else
-                const SizedBox(width: 80),
-              const Spacer(),
-              if (!isLast)
-                ScaleButton(
-                  onTap: _applyAndClose,
-                  child: Container(
-                    height: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: flair.primary.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: flair.primary.withValues(alpha: 0.3),
-                        width: 1.0,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.check_rounded, size: 15, color: flair.primary),
-                        const SizedBox(width: 6),
-                        GoopText(
-                          'APPLY',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: flair.primary,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
+    return GestureDetector(
+      onTap: _togglePreview,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: 44,
+        margin: const EdgeInsets.symmetric(vertical: 80),
+        decoration: BoxDecoration(
+          color: flair.primary.withValues(alpha: 0.15),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(12),
+            bottomLeft: Radius.circular(12),
           ),
-        ],
+          border: Border.all(
+            color: flair.primary.withValues(alpha: 0.4),
+            width: 1.0,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _previewOpen ? Icons.close_rounded : Icons.visibility_rounded,
+              size: 20,
+              color: flair.primary,
+            ),
+            const SizedBox(height: 8),
+            RotatedBox(
+              quarterTurns: 1,
+              child: GoopText(
+                'PREVIEW',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  color: flair.primary,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Fullscreen slide-in preview — shows the theme splash + sample UI
+  /// scene in full glory. Tap anywhere to dismiss.
+  Widget _buildFullscreenPreview() {
+    return GestureDetector(
+      onTap: _togglePreview,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedBuilder(
+        animation: _previewAnim,
+        builder: (context, child) {
+          return Opacity(
+            opacity: _previewAnim.value,
+            child: child,
+          );
+        },
+        child: Container(
+          color: Colors.black.withValues(alpha: 0.95),
+          child: SafeArea(
+            child: Stack(
+              children: [
+                // Fullscreen preview content
+                Center(child: _FullscreenPreview()),
+                // Close hint
+                Positioned(
+                  bottom: 30,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: GoopText(
+                      'Tap anywhere to close',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white.withValues(alpha: 0.4),
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -620,53 +448,21 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 
   void _resetAll() {
     Haptics.selection();
-    // Restore to the user's original state, not to arbitrary defaults.
-    // This prevents accidental data loss from the Reset button.
     setState(() {
       _previewMode = _originalMode;
       AppTheme.previewNotifier.value = _originalMode;
     });
   }
-
-  /// Check if the current preview theme has palette variants (Step 2).
-  bool _hasVariants() {
-    return _previewMode == AppThemeMode.unicorn ||
-        kThemeRemixes.containsKey(_previewMode) ||
-        _previewMode == AppThemeMode.custom;
-  }
-
-  /// Navigate to a step, auto-skipping Step 2 (Palette) when the
-  /// current theme has no variants. Prevents the dead-end "no variants"
-  /// screen from being shown.
-  void _goTo(int i) {
-    if (i < 0 || i >= _stepLabels.length) return;
-    // Skip Step 2 (Palette) if no variants available
-    if (i == 1 && !_hasVariants()) {
-      // Skip forward or backward past it
-      if (i > _step) {
-        i = 2; // skip to Particles
-      } else {
-        i = 0; // skip back to Theme
-      }
-    }
-    Haptics.selection();
-    setState(() => _step = i);
-  }
 }
 
 // =============================================================================
-// LIVE PREVIEW — mini app scene with card, text, particles, button
+// FULLSCREEN PREVIEW — theme splash + rich sample UI scene in full glory
 // =============================================================================
 
-class _LivePreview extends StatelessWidget {
+class _FullscreenPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
-
-    // Listen to BOTH previewNotifier (theme changes) and VisualPrefs
-    // (particle/font/glow changes) so the preview updates instantly on
-    // any setting change. Uses displayedFlair (preview mode) not flair
-    // (committed mode) so the preview reflects the un-applied theme.
     return ValueListenableBuilder<AppThemeMode?>(
       valueListenable: AppTheme.previewNotifier,
       builder: (context, previewMode, _) {
@@ -674,16 +470,15 @@ class _LivePreview extends StatelessWidget {
         return ValueListenableBuilder<VisualPrefs>(
           valueListenable: VisualPrefs.notifier,
           builder: (context, prefs, _) {
-            return _buildPreview(flair, prefs, sf);
+            return _buildScene(flair, prefs, sf);
           },
         );
       },
     );
   }
 
-  Widget _buildPreview(ThemeFlair flair, VisualPrefs prefs, double sf) {
-    // Resolve particle colors — mirrors ThemeOverlay's logic so the
-    // preview shows the same colors as the real background.
+  Widget _buildScene(ThemeFlair flair, VisualPrefs prefs, double sf) {
+    // Resolve particle colors
     List<Color>? particleColors;
     if (prefs.particleColorSchema != ParticleColorSchema.presetDefault) {
       if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
@@ -692,281 +487,420 @@ class _LivePreview extends StatelessWidget {
         particleColors = prefs.particleColorSchema.colors;
       }
     }
-
-    // Determine if particles should show: either explicitly enabled or
-    // the theme has an auto-on default (non-gungeonDust themes).
     final themeDefault = kThemeParticleDefaults[AppTheme.displayedMode] ??
         ParticlePreset.gungeonDust;
     final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
     final particlesOn = prefs.particlesEnabled || themeAutoOn;
 
-    return Container(
-          height: 160 * sf,
-          margin: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-          decoration: BoxDecoration(
-            color: flair.scaffold.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: flair.primary.withValues(alpha: 0.25),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: flair.primary.withValues(alpha: 0.08),
-                blurRadius: 8,
-                spreadRadius: 0,
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: flair.scaffold,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: flair.primary.withValues(alpha: 0.3),
+            width: 2,
           ),
-          clipBehavior: Clip.hardEdge,
-          child: Stack(
-            children: [
-              // ── "LIVE PREVIEW" label badge (top-left corner) ──
-              Positioned(
-                top: 0,
-                left: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: flair.primary.withValues(alpha: 0.2),
-                    borderRadius: const BorderRadius.only(
-                      bottomRight: Radius.circular(8),
-                    ),
-                    border: Border(
-                      right: BorderSide(color: flair.primary.withValues(alpha: 0.3), width: 1),
-                      bottom: BorderSide(color: flair.primary.withValues(alpha: 0.3), width: 1),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.visibility_rounded, size: 10, color: flair.primary),
-                      const SizedBox(width: 4),
-                      GoopText(
-                        'LIVE PREVIEW',
-                        style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w900,
-                          color: flair.primary,
-                          letterSpacing: 1.0,
-                        ),
-                      ),
-                    ],
-                  ),
+          boxShadow: [
+            BoxShadow(
+              color: flair.primary.withValues(alpha: 0.15),
+              blurRadius: 24,
+              spreadRadius: 4,
+            ),
+          ],
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // ── Theme splash image as full background ──
+            if (AppTheme.displayedMode.splashSlug.isNotEmpty)
+              Positioned.fill(
+                child: Image.asset(
+                  'assets/images/themes/splash/${AppTheme.displayedMode.splashSlug}.jpg',
+                  fit: BoxFit.cover,
+                  opacity: AlwaysStoppedAnimation(0.55),
                 ),
               ),
-              // ── Mini particle engine (behind everything) ──
-              if (particlesOn)
-                Positioned.fill(
-                  child: ParticleField(
-                    preset: prefs.particlePreset,
-                    count: (prefs.particleCount * 0.5).round().clamp(4, 16),
-                    sizeScale: prefs.particleSizeScale * 0.7,
-                    opacity: prefs.particleOpacity,
-                    glowOverride: prefs.particleGlowEffect,
-                    lineLinksOverride: prefs.particleLineLinks ? true : null,
-                    colorsOverride: particleColors,
-                    bounce: prefs.particleBounce,
-                    speedMultiplier: prefs.particleSpeed.multiplier,
-                  ),
+            // ── Particle field ──
+            if (particlesOn)
+              Positioned.fill(
+                child: ParticleField(
+                  preset: prefs.particlePreset,
+                  count: (prefs.particleCount * 0.8).round().clamp(8, 30),
+                  sizeScale: prefs.particleSizeScale,
+                  opacity: prefs.particleOpacity,
+                  glowOverride: prefs.particleGlowEffect,
+                  lineLinksOverride: prefs.particleLineLinks ? true : null,
+                  colorsOverride: particleColors,
+                  bounce: prefs.particleBounce,
+                  speedMultiplier: prefs.particleSpeed.multiplier,
                 ),
-              // Glow overlay
-              if (prefs.glowIntensity > 0)
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        center: Alignment.center,
-                        radius: 1.2,
-                        colors: [
-                          VisualPrefs.glowColors[prefs.glowColorIndex]
-                              .withValues(alpha: prefs.glowIntensity * 0.3),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              // Subtle scrim behind content for readability over particles
+              ),
+            // ── Glow overlay ──
+            if (prefs.glowIntensity > 0)
               Positioned.fill(
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                    gradient: RadialGradient(
+                      center: Alignment.center,
+                      radius: 1.5,
                       colors: [
-                        flair.scaffold.withValues(alpha: 0.3),
-                        flair.scaffold.withValues(alpha: 0.5),
+                        VisualPrefs.glowColors[prefs.glowColorIndex]
+                            .withValues(alpha: prefs.glowIntensity * 0.4),
+                        Colors.transparent,
                       ],
                     ),
                   ),
                 ),
               ),
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(12),
+            // ── Dark scrim for content readability ──
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      flair.scaffold.withValues(alpha: 0.3),
+                      flair.scaffold.withValues(alpha: 0.85),
+                    ],
+                    stops: const [0.0, 0.5],
+                  ),
+                ),
+              ),
+            ),
+            // ── Theme name header ──
+            Positioned(
+              top: 20,
+              left: 0,
+              right: 0,
+              child: Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Sample item card
-                    Row(
-                      children: [
-                        // Mini card with quality badge
-                        Container(
-                          width: 48 * sf,
-                          height: 48 * sf,
-                          decoration: BoxDecoration(
-                            color: flair.card,
-                            borderRadius: BorderRadius.circular(flair.chipRadius),
-                            border: Border.all(
-                              color: flair.primary.withValues(alpha: 0.3),
-                              width: 1.0,
-                            ),
-                          ),
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: Icon(Icons.gps_fixed,
-                                    size: 22 * sf,
-                                    color: flair.primary.withValues(alpha: 0.6)),
-                              ),
-                              Positioned(
-                                top: 3,
-                                right: 3,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 1),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFD700),
-                                    borderRadius: BorderRadius.circular(3),
-                                  ),
-                                  child: GoopText('A',
-                                      style: TextStyle(
-                                        fontSize: 7 * sf,
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.black,
-                                      )),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        // Sample text in selected font + size
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GoopText(
-                                'Sample Gun Name',
-                                style: prefs.font.textStyle.copyWith(
-                                  fontSize: (prefs.fontSize * 0.7 * sf)
-                                      .clamp(8.0, 16.0),
-                                  fontWeight: FontWeight.w800,
-                                  color: flair.headlineStat,
-                                  height: 1.2,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              GoopText(
-                                'A semiautomatic pistol with decent damage',
-                                style: prefs.font.textStyle.copyWith(
-                                  fontSize: (prefs.fontSize * 0.55 * sf)
-                                      .clamp(7.0, 12.0),
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.white.withValues(alpha: 0.5),
-                                  height: 1.3,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    GoopText(
+                      AppTheme.displayedMode.label.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 24 * sf,
+                        fontWeight: FontWeight.w900,
+                        color: flair.headlineStat,
+                        letterSpacing: 3,
+                        shadows: [
+                          Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 8),
+                        ],
+                      ),
                     ),
-                    // Sample button + chip row
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: flair.primary,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: GoopText(
-                            'Sample Button',
-                            style: TextStyle(
-                              fontSize: 9 * sf,
-                              fontWeight: FontWeight.w800,
-                              color: flair.primary.computeLuminance() > 0.5
-                                  ? Colors.black87
-                                  : Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: flair.secondary.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                                color: flair.secondary.withValues(alpha: 0.4)),
-                          ),
-                          child: GoopText(
-                            '✓ Chip',
-                            style: TextStyle(
-                              fontSize: 8 * sf,
-                              fontWeight: FontWeight.w700,
-                              color: flair.secondary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Stat row
-                    Row(
-                      children: [
-                        _miniStat('DMG', '56.0', flair, sf),
-                        const SizedBox(width: 6),
-                        _miniStat('DPS', '168', flair, sf),
-                        const SizedBox(width: 6),
-                        _miniStat('AMMO', '300', flair, sf),
-                      ],
+                    const SizedBox(height: 4),
+                    GoopText(
+                      AppTheme.displayedMode.vibe,
+                      style: TextStyle(
+                        fontSize: 12 * sf,
+                        fontWeight: FontWeight.w700,
+                        color: flair.primary,
+                        letterSpacing: 2,
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-        );
+            ),
+            // ── Sample UI scene (centered, rich) ──
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Sample item card with 2.5D depth
+                    _sampleItemCard(flair, prefs, sf),
+                    const SizedBox(height: 12),
+                    // Sample stat row
+                    _sampleStatRow(flair, sf),
+                    const SizedBox(height: 12),
+                    // Sample button + chip
+                    _sampleButtonRow(flair, prefs, sf),
+                    const SizedBox(height: 16),
+                    // Sample synergy glow
+                    _sampleSynergyGlow(flair, sf),
+                  ],
+                ),
+              ),
+            ),
+            // ── Color palette strip (bottom) ──
+            Positioned(
+              bottom: 20,
+              left: 20,
+              right: 20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _paletteDot(flair.scaffold, 'Scaffold', sf),
+                  const SizedBox(width: 10),
+                  _paletteDot(flair.card, 'Card', sf),
+                  const SizedBox(width: 10),
+                  _paletteDot(flair.primary, 'Primary', sf),
+                  const SizedBox(width: 10),
+                  _paletteDot(flair.secondary, 'Secondary', sf),
+                  const SizedBox(width: 10),
+                  _paletteDot(flair.headlineStat, 'Accent', sf),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget _miniStat(String label, String value, ThemeFlair flair, double sf) {
+  Widget _sampleItemCard(ThemeFlair flair, VisualPrefs prefs, double sf) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(color: flair.primary.withValues(alpha: 0.1)),
+        color: flair.card.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(flair.cardRadius.toDouble()),
+        border: Border.all(
+          color: flair.primary.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.4),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Item icon with quality badge
+          Container(
+            width: 56 * sf,
+            height: 56 * sf,
+            decoration: BoxDecoration(
+              color: flair.scaffold,
+              borderRadius: BorderRadius.circular(flair.chipRadius.toDouble()),
+              border: Border.all(
+                color: flair.primary.withValues(alpha: 0.4),
+                width: 1,
+              ),
+            ),
+            child: Stack(
+              children: [
+                Center(
+                  child: Icon(Icons.gps_fixed,
+                      size: 28 * sf,
+                      color: flair.primary.withValues(alpha: 0.7)),
+                ),
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFD700),
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    child: GoopText('A',
+                        style: TextStyle(
+                          fontSize: 9 * sf,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                        )),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Item text in selected font
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(
+                  'Sample Gun Name',
+                  style: prefs.font.textStyle.copyWith(
+                    fontSize: (16 * sf).clamp(10.0, 20.0),
+                    fontWeight: FontWeight.w800,
+                    color: flair.headlineStat,
+                    height: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                GoopText(
+                  'A semiautomatic pistol with decent damage and good synergy potential',
+                  style: prefs.font.textStyle.copyWith(
+                    fontSize: (11 * sf).clamp(8.0, 14.0),
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white.withValues(alpha: 0.5),
+                    height: 1.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sampleStatRow(ThemeFlair flair, double sf) {
+    return Row(
+      children: [
+        _statChip('DMG', '56.0', flair, sf),
+        const SizedBox(width: 8),
+        _statChip('DPS', '168', flair, sf),
+        const SizedBox(width: 8),
+        _statChip('AMMO', '300', flair, sf),
+        const SizedBox(width: 8),
+        _statChip('RATE', '4.2', flair, sf),
+      ],
+    );
+  }
+
+  Widget _statChip(String label, String value, ThemeFlair flair, double sf) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: flair.primary.withValues(alpha: 0.15)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GoopText(label,
+                style: TextStyle(
+                    fontSize: 8 * sf,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white.withValues(alpha: 0.4))),
+            const SizedBox(height: 2),
+            GoopText(value,
+                style: TextStyle(
+                    fontSize: 14 * sf,
+                    fontWeight: FontWeight.w900,
+                    color: flair.headlineStat)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _sampleButtonRow(ThemeFlair flair, VisualPrefs prefs, double sf) {
+    final onPrimary = flair.primary.computeLuminance() > 0.5
+        ? Colors.black87
+        : Colors.white;
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: flair.primary,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: flair.primary.withValues(alpha: 0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: GoopText(
+            'Sample Button',
+            style: TextStyle(
+              fontSize: 12 * sf,
+              fontWeight: FontWeight.w800,
+              color: onPrimary,
+            ),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: flair.secondary.withValues(alpha: 0.15),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: flair.secondary.withValues(alpha: 0.4)),
+          ),
+          child: GoopText(
+            '✓ Synergy Active',
+            style: TextStyle(
+              fontSize: 10 * sf,
+              fontWeight: FontWeight.w700,
+              color: flair.secondary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _sampleSynergyGlow(ThemeFlair flair, double sf) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: flair.primary.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: flair.primary.withValues(alpha: 0.5),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: flair.primary.withValues(alpha: 0.2),
+            blurRadius: 12,
+            spreadRadius: 1,
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GoopText('$label ',
-              style: TextStyle(
-                  fontSize: 7 * sf,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.4))),
-          GoopText(value,
-              style: TextStyle(
-                  fontSize: 8 * sf,
-                  fontWeight: FontWeight.w900,
-                  color: flair.headlineStat)),
+          Icon(Icons.bolt_rounded, size: 16 * sf, color: flair.primary),
+          const SizedBox(width: 6),
+          GoopText(
+            'GLOWING SYNERGY BORDER',
+            style: TextStyle(
+              fontSize: 10 * sf,
+              fontWeight: FontWeight.w900,
+              color: flair.primary,
+              letterSpacing: 1,
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _paletteDot(Color color, String label, double sf) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 24 * sf,
+          height: 24 * sf,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+            boxShadow: [
+              BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 6),
+            ],
+          ),
+        ),
+        const SizedBox(height: 4),
+        GoopText(label,
+            style: TextStyle(
+                fontSize: 7 * sf,
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withValues(alpha: 0.4))),
+      ],
     );
   }
 }
@@ -986,6 +920,12 @@ class _ThemeStep extends StatelessWidget {
     required this.onQuickApply,
   });
 
+  bool _hasVariants() {
+    return previewMode == AppThemeMode.unicorn ||
+        kThemeRemixes.containsKey(previewMode) ||
+        previewMode == AppThemeMode.custom;
+  }
+
   @override
   Widget build(BuildContext context) {
     final modes = kVisibleThemes;
@@ -993,9 +933,7 @@ class _ThemeStep extends StatelessWidget {
 
     return Column(
       children: [
-        // Discoverability hint — tells users the long-press shortcut
-        // exists so they don't have to traverse the full wizard just to
-        // switch themes.
+        // Discoverability hint
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
           child: GoopText(
@@ -1037,6 +975,7 @@ class _ThemeStep extends StatelessWidget {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeOutCubic,
+            clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: f.scaffold.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(12),
@@ -1048,38 +987,79 @@ class _ThemeStep extends StatelessWidget {
                   ? [BoxShadow(color: f.primary.withValues(alpha: 0.2), blurRadius: 10)]
                   : null,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                // Color swatches
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _swatch(f.scaffold, true, false),
-                    _swatch(f.primary, false, false),
-                    _swatch(f.secondary, false, false),
-                    _swatch(f.headlineStat, false, true),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                GoopText(
-                  m.label.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w900,
-                    color: isPreview ? f.headlineStat : Colors.white.withValues(alpha: 0.6),
-                    letterSpacing: 1.0,
+                // Theme splash image background
+                if (m.splashSlug.isNotEmpty)
+                  Image.asset(
+                    'assets/images/themes/splash/${m.splashSlug}.jpg',
+                    fit: BoxFit.cover,
+                    opacity: AlwaysStoppedAnimation(isPreview ? 1.0 : 0.7),
+                  ),
+                // Dark gradient scrim for label readability
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.65),
+                        ],
+                        stops: const [0.4, 1.0],
+                      ),
+                    ),
                   ),
                 ),
-                if (isActive) ...[
-                  const SizedBox(height: 3),
-                  GoopText('ACTIVE',
-                      style: TextStyle(
-                          fontSize: 9,
+                // Label
+                Positioned(
+                  left: 8,
+                  bottom: 6,
+                  right: 8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GoopText(
+                        m.label.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 11,
                           fontWeight: FontWeight.w900,
-                          color: f.primary,
-                          letterSpacing: 0.8)),
-                ],
+                          color: isPreview ? f.headlineStat : Colors.white,
+                          letterSpacing: 1.0,
+                          shadows: [
+                            Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 4),
+                          ],
+                        ),
+                      ),
+                      if (isActive) ...[
+                        const SizedBox(height: 2),
+                        GoopText('ACTIVE',
+                            style: TextStyle(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                color: f.primary,
+                                letterSpacing: 0.8)),
+                      ],
+                    ],
+                  ),
+                ),
+                // Selected checkmark
+                if (isPreview)
+                  Positioned(
+                    top: 6,
+                    right: 6,
+                    child: Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        color: f.primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.check_rounded, size: 12, color: Colors.black),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -1087,21 +1067,17 @@ class _ThemeStep extends StatelessWidget {
             },
           ),
         ),
+        // ── Palette variants (inline, only if the selected theme has them) ──
+        if (_hasVariants()) ...[
+          const SizedBox(height: 4),
+          Expanded(
+            child: _PaletteStep(
+              previewMode: previewMode,
+              onRefresh: () {},
+            ),
+          ),
+        ],
       ],
-    );
-  }
-
-  Widget _swatch(Color color, bool left, bool right) {
-    return Container(
-      width: 24,
-      height: 28,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.horizontal(
-          left: left ? const Radius.circular(5) : Radius.zero,
-          right: right ? const Radius.circular(5) : Radius.zero,
-        ),
-      ),
     );
   }
 }
