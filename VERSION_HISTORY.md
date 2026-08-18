@@ -6,6 +6,23 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.55 — ⚙️ Active Run Rework Phase 5: Preferences Sheet + Polish (August 2026)
+**Build:** 131
+
+> Phase 5 (final) of the Active Run Rework. Preferences sheet + polish. All 5 phases complete.
+
+### New Features
+- **Display Preferences sheet** — gear icon on the mode bar opens a bottom sheet with: (1) display mode picker — 3 cards with icons, labels, and descriptions, (2) 2.5D inventory toggle — enables/disables volumetric tilt + depth shadow on all inventory tiles, (3) tilt intensity slider — 0-100%, scales max tilt degrees on tap/hover. Changes apply live behind the sheet. Dark container + grabber styling matches existing `HomeCustomizationSheet` pattern.
+- **Mode bar gear icon** — collapsed pill now has a separate gear icon next to the mode name for quick access to preferences without expanding the full mode picker.
+
+### Bughunt
+- All 4 new controllers (matrix rain, drift, scan, page) verified disposed.
+- All 26 MP/dice/emote/quick-add callbacks in `active_run_screen.dart` verified intact — mode bar is purely additive.
+- `flutter analyze` clean on full `lib/` (0 issues).
+- Coop player correctly hides synergies page in Codex mode and COOL/CURSE chips in Compact/Matrix modes.
+
+---
+
 ## v1.9.54 — 🟣 Active Run Rework Phase 4: Gungeon Matrix Mode (August 2026)
 **Build:** 130
 

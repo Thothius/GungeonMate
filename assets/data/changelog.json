@@ -1,5 +1,14 @@
 [
   {
+    "version": "v1.9.55",
+    "title": "Active Run Rework Phase 5 — Preferences Sheet + Polish",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Display Preferences sheet — gear icon on the mode bar opens a bottom sheet with display mode picker (3 cards with descriptions), 2.5D inventory toggle, and tilt intensity slider (0-100%). Changes apply live behind the sheet. Dark container + grabber styling matches existing customization sheets.",
+      "POLISH: Mode bar collapsed pill now has a separate gear icon for quick access to preferences without expanding the full mode picker."
+    ]
+  },
+  {
     "version": "v1.9.54",
     "title": "Active Run Rework Phase 4 — Gungeon Matrix Mode",
     "date": "August 2026",
