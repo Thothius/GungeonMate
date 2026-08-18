@@ -1,5 +1,18 @@
 [
   {
+    "version": "v1.9.47",
+    "title": "Device Pairing — One-Tap Co-op with Regular Partners",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Pair a Partner — one-time setup for instant co-op with a regular partner. Pair once via a 4-digit pairing PIN, then connect with one tap every time after. No PIN exchange needed on subsequent sessions.",
+      "FEATURE: Paired Partners list in the multiplayer lobby — tap any paired partner to connect instantly as Host or Sidekick. Shows partner nickname and last connected time.",
+      "FEATURE: Pairing uses a persistent 8-character secret (pairId) exchanged automatically over Nearby Connections. Stored locally via SharedPreferences — no servers, no accounts, fully device-to-device.",
+      "INFRASTRUCTURE: New PairedPartner model + PairedPartnersStore (ValueNotifier-backed SharedPreferences persistence). Mirrors the HomeCustomization pattern.",
+      "INFRASTRUCTURE: New MpPair + MpPairAck wire messages for the one-time pairing token exchange. Protocol version unchanged (still v1) — backwards compatible.",
+      "INFRASTRUCTURE: MultiplayerSession pairing mode — startPairing/joinPairing/connectPaired methods. Pairing mode skips run-state side effects (no snapshot broadcast, no session persistence during pairing)."
+    ]
+  },
+  {
     "version": "v1.9.46",
     "title": "Release Polish Pass",
     "date": "August 2026",

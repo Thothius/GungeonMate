@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/gungeoneer.dart';
 import '../models/multiplayer_messages.dart';
+import '../models/paired_partner.dart';
 import '../models/run_state.dart';
 import '../providers/run_provider.dart';
 import '../services/multiplayer_session.dart';
+import '../services/paired_partners_store.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
@@ -39,11 +41,16 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
   Gungeoneer? _selectedCharacter;
   List<SavedMpSession> _savedSessions = [];
 
+  void _onPartnersChanged() {
+    if (mounted) setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     _hydrateNickname();
     _loadSavedSessions();
+    PairedPartnersStore.notifier.addListener(_onPartnersChanged);
   }
 
   Future<void> _loadSavedSessions() async {
@@ -141,6 +148,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
 
   @override
   void dispose() {
+    PairedPartnersStore.notifier.removeListener(_onPartnersChanged);
     _nickCtrl.dispose();
     _pinCtrl.dispose();
     super.dispose();
@@ -417,6 +425,38 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                 ),
                 child: Column(
                   children: [
+                    // ── Paired Partners ──
+                    ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                      leading: Icon(Icons.favorite_rounded, size: 20, color: Colors.pinkAccent.withValues(alpha: 0.8)),
+                      title: GoopText(
+                        'Pair a Partner',
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.7)),
+                      ),
+                      subtitle: GoopText(
+                        'One-time setup for instant co-op',
+                        style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
+                      ),
+                      trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
+                      onTap: () {
+                        Haptics.selection();
+                        _showPairingFlowSheet(context);
+                      },
+                    ),
+                    if (PairedPartnersStore.all.isNotEmpty)
+                      ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                        leading: Icon(Icons.people_alt_rounded, size: 20, color: Colors.pinkAccent.withValues(alpha: 0.7)),
+                        title: GoopText(
+                          'Paired Partners (${PairedPartnersStore.all.length})',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.7)),
+                        ),
+                        trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
+                        onTap: () {
+                          Haptics.selection();
+                          _showPairedPartnersSheet(context);
+                        },
+                      ),
                     ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
                       leading: Icon(Icons.help_outline_rounded, size: 20, color: flair.primary.withValues(alpha: 0.7)),
@@ -441,6 +481,579 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // ===================================================================
+  // ── Device Pairing ─────────────────────────────────────────────────
+  // ===================================================================
+
+  /// Pairing flow entry sheet — choose to Host (initiator) or Join
+  /// (receiver) a one-time pairing. Both sides enter the same 4-digit
+  /// pairing PIN for this single exchange; after that, a persistent
+  /// pairId is exchanged and stored, enabling one-tap co-op forever.
+  void _showPairingFlowSheet(BuildContext context) {
+    final pairingPinCtrl = TextEditingController();
+    var isHost = true;
+    final flair = AppTheme.flair;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1B1B1E),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  20, 12, 20,
+                  20 + MediaQuery.of(ctx).viewInsets.bottom,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Handle bar
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        width: 40, height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 22),
+                        const SizedBox(width: 10),
+                        const Expanded(
+                          child: GoopText('PAIR A PARTNER',
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, size: 18, color: Colors.white54),
+                          tooltip: 'Close',
+                          onPressed: () => Navigator.pop(ctx),
+                        ),
+                      ],
+                    ),
+                    const Divider(color: Colors.white12, height: 1),
+                    const SizedBox(height: 16),
+                    GoopText(
+                      'Pair once with a regular co-op partner (e.g. your partner or best friend) and connect with one tap every time after — no PIN exchange needed.',
+                      style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6), height: 1.4),
+                    ),
+                    const SizedBox(height: 20),
+                    _StepLabel('STEP 1 — HOST OR JOIN?'),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _RoleButton(
+                            icon: Icons.campaign,
+                            label: 'HOST',
+                            selected: isHost,
+                            onTap: () {
+                              Haptics.selection();
+                              setSheetState(() => isHost = true);
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _RoleButton(
+                            icon: Icons.bluetooth_searching,
+                            label: 'JOIN',
+                            selected: !isHost,
+                            onTap: () {
+                              Haptics.selection();
+                              setSheetState(() => isHost = false);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    _StepLabel('STEP 2 — PAIRING PIN'),
+                    const SizedBox(height: 8),
+                    _PinField(controller: pairingPinCtrl, locked: false),
+                    const SizedBox(height: 4),
+                    GoopText(
+                      isHost
+                          ? 'Share this 4-digit PIN with your partner for this one-time pairing only.'
+                          : 'Enter the 4-digit PIN your partner shared with you.',
+                      style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: FilledButton.icon(
+                        icon: const Icon(Icons.link_rounded, size: 20),
+                        label: GoopText(
+                          isHost ? 'START PAIRING' : 'FIND PARTNER',
+                          style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                        ),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.pinkAccent,
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          final pin = pairingPinCtrl.text.trim();
+                          if (pin.length != 4 || int.tryParse(pin) == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: GoopText('Please enter a valid 4-digit pairing PIN.'),
+                                duration: Duration(seconds: 2),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                            return;
+                          }
+                          final nickname = _nickCtrl.text.trim().isEmpty
+                              ? 'Player'
+                              : _nickCtrl.text.trim();
+                          unawaited(_saveNickname(nickname));
+                          Navigator.pop(ctx);
+                          _startPairingSession(
+                            nickname: nickname,
+                            pairingPin: pin,
+                            isHost: isHost,
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Center(
+                      child: TextButton.icon(
+                        icon: Icon(Icons.info_outline_rounded, size: 14, color: flair.secondary.withValues(alpha: 0.6)),
+                        label: GoopText(
+                          'How pairing works',
+                          style: TextStyle(fontSize: 11, color: flair.secondary.withValues(alpha: 0.6)),
+                        ),
+                        onPressed: () => _showPairingHelpDialog(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).then((_) => pairingPinCtrl.dispose());
+  }
+
+  void _showPairingHelpDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1B1B1E),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(Icons.info_outline_rounded, color: AppTheme.flair.secondary, size: 22),
+            const SizedBox(width: 10),
+            const GoopText('HOW PAIRING WORKS',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildGuideStep('1. One-time PIN', 'One device hosts, the other joins. Both enter the same 4-digit PIN — just for this single pairing session.'),
+              _buildGuideStep('2. Automatic exchange', 'Once connected, the devices exchange a secret pairing token. No manual entry needed — it happens automatically.'),
+              _buildGuideStep('3. One-tap co-op forever', 'Your partner appears in "Paired Partners". Tap them, pick Host or Join, and you\'re in co-op instantly. No PIN needed ever again.'),
+              _buildGuideStep('4. Private & local', 'Pairing uses Nearby Connections (Bluetooth + Wi-Fi). No servers, no accounts, no data leaves your devices.'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const GoopText('GOT IT', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Kick off the pairing session via MultiplayerSession and navigate
+  /// to the connect screen, which shows the searching/pairing state.
+  Future<void> _startPairingSession({
+    required String nickname,
+    required String pairingPin,
+    required bool isHost,
+  }) async {
+    final shouldProceed = await _showPermissionRationale();
+    if (!shouldProceed || !mounted) return;
+
+    final session = context.read<MultiplayerSession>();
+    if (isHost) {
+      await session.startPairing(nickname: nickname, pairingPin: pairingPin);
+    } else {
+      await session.joinPairing(nickname: nickname, pairingPin: pairingPin);
+    }
+    if (!mounted) return;
+    // The connect screen auto-pops when pairing completes (it listens
+    // to pairingCompleteNotifier internally). After it pops, show a
+    // success toast on the lobby.
+    late final VoidCallback onPairComplete;
+    onPairComplete = () {
+      if (session.pairingCompleteNotifier.value) {
+        session.pairingCompleteNotifier.removeListener(onPairComplete);
+        // Reset the notifier so it's ready for a future pairing.
+        session.pairingCompleteNotifier.value = false;
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: GoopText('Partner paired! Find them in "Paired Partners" for one-tap co-op.'),
+              duration: Duration(seconds: 4),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      }
+    };
+    session.pairingCompleteNotifier.addListener(onPairComplete);
+    // If pairing completes before we add the listener (race), check now.
+    if (session.pairingCompleteNotifier.value) onPairComplete();
+
+    await Navigator.push(
+      context,
+      fastRoute(const MultiplayerConnectScreen()),
+    );
+    // Clean up listener if user backed out before pairing completed.
+    session.pairingCompleteNotifier.removeListener(onPairComplete);
+  }
+
+  /// Paired partners list — tap to connect (one-tap), swipe/long-press
+  /// to remove. Shows partner nickname, pairId (truncated), and last
+  /// connected time.
+  void _showPairedPartnersSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF1B1B1E),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (ctx) {
+        return SafeArea(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(ctx).size.height * 0.7,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  margin: const EdgeInsets.only(top: 10, bottom: 6),
+                  width: 40, height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.people_alt_rounded, color: Colors.pinkAccent, size: 20),
+                      const SizedBox(width: 10),
+                      const GoopText('PAIRED PARTNERS',
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 1)),
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 18, color: Colors.white54),
+                        tooltip: 'Close',
+                        onPressed: () => Navigator.pop(ctx),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(color: Colors.white12, height: 1),
+                Expanded(
+                  child: ValueListenableBuilder<List<PairedPartner>>(
+                    valueListenable: PairedPartnersStore.notifier,
+                    builder: (ctx, partners, _) {
+                      if (partners.isEmpty) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(32),
+                            child: GoopText(
+                              'No paired partners yet.\nPair a partner for one-tap co-op.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 13, color: Colors.white54),
+                            ),
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        padding: const EdgeInsets.all(12),
+                        itemCount: partners.length,
+                        itemBuilder: (ctx, idx) {
+                          final p = partners[idx];
+                          final lastConnected = p.lastConnectedAtMs != null
+                              ? DateTime.fromMillisecondsSinceEpoch(p.lastConnectedAtMs!)
+                              : null;
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF161619),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.pinkAccent.withValues(alpha: 0.15)),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.pop(ctx);
+                                  _showConnectPairedDialog(context, p);
+                                },
+                                borderRadius: BorderRadius.circular(12),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 40, height: 40,
+                                        decoration: BoxDecoration(
+                                          color: Colors.pinkAccent.withValues(alpha: 0.15),
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: const Icon(Icons.favorite, color: Colors.pinkAccent, size: 20),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            GoopText(
+                                              p.partnerNickname,
+                                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.white),
+                                              maxLines: 1, overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 2),
+                                            GoopText(
+                                              lastConnected != null
+                                                  ? 'Last connected ${_formatRelative(lastConnected)}'
+                                                  : 'Paired ${_formatRelative(DateTime.fromMillisecondsSinceEpoch(p.createdAtMs))}',
+                                              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.redAccent),
+                                        tooltip: 'Remove partner',
+                                        onPressed: () => _confirmRemovePartner(context, p),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _formatRelative(DateTime dt) {
+    final now = DateTime.now();
+    final diff = now.difference(dt);
+    if (diff.inMinutes < 1) return 'just now';
+    if (diff.inHours < 1) return '${diff.inMinutes}m ago';
+    if (diff.inDays < 1) return '${diff.inHours}h ago';
+    if (diff.inDays < 30) return '${diff.inDays}d ago';
+    return '${dt.month}/${dt.day}/${dt.year}';
+  }
+
+  /// Connect dialog for a paired partner — pick Host or Join role,
+  /// then one-tap connect using the stored pairId (no PIN entry).
+  void _showConnectPairedDialog(BuildContext context, PairedPartner partner) {
+    final flair = AppTheme.flair;
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1B1B1E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: Colors.pinkAccent.withValues(alpha: 0.3)),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 22),
+            const SizedBox(width: 10),
+            Expanded(
+              child: GoopText(
+                'CONNECT WITH ${partner.partnerNickname.toUpperCase()}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 0.5),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GoopText(
+              'Pick your role to start a co-op session. No PIN needed — you\'re paired!',
+              style: const TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.3),
+            ),
+            const SizedBox(height: 16),
+            // Host as Main
+            InkWell(
+              onTap: () {
+                Navigator.pop(ctx);
+                _connectPaired(partner, MpRole.main);
+              },
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: flair.primary.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: flair.primary.withValues(alpha: 0.25)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.star_rounded, color: flair.primary, size: 24),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GoopText(
+                            'HOST AS MAIN',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: flair.primary, letterSpacing: 0.5),
+                          ),
+                          const SizedBox(height: 2),
+                          GoopText(
+                            'Host the run. Your partner joins as Sidekick.',
+                            style: const TextStyle(fontSize: 11, color: Colors.white60),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Join as Sidekick
+            InkWell(
+              onTap: () {
+                Navigator.pop(ctx);
+                _connectPaired(partner, MpRole.sidekick);
+              },
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.purple.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.purple.withValues(alpha: 0.25)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.handshake_rounded, color: Colors.purpleAccent, size: 24),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const GoopText(
+                            'JOIN AS SIDEKICK',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.5),
+                          ),
+                          const SizedBox(height: 2),
+                          GoopText(
+                            'Find your partner\'s hosted run and join.',
+                            style: const TextStyle(fontSize: 11, color: Colors.white60),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const GoopText('CANCEL', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _connectPaired(PairedPartner partner, MpRole role) async {
+    final shouldProceed = await _showPermissionRationale();
+    if (!shouldProceed || !mounted) return;
+    final session = context.read<MultiplayerSession>();
+    final nickname = _nickCtrl.text.trim().isEmpty ? 'Player' : _nickCtrl.text.trim();
+    unawaited(_saveNickname(nickname));
+    await session.connectPaired(
+      partner: partner,
+      role: role,
+      nickname: nickname,
+      character: _selectedCharacter,
+    );
+    if (!mounted) return;
+    await Navigator.pushReplacement(
+      context,
+      fastRoute(const MultiplayerConnectScreen()),
+    );
+  }
+
+  void _confirmRemovePartner(BuildContext context, PairedPartner partner) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const GoopText('Remove Partner?'),
+        content: GoopText(
+          'Remove "${partner.partnerNickname}" from your paired partners? You\'ll need to pair again to use one-tap co-op with them.',
+          maxLines: 4, overflow: TextOverflow.ellipsis,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const GoopText('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.redAccent),
+            onPressed: () {
+              Navigator.pop(ctx);
+              unawaited(PairedPartnersStore.remove(partner.pairId));
+              Haptics.selection();
+            },
+            child: const GoopText('Remove'),
+          ),
+        ],
       ),
     );
   }
@@ -1169,6 +1782,11 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
   late final ScrollController _logScrollCtrl;
   bool _consoleCollapsed = true;
 
+  /// One-shot listener that auto-pops the connect screen when a
+  /// pairing completes. Without this, the user sees "Pairing…" flip
+  /// to "Ready" and has to manually tap close — auto-pop is smoother.
+  late final VoidCallback _onPairingComplete;
+
   @override
   void initState() {
     super.initState();
@@ -1177,10 +1795,19 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
       duration: const Duration(seconds: 2),
     );
     _logScrollCtrl = ScrollController();
+    final session = context.read<MultiplayerSession>();
+    _onPairingComplete = () {
+      if (session.pairingCompleteNotifier.value && mounted) {
+        Navigator.of(context).maybePop();
+      }
+    };
+    session.pairingCompleteNotifier.addListener(_onPairingComplete);
   }
 
   @override
   void dispose() {
+    context.read<MultiplayerSession>().pairingCompleteNotifier
+        .removeListener(_onPairingComplete);
     _spinCtrl.dispose();
     _logScrollCtrl.dispose();
     super.dispose();
@@ -1214,23 +1841,38 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
 
     switch (status) {
       case MpStatus.searching:
-        title = session.myRole == MpRole.main
-            ? 'Waiting for Sidekick'
-            : 'Looking for Host';
-        subtitle = session.myRole == MpRole.main
-            ? 'Advertising via Wi-Fi & Bluetooth…'
-            : 'Scanning for nearby games…';
+        if (session.isPairingMode) {
+          title = session.myRole == MpRole.main
+              ? 'Waiting for Partner'
+              : 'Looking for Partner';
+          subtitle = 'Pairing in progress…';
+        } else {
+          title = session.myRole == MpRole.main
+              ? 'Waiting for Sidekick'
+              : 'Looking for Host';
+          subtitle = session.myRole == MpRole.main
+              ? 'Advertising via Wi-Fi & Bluetooth…'
+              : 'Scanning for nearby games…';
+        }
         icon = Icons.bluetooth_searching;
         isSpinning = true;
       case MpStatus.handshaking:
-        title = 'Connecting';
-        subtitle = 'Exchanging data with peer...';
+        title = session.isPairingMode ? 'Pairing' : 'Connecting';
+        subtitle = session.isPairingMode
+            ? 'Exchanging pairing token…'
+            : 'Exchanging data with peer...';
         icon = Icons.sync;
         isSpinning = true;
       case MpStatus.connected:
-        title = 'Connected!';
-        subtitle = 'Run synced with ${session.peerNickname ?? 'peer'}';
-        icon = Icons.check_circle;
+        if (session.isPairingMode) {
+          title = 'Pairing…';
+          subtitle = 'Saving partner connection…';
+          icon = Icons.favorite;
+        } else {
+          title = 'Connected!';
+          subtitle = 'Run synced with ${session.peerNickname ?? 'peer'}';
+          icon = Icons.check_circle;
+        }
       case MpStatus.disconnected:
         title = 'Disconnected';
         subtitle = 'Connection lost. Retry?';

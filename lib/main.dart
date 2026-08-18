@@ -7,6 +7,7 @@ import 'services/app_theme.dart';
 import 'services/home_customization.dart';
 import 'services/multiplayer_service.dart';
 import 'services/multiplayer_session.dart';
+import 'services/paired_partners_store.dart';
 import 'utils/asset_paths.dart' show kAppVersion;
 import 'widgets/theme_overlay.dart';
 
@@ -18,6 +19,7 @@ void main() async {
   await AppTheme.init();
   await VisualPrefs.init();
   await HomeCustomization.load();
+  await PairedPartnersStore.load();
   // Expose the current app version for MP hello diagnostics.
   MultiplayerSession.appVersionString = kAppVersion;
   runApp(const GungeonMateApp());
