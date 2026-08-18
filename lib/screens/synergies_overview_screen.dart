@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
+import '../services/haptics.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../widgets/game_icon.dart';
@@ -53,7 +54,10 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
             child: FilterChip(
               label: GoopText(_onlyActive ? 'Active only' : 'All'),
               selected: _onlyActive,
-              onSelected: (v) => setState(() => _onlyActive = v),
+              onSelected: (v) {
+                Haptics.selection();
+                setState(() => _onlyActive = v);
+              },
             ),
           ),
         ],
