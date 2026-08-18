@@ -125,6 +125,8 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       const SizedBox(height: 12),
                       const Spacer(flex: 4),
                   // Local Run = single device solo play
+                  // Premium Gungeon-styled hero button: gold gradient,
+                  // glow shadow, scale-on-press.
                   ScaleButton(
                     onTap: () {
                       Haptics.selection();
@@ -133,31 +135,53 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         fastRoute(const CharacterSelectScreen()),
                       );
                     },
-                    child: IgnorePointer(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: btnHeight,
-                        child: FilledButton.icon(
-                          onPressed: () {},
-                          style: FilledButton.styleFrom(
-                            elevation: 3,
-                            shadowColor: const Color(0xFFFFD54F).withValues(alpha: 0.15),
+                    child: Container(
+                      width: double.infinity,
+                      height: btnHeight,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color(0xFFFFD54F), // Bright Gold
+                            Color(0xFFFFB300), // Deep Gold
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: const Color(0xFFFFE082).withValues(alpha: 0.8),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFFD54F).withValues(alpha: 0.25),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
                           ),
-                          icon: Icon(Icons.play_arrow_rounded, size: btnIconSize),
-                          label: GoopText(
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.play_arrow_rounded,
+                              size: btnIconSize, color: const Color(0xFF3E2723)),
+                          const SizedBox(width: 10),
+                          GoopText(
                             'Local Run',
                             style: TextStyle(
                               fontSize: btnFontSize,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w900,
                               letterSpacing: 1.2,
+                              color: const Color(0xFF3E2723),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 10),
                   // Bluetooth Multiplayer = pair two devices
+                  // Premium outlined button: subtle gradient, cyan glow.
                   ScaleButton(
                     onTap: () {
                       Haptics.selection();
@@ -166,30 +190,106 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         fastRoute(const MultiplayerLobbyScreen()),
                       );
                     },
-                    child: IgnorePointer(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: btnHeight,
-                        child: OutlinedButton.icon(
-                          onPressed: () {},
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.18),
-                              width: 1.2,
-                            ),
+                    child: Container(
+                      width: double.infinity,
+                      height: btnHeight,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.cyanAccent.withValues(alpha: 0.12),
+                            Colors.cyanAccent.withValues(alpha: 0.04),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: Colors.cyanAccent.withValues(alpha: 0.4),
+                          width: 1.4,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.cyanAccent.withValues(alpha: 0.12),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
                           ),
-                          icon: Icon(Icons.bluetooth_searching, size: 22 * sf),
-                          label: GoopText(
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.bluetooth_searching,
+                              size: 22 * sf, color: Colors.cyanAccent),
+                          const SizedBox(width: 10),
+                          GoopText(
                             'Multiplayer',
                             style: TextStyle(
                               fontSize: btnFontSize,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w800,
                               letterSpacing: 1.2,
+                              color: Colors.white,
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 14),
+                  // ── Toggle Animations + Theme Picker row ──
+                  // Moved from the top corners into the menu flow so the
+                  // home screen reads as a single clean column. Both
+                  // buttons share one row at equal width.
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ValueListenableBuilder<HomeCustomization>(
+                          valueListenable: HomeCustomization.notifier,
+                          builder: (context, cust, _) {
+                            final anyActive = cust.showGungeoneer ||
+                                (cust.showJunk && cust.totalJunk > 0);
+                            return _MenuPillButton(
+                              key: _animPillKey,
+                              label: 'Animations',
+                              icon: Icons.animation_rounded,
+                              active: anyActive,
+                              activeColor: const Color(0xFFBCA0F8),
+                              onTap: () {
+                                Haptics.selection();
+                                _showAnimationsMenu(context, cust, _animPillKey);
+                              },
+                              onLongPress: () {
+                                Haptics.selection();
+                                showModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: Colors.transparent,
+                                  isScrollControlled: true,
+                                  useSafeArea: false,
+                                  builder: (_) => const HomeCustomizationSheet(
+                                    initialSection: HomeCustomSection.gungeoneer,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _MenuPillButton(
+                          label: 'Theme',
+                          icon: Icons.palette_rounded,
+                          active: true,
+                          activeColor: Colors.pinkAccent,
+                          onTap: () {
+                            Haptics.selection();
+                            Navigator.push(
+                              context,
+                              fastRoute(const ExperienceStudioScreen()),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   GoopText(
@@ -212,118 +312,32 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         ),
           ),
           ),
-          // Theme Picker — top-right corner. Labeled pill (not just an
-          // icon) so the feature is discoverable. Opens the theme studio
-          // so the user can switch themes in 1 tap.
-          Positioned(
-            top: 12,
-            right: 12,
-            child: SafeArea(
-              child: Semantics(
-                label: 'Theme Picker',
-                button: true,
-                child: GestureDetector(
-                  onTap: () {
-                    Haptics.selection();
-                    Navigator.push(
-                      context,
-                      fastRoute(const ExperienceStudioScreen()),
-                    );
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 44),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12 * sf,
-                        vertical: 10 * sf,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.pinkAccent.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.pinkAccent.withValues(alpha: 0.5),
-                          width: 1.2,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.palette_rounded, size: 16 * sf, color: Colors.pinkAccent),
-                          SizedBox(width: 7 * sf),
-                          GoopText(
-                            'Theme Picker',
-                            style: TextStyle(
-                              fontSize: 11 * sf,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white,
-                              letterSpacing: 0.3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // ── Top-left: unified "Toggle Animations" pill ──
-          // Single pill that opens a popup menu with individual toggles
-          // for the Gungeoneer sprite and junk floaters. Cleaner than
-          // two separate pills — one control, one place.
-          Positioned(
-            top: 12,
-            left: 12,
-            child: SafeArea(
-              child: ValueListenableBuilder<HomeCustomization>(
-                valueListenable: HomeCustomization.notifier,
-                builder: (context, cust, _) {
-                  final anyActive = cust.showGungeoneer ||
-                      (cust.showJunk && cust.totalJunk > 0);
-                  return _QuickToggle(
-                    key: _animPillKey,
-                    label: 'Toggle Animations',
-                    icon: Icons.animation_rounded,
-                    active: anyActive,
-                    activeColor: const Color(0xFFBCA0F8),
-                    onTap: () {
-                      Haptics.selection();
-                      _showAnimationsMenu(context, cust, _animPillKey);
-                    },
-                    onLongPress: () {
-                      Haptics.selection();
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        isScrollControlled: true,
-                        useSafeArea: false,
-                        builder: (_) => const HomeCustomizationSheet(
-                          initialSection: HomeCustomSection.gungeoneer,
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-          // Changelog button — centered at bottom, 15% bigger
+          // Changelog button — centered at bottom, premium pill style
           Positioned(
             bottom: 16,
             left: 0,
             right: 0,
             child: SafeArea(
               child: Center(
-                child: InkWell(
+                child: ScaleButton(
                   onTap: () => _showChangelogDialog(context),
-                  borderRadius: BorderRadius.circular(20),
+                  enableHaptics: false,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16 * sf, vertical: 9 * sf),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.08),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          const Color(0xFFFFD54F).withValues(alpha: 0.12),
+                          const Color(0xFFFFD54F).withValues(alpha: 0.04),
+                        ],
+                      ),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white24, width: 1.2),
+                      border: Border.all(
+                        color: const Color(0xFFFFD54F).withValues(alpha: 0.35),
+                        width: 1.2,
+                      ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -685,74 +699,98 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 }
 
 // =============================================================================
-// _QuickToggle — top-left pill toggle for the home screen. Tap toggles
-// the feature on/off; long-press opens the customization sheet focused
-// on that section.
+// _MenuPillButton — premium pill button for the home menu row.
+// Scale-on-press, themed glow when active, subtle inner highlight.
 // =============================================================================
 
-class _QuickToggle extends StatelessWidget {
+class _MenuPillButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool active;
   final Color activeColor;
   final VoidCallback onTap;
-  final VoidCallback onLongPress;
+  final VoidCallback? onLongPress;
 
-  const _QuickToggle({
+  const _MenuPillButton({
     super.key,
     required this.label,
     required this.icon,
     required this.active,
     required this.activeColor,
     required this.onTap,
-    required this.onLongPress,
+    this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
     return Semantics(
-      label: '$label toggle${active ? ' (active)' : ''}',
+      label: '$label${active ? ' (active)' : ''}',
       button: true,
-      child: GestureDetector(
+      child: ScaleButton(
         onTap: onTap,
         onLongPress: onLongPress,
-        behavior: HitTestBehavior.opaque,
-        // 2026 accessibility: minimum 44px tap target.
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 44),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            padding: EdgeInsets.symmetric(horizontal: 12 * sf, vertical: 10 * sf),
-            decoration: BoxDecoration(
+        enableHaptics: false,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          height: 46 * sf,
+          decoration: BoxDecoration(
+            // Subtle vertical gradient for depth — premium feel
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: active
+                  ? [
+                      activeColor.withValues(alpha: 0.22),
+                      activeColor.withValues(alpha: 0.08),
+                    ]
+                  : [
+                      Colors.white.withValues(alpha: 0.08),
+                      Colors.white.withValues(alpha: 0.03),
+                    ],
+            ),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
               color: active
-                  ? activeColor.withValues(alpha: 0.18)
-                  : Colors.white.withValues(alpha: 0.06),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: active ? activeColor.withValues(alpha: 0.7) : Colors.white24,
-                width: 1.2,
+                  ? activeColor.withValues(alpha: 0.6)
+                  : Colors.white.withValues(alpha: 0.12),
+              width: 1.2,
+            ),
+            boxShadow: active
+                ? [
+                    BoxShadow(
+                      color: activeColor.withValues(alpha: 0.18),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.15),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 18 * sf,
+                color: active ? activeColor : Colors.white54,
               ),
-              boxShadow: active
-                  ? [BoxShadow(color: activeColor.withValues(alpha: 0.2), blurRadius: 6)]
-                  : null,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 16 * sf, color: active ? activeColor : Colors.white54),
-                SizedBox(width: 7 * sf),
-                GoopText(
-                  label,
-                  style: TextStyle(
-                    fontSize: 11 * sf,
-                    fontWeight: FontWeight.w800,
-                    color: active ? Colors.white : Colors.white60,
-                    letterSpacing: 0.3,
-                  ),
+              SizedBox(width: 8 * sf),
+              GoopText(
+                label,
+                style: TextStyle(
+                  fontSize: 13 * sf,
+                  fontWeight: FontWeight.w800,
+                  color: active ? Colors.white : Colors.white60,
+                  letterSpacing: 0.5,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
