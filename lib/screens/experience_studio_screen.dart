@@ -1156,12 +1156,12 @@ class _PaletteStep extends StatelessWidget {
           GoopText(
             'PALETTE VARIANTS',
             style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w900,
                 color: AppTheme.flair.primary.withValues(alpha: 0.8),
                 letterSpacing: 1.5),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 14),
           if (previewMode == AppThemeMode.unicorn)
             _UnicornPalettes(onRefresh: onRefresh)
           else
@@ -1182,10 +1182,20 @@ class _UnicornPalettes extends StatelessWidget {
       listenable: AppTheme.unicornPaletteNotifier,
       builder: (context, _) {
         final active = AppTheme.unicornPalette;
-        return Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: UnicornPalette.values.map((p) {
+        final palettes = UnicornPalette.values;
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.6,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemCount: palettes.length,
+          itemBuilder: (context, i) {
+            final p = palettes[i];
             final pf = p.flair;
             final isSelected = p == active;
             return GestureDetector(
@@ -1196,7 +1206,7 @@ class _UnicornPalettes extends StatelessWidget {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? pf.primary.withValues(alpha: 0.15)
@@ -1206,10 +1216,15 @@ class _UnicornPalettes extends StatelessWidget {
                     color: isSelected ? pf.primary : Colors.white.withValues(alpha: 0.08),
                     width: isSelected ? 2.0 : 1.0,
                   ),
+                  boxShadow: isSelected
+                      ? [BoxShadow(color: pf.primary.withValues(alpha: 0.15), blurRadius: 8)]
+                      : null,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Color swatches row
                     Row(
                       children: [
                         _miniSwatch(pf.scaffold, true, false),
@@ -1217,17 +1232,17 @@ class _UnicornPalettes extends StatelessWidget {
                         _miniSwatch(pf.headlineStat, false, true),
                       ],
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(height: 8),
                     GoopText(p.label,
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
                             color: isSelected ? pf.primary : Colors.white.withValues(alpha: 0.6))),
                   ],
                 ),
               ),
             );
-          }).toList(),
+          },
         );
       },
     );
@@ -1247,10 +1262,18 @@ class _RemixPalettes extends StatelessWidget {
         final remixes = kThemeRemixes[mode]!;
         final active = AppTheme.remixFor(mode);
         final f = AppTheme.flairFor(mode);
-        return Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: List.generate(remixes.length, (i) {
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.6,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemCount: remixes.length,
+          itemBuilder: (context, i) {
             final r = remixes[i];
             final rf = r.flair;
             final colors = rf != null
@@ -1265,7 +1288,7 @@ class _RemixPalettes extends StatelessWidget {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? f.primary.withValues(alpha: 0.15)
@@ -1275,9 +1298,13 @@ class _RemixPalettes extends StatelessWidget {
                     color: isSelected ? f.primary : Colors.white.withValues(alpha: 0.08),
                     width: isSelected ? 2.0 : 1.0,
                   ),
+                  boxShadow: isSelected
+                      ? [BoxShadow(color: f.primary.withValues(alpha: 0.15), blurRadius: 8)]
+                      : null,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
@@ -1287,17 +1314,17 @@ class _RemixPalettes extends StatelessWidget {
                         ],
                       ],
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(height: 8),
                     GoopText(r.label,
                         style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
                             color: isSelected ? f.primary : Colors.white.withValues(alpha: 0.6))),
                   ],
                 ),
               ),
             );
-          }),
+          },
         );
       },
     );
@@ -1591,35 +1618,40 @@ class _ParticlesStep extends StatelessWidget {
                 value: prefs.particlesEnabled,
                 onChanged: (v) { VisualPrefs.setParticles(v); Haptics.selection(); },
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 18),
               if (prefs.particlesEnabled) ...[
                 _StepLabel('PRESET'),
+                const SizedBox(height: 10),
                 _PresetGrid(current: prefs.particlePreset),
-                const SizedBox(height: 12),
+                const SizedBox(height: 18),
                 _StepLabel('COLOR SCHEMA'),
+                const SizedBox(height: 10),
                 _SchemaGrid(current: prefs.particleColorSchema),
-                const SizedBox(height: 12),
+                const SizedBox(height: 18),
                 _StepLabel('SPEED'),
+                const SizedBox(height: 10),
                 _SpeedRow(current: prefs.particleSpeed),
-                const SizedBox(height: 14),
+                const SizedBox(height: 18),
                 _StepLabel('STUDIO'),
-                const SizedBox(height: 6),
+                const SizedBox(height: 10),
                 _StudioSlider('Count', '${prefs.particleCount}', prefs.particleCount.toDouble(),
                     1, 32, 31, flair.headlineStat, (v) => VisualPrefs.setParticleCount(v.toInt())),
+                const SizedBox(height: 10),
                 _StudioSlider('Size', '${prefs.particleSizeScale.toStringAsFixed(1)}x',
                     prefs.particleSizeScale, 0.3, 2.0, 17, flair.headlineStat,
                     (v) => VisualPrefs.setParticleSizeScale(v)),
+                const SizedBox(height: 10),
                 _StudioSlider('Opacity', '${(prefs.particleOpacity * 100).toStringAsFixed(0)}%',
                     prefs.particleOpacity, 0.0, 1.0, 20, flair.headlineStat,
                     (v) => VisualPrefs.setParticleOpacity(v)),
-                const SizedBox(height: 8),
+                const SizedBox(height: 18),
                 _StepLabel('GLOW EFFECT'),
-                const SizedBox(height: 6),
-                _GlowRow(current: prefs.particleGlowEffect),
                 const SizedBox(height: 10),
+                _GlowRow(current: prefs.particleGlowEffect),
+                const SizedBox(height: 14),
                 _ToggleRow(icon: Icons.timeline_outlined, label: 'Line Links',
                     value: prefs.particleLineLinks, onChanged: (v) { VisualPrefs.setParticleLineLinks(v); Haptics.selection(); }),
-                const SizedBox(height: 6),
+                const SizedBox(height: 10),
                 _ToggleRow(icon: Icons.sports_baseball_outlined, label: 'Edge Bounce',
                     value: prefs.particleBounce, onChanged: (v) { VisualPrefs.setParticleBounce(v); Haptics.selection(); }),
               ],
@@ -1644,7 +1676,7 @@ class _PresetGrid extends StatelessWidget {
       ParticlePreset.cursedSmoke, ParticlePreset.bulletHell,
     ];
     return Wrap(
-      spacing: 8, runSpacing: 8,
+      spacing: 10, runSpacing: 10,
       children: presets.map((p) {
         final isActive = p == current;
         final flair = AppTheme.flair;
@@ -1652,7 +1684,7 @@ class _PresetGrid extends StatelessWidget {
           onTap: () { VisualPrefs.setParticlePreset(p); Haptics.selection(); },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               color: isActive ? flair.primary.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(10),
@@ -1660,12 +1692,15 @@ class _PresetGrid extends StatelessWidget {
                 color: isActive ? flair.primary.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.1),
                 width: isActive ? 1.5 : 1.0,
               ),
+              boxShadow: isActive
+                  ? [BoxShadow(color: flair.primary.withValues(alpha: 0.1), blurRadius: 6)]
+                  : null,
             ),
             child: GoopText(p.label,
                 style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                    color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.5))),
+                    fontSize: 13,
+                    fontWeight: isActive ? FontWeight.w900 : FontWeight.w700,
+                    color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.55))),
           ),
         );
       }).toList(),
@@ -1681,11 +1716,11 @@ class _SchemaGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final schemas = ParticleColorSchema.values;
     return SizedBox(
-      height: 36,
+      height: 44,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: schemas.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 6),
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (_, i) {
           final s = schemas[i];
           final isActive = s == current;
@@ -1694,7 +1729,7 @@ class _SchemaGrid extends StatelessWidget {
             onTap: () { VisualPrefs.setParticleColorSchema(s); Haptics.selection(); },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
               decoration: BoxDecoration(
                 color: isActive ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.circular(10),
@@ -1708,22 +1743,22 @@ class _SchemaGrid extends StatelessWidget {
                 children: [
                   if (colors != null)
                     ...colors.take(3).map((c) => Padding(
-                      padding: const EdgeInsets.only(right: 3),
+                      padding: const EdgeInsets.only(right: 4),
                       child: Container(
-                        width: 7, height: 7,
+                        width: 9, height: 9,
                         decoration: BoxDecoration(shape: BoxShape.circle, color: c),
                       ),
                     ))
                   else
                     const Padding(
-                      padding: EdgeInsets.only(right: 3),
-                      child: Icon(Icons.auto_awesome, size: 10, color: Colors.white54),
+                      padding: EdgeInsets.only(right: 4),
+                      child: Icon(Icons.auto_awesome, size: 12, color: Colors.white54),
                     ),
                   GoopText(s.label,
                       style: TextStyle(
-                          fontSize: 9,
+                          fontSize: 11,
                           fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                          color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.5))),
+                          color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.55))),
                 ],
               ),
             ),
@@ -1748,8 +1783,8 @@ class _SpeedRow extends StatelessWidget {
           child: GestureDetector(
             onTap: () { VisualPrefs.setParticleSpeed(s); Haptics.selection(); },
             child: Container(
-              margin: const EdgeInsets.only(right: 6),
-              padding: const EdgeInsets.symmetric(vertical: 8),
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               decoration: BoxDecoration(
                 color: isActive ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.circular(8),
@@ -1760,9 +1795,9 @@ class _SpeedRow extends StatelessWidget {
               child: Center(
                 child: GoopText(s.label,
                     style: TextStyle(
-                        fontSize: 9,
+                        fontSize: 11,
                         fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                        color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.5))),
+                        color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.55))),
               ),
             ),
           ),
@@ -1779,11 +1814,11 @@ class _GlowRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 36,
+      height: 44,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: GlowEffect.values.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 6),
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (_, i) {
           final e = GlowEffect.values[i];
           final isActive = e == current;
@@ -1791,7 +1826,7 @@ class _GlowRow extends StatelessWidget {
           return GestureDetector(
             onTap: () { VisualPrefs.setParticleGlowEffect(e); Haptics.selection(); },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
                 color: isActive ? flair.card.withValues(alpha: 0.9) : flair.card.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(10),
@@ -1803,7 +1838,7 @@ class _GlowRow extends StatelessWidget {
               child: Center(
                 child: GoopText(e.label,
                     style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 12,
                         fontWeight: FontWeight.w900,
                         color: isActive ? Colors.white : Colors.white54)),
               ),
@@ -1833,25 +1868,25 @@ class _TypographyStep extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _StepLabel('FONT FAMILY'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               _FontFamilyGrid(current: prefs.font),
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               _StepLabel('BASE FONT SIZE'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               _FontSizeSlider(
                 current: prefs.fontSize,
                 onChanged: (v) => VisualPrefs.setFontSize(v),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               _StepLabel('INVENTORY FONT SIZE'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               _FontSizeSlider(
                 current: prefs.inventoryFontSize,
                 onChanged: (v) => VisualPrefs.setInventoryFontSize(v),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               _StepLabel('WEIGHT BIAS'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               _WeightRow(current: prefs.fontWeightBias),
             ],
           ),
@@ -1865,36 +1900,159 @@ class _FontFamilyGrid extends StatelessWidget {
   final AppFont current;
   const _FontFamilyGrid({required this.current});
 
+  // Font categories for organized browsing. The first category
+  // ("Featured") pins the two Gungeon-defining fonts at the top so
+  // they're always easy to find: the official Gungeon pixel font and
+  // Megrim (the app's signature thin-wire display font).
+  static const _categories = <_FontCategory>[
+    _FontCategory('Featured', [
+      AppFont.gungeon,
+      AppFont.megrim,
+    ]),
+    _FontCategory('Pixel & Retro', [
+      AppFont.pressStart2p,
+      AppFont.silkscreen,
+      AppFont.vt323,
+      AppFont.pixelifySans,
+      AppFont.bungee,
+      AppFont.bungeeShade,
+      AppFont.rubik8bit,
+      AppFont.dotgothic16,
+    ]),
+    _FontCategory('Sci-Fi & Tech', [
+      AppFont.monoton,
+      AppFont.blackOpsOne,
+      AppFont.orbitron,
+      AppFont.shareTechMono,
+      AppFont.syncopate,
+      AppFont.rajdhani,
+      AppFont.audiowide,
+      AppFont.russoOne,
+      AppFont.fasterOne,
+      AppFont.spaceGrotesk,
+      AppFont.jetBrainsMono,
+    ]),
+    _FontCategory('Display & Impact', [
+      AppFont.archivoBlack,
+      AppFont.anton,
+      AppFont.rowdies,
+      AppFont.righteous,
+      AppFont.teko,
+      AppFont.fjallaOne,
+      AppFont.bebasNeue,
+      AppFont.kanit,
+    ]),
+    _FontCategory('Casual & Fun', [
+      AppFont.comicNeue,
+      AppFont.fredoka,
+      AppFont.sniglet,
+      AppFont.lemon,
+      AppFont.lilitaOne,
+      AppFont.spicyRice,
+      AppFont.chewy,
+      AppFont.boogaloo,
+      AppFont.carterOne,
+      AppFont.permanentMarker,
+    ]),
+    _FontCategory('Clean & Modern', [
+      AppFont.dmSans,
+      AppFont.outfit,
+      AppFont.syne,
+      AppFont.montserrat,
+      AppFont.lexend,
+      AppFont.comfortaa,
+      AppFont.alata,
+    ]),
+    _FontCategory('Gothic & Fantasy', [
+      AppFont.medievalSharp,
+      AppFont.cinzelDecorative,
+      AppFont.almendra,
+      AppFont.metalMania,
+      AppFont.unifrakturMaguntia,
+      AppFont.newRocker,
+      AppFont.rye,
+      AppFont.nosifer,
+      AppFont.cinzel,
+    ]),
+    _FontCategory('Serif & Editorial', [
+      AppFont.playfairDisplay,
+      AppFont.ebGaramond,
+      AppFont.merriweather,
+      AppFont.libreBaskerville,
+      AppFont.specialElite,
+      AppFont.coustard,
+    ]),
+    _FontCategory('Handwritten & Script', [
+      AppFont.architectsDaughter,
+      AppFont.rockSalt,
+      AppFont.shadowsIntoLight,
+      AppFont.lobster,
+      AppFont.caveat,
+    ]),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    return Wrap(
-      spacing: 8, runSpacing: 8,
-      children: AppFont.values.map((font) {
-        final isSelected = font == current;
-        return GestureDetector(
-          onTap: () { VisualPrefs.setFont(font); Haptics.selection(); },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: isSelected ? flair.primary.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.04),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: isSelected ? flair.primary.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.08),
-                width: isSelected ? 1.5 : 1.0,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: _categories.map((cat) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Category header
+              GoopText(cat.name.toUpperCase(),
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      color: flair.primary.withValues(alpha: 0.6),
+                      letterSpacing: 1.2)),
+              const SizedBox(height: 8),
+              // Font chips in this category
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: cat.fonts.map((font) {
+                  final isSelected = font == current;
+                  return GestureDetector(
+                    onTap: () { VisualPrefs.setFont(font); Haptics.selection(); },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: isSelected ? flair.primary.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.04),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: isSelected ? flair.primary.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.08),
+                          width: isSelected ? 1.5 : 1.0,
+                        ),
+                        boxShadow: isSelected
+                            ? [BoxShadow(color: flair.primary.withValues(alpha: 0.1), blurRadius: 6)]
+                            : null,
+                      ),
+                      child: GoopText(font.label,
+                          style: font.textStyle.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? Colors.white : Colors.white54)),
+                    ),
+                  );
+                }).toList(),
               ),
-            ),
-            child: GoopText(font.label,
-                style: font.textStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: isSelected ? Colors.white : Colors.white54)),
+            ],
           ),
         );
       }).toList(),
     );
   }
+}
+
+class _FontCategory {
+  final String name;
+  final List<AppFont> fonts;
+  const _FontCategory(this.name, this.fonts);
 }
 
 class _FontSizeSlider extends StatelessWidget {
@@ -1990,8 +2148,8 @@ class _WeightRow extends StatelessWidget {
           child: GestureDetector(
             onTap: () { VisualPrefs.setFontWeightBias(options[i]); Haptics.selection(); },
             child: Container(
-              margin: const EdgeInsets.only(right: 6),
-              padding: const EdgeInsets.symmetric(vertical: 9),
+              margin: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.symmetric(vertical: 11),
               decoration: BoxDecoration(
                 color: isActive ? flair.primary.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.circular(8),
@@ -2002,9 +2160,9 @@ class _WeightRow extends StatelessWidget {
               child: Center(
                 child: GoopText(labels[i],
                     style: TextStyle(
-                        fontSize: 9,
+                        fontSize: 11,
                         fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                        color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.5))),
+                        color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.55))),
               ),
             ),
           ),
@@ -2033,25 +2191,25 @@ class _AmbianceStep extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _StepLabel('SCREEN GLOW'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               _StudioSlider('Glow Intensity',
                   '${(prefs.glowIntensity * 100).toStringAsFixed(0)}%',
                   prefs.glowIntensity, 0.0, 1.0, 20, flair.headlineStat,
                   (v) => VisualPrefs.setGlow(v)),
-              const SizedBox(height: 12),
+              const SizedBox(height: 18),
               _StepLabel('GLOW COLOR'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               _GlowColorRow(currentIndex: prefs.glowColorIndex),
-              const SizedBox(height: 16),
+              const SizedBox(height: 18),
               _StepLabel('DIALOGUE'),
-              const SizedBox(height: 8),
+              const SizedBox(height: 10),
               _ToggleRow(
                 icon: Icons.vibration,
                 label: 'Dialogue Haptics',
                 value: prefs.dialogueHapticsEnabled,
                 onChanged: (v) { VisualPrefs.setDialogueHapticsEnabled(v); Haptics.selection(); },
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 12),
               _StudioSlider('Text Speed', '${prefs.dialogueTextSpeedMs}ms',
                   prefs.dialogueTextSpeedMs.toDouble(), 5, 80, 75, flair.headlineStat,
                   (v) => VisualPrefs.setDialogueTextSpeedMs(v.toInt())),
@@ -2112,9 +2270,9 @@ class _StepLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return GoopText(text,
         style: TextStyle(
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: FontWeight.w900,
-            color: AppTheme.flair.primary.withValues(alpha: 0.8),
+            color: AppTheme.flair.primary.withValues(alpha: 0.85),
             letterSpacing: 1.5));
   }
 }
@@ -2130,7 +2288,7 @@ class _ToggleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: flair.card.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(8),
@@ -2138,11 +2296,11 @@ class _ToggleRow extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.white54),
+          Icon(icon, size: 18, color: Colors.white54),
           const SizedBox(width: 10),
           Expanded(
             child: GoopText(label,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white70)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white70)),
           ),
           Switch(
             value: value,
@@ -2175,8 +2333,8 @@ class _StudioSlider extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GoopText(label, style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white70)),
-              GoopText(displayValue, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: color)),
+              GoopText(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70)),
+              GoopText(displayValue, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
             ],
           ),
           SizedBox(
