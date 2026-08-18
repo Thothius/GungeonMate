@@ -2756,6 +2756,12 @@ class VisualPrefs {
   /// Defaults to [ShaderPreset.digitalRain].
   final ShaderPreset shaderPreset;
 
+  /// Whether to show the fullscreen mode picker onboarding dialog
+  /// when a new run starts. Defaults to true — first-time users
+  /// should see the 3 display modes. Unchecking "Remember Pick" in
+  /// the dialog sets this to false.
+  final bool showModePickerOnNewRun;
+
 
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
@@ -2815,6 +2821,7 @@ class VisualPrefs {
     this.depthTiltIntensity = 0.6,
     this.shaderEnabled = false,
     this.shaderPreset = ShaderPreset.digitalRain,
+    this.showModePickerOnNewRun = true,
   });
 
   static const _kGlow     = 'vp.glow_v1';
@@ -2853,6 +2860,7 @@ class VisualPrefs {
   static const _kDepthTiltIntensity = 'vp.depth_tilt_intensity_v1';
   static const _kShaderEnabled = 'vp.shader_enabled_v1';
   static const _kShaderPreset = 'vp.shader_preset_v1';
+  static const _kShowModePickerOnNewRun = 'vp.show_mode_picker_on_new_run_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
       ValueNotifier(const VisualPrefs());
@@ -2924,6 +2932,7 @@ class VisualPrefs {
       final shaderEnabled = p.getBool(_kShaderEnabled) ?? false;
       final shaderPresetIdx = p.getInt(_kShaderPreset) ?? 0;
       final shaderPreset = ShaderPreset.values[shaderPresetIdx.clamp(0, ShaderPreset.values.length - 1)];
+      final showModePickerOnNewRun = p.getBool(_kShowModePickerOnNewRun) ?? true;
 
 
       notifier.value = VisualPrefs(
@@ -2960,6 +2969,7 @@ class VisualPrefs {
         depthTiltIntensity: depthTiltIntensity,
         shaderEnabled: shaderEnabled,
         shaderPreset: shaderPreset,
+        showModePickerOnNewRun: showModePickerOnNewRun,
       );
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
@@ -3116,6 +3126,11 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setShowModePickerOnNewRun(bool v) async {
+    notifier.value = notifier.value._with(showModePickerOnNewRun: v);
+    _persist();
+  }
+
   static Future<void> setDepthTiltIntensity(double v) async {
     notifier.value = notifier.value._with(depthTiltIntensity: v.clamp(0.0, 1.0));
     _persist();
@@ -3170,6 +3185,7 @@ class VisualPrefs {
       await p.setDouble(_kDepthTiltIntensity, v.depthTiltIntensity);
       await p.setBool(_kShaderEnabled, v.shaderEnabled);
       await p.setInt(_kShaderPreset, v.shaderPreset.index);
+      await p.setBool(_kShowModePickerOnNewRun, v.showModePickerOnNewRun);
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
@@ -3207,6 +3223,7 @@ class VisualPrefs {
     double? depthTiltIntensity,
     bool? shaderEnabled,
     ShaderPreset? shaderPreset,
+    bool? showModePickerOnNewRun,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -3241,6 +3258,7 @@ class VisualPrefs {
     depthTiltIntensity: depthTiltIntensity ?? this.depthTiltIntensity,
     shaderEnabled: shaderEnabled ?? this.shaderEnabled,
     shaderPreset: shaderPreset ?? this.shaderPreset,
+    showModePickerOnNewRun: showModePickerOnNewRun ?? this.showModePickerOnNewRun,
   );
 }
 

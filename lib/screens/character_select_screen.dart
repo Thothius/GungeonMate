@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter/scheduler.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
@@ -9,6 +10,7 @@ import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
+import '../widgets/active_run/modes/mode_picker_onboarding.dart';
 import 'gungeoneer_detail_screen.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
@@ -172,6 +174,20 @@ class _CharacterGrid extends StatelessWidget {
               } else {
                 run.startNewRun(char);
                 if (Navigator.canPop(c)) Navigator.pop(c);
+                // Show the mode picker onboarding dialog after the
+                // new run starts and we've navigated back to the
+                // active run screen. Post-frame so the pop completes
+                // first and the dialog shows on top of the run view.
+                if (VisualPrefs.notifier.value.showModePickerOnNewRun) {
+                  SchedulerBinding.instance.addPostFrameCallback((_) {
+                    if (!c.mounted) return;
+                    showDialog(
+                      context: c,
+                      barrierDismissible: true,
+                      builder: (_) => const ModePickerOnboardingDialog(),
+                    );
+                  });
+                }
               }
             }
             final card = _CharacterCard(

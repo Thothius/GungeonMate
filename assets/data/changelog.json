@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.58",
+    "title": "Mode Picker Onboarding — Fullscreen Animated Showcase on New Run",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Mode Picker Onboarding Dialog — pops up automatically when a new run starts (if 'Remember Pick' is checked). Fullscreen dialog with 15% padding so it reads as a pick overlay, not the run view. Three large animated preview cards (Codex Book / Compact Run / Gungeon Matrix), each with an animated showcase thumbnail, tagline, and feature chips. Hover/tap scale animation. 'Remember Pick' checkbox — uncheck to skip the dialog on future runs (persisted via VisualPrefs.showModePickerOnNewRun). Tapping a card selects that mode and dismisses instantly. Entrance fade animation. Uses flutter_animate for the showcase loops."
+    ]
+  },
+  {
     "version": "v1.9.57",
     "title": "Gungeon Meter on Codex Book Active View",
     "date": "August 2026",

@@ -6,6 +6,29 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.58 — 🎯 Mode Picker Onboarding: Fullscreen Animated Showcase (August 2026)
+**Build:** 134
+
+> When a new run starts, a fullscreen mode picker dialog pops up showing all 3 active view modes with animated previews.
+
+### New Features
+- **Mode Picker Onboarding Dialog** — automatically appears when a new run starts (if `showModePickerOnNewRun` is true, which is the default). Fullscreen `Dialog` with 15% padding on all sides so it reads as a pick overlay. Three large preview cards (Codex Book / Compact Run / Gungeon Matrix), each with:
+  - Animated showcase thumbnail (book pulse for Codex, mini bars for Compact, falling binary for Matrix)
+  - Tagline (1-line description)
+  - Feature chips (4 key features per mode)
+  - Hover/tap scale animation (1.02x)
+  - Selected mode checkmark
+- **"Remember Pick" checkbox** — checked by default. Uncheck to set `VisualPrefs.showModePickerOnNewRun` to false, skipping the dialog on future runs.
+- Tapping a card calls `VisualPrefs.setRunDisplayMode` and dismisses the dialog instantly.
+- Entrance fade animation via `AnimationController`.
+
+### Infrastructure
+- `lib/widgets/active_run/modes/mode_picker_onboarding.dart` — the dialog widget (494 lines).
+- `lib/services/app_theme.dart` — new `showModePickerOnNewRun` field on `VisualPrefs` + setter + persist + load.
+- `lib/screens/character_select_screen.dart` — after `startNewRun`, shows the dialog via `SchedulerBinding.addPostFrameCallback` (so the pop completes first and the dialog shows on top of the active run screen).
+
+---
+
 ## v1.9.57 — 📊 Gungeon Meter on Codex Book Active View (August 2026)
 **Build:** 133
 
