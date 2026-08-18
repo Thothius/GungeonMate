@@ -345,8 +345,10 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                 if (!isHomeScreen && prefs.particlesEnabled && _touchParticles.isNotEmpty)
                   Positioned.fill(
                     child: IgnorePointer(
-                      child: CustomPaint(
-                        painter: TouchParticlePainter(particles: _touchParticles),
+                      child: RepaintBoundary(
+                        child: CustomPaint(
+                          painter: TouchParticlePainter(particles: _touchParticles),
+                        ),
                       ),
                     ),
                   ),

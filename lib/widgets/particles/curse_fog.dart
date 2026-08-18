@@ -27,15 +27,17 @@ class _CurseFogState extends State<CurseFog> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _c,
-      builder: (context, child) {
-        final t = _c.value;
-        return CustomPaint(
-          painter: CurseFogPainter(t: t),
-          size: Size.infinite,
-        );
-      },
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _c,
+        builder: (context, child) {
+          final t = _c.value;
+          return CustomPaint(
+            painter: CurseFogPainter(t: t),
+            size: Size.infinite,
+          );
+        },
+      ),
     );
   }
 }

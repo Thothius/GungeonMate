@@ -203,11 +203,13 @@ class _VortexLightningState extends State<VortexLightning>
         ),
         // ── Lightning bolt ──
         Positioned.fill(
-          child: CustomPaint(
-            painter: _LightningBoltPainter(
-              path: _boltPath,
-              intensity: _boltIntensity,
-              opacity: _flashOpacity,
+          child: RepaintBoundary(
+            child: CustomPaint(
+              painter: _LightningBoltPainter(
+                path: _boltPath,
+                intensity: _boltIntensity,
+                opacity: _flashOpacity,
+              ),
             ),
           ),
         ),

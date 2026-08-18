@@ -396,9 +396,11 @@ class DiceRollDialogState extends State<DiceRollDialog>
               if (_particles.isNotEmpty)
                 Positioned.fill(
                   child: IgnorePointer(
-                    child: CustomPaint(
-                      key: _particleKey,
-                      painter: DialogParticlePainter(particles: _particles),
+                    child: RepaintBoundary(
+                      child: CustomPaint(
+                        key: _particleKey,
+                        painter: DialogParticlePainter(particles: _particles),
+                      ),
                     ),
                   ),
                 ),

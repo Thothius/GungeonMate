@@ -785,9 +785,11 @@ class _PeriodicTileState extends State<PeriodicTile>
           child,
           Positioned.fill(
             child: IgnorePointer(
-              child: CustomPaint(
-                painter: _StrikethroughPainter(
-                  color: Colors.redAccent.withValues(alpha: 0.42),
+              child: RepaintBoundary(
+                child: CustomPaint(
+                  painter: _StrikethroughPainter(
+                    color: Colors.redAccent.withValues(alpha: 0.42),
+                  ),
                 ),
               ),
             ),

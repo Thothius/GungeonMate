@@ -47,20 +47,22 @@ class _EdgeDripWidgetState extends State<EdgeDripWidget>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: _EdgeDripPainter(
-            progress: _controller.value,
-            color: widget.color,
-            dripCount: widget.dripCount,
-            maxDripHeight: widget.maxDripHeight,
-            viscosity: widget.viscosity,
-          ),
-          size: Size.infinite,
-        );
-      },
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: _EdgeDripPainter(
+              progress: _controller.value,
+              color: widget.color,
+              dripCount: widget.dripCount,
+              maxDripHeight: widget.maxDripHeight,
+              viscosity: widget.viscosity,
+            ),
+            size: Size.infinite,
+          );
+        },
+      ),
     );
   }
 }

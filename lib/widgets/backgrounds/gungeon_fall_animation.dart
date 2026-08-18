@@ -47,10 +47,12 @@ class _GungeonFallAnimationState extends State<GungeonFallAnimation>
         // ── Portal vortex ──────────────────────────────────────────
         Positioned.fill(
           child: IgnorePointer(
-            child: AnimatedBuilder(
-              animation: _ctrl,
-              builder: (_, __) => CustomPaint(
-                painter: _PortalPainter(progress: _ctrl.value),
+            child: RepaintBoundary(
+              child: AnimatedBuilder(
+                animation: _ctrl,
+                builder: (_, __) => CustomPaint(
+                  painter: _PortalPainter(progress: _ctrl.value),
+                ),
               ),
             ),
           ),

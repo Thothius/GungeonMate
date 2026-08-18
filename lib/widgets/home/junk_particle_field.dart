@@ -137,21 +137,23 @@ class _JunkParticleFieldState extends State<JunkParticleField>
           return const SizedBox.shrink();
         }
         return IgnorePointer(
-          child: AnimatedBuilder(
-            animation: _ctrl,
-            builder: (context, _) {
-              // sizeOf avoids rebuilds on keyboard/orientation changes.
-              final size = MediaQuery.sizeOf(context);
-              return CustomPaint(
-                size: size,
-                painter: _JunkPainter(
-                  particles: _particles,
-                  images: _images,
-                  progress: _ctrl.value,
-                  elapsed: _clock.elapsedMilliseconds / 1000.0,
-                ),
-              );
-            },
+          child: RepaintBoundary(
+            child: AnimatedBuilder(
+              animation: _ctrl,
+              builder: (context, _) {
+                // sizeOf avoids rebuilds on keyboard/orientation changes.
+                final size = MediaQuery.sizeOf(context);
+                return CustomPaint(
+                  size: size,
+                  painter: _JunkPainter(
+                    particles: _particles,
+                    images: _images,
+                    progress: _ctrl.value,
+                    elapsed: _clock.elapsedMilliseconds / 1000.0,
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
