@@ -67,6 +67,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     'Ambiance',
   ];
 
+  static const _stepDescriptions = [
+    'Pick your base palette',
+    'Fine-tune color variants',
+    'Ambient particle effects',
+    'Fonts and text sizing',
+    'Screen glow and feel',
+  ];
+
   void _applyAndClose() {
     Haptics.success();
     AppTheme.previewNotifier.value = null;
@@ -91,8 +99,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               _buildTopBar(),
               // ── Live preview (always visible) ──
               _LivePreview(),
-              // ── Progress dots ──
-              _buildProgressDots(),
+              // ── Step header with progress bar ──
+              _buildStepHeader(),
               // ── Step content (animated transition between steps) ──
               Expanded(
                 child: AnimatedSwitcher(
@@ -191,62 +199,135 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-  Widget _buildProgressDots() {
+  /// Build a clear, big step header that shows the current step number,
+  /// step name, a one-line description, and a progress bar. This replaces
+  /// the old tiny dot indicator — 2026 mobile UX demands the user always
+  /// knows where they are and what's next at a glance.
+  Widget _buildStepHeader() {
     final flair = AppTheme.flair;
-    // Build the list of visible step indices — skip Palette (index 1)
-    // when the current theme has no variants.
     final visibleIndices = List.generate(_stepLabels.length, (i) => i)
         .where((i) => i != 1 || _hasVariants())
         .toList();
+    final visibleStep = visibleIndices.indexOf(_step);
+    final totalVisible = visibleIndices.length;
+    final progress = (visibleStep + 1) / totalVisible;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: visibleIndices.map((i) {
-          final on = i == _step;
-          final done = i < _step;
-          return GestureDetector(
-            onTap: () => _goTo(i),
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              // 44px minimum tap target per accessibility guidelines
-              constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: on ? 10 : 8,
-                    height: on ? 10 : 8,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: on
-                          ? flair.primary
-                          : done
-                              ? flair.primary.withValues(alpha: 0.5)
-                              : Colors.white.withValues(alpha: 0.2),
-                    ),
+      padding: const EdgeInsets.fromLTRB(16, 2, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Step counter + step name
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              GoopText(
+                '${visibleStep + 1}',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: flair.primary,
+                  height: 1.0,
+                ),
+              ),
+              GoopText(
+                ' / $totalVisible',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withValues(alpha: 0.4),
+                  height: 1.0,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: GoopText(
+                  _stepLabels[_step].toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white.withValues(alpha: 0.85),
+                    letterSpacing: 1.2,
                   ),
-                  if (on) ...[
-                    const SizedBox(width: 6),
-                    GoopText(
-                      _stepLabels[i].toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 8,
-                        fontWeight: FontWeight.w900,
-                        color: flair.primary,
-                        letterSpacing: 1.2,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          // One-line description
+          GoopText(
+            _stepDescriptions[_step],
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.white.withValues(alpha: 0.45),
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 8),
+          // Progress bar — clean, thick, themed
+          ClipRRect(
+            borderRadius: BorderRadius.circular(3),
+            child: LinearProgressIndicator(
+              value: progress,
+              minHeight: 4,
+              backgroundColor: Colors.white.withValues(alpha: 0.08),
+              valueColor: AlwaysStoppedAnimation(flair.primary),
+            ),
+          ),
+          // Tappable step chips for quick navigation
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 30,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: visibleIndices.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              itemBuilder: (context, idx) {
+                final stepIdx = visibleIndices[idx];
+                final isCurrent = stepIdx == _step;
+                final isDone = stepIdx < _step;
+                return GestureDetector(
+                  onTap: () => _goTo(stepIdx),
+                  behavior: HitTestBehavior.opaque,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: isCurrent
+                          ? flair.primary.withValues(alpha: 0.18)
+                          : isDone
+                              ? flair.primary.withValues(alpha: 0.08)
+                              : Colors.white.withValues(alpha: 0.04),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: isCurrent
+                            ? flair.primary.withValues(alpha: 0.6)
+                            : Colors.transparent,
+                        width: 1.0,
                       ),
                     ),
-                  ],
-                ],
-              ),
+                    child: Center(
+                      child: GoopText(
+                        _stepLabels[stepIdx],
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: isCurrent ? FontWeight.w800 : FontWeight.w600,
+                          color: isCurrent
+                              ? flair.primary
+                              : isDone
+                                  ? flair.primary.withValues(alpha: 0.5)
+                                  : Colors.white.withValues(alpha: 0.35),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        }).toList(),
+          ),
+        ],
       ),
     );
   }
@@ -292,106 +373,183 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         ? Colors.black87
         : Colors.white;
 
-    // Gungeon-styled action button — chunky border, subtle glow, tactile
-    // scale-on-press via ScaleButton. Apply always uses the theme's
-    // primary color so it reads as the affirmative action from any step.
-    Widget gungeonButton({
-      required String label,
-      required IconData icon,
-      required Color bgColor,
-      required Color textColor,
-      required Color borderColor,
-      bool glow = false,
-      bool expanded = false,
-      required VoidCallback onTap,
-    }) {
-      final btn = ScaleButton(
-        onTap: onTap,
-        child: Container(
-          height: 46,
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: borderColor, width: 1.4),
-            boxShadow: glow
-                ? [BoxShadow(color: borderColor.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
-                : [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 4, offset: const Offset(0, 2))],
-          ),
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 16, color: textColor),
-              const SizedBox(width: 7),
-              GoopText(
-                label.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.0,
-                  color: textColor,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-      return expanded ? Expanded(child: btn) : btn;
-    }
+    // Figure out the next step name for context (e.g. "Next: Particles")
+    final visibleIndices = List.generate(_stepLabels.length, (i) => i)
+        .where((i) => i != 1 || _hasVariants())
+        .toList();
+    final currentVisibleIdx = visibleIndices.indexOf(_step);
+    final hasNext = currentVisibleIdx < visibleIndices.length - 1;
+    final nextStepName = hasNext ? _stepLabels[visibleIndices[currentVisibleIdx + 1]] : '';
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-      child: Row(
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          if (_step > 0)
-            gungeonButton(
-              label: 'Back',
-              icon: Icons.arrow_back_rounded,
-              bgColor: Colors.white.withValues(alpha: 0.06),
-              textColor: Colors.white70,
-              borderColor: Colors.white.withValues(alpha: 0.15),
-              expanded: true,
-              onTap: () => _goTo(_step - 1),
+          // Primary action — big, full-width, clear
+          if (isLast)
+            // Last step: APPLY is the hero
+            ScaleButton(
+              onTap: _applyAndClose,
+              child: Container(
+                height: 52,
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: flair.primary, width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.check_circle_rounded, size: 20, color: onPrimary),
+                    const SizedBox(width: 8),
+                    GoopText(
+                      'APPLY & SAVE',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: onPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             )
           else
-            const Spacer(),
-          const SizedBox(width: 12),
-          // On the last step, Apply takes the full trailing width (as
-          // before). On every other step, Next and Apply share the row so
-          // the user can commit their theme choice immediately without
-          // traversing the rest of the wizard.
-          if (isLast)
-            gungeonButton(
-              label: 'Apply',
-              icon: Icons.check_rounded,
-              bgColor: flair.primary,
-              textColor: onPrimary,
-              borderColor: flair.primary,
-              glow: true,
-              expanded: true,
-              onTap: _applyAndClose,
-            )
-          else ...[
-            gungeonButton(
-              label: 'Next',
-              icon: Icons.arrow_forward_rounded,
-              bgColor: flair.primary.withValues(alpha: 0.3),
-              textColor: onPrimary,
-              borderColor: flair.primary.withValues(alpha: 0.5),
-              expanded: true,
+            // Non-last step: NEXT is the hero, with context label
+            ScaleButton(
               onTap: () => _goTo(_step + 1),
+              child: Container(
+                height: 52,
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: flair.primary, width: 1.5),
+                  boxShadow: [
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: 0.25),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GoopText(
+                      'NEXT',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                        color: onPrimary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: onPrimary.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: GoopText(
+                        nextStepName,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: onPrimary.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Icon(Icons.arrow_forward_rounded, size: 18, color: onPrimary),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(width: 8),
-            gungeonButton(
-              label: 'Apply',
-              icon: Icons.check_rounded,
-              bgColor: flair.primary,
-              textColor: onPrimary,
-              borderColor: flair.primary,
-              glow: true,
-              onTap: _applyAndClose,
-            ),
-          ],
+          const SizedBox(height: 8),
+          // Secondary row: Back (left) + Apply (right, smaller)
+          Row(
+            children: [
+              if (_step > 0)
+                ScaleButton(
+                  onTap: () => _goTo(_step - 1),
+                  child: Container(
+                    height: 40,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.12),
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.arrow_back_rounded, size: 15, color: Colors.white60),
+                        const SizedBox(width: 6),
+                        GoopText(
+                          'BACK',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white60,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                const SizedBox(width: 80),
+              const Spacer(),
+              if (!isLast)
+                ScaleButton(
+                  onTap: _applyAndClose,
+                  child: Container(
+                    height: 40,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: flair.primary.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: flair.primary.withValues(alpha: 0.3),
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check_rounded, size: 15, color: flair.primary),
+                        const SizedBox(width: 6),
+                        GoopText(
+                          'APPLY',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w800,
+                            color: flair.primary,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ],
       ),
     );
@@ -769,10 +927,10 @@ class _ThemeStep extends StatelessWidget {
           child: GoopText(
             'Tap to preview  ·  Long-press to apply instantly',
             style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              color: Colors.white.withValues(alpha: 0.4),
-              letterSpacing: 0.5,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withValues(alpha: 0.45),
+              letterSpacing: 0.3,
             ),
           ),
         ),
@@ -926,9 +1084,9 @@ class _PaletteStep extends StatelessWidget {
           GoopText(
             'PALETTE VARIANTS',
             style: TextStyle(
-                fontSize: 11,
+                fontSize: 12,
                 fontWeight: FontWeight.w900,
-                color: AppTheme.flair.primary.withValues(alpha: 0.7),
+                color: AppTheme.flair.primary.withValues(alpha: 0.8),
                 letterSpacing: 1.5),
           ),
           const SizedBox(height: 12),
@@ -1136,7 +1294,7 @@ class _CustomColorsStepState extends State<_CustomColorsStep> {
             children: [
               const GoopText('CUSTOM THEME COLORS',
                   style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.5,
                       color: Colors.white54)),
@@ -1882,10 +2040,10 @@ class _StepLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return GoopText(text,
         style: TextStyle(
-            fontSize: 9,
+            fontSize: 12,
             fontWeight: FontWeight.w900,
-            color: AppTheme.flair.primary.withValues(alpha: 0.7),
-            letterSpacing: 1.8));
+            color: AppTheme.flair.primary.withValues(alpha: 0.8),
+            letterSpacing: 1.5));
   }
 }
 
