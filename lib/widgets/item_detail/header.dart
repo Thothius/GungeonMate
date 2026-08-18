@@ -131,17 +131,17 @@ class ItemDetailHeader extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          // Icon — no ring, bigger and cleaner
+          // Icon — no ring, 25% smaller (128 → 96) to show more info on screen
           GameIcon(
             assetPath: iconPath,
             fallback: isGun
                 ? Icons.gps_fixed
                 : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
             quality: quality,
-            size: 128,
+            size: 96,
             showRing: false,
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 10),
           // Item name
           GoopText(
             name,
@@ -152,7 +152,7 @@ class ItemDetailHeader extends StatelessWidget {
               letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           // All tags inline in one Wrap
           Wrap(
             alignment: WrapAlignment.center,

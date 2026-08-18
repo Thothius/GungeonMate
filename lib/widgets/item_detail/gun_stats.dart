@@ -1198,8 +1198,8 @@ class GunStats extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 142,
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                      height: 121,
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                       decoration: BoxDecoration(
                         color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(12),
@@ -1231,16 +1231,16 @@ class GunStats extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.asset(
                               animationAsset,
-                              height: 80,
+                              height: 68,
                               fit: BoxFit.contain,
                               filterQuality: FilterQuality.none,
                               errorBuilder: (_, __, ___) => Container(
-                                height: 80,
+                                height: 68,
                                 alignment: Alignment.center,
                                 child: GoopText(
                                   displayType,
@@ -1256,8 +1256,8 @@ class GunStats extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Container(
-                      height: 142,
-                      padding: const EdgeInsets.all(12),
+                      height: 121,
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(12),
@@ -1286,13 +1286,13 @@ class GunStats extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 8),
                           GoopText(
                             gun.name.toLowerCase() == 'gunderfury'
                                 ? gun.getDynamicDps(gunderLevel: p.gunderfuryLevel).toStringAsFixed(1)
                                 : (gun.dpsValue > 0 ? gun.dpsValue.toStringAsFixed(1) : (gun.dps.isEmpty ? '0.0' : gun.dps)),
                             style: TextStyle(
-                              fontSize: 32,
+                              fontSize: 27,
                               fontWeight: FontWeight.w900,
                               color: AppTheme.flair.secondary,
                               height: 1.0,
@@ -1304,7 +1304,7 @@ class GunStats extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 4),
                           GoopText(
                             'Damage Per Second',
                             style: TextStyle(
