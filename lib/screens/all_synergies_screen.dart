@@ -67,42 +67,70 @@ class AllSynergiesScreen extends StatelessWidget {
               ],
             ),
           ),
-          // Two-column layout: acquired (left) | not-acquired (right)
+          // Responsive: side-by-side on wide screens, stacked on mobile.
+          // 600px is the Material breakpoint for tablet/landscape.
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ── LEFT: Acquired (active + partial) ──
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      _columnHeader('ACQUIRED', Colors.greenAccent,
-                          active.length + partial.length),
-                      if (active.isNotEmpty) ...[
-                        _subHeader('Active', Colors.greenAccent, active.length),
-                        _SynergyGrid(list: active, owned: owned, active: true),
-                      ],
-                      if (partial.isNotEmpty) ...[
-                        _subHeader('Partial', Colors.amberAccent, partial.length),
-                        _SynergyGrid(list: partial, owned: owned, active: false),
-                      ],
-                      const SliverToBoxAdapter(child: SizedBox(height: 80)),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isWide = constraints.maxWidth >= 600;
+                final gridCols = isWide ? 2 : 1;
+
+                if (isWide) {
+                  // ── Two-column layout: acquired (left) | not-acquired (right) ──
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: CustomScrollView(
+                          slivers: [
+                            _columnHeader('ACQUIRED', Colors.greenAccent,
+                                active.length + partial.length),
+                            if (active.isNotEmpty) ...[
+                              _subHeader('Active', Colors.greenAccent, active.length),
+                              _SynergyGrid(list: active, owned: owned, active: true, columns: gridCols),
+                            ],
+                            if (partial.isNotEmpty) ...[
+                              _subHeader('Partial', Colors.amberAccent, partial.length),
+                              _SynergyGrid(list: partial, owned: owned, active: false, columns: gridCols),
+                            ],
+                            const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                          ],
+                        ),
+                      ),
+                      Container(width: 1, color: Colors.white.withValues(alpha: 0.06)),
+                      Expanded(
+                        child: CustomScrollView(
+                          slivers: [
+                            _columnHeader('NOT ACQUIRED', Colors.white38, locked.length),
+                            _SynergyGrid(list: locked, owned: owned, active: false, columns: gridCols),
+                            const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                          ],
+                        ),
+                      ),
                     ],
-                  ),
-                ),
-                // ── Divider ──
-                Container(width: 1, color: Colors.white.withValues(alpha: 0.06)),
-                // ── RIGHT: Not acquired (locked) ──
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      _columnHeader('NOT ACQUIRED', Colors.white38, locked.length),
-                      _SynergyGrid(list: locked, owned: owned, active: false),
-                      const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                  );
+                }
+
+                // ── Stacked layout (mobile): all sections in one scroll ──
+                return CustomScrollView(
+                  slivers: [
+                    _columnHeader('ACQUIRED', Colors.greenAccent,
+                        active.length + partial.length),
+                    if (active.isNotEmpty) ...[
+                      _subHeader('Active', Colors.greenAccent, active.length),
+                      _SynergyGrid(list: active, owned: owned, active: true, columns: 2),
                     ],
-                  ),
-                ),
-              ],
+                    if (partial.isNotEmpty) ...[
+                      _subHeader('Partial', Colors.amberAccent, partial.length),
+                      _SynergyGrid(list: partial, owned: owned, active: false, columns: 2),
+                    ],
+                    const SliverToBoxAdapter(child: Divider(color: Colors.white12, height: 24)),
+                    _columnHeader('NOT ACQUIRED', Colors.white38, locked.length),
+                    _SynergyGrid(list: locked, owned: owned, active: false, columns: 2),
+                    const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -194,11 +222,13 @@ class _SynergyGrid extends StatelessWidget {
   final List<Synergy> list;
   final Set<String> owned;
   final bool active;
+  final int columns;
 
   const _SynergyGrid({
     required this.list,
     required this.owned,
     required this.active,
+    this.columns = 2,
   });
 
   @override
@@ -206,8 +236,8 @@ class _SynergyGrid extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: columns,
           childAspectRatio: 1.05,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,

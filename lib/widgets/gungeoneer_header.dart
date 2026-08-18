@@ -954,7 +954,7 @@ class _RobotDmgBadge extends StatelessWidget {
           GoopText(
             'DMG',
             style: TextStyle(
-              fontSize: 6,
+              fontSize: 8,
               fontWeight: FontWeight.w900,
               color: Colors.cyanAccent.withValues(alpha: 0.6),
               letterSpacing: 1.0,

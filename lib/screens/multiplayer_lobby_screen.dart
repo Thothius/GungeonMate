@@ -369,85 +369,45 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               const SizedBox(height: 24),
 
               // ── Primary CTA ────────────────────────────────────────
-              // Greyed out when hosting but no character picked yet.
+              // When hosting but no character picked, the button becomes
+              // an amber "PICK CHARACTER" action — clearly tappable, not
+              // disabled-looking. Once picked, it becomes "START HOSTING".
               Builder(builder: (context) {
-                final canStart = !_isMain || _selectedCharacter != null;
+                final needsChar = _isMain && _selectedCharacter == null;
                 return SizedBox(
                   width: double.infinity,
                   height: 52 * sf,
                   child: FilledButton.icon(
-                    icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth, size: 20),
+                    icon: Icon(
+                      needsChar
+                          ? Icons.person_add_rounded
+                          : (_isMain ? Icons.campaign : Icons.bluetooth),
+                      size: 20,
+                    ),
                     label: GoopText(
                       _isMain
-                          ? (_selectedCharacter == null ? 'PICK CHARACTER FIRST' : 'START HOSTING')
+                          ? (_selectedCharacter == null ? 'PICK CHARACTER' : 'START HOSTING')
                           : 'FIND HOST',
                       style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5),
                     ),
                     style: FilledButton.styleFrom(
-                      backgroundColor: canStart
-                          ? flair.primary
-                          : Colors.white.withValues(alpha: 0.08),
-                      disabledBackgroundColor: Colors.white.withValues(alpha: 0.06),
-                      disabledForegroundColor: Colors.white.withValues(alpha: 0.3),
+                      backgroundColor: needsChar
+                          ? flair.secondary
+                          : flair.primary,
+                      foregroundColor: Colors.white,
                     ),
-                    onPressed: canStart
-                        ? () {
-                            Haptics.selection();
-                            _start();
-                          }
-                        : () {
-                            Haptics.selection();
-                            _pickCharacter();
-                          },
+                    onPressed: () {
+                      if (needsChar) {
+                        Haptics.selection();
+                        _pickCharacter();
+                      } else {
+                        Haptics.selection();
+                        _start();
+                      }
+                    },
                   ),
                 );
               }),
-              const SizedBox(height: 16),
-
-              // ── Divider ────────────────────────────────────────────
-              Row(
-                children: [
-                  const Expanded(child: Divider(color: Colors.white12, height: 1)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: GoopText(
-                      'or',
-                      style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.3)),
-                    ),
-                  ),
-                  const Expanded(child: Divider(color: Colors.white12, height: 1)),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // ── Solo Co-op ─────────────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.smart_toy_outlined, size: 18),
-                  label: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      GoopText('Solo Co-op', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                      GoopText('Play with AI partner', style: TextStyle(fontSize: 10, color: Colors.white54)),
-                    ],
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: flair.secondary,
-                    side: BorderSide(color: flair.secondary.withValues(alpha: 0.5), width: 1),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    alignment: Alignment.centerLeft,
-                  ),
-                  onPressed: () {
-                    Haptics.selection();
-                    _pinCtrl.text = '0000';
-                    setState(() => _isMain = false);
-                    _start();
-                  },
-                ),
-              ),
 
               // ── Bottom links ───────────────────────────────────────
               const SizedBox(height: 24),
@@ -509,8 +469,6 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               _buildGuideStep('2. Host: Pick Main', 'One phone selects "Host", picks a character, enters a nickname, and taps "Start Hosting". A 4-digit PIN appears.'),
               _buildGuideStep('3. Sidekick: Enter PIN', 'Other phone selects "Join", enters nickname, types the host\'s 4-digit PIN, taps "Find Host".'),
               _buildGuideStep('4. Play!', 'Devices pair automatically. Host controls the run. Sidekick plays as The Cultist. Items can be gifted between players.'),
-              const SizedBox(height: 16),
-              _buildGuideStep('Solo Co-op', 'Want to try co-op solo? Tap "Solo Co-op" to spawn a simulated AI partner on this device.'),
             ],
           ),
         ),
