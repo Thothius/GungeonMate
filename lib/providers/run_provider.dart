@@ -1697,6 +1697,30 @@ class RunProvider with ChangeNotifier {
     return _synergyCountCache![itemName.toLowerCase()] ?? 0;
   }
 
+  /// Synergy Predictor (genius audit Q2): returns the names of synergies
+  /// that are NOT currently active but WOULD become active if [itemName]
+  /// were added to [slot]'s loadout. Used by the browse screen to
+  /// highlight items/guns that complete partial synergies.
+  ///
+  /// Returns an empty list if the item is already owned (can't complete
+  /// what's already counted) or if no synergy would be completed.
+  List<String> synergiesCompletedBy(String itemName,
+      {PlayerSlot slot = PlayerSlot.main}) {
+    final player =
+        slot == PlayerSlot.main ? _runState.main : _runState.coop;
+    if (player == null) return const [];
+    final owned = player.allItemNames;
+    final ownedLower = owned.map((n) => n.toLowerCase()).toSet();
+    final lower = itemName.toLowerCase();
+    if (ownedLower.contains(lower)) return const []; // already owned
+    final wouldOwn = [...owned, itemName];
+    return _allSynergies
+        .where((s) =>
+            !s.matchesItems(owned) && s.matchesItems(wouldOwn))
+        .map((s) => s.name)
+        .toList();
+  }
+
   Map<String, int> _buildSynergyCountCache() {
     final map = <String, int>{};
     for (final s in _allSynergies) {

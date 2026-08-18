@@ -6,6 +6,16 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.50 — ✨ Synergy Predictor (August 2026)
+**Build:** 126
+
+> Browse items and guns now show a gold "COMPLETES" badge when acquiring them would activate a partial synergy.
+
+### New Features
+- **Synergy Predictor** — browse rows now display a gold "COMPLETES: <synergy name>" pill when adding that item/gun to your loadout would complete a partial synergy. Shows "COMPLETES N" when multiple synergies would be activated. Slot-aware (respects coop browse). Items already in your loadout are excluded.
+
+---
+
 ## v1.9.49 — 🔗 True One-Tap Co-op (August 2026)
 **Build:** 125
 

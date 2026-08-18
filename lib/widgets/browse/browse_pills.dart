@@ -180,10 +180,27 @@ Widget synergyPill(int count) {
       icon: Icons.hub);
 }
 
+/// Synergy Predictor pill — gold/amber badge shown on browse rows when
+/// acquiring this item/gun would complete a partial synergy. Shows the
+/// synergy name for a single completion, or a count for multiple.
+Widget completesPill(List<String> synergyNames) {
+  if (synergyNames.isEmpty) return const SizedBox.shrink();
+  final label = synergyNames.length == 1
+      ? 'COMPLETES: ${synergyNames.first}'
+      : 'COMPLETES ${synergyNames.length}';
+  return metaPill(label, const Color(0xFFFFD700), icon: Icons.link);
+}
+
 class GunMeta extends StatelessWidget {
   final Gun gun;
   final int synergyCount;
-  const GunMeta({super.key, required this.gun, required this.synergyCount});
+  final List<String> completesSynergies;
+  const GunMeta({
+    super.key,
+    required this.gun,
+    required this.synergyCount,
+    this.completesSynergies = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +216,8 @@ class GunMeta extends StatelessWidget {
         metaPill(gun.type, Colors.white70),
       if (gun.sellPrice.isNotEmpty && gun.sellPrice != 'N/A')
         coinPill(gun.sellPrice),
+      if (completesSynergies.isNotEmpty)
+        completesPill(completesSynergies),
       synergyPill(synergyCount),
     ];
     return Wrap(
@@ -218,7 +237,13 @@ class GunMeta extends StatelessWidget {
 class ItemMeta extends StatelessWidget {
   final Item item;
   final int synergyCount;
-  const ItemMeta({super.key, required this.item, required this.synergyCount});
+  final List<String> completesSynergies;
+  const ItemMeta({
+    super.key,
+    required this.item,
+    required this.synergyCount,
+    this.completesSynergies = const [],
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -236,6 +261,9 @@ class ItemMeta extends StatelessWidget {
     }
     if (item.sellPrice.isNotEmpty && item.sellPrice != 'N/A') {
       bits.add(coinPill(item.sellPrice));
+    }
+    if (completesSynergies.isNotEmpty) {
+      bits.add(completesPill(completesSynergies));
     }
     bits.add(synergyPill(synergyCount));
     return Wrap(

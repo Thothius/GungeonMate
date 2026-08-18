@@ -308,6 +308,8 @@ class _BrowseScreenState extends State<BrowseScreen>
   /// Tappable row for a gun. Used by both the Guns and All tabs.
   Widget _gunRow(BuildContext c, RunProvider p, Gun g) {
     final syn = p.synergyCountFor(g.name);
+    final completes =
+        p.synergiesCompletedBy(g.name, slot: widget.targetSlot);
     final targetPlayer = widget.targetSlot == PlayerSlot.coop
         ? p.runState.coop
         : p.runState.main;
@@ -319,7 +321,8 @@ class _BrowseScreenState extends State<BrowseScreen>
       quality: g.quality,
       iconPath: g.icon,
       fallback: Icons.gps_fixed,
-      meta: GunMeta(gun: g, synergyCount: syn),
+      meta: GunMeta(
+          gun: g, synergyCount: syn, completesSynergies: completes),
       inRun: p.ownerSlotOfGun(g.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
@@ -367,6 +370,8 @@ class _BrowseScreenState extends State<BrowseScreen>
   /// Tappable row for an item. Used by both the Items and All tabs.
   Widget _itemRow(BuildContext c, RunProvider p, Item it) {
     final syn = p.synergyCountFor(it.name);
+    final completes =
+        p.synergiesCompletedBy(it.name, slot: widget.targetSlot);
     final targetPlayer = widget.targetSlot == PlayerSlot.coop
         ? p.runState.coop
         : p.runState.main;
@@ -378,7 +383,8 @@ class _BrowseScreenState extends State<BrowseScreen>
       quality: it.quality,
       iconPath: it.icon,
       fallback: it.isActive ? Icons.flash_on : Icons.inventory_2_outlined,
-      meta: ItemMeta(item: it, synergyCount: syn),
+      meta: ItemMeta(
+          item: it, synergyCount: syn, completesSynergies: completes),
       inRun: p.ownerSlotOfItem(it.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {

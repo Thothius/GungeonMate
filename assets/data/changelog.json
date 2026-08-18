@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.50",
+    "title": "Synergy Predictor — Find Items That Complete Synergies",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Synergy Predictor — browse items and guns now show a gold 'COMPLETES' badge when acquiring them would activate a partial synergy. Shows the synergy name for single completions, or a count for multiple. No UI clutter — only appears when the item would actually complete something."
+    ]
+  },
+  {
     "version": "v1.9.49",
     "title": "True One-Tap Co-op for Paired Partners",
     "date": "August 2026",
