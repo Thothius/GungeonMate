@@ -49,9 +49,21 @@ class AmmonomiconTabStrip extends StatelessWidget {
 
   /// Asset path for an ammonomicon tab icon stem.
   static String tabAssetPath(String stem) {
-    final ext = stem.endsWith('.png') ? 'png' : 'webp';
+    // Stems may arrive with or without an extension. The codex tab
+    // assets are a mix of .png and .webp, so we check both on disk via
+    // the asset list. Since we can't do filesystem checks at runtime,
+    // we use a lookup table for the known mixed extensions.
+    final ext = _tabExtensions[stem] ?? 'webp';
     return 'assets/images/codex/tabs/$stem.$ext';
   }
+
+  // Extension lookup — needed because the tab assets are a mix of
+  // .png and .webp. If a stem isn't here, .webp is used as default.
+  static const _tabExtensions = <String, String>{
+    'Ammonomicon_Tab_Guns': 'png',
+    'Ammonomicon_Tab_Items': 'png',
+    'Ammonomicon_Tab_Enemies': 'png',
+  };
 
   @override
   Widget build(BuildContext context) {
