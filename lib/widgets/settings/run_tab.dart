@@ -392,10 +392,10 @@ class _AppTabState extends State<AppTab> {
       child: GoopText(
         label,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: 13,
           fontWeight: FontWeight.w900,
           color: AppTheme.flair.primary.withValues(alpha: 0.8),
-          letterSpacing: 0.8,
+          letterSpacing: 1.2,
         ),
       ),
     );
@@ -466,9 +466,9 @@ class _AppTabState extends State<AppTab> {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
-      childAspectRatio: 1.8,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      childAspectRatio: 2.2,
       children: tiles.map((t) => _CompactActionTile(data: t)).toList(),
     );
   }
@@ -480,31 +480,43 @@ class _AppTabState extends State<AppTab> {
     String player2Name,
     bool mpActive,
   ) {
+    final iconColor = mpActive
+        ? Colors.greenAccent
+        : (hasCoop ? Colors.pinkAccent : Colors.white54);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            iconColor.withValues(alpha: 0.12),
+            iconColor.withValues(alpha: 0.04),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: iconColor.withValues(alpha: 0.3), width: 1.2),
       ),
       child: Row(
         children: [
           Icon(
-            mpActive ? Icons.wifi_rounded : (hasCoop ? Icons.people_alt_rounded : Icons.person_rounded),
-            size: 16,
-            color: mpActive ? Colors.greenAccent : (hasCoop ? Colors.pinkAccent : Colors.white54),
+            mpActive
+                ? Icons.wifi_rounded
+                : (hasCoop ? Icons.people_alt_rounded : Icons.person_rounded),
+            size: 20,
+            color: iconColor,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Expanded(
             child: GoopText(
               mpActive
                   ? 'MP ACTIVE'
                   : (hasCoop ? 'P2 ACTIVE: $player2Name' : 'SOLO'),
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.w800,
-                color: mpActive ? Colors.greenAccent : (hasCoop ? Colors.pinkAccent : Colors.white70),
-                letterSpacing: 0.3,
+                color: iconColor,
+                letterSpacing: 0.5,
               ),
             ),
           ),
@@ -538,38 +550,47 @@ class _CompactActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final tileColor = data.isDanger ? data.color : data.color;
     return Material(
-      color: Colors.white.withValues(alpha: 0.06),
-      borderRadius: BorderRadius.circular(10),
+      color: flair.card.withValues(alpha: 0.6),
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: data.onTap,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
             border: Border.all(
-              color: data.isDanger
-                  ? data.color.withValues(alpha: 0.35)
-                  : data.color.withValues(alpha: 0.2),
+              color: tileColor.withValues(alpha: 0.2),
             ),
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
             children: [
-              Icon(data.icon, color: data.color, size: 22),
-              const SizedBox(height: 6),
-              GoopText(
-                data.label,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  color: data.isDanger ? data.color : Colors.white70,
-                  letterSpacing: 0.4,
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: tileColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                child: Icon(data.icon, color: data.color, size: 20),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: GoopText(
+                  data.label,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: data.isDanger ? data.color : Colors.white.withValues(alpha: 0.8),
+                    letterSpacing: 0.3,
+                  ),
+                  textAlign: TextAlign.start,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),

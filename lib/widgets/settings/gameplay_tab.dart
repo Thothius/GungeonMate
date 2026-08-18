@@ -76,11 +76,11 @@ class _GameplayTabState extends State<GameplayTab> {
       padding: const EdgeInsets.only(left: 4, bottom: 8),
       child: GoopText(
         label,
-        style: const TextStyle(
-          fontSize: 10,
+        style: TextStyle(
+          fontSize: 13,
           fontWeight: FontWeight.w900,
-          color: Colors.white38,
-          letterSpacing: 0.8,
+          color: AppTheme.flair.primary.withValues(alpha: 0.8),
+          letterSpacing: 1.2,
         ),
       ),
     );
@@ -91,9 +91,9 @@ class _GameplayTabState extends State<GameplayTab> {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
-      childAspectRatio: 1.8,
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      childAspectRatio: 2.2,
       children: tiles.map((t) => _CompactActionTile(data: t)).toList(),
     );
   }
@@ -150,7 +150,7 @@ class _GameplayTabState extends State<GameplayTab> {
               onChanged: (t) => VisualPrefs.setCustomDiceType(t),
               height: 56,
               itemBuilder: (type, isSelected) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
                   color: isSelected
                       ? flair.card.withValues(alpha: 0.9)
@@ -166,7 +166,7 @@ class _GameplayTabState extends State<GameplayTab> {
                     type.label,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.w900,
                       color: isSelected ? Colors.white : Colors.white54,
                       letterSpacing: 0.5,
@@ -233,20 +233,24 @@ class _GameplayTabState extends State<GameplayTab> {
     required ThemeFlair flair,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: flair.card.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: flair.primary.withValues(alpha: 0.20)),
       ),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.white54),
-          const SizedBox(width: 10),
+          Icon(icon, size: 18, color: Colors.white60),
+          const SizedBox(width: 12),
           Expanded(
             child: GoopText(
-              label.toUpperCase(),
-              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white70, letterSpacing: 0.5),
+              label,
+              style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  letterSpacing: 0.3),
             ),
           ),
           Switch(
@@ -281,17 +285,23 @@ class _GameplayTabState extends State<GameplayTab> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GoopText(label, style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.bold, color: Colors.white70)),
-            GoopText(displayValue, style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: color)),
+            GoopText(label,
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white.withValues(alpha: 0.8))),
+            GoopText(displayValue,
+                style: TextStyle(
+                    fontSize: 13, fontWeight: FontWeight.w900, color: color)),
           ],
         ),
         SizedBox(
-          height: 32,
+          height: 36,
           child: SliderTheme(
             data: SliderThemeData(
-              trackHeight: 3.0,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 12.0),
+              trackHeight: 4.0,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7.0),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 14.0),
               activeTrackColor: color,
               inactiveTrackColor: Colors.white12,
               thumbColor: Colors.white,
@@ -333,36 +343,45 @@ class _CompactActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
     return Material(
-      color: Colors.white.withValues(alpha: 0.06),
-      borderRadius: BorderRadius.circular(10),
+      color: flair.card.withValues(alpha: 0.6),
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: data.onTap,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.white.withValues(alpha: 0.08),
+              color: data.color.withValues(alpha: 0.2),
               width: 1.0,
             ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
             children: [
-              Icon(data.icon, size: 22, color: data.color),
-              const SizedBox(height: 6),
-              GoopText(
-                data.label,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white70,
-                  letterSpacing: 0.3,
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: data.color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(data.icon, size: 20, color: data.color),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: GoopText(
+                  data.label,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white.withValues(alpha: 0.8),
+                    letterSpacing: 0.3,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
