@@ -6,6 +6,23 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.49 — 🔗 True One-Tap Co-op (August 2026)
+**Build:** 125
+
+> The core UX promise of Device Pairing: tap your partner, you're in. No dialogs, no PIN, no role picker — just one tap.
+
+### New Features
+- **One-tap connect** — tapping a paired partner now connects immediately using the saved role + character. No role picker, no character picker. The app remembers your last role and character for each partner after the first connection.
+- **Long-press to change role** — long-press a paired partner to open the full role/character dialog. For when you want to switch from Main to Sidekick or change character.
+
+### Infrastructure
+- `PairedPartner` model: added `lastRole` and `lastCharacterName` fields (persisted, backwards-compatible JSON).
+- `PairedPartnersStore.markConnectedWithRole()` — saves role + character on successful hello, enabling one-tap next time.
+- `MultiplayerSession._onHello` — now calls `markConnectedWithRole` instead of `markConnected`, passing the current role + character name.
+- Lobby: partner tiles show "Tap to connect as Main/Sidekick" hint when one-tap is available. First-time partners show the pairing date instead.
+
+---
+
 ## v1.9.48 — 🔗 Device Pairing Phase 2: Elevated Privileges (August 2026)
 **Build:** 124
 

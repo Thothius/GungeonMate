@@ -74,6 +74,34 @@ class PairedPartnersStore {
     await _persist(list);
   }
 
+  /// Update [lastConnectedAtMs] + [lastRole] + [lastCharacterName] for
+  /// a partner after a successful paired connection. This is what
+  /// enables one-tap reconnect — the next time the user taps this
+  /// partner, we skip the role/character dialog and connect directly.
+  static Future<void> markConnectedWithRole(
+    String pairId, {
+    required String role,
+    String? characterName,
+  }) async {
+    final list = <PairedPartner>[];
+    var changed = false;
+    for (final p in notifier.value) {
+      if (p.pairId == pairId) {
+        list.add(p.copyWith(
+          lastConnectedAtMs: DateTime.now().millisecondsSinceEpoch,
+          lastRole: role,
+          lastCharacterName: characterName,
+        ));
+        changed = true;
+      } else {
+        list.add(p);
+      }
+    }
+    if (!changed) return;
+    notifier.value = list;
+    await _persist(list);
+  }
+
   /// Remove a partner by pairId and persist.
   static Future<void> remove(String pairId) async {
     final list =

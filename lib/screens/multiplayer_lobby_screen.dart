@@ -807,18 +807,39 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                           final lastConnected = p.lastConnectedAtMs != null
                               ? DateTime.fromMillisecondsSinceEpoch(p.lastConnectedAtMs!)
                               : null;
+                          // One-tap connect if we have a saved role;
+                          // show the role/character dialog only the
+                          // first time (no lastRole yet).
+                          final canOneTap = p.lastRole != null;
                           return Container(
                             margin: const EdgeInsets.only(bottom: 8),
                             decoration: BoxDecoration(
                               color: const Color(0xFF161619),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.pinkAccent.withValues(alpha: 0.15)),
+                              border: Border.all(
+                                color: canOneTap
+                                    ? Colors.pinkAccent.withValues(alpha: 0.3)
+                                    : Colors.pinkAccent.withValues(alpha: 0.15),
+                              ),
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: InkWell(
                                 onTap: () {
                                   Navigator.pop(ctx);
+                                  if (canOneTap) {
+                                    _oneTapConnectPaired(p);
+                                  } else {
+                                    _showConnectPairedDialog(context, p);
+                                  }
+                                },
+                                onLongPress: () {
+                                  Haptics.selection();
+                                  Navigator.pop(ctx);
+                                  // Long-press always shows the full
+                                  // dialog — lets the user switch role
+                                  // or character even after one-tap is
+                                  // configured.
                                   _showConnectPairedDialog(context, p);
                                 },
                                 borderRadius: BorderRadius.circular(12),
@@ -846,10 +867,17 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                                             ),
                                             const SizedBox(height: 2),
                                             GoopText(
-                                              lastConnected != null
-                                                  ? 'Last connected ${_formatRelative(lastConnected)}'
-                                                  : 'Paired ${_formatRelative(DateTime.fromMillisecondsSinceEpoch(p.createdAtMs))}',
-                                              style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.4)),
+                                              canOneTap
+                                                  ? 'Tap to connect as ${p.lastRole == 'main' ? 'Main' : 'Sidekick'}'
+                                                  : lastConnected != null
+                                                      ? 'Last connected ${_formatRelative(lastConnected)}'
+                                                      : 'Paired ${_formatRelative(DateTime.fromMillisecondsSinceEpoch(p.createdAtMs))}',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                color: canOneTap
+                                                    ? Colors.pinkAccent.withValues(alpha: 0.7)
+                                                    : Colors.white.withValues(alpha: 0.4),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -1060,6 +1088,23 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
         ),
       ),
     );
+  }
+
+  /// One-tap connect: skip the role/character dialog and connect
+  /// immediately using the partner's saved [lastRole] and
+  /// [lastCharacterName]. This is the core UX promise of Device
+  /// Pairing — tap your partner, you're in.
+  Future<void> _oneTapConnectPaired(PairedPartner partner) async {
+    final role = partner.lastRole == 'sidekick'
+        ? MpRole.sidekick
+        : MpRole.main;
+    // Resolve the saved character (if any) against master data.
+    Gungeoneer? character;
+    if (partner.lastCharacterName != null) {
+      final runProvider = context.read<RunProvider>();
+      character = runProvider.gungeoneerByName(partner.lastCharacterName!);
+    }
+    await _connectPaired(partner, role, character: character);
   }
 
   Future<void> _connectPaired(PairedPartner partner, MpRole role,

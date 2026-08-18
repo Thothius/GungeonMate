@@ -1594,11 +1594,18 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     // app-kill mid-session can resume into the same role on next launch.
     unawaited(_persistSession());
     // If this is a paired-partner connection, mark the partner as
-    // recently connected now that hello succeeded.
+    // recently connected and save the role+character for one-tap
+    // reconnect next time.
     final mark = _pendingPairMark;
     if (mark != null) {
       _pendingPairMark = null;
-      unawaited(PairedPartnersStore.markConnected(mark));
+      final roleStr = _myRole == MpRole.main ? 'main' : 'sidekick';
+      final charName = _myCharacterName;
+      unawaited(PairedPartnersStore.markConnectedWithRole(
+        mark,
+        role: roleStr,
+        characterName: charName,
+      ));
     }
     // Send initial snapshot after hello exchange
     unawaited(_broadcastSnapshot(force: true));

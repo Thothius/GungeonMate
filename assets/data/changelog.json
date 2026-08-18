@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.49",
+    "title": "True One-Tap Co-op for Paired Partners",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: True one-tap connect — tap a paired partner and you're in. No role picker, no character picker, no PIN. The app remembers your last role and character for each partner and connects immediately.",
+      "UX: First-time connect still shows the role/character dialog (so you pick Host/Join + character once). After that, every subsequent connect is a single tap.",
+      "UX: Long-press a paired partner to change role or character — for when you want to switch sides."
+    ]
+  },
+  {
     "version": "v1.9.48",
     "title": "Device Pairing Phase 2 — Elevated Privileges",
     "date": "August 2026",
