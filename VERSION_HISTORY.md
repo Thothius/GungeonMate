@@ -6,6 +6,17 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.57 — 📊 Gungeon Meter on Codex Book Active View (August 2026)
+**Build:** 133
+
+> The interactive GungeonMeter is now attached to an active run view — the Codex Book mode's left character page.
+
+### Changes
+- **Codex Book left page** — replaced static COOLNESS/CURSE `_statCard` text tiles with live `GungeonMeter` widgets. Tap or drag the bar to adjust coolness/curse directly from the active run. Threshold tick at 10, overflow glow + skull icon for curse, haptic feedback on threshold cross. GUNS/ITEMS cards now side-by-side in a row to save vertical space for the meters.
+- The meter reads `RunState.totalCoolness`/`totalCurse` (sum across all guns + items + manual base for both players) and calls `RunProvider.adjustCoolness`/`adjustCurse` on drag.
+
+---
+
 ## v1.9.56 — 📊 Interactive Gungeon Meter: Coolness/Curse Fill Bar (August 2026)
 **Build:** 132
 

@@ -15,6 +15,7 @@ import '../../../utils/fast_route.dart';
 import '../../../screens/item_detail_screen.dart';
 import '../../game_icon.dart';
 import '../depth_tile.dart';
+import '../gungeon_meter.dart';
 import '../mode_helpers.dart' as mh;
 
 /// Mode 1 — The Gungeon Codex Book.
@@ -93,7 +94,7 @@ class _CodexBookModeState extends State<CodexBookMode> {
                   if (wide) {
                     return Row(
                       children: [
-                        Expanded(flex: 2, child: _leftPage(player, state, flair)),
+                        Expanded(flex: 2, child: _leftPage(player, state, p, flair)),
                         _bookSpine(flair),
                         Expanded(
                           flex: 3,
@@ -116,7 +117,7 @@ class _CodexBookModeState extends State<CodexBookMode> {
                     children: [
                       SizedBox(
                         height: constraints.maxHeight * 0.28,
-                        child: _leftPage(player, state, flair),
+                        child: _leftPage(player, state, p, flair),
                       ),
                       _bookSpine(flair, horizontal: true),
                       Expanded(
@@ -144,7 +145,7 @@ class _CodexBookModeState extends State<CodexBookMode> {
 
   // ---- Left page: character + stats ----------------------------------
 
-  Widget _leftPage(Player player, RunState state, ThemeFlair flair) {
+  Widget _leftPage(Player player, RunState state, RunProvider p, ThemeFlair flair) {
     final char = player.character!;
     return Container(
       padding: const EdgeInsets.all(16),
@@ -165,19 +166,39 @@ class _CodexBookModeState extends State<CodexBookMode> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          // Stats cards — parchment style with brass studs.
+          // Interactive meters for coolness/curse (Main only — coop
+          // doesn't have dungeon-scope stats). Tap or drag the bar to
+          // adjust. Threshold at 10 = Lord of the Jammed / max cool.
           if (isMain) ...[
-            _statCard('COOLNESS', state.totalCoolness.toStringAsFixed(0),
-                Icons.ac_unit, Colors.cyanAccent, flair),
-            const SizedBox(height: 8),
-            _statCard('CURSE', state.totalCurse.toStringAsFixed(0),
-                Icons.warning_amber, Colors.deepOrangeAccent, flair),
-            const SizedBox(height: 8),
-            _statCard('GUNS', '${player.guns.length}',
-                Icons.gps_fixed, flair.primary, flair),
-            const SizedBox(height: 8),
-            _statCard('ITEMS', '${player.items.length}',
-                Icons.inventory_2, Colors.amberAccent, flair),
+            GungeonMeter(
+              value: state.totalCoolness.clamp(0.0, 15.0),
+              isCool: true,
+              color: const Color(0xFF00E5FF),
+              label: 'COOLNESS',
+              onDelta: (d) => p.adjustCoolness(d),
+            ),
+            const SizedBox(height: 10),
+            GungeonMeter(
+              value: state.totalCurse.clamp(0.0, 15.0),
+              isCool: false,
+              color: const Color(0xFFFF3D00),
+              label: 'CURSE',
+              onDelta: (d) => p.adjustCurse(d),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: _statCard('GUNS', '${player.guns.length}',
+                      Icons.gps_fixed, flair.primary, flair),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _statCard('ITEMS', '${player.items.length}',
+                      Icons.inventory_2, Colors.amberAccent, flair),
+                ),
+              ],
+            ),
           ] else
             _statCard('GUNS', '${player.guns.length}',
                 Icons.gps_fixed, flair.primary, flair),

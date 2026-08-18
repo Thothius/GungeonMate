@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.57",
+    "title": "Gungeon Meter on Codex Book Active View",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Interactive Gungeon Meter now on the Codex Book active run view. The left character page replaces static COOLNESS/CURSE text cards with live interactive meter bars. Tap or drag the bar to adjust coolness/curse directly from the active run — no need to navigate to the stats detail screen. Threshold tick at 10, overflow glow + skull icon for curse, haptic feedback on threshold cross. GUNS/ITEMS cards now side-by-side in a row to save vertical space for the meters."
+    ]
+  },
+  {
     "version": "v1.9.56",
     "title": "Interactive Gungeon Meter — Coolness/Curse Fill Bar",
     "date": "August 2026",
