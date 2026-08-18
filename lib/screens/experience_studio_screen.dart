@@ -277,13 +277,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             ),
           ),
           // Tappable step chips for quick navigation
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           SizedBox(
-            height: 30,
+            height: 36,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: visibleIndices.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 6),
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (context, idx) {
                 final stepIdx = visibleIndices[idx];
                 final isCurrent = stepIdx == _step;
@@ -293,32 +293,44 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   behavior: HitTestBehavior.opaque,
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                     decoration: BoxDecoration(
                       color: isCurrent
-                          ? flair.primary.withValues(alpha: 0.18)
+                          ? flair.primary.withValues(alpha: 0.2)
                           : isDone
                               ? flair.primary.withValues(alpha: 0.08)
                               : Colors.white.withValues(alpha: 0.04),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: isCurrent
-                            ? flair.primary.withValues(alpha: 0.6)
-                            : Colors.transparent,
-                        width: 1.0,
+                            ? flair.primary.withValues(alpha: 0.7)
+                            : isDone
+                                ? flair.primary.withValues(alpha: 0.25)
+                                : Colors.white.withValues(alpha: 0.1),
+                        width: isCurrent ? 1.4 : 1.0,
                       ),
+                      boxShadow: isCurrent
+                          ? [
+                              BoxShadow(
+                                color: flair.primary.withValues(alpha: 0.15),
+                                blurRadius: 6,
+                                spreadRadius: 0,
+                              ),
+                            ]
+                          : null,
                     ),
                     child: Center(
                       child: GoopText(
                         _stepLabels[stepIdx],
                         style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: isCurrent ? FontWeight.w800 : FontWeight.w600,
+                          fontSize: 12,
+                          fontWeight: isCurrent ? FontWeight.w900 : FontWeight.w700,
                           color: isCurrent
                               ? flair.primary
                               : isDone
                                   ? flair.primary.withValues(alpha: 0.5)
-                                  : Colors.white.withValues(alpha: 0.35),
+                                  : Colors.white.withValues(alpha: 0.4),
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ),
@@ -425,7 +437,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               ),
             )
           else
-            // Non-last step: NEXT is the hero, with context label
+            // Non-last step: NEXT is the hero, with context label.
+            // Extra glow + pulse animation so it's impossible to miss.
             ScaleButton(
               onTap: () => _goTo(_step + 1),
               child: Container(
@@ -436,9 +449,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   border: Border.all(color: flair.primary, width: 1.5),
                   boxShadow: [
                     BoxShadow(
-                      color: flair.primary.withValues(alpha: 0.25),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
+                      color: flair.primary.withValues(alpha: 0.4),
+                      blurRadius: 16,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 3),
+                    ),
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: 0.2),
+                      blurRadius: 24,
+                      spreadRadius: 4,
+                      offset: Offset.zero,
                     ),
                   ],
                 ),
@@ -449,34 +469,45 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                     GoopText(
                       'NEXT',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 16,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
+                        letterSpacing: 1.5,
                         color: onPrimary,
+                        shadows: [
+                          Shadow(
+                            color: onPrimary.withValues(alpha: 0.3),
+                            blurRadius: 4,
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                       decoration: BoxDecoration(
-                        color: onPrimary.withValues(alpha: 0.15),
+                        color: onPrimary.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: GoopText(
                         nextStepName,
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 12,
                           fontWeight: FontWeight.w700,
-                          color: onPrimary.withValues(alpha: 0.7),
+                          color: onPrimary.withValues(alpha: 0.8),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 6),
-                    Icon(Icons.arrow_forward_rounded, size: 18, color: onPrimary),
+                    const SizedBox(width: 8),
+                    Icon(Icons.arrow_forward_rounded, size: 20, color: onPrimary),
                   ],
                 ),
               ),
-            ),
+            )
+                .animate(onPlay: (c) => c.repeat(reverse: true))
+                .shimmer(
+                  duration: 1800.ms,
+                  color: onPrimary.withValues(alpha: 0.15),
+                ),
           const SizedBox(height: 8),
           // Secondary row: Back (left) + Apply (right, smaller)
           Row(
@@ -674,13 +705,54 @@ class _LivePreview extends StatelessWidget {
             color: flair.scaffold.withValues(alpha: 0.6),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: flair.primary.withValues(alpha: 0.15),
-              width: 1.0,
+              color: flair.primary.withValues(alpha: 0.25),
+              width: 1.5,
             ),
+            boxShadow: [
+              BoxShadow(
+                color: flair.primary.withValues(alpha: 0.08),
+                blurRadius: 8,
+                spreadRadius: 0,
+              ),
+            ],
           ),
           clipBehavior: Clip.hardEdge,
           child: Stack(
             children: [
+              // ── "LIVE PREVIEW" label badge (top-left corner) ──
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: flair.primary.withValues(alpha: 0.2),
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(8),
+                    ),
+                    border: Border(
+                      right: BorderSide(color: flair.primary.withValues(alpha: 0.3), width: 1),
+                      bottom: BorderSide(color: flair.primary.withValues(alpha: 0.3), width: 1),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.visibility_rounded, size: 10, color: flair.primary),
+                      const SizedBox(width: 4),
+                      GoopText(
+                        'LIVE PREVIEW',
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          color: flair.primary,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               // ── Mini particle engine (behind everything) ──
               if (particlesOn)
                 Positioned.fill(
