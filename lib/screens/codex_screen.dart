@@ -6,6 +6,7 @@ import '../models/codex_entry.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
+import '../widgets/codex/ammonomicon_tabs.dart';
 import 'bullet_hell_codex_screen.dart';
 import 'challenge_mode_codex_screen.dart';
 import 'drake_codex_screen.dart';
@@ -49,77 +50,84 @@ class _CodexScreenState extends State<CodexScreen> {
   List<CodexEntry> _bosses = [];
   bool _loaded = false;
 
-  // Category definitions — special pages first, then data categories.
-  // The order here determines the grid order.
+  // Category definitions — Ammonomicon bookmark tabs.
+  // The 5 ammonomicon tab icons map to: Guns→Objects, Items→Pickups,
+  // Enemies, Bosses, Death→NPCs. The 7 special pages use themed Material
+  // icons in the same bookmark visual style.
   static const _categories = [
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Gungeoneers',
       icon: Icons.person,
       color: Color(0xFF42A5F5),
       isSpecial: true,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Paradox',
       icon: Icons.auto_awesome,
       color: Color(0xFF00E5FF),
       isSpecial: true,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Gunslinger',
       icon: Icons.casino,
       color: Color(0xFFFFD54F),
       isSpecial: true,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Bullet Hell',
       icon: Icons.local_fire_department,
       color: Color(0xFFFF5252),
       isSpecial: true,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Drake',
       icon: Icons.pets,
       color: Color(0xFF00E676),
       isSpecial: true,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Challenge',
       icon: Icons.shuffle,
       color: Color(0xFFAB47BC),
       isSpecial: true,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Rat',
       icon: Icons.pest_control,
       color: Color(0xFFFFB300),
       isSpecial: true,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Objects',
+      assetIcon: 'Ammonomicon_Tab_Guns',
       icon: Icons.widgets,
       color: Color(0xFF66BB6A),
       isSpecial: false,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Pickups',
+      assetIcon: 'Ammonomicon_Tab_Items',
       icon: Icons.inventory_2_outlined,
       color: Color(0xFF42A5F5),
       isSpecial: false,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'NPCs',
+      assetIcon: 'Ammonomicon_Tab_Death',
       icon: Icons.person_outline,
       color: Color(0xFFEF5350),
       isSpecial: false,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Enemies',
+      assetIcon: 'Ammonomicon_Tab_Enemies',
       icon: Icons.dangerous_outlined,
       color: Color(0xFFFF7043),
       isSpecial: false,
     ),
-    _CategoryDef(
+    AmmonomiconTab(
       label: 'Bosses',
+      assetIcon: 'Ammonomicon_Tab_Bosses',
       icon: Icons.emoji_events_outlined,
       color: Color(0xFFAB47BC),
       isSpecial: false,
@@ -262,86 +270,98 @@ class _CodexScreenState extends State<CodexScreen> {
       ),
       body: !_loaded
           ? const Center(child: CircularProgressIndicator())
-          : Column(
+          : Stack(
               children: [
-                // ── Category strip — horizontal scroll, smooth & quick ──
-                SizedBox(
-                  height: 56,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(
-                      decelerationRate: ScrollDecelerationRate.fast,
-                    ),
-                    padding: const EdgeInsets.fromLTRB(10, 4, 10, 6),
-                    itemCount: _categories.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      final c = _categories[index];
-                      final isSelected = index == _selected;
-                      return _CategoryTile(
-                        label: c.label,
-                        icon: c.icon,
-                        color: c.color,
-                        isSelected: isSelected,
-                        onTap: () {
-                          Haptics.selection();
-                          setState(() {
-                            _selected = index;
-                            _searchCtrl.clear();
-                            _query = '';
-                          });
-                        },
-                      );
-                    },
-                  ),
-                ),
-                // ── Search bar (data categories only) ──────────────────
-                if (!cat.isSpecial)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
-                    child: SizedBox(
-                      height: 40,
-                      child: TextField(
-                        controller: _searchCtrl,
-                        decoration: InputDecoration(
-                          hintText: 'Search ${cat.label.toLowerCase()}...',
-                          prefixIcon: const Icon(Icons.search, size: 18),
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 4),
-                          suffixIcon: _searchCtrl.text.isNotEmpty
-                              ? IconButton(
-                                  icon: const Icon(Icons.clear, size: 16),
-                                  onPressed: () {
-                                    _searchCtrl.clear();
-                                    _onSearchChanged();
-                                  },
-                                )
-                              : null,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: flair.primary.withValues(alpha: 0.3),
+                // ── Content area (padded left to clear the bookmark strip) ──
+                Padding(
+                  padding: const EdgeInsets.only(left: 72),
+                  child: Column(
+                    children: [
+                      if (!cat.isSpecial)
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 6, 12, 6),
+                          child: SizedBox(
+                            height: 40,
+                            child: TextField(
+                              controller: _searchCtrl,
+                              decoration: InputDecoration(
+                                hintText: 'Search ${cat.label.toLowerCase()}...',
+                                prefixIcon: const Icon(Icons.search, size: 18),
+                                isDense: true,
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                suffixIcon: _searchCtrl.text.isNotEmpty
+                                    ? IconButton(
+                                        icon: const Icon(Icons.clear, size: 16),
+                                        onPressed: () {
+                                          _searchCtrl.clear();
+                                          _onSearchChanged();
+                                        },
+                                      )
+                                    : null,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: flair.primary.withValues(alpha: 0.3),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: flair.primary.withValues(alpha: 0.7),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: flair.primary.withValues(alpha: 0.7),
-                            ),
+                        ),
+                      // ── Active category header (ammonomicon entry title) ──
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 2, 12, 4),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              Icon(cat.icon ?? Icons.bookmark,
+                                  size: 16, color: cat.color),
+                              const SizedBox(width: 6),
+                              GoopText(
+                                cat.label.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.4,
+                                  color: cat.color,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                    ),
+                      // ── Content ────────────────────────────────────────
+                      Expanded(
+                        child: cat.isSpecial
+                            ? _specialPage(_selected)
+                            : _CodexList(
+                                entries: _entriesFor(_selected),
+                                section: _sectionFor(_selected),
+                              ),
+                      ),
+                    ],
                   ),
-                // ── Content ────────────────────────────────────────────
-                Expanded(
-                  child: cat.isSpecial
-                      ? _specialPage(_selected)
-                      : _CodexList(
-                          entries: _entriesFor(_selected),
-                          section: _sectionFor(_selected),
-                        ),
+                ),
+                // ── Ammonomicon bookmark tabs — left edge ──────────────────
+                AmmonomiconTabStrip(
+                  tabs: _categories,
+                  selected: _selected,
+                  onSelect: (index) {
+                    Haptics.selection();
+                    setState(() {
+                      _selected = index;
+                      _searchCtrl.clear();
+                      _query = '';
+                    });
+                  },
                 ),
               ],
             ),
@@ -367,98 +387,6 @@ class _CodexScreenState extends State<CodexScreen> {
       default:
         return const SizedBox.shrink();
     }
-  }
-}
-
-// =============================================================================
-// Category definition
-// =============================================================================
-
-class _CategoryDef {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final bool isSpecial;
-
-  const _CategoryDef({
-    required this.label,
-    required this.icon,
-    required this.color,
-    required this.isSpecial,
-  });
-}
-
-// =============================================================================
-// Category tile — tappable grid card with icon + label
-// =============================================================================
-
-class _CategoryTile extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _CategoryTile({
-    required this.label,
-    required this.icon,
-    required this.color,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? color.withValues(alpha: 0.18)
-              : AppTheme.flair.card,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: isSelected
-                ? color.withValues(alpha: 0.8)
-                : color.withValues(alpha: 0.15),
-            width: isSelected ? 1.4 : 0.8,
-          ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.15),
-                    blurRadius: 6,
-                    spreadRadius: 0,
-                  ),
-                ]
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isSelected ? color : color.withValues(alpha: 0.55),
-            ),
-            const SizedBox(width: 6),
-            GoopText(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                color: isSelected
-                    ? Colors.white
-                    : Colors.white.withValues(alpha: 0.6),
-                letterSpacing: 0.3,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ).animate().fadeIn(duration: 150.ms, delay: 30.ms);
   }
 }
 

@@ -4,7 +4,11 @@ import 'character_select_screen.dart';
 import 'multiplayer_lobby_screen.dart';
 import 'experience_studio_screen.dart';
 import '../services/haptics.dart';
+import '../services/home_customization.dart';
 import '../widgets/scale_button.dart';
+import '../widgets/home/rotating_gungeoneer.dart';
+import '../widgets/home/junk_particle_field.dart';
+import '../widgets/home/home_customization_sheet.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
@@ -28,6 +32,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
       backgroundColor: Colors.transparent,
       body: Stack(
           children: [
+          // ── Junk particle field (behind content, in front of vortex) ──
+          const Positioned.fill(child: JunkParticleField()),
+          // ── Rotating gungeoneer at the vortex center ──────────────────
+          const Positioned.fill(child: RotatingGungeoneer(size: 240)),
           Positioned.fill(
               child: SafeArea(
             child: Center(
@@ -178,9 +186,45 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 10),
+                  // Customize — opens the home customization sheet
+                  // (gungeoneer picker + junk particle settings).
+                  ScaleButton(
+                    onTap: () {
+                      Haptics.selection();
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true,
+                        useSafeArea: false,
+                        builder: (_) => const HomeCustomizationSheet(),
+                      );
+                    },
+                    child: IgnorePointer(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: btnHeight,
+                        child: TextButton.icon(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFFBCA0F8),
+                          ),
+                          icon: Icon(Icons.tune_rounded, size: 22 * sf),
+                          label: GoopText(
+                            'Customize',
+                            style: TextStyle(
+                              fontSize: btnFontSize,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.40',
+                    'v1.9.41',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -226,6 +270,82 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ),
             ),
           ),
+          // ── Top-left quick toggles: Toggle Gungeoneer + Toggle Junk ──
+          Positioned(
+            top: 12,
+            left: 12,
+            child: SafeArea(
+              child: ValueListenableBuilder<HomeCustomization>(
+                valueListenable: HomeCustomization.notifier,
+                builder: (context, cust, _) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _QuickToggle(
+                        label: 'Toggle Gungeoneer',
+                        icon: Icons.person_rounded,
+                        active: cust.showGungeoneer,
+                        activeColor: const Color(0xFFBCA0F8),
+                        onTap: () {
+                          Haptics.selection();
+                          HomeCustomization.setShowGungeoneer(!cust.showGungeoneer);
+                        },
+                        onLongPress: () {
+                          Haptics.selection();
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            isScrollControlled: true,
+                            useSafeArea: false,
+                            builder: (_) => const HomeCustomizationSheet(
+                              initialSection: HomeCustomSection.gungeoneer,
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      _QuickToggle(
+                        label: 'Toggle Junk',
+                        icon: Icons.auto_awesome_rounded,
+                        active: cust.showJunk && cust.totalJunk > 0,
+                        activeColor: const Color(0xFFFFD54F),
+                        onTap: () {
+                          Haptics.selection();
+                          // If no junk configured yet, opening the sheet
+                          // is more useful than silently toggling nothing.
+                          if (cust.totalJunk == 0) {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              useSafeArea: false,
+                              builder: (_) => const HomeCustomizationSheet(
+                                initialSection: HomeCustomSection.junk,
+                              ),
+                            );
+                            return;
+                          }
+                          HomeCustomization.setShowJunk(!cust.showJunk);
+                        },
+                        onLongPress: () {
+                          Haptics.selection();
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            isScrollControlled: true,
+                            useSafeArea: false,
+                            builder: (_) => const HomeCustomizationSheet(
+                              initialSection: HomeCustomSection.junk,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
           // Changelog button — centered at bottom, 15% bigger
           Positioned(
             bottom: 16,
@@ -249,7 +369,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.40)',
+                          'Changelog (v1.9.41)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -303,7 +423,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.40 — 10 New Themes + Active Item Badges',
+                            'v1.9.41 — Home Screen Rework + Ammonomicon Codex Tabs',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -483,6 +603,73 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                 ),
               )),
         ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// _QuickToggle — top-left pill toggle for the home screen. Tap toggles
+// the feature on/off; long-press opens the customization sheet focused
+// on that section.
+// =============================================================================
+
+class _QuickToggle extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool active;
+  final Color activeColor;
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
+
+  const _QuickToggle({
+    required this.label,
+    required this.icon,
+    required this.active,
+    required this.activeColor,
+    required this.onTap,
+    required this.onLongPress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final sf = Responsive.factor(context);
+    return GestureDetector(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        padding: EdgeInsets.symmetric(horizontal: 10 * sf, vertical: 7 * sf),
+        decoration: BoxDecoration(
+          color: active
+              ? activeColor.withValues(alpha: 0.18)
+              : Colors.white.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: active ? activeColor.withValues(alpha: 0.7) : Colors.white24,
+            width: 1.2,
+          ),
+          boxShadow: active
+              ? [BoxShadow(color: activeColor.withValues(alpha: 0.2), blurRadius: 6)]
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14 * sf, color: active ? activeColor : Colors.white54),
+            SizedBox(width: 6 * sf),
+            GoopText(
+              label,
+              style: TextStyle(
+                fontSize: 10.5 * sf,
+                fontWeight: FontWeight.w800,
+                color: active ? Colors.white : Colors.white60,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
