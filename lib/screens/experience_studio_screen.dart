@@ -6,6 +6,7 @@ import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../utils/responsive.dart';
+import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart'
     show
         ParticlePreset,
@@ -133,6 +134,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   }
 
   Widget _buildTopBar() {
+    final flair = AppTheme.flair;
     return Padding(
       padding: const EdgeInsets.only(left: 4, right: 8, top: 4, bottom: 4),
       child: Row(
@@ -149,17 +151,40 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w900,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: flair.primary.withValues(alpha: 0.5),
               letterSpacing: 2.5,
             ),
           ),
           const Spacer(),
-          TextButton.icon(
-            onPressed: () => _showResetDialog(),
-            icon: const Icon(Icons.refresh, size: 14),
-            label: const GoopText('Reset',
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
-            style: TextButton.styleFrom(foregroundColor: Colors.white54),
+          ScaleButton(
+            onTap: () => _showResetDialog(),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  width: 1.0,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.refresh_rounded, size: 13, color: Colors.white54),
+                  const SizedBox(width: 5),
+                  GoopText(
+                    'RESET',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white54,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -267,41 +292,66 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         ? Colors.black87
         : Colors.white;
 
-    // Shared button styles — Apply always uses the theme's primary color
-    // so it reads as the affirmative action from any step.
-    FilledButton applyButton({bool expanded = false}) => FilledButton.icon(
-          onPressed: _applyAndClose,
-          icon: const Icon(Icons.check_rounded, size: 16),
-          label: const GoopText('Apply',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-          style: FilledButton.styleFrom(
-            backgroundColor: flair.primary,
-            foregroundColor: onPrimary,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            padding: const EdgeInsets.symmetric(vertical: 12),
+    // Gungeon-styled action button — chunky border, subtle glow, tactile
+    // scale-on-press via ScaleButton. Apply always uses the theme's
+    // primary color so it reads as the affirmative action from any step.
+    Widget gungeonButton({
+      required String label,
+      required IconData icon,
+      required Color bgColor,
+      required Color textColor,
+      required Color borderColor,
+      bool glow = false,
+      bool expanded = false,
+      required VoidCallback onTap,
+    }) {
+      final btn = ScaleButton(
+        onTap: onTap,
+        child: Container(
+          height: 46,
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: borderColor, width: 1.4),
+            boxShadow: glow
+                ? [BoxShadow(color: borderColor.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
+                : [BoxShadow(color: Colors.black.withValues(alpha: 0.2), blurRadius: 4, offset: const Offset(0, 2))],
           ),
-        );
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 16, color: textColor),
+              const SizedBox(width: 7),
+              GoopText(
+                label.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.0,
+                  color: textColor,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+      return expanded ? Expanded(child: btn) : btn;
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
       child: Row(
         children: [
           if (_step > 0)
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: () => _goTo(_step - 1),
-                icon: const Icon(Icons.arrow_back, size: 16),
-                label: const GoopText('Back',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.white70,
-                  side: BorderSide(color: Colors.white.withValues(alpha: 0.15)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
+            gungeonButton(
+              label: 'Back',
+              icon: Icons.arrow_back_rounded,
+              bgColor: Colors.white.withValues(alpha: 0.06),
+              textColor: Colors.white70,
+              borderColor: Colors.white.withValues(alpha: 0.15),
+              expanded: true,
+              onTap: () => _goTo(_step - 1),
             )
           else
             const Spacer(),
@@ -311,26 +361,36 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           // the user can commit their theme choice immediately without
           // traversing the rest of the wizard.
           if (isLast)
-            Expanded(child: applyButton(expanded: true))
+            gungeonButton(
+              label: 'Apply',
+              icon: Icons.check_rounded,
+              bgColor: flair.primary,
+              textColor: onPrimary,
+              borderColor: flair.primary,
+              glow: true,
+              expanded: true,
+              onTap: _applyAndClose,
+            )
           else ...[
-            Expanded(
-              child: FilledButton.icon(
-                onPressed: () => _goTo(_step + 1),
-                icon: const Icon(Icons.arrow_forward, size: 16),
-                label: const GoopText('Next',
-                    style:
-                        TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
-                style: FilledButton.styleFrom(
-                  backgroundColor: flair.primary.withValues(alpha: 0.35),
-                  foregroundColor: onPrimary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
+            gungeonButton(
+              label: 'Next',
+              icon: Icons.arrow_forward_rounded,
+              bgColor: flair.primary.withValues(alpha: 0.3),
+              textColor: onPrimary,
+              borderColor: flair.primary.withValues(alpha: 0.5),
+              expanded: true,
+              onTap: () => _goTo(_step + 1),
             ),
             const SizedBox(width: 8),
-            applyButton(),
+            gungeonButton(
+              label: 'Apply',
+              icon: Icons.check_rounded,
+              bgColor: flair.primary,
+              textColor: onPrimary,
+              borderColor: flair.primary,
+              glow: true,
+              onTap: _applyAndClose,
+            ),
           ],
         ],
       ),
@@ -780,10 +840,10 @@ class _ThemeStep extends StatelessWidget {
                   ),
                 ),
                 if (isActive) ...[
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 3),
                   GoopText('ACTIVE',
                       style: TextStyle(
-                          fontSize: 7,
+                          fontSize: 9,
                           fontWeight: FontWeight.w900,
                           color: f.primary,
                           letterSpacing: 0.8)),
