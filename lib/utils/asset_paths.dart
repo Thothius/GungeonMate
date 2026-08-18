@@ -24,7 +24,7 @@
 /// Single source of truth for the app version string. Keep this in sync
 /// with the `version:` field in pubspec.yaml. Used by main.dart, the
 /// main menu, the changelog button, and the MP handshake.
-const String kAppVersion = '1.9.59';
+const String kAppVersion = '1.9.60';
 
 // Slug a free-form display name into the canonical asset filename
 // stem (no extension). Pure function — given the same name, always

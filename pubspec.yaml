@@ -1,7 +1,7 @@
 name: gungeon_mate
 description: "Gungeon Mate - Enter the Gungeon companion app for tracking runs, items, guns, and synergies"
 publish_to: 'none'
-version: 1.9.59+135
+version: 1.9.60+136
 
 environment:
   sdk: ^3.7.0
@@ -44,6 +44,9 @@ dependencies:
 
   # Video looping engine for animated wallpapers
   video_player: ^2.9.2
+  # Windows/Linux video backend for video_player (drop-in, no API change)
+  video_player_media_kit: ^2.0.0
+  media_kit_libs_windows_video: ^1.0.11
 
 dev_dependencies:
   flutter_test:

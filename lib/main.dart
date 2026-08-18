@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'providers/run_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/app_theme.dart';
@@ -13,6 +14,9 @@ import 'widgets/theme_overlay.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Enable video_player on Windows/Linux via media_kit (libmpv) backend.
+  // Drop-in — no API change to existing VideoPlayerController usage.
+  VideoPlayerMediaKit.ensureInitialized(windows: true);
   // Hydrate the user's persisted choices before any UI mounts so the
   // very first frame honours their prefs. Each init() swallows platform
   // failures internally — a broken plugin can't block app startup.

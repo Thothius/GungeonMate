@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.60",
+    "title": "Vortex MP4 Playback on Windows — media_kit Backend",
+    "date": "August 2026",
+    "items": [
+      "FIX: Vortex mp4 now plays on Windows desktop. Added video_player_media_kit (libmpv backend) as a drop-in Windows video player for the existing video_player API. The animated vortex wallpaper (gungeonmate-animation-02.mp4) on the home screen now plays the actual video instead of falling back to the CustomPaint vortex. VideoPlayerMediaKit.ensureInitialized(windows: true) called in main.dart before runApp. No API changes to existing AnimatedWallpaperBackground — it just works. Fallback CustomPaint vortex still retained for any platform where video init fails."
+    ]
+  },
+  {
     "version": "v1.9.59",
     "title": "Theme Signature Mode — Theme-Aware Active Run View",
     "date": "August 2026",

@@ -516,7 +516,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.59 — Theme Signature Mode',
+                            'v1.9.60 — Vortex MP4 on Windows',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

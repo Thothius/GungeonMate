@@ -6,6 +6,18 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.60 — 🎬 Vortex MP4 Playback on Windows (August 2026)
+**Build:** 136
+
+> The animated vortex wallpaper on the home screen now plays the actual mp4 video on Windows desktop, instead of falling back to the CustomPaint vortex.
+
+### Fix
+- Added `video_player_media_kit: ^2.0.0` + `media_kit_libs_windows_video` — a drop-in libmpv backend for the existing `video_player` API. No API changes to `AnimatedWallpaperBackground`.
+- `VideoPlayerMediaKit.ensureInitialized(windows: true)` called in `main.dart` before `runApp`.
+- The `gungeonmate-animation-02.mp4` vortex video now initializes and plays on Windows. The CustomPaint fallback in `animated_wallpaper.dart` is still retained for any platform where video init fails.
+
+---
+
 ## v1.9.59 — 🎨 Theme Signature Mode: Theme-Aware Active Run View (August 2026)
 **Build:** 135
 
