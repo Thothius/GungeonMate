@@ -16,6 +16,7 @@ import '../../screens/settings_screen.dart';
 import '../../screens/codex_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
 import '../../screens/character_select_screen.dart';
+import 'end_run_confirm_dialog.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -482,19 +483,29 @@ class HeaderMenu extends StatelessWidget {
           ),
           const PopupMenuItem(
             value: 'end_run',
+            height: 52,
             child: Row(children: [
-              Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
-              SizedBox(width: 10),
-              GoopText('End Run & Disconnect', style: TextStyle(color: Colors.redAccent)),
+              Icon(Icons.exit_to_app, size: 24, color: Colors.redAccent),
+              SizedBox(width: 12),
+              GoopText('End Run & Disconnect',
+                  style: TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800)),
             ]),
           ),
         ] else ...[
           const PopupMenuItem(
             value: 'end_run',
+            height: 52,
             child: Row(children: [
-              Icon(Icons.exit_to_app, size: 18, color: Colors.redAccent),
-              SizedBox(width: 10),
-              GoopText('End Run', style: TextStyle(color: Colors.redAccent)),
+              Icon(Icons.exit_to_app, size: 24, color: Colors.redAccent),
+              SizedBox(width: 12),
+              GoopText('End Run',
+                  style: TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800)),
             ]),
           ),
         ],
@@ -594,52 +605,17 @@ class HeaderMenu extends StatelessWidget {
     final session = context.read<MultiplayerSession>();
     final isSidekick = session.isActive && session.myRole == MpRole.sidekick;
 
-    showDialog(
-      context: context,
-      builder: (c) => AlertDialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 30, vertical: 18),
-        titlePadding: const EdgeInsets.fromLTRB(28, 28, 28, 12),
-        contentPadding: const EdgeInsets.fromLTRB(28, 12, 28, 24),
-        actionsPadding: const EdgeInsets.fromLTRB(28, 12, 28, 28),
-        icon: const Icon(Icons.warning_rounded, color: Colors.redAccent, size: 32),
-        title: GoopText(
-          isSidekick ? 'End Run & Disconnect?' : 'End Run?',
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-        ),
-        content: GoopText(
-          isSidekick
-              ? 'This will disconnect you from the host, reset the current session, and return you to the main menu.'
-              : 'This resets the current run and returns to the main menu.',
-          style: const TextStyle(fontSize: 15, height: 1.45),
-        ),
-        actions: [
-          TextButton(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-              textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
-            ),
-            onPressed: () => Navigator.pop(c),
-            child: const GoopText('Cancel'),
-          ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.red.shade900,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-              textStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
-            ),
-            onPressed: () async {
-              Navigator.pop(c);
-              if (session.isActive) {
-                // Tells the peer to end too, then tears the MP session down cleanly.
-                await session.notifyEndRunAndCancel();
-              }
-              // Wipe local run state and pop screens to return to the main menu
-              p.endRun();
-            },
-            child: GoopText(isSidekick ? 'End & Disconnect' : 'End Run'),
-          ),
-        ],
-      ),
+    EndRunConfirmDialog.show(
+      context,
+      isSidekick: isSidekick,
+      onConfirm: () async {
+        if (session.isActive) {
+          // Tells the peer to end too, then tears the MP session down cleanly.
+          await session.notifyEndRunAndCancel();
+        }
+        // Wipe local run state and pop screens to return to the main menu
+        p.endRun();
+      },
     );
   }
 

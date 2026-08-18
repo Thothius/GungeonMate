@@ -102,6 +102,7 @@ flutter:
     - assets/images/pickups/
     - assets/images/npcs/
     - assets/images/enemies/
+    - assets/images/end_run/
     - assets/images/bosses/
     - assets/images/codex/
     - assets/images/codex/tabs/
