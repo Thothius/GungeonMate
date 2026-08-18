@@ -29,22 +29,53 @@ class HomeCustomization {
   });
 
   /// All supported junk types in display order, with a human label and
-  /// the asset stem (file name without extension).
+  /// the asset stem (file name without extension). Grouped: pickups
+  /// first, then enemies, then items.
   static const junkTypes = <_JunkType>[
+    // ── Pickups ──
     _JunkType('Money', 'Money'),
     _JunkType('Money x5', 'Money_5'),
     _JunkType('Golden Shell', 'Golden_Shell'),
     _JunkType('Blank', 'Blank'),
     _JunkType('Glass Guon Stone', 'Glass_Guon_Stone'),
     _JunkType('Half Heart', 'Half_Heart'),
+    _JunkType('Heart', 'Pickup_Heart'),
+    _JunkType('Armor', 'Pickup_Armor'),
+    _JunkType('Key', 'Pickup_Key'),
+    _JunkType('Pickup Blank', 'Pickup_Blank'),
+    // ── Enemies ──
+    _JunkType('Bullet Kin', 'Bullet_Kin'),
+    _JunkType('Arrowkin', 'Arrowkin'),
+    _JunkType('Bullat', 'Bullat'),
+    _JunkType('Blobulin', 'Blobulin'),
+    _JunkType('Shotgat', 'Shotgat'),
+    _JunkType('Skullet', 'Skullet'),
+    _JunkType('Gun Nut', 'Gun_Nut'),
+    _JunkType('Bookllet', 'Bookllet'),
+    // ── Items ──
+    _JunkType('Bomb', 'Bomb'),
+    _JunkType('Blue Guon Stone', 'Blue_Guon_Stone'),
+    _JunkType('Spice', 'Spice'),
+    _JunkType('Iron Coin', 'Iron_Coin'),
   ];
 
   /// Total number of junk sprites currently configured.
   int get totalJunk => junkCounts.values.fold(0, (a, b) => a + b);
 
-  /// Asset path for a junk stem.
+  /// Asset path for a junk stem. Pickup/enemy sprites are .png, items
+  /// are .webp. The extension is inferred from the stem prefix.
   static String junkAssetPath(String stem) {
-    final ext = stem.endsWith('.png') ? 'png' : 'webp';
+    // Pickups and enemies use .png, items use .webp.
+    final isPng = stem.startsWith('Pickup_') ||
+        stem.startsWith('Bullet_') ||
+        stem.startsWith('Arrow') ||
+        stem.startsWith('Bullat') ||
+        stem.startsWith('Blob') ||
+        stem.startsWith('Shotgat') ||
+        stem.startsWith('Skullet') ||
+        stem.startsWith('Gun_Nut') ||
+        stem.startsWith('Bookllet');
+    final ext = isPng ? 'png' : 'webp';
     return 'assets/images/home/junk/$stem.$ext';
   }
 

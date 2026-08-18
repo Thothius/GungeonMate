@@ -187,44 +187,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // Customize — opens the home customization sheet
-                  // (gungeoneer picker + junk particle settings).
-                  ScaleButton(
-                    onTap: () {
-                      Haptics.selection();
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        isScrollControlled: true,
-                        useSafeArea: false,
-                        builder: (_) => const HomeCustomizationSheet(),
-                      );
-                    },
-                    child: IgnorePointer(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: btnHeight,
-                        child: TextButton.icon(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xFFBCA0F8),
-                          ),
-                          icon: Icon(Icons.tune_rounded, size: 22 * sf),
-                          label: GoopText(
-                            'Customize',
-                            style: TextStyle(
-                              fontSize: btnFontSize,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.43',
+                    'v1.9.44',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -270,7 +235,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               ),
             ),
           ),
-          // ── Top-left quick toggles: Toggle Gungeoneer + Toggle Junk ──
+          // ── Top-left quick toggles: Gungeoneer + Floaters ──
+          // Each toggle works as a pill: tap toggles on/off. When on,
+          // tapping again opens the config sheet for that section.
+          // Long-press always opens the config sheet directly.
           Positioned(
             top: 12,
             left: 12,
@@ -282,13 +250,39 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _QuickToggle(
-                        label: 'Toggle Gungeoneer',
+                        label: 'Gungeoneer',
                         icon: Icons.person_rounded,
                         active: cust.showGungeoneer,
                         activeColor: const Color(0xFFBCA0F8),
                         onTap: () {
                           Haptics.selection();
-                          HomeCustomization.setShowGungeoneer(!cust.showGungeoneer);
+                          if (cust.showGungeoneer) {
+                            // Already on — open config to pick character.
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              useSafeArea: false,
+                              builder: (_) => const HomeCustomizationSheet(
+                                initialSection: HomeCustomSection.gungeoneer,
+                              ),
+                            );
+                          } else {
+                            // Off — turn on (opens config if no character
+                            // selected yet, so user picks one immediately).
+                            if (cust.gungeoneerName.isEmpty) {
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.transparent,
+                                isScrollControlled: true,
+                                useSafeArea: false,
+                                builder: (_) => const HomeCustomizationSheet(
+                                  initialSection: HomeCustomSection.gungeoneer,
+                                ),
+                              );
+                            }
+                            HomeCustomization.setShowGungeoneer(true);
+                          }
                         },
                         onLongPress: () {
                           Haptics.selection();
@@ -305,15 +299,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       ),
                       const SizedBox(height: 8),
                       _QuickToggle(
-                        label: 'Toggle Junk',
+                        label: 'Floaters',
                         icon: Icons.auto_awesome_rounded,
                         active: cust.showJunk && cust.totalJunk > 0,
                         activeColor: const Color(0xFFFFD54F),
                         onTap: () {
                           Haptics.selection();
-                          // If no junk configured yet, opening the sheet
-                          // is more useful than silently toggling nothing.
-                          if (cust.totalJunk == 0) {
+                          if (cust.showJunk && cust.totalJunk > 0) {
+                            // Already on — open config to adjust floaters.
                             showModalBottomSheet(
                               context: context,
                               backgroundColor: Colors.transparent,
@@ -323,9 +316,20 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                 initialSection: HomeCustomSection.junk,
                               ),
                             );
-                            return;
+                          } else if (cust.totalJunk == 0) {
+                            // No floaters configured — open config to pick.
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              isScrollControlled: true,
+                              useSafeArea: false,
+                              builder: (_) => const HomeCustomizationSheet(
+                                initialSection: HomeCustomSection.junk,
+                              ),
+                            );
+                          } else {
+                            HomeCustomization.setShowJunk(true);
                           }
-                          HomeCustomization.setShowJunk(!cust.showJunk);
                         },
                         onLongPress: () {
                           Haptics.selection();
@@ -369,7 +373,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.43)',
+                          'Changelog (v1.9.44)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -423,7 +427,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.43 — Active Run Calc UX + Avatar Default + Empty-State Info',
+                            'v1.9.44 — Home Screen Toggle Unification + 16 New Vortex Floaters',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
