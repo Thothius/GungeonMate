@@ -1,5 +1,13 @@
 [
   {
+    "version": "v1.9.56",
+    "title": "Interactive Gungeon Meter — Coolness/Curse Fill Bar",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Interactive Gungeon Meter — custom-painted horizontal fill bar replacing the old LinearProgressIndicator on the stats detail screen. Animated gradient fill (cyan for coolness, oxblood-red for curse). Threshold tick at 10 with prominent marker. Tap or drag anywhere on the bar to set the value directly. Overflow state at curse ≥ 10: pulsing red glow border + skull icon at the right edge + Lord of the Jammed alert card. Haptic feedback on threshold cross. Scale labels (0/5/10/15+) with threshold highlight. RepaintBoundary isolated for performance."
+    ]
+  },
+  {
     "version": "v1.9.55",
     "title": "Active Run Rework Phase 5 — Preferences Sheet + Polish",
     "date": "August 2026",

@@ -516,7 +516,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.55 — Display Preferences',
+                            'v1.9.56 — Gungeon Meter',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

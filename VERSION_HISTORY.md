@@ -6,6 +6,20 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.56 — 📊 Interactive Gungeon Meter: Coolness/Curse Fill Bar (August 2026)
+**Build:** 132
+
+> Replaces the basic LinearProgressIndicator on the stats detail screen with a custom-painted interactive meter.
+
+### New Features
+- **Interactive Gungeon Meter** — custom-painted horizontal fill bar (`GungeonMeter` widget). Animated gradient fill: cyan for coolness, oxblood-red for curse. Threshold tick at 10 with prominent marker line. Tap or drag anywhere on the bar to set the value directly (calls `adjustCoolness`/`adjustCurse`). Overflow state at curse ≥ 10: pulsing red glow border via `AnimationController`, skull icon (☠) at the right edge with scale pulse, Lord of the Jammed alert card. Haptic feedback on threshold cross (`Haptics.heavy()`). Scale labels (0/5/10/15+) with threshold highlight. Value text overlay in monospace. `RepaintBoundary` isolated for performance. Single `AnimationController` disposed properly.
+
+### Infrastructure
+- `lib/widgets/active_run/gungeon_meter.dart` — the new meter widget + `_MeterPainter` CustomPainter.
+- `lib/screens/stats_detail_screen.dart` — replaced `LinearProgressIndicator` section with `GungeonMeter`. Removed unused `meterPercentage` variable.
+
+---
+
 ## v1.9.55 — ⚙️ Active Run Rework Phase 5: Preferences Sheet + Polish (August 2026)
 **Build:** 131
 

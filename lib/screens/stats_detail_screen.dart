@@ -4,6 +4,7 @@ import '../providers/run_provider.dart';
 import '../models/run_log_entry.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
+import '../widgets/active_run/gungeon_meter.dart';
 
 enum StatType { coolness, curse }
 
@@ -135,11 +136,7 @@ class _ValueCard extends StatelessWidget {
     final double clampedVal = value.clamp(minSlider, maxSlider);
 
     // Active item reduction percent (max 50%) or Lord of the Jammed Threat percentage
-    final meterPercentage = isCool 
-        ? (value * 5).clamp(0.0, 50.0) / 50.0 
-        : (value * 10).clamp(0.0, 100.0) / 100.0;
-
-    final meterLabel = isCool 
+    final meterLabel = isCool
         ? 'Active Cooldown Speedup: +${(value * 5).clamp(0, 50).toStringAsFixed(1)}%' 
         : 'Bullet Hell Threat Level: ${(value * 10).clamp(0, 100).toStringAsFixed(1)}%';
 
@@ -260,7 +257,7 @@ class _ValueCard extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          // Live Progress Bar (Gungeon Meter)
+          // Live Interactive Gungeon Meter
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),
@@ -268,66 +265,12 @@ class _ValueCard extends StatelessWidget {
               color: Colors.black.withValues(alpha: 0.15),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15)),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GoopText(
-                      meterLabel,
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: color.withValues(alpha: 0.9),
-                        letterSpacing: 0.2,
-                      ),
-                    ),
-                    if (isCool && value >= 10.0)
-                      const Icon(Icons.star_rounded, color: Colors.amber, size: 14),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: meterPercentage,
-                    backgroundColor: Colors.white.withValues(alpha: 0.05),
-                    color: color,
-                    minHeight: 6,
-                  ),
-                ),
-                // Lord of the Jammed Special Alert Card
-                if (!isCool && value >= 10.0) ...[
-                  const SizedBox(height: 10),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.red.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.redAccent, width: 1.0),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 16),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: GoopText(
-                            'LORD OF THE JAMMED HAS SPAWNED!',
-                            style: TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.redAccent,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ],
+            child: GungeonMeter(
+              value: value.clamp(0.0, 15.0),
+              isCool: isCool,
+              color: color,
+              label: meterLabel,
+              onDelta: onDelta,
             ),
           ),
         ],
