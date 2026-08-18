@@ -1,7 +1,7 @@
 name: gungeon_mate
 description: "Gungeon Mate - Enter the Gungeon companion app for tracking runs, items, guns, and synergies"
 publish_to: 'none'
-version: 1.9.50+126
+version: 1.9.51+127
 
 environment:
   sdk: ^3.7.0
@@ -76,6 +76,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  # Fragment shaders (Q3 ambient effects — digital rain + dark neon fog).
+  shaders:
+    - assets/shaders/digital_rain.frag
+    - assets/shaders/dark_neon_fog.frag
 
   # Assets
   assets:

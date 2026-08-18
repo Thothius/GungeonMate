@@ -1,5 +1,14 @@
 [
   {
+    "version": "v1.9.51",
+    "title": "Ambient Fragment Shaders — GPU Digital Rain & Dark Neon Fog",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Ambient fragment shaders — GPU-composited visual effects rendered via GLSL fragment programs. Two presets: Digital Rain (purple Matrix-style falling glyph columns) and Dark Neon Fog (slow-churning purple-black fog). Opt-in via VisualPrefs, rendered behind content with RepaintBoundary isolation.",
+      "INFRA: FragmentProgram.fromAsset loads .frag files at startup, cached at class level for instant switching. Stopwatch-driven uTime uniform, AnimationController drives repaint ticks only."
+    ]
+  },
+  {
     "version": "v1.9.50",
     "title": "Synergy Predictor — Find Items That Complete Synergies",
     "date": "August 2026",

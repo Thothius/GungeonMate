@@ -6,6 +6,26 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.51 — 🌫️ Ambient Fragment Shaders (August 2026)
+**Build:** 127
+
+> GPU-composited ambient visual effects via GLSL fragment shaders. Completes the genius audit v0.0.7 clean sweep (Q1–Q4 all done).
+
+### New Features
+- **Ambient fragment shaders** — two GLSL fragment programs rendered via Flutter's FragmentProgram API:
+  - **Digital Rain** — purple Matrix-style falling glyph columns with per-column deterministic speed, brightness, and flicker. Head glyph is white-purple, trail fades to deep purple.
+  - **Dark Neon Fog** — slow-churning purple-black fog using 4-octave fractal Brownian motion noise. Very low opacity — reads as atmosphere, not foreground.
+- **Opt-in via VisualPrefs** — `shaderEnabled` (default off) + `shaderPreset` (digitalRain/darkNeonFog). Persisted to SharedPreferences.
+- **GPU-composited** — shaders run on the GPU via `Paint.shader`, wrapped in `RepaintBoundary` (Q4 foundation). Only the shader layer repaints on each tick.
+
+### Infrastructure
+- `assets/shaders/digital_rain.frag` + `dark_neon_fog.frag` — GLSL 460 core, registered in pubspec.yaml `flutter: shaders:`
+- `lib/widgets/backgrounds/ambient_shader.dart` — `AmbientShaderLayer` widget with `AmbientShader` enum, program caching, Stopwatch-driven uTime
+- `ShaderPreset` enum + `shaderEnabled`/`shaderPreset` fields on `VisualPrefs` with full persistence
+- Wired into `theme_overlay.dart` at layer 0.5 (between video wallpaper and particles)
+
+---
+
 ## v1.9.50 — ✨ Synergy Predictor (August 2026)
 **Build:** 126
 

@@ -12,6 +12,7 @@ import 'particles/touch_particle.dart';
 import 'particles/ambient_glow.dart';
 import 'backgrounds/page_frame.dart';
 import 'backgrounds/animated_wallpaper.dart';
+import 'backgrounds/ambient_shader.dart';
 
 class ThemeOverlay extends StatefulWidget {
   final Widget child;
@@ -252,6 +253,20 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                     child: IgnorePointer(
                       child: Container(
                         color: Colors.black.withValues(alpha: 0.35),
+                      ),
+                    ),
+                  ),
+
+                // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
+                // rain or dark neon fog. Sits behind particles but above the
+                // base background + video wallpaper. Opt-in via VisualPrefs.
+                if (prefs.shaderEnabled)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: AmbientShaderLayer(
+                        shader: prefs.shaderPreset == ShaderPreset.darkNeonFog
+                            ? AmbientShader.darkNeonFog
+                            : AmbientShader.digitalRain,
                       ),
                     ),
                   ),

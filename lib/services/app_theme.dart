@@ -1960,6 +1960,20 @@ enum RunDisplayMode {
   matrix,
 }
 
+/// Ambient fragment shader preset (Q3 genius audit). Each preset maps
+/// to a .frag file in assets/shaders/. See AmbientShaderLayer.
+enum ShaderPreset {
+  digitalRain,
+  darkNeonFog;
+}
+
+extension ShaderPresetX on ShaderPreset {
+  String get label => switch (this) {
+        ShaderPreset.digitalRain => 'Digital Rain',
+        ShaderPreset.darkNeonFog => 'Dark Neon Fog',
+      };
+}
+
 extension RunDisplayModeX on RunDisplayMode {
   String get label => switch (this) {
         RunDisplayMode.codex => 'Codex Book',
@@ -2734,6 +2748,14 @@ class VisualPrefs {
   /// nauseating.
   final double depthTiltIntensity;
 
+  /// Whether ambient fragment shaders (Q3) are enabled. Off by default —
+  /// shaders are GPU-intensive and opt-in. See [shaderPreset].
+  final bool shaderEnabled;
+
+  /// Which ambient shader to render when [shaderEnabled] is true.
+  /// Defaults to [ShaderPreset.digitalRain].
+  final ShaderPreset shaderPreset;
+
 
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
@@ -2791,6 +2813,8 @@ class VisualPrefs {
     this.runDisplayModeBarCollapsed = true,
     this.depthInventory = true,
     this.depthTiltIntensity = 0.6,
+    this.shaderEnabled = false,
+    this.shaderPreset = ShaderPreset.digitalRain,
   });
 
   static const _kGlow     = 'vp.glow_v1';
@@ -2827,6 +2851,8 @@ class VisualPrefs {
   static const _kRunDisplayModeBarCollapsed = 'vp.run_display_mode_bar_collapsed_v1';
   static const _kDepthInventory = 'vp.depth_inventory_v1';
   static const _kDepthTiltIntensity = 'vp.depth_tilt_intensity_v1';
+  static const _kShaderEnabled = 'vp.shader_enabled_v1';
+  static const _kShaderPreset = 'vp.shader_preset_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
       ValueNotifier(const VisualPrefs());
@@ -2895,6 +2921,9 @@ class VisualPrefs {
       final runDisplayModeBarCollapsed = p.getBool(_kRunDisplayModeBarCollapsed) ?? true;
       final depthInventory = p.getBool(_kDepthInventory) ?? true;
       final depthTiltIntensity = p.getDouble(_kDepthTiltIntensity) ?? 0.6;
+      final shaderEnabled = p.getBool(_kShaderEnabled) ?? false;
+      final shaderPresetIdx = p.getInt(_kShaderPreset) ?? 0;
+      final shaderPreset = ShaderPreset.values[shaderPresetIdx.clamp(0, ShaderPreset.values.length - 1)];
 
 
       notifier.value = VisualPrefs(
@@ -2929,6 +2958,8 @@ class VisualPrefs {
         runDisplayModeBarCollapsed: runDisplayModeBarCollapsed,
         depthInventory: depthInventory,
         depthTiltIntensity: depthTiltIntensity,
+        shaderEnabled: shaderEnabled,
+        shaderPreset: shaderPreset,
       );
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
@@ -3090,6 +3121,16 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setShaderEnabled(bool v) async {
+    notifier.value = notifier.value._with(shaderEnabled: v);
+    _persist();
+  }
+
+  static Future<void> setShaderPreset(ShaderPreset v) async {
+    notifier.value = notifier.value._with(shaderPreset: v);
+    _persist();
+  }
+
 
   static Future<void> _persist() async {
     try {
@@ -3127,6 +3168,8 @@ class VisualPrefs {
       await p.setBool(_kRunDisplayModeBarCollapsed, v.runDisplayModeBarCollapsed);
       await p.setBool(_kDepthInventory, v.depthInventory);
       await p.setDouble(_kDepthTiltIntensity, v.depthTiltIntensity);
+      await p.setBool(_kShaderEnabled, v.shaderEnabled);
+      await p.setInt(_kShaderPreset, v.shaderPreset.index);
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
@@ -3162,6 +3205,8 @@ class VisualPrefs {
     bool? runDisplayModeBarCollapsed,
     bool? depthInventory,
     double? depthTiltIntensity,
+    bool? shaderEnabled,
+    ShaderPreset? shaderPreset,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -3194,6 +3239,8 @@ class VisualPrefs {
     runDisplayModeBarCollapsed: runDisplayModeBarCollapsed ?? this.runDisplayModeBarCollapsed,
     depthInventory: depthInventory ?? this.depthInventory,
     depthTiltIntensity: depthTiltIntensity ?? this.depthTiltIntensity,
+    shaderEnabled: shaderEnabled ?? this.shaderEnabled,
+    shaderPreset: shaderPreset ?? this.shaderPreset,
   );
 }
 
