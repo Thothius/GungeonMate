@@ -890,128 +890,180 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
 
   /// Connect dialog for a paired partner — pick Host or Join role,
   /// then one-tap connect using the stored pairId (no PIN entry).
+  /// Paired Sidekicks get character swap flexibility (not forced to
+  /// Cultist). Paired Main gets "Reset Run with New Gungeoneer"
+  /// available once connected.
   void _showConnectPairedDialog(BuildContext context, PairedPartner partner) {
     final flair = AppTheme.flair;
+    final runProvider = context.read<RunProvider>();
+    final allGungeoneers = runProvider.allGungeoneers;
+    var selectedSidekickChar = runProvider.gungeoneerByName('The Cultist') ??
+        allGungeoneers.first;
+
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF1B1B1E),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.pinkAccent.withValues(alpha: 0.3)),
-        ),
-        title: Row(
-          children: [
-            const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 22),
-            const SizedBox(width: 10),
-            Expanded(
-              child: GoopText(
-                'CONNECT WITH ${partner.partnerNickname.toUpperCase()}',
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 0.5),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GoopText(
-              'Pick your role to start a co-op session. No PIN needed — you\'re paired!',
-              style: const TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.3),
-            ),
-            const SizedBox(height: 16),
-            // Host as Main
-            InkWell(
-              onTap: () {
-                Navigator.pop(ctx);
-                _connectPaired(partner, MpRole.main);
-              },
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: flair.primary.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: flair.primary.withValues(alpha: 0.25)),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.star_rounded, color: flair.primary, size: 24),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GoopText(
-                            'HOST AS MAIN',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: flair.primary, letterSpacing: 0.5),
-                          ),
-                          const SizedBox(height: 2),
-                          GoopText(
-                            'Host the run. Your partner joins as Sidekick.',
-                            style: const TextStyle(fontSize: 11, color: Colors.white60),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Join as Sidekick
-            InkWell(
-              onTap: () {
-                Navigator.pop(ctx);
-                _connectPaired(partner, MpRole.sidekick);
-              },
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.purple.withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.purple.withValues(alpha: 0.25)),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.handshake_rounded, color: Colors.purpleAccent, size: 24),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const GoopText(
-                            'JOIN AS SIDEKICK',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.5),
-                          ),
-                          const SizedBox(height: 2),
-                          GoopText(
-                            'Find your partner\'s hosted run and join.',
-                            style: const TextStyle(fontSize: 11, color: Colors.white60),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const GoopText('CANCEL', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          backgroundColor: const Color(0xFF1B1B1E),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: Colors.pinkAccent.withValues(alpha: 0.3)),
           ),
-        ],
+          title: Row(
+            children: [
+              const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 22),
+              const SizedBox(width: 10),
+              Expanded(
+                child: GoopText(
+                  'CONNECT WITH ${partner.partnerNickname.toUpperCase()}',
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 0.5),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GoopText(
+                'Pick your role to start a co-op session. No PIN needed — you\'re paired!',
+                style: const TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.3),
+              ),
+              const SizedBox(height: 16),
+              // Host as Main
+              InkWell(
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _connectPaired(partner, MpRole.main);
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: flair.primary.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: flair.primary.withValues(alpha: 0.25)),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.star_rounded, color: flair.primary, size: 24),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GoopText(
+                              'HOST AS MAIN',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: flair.primary, letterSpacing: 0.5),
+                            ),
+                            const SizedBox(height: 2),
+                            GoopText(
+                              'Host the run. Your partner joins as Sidekick.',
+                              style: const TextStyle(fontSize: 11, color: Colors.white60),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              // Join as Sidekick (with character picker — paired privilege)
+              InkWell(
+                onTap: () {
+                  Navigator.pop(ctx);
+                  _connectPaired(partner, MpRole.sidekick,
+                      character: selectedSidekickChar);
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.purple.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.purple.withValues(alpha: 0.25)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.handshake_rounded, color: Colors.purpleAccent, size: 24),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const GoopText(
+                                  'JOIN AS SIDEKICK',
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.5),
+                                ),
+                                const SizedBox(height: 2),
+                                GoopText(
+                                  'Find your partner\'s hosted run and join.',
+                                  style: const TextStyle(fontSize: 11, color: Colors.white60),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      // Character picker — paired privilege (not forced to Cultist)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.purple.withValues(alpha: 0.2)),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.person_outline_rounded, size: 16, color: Colors.purple.withValues(alpha: 0.6)),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: DropdownButton<Gungeoneer>(
+                                value: selectedSidekickChar,
+                                isExpanded: true,
+                                underline: const SizedBox(),
+                                dropdownColor: const Color(0xFF1B1B1E),
+                                style: const TextStyle(fontSize: 12, color: Colors.white70),
+                                items: allGungeoneers.map((g) => DropdownMenuItem(
+                                  value: g,
+                                  child: GoopText(g.name, style: const TextStyle(fontSize: 12)),
+                                )).toList(),
+                                onChanged: (g) {
+                                  if (g != null) {
+                                    Haptics.selection();
+                                    setDialogState(() => selectedSidekickChar = g);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const GoopText('CANCEL', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Future<void> _connectPaired(PairedPartner partner, MpRole role) async {
+  Future<void> _connectPaired(PairedPartner partner, MpRole role,
+      {Gungeoneer? character}) async {
     final shouldProceed = await _showPermissionRationale();
     if (!shouldProceed || !mounted) return;
     final session = context.read<MultiplayerSession>();
@@ -1021,7 +1073,7 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
       partner: partner,
       role: role,
       nickname: nickname,
-      character: _selectedCharacter,
+      character: character ?? _selectedCharacter,
     );
     if (!mounted) return;
     await Navigator.pushReplacement(
@@ -1822,6 +1874,106 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
     }
   }
 
+  /// Paired Main privilege: pick a new gungeoneer and reset the run
+  /// without disconnecting the pair. The pairId stays the same, so
+  /// no re-pairing is needed.
+  void _showResetRunDialog(BuildContext context, MultiplayerSession session) {
+    final runProvider = context.read<RunProvider>();
+    final allGungeoneers = runProvider.allGungeoneers;
+    var selectedChar = runProvider.runState.selectedCharacter ??
+        runProvider.gungeoneerByName('The Marine') ??
+        allGungeoneers.first;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDialogState) => AlertDialog(
+          backgroundColor: const Color(0xFF1B1B1E),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: Colors.pinkAccent.withValues(alpha: 0.3)),
+          ),
+          title: Row(
+            children: [
+              const Icon(Icons.refresh_rounded, color: Colors.pinkAccent, size: 22),
+              const SizedBox(width: 10),
+              const Expanded(
+                child: GoopText(
+                  'RESET RUN',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GoopText(
+                'Pick a new gungeoneer. Your inventory resets but your partner stays connected — no re-pairing needed.',
+                style: const TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.3),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.pinkAccent.withValues(alpha: 0.2)),
+                ),
+                child: DropdownButton<Gungeoneer>(
+                  value: selectedChar,
+                  isExpanded: true,
+                  underline: const SizedBox(),
+                  dropdownColor: const Color(0xFF1B1B1E),
+                  style: const TextStyle(fontSize: 14, color: Colors.white),
+                  items: allGungeoneers.map((g) => DropdownMenuItem(
+                    value: g,
+                    child: GoopText(g.name, style: const TextStyle(fontSize: 14)),
+                  )).toList(),
+                  onChanged: (g) {
+                    if (g != null) {
+                      Haptics.selection();
+                      setDialogState(() => selectedChar = g);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const GoopText('CANCEL', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+            ),
+            FilledButton.icon(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.pinkAccent,
+                foregroundColor: Colors.white,
+              ),
+              icon: const Icon(Icons.refresh_rounded, size: 18),
+              label: const GoopText('RESET', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+              onPressed: () {
+                Navigator.pop(ctx);
+                unawaited(session.resetRunWithNewGungeoneer(selectedChar));
+                Haptics.selection();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: GoopText('Run reset with ${selectedChar.name}. Partner stays connected.'),
+                      duration: const Duration(seconds: 3),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final session = context.watch<MultiplayerSession>();
@@ -2065,6 +2217,30 @@ class _MultiplayerConnectScreenState extends State<MultiplayerConnectScreen>
                     },
                   ),
                 ),
+                // Paired Main privilege: Reset Run with New Gungeoneer
+                if (session.isPairedConnection &&
+                    session.myRole == MpRole.main) ...[
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.pinkAccent,
+                        side: BorderSide(color: Colors.pinkAccent.withValues(alpha: 0.5), width: 1.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      icon: const Icon(Icons.refresh_rounded, size: 20),
+                      label: const GoopText(
+                        'Reset Run with New Gungeoneer',
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                      ),
+                      onPressed: () => _showResetRunDialog(context, session),
+                    ),
+                  ),
+                ],
               ],
               if (status == MpStatus.permissionDenied) ...[
                 const SizedBox(height: 28),

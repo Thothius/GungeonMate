@@ -273,8 +273,25 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
   /// explicitly tearing down (End Run / Disconnect / cancel) is the only
   /// way out. Backoff still grows with attempts but is capped at 30s.
   static const int _maxAutoReconnectBackoffSec = 30;
+  /// Paired-partner elevated privilege: faster backoff cap (10s vs 30s)
+  /// and faster initial retry (0.5s vs 1s). Regular co-op partners are
+  /// worth waiting for; paired partners get priority reconnection.
+  static const int _maxPairedReconnectBackoffSec = 10;
   static const int _searchTimeoutMs = 60000; // 60 seconds (fresh search)
   static const int _reconnectSearchTimeoutMs = 20000; // 20 seconds (reconnect)
+
+  /// True when the current session was initiated via [connectPaired] —
+  /// a paired-partner connection. Drives elevated privileges: faster
+  /// auto-reconnect backoff, character swap flexibility, and the
+  /// "Reset Run with New Gungeoneer" quick action.
+  bool _isPairedConnection = false;
+  bool get isPairedConnection => _isPairedConnection;
+
+  /// The pairId of the current paired connection, if any. Used to
+  /// mark the partner as recently connected on hello success and
+  /// to look up the PairedPartner record for privilege checks.
+  String? _activePairId;
+  String? get activePairId => _activePairId;
 
   MultiplayerSession(this._service, this._runProvider) {
     _eventSub = _service.events.listen(_onServiceEvent);
@@ -556,10 +573,13 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   /// Start a session as Sidekick. Forces the Cultist character (as per
-  /// product spec). Pulls permissions, then discovers.
+  /// product spec) unless [character] is provided — paired partners get
+  /// character swap flexibility as an elevated privilege. Pulls
+  /// permissions, then discovers.
   Future<void> startAsSidekick({
     required String nickname,
     String pinCode = '',
+    Gungeoneer? character,
   }) async {
     if (_busyTransition) return;
     if (_status == MpStatus.searching ||
@@ -606,14 +626,14 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     _myRole = MpRole.sidekick;
     _myNickname = nickname;
     _pinCode = pinCode;
-    // Force Cultist. Resolved locally against master data so we broadcast
-    // the canonical name casing the receiver expects.
-    final cultist =
+    // Force Cultist (product spec) unless a character override is
+    // provided — paired partners get character swap flexibility.
+    final chosenChar = character ??
         _runProvider.gungeoneerByName('The Cultist') ??
         _runProvider.gungeoneerByName('Cultist');
-    _myCharacterName = cultist?.name ?? 'The Cultist';
+    _myCharacterName = chosenChar?.name ?? 'The Cultist';
     _lastRole = MpRole.sidekick;
-    _lastCharacter = cultist;
+    _lastCharacter = chosenChar;
     _lastNickname = nickname;
     _status = MpStatus.searching;
     _error = null;
@@ -630,16 +650,18 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
     // Start search timeout
     _startSearchTimeout();
-    // Sidekick starts their run as Cultist (coop slot).
+    // Sidekick starts their run in the coop slot.
     // Main Player's data will arrive via snapshot once connected.
     //
-    // Reconnect-safe: if the coop slot is already a Cultist with an
-    // inventory built up during the previous session, leave it alone.
-    // Calling startCoopPlayer here would wipe everything they collected.
-    final coopChar = _runProvider.runState.coop?.character?.name;
-    final alreadyHasCoop = cultist != null && coopChar == cultist.name;
-    if (cultist != null && !alreadyHasCoop) {
-      _runProvider.startCoopPlayer(cultist);
+    // Reconnect-safe: if the coop slot already has the chosen character
+    // with an inventory built up during the previous session, leave it
+    // alone. Calling startCoopPlayer here would wipe everything they
+    // collected.
+    final coopCharName = _runProvider.runState.coop?.character?.name;
+    final alreadyHasCoop =
+        chosenChar != null && coopCharName == chosenChar.name;
+    if (chosenChar != null && !alreadyHasCoop) {
+      _runProvider.startCoopPlayer(chosenChar);
     }
     _log(
       'Discovery initiated... Scanning for Main Host matching PIN: ${pinCode.isEmpty ? "Any" : pinCode}',
@@ -752,6 +774,9 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     _pairPersistedLocally = false;
     _pairingPeerNickname = null;
     _pendingPairMark = null;
+    // Clear paired-connection privileges.
+    _isPairedConnection = false;
+    _activePairId = null;
     // Clear reconnect identity so canReconnect returns false — prevents
     // a PINless reconnect() call after cancel() zeroes _pinCode.
     _lastRole = null;
@@ -884,7 +909,13 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
       if (role == MpRole.main) {
         await startAsMain(nickname: _lastNickname, character: char);
       } else {
-        await startAsSidekick(nickname: _lastNickname, pinCode: _pinCode ?? '');
+        // Pass the last character so paired Sidekicks keep their
+        // chosen character on reconnect (not forced back to Cultist).
+        await startAsSidekick(
+          nickname: _lastNickname,
+          pinCode: _pinCode ?? '',
+          character: char,
+        );
       }
     } finally {
       _busyTransition = false;
@@ -964,6 +995,9 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     // silently rejoin on next app launch.
     unawaited(_clearPersistedSession());
     _runProvider.mpDisconnected = true;
+    // Clear paired-connection privileges on explicit disconnect.
+    _isPairedConnection = false;
+    _activePairId = null;
     _status = MpStatus.disconnected;
     _log('Session disconnected.');
     notifyListeners();
@@ -1885,19 +1919,20 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     if (_status != MpStatus.disconnected) return;
     _autoReconnectTimer?.cancel();
     _autoReconnectAttempts++;
-    // Exponential backoff capped at 30s. Sequence: 1, 2, 4, 8, 16, 30, 30, ...
-    // Starts at 1s for the fastest possible first retry — the most common
-    // disconnect is a transient BT hiccup that resolves in under 2s.
-    // No upper limit on attempts: the session keeps trying until the
-    // user explicitly ends the run or disconnects, so an accidental
-    // app-kill or transient BT/Wi-Fi drop never silently strands them.
-    final raw = 1 << (_autoReconnectAttempts - 1); // 1, 2, 4, 8, 16, 32...
-    final secs =
-        raw > _maxAutoReconnectBackoffSec ? _maxAutoReconnectBackoffSec : raw;
+    // Exponential backoff. For paired connections, use a lower cap (10s
+    // vs 30s) and faster initial (0.5s vs 1s) — paired partners get
+    // priority reconnection per the elevated-privileges spec.
+    final maxBackoff = _isPairedConnection
+        ? _maxPairedReconnectBackoffSec
+        : _maxAutoReconnectBackoffSec;
+    // Paired: 0.5, 1, 2, 4, 8, 10, 10, ...  Regular: 1, 2, 4, 8, 16, 30, 30, ...
+    final base = _isPairedConnection ? 0.5 : 1.0;
+    final raw = base * (1 << (_autoReconnectAttempts - 1));
+    final secs = raw > maxBackoff ? maxBackoff.toDouble() : raw;
     _log(
       'Auto-reconnect scheduler: Attempt #$_autoReconnectAttempts scheduled in $secs seconds...',
     );
-    final delay = Duration(seconds: secs);
+    final delay = Duration(milliseconds: (secs * 1000).round());
     _autoReconnectTimer = Timer(delay, () {
       _autoReconnectTimer = null;
       if (_status != MpStatus.disconnected) return;
@@ -2301,6 +2336,10 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
     _pairPersistedLocally = false;
     _pendingPairId = null;
     _pairingPeerNickname = null;
+    // Mark this as a paired connection for elevated privileges (faster
+    // auto-reconnect, character swap, reset run with new gungeoneer).
+    _isPairedConnection = true;
+    _activePairId = partner.pairId;
     if (role == MpRole.main) {
       final char = character ??
           _runProvider.runState.selectedCharacter ??
@@ -2308,17 +2347,59 @@ class MultiplayerSession extends ChangeNotifier with WidgetsBindingObserver {
           _runProvider.allGungeoneers.first;
       await startAsMain(nickname: nick, character: char);
     } else {
-      // For paired Sidekicks, allow non-Cultist characters (elevated
-      // privilege). startAsSidekick forces Cultist internally, so we
-      // override after the call returns — but the cleaner path is to
-      // mirror startAsSidekick's transport setup with our own character.
-      // For now, use startAsSidekick and let the first snapshot from
-      // Main reconcile. Character flexibility is a Phase 2 privilege.
-      await startAsSidekick(nickname: nick, pinCode: partner.pairId);
+      // Paired Sidekick privilege: pass the character override through
+      // to startAsSidekick instead of forcing Cultist. If no character
+      // is selected, falls back to Cultist (default behavior).
+      await startAsSidekick(
+        nickname: nick,
+        pinCode: partner.pairId,
+        character: character,
+      );
     }
     // Mark the partner as recently connected once hello succeeds.
     // _onHello checks _pendingPairMark and calls markConnected.
     _pendingPairMark = partner.pairId;
+  }
+
+  /// Paired-partner elevated privilege: reset the current run with a
+  /// new gungeoneer without disconnecting the pair. Only valid for
+  /// paired Main Player sessions — the Main controls the run's
+  /// character, so swapping it here propagates to the Sidekick via the
+  /// next snapshot. The pairId/PIN stays the same, so no re-pairing
+  /// is needed.
+  ///
+  /// This is a local-only operation: it clears the Main slot's inventory
+  /// and sets the new character, then broadcasts a snapshot so the peer
+  /// sees the change immediately. The transport connection is untouched.
+  Future<void> resetRunWithNewGungeoneer(Gungeoneer newCharacter) async {
+    if (!_isPairedConnection) {
+      _log('resetRunWithNewGungeoneer: not a paired connection — ignoring.');
+      return;
+    }
+    if (_myRole != MpRole.main) {
+      _log('resetRunWithNewGungeoneer: only Main Player can reset — ignoring.');
+      return;
+    }
+    if (_status != MpStatus.connected) {
+      _log('resetRunWithNewGungeoneer: not connected — ignoring.');
+      return;
+    }
+    _log('Paired privilege: resetting run with ${newCharacter.name}...');
+    _myCharacterName = newCharacter.name;
+    _lastCharacter = newCharacter;
+    // Preserve the coop (Sidekick) slot — they keep their character.
+    // Only the Main slot resets to the new gungeoneer with starter
+    // loadout. The coop player's inventory will be restored from the
+    // peer's next snapshot (they re-broadcast on our snapshot change).
+    final coopChar = _runProvider.runState.coop?.character;
+    _runProvider.startNewRun(newCharacter);
+    if (coopChar != null) {
+      _runProvider.startCoopPlayer(coopChar);
+    }
+    // Broadcast the updated state so the peer sees the new character
+    // and cleared inventory immediately. The peer's snapshot will
+    // restore the coop slot's inventory on the next sync cycle.
+    unawaited(_broadcastSnapshot(force: true));
   }
 
   /// pairId awaiting a markConnected call once hello succeeds.

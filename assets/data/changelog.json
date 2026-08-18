@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.48",
+    "title": "Device Pairing Phase 2 — Elevated Privileges",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Faster auto-reconnect for paired partners — paired sessions use a 10s backoff cap (vs 30s regular) and 0.5s initial retry (vs 1s). Your regular co-op partner gets priority reconnection.",
+      "FEATURE: Character swap flexibility for paired Sidekicks — paired partners joining as Sidekick can now pick any gungeoneer, not just The Cultist. Character picker appears in the connect dialog.",
+      "FEATURE: 'Reset Run with New Gungeoneer' — paired Main players can reset their run with a different character without disconnecting the pair. Button appears on the connect screen when connected as paired Main. No re-pairing needed."
+    ]
+  },
+  {
     "version": "v1.9.47",
     "title": "Device Pairing — One-Tap Co-op with Regular Partners",
     "date": "August 2026",

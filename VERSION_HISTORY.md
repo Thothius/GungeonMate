@@ -6,6 +6,24 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.48 — 🔗 Device Pairing Phase 2: Elevated Privileges (August 2026)
+**Build:** 124
+
+> Phase 2 of Device Pairing. Paired partners now get three elevated privileges: faster auto-reconnect, character swap flexibility, and reset run with new gungeoneer.
+
+### New Features
+- **Faster auto-reconnect for paired sessions** — 10s backoff cap (vs 30s regular) and 0.5s initial retry (vs 1s). Paired partners get priority reconnection.
+- **Character swap flexibility** — paired Sidekicks can pick any gungeoneer (not just The Cultist). Character picker in the connect dialog. Persists across reconnects.
+- **"Reset Run with New Gungeoneer"** — paired Main players can reset their run with a different character without disconnecting the pair. Button on the connect screen. Coop slot preserved; peer snapshot restores Sidekick inventory.
+
+### Infrastructure
+- `_isPairedConnection` flag + `_activePairId` on `MultiplayerSession` — tracks whether the current session is a paired connection. Cleared in `cancel()` and `disconnect()`.
+- `startAsSidekick` now accepts optional `character` parameter — paired partners pass their chosen character; regular sessions still force Cultist.
+- `reconnect()` passes `_lastCharacter` to `startAsSidekick` — paired Sidekick keeps their chosen character on reconnect.
+- `resetRunWithNewGungeoneer(Gungeoneer)` method on `MultiplayerSession` — resets Main slot, preserves coop slot, broadcasts snapshot.
+
+---
+
 ## v1.9.47 — 🔗 Device Pairing: One-Tap Co-op (August 2026)
 **Build:** 123
 
