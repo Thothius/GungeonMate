@@ -12,6 +12,7 @@ import '../widgets/home/home_customization_sheet.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
+import '../utils/asset_paths.dart' show kAppVersion;
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 class MainMenuScreen extends StatefulWidget {
@@ -22,6 +23,10 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
+  /// Key for the Toggle Animations pill — used to position the popup
+  /// menu relative to the pill's actual on-screen position.
+  final GlobalKey _animPillKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
@@ -186,10 +191,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.45',
+                    'v$kAppVersion',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -271,13 +275,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   final anyActive = cust.showGungeoneer ||
                       (cust.showJunk && cust.totalJunk > 0);
                   return _QuickToggle(
+                    key: _animPillKey,
                     label: 'Toggle Animations',
                     icon: Icons.animation_rounded,
                     active: anyActive,
                     activeColor: const Color(0xFFBCA0F8),
                     onTap: () {
                       Haptics.selection();
-                      _showAnimationsMenu(context, cust);
+                      _showAnimationsMenu(context, cust, _animPillKey);
                     },
                     onLongPress: () {
                       Haptics.selection();
@@ -319,7 +324,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.45)',
+                          'Changelog (v$kAppVersion)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -337,10 +342,22 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
   /// Popup menu for toggling individual vortex animations on/off.
   /// Each item has a toggle switch and a "configure" arrow that opens
   /// the relevant section of the home customization sheet.
-  void _showAnimationsMenu(BuildContext context, HomeCustomization cust) {
+  /// The menu is positioned below the pill using its GlobalKey.
+  void _showAnimationsMenu(
+      BuildContext context, HomeCustomization cust, GlobalKey pillKey) {
+    // Compute the pill's position to place the menu below it.
+    final renderBox = pillKey.currentContext?.findRenderObject() as RenderBox?;
+    final pillPos = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+    final pillSize = renderBox?.size ?? Size.zero;
+    final screenWidth = MediaQuery.sizeOf(context).width;
     showMenu<_AnimAction>(
       context: context,
-      position: const RelativeRect.fromLTRB(12, 60, 200, 0),
+      position: RelativeRect.fromLTRB(
+        pillPos.dx,
+        pillPos.dy + pillSize.height + 4,
+        screenWidth - pillPos.dx - pillSize.width,
+        0,
+      ),
       color: const Color(0xFF1E1E22),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -475,7 +492,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.45 — Synergy Pill + Robot DMG Badge + Big Stat Views + Panel Pills',
+                            'v1.9.46 — Release Polish Pass',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -675,6 +692,7 @@ class _QuickToggle extends StatelessWidget {
   final VoidCallback onLongPress;
 
   const _QuickToggle({
+    super.key,
     required this.label,
     required this.icon,
     required this.active,
@@ -686,41 +704,49 @@ class _QuickToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
-    return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        padding: EdgeInsets.symmetric(horizontal: 10 * sf, vertical: 7 * sf),
-        decoration: BoxDecoration(
-          color: active
-              ? activeColor.withValues(alpha: 0.18)
-              : Colors.white.withValues(alpha: 0.06),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: active ? activeColor.withValues(alpha: 0.7) : Colors.white24,
-            width: 1.2,
-          ),
-          boxShadow: active
-              ? [BoxShadow(color: activeColor.withValues(alpha: 0.2), blurRadius: 6)]
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 14 * sf, color: active ? activeColor : Colors.white54),
-            SizedBox(width: 6 * sf),
-            GoopText(
-              label,
-              style: TextStyle(
-                fontSize: 10.5 * sf,
-                fontWeight: FontWeight.w800,
-                color: active ? Colors.white : Colors.white60,
-                letterSpacing: 0.3,
+    return Semantics(
+      label: '$label toggle${active ? ' (active)' : ''}',
+      button: true,
+      child: GestureDetector(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        behavior: HitTestBehavior.opaque,
+        // 2026 accessibility: minimum 44px tap target.
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 44),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: EdgeInsets.symmetric(horizontal: 12 * sf, vertical: 10 * sf),
+            decoration: BoxDecoration(
+              color: active
+                  ? activeColor.withValues(alpha: 0.18)
+                  : Colors.white.withValues(alpha: 0.06),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: active ? activeColor.withValues(alpha: 0.7) : Colors.white24,
+                width: 1.2,
               ),
+              boxShadow: active
+                  ? [BoxShadow(color: activeColor.withValues(alpha: 0.2), blurRadius: 6)]
+                  : null,
             ),
-          ],
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 16 * sf, color: active ? activeColor : Colors.white54),
+                SizedBox(width: 7 * sf),
+                GoopText(
+                  label,
+                  style: TextStyle(
+                    fontSize: 11 * sf,
+                    fontWeight: FontWeight.w800,
+                    color: active ? Colors.white : Colors.white60,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

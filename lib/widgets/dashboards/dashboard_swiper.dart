@@ -69,11 +69,6 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
   int _selectedIndex = 0;
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final player = widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;

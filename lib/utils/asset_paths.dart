@@ -21,6 +21,11 @@
 // The wiki URL in JSON is intentionally ignored — keeping the JSON
 // faithful to the scrape source while the runtime stays offline.
 
+/// Single source of truth for the app version string. Keep this in sync
+/// with the `version:` field in pubspec.yaml. Used by main.dart, the
+/// main menu, the changelog button, and the MP handshake.
+const String kAppVersion = '1.9.46';
+
 // Slug a free-form display name into the canonical asset filename
 // stem (no extension). Pure function — given the same name, always
 // returns the same slug. Cheap; safe to call per-build if needed.

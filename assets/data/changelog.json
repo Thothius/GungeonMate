@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.46",
+    "title": "Release Polish Pass",
+    "date": "August 2026",
+    "items": [
+      "POLISH: Centralized app version string into kAppVersion constant (asset_paths.dart) — replaces 4 hardcoded copies across main.dart, main_menu_screen, and changelog button.",
+      "POLISH: Fixed sub-minimum tap targets on _LabeledIconButton and SpongeButton — increased from 36x32 to 44x36 (accessibility minimum).",
+      "POLISH: Increased label font size from 8px to 9px on Calc/Effects/Shrine/Panels/Sponge buttons for legibility.",
+      "POLISH: Removed redundant double SizedBox on main menu (was 10+12, now just 12).",
+      "POLISH: Removed empty dispose() override in DashboardSwiper (no-op, just called super)."
+    ]
+  },
+  {
     "version": "v1.9.45",
     "title": "Synergy Pill + Robot DMG Badge + Big Stat Views + Panel Pills",
     "date": "August 2026",

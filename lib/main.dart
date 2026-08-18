@@ -7,6 +7,7 @@ import 'services/app_theme.dart';
 import 'services/home_customization.dart';
 import 'services/multiplayer_service.dart';
 import 'services/multiplayer_session.dart';
+import 'utils/asset_paths.dart' show kAppVersion;
 import 'widgets/theme_overlay.dart';
 
 void main() async {
@@ -17,9 +18,8 @@ void main() async {
   await AppTheme.init();
   await VisualPrefs.init();
   await HomeCustomization.load();
-  // Expose the current app version for MP hello diagnostics. This is
-  // hardcoded to match pubspec.yaml; update on version bump.
-  MultiplayerSession.appVersionString = '1.9.45';
+  // Expose the current app version for MP hello diagnostics.
+  MultiplayerSession.appVersionString = kAppVersion;
   runApp(const GungeonMateApp());
 }
 

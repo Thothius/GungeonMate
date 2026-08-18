@@ -1481,12 +1481,12 @@ class _LabeledIconButton extends StatelessWidget {
           icon: Icon(icon, size: 20, color: color),
           tooltip: tooltip,
           padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(minWidth: 36, minHeight: 32),
+          constraints: const BoxConstraints(minWidth: 44, minHeight: 36),
         ),
         GoopText(
           label,
           style: TextStyle(
-            fontSize: 8,
+            fontSize: 9,
             fontWeight: FontWeight.w600,
             color: color,
             letterSpacing: 0.5,

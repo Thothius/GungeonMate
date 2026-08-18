@@ -1012,12 +1012,12 @@ class SpongeButtonState extends State<SpongeButton>
                     ? 'Sponge: English translation active'
                     : 'Sponge: Alien language active',
                 padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(minWidth: 36, minHeight: 32),
+                constraints: const BoxConstraints(minWidth: 44, minHeight: 36),
               ),
               GoopText(
                 'Sponge',
                 style: TextStyle(
-                  fontSize: 8,
+                  fontSize: 9,
                   fontWeight: FontWeight.w600,
                   color: isSponge ? Colors.amberAccent : Colors.white38,
                   letterSpacing: 0.5,
