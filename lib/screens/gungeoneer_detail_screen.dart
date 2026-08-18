@@ -12,21 +12,58 @@ import '../utils/fast_route.dart';
 import '../widgets/spoiler_tag.dart';
 import 'item_detail_screen.dart';
 
-/// Rich, scrollable detail view for a single Gungeoneer.
+/// Rich, tabbed detail view for a single Gungeoneer.
 ///
-/// Shows character art, short description, starting loadout (with tappable
-/// tiles that link to existing gun/item detail screens), playstyle analysis,
-/// gameplay tips, and spoiler-gated sections for past story, past kill
-/// details, unlock methods, and alternate costume information.
-class GungeoneerDetailScreen extends StatelessWidget {
+/// Uses a filter/tab bar so the user sees one clean page at a time:
+/// Lore → Loadout → Playstyle → Tips → Spoilers (last, labeled).
+/// No overwhelming wall of data — 2026 standard UX.
+class GungeoneerDetailScreen extends StatefulWidget {
   final Gungeoneer gungeoneer;
 
   const GungeoneerDetailScreen({super.key, required this.gungeoneer});
 
   @override
+  State<GungeoneerDetailScreen> createState() => _GungeoneerDetailScreenState();
+}
+
+class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabCtrl = TabController(length: _tabs.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabCtrl.dispose();
+    super.dispose();
+  }
+
+  List<_DetailTab> get _tabs {
+    final g = widget.gungeoneer;
+    final hasSpoilers = g.pastSummary.isNotEmpty ||
+        g.pastDetails.isNotEmpty ||
+        (g.pastUnlocks.isNotEmpty && !g.pastUnlocks.contains('N/A')) ||
+        (g.unlockMethod.isNotEmpty &&
+            !g.unlockMethod.contains('Available from the start')) ||
+        (g.altCostumeUnlock.isNotEmpty &&
+            !g.altCostumeUnlock.contains('N/A'));
+    return [
+      if (g.loreIntro.isNotEmpty) _DetailTab.lore,
+      _DetailTab.loadout,
+      if (g.playstyle.isNotEmpty) _DetailTab.playstyle,
+      if (g.tips.isNotEmpty) _DetailTab.tips,
+      if (hasSpoilers) _DetailTab.spoilers,
+    ];
+  }
+
+  @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    final g = gungeoneer;
+    final g = widget.gungeoneer;
     final p = context.watch<RunProvider>();
 
     return Scaffold(
@@ -51,158 +88,71 @@ class GungeoneerDetailScreen extends StatelessWidget {
             ),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          // ── Hero art + short desc ──
-          SliverToBoxAdapter(child: _HeroSection(gungeoneer: g, flair: flair)),
+      body: Column(
+        children: [
+          // ── Hero section (always visible) ──
+          _HeroSection(gungeoneer: g, flair: flair),
 
-          // ── Lore intro ──
-          if (g.loreIntro.isNotEmpty)
-            SliverToBoxAdapter(
-              child: _Section(
-                label: 'LORE',
-                icon: Icons.auto_stories,
-                color: Colors.purpleAccent,
-                child: GoopText(
-                  g.loreIntro,
-                  style: TextStyle(
-                    fontSize: 13,
-                    height: 1.5,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white.withValues(alpha: 0.8),
-                  ),
-                ),
+          // ── Tab bar ──
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: flair.card,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: flair.primary.withValues(alpha: 0.15),
+                width: 0.8,
               ),
             ),
-
-          // ── Starting loadout ──
-          SliverToBoxAdapter(
-            child: _LoadoutSection(gungeoneer: g, flair: flair, provider: p),
+            child: TabBar(
+              controller: _tabCtrl,
+              isScrollable: true,
+              tabAlignment: TabAlignment.center,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicator: BoxDecoration(
+                color: flair.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              dividerColor: Colors.transparent,
+              labelColor: flair.primary,
+              unselectedLabelColor: Colors.white.withValues(alpha: 0.4),
+              labelStyle: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.5,
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+              tabs: _tabs.map((t) => Tab(
+                icon: Icon(t.icon, size: 14),
+                text: t.label,
+              )).toList(),
+            ),
           ),
+          const SizedBox(height: 8),
 
-          // ── Playstyle ──
-          if (g.playstyle.isNotEmpty)
-            SliverToBoxAdapter(
-              child: _Section(
-                label: 'PLAYSTYLE',
-                icon: Icons.sports_esports,
-                color: Colors.cyanAccent,
-                child: GoopText(
-                  g.playstyle,
-                  style: TextStyle(
-                    fontSize: 13.5,
-                    height: 1.5,
-                    color: Colors.white.withValues(alpha: 0.85),
-                  ),
-                ),
-              ),
-            ),
-
-          // ── Tips ──
-          if (g.tips.isNotEmpty)
-            SliverToBoxAdapter(
-              child: _Section(
-                label: 'TIPS',
-                icon: Icons.lightbulb_outline,
-                color: Colors.amberAccent,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: g.tips
-                      .map((t) => Padding(
-                            padding: const EdgeInsets.only(bottom: 6),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.arrow_right_rounded,
-                                    size: 18,
-                                    color:
-                                        Colors.amberAccent.withValues(alpha: 0.7)),
-                                const SizedBox(width: 4),
-                                Expanded(
-                                  child: GoopText(
-                                    t,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      height: 1.4,
-                                      color:
-                                          Colors.white.withValues(alpha: 0.8),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ))
-                      .toList(),
-                ),
-              ),
-            ),
-
-          // ── Spoiler sections ──
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Past Story
-                  if (g.pastSummary.isNotEmpty)
-                    SpoilerTag(
-                      label: 'Past Story',
-                      content: _SpoilerContent(
-                        title: g.pastName,
-                        body: g.pastSummary,
-                      ),
-                    ),
-                  // Past Kill Details
-                  if (g.pastDetails.isNotEmpty)
-                    SpoilerTag(
-                      label: 'Past Kill Details',
-                      content: _SpoilerContent(
-                        title: g.pastName,
-                        body: g.pastDetails,
-                        extra: g.pastLoadout.isNotEmpty
-                            ? 'Past loadout: ${g.pastLoadout}'
-                            : null,
-                      ),
-                    ),
-                  // Past Kill Unlocks
-                  if (g.pastUnlocks.isNotEmpty &&
-                      !g.pastUnlocks.contains('N/A'))
-                    SpoilerTag(
-                      label: 'Past Kill Unlocks',
-                      icon: Icons.card_giftcard,
-                      content: _SpoilerContent(body: g.pastUnlocks),
-                    ),
-                  // Unlock Method
-                  if (g.unlockMethod.isNotEmpty &&
-                      !g.unlockMethod.contains('Available from the start'))
-                    SpoilerTag(
-                      label: 'Unlock Method',
-                      icon: Icons.lock_outline,
-                      content: _SpoilerContent(body: g.unlockMethod),
-                    ),
-                  // Alternate Unlocks
-                  if (g.altCostumeUnlock.isNotEmpty &&
-                      !g.altCostumeUnlock.contains('N/A'))
-                    SpoilerTag(
-                      label: 'Alternate Unlocks',
-                      icon: Icons.palette_outlined,
-                      content: _SpoilerContent(
-                        body: [
-                          if (g.altCostumeName.isNotEmpty &&
-                              !g.altCostumeName.contains('N/A'))
-                            'Alternate costume: ${g.altCostumeName}',
-                          g.altCostumeUnlock,
-                          if (g.altWeaponSkinUnlock.isNotEmpty &&
-                              !g.altWeaponSkinUnlock.contains('N/A'))
-                            g.altWeaponSkinUnlock,
-                        ]
-                            .where((s) => s.isNotEmpty)
-                            .join('\n\n'),
-                      ),
-                    ),
-                ],
-              ),
+          // ── Tab content ──
+          Expanded(
+            child: TabBarView(
+              controller: _tabCtrl,
+              children: _tabs.map((tab) {
+                switch (tab) {
+                  case _DetailTab.lore:
+                    return _LorePage(g: g);
+                  case _DetailTab.loadout:
+                    return _LoadoutPage(g: g, provider: p);
+                  case _DetailTab.playstyle:
+                    return _PlaystylePage(g: g);
+                  case _DetailTab.tips:
+                    return _TipsPage(g: g);
+                  case _DetailTab.spoilers:
+                    return _SpoilersPage(g: g);
+                }
+              }).toList(),
             ),
           ),
         ],
@@ -230,7 +180,23 @@ class GungeoneerDetailScreen extends StatelessWidget {
 }
 
 // =============================================================================
-// Hero section — character art + short desc + badges
+// Tab definitions
+// =============================================================================
+
+enum _DetailTab {
+  lore('LORE', Icons.auto_stories),
+  loadout('LOADOUT', Icons.inventory_2),
+  playstyle('PLAYSTYLE', Icons.sports_esports),
+  tips('TIPS', Icons.lightbulb_outline),
+  spoilers('SPOILERS', Icons.warning_amber_rounded);
+
+  final String label;
+  final IconData icon;
+  const _DetailTab(this.label, this.icon);
+}
+
+// =============================================================================
+// Hero section — character art + short desc + badges (always visible)
 // =============================================================================
 
 class _HeroSection extends StatelessWidget {
@@ -243,86 +209,55 @@ class _HeroSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final g = gungeoneer;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       child: Column(
         children: [
-          // Character art
+          // In-game sprite (not card art — 2026 standard: always sprites)
           SizedBox(
-            height: 180,
-            child: Center(child: _buildArt()),
+            height: 120,
+            child: Center(child: _buildSprite()),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           // Short description
           if (g.shortDesc.isNotEmpty)
             GoopText(
               g.shortDesc,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontStyle: FontStyle.italic,
-                color: Colors.white.withValues(alpha: 0.65),
-                height: 1.4,
+                color: Colors.white.withValues(alpha: 0.6),
+                height: 1.35,
               ),
             ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           // Badges row
           Wrap(
-            spacing: 8,
-            runSpacing: 6,
+            spacing: 6,
+            runSpacing: 4,
             alignment: WrapAlignment.center,
             children: [
               if (g.isCoopOnly)
-                _Badge(
-                  label: 'CO-OP ONLY',
-                  color: Colors.cyanAccent,
-                  icon: Icons.group,
-                ),
+                _Badge(label: 'CO-OP ONLY', color: Colors.cyanAccent, icon: Icons.group),
               if (g.hegemonyCost > 0)
-                _Badge(
-                  label: 'Cost: ${g.hegemonyCost} Hegemony Credits',
-                  color: Colors.amberAccent,
-                  icon: Icons.paid,
-                ),
+                _Badge(label: '${g.hegemonyCost} Hegemony', color: Colors.amberAccent, icon: Icons.paid),
               if (g.startingArmor > 0 && !g.name.contains('Robot'))
-                _Badge(
-                  label: 'Starts with ${g.startingArmor} armor',
-                  color: Colors.blueAccent,
-                  icon: Icons.shield,
-                ),
+                _Badge(label: '${g.startingArmor} Armor', color: Colors.blueAccent, icon: Icons.shield),
               if (g.name == 'The Robot')
-                _Badge(
-                  label: '6 Armor, No Hearts',
-                  color: Colors.amberAccent,
-                  icon: Icons.precision_manufacturing,
-                ),
+                _Badge(label: '6 Armor, No Hearts', color: Colors.amberAccent, icon: Icons.precision_manufacturing),
             ],
           ),
-          // Nicknames trivia
-          if (g.nicknames.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: GoopText(
-                [
-                  if (g.nicknames.isNotEmpty)
-                    'Also called: ${g.nicknames.join(', ')}',
-                  if (g.voice.isNotEmpty) 'Voice: ${g.voice}',
-                ].join(' · '),
-                style: TextStyle(
-                  fontSize: 10.5,
-                  color: Colors.white.withValues(alpha: 0.4),
-                ),
-              ),
-            ),
         ],
       ),
     );
   }
 
-  Widget _buildArt() {
-    final animPath = gungeoneerAnimatedCardPath(gungeoneer.name);
-    if (animPath.isNotEmpty) {
+  /// Always show the in-game sprite GIF — no card art.
+  Widget _buildSprite() {
+    final gifPath = gungeoneerGifPath(gungeoneer.name);
+    if (gifPath.isNotEmpty) {
       return Image.asset(
-        animPath,
+        gifPath,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
         gaplessPlayback: true,
@@ -339,89 +274,307 @@ class _HeroSection extends StatelessWidget {
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
         errorBuilder: (_, __, ___) =>
-            const Icon(Icons.person, size: 120, color: Colors.white54),
+            const Icon(Icons.person, size: 80, color: Colors.white54),
       );
     }
-    return const Icon(Icons.person, size: 120, color: Colors.white54);
+    return const Icon(Icons.person, size: 80, color: Colors.white54);
   }
 }
 
 // =============================================================================
-// Loadout section — tappable gun/item tiles
+// Lore page
 // =============================================================================
 
-class _LoadoutSection extends StatelessWidget {
-  final Gungeoneer gungeoneer;
-  final ThemeFlair flair;
-  final RunProvider provider;
-
-  const _LoadoutSection({
-    required this.gungeoneer,
-    required this.flair,
-    required this.provider,
-  });
+class _LorePage extends StatelessWidget {
+  final Gungeoneer g;
+  const _LorePage({required this.g});
 
   @override
   Widget build(BuildContext context) {
-    final g = gungeoneer;
-    final guns = g.startingGuns;
-    final items = g.startingItems;
-
-    return _Section(
-      label: 'STARTING LOADOUT',
-      icon: Icons.inventory_2,
-      color: flair.primary,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Guns
-          if (guns.isNotEmpty) ...[
-            _SubLabel('Weapons'),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: guns.map((name) => _LoadoutTile(
-                    name: name,
-                    isRandom: name == 'Random',
-                    provider: provider,
-                  )).toList(),
-            ),
-            const SizedBox(height: 12),
-          ],
-          // Items
-          if (items.isNotEmpty) ...[
-            _SubLabel('Items'),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: items.map((name) => _LoadoutTile(
-                    name: name,
-                    isRandom: name == 'Random',
-                    provider: provider,
-                  )).toList(),
-            ),
-            const SizedBox(height: 12),
-          ],
-          // Armor
-          if (g.startingArmor > 0) ...[
-            _SubLabel('Other'),
-            Row(
-              children: [
-                Icon(Icons.shield, size: 16, color: Colors.blueAccent.withValues(alpha: 0.7)),
-                const SizedBox(width: 6),
-                GoopText(
-                  '${g.startingArmor} Armor',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white.withValues(alpha: 0.8),
-                  ),
+          if (g.loreIntro.isNotEmpty)
+            _ContentCard(
+              color: Colors.purpleAccent,
+              child: GoopText(
+                g.loreIntro,
+                style: TextStyle(
+                  fontSize: 13.5,
+                  height: 1.6,
+                  fontStyle: FontStyle.italic,
+                  color: Colors.white.withValues(alpha: 0.85),
                 ),
-              ],
+              ),
+            ),
+          // Nicknames trivia
+          if (g.nicknames.isNotEmpty || g.voice.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            _ContentCard(
+              color: Colors.purpleAccent.withValues(alpha: 0.5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (g.nicknames.isNotEmpty)
+                    GoopText(
+                      'Also called: ${g.nicknames.join(', ')}',
+                      style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6)),
+                    ),
+                  if (g.voice.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    GoopText(
+                      'Voice: ${g.voice}',
+                      style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6)),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ],
         ],
       ),
+    );
+  }
+}
+
+// =============================================================================
+// Loadout page
+// =============================================================================
+
+class _LoadoutPage extends StatelessWidget {
+  final Gungeoneer g;
+  final RunProvider provider;
+  const _LoadoutPage({required this.g, required this.provider});
+
+  @override
+  Widget build(BuildContext context) {
+    final guns = g.startingGuns;
+    final items = g.startingItems;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      child: _ContentCard(
+        color: AppTheme.flair.primary,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (guns.isNotEmpty) ...[
+              _SubLabel('Weapons'),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: guns.map((name) => _LoadoutTile(
+                  name: name, isRandom: name == 'Random', provider: provider,
+                )).toList(),
+              ),
+              const SizedBox(height: 12),
+            ],
+            if (items.isNotEmpty) ...[
+              _SubLabel('Items'),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: items.map((name) => _LoadoutTile(
+                  name: name, isRandom: name == 'Random', provider: provider,
+                )).toList(),
+              ),
+              const SizedBox(height: 12),
+            ],
+            if (g.startingArmor > 0) ...[
+              _SubLabel('Other'),
+              Row(
+                children: [
+                  Icon(Icons.shield, size: 16, color: Colors.blueAccent.withValues(alpha: 0.7)),
+                  const SizedBox(width: 6),
+                  GoopText(
+                    '${g.startingArmor} Armor',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.8)),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// Playstyle page
+// =============================================================================
+
+class _PlaystylePage extends StatelessWidget {
+  final Gungeoneer g;
+  const _PlaystylePage({required this.g});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      child: _ContentCard(
+        color: Colors.cyanAccent,
+        child: GoopText(
+          g.playstyle,
+          style: TextStyle(
+            fontSize: 13.5,
+            height: 1.6,
+            color: Colors.white.withValues(alpha: 0.85),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// Tips page
+// =============================================================================
+
+class _TipsPage extends StatelessWidget {
+  final Gungeoneer g;
+  const _TipsPage({required this.g});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      child: _ContentCard(
+        color: Colors.amberAccent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: g.tips.map((t) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.arrow_right_rounded, size: 18, color: Colors.amberAccent.withValues(alpha: 0.7)),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: GoopText(
+                    t,
+                    style: TextStyle(fontSize: 13, height: 1.5, color: Colors.white.withValues(alpha: 0.8)),
+                  ),
+                ),
+              ],
+            ),
+          )).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// Spoilers page — all spoiler-gated content in one place, clearly labeled
+// =============================================================================
+
+class _SpoilersPage extends StatelessWidget {
+  final Gungeoneer g;
+  const _SpoilersPage({required this.g});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Spoiler warning banner
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
+            decoration: BoxDecoration(
+              color: Colors.redAccent.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.redAccent.withValues(alpha: 0.25), width: 0.8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.warning_amber_rounded, size: 18, color: Colors.redAccent.withValues(alpha: 0.7)),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: GoopText(
+                    'SPOILER WARNING — Story, past kills, and unlock details below.',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.redAccent.withValues(alpha: 0.8), letterSpacing: 0.3),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Past Story
+          if (g.pastSummary.isNotEmpty)
+            SpoilerTag(
+              label: 'Past Story',
+              content: _SpoilerContent(title: g.pastName, body: g.pastSummary),
+            ),
+          // Past Kill Details
+          if (g.pastDetails.isNotEmpty)
+            SpoilerTag(
+              label: 'Past Kill Details',
+              content: _SpoilerContent(
+                title: g.pastName,
+                body: g.pastDetails,
+                extra: g.pastLoadout.isNotEmpty ? 'Past loadout: ${g.pastLoadout}' : null,
+              ),
+            ),
+          // Past Kill Unlocks
+          if (g.pastUnlocks.isNotEmpty && !g.pastUnlocks.contains('N/A'))
+            SpoilerTag(
+              label: 'Past Kill Unlocks',
+              icon: Icons.card_giftcard,
+              content: _SpoilerContent(body: g.pastUnlocks),
+            ),
+          // Unlock Method
+          if (g.unlockMethod.isNotEmpty && !g.unlockMethod.contains('Available from the start'))
+            SpoilerTag(
+              label: 'Unlock Method',
+              icon: Icons.lock_outline,
+              content: _SpoilerContent(body: g.unlockMethod),
+            ),
+          // Alternate Unlocks
+          if (g.altCostumeUnlock.isNotEmpty && !g.altCostumeUnlock.contains('N/A'))
+            SpoilerTag(
+              label: 'Alternate Unlocks',
+              icon: Icons.palette_outlined,
+              content: _SpoilerContent(
+                body: [
+                  if (g.altCostumeName.isNotEmpty && !g.altCostumeName.contains('N/A'))
+                    'Alternate costume: ${g.altCostumeName}',
+                  g.altCostumeUnlock,
+                  if (g.altWeaponSkinUnlock.isNotEmpty && !g.altWeaponSkinUnlock.contains('N/A'))
+                    g.altWeaponSkinUnlock,
+                ].where((s) => s.isNotEmpty).join('\n\n'),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// Reusable widgets
+// =============================================================================
+
+class _ContentCard extends StatelessWidget {
+  final Color color;
+  final Widget child;
+  const _ContentCard({required this.color, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppTheme.flair.card,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: color.withValues(alpha: 0.15), width: 0.8),
+      ),
+      child: child,
     );
   }
 }
@@ -448,11 +601,7 @@ class _LoadoutTile extends StatelessWidget {
             const SizedBox(width: 6),
             GoopText(
               name,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-                color: Colors.purpleAccent.withValues(alpha: 0.85),
-              ),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.purpleAccent.withValues(alpha: 0.85)),
             ),
           ],
         ),
@@ -467,10 +616,7 @@ class _LoadoutTile extends StatelessWidget {
       onTap: exists
           ? () {
               Haptics.selection();
-              Navigator.push(
-                context,
-                fastRoute(ItemDetailScreen(gun: gun, item: item)),
-              );
+              Navigator.push(context, fastRoute(ItemDetailScreen(gun: gun, item: item)));
             }
           : null,
       child: _tileContainer(
@@ -481,8 +627,7 @@ class _LoadoutTile extends StatelessWidget {
             Icon(
               gun != null ? Icons.gps_fixed : Icons.inventory_2_outlined,
               size: 16,
-              color: (gun != null ? Colors.cyanAccent : Colors.greenAccent)
-                  .withValues(alpha: 0.7),
+              color: (gun != null ? Colors.cyanAccent : Colors.greenAccent).withValues(alpha: 0.7),
             ),
             const SizedBox(width: 6),
             GoopText(
@@ -512,71 +657,9 @@ class _LoadoutTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppTheme.flair.card,
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: AppTheme.flair.primary.withValues(alpha: 0.15),
-            width: 0.8,
-          ),
+          border: Border.all(color: AppTheme.flair.primary.withValues(alpha: 0.15), width: 0.8),
         ),
         child: child,
-      ),
-    );
-  }
-}
-
-// =============================================================================
-// Reusable section wrapper
-// =============================================================================
-
-class _Section extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final Color color;
-  final Widget child;
-
-  const _Section({
-    required this.label,
-    required this.icon,
-    required this.color,
-    required this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, size: 16, color: color.withValues(alpha: 0.8)),
-              const SizedBox(width: 8),
-              GoopText(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w900,
-                  color: color.withValues(alpha: 0.9),
-                  letterSpacing: 0.8,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: AppTheme.flair.card,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: AppTheme.flair.primary.withValues(alpha: 0.1),
-                width: 0.8,
-              ),
-            ),
-            child: child,
-          ),
-        ],
       ),
     );
   }
@@ -592,36 +675,23 @@ class _SubLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 6),
       child: GoopText(
         text,
-        style: TextStyle(
-          fontSize: 10.5,
-          fontWeight: FontWeight.w700,
-          color: Colors.white.withValues(alpha: 0.5),
-          letterSpacing: 0.5,
-        ),
+        style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: Colors.white.withValues(alpha: 0.5), letterSpacing: 0.5),
       ),
     );
   }
 }
-
-// =============================================================================
-// Badge
-// =============================================================================
 
 class _Badge extends StatelessWidget {
   final String label;
   final Color color;
   final IconData icon;
 
-  const _Badge({
-    required this.label,
-    required this.color,
-    required this.icon,
-  });
+  const _Badge({required this.label, required this.color, required this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
@@ -630,25 +700,17 @@ class _Badge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 13, color: color.withValues(alpha: 0.85)),
-          const SizedBox(width: 5),
+          Icon(icon, size: 12, color: color.withValues(alpha: 0.85)),
+          const SizedBox(width: 4),
           GoopText(
             label,
-            style: TextStyle(
-              fontSize: 10.5,
-              fontWeight: FontWeight.w700,
-              color: color.withValues(alpha: 0.95),
-            ),
+            style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.95)),
           ),
         ],
       ),
     );
   }
 }
-
-// =============================================================================
-// Spoiler content
-// =============================================================================
 
 class _SpoilerContent extends StatelessWidget {
   final String? title;
@@ -665,31 +727,19 @@ class _SpoilerContent extends StatelessWidget {
         if (title != null && title!.isNotEmpty) ...[
           GoopText(
             title!,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: Colors.amber.withValues(alpha: 0.9),
-            ),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.amber.withValues(alpha: 0.9)),
           ),
           const SizedBox(height: 6),
         ],
         GoopText(
           body,
-          style: TextStyle(
-            fontSize: 12.5,
-            height: 1.5,
-            color: Colors.white.withValues(alpha: 0.8),
-          ),
+          style: TextStyle(fontSize: 12.5, height: 1.5, color: Colors.white.withValues(alpha: 0.8)),
         ),
         if (extra != null && extra!.isNotEmpty) ...[
           const SizedBox(height: 8),
           GoopText(
             extra!,
-            style: TextStyle(
-              fontSize: 11.5,
-              fontStyle: FontStyle.italic,
-              color: Colors.white.withValues(alpha: 0.55),
-            ),
+            style: TextStyle(fontSize: 11.5, height: 1.4, color: Colors.white.withValues(alpha: 0.6), fontStyle: FontStyle.italic),
           ),
         ],
       ],
