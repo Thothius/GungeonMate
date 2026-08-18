@@ -76,6 +76,8 @@ sealed class MpMessage {
       'diceCancel' => const MpDiceCancel(),
       'diceResult' => MpDiceResult.fromJson(map),
       'emote' => MpEmote.fromJson(map),
+      'pair' => MpPair.fromJson(map),
+      'pairAck' => MpPairAck.fromJson(map),
       _ => throw FormatException('MpMessage: unknown type "$t"'),
     };
   }
@@ -373,5 +375,51 @@ final class MpEmote extends MpMessage {
   factory MpEmote.fromJson(Map<String, dynamic> j) => MpEmote(
     from: j['from'] as String? ?? 'Player',
     action: j['action'] as String? ?? 'kiss',
+  );
+}
+
+/// Device Pairing handshake. Sent by the pairing initiator (the device
+/// that advertised) immediately after a successful [MpHello] in pairing
+/// mode. Delivers the generated [pairId] — a persistent secret that
+/// replaces the per-session PIN for all future connections between these
+/// two devices. The receiver persists it and replies with [MpPairAck].
+///
+/// `nickname` is the sender's nickname so the receiver can label the
+/// partner in their paired-partners list.
+final class MpPair extends MpMessage {
+  final String pairId;
+  final String nickname;
+
+  const MpPair({required this.pairId, required this.nickname});
+
+  @override
+  String get type => 'pair';
+
+  @override
+  Map<String, dynamic> toJson() => {'pairId': pairId, 'nickname': nickname};
+
+  factory MpPair.fromJson(Map<String, dynamic> j) => MpPair(
+    pairId: j['pairId'] as String? ?? '',
+    nickname: j['nickname'] as String? ?? 'Partner',
+  );
+}
+
+/// Acknowledgement that the receiver persisted the [MpPair]. Sent back
+/// so the initiator knows it's safe to persist their own copy — if the
+/// ack never arrives, the initiator discards the pairId and the user
+/// can re-pair.
+final class MpPairAck extends MpMessage {
+  final String pairId;
+
+  const MpPairAck({required this.pairId});
+
+  @override
+  String get type => 'pairAck';
+
+  @override
+  Map<String, dynamic> toJson() => {'pairId': pairId};
+
+  factory MpPairAck.fromJson(Map<String, dynamic> j) => MpPairAck(
+    pairId: j['pairId'] as String? ?? '',
   );
 }

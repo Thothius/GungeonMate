@@ -6,6 +6,24 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.47 — 🔗 Device Pairing: One-Tap Co-op (August 2026)
+**Build:** 123
+
+> First phase of the Device Pairing feature. Pair once with a regular co-op partner, then connect with one tap every time after — no PIN exchange needed.
+
+### New Features
+- **Pair a Partner** — one-time setup via a 4-digit pairing PIN. Both devices exchange a persistent 8-char secret (pairId) over Nearby Connections. Stored locally; no servers or accounts.
+- **Paired Partners list** — appears in the multiplayer lobby after pairing. Tap a partner to connect instantly as Host or Sidekick. Shows partner nickname + last connected time.
+- **Pairing flow sheet** — Host or Join pairing, 4-digit PIN entry, help dialog explaining the 4-step process.
+
+### Infrastructure
+- New `PairedPartner` model + `PairedPartnersStore` (ValueNotifier + SharedPreferences, mirrors `HomeCustomization` pattern).
+- New `MpPair` + `MpPairAck` wire messages for the one-time pairing token exchange. Protocol version unchanged (v1) — backwards compatible with older peers.
+- `MultiplayerSession` pairing mode: `startPairing` / `joinPairing` / `connectPaired` / `cancelPairing`. Pairing mode skips run-state side effects (no snapshot broadcast, no session persistence during pairing).
+- `PairedPartnersStore.load()` called at app startup in `main.dart`.
+
+---
+
 ## v1.9.46 — ✨ Release Polish Pass (August 2026)
 **Build:** 122
 
