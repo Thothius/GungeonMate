@@ -1384,6 +1384,20 @@ class RunProvider with ChangeNotifier {
     return _allSynergies.where((s) => s.matchesItems(itemNames)).toList();
   }
 
+  /// Partial synergies: at least one required or any-of item is owned,
+  /// but the synergy is NOT fully active. These are "potential" synergies
+  /// the user could complete by acquiring the remaining items.
+  List<Synergy> getPartialSynergies() {
+    final itemNames = _runState.main.allItemNames;
+    final owned = itemNames.map((n) => n.toLowerCase()).toSet();
+    return _allSynergies.where((s) {
+      if (s.matchesItems(itemNames)) return false; // active, not partial
+      return s.items.any((i) => owned.contains(i.toLowerCase())) ||
+          (s.anyOf.isNotEmpty &&
+              s.anyOf.any((i) => owned.contains(i.toLowerCase())));
+    }).toList();
+  }
+
   /// Active synergies for a specific player slot (main or coop).
   List<Synergy> getActiveSynergiesForSlot(PlayerSlot slot) {
     final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;

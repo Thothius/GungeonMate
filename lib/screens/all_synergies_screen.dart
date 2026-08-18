@@ -35,45 +35,6 @@ class AllSynergiesScreen extends StatelessWidget {
     partial.sort((a, b) => a.name.compareTo(b.name));
     locked.sort((a, b) => a.name.compareTo(b.name));
 
-    Widget sectionHeader(String label, Color color, int count) =>
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-            child: Row(
-              children: [
-                Icon(Icons.auto_awesome, size: 16, color: color),
-                const SizedBox(width: 8),
-                GoopText(
-                  label,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w900,
-                    color: color,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-                const Spacer(),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '$count',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                      color: color,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -91,37 +52,142 @@ class AllSynergiesScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-              child: GoopText(
-                'Owned items are lit; missing are dim. Tap a synergy to view its details.',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white.withValues(alpha: 0.55),
-                ),
-              ),
+      body: Column(
+        children: [
+          // Summary bar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Row(
+              children: [
+                _summaryChip('ACTIVE', active.length, Colors.greenAccent),
+                const SizedBox(width: 8),
+                _summaryChip('PARTIAL', partial.length, Colors.amberAccent),
+                const SizedBox(width: 8),
+                _summaryChip('LOCKED', locked.length, Colors.white38),
+              ],
             ),
           ),
-          if (active.isNotEmpty) ...[
-            sectionHeader('ACTIVE', Colors.greenAccent, active.length),
-            _SynergyGrid(list: active, owned: owned, active: true),
-          ],
-          if (partial.isNotEmpty) ...[
-            sectionHeader('PARTIAL', Colors.amberAccent, partial.length),
-            _SynergyGrid(list: partial, owned: owned, active: false),
-          ],
-          if (locked.isNotEmpty) ...[
-            sectionHeader('LOCKED', Colors.white38, locked.length),
-            _SynergyGrid(list: locked, owned: owned, active: false),
-          ],
-          const SliverToBoxAdapter(child: SizedBox(height: 80)),
+          // Two-column layout: acquired (left) | not-acquired (right)
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ── LEFT: Acquired (active + partial) ──
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      _columnHeader('ACQUIRED', Colors.greenAccent,
+                          active.length + partial.length),
+                      if (active.isNotEmpty) ...[
+                        _subHeader('Active', Colors.greenAccent, active.length),
+                        _SynergyGrid(list: active, owned: owned, active: true),
+                      ],
+                      if (partial.isNotEmpty) ...[
+                        _subHeader('Partial', Colors.amberAccent, partial.length),
+                        _SynergyGrid(list: partial, owned: owned, active: false),
+                      ],
+                      const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                    ],
+                  ),
+                ),
+                // ── Divider ──
+                Container(width: 1, color: Colors.white.withValues(alpha: 0.06)),
+                // ── RIGHT: Not acquired (locked) ──
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      _columnHeader('NOT ACQUIRED', Colors.white38, locked.length),
+                      _SynergyGrid(list: locked, owned: owned, active: false),
+                      const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
+
+  Widget _summaryChip(String label, int count, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 0.7),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GoopText(
+            '$count',
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color),
+          ),
+          const SizedBox(width: 4),
+          GoopText(
+            label,
+            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.5),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _columnHeader(String label, Color color, int count) =>
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+          child: Row(
+            children: [
+              GoopText(
+                label,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w900,
+                  color: color,
+                  letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  '$count',
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: color),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget _subHeader(String label, Color color, int count) =>
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+          child: Row(
+            children: [
+              Icon(Icons.circle, size: 6, color: color),
+              const SizedBox(width: 4),
+              GoopText(
+                '$label ($count)',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: color.withValues(alpha: 0.7),
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }
 
 class _SynergyGrid extends StatelessWidget {

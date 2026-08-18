@@ -189,7 +189,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                   const SizedBox(height: 10),
                   const SizedBox(height: 12),
                   GoopText(
-                    'v1.9.44',
+                    'v1.9.45',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w700,
@@ -373,7 +373,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                         Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
                         SizedBox(width: 7 * sf),
                         GoopText(
-                          'Changelog (v1.9.44)',
+                          'Changelog (v1.9.45)',
                           style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -427,7 +427,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.44 — Home Screen Toggle Unification + 16 New Vortex Floaters',
+                            'v1.9.45 — Synergy Pill + Robot DMG Badge + Big Stat Views + Panel Pills',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

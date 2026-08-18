@@ -3,9 +3,8 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/haptics.dart';
 import '../../utils/format.dart';
-import '../../utils/fast_route.dart';
 import '../../services/goop_talk_engine.dart';
-import '../../screens/stats_detail_screen.dart';
+import '../../screens/stats_detail_screen.dart' show curseTable;
 
 /// for quick zeroing.
 class StatAdjusterSheet extends StatelessWidget {
@@ -282,27 +281,63 @@ class CoolnessSheet extends StatelessWidget {
                 ),
               ),
             ),
+            // ── BIG NUMBER with inline +/- controls ──
             Row(
               children: [
-                const Icon(Icons.ac_unit_rounded, color: accent, size: 22),
-                const SizedBox(width: 8),
-                const GoopText(
-                  'COOLNESS',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.4,
+                // Big coolness number
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.ac_unit_rounded, color: accent, size: 18),
+                          const SizedBox(width: 6),
+                          const GoopText(
+                            'COOLNESS',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                              color: Colors.white54,
+                            ),
+                          ),
+                        ],
+                      ),
+                      GoopText(
+                        formatStat(value),
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.w900,
+                          color: accent,
+                          height: 1.0,
+                          letterSpacing: -1.0,
+                          shadows: [
+                            Shadow(
+                              color: accent.withValues(alpha: 0.4),
+                              blurRadius: 12,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
-                GoopText(
-                  formatStat(value),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: accent,
-                    height: 1,
-                  ),
+                // Inline +/- controls (big, robust touch targets)
+                Column(
+                  children: [
+                    _bigStepButton(Icons.add_rounded, () => apply(1), accent),
+                    const SizedBox(height: 6),
+                    _bigStepButton(Icons.remove_rounded, () => apply(-1), accent),
+                  ],
+                ),
+                const SizedBox(width: 6),
+                Column(
+                  children: [
+                    _bigStepButton(Icons.add_rounded, () => apply(0.5), accent.withValues(alpha: 0.7)),
+                    const SizedBox(height: 6),
+                    _bigStepButton(Icons.remove_rounded, () => apply(-0.5), accent.withValues(alpha: 0.7)),
+                  ],
                 ),
               ],
             ),
@@ -321,7 +356,7 @@ class CoolnessSheet extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Stat adjuster row
+            // Fine adjuster row (smaller increments + reset)
             Row(
               children: [
                 step(-1),
@@ -384,36 +419,27 @@ class CoolnessSheet extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
-
-            // Link to full coolness details
-            Center(
-              child: TextButton.icon(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    fastRoute(const StatsDetailScreen(
-                      statType: StatType.coolness,
-                    )),
-                  );
-                },
-                icon: const Icon(Icons.analytics_outlined, size: 16),
-                label: const GoopText(
-                  'View Coolness Breakdown',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                style: TextButton.styleFrom(
-                  foregroundColor: accent.withValues(alpha: 0.8),
-                ),
-              ),
-            ),
             const SizedBox(height: 4),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Big circular +/- button for inline stat adjustment next to the
+  /// big number. 44×44 touch target.
+  Widget _bigStepButton(IconData icon, VoidCallback onTap, Color color) {
+    return GestureDetector(
+      onTap: () { onTap(); Haptics.selection(); },
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.10),
+          shape: BoxShape.circle,
+          border: Border.all(color: color.withValues(alpha: 0.4), width: 1.2),
+        ),
+        child: Icon(icon, color: color, size: 22),
       ),
     );
   }
@@ -559,28 +585,62 @@ class CurseSheet extends StatelessWidget {
                 ),
               ),
             ),
-            // Header row
+            // ── BIG NUMBER with inline +/- controls ──
             Row(
               children: [
-                const Icon(Icons.warning_amber_rounded, color: accent, size: 22),
-                const SizedBox(width: 8),
-                const GoopText(
-                  'CURSE',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.4,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.warning_amber_rounded, color: accent, size: 18),
+                          const SizedBox(width: 6),
+                          const GoopText(
+                            'CURSE',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                              color: Colors.white54,
+                            ),
+                          ),
+                        ],
+                      ),
+                      GoopText(
+                        formatStat(value),
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.w900,
+                          color: accent,
+                          height: 1.0,
+                          letterSpacing: -1.0,
+                          shadows: [
+                            Shadow(
+                              color: accent.withValues(alpha: 0.4),
+                              blurRadius: 12,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
-                GoopText(
-                  formatStat(value),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                    color: accent,
-                    height: 1,
-                  ),
+                // Inline +/- controls
+                Column(
+                  children: [
+                    _bigStepButton(Icons.add_rounded, () => apply(1), accent),
+                    const SizedBox(height: 6),
+                    _bigStepButton(Icons.remove_rounded, () => apply(-1), accent),
+                  ],
+                ),
+                const SizedBox(width: 6),
+                Column(
+                  children: [
+                    _bigStepButton(Icons.add_rounded, () => apply(0.5), accent.withValues(alpha: 0.7)),
+                    const SizedBox(height: 6),
+                    _bigStepButton(Icons.remove_rounded, () => apply(-0.5), accent.withValues(alpha: 0.7)),
+                  ],
                 ),
               ],
             ),
@@ -599,14 +659,12 @@ class CurseSheet extends StatelessWidget {
                       height: 8,
                       child: Stack(
                         children: [
-                          // Background track
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.06),
                               borderRadius: BorderRadius.circular(6),
                             ),
                           ),
-                          // Fill
                           FractionallySizedBox(
                             widthFactor: pct,
                             child: Container(
@@ -621,7 +679,6 @@ class CurseSheet extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // Tick marks at each integer
                           Row(
                             children: List.generate(11, (i) => Expanded(
                               child: Align(
@@ -665,7 +722,7 @@ class CurseSheet extends StatelessWidget {
                 ),
               ),
             ),
-            // 3×2 grid of effect chips — perfectly aligned
+            // 3×2 grid of effect chips
             Builder(builder: (context) {
               final currentIdx = value.floor().clamp(0, 10);
               final row = curseTable[currentIdx];
@@ -727,20 +784,7 @@ class CurseSheet extends StatelessWidget {
             }),
             const SizedBox(height: 16),
 
-            // Section label
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8),
-              child: GoopText(
-                'ADJUST CURSE',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white38,
-                  letterSpacing: 0.8,
-                ),
-              ),
-            ),
-            // Stat adjuster row
+            // Fine adjuster row
             Row(
               children: [
                 step(-1),
@@ -778,19 +822,6 @@ class CurseSheet extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Section label
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8),
-              child: GoopText(
-                'QUICK ACTIONS',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white38,
-                  letterSpacing: 0.8,
-                ),
-              ),
-            ),
             // Curse-raising actions
             Row(
               children: [
@@ -816,41 +847,25 @@ class CurseSheet extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
-
-            // Full-width breakdown button
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    fastRoute(const StatsDetailScreen(
-                      statType: StatType.curse,
-                    )),
-                  );
-                },
-                icon: const Icon(Icons.analytics_outlined, size: 16),
-                label: const GoopText(
-                  'View Curse Breakdown',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: accent.withValues(alpha: 0.9),
-                  side: BorderSide(color: accent.withValues(alpha: 0.3), width: 0.8),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Big circular +/- button for inline stat adjustment.
+  Widget _bigStepButton(IconData icon, VoidCallback onTap, Color color) {
+    return GestureDetector(
+      onTap: () { onTap(); Haptics.selection(); },
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.10),
+          shape: BoxShape.circle,
+          border: Border.all(color: color.withValues(alpha: 0.4), width: 1.2),
+        ),
+        child: Icon(icon, color: color, size: 22),
       ),
     );
   }

@@ -43,6 +43,10 @@ class GungeoneerHeader extends StatefulWidget {
   /// Tapped to open a compact grid of all possible synergies.
   final VoidCallback? onTapSynergies;
 
+  /// Number of partial (potential) synergies — shown after a `|` in the
+  /// synergy pill so users can see what's possible to complete.
+  final int partialSynergies;
+
   /// Recognized passive effects (damage up, flight, dodge roll up, etc.)
   /// surfaced as compact chips with their extracted numeric stat where
   /// we can isolate one. Renders below the stats strip, toggled by the
@@ -52,6 +56,10 @@ class GungeoneerHeader extends StatefulWidget {
   /// Chronological list of shrine names used this run. Shown in a
   /// compact tracker panel toggled by the shrine icon.
   final List<String> shrinesUsed;
+
+  /// Robot damage boost percentage — when > 0, a cyber-styled +DMG%
+  /// overlay is shown next to the avatar. Only meaningful for Robot.
+  final double robotDamageBoost;
 
   const GungeoneerHeader({
     super.key,
@@ -70,8 +78,10 @@ class GungeoneerHeader extends StatefulWidget {
     this.onLongPressCoolness,
     this.onLongPressCurse,
     this.onTapSynergies,
+    this.partialSynergies = 0,
     this.effectChips = const <EffectChip>[],
     this.shrinesUsed = const <String>[],
+    this.robotDamageBoost = 0,
   });
 
   @override
@@ -282,6 +292,12 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                           child: _buildAvatarContent(iconPath),
                         ),
                       ),
+                      // Robot +DMG cyber overlay — shown when robotDamageBoost > 0.
+                      // Matrix/cyber ASCII styled number next to the avatar.
+                      if (widget.robotDamageBoost > 0) ...[
+                        const SizedBox(width: 4),
+                        _RobotDmgBadge(boost: widget.robotDamageBoost),
+                      ],
                       const SizedBox(width: 8),
 
                       if (trailingWidget != null) ...[
@@ -375,7 +391,9 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                   Expanded(
                     child: _buildFlatCapsule(
                       color: widget.activeSynergies > 0 ? const Color(0xFFFFD740) : Colors.white38,
-                      value: '${widget.activeSynergies}',
+                      value: widget.partialSynergies > 0
+                          ? '${widget.activeSynergies}|${widget.partialSynergies}'
+                          : '${widget.activeSynergies}',
                       label: 'SYN',
                       onTap: widget.onTapSynergies,
                       isActive: widget.activeSynergies > 0,
@@ -897,6 +915,74 @@ class _ShrineTracker extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// =============================================================================
+// _RobotDmgBadge — cyber/matrix styled +DMG% overlay for the Robot
+// =============================================================================
+
+class _RobotDmgBadge extends StatelessWidget {
+  final double boost;
+  const _RobotDmgBadge({required this.boost});
+
+  @override
+  Widget build(BuildContext context) {
+    final pct = boost.toStringAsFixed(0);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0D1117),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+          color: Colors.cyanAccent.withValues(alpha: 0.4),
+          width: 0.8,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.cyanAccent.withValues(alpha: 0.1),
+            blurRadius: 4,
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // ASCII-art style header line
+          GoopText(
+            'DMG',
+            style: TextStyle(
+              fontSize: 6,
+              fontWeight: FontWeight.w900,
+              color: Colors.cyanAccent.withValues(alpha: 0.6),
+              letterSpacing: 1.0,
+              fontFamily: 'monospace',
+              height: 1.0,
+            ),
+          ),
+          const SizedBox(height: 1),
+          // Big cyber number
+          GoopText(
+            '+$pct%',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+              color: Colors.cyanAccent,
+              letterSpacing: 0.5,
+              fontFamily: 'monospace',
+              height: 1.0,
+              shadows: [
+                Shadow(
+                  color: Colors.cyanAccent.withValues(alpha: 0.5),
+                  blurRadius: 4,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

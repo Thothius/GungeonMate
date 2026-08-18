@@ -19,7 +19,7 @@ void main() async {
   await HomeCustomization.load();
   // Expose the current app version for MP hello diagnostics. This is
   // hardcoded to match pubspec.yaml; update on version bump.
-  MultiplayerSession.appVersionString = '1.9.44';
+  MultiplayerSession.appVersionString = '1.9.45';
   runApp(const GungeonMateApp());
 }
 
