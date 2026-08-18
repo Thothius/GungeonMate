@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'providers/run_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/app_theme.dart';
+import 'services/home_customization.dart';
 import 'services/multiplayer_service.dart';
 import 'services/multiplayer_session.dart';
 import 'widgets/theme_overlay.dart';
@@ -15,9 +16,10 @@ void main() async {
   // failures internally — a broken plugin can't block app startup.
   await AppTheme.init();
   await VisualPrefs.init();
+  await HomeCustomization.load();
   // Expose the current app version for MP hello diagnostics. This is
   // hardcoded to match pubspec.yaml; update on version bump.
-  MultiplayerSession.appVersionString = '1.9.40';
+  MultiplayerSession.appVersionString = '1.9.41';
   runApp(const GungeonMateApp());
 }
 

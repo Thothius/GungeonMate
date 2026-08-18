@@ -1,5 +1,32 @@
 [
   {
+    "version": "v1.9.42",
+    "title": "Responsive Screen Profiles + Character Select No-Scroll Fix",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: New ScreenProfile system (lib/utils/responsive.dart) — classifies the app window into Material 3 width/height breakpoints (compact/medium/expanded/large), exposes height-aware convenience flags (isShort, isSmallPhone), usableHeight/usableWidth excluding safe-area + keyboard, and a columnsFor(itemCount) helper with orphan-avoidance.",
+      "FEATURE: Responsive.heightFactor / scaleHeight / minScale — height-aware scalar helpers complementing the existing width-based Responsive.factor/scale/font.",
+      "FIX: Character Select screen no longer scrolls or overflows on any phone size. Grid cell aspect ratio is now computed from the actual available height (LayoutBuilder constraints) instead of a hardcoded 0.54 constant. Tested at 320×568 (iPhone SE1), 393×851 (Pixel 7), 768×1024 (tablet), 851×393 (landscape phone) — all fit with zero scroll.",
+      "FIX: Character Select helper description auto-hides on short screens (usableHeight < 700dp) to reclaim vertical space for the grid.",
+      "FIX: Character Select grid uses NeverScrollableScrollPhysics — scrolling is now structurally impossible, making any future layout regression immediately visible."
+    ]
+  },
+  {
+    "version": "v1.9.41",
+    "title": "Home Screen Rework + Ammonomicon Codex Tabs",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Home screen Customize button (styled like Local Run / Multiplayer) opens a bottom sheet for full home customization.",
+      "FEATURE: Rotating Gungeoneer model at the vortex center — falls forever with a depth pulse (goes deeper + smaller, then floats back out) on an organic RNG-assisted loop. Pick a specific character or let it RNG-cycle through all gungeoneers every 4-8s.",
+      "FEATURE: Junk particle field — Money, Money x5, Golden Shells, Blanks, Glass Guon Stones, and Half Hearts drift and swirl through the vortex on individual orbits with radial breathing and per-sprite spin.",
+      "FEATURE: Top-left Toggle Gungeoneer + Toggle Junk quick toggles. Tap to toggle on/off; long-press opens the customization sheet focused on that section.",
+      "FEATURE: Home customization sheet — gungeoneer grid picker (in-game sprites, RNG Cycle + Off options) and per-junk-type count steppers (0-12 each). All choices persist across app restarts.",
+      "REWORK: Codex now uses Ammonomicon-style bookmark tabs coming from the left edge of the screen. All 12 categories (7 special pages + 5 data) are bookmark tabs that pull out when active and tuck in when inactive.",
+      "REWORK: 5 authentic ammonomicon tab icons (Guns, Items, Enemies, Bosses, Death) mapped to matching data categories; special pages use themed Material icons in the same bookmark visual style.",
+      "ASSETS: New home/junk/ folder with 6 junk sprite webps; new codex/tabs/ folder with 5 ammonomicon tab icons; ammonomicon cover + button assets."
+    ]
+  },
+  {
     "version": "v1.9.40",
     "title": "10 New Themes + Active Item Badges",
     "date": "August 2026",
