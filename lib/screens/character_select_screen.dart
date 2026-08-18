@@ -247,12 +247,16 @@ class _CharacterCard extends StatelessWidget {
                 ),
               ),
             ),
-            // In-game GIF sprite centered in the square
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: _buildInGameSprite(),
-              ),
+            // In-game GIF sprite — fills the area above the name label.
+            // No padding so the sprite scales up to fill the full tile
+            // height. The name label at the bottom has its own
+            // semi-transparent backing so the sprite reads behind it.
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 22, // space for the name label
+              child: _buildInGameSprite(),
             ),
             // ── Name label at bottom ──
             Positioned(
@@ -323,12 +327,15 @@ class _CharacterCard extends StatelessWidget {
 
   /// Always show the in-game sprite GIF. Falls back to the static icon
   /// if no GIF exists. No animated card art — just the raw sprite model.
+  /// Uses BoxFit.fitHeight so portrait pixel-art sprites fill the
+  /// available height — much bigger than the old BoxFit.contain which
+  /// left them tiny in the center of a square tile.
   Widget _buildInGameSprite() {
     final gifPath = gungeoneerGifPath(character.name);
     if (gifPath.isNotEmpty) {
       return Image.asset(
         gifPath,
-        fit: BoxFit.contain,
+        fit: BoxFit.fitHeight,
         filterQuality: FilterQuality.none,
         gaplessPlayback: true,
         errorBuilder: (_, __, ___) => _buildFallbackIcon(),
@@ -342,7 +349,7 @@ class _CharacterCard extends StatelessWidget {
     if (char.icon.startsWith('assets/')) {
       return Image.asset(
         char.icon,
-        fit: BoxFit.contain,
+        fit: BoxFit.fitHeight,
         filterQuality: FilterQuality.none,
         errorBuilder: (_, __, ___) =>
             const Icon(Icons.person, size: 64, color: Colors.white70),
