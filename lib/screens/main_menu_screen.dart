@@ -208,13 +208,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
         ),
           ),
           ),
-          // Palette quick-launch — top-right corner. Opens the theme
-          // picker directly so the user can switch themes in 1 tap.
+          // Theme Picker — top-right corner. Labeled pill (not just an
+          // icon) so the feature is discoverable. Opens the theme studio
+          // so the user can switch themes in 1 tap.
           Positioned(
             top: 12,
             right: 12,
             child: SafeArea(
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () {
                   Haptics.selection();
                   Navigator.push(
@@ -222,23 +223,44 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                     fastRoute(const ExperienceStudioScreen()),
                   );
                 },
-                borderRadius: BorderRadius.circular(20),
+                behavior: HitTestBehavior.opaque,
                 child: Container(
-                  padding: EdgeInsets.all(8 * sf),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white24, width: 1.2),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 10 * sf,
+                    vertical: 7 * sf,
                   ),
-                  child: Icon(Icons.palette_rounded, size: 16 * sf, color: Colors.pinkAccent),
+                  decoration: BoxDecoration(
+                    color: Colors.pinkAccent.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.pinkAccent.withValues(alpha: 0.5),
+                      width: 1.2,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.palette_rounded, size: 14 * sf, color: Colors.pinkAccent),
+                      SizedBox(width: 6 * sf),
+                      GoopText(
+                        'Theme Picker',
+                        style: TextStyle(
+                          fontSize: 10.5 * sf,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
-          // ── Top-left quick toggles: Gungeoneer + Floaters ──
-          // Each toggle works as a pill: tap toggles on/off. When on,
-          // tapping again opens the config sheet for that section.
-          // Long-press always opens the config sheet directly.
+          // ── Top-left: unified "Toggle Animations" pill ──
+          // Single pill that opens a popup menu with individual toggles
+          // for the Gungeoneer sprite and junk floaters. Cleaner than
+          // two separate pills — one control, one place.
           Positioned(
             top: 12,
             left: 12,
@@ -246,105 +268,29 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
               child: ValueListenableBuilder<HomeCustomization>(
                 valueListenable: HomeCustomization.notifier,
                 builder: (context, cust, _) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _QuickToggle(
-                        label: 'Gungeoneer',
-                        icon: Icons.person_rounded,
-                        active: cust.showGungeoneer,
-                        activeColor: const Color(0xFFBCA0F8),
-                        onTap: () {
-                          Haptics.selection();
-                          if (cust.showGungeoneer) {
-                            // Already on — open config to pick character.
-                            showModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              isScrollControlled: true,
-                              useSafeArea: false,
-                              builder: (_) => const HomeCustomizationSheet(
-                                initialSection: HomeCustomSection.gungeoneer,
-                              ),
-                            );
-                          } else {
-                            // Off — turn on (opens config if no character
-                            // selected yet, so user picks one immediately).
-                            if (cust.gungeoneerName.isEmpty) {
-                              showModalBottomSheet(
-                                context: context,
-                                backgroundColor: Colors.transparent,
-                                isScrollControlled: true,
-                                useSafeArea: false,
-                                builder: (_) => const HomeCustomizationSheet(
-                                  initialSection: HomeCustomSection.gungeoneer,
-                                ),
-                              );
-                            }
-                            HomeCustomization.setShowGungeoneer(true);
-                          }
-                        },
-                        onLongPress: () {
-                          Haptics.selection();
-                          showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            isScrollControlled: true,
-                            useSafeArea: false,
-                            builder: (_) => const HomeCustomizationSheet(
-                              initialSection: HomeCustomSection.gungeoneer,
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 8),
-                      _QuickToggle(
-                        label: 'Floaters',
-                        icon: Icons.auto_awesome_rounded,
-                        active: cust.showJunk && cust.totalJunk > 0,
-                        activeColor: const Color(0xFFFFD54F),
-                        onTap: () {
-                          Haptics.selection();
-                          if (cust.showJunk && cust.totalJunk > 0) {
-                            // Already on — open config to adjust floaters.
-                            showModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              isScrollControlled: true,
-                              useSafeArea: false,
-                              builder: (_) => const HomeCustomizationSheet(
-                                initialSection: HomeCustomSection.junk,
-                              ),
-                            );
-                          } else if (cust.totalJunk == 0) {
-                            // No floaters configured — open config to pick.
-                            showModalBottomSheet(
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              isScrollControlled: true,
-                              useSafeArea: false,
-                              builder: (_) => const HomeCustomizationSheet(
-                                initialSection: HomeCustomSection.junk,
-                              ),
-                            );
-                          } else {
-                            HomeCustomization.setShowJunk(true);
-                          }
-                        },
-                        onLongPress: () {
-                          Haptics.selection();
-                          showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            isScrollControlled: true,
-                            useSafeArea: false,
-                            builder: (_) => const HomeCustomizationSheet(
-                              initialSection: HomeCustomSection.junk,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                  final anyActive = cust.showGungeoneer ||
+                      (cust.showJunk && cust.totalJunk > 0);
+                  return _QuickToggle(
+                    label: 'Toggle Animations',
+                    icon: Icons.animation_rounded,
+                    active: anyActive,
+                    activeColor: const Color(0xFFBCA0F8),
+                    onTap: () {
+                      Haptics.selection();
+                      _showAnimationsMenu(context, cust);
+                    },
+                    onLongPress: () {
+                      Haptics.selection();
+                      showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true,
+                        useSafeArea: false,
+                        builder: (_) => const HomeCustomizationSheet(
+                          initialSection: HomeCustomSection.gungeoneer,
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -386,6 +332,108 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           ],
         ),
     );
+  }
+
+  /// Popup menu for toggling individual vortex animations on/off.
+  /// Each item has a toggle switch and a "configure" arrow that opens
+  /// the relevant section of the home customization sheet.
+  void _showAnimationsMenu(BuildContext context, HomeCustomization cust) {
+    showMenu<_AnimAction>(
+      context: context,
+      position: const RelativeRect.fromLTRB(12, 60, 200, 0),
+      color: const Color(0xFF1E1E22),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: Colors.white.withValues(alpha: 0.12), width: 1),
+      ),
+      items: [
+        PopupMenuItem<_AnimAction>(
+          value: _AnimAction.toggleGungeoneer,
+          child: _AnimMenuRow(
+            icon: Icons.person_rounded,
+            label: 'Gungeoneer',
+            color: const Color(0xFFBCA0F8),
+            active: cust.showGungeoneer,
+          ),
+        ),
+        PopupMenuItem<_AnimAction>(
+          value: _AnimAction.configGungeoneer,
+          child: _AnimMenuRow(
+            icon: Icons.tune_rounded,
+            label: 'Configure Gungeoneer',
+            color: Colors.white54,
+            active: false,
+            trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
+          ),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<_AnimAction>(
+          value: _AnimAction.toggleFloaters,
+          child: _AnimMenuRow(
+            icon: Icons.auto_awesome_rounded,
+            label: 'Floaters',
+            color: const Color(0xFFFFD54F),
+            active: cust.showJunk && cust.totalJunk > 0,
+          ),
+        ),
+        PopupMenuItem<_AnimAction>(
+          value: _AnimAction.configFloaters,
+          child: _AnimMenuRow(
+            icon: Icons.tune_rounded,
+            label: 'Configure Floaters',
+            color: Colors.white54,
+            active: false,
+            trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
+          ),
+        ),
+      ],
+    ).then((action) {
+      if (action == null || !context.mounted) return;
+      Haptics.selection();
+      switch (action) {
+        case _AnimAction.toggleGungeoneer:
+          HomeCustomization.setShowGungeoneer(!cust.showGungeoneer);
+          break;
+        case _AnimAction.configGungeoneer:
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            useSafeArea: false,
+            builder: (_) => const HomeCustomizationSheet(
+              initialSection: HomeCustomSection.gungeoneer,
+            ),
+          );
+          break;
+        case _AnimAction.toggleFloaters:
+          if (cust.totalJunk == 0) {
+            // No floaters configured — open config to pick.
+            showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              isScrollControlled: true,
+              useSafeArea: false,
+              builder: (_) => const HomeCustomizationSheet(
+                initialSection: HomeCustomSection.junk,
+              ),
+            );
+          } else {
+            HomeCustomization.setShowJunk(!cust.showJunk);
+          }
+          break;
+        case _AnimAction.configFloaters:
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            useSafeArea: false,
+            builder: (_) => const HomeCustomizationSheet(
+              initialSection: HomeCustomSection.junk,
+            ),
+          );
+          break;
+      }
+    });
   }
 
   void _showChangelogDialog(BuildContext context) {
@@ -789,4 +837,57 @@ class _QuickToggle extends StatelessWidget {
 //     );
 //   }
 // }
+
+/// Actions available in the animations popup menu.
+enum _AnimAction {
+  toggleGungeoneer,
+  configGungeoneer,
+  toggleFloaters,
+  configFloaters,
+}
+
+/// A row in the animations popup menu — icon + label + toggle indicator.
+class _AnimMenuRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final bool active;
+  final Widget? trailing;
+
+  const _AnimMenuRow({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.active,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: active ? color : Colors.white54),
+        const SizedBox(width: 10),
+        Expanded(
+          child: GoopText(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: active ? Colors.white : Colors.white60,
+            ),
+          ),
+        ),
+        if (trailing != null)
+          trailing!
+        else
+          Icon(
+            active ? Icons.toggle_on_rounded : Icons.toggle_off_rounded,
+            size: 22,
+            color: active ? color : Colors.white38,
+          ),
+      ],
+    );
+  }
+}
 

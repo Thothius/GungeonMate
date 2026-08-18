@@ -1,90 +1,117 @@
-import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/home_customization.dart';
-import '../../services/haptics.dart';
 import '../../utils/asset_paths.dart';
+import 'vortex_config.dart';
 
-/// A gungeoneer in-game sprite rotating in the center of the home-screen
-/// vortex. The model "falls forever": it slowly spins while a depth pulse
-/// makes it shrink (going deeper) then grow back (floating out) on an
-/// organic, slightly randomized loop. When no specific gungeoneer is
-/// chosen, it cycles through a random character every few seconds.
+/// A gungeoneer in-game sprite caught in the home-screen vortex, spinning
+/// 360° on its own axis while descending through the vortex column then
+/// floating back up.
 ///
-/// Purely decorative — wrapped in IgnorePointer by the caller, but taps
-/// are absorbed here too so the sprite never blocks the buttons beneath.
+/// **Vortex physics model (descent-ascent cycle):**
+/// The vortex is a swirling column of energy at the very center of the
+/// screen. The gungeoneer is suspended in it. The motion is a deliberate,
+/// cinematic descent-ascent cycle:
+///
+///   1. **Descent** (default 30s) — the sprite starts at the top of the
+///      vortex (nearest/largest) and falls to the bottom (farthest/
+///      smallest). The fall accelerates (ease-in, like gravity in a
+///      viscous medium). During descent the sprite spins faster
+///      (tumbling through the vortex).
+///
+///   2. **Ascent** (default 25s) — the sprite floats from the bottom back
+///      to the top. The rise decelerates (ease-out, like a bubble in
+///      water). The spin slows to its base speed (gentle rotation).
+///
+///   3. **Repeat** — the cycle loops seamlessly. The sprite arrives at
+///      the top just as the next descent begins.
+///
+/// All motion is always-forward — a single Stopwatch drives the elapsed
+/// time, and all positions/rotations are computed from it. No controllers
+/// reverse; the easing curves create the organic acceleration/deceleration.
+///
+/// All parameters are driven by [VortexConfig] — tweak there to adjust
+/// the simulation without touching this widget.
+///
+/// **Slight blur:** the sprite is wrapped in [ImageFiltered] with a low
+/// sigma blur (default 0.8). Per Flutter 2026 guidance, ImageFiltered is
+/// dramatically cheaper than BackdropFilter for single-widget blur.
+///
+/// Purely decorative — wrapped in IgnorePointer by the caller.
 class RotatingGungeoneer extends StatefulWidget {
   /// Base display size of the sprite (longest edge), in logical px.
+  /// Overridden by [VortexConfig.gungeoneerSize] if a config is provided.
   final double size;
 
-  const RotatingGungeoneer({super.key, this.size = 220});
+  /// Vortex configuration. Defaults to [VortexConfig.defaultConfig].
+  final VortexConfig config;
+
+  const RotatingGungeoneer({
+    super.key,
+    this.size = 220,
+    this.config = VortexConfig.defaultConfig,
+  });
 
   @override
   State<RotatingGungeoneer> createState() => _RotatingGungeoneerState();
 }
 
 class _RotatingGungeoneerState extends State<RotatingGungeoneer>
-    with TickerProviderStateMixin {
-  late final AnimationController _spin;
-  late final AnimationController _depth;
-  final math.Random _rng = math.Random(42);
+    with SingleTickerProviderStateMixin {
+  /// Single repaint trigger. The actual motion is driven by [_clock]
+  /// (elapsed time), not this controller — it just forces a repaint
+  /// every frame so the sprite moves smoothly.
+  late final AnimationController _repaint;
 
-  // RNG character cycling.
-  Timer? _rngTimer;
+  /// Elapsed-time clock — drives all motion. Stable regardless of
+  /// controller duration.
+  final Stopwatch _clock = Stopwatch();
+
+  final math.Random _rng = math.Random(42);
   int _currentIdx = 0;
+
+  /// Tracks which cycle we're in so we can swap characters at the bottom
+  /// (deepest point) of each descent.
+  int _lastCycle = 0;
+
+  VortexConfig get _cfg => widget.config;
 
   @override
   void initState() {
     super.initState();
-    // Slow continuous rotation (~24s per revolution).
-    _spin = AnimationController(
+    _repaint = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 24),
+      duration: const Duration(seconds: 1),
     )..repeat();
-    // Depth pulse: deeper-then-out breathing, ~7s cycle.
-    _depth = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 7),
-    )..repeat(reverse: true);
-    // RNG character swap on a randomized 4–8s cadence.
-    _scheduleNextSwap(0);
+    _clock.start();
   }
 
-  void _scheduleNextSwap(int count) {
-    _rngTimer?.cancel();
-    if (count == 0) {
-      _rngTimer = Timer(const Duration(milliseconds: 300), _doSwap);
-      return;
-    }
-    final delay = Duration(seconds: 4 + _rng.nextInt(5));
-    _rngTimer = Timer(delay, _doSwap);
+  @override
+  void dispose() {
+    _clock.stop();
+    _repaint.dispose();
+    super.dispose();
   }
 
-  void _doSwap() {
-    if (!mounted) return;
-    setState(() {
-      // Advance to a different index than the current one.
+  void _maybeSwap(double elapsed) {
+    final cycle = _cfg.gungeoneerCycleDuration;
+    final currentCycle = (elapsed / cycle).floor();
+    // Swap when we enter a new cycle — this is the moment the sprite
+    // is at the bottom (deepest/smallest), so the swap is least visible.
+    if (currentCycle != _lastCycle) {
+      _lastCycle = currentCycle;
       final count = context.read<RunProvider>().allGungeoneers.length;
       if (count > 1) {
         int next;
         do {
           next = _rng.nextInt(count);
         } while (next == _currentIdx);
-        _currentIdx = next;
+        setState(() => _currentIdx = next);
       }
-    });
-    Haptics.selection();
-    _scheduleNextSwap(1);
-  }
-
-  @override
-  void dispose() {
-    _rngTimer?.cancel();
-    _spin.dispose();
-    _depth.dispose();
-    super.dispose();
+    }
   }
 
   @override
@@ -96,54 +123,100 @@ class _RotatingGungeoneerState extends State<RotatingGungeoneer>
         final gungeoneers = context.watch<RunProvider>().allGungeoneers;
         if (gungeoneers.isEmpty) return const SizedBox.shrink();
 
-        // Resolve the active name. Fixed name wins; otherwise RNG cycle.
         final isRng = cust.gungeoneerName.isEmpty;
         final name = isRng
             ? gungeoneers[_currentIdx % gungeoneers.length].name
             : cust.gungeoneerName;
 
         return IgnorePointer(
-          child: AnimatedBuilder(
-            animation: Listenable.merge([_spin, _depth]),
-            builder: (context, _) {
-              // Depth: 0.0 = far/small (deep), 1.0 = near/large (out).
-              // Ease the depth curve so the "float out" lingers.
-              final d = Curves.easeInOutSine.transform(_depth.value);
-              // Organic jitter: combine two slow sines driven by spin
-              // progress for an RNG-assisted, non-mechanical drift.
-              final t = _spin.value * 2 * math.pi;
-              final jitter =
-                  0.06 * math.sin(t * 1.3) + 0.04 * math.sin(t * 2.7 + 1.1);
-              final scale = 0.62 + 0.38 * d + jitter;
-              // Slow yaw rotation; tilt slightly with depth for parallax.
-              final yaw = _spin.value * 2 * math.pi;
-              final tilt = 0.12 * math.sin(t * 0.8);
-              return Center(
-                child: Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.0012) // perspective
-                    ..rotateY(yaw)
-                    ..rotateX(tilt)
-                    ..scale(scale.clamp(0.3, 1.2)),
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 600),
-                    switchInCurve: Curves.easeOutCubic,
-                    switchOutCurve: Curves.easeInCubic,
-                    child: _GungeoneerSprite(
-                      key: ValueKey(name),
-                      name: name,
-                      size: widget.size,
-                      // Fade opacity with depth so "going deeper" dims it.
-                      opacity: 0.55 + 0.45 * d,
-                    ),
-                  ),
-                ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return AnimatedBuilder(
+                animation: _repaint,
+                builder: (context, _) {
+                  final elapsed = _clock.elapsedMilliseconds / 1000.0;
+                  _maybeSwap(elapsed);
+                  return _buildVortexSprite(name, constraints, elapsed);
+                },
               );
             },
           ),
         );
       },
+    );
+  }
+
+  Widget _buildVortexSprite(
+      String name, BoxConstraints constraints, double elapsed) {
+    final screenW = constraints.maxWidth;
+    final screenH = constraints.maxHeight;
+    final size = widget.size;
+    final cfg = _cfg;
+    final cx = screenW / 2;
+    final cy = screenH / 2;
+
+    // ── Depth: tied to vertical position (top=near/large, bottom=far/small) ──
+    final depth = cfg.depthFromElapsed(elapsed);
+
+    // ── Drift range: half the current bounding box ──
+    final driftRange = cfg.orbitRadiusAt(depth, screenW);
+
+    // ── Vertical position: descent-ascent cycle ──
+    final vertical =
+        cfg.verticalFromElapsed(elapsed, driftRange) *
+        cfg.gungeoneerOrbitYCompression;
+
+    // ── Horizontal sway: subtle drift ──
+    final swayRange = driftRange * cfg.gungeoneerSwayFraction;
+    final sway = cfg.swayFromElapsed(elapsed, swayRange);
+
+    // ── Sprite's own 360° spin (rotateZ, 2D-safe) ──
+    // Faster during descent (tumbling), slower during ascent.
+    final spinAngle = cfg.spinFromElapsed(elapsed);
+
+    // ── Scale and opacity from depth ──
+    final scale = cfg.gungeoneerScaleAt(depth);
+    final opacity = cfg.gungeoneerOpacityAt(depth);
+
+    // ── Final position ──
+    final posX = cx + sway;
+    final posY = cy + vertical;
+
+    return Stack(
+      children: [
+        Positioned(
+          left: posX - size / 2,
+          top: posY - size / 2,
+          child: Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..rotateZ(spinAngle)
+              ..scale(scale),
+            child: Opacity(
+              opacity: opacity,
+              // Slight blur via ImageFiltered — cheaper than BackdropFilter
+              // for single-widget blur. sigma 0 = no blur.
+              child: cfg.gungeoneerBlurSigma > 0
+                  ? ImageFiltered(
+                      imageFilter: ui.ImageFilter.blur(
+                        sigmaX: cfg.gungeoneerBlurSigma,
+                        sigmaY: cfg.gungeoneerBlurSigma,
+                      ),
+                      child: _GungeoneerSprite(
+                        key: ValueKey(name),
+                        name: name,
+                        size: size,
+                      ),
+                    )
+                  : _GungeoneerSprite(
+                      key: ValueKey(name),
+                      name: name,
+                      size: size,
+                    ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -154,13 +227,11 @@ class _RotatingGungeoneerState extends State<RotatingGungeoneer>
 class _GungeoneerSprite extends StatelessWidget {
   final String name;
   final double size;
-  final double opacity;
 
   const _GungeoneerSprite({
     super.key,
     required this.name,
     required this.size,
-    required this.opacity,
   });
 
   @override
@@ -181,18 +252,15 @@ class _GungeoneerSprite extends StatelessWidget {
               shape: BoxShape.circle,
               gradient: RadialGradient(
                 colors: [
-                  const Color(0xFFBCA0F8).withValues(alpha: 0.28 * opacity),
-                  const Color(0xFF9D5CDB).withValues(alpha: 0.10 * opacity),
+                  const Color(0xFFBCA0F8).withValues(alpha: 0.25),
+                  const Color(0xFF9D5CDB).withValues(alpha: 0.08),
                   Colors.transparent,
                 ],
                 stops: const [0.0, 0.45, 1.0],
               ),
             ),
           ),
-          Opacity(
-            opacity: opacity.clamp(0.0, 1.0),
-            child: _buildImage(gif, icon),
-          ),
+          _buildImage(gif, icon),
         ],
       ),
     );
