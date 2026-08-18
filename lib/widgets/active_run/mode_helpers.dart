@@ -12,7 +12,7 @@ import '../../screens/item_detail_screen.dart';
 import 'sort_picker.dart' show TileActionsSheet;
 
 // =============================================================================
-// Shared helpers for the 3 active-run display modes (Codex / Compact / Matrix).
+// Shared helpers for the active-run display modes (Codex / Compact / Signature).
 //
 // Extracted verbatim from `PlayerPageState` so each mode widget can drive the
 // same MP/transfer/sort/undo flows without triplicating ~300 lines. Every

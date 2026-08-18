@@ -6,13 +6,14 @@ import '../../../services/goop_talk_engine.dart';
 
 /// A collapsible mode-switcher bar for the active run screen.
 ///
-/// Shows 3 tappable preview cards (Codex Book / Compact Run / Gungeon
-/// Matrix) when expanded, or a single pill showing the current mode
-/// when collapsed. Tapping a card switches [VisualPrefs.runDisplayMode]
-/// instantly — the active run rebuilds with the new mode, no navigation.
+/// Shows tappable preview cards (Classic / Codex Book / Compact Run /
+/// Theme Signature) when expanded, or a single pill showing the current
+/// mode when collapsed. Tapping a card switches
+/// [VisualPrefs.runDisplayMode] instantly — the active run rebuilds
+/// with the new mode, no navigation.
 ///
 /// Default state: collapsed (user-confirmed). The collapsed pill shows
-/// the current mode name + a chevron. Tapping it expands to the 3-card
+/// the current mode name + a chevron. Tapping it expands to the card
 /// strip. Tapping a card collapses back down and applies the selection
 /// in one motion.
 ///
@@ -187,7 +188,6 @@ class _RunDisplayModeBarState extends State<RunDisplayModeBar> {
         RunDisplayMode.classic => Icons.view_agenda_rounded,
         RunDisplayMode.codex => Icons.menu_book_rounded,
         RunDisplayMode.compact => Icons.view_compact_rounded,
-        RunDisplayMode.matrix => Icons.code_rounded,
         RunDisplayMode.signature => Icons.auto_awesome_rounded,
       };
 
@@ -358,7 +358,6 @@ class _PreferencesSheet extends StatelessWidget {
       RunDisplayMode.classic => Icons.view_agenda_rounded,
       RunDisplayMode.codex => Icons.menu_book_rounded,
       RunDisplayMode.compact => Icons.view_compact_rounded,
-      RunDisplayMode.matrix => Icons.code_rounded,
       RunDisplayMode.signature => Icons.auto_awesome_rounded,
     };
     return AnimatedContainer(
@@ -431,7 +430,6 @@ class _ModeCard extends StatelessWidget {
       RunDisplayMode.classic => Icons.view_agenda_rounded,
       RunDisplayMode.codex => Icons.menu_book_rounded,
       RunDisplayMode.compact => Icons.view_compact_rounded,
-      RunDisplayMode.matrix => Icons.code_rounded,
       RunDisplayMode.signature => Icons.auto_awesome_rounded,
     };
 

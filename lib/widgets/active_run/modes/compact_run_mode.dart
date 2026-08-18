@@ -297,34 +297,28 @@ class CompactRunMode extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFF141416),
           borderRadius: BorderRadius.circular(6),
-          border: Border(
-            left: BorderSide(
-              color: entry.isTopDps
-                  ? Colors.amberAccent
-                  : Colors.transparent,
-              width: 2,
-            ),
-            top: BorderSide(
-              color: entry.glow != null
-                  ? entry.glow!.withValues(alpha: 0.2)
-                  : Colors.white.withValues(alpha: 0.04),
-              width: 0.8,
-            ),
-            right: BorderSide(
-              color: Colors.white.withValues(alpha: 0.04),
-              width: 0.8,
-            ),
-            bottom: BorderSide(
-              color: Colors.white.withValues(alpha: 0.04),
-              width: 0.8,
-            ),
+          border: Border.all(
+            color: entry.glow != null
+                ? entry.glow!.withValues(alpha: 0.2)
+                : Colors.white.withValues(alpha: 0.04),
+            width: 0.8,
           ),
         ),
         child: Row(
           children: [
+            if (entry.isTopDps)
+              Container(
+                width: 2,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.amberAccent,
+                  borderRadius: BorderRadius.circular(1),
+                ),
+              ),
+            if (entry.isTopDps) const SizedBox(width: 4),
             SizedBox(
-              width: 20,
               height: 20,
+              width: 20,
               child: GameIcon(
                 assetPath: entry.icon,
                 fallback: Icons.help_outline,
