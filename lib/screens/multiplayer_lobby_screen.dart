@@ -84,6 +84,16 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
     } catch (e) { debugPrint('[MP Lobby] error: $e'); }
   }
 
+  Future<void> _clearAllSavedSessions() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('saved_mp_sessions');
+      if (mounted) {
+        setState(() => _savedSessions = []);
+      }
+    } catch (e) { debugPrint('[MP Lobby] error: $e'); }
+  }
+
   Future<void> _loadSession(SavedMpSession saved, MpRole role) async {
     final session = context.read<MultiplayerSession>();
     await session.loadSavedSession(saved, overrideRole: role);
@@ -281,16 +291,17 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               TextField(
                 controller: _nickCtrl,
                 maxLength: 24,
-                style: const TextStyle(fontSize: 15),
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
                 decoration: InputDecoration(
                   hintText: 'Enter your nickname',
-                  prefixIcon: const Icon(Icons.person_outline, size: 20),
+                  hintStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.3)),
+                  prefixIcon: const Icon(Icons.person_outline, size: 28),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 12,
+                    horizontal: 18,
+                    vertical: 18,
                   ),
                 ),
               ),
@@ -305,7 +316,6 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                     child: _RoleButton(
                       icon: Icons.campaign,
                       label: 'HOST',
-                      subtitle: 'Host a game',
                       selected: _isMain,
                       onTap: () {
                         Haptics.selection();
@@ -318,7 +328,6 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                     child: _RoleButton(
                       icon: Icons.bluetooth_searching,
                       label: 'JOIN',
-                      subtitle: 'Join a game',
                       selected: !_isMain,
                       onTap: () {
                         Haptics.selection();
@@ -360,24 +369,39 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
               const SizedBox(height: 24),
 
               // ── Primary CTA ────────────────────────────────────────
-              SizedBox(
-                width: double.infinity,
-                height: 52 * sf,
-                child: FilledButton.icon(
-                  icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth, size: 20),
-                  label: GoopText(
-                    _isMain ? 'START HOSTING' : 'FIND HOST',
-                    style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5),
+              // Greyed out when hosting but no character picked yet.
+              Builder(builder: (context) {
+                final canStart = !_isMain || _selectedCharacter != null;
+                return SizedBox(
+                  width: double.infinity,
+                  height: 52 * sf,
+                  child: FilledButton.icon(
+                    icon: Icon(_isMain ? Icons.campaign : Icons.bluetooth, size: 20),
+                    label: GoopText(
+                      _isMain
+                          ? (_selectedCharacter == null ? 'PICK CHARACTER FIRST' : 'START HOSTING')
+                          : 'FIND HOST',
+                      style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                    ),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: canStart
+                          ? flair.primary
+                          : Colors.white.withValues(alpha: 0.08),
+                      disabledBackgroundColor: Colors.white.withValues(alpha: 0.06),
+                      disabledForegroundColor: Colors.white.withValues(alpha: 0.3),
+                    ),
+                    onPressed: canStart
+                        ? () {
+                            Haptics.selection();
+                            _start();
+                          }
+                        : () {
+                            Haptics.selection();
+                            _pickCharacter();
+                          },
                   ),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: flair.primary,
-                  ),
-                  onPressed: () {
-                    Haptics.selection();
-                    _start();
-                  },
-                ),
-              ),
+                );
+              }),
               const SizedBox(height: 16),
 
               // ── Divider ────────────────────────────────────────────
@@ -536,6 +560,21 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
                       const GoopText('SAVED SESSIONS',
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 1)),
                       const Spacer(),
+                      // Clear All button
+                      TextButton.icon(
+                        icon: const Icon(Icons.delete_sweep_rounded, size: 16, color: Colors.redAccent),
+                        label: const GoopText('CLEAR ALL',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Colors.redAccent, letterSpacing: 0.5)),
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          minimumSize: const Size(0, 32),
+                        ),
+                        onPressed: () {
+                          Haptics.selection();
+                          _showClearAllConfirm(context);
+                        },
+                      ),
+                      const SizedBox(width: 4),
                       IconButton(
                         icon: const Icon(Icons.close, size: 18, color: Colors.white54),
                         onPressed: () => Navigator.pop(ctx),
@@ -651,6 +690,44 @@ class _MultiplayerLobbyScreenState extends State<MultiplayerLobbyScreen> {
           ),
         );
       },
+    );
+  }
+
+  void _showClearAllConfirm(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1B1B1E),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(
+          children: [
+            Icon(Icons.delete_sweep_rounded, color: Colors.redAccent, size: 22),
+            SizedBox(width: 10),
+            GoopText('CLEAR ALL SAVED SESSIONS?',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          ],
+        ),
+        content: GoopText(
+          'This permanently removes all ${_savedSessions.length} saved session${_savedSessions.length == 1 ? '' : 's'}. This cannot be undone.',
+          style: const TextStyle(fontSize: 13, color: Colors.white70, height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const GoopText('CANCEL', style: TextStyle(fontWeight: FontWeight.w800, letterSpacing: 0.5)),
+          ),
+          FilledButton.tonal(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
+            onPressed: () {
+              Navigator.pop(ctx); // confirm dialog
+              Navigator.pop(context); // saved sessions sheet
+              _clearAllSavedSessions();
+              Haptics.selection();
+            },
+            child: const GoopText('CLEAR ALL', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5)),
+          ),
+        ],
+      ),
     );
   }
 
@@ -853,14 +930,12 @@ class _StepLabel extends StatelessWidget {
 class _RoleButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  final String subtitle;
   final bool selected;
   final VoidCallback onTap;
 
   const _RoleButton({
     required this.icon,
     required this.label,
-    required this.subtitle,
     required this.selected,
     required this.onTap,
   });
@@ -900,14 +975,6 @@ class _RoleButton extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1,
                   color: selected ? flair.primary : Colors.white.withValues(alpha: 0.5),
-                ),
-              ),
-              const SizedBox(height: 2),
-              GoopText(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 9,
-                  color: Colors.white.withValues(alpha: 0.35),
                 ),
               ),
             ],
