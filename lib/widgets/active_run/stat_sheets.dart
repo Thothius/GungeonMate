@@ -170,37 +170,6 @@ class CoolnessSheet extends StatelessWidget {
 
     void apply(double delta) => p.adjustCoolness(delta);
 
-    Widget step(double delta) {
-      final positive = delta > 0;
-      final text = '${positive ? '+' : ''}${formatStat(delta)}';
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: OutlinedButton(
-            onPressed: () => apply(delta),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              foregroundColor: positive ? accent : Colors.white70,
-              side: BorderSide(
-                color: accent.withValues(alpha: positive ? 0.7 : 0.25),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: GoopText(
-              text,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.4,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget actionButton({
       required IconData icon,
       required Color color,
@@ -354,45 +323,35 @@ class CoolnessSheet extends StatelessWidget {
                 _coolEffectChip('ROOM REWARD', '${roomReward.toStringAsFixed(0)}%', Colors.amber),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
 
-            // Fine adjuster row (smaller increments + reset)
-            Row(
-              children: [
-                step(-1),
-                step(-0.5),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: OutlinedButton(
-                      onPressed: () => apply(-value),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        foregroundColor: Colors.white60,
-                        side: BorderSide(
-                          color: Colors.white.withValues(alpha: 0.12),
-                          width: 1.0,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const GoopText(
-                        'RESET',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
+            // Compact reset row — just reset, no duplicate +/- controls
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => apply(-value),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  foregroundColor: Colors.white60,
+                  side: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    width: 1.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                step(0.5),
-                step(1),
-              ],
+                child: const GoopText(
+                  'RESET TO 0',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
             // Quick coolness actions
             Row(
@@ -477,37 +436,6 @@ class CurseSheet extends StatelessWidget {
     const accent = Color(0xFFE040FB);
 
     void apply(double delta) => p.adjustCurse(delta);
-
-    Widget step(double delta) {
-      final positive = delta > 0;
-      final text = '${positive ? '+' : ''}${formatStat(delta)}';
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: OutlinedButton(
-            onPressed: () => apply(delta),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              foregroundColor: positive ? accent : Colors.white70,
-              side: BorderSide(
-                color: accent.withValues(alpha: positive ? 0.7 : 0.25),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: GoopText(
-              text,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.4,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
     Widget actionButton({
       required IconData icon,
@@ -782,45 +710,35 @@ class CurseSheet extends StatelessWidget {
                 ],
               );
             }),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
-            // Fine adjuster row
-            Row(
-              children: [
-                step(-1),
-                step(-0.5),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: OutlinedButton(
-                      onPressed: () => apply(-value),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        foregroundColor: Colors.white60,
-                        side: BorderSide(
-                          color: Colors.white.withValues(alpha: 0.12),
-                          width: 1.0,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const GoopText(
-                        'RESET',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
+            // Compact reset row — just reset, no duplicate +/- controls
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => apply(-value),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  foregroundColor: Colors.white60,
+                  side: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    width: 1.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                step(0.5),
-                step(1),
-              ],
+                child: const GoopText(
+                  'RESET TO 0',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
 
             // Curse-raising actions
             Row(
