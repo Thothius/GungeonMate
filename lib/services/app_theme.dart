@@ -1943,6 +1943,40 @@ enum InventoryDisplayMode {
   tacticalStats,
 }
 
+/// Active-run display mode — three interchangeable ways to view the same
+/// core loadout data (character + guns + items + run stats). Switchable
+/// instantly via the RunDisplayModeBar on the active-run screen.
+///
+/// - [codex]:   Mode 1 — leather-and-brass book compendium (default).
+/// - [compact]: Mode 2 — super-compact tactical HUD for quick runs.
+/// - [matrix]:  Mode 3 — purple Gungeon Matrix animated rain background.
+///
+/// Persisted via [VisualPrefs.runDisplayMode]. Independent of the active
+/// theme palette and the particle system — switching mode does not touch
+/// theme or particle prefs (avoids BUG-038-style coupling).
+enum RunDisplayMode {
+  codex,
+  compact,
+  matrix,
+}
+
+extension RunDisplayModeX on RunDisplayMode {
+  String get label => switch (this) {
+        RunDisplayMode.codex => 'Codex Book',
+        RunDisplayMode.compact => 'Compact Run',
+        RunDisplayMode.matrix => 'Gungeon Matrix',
+      };
+
+  String get description => switch (this) {
+        RunDisplayMode.codex =>
+          'Leather-and-brass compendium with turning pages',
+        RunDisplayMode.compact =>
+          'High-density tactical HUD for fast sessions',
+        RunDisplayMode.matrix =>
+          'Purple digital rain with live run data overlay',
+      };
+}
+
 /// Data model for custom theme settings persisted to SharedPreferences.
 /// Allows users to create their own color palette with optional backdrop/aura/font.
 class CustomThemeData {
@@ -2678,6 +2712,28 @@ class VisualPrefs {
   /// User-selected particle speed multiplier.
   final ParticleSpeed particleSpeed;
 
+  /// Active-run display mode — which of the 3 reimagined layouts (Codex
+  /// Book / Compact Run / Gungeon Matrix) is shown on the active-run
+  /// screen. Defaults to [RunDisplayMode.codex]. See the plan at
+  /// `docs/active_run_rework_plan.md`.
+  final RunDisplayMode runDisplayMode;
+
+  /// Whether the RunDisplayModeBar on the active-run screen starts
+  /// collapsed to a single pill (true) or expanded showing all 3 preview
+  /// cards (false). Defaults to true — the pill is the entry point.
+  final bool runDisplayModeBarCollapsed;
+
+  /// Whether the 2.5D volumetric inventory treatment (perspective tilt +
+  /// depth shadow + top-DPS float) is applied to inventory tiles. On by
+  /// default; users can disable via the Preferences sheet.
+  final bool depthInventory;
+
+  /// 2.5D tilt intensity, 0.0–1.0. Scales the max tilt degrees applied to
+  /// [DepthTile] on tap-down/hover. 0 = flat (equivalent to disabling
+  /// depthInventory), 1 = full ±8° tilt. Default 0.6 — present but not
+  /// nauseating.
+  final double depthTiltIntensity;
+
 
   /// Computed scale factor applied globally via MediaQuery.
   double get textScaleFactor => fontSize / 14.0;
@@ -2731,6 +2787,10 @@ class VisualPrefs {
     this.periodicGridColumnCount = 0,
     this.particleColorSchema = ParticleColorSchema.presetDefault,
     this.particleSpeed = ParticleSpeed.normal,
+    this.runDisplayMode = RunDisplayMode.codex,
+    this.runDisplayModeBarCollapsed = true,
+    this.depthInventory = true,
+    this.depthTiltIntensity = 0.6,
   });
 
   static const _kGlow     = 'vp.glow_v1';
@@ -2763,6 +2823,10 @@ class VisualPrefs {
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kParticleColorSchema = 'vp.particle_color_schema_v1';
   static const _kParticleSpeed = 'vp.particle_speed_v1';
+  static const _kRunDisplayMode = 'vp.run_display_mode_v1';
+  static const _kRunDisplayModeBarCollapsed = 'vp.run_display_mode_bar_collapsed_v1';
+  static const _kDepthInventory = 'vp.depth_inventory_v1';
+  static const _kDepthTiltIntensity = 'vp.depth_tilt_intensity_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
       ValueNotifier(const VisualPrefs());
@@ -2826,6 +2890,12 @@ class VisualPrefs {
       final particleSpeedIdx = p.getInt(_kParticleSpeed) ?? 2;
       final particleSpeed = ParticleSpeed.values[particleSpeedIdx.clamp(0, ParticleSpeed.values.length - 1)];
 
+      final runDisplayModeIdx = p.getInt(_kRunDisplayMode) ?? 0;
+      final runDisplayMode = RunDisplayMode.values[runDisplayModeIdx.clamp(0, RunDisplayMode.values.length - 1)];
+      final runDisplayModeBarCollapsed = p.getBool(_kRunDisplayModeBarCollapsed) ?? true;
+      final depthInventory = p.getBool(_kDepthInventory) ?? true;
+      final depthTiltIntensity = p.getDouble(_kDepthTiltIntensity) ?? 0.6;
+
 
       notifier.value = VisualPrefs(
         glowIntensity:    p.getDouble(_kGlow)     ?? 0.0,
@@ -2855,6 +2925,10 @@ class VisualPrefs {
         periodicGridColumnCount: periodicGridColumnCount,
         particleColorSchema: particleColorSchema,
         particleSpeed: particleSpeed,
+        runDisplayMode: runDisplayMode,
+        runDisplayModeBarCollapsed: runDisplayModeBarCollapsed,
+        depthInventory: depthInventory,
+        depthTiltIntensity: depthTiltIntensity,
       );
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
@@ -2996,6 +3070,26 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setRunDisplayMode(RunDisplayMode v) async {
+    notifier.value = notifier.value._with(runDisplayMode: v);
+    _persist();
+  }
+
+  static Future<void> setRunDisplayModeBarCollapsed(bool v) async {
+    notifier.value = notifier.value._with(runDisplayModeBarCollapsed: v);
+    _persist();
+  }
+
+  static Future<void> setDepthInventory(bool v) async {
+    notifier.value = notifier.value._with(depthInventory: v);
+    _persist();
+  }
+
+  static Future<void> setDepthTiltIntensity(double v) async {
+    notifier.value = notifier.value._with(depthTiltIntensity: v.clamp(0.0, 1.0));
+    _persist();
+  }
+
 
   static Future<void> _persist() async {
     try {
@@ -3029,6 +3123,10 @@ class VisualPrefs {
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kParticleColorSchema, v.particleColorSchema.index);
       await p.setInt(_kParticleSpeed, v.particleSpeed.index);
+      await p.setInt(_kRunDisplayMode, v.runDisplayMode.index);
+      await p.setBool(_kRunDisplayModeBarCollapsed, v.runDisplayModeBarCollapsed);
+      await p.setBool(_kDepthInventory, v.depthInventory);
+      await p.setDouble(_kDepthTiltIntensity, v.depthTiltIntensity);
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
@@ -3060,6 +3158,10 @@ class VisualPrefs {
     int?    periodicGridColumnCount,
     ParticleColorSchema? particleColorSchema,
     ParticleSpeed? particleSpeed,
+    RunDisplayMode? runDisplayMode,
+    bool? runDisplayModeBarCollapsed,
+    bool? depthInventory,
+    double? depthTiltIntensity,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
@@ -3088,6 +3190,10 @@ class VisualPrefs {
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
     particleColorSchema: particleColorSchema ?? this.particleColorSchema,
     particleSpeed: particleSpeed ?? this.particleSpeed,
+    runDisplayMode: runDisplayMode ?? this.runDisplayMode,
+    runDisplayModeBarCollapsed: runDisplayModeBarCollapsed ?? this.runDisplayModeBarCollapsed,
+    depthInventory: depthInventory ?? this.depthInventory,
+    depthTiltIntensity: depthTiltIntensity ?? this.depthTiltIntensity,
   );
 }
 
