@@ -8,6 +8,7 @@ import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
+import '../utils/responsive.dart';
 import 'gungeoneer_detail_screen.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
@@ -33,6 +34,12 @@ class CharacterSelectScreen extends StatelessWidget {
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
         final flair = AppTheme.flair;
+        final profile = ScreenProfile.of(context);
+        // On short screens we collapse the helper text to reclaim vertical
+        // space for the grid — the description is nice-to-have, not essential.
+        final showDescription = !isMultiplayerPick && !profile.isShort;
+        final titleFontSize = profile.isShort ? 16.0 : 18.0;
+
         return Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
@@ -49,7 +56,7 @@ class CharacterSelectScreen extends StatelessWidget {
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                padding: EdgeInsets.fromLTRB(16, profile.isShort ? 8 : 16, 16, 4),
                 child: GoopText(
                   isCoop
                       ? 'Choose Player 2\'s Gungeoneer'
@@ -57,12 +64,12 @@ class CharacterSelectScreen extends StatelessWidget {
                           ? 'Choose your character for multiplayer'
                           : 'Choose your Gungeoneer',
                   style: prefs.font.textStyle.copyWith(
-                    fontSize: 18,
+                    fontSize: titleFontSize,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
               ),
-              if (!isMultiplayerPick)
+              if (showDescription)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
                   child: GoopText(
@@ -85,44 +92,13 @@ class CharacterSelectScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: isMultiplayerPick ? 0.52 : 0.54,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: p.allGungeoneers.length,
-                  itemBuilder: (c, i) {
-                    final char = p.allGungeoneers[i];
-                    void onTap() {
-                      Haptics.selection();
-                      if (isMultiplayerPick) {
-                        Navigator.pop(c, char);
-                      } else if (isCoop) {
-                        p.startCoopPlayer(char);
-                        if (Navigator.canPop(c)) Navigator.pop(c);
-                      } else {
-                        p.startNewRun(char);
-                        if (Navigator.canPop(c)) Navigator.pop(c);
-                      }
-                    }
-                    final card = _CharacterCard(
-                      character: char,
-                      flair: flair,
-                      prefs: prefs,
-                      onTap: onTap,
-                    );
-                    return card.animate().fadeIn(
-                      duration: 300.ms,
-                      delay: (i * 60).ms,
-                    ).slide(
-                      begin: const Offset(0, 0.08),
-                      duration: 300.ms,
-                      curve: Curves.easeOutCubic,
-                    );
-                  },
+                child: _CharacterGrid(
+                  gungeoneers: p.allGungeoneers,
+                  flair: flair,
+                  prefs: prefs,
+                  profile: profile,
+                  isMultiplayerPick: isMultiplayerPick,
+                  isCoop: isCoop,
                 ),
               ),
             ],
@@ -133,7 +109,95 @@ class CharacterSelectScreen extends StatelessWidget {
   }
 }
 
-/// Unified character card — static art, tap-to-select.
+/// Grid that computes its cell aspect ratio from the available height so all
+/// rows fit without scrolling — the core fix for the overflow/scroll bug on
+/// short phones.
+class _CharacterGrid extends StatelessWidget {
+  final List<Gungeoneer> gungeoneers;
+  final ThemeFlair flair;
+  final VisualPrefs prefs;
+  final ScreenProfile profile;
+  final bool isMultiplayerPick;
+  final bool isCoop;
+
+  const _CharacterGrid({
+    required this.gungeoneers,
+    required this.flair,
+    required this.prefs,
+    required this.profile,
+    required this.isMultiplayerPick,
+    required this.isCoop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final itemCount = gungeoneers.length;
+    if (itemCount == 0) return const SizedBox.shrink();
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = profile.columnsFor(itemCount);
+        // Grid interior padding — tightened on short screens.
+        final hPad = 12.0;
+        final vPad = profile.isShort ? 8.0 : 12.0;
+        final crossSpacing = 8.0;
+        final mainSpacing = profile.isShort ? 6.0 : 10.0;
+
+        // Square tiles: aspect ratio = 1.0. The grid fills available space
+        // but tiles are always square — compact, solid, 2026 standard.
+        final aspect = 1.0;
+
+        return GridView.builder(
+          padding: EdgeInsets.fromLTRB(hPad, vPad, hPad, vPad),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            childAspectRatio: aspect,
+            crossAxisSpacing: crossSpacing,
+            mainAxisSpacing: mainSpacing,
+          ),
+          // The grid is sized to fit — scrolling is unnecessary and indicates
+          // a layout bug. NeverScrollable makes that explicit.
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: itemCount,
+          itemBuilder: (c, i) {
+            final char = gungeoneers[i];
+            void onTap() {
+              Haptics.selection();
+              final run = c.read<RunProvider>();
+              if (isMultiplayerPick) {
+                Navigator.pop(c, char);
+              } else if (isCoop) {
+                run.startCoopPlayer(char);
+                if (Navigator.canPop(c)) Navigator.pop(c);
+              } else {
+                run.startNewRun(char);
+                if (Navigator.canPop(c)) Navigator.pop(c);
+              }
+            }
+            final card = _CharacterCard(
+              character: char,
+              flair: flair,
+              prefs: prefs,
+              onTap: onTap,
+            );
+            return card.animate().fadeIn(
+              duration: 300.ms,
+              delay: (i * 60).ms,
+            ).slide(
+              begin: const Offset(0, 0.08),
+              duration: 300.ms,
+              curve: Curves.easeOutCubic,
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+/// Unified character card — in-game sprite, tap-to-select. Square tiles
+/// with compact, solid visuals. 2026 standard: always show the in-game
+/// sprite model, not special card art graphics.
 class _CharacterCard extends StatelessWidget {
   final Gungeoneer character;
   final ThemeFlair flair;
@@ -155,7 +219,7 @@ class _CharacterCard extends StatelessWidget {
       elevation: 4,
       shadowColor: flair.primary.withValues(alpha: 0.12),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
         side: BorderSide(
           color: flair.primary.withValues(alpha: 0.2),
           width: 1.0,
@@ -164,91 +228,90 @@ class _CharacterCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: Column(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
           children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: RadialGradient(
-                          center: Alignment.center,
-                          radius: 0.8,
-                          colors: [
-                            flair.primary.withValues(alpha: 0.1),
-                            flair.primary.withValues(alpha: 0.02),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
-                    ),
+            // ── In-game sprite fills the square tile ──
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: Alignment.center,
+                    radius: 0.75,
+                    colors: [
+                      flair.primary.withValues(alpha: 0.08),
+                      flair.primary.withValues(alpha: 0.02),
+                      Colors.transparent,
+                    ],
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Transform.scale(
-                      scale: 1.1,
-                      alignment: Alignment.bottomCenter,
-                      child: _buildCardArt(),
-                    ),
-                  ),
-                  // ── ? info button — opens Gungeoneer detail screen ──
-                  Positioned(
-                    top: 2,
-                    right: 2,
-                    child: GestureDetector(
-                      onTap: () {
-                        Haptics.selection();
-                        Navigator.push(
-                          context,
-                          fastRoute(GungeoneerDetailScreen(
-                            gungeoneer: character,
-                          )),
-                        );
-                      },
-                      behavior: HitTestBehavior.opaque,
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.55),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.35),
-                            width: 0.8,
-                          ),
-                        ),
-                        child: const Icon(
-                          Icons.help_outline,
-                          size: 16,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(4, 5, 4, 6),
-              decoration: BoxDecoration(
-                color: flair.primary.withValues(alpha: 0.08),
-                border: Border(
-                  top: BorderSide(color: flair.primary.withValues(alpha: 0.15), width: 0.5),
                 ),
               ),
-              child: GoopText(
-                char.name,
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: prefs.font.textStyle.copyWith(
-                  fontSize: 10.5,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.3,
-                  color: Colors.white,
+            ),
+            // In-game GIF sprite centered in the square
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: _buildInGameSprite(),
+              ),
+            ),
+            // ── Name label at bottom ──
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(4, 4, 4, 5),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  border: Border(
+                    top: BorderSide(color: flair.primary.withValues(alpha: 0.15), width: 0.5),
+                  ),
+                ),
+                child: GoopText(
+                  char.name,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: prefs.font.textStyle.copyWith(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.3,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            // ── ? info button — opens Gungeoneer detail screen ──
+            Positioned(
+              top: 4,
+              right: 4,
+              child: GestureDetector(
+                onTap: () {
+                  Haptics.selection();
+                  Navigator.push(
+                    context,
+                    fastRoute(GungeoneerDetailScreen(
+                      gungeoneer: character,
+                    )),
+                  );
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.55),
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.35),
+                      width: 0.8,
+                    ),
+                  ),
+                  child: const Icon(
+                    Icons.help_outline,
+                    size: 14,
+                    color: Colors.white70,
+                  ),
                 ),
               ),
             ),
@@ -258,11 +321,13 @@ class _CharacterCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCardArt() {
-    final animPath = gungeoneerAnimatedCardPath(character.name);
-    if (animPath.isNotEmpty) {
+  /// Always show the in-game sprite GIF. Falls back to the static icon
+  /// if no GIF exists. No animated card art — just the raw sprite model.
+  Widget _buildInGameSprite() {
+    final gifPath = gungeoneerGifPath(character.name);
+    if (gifPath.isNotEmpty) {
       return Image.asset(
-        animPath,
+        gifPath,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
         gaplessPlayback: true,
@@ -279,9 +344,10 @@ class _CharacterCard extends StatelessWidget {
         char.icon,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
-        errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 96, color: Colors.white70),
+        errorBuilder: (_, __, ___) =>
+            const Icon(Icons.person, size: 64, color: Colors.white70),
       );
     }
-    return const Icon(Icons.person, size: 96, color: Colors.white70);
+    return const Icon(Icons.person, size: 64, color: Colors.white70);
   }
 }
