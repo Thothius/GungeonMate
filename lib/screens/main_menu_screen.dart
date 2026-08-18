@@ -219,43 +219,50 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
             top: 12,
             right: 12,
             child: SafeArea(
-              child: GestureDetector(
-                onTap: () {
-                  Haptics.selection();
-                  Navigator.push(
-                    context,
-                    fastRoute(const ExperienceStudioScreen()),
-                  );
-                },
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10 * sf,
-                    vertical: 7 * sf,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.pinkAccent.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Colors.pinkAccent.withValues(alpha: 0.5),
-                      width: 1.2,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.palette_rounded, size: 14 * sf, color: Colors.pinkAccent),
-                      SizedBox(width: 6 * sf),
-                      GoopText(
-                        'Theme Picker',
-                        style: TextStyle(
-                          fontSize: 10.5 * sf,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          letterSpacing: 0.3,
+              child: Semantics(
+                label: 'Theme Picker',
+                button: true,
+                child: GestureDetector(
+                  onTap: () {
+                    Haptics.selection();
+                    Navigator.push(
+                      context,
+                      fastRoute(const ExperienceStudioScreen()),
+                    );
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 44),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12 * sf,
+                        vertical: 10 * sf,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.pinkAccent.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.pinkAccent.withValues(alpha: 0.5),
+                          width: 1.2,
                         ),
                       ),
-                    ],
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.palette_rounded, size: 16 * sf, color: Colors.pinkAccent),
+                          SizedBox(width: 7 * sf),
+                          GoopText(
+                            'Theme Picker',
+                            style: TextStyle(
+                              fontSize: 11 * sf,
+                              fontWeight: FontWeight.w800,
+                              color: Colors.white,
+                              letterSpacing: 0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),

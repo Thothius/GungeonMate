@@ -103,14 +103,19 @@ class _RotatingGungeoneerState extends State<RotatingGungeoneer>
     // is at the bottom (deepest/smallest), so the swap is least visible.
     if (currentCycle != _lastCycle) {
       _lastCycle = currentCycle;
-      final count = context.read<RunProvider>().allGungeoneers.length;
-      if (count > 1) {
-        int next;
-        do {
-          next = _rng.nextInt(count);
-        } while (next == _currentIdx);
-        setState(() => _currentIdx = next);
-      }
+      // Defer the swap to after the current build frame — calling
+      // setState during AnimatedBuilder.builder would throw.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final count = context.read<RunProvider>().allGungeoneers.length;
+        if (count > 1) {
+          int next;
+          do {
+            next = _rng.nextInt(count);
+          } while (next == _currentIdx);
+          setState(() => _currentIdx = next);
+        }
+      });
     }
   }
 
@@ -150,6 +155,9 @@ class _RotatingGungeoneerState extends State<RotatingGungeoneer>
       String name, BoxConstraints constraints, double elapsed) {
     final screenW = constraints.maxWidth;
     final screenH = constraints.maxHeight;
+    // Guard against zero-size constraints during initial layout —
+    // return empty to avoid NaN positions and sprite flashing at (0,0).
+    if (screenW <= 0 || screenH <= 0) return const SizedBox.shrink();
     final size = widget.size;
     final cfg = _cfg;
     final cx = screenW / 2;
