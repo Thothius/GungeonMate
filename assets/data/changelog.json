@@ -1,5 +1,17 @@
 [
   {
+    "version": "v1.9.44",
+    "title": "Home Screen Toggle Unification + 16 New Vortex Floaters",
+    "date": "August 2026",
+    "items": [
+      "REWORK: Removed the standalone Customize button from the home screen. The two top-left toggles now handle everything.",
+      "REWORK: 'Toggle Gungeoneer' renamed to 'Gungeoneer' — tap toggles on/off. When already on, tap opens the character picker sheet. Long-press always opens config. If no character is selected when turning on, the picker opens automatically.",
+      "REWORK: 'Toggle Junk' renamed to 'Floaters' — same pill mechanic as Gungeoneer. Tap toggles on/off. When on, tap opens the floaters config sheet. Long-press always opens config.",
+      "FEATURE: 16 new vortex floater sprites added — 8 iconic enemies (Bullet Kin, Arrowkin, Bullat, Blobulin, Shotgat, Skullet, Gun Nut, Bookllet) and 8 items/pickups (Bomb, Blue Guon Stone, Spice, Iron Coin, Heart, Armor, Key, Pickup Blank). All configurable with count toggles like the original 6.",
+      "INFRASTRUCTURE: HomeCustomization.junkTypes expanded from 6 to 22 entries. Asset path helper now infers .png vs .webp from stem prefix."
+    ]
+  },
+  {
     "version": "v1.9.43",
     "title": "Active Run Calc UX + Avatar Default + Empty-State Info",
     "date": "August 2026",
