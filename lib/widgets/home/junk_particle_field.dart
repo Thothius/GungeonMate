@@ -1,9 +1,9 @@
-import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../../services/home_customization.dart';
+import 'vortex_config.dart';
 
 /// A field of "junk" pickups (money, blanks, guon stones, hearts, golden
 /// shells) drifting and swirling through the home-screen vortex. Each
@@ -11,9 +11,26 @@ import '../../services/home_customization.dart';
 /// gentle radial breathing so the whole field pulses in and out — like
 /// loot caught in a portal current. Sprites also spin individually.
 ///
+/// All motion parameters are driven by [VortexConfig] — tweak there to
+/// adjust the simulation.
+///
+/// **Optimizations vs. original:**
+///   • Particles are rebuilt only when the customization changes (not every
+///     frame). A cached list is kept and invalidated on HomeCustomization
+///     updates.
+///   • Uses `MediaQuery.sizeOf` instead of `MediaQuery.of` to avoid
+///     rebuilds on keyboard/orientation changes.
+///   • The repaint trigger (AnimationController) is decoupled from particle
+///     data — only the painter rebuilds per frame, not the widget tree.
+///
 /// Purely decorative; the caller wraps it in IgnorePointer.
 class JunkParticleField extends StatefulWidget {
-  const JunkParticleField({super.key});
+  final VortexConfig config;
+
+  const JunkParticleField({
+    super.key,
+    this.config = VortexConfig.defaultConfig,
+  });
 
   @override
   State<JunkParticleField> createState() => _JunkParticleFieldState();
@@ -24,16 +41,19 @@ class _JunkParticleFieldState extends State<JunkParticleField>
   late final AnimationController _ctrl;
   final Stopwatch _clock = Stopwatch();
   List<_JunkParticle> _particles = [];
-  // Cached decoded sprites, keyed by junk stem.
   final Map<String, ui.Image> _images = {};
   bool _loaded = false;
+  // Cache key for particle rebuild — only rebuild when counts change.
+  String _lastCountsKey = '';
+
+  VortexConfig get _cfg => widget.config;
 
   @override
   void initState() {
     super.initState();
     _ctrl = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20),
+      duration: Duration(seconds: _cfg.junkControllerDuration.round()),
     )..repeat();
     _clock.start();
     _loadImages();
@@ -47,15 +67,12 @@ class _JunkParticleFieldState extends State<JunkParticleField>
   }
 
   Future<void> _loadImages() async {
-    // Load every supported junk sprite once; the field picks which to
-    // draw based on the user's configured counts.
     await Future.wait(HomeCustomization.junkTypes.map((t) async {
       final path = HomeCustomization.junkAssetPath(t.stem);
       try {
         final data = await rootBundle.load(path);
-        final codec = await ui.instantiateImageCodec(
-          data.buffer.asUint8List(),
-        );
+        final codec =
+            await ui.instantiateImageCodec(data.buffer.asUint8List());
         final frame = await codec.getNextFrame();
         _images[t.stem] = frame.image;
       } catch (_) {
@@ -65,8 +82,19 @@ class _JunkParticleFieldState extends State<JunkParticleField>
     if (mounted) setState(() => _loaded = true);
   }
 
-  void _rebuildParticles(HomeCustomization cust) {
-    // Deterministic per-stem seed so counts don't reshuffle every frame.
+  /// Build a cache key from current junk counts so we only rebuild the
+  /// particle list when counts actually change — not every frame.
+  String _countsKey(HomeCustomization cust) {
+    return HomeCustomization.junkTypes
+        .map((t) => '${t.stem}:${cust.junkCounts[t.stem] ?? 0}')
+        .join('|');
+  }
+
+  void _rebuildParticlesIfNeeded(HomeCustomization cust) {
+    final key = _countsKey(cust);
+    if (key == _lastCountsKey) return; // counts unchanged — keep cached list
+    _lastCountsKey = key;
+    final cfg = _cfg;
     final all = <_JunkParticle>[];
     for (final t in HomeCustomization.junkTypes) {
       final count = cust.junkCounts[t.stem] ?? 0;
@@ -75,19 +103,21 @@ class _JunkParticleFieldState extends State<JunkParticleField>
       for (var i = 0; i < count; i++) {
         all.add(_JunkParticle(
           stem: t.stem,
-          // Spread orbits across a wide radius band around the vortex.
-          radius: 0.18 + r.nextDouble() * 0.34,
+          radius: cfg.junkRadiusMin +
+              r.nextDouble() * (cfg.junkRadiusMax - cfg.junkRadiusMin),
           angle: r.nextDouble() * 2 * math.pi,
-          // Slow, varied orbital speed; some clockwise, some counter.
-          omega: (0.06 + r.nextDouble() * 0.18) * (r.nextBool() ? 1 : -1),
-          // Radial breathing phase + amplitude (how far it drifts in/out).
+          omega: (cfg.junkOmegaMin +
+                  r.nextDouble() * (cfg.junkOmegaMax - cfg.junkOmegaMin)) *
+              (r.nextBool() ? 1 : -1),
           breathPhase: r.nextDouble() * 2 * math.pi,
           breathAmp: 0.03 + r.nextDouble() * 0.06,
           breathSpeed: 0.4 + r.nextDouble() * 0.8,
-          // Individual sprite spin.
-          spin: (r.nextDouble() * 2 - 1) * 1.2,
-          size: 22 + r.nextDouble() * 18,
-          opacity: 0.55 + r.nextDouble() * 0.35,
+          spin: cfg.junkSpinMin +
+              r.nextDouble() * (cfg.junkSpinMax - cfg.junkSpinMin),
+          size: cfg.junkSizeMin +
+              r.nextDouble() * (cfg.junkSizeMax - cfg.junkSizeMin),
+          opacity: cfg.junkOpacityMin +
+              r.nextDouble() * (cfg.junkOpacityMax - cfg.junkOpacityMin),
         ));
       }
     }
@@ -102,7 +132,7 @@ class _JunkParticleFieldState extends State<JunkParticleField>
         if (!cust.showJunk || cust.totalJunk == 0 || !_loaded) {
           return const SizedBox.shrink();
         }
-        _rebuildParticles(cust);
+        _rebuildParticlesIfNeeded(cust);
         if (_particles.isEmpty || _images.isEmpty) {
           return const SizedBox.shrink();
         }
@@ -110,9 +140,10 @@ class _JunkParticleFieldState extends State<JunkParticleField>
           child: AnimatedBuilder(
             animation: _ctrl,
             builder: (context, _) {
-              final mq = MediaQuery.of(context);
+              // sizeOf avoids rebuilds on keyboard/orientation changes.
+              final size = MediaQuery.sizeOf(context);
               return CustomPaint(
-                size: mq.size,
+                size: size,
                 painter: _JunkPainter(
                   particles: _particles,
                   images: _images,
