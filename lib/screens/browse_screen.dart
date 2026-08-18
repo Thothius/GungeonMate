@@ -24,7 +24,7 @@ class BrowseScreen extends StatefulWidget {
   /// case), [dispose] never fires on tab switches. The parent feeds us
   /// a freshly-computed visibility flag so we can clear the search
   /// input the moment the user navigates away. Defaults to `true` for
-  /// the modal-route case (Run header â†’ Browse), where dispose handles
+  /// the modal-route case (Run header → Browse), where dispose handles
   /// teardown naturally.
   final bool isVisible;
 
