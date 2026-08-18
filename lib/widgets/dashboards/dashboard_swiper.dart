@@ -244,7 +244,7 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
         child: Container(
           decoration: BoxDecoration(
             color: AppTheme.flair.scaffold.withValues(alpha: 0.4),
@@ -255,7 +255,7 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
             children: [
               // Tab row — fat tappable chips, up to 3 per row before wrapping
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(6),
                 child: Wrap(
                   spacing: 6,
                   runSpacing: 6,
@@ -293,7 +293,7 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
                 child: _collapsed
                     ? const SizedBox.shrink()
                     : Padding(
-                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                        padding: const EdgeInsets.fromLTRB(2, 0, 2, 2),
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 200),
                           switchInCurve: Curves.easeOut,

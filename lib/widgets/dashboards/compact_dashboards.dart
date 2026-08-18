@@ -39,9 +39,9 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF0E1218),
             borderRadius: BorderRadius.circular(12),
@@ -156,9 +156,9 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF120E08),
             borderRadius: BorderRadius.circular(12),
@@ -278,9 +278,9 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF100E18),
             borderRadius: BorderRadius.circular(12),
@@ -430,9 +430,9 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF181210),
             borderRadius: BorderRadius.circular(12),
@@ -558,9 +558,9 @@ class SpiceDashboardState extends State<SpiceDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF180E0E),
             borderRadius: BorderRadius.circular(12),
@@ -687,9 +687,9 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF0E1218),
             borderRadius: BorderRadius.circular(12),
@@ -826,9 +826,9 @@ class SprunDashboardState extends State<SprunDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF0E1018),
             borderRadius: BorderRadius.circular(12),
@@ -964,9 +964,9 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF181410),
             borderRadius: BorderRadius.circular(12),
@@ -1081,9 +1081,9 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF121418),
             borderRadius: BorderRadius.circular(12),
@@ -1215,9 +1215,9 @@ class PolarisDashboardState extends State<PolarisDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF0E1218),
             borderRadius: BorderRadius.circular(12),
@@ -1388,9 +1388,9 @@ class GuntherDashboardState extends State<GuntherDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF0F0E18),
             borderRadius: BorderRadius.circular(12),
@@ -1541,9 +1541,9 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF180E0E),
             borderRadius: BorderRadius.circular(12),

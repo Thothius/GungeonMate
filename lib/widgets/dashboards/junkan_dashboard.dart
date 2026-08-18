@@ -99,7 +99,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF13151A),
@@ -180,7 +180,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                       children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(14),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

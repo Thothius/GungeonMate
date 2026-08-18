@@ -29,9 +29,9 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: const Color(0xFF101408),
             borderRadius: BorderRadius.circular(12),

@@ -55,7 +55,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF13151A),
@@ -129,7 +129,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                       children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(14),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -277,7 +277,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF13151A),
@@ -351,7 +351,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                       children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(14),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -493,7 +493,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+        padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF13151A),
@@ -567,7 +567,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                       children: [
                 const Divider(color: Colors.white12, height: 1),
                 Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(14),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
