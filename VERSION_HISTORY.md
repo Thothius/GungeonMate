@@ -6,6 +6,33 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.59 — 🎨 Theme Signature Mode: Theme-Aware Active Run View (August 2026)
+**Build:** 135
+
+> A 4th active run display mode that adapts its entire layout, decorations, and lore text to match the active theme. Each of the 14 visible themes gets a unique aesthetic treatment.
+
+### New Features
+- **Theme Signature mode** (`RunDisplayMode.signature`) — a 4th active run display mode. Layout: lore header card (title, tagline, Gungeon quote, element badge, accent glyph) → character portrait → interactive GungeonMeters → gun list → item list. All inventory tiles use DepthTile 2.5D. Decorative background painter sits behind content via RepaintBoundary. Single AnimationController (8s loop) disposed properly.
+- **ThemeLore registry** — 14 theme lore entries (one per visible theme) driving the Theme Signature mode. Each entry has: lore title, tagline, Gungeon quote, element, decorative background style, themed stat labels, accent glyph.
+- **14 unique decorative backgrounds** — embers (Forge Master/Dragunfire), frost (Hollow Chill), sparkles (Unicorn), circuits (Robot's Core/Mr. Robot), paws (Cat Lady), moonlight (Moonlit Chamber), lightning (Storm Caller), brass filigree (Ammonomicon), crossed blades (The Bullet), reality shards (The Paradox), gunpowder grains (Gunpowder), bone fragments (Lich's Domain), tactical grid (Valor of Marines), particle dust (Custom).
+- **Themed stat labels** — COOLNESS→TEMPER (Forge Master), COOLNESS→SPARKLE (Unicorn), COOLNESS→CHARGE (Storm Caller), COOLNESS→HONOR (The Bullet), COOLNESS→STABILITY (The Paradox), etc. Curse and top-DPS labels also themed per lore.
+
+### Infrastructure
+- `lib/widgets/active_run/modes/theme_lore.dart` — ThemeLore class + ThemeDecor enum + ThemedStatLabels + kThemeLore registry (14 entries) + themeLoreFor() helper.
+- `lib/widgets/active_run/modes/theme_signature_mode.dart` — ThemeSignatureMode widget + _ThemeDecorPainter CustomPainter (14 decor styles).
+- `lib/services/app_theme.dart` — RunDisplayMode enum extended with `signature` (Mode 4). `classic` (Mode 0) also added as the new default. RunDisplayMode pref key migrated to v2.
+- `lib/widgets/active_run/player_page.dart` — routing for `signature` mode.
+- `lib/widgets/active_run/modes/run_display_mode_bar.dart` — icon for `signature` mode in 3 switch statements.
+- `lib/widgets/active_run/modes/mode_picker_onboarding.dart` — `_signatureShowcase` method + metadata for `signature` mode.
+
+### User-directed changes (parallel with Slot 1)
+- `classic` mode (Mode 0) added as the original scroll view, now the default.
+- `showModePickerOnNewRun` default changed to `false` — onboarding dialog won't auto-show.
+- Mode picker onboarding trigger removed from `character_select_screen.dart`.
+- `_kRunDisplayMode` key migrated to v2 for index safety.
+
+---
+
 ## v1.9.58 — 🎯 Mode Picker Onboarding: Fullscreen Animated Showcase (August 2026)
 **Build:** 134
 

@@ -1,5 +1,15 @@
 [
   {
+    "version": "v1.9.59",
+    "title": "Theme Signature Mode — Theme-Aware Active Run View",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: Theme Signature mode — a 4th active run display mode that adapts its entire layout, decorations, and lore text to match the active theme. Each of the 14 visible themes has a ThemeLore entry with: lore title, tagline, Gungeon quote, element badge, themed stat labels (COOLNESS→TEMPER for Forge Master, COOLNESS→SPARKLE for Unicorn, etc.), accent glyph, and decorative background painter. 14 unique decorative backgrounds: embers (Forge Master/Dragunfire), frost (Hollow Chill), sparkles (Unicorn), circuits (Robot's Core/Mr. Robot), paws (Cat Lady), moonlight (Moonlit Chamber), lightning (Storm Caller), brass filigree (Ammonomicon), crossed blades (The Bullet), reality shards (The Paradox), gunpowder grains (Gunpowder), bone fragments (Lich's Domain), tactical grid (Valor of Marines), particle dust (Custom). Layout: lore header card → character portrait → interactive GungeonMeters → gun list → item list. All inventory tiles use DepthTile 2.5D. Decorative painter sits behind content as subtle background flourish via RepaintBoundary. Single AnimationController (8s loop) disposed properly.",
+      "FEATURE: ThemeLore registry — 14 theme lore entries driving the Theme Signature mode. Each entry has: title, tagline, quote, element, decor style, themed stat labels, accent glyph. Fallback for themes not in registry.",
+      "INFRASTRUCTURE: RunDisplayMode enum extended with 'signature' (Mode 4). Mode bar, onboarding dialog, and PlayerPage routing all updated to handle the 4th mode. Classic Scroll mode (Mode 0) added by Slot 1 in parallel."
+    ]
+  },
+  {
     "version": "v1.9.58",
     "title": "Mode Picker Onboarding — Fullscreen Animated Showcase on New Run",
     "date": "August 2026",

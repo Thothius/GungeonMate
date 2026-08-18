@@ -184,9 +184,11 @@ class _RunDisplayModeBarState extends State<RunDisplayModeBar> {
   }
 
   IconData _modeIcon(RunDisplayMode mode) => switch (mode) {
+        RunDisplayMode.classic => Icons.view_agenda_rounded,
         RunDisplayMode.codex => Icons.menu_book_rounded,
         RunDisplayMode.compact => Icons.view_compact_rounded,
         RunDisplayMode.matrix => Icons.code_rounded,
+        RunDisplayMode.signature => Icons.auto_awesome_rounded,
       };
 
   /// Opens the preferences bottom sheet — display mode picker +
@@ -353,9 +355,11 @@ class _PreferencesSheet extends StatelessWidget {
 
   Widget _buildModeCard(RunDisplayMode mode, bool selected, ThemeFlair flair) {
     final icon = switch (mode) {
+      RunDisplayMode.classic => Icons.view_agenda_rounded,
       RunDisplayMode.codex => Icons.menu_book_rounded,
       RunDisplayMode.compact => Icons.view_compact_rounded,
       RunDisplayMode.matrix => Icons.code_rounded,
+      RunDisplayMode.signature => Icons.auto_awesome_rounded,
     };
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -424,9 +428,11 @@ class _ModeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     final icon = switch (mode) {
+      RunDisplayMode.classic => Icons.view_agenda_rounded,
       RunDisplayMode.codex => Icons.menu_book_rounded,
       RunDisplayMode.compact => Icons.view_compact_rounded,
       RunDisplayMode.matrix => Icons.code_rounded,
+      RunDisplayMode.signature => Icons.auto_awesome_rounded,
     };
 
     return Padding(

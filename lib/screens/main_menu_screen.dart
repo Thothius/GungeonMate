@@ -516,7 +516,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                           ),
                           const SizedBox(height: 2),
                           const GoopText(
-                            'v1.9.58 — Mode Picker Onboarding',
+                            'v1.9.59 — Theme Signature Mode',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

@@ -1947,17 +1947,22 @@ enum InventoryDisplayMode {
 /// core loadout data (character + guns + items + run stats). Switchable
 /// instantly via the RunDisplayModeBar on the active-run screen.
 ///
-/// - [codex]:   Mode 1 — leather-and-brass book compendium (default).
-/// - [compact]: Mode 2 — super-compact tactical HUD for quick runs.
-/// - [matrix]:  Mode 3 — purple Gungeon Matrix animated rain background.
+/// - [classic]:   Mode 0 — the original full scroll view (default).
+/// - [codex]:     Mode 1 — leather-and-brass book compendium.
+/// - [compact]:   Mode 2 — super-compact tactical HUD for quick runs.
+/// - [matrix]:    Mode 3 — purple Gungeon Matrix animated rain background.
+/// - [signature]: Mode 4 — Theme Signature mode that adapts its entire
+///   layout, decorations, and lore text to match the active theme.
 ///
 /// Persisted via [VisualPrefs.runDisplayMode]. Independent of the active
 /// theme palette and the particle system — switching mode does not touch
 /// theme or particle prefs (avoids BUG-038-style coupling).
 enum RunDisplayMode {
+  classic,
   codex,
   compact,
   matrix,
+  signature,
 }
 
 /// Ambient fragment shader preset (Q3 genius audit). Each preset maps
@@ -1976,18 +1981,24 @@ extension ShaderPresetX on ShaderPreset {
 
 extension RunDisplayModeX on RunDisplayMode {
   String get label => switch (this) {
+        RunDisplayMode.classic => 'Classic Scroll',
         RunDisplayMode.codex => 'Codex Book',
         RunDisplayMode.compact => 'Compact Run',
         RunDisplayMode.matrix => 'Gungeon Matrix',
+        RunDisplayMode.signature => 'Theme Signature',
       };
 
   String get description => switch (this) {
+        RunDisplayMode.classic =>
+          'The original full scroll view — everything in one page',
         RunDisplayMode.codex =>
           'Leather-and-brass compendium with turning pages',
         RunDisplayMode.compact =>
           'High-density tactical HUD for fast sessions',
         RunDisplayMode.matrix =>
           'Purple digital rain with live run data overlay',
+        RunDisplayMode.signature =>
+          'Adapts to your active theme — lore, colors, decorations',
       };
 }
 
@@ -2726,10 +2737,9 @@ class VisualPrefs {
   /// User-selected particle speed multiplier.
   final ParticleSpeed particleSpeed;
 
-  /// Active-run display mode — which of the 3 reimagined layouts (Codex
-  /// Book / Compact Run / Gungeon Matrix) is shown on the active-run
-  /// screen. Defaults to [RunDisplayMode.codex]. See the plan at
-  /// `docs/active_run_rework_plan.md`.
+  /// Active-run display mode — which layout is shown on the active-run
+  /// screen. Defaults to [RunDisplayMode.classic] (the original scroll
+  /// view). See the plan at `docs/active_run_rework_plan.md`.
   final RunDisplayMode runDisplayMode;
 
   /// Whether the RunDisplayModeBar on the active-run screen starts
@@ -2815,13 +2825,13 @@ class VisualPrefs {
     this.periodicGridColumnCount = 0,
     this.particleColorSchema = ParticleColorSchema.presetDefault,
     this.particleSpeed = ParticleSpeed.normal,
-    this.runDisplayMode = RunDisplayMode.codex,
+    this.runDisplayMode = RunDisplayMode.classic,
     this.runDisplayModeBarCollapsed = true,
     this.depthInventory = true,
     this.depthTiltIntensity = 0.6,
     this.shaderEnabled = false,
     this.shaderPreset = ShaderPreset.digitalRain,
-    this.showModePickerOnNewRun = true,
+    this.showModePickerOnNewRun = false,
   });
 
   static const _kGlow     = 'vp.glow_v1';
@@ -2854,7 +2864,10 @@ class VisualPrefs {
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kParticleColorSchema = 'vp.particle_color_schema_v1';
   static const _kParticleSpeed = 'vp.particle_speed_v1';
-  static const _kRunDisplayMode = 'vp.run_display_mode_v1';
+  // v2: index shifted when `classic` was added as the first enum value —
+  // old v1 indexes would map to the wrong mode, so everyone resets to the
+  // classic default once and re-picks.
+  static const _kRunDisplayMode = 'vp.run_display_mode_v2';
   static const _kRunDisplayModeBarCollapsed = 'vp.run_display_mode_bar_collapsed_v1';
   static const _kDepthInventory = 'vp.depth_inventory_v1';
   static const _kDepthTiltIntensity = 'vp.depth_tilt_intensity_v1';
@@ -2932,7 +2945,7 @@ class VisualPrefs {
       final shaderEnabled = p.getBool(_kShaderEnabled) ?? false;
       final shaderPresetIdx = p.getInt(_kShaderPreset) ?? 0;
       final shaderPreset = ShaderPreset.values[shaderPresetIdx.clamp(0, ShaderPreset.values.length - 1)];
-      final showModePickerOnNewRun = p.getBool(_kShowModePickerOnNewRun) ?? true;
+      final showModePickerOnNewRun = p.getBool(_kShowModePickerOnNewRun) ?? false;
 
 
       notifier.value = VisualPrefs(

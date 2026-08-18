@@ -291,9 +291,11 @@ class _ModePickerOnboardingDialogState
           ),
           // Mode-specific animated content
           switch (mode) {
+            RunDisplayMode.classic => _classicShowcase(flair),
             RunDisplayMode.codex => _codexShowcase(flair),
             RunDisplayMode.compact => _compactShowcase(flair),
             RunDisplayMode.matrix => _matrixShowcase(flair),
+            RunDisplayMode.signature => _signatureShowcase(flair),
           },
           // Hover glow
           if (isHovered)
@@ -308,6 +310,51 @@ class _ModePickerOnboardingDialogState
             ),
         ],
       ),
+    );
+  }
+
+  Widget _classicShowcase(ThemeFlair flair) {
+    // A gently scrolling stack of list rows — the original scroll view.
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _miniRow(flair.primary),
+          _miniRow(Colors.white38),
+          _miniRow(Colors.white24),
+          _miniRow(Colors.white24),
+        ],
+      ),
+    )
+        .animate(onPlay: (c) => c.repeat(reverse: true))
+        .slideY(begin: 0.06, end: -0.06, duration: 1600.ms, curve: Curves.easeInOut)
+        .fadeIn(duration: 400.ms);
+  }
+
+  Widget _miniRow(Color color) {
+    return Row(
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
+        const SizedBox(width: 4),
+        Expanded(
+          child: Container(
+            height: 4,
+            decoration: BoxDecoration(
+              color: color.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -374,6 +421,26 @@ class _ModePickerOnboardingDialogState
             end: 0.3,
             duration: 800.ms,
             curve: Curves.linear,
+          ),
+    );
+  }
+
+  Widget _signatureShowcase(ThemeFlair flair) {
+    return Center(
+      child: Icon(Icons.auto_awesome_rounded,
+              size: 28, color: flair.primary)
+          .animate(onPlay: (c) => c.repeat(reverse: true))
+          .rotate(
+            begin: -0.15,
+            end: 0.15,
+            duration: 1500.ms,
+            curve: Curves.easeInOut,
+          )
+          .scale(
+            begin: const Offset(0.9, 0.9),
+            end: const Offset(1.1, 1.1),
+            duration: 1200.ms,
+            curve: Curves.easeInOut,
           ),
     );
   }
@@ -457,21 +524,33 @@ class _ModePickerOnboardingDialogState
   // ---- Mode metadata --------------------------------------------------
 
   IconData _modeIcon(RunDisplayMode mode) => switch (mode) {
+        RunDisplayMode.classic => Icons.view_agenda_rounded,
         RunDisplayMode.codex => Icons.menu_book_rounded,
         RunDisplayMode.compact => Icons.view_compact_rounded,
         RunDisplayMode.matrix => Icons.code_rounded,
+        RunDisplayMode.signature => Icons.auto_awesome_rounded,
       };
 
   String _modeTagline(RunDisplayMode mode) => switch (mode) {
+        RunDisplayMode.classic =>
+          'The original view. Full scroll, all sections, no frills.',
         RunDisplayMode.codex =>
           'Leather-and-brass compendium. Book-like two-page spread.',
         RunDisplayMode.compact =>
           'Tactical HUD. Everything at a glance, no scrolling.',
         RunDisplayMode.matrix =>
           'Purple digital rain. Data floating over the matrix.',
+        RunDisplayMode.signature =>
+          'Adapts to your active theme — lore, colors, decorations.',
       };
 
   List<String> _modeFeatures(RunDisplayMode mode) => switch (mode) {
+        RunDisplayMode.classic => [
+            'Full scroll view',
+            'All dashboards',
+            'Sort pickers',
+            'Battle-tested',
+          ],
         RunDisplayMode.codex => [
             'Character locket',
             'Swipeable pages',
@@ -489,6 +568,12 @@ class _ModePickerOnboardingDialogState
             'Glass panels',
             'Data streams',
             'Focus panel',
+          ],
+        RunDisplayMode.signature => [
+            'Theme lore header',
+            'Themed stat labels',
+            'Decorative bg',
+            'Live meters',
           ],
       };
 }
