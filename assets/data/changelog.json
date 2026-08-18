@@ -1,5 +1,26 @@
 [
   {
+    "version": "v1.9.62",
+    "title": "Unified Settings — Gameplay + App Merged, Dialogue Removed",
+    "date": "August 2026",
+    "items": [
+      "REWORK: Gameplay and App settings tabs unified into a single SETTINGS tab. Settings now has 2 tabs (Appearance + Settings) instead of 3. Modern section headers with accent bars. Dice style, multiplayer status, account/data, developer tools, and danger zone now in one clean scroll.",
+      "REMOVED: Dialogue options (haptics + text speed) — useless, removed from settings. VisualPrefs fields retained for Experience Studio.",
+      "REMOVED: Event Log and Quick Actions (Use Shrine) — don't belong in settings. Shrine picker is already accessible from the active run screen. Event Log tile removed from both gameplay and account sections.",
+      "DELETED: gameplay_tab.dart and run_tab.dart — dead code after unification. Replaced by settings_tab.dart."
+    ]
+  },
+  {
+    "version": "v1.9.61",
+    "title": "Theme Splash Images — 14 Gemini-Generated Theme Portraits",
+    "date": "August 2026",
+    "items": [
+      "FEATURE: 14 theme splash images added to assets/images/themes/splash/. Each visible theme (Unicorn, Forge Master, Robot's Core, Cat Lady, Moonlit Chamber, Storm Caller, Mr. Robot, Valor of Marines, The Bullet, The Paradox, Gunpowder, Dragunfire, Lich's Domain, Custom) now has a unique 2048x2048 Gemini-generated splash portrait with dark minimalist background, themed label text, and explicit Enter the Gungeon imagery.",
+      "FEATURE: Experience Studio theme grid now shows the splash image as each card's background with a dark gradient scrim and label overlay. Selected theme gets a checkmark badge. The live preview pane at the top also shows the selected theme's splash as a subtle 35% opacity background.",
+      "INFRASTRUCTURE: AppThemeMode.splashSlug getter maps each theme to its asset slug. themeSplashPath() helper in asset_paths.dart. pubspec.yaml registers the new assets/images/themes/splash/ directory."
+    ]
+  },
+  {
     "version": "v1.9.60",
     "title": "Vortex MP4 Playback on Windows — media_kit Backend",
     "date": "August 2026",

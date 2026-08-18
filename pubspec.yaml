@@ -1,7 +1,7 @@
 name: gungeon_mate
 description: "Gungeon Mate - Enter the Gungeon companion app for tracking runs, items, guns, and synergies"
 publish_to: 'none'
-version: 1.9.60+136
+version: 1.9.62+138
 
 environment:
   sdk: ^3.7.0
@@ -121,6 +121,7 @@ flutter:
     - assets/animations/dog/
     - assets/animations/bosses/
     - assets/images/wallpapers/animated/
+    - assets/images/themes/splash/
 
   fonts:
     - family: EnterTheGungeonBig

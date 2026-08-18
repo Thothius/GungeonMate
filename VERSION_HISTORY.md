@@ -6,6 +6,49 @@ All production APK builds are archived in `../app-releases/` with proper version
 
 ---
 
+## v1.9.62 — ⚙️ Unified Settings: Gameplay + App Merged (August 2026)
+**Build:** 138
+
+> Settings simplified from 3 tabs to 2. Gameplay and App tabs merged into a single SETTINGS tab with modern section headers.
+
+### Rework
+- **Unified SETTINGS tab** — Gameplay and App tabs merged into one scrollable view. Modern section headers with accent-colored bars. Sections: Dice Style → Multiplayer → Account & Data → Developer → Danger Zone.
+- **Settings screen** — now 2 tabs (Appearance + Settings) instead of 3.
+
+### Removed
+- **Dialogue options** — dialogue haptics toggle and text speed slider removed from settings. Useless. VisualPrefs fields retained for Experience Studio.
+- **Event Log** — removed from settings. Doesn't belong there.
+- **Quick Actions** — Use Shrine and Event Log tiles removed from settings. Shrine picker is already accessible from the active run screen.
+
+### Deleted
+- `lib/widgets/settings/gameplay_tab.dart` — dead code after unification.
+- `lib/widgets/settings/run_tab.dart` — dead code after unification.
+
+### Infrastructure
+- `lib/widgets/settings/settings_tab.dart` — new unified settings tab (713 lines).
+- `lib/screens/settings_screen.dart` — 2-tab layout (Appearance + Settings).
+
+---
+
+## v1.9.61 — 🖼️ Theme Splash Images (August 2026)
+**Build:** 137
+
+> 14 Gemini-generated theme splash portraits wired into the Experience Studio theme picker and live preview.
+
+### New Features
+- **14 theme splash images** — one per visible theme (Unicorn, Forge Master, Robot's Core, Cat Lady, Moonlit Chamber, Storm Caller, Mr. Robot, Valor of Marines, The Bullet, The Paradox, Gunpowder, Dragunfire, Lich's Domain, Custom). Each is a 2048×2048 Gemini-generated image with dark minimalist background, themed label text, and explicit Enter the Gungeon imagery.
+- **Experience Studio theme grid redesign** — each theme card now shows its splash image as the background with a dark gradient scrim for label readability. Selected theme gets a checkmark badge in the top-right corner.
+- **Live preview splash background** — the live preview pane at the top of Experience Studio now shows the selected theme's splash image at 35% opacity behind the preview content.
+
+### Infrastructure
+- `assets/images/themes/splash/` — 14 new JPG assets (1.7–8.6 MB each).
+- `lib/services/app_theme.dart` — `AppThemeMode.splashSlug` getter maps each theme to its asset slug.
+- `lib/utils/asset_paths.dart` — `themeSplashPath()` helper.
+- `lib/screens/experience_studio_screen.dart` — theme grid cards use splash backgrounds; live preview uses splash as subtle background.
+- `pubspec.yaml` — new `assets/images/themes/splash/` directory registered.
+
+---
+
 ## v1.9.60 — 🎬 Vortex MP4 Playback on Windows (August 2026)
 **Build:** 136
 

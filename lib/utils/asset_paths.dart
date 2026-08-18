@@ -24,7 +24,7 @@
 /// Single source of truth for the app version string. Keep this in sync
 /// with the `version:` field in pubspec.yaml. Used by main.dart, the
 /// main menu, the changelog button, and the MP handshake.
-const String kAppVersion = '1.9.60';
+const String kAppVersion = '1.9.62';
 
 // Slug a free-form display name into the canonical asset filename
 // stem (no extension). Pure function — given the same name, always
@@ -64,6 +64,13 @@ String gungeoneerGifPath(String name) {
 }
 String localShrineIcon(String name) => _pathFor('shrines', name);
 String localSynergyIcon(String name) => _pathFor('synergies', name);
+
+/// Path to the splash image for a theme mode slug (e.g. 'unicorn',
+/// 'forge_master'). Returns '' if no splash exists for the slug.
+String themeSplashPath(String slug) {
+  if (slug.isEmpty) return '';
+  return 'assets/images/themes/splash/$slug.jpg';
+}
 
 /// Path to the animated card GIF (or webp for Cultist) for a gungeoneer.
 /// Files live in assets/images/gungeoneers/animated/ and use a different

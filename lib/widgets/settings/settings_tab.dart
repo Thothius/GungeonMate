@@ -15,20 +15,22 @@ import '../../utils/fast_route.dart';
 import '../active_run/end_run_confirm_dialog.dart';
 import '../active_run/active_run_helpers.dart';
 import 'debug_tab.dart';
-import 'run_log_screen.dart';
+import 'swipe_picker.dart';
 
-/// App settings tab — MP status, run session, inventory reset, changelog,
-/// dev tools, danger zone. Part of the 3-tab settings reorganization
-/// (Appearance / Gameplay / App).
-class AppTab extends StatefulWidget {
-  const AppTab({super.key});
+/// Unified settings tab — gameplay preferences, multiplayer status,
+/// account/data, developer tools, and danger zone.
+///
+/// Formerly split across GameplayTab + AppTab. Unified into a single
+/// scrollable view with modern grouped sections (v1.9.62).
+class SettingsTab extends StatefulWidget {
+  const SettingsTab({super.key});
 
   @override
-  State<AppTab> createState() => _AppTabState();
+  State<SettingsTab> createState() => _SettingsTabState();
 }
 
-class _AppTabState extends State<AppTab> {
-  // ── Confirm dialogs (lifted from old RunTab + AppTab) ──────────────
+class _SettingsTabState extends State<SettingsTab> {
+  // ── Confirm dialogs ────────────────────────────────────────────────
 
   void _confirmEndRun(BuildContext context, RunProvider p) {
     EndRunConfirmDialog.show(
@@ -113,7 +115,9 @@ class _AppTabState extends State<AppTab> {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
-    } catch (e) { debugPrint('[RunTab] prefs clear error: $e'); }
+    } catch (e) {
+      debugPrint('[SettingsTab] prefs clear error: $e');
+    }
     if (!context.mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       fastRoute(const CharacterSelectScreen()),
@@ -121,7 +125,7 @@ class _AppTabState extends State<AppTab> {
     );
   }
 
-  // ── Changelog dialog (lifted from old AppTab) ──────────────────────
+  // ── Changelog dialog ───────────────────────────────────────────────
 
   void _showChangelogDialog(BuildContext context) {
     showDialog(
@@ -230,175 +234,296 @@ class _AppTabState extends State<AppTab> {
     final player2Name = p.runState.coop?.character?.name ?? 'Player 2';
     final mpSession = context.watch<MultiplayerSession>();
     final mpActive = mpSession.isActive;
+    final flair = AppTheme.flair;
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── MP & Co-op status bar (slim full-width) ──
-          _buildMpStatusBar(context, p, hasCoop, player2Name, mpActive),
-          const SizedBox(height: 16),
+    return ListenableBuilder(
+      listenable: VisualPrefs.notifier,
+      builder: (context, _) {
+        final prefs = VisualPrefs.notifier.value;
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── DICE STYLE ──
+              _sectionHeader('DICE STYLE', flair),
+              _buildDicePanel(flair, prefs),
+              const SizedBox(height: 20),
 
-          // ── MP SESSION grid (only when MP active) ──
-          if (mpActive) ...[
-            _groupLabel('MP SESSION'),
-            _buildGrid([
-              _TileData(
-                icon: Icons.save_outlined,
-                label: 'Save MP',
-                color: Colors.greenAccent,
-                onTap: () {
-                  unawaited(mpSession.saveCurrentSession().then((_) {
-                    if (context.mounted) {
+              // ── MULTIPLAYER ──
+              _sectionHeader('MULTIPLAYER', flair),
+              _buildMpStatusBar(context, p, hasCoop, player2Name, mpActive),
+              if (mpActive) ...[
+                const SizedBox(height: 10),
+                _buildGrid([
+                  _TileData(
+                    icon: Icons.save_outlined,
+                    label: 'Save MP',
+                    color: Colors.greenAccent,
+                    onTap: () {
+                      unawaited(mpSession.saveCurrentSession().then((_) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: GoopText('Run saved'),
+                              duration: Duration(seconds: 2),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }).catchError((e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: GoopText('Failed to save session: $e'),
+                              duration: const Duration(seconds: 3),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }));
+                    },
+                  ),
+                  _TileData(
+                    icon: mpSession.isPaused
+                        ? Icons.play_circle_fill_rounded
+                        : Icons.pause_circle_filled_rounded,
+                    label: mpSession.isPaused ? 'Resume Run' : 'Pause Run',
+                    color: mpSession.isPaused ? Colors.greenAccent : Colors.orangeAccent,
+                    onTap: () {
+                      unawaited(
+                        (mpSession.isPaused ? mpSession.resumeRun() : mpSession.pauseRun()).then((_) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: GoopText(
+                                  mpSession.isPaused
+                                      ? 'MP run resumed — searching for peer...'
+                                      : 'MP run paused — tap Resume when back in range.',
+                                ),
+                                duration: const Duration(seconds: 2),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        }),
+                      );
+                    },
+                  ),
+                  if (mpSession.myRole == MpRole.sidekick)
+                    _TileData(
+                      icon: Icons.bluetooth_disabled,
+                      label: 'Leave MP',
+                      color: Colors.lightBlueAccent,
+                      onTap: () => _confirmLeaveMp(context, mpSession),
+                    ),
+                ]),
+              ],
+              const SizedBox(height: 20),
+
+              // ── ACCOUNT & DATA ──
+              _sectionHeader('ACCOUNT & DATA', flair),
+              _buildGrid([
+                _TileData(
+                  icon: Icons.restart_alt_rounded,
+                  label: 'Reset $player1Name',
+                  color: Colors.cyanAccent,
+                  onTap: () => confirmClearInventoryDialog(context, p, PlayerSlot.main),
+                ),
+                if (hasCoop)
+                  _TileData(
+                    icon: Icons.restart_alt_rounded,
+                    label: 'Reset $player2Name',
+                    color: Colors.pinkAccent,
+                    onTap: () => confirmClearInventoryDialog(context, p, PlayerSlot.coop),
+                  ),
+                _TileData(
+                  icon: Icons.history_edu_rounded,
+                  label: 'Changelog',
+                  color: const Color(0xFFFFD740),
+                  onTap: () => _showChangelogDialog(context),
+                ),
+              ]),
+              const SizedBox(height: 20),
+
+              // ── DEVELOPER ──
+              _sectionHeader('DEVELOPER', flair),
+              _buildGrid([
+                _TileData(
+                  icon: Icons.grid_view_rounded,
+                  label: 'Dev Tools',
+                  color: Colors.amber,
+                  onTap: () {
+                    if (p.runState.main.character != null) {
+                      Haptics.selection();
+                      Navigator.push(context, fastRoute(const SpecialItemsGridScreen()));
+                    } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: GoopText('Run saved'),
+                          content: GoopText('Start a run first to spawn special items.'),
                           duration: Duration(seconds: 2),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
                     }
-                  }).catchError((e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: GoopText('Failed to save session: $e'),
-                          duration: const Duration(seconds: 3),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    }
-                  }));
-                },
-              ),
-              _TileData(
-                icon: mpSession.isPaused
-                    ? Icons.play_circle_fill_rounded
-                    : Icons.pause_circle_filled_rounded,
-                label: mpSession.isPaused ? 'Resume Run' : 'Pause Run',
-                color: mpSession.isPaused ? Colors.greenAccent : Colors.orangeAccent,
-                onTap: () {
-                  unawaited(
-                    (mpSession.isPaused ? mpSession.resumeRun() : mpSession.pauseRun()).then((_) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: GoopText(
-                              mpSession.isPaused
-                                  ? 'MP run resumed — searching for peer...'
-                                  : 'MP run paused — tap Resume when back in range.',
-                            ),
-                            duration: const Duration(seconds: 2),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    }),
-                  );
-                },
-              ),
-              if (mpSession.myRole == MpRole.sidekick)
-                _TileData(
-                  icon: Icons.bluetooth_disabled,
-                  label: 'Leave MP',
-                  color: Colors.lightBlueAccent,
-                  onTap: () => _confirmLeaveMp(context, mpSession),
+                  },
                 ),
-            ]),
-            const SizedBox(height: 16),
-          ],
+              ]),
+              const SizedBox(height: 20),
 
-          // ── ACCOUNT & DATA grid ──
-          _groupLabel('ACCOUNT & DATA'),
-          _buildGrid([
-            _TileData(
-              icon: Icons.restart_alt_rounded,
-              label: 'Reset $player1Name',
-              color: Colors.cyanAccent,
-              onTap: () => confirmClearInventoryDialog(context, p, PlayerSlot.main),
-            ),
-            if (hasCoop)
-              _TileData(
-                icon: Icons.restart_alt_rounded,
-                label: 'Reset $player2Name',
-                color: Colors.pinkAccent,
-                onTap: () => confirmClearInventoryDialog(context, p, PlayerSlot.coop),
-              ),
-            _TileData(
-              icon: Icons.history_edu_rounded,
-              label: 'Changelog',
-              color: const Color(0xFFFFD740),
-              onTap: () => _showChangelogDialog(context),
-            ),
-            _TileData(
-              icon: Icons.receipt_long_rounded,
-              label: 'Event Log',
-              color: const Color(0xFFFFD740),
-              onTap: () => Navigator.push(context, fastRoute(const RunLogScreen())),
-            ),
-          ]),
-          const SizedBox(height: 16),
-
-          // ── DEVELOPER grid ──
-          _groupLabel('DEVELOPER'),
-          _buildGrid([
-            _TileData(
-              icon: Icons.grid_view_rounded,
-              label: 'Dev Tools',
-              color: Colors.amber,
-              onTap: () {
-                if (p.runState.main.character != null) {
-                  Haptics.selection();
-                  Navigator.push(context, fastRoute(const SpecialItemsGridScreen()));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: GoopText('Start a run first to spawn special items.'),
-                      duration: Duration(seconds: 2),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                }
-              },
-            ),
-          ]),
-          const SizedBox(height: 16),
-
-          // ── DANGER ZONE ──
-          _groupLabel('DANGER ZONE'),
-          // End Run — full-width prominent button with Lord of the Jammed icon
-          _buildEndRunButton(context, p),
-          const SizedBox(height: 8),
-          _buildGrid([
-            _TileData(
-              icon: Icons.restart_alt,
-              label: 'Reset All Data',
-              color: Colors.deepOrange,
-              isDanger: true,
-              onTap: () => _confirmResetAppData(context),
-            ),
-          ]),
-        ],
-      ),
+              // ── DANGER ZONE ──
+              _sectionHeader('DANGER ZONE', flair),
+              _buildEndRunButton(context, p),
+              const SizedBox(height: 10),
+              _buildGrid([
+                _TileData(
+                  icon: Icons.restart_alt,
+                  label: 'Reset All Data',
+                  color: Colors.deepOrange,
+                  isDanger: true,
+                  onTap: () => _confirmResetAppData(context),
+                ),
+              ]),
+              const SizedBox(height: 24),
+            ],
+          ),
+        );
+      },
     );
   }
 
   // ── Helpers ────────────────────────────────────────────────────────
 
-  Widget _groupLabel(String label) {
+  Widget _sectionHeader(String label, ThemeFlair flair) {
     return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: GoopText(
-        label,
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w900,
-          color: AppTheme.flair.primary.withValues(alpha: 0.8),
-          letterSpacing: 1.2,
+      padding: const EdgeInsets.only(left: 4, bottom: 10),
+      child: Row(
+        children: [
+          Container(
+            width: 3,
+            height: 14,
+            decoration: BoxDecoration(
+              color: flair.primary,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 8),
+          GoopText(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w900,
+              color: flair.primary.withValues(alpha: 0.9),
+              letterSpacing: 1.4,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildGrid(List<_TileData> tiles) {
+    return GridView.count(
+      crossAxisCount: 2,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 10,
+      crossAxisSpacing: 10,
+      childAspectRatio: 2.2,
+      children: tiles.map((t) => _CompactActionTile(data: t)).toList(),
+    );
+  }
+
+  Widget _buildDicePanel(ThemeFlair flair, VisualPrefs prefs) {
+    return Card(
+      color: flair.card.withValues(alpha: 0.92),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: flair.primary.withValues(alpha: 0.18)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Column(
+          children: [
+            SwipePicker<CustomDiceType>(
+              items: CustomDiceType.values,
+              value: prefs.customDiceType,
+              onChanged: (t) => VisualPrefs.setCustomDiceType(t),
+              height: 56,
+              itemBuilder: (type, isSelected) => Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? flair.card.withValues(alpha: 0.9)
+                      : flair.card.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: isSelected ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                    width: isSelected ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Center(
+                  child: GoopText(
+                    type.label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: isSelected ? Colors.white : Colors.white54,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Center(child: _dicePreview(type: prefs.customDiceType, flair: flair)),
+          ],
         ),
       ),
     );
+  }
+
+  Widget _dicePreview({required CustomDiceType type, required ThemeFlair flair, int value = 5}) {
+    final colors = _diceColors(type, flair);
+    return Container(
+      width: 120,
+      height: 120,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: colors.$1,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: colors.$2, width: 3),
+        boxShadow: [BoxShadow(color: colors.$4, blurRadius: 12, spreadRadius: 3)],
+      ),
+      child: Text(
+        '$value',
+        style: TextStyle(
+          fontSize: 56,
+          fontWeight: FontWeight.w900,
+          color: colors.$3,
+        ),
+      ),
+    );
+  }
+
+  (Color, Color, Color, Color) _diceColors(CustomDiceType type, ThemeFlair flair) {
+    switch (type) {
+      case CustomDiceType.classicWhite:
+        return (const Color(0xFFFAFAFA), const Color(0xFF90A4AE), const Color(0xFF263238), Colors.white24);
+      case CustomDiceType.goldGlimmer:
+        return (const Color(0xFF2C2210), const Color(0xFFFFD54F), const Color(0xFFFFD54F), const Color(0x33FFD54F));
+      case CustomDiceType.frostShard:
+        return (const Color(0xFF101C2C), const Color(0xFF00E5FF), const Color(0xFF00E5FF), const Color(0x3300E5FF));
+      case CustomDiceType.moltenAmber:
+        return (const Color(0xFF2C1010), const Color(0xFFFF3D00), const Color(0xFFFF3D00), const Color(0x33FF3D00));
+      case CustomDiceType.voidPurple:
+        return (const Color(0xFF1F102C), const Color(0xFFD500F9), const Color(0xFFD500F9), const Color(0x33D500F9));
+      case CustomDiceType.toxicOoze:
+        return (const Color(0xFF102C13), const Color(0xFF00E676), const Color(0xFF00E676), const Color(0x3300E676));
+      case CustomDiceType.themeDefault:
+        return (const Color(0xFF161413), flair.primary, flair.primary, flair.primary.withValues(alpha: 0.3));
+    }
   }
 
   /// Full-width, prominent End Run button styled with the Lord of the
@@ -458,18 +583,6 @@ class _AppTabState extends State<AppTab> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildGrid(List<_TileData> tiles) {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      childAspectRatio: 2.2,
-      children: tiles.map((t) => _CompactActionTile(data: t)).toList(),
     );
   }
 
@@ -551,7 +664,6 @@ class _CompactActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    final tileColor = data.isDanger ? data.color : data.color;
     return Material(
       color: flair.card.withValues(alpha: 0.6),
       borderRadius: BorderRadius.circular(12),
@@ -561,10 +673,11 @@ class _CompactActionTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: tileColor.withValues(alpha: 0.2),
-            ),
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: data.color.withValues(alpha: 0.2),
+              width: 1.0,
+            ),
           ),
           child: Row(
             children: [
@@ -572,10 +685,10 @@ class _CompactActionTile extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: tileColor.withValues(alpha: 0.12),
+                  color: data.color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(data.icon, color: data.color, size: 20),
+                child: Icon(data.icon, size: 20, color: data.color),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -584,10 +697,9 @@ class _CompactActionTile extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: data.isDanger ? data.color : Colors.white.withValues(alpha: 0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     letterSpacing: 0.3,
                   ),
-                  textAlign: TextAlign.start,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
