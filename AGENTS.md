@@ -1,16 +1,15 @@
 # Gungeon Mate — Agent Notes
 
-> The workspace cwd (`X:\apps\GungeonMate`) is a **stale empty shell** — only
-> an empty `build/` dir tree. The real project lives here:
-> `X:\MEDIA SILO\APPS\GungeonMate\gungeon_mate`. Always work in this path.
-> NOTE: root `AGENTS.md`/`docs/` still cite the OLD path `X:\apps\GungeonMate`
-> — substitute `X:\MEDIA SILO\APPS\GungeonMate` everywhere.
+> Project root: `X:\GungeonMate` (moved 2026-10-29 — formerly
+> `X:\MEDIA SILO\APPS\GungeonMate`, and before that `X:\apps\GungeonMate`;
+> both old paths are now gone). App code lives in `X:\GungeonMate\gungeon_mate`.
+> Always work in this path.
 
 ## Agent coordination (mandatory)
 - I am **Slot 1 — VISUAL (Devin)**, claimed ACTIVE on `AGENT_STATUS.md`
   (root repo). Update slot fields (Files in progress, Uncommitted, Last
   board update) during work; release + Session Log row at end (AC1–AC7).
-- **Two independent repos:** root `X:\MEDIA SILO\APPS\GungeonMate` →
+- **Two independent repos:** root `X:\GungeonMate` →
   `github.com/Thothius/game-roomian-battler.git` (docs/coordination);
   app `gungeon_mate/` → `github.com/Thothius/GungeonMate.git` (code).
   `gungeon_mate/` is gitignored in root repo.
@@ -21,14 +20,16 @@
   task (S7). Never `git checkout --`/`git restore` dirty files (S1).
 - Root repo has uncommitted `AGENT_STATUS.md` (my slot claim) + untracked
   `9unis.jpg` (NOT mine — don't commit it without asking).
-- App repo: **193 commits ahead of origin/master** — big push backlog.
-  5 stashes exist (stale WIPs — review before dropping).
+- App repo: in sync with `origin/master` (v3.2.1 `3cd8b10` pushed).
+  Stash list cleared 2026-10-29 (all entries were stale/superseded WIPs).
+  Worktrees under `.worktrees/` pruned same day — 4 slot branches deleted
+  after their content was confirmed landed in the v3.2.1 squash.
 
 ## Bug tracker & known issues
 - `docs/USER_BUG_LIST.md` — canonical tracker (B1–B4). Log confirmed bugs,
   move fixed entries to Fixed with SHA.
-- Failing baseline test: `mp_protocol_v3` 'MpSurprise preset-only omits
-  optional fields' — WIP regression (see below).
+- Baseline green: `mp_protocol_v3` surprise-fx regression was fixed when
+  the WIP landed (verified all-pass 2026-10-29).
 - Open deferred: TIERS test regression (test-side, `browse_synergies`),
   synergy-scan recompute-per-build perf, browse row overflow ≤500px,
   MP first-endpoint mis-pair race, host-gone hint, `�` mojibake in JSONs.
@@ -108,12 +109,11 @@
   a stale PATH entry; dir does not exist.
 - Baseline: `flutter analyze` = 21 minor issues, all in test files
   (unused imports, underscore local names) — zero errors.
-- Baseline: `flutter test` = 419 pass / 4 skip / **1 FAIL**:
-  `mp_protocol_v3_test` → 'MpSurprise preset-only omits optional fields
-  on the wire'. Expects `toJson() == {'preset': 'meow'}` — the
-  omit-empty-optionals contract. Broke with the WIP surprise change.
+- Baseline: `flutter test` = **all pass** (verified 2026-10-29 post-move:
+  ~424 tests, ~4 skipped). The `mp_protocol_v3` surprise-fx failure was
+  fixed when the WIP landed.
 
-## Uncommitted WIP (as of 2026-10-29): Surprise fx extension
+## Landed: Surprise fx extension (was uncommitted WIP on 2026-10-29)
 Files: `multiplayer_messages.dart`, `mp_session.dart`, `surprise_overlay.dart`.
 - `MpSurprise` gained `fx` field ('bulletrain'|'heartsburst'|'explosion'
   overrides; empty = preset's own fx). `sendSurprise` threads it through.
