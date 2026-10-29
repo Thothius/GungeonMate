@@ -385,14 +385,22 @@ class _RoleStage extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 14 * sf),
-          _BigCard(
-            title: 'TESTING MODE',
-            subtitle: 'Solo demo — fake peer\nFull MP/Paradox UI, no second phone',
-            icon: Icons.science_rounded,
-            color: const Color(0xFFFFB300),
-            onTap: onDemo,
-            sf: sf,
+          SizedBox(height: 18 * sf),
+          // Testing mode demoted to a low-prominence text link — it's a
+          // dev tool, not a real play path.
+          Center(
+            child: TextButton.icon(
+              onPressed: onDemo,
+              icon: Icon(Icons.science_outlined,
+                  size: 14,
+                  color: Colors.white.withValues(alpha: 0.35)),
+              label: GoopText(
+                'Testing mode — solo demo, no second phone',
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.white.withValues(alpha: 0.35)),
+              ),
+            ),
           ),
           const Spacer(flex: 2),
         ],
