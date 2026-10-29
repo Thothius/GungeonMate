@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import '../theme/tokens.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +16,22 @@ enum CharSelectMode { solo, coop, multiplayerPick }
 
 class CharacterSelectScreen extends StatelessWidget {
   final CharSelectMode mode;
+
+  /// Optional filtered list of gungeoneers to show. When null, all
+  /// gungeoneers from [RunProvider] are displayed. Used by the MP
+  /// lobby to exclude "The Cultist" for the Main player.
+  final List<Gungeoneer>? gungeoneers;
+
   const CharacterSelectScreen({
     super.key,
     this.mode = CharSelectMode.solo,
+    this.gungeoneers,
   });
 
   /// Quick constructor for multiplayer lobby picking.
   const CharacterSelectScreen.multiplayerPick({super.key})
-      : mode = CharSelectMode.multiplayerPick;
+      : mode = CharSelectMode.multiplayerPick,
+        gungeoneers = null;
 
   @override
   Widget build(BuildContext context) {
@@ -53,16 +62,14 @@ class CharacterSelectScreen extends StatelessWidget {
             ),
             centerTitle: true,
           ),
-          body: Column(
+          body: SafeArea(
+            top: false,
+            child: Column(
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(16, profile.isShort ? 8 : 16, 16, 4),
                 child: GoopText(
-                  isCoop
-                      ? 'Choose Player 2\'s Gungeoneer'
-                      : isMultiplayerPick
-                          ? 'Choose your character for multiplayer'
-                          : 'Choose your Gungeoneer',
+                  'Choose Gungeoneer',
                   style: prefs.font.textStyle.copyWith(
                     fontSize: titleFontSize,
                     fontWeight: FontWeight.w900,
@@ -84,7 +91,7 @@ class CharacterSelectScreen extends StatelessWidget {
                   ),
                 ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
                 child: Divider(
                   height: 1,
                   thickness: 0.5,
@@ -93,7 +100,13 @@ class CharacterSelectScreen extends StatelessWidget {
               ),
               Expanded(
                 child: _CharacterGrid(
-                  gungeoneers: p.allGungeoneers,
+                  // Cultist is only pickable as MP Sidekick — the lobby
+                  // passes the full list (incl. Cultist) for Sidekick.
+                  // Solo/Coop get a filtered list with Cultist excluded.
+                  gungeoneers: gungeoneers ??
+                      p.allGungeoneers
+                          .where((g) => g.name != 'The Cultist')
+                          .toList(),
                   flair: flair,
                   prefs: prefs,
                   profile: profile,
@@ -102,6 +115,7 @@ class CharacterSelectScreen extends StatelessWidget {
                 ),
               ),
             ],
+          ),
           ),
         );
       },
@@ -137,9 +151,11 @@ class _CharacterGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final columns = profile.columnsFor(itemCount);
-        // Grid interior padding — tightened on short screens.
-        final hPad = 12.0;
-        final vPad = profile.isShort ? 8.0 : 12.0;
+        // Grid interior padding — ~10% of the available width/height so
+        // the cards fill their cells cleanly with breathing room.
+        final mq = MediaQuery.of(context);
+        final hPad = mq.size.width * 0.10;
+        final vPad = profile.isShort ? mq.size.height * 0.04 : mq.size.height * 0.05;
         final crossSpacing = 8.0;
         final mainSpacing = profile.isShort ? 6.0 : 10.0;
 
@@ -179,6 +195,22 @@ class _CharacterGrid extends StatelessWidget {
               flair: flair,
               prefs: prefs,
               onTap: onTap,
+              onLongPress: () {
+                Haptics.selection();
+                Navigator.push(
+                  c,
+                  fastRoute(GungeoneerDetailScreen(
+                    gungeoneer: char,
+                    // In multiplayerPick mode, "PLAY AS" should return
+                    // the character to the MP lobby, not start a solo run.
+                    onPlayAs: isMultiplayerPick
+                        ? () {
+                            if (Navigator.canPop(c)) Navigator.pop(c, char);
+                          }
+                        : null,
+                  )),
+                );
+              },
             );
             return card.animate().fadeIn(
               duration: 300.ms,
@@ -203,12 +235,14 @@ class _CharacterCard extends StatelessWidget {
   final ThemeFlair flair;
   final VisualPrefs prefs;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   const _CharacterCard({
     required this.character,
     required this.flair,
     required this.prefs,
     required this.onTap,
+    required this.onLongPress,
   });
 
   @override
@@ -219,7 +253,7 @@ class _CharacterCard extends StatelessWidget {
       elevation: 4,
       shadowColor: flair.primary.withValues(alpha: 0.12),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         side: BorderSide(
           color: flair.primary.withValues(alpha: 0.2),
           width: 1.0,
@@ -228,7 +262,8 @@ class _CharacterCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        onLongPress: onLongPress,
+        borderRadius: BorderRadius.all(Radii.md),
         child: Stack(
           children: [
             // ── In-game sprite fills the square tile ──
@@ -277,44 +312,10 @@ class _CharacterCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: prefs.font.textStyle.copyWith(
-                    fontSize: 10,
+                    fontSize: FontSizes.labelSmall,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.3,
                     color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-            // ── ? info button — opens Gungeoneer detail screen ──
-            Positioned(
-              top: 4,
-              right: 4,
-              child: GestureDetector(
-                onTap: () {
-                  Haptics.selection();
-                  Navigator.push(
-                    context,
-                    fastRoute(GungeoneerDetailScreen(
-                      gungeoneer: character,
-                    )),
-                  );
-                },
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.35),
-                      width: 0.8,
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.help_outline,
-                    size: 14,
-                    color: Colors.white70,
                   ),
                 ),
               ),
@@ -338,6 +339,8 @@ class _CharacterCard extends StatelessWidget {
         fit: BoxFit.fitHeight,
         filterQuality: FilterQuality.none,
         gaplessPlayback: true,
+        cacheWidth: 200,
+        cacheHeight: 200,
         errorBuilder: (_, __, ___) => _buildFallbackIcon(),
       );
     }
@@ -351,6 +354,8 @@ class _CharacterCard extends StatelessWidget {
         char.icon,
         fit: BoxFit.fitHeight,
         filterQuality: FilterQuality.none,
+        cacheWidth: 200,
+        cacheHeight: 200,
         errorBuilder: (_, __, ___) =>
             const Icon(Icons.person, size: 64, color: Colors.white70),
       );

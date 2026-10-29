@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
@@ -8,6 +9,7 @@ import 'dart:math' as math;
 import '../providers/run_provider.dart';
 import '../models/shrine.dart';
 import '../services/haptics.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Resolves the correct shrine icon asset, applying bundled art overrides
 /// (updated Ammo/Angel shrine graphics) over the default data-driven icon.
@@ -81,24 +83,30 @@ class ShrinePickerScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 6),
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.amber.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                        color: Colors.amber.withValues(alpha: 0.4)),
+                      color: Colors.amber.withValues(alpha: 0.4),
+                    ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.temple_buddhist_outlined,
-                          color: Colors.amber, size: 16),
+                      const Icon(
+                        Icons.temple_buddhist_outlined,
+                        color: Colors.amber,
+                        size: 16,
+                      ),
                       const SizedBox(width: 6),
                       GoopText(
                         '${provider.runState.shrinesUsed.length} used',
                         style: const TextStyle(
                           color: Colors.amber,
-                          fontSize: 14,
+                          fontSize: FontSizes.bodyMedium,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -110,30 +118,29 @@ class ShrinePickerScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: shrines.isEmpty
-          ? const Center(child: GoopText('No shrine data'))
-          : ListView.builder(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
-              itemCount: shrines.length,
-              itemBuilder: (c, i) {
-                final s = shrines[i];
-                return _ShrineListTile(
-                  shrine: s,
-                  usageCount: used[s.name] ?? 0,
-                  onTap: () => _openActivationSheet(context, s),
-                  onUse: s.name.toLowerCase() == 'hero' && currentCurse >= 9
-                      ? null
-                      : () {
-                          Haptics.selection();
-                          final result = provider.applyShrine(s);
-                          _showShrineResult(context, result);
-                        },
-                ).animate().fadeIn(
-                      duration: 200.ms,
-                      delay: (i * 30).ms,
-                    );
-              },
-            ),
+      body:
+          shrines.isEmpty
+              ? const Center(child: GoopText('No shrine data'))
+              : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
+                itemCount: shrines.length,
+                itemBuilder: (c, i) {
+                  final s = shrines[i];
+                  return _ShrineListTile(
+                    shrine: s,
+                    usageCount: used[s.name] ?? 0,
+                    onTap: () => _openActivationSheet(context, s),
+                    onUse:
+                        s.name.toLowerCase() == 'hero' && currentCurse >= 9
+                            ? null
+                            : () {
+                              Haptics.selection();
+                              final result = provider.applyShrine(s);
+                              _showShrineResult(context, result);
+                            },
+                  ).animate().fadeIn(duration: 200.ms, delay: (i * 30).ms);
+                },
+              ),
     );
   }
 
@@ -142,8 +149,8 @@ class ShrinePickerScreen extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (c) =>
-          ShrineActivationSheet(shrine: shrine, parentContext: context),
+      builder:
+          (c) => ShrineActivationSheet(shrine: shrine, parentContext: context),
     );
   }
 }
@@ -168,7 +175,9 @@ class _ShrineListTile extends StatelessWidget {
     final hasCool = shrine.coolness != 0;
     final hasCleanse = name == 'cleanse';
     final hasHeartCost =
-        name.contains('angel') || name.contains('blood') || name.contains('companion');
+        name.contains('angel') ||
+        name.contains('blood') ||
+        name.contains('companion');
 
     final String iconAsset = resolveShrineIcon(shrine.name, shrine.icon);
 
@@ -186,7 +195,7 @@ class _ShrineListTile extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(Insets.md),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -197,42 +206,47 @@ class _ShrineListTile extends StatelessWidget {
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.all(Radii.md),
                     border: Border.all(
                       color: Colors.amber.withValues(alpha: 0.08),
                       width: 1.0,
                     ),
                   ),
                   child: SizedBox(
-                    height: 72,
-                    width: 72,
-                    child: iconAsset.startsWith('assets/')
-                        ? Image.asset(
-                            iconAsset,
-                            fit: BoxFit.contain,
-                            filterQuality: FilterQuality.none,
-                            errorBuilder: (_, __, ___) => const Icon(
+                    height: 92,
+                    width: 92,
+                    child:
+                        iconAsset.startsWith('assets/')
+                            ? Image.asset(
+                              iconAsset,
+                              fit: BoxFit.contain,
+                              filterQuality: FilterQuality.none,
+                              cacheWidth: 184,
+                              cacheHeight: 184,
+                              errorBuilder:
+                                  (_, __, ___) => const Icon(
+                                    Icons.temple_buddhist_outlined,
+                                    size: 40,
+                                    color: Colors.amber,
+                                  ),
+                            )
+                            : iconAsset.startsWith('http')
+                            ? Image.network(
+                              iconAsset,
+                              fit: BoxFit.contain,
+                              filterQuality: FilterQuality.none,
+                              errorBuilder:
+                                  (_, __, ___) => const Icon(
+                                    Icons.temple_buddhist_outlined,
+                                    size: 40,
+                                    color: Colors.amber,
+                                  ),
+                            )
+                            : const Icon(
                               Icons.temple_buddhist_outlined,
-                              size: 28,
+                              size: 40,
                               color: Colors.amber,
                             ),
-                          )
-                        : iconAsset.startsWith('http')
-                            ? Image.network(
-                                iconAsset,
-                                fit: BoxFit.contain,
-                                filterQuality: FilterQuality.none,
-                                errorBuilder: (_, __, ___) => const Icon(
-                                  Icons.temple_buddhist_outlined,
-                                  size: 28,
-                                  color: Colors.amber,
-                                ),
-                              )
-                            : const Icon(
-                                Icons.temple_buddhist_outlined,
-                                size: 28,
-                                color: Colors.amber,
-                              ),
                   ),
                 ),
               ),
@@ -249,7 +263,7 @@ class _ShrineListTile extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: FontSizes.titleSmall,
                         fontWeight: FontWeight.w900,
                         color: Colors.white,
                         letterSpacing: 0.5,
@@ -307,40 +321,51 @@ class _ShrineListTile extends StatelessWidget {
                         if (hasHeartCost)
                           _shrineBadge('HEART -1', Colors.redAccent),
                         if (usageCount > 0)
-                          _shrineBadge(
-                            'USED ${usageCount}X',
-                            Colors.amber,
-                          ),
+                          _shrineBadge('USED ${usageCount}X', Colors.amber),
                       ],
                     ),
                   ],
                 ),
               ),
 
-              // Use button
-              Padding(
-                padding: const EdgeInsets.only(left: 8, top: 4),
-                child: FilledButton(
-                  onPressed: onUse,
-                  style: FilledButton.styleFrom(
-                    backgroundColor:
-                        onUse == null ? Colors.white38 : Colors.amber,
-                    foregroundColor: Colors.black,
-                    disabledBackgroundColor: Colors.white12,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 6),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    minimumSize: Size.zero,
-                  ),
-                  child: const GoopText(
-                    'USE',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.6,
+              // Use button — chunky pill, real 48px touch target.
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: FilledButton.icon(
+                      onPressed: onUse,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.amber,
+                        foregroundColor: Colors.black,
+                        disabledBackgroundColor: Colors.white12,
+                        disabledForegroundColor: Colors.white38,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 0,
+                        ),
+                        minimumSize: const Size(0, 48),
+                      ),
+                      icon: const Icon(Icons.bolt, size: 18),
+                      label: const GoopText(
+                        'USE',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.6,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  IconButton(
+                    tooltip: 'Open ${shrine.name} on the Gungeon wiki',
+                    visualDensity: VisualDensity.compact,
+                    icon: Icon(Icons.open_in_browser_rounded,
+                        size: 18,
+                        color: Colors.white.withValues(alpha: 0.45)),
+                    onPressed: () => _openShrineWiki(shrine.name),
+                  ),
+                ],
               ),
             ],
           ),
@@ -360,7 +385,7 @@ class _ShrineListTile extends StatelessWidget {
       child: GoopText(
         text,
         style: TextStyle(
-          fontSize: 9,
+          fontSize: FontSizes.labelSmall,
           fontWeight: FontWeight.bold,
           color: color,
         ),
@@ -394,228 +419,254 @@ class ShrineActivationSheet extends StatelessWidget {
       minChildSize: 0.45,
       maxChildSize: 0.95,
       expand: false,
-      builder: (c, ctrl) => Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
-            Container(
-              width: 38,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(4),
+      builder:
+          (c, ctrl) => Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(18),
               ),
             ),
-            Expanded(
-              child: ListView(
-                controller: ctrl,
-                padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
-                children: [
-                  // Centered Large Image
-                  Center(
-                    child: Hero(
-                      tag: 'shrine_${shrine.name}',
-                      child: Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: Colors.amber.withValues(alpha: 0.1),
-                            width: 1.2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.3),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4),
+            child: Column(
+              children: [
+                const SizedBox(height: 8),
+                Container(
+                  width: 38,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                Expanded(
+                  child: ListView(
+                    controller: ctrl,
+                    padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
+                    children: [
+                      // Centered Large Image
+                      Center(
+                        child: Hero(
+                          tag: 'shrine_${shrine.name}',
+                          child: Container(
+                            padding: const EdgeInsets.all(Insets.md),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withValues(alpha: 0.25),
+                              borderRadius: BorderRadius.all(Radii.lg),
+                              border: Border.all(
+                                color: Colors.amber.withValues(alpha: 0.1),
+                                width: 1.2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.3),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: SizedBox(
-                          height: 120,
-                          width: 120,
-                          child: resolveShrineIcon(shrine.name, shrine.icon).startsWith('assets/')
-                              ? Image.asset(
-                                  resolveShrineIcon(shrine.name, shrine.icon),
-                                  fit: BoxFit.contain,
-                                  filterQuality: FilterQuality.none, // Pixel art!
-                                  errorBuilder: (_, __, ___) => const Icon(
-                                    Icons.temple_buddhist_outlined,
-                                    size: 48,
-                                    color: Colors.amber,
-                                  ),
-                                )
-                              : resolveShrineIcon(shrine.name, shrine.icon).startsWith('http')
-                                  ? Image.network(
-                                      resolveShrineIcon(shrine.name, shrine.icon),
-                                      fit: BoxFit.contain,
-                                      filterQuality: FilterQuality.none,
-                                      errorBuilder: (_, __, ___) => const Icon(
+                            child: SizedBox(
+                              height: 160,
+                              width: 160,
+                              child:
+                                  resolveShrineIcon(
+                                        shrine.name,
+                                        shrine.icon,
+                                      ).startsWith('assets/')
+                                      ? Image.asset(
+                                        resolveShrineIcon(
+                                          shrine.name,
+                                          shrine.icon,
+                                        ),
+                                        fit: BoxFit.contain,
+                                        filterQuality:
+                                            FilterQuality.none, // Pixel art!
+                                        cacheWidth: 320,
+                                        cacheHeight: 320,
+                                        errorBuilder:
+                                            (_, __, ___) => const Icon(
+                                              Icons.temple_buddhist_outlined,
+                                              size: 64,
+                                              color: Colors.amber,
+                                            ),
+                                      )
+                                      : resolveShrineIcon(
+                                        shrine.name,
+                                        shrine.icon,
+                                      ).startsWith('http')
+                                      ? Image.network(
+                                        resolveShrineIcon(
+                                          shrine.name,
+                                          shrine.icon,
+                                        ),
+                                        fit: BoxFit.contain,
+                                        filterQuality: FilterQuality.none,
+                                        errorBuilder:
+                                            (_, __, ___) => const Icon(
+                                              Icons.temple_buddhist_outlined,
+                                              size: 64,
+                                              color: Colors.amber,
+                                            ),
+                                      )
+                                      : const Icon(
                                         Icons.temple_buddhist_outlined,
-                                        size: 48,
+                                        size: 64,
                                         color: Colors.amber,
                                       ),
-                                    )
-                                  : const Icon(
-                                      Icons.temple_buddhist_outlined,
-                                      size: 48,
-                                      color: Colors.amber,
-                                    ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-
-                  // Centered Title
-                  Center(
-                    child: GoopText(
-                      shrine.name,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.8,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-
-                  // Centered Ammonomicon Message
-                  if (shrine.message.isNotEmpty && shrine.message != 'N/A')
-                    Center(
-                      child: GoopText(
-                        '"${shrine.message}"',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12.5,
-                          color: Colors.white.withValues(alpha: 0.7),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ),
-
-                  // Health Cost Alert for Angel or Blood Shrine (Takes a life with a life -1!)
-                  if (name.contains('angel') || name.contains('blood')) ...[
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.red.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.redAccent.withValues(alpha: 0.35)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.red.withValues(alpha: 0.05),
-                            blurRadius: 8,
-                          ),
-                        ],
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.heart_broken_rounded, color: Colors.redAccent, size: 16),
-                          SizedBox(width: 8),
-                          GoopText(
-                            '💔 PENALTY COST: -1 HEART CONTAINER (LIFE -1)',
-                            style: TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.redAccent,
-                              letterSpacing: 0.5,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  if (shrine.description.isNotEmpty) ...[
-                    const SizedBox(height: 14),
-                    GoopText(
-                      shrine.description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        height: 1.35,
-                        color: Colors.white.withValues(alpha: 0.75),
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 14),
-                  const _SectionHeader(
-                      icon: Icons.auto_awesome, title: 'EFFECT'),
-                  const SizedBox(height: 10),
-                  _buildEffectBody(shrine),
-                  const SizedBox(height: 16),
-                  _WillApplyCard(shrine: shrine, currentCurse: currentCurse),
-                  if (heroBlocked) ...[
-                    const SizedBox(height: 12),
-                    _BlockedNotice(
-                      message:
-                          'Hero shrine cannot be used while curse ≥ 9 (currently ${currentCurse.toStringAsFixed(1)}).',
-                    ),
-                  ],
-                  const SizedBox(height: 90),
-                ],
-              ),
-            ),
-            SafeArea(
-              top: false,
-              minimum: const EdgeInsets.fromLTRB(18, 0, 18, 14),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: OutlinedButton.styleFrom(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      child: const GoopText('Cancel'),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    flex: 2,
-                    child: FilledButton.icon(
-                      onPressed: heroBlocked
-                          ? null
-                          : () {
-                              final result = provider.applyShrine(shrine);
-                              Navigator.pop(context);
-                              _showShrineResult(parentContext, result);
-                            },
-                      style: FilledButton.styleFrom(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 14),
-                        backgroundColor: Colors.amber,
-                        foregroundColor: Colors.black,
-                      ),
-                      icon: const Icon(Icons.bolt, size: 20),
-                      label: GoopText(
-                        shrine.hasAutoEffect
-                            ? 'Use Shrine'
-                            : 'Mark as Used',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w800,
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 14),
+
+                      // Centered Title
+                      Center(
+                        child: GoopText(
+                          shrine.name,
+                          style: const TextStyle(
+                            fontSize: FontSizes.headlineSmall,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+
+                      // Lore line under the title (the in-game prayer quote
+                      // is dropped — it adds nothing at pick time).
+                      if (shrine.description.isNotEmpty)
+                        Center(
+                          child: GoopText(
+                            shrine.description,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12.5,
+                              color: Colors.white.withValues(alpha: 0.6),
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+
+                      // Health Cost Alert — same shrines the list tile flags.
+                      if (name.contains('angel') ||
+                          name.contains('blood') ||
+                          name.contains('companion')) ...[
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.all(Radii.sm),
+                            border: Border.all(
+                              color: Colors.redAccent.withValues(alpha: 0.35),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.red.withValues(alpha: 0.05),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.heart_broken_rounded,
+                                color: Colors.redAccent,
+                                size: 16,
+                              ),
+                              SizedBox(width: 8),
+                              GoopText(
+                                '💔 PENALTY COST: -1 HEART CONTAINER (LIFE -1)',
+                                style: TextStyle(
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.redAccent,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 14),
+                      const _SectionHeader(
+                        icon: Icons.auto_awesome,
+                        title: 'EFFECT',
+                      ),
+                      const SizedBox(height: 10),
+                      _buildEffectBody(shrine),
+                      const SizedBox(height: 16),
+                      _WillApplyCard(
+                        shrine: shrine,
+                        currentCurse: currentCurse,
+                      ),
+                      if (heroBlocked) ...[
+                        const SizedBox(height: 12),
+                        _BlockedNotice(
+                          message:
+                              'Hero shrine cannot be used while curse ≥ 9 (currently ${currentCurse.toStringAsFixed(1)}).',
+                        ),
+                      ],
+                      const SizedBox(height: 90),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                SafeArea(
+                  top: false,
+                  minimum: const EdgeInsets.fromLTRB(18, 0, 18, 14),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          style: OutlinedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(52),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                          ),
+                          child: const GoopText('Cancel'),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 2,
+                        child: FilledButton.icon(
+                          onPressed:
+                              heroBlocked
+                                  ? null
+                                  : () {
+                                    final result = provider.applyShrine(shrine);
+                                    Navigator.pop(context);
+                                    _showShrineResult(parentContext, result);
+                                  },
+                          style: FilledButton.styleFrom(
+                            minimumSize: const Size.fromHeight(52),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            backgroundColor: Colors.amber,
+                            foregroundColor: Colors.black,
+                          ),
+                          icon: const Icon(Icons.bolt, size: 20),
+                          label: GoopText(
+                            shrine.hasAutoEffect
+                                ? 'Use Shrine'
+                                : 'Mark as Used',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
-
 }
 
 class _SectionHeader extends StatelessWidget {
@@ -645,8 +696,7 @@ class _SectionHeader extends StatelessWidget {
 class _WillApplyCard extends StatelessWidget {
   final Shrine shrine;
   final double currentCurse;
-  const _WillApplyCard(
-      {required this.shrine, required this.currentCurse});
+  const _WillApplyCard({required this.shrine, required this.currentCurse});
 
   @override
   Widget build(BuildContext context) {
@@ -655,16 +705,14 @@ class _WillApplyCard extends StatelessWidget {
 
     if (name == 'cleanse') {
       auto.add((
-        label:
-            'Curse → 0   (Δ ${(-currentCurse).toStringAsFixed(1)})',
+        label: 'Curse → 0   (Δ ${(-currentCurse).toStringAsFixed(1)})',
         color: Colors.lightGreenAccent,
         icon: Icons.water_drop,
       ));
     } else if (name == 'hero') {
       if (currentCurse < 9) {
         auto.add((
-          label:
-              'Curse → 9   (Δ +${(9 - currentCurse).toStringAsFixed(1)})',
+          label: 'Curse → 9   (Δ +${(9 - currentCurse).toStringAsFixed(1)})',
           color: Colors.deepOrangeAccent,
           icon: Icons.warning_amber,
         ));
@@ -700,8 +748,7 @@ class _WillApplyCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const _SectionHeader(
-                icon: Icons.bolt, title: 'WILL BE APPLIED'),
+            const _SectionHeader(icon: Icons.bolt, title: 'WILL BE APPLIED'),
             const SizedBox(height: 8),
             if (auto.isEmpty)
               GoopText(
@@ -715,8 +762,8 @@ class _WillApplyCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final a in auto) _AutoRow(
-                      label: a.label, color: a.color, icon: a.icon),
+                  for (final a in auto)
+                    _AutoRow(label: a.label, color: a.color, icon: a.icon),
                 ],
               ),
           ],
@@ -730,8 +777,11 @@ class _AutoRow extends StatelessWidget {
   final String label;
   final Color color;
   final IconData icon;
-  const _AutoRow(
-      {required this.label, required this.color, required this.icon});
+  const _AutoRow({
+    required this.label,
+    required this.color,
+    required this.icon,
+  });
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -742,10 +792,7 @@ class _AutoRow extends StatelessWidget {
           const SizedBox(width: 8),
           GoopText(
             label,
-            style: const TextStyle(
-              fontSize: 13.5,
-              fontWeight: FontWeight.w700,
-            ),
+            style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w700),
           ),
         ],
       ),
@@ -759,10 +806,10 @@ class _BlockedNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.red.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(color: Colors.red.withValues(alpha: 0.35)),
       ),
       child: Row(
@@ -786,50 +833,59 @@ void _showShrineResult(BuildContext c, ShrineApplyResult r) {
   final lines = <String>[];
   if (r.applied.isNotEmpty) lines.add(r.applied.join(' · '));
   if (r.manual.isNotEmpty) lines.add(r.manual.first);
-  final label = lines.isEmpty
-      ? '${r.shrine.name} marked as used'
-      : '${r.shrine.name}: ${lines.join(' · ')}';
+  final label =
+      lines.isEmpty
+          ? '${r.shrine.name} marked as used'
+          : '${r.shrine.name}: ${lines.join(' · ')}';
   ScaffoldMessenger.of(c).showSnackBar(
     SnackBar(
       content: GoopText(label),
       behavior: SnackBarBehavior.floating,
       duration: const Duration(milliseconds: 2600),
-      action: r.manual.length > 1
-          ? SnackBarAction(
-              label: 'Details',
-              onPressed: () {
-                showDialog(
-                  context: c,
-                  builder: (_) => AlertDialog(
-                    title: GoopText('${r.shrine.name} · what to do', maxLines: 1, overflow: TextOverflow.ellipsis),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (r.applied.isNotEmpty) ...[
-                          const GoopText('Auto-applied:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700)),
-                          for (final a in r.applied) GoopText('  · $a'),
-                          const SizedBox(height: 10),
-                        ],
-                        const GoopText('You do it in-game:',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w700)),
-                        for (final m in r.manual) GoopText('  · $m'),
-                      ],
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(c),
-                        child: const GoopText('OK'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            )
-          : null,
+      action:
+          r.manual.length > 1
+              ? SnackBarAction(
+                label: 'Details',
+                onPressed: () {
+                  showDialog(
+                    context: c,
+                    builder:
+                        (_) => AlertDialog(
+                          title: GoopText(
+                            '${r.shrine.name} · what to do',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (r.applied.isNotEmpty) ...[
+                                const GoopText(
+                                  'Auto-applied:',
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                ),
+                                for (final a in r.applied) GoopText('  · $a'),
+                                const SizedBox(height: 10),
+                              ],
+                              const GoopText(
+                                'You do it in-game:',
+                                style: TextStyle(fontWeight: FontWeight.w700),
+                              ),
+                              for (final m in r.manual) GoopText('  · $m'),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(c),
+                              child: const GoopText('OK'),
+                            ),
+                          ],
+                        ),
+                  );
+                },
+              )
+              : null,
     ),
   );
 }
@@ -844,114 +900,118 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
 
   showDialog(
     context: c,
-    builder: (c) => AlertDialog(
-      backgroundColor: AppTheme.flair.card,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      title: Row(
-        children: [
-          const Icon(Icons.temple_buddhist, color: Colors.amber),
-          const SizedBox(width: 8),
-          GoopText(
-            used.isEmpty ? 'Shrines used' : '${used.length} shrines used',
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
+    builder:
+        (c) => AlertDialog(
+          backgroundColor: AppTheme.flair.card,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radii.lg),
+          ),
+          title: Row(
+            children: [
+              const Icon(Icons.temple_buddhist, color: Colors.amber),
+              const SizedBox(width: 8),
+              GoopText(
+                used.isEmpty ? 'Shrines used' : '${used.length} shrines used',
+                style: const TextStyle(
+                  fontSize: FontSizes.titleMedium,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
+          ),
+          content: Container(
+            width: double.maxFinite,
+            constraints: BoxConstraints(
+              maxHeight: math.min(420, MediaQuery.of(c).size.height * 0.5),
             ),
-          ),
-        ],
-      ),
-      content: Container(
-        width: double.maxFinite,
-        constraints: BoxConstraints(
-          maxHeight: math.min(
-            420,
-            MediaQuery.of(c).size.height * 0.5,
-          ),
-        ),
-        child: used.isEmpty
-            ? const Center(
-                child: GoopText('No shrines used yet this run.'),
-              )
-            : ListView.builder(
-                itemCount: names.length,
-                itemBuilder: (c, i) {
-                  final name = names[i];
-                  final count = counts[name]!;
-                  final s = p.shrineByName(name);
-                  return Card(
-                    color: Colors.amber.withValues(alpha: 0.06),
-                    elevation: 0,
-                    margin: const EdgeInsets.only(bottom: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(
-                        color: Colors.amber.withValues(alpha: 0.2),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: GoopText(
-                                  name,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w900,
-                                  ),
+            child:
+                used.isEmpty
+                    ? const Center(
+                      child: GoopText('No shrines used yet this run.'),
+                    )
+                    : ListView.builder(
+                      itemCount: names.length,
+                      itemBuilder: (c, i) {
+                        final name = names[i];
+                        final count = counts[name]!;
+                        final s = p.shrineByName(name);
+                        return Card(
+                          color: Colors.amber.withValues(alpha: 0.06),
+                          elevation: 0,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(
+                              color: Colors.amber.withValues(alpha: 0.2),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(Insets.md),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: GoopText(
+                                        name,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ),
+                                    if (count > 1)
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 6,
+                                          vertical: 2,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.amber.withValues(
+                                            alpha: 0.2,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                        child: GoopText(
+                                          'x$count',
+                                          style: const TextStyle(
+                                            fontSize: FontSizes.labelMedium,
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.amber,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
-                              ),
-                              if (count > 1)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        Colors.amber.withValues(alpha: 0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: GoopText(
-                                    'x$count',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w800,
-                                      color: Colors.amber,
+                                const SizedBox(height: 4),
+                                if (s != null)
+                                  GoopText(
+                                    _shortEffect(s),
+                                    style: TextStyle(
+                                      fontSize: 12.5,
+                                      height: 1.35,
+                                      color: Colors.white.withValues(
+                                        alpha: 0.75,
+                                      ),
                                     ),
                                   ),
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          if (s != null)
-                            GoopText(
-                              _shortEffect(s),
-                              style: TextStyle(
-                                fontSize: 12.5,
-                                height: 1.35,
-                                color: Colors.white.withValues(alpha: 0.75),
-                              ),
+                              ],
                             ),
-                        ],
-                      ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(c),
-          child: const GoopText('Close'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(c),
+              child: const GoopText('Close'),
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
@@ -963,11 +1023,12 @@ Widget _buildEffectBody(Shrine shrine) {
 }
 
 Widget _genericEffectBody({required String effect}) {
-  final sentences = effect
-      .split('. ')
-      .map((s) => s.trim())
-      .where((s) => s.isNotEmpty)
-      .toList();
+  final sentences =
+      effect
+          .split('. ')
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .toList();
 
   if (sentences.isEmpty) return const SizedBox.shrink();
 
@@ -987,18 +1048,16 @@ Widget _genericEffectBody({required String effect}) {
     children: [
       Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(Insets.md),
         decoration: BoxDecoration(
           color: Colors.amber.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.amber.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
         ),
         child: GoopText(
           main,
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: FontSizes.bodyMedium,
             fontWeight: FontWeight.w800,
             height: 1.35,
             color: Colors.white,
@@ -1008,7 +1067,7 @@ Widget _genericEffectBody({required String effect}) {
       const SizedBox(height: 10),
       for (final s in rest)
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: Insets.xs),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -1023,10 +1082,7 @@ Widget _genericEffectBody({required String effect}) {
               Expanded(
                 child: Text(
                   s,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    height: 1.35,
-                  ),
+                  style: const TextStyle(fontSize: 13, height: 1.35),
                 ),
               ),
             ],
@@ -1071,11 +1127,8 @@ Widget _diceEffectBody({required String effect}) {
   final matches = re.allMatches(text).toList();
   final lastEnd = matches.isNotEmpty ? matches.last.end : 0;
   final tail = text.substring(lastEnd).trim();
-  final notes = tail
-      .split('. ')
-      .map((s) => s.trim())
-      .where((s) => s.isNotEmpty)
-      .toList();
+  final notes =
+      tail.split('. ').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
 
   for (var i = 0; i < notes.length; i++) {
     if (!notes[i].endsWith('.') &&
@@ -1091,7 +1144,7 @@ Widget _diceEffectBody({required String effect}) {
       const GoopText(
         'One positive and one negative effect:',
         style: TextStyle(
-          fontSize: 14,
+          fontSize: FontSizes.bodyMedium,
           fontWeight: FontWeight.w800,
           color: Colors.white,
         ),
@@ -1125,10 +1178,7 @@ Widget _diceEffectBody({required String effect}) {
                 Expanded(
                   child: Text(
                     n,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      height: 1.35,
-                    ),
+                    style: const TextStyle(fontSize: 13, height: 1.35),
                   ),
                 ),
               ],
@@ -1157,10 +1207,8 @@ class _DiceEffectCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
-        border: Border(
-          left: BorderSide(color: color, width: 3),
-        ),
+        borderRadius: BorderRadius.all(Radii.sm),
+        border: Border.all(color: color.withValues(alpha: 0.15), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1175,15 +1223,21 @@ class _DiceEffectCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 2),
-          Text(
-            body,
-            style: const TextStyle(
-              fontSize: 13,
-              height: 1.35,
-            ),
-          ),
+          Text(body, style: const TextStyle(fontSize: 13, height: 1.35)),
         ],
       ),
     );
+  }
+}
+
+/// Opens the shrine's wiki.gg page in the external browser — same
+/// URL pattern as the item detail screen's wiki button.
+Future<void> _openShrineWiki(String shrineName) async {
+  try {
+    final slug = Uri.encodeComponent(shrineName.replaceAll(' ', '_'));
+    await launchUrl(Uri.parse('https://enterthegungeon.wiki.gg/wiki/$slug'),
+        mode: LaunchMode.externalApplication);
+  } catch (e) {
+    debugPrint('[ShrinePicker] wiki launch error: $e');
   }
 }

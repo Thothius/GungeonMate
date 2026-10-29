@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -57,7 +58,7 @@ class BulletHellCodexScreen extends StatelessWidget {
                   const SizedBox(height: 22),
                   _SectionTitle(
                     icon: Icons.block,
-                    title: 'Survival — The "No Loot" Rule',
+                    title: 'Survival: The "No Loot" Rule',
                     color: _bone,
                   ),
                   _InfoBlock(
@@ -189,6 +190,8 @@ class _Header extends StatelessWidget {
             width: double.infinity,
             height: 200,
             fit: BoxFit.cover,
+            cacheWidth: 800,
+            cacheHeight: 400,
             errorBuilder: (_, __, ___) => Container(
               height: 200,
               color: BulletHellCodexScreen._void,
@@ -244,7 +247,7 @@ class _Header extends StatelessWidget {
               GoopText(
                 'BULLET HELL',
                 style: TextStyle(
-                  fontSize: 28 * sf,
+                  fontSize: FontSizes.headlineMedium * sf,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 3,
                   color: Colors.white,
@@ -293,7 +296,7 @@ class _SectionTitle extends StatelessWidget {
               GoopText(
                 title.toUpperCase(),
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: FontSizes.bodyMedium,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
                   color: color,
@@ -354,7 +357,7 @@ class _InfoBlock extends StatelessWidget {
             GoopText(
               heading!,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.w800,
                 color: accent.withValues(alpha: 0.95),
                 letterSpacing: 0.3,
@@ -403,7 +406,7 @@ class _JunctionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
             decoration: BoxDecoration(
               color: BulletHellCodexScreen._emberDim.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(6),
@@ -415,7 +418,7 @@ class _JunctionCard extends StatelessWidget {
             child: GoopText(
               label,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
                 color: BulletHellCodexScreen._ember,
                 letterSpacing: 0.4,
@@ -427,7 +430,7 @@ class _JunctionCard extends StatelessWidget {
             child: GoopText(
               body,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: FontSizes.labelMedium,
                 height: 1.45,
                 color: Colors.white.withValues(alpha: 0.78),
               ),
@@ -499,7 +502,7 @@ class _PhaseCard extends StatelessWidget {
               child: GoopText(
                 phase.split(' ').last,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: FontSizes.titleSmall,
                   fontWeight: FontWeight.w900,
                   color: BulletHellCodexScreen._ember,
                 ),
@@ -524,7 +527,7 @@ class _PhaseCard extends StatelessWidget {
                 GoopText(
                   body,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     height: 1.45,
                     color: Colors.white.withValues(alpha: 0.75),
                   ),
@@ -549,13 +552,13 @@ class _WikiLink extends StatelessWidget {
       child: TextButton.icon(
         style: TextButton.styleFrom(
           foregroundColor: BulletHellCodexScreen._ember,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.sm),
         ),
         icon: const Icon(Icons.open_in_new, size: 14),
         label: GoopText(
           'View on wiki.gg',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.w700,
             color: BulletHellCodexScreen._ember,
           ),

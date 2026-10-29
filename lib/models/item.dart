@@ -7,6 +7,10 @@ class Item {
   final String type;
   final String effect;
   final String quote;
+
+  /// Ammonomicon flavour entry — the long-form description shown in the
+  /// in-game Ammonomicon. Parsed from `ammonomicon_entry` in items.json.
+  final String ammonomiconEntry;
   final String quality;
   final String sellPrice;
   final String chestColor;
@@ -30,6 +34,7 @@ class Item {
     this.type = '',
     this.effect = '',
     this.quote = '',
+    this.ammonomiconEntry = '',
     this.quality = '',
     this.sellPrice = '',
     this.chestColor = '',
@@ -48,6 +53,7 @@ class Item {
       type: json['type'] ?? '',
       effect: json['effect'] ?? '',
       quote: json['quote'] ?? '',
+      ammonomiconEntry: json['ammonomicon_entry'] ?? '',
       quality: json['quality'] ?? '',
       sellPrice: json['sell_price']?.toString() ?? '',
       chestColor: json['chest_color'] ?? '',
@@ -66,6 +72,7 @@ class Item {
       'type': type,
       'effect': effect,
       'quote': quote,
+      'ammonomicon_entry': ammonomiconEntry,
       'quality': quality,
       'sell_price': sellPrice,
       'chest_color': chestColor,

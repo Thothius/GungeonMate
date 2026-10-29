@@ -4,6 +4,7 @@ import '../../models/gun.dart';
 import '../../providers/run_provider.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
 import '../../widgets/themed_number.dart';
 import 'quick_jump_button.dart';
 
@@ -61,13 +62,13 @@ class StatGroup extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: Insets.sm),
           child: useFilledPill
               ? Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.all(Radii.sm),
                     border: Border.all(color: color.withValues(alpha: 0.5), width: 1.0),
                   ),
                   child: Row(
@@ -97,7 +98,7 @@ class StatGroup extends StatelessWidget {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     Icon(icon, size: 18, color: color),
                     const SizedBox(width: 7),
                     GoopText(
@@ -196,7 +197,7 @@ class StatPill extends StatelessWidget {
           GoopText(
             '$label  ',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: accentColor?.withValues(alpha: 0.85) ??
                   groupColor?.withValues(alpha: 0.75) ??
                   Colors.white.withValues(alpha: 0.6),
@@ -266,7 +267,7 @@ class GunStats extends StatelessWidget {
   const GunStats({super.key, required this.gun});
 
   Widget _buildGunderfuryInfo(BuildContext context, RunProvider p) {
-    final lvl = p.gunderfuryLevel.clamp(1, 60);
+    final lvl = context.select<RunProvider, int>((p) => p.gunderfuryLevel).clamp(1, 60);
     String formName = '';
     String description = '';
     String statsDesc = '';
@@ -307,10 +308,10 @@ class GunStats extends StatelessWidget {
     final double xpProgress = (currentXp / 75000).clamp(0.0, 1.0);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: Insets.md),
       decoration: BoxDecoration(
         color: Colors.purple.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
         boxShadow: [
           BoxShadow(
@@ -326,12 +327,12 @@ class GunStats extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.bolt, color: Colors.purpleAccent.shade100, size: 20),
-              const SizedBox(width: 8),
+              const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
                   'GUNDERFURY LEVEL TRACKER',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
                     color: Colors.purpleAccent.shade100,
                     letterSpacing: 0.8,
@@ -342,6 +343,7 @@ class GunStats extends StatelessWidget {
                 children: [
                   IconButton(
                     visualDensity: VisualDensity.compact,
+                    tooltip: 'Decrease Gunderfury level',
                     icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
                     onPressed: lvl > 1 ? () => p.setGunderfuryLevel(lvl - 1) : null,
                   ),
@@ -358,6 +360,7 @@ class GunStats extends StatelessWidget {
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
+                    tooltip: 'Increase Gunderfury level',
                     icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
                     onPressed: lvl < 60 ? () => p.setGunderfuryLevel(lvl + 1) : null,
                   ),
@@ -378,7 +381,7 @@ class GunStats extends StatelessWidget {
               overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
             ),
             child: SizedBox(
-              height: 32,
+              height: Insets.xxl,
               child: Slider(
                 value: lvl.toDouble(),
                 min: 1,
@@ -397,7 +400,7 @@ class GunStats extends StatelessWidget {
               const GoopText(
                 'EXPERIENCE GAUGE',
                 style: TextStyle(
-                  fontSize: 9,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.w900,
                   color: Colors.white54,
                   letterSpacing: 0.5,
@@ -406,14 +409,14 @@ class GunStats extends StatelessWidget {
               GoopText(
                 lvl == 60 ? 'MAX LEVEL' : '${currentXp.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} / 75,000 XP',
                 style: TextStyle(
-                  fontSize: 9.5,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.bold,
                   color: lvl == 60 ? Colors.amberAccent : Colors.purpleAccent.shade100,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: Insets.xs),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
             child: LinearProgressIndicator(
@@ -423,7 +426,7 @@ class GunStats extends StatelessWidget {
               valueColor: AlwaysStoppedAnimation<Color>(lvl == 60 ? Colors.amber : Colors.purpleAccent),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: Insets.md),
           Wrap(
             spacing: 6,
             runSpacing: 6,
@@ -467,19 +470,21 @@ class GunStats extends StatelessWidget {
               Container(
                 width: 44,
                 height: 44,
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(Insets.xs),
                 decoration: BoxDecoration(
                   color: Colors.black38,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.3), width: 1.2),
                 ),
                 child: Image.asset(
                   'assets/images/guns/gunderfury.webp',
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.none,
+                  cacheWidth: 88,
+                  cacheHeight: 88,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: Insets.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -508,7 +513,7 @@ class GunStats extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           GoopText(
             description,
             style: TextStyle(
@@ -523,7 +528,7 @@ class GunStats extends StatelessWidget {
   }
 
   Widget _buildTripleGunInfo(BuildContext context, RunProvider p) {
-    final form = p.tripleGunForm;
+    final form = context.select<RunProvider, int>((p) => p.tripleGunForm);
     String formName = '';
     String formDesc = '';
     if (form == 1) {
@@ -538,7 +543,7 @@ class GunStats extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.blue.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -550,12 +555,12 @@ class GunStats extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.alt_route, color: Colors.blueAccent.shade100, size: 20),
-              const SizedBox(width: 8),
+              const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
                   'Triple Gun Active Form',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.blueAccent.shade100,
                   ),
@@ -563,7 +568,7 @@ class GunStats extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -584,7 +589,7 @@ class GunStats extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           GoopText(
             formName,
             style: TextStyle(
@@ -593,11 +598,11 @@ class GunStats extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: Insets.xs),
           GoopText(
             formDesc,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.3,
             ),
@@ -608,8 +613,8 @@ class GunStats extends StatelessWidget {
   }
 
   Widget _buildEvolverInfo(BuildContext context, RunProvider p) {
-    final activeStage = p.evolverForm;
-    final totalKills = p.evolverKills;
+    final activeStage = context.select<RunProvider, int>((p) => p.evolverForm);
+    final totalKills = context.select<RunProvider, int>((p) => p.evolverKills);
 
     final stages = const [
       EvolverStageSpec(
@@ -647,7 +652,7 @@ class GunStats extends StatelessWidget {
       EvolverStageSpec(
         id: 5,
         name: 'Frog',
-        dps: '23.0 DPS/sec',
+        dps: '23.0 DPS',
         bullet: 'Continuous tracking tongue',
         icon: Icons.pets_outlined,
         color: Colors.orangeAccent,
@@ -684,7 +689,7 @@ class GunStats extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.science_outlined, color: Colors.greenAccent.shade200, size: 22),
-              const SizedBox(width: 8),
+              const SizedBox(width: Insets.sm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -701,7 +706,7 @@ class GunStats extends StatelessWidget {
                     GoopText(
                       'Biological Adaptations Slay Counter',
                       style: TextStyle(
-                        fontSize: 9.5,
+                        fontSize: FontSizes.labelSmall,
                         color: Colors.greenAccent.withValues(alpha: 0.6),
                         fontWeight: FontWeight.bold,
                       ),
@@ -712,7 +717,7 @@ class GunStats extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   color: Colors.black38,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.25)),
                 ),
                 child: Row(
@@ -720,11 +725,12 @@ class GunStats extends StatelessWidget {
                   children: [
                     IconButton(
                       visualDensity: VisualDensity.compact,
+                      tooltip: 'Decrease Evolver kills',
                       icon: const Icon(Icons.remove, size: 16, color: Colors.greenAccent),
                       onPressed: totalKills > 0 ? () => p.setEvolverKills(totalKills - 1) : null,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
                       child: GoopText(
                         '$totalKills/25',
                         style: const TextStyle(
@@ -737,6 +743,7 @@ class GunStats extends StatelessWidget {
                     ),
                     IconButton(
                       visualDensity: VisualDensity.compact,
+                      tooltip: 'Increase Evolver kills',
                       icon: const Icon(Icons.add, size: 16, color: Colors.greenAccent),
                       onPressed: totalKills < 25 ? () => p.setEvolverKills(totalKills + 1) : null,
                     ),
@@ -803,11 +810,11 @@ class GunStats extends StatelessWidget {
                                 color: color,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                            const SizedBox(height: Insets.xs),
                             GoopText(
                               spec.name,
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: FontSizes.labelSmall,
                                 fontWeight: isActive ? FontWeight.w900 : FontWeight.bold,
                                 color: isActive ? spec.color : Colors.white60,
                               ),
@@ -821,10 +828,10 @@ class GunStats extends StatelessWidget {
               }),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: Insets.md),
           const GoopText(
             'UNIQUE ENEMY TYPES SLAIN CHECKLIST',
-            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.greenAccent, letterSpacing: 0.5),
+            style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.greenAccent, letterSpacing: 0.5),
           ),
           const SizedBox(height: 6),
           Wrap(
@@ -864,7 +871,7 @@ class GunStats extends StatelessWidget {
                         : Text(
                             '$killNum',
                             style: TextStyle(
-                              fontSize: 9, 
+                              fontSize: FontSizes.labelSmall,
                               fontWeight: FontWeight.bold, 
                               color: isThresholdNode ? Colors.greenAccent.withValues(alpha: 0.4) : Colors.white54
                             ),
@@ -874,10 +881,10 @@ class GunStats extends StatelessWidget {
               );
             }),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: Insets.md),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: Insets.sm),
             decoration: BoxDecoration(
               color: Colors.black45,
               borderRadius: BorderRadius.circular(10),
@@ -896,7 +903,7 @@ class GunStats extends StatelessWidget {
                         color: currentSpec.color,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     GoopText(
                       'BIO-ANALYSIS: STAGE ${currentSpec.id} [${currentSpec.name.toUpperCase()}]',
                       style: TextStyle(
@@ -937,7 +944,7 @@ class GunStats extends StatelessWidget {
   }
 
   Widget _buildShellegunInfo(BuildContext context, RunProvider p) {
-    final mode = p.shellegunMode;
+    final mode = context.select<RunProvider, int>((p) => p.shellegunMode);
     const modeNames = ['Pistol (Manual)', 'Pistol (Auto)', 'Beam'];
     const modeDescs = [
       'Fires manually-controlled shells. Highest single-shot DPS.',
@@ -947,7 +954,7 @@ class GunStats extends StatelessWidget {
     const modeDps = [33.1, 24.0, 13.3];
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.teal.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -959,12 +966,12 @@ class GunStats extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.tune, color: Colors.tealAccent.shade100, size: 20),
-              const SizedBox(width: 8),
+              const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
                   'Shellegun Firing Mode',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.tealAccent.shade100,
                   ),
@@ -972,7 +979,7 @@ class GunStats extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -993,7 +1000,7 @@ class GunStats extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           GoopText(
             'Form $mode: ${modeNames[mode - 1]} — ${modeDps[mode - 1]} DPS',
             style: TextStyle(
@@ -1002,11 +1009,11 @@ class GunStats extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: Insets.xs),
           GoopText(
             modeDescs[mode - 1],
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.3,
             ),
@@ -1017,7 +1024,7 @@ class GunStats extends StatelessWidget {
   }
 
   Widget _buildChamberGunInfo(BuildContext context, RunProvider p) {
-    final floor = p.chamberGunFloor;
+    final floor = context.select<RunProvider, int>((p) => p.chamberGunFloor);
     const floorNames = [
       'Keep of the Lead Lord',
       'Oubliette',
@@ -1033,7 +1040,7 @@ class GunStats extends StatelessWidget {
     const floorDps = [15.9, 30.3, 25.1, 80.0, 300.0, 20.0, 68.0, 100.0, 70.0, 180.0];
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.deepOrange.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -1045,12 +1052,12 @@ class GunStats extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.layers, color: Colors.deepOrangeAccent.shade100, size: 20),
-              const SizedBox(width: 8),
+              const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
                   'Chamber Gun — Active Floor',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.deepOrangeAccent.shade100,
                   ),
@@ -1058,7 +1065,7 @@ class GunStats extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           Wrap(
             spacing: 6,
             runSpacing: 6,
@@ -1070,7 +1077,7 @@ class GunStats extends StatelessWidget {
               );
             }),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           GoopText(
             '${floorNames[floor]} — ${floorDps[floor]} DPS',
             style: TextStyle(
@@ -1079,11 +1086,11 @@ class GunStats extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: Insets.xs),
           GoopText(
             'Chamber Gun transforms based on the current floor. Select your floor to see accurate DPS.',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.3,
             ),
@@ -1095,7 +1102,7 @@ class GunStats extends StatelessWidget {
 
   Widget _buildCaseyInfo(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.lime.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -1107,12 +1114,12 @@ class GunStats extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.sports_baseball, color: Colors.limeAccent.shade100, size: 20),
-              const SizedBox(width: 8),
+              const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
                   'Casey — Melee & Reflect',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.limeAccent.shade100,
                   ),
@@ -1120,11 +1127,11 @@ class GunStats extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: Insets.sm),
           GoopText(
             '100 base damage per swing. Reflects enemy bullets back at them for massive damage. DPS shown (50) reflects only melee — actual combat value is far higher with bullet reflection.',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.3,
             ),
@@ -1136,24 +1143,8 @@ class GunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final combat = <MapEntry<String, String>>[
-      MapEntry('Damage', gun.damage),
-      MapEntry('Fire rate', gun.fireRate),
-      MapEntry('Magazine', gun.magazineSize),
-      MapEntry('Max ammo', gun.ammoCapacity),
-      MapEntry('Reload', gun.reloadTime),
-    ].where((e) => e.value.isNotEmpty).toList();
-    final handling = <MapEntry<String, String>>[
-      MapEntry('Range', gun.range),
-      MapEntry('Shot speed', gun.shotSpeed),
-      MapEntry('Force', gun.force),
-      MapEntry('Spread', gun.spread),
-    ].where((e) => e.value.isNotEmpty).toList();
-    final meta = <MapEntry<String, String>>[
-      MapEntry('Class', gun.gunClass),
-    ].where((e) => e.value.isNotEmpty).toList();
-
-    final p = context.watch<RunProvider>();
+    final p = context.read<RunProvider>();
+    final gunderfuryLevel = context.select<RunProvider, int>((p) => p.gunderfuryLevel);
     final gunderfuryInfo = gun.name.toLowerCase() == 'gunderfury'
         ? _buildGunderfuryInfo(context, p)
         : null;
@@ -1173,209 +1164,323 @@ class GunStats extends StatelessWidget {
         ? _buildCaseyInfo(context)
         : null;
 
-    final String animationAsset;
-    final String displayType = gun.type;
     final String typeLower = gun.type.toLowerCase();
     if (typeLower.contains('charged') || typeLower.contains('charge')) {
-      animationAsset = 'assets/animations/gun_types/Chargeweapon_demo.gif';
     } else if (typeLower.contains('beam')) {
-      animationAsset = 'assets/animations/gun_types/Beamweapon_demo.gif';
     } else if (typeLower.contains('burst')) {
-      animationAsset = 'assets/animations/gun_types/Burstweapon_demo.gif';
     } else if (typeLower.contains('automatic') || typeLower.contains('auto')) {
-      animationAsset = 'assets/animations/gun_types/Automaticweapon_demo.gif';
     } else {
-      animationAsset = 'assets/animations/gun_types/Semiautomaticweapon_demo.gif';
     }
+
+    // All form-stateful guns get their dynamic DPS — same params
+    // _avgDpsFor uses, so the header stat matches run averages.
+    final String dpsValue = () {
+      final dyn = gun.getDynamicDps(
+        gunderLevel: gunderfuryLevel,
+        tripleForm: context.select<RunProvider, int>((p) => p.tripleGunForm),
+        evolverStage: context.select<RunProvider, int>((p) => p.evolverForm),
+        shellegunMode: context.select<RunProvider, int>((p) => p.shellegunMode),
+        chamberGunFloor:
+            context.select<RunProvider, int>((p) => p.chamberGunFloor),
+      );
+      return dyn > 0
+          ? dyn.toStringAsFixed(1)
+          : (gun.dps.isEmpty ? '0.0' : gun.dps);
+    }();
+
+    // Hero row — the four stats that matter most (per redesign):
+    // DPS panel + RANGE/SPREAD/FORCE uniform cards.
+    final heroStats = <_StatSpec>[
+      _StatSpec(label: 'Range', value: gun.range, icon: Icons.linear_scale, category: _StatCategory.handling),
+      _StatSpec(label: 'Spread', value: gun.spread, icon: Icons.scatter_plot, category: _StatCategory.handling),
+      _StatSpec(label: 'Force', value: gun.force, icon: Icons.waves, category: _StatCategory.handling),
+    ].where((s) => s.value.isNotEmpty).toList();
+
+    // Secondary grid — everything else, compact.
+    final secondaryStats = <_StatSpec>[
+      _StatSpec(label: 'Damage', value: gun.damage, icon: Icons.bolt, category: _StatCategory.combat),
+      _StatSpec(label: 'Fire Rate', value: gun.fireRate, icon: Icons.speed, category: _StatCategory.combat),
+      _StatSpec(label: 'Reload', value: gun.reloadTime, icon: Icons.refresh, category: _StatCategory.combat),
+      _StatSpec(label: 'Shot Speed', value: gun.shotSpeed, icon: Icons.fast_forward, category: _StatCategory.handling),
+      _StatSpec(label: 'Magazine', value: gun.magazineSize, icon: Icons.inventory_2_outlined, category: _StatCategory.combat),
+      _StatSpec(label: 'Max Ammo', value: gun.ammoCapacity, icon: Icons.all_inclusive_outlined, category: _StatCategory.combat),
+      _StatSpec(label: 'Class', value: gun.gunClass, icon: Icons.category_outlined, category: _StatCategory.meta),
+      _StatSpec(label: 'Chest', value: gun.chestColorDisplay, icon: Icons.inventory_2_outlined, category: _StatCategory.meta),
+      if (gun.curse > 0)
+        _StatSpec(label: 'Curse', value: '+${gun.curse}', icon: Icons.mood_bad_outlined, category: _StatCategory.meta),
+      if (gun.coolness > 0)
+        _StatSpec(label: 'Cool', value: '+${gun.coolness}', icon: Icons.ac_unit, category: _StatCategory.meta),
+    ].where((s) => s.value.isNotEmpty).toList();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
       child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Hero row: DPS panel + RANGE/SPREAD/FORCE cards ──
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(child: _buildDpsPanel(dpsValue)),
+                const SizedBox(width: 8),
+                for (final s in heroStats)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: _PrimaryStatCard(spec: s),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          // ── Special gun info panels (unchanged) ──
+          if (gunderfuryInfo != null) ...[
+            gunderfuryInfo,
+            const SizedBox(height: 14),
+          ],
+          if (tripleGunInfo != null) ...[
+            tripleGunInfo,
+            const SizedBox(height: 14),
+          ],
+          if (evolverInfo != null) ...[
+            evolverInfo,
+            const SizedBox(height: 14),
+          ],
+          if (shellegunInfo != null) ...[
+            shellegunInfo,
+            const SizedBox(height: 14),
+          ],
+          if (chamberGunInfo != null) ...[
+            chamberGunInfo,
+            const SizedBox(height: 14),
+          ],
+          if (caseyInfo != null) ...[
+            caseyInfo,
+            const SizedBox(height: 14),
+          ],
+
+          // ── Row 3: secondary stats — compact responsive wrap ──
+          if (secondaryStats.isNotEmpty)
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: secondaryStats
+                  .map((s) => _SecondaryStatChip(spec: s))
+                  .toList(),
+            ),
+
+        ],
+      ),
+    );
+  }
+
+  /// DPS summary panel — large number, label, and icon. Visually balanced
+  Widget _buildDpsPanel(String dpsValue) {
+    final flair = AppTheme.flair;
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+      decoration: BoxDecoration(
+        color: flair.scaffold.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.all(Radii.md),
+        border: Border.all(
+          color: flair.secondary.withValues(alpha: 0.3),
+          width: 1.0,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 121,
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: AppTheme.flair.primary.withValues(alpha: 0.25),
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.bolt, size: 14, color: AppTheme.flair.primary),
-                              const SizedBox(width: 4),
-                              Flexible(
-                                child: GoopText(
-                                  displayType.toUpperCase(),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w900,
-                                    color: AppTheme.flair.headlineStat,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 6),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.asset(
-                              animationAsset,
-                              height: 68,
-                              fit: BoxFit.contain,
-                              filterQuality: FilterQuality.none,
-                              errorBuilder: (_, __, ___) => Container(
-                                height: 68,
-                                alignment: Alignment.center,
-                                child: GoopText(
-                                  displayType,
-                                  style: const TextStyle(color: Colors.white54, fontSize: 10),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Container(
-                      height: 121,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: AppTheme.flair.primary.withValues(alpha: 0.25),
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.flash_on, size: 14, color: AppTheme.flair.secondary),
-                              const SizedBox(width: 4),
-                              GoopText(
-                                'GUN DPS',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w900,
-                                  color: AppTheme.flair.headlineStat,
-                                  letterSpacing: 1.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          GoopText(
-                            gun.name.toLowerCase() == 'gunderfury'
-                                ? gun.getDynamicDps(gunderLevel: p.gunderfuryLevel).toStringAsFixed(1)
-                                : (gun.dpsValue > 0 ? gun.dpsValue.toStringAsFixed(1) : (gun.dps.isEmpty ? '0.0' : gun.dps)),
-                            style: TextStyle(
-                              fontSize: 27,
-                              fontWeight: FontWeight.w900,
-                              color: AppTheme.flair.secondary,
-                              height: 1.0,
-                              shadows: [
-                                Shadow(
-                                  color: AppTheme.flair.secondary.withValues(alpha: 0.5),
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          GoopText(
-                            'Damage Per Second',
-                            style: TextStyle(
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white.withValues(alpha: 0.5),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              Icon(Icons.flash_on, size: 14, color: flair.secondary),
+              const SizedBox(width: Insets.xs),
+              GoopText(
+                'DPS',
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w900,
+                  color: flair.headlineStat,
+                  letterSpacing: 1.2,
+                ),
               ),
-              const SizedBox(height: 14),
-              if (gunderfuryInfo != null) ...[
-                gunderfuryInfo,
-                const SizedBox(height: 14),
-              ],
-              if (tripleGunInfo != null) ...[
-                tripleGunInfo,
-                const SizedBox(height: 14),
-              ],
-              if (evolverInfo != null) ...[
-                evolverInfo,
-                const SizedBox(height: 14),
-              ],
-              if (shellegunInfo != null) ...[
-                shellegunInfo,
-                const SizedBox(height: 14),
-              ],
-              if (chamberGunInfo != null) ...[
-                chamberGunInfo,
-                const SizedBox(height: 14),
-              ],
-              if (caseyInfo != null) ...[
-                caseyInfo,
-                const SizedBox(height: 14),
-              ],
-              if (gun.notes.isNotEmpty) ...[
-                GoopText(
-                  gun.notes,
-                  style: const TextStyle(fontSize: 14.5, height: 1.35),
-                ),
-                const Divider(height: 26),
-              ],
-              if (combat.isNotEmpty)
-                StatGroup(
-                  label: 'Combat',
-                  icon: Icons.local_fire_department,
-                  stats: combat,
-                ),
-              if (handling.isNotEmpty) ...[
-                if (combat.isNotEmpty) const SizedBox(height: 14),
-                StatGroup(
-                  label: 'Handling',
-                  icon: Icons.tune,
-                  stats: handling,
-                ),
-              ],
-              if (meta.isNotEmpty) ...[
-                if (combat.isNotEmpty || handling.isNotEmpty)
-                  const SizedBox(height: 14),
-                StatGroup(
-                  label: 'Meta',
-                  icon: Icons.info_outline,
-                  stats: meta,
-                ),
-              ],
             ],
           ),
+          const SizedBox(height: Insets.sm),
+          GoopText(
+            dpsValue,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w900,
+              color: flair.secondary,
+              height: 1.0,
+              shadows: [
+                Shadow(
+                  color: flair.secondary.withValues(alpha: 0.5),
+                  blurRadius: 8,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: Insets.xs),
+          GoopText(
+            'Damage / sec',
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.bold,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+}
+
+/// Stat category — mirrors the old Combat/Handling/Meta grouping so the
+/// color coding users knew is preserved without the heavy group headers.
+enum _StatCategory { combat, handling, meta }
+
+extension _StatCategoryColor on _StatCategory {
+  /// Resolves the theme-tied category color, falling back to the canonical
+  /// Combat=red, Handling=cyan, Meta=amber when a theme hasn't opted in.
+  Color color(ThemeFlair flair) {
+    switch (this) {
+      case _StatCategory.combat:
+        return flair.statGroupCombat ?? Colors.redAccent;
+      case _StatCategory.handling:
+        return flair.statGroupHandling ?? Colors.cyanAccent;
+      case _StatCategory.meta:
+        return flair.statGroupMeta ?? Colors.amberAccent;
+    }
+  }
+}
+
+/// Lightweight data holder for a single stat entry.
+class _StatSpec {
+  final String label;
+  final String value;
+  final IconData icon;
+  final _StatCategory category;
+  const _StatSpec({
+    required this.label,
+    required this.value,
+    required this.icon,
+    required this.category,
+  });
+}
+
+/// Uniform vertical stat card for primary stats (Damage, Fire Rate, Range,
+/// Force). Icon → value → label, all centered and consistently sized.
+class _PrimaryStatCard extends StatelessWidget {
+  final _StatSpec spec;
+  const _PrimaryStatCard({required this.spec});
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final catColor = spec.category.color(flair);
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+      decoration: BoxDecoration(
+        color: catColor.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.all(Radii.md),
+        border: Border.all(
+          color: catColor.withValues(alpha: 0.3),
+          width: 0.8,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(spec.icon, size: 20, color: catColor),
+          const SizedBox(height: 6),
+          GoopText(
+            spec.value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w800,
+              color: flair.headlineStat,
+              height: 1.1,
+            ),
+          ),
+          const SizedBox(height: 3),
+          GoopText(
+            spec.label.toUpperCase(),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w700,
+              color: Colors.white.withValues(alpha: 0.5),
+              letterSpacing: 0.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Compact horizontal stat chip for secondary stats (Magazine, Max Ammo,
+/// Reload, Shot Speed, Spread, Class). Icon + label + value in a row.
+class _SecondaryStatChip extends StatelessWidget {
+  final _StatSpec spec;
+  const _SecondaryStatChip({required this.spec});
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final catColor = spec.category.color(flair);
+    final hasDigit = RegExp(r'\d').hasMatch(spec.value);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+      decoration: BoxDecoration(
+        color: catColor.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: catColor.withValues(alpha: 0.22),
+          width: 0.6,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(spec.icon, size: 11, color: catColor.withValues(alpha: 0.85)),
+          const SizedBox(width: 4),
+          GoopText(
+            spec.label,
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w600,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
+          ),
+          const SizedBox(width: 4),
+          if (hasDigit)
+            ThemedNumber(
+              value: spec.value,
+              baseSize: 11,
+              colorOverride: flair.headlineStat,
+              role: ThemedNumberRole.headline,
+            )
+          else
+            GoopText(
+              spec.value,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: flair.headlineStat,
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/reduce_motion.dart';
 
 /// Role a [ThemedNumber] is playing in the UI. The widget adjusts its
 /// colour (and for Curseblaster, its glow strength) based on the role
@@ -181,6 +182,8 @@ class _ShimmerOverlayState extends State<_ShimmerOverlay>
 
   @override
   Widget build(BuildContext context) {
+    // Reduced-motion: skip the shimmer sweep entirely — just show the child.
+    if (ReduceMotion.of(context)) return widget.child;
     return AnimatedBuilder(
       animation: _c,
       builder: (_, child) {
@@ -259,6 +262,8 @@ class _SparkleOverlayState extends State<_SparkleOverlay>
 
   @override
   Widget build(BuildContext context) {
+    // Reduced-motion: skip sparkle particles — just show the child.
+    if (ReduceMotion.of(context)) return widget.child;
     return AnimatedBuilder(
       animation: _c,
       builder: (_, child) {
@@ -360,6 +365,8 @@ class _ThemedBulletState extends State<ThemedBullet>
           ),
         );
         if (!f.twinkleBullets) return glyph;
+        // Reduced-motion: skip the twinkle — show a steady glyph.
+        if (ReduceMotion.of(context)) return glyph;
         return AnimatedBuilder(
           animation: _c,
           builder: (_, child) {

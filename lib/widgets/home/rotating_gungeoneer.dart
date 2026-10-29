@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/home_customization.dart';
 import '../../utils/asset_paths.dart';
+import '../../utils/reduce_motion.dart';
 import 'vortex_config.dart';
 
 /// A gungeoneer in-game sprite caught in the home-screen vortex, spinning
@@ -136,6 +137,12 @@ class _RotatingGungeoneerState extends State<RotatingGungeoneer>
         return IgnorePointer(
           child: LayoutBuilder(
             builder: (context, constraints) {
+              // Reduced-motion: render a static centered sprite — no orbit,
+              // no spin, no depth cycle. The character is still visible as
+              // the home-screen identity, just without kinetic motion.
+              if (ReduceMotion.of(context)) {
+                return _buildStaticSprite(name, constraints);
+              }
               return AnimatedBuilder(
                 animation: _repaint,
                 builder: (context, _) {
@@ -227,6 +234,30 @@ class _RotatingGungeoneerState extends State<RotatingGungeoneer>
       ],
     );
   }
+
+  /// Static (non-animated) sprite for reduced-motion mode.
+  /// Centers the gungeoneer at full scale with no orbit or spin.
+  Widget _buildStaticSprite(String name, BoxConstraints constraints) {
+    final screenW = constraints.maxWidth;
+    final screenH = constraints.maxHeight;
+    if (screenW <= 0 || screenH <= 0) return const SizedBox.shrink();
+    final size = widget.size;
+    final cx = screenW / 2;
+    final cy = screenH / 2;
+    return Stack(
+      children: [
+        Positioned(
+          left: cx - size / 2,
+          top: cy - size / 2,
+          child: _GungeoneerSprite(
+            key: ValueKey(name),
+            name: name,
+            size: size,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 /// Renders a single gungeoneer's in-game GIF sprite, falling back to the
@@ -281,6 +312,8 @@ class _GungeoneerSprite extends StatelessWidget {
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
         gaplessPlayback: true,
+        cacheWidth: (size * 2).round(),
+        cacheHeight: (size * 2).round(),
         errorBuilder: (_, __, ___) => _iconOrFallback(icon),
       );
     }
@@ -293,6 +326,8 @@ class _GungeoneerSprite extends StatelessWidget {
         icon,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
+        cacheWidth: (size * 2).round(),
+        cacheHeight: (size * 2).round(),
         errorBuilder: (_, __, ___) => const _PersonFallback(),
       );
     }

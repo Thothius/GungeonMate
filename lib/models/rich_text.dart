@@ -141,9 +141,27 @@ class RichBullet {
       sub: ((j['sub'] as List<dynamic>?) ?? const [])
           .whereType<Map<String, dynamic>>()
           .map((s) => RichBullet.fromJson(s))
+          .where((b) => !b.referencesExitTheGungeon)
           .toList(growable: false),
     );
   }
+
+  /// Flattened display text of this bullet's own tokens (sub-bullets not
+  /// included) — text runs plus ref/synergy/ext labels. Used for content
+  /// filters that need to inspect a bullet without rendering it.
+  String get plainText => tokens
+      .map((t) => switch (t) {
+            RichTextRun(:final text) => text,
+            RichRef(:final name) => name,
+            RichSynRef(:final synergyName) => synergyName,
+            RichExt(:final label) => label,
+          })
+      .join();
+
+  /// Whether this bullet references the *Exit the Gungeon* spin-off game.
+  /// Case-sensitive on purpose: lowercase "exit the Gungeon" is the verb
+  /// phrase ("enter and exit the Gungeon") and must be kept.
+  bool get referencesExitTheGungeon => plainText.contains('Exit the Gungeon');
 
   /// True if this bullet has neither tokens nor non-empty sub-bullets.
   bool get isEmpty {
@@ -162,7 +180,7 @@ List<RichBullet> _parseBulletList(dynamic raw) {
   return raw
       .whereType<Map<String, dynamic>>()
       .map((b) => RichBullet.fromJson(b))
-      .where((b) => !b.isEmpty)
+      .where((b) => !b.isEmpty && !b.referencesExitTheGungeon)
       .toList(growable: false);
 }
 

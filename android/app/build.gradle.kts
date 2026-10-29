@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.gungeonmate.gungeon_mate"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36  // media_kit_video requires SDK 36
     ndkVersion = "27.0.12077973"
 
     compileOptions {

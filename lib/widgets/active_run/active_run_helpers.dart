@@ -1,22 +1,23 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/player.dart';
 import '../../services/app_theme.dart';
+import '../../theme/tokens.dart';
+import '../../services/haptics.dart';
 import '../../services/effect_tagger.dart';
-import '../../services/multiplayer_session.dart';
+import '../../services/mp_session.dart';
 import '../../models/multiplayer_messages.dart';
 import '../../utils/fast_route.dart';
+import '../../screens/codex_screen.dart';
 import '../../services/goop_talk_engine.dart';
-import 'dice_roll.dart';
-import 'sort_picker.dart';
 import '../../screens/effects_summary_screen.dart';
 import '../../screens/settings_screen.dart';
-import '../../screens/codex_screen.dart';
+import '../../screens/experience_studio_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
-import '../../screens/character_select_screen.dart';
-import 'end_run_confirm_dialog.dart';
+import 'sort_picker.dart';
+import 'dice_roll.dart';
+import '../paradox/chat_sheet.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -226,113 +227,40 @@ class HeaderMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
-    final mpSession = context.watch<MultiplayerSession>();
+    final mpSession = context.watch<MpSession>();
     final mpActive = mpSession.isActive;
-    // Wrap in a Column to match the _LabeledIconButton pattern used by
-    // the 4 toggle icons (Calc/Effects/Shrine/Panels) so the trailing
-    // row is perfectly symmetrical — every item has an icon + label.
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        PopupMenuButton<String>(
+    return PopupMenuButton<String>(
           tooltip: 'Run tools',
-          // Big single-icon target — gear is universally read as "options".
-          // Bigger hit-rect than the old "Run ▼" chip (44×44 vs 28×24).
+          // Bigger gear icon — 44×44 hit target, 24px icon.
           padding: EdgeInsets.zero,
-          offset: const Offset(0, 44),
+          offset: const Offset(0, 48),
           child: Container(
-            width: 36,
-            height: 36,
+            width: 44,
+            height: 44,
             margin: const EdgeInsets.symmetric(horizontal: 4),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.06),
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
             ),
-            child: const Icon(Icons.tune_rounded, size: 18, color: Colors.white70),
+            child: const Icon(Icons.tune_rounded, size: 24, color: Colors.white70),
           ),
       onSelected: (v) {
         switch (v) {
+          case 'themes':
+            Navigator.push(
+              context,
+              fastRoute(const ExperienceStudioScreen()),
+            );
+            break;
           case 'settings':
             Navigator.push(
               context,
               fastRoute(const SettingsScreen()),
             );
             break;
-          case 'codex':
-            Navigator.push(
-              context,
-              fastRoute(const CodexScreen(showBackButton: true)),
-            );
-            break;
-          case 'shrine_picker':
-            Navigator.push(
-              context,
-              fastRoute(const ShrinePickerScreen()),
-            );
-            break;
-          case 'add_coop':
-            _handleAddCoop(context, p);
-            break;
-          case 'end_run':
-            _confirmEndRun(context, p);
-            break;
           case 'leave_mp':
             _confirmLeaveMp(context, mpSession);
-            break;
-          case 'save_mp_session':
-            unawaited(mpSession.saveCurrentSession().then((_) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: GoopText('MP session saved'),
-                    duration: Duration(seconds: 2),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            }).catchError((e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: GoopText('Failed to save session: $e'),
-                    duration: const Duration(seconds: 3),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            }));
-            break;
-          case 'save_run':
-            unawaited(p.saveRun().then((_) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: GoopText('Run saved'),
-                    duration: Duration(seconds: 2),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            }).catchError((e) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: GoopText('Failed to save run: $e'),
-                    duration: const Duration(seconds: 3),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            }));
-            break;
-          // toggle_dashboards — hidden for now (dashboards always on)
-          // case 'toggle_dashboards':
-          //   VisualPrefs.setShowDashboards(!VisualPrefs.notifier.value.showDashboards);
-          //   Haptics.selection();
-          //   break;
-          case 'dice_roll':
-            showDiceRollDialog(context);
             break;
           case 'reset_items_p1':
             confirmClearInventoryDialog(context, p, PlayerSlot.main);
@@ -340,76 +268,109 @@ class HeaderMenu extends StatelessWidget {
           case 'reset_items_p2':
             confirmClearInventoryDialog(context, p, PlayerSlot.coop);
             break;
-          case 'pause_mp':
-            unawaited(mpSession.pauseRun().then((_) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: GoopText('MP run paused — auto-reconnect stopped. Tap Resume when back in range.'),
-                    duration: Duration(seconds: 3),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            }));
+          case 'shrine':
+            Navigator.push(
+              context,
+              fastRoute(const ShrinePickerScreen()),
+            );
             break;
-          case 'resume_mp':
-            unawaited(mpSession.resumeRun().then((_) {
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: GoopText('MP run resumed — searching for peer...'),
-                    duration: Duration(seconds: 2),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            }));
+          case 'dice':
+            showDiceRollDialog(context);
+            break;
+          case 'messages':
+            showParadoxChatSheet(context);
+            break;
+          case 'surprise':
+            showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: const Color(0xFF140B22),
+              shape: const RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(18))),
+              builder: (_) => const SurpriseSheet(),
+            );
+            break;
+          case 'codex':
+            Navigator.push(context, fastRoute(const CodexScreen()));
             break;
         }
       },
       itemBuilder: (ctx) => [
-        // ── NAVIGATION ──
-        _menuLabel('NAVIGATION'),
+        // ── PANELS ──
+        _menuLabel('PANELS'),
+        _panelToggleItem(
+          ctx,
+          icon: Icons.auto_awesome,
+          label: 'Effects',
+          isOn: VisualPrefs.notifier.value.showEffectsPanel,
+          onToggle: () => VisualPrefs.setShowEffectsPanel(
+              !VisualPrefs.notifier.value.showEffectsPanel),
+        ),
+        _panelToggleItem(
+          ctx,
+          icon: Icons.view_agenda_rounded,
+          label: 'Panels',
+          isOn: VisualPrefs.notifier.value.showDashboards,
+          onToggle: () => VisualPrefs.setShowDashboards(
+              !VisualPrefs.notifier.value.showDashboards),
+        ),
+
+        // ── SHRINES ──
+        const PopupMenuItem(
+          value: 'shrine',
+          child: Row(children: [
+            Icon(Icons.temple_buddhist, size: 18, color: Colors.amberAccent),
+            SizedBox(width: 10),
+            GoopText('Shrines'),
+          ]),
+        ),
+
+        // ── CODEX ──
         const PopupMenuItem(
           value: 'codex',
           child: Row(children: [
-            Icon(Icons.menu_book_rounded, size: 18, color: Colors.tealAccent),
+            Icon(Icons.menu_book_rounded, size: 18, color: Color(0xFF4DD0E1)),
             SizedBox(width: 10),
             GoopText('Codex'),
           ]),
         ),
-        PopupMenuItem(
-          value: 'shrine_picker',
-          child: const Row(children: [
-            Icon(Icons.temple_buddhist, size: 18, color: Colors.amber),
+
+        // ── DICE ──
+        const PopupMenuItem(
+          value: 'dice',
+          child: Row(children: [
+            Icon(Icons.casino_rounded, size: 18, color: Color(0xFFFFD54F)),
             SizedBox(width: 10),
-            GoopText('Shrine Picker'),
+            GoopText('Dice Roll'),
           ]),
         ),
 
-        // ── ACTIONS ──
-        _menuLabel('ACTIONS'),
-        const PopupMenuItem(
-          value: 'dice_roll',
-          child: Row(children: [
-            Icon(Icons.casino_outlined, size: 18, color: Color(0xFFFFD54F)),
-            SizedBox(width: 10),
-            GoopText('Gunfortuna Dice Roll'),
-          ]),
-        ),
-        PopupMenuItem(
-          value: 'add_coop',
-          child: Row(children: [
-            Icon(
-              p.runState.hasCoop ? Icons.remove_circle_outline : Icons.person_add_alt_1,
-              size: 18,
-              color: p.runState.hasCoop ? Colors.redAccent : Colors.pinkAccent,
-            ),
-            const SizedBox(width: 10),
-            GoopText(p.runState.hasCoop ? 'Remove Co-op Player' : 'Add Co-op Player'),
-          ]),
-        ),
+        // ── SURPRISE (MP only) ──
+        if (mpActive)
+          const PopupMenuItem(
+            value: 'surprise',
+            child: Row(children: [
+              Icon(Icons.auto_awesome_rounded, size: 18, color: Colors.amberAccent),
+              SizedBox(width: 10),
+              GoopText('Surprise'),
+            ]),
+          ),
+
+        // ── MESSAGES (MP only) ──
+        if (mpActive)
+          const PopupMenuItem(
+            value: 'messages',
+            child: Row(children: [
+              Icon(Icons.chat_bubble_rounded,
+                  size: 18, color: Color(0xFFB388FF)),
+              SizedBox(width: 10),
+              GoopText('Messages'),
+            ]),
+          ),
+
+        // ── RESET ──
+        _menuLabel('RESET'),
         const PopupMenuItem(
           value: 'reset_items_p1',
           child: Row(children: [
@@ -429,49 +390,8 @@ class HeaderMenu extends StatelessWidget {
           ),
 
         // ── SESSION ──
-        if (mpActive) ...[
-          _menuLabel('SESSION'),
-          const PopupMenuItem(
-            value: 'save_mp_session',
-            child: Row(children: [
-              Icon(Icons.cloud_upload_rounded, size: 18, color: Colors.greenAccent),
-              SizedBox(width: 10),
-              GoopText('Save MP Session'),
-            ]),
-          ),
-          if (mpSession.isPaused)
-            const PopupMenuItem(
-              value: 'resume_mp',
-              child: Row(children: [
-                Icon(Icons.play_circle_fill_rounded, size: 18, color: Colors.greenAccent),
-                SizedBox(width: 10),
-                GoopText('Resume MP Run', style: TextStyle(color: Colors.greenAccent)),
-              ]),
-            )
-          else
-            const PopupMenuItem(
-              value: 'pause_mp',
-              child: Row(children: [
-                Icon(Icons.pause_circle_filled_rounded, size: 18, color: Colors.orangeAccent),
-                SizedBox(width: 10),
-                GoopText('Pause MP Run', style: TextStyle(color: Colors.orangeAccent)),
-              ]),
-            ),
-        ] else ...[
-          _menuLabel('SESSION'),
-          const PopupMenuItem(
-            value: 'save_run',
-            child: Row(children: [
-              Icon(Icons.save_outlined, size: 18, color: Colors.greenAccent),
-              SizedBox(width: 10),
-              GoopText('Save Run'),
-            ]),
-          ),
-        ],
-
-        // ── END SESSION ──
-        _menuLabel('END SESSION'),
         if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
+          _menuLabel('SESSION'),
           const PopupMenuItem(
             value: 'leave_mp',
             child: Row(children: [
@@ -481,37 +401,18 @@ class HeaderMenu extends StatelessWidget {
               GoopText('Leave Multiplayer'),
             ]),
           ),
-          const PopupMenuItem(
-            value: 'end_run',
-            height: 52,
-            child: Row(children: [
-              Icon(Icons.exit_to_app, size: 24, color: Colors.redAccent),
-              SizedBox(width: 12),
-              GoopText('End Run & Disconnect',
-                  style: TextStyle(
-                      color: Colors.redAccent,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800)),
-            ]),
-          ),
-        ] else ...[
-          const PopupMenuItem(
-            value: 'end_run',
-            height: 52,
-            child: Row(children: [
-              Icon(Icons.exit_to_app, size: 24, color: Colors.redAccent),
-              SizedBox(width: 12),
-              GoopText('End Run',
-                  style: TextStyle(
-                      color: Colors.redAccent,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800)),
-            ]),
-          ),
         ],
 
         // ── SETTINGS ──
         _menuLabel('SETTINGS'),
+        const PopupMenuItem(
+          value: 'themes',
+          child: Row(children: [
+            Icon(Icons.palette_rounded, size: 18, color: Colors.pinkAccent),
+            SizedBox(width: 10),
+            GoopText('Themes'),
+          ]),
+        ),
         const PopupMenuItem(
           value: 'settings',
           child: Row(children: [
@@ -521,19 +422,54 @@ class HeaderMenu extends StatelessWidget {
           ]),
         ),
       ],
-    ),
-        const SizedBox(height: 2),
-        const GoopText(
-          'More',
-          style: TextStyle(
-            fontSize: 8,
-            fontWeight: FontWeight.w600,
-            color: Colors.white70,
-            letterSpacing: 0.5,
-            height: 1.0,
-          ),
-        ),
-      ],
+    );
+  }
+
+  /// Toggleable panel item for the popup menu.
+  /// Uses `enabled: false` so tapping the Switch doesn't close the menu.
+  /// ON = filled circle (amber), OFF = empty circle (white38).
+  PopupMenuItem<String> _panelToggleItem(
+    BuildContext ctx, {
+    required IconData icon,
+    required String label,
+    required bool isOn,
+    required VoidCallback onToggle,
+  }) {
+    return PopupMenuItem<String>(
+      enabled: false,
+      value: '__panel_${label.toLowerCase()}',
+      child: ListenableBuilder(
+        listenable: VisualPrefs.notifier,
+        builder: (_, __) {
+          final current = label == 'Effects'
+              ? VisualPrefs.notifier.value.showEffectsPanel
+              : VisualPrefs.notifier.value.showDashboards;
+          return Row(
+            children: [
+              Icon(icon, size: 18,
+                  color: current ? Colors.amberAccent : Colors.white38),
+              const SizedBox(width: 10),
+              Expanded(child: GoopText(label)),
+              // Wrap in a larger hit area (44×44 minimum touch target).
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {
+                  Haptics.selection();
+                  onToggle();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                  child: Icon(
+                    current ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    size: 20,
+                    color: current ? Colors.amberAccent : Colors.white38,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -554,7 +490,7 @@ class HeaderMenu extends StatelessWidget {
             GoopText(
               label,
               style: TextStyle(
-                fontSize: 9,
+                fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
                 color: AppTheme.flair.primary.withValues(alpha: 0.8),
                 letterSpacing: 1.2,
@@ -566,7 +502,7 @@ class HeaderMenu extends StatelessWidget {
     );
   }
 
-  void _confirmLeaveMp(BuildContext context, MultiplayerSession session) {
+  void _confirmLeaveMp(BuildContext context, MpSession session) {
     final isSidekick = session.myRole == MpRole.sidekick;
     showDialog(
       context: context,
@@ -601,65 +537,6 @@ class HeaderMenu extends StatelessWidget {
     );
   }
 
-  void _confirmEndRun(BuildContext context, RunProvider p) {
-    final session = context.read<MultiplayerSession>();
-    final isSidekick = session.isActive && session.myRole == MpRole.sidekick;
-
-    EndRunConfirmDialog.show(
-      context,
-      isSidekick: isSidekick,
-      onConfirm: () async {
-        if (session.isActive) {
-          // Tells the peer to end too, then tears the MP session down cleanly.
-          await session.notifyEndRunAndCancel();
-        }
-        // Wipe local run state and pop screens to return to the main menu
-        p.endRun();
-      },
-    );
-  }
-
-  /// Handle Add/Remove Co-op player from the Run Tools popup.
-  void _handleAddCoop(BuildContext context, RunProvider p) {
-    if (p.runState.hasCoop) {
-      // Confirm removal
-      showDialog(
-        context: context,
-        builder: (c) => AlertDialog(
-          icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent),
-          title: const GoopText('Remove Co-op Player?'),
-          content: GoopText(
-            'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(c),
-              child: const GoopText('Cancel'),
-            ),
-            FilledButton.tonal(
-              style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
-              onPressed: () {
-                p.endCoopPlayer();
-                Navigator.pop(c);
-              },
-              child: const GoopText('Remove'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      // Add co-op player — pick character first
-      final cultist = p.gungeoneerByName('The Cultist') ??
-          p.gungeoneerByName('Cultist');
-      if (cultist != null) {
-        p.startCoopPlayer(cultist);
-      }
-      Navigator.push(
-        context,
-        fastRoute(const CharacterSelectScreen(mode: CharSelectMode.coop)),
-      );
-    }
-  }
 }
 
 class SectionHeaderSliver extends StatelessWidget {

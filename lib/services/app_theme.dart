@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../theme/tokens.dart';
+import '../utils/contrast.dart';
 import '../widgets/particle_engine.dart'
-    show ParticlePreset, GlowEffect, ParticleColorSchema, ParticleSpeed;
+    show ParticlePreset, GlowEffect, ParticleColorSchema, ParticleSpeed, ParticleType;
 
 /// Eight lore-named palettes. Each is a hand-tuned palette + a
 /// [ThemeFlair] record carrying extra styling knobs (numeric typography,
@@ -63,6 +66,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF69B4), // pink
       statGroupHandling: Color(0xFFF06292), // rose
       statGroupMeta: Color(0xFFE8A7F0), // lavender
+      font: AppFont.fredoka,
     ),
   ),
   unicornII(
@@ -162,7 +166,7 @@ enum AppThemeMode {
     ),
   ),
   ammonomicon(
-    label: 'Ammonomicon',
+    label: 'Codex',
     vibe: 'ARCHIVAL',
     diff: 'NORMAL',
     elem: 'KNOWLEDGE',
@@ -224,6 +228,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF4500), // dragun orange
       statGroupHandling: Color(0xFFFFB74D), // sulfur orange
       statGroupMeta: Color(0xFFFFCC00), // gold
+      font: AppFont.russoOne,
     ),
   ),
   hollowChill(
@@ -536,6 +541,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF00F5D4), // electric teal
       statGroupHandling: Color(0xFF69F0AE), // neon green
       statGroupMeta: Color(0xFFB2DFDB), // pale teal
+      font: AppFont.audiowide,
     ),
   ),
   cultOfGundead(
@@ -721,6 +727,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF69F0AE),
       statGroupHandling: Color(0xFF40C4FF),
       statGroupMeta: Color(0xFFB9F6CA),
+      font: AppFont.jetBrainsMono,
     ),
   ),
   valorOfMarines(
@@ -754,6 +761,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFB74D),
       statGroupHandling: Color(0xFFC5E1A5),
       statGroupMeta: Color(0xFFE6EE9C),
+      font: AppFont.blackOpsOne,
     ),
   ),
   theBullet(
@@ -788,6 +796,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFEF5350),
       statGroupHandling: Color(0xFFFFD740),
       statGroupMeta: Color(0xFFFFE57F),
+      font: AppFont.righteous,
     ),
   ),
   theParadox(
@@ -823,6 +832,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF7E57C2),
       statGroupHandling: Color(0xFFCE93D8),
       statGroupMeta: Color(0xFFE1BEE7),
+      font: AppFont.syncopate,
     ),
   ),
   gunpowder(
@@ -856,6 +866,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFB71C1C),
       statGroupHandling: Color(0xFF9E9E9E),
       statGroupMeta: Color(0xFFE57373),
+      font: AppFont.rowdies,
     ),
   ),
   dragunfire(
@@ -890,6 +901,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFF4500),
       statGroupHandling: Color(0xFFFFAB40),
       statGroupMeta: Color(0xFFFFCC00),
+      font: AppFont.archivoBlack,
     ),
   ),
   lichsDomain(
@@ -923,6 +935,7 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFF2EC4B6),
       statGroupHandling: Color(0xFFE0E0E0),
       statGroupMeta: Color(0xFFF5F5DC),
+      font: AppFont.specialElite,
     ),
   ),
   catLady(
@@ -956,41 +969,176 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFB74D), // amber
       statGroupHandling: Color(0xFFD7CCC8), // cream
       statGroupMeta: Color(0xFFFFCC80), // light amber
+      font: AppFont.carterOne,
     ),
   ),
   moonlitChamber(
-    label: 'Moonlit Chamber',
-    vibe: 'LUNAR',
+    // Re-skinned as MINIMALIST — enum id stays so old saved prefs
+    // migrate seamlessly to the sleek look.
+    label: 'Minimalist',
+    vibe: 'CLEAN',
     diff: 'NORMAL',
-    elem: 'MOON',
-    whimsicalDescription: 'Silver light spills through the gungeon grates as a crescent moon watches from above. Cool midnight blues with silver-white crescents drifting in the dark — serene, watchful, and quietly powerful.',
+    elem: 'CORE',
+    whimsicalDescription: 'Stripped to the essentials. Soft whites on deep charcoal, quiet borders, no glow, no spectacle — the distilled GungeonMate for purists who want the data and nothing else.',
     staticFlair: ThemeFlair(
-      scaffold: Color(0xFF0A0E1A),
-      card: Color(0xFF121829),
-      primary: Color(0xFF90CAF9), // silver-blue
-      secondary: Color(0xFFE1F5FE), // pale moonlight
-      headlineStat: Color(0xFFB3E5FC), // light silver
-      bulletColor: Color(0xFF90CAF9),
-      bulletGlyph: '🌙',
-      sparkleNumbers: true,
-      numberGlowColor: Color(0xFF90CAF9),
+      scaffold: Color(0xFF0B0B0F),
+      card: Color(0xFF141419),
+      primary: Color(0xFFECEFF1), // soft white
+      secondary: Color(0xFF9E9E9E), // mid grey
+      headlineStat: Color(0xFFFFFFFF), // pure white
+      bulletColor: Color(0xFFECEFF1),
+      bulletGlyph: '▪',
+      sparkleNumbers: false,
+      numberGlowColor: Color(0x00000000),
       tabularFigures: true,
-      numberSizeScale: 1.05,
-      numberWeight: FontWeight.w700,
-      chipRadius: 12,
-      cardRadius: 14,
-      cardBorderColor: Color(0x4490CAF9),
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w600,
+      chipRadius: 4,
+      cardRadius: 6,
+      cardBorderColor: Color(0x339E9E9E),
       cardBorderWidth: 1.0,
-      dividerColor: Color(0x5590CAF9),
+      dividerColor: Color(0x339E9E9E),
       dividerThickness: 1.0,
-      glowPrimary: Color(0x4490CAF9),
-      glowSecondary: Color(0x33E1F5FE),
+      glowPrimary: Color(0x00000000),
+      glowSecondary: Color(0x00000000),
       auraStyle: AvatarAuraStyle.moonGlow,
-      headerGlyph: '🌙',
-      headerUnderlineColor: Color(0x8890CAF9),
-      statGroupCombat: Color(0xFF90CAF9), // silver-blue
-      statGroupHandling: Color(0xFFE1F5FE), // moonlight
-      statGroupMeta: Color(0xFFB3E5FC), // light silver
+      headerGlyph: '▪',
+      headerUnderlineColor: Color(0x559E9E9E),
+      statGroupCombat: Color(0xFFECEFF1), // soft white
+      statGroupHandling: Color(0xFF9E9E9E), // mid grey
+      statGroupMeta: Color(0xFFBDBDBD), // light grey
+      font: AppFont.gungeon,
+    ),
+  ),
+  candyRush(
+    label: 'Candy Rush',
+    vibe: 'SWEET',
+    diff: 'CO-OP',
+    elem: 'SUGAR',
+    whimsicalDescription: 'Unicorn sibling - bubblegum pink melts into cotton-candy pastels.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF241620), card: Color(0xFF33202E),
+      primary: Color(0xFFF8BBD0), secondary: Color(0xFFB3E5FC),
+      headlineStat: Color(0xFFF48FB1), bulletColor: Color(0xFFF8BBD0),
+      bulletGlyph: '\u2665', twinkleBullets: true, sparkleNumbers: true,
+      numberGlowColor: Color(0xFFF8BBD0), tabularFigures: false,
+      numberSizeScale: 1.03, numberWeight: FontWeight.w700,
+      numberStyle: FontStyle.italic, chipRadius: 18, cardRadius: 18,
+      dividerColor: Color(0x55F8BBD0), dividerThickness: 1.0,
+      glowPrimary: Color(0x55F8BBD0), glowSecondary: Color(0x3BB3E5FC),
+      auraStyle: AvatarAuraStyle.pastelPulse, headerGlyph: '\u2665',
+      headerUnderlineColor: Color(0x88F8BBD0),
+      statGroupCombat: Color(0xFFF8BBD0),
+      statGroupHandling: Color(0xFFB3E5FC),
+      statGroupMeta: Color(0xFFF48FB1), font: AppFont.fredoka,
+    ),
+  ),
+  neonPrism(
+    label: 'Neon Prism',
+    vibe: 'ELECTRIC', diff: 'CO-OP', elem: 'SPECTRUM',
+    whimsicalDescription: 'Unicorn after dark - deep night lit by saturated prism accents.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0D0A14), card: Color(0xFF1A1226),
+      primary: Color(0xFFE040FB), secondary: Color(0xFF00E5FF),
+      headlineStat: Color(0xFFFFD740), bulletColor: Color(0xFFE040FB),
+      bulletGlyph: '\u2726', twinkleBullets: true, sparkleNumbers: true,
+      numberGlowColor: Color(0xFFE040FB), tabularFigures: true,
+      numberSizeScale: 1.05, numberWeight: FontWeight.w800,
+      chipRadius: 14, cardRadius: 16,
+      cardBorderColor: Color(0x44E040FB), cardBorderWidth: 1.0,
+      dividerColor: Color(0x55E040FB), dividerThickness: 1.0,
+      glowPrimary: Color(0x55E040FB), glowSecondary: Color(0x4000E5FF),
+      auraStyle: AvatarAuraStyle.pastelPulse, headerGlyph: '\u2726',
+      headerUnderlineColor: Color(0xAAE040FB),
+      statGroupCombat: Color(0xFFE040FB),
+      statGroupHandling: Color(0xFF00E5FF),
+      statGroupMeta: Color(0xFFFFD740), font: AppFont.fredoka,
+    ),
+  ),
+  blacksmithsFire(
+    label: "Blacksmiths Fire",
+    vibe: 'RUSTED', diff: 'EXPERT', elem: 'EMBER',
+    whimsicalDescription: 'Forge Master rougher kin - rust and deep ember over scorched iron.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF120B08), card: Color(0xFF1E130E),
+      primary: Color(0xFFD84315), secondary: Color(0xFFFF8A65),
+      headlineStat: Color(0xFFFFB74D), bulletColor: Color(0xFFD84315),
+      bulletGlyph: '\u2622', twinkleBullets: true, tabularFigures: true,
+      numberSizeScale: 1.0, numberWeight: FontWeight.w800,
+      chipRadius: 4, cardRadius: 6,
+      cardBorderColor: Color(0x33D84315), cardBorderWidth: 1.0,
+      dividerColor: Color(0x44D84315), dividerThickness: 1.0,
+      glowPrimary: Color(0x4DD84315), glowSecondary: Color(0x2EFF8A65),
+      auraStyle: AvatarAuraStyle.forgeGlow, headerGlyph: '\u2622',
+      headerUnderlineColor: Color(0x88D84315),
+      statGroupCombat: Color(0xFFD84315),
+      statGroupHandling: Color(0xFFFF8A65),
+      statGroupMeta: Color(0xFFFFB74D), font: AppFont.russoOne,
+    ),
+  ),
+  moltenSteel(
+    label: 'Molten Steel',
+    vibe: 'FORGED', diff: 'EXPERT', elem: 'STEEL',
+    whimsicalDescription: 'Forge Master chilled - iron greys with a molten-orange edge bleeding through.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0E0E12), card: Color(0xFF18181E),
+      primary: Color(0xFFFF6E40), secondary: Color(0xFFB0BEC5),
+      headlineStat: Color(0xFFECEFF1), bulletColor: Color(0xFFFF6E40),
+      bulletGlyph: '\u2692', twinkleBullets: false, tabularFigures: true,
+      numberSizeScale: 1.0, numberWeight: FontWeight.w700,
+      chipRadius: 5, cardRadius: 7,
+      cardBorderColor: Color(0x3378909C), cardBorderWidth: 1.0,
+      dividerColor: Color(0x3378909C), dividerThickness: 1.0,
+      glowPrimary: Color(0x33FF6E40), glowSecondary: Color(0x2278909C),
+      auraStyle: AvatarAuraStyle.forgeGlow, headerGlyph: '\u2692',
+      headerUnderlineColor: Color(0x66FF6E40),
+      statGroupCombat: Color(0xFFFF6E40),
+      statGroupHandling: Color(0xFFB0BEC5),
+      statGroupMeta: Color(0xFF90A4AE), font: AppFont.russoOne,
+    ),
+  ),
+  paperInk(
+    label: 'Paper & Ink',
+    vibe: 'QUIET', diff: 'NORMAL', elem: 'INK',
+    whimsicalDescription: 'Minimalist day shift - soft paper greys under crisp ink.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF16161A), card: Color(0xFF222228),
+      primary: Color(0xFF90A4AE), secondary: Color(0xFFB0BEC5),
+      headlineStat: Color(0xFFECEFF1), bulletColor: Color(0xFF90A4AE),
+      bulletGlyph: '\u25AA', sparkleNumbers: false,
+      numberGlowColor: Color(0x00000000), tabularFigures: true,
+      numberSizeScale: 1.0, numberWeight: FontWeight.w600,
+      chipRadius: 4, cardRadius: 6,
+      cardBorderColor: Color(0x3390A4AE), cardBorderWidth: 1.0,
+      dividerColor: Color(0x3390A4AE), dividerThickness: 1.0,
+      glowPrimary: Color(0x00000000), glowSecondary: Color(0x00000000),
+      auraStyle: AvatarAuraStyle.moonGlow, headerGlyph: '\u25AA',
+      headerUnderlineColor: Color(0x5590A4AE),
+      statGroupCombat: Color(0xFF90A4AE),
+      statGroupHandling: Color(0xFFB0BEC5),
+      statGroupMeta: Color(0xFF78909C), font: AppFont.gungeon,
+    ),
+  ),
+  voidWhite(
+    label: 'Void White',
+    vibe: 'STARK', diff: 'BRUTAL', elem: 'VOID',
+    whimsicalDescription: 'Minimalist edge - pure white on near-black, no chrome, no noise.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF08080C), card: Color(0xFF101014),
+      primary: Color(0xFFFFFFFF), secondary: Color(0xFF9E9E9E),
+      headlineStat: Color(0xFFFFFFFF), bulletColor: Color(0xFFFFFFFF),
+      bulletGlyph: '\u25AA', sparkleNumbers: false,
+      numberGlowColor: Color(0x00000000), tabularFigures: true,
+      numberSizeScale: 1.0, numberWeight: FontWeight.w700,
+      chipRadius: 4, cardRadius: 6,
+      cardBorderColor: Color(0x33FFFFFF), cardBorderWidth: 1.0,
+      dividerColor: Color(0x22FFFFFF), dividerThickness: 1.0,
+      glowPrimary: Color(0x00000000), glowSecondary: Color(0x00000000),
+      auraStyle: AvatarAuraStyle.moonGlow, headerGlyph: '\u25AA',
+      headerUnderlineColor: Color(0x55FFFFFF),
+      statGroupCombat: Color(0xFFFFFFFF),
+      statGroupHandling: Color(0xFF9E9E9E),
+      statGroupMeta: Color(0xFF757575), font: AppFont.gungeon,
     ),
   ),
   stormCaller(
@@ -1025,6 +1173,431 @@ enum AppThemeMode {
       statGroupCombat: Color(0xFFFFEB3B), // electric yellow
       statGroupHandling: Color(0xFF42A5F5), // voltage blue
       statGroupMeta: Color(0xFFFFFF00), // pure electric
+      font: AppFont.fasterOne,
+    ),
+  ),
+  // ── 6 Character Themes ─────────────────────────────────────────
+  theCultist(
+    label: 'The Cultist',
+    vibe: 'MYSTIC',
+    diff: 'HARD',
+    elem: 'SHADOW',
+    whimsicalDescription: 'A hooded figure kneels in candlelight. Deep blue robes, flickering gold, and shadow-purple — for the gungeoneer who speaks in riddles and fights in silence.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0D0F1A),
+      card: Color(0xFF161A2E),
+      primary: Color(0xFFFFD700), // candle gold
+      secondary: Color(0xFF7B68EE), // mystic purple
+      headlineStat: Color(0xFFFFE082), // warm gold
+      bulletColor: Color(0xFF7B68EE),
+      bulletGlyph: '◈',
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFFFFD700),
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w700,
+      chipRadius: 12,
+      cardRadius: 14,
+      cardBorderColor: Color(0x447B68EE),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x447B68EE),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x44FFD700),
+      glowSecondary: Color(0x337B68EE),
+      glowStyle: GlowStyle.halo,
+      auraStyle: AvatarAuraStyle.voidPulse,
+      headerGlyph: '◈',
+      headerUnderlineColor: Color(0x88FFD700),
+      statGroupCombat: Color(0xFFFFD700),
+      statGroupHandling: Color(0xFF7B68EE),
+      statGroupMeta: Color(0xFFFFE082),
+      font: AppFont.medievalSharp,
+    ),
+  ),
+  theGunslinger(
+    label: 'The Gunslinger',
+    vibe: 'LEGENDARY',
+    diff: 'EXTREME',
+    elem: 'BULLET',
+    whimsicalDescription: 'The legend who killed the past with two guns and a grin. Polished gold, worn leather, and gunmetal — for the gungeoneer who walks in like they own the place.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF1A1208),
+      card: Color(0xFF2A1E10),
+      primary: Color(0xFFFFB300), // gold
+      secondary: Color(0xFFFF6F00), // amber
+      headlineStat: Color(0xFFFFD54F), // bright gold
+      bulletColor: Color(0xFFFFB300),
+      bulletGlyph: '✦',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.08,
+      numberWeight: FontWeight.w800,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x66FFB300),
+      cardBorderWidth: 1.2,
+      dividerColor: Color(0x55FFB300),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55FFB300),
+      glowSecondary: Color(0x44FF6F00),
+      auraStyle: AvatarAuraStyle.goldShimmerRing,
+      headerGlyph: '✦',
+      headerUnderlineColor: Color(0xAAFFB300),
+      statGroupCombat: Color(0xFFFFB300),
+      statGroupHandling: Color(0xFFFF6F00),
+      statGroupMeta: Color(0xFFFFD54F),
+      font: AppFont.cinzel,
+    ),
+  ),
+  theConvict(
+    label: 'The Convict',
+    vibe: 'REBELLIOUS',
+    diff: 'HARD',
+    elem: 'FIRE',
+    whimsicalDescription: 'A rebel with a shotgun and a grudge. Prison orange, rebel red, and dark steel — for the gungeoneer who fights harder when cornered.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF1A0F0A),
+      card: Color(0xFF2A1810),
+      primary: Color(0xFFFF5722), // prison orange
+      secondary: Color(0xFFD32F2F), // rebel red
+      headlineStat: Color(0xFFFF8A65), // light orange
+      bulletColor: Color(0xFFFF5722),
+      bulletGlyph: '▲',
+      tabularFigures: true,
+      numberSizeScale: 1.06,
+      numberWeight: FontWeight.w800,
+      chipRadius: 6,
+      cardRadius: 8,
+      cardBorderColor: Color(0x44FF5722),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55FF5722),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55FF5722),
+      glowSecondary: Color(0x44D32F2F),
+      auraStyle: AvatarAuraStyle.forgeGlow,
+      headerGlyph: '▲',
+      headerUnderlineColor: Color(0xAAFF5722),
+      statGroupCombat: Color(0xFFFF5722),
+      statGroupHandling: Color(0xFFD32F2F),
+      statGroupMeta: Color(0xFFFF8A65),
+      font: AppFont.anton,
+    ),
+  ),
+  theHunter(
+    label: 'The Hunter',
+    vibe: 'WILDERNESS',
+    diff: 'NORMAL',
+    elem: 'NATURE',
+    whimsicalDescription: 'A crossbow, a plan, and patience. Forest green, bark brown, and crossbow silver — for the gungeoneer who hunts from the shadows of the gungeon.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A1208),
+      card: Color(0xFF121E10),
+      primary: Color(0xFF66BB6A), // forest green
+      secondary: Color(0xFFA1887F), // bark brown
+      headlineStat: Color(0xFFA5D6A7), // light green
+      bulletColor: Color(0xFF66BB6A),
+      bulletGlyph: '➤',
+      tabularFigures: true,
+      numberSizeScale: 1.04,
+      numberWeight: FontWeight.w700,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x4466BB6A),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x4466BB6A),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x3366BB6A),
+      glowSecondary: Color(0x22A1887F),
+      auraStyle: AvatarAuraStyle.pastelPulse,
+      headerGlyph: '➤',
+      headerUnderlineColor: Color(0x8866BB6A),
+      statGroupCombat: Color(0xFF66BB6A),
+      statGroupHandling: Color(0xFFA1887F),
+      statGroupMeta: Color(0xFFA5D6A7),
+      font: AppFont.merriweather,
+    ),
+  ),
+  thePilot(
+    label: 'The Pilot',
+    vibe: 'CHARISMATIC',
+    diff: 'NORMAL',
+    elem: 'COSMIC',
+    whimsicalDescription: 'A rogueish grin and a trusty sidearm. Space silver, trust blue, and starlight — for the gungeoneer who talks their way in and shoots their way out.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0E1A),
+      card: Color(0xFF121829),
+      primary: Color(0xFF42A5F5), // trust blue
+      secondary: Color(0xFFB0BEC5), // space silver
+      headlineStat: Color(0xFF82B1FF), // light blue
+      bulletColor: Color(0xFF42A5F5),
+      bulletGlyph: '★',
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFF42A5F5),
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w700,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x4442A5F5),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x5542A5F5),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x4442A5F5),
+      glowSecondary: Color(0x33B0BEC5),
+      auraStyle: AvatarAuraStyle.cosmicTemporal,
+      headerGlyph: '★',
+      headerUnderlineColor: Color(0x8842A5F5),
+      statGroupCombat: Color(0xFF42A5F5),
+      statGroupHandling: Color(0xFFB0BEC5),
+      statGroupMeta: Color(0xFF82B1FF),
+      font: AppFont.orbitron,
+    ),
+  ),
+  theRat(
+    label: 'The Resourceful Rat',
+    vibe: 'CUNNING',
+    diff: 'NORMAL',
+    elem: 'GOLD',
+    whimsicalDescription: 'A dealmaker in the dark. Cheese gold, rat brown, and stolen silver — for the gungeoneer who always has a backup plan and a price.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF12100A),
+      card: Color(0xFF1E1A10),
+      primary: Color(0xFFFFC107), // cheese gold
+      secondary: Color(0xFF8D6E63), // rat brown
+      headlineStat: Color(0xFFFFD54F), // bright gold
+      bulletColor: Color(0xFFFFC107),
+      bulletGlyph: '◆',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.04,
+      numberWeight: FontWeight.w700,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x44FFC107),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55FFC107),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x44FFC107),
+      glowSecondary: Color(0x338D6E63),
+      auraStyle: AvatarAuraStyle.pastelPulse,
+      headerGlyph: '◆',
+      headerUnderlineColor: Color(0x88FFC107),
+      statGroupCombat: Color(0xFFFFC107),
+      statGroupHandling: Color(0xFF8D6E63),
+      statGroupMeta: Color(0xFFFFD54F),
+      font: AppFont.pressStart2p,
+    ),
+  ),
+  // ── 6 Floor Themes ─────────────────────────────────────────────
+  breachGateway(
+    label: 'The Breach',
+    vibe: 'ENTRY',
+    diff: 'NORMAL',
+    elem: 'PORTAL',
+    whimsicalDescription: 'The gateway shimmers. Portal purple, breach blue, and starlight white — the first step into the gungeon, where every run begins.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0814),
+      card: Color(0xFF14102A),
+      primary: Color(0xFF7C4DFF), // portal purple
+      secondary: Color(0xFF18FFFF), // portal cyan
+      headlineStat: Color(0xFFB388FF), // light purple
+      bulletColor: Color(0xFF7C4DFF),
+      bulletGlyph: '◉',
+      sparkleNumbers: true,
+      numberGlowColor: Color(0xFF7C4DFF),
+      tabularFigures: true,
+      numberSizeScale: 1.05,
+      numberWeight: FontWeight.w700,
+      chipRadius: 14,
+      cardRadius: 16,
+      cardBorderColor: Color(0x447C4DFF),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x557C4DFF),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x447C4DFF),
+      glowSecondary: Color(0x3318FFFF),
+      auraStyle: AvatarAuraStyle.paradoxRift,
+      headerGlyph: '◉',
+      headerUnderlineColor: Color(0x887C4DFF),
+      statGroupCombat: Color(0xFF7C4DFF),
+      statGroupHandling: Color(0xFF18FFFF),
+      statGroupMeta: Color(0xFFB388FF),
+      font: AppFont.rajdhani,
+    ),
+  ),
+  leadLordKeep(
+    label: "Lead Lord's Keep",
+    vibe: 'REGAL',
+    diff: 'NORMAL',
+    elem: 'BRASS',
+    whimsicalDescription: 'The first chamber, ruled by the Bullet King. Brass, gold, and stone grey — a regal hall where the gungeon begins in earnest.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF12100A),
+      card: Color(0xFF221E14),
+      primary: Color(0xFFC5A05E), // brass
+      secondary: Color(0xFFD4AF37), // gold
+      headlineStat: Color(0xFFFFD700), // bright gold
+      bulletColor: Color(0xFFC5A05E),
+      bulletGlyph: '❖',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.06,
+      numberWeight: FontWeight.w800,
+      chipRadius: 10,
+      cardRadius: 12,
+      cardBorderColor: Color(0x66C5A05E),
+      cardBorderWidth: 1.2,
+      dividerColor: Color(0x55C5A05E),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x44C5A05E),
+      glowSecondary: Color(0x33D4AF37),
+      auraStyle: AvatarAuraStyle.pastelPulse,
+      headerGlyph: '❖',
+      headerUnderlineColor: Color(0xAAC5A05E),
+      statGroupCombat: Color(0xFFC5A05E),
+      statGroupHandling: Color(0xFFD4AF37),
+      statGroupMeta: Color(0xFFFFD700),
+      font: AppFont.cinzelDecorative,
+    ),
+  ),
+  oubliettePit(
+    label: 'The Oubliette',
+    vibe: 'TOXIC',
+    diff: 'HARD',
+    elem: 'POISON',
+    whimsicalDescription: 'A forgotten chamber of sewage and poison. Toxic green, rust orange, and murky brown — for the gungeoneer who ventures where others flush.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A1208),
+      card: Color(0xFF121E0E),
+      primary: Color(0xFF8BC34A), // toxic green
+      secondary: Color(0xFFBF360C), // rust
+      headlineStat: Color(0xFFAED581), // light green
+      bulletColor: Color(0xFF8BC34A),
+      bulletGlyph: '☠',
+      tabularFigures: true,
+      numberSizeScale: 1.04,
+      numberWeight: FontWeight.w700,
+      chipRadius: 8,
+      cardRadius: 10,
+      cardBorderColor: Color(0x448BC34A),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x558BC34A),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x448BC34A),
+      glowSecondary: Color(0x33BF360C),
+      glowStyle: GlowStyle.drip,
+      auraStyle: AvatarAuraStyle.toxicOoze,
+      headerGlyph: '☠',
+      headerUnderlineColor: Color(0x888BC34A),
+      statGroupCombat: Color(0xFF8BC34A),
+      statGroupHandling: Color(0xFFBF360C),
+      statGroupMeta: Color(0xFFAED581),
+      font: AppFont.shareTechMono,
+    ),
+  ),
+  blackPowderMine(
+    label: 'Black Powder Mine',
+    vibe: 'INDUSTRIAL',
+    diff: 'HARD',
+    elem: 'EXPLOSIVE',
+    whimsicalDescription: 'A mine shaft of coal and gunpowder. Spark orange, coal black, and rust brown — for the gungeoneer who digs deep and shoots straight.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0A08),
+      card: Color(0xFF14140E),
+      primary: Color(0xFFFF6F00), // spark orange
+      secondary: Color(0xFF795548), // coal brown
+      headlineStat: Color(0xFFFFAB40), // light orange
+      bulletColor: Color(0xFFFF6F00),
+      bulletGlyph: '✸',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.06,
+      numberWeight: FontWeight.w800,
+      chipRadius: 6,
+      cardRadius: 8,
+      cardBorderColor: Color(0x44FF6F00),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x55FF6F00),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55FF6F00),
+      glowSecondary: Color(0x33795548),
+      auraStyle: AvatarAuraStyle.forgeGlow,
+      headerGlyph: '✸',
+      headerUnderlineColor: Color(0xAAFF6F00),
+      statGroupCombat: Color(0xFFFF6F00),
+      statGroupHandling: Color(0xFF795548),
+      statGroupMeta: Color(0xFFFFAB40),
+      font: AppFont.blackOpsOne,
+    ),
+  ),
+  bulletHellFloor(
+    label: 'Bullet Hell',
+    vibe: 'APOCALYPTIC',
+    diff: 'EXTREME',
+    elem: 'BULLET',
+    whimsicalDescription: 'The final floor. Blood red, bullet black, and warning yellow — for the gungeoneer who has killed their past and lives to tell about it.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0A0404),
+      card: Color(0xFF140808),
+      primary: Color(0xFFD32F2F), // blood red
+      secondary: Color(0xFFFFC107), // warning yellow
+      headlineStat: Color(0xFFFF5252), // bright red
+      bulletColor: Color(0xFFD32F2F),
+      bulletGlyph: '✕',
+      shimmerHeadline: true,
+      tabularFigures: true,
+      numberSizeScale: 1.08,
+      numberWeight: FontWeight.w800,
+      chipRadius: 4,
+      cardRadius: 6,
+      cardBorderColor: Color(0x66D32F2F),
+      cardBorderWidth: 1.2,
+      dividerColor: Color(0x55D32F2F),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x55D32F2F),
+      glowSecondary: Color(0x44FFC107),
+      glowStyle: GlowStyle.ember,
+      auraStyle: AvatarAuraStyle.lichPurple,
+      headerGlyph: '✕',
+      headerUnderlineColor: Color(0xAAD32F2F),
+      statGroupCombat: Color(0xFFD32F2F),
+      statGroupHandling: Color(0xFFFFC107),
+      statGroupMeta: Color(0xFFFF5252),
+      font: AppFont.archivoBlack,
+    ),
+  ),
+  rgDepartment(
+    label: 'R&G Department',
+    vibe: 'BUREAUCRATIC',
+    diff: 'EXPERT',
+    elem: 'NEON',
+    whimsicalDescription: 'The office floor of the Research & Development Department. Neon green, paper white, and office grey — for the gungeoneer who files paperwork between bullets.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFF0C0C0C),
+      card: Color(0xFF181818),
+      primary: Color(0xFF00E676), // neon green
+      secondary: Color(0xFFE0E0E0), // paper white
+      headlineStat: Color(0xFF69F0AE), // light green
+      bulletColor: Color(0xFF00E676),
+      bulletGlyph: '▸',
+      tabularFigures: true,
+      numberSizeScale: 1.04,
+      numberWeight: FontWeight.w700,
+      chipRadius: 6,
+      cardRadius: 8,
+      cardBorderColor: Color(0x4400E676),
+      cardBorderWidth: 1.0,
+      dividerColor: Color(0x4400E676),
+      dividerThickness: 0.8,
+      glowPrimary: Color(0x4400E676),
+      glowSecondary: Color(0x22E0E0E0),
+      auraStyle: AvatarAuraStyle.lightningArc,
+      headerGlyph: '▸',
+      headerUnderlineColor: Color(0x8800E676),
+      statGroupCombat: Color(0xFF00E676),
+      statGroupHandling: Color(0xFFE0E0E0),
+      statGroupMeta: Color(0xFF69F0AE),
+      font: AppFont.jetBrainsMono,
     ),
   ),
   custom(
@@ -1067,6 +1640,7 @@ enum AppThemeMode {
       headerAllCaps: true,
       headerUnderlineColor: Color(0x44FFFFFF),
       pageFrame: true,
+      font: AppFont.dmSans,
     ),
   );
 
@@ -1119,6 +1693,7 @@ enum AppThemeMode {
         dividerThickness: 1.0,
         glowPrimary: data.primary.withValues(alpha: 0.2),
         glowSecondary: data.secondary.withValues(alpha: 0.1),
+        glowStyle: GlowStyle.orbit,
         auraStyle: data.auraStyle,
         headerGlyph: null,
         headerUnderlineColor: data.primary.withValues(alpha: 0.5),
@@ -1126,6 +1701,38 @@ enum AppThemeMode {
     }
     return _staticFlair!;
   }
+
+  /// Asset slug for the theme's splash image (e.g. 'unicorn',
+  /// 'forge_master'). Returns '' for themes without a splash asset.
+  String get splashSlug => switch (this) {
+        AppThemeMode.unicorn => 'unicorn',
+        AppThemeMode.forgeMaster => 'forge_master',
+        AppThemeMode.robotsCore => 'robots_core',
+        AppThemeMode.catLady => 'cat_lady',
+        AppThemeMode.moonlitChamber => 'moonlit_chamber',
+        AppThemeMode.stormCaller => 'storm_caller',
+        AppThemeMode.mrRobot => 'mr_robot',
+        AppThemeMode.valorOfMarines => 'valor_of_marines',
+        AppThemeMode.theBullet => 'the_bullet',
+        AppThemeMode.theParadox => 'the_paradox',
+        AppThemeMode.gunpowder => 'gunpowder',
+        AppThemeMode.dragunfire => 'dragunfire',
+        AppThemeMode.lichsDomain => 'lichs_domain',
+        AppThemeMode.theCultist => 'the_cultist',
+        AppThemeMode.theGunslinger => 'the_gunslinger',
+        AppThemeMode.theConvict => 'the_convict',
+        AppThemeMode.theHunter => 'the_hunter',
+        AppThemeMode.thePilot => 'the_pilot',
+        AppThemeMode.theRat => 'the_rat',
+        AppThemeMode.breachGateway => 'the_breach',
+        AppThemeMode.leadLordKeep => 'lead_lord_keep',
+        AppThemeMode.oubliettePit => 'the_oubliette',
+        AppThemeMode.blackPowderMine => 'black_powder_mine',
+        AppThemeMode.bulletHellFloor => 'bullet_hell',
+        AppThemeMode.rgDepartment => 'rg_department',
+        AppThemeMode.custom => 'custom',
+        _ => '',
+      };
 }
 
 /// Palette variants for the Unicorn megapack. The first four map to
@@ -1219,19 +1826,16 @@ enum UnicornPalette {
 }
 
 enum AppFont {
+  // ── Featured (locked) ──
   gungeon,
   megrim,
+  // ── Pixel & Retro ──
   pressStart2p,
   silkscreen,
   vt323,
   pixelifySans,
-  bungee,
-  bungeeShade,
-  rubik8bit,
-  monoton,
+  // ── Sci-Fi & Tech ──
   blackOpsOne,
-  dotgothic16,
-  creepster,
   orbitron,
   shareTechMono,
   syncopate,
@@ -1239,53 +1843,27 @@ enum AppFont {
   audiowide,
   russoOne,
   fasterOne,
+  jetBrainsMono,
+  // ── Display & Impact ──
   archivoBlack,
   anton,
   rowdies,
   righteous,
-  comicNeue,
-  fredoka,
-  sniglet,
-  lemon,
-  lilitaOne,
-  spicyRice,
-  chewy,
-  boogaloo,
-  carterOne,
-  permanentMarker,
-  spaceGrotesk,
-  jetBrainsMono,
-  dmSans,
-  outfit,
-  syne,
-  montserrat,
-  lexend,
-  kanit,
-  teko,
-  fjallaOne,
   bebasNeue,
+  // ── Casual & Fun ──
+  fredoka,
+  carterOne,
+  // ── Clean & Modern ──
+  dmSans,
+  montserrat,
+  // ── Gothic & Fantasy ──
   medievalSharp,
   cinzelDecorative,
-  almendra,
-  metalMania,
-  unifrakturMaguntia,
-  newRocker,
-  rye,
-  nosifer,
-  playfairDisplay,
-  ebGaramond,
-  merriweather,
-  libreBaskerville,
-  specialElite,
-  coustard,
-  architectsDaughter,
   cinzel,
-  rockSalt,
-  shadowsIntoLight,
-  lobster,
-  caveat,
-  comfortaa,
-  alata,
+  // ── Serif & Editorial ──
+  merriweather,
+  specialElite,
+  playfairDisplay,
 }
 
 extension AppFontLabel on AppFont {
@@ -1294,13 +1872,7 @@ extension AppFontLabel on AppFont {
     AppFont.silkscreen: 'Silkscreen',
     AppFont.vt323: 'VT323',
     AppFont.pixelifySans: 'Pixelify Sans',
-    AppFont.bungee: 'Bungee',
-    AppFont.bungeeShade: 'Bungee Shade',
-    AppFont.rubik8bit: 'Rubik 8-Bit',
-    AppFont.monoton: 'Monoton',
     AppFont.blackOpsOne: 'Black Ops One',
-    AppFont.dotgothic16: 'DotGothic16',
-    AppFont.creepster: 'Creepster',
     AppFont.orbitron: 'Orbitron',
     AppFont.shareTechMono: 'Share Tech Mono',
     AppFont.syncopate: 'Syncopate',
@@ -1308,54 +1880,23 @@ extension AppFontLabel on AppFont {
     AppFont.audiowide: 'Audiowide',
     AppFont.russoOne: 'Russo One',
     AppFont.fasterOne: 'Faster One',
+    AppFont.jetBrainsMono: 'JetBrains Mono',
     AppFont.archivoBlack: 'Archivo Black',
     AppFont.anton: 'Anton',
     AppFont.rowdies: 'Rowdies',
     AppFont.righteous: 'Righteous',
-    AppFont.comicNeue: 'Comic Neue',
-    AppFont.fredoka: 'Fredoka',
-    AppFont.sniglet: 'Sniglet',
-    AppFont.lemon: 'Lemon',
-    AppFont.lilitaOne: 'Lilita One',
-    AppFont.spicyRice: 'Spicy Rice',
-    AppFont.chewy: 'Chewy',
-    AppFont.boogaloo: 'Boogaloo',
-    AppFont.carterOne: 'Carter One',
-    AppFont.permanentMarker: 'Permanent Marker',
-    AppFont.spaceGrotesk: 'Space Grotesk',
-    AppFont.jetBrainsMono: 'JetBrains Mono',
-    AppFont.dmSans: 'DM Sans',
-    AppFont.outfit: 'Outfit',
-    AppFont.syne: 'Syne',
-    AppFont.montserrat: 'Montserrat',
-    AppFont.lexend: 'Lexend',
-    AppFont.kanit: 'Kanit',
-    AppFont.teko: 'Teko',
-    AppFont.fjallaOne: 'Fjalla One',
     AppFont.bebasNeue: 'Bebas Neue',
+    AppFont.fredoka: 'Fredoka',
+    AppFont.carterOne: 'Carter One',
+    AppFont.dmSans: 'DM Sans',
+    AppFont.montserrat: 'Montserrat',
     AppFont.medievalSharp: 'MedievalSharp',
     AppFont.cinzelDecorative: 'Cinzel Decorative',
-    AppFont.almendra: 'Almendra',
-    AppFont.metalMania: 'Metal Mania',
-    AppFont.unifrakturMaguntia: 'UnifrakturMaguntia',
-    AppFont.newRocker: 'New Rocker',
-    AppFont.rye: 'Rye',
-    AppFont.nosifer: 'Nosifer',
-    AppFont.playfairDisplay: 'Playfair Display',
-    AppFont.ebGaramond: 'EB Garamond',
-    AppFont.merriweather: 'Merriweather',
-    AppFont.libreBaskerville: 'Libre Baskerville',
-    AppFont.specialElite: 'Special Elite',
-    AppFont.coustard: 'Coustard',
-    AppFont.architectsDaughter: 'Architects Daughter',
     AppFont.cinzel: 'Cinzel',
+    AppFont.merriweather: 'Merriweather',
+    AppFont.specialElite: 'Special Elite',
+    AppFont.playfairDisplay: 'Playfair Display',
     AppFont.megrim: 'Megrim',
-    AppFont.rockSalt: 'Rock Salt',
-    AppFont.shadowsIntoLight: 'Shadows Into Light',
-    AppFont.lobster: 'Lobster',
-    AppFont.caveat: 'Caveat',
-    AppFont.comfortaa: 'Comfortaa',
-    AppFont.alata: 'Alata',
   };
 
   static const Map<AppFont, String> _googleFontDescriptions = {
@@ -1363,13 +1904,7 @@ extension AppFontLabel on AppFont {
     AppFont.silkscreen: 'Crisp tiny 8-bit screen font',
     AppFont.vt323: 'Nostalgic glowing CRT terminal font',
     AppFont.pixelifySans: 'Modern hybrid geometric pixel art',
-    AppFont.bungee: 'Chunky vertical urban sign look',
-    AppFont.bungeeShade: 'Shadowed retro arcade heading',
-    AppFont.rubik8bit: 'Extra heavy 3D pixel letters',
-    AppFont.monoton: 'Triple-line futuristic high-tech race style',
     AppFont.blackOpsOne: 'Military industrial stencil look',
-    AppFont.dotgothic16: 'Authentic 90s Japanese arcade style',
-    AppFont.creepster: 'Spooky classic halloween horror lettering',
     AppFont.orbitron: 'Futuristic sci-fi aerospace tech',
     AppFont.shareTechMono: 'Clean digital cybernetic HUD console',
     AppFont.syncopate: 'Wide high-end cyberpunk architecture',
@@ -1377,54 +1912,23 @@ extension AppFontLabel on AppFont {
     AppFont.audiowide: 'Smooth streamlined robotic lettering',
     AppFont.russoOne: 'Heavy soviet metal sci-fi gaming',
     AppFont.fasterOne: 'Wind-tunnel racing speed blur lines',
+    AppFont.jetBrainsMono: 'Elite software engineer monospace editor',
     AppFont.archivoBlack: 'Ultra heavy high-visibility signage',
     AppFont.anton: 'Thick solid impact display blocks',
     AppFont.rowdies: 'Edgy casual heavy fighting style',
     AppFont.righteous: 'Cool geometric art deco bubble-sans',
-    AppFont.comicNeue: 'Highly readable modern cartoon comic',
-    AppFont.fredoka: 'Cute rounded friendly organic blocks',
-    AppFont.sniglet: 'Playful bouncy summer kids cartoon',
-    AppFont.lemon: 'Thick juicy casual letter blocks',
-    AppFont.lilitaOne: 'Chubby fat-finger casual display',
-    AppFont.spicyRice: 'Wacky tropical retro gaming logo',
-    AppFont.chewy: 'Squishy melting marshmallow cartoon',
-    AppFont.boogaloo: 'Swinging 60s retro party lettering',
-    AppFont.carterOne: 'Thick vintage brush logo signwriting',
-    AppFont.permanentMarker: 'Grungy hand-drawn permanent ink scribble',
-    AppFont.spaceGrotesk: 'Sleek geometric tech sans with character',
-    AppFont.jetBrainsMono: 'Elite software engineer monospace editor',
-    AppFont.dmSans: 'Neutral geometric modern interface sans',
-    AppFont.outfit: 'Perfect luxury circular modern display',
-    AppFont.syne: 'Artistic high-fashion expressive layout',
-    AppFont.montserrat: 'Clean urban geometric architectural sans',
-    AppFont.lexend: 'Ultra readable educational interface sans',
-    AppFont.kanit: 'Sleek compact high-density modern sans',
-    AppFont.teko: 'Super tall condensed athletic metal block',
-    AppFont.fjallaOne: 'High impact condensed newspaper heading',
     AppFont.bebasNeue: 'Clean condensed billboard display legend',
+    AppFont.fredoka: 'Cute rounded friendly organic blocks',
+    AppFont.carterOne: 'Thick vintage brush logo signwriting',
+    AppFont.dmSans: 'Neutral geometric modern interface sans',
+    AppFont.montserrat: 'Clean urban geometric architectural sans',
     AppFont.medievalSharp: 'Sharp runic celtic iron broadsword',
     AppFont.cinzelDecorative: 'Ornate royalty fantasy crown capitals',
-    AppFont.almendra: 'Classic gothic fantasy parchment script',
-    AppFont.metalMania: 'Heavy thrash metal guitar typography',
-    AppFont.unifrakturMaguntia: 'Traditional blackletter gothic cathedral script',
-    AppFont.newRocker: 'Aggressive hard rock jagged lettering',
-    AppFont.rye: 'Wanted poster wild west saloon woodcut',
-    AppFont.nosifer: 'Dripping toxic acid blood splatter',
-    AppFont.playfairDisplay: 'Luxurious high-contrast theatrical display',
-    AppFont.ebGaramond: 'Classic scholarly book antique print',
-    AppFont.merriweather: 'Robust highly readable editorial serif',
-    AppFont.libreBaskerville: 'Elegant traditional transitional book serif',
-    AppFont.specialElite: 'Grungy ink-splattered vintage typewriter',
-    AppFont.coustard: 'Slab-serif heavy typewriter-slab block',
-    AppFont.architectsDaughter: 'Messy architect blueprints hand scribble',
     AppFont.cinzel: 'Formal ancient roman stone carving',
+    AppFont.merriweather: 'Robust highly readable editorial serif',
+    AppFont.specialElite: 'Grungy ink-splattered vintage typewriter',
+    AppFont.playfairDisplay: 'Luxurious high-contrast theatrical display',
     AppFont.megrim: 'Ultra-stylized thin wire outline vector',
-    AppFont.rockSalt: 'Scribbled dry-erase whiteboard marker',
-    AppFont.shadowsIntoLight: 'Neat feminine clean gel-pen handwriting',
-    AppFont.lobster: 'Thick bold retro script lettering',
-    AppFont.caveat: 'Natural fluid cursive ink handwriting',
-    AppFont.comfortaa: 'Soft circular geometric outline sans',
-    AppFont.alata: 'Clean balanced minimal graphic sans',
   };
 
   String get label {
@@ -1479,6 +1983,26 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.custom,
 ];
 
+/// The curated themes shown in the theme picker — cut to three for
+/// v3.0 (the broad picker confused users; each remaining theme's
+/// customization is clearer). Users persisted on a removed theme are
+/// migrated to Moonlit Chamber at load time.
+/// Minimalist stays in [kVisibleThemes] as the plain default look.
+const List<AppThemeMode> kPickerThemes = <AppThemeMode>[
+  // Unicorn family — OG + 2 variants
+  AppThemeMode.unicorn,
+  AppThemeMode.candyRush,
+  AppThemeMode.neonPrism,
+  // Forge family — OG + 2 variants
+  AppThemeMode.forgeMaster,
+  AppThemeMode.blacksmithsFire,
+  AppThemeMode.moltenSteel,
+  // Minimalist family — OG + 2 variants
+  AppThemeMode.moonlitChamber,
+  AppThemeMode.paperInk,
+  AppThemeMode.voidWhite,
+];
+
 /// Per-theme default particle preset. When a theme is active and the user
 /// hasn't explicitly chosen a different preset (still on [ParticlePreset.gungeonDust]),
 /// the theme overlay auto-applies the preset listed here. This gives every
@@ -1518,7 +2042,157 @@ const Map<AppThemeMode, ParticlePreset> kThemeParticleDefaults =
   AppThemeMode.gunpowder: ParticlePreset.gunpowderSmoke,
   AppThemeMode.dragunfire: ParticlePreset.dragunScales,
   AppThemeMode.lichsDomain: ParticlePreset.boneShards,
+  // ── 12 new themes (v2.0.4) ──
+  AppThemeMode.theCultist: ParticlePreset.cursedSkulls,
+  AppThemeMode.theGunslinger: ParticlePreset.goldenSparkle,
+  AppThemeMode.theConvict: ParticlePreset.solarFlare,
+  AppThemeMode.theHunter: ParticlePreset.crystalLattice,
+  AppThemeMode.thePilot: ParticlePreset.cosmicStars,
+  AppThemeMode.theRat: ParticlePreset.hegemonyCredits,
+  AppThemeMode.breachGateway: ParticlePreset.cosmicDust,
+  AppThemeMode.leadLordKeep: ParticlePreset.brassCasings,
+  AppThemeMode.oubliettePit: ParticlePreset.toxicBubbles,
+  AppThemeMode.blackPowderMine: ParticlePreset.gunpowderSmoke,
+  AppThemeMode.bulletHellFloor: ParticlePreset.bulletHell,
+  AppThemeMode.rgDepartment: ParticlePreset.circuitTraces,
   AppThemeMode.custom: ParticlePreset.cosmicStars,
+};
+
+/// Curated visual settings for a premade theme. When a user selects a
+/// premade theme, these settings are applied to give the theme a
+/// complete, intentional identity — not just colors but particles,
+/// glow, shader, and font too.
+class ThemeCuration {
+  final ParticlePreset particlePreset;
+  final ParticleColorSchema colorSchema;
+  final GlowEffect glowEffect;
+  final ParticleSpeed speed;
+  final int particleCount;
+  final double particleSizeScale;
+  final double particleOpacity;
+  final bool particleLineLinks;
+  final bool particleBounce;
+  final int glowColorIndex;
+  final double glowIntensity;
+  final bool shaderEnabled;
+  final ShaderPreset? shaderPreset;
+
+  const ThemeCuration({
+    required this.particlePreset,
+    this.colorSchema = ParticleColorSchema.presetDefault,
+    this.glowEffect = GlowEffect.smokey,
+    this.speed = ParticleSpeed.normal,
+    this.particleCount = 28,
+    this.particleSizeScale = 1.0,
+    this.particleOpacity = 0.8,
+    this.particleLineLinks = false,
+    this.particleBounce = false,
+    this.glowColorIndex = 0,
+    this.glowIntensity = 0.15,
+    this.shaderEnabled = false,
+    this.shaderPreset,
+  });
+}
+
+/// Curated settings for each of the 8 premade picker themes.
+/// When a user selects a premade, these are applied to VisualPrefs
+/// so the theme has a complete, polished identity out of the box.
+const Map<AppThemeMode, ThemeCuration> kThemeCuration =
+    <AppThemeMode, ThemeCuration>{
+  AppThemeMode.unicorn: ThemeCuration(
+    particlePreset: ParticlePreset.unicornSparkles,
+    colorSchema: ParticleColorSchema.candy,
+    glowEffect: GlowEffect.pulse,
+    speed: ParticleSpeed.slow,
+    particleCount: 20,
+    particleOpacity: 0.9,
+    glowColorIndex: 2, // pink
+    glowIntensity: 0.25,
+    shaderEnabled: true,
+    shaderPreset: ShaderPreset.darkNeonFog,
+  ),
+  AppThemeMode.forgeMaster: ThemeCuration(
+    particlePreset: ParticlePreset.forgeEmbers,
+    colorSchema: ParticleColorSchema.inferno,
+    glowEffect: GlowEffect.ember,
+    speed: ParticleSpeed.normal,
+    particleCount: 18,
+    particleOpacity: 0.85,
+    glowColorIndex: 1, // amber
+    glowIntensity: 0.3,
+    shaderEnabled: true,
+    shaderPreset: ShaderPreset.darkNeonFog,
+  ),
+  AppThemeMode.moonlitChamber: ThemeCuration(
+    particlePreset: ParticlePreset.moonlight,
+    colorSchema: ParticleColorSchema.glacier,
+    glowEffect: GlowEffect.smokey,
+    speed: ParticleSpeed.verySlow,
+    particleCount: 14,
+    particleOpacity: 0.7,
+    glowColorIndex: 4, // blue
+    glowIntensity: 0.2,
+    shaderEnabled: true,
+    shaderPreset: ShaderPreset.darkNeonFog,
+  ),
+  AppThemeMode.theBullet: ThemeCuration(
+    particlePreset: ParticlePreset.heroicBlades,
+    colorSchema: ParticleColorSchema.gilded,
+    glowEffect: GlowEffect.neon,
+    speed: ParticleSpeed.fast,
+    particleCount: 16,
+    particleOpacity: 0.85,
+    glowColorIndex: 3, // gold
+    glowIntensity: 0.25,
+    shaderEnabled: false,
+  ),
+  AppThemeMode.theParadox: ThemeCuration(
+    particlePreset: ParticlePreset.paradoxShards,
+    colorSchema: ParticleColorSchema.voidStorm,
+    glowEffect: GlowEffect.spectral,
+    speed: ParticleSpeed.normal,
+    particleCount: 22,
+    particleOpacity: 0.75,
+    glowColorIndex: 6, // purple
+    glowIntensity: 0.3,
+    shaderEnabled: true,
+    shaderPreset: ShaderPreset.digitalRain,
+  ),
+  AppThemeMode.dragunfire: ThemeCuration(
+    particlePreset: ParticlePreset.dragunScales,
+    colorSchema: ParticleColorSchema.inferno,
+    glowEffect: GlowEffect.ember,
+    speed: ParticleSpeed.fast,
+    particleCount: 20,
+    particleOpacity: 0.9,
+    glowColorIndex: 0, // red
+    glowIntensity: 0.35,
+    shaderEnabled: true,
+    shaderPreset: ShaderPreset.darkNeonFog,
+  ),
+  AppThemeMode.lichsDomain: ThemeCuration(
+    particlePreset: ParticlePreset.boneShards,
+    colorSchema: ParticleColorSchema.monochrome,
+    glowEffect: GlowEffect.cursed,
+    speed: ParticleSpeed.slow,
+    particleCount: 16,
+    particleOpacity: 0.7,
+    glowColorIndex: 8, // teal
+    glowIntensity: 0.2,
+    shaderEnabled: true,
+    shaderPreset: ShaderPreset.digitalRain,
+  ),
+  AppThemeMode.gunpowder: ThemeCuration(
+    particlePreset: ParticlePreset.gunpowderSmoke,
+    colorSchema: ParticleColorSchema.steel,
+    glowEffect: GlowEffect.smokey,
+    speed: ParticleSpeed.normal,
+    particleCount: 14,
+    particleOpacity: 0.65,
+    glowColorIndex: 5, // grey
+    glowIntensity: 0.15,
+    shaderEnabled: false,
+  ),
 };
 
 /// Animated avatar-border treatment. Painted by `AvatarAura` around
@@ -1589,7 +2263,7 @@ extension AppThemeModeLabel on AppThemeMode {
       case AppThemeMode.unicornIV:
         return 'Unicorn Sunset';
       case AppThemeMode.ammonomicon:
-        return 'The Ammonomicon';
+        return 'The Codex';
       case AppThemeMode.forgeMaster:
         return 'Forge Master';
       case AppThemeMode.hollowChill:
@@ -1624,8 +2298,20 @@ extension AppThemeModeLabel on AppThemeMode {
         return "Winchester's Game";
       case AppThemeMode.catLady:
         return 'Cat Lady';
+      case AppThemeMode.candyRush:
+        return 'Candy Rush';
+      case AppThemeMode.neonPrism:
+        return 'Neon Prism';
+      case AppThemeMode.blacksmithsFire:
+        return "Blacksmith's Fire";
+      case AppThemeMode.moltenSteel:
+        return 'Molten Steel';
+      case AppThemeMode.paperInk:
+        return 'Paper & Ink';
+      case AppThemeMode.voidWhite:
+        return 'Void White';
       case AppThemeMode.moonlitChamber:
-        return 'Moonlit Chamber';
+        return 'Minimalist';
       case AppThemeMode.stormCaller:
         return 'Storm Caller';
       case AppThemeMode.mrRobot:
@@ -1642,6 +2328,30 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Dragunfire';
       case AppThemeMode.lichsDomain:
         return "Lich's Domain";
+      case AppThemeMode.theCultist:
+        return 'The Cultist';
+      case AppThemeMode.theGunslinger:
+        return 'The Gunslinger';
+      case AppThemeMode.theConvict:
+        return 'The Convict';
+      case AppThemeMode.theHunter:
+        return 'The Hunter';
+      case AppThemeMode.thePilot:
+        return 'The Pilot';
+      case AppThemeMode.theRat:
+        return 'The Resourceful Rat';
+      case AppThemeMode.breachGateway:
+        return 'The Breach';
+      case AppThemeMode.leadLordKeep:
+        return "Lead Lord's Keep";
+      case AppThemeMode.oubliettePit:
+        return 'The Oubliette';
+      case AppThemeMode.blackPowderMine:
+        return 'Black Powder Mine';
+      case AppThemeMode.bulletHellFloor:
+        return 'Bullet Hell';
+      case AppThemeMode.rgDepartment:
+        return 'R&G Department';
       case AppThemeMode.minimalist:
         return 'Minimalist';
       case AppThemeMode.custom:
@@ -1695,8 +2405,20 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Target Practice — fairground green, ticket orange, wood brown';
       case AppThemeMode.catLady:
         return 'Cozy Den — warm amber, cream, walnut brown with paw prints';
+      case AppThemeMode.candyRush:
+        return 'Bubblegum — pastel pink, cotton-candy blue, sweet rose';
+      case AppThemeMode.neonPrism:
+        return 'Neon Spectrum — magenta, cyan, electric gold on night';
+      case AppThemeMode.blacksmithsFire:
+        return 'Rusted Ember — deep rust, hot copper, scorched iron';
+      case AppThemeMode.moltenSteel:
+        return 'Iron & Molten — steel greys, one hot orange edge';
+      case AppThemeMode.paperInk:
+        return 'Sketchbook — ink blue-grey, paper grey, quiet tones';
+      case AppThemeMode.voidWhite:
+        return 'Stark — pure white on near-black, zero chrome';
       case AppThemeMode.moonlitChamber:
-        return 'Lunar Watch — silver-blue, pale moonlight, midnight dark';
+        return 'Distilled — soft whites on deep charcoal, no glow';
       case AppThemeMode.stormCaller:
         return 'High Voltage — electric yellow, voltage blue, storm steel';
       case AppThemeMode.mrRobot:
@@ -1713,6 +2435,30 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Molten Inferno — dragun orange, scale amber, ash black';
       case AppThemeMode.lichsDomain:
         return 'Necrotic — crypt teal, bone white, void black';
+      case AppThemeMode.theCultist:
+        return 'Mystic — candle gold, mystic purple, shadow';
+      case AppThemeMode.theGunslinger:
+        return 'Legendary — gold, amber, gunmetal';
+      case AppThemeMode.theConvict:
+        return 'Rebellious — prison orange, rebel red, steel';
+      case AppThemeMode.theHunter:
+        return 'Wilderness — forest green, bark brown, silver';
+      case AppThemeMode.thePilot:
+        return 'Charismatic — trust blue, space silver, starlight';
+      case AppThemeMode.theRat:
+        return 'Cunning — cheese gold, rat brown, stolen silver';
+      case AppThemeMode.breachGateway:
+        return 'Entry — portal purple, breach cyan, starlight';
+      case AppThemeMode.leadLordKeep:
+        return 'Regal — brass, gold, stone grey';
+      case AppThemeMode.oubliettePit:
+        return 'Toxic — toxic green, rust, murky brown';
+      case AppThemeMode.blackPowderMine:
+        return 'Industrial — spark orange, coal black, rust';
+      case AppThemeMode.bulletHellFloor:
+        return 'Apocalyptic — blood red, bullet black, warning yellow';
+      case AppThemeMode.rgDepartment:
+        return 'Bureaucratic — neon green, paper white, office grey';
       case AppThemeMode.minimalist:
         return 'Stripped Back — pure black, clean white, cold grey';
       case AppThemeMode.custom:
@@ -1943,28 +2689,6 @@ enum InventoryDisplayMode {
   tacticalStats,
 }
 
-/// Active-run display mode — three interchangeable ways to view the same
-/// core loadout data (character + guns + items + run stats). Switchable
-/// instantly via the RunDisplayModeBar on the active-run screen.
-///
-/// - [classic]:   Mode 0 — the original full scroll view (default).
-/// - [codex]:     Mode 1 — leather-and-brass book compendium.
-/// - [compact]:   Mode 2 — super-compact tactical HUD for quick runs.
-/// - [matrix]:    Mode 3 — purple Gungeon Matrix animated rain background.
-/// - [signature]: Mode 4 — Theme Signature mode that adapts its entire
-///   layout, decorations, and lore text to match the active theme.
-///
-/// Persisted via [VisualPrefs.runDisplayMode]. Independent of the active
-/// theme palette and the particle system — switching mode does not touch
-/// theme or particle prefs (avoids BUG-038-style coupling).
-enum RunDisplayMode {
-  classic,
-  codex,
-  compact,
-  matrix,
-  signature,
-}
-
 /// Ambient fragment shader preset (Q3 genius audit). Each preset maps
 /// to a .frag file in assets/shaders/. See AmbientShaderLayer.
 enum ShaderPreset {
@@ -1976,29 +2700,6 @@ extension ShaderPresetX on ShaderPreset {
   String get label => switch (this) {
         ShaderPreset.digitalRain => 'Digital Rain',
         ShaderPreset.darkNeonFog => 'Dark Neon Fog',
-      };
-}
-
-extension RunDisplayModeX on RunDisplayMode {
-  String get label => switch (this) {
-        RunDisplayMode.classic => 'Classic Scroll',
-        RunDisplayMode.codex => 'Codex Book',
-        RunDisplayMode.compact => 'Compact Run',
-        RunDisplayMode.matrix => 'Gungeon Matrix',
-        RunDisplayMode.signature => 'Theme Signature',
-      };
-
-  String get description => switch (this) {
-        RunDisplayMode.classic =>
-          'The original full scroll view — everything in one page',
-        RunDisplayMode.codex =>
-          'Leather-and-brass compendium with turning pages',
-        RunDisplayMode.compact =>
-          'High-density tactical HUD for fast sessions',
-        RunDisplayMode.matrix =>
-          'Purple digital rain with live run data overlay',
-        RunDisplayMode.signature =>
-          'Adapts to your active theme — lore, colors, decorations',
       };
 }
 
@@ -2026,6 +2727,61 @@ class CustomThemeData {
     this.auraStyle = AvatarAuraStyle.none,
     this.font = AppFont.gungeon,
   });
+
+  /// Serialize for embedding inside SavedCustomTheme.
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'scaffold': scaffold.toARGB32(),
+    'card': card.toARGB32(),
+    'primary': primary.toARGB32(),
+    'secondary': secondary.toARGB32(),
+    'headlineStat': headlineStat.toARGB32(),
+    'bulletColor': bulletColor.toARGB32(),
+    'auraStyle': auraStyle.index,
+    'font': font.index,
+  };
+
+  /// Deserialize from embedded JSON. Color fields fall back to defaults
+  /// if missing (handles legacy/partial JSON gracefully).
+  factory CustomThemeData.fromJson(Map<String, dynamic> j) {
+    final d = CustomThemeData.defaultTheme;
+    return CustomThemeData(
+      name: j['name'] as String? ?? 'Custom',
+      scaffold: Color(j['scaffold'] as int? ?? d.scaffold.toARGB32()),
+      card: Color(j['card'] as int? ?? d.card.toARGB32()),
+      primary: Color(j['primary'] as int? ?? d.primary.toARGB32()),
+      secondary: Color(j['secondary'] as int? ?? d.secondary.toARGB32()),
+      headlineStat: Color(j['headlineStat'] as int? ?? d.headlineStat.toARGB32()),
+      bulletColor: Color(j['bulletColor'] as int? ?? d.bulletColor.toARGB32()),
+      auraStyle: AvatarAuraStyle.values[j['auraStyle'] as int? ?? 0],
+      font: AppFont.values[j['font'] as int? ?? 0],
+    );
+  }
+
+  /// Copy with optional overrides (used by color picker).
+  CustomThemeData copyWith({
+    String? name,
+    Color? scaffold,
+    Color? card,
+    Color? primary,
+    Color? secondary,
+    Color? headlineStat,
+    Color? bulletColor,
+    AvatarAuraStyle? auraStyle,
+    AppFont? font,
+  }) {
+    return CustomThemeData(
+      name: name ?? this.name,
+      scaffold: scaffold ?? this.scaffold,
+      card: card ?? this.card,
+      primary: primary ?? this.primary,
+      secondary: secondary ?? this.secondary,
+      headlineStat: headlineStat ?? this.headlineStat,
+      bulletColor: bulletColor ?? this.bulletColor,
+      auraStyle: auraStyle ?? this.auraStyle,
+      font: font ?? this.font,
+    );
+  }
 
   static const String _prefsKey = 'custom.theme.data';
 
@@ -2120,30 +2876,6 @@ class CustomThemeData {
       font: AppFont.values[rng.nextInt(AppFont.values.length)],
     );
   }
-
-  CustomThemeData copyWith({
-    String? name,
-    Color? scaffold,
-    Color? card,
-    Color? primary,
-    Color? secondary,
-    Color? headlineStat,
-    Color? bulletColor,
-    AvatarAuraStyle? auraStyle,
-    AppFont? font,
-  }) {
-    return CustomThemeData(
-      name: name ?? this.name,
-      scaffold: scaffold ?? this.scaffold,
-      card: card ?? this.card,
-      primary: primary ?? this.primary,
-      secondary: secondary ?? this.secondary,
-      headlineStat: headlineStat ?? this.headlineStat,
-      bulletColor: bulletColor ?? this.bulletColor,
-      auraStyle: auraStyle ?? this.auraStyle,
-      font: font ?? this.font,
-    );
-  }
 }
 
 /// Helper for generating lore-style random theme names.
@@ -2226,6 +2958,19 @@ class _RandomColorGenerator {
     // Return a curated pre-balanced Gungeon color scheme, completely oiled up!
     return _schemas[_rng.nextInt(_schemas.length)];
   }
+}
+
+/// Per-theme ambient glow animation style. Controls how the
+/// [_AmbientGlow] layer behind every theme moves and pulses.
+enum GlowStyle {
+  /// Orbiting dual-radial gradient (current behavior). Default.
+  orbit,
+  /// Bottom-up flicker — ember-like, fast and erratic.
+  ember,
+  /// Centered slow halo — static-ish, gentle pulse.
+  halo,
+  /// Top-down drip — slow downward gradient movement.
+  drip,
 }
 
 /// Extra per-theme styling knobs beyond [ColorScheme]. Read via
@@ -2319,6 +3064,9 @@ class ThemeFlair {
   final Color glowPrimary;
   final Color glowSecondary;
 
+  /// Per-theme ambient glow animation style. See [GlowStyle].
+  final GlowStyle glowStyle;
+
   /// Animated border treatment for character avatars (see
   /// `widgets/avatar_aura.dart`). Defaults to `none` — opt in per
   /// theme so the picker preview can stay clean.
@@ -2351,6 +3099,11 @@ class ThemeFlair {
   final Color? statGroupHandling;
   final Color? statGroupMeta;
 
+  /// Per-theme default font. When non-null, switching to this theme
+  /// applies this font. Users can still override via the font picker.
+  /// When null, the global VisualPrefs font is used.
+  final AppFont? font;
+
   const ThemeFlair({
     required this.scaffold,
     required this.card,
@@ -2378,6 +3131,7 @@ class ThemeFlair {
     this.dividerThickness = 1.0,
     this.glowPrimary = const Color(0x22FFFFFF),
     this.glowSecondary = const Color(0x11FFFFFF),
+    this.glowStyle = GlowStyle.orbit,
     this.auraStyle = AvatarAuraStyle.none,
     this.headerGlyph,
     this.headerAllCaps = false,
@@ -2386,6 +3140,7 @@ class ThemeFlair {
     this.statGroupCombat,
     this.statGroupHandling,
     this.statGroupMeta,
+    this.font,
   });
 }
 
@@ -2425,6 +3180,7 @@ ThemeFlair _hueShiftFlair(ThemeFlair f, double degrees) {
     dividerThickness: f.dividerThickness,
     glowPrimary: _hueShift(f.glowPrimary, degrees),
     glowSecondary: _hueShift(f.glowSecondary, degrees),
+    glowStyle: f.glowStyle,
     auraStyle: f.auraStyle,
     headerGlyph: f.headerGlyph,
     headerAllCaps: f.headerAllCaps,
@@ -2687,6 +3443,7 @@ class VisualPrefs {
   /// Font-weight bias applied globally on top of the active theme.
   /// Adjusted in increments of 100 (e.g. -400 to +500). Stored as an integer.
   final int fontWeightBias;
+  final int fontLetterSpacing; // ±steps ×0.5pt applied in GoopText
 
   /// Selected app-wide font. Defaults to Gungeon so the OOB look is
   /// recognisable to fans.
@@ -2714,11 +3471,6 @@ class VisualPrefs {
   final bool isGoopianLanguage;
   final bool spongeActive;
 
-  /// Whether the universal Damage Calculator terminal is shown on the
-  /// active-run dashboard for every character (Robot keeps its own
-  /// dedicated HUD regardless of this flag).
-  final bool showDamageCalculator;
-
   /// Whether the Effects panel accordion is shown on the active-run dashboard.
   final bool showEffectsPanel;
 
@@ -2737,26 +3489,17 @@ class VisualPrefs {
   /// User-selected particle speed multiplier.
   final ParticleSpeed particleSpeed;
 
-  /// Active-run display mode — which layout is shown on the active-run
-  /// screen. Defaults to [RunDisplayMode.classic] (the original scroll
-  /// view). See the plan at `docs/active_run_rework_plan.md`.
-  final RunDisplayMode runDisplayMode;
+  /// Typed particle system — index into [ParticleType.values] (0 = dot).
+  final int particleTypeIndex;
 
-  /// Whether the RunDisplayModeBar on the active-run screen starts
-  /// collapsed to a single pill (true) or expanded showing all 3 preview
-  /// cards (false). Defaults to true — the pill is the entry point.
-  final bool runDisplayModeBarCollapsed;
+  /// Index into the active theme's 3 flavored color schemas (0-2).
+  final int particleSchemaIndex;
 
-  /// Whether the 2.5D volumetric inventory treatment (perspective tilt +
-  /// depth shadow + top-DPS float) is applied to inventory tiles. On by
-  /// default; users can disable via the Preferences sheet.
-  final bool depthInventory;
+  /// Chaotic motion toggle — organic turbulence on top of drift.
+  final bool particleChaos;
 
-  /// 2.5D tilt intensity, 0.0–1.0. Scales the max tilt degrees applied to
-  /// [DepthTile] on tap-down/hover. 0 = flat (equivalent to disabling
-  /// depthInventory), 1 = full ±8° tilt. Default 0.6 — present but not
-  /// nauseating.
-  final double depthTiltIntensity;
+  /// Touch/tilt-reactive toggle — particles respond to device tilt.
+  final bool particleTouch;
 
   /// Whether ambient fragment shaders (Q3) are enabled. Off by default —
   /// shaders are GPU-intensive and opt-in. See [shaderPreset].
@@ -2765,12 +3508,6 @@ class VisualPrefs {
   /// Which ambient shader to render when [shaderEnabled] is true.
   /// Defaults to [ShaderPreset.digitalRain].
   final ShaderPreset shaderPreset;
-
-  /// Whether to show the fullscreen mode picker onboarding dialog
-  /// when a new run starts. Defaults to true — first-time users
-  /// should see the 3 display modes. Unchecking "Remember Pick" in
-  /// the dialog sets this to false.
-  final bool showModePickerOnNewRun;
 
 
   /// Computed scale factor applied globally via MediaQuery.
@@ -2781,8 +3518,9 @@ class VisualPrefs {
     6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 20.0, 24.0, 28.0, 32.0,
   ];
 
-  /// 12 deep, curated glow colors for the ambient screen glow.
+  /// 36 deep, curated glow colors for the ambient screen glow.
   static const glowColors = [
+    // Original 12
     Color(0xFF0D47A1), // Abyssal Blue
     Color(0xFFB71C1C), // Curse Crimson
     Color(0xFFE65100), // Forge Amber
@@ -2795,47 +3533,85 @@ class VisualPrefs {
     Color(0xFF004D40), // Ethereal Teal
     Color(0xFF6A1B9A), // Magenta Pulse
     Color(0xFF263238), // Obsidian Grey
+    // 24 new curated colors
+    Color(0xFF01579B), // Deep Ocean
+    Color(0xFFD32F2F), // Ember Red
+    Color(0xFFF57F17), // Sunfire
+    Color(0xFF00838F), // Arctic Teal
+    Color(0xFF2E7D32), // Forest
+    Color(0xFF6A1B9A), // Royal Plum
+    Color(0xFFF9A825), // Honey
+    Color(0xFF283593), // Navy
+    Color(0xFFAD1457), // Wine
+    Color(0xFF00695C), // Peacock
+    Color(0xFFAD1457), // Raspberry
+    Color(0xFF37474F), // Slate
+    Color(0xFF1565C0), // Sapphire
+    Color(0xFFC62828), // Ruby
+    Color(0xFFEF6C00), // Tangerine
+    Color(0xFF00ACC1), // Aqua
+    Color(0xFF558B2F), // Olive
+    Color(0xFF4527A0), // Indigo Night
+    Color(0xFFC17900), // Bronze
+    Color(0xFF1A237E), // Midnight
+    Color(0xFF6D214F), // Maroon
+    Color(0xFF0D7377), // Lagoon
+    Color(0xFF8E24AA), // Orchid
+    Color(0xFF455A64), // Steel
+    // 12 pinks & purples — the glow lab's neon side
+    Color(0xFFEC407A), // Hot Pink
+    Color(0xFFAB47BC), // Mauve Glow
+    Color(0xFF7B1FA2), // Deep Purple
+    Color(0xFFD81B60), // Raspberry
+    Color(0xFF9C27B0), // Neon Violet
+    Color(0xFFBA68C8), // Lilac
+    Color(0xFFE91E63), // Magenta Blaze
+    Color(0xFF8E24AA), // Amethyst
+    Color(0xFFCE93D8), // Soft Orchid
+    Color(0xFFF06292), // Bubblegum
+    Color(0xFF5E35B1), // Ultraviolet
+    Color(0xFFAD1457), // Deep Rose
   ];
 
   const VisualPrefs({
     this.glowIntensity = 0.0,
-    this.particlesEnabled = false,
+    this.particlesEnabled = true,
     this.particlePreset = ParticlePreset.gungeonDust,
     this.particleGlowEffect = GlowEffect.none,
     this.particleLineLinks = false,
     this.particleBounce = false,
     this.glowColorIndex = 0,
     this.fontWeightBias = 0,
+    this.fontLetterSpacing = 0,
     this.font = AppFont.gungeon,
     this.fontSize = 12.0,
     this.inventoryFontSize = 12.0,
     this.inventoryDisplayMode = InventoryDisplayMode.classicPeriodic,
     this.customDiceType = CustomDiceType.themeDefault,
     this.particleSizeScale = 1.0,
-    this.particleOpacity = 0.7,
-    this.particleCount = 16,
+    this.particleOpacity = 0.55,
+    this.particleCount = 32,
     this.dialogueHapticsEnabled = true,
     this.dialogueTextSpeedMs = 30,
     this.isGoopianLanguage = false,
     this.spongeActive = false,
-    this.showDamageCalculator = false,
     this.showEffectsPanel = false,
     this.showShrinePanel = false,
     this.showDashboards = true,
     this.periodicGridColumnCount = 0,
     this.particleColorSchema = ParticleColorSchema.presetDefault,
     this.particleSpeed = ParticleSpeed.normal,
-    this.runDisplayMode = RunDisplayMode.classic,
-    this.runDisplayModeBarCollapsed = true,
-    this.depthInventory = true,
-    this.depthTiltIntensity = 0.6,
+    this.particleTypeIndex = 0,
+    this.particleSchemaIndex = 0,
+    this.particleChaos = false,
+    this.particleTouch = true,
     this.shaderEnabled = false,
     this.shaderPreset = ShaderPreset.digitalRain,
-    this.showModePickerOnNewRun = false,
   });
 
   static const _kGlow     = 'vp.glow_v1';
-  static const _kParticles = 'vp.particles_v1';
+  static const _kParticles = 'vp.particles_v2'; // v2: default on (was v1=false)
+  static const _kSpacing = 'visual.font.spacing';
   static const _kWeight   = 'vp.weight_v1';
   static const _kFont     = 'vp.font_v1';
   static const _kFontSize = 'vp.font_size_v1';
@@ -2857,23 +3633,18 @@ class VisualPrefs {
   static const _kDialogueTextSpeed = 'vp.dialogue_text_speed_v1';
   static const _kGoopianLanguage = 'vp.goopian_language_v1';
   static const _kSpongeActive = 'vp.sponge_active_v1';
-  static const _kShowDamageCalculator = 'vp.show_damage_calculator_v1';
   static const _kShowEffectsPanel = 'vp.show_effects_panel_v1';
   static const _kShowShrinePanel = 'vp.show_shrine_panel_v1';
   static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kParticleColorSchema = 'vp.particle_color_schema_v1';
   static const _kParticleSpeed = 'vp.particle_speed_v1';
-  // v2: index shifted when `classic` was added as the first enum value —
-  // old v1 indexes would map to the wrong mode, so everyone resets to the
-  // classic default once and re-picks.
-  static const _kRunDisplayMode = 'vp.run_display_mode_v2';
-  static const _kRunDisplayModeBarCollapsed = 'vp.run_display_mode_bar_collapsed_v1';
-  static const _kDepthInventory = 'vp.depth_inventory_v1';
-  static const _kDepthTiltIntensity = 'vp.depth_tilt_intensity_v1';
+  static const _kParticleTypeIdx = 'vp.particle_type_v1';
+  static const _kParticleSchemaIdx = 'vp.particle_schema_idx_v1';
+  static const _kParticleChaos = 'vp.particle_chaos_v1';
+  static const _kParticleTouch = 'vp.particle_touch_v1';
   static const _kShaderEnabled = 'vp.shader_enabled_v1';
   static const _kShaderPreset = 'vp.shader_preset_v1';
-  static const _kShowModePickerOnNewRun = 'vp.show_mode_picker_on_new_run_v1';
 
   static final ValueNotifier<VisualPrefs> notifier =
       ValueNotifier(const VisualPrefs());
@@ -2897,11 +3668,11 @@ class VisualPrefs {
       double fontSize;
       final savedSize = p.getDouble(_kFontSize);
       if (savedSize != null) {
-        fontSize = _snapToStep(savedSize.clamp(6.0, 32.0));
+        fontSize = _snapToStep(savedSize.clamp(6.0, 20.0));
       } else {
         final legacyScale = p.getDouble(_kScaleLegacy);
         if (legacyScale != null) {
-          fontSize = _snapToStep((legacyScale * 14.0).clamp(6.0, 32.0));
+          fontSize = _snapToStep((legacyScale * 14.0).clamp(6.0, 20.0));
           // Best-effort cleanup of legacy key.
           unawaited(p.remove(_kScaleLegacy));
           unawaited(p.setDouble(_kFontSize, fontSize));
@@ -2927,7 +3698,6 @@ class VisualPrefs {
 
       final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
-      final showDamageCalculator = p.getBool(_kShowDamageCalculator) ?? false;
       final showEffectsPanel = p.getBool(_kShowEffectsPanel) ?? false;
       final showShrinePanel = p.getBool(_kShowShrinePanel) ?? false;
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
@@ -2937,52 +3707,45 @@ class VisualPrefs {
       final particleSpeedIdx = p.getInt(_kParticleSpeed) ?? 2;
       final particleSpeed = ParticleSpeed.values[particleSpeedIdx.clamp(0, ParticleSpeed.values.length - 1)];
 
-      final runDisplayModeIdx = p.getInt(_kRunDisplayMode) ?? 0;
-      final runDisplayMode = RunDisplayMode.values[runDisplayModeIdx.clamp(0, RunDisplayMode.values.length - 1)];
-      final runDisplayModeBarCollapsed = p.getBool(_kRunDisplayModeBarCollapsed) ?? true;
-      final depthInventory = p.getBool(_kDepthInventory) ?? true;
-      final depthTiltIntensity = p.getDouble(_kDepthTiltIntensity) ?? 0.6;
       final shaderEnabled = p.getBool(_kShaderEnabled) ?? false;
       final shaderPresetIdx = p.getInt(_kShaderPreset) ?? 0;
       final shaderPreset = ShaderPreset.values[shaderPresetIdx.clamp(0, ShaderPreset.values.length - 1)];
-      final showModePickerOnNewRun = p.getBool(_kShowModePickerOnNewRun) ?? false;
 
 
       notifier.value = VisualPrefs(
         glowIntensity:    p.getDouble(_kGlow)     ?? 0.0,
-        particlesEnabled: p.getBool(_kParticles)  ?? false,
+        particlesEnabled: p.getBool(_kParticles)  ?? true,
         particlePreset:   particlePreset,
         particleGlowEffect: particleGlowEffect,
         particleLineLinks: particleLineLinks,
         particleBounce:   particleBounce,
         glowColorIndex:   glowColorIndex,
         fontWeightBias:   p.getInt(_kWeight)      ?? 0,
+        fontLetterSpacing: p.getInt(_kSpacing)    ?? 0,
         font:             font,
         fontSize:         fontSize,
         inventoryFontSize: inventoryFontSize,
         inventoryDisplayMode: inventoryDisplayMode,
         customDiceType:   customDiceType,
         particleSizeScale: p.getDouble(_kParticleSizeScale) ?? 1.0,
-        particleOpacity:   p.getDouble(_kParticleOpacity) ?? 0.7,
-        particleCount:     p.getInt(_kParticleCount) ?? 16,
+        particleOpacity:   p.getDouble(_kParticleOpacity) ?? 0.55,
+        particleCount:     p.getInt(_kParticleCount) ?? 32,
         dialogueHapticsEnabled: p.getBool(_kDialogueHaptics) ?? true,
         dialogueTextSpeedMs: p.getInt(_kDialogueTextSpeed) ?? 30,
         isGoopianLanguage: isGoopian,
         spongeActive: spongeActive,
-        showDamageCalculator: showDamageCalculator,
         showEffectsPanel: showEffectsPanel,
         showShrinePanel: showShrinePanel,
         showDashboards: showDashboards,
         periodicGridColumnCount: periodicGridColumnCount,
         particleColorSchema: particleColorSchema,
         particleSpeed: particleSpeed,
-        runDisplayMode: runDisplayMode,
-        runDisplayModeBarCollapsed: runDisplayModeBarCollapsed,
-        depthInventory: depthInventory,
-        depthTiltIntensity: depthTiltIntensity,
+        particleTypeIndex: (p.getInt(_kParticleTypeIdx) ?? 0).clamp(0, ParticleType.values.length - 1),
+        particleSchemaIndex: (p.getInt(_kParticleSchemaIdx) ?? 0).clamp(0, 2),
+        particleChaos: p.getBool(_kParticleChaos) ?? false,
+        particleTouch: p.getBool(_kParticleTouch) ?? true,
         shaderEnabled: shaderEnabled,
         shaderPreset: shaderPreset,
-        showModePickerOnNewRun: showModePickerOnNewRun,
       );
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
@@ -2999,6 +3762,10 @@ class VisualPrefs {
 
   static Future<void> setFontWeightBias(int v) async {
     notifier.value = notifier.value._with(fontWeightBias: v.clamp(-800, 800));
+  }
+
+  static void setFontLetterSpacing(int v) {
+    notifier.value = notifier.value._with(fontLetterSpacing: v.clamp(-2, 2));
     _persist();
   }
 
@@ -3008,7 +3775,7 @@ class VisualPrefs {
   }
 
   static Future<void> setFontSize(double v) async {
-    final clamped = v.clamp(6.0, 32.0);
+    final clamped = v.clamp(6.0, 20.0);
     notifier.value = notifier.value._with(fontSize: clamped);
     _persist();
   }
@@ -3045,7 +3812,7 @@ class VisualPrefs {
   }
 
   static Future<void> setGlowColorIndex(int v) async {
-    notifier.value = notifier.value._with(glowColorIndex: v.clamp(0, 11));
+    notifier.value = notifier.value._with(glowColorIndex: v.clamp(0, glowColors.length - 1));
     _persist();
   }
 
@@ -3060,7 +3827,7 @@ class VisualPrefs {
   }
 
   static Future<void> setParticleCount(int v) async {
-    notifier.value = notifier.value._with(particleCount: v.clamp(1, 32));
+    notifier.value = notifier.value._with(particleCount: v.clamp(1, 200));
     _persist();
   }
 
@@ -3089,11 +3856,6 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setShowDamageCalculator(bool v) async {
-    notifier.value = notifier.value._with(showDamageCalculator: v);
-    _persist();
-  }
-
   static Future<void> setShowEffectsPanel(bool v) async {
     notifier.value = notifier.value._with(showEffectsPanel: v);
     _persist();
@@ -3119,33 +3881,29 @@ class VisualPrefs {
     _persist();
   }
 
+  static Future<void> setParticleTypeIndex(int v) async {
+    notifier.value = notifier.value._with(
+        particleTypeIndex: v.clamp(0, ParticleType.values.length - 1));
+    _persist();
+  }
+
+  static Future<void> setParticleSchemaIndex(int v) async {
+    notifier.value = notifier.value._with(particleSchemaIndex: v.clamp(0, 2));
+    _persist();
+  }
+
+  static Future<void> setParticleChaos(bool v) async {
+    notifier.value = notifier.value._with(particleChaos: v);
+    _persist();
+  }
+
+  static Future<void> setParticleTouch(bool v) async {
+    notifier.value = notifier.value._with(particleTouch: v);
+    _persist();
+  }
+
   static Future<void> setParticleSpeed(ParticleSpeed v) async {
     notifier.value = notifier.value._with(particleSpeed: v);
-    _persist();
-  }
-
-  static Future<void> setRunDisplayMode(RunDisplayMode v) async {
-    notifier.value = notifier.value._with(runDisplayMode: v);
-    _persist();
-  }
-
-  static Future<void> setRunDisplayModeBarCollapsed(bool v) async {
-    notifier.value = notifier.value._with(runDisplayModeBarCollapsed: v);
-    _persist();
-  }
-
-  static Future<void> setDepthInventory(bool v) async {
-    notifier.value = notifier.value._with(depthInventory: v);
-    _persist();
-  }
-
-  static Future<void> setShowModePickerOnNewRun(bool v) async {
-    notifier.value = notifier.value._with(showModePickerOnNewRun: v);
-    _persist();
-  }
-
-  static Future<void> setDepthTiltIntensity(double v) async {
-    notifier.value = notifier.value._with(depthTiltIntensity: v.clamp(0.0, 1.0));
     _persist();
   }
 
@@ -3154,9 +3912,38 @@ class VisualPrefs {
     _persist();
   }
 
+  /// Apply a full set of curated visual settings at once (used when
+  /// selecting a premade theme).
+  static Future<void> applyCuration(ThemeCuration c) async {
+    notifier.value = notifier.value._with(
+      particlePreset: c.particlePreset,
+      particleColorSchema: c.colorSchema,
+      particleGlowEffect: c.glowEffect,
+      particleSpeed: c.speed,
+      particleCount: c.particleCount,
+      particleSizeScale: c.particleSizeScale,
+      particleOpacity: c.particleOpacity,
+      particleLineLinks: c.particleLineLinks,
+      particleBounce: c.particleBounce,
+      glowColorIndex: c.glowColorIndex,
+      glowIntensity: c.glowIntensity,
+      shaderEnabled: c.shaderEnabled,
+      shaderPreset: c.shaderPreset ?? notifier.value.shaderPreset,
+      particlesEnabled: true,
+    );
+    _persist();
+  }
+
   static Future<void> setShaderPreset(ShaderPreset v) async {
     notifier.value = notifier.value._with(shaderPreset: v);
     _persist();
+  }
+
+  /// Replace the entire VisualPrefs state and persist to disk.
+  /// Used when restoring a saved custom theme's preferences.
+  static Future<void> replaceAndPersist(VisualPrefs prefs) async {
+    notifier.value = prefs;
+    await _persist();
   }
 
 
@@ -3167,6 +3954,7 @@ class VisualPrefs {
       await p.setDouble(_kGlow,     v.glowIntensity);
       await p.setBool(_kParticles,  v.particlesEnabled);
       await p.setInt(_kWeight,      v.fontWeightBias);
+      await p.setInt(_kSpacing,     v.fontLetterSpacing);
       await p.setInt(_kFont,        v.font.index);
       await p.setDouble(_kFontSize,  v.fontSize);
       await p.setDouble(_kInventoryFontSize, v.inventoryFontSize);
@@ -3185,20 +3973,18 @@ class VisualPrefs {
       await p.setInt(_kDialogueTextSpeed, v.dialogueTextSpeedMs);
       await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
       await p.setBool(_kSpongeActive, v.spongeActive);
-      await p.setBool(_kShowDamageCalculator, v.showDamageCalculator);
       await p.setBool(_kShowEffectsPanel, v.showEffectsPanel);
       await p.setBool(_kShowShrinePanel, v.showShrinePanel);
       await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kParticleColorSchema, v.particleColorSchema.index);
       await p.setInt(_kParticleSpeed, v.particleSpeed.index);
-      await p.setInt(_kRunDisplayMode, v.runDisplayMode.index);
-      await p.setBool(_kRunDisplayModeBarCollapsed, v.runDisplayModeBarCollapsed);
-      await p.setBool(_kDepthInventory, v.depthInventory);
-      await p.setDouble(_kDepthTiltIntensity, v.depthTiltIntensity);
+      await p.setInt(_kParticleTypeIdx, v.particleTypeIndex);
+      await p.setInt(_kParticleSchemaIdx, v.particleSchemaIndex);
+      await p.setBool(_kParticleChaos, v.particleChaos);
+      await p.setBool(_kParticleTouch, v.particleTouch);
       await p.setBool(_kShaderEnabled, v.shaderEnabled);
       await p.setInt(_kShaderPreset, v.shaderPreset.index);
-      await p.setBool(_kShowModePickerOnNewRun, v.showModePickerOnNewRun);
     } catch (e) { debugPrint('[AppTheme] prefs error: $e'); }
   }
 
@@ -3206,6 +3992,7 @@ class VisualPrefs {
     double? glowIntensity,
     bool?   particlesEnabled,
     int?    fontWeightBias,
+    int?    fontLetterSpacing,
     AppFont? font,
     double? fontSize,
     double? inventoryFontSize,
@@ -3223,24 +4010,23 @@ class VisualPrefs {
     int?    dialogueTextSpeedMs,
     bool?   isGoopianLanguage,
     bool?   spongeActive,
-    bool?   showDamageCalculator,
     bool?   showEffectsPanel,
     bool?   showShrinePanel,
     bool?   showDashboards,
     int?    periodicGridColumnCount,
     ParticleColorSchema? particleColorSchema,
     ParticleSpeed? particleSpeed,
-    RunDisplayMode? runDisplayMode,
-    bool? runDisplayModeBarCollapsed,
-    bool? depthInventory,
-    double? depthTiltIntensity,
+    int? particleTypeIndex,
+    int? particleSchemaIndex,
+    bool? particleChaos,
+    bool? particleTouch,
     bool? shaderEnabled,
     ShaderPreset? shaderPreset,
-    bool? showModePickerOnNewRun,
   }) => VisualPrefs(
     glowIntensity:    glowIntensity    ?? this.glowIntensity,
     particlesEnabled: particlesEnabled ?? this.particlesEnabled,
     fontWeightBias:   fontWeightBias   ?? this.fontWeightBias,
+    fontLetterSpacing: fontLetterSpacing ?? this.fontLetterSpacing,
     font:             font             ?? this.font,
     fontSize:         fontSize         ?? this.fontSize,
     inventoryFontSize: inventoryFontSize ?? this.inventoryFontSize,
@@ -3258,21 +4044,175 @@ class VisualPrefs {
     dialogueTextSpeedMs: dialogueTextSpeedMs ?? this.dialogueTextSpeedMs,
     isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
     spongeActive:     spongeActive      ?? this.spongeActive,
-    showDamageCalculator: showDamageCalculator ?? this.showDamageCalculator,
     showEffectsPanel: showEffectsPanel ?? this.showEffectsPanel,
     showShrinePanel: showShrinePanel ?? this.showShrinePanel,
     showDashboards: showDashboards ?? this.showDashboards,
     periodicGridColumnCount: periodicGridColumnCount ?? this.periodicGridColumnCount,
     particleColorSchema: particleColorSchema ?? this.particleColorSchema,
     particleSpeed: particleSpeed ?? this.particleSpeed,
-    runDisplayMode: runDisplayMode ?? this.runDisplayMode,
-    runDisplayModeBarCollapsed: runDisplayModeBarCollapsed ?? this.runDisplayModeBarCollapsed,
-    depthInventory: depthInventory ?? this.depthInventory,
-    depthTiltIntensity: depthTiltIntensity ?? this.depthTiltIntensity,
+    particleTypeIndex: particleTypeIndex ?? this.particleTypeIndex,
+    particleSchemaIndex: particleSchemaIndex ?? this.particleSchemaIndex,
+    particleChaos: particleChaos ?? this.particleChaos,
+    particleTouch: particleTouch ?? this.particleTouch,
     shaderEnabled: shaderEnabled ?? this.shaderEnabled,
     shaderPreset: shaderPreset ?? this.shaderPreset,
-    showModePickerOnNewRun: showModePickerOnNewRun ?? this.showModePickerOnNewRun,
   );
+
+  /// Serialize to JSON for custom theme persistence.
+  Map<String, dynamic> toJson() => {
+    'glowIntensity': glowIntensity,
+    'particlesEnabled': particlesEnabled,
+    'fontWeightBias': fontWeightBias,
+    'font': font.index,
+    'fontSize': fontSize,
+    'inventoryFontSize': inventoryFontSize,
+    'inventoryDisplayMode': inventoryDisplayMode.index,
+    'particlePreset': particlePreset.index,
+    'particleGlowEffect': particleGlowEffect.index,
+    'particleLineLinks': particleLineLinks,
+    'particleBounce': particleBounce,
+    'glowColorIndex': glowColorIndex,
+    'customDiceType': customDiceType.index,
+    'particleSizeScale': particleSizeScale,
+    'particleOpacity': particleOpacity,
+    'particleCount': particleCount,
+    'dialogueHapticsEnabled': dialogueHapticsEnabled,
+    'dialogueTextSpeedMs': dialogueTextSpeedMs,
+    'isGoopianLanguage': isGoopianLanguage,
+    'spongeActive': spongeActive,
+    'showEffectsPanel': showEffectsPanel,
+    'showShrinePanel': showShrinePanel,
+    'showDashboards': showDashboards,
+    'periodicGridColumnCount': periodicGridColumnCount,
+    'particleColorSchema': particleColorSchema.index,
+    'particleSpeed': particleSpeed.index,
+    'shaderEnabled': shaderEnabled,
+    'shaderPreset': shaderPreset.index,
+  };
+
+  /// Deserialize from JSON for custom theme restoration.
+  factory VisualPrefs.fromJson(Map<String, dynamic> j) {
+    return VisualPrefs(
+      glowIntensity: (j['glowIntensity'] as num?)?.toDouble() ?? 0.0,
+      particlesEnabled: j['particlesEnabled'] as bool? ?? false,
+      fontWeightBias: j['fontWeightBias'] as int? ?? 0,
+      font: AppFont.values[(j['font'] as int?) ?? 0],
+      fontSize: (j['fontSize'] as num?)?.toDouble() ?? 12.0,
+      inventoryFontSize: (j['inventoryFontSize'] as num?)?.toDouble() ?? 11.0,
+      inventoryDisplayMode: InventoryDisplayMode.values[(j['inventoryDisplayMode'] as int?) ?? 0],
+      particlePreset: ParticlePreset.values[(j['particlePreset'] as int?) ?? 0],
+      particleGlowEffect: GlowEffect.values[(j['particleGlowEffect'] as int?) ?? 0],
+      particleLineLinks: j['particleLineLinks'] as bool? ?? false,
+      particleBounce: j['particleBounce'] as bool? ?? false,
+      glowColorIndex: j['glowColorIndex'] as int? ?? 0,
+      customDiceType: CustomDiceType.values[(j['customDiceType'] as int?) ?? 0],
+      particleSizeScale: (j['particleSizeScale'] as num?)?.toDouble() ?? 1.0,
+      particleOpacity: (j['particleOpacity'] as num?)?.toDouble() ?? 0.8,
+      particleCount: j['particleCount'] as int? ?? 16,
+      dialogueHapticsEnabled: j['dialogueHapticsEnabled'] as bool? ?? true,
+      dialogueTextSpeedMs: j['dialogueTextSpeedMs'] as int? ?? 30,
+      isGoopianLanguage: j['isGoopianLanguage'] as bool? ?? false,
+      spongeActive: j['spongeActive'] as bool? ?? false,
+      showEffectsPanel: j['showEffectsPanel'] as bool? ?? true,
+      showShrinePanel: j['showShrinePanel'] as bool? ?? true,
+      showDashboards: j['showDashboards'] as bool? ?? true,
+      periodicGridColumnCount: j['periodicGridColumnCount'] as int? ?? 0,
+      particleColorSchema: ParticleColorSchema.values[(j['particleColorSchema'] as int?) ?? 0],
+      particleSpeed: ParticleSpeed.values[(j['particleSpeed'] as int?) ?? 2],
+      shaderEnabled: j['shaderEnabled'] as bool? ?? false,
+      shaderPreset: ShaderPreset.values[(j['shaderPreset'] as int?) ?? 0],
+    );
+  }
+}
+
+/// A saved custom theme — captures the full visual state (base theme
+/// palette + all VisualPrefs) so it can be restored and displayed in
+/// the theme picker alongside the premades.
+class SavedCustomTheme {
+  final String id;       // unique timestamp-based ID
+  final String name;     // user-given name
+  final String splashSlug; // graphic asset key from a premade
+  final AppThemeMode baseMode; // the premade theme this was built from
+  final VisualPrefs prefs;     // the visual settings at save time
+  final CustomThemeData? customData; // custom palette (only when baseMode == custom)
+  final String icon;           // Material icon codePoint as string (e.g. "0xe3af")
+
+  const SavedCustomTheme({
+    required this.id,
+    required this.name,
+    required this.splashSlug,
+    required this.baseMode,
+    required this.prefs,
+    this.customData,
+    this.icon = '',
+  });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'name': name,
+    'splashSlug': splashSlug,
+    'baseMode': baseMode.index,
+    'prefs': prefs.toJson(),
+    if (customData != null) 'customData': customData!.toJson(),
+    if (icon.isNotEmpty) 'icon': icon,
+  };
+
+  factory SavedCustomTheme.fromJson(Map<String, dynamic> j) {
+    return SavedCustomTheme(
+      id: j['id'] as String,
+      name: j['name'] as String,
+      splashSlug: j['splashSlug'] as String,
+      baseMode: AppThemeMode.values[j['baseMode'] as int],
+      prefs: VisualPrefs.fromJson(j['prefs'] as Map<String, dynamic>),
+      customData: j['customData'] != null
+          ? CustomThemeData.fromJson(j['customData'] as Map<String, dynamic>)
+          : null,
+      icon: j['icon'] as String? ?? '',
+    );
+  }
+}
+
+/// Persisted store of user-saved custom themes. Stored as a JSON list
+/// in SharedPreferences. Unlimited count.
+class CustomThemeStore {
+  static const _key = 'custom.themes.v1';
+  static final ValueNotifier<List<SavedCustomTheme>> notifier =
+      ValueNotifier<List<SavedCustomTheme>>([]);
+
+  static List<SavedCustomTheme> get themes => notifier.value;
+
+  static Future<void> load() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final json = prefs.getString(_key);
+      if (json != null) {
+        final list = jsonDecode(json) as List;
+        notifier.value = list
+            .map((j) => SavedCustomTheme.fromJson(j as Map<String, dynamic>))
+            .toList();
+      }
+    } catch (_) {}
+  }
+
+  static Future<void> save(SavedCustomTheme theme) async {
+    final updated = [...notifier.value, theme];
+    notifier.value = updated;
+    await _persist(updated);
+  }
+
+  static Future<void> delete(String id) async {
+    final updated = notifier.value.where((t) => t.id != id).toList();
+    notifier.value = updated;
+    await _persist(updated);
+  }
+
+  static Future<void> _persist(List<SavedCustomTheme> themes) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final json = jsonEncode(themes.map((t) => t.toJson()).toList());
+      await prefs.setString(_key, json);
+    } catch (_) {}
+  }
 }
 
 /// Static holder for the live [AppThemeMode]. Mutated via [setMode] and
@@ -3337,6 +4277,9 @@ class AppTheme {
   /// Cached custom theme data for synchronous flair access.
   static CustomThemeData? _cachedCustomTheme;
 
+  /// Public read-only access to the cached custom theme data.
+  static CustomThemeData? get cachedCustomTheme => _cachedCustomTheme;
+
   /// Update the cached custom theme name (call when saving custom theme).
   static void setCustomThemeName(String name) {
     _customThemeName = name;
@@ -3346,6 +4289,17 @@ class AppTheme {
   static void setCustomThemeData(CustomThemeData data) {
     _cachedCustomTheme = data;
     _customThemeName = data.name;
+  }
+
+  /// Persist custom theme palette to disk + update cache + refresh listeners.
+  static Future<void> saveCustomThemeData(CustomThemeData data) async {
+    _cachedCustomTheme = data;
+    _customThemeName = data.name;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(CustomThemeData._prefsKey, jsonEncode(data.toJson()));
+    } catch (_) {}
+    refresh();
   }
 
   /// Hydrate [mode] from disk. Call once from `main()` before `runApp`.
@@ -3373,9 +4327,26 @@ class AppTheme {
         }
       }
 
+      // Load custom theme palette data (if previously saved).
+      final customJson = prefs.getString(CustomThemeData._prefsKey);
+      if (customJson != null) {
+        try {
+          final j = jsonDecode(customJson) as Map<String, dynamic>;
+          _cachedCustomTheme = CustomThemeData.fromJson(j);
+          _customThemeName = _cachedCustomTheme!.name;
+        } catch (_) {}
+      }
+
       final idx = prefs.getInt(_prefsKey);
       if (idx != null && idx >= 0 && idx < AppThemeMode.values.length) {
-        final m = AppThemeMode.values[idx];
+        var m = AppThemeMode.values[idx];
+        // v3.0 theme cut — anything outside the three supported picker
+        // themes (or the plain Minimalist default) migrates to Moonlit
+        // Chamber. Covers the removed picker themes and custom themes.
+        if (m != AppThemeMode.minimalist && !kPickerThemes.contains(m)) {
+          m = AppThemeMode.moonlitChamber;
+          await prefs.setInt(_prefsKey, m.index);
+        }
         if (kVisibleThemes.contains(m)) {
           notifier.value = m;
         } else {
@@ -3409,11 +4380,61 @@ class AppTheme {
     } catch (_) {
       // Keep default on any persistence failure.
     }
+    // Debug-only: audit contrast ratios for all visible themes so
+    // accessibility regressions surface during development.
+    if (kDebugMode) {
+      _auditAllThemeContrast();
+    }
+  }
+
+  /// Debug-only: print WCAG contrast warnings for every visible theme.
+  /// Runs once at startup. Themes that fail the large-text threshold
+  /// (3:1) are flagged as FAIL; those that pass large but fail body
+  /// (4.5:1) are flagged as WARN.
+  static void _auditAllThemeContrast() {
+    for (final mode in kVisibleThemes) {
+      if (mode == AppThemeMode.custom) continue;
+      final f = mode.flair;
+      final results = auditThemeContrast(
+        scaffold: f.scaffold,
+        card: f.card,
+        primary: f.primary,
+        secondary: f.secondary,
+        headlineStat: f.headlineStat,
+        themeLabel: mode.label,
+      );
+      final failures = results.where((r) => r.fails).toList();
+      final warnings =
+          results.where((r) => !r.fails && !r.passesBody).toList();
+      if (failures.isNotEmpty || warnings.isNotEmpty) {
+        debugPrint('┌─ Contrast: ${mode.label}');
+        for (final r in failures) {
+          debugPrint('│ FAIL $r');
+        }
+        for (final r in warnings) {
+          debugPrint('│ WARN $r');
+        }
+        debugPrint('└─');
+      }
+    }
   }
 
   /// Persist + apply the picked theme.
+  /// For premade themes, curated particle/typo/ambiance settings are
+  /// applied to give the theme a complete identity. For custom themes,
+  /// only the font is applied (user keeps their visual prefs).
   static Future<void> setMode(AppThemeMode m) async {
     notifier.value = m;
+    // Apply the theme's curated font as the new default.
+    final themeFont = m.flair.font;
+    if (themeFont != null) {
+      await VisualPrefs.setFont(themeFont);
+    }
+    // Apply curated visual settings for premade themes.
+    final curation = kThemeCuration[m];
+    if (curation != null) {
+      await VisualPrefs.applyCuration(curation);
+    }
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt(_prefsKey, m.index);
@@ -3464,9 +4485,31 @@ class AppTheme {
     final selectedFont = m == AppThemeMode.custom && _cachedCustomTheme != null
         ? _cachedCustomTheme!.font
         : prefs.font;
-    var textTheme = selectedFont.textTheme;
+
+    // Build a deliberate type scale with tuned sizes, heights, and
+    // letter-spacings — never the raw Material/Google Fonts defaults.
+    // The font family is applied via ThemeData.fontFamily below, so the
+    // type scale values are preserved when the font changes.
+    //
+    // onSurface is derived from the surface luminance so that text
+    // stays readable on any flair — dark surfaces get off-white text,
+    // light surfaces get near-black text. This prevents the white-text-
+    // on-light-fill contrast bug (U-002).
+    final surfaceLum = Contrast.luminance(f.card);
+    final onSurface = surfaceLum > 0.5
+        ? const Color(0xFF1E1E22) // dark text on light surface
+        : const Color(0xFFF0F0F0); // off-white text on dark surface
+    final onSurfaceVariant = onSurface.withValues(alpha: 0.7);
+    final scheme = ColorScheme.dark(
+      primary: f.primary,
+      secondary: f.secondary,
+      surface: f.card,
+      onSurface: onSurface,
+      onSurfaceVariant: onSurfaceVariant,
+    );
+    var textTheme = buildAppTextTheme(scheme);
     textTheme = _applyWeightBias(textTheme, bias);
-    
+
     String? fontFamilyName;
     if (selectedFont == AppFont.gungeon) {
       fontFamilyName = 'EnterTheGungeonBig';
@@ -3477,14 +4520,20 @@ class AppTheme {
         fontFamilyName = 'EnterTheGungeonBig';
       }
     }
-    
+
+    // CRITICAL: Apply the font family to the textTheme itself, not just
+    // ThemeData.fontFamily. ThemeData.fontFamily is a fallback that only
+    // applies to Text widgets with no TextStyle at all. Text widgets that
+    // use Theme.of(context).textTheme.* or inherit via DefaultTextStyle
+    // get the style from textTheme — if those styles have fontFamily: null,
+    // Flutter uses the platform default (Roboto), NOT ThemeData.fontFamily.
+    // Applying here ensures every text style carries the picked font.
+    if (fontFamilyName != null) {
+      textTheme = textTheme.apply(fontFamily: fontFamilyName);
+    }
+
     return ThemeData(
-      colorScheme: ColorScheme.dark(
-        primary: f.primary,
-        secondary: f.secondary,
-        surface: f.card,
-        onSurface: Colors.white,
-      ),
+      colorScheme: scheme,
       useMaterial3: true,
       fontFamily: fontFamilyName,
       scaffoldBackgroundColor: Colors.transparent,
@@ -3495,10 +4544,8 @@ class AppTheme {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: (textTheme.titleLarge ?? const TextStyle()).copyWith(
-          fontSize: 15,
+        titleTextStyle: (textTheme.titleMedium ?? const TextStyle()).copyWith(
           fontWeight: FontWeight.w900,
-          color: Colors.white,
           letterSpacing: 0.5,
         ),
       ),
@@ -3527,9 +4574,53 @@ class AppTheme {
         ),
         margin: EdgeInsets.zero,
       ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(Size(0, 48)),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 24),
+          ),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          )),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return Colors.white.withValues(alpha: 0.12);
+            }
+            if (states.contains(WidgetState.pressed)) {
+              return f.primary.withValues(alpha: 0.88);
+            }
+            return f.primary;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return onSurface.withValues(alpha: 0.38);
+            }
+            // Contrast-correct foreground for the primary fill: dark
+            // text on light primaries, light text on dark primaries.
+            return Contrast.luminance(f.primary) > 0.5
+                ? const Color(0xFF1E1E22)
+                : const Color(0xFFF0F0F0);
+          }),
+        ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(Size(48, 48)),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          )),
+        ),
+      ),
       dividerTheme: DividerThemeData(
         color: f.dividerColor,
         thickness: f.dividerThickness,
+      ),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
       ),
     );
   }
@@ -3546,3 +4637,66 @@ class RefreshableValueNotifier<T> extends ValueNotifier<T> {
   void refresh() => notifyListeners();
 }
 
+
+
+// =============================================================================
+// Typed particle color schemas — 3 flavored palettes per picker theme.
+// Each theme gets names that feel like its own fantasy.
+// =============================================================================
+
+/// (name, colors) per theme — index 0 is the theme's signature look.
+const Map<AppThemeMode, List<({String name, List<Color> colors})>>
+    kThemeParticleSchemas = {
+  AppThemeMode.unicorn: [
+    (name: 'RAINBOW', colors: [Color(0xFFFF5252), Color(0xFFFFB300), Color(0xFF69F0AE), Color(0xFF40C4FF), Color(0xFFB388FF)]),
+    (name: 'PASTEL', colors: [Color(0xFFF8BBD0), Color(0xFFB3E5FC), Color(0xFFD1C4E9), Color(0xFFC8E6C9)]),
+    (name: 'GOLD', colors: [Color(0xFFFFD700), Color(0xFFFFB300), Color(0xFFFFF8DC)]),
+  ],
+  AppThemeMode.forgeMaster: [
+    (name: 'EMBER', colors: [Color(0xFFFF5722), Color(0xFFFF8A65), Color(0xFFD84315)]),
+    (name: 'AMBER', colors: [Color(0xFFFFB300), Color(0xFFFFD54F), Color(0xFFFF6F00)]),
+    (name: 'STEEL', colors: [Color(0xFFB0BEC5), Color(0xFF78909C), Color(0xFFECEFF1)]),
+  ],
+  AppThemeMode.candyRush: [
+    (name: 'BUBBLEGUM', colors: [Color(0xFFF8BBD0), Color(0xFFF48FB1), Color(0xFFFCE4EC)]),
+    (name: 'COTTON', colors: [Color(0xFFB3E5FC), Color(0xFFE1BEE7), Color(0xFFF8BBD0)]),
+    (name: 'SUGAR', colors: [Color(0xFFFFF0F5), Color(0xFFF8BBD0), Color(0xFFEC407A)]),
+  ],
+  AppThemeMode.neonPrism: [
+    (name: 'PRISM', colors: [Color(0xFFE040FB), Color(0xFF00E5FF), Color(0xFFFFD740)]),
+    (name: 'VOLT', colors: [Color(0xFF00E5FF), Color(0xFF76FF03), Color(0xFFE040FB)]),
+    (name: 'RAIN', colors: [Color(0xFF7C4DFF), Color(0xFF18FFFF), Color(0xFFFF4081)]),
+  ],
+  AppThemeMode.blacksmithsFire: [
+    (name: 'RUST', colors: [Color(0xFFD84315), Color(0xFF8D6E63), Color(0xFFFF8A65)]),
+    (name: 'COAL', colors: [Color(0xFF3E2723), Color(0xFFD84315), Color(0xFFFFB74D)]),
+    (name: 'FORGE', colors: [Color(0xFFFF8A65), Color(0xFFD84315), Color(0xFFFFCC80)]),
+  ],
+  AppThemeMode.moltenSteel: [
+    (name: 'MOLTEN', colors: [Color(0xFFFF6E40), Color(0xFFFF8A65), Color(0xFFDD2C00)]),
+    (name: 'STEEL', colors: [Color(0xFFB0BEC5), Color(0xFF78909C), Color(0xFFECEFF1)]),
+    (name: 'IRON', colors: [Color(0xFF546E7A), Color(0xFF90A4AE), Color(0xFFFF6E40)]),
+  ],
+  AppThemeMode.paperInk: [
+    (name: 'INK', colors: [Color(0xFF90A4AE), Color(0xFF546E7A), Color(0xFF263238)]),
+    (name: 'PAPER', colors: [Color(0xFFECEFF1), Color(0xFFCFD8DC), Color(0xFFB0BEC5)]),
+    (name: 'SKETCH', colors: [Color(0xFF78909C), Color(0xFFB0BEC5), Color(0xFF90A4AE)]),
+  ],
+  AppThemeMode.voidWhite: [
+    (name: 'VOID', colors: [Color(0xFFFFFFFF), Color(0xFF9E9E9E), Color(0xFF424242)]),
+    (name: 'STARK', colors: [Color(0xFFFAFAFA), Color(0xFF616161), Color(0xFFBDBDBD)]),
+    (name: 'INVERT', colors: [Color(0xFF212121), Color(0xFF616161), Color(0xFF9E9E9E)]),
+  ],
+  AppThemeMode.moonlitChamber: [
+    (name: 'MONO', colors: [Color(0xFFECEFF1), Color(0xFFB0BEC5), Color(0xFF90A4AE)]),
+    (name: 'WHITE', colors: [Color(0xFFFFFFFF), Color(0xFFFAFAFA), Color(0xFFE0E0E0)]),
+    (name: 'ONYX', colors: [Color(0xFF616161), Color(0xFF424242), Color(0xFF9E9E9E)]),
+  ],
+};
+
+/// Schema colors for the current mode + pref index (clamped).
+List<Color> particleSchemaColors(AppThemeMode mode, int schemaIdx) {
+  final list = kThemeParticleSchemas[mode] ??
+      kThemeParticleSchemas[AppThemeMode.moonlitChamber]!;
+  return list[schemaIdx.clamp(0, list.length - 1)].colors;
+}

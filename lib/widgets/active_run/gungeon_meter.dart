@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
+import '../../utils/reduce_motion.dart';
 
 /// An interactive horizontal meter for coolness or curse.
 ///
@@ -97,6 +99,10 @@ class _GungeonMeterState extends State<GungeonMeter>
   Widget build(BuildContext context) {
     final isOver = _isOverThreshold;
     final accent = widget.color;
+    // Reduced-motion: no pulse animation — the meter still shows fill,
+    // color, and threshold, just without the pulsing/glowing effect.
+    final reduceMotion = ReduceMotion.of(context);
+    final pulseValue = reduceMotion ? 0.0 : (isOver ? _pulse.value : 0.0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,20 +140,32 @@ class _GungeonMeterState extends State<GungeonMeter>
                   children: [
                     // Custom-painted meter
                     RepaintBoundary(
-                      child: AnimatedBuilder(
-                        animation: _pulse,
-                        builder: (_, __) => CustomPaint(
-                          size: Size(barWidth, 28),
-                          painter: _MeterPainter(
-                            fillFraction: _fillFraction,
-                            thresholdFraction: _thresholdFraction,
-                            isOverThreshold: isOver,
-                            pulse: isOver ? _pulse.value : 0.0,
-                            color: accent,
-                            isCool: widget.isCool,
-                          ),
-                        ),
-                      ),
+                      child: reduceMotion
+                          ? CustomPaint(
+                              size: Size(barWidth, 28),
+                              painter: _MeterPainter(
+                                fillFraction: _fillFraction,
+                                thresholdFraction: _thresholdFraction,
+                                isOverThreshold: isOver,
+                                pulse: pulseValue,
+                                color: accent,
+                                isCool: widget.isCool,
+                              ),
+                            )
+                          : AnimatedBuilder(
+                              animation: _pulse,
+                              builder: (_, __) => CustomPaint(
+                                size: Size(barWidth, 28),
+                                painter: _MeterPainter(
+                                  fillFraction: _fillFraction,
+                                  thresholdFraction: _thresholdFraction,
+                                  isOverThreshold: isOver,
+                                  pulse: pulseValue,
+                                  color: accent,
+                                  isCool: widget.isCool,
+                                ),
+                              ),
+                            ),
                     ),
 
                     // Skull icon at right edge when overflowed (curse only)
@@ -155,10 +173,34 @@ class _GungeonMeterState extends State<GungeonMeter>
                       Positioned(
                         right: -2,
                         top: -2,
-                        child: AnimatedBuilder(
-                          animation: _pulse,
-                          builder: (_, __) => Transform.scale(
-                            scale: 0.85 + _pulse.value * 0.15,
+                        child: reduceMotion
+                            ? Transform.scale(
+                                scale: 0.85,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  padding: const EdgeInsets.all(2),
+                                  child: GoopText(
+                                    '☠',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.redAccent,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.redAccent,
+                                          blurRadius: 8,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : AnimatedBuilder(
+                                animation: _pulse,
+                                builder: (_, __) => Transform.scale(
+                                  scale: 0.85 + _pulse.value * 0.15,
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.black.withValues(alpha: 0.6),
@@ -263,7 +305,7 @@ class _GungeonMeterState extends State<GungeonMeter>
     return GoopText(
       text,
       style: TextStyle(
-        fontSize: 9,
+        fontSize: FontSizes.labelSmall,
         fontWeight: highlight ? FontWeight.w900 : FontWeight.w500,
         color: highlight
             ? (widget.isCool ? Colors.amber : Colors.redAccent)

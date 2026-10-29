@@ -10,6 +10,10 @@ class GameIcon extends StatelessWidget {
   final String quality;
   final double size;
   final bool showRing;
+  /// Screen-reader label describing what this icon represents (e.g.
+  /// "M1911, quality A"). When empty, the icon is treated as decorative
+  /// and excluded from semantics.
+  final String semanticLabel;
 
   const GameIcon({
     super.key,
@@ -18,6 +22,7 @@ class GameIcon extends StatelessWidget {
     this.quality = '',
     this.size = 44,
     this.showRing = true,
+    this.semanticLabel = '',
   });
 
   @override
@@ -40,6 +45,9 @@ class GameIcon extends StatelessWidget {
             height: size * imgScale,
             fit: BoxFit.contain,
             filterQuality: FilterQuality.none, // crisp pixel art
+            cacheWidth: (size * imgScale * 2).round(),
+            cacheHeight: (size * imgScale * 2).round(),
+            semanticLabel: semanticLabel.isNotEmpty ? semanticLabel : null,
             errorBuilder: (_, __, ___) =>
                 Icon(fallback, size: size * iconScale, color: Colors.white),
           )
@@ -55,8 +63,14 @@ class GameIcon extends StatelessWidget {
               )
             : Icon(fallback, size: size * iconScale, color: Colors.white);
 
+    // Wrap with Semantics: if a label is provided, announce it; otherwise
+    // exclude the decorative icon from the accessibility tree.
+    final labeled = semanticLabel.isNotEmpty
+        ? Semantics(label: semanticLabel, image: true, child: inner)
+        : ExcludeSemantics(child: inner);
+
     if (!showRing) {
-      return SizedBox(width: size, height: size, child: Center(child: inner));
+      return SizedBox(width: size, height: size, child: Center(child: labeled));
     }
     return Container(
       width: size,
@@ -70,7 +84,7 @@ class GameIcon extends StatelessWidget {
           width: isS ? 2.0 : 1.5,
         ),
       ),
-      child: inner,
+      child: labeled,
     );
   }
 }

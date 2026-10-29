@@ -1,7 +1,10 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
+import '../models/gun.dart';
+import '../models/item.dart';
 import '../widgets/periodic_tile.dart';
 import 'item_detail_screen.dart';
 import '../utils/fast_route.dart';
@@ -17,9 +20,8 @@ class FavouritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final guns = p.favouriteGuns;
-    final items = p.favouriteItems;
+    final guns = context.select<RunProvider, List<Gun>>((p) => p.favouriteGuns);
+    final items = context.select<RunProvider, List<Item>>((p) => p.favouriteItems);
     final total = guns.length + items.length;
 
     return ValueListenableBuilder<VisualPrefs>(
@@ -54,7 +56,7 @@ class FavouritesScreen extends StatelessWidget {
                 IconButton(
                   tooltip: 'Reset favourites',
                   icon: const Icon(Icons.delete_sweep_outlined),
-                  onPressed: () => _confirmReset(context, p),
+                  onPressed: () => _confirmReset(context, context.read<RunProvider>()),
                 ),
             ],
           ),
@@ -195,7 +197,7 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(Insets.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -208,7 +210,7 @@ class _EmptyState extends StatelessWidget {
             GoopText(
               'No favourites yet',
               style: prefs.font.textStyle.copyWith(
-                fontSize: 16,
+                fontSize: FontSizes.titleSmall,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
               ),

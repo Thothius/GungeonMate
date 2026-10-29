@@ -1,4 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import '../theme/tokens.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/run_provider.dart';
@@ -15,6 +16,8 @@ import '../widgets/item_detail/gun_stats.dart';
 import '../utils/responsive.dart';
 import '../widgets/item_detail/item_body.dart';
 import '../widgets/item_detail/synergies_section.dart';
+import '../widgets/item_detail/gun_notes_tab.dart';
+import '../widgets/item_detail/gun_synergies_tab.dart';
 import '../widgets/item_detail/destroy_banner.dart';
 
 class ItemDetailScreen extends StatefulWidget {
@@ -103,15 +106,24 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         toolbarHeight: 0,
         title: const SizedBox.shrink(),
       ),
-      body: CustomScrollView(
-        controller: _scrollCtrl,
+      // Cap content width — detail cards stretch absurdly on
+      // tablets/desktop without a constraint. SizedBox pins BOTH
+      // axes so the scrollable can't collapse inside loose
+      // Center/ConstrainedBox constraints.
+      body: LayoutBuilder(
+        builder: (context, cons) => Center(
+          child: SizedBox(
+            width: cons.maxWidth > 760 ? 760 : cons.maxWidth,
+            height: cons.maxHeight,
+            child: CustomScrollView(
+            controller: _scrollCtrl,
         slivers: [
           SliverToBoxAdapter(
             child: Container(
               margin: const EdgeInsets.fromLTRB(12, 8, 12, 8),
               decoration: BoxDecoration(
                 color: AppTheme.flair.card,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.all(Radii.lg),
                 boxShadow: [
                   BoxShadow(
                     color: AppTheme.flair.primary.withValues(alpha: 0.08),
@@ -127,6 +139,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     subtitle: subtitle,
                     quality: quality,
                     quote: quote,
+                    effect: gun?.notes ?? '',
                     isGun: gun != null,
                     isActive: item?.isActive ?? false,
                     iconPath: gun?.icon ?? item?.icon ?? '',
@@ -139,41 +152,62 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         ? ElementalTagger.elementsOfGun(gun)
                         : ElementalTagger.elementsOfItem(item!),
                   ),
-                  KeyedSubtree(
-                    key: _statsKey,
-                    child: gun != null
-                        ? GunStats(gun: gun)
-                        : ItemBody(item: item!, ownerSlot: ownerSlot),
-                  ),
+                  if (gun == null)
+                    KeyedSubtree(
+                      key: _statsKey,
+                      child: ItemBody(item: item!, ownerSlot: ownerSlot),
+                    )
+                  else
+                    _ElementTagRow(
+                        elements: ElementalTagger.elementsOfGun(gun)),
                 ],
               ),
             ),
           ),
-          // ---- Wiki rich content (Effects, Interactions, Notes, Trivia) ----
-          // Rendered as collapsible accordion cards. Hidden when empty so
-          // entries with no wiki coverage just keep the existing layout.
-          // We inject a zero-height anchor sliver *before* the group so
-          // `_scrollTo(_wikiKey)` has a target — `buildWikiSlivers`
-          // returns a list of slivers we can't wrap with a box-level
-          // KeyedSubtree.
-          if (wiki.hasAny) ...[
+          // ---- Flat single-scroll layout (no tabs): STATS →
+          // SYNERGIES → NOTES/wiki last. Gun path renders everything;
+          // item path keeps its existing flat body + synergy section.
+          if (gun != null)
             SliverToBoxAdapter(
-              child: SizedBox(key: _wikiKey, height: 0),
+              child: KeyedSubtree(key: _statsKey, child: GunStats(gun: gun)),
             ),
-            ...buildWikiSlivers(wiki),
-          ],
-          SliverToBoxAdapter(
-            child: SizedBox(
-              key: _synergyKey,
-              height: MediaQuery.of(context).size.height * 0.5,
-              child: SingleChildScrollView(
-                child: SynergiesSection(
+          if (gun != null)
+            SliverToBoxAdapter(
+              child: SizedBox(
+                key: _synergyKey,
+                child: GunSynergiesTab(
                   statuses: synergyStatuses,
                   currentName: name,
                 ),
               ),
             ),
-          ),
+          if (gun != null)
+            SliverToBoxAdapter(
+              child: GunNotesTab(
+                gun: gun,
+                elements: ElementalTagger.elementsOfGun(gun),
+              ),
+            ),
+          // ---- Wiki rich content (Effects, Interactions, Notes, Trivia) ----
+          if (gun != null && wiki.hasAny) ...[
+            SliverToBoxAdapter(
+              child: SizedBox(key: _wikiKey, height: 0),
+            ),
+            ...buildWikiSlivers(wiki),
+          ],
+          if (item != null)
+            SliverToBoxAdapter(
+              child: SizedBox(
+                key: _synergyKey,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: SingleChildScrollView(
+                  child: SynergiesSection(
+                    statuses: synergyStatuses,
+                    currentName: name,
+                  ),
+                ),
+              ),
+            ),
           if (item != null && item.isDestroyedOnUse && isInRun)
             SliverToBoxAdapter(
               child: DestroyBanner(
@@ -195,11 +229,21 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             ),
           const SliverToBoxAdapter(child: SizedBox(height: 120)),
         ],
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 10, 12, 14),
-          child: Row(
+          // Align+heightFactor centers horizontally AND shrink-wraps
+          // vertically — bare Center expands to eat the body's height.
+          child: Align(
+            alignment: Alignment.topCenter,
+            heightFactor: 1.0,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: Row(
             children: [
               // Back one step (e.g. back to Browse when coming from
               // Browse, or back to the previous detail view when
@@ -216,14 +260,14 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     label: GoopText(
                       'Back',
                       style: TextStyle(
-                        fontSize: 16 * sf,
+                        fontSize: FontSizes.titleSmall * sf,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.3,
                       ),
                     ),
                     style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.all(Radii.lg),
                       ),
                       side: BorderSide(
                         color: Colors.white.withValues(alpha: 0.25),
@@ -246,7 +290,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   style: OutlinedButton.styleFrom(
                     padding: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.all(Radii.lg),
                     ),
                     side: BorderSide(
                       color: AppTheme.flair.primary,
@@ -276,7 +320,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         style: OutlinedButton.styleFrom(
                           padding: EdgeInsets.zero,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.all(Radii.lg),
                           ),
                           side: const BorderSide(
                             color: Colors.redAccent,
@@ -317,7 +361,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         style: FilledButton.styleFrom(
                           padding: EdgeInsets.zero,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.all(Radii.lg),
                           ),
                         ),
                         onPressed: () {
@@ -342,8 +386,52 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       ),
               ),
             ],
+              ),
+            ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Element tags rendered inline under the header card — flat rework
+/// moved elements out of the notes tab into the stats area so the
+/// damage-type info is visible without scrolling to notes.
+class _ElementTagRow extends StatelessWidget {
+  final Set<ElementKind> elements;
+  const _ElementTagRow({required this.elements});
+
+  @override
+  Widget build(BuildContext context) {
+    if (elements.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+      child: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [
+          for (final e in elements)
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: e.color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(6),
+                border:
+                    Border.all(color: e.color.withValues(alpha: 0.5)),
+              ),
+              child: GoopText(
+                e.label.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.8,
+                  color: e.color,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

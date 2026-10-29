@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math' as math;
@@ -7,11 +8,16 @@ import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/asset_paths.dart';
+import 'active_run/run_effects_block.dart';
+import '../utils/responsive.dart';
 
 /// Banner for the Inventory: portrait + name + quick-glance stats row.
 class GungeoneerHeader extends StatefulWidget {
   final Gungeoneer character;
   final double topDps;
+
+  /// Tap handler for the DPS capsule — opens the damage calculator sheet.
+  final VoidCallback? onTapDPS;
   final int gunCount;
   final int itemCount;
   final int activeSynergies;
@@ -65,6 +71,7 @@ class GungeoneerHeader extends StatefulWidget {
     super.key,
     required this.character,
     required this.topDps,
+    this.onTapDPS,
     required this.gunCount,
     required this.itemCount,
     required this.activeSynergies,
@@ -215,12 +222,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
       builder: (context, _, __) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(MediaQuery.of(context).textScaler.scale(1).clamp(0.8, 1.35)),
-          ),
-          child: _buildExpanded(context),
-        );
+        return _buildExpanded(context);
       },
     );
   }
@@ -228,22 +230,28 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
   Widget _buildExpanded(BuildContext context) {
     final f = AppTheme.flair;
     final iconPath = widget.character.icon;
-    final cdReduction = (widget.coolness * 5.0).clamp(0.0, 50.0);
-    final ammoMultiplier = 1.0 + (widget.curse * 0.05) + (widget.coolness * 0.01);
-
     final trailingWidget = widget.trailing ?? (widget.onEndRun != null
         ? IconButton(
             tooltip: 'End run',
             onPressed: widget.onEndRun,
             icon: const Icon(Icons.exit_to_app, color: Colors.white70, size: 18),
             constraints: const BoxConstraints(),
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(Insets.xs),
           )
         : null);
 
-    return Padding(
+    // Neutralize the global text scaler so the header layout stays
+    // pixel-stable regardless of the theme's font-size setting. The
+    // stat capsules use FittedBox, but the avatar/name area doesn't —
+    // a 2.28x scale factor would blow up the single-row layout.
+    return MediaQuery(
+      data: MediaQuery.of(context).copyWith(
+        textScaler: TextScaler.noScaling,
+      ),
+      child: Padding(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
-      child: AnimatedBuilder(
+      child: RepaintBoundary(
+        child: AnimatedBuilder(
         animation: _borderPulseController,
         builder: (context, child) {
           final pulse = (math.sin(_borderPulseController.value * 2 * math.pi) + 1) / 2;
@@ -271,9 +279,9 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Row 1: Character Portrait, Name and Quick settings
+            // Single row: Avatar + COOL + CURSE + SYN + DPS + Gear menu
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -281,27 +289,66 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                     children: [
                       // Clean, flat Avatar (Tappable — cycles through
                       // static icon → in-game GIF → animated card art).
-                      // Slightly smaller than before (64×50 vs 72×56) so
-                      // the visual weight of the avatar block balances
-                      // the trailing options row on the right.
                       GestureDetector(
                         onTap: _onAvatarTapped,
                         child: SizedBox(
-                          width: 64,
-                          height: 50,
+                          width: 48,
+                          height: 48,
                           child: _buildAvatarContent(iconPath),
                         ),
                       ),
                       // Robot +DMG cyber overlay — shown when robotDamageBoost > 0.
-                      // Matrix/cyber ASCII styled number next to the avatar.
                       if (widget.robotDamageBoost > 0) ...[
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 3),
                         _RobotDmgBadge(boost: widget.robotDamageBoost),
                       ],
-                      const SizedBox(width: 8),
-
+                      const SizedBox(width: 6),
+                      // 4 stat capsules share the remaining space equally
+                      Expanded(
+                        child: _buildFlatCapsule(
+                          color: const Color(0xFF00E5FF),
+                          value: '+${widget.coolness.toStringAsFixed(1)}',
+                          label: 'COOL',
+                          onTap: widget.onTapCoolness,
+                          onLongPress: widget.onLongPressCoolness,
+                          isCool: true,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _buildFlatCapsule(
+                          color: const Color(0xFFE040FB),
+                          value: '+${widget.curse.toStringAsFixed(1)}',
+                          label: 'CURSE',
+                          onTap: widget.onTapCurse,
+                          onLongPress: widget.onLongPressCurse,
+                          isCurse: true,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _buildFlatCapsule(
+                          color: widget.activeSynergies > 0 ? const Color(0xFFFFD740) : Colors.white38,
+                          value: widget.partialSynergies > 0
+                              ? '${widget.activeSynergies}|${widget.partialSynergies}'
+                              : '${widget.activeSynergies}',
+                          label: 'SYN',
+                          onTap: widget.onTapSynergies,
+                          isActive: widget.activeSynergies > 0,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: _buildFlatCapsule(
+                          color: widget.topDps > 0 ? const Color(0xFFFF9100) : Colors.white38,
+                          value: widget.topDps > 0 ? widget.topDps.toStringAsFixed(0) : '0',
+                          label: 'DPS',
+                          onTap: widget.onTapDPS,
+                          isActive: widget.topDps > 0,
+                        ),
+                      ),
                       if (trailingWidget != null) ...[
-                        const Spacer(),
+                        const SizedBox(width: 6),
                         trailingWidget,
                       ],
                     ],
@@ -313,7 +360,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                       child: IgnorePointer(
                         child: AnimatedContainer(
                         duration: const Duration(milliseconds: 150),
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
                         decoration: BoxDecoration(
                           color: AppTheme.flair.card, // Solid dark grey background
                           borderRadius: BorderRadius.circular(6),
@@ -329,7 +376,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                         child: GoopText(
                           _quickComment!,
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: FontSizes.labelSmall,
                             fontStyle: FontStyle.italic,
                             color: f.headlineStat,
                             fontWeight: FontWeight.bold,
@@ -343,75 +390,6 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
               ),
             ),
 
-            // Row 2: spacious horizontal gauge bar for stats (full width!)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(14, 6, 14, 12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildFlatCapsule(
-                      color: const Color(0xFF00E5FF),
-                      value: '+${widget.coolness.toStringAsFixed(1)}',
-                      label: 'COOL',
-                      onTap: widget.onTapCoolness,
-                      onLongPress: widget.onLongPressCoolness,
-                      isCool: true,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: _buildFlatCapsule(
-                      color: const Color(0xFFE040FB),
-                      value: '+${widget.curse.toStringAsFixed(1)}',
-                      label: 'CURSE',
-                      onTap: widget.onTapCurse,
-                      onLongPress: widget.onLongPressCurse,
-                      isCurse: true,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: _buildFlatCapsule(
-                      color: const Color(0xFF00B0FF),
-                      value: '-${cdReduction.toStringAsFixed(0)}%',
-                      label: 'CD ↓',
-                      isActive: cdReduction > 0,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: _buildFlatCapsule(
-                      color: const Color(0xFF00E676),
-                      value: 'x${ammoMultiplier.toStringAsFixed(2)}',
-                      label: 'AMMO',
-                      isActive: ammoMultiplier > 1.0,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: _buildFlatCapsule(
-                      color: widget.activeSynergies > 0 ? const Color(0xFFFFD740) : Colors.white38,
-                      value: widget.partialSynergies > 0
-                          ? '${widget.activeSynergies}|${widget.partialSynergies}'
-                          : '${widget.activeSynergies}',
-                      label: 'SYN',
-                      onTap: widget.onTapSynergies,
-                      isActive: widget.activeSynergies > 0,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: _buildFlatCapsule(
-                      color: widget.topDps > 0 ? const Color(0xFFFF9100) : Colors.white38,
-                      value: widget.topDps > 0 ? widget.topDps.toStringAsFixed(0) : '0',
-                      label: 'DPS',
-                      isActive: widget.topDps > 0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
             // Dynamic themed divider/decoration
             Container(
               height: 1.0,
@@ -419,9 +397,10 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
               color: Colors.white.withValues(alpha: 0.05),
             ),
 
-            // PREMIUM BEVELED PASSIVE TAGS PANEL — toggled by the effects
-            // button in the header trailing row via VisualPrefs.showEffectsPanel.
-            if (widget.effectChips.isNotEmpty) ...[
+            // EFFECTS PANEL — compact cool/curse stats + pull-down
+            // controls only (passive tags removed). Toggled by the
+            // effects button via VisualPrefs.showEffectsPanel.
+            ...[
               ListenableBuilder(
                 listenable: VisualPrefs.notifier,
                 builder: (context, _) {
@@ -448,43 +427,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
                           ),
                         ],
                       ),
-                      child: _EffectChipsWrap(chips: widget.effectChips),
-                    ),
-                  );
-                },
-              ),
-            ],
-
-            // SHRINE TRACKER PANEL — toggled by the shrine icon in the
-            // header trailing row via VisualPrefs.showShrinePanel.
-            if (widget.shrinesUsed.isNotEmpty) ...[
-              ListenableBuilder(
-                listenable: VisualPrefs.notifier,
-                builder: (context, _) {
-                  if (!VisualPrefs.notifier.value.showShrinePanel) {
-                    return const SizedBox.shrink();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.25),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: const Color(0xFFFFD740).withValues(alpha: 0.20),
-                          width: 1.0,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: _ShrineTracker(shrines: widget.shrinesUsed),
+                      child: const RunEffectsBlock(),
                     ),
                   );
                 },
@@ -492,6 +435,8 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
             ],
           ],
         ),
+      ),
+      ),
       ),
     );
   }
@@ -508,6 +453,8 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
               fit: BoxFit.contain,
               filterQuality: FilterQuality.none,
               gaplessPlayback: true,
+              cacheWidth: 96,
+              cacheHeight: 96,
               errorBuilder: (_, __, ___) => fallback,
             )
           : fallback;
@@ -522,13 +469,15 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
           fit: BoxFit.contain,
           filterQuality: FilterQuality.none,
           gaplessPlayback: true,
+          cacheWidth: 96,
+          cacheHeight: 96,
           errorBuilder: (_, __, ___) => iconPath.startsWith('assets/')
-              ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+              ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, cacheWidth: 96, cacheHeight: 96, errorBuilder: (_, __, ___) => fallback)
               : fallback,
         );
       }
       return iconPath.startsWith('assets/')
-          ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+          ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, cacheWidth: 96, cacheHeight: 96, errorBuilder: (_, __, ___) => fallback)
           : fallback;
     }
 
@@ -540,13 +489,15 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
         gaplessPlayback: true,
+        cacheWidth: 96,
+        cacheHeight: 96,
         errorBuilder: (_, __, ___) => iconPath.startsWith('assets/')
-            ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+            ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, cacheWidth: 96, cacheHeight: 96, errorBuilder: (_, __, ___) => fallback)
             : fallback,
       );
     }
     return iconPath.startsWith('assets/')
-        ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, errorBuilder: (_, __, ___) => fallback)
+        ? Image.asset(iconPath, fit: BoxFit.contain, filterQuality: FilterQuality.none, cacheWidth: 96, cacheHeight: 96, errorBuilder: (_, __, ___) => fallback)
         : fallback;
   }
 
@@ -570,7 +521,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
     Widget valueText = GoopText(
       value,
       style: TextStyle(
-        fontSize: 16,
+        fontSize: FontSizes.bodyMedium,
         fontWeight: FontWeight.w900,
         color: isActive ? Colors.white : Colors.white38,
         height: 1.1,
@@ -578,7 +529,8 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
     );
 
     if (isCool && coolGlowIntensity > 0) {
-      valueText = AnimatedBuilder(
+      valueText = RepaintBoundary(
+        child: AnimatedBuilder(
         animation: _wobbleController,
         builder: (context, child) {
           final pulse = math.sin(_wobbleController.value * 2 * math.pi) * 3.0;
@@ -597,9 +549,11 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
           );
         },
         child: valueText,
+      ),
       );
     } else if (isCurse && curseGlowIntensity > 0) {
-      valueText = AnimatedBuilder(
+      valueText = RepaintBoundary(
+        child: AnimatedBuilder(
         animation: _wobbleController,
         builder: (context, child) {
           final pulse = math.sin(_wobbleController.value * 2 * math.pi * 2) * 2.0;
@@ -628,19 +582,20 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
           );
         },
         child: valueText,
+      ),
       );
     }
 
     final capsule = Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
       decoration: BoxDecoration(
-        color: isActive 
-            ? color.withValues(alpha: 0.16) 
+        color: isActive
+            ? color.withValues(alpha: 0.16)
             : Colors.black.withValues(alpha: 0.28),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: isActive 
-              ? color.withValues(alpha: 0.45) 
+          color: isActive
+              ? color.withValues(alpha: 0.45)
               : Colors.white.withValues(alpha: 0.10),
           width: 1.0,
         ),
@@ -649,16 +604,17 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader> with TickerProvider
         fit: BoxFit.scaleDown,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             valueText,
-            const SizedBox(height: 4),
+            const SizedBox(height: 2),
             GoopText(
               label,
               style: TextStyle(
-                fontSize: 9.5,
+                fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
                 color: isActive ? color : Colors.white24,
-                letterSpacing: 0.6,
+                letterSpacing: 0.4,
                 height: 1.0,
               ),
             ),
@@ -784,7 +740,7 @@ class _EffectChipsWrapState extends State<_EffectChipsWrap> {
                 GoopText(
                   _isExpanded ? 'COLLAPSE' : '+$hiddenCount MORE',
                   style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 10.5 * Responsive.factor(context),
                     fontWeight: FontWeight.w900,
                     color: flair.headlineStat,
                     letterSpacing: 0.5,
@@ -813,7 +769,7 @@ class _EffectChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.all(Radii.md),
           border: Border.all(
             color: color.withValues(alpha: 0.45),
             width: 0.7,
@@ -827,7 +783,7 @@ class _EffectChip extends StatelessWidget {
             GoopText(
               chip.tag.label,
               style: TextStyle(
-                fontSize: 11.5,
+                fontSize: 11.5 * Responsive.factor(context),
                 fontWeight: FontWeight.w700,
                 color: color,
                 letterSpacing: 0.2,
@@ -837,8 +793,8 @@ class _EffectChip extends StatelessWidget {
               const SizedBox(width: 3),
               GoopText(
                 value,
-                style: const TextStyle(
-                  fontSize: 11.5,
+                style: TextStyle(
+                  fontSize: 11.5 * Responsive.factor(context),
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
                 ),
@@ -849,7 +805,7 @@ class _EffectChip extends StatelessWidget {
               GoopText(
                 '×${chip.sourceCount}',
                 style: TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 10.5 * Responsive.factor(context),
                   fontWeight: FontWeight.w700,
                   color: Colors.white.withValues(alpha: 0.7),
                 ),
@@ -858,63 +814,6 @@ class _EffectChip extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-/// Compact shrine usage tracker. Shows each shrine name as a pill
-/// with an icon, in a wrap layout. Most recent first.
-class _ShrineTracker extends StatelessWidget {
-  final List<String> shrines;
-  const _ShrineTracker({required this.shrines});
-
-  @override
-  Widget build(BuildContext context) {
-    final flair = AppTheme.flair;
-    final reversed = shrines.reversed.toList();
-    return Wrap(
-      spacing: 5,
-      runSpacing: 5,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        for (int i = 0; i < reversed.length; i++)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFD740).withValues(alpha: 0.10),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFFFFD740).withValues(alpha: 0.40),
-                width: 0.7,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.temple_buddhist, color: Color(0xFFFFD740), size: 12.5),
-                const SizedBox(width: 4),
-                GoopText(
-                  reversed[i],
-                  style: const TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFFFFD740),
-                    letterSpacing: 0.2,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        GoopText(
-          '${shrines.length} shrine${shrines.length == 1 ? '' : 's'} used',
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            color: flair.headlineStat.withValues(alpha: 0.6),
-            letterSpacing: 0.3,
-          ),
-        ),
-      ],
     );
   }
 }
@@ -933,7 +832,7 @@ class _RobotDmgBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D1117),
+        color: AppTheme.flair.scaffold,
         borderRadius: BorderRadius.circular(4),
         border: Border.all(
           color: Colors.cyanAccent.withValues(alpha: 0.4),
@@ -954,7 +853,7 @@ class _RobotDmgBadge extends StatelessWidget {
           GoopText(
             'DMG',
             style: TextStyle(
-              fontSize: 8,
+              fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
               color: Colors.cyanAccent.withValues(alpha: 0.6),
               letterSpacing: 1.0,
@@ -967,7 +866,7 @@ class _RobotDmgBadge extends StatelessWidget {
           GoopText(
             '+$pct%',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 13 * Responsive.factor(context),
               fontWeight: FontWeight.w900,
               color: Colors.cyanAccent,
               letterSpacing: 0.5,

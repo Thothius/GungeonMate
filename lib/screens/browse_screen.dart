@@ -1,19 +1,21 @@
-﻿import 'package:flutter/material.dart';
+import '../theme/tokens.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/player.dart';
-import '../services/multiplayer_session.dart';
+import '../models/run_state.dart'; // Used by context.select type parameter
 import 'item_detail_screen.dart';
-import 'favourites_screen.dart';
 import '../services/goop_talk_engine.dart';
+import '../services/haptics.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../widgets/browse/any_entry.dart';
 import '../widgets/browse/browse_pills.dart';
 import '../widgets/browse/browse_row.dart';
+import '../widgets/state_widgets.dart';
 
 class BrowseScreen extends StatefulWidget {
   /// When provided, the ADD button and the snackbar route adds into the
@@ -42,9 +44,16 @@ class BrowseScreen extends StatefulWidget {
   State<BrowseScreen> createState() => _BrowseScreenState();
 }
 
-class _BrowseScreenState extends State<BrowseScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tab;
+enum _BrowseMode { all, tiers, synergies }
+enum _KindFilter { all, guns, items, favourites }
+enum _SynOwner { all, p1, p2 }
+
+class _BrowseScreenState extends State<BrowseScreen> {
+  _BrowseMode _mode = _BrowseMode.all;
+  final Set<String> _tiers = {}; // empty = all tiers
+  _KindFilter _kind = _KindFilter.all; // ALL-mode sub-filter
+  _SynOwner _synOwner = _SynOwner.all; // synergies owner tab
+  int _allCount = 0, _p1Count = 0, _p2Count = 0;
   final TextEditingController _searchCtrl = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   String _query = '';
@@ -62,15 +71,6 @@ class _BrowseScreenState extends State<BrowseScreen>
   @override
   void initState() {
     super.initState();
-    // Length 4: All / Guns / Items / Favourites.
-    _tab = TabController(length: 4, vsync: this);
-    _tab.addListener(() {
-      if (!_tab.indexIsChanging) return;
-      // Drop the keyboard whenever the user changes tab so it never
-      // flickers up after navigating between sections.
-      FocusManager.instance.primaryFocus?.unfocus();
-      setState(() {});
-    });
     _searchCtrl.addListener(_onSearchChanged);
   }
 
@@ -96,44 +96,22 @@ class _BrowseScreenState extends State<BrowseScreen>
 
   @override
   void dispose() {
-    _tab.dispose();
     _searchCtrl.removeListener(_onSearchChanged);
     _searchCtrl.dispose();
     _searchFocusNode.dispose();
     super.dispose();
   }
 
-  List<Gun> _sortedGuns(RunProvider p) {
-    final list = p.allGuns
-        .where((g) => g.name.toLowerCase().contains(_query))
-        .toList();
-    list.sort((a, b) {
-      final c = (_qualityOrder[a.quality] ?? 99)
-          .compareTo(_qualityOrder[b.quality] ?? 99);
-      return c != 0 ? c : a.name.compareTo(b.name);
-    });
-    return list;
-  }
-
-  List<Item> _sortedItems(RunProvider p) {
-    final list = p.allItems
-        .where((it) => it.name.toLowerCase().contains(_query))
-        .toList();
-    list.sort((a, b) {
-      final c = (_qualityOrder[a.quality] ?? 99)
-          .compareTo(_qualityOrder[b.quality] ?? 99);
-      return c != 0 ? c : a.name.compareTo(b.name);
-    });
-    return list;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final tabIdx = _tab.index;
-    final isAll = tabIdx == 0;
-    final isGuns = tabIdx == 1;
-    final isFavs = tabIdx == 3;
+    // Select only runState — the field that changes when items are
+    // added/removed. This prevents rebuilds from MP sync events,
+    // favorites toggles in other screens, or provider loading state
+    // changes that don't affect the browse list.
+    // The select triggers rebuilds when runState changes; the value
+    // itself is read through p in the row builders below.
+    context.select<RunProvider, RunState>((p) => p.runState);
+    final p = context.read<RunProvider>();
     final isCoop = widget.targetSlot == PlayerSlot.coop;
     return PopScope(
       // Dismiss the soft keyboard before this route pops so the active
@@ -142,14 +120,13 @@ class _BrowseScreenState extends State<BrowseScreen>
       onPopInvokedWithResult: (didPop, _) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: _buildScaffold(context, p, isAll, isGuns, isFavs, isCoop),
+      child: _buildScaffold(context, p, isCoop),
     );
   }
 
   Widget _buildScaffold(
-      BuildContext context, RunProvider p, bool isAll, bool isGuns, bool isFavs, bool isCoop) {
+      BuildContext context, RunProvider p, bool isCoop) {
     final sf = Responsive.factor(context);
-    final tabHeight = 52 * sf;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -163,59 +140,74 @@ class _BrowseScreenState extends State<BrowseScreen>
             ? const GoopText('Browse')
             : const SizedBox.shrink(),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(64),
+          // Height is scale-factor aware — the mode bar and tier
+          // strip size by Responsive.factor, so a fixed 64/108
+          // overflowed vertically whenever sf > ~1.2.
+          preferredSize: Size.fromHeight(
+              (46 * sf) +
+                  (_mode == _BrowseMode.tiers ? (8 + 46 * sf) : 0) +
+                  (_mode == _BrowseMode.all ? (8 + 40 * sf) : 0) +
+                  (_mode == _BrowseMode.synergies ? (8 + 40 * sf) : 0) +
+                  12),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 4, 8, 6),
-            child: TabBar(
-              controller: _tab,
-              // Bigger, easier-to-tap pills. Indicator fills each tab
-              // so the active state is unmistakable on small screens.
-              labelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.4,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
-              indicator: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary
-                    .withValues(alpha: 0.22),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary
-                      .withValues(alpha: 0.7),
-                  width: 1.2,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Filter mode bar — ALL / TIERS / SYNERGIES.
+                Row(
+                  children: [
+                    _modeBtn('ALL', Icons.apps, _BrowseMode.all, isCoop ? 'ALL · P2' : 'ALL', sf),
+                    _modeBtn('TIERS', Icons.military_tech_outlined,
+                        _BrowseMode.tiers, 'TIERS', sf),
+                    _modeBtn('SYN', Icons.hub_outlined,
+                        _BrowseMode.synergies, 'SYNERGIES', sf),
+                  ].map((w) => Expanded(child: w)).toList(),
                 ),
-              ),
-              indicatorSize: TabBarIndicatorSize.tab,
-              dividerHeight: 0,
-              tabs: [
-                Tab(
-                  height: tabHeight,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: Icon(Icons.apps, size: 20 * sf),
-                  text: isCoop ? 'All · P2' : 'All',
-                ),
-                Tab(
-                  height: tabHeight,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: Icon(Icons.gps_fixed, size: 20 * sf),
-                  text: 'Guns',
-                ),
-                Tab(
-                  height: tabHeight,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: Icon(Icons.inventory_2_outlined, size: 20 * sf),
-                  text: 'Items',
-                ),
-                Tab(
-                  height: tabHeight,
-                  iconMargin: const EdgeInsets.only(bottom: 2),
-                  icon: Icon(Icons.favorite, size: 20 * sf),
-                  text: 'Favs',
-                ),
+                // Tier strip — only while TIERS mode is active. Nothing
+                // selected means "show everything".
+                if (_mode == _BrowseMode.tiers)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (final t in const ['S', 'A', 'B', 'C', 'D', 'N'])
+                          _tierChip(t, sf),
+                      ],
+                    ),
+                  ),
+                // ALL sub-filter — guns / items / favourites icons.
+                if (_mode == _BrowseMode.all)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      children: [
+                        for (final k in const [
+                          (Icons.apps, 'ALL', _KindFilter.all),
+                          (Icons.sports_martial_arts_rounded, 'GUNS', _KindFilter.guns),
+                          (Icons.backpack_rounded, 'ITEMS', _KindFilter.items),
+                          (Icons.favorite_rounded, 'FAVS', _KindFilter.favourites),
+                        ])
+                          Expanded(child: _kindChip(k.$1, k.$2, k.$3, sf)),
+                      ],
+                    ),
+                  ),
+                // SYNERGIES owner tabs — combined / P1 / P2 pools.
+                if (_mode == _BrowseMode.synergies)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      children: [
+                        for (final o in const [
+                          ('ALL', _SynOwner.all),
+                          ('P1', _SynOwner.p1),
+                          ('P2', _SynOwner.p2),
+                        ])
+                          Expanded(child: _ownerTab(o.$1, o.$2, sf)),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
@@ -224,10 +216,17 @@ class _BrowseScreenState extends State<BrowseScreen>
       body: SafeArea(
         child: Column(
         children: [
-          if (!isFavs) ...[
-            Padding(
+          Padding(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-              child: Row(
+              // Align+heightFactor centers horizontally AND
+              // shrink-wraps vertically — bare Center expands to eat
+              // all column height and starves the list below.
+              child: Align(
+                alignment: Alignment.topCenter,
+                heightFactor: 1.0,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 680),
+                  child: Row(
                 children: [
                   Expanded(
                     child: SizedBox(
@@ -267,22 +266,22 @@ class _BrowseScreenState extends State<BrowseScreen>
                         Navigator.maybePop(context);
                       },
                       constraints: const BoxConstraints(),
-                      padding: const EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(Insets.xs),
                     ),
                   ],
                 ],
+                  ),
+                ),
               ),
             ),
-          ],
+          // Wide screens: cap the row width so lists don't stretch
+          // edge-to-edge on tablets/desktop windows.
           Expanded(
-            child: TabBarView(
-              controller: _tab,
-              children: [
-                _allList(p),
-                _gunsList(p),
-                _itemsList(p),
-                const FavouritesScreen(embedded: true),
-              ],
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 680),
+                child: _modeList(p),
+              ),
             ),
           ),
         ],
@@ -291,24 +290,439 @@ class _BrowseScreenState extends State<BrowseScreen>
     );
   }
 
-  Widget _gunsList(RunProvider p) {
-    final items = _sortedGuns(p);
-    if (items.isEmpty) return _emptyState();
+  /// One mode button in the ALL/TIERS/SYNERGIES bar.
+  Widget _modeBtn(String key, IconData icon, _BrowseMode mode,
+      String label, double sf) {
+    final active = _mode == mode;
+    final primary = Theme.of(context).colorScheme.primary;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: GestureDetector(
+        onTap: () {
+          Haptics.selection();
+          FocusManager.instance.primaryFocus?.unfocus();
+          setState(() => _mode = mode);
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          height: 46 * sf,
+          decoration: BoxDecoration(
+            color: active
+                ? primary.withValues(alpha: 0.22)
+                : Colors.transparent,
+            borderRadius: BorderRadius.all(Radii.md),
+            border: Border.all(
+              color: active
+                  ? primary.withValues(alpha: 0.7)
+                  : Colors.white.withValues(alpha: 0.12),
+              width: 1.2,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon,
+                  size: 17 * sf,
+                  color: active
+                      ? primary
+                      : Colors.white.withValues(alpha: 0.45)),
+              SizedBox(width: 5 * sf),
+              Flexible(
+                child: GoopText(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: FontSizes.labelMedium * sf,
+                    fontWeight: active ? FontWeight.w800 : FontWeight.w600,
+                    letterSpacing: 0.6,
+                    color: active
+                        ? primary
+                        : Colors.white.withValues(alpha: 0.5),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// One tier filter chip — multi-select, toggling off everything
+  /// returns to "show all".
+  Widget _tierChip(String tier, double sf) {
+    final sel = _tiers.contains(tier);
+    // Real chest colors — D brown, C blue, B green, A red, S black.
+    final accent = tier == 'S'
+        ? const Color(0xFFFFD700) // gold trim — EtG black chests are gold-ringed
+        : tier == 'A'
+            ? const Color(0xFFE53935) // red chest
+            : tier == 'B'
+                ? const Color(0xFF43A047) // green chest
+                : tier == 'C'
+                    ? const Color(0xFF1E88E5) // blue chest
+                    : tier == 'D'
+                        ? const Color(0xFF8D6E63) // brown chest
+                        : Colors.white54;
+    return Expanded(
+      child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: GestureDetector(
+        key: Key('tier_chip_$tier'),
+        onTap: () {
+          Haptics.selection();
+          setState(() {
+            if (sel) {
+              _tiers.remove(tier);
+            } else {
+              _tiers.add(tier);
+            }
+          });
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          width: double.infinity,
+          height: 46 * sf,
+          decoration: BoxDecoration(
+            color: sel ? accent.withValues(alpha: 0.2) : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: sel
+                  ? accent.withValues(alpha: 0.8)
+                  : Colors.white.withValues(alpha: 0.15),
+              width: sel ? 1.5 : 1,
+            ),
+          ),
+          child: Center(
+            child: GoopText(tier,
+                style: TextStyle(
+                  fontSize: 13 * sf,
+                  fontWeight: FontWeight.w900,
+                  color: sel
+                      ? accent
+                      : Colors.white.withValues(alpha: 0.4),
+                )),
+          ),
+        ),
+      ),
+      ),
+    );
+  }
+
+  /// Mode-driven list — ALL/TIERS share the combined view (TIERS just
+  /// filters by selected qualities); SYNERGIES shows candidates that
+  /// complete or extend synergies for the COMBINED inventories.
+  Widget _modeList(RunProvider p) {
+    return switch (_mode) {
+      _BrowseMode.all || _BrowseMode.tiers => _combinedList(p),
+      _BrowseMode.synergies => _synergyCandidatesList(p),
+    };
+  }
+
+  /// Combined guns+items, search-filtered, then tier-filtered when the
+  /// TIERS strip has selections.
+  Widget _combinedList(RunProvider p) {
+    final guns = p.allGuns
+        .where((g) => g.name.toLowerCase().contains(_query))
+        .toList();
+    final items = p.allItems
+        .where((it) => it.name.toLowerCase().contains(_query))
+        .toList();
+
+    var entries = <AnyEntry>[
+      for (final g in guns) AnyEntry.gun(g),
+      for (final it in items) AnyEntry.item(it),
+    ];
+
+    entries.sort((a, b) {
+      final c = (_qualityOrder[a.quality] ?? 99)
+          .compareTo(_qualityOrder[b.quality] ?? 99);
+      return c != 0 ? c : a.name.compareTo(b.name);
+    });
+
+    if (_mode == _BrowseMode.tiers && _tiers.isNotEmpty) {
+      entries = entries
+          .where((e) => _tiers.contains(e.quality.toUpperCase()))
+          .toList();
+    }
+    // TIERS always spans guns + items + favourites — the ALL-mode
+    // kind chips must not shrink the tier pool.
+    if (_mode == _BrowseMode.all) {
+      switch (_kind) {
+        case _KindFilter.guns:
+          entries = entries.where((e) => e.gun != null).toList();
+        case _KindFilter.items:
+          entries = entries.where((e) => e.item != null).toList();
+        case _KindFilter.favourites:
+          entries = entries.where((e) => p.isFavourite(e.name)).toList();
+        case _KindFilter.all:
+          break;
+      }
+    }
+
+    if (entries.isEmpty) return _emptyState();
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      itemCount: items.length,
+      itemCount: entries.length,
+      prototypeItem: entries.first.gun != null
+          ? _gunRow(context, p, entries.first.gun!)
+          : _itemRow(context, p, entries.first.item!),
       itemBuilder: (c, i) {
-        final g = items[i];
-        return _gunRow(c, p, g);
+        final e = entries[i];
+        return e.gun != null
+            ? _gunRow(c, p, e.gun!)
+            : _itemRow(c, p, e.item!);
       },
     );
   }
 
-  /// Tappable row for a gun. Used by both the Guns and All tabs.
-  Widget _gunRow(BuildContext c, RunProvider p, Gun g) {
+  /// Synergies [name] would complete against a pool, each tagged
+  /// with who owns the other pieces — 'P1', 'P2', or 'P1+P2'.
+  List<({String name, String owners})> _completesFor(
+    String name, {
+    required Set<String> combined,
+    required Set<String> mainNames,
+    required Set<String> coopNames,
+    required Player? coop,
+    required RunProvider p,
+  }) {
+    final lower = name.toLowerCase();
+    if (combined.contains(lower)) return const [];
+    final owned = combined.toList();
+    final wouldOwn = [...combined, lower];
+    final out = <({String name, String owners})>[];
+    for (final s in p.allSynergies) {
+      if (s.matchesItems(owned) || !s.matchesItems(wouldOwn)) {
+        continue;
+      }
+      var p1 = false, p2 = false;
+      for (final piece in [...s.items, ...s.anyOf]) {
+        final pl = piece.toLowerCase();
+        if (pl != lower) {
+          if (mainNames.contains(pl)) p1 = true;
+          if (coopNames.contains(pl)) p2 = true;
+        }
+      }
+      out.add((
+        name: s.name,
+        owners:
+            coop == null ? 'P1' : (p1 && p2 ? 'P1+P2' : p2 ? 'P2' : 'P1'),
+      ));
+    }
+    return out;
+  }
+
+  /// Synergies already fully satisfied by [owned] — the 'already hits'
+  /// section on top of the synergies list.
+  List<({String name, String owners})> _completedSynergies(
+      Set<String> owned, Set<String> mainNames, Set<String> coopNames,
+      Player? coop, RunProvider p) {
+    final out = <({String name, String owners})>[];
+    for (final s in p.allSynergies) {
+      if (!s.matchesItems(owned.toList())) continue;
+      var p1 = false, p2 = false;
+      for (final piece in [...s.items, ...s.anyOf]) {
+        final pl = piece.toLowerCase();
+        if (mainNames.contains(pl)) p1 = true;
+        if (coopNames.contains(pl)) p2 = true;
+      }
+      out.add((
+        name: s.name,
+        owners:
+            coop == null ? 'P1' : (p1 && p2 ? 'P1+P2' : p2 ? 'P2' : 'P1'),
+      ));
+    }
+    return out;
+  }
+
+  /// Synergy candidates — guns/items neither player owns that would
+  /// complete (or extend) a synergy given BOTH players' inventories.
+  /// Sorted by completions desc, then quality, then name.
+  Widget _synergyCandidatesList(RunProvider p) {
+    final combined = <String>{
+      ...p.runState.main.allItemNames.map((n) => n.toLowerCase()),
+      if (p.runState.coop != null)
+        ...p.runState.coop!.allItemNames.map((n) => n.toLowerCase()),
+    };
+    final coop = p.runState.coop;
+    final mainNames = p.runState.main.allItemNames
+        .map((n) => n.toLowerCase())
+        .toSet();
+    final coopNames = coop == null
+        ? const <String>{}
+        : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
+
+    List<({String name, String owners})> completesFor(String name) =>
+        _completesFor(name, combined: combined, mainNames: mainNames,
+            coopNames: coopNames, coop: coop, p: p);
+
+    final hits = <(AnyEntry, List<({String name, String owners})>)>[];
+    for (final g in p.allGuns) {
+      if (!g.name.toLowerCase().contains(_query)) continue;
+      final done = completesFor(g.name);
+      if (done.isNotEmpty) hits.add((AnyEntry.gun(g), done));
+    }
+    for (final it in p.allItems) {
+      if (!it.name.toLowerCase().contains(_query)) continue;
+      final done = completesFor(it.name);
+      if (done.isNotEmpty) hits.add((AnyEntry.item(it), done));
+    }
+    hits.sort((a, b) {
+      final c = b.$2.length.compareTo(a.$2.length);
+      if (c != 0) return c;
+      final q = (_qualityOrder[a.$1.quality] ?? 99)
+          .compareTo(_qualityOrder[b.$1.quality] ?? 99);
+      return q != 0 ? q : a.$1.name.compareTo(b.$1.name);
+    });
+
+    // Per-owner counts for the tabs — same predicate each tab uses.
+    final newAll = hits.length;
+    final newP1 = hits
+        .where((h) => h.$2.any((sy) => sy.owners.contains('P1')))
+        .length;
+    final newP2 = hits
+        .where((h) => h.$2.any((sy) => sy.owners.contains('P2')))
+        .length;
+    if (newAll != _allCount || newP1 != _p1Count || newP2 != _p2Count) {
+      _allCount = newAll; _p1Count = newP1; _p2Count = newP2;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() {});
+      });
+    }
+    // Owner tab filter — P1/P2 keep candidates where that player
+    // owns at least one piece of a completable synergy.
+    if (_synOwner != _SynOwner.all) {
+      final tag = _synOwner == _SynOwner.p1 ? 'P1' : 'P2';
+      hits.retainWhere((h) => h.$2.any((sy) => sy.owners.contains(tag)));
+    }
+
+    // 'Already hits' — synergies fully satisfied by the combined
+    // inventory, shown on top with owner labels, separated from the
+    // candidate list below.
+    final completed =
+        _completedSynergies(combined, mainNames, coopNames, coop, p);
+
+    if (hits.isEmpty && completed.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(Insets.xxl),
+          child: GoopText(
+            'No synergy candidates.\nGuns/items that would complete a '
+            'synergy for either player show up here.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: FontSizes.bodyMedium,
+              height: 1.5,
+              color: AppTheme.flair.secondary.withValues(alpha: 0.55),
+            ),
+          ),
+        ),
+      );
+    }
+
+    final headCount = completed.isEmpty ? 0 : completed.length + 2;
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      itemCount: headCount + hits.length,
+      itemBuilder: (c, i) {
+        if (completed.isNotEmpty && i == 0) {
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 4),
+            child: Row(
+              children: [
+                Icon(Icons.check_circle_rounded,
+                    size: 13, color: Colors.greenAccent),
+                const SizedBox(width: 6),
+                GoopText('COMPLETE',
+                    style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.4,
+                        color: Colors.greenAccent.withValues(alpha: 0.9))),
+              ],
+            ),
+          );
+        }
+        if (completed.isNotEmpty && i <= completed.length) {
+          final cs = completed[i - 1];
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.greenAccent.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                    color: Colors.greenAccent.withValues(alpha: 0.15)),
+              ),
+              child: Row(
+              children: [
+                Icon(Icons.auto_awesome,
+                    size: 11,
+                    color: Colors.greenAccent.withValues(alpha: 0.5)),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: GoopText(cs.name,
+                      style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white.withValues(alpha: 0.75))),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: Colors.greenAccent.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                        color: Colors.greenAccent.withValues(alpha: 0.4)),
+                  ),
+                  child: GoopText(cs.owners,
+                      style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.greenAccent)),
+                ),
+              ],
+              ),
+            ),
+          );
+        }
+        if (completed.isNotEmpty && i == completed.length + 1) {
+          return Divider(
+              color: Colors.white.withValues(alpha: 0.10),
+              height: 16,
+              thickness: 1);
+        }
+        final hi = i - headCount;
+        final e = hits[hi].$1;
+        final done = hits[hi].$2;
+        final names = done.map((s) => s.name).toList();
+        // Owner summary for the pill — identical owners collapse to
+        // that label, mixed pieces across players show 'P1+P2'.
+        String? owner;
+        if (coop != null) {
+          final set = done.map((s) => s.owners).toSet();
+          owner = set.length == 1 ? set.first : 'P1+P2';
+        }
+        return e.gun != null
+            ? _gunRow(c, p, e.gun!,
+                completes: names, ownerLabel: owner)
+            : _itemRow(c, p, e.item!,
+                completes: names, ownerLabel: owner);
+      },
+    );
+  }
+
+  /// Tappable row for a gun — combined + synergies views.
+  Widget _gunRow(BuildContext c, RunProvider p, Gun g,
+      {List<String>? completes, String? ownerLabel}) {
     final syn = p.synergyCountFor(g.name);
-    final completes =
+    completes ??=
         p.synergiesCompletedBy(g.name, slot: widget.targetSlot);
     final targetPlayer = widget.targetSlot == PlayerSlot.coop
         ? p.runState.coop
@@ -322,7 +736,10 @@ class _BrowseScreenState extends State<BrowseScreen>
       iconPath: g.icon,
       fallback: Icons.gps_fixed,
       meta: GunMeta(
-          gun: g, synergyCount: syn, completesSynergies: completes),
+          gun: g,
+          synergyCount: syn,
+          completesSynergies: completes,
+          ownerLabel: ownerLabel),
       inRun: p.ownerSlotOfGun(g.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
@@ -337,7 +754,6 @@ class _BrowseScreenState extends State<BrowseScreen>
         FocusManager.instance.primaryFocus?.unfocus();
       },
       onAdd: () {
-        if (_blockedByMpDrop(c)) return;
         p.addGun(g, slot: widget.targetSlot);
         ScaffoldMessenger.of(c).showSnackBar(
           SnackBar(
@@ -351,26 +767,11 @@ class _BrowseScreenState extends State<BrowseScreen>
     );
   }
 
-  /// While the MP session is disconnected (auto-reconnecting in the
-  /// background) any local add would silently desync from the peer
-  /// until reconnect. Show a toast and bail. Returns true when the
-  /// add should be blocked.
-  bool _blockedByMpDrop(BuildContext c) {
-    final session = c.read<MultiplayerSession>();
-    if (session.status != MpStatus.disconnected) return false;
-    ScaffoldMessenger.of(c).showSnackBar(
-      const SnackBar(
-        content: GoopText('Reconnecting to peer… try again in a moment.'),
-        duration: Duration(milliseconds: 1400),
-      ),
-    );
-    return true;
-  }
-
-  /// Tappable row for an item. Used by both the Items and All tabs.
-  Widget _itemRow(BuildContext c, RunProvider p, Item it) {
+  /// Tappable row for an item — combined + synergies views.
+  Widget _itemRow(BuildContext c, RunProvider p, Item it,
+      {List<String>? completes, String? ownerLabel}) {
     final syn = p.synergyCountFor(it.name);
-    final completes =
+    completes ??=
         p.synergiesCompletedBy(it.name, slot: widget.targetSlot);
     final targetPlayer = widget.targetSlot == PlayerSlot.coop
         ? p.runState.coop
@@ -384,7 +785,10 @@ class _BrowseScreenState extends State<BrowseScreen>
       iconPath: it.icon,
       fallback: it.isActive ? Icons.flash_on : Icons.inventory_2_outlined,
       meta: ItemMeta(
-          item: it, synergyCount: syn, completesSynergies: completes),
+          item: it,
+          synergyCount: syn,
+          completesSynergies: completes,
+          ownerLabel: ownerLabel),
       inRun: p.ownerSlotOfItem(it.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
@@ -397,7 +801,6 @@ class _BrowseScreenState extends State<BrowseScreen>
         FocusManager.instance.primaryFocus?.unfocus();
       },
       onAdd: () {
-        if (_blockedByMpDrop(c)) return;
         p.addItem(it, slot: widget.targetSlot);
         final nameLower = it.name.toLowerCase();
         final isHpUp = nameLower.contains('master round') ||
@@ -424,78 +827,96 @@ class _BrowseScreenState extends State<BrowseScreen>
     );
   }
 
-  /// Combined Guns + Items list — the default Browse view.
-  Widget _allList(RunProvider p) {
-    final guns = p.allGuns
-        .where((g) => g.name.toLowerCase().contains(_query))
-        .toList();
-    final items = p.allItems
-        .where((it) => it.name.toLowerCase().contains(_query))
-        .toList();
-
-    final entries = <AnyEntry>[
-      for (final g in guns) AnyEntry.gun(g),
-      for (final it in items) AnyEntry.item(it),
-    ];
-
-    entries.sort((a, b) {
-      final c = (_qualityOrder[a.quality] ?? 99)
-          .compareTo(_qualityOrder[b.quality] ?? 99);
-      return c != 0 ? c : a.name.compareTo(b.name);
-    });
-
-    if (entries.isEmpty) return _emptyState();
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      itemCount: entries.length,
-      itemBuilder: (c, i) {
-        final e = entries[i];
-        return e.gun != null
-            ? _gunRow(c, p, e.gun!)
-            : _itemRow(c, p, e.item!);
-      },
-    );
-  }
-
-  Widget _itemsList(RunProvider p) {
-    final items = _sortedItems(p);
-    if (items.isEmpty) return _emptyState();
-    return ListView.builder(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      itemCount: items.length,
-      itemBuilder: (c, i) => _itemRow(c, p, items[i]),
-    );
-  }
-
   Widget _emptyState() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.search_off_rounded,
-              size: 48,
-              color: AppTheme.flair.secondary.withValues(alpha: 0.4),
-            ),
-            const SizedBox(height: 12),
-            GoopText(
-              _query.isEmpty
-                  ? 'No guns or items to show.'
-                  : 'No results for "$_query".',
-              style: TextStyle(
-                fontSize: 14,
-                color: AppTheme.flair.secondary.withValues(alpha: 0.6),
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+    return EmptyState(
+      icon: Icons.search_off_rounded,
+      message: _query.isEmpty
+          ? 'No guns or items to show.'
+          : 'No results for "$_query".',
+      flavor: _query.isEmpty
+          ? 'The Gungeon keeps its secrets.'
+          : 'Not even the Resourceful Rat has that.',
+    );
+  }
+  /// Kind chip for the ALL sub-filter — gun / item / heart icons.
+  Widget _kindChip(IconData icon, String label, _KindFilter k, double sf) {
+    final active = _kind == k;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: GestureDetector(
+        onTap: () { Haptics.selection(); setState(() => _kind = k); },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          width: double.infinity,
+          height: 40 * sf,
+        decoration: BoxDecoration(
+          color: active
+              ? AppTheme.flair.primary.withValues(alpha: 0.16)
+              : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.15),
+            width: active ? 1.6 : 1.0,
+          ),
+        ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 14 * sf,
+                  color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5)),
+              SizedBox(width: 5 * sf),
+              GoopText(label, style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w800, letterSpacing: 0.8,
+                  color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5))),
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
+  /// Owner tab for synergies — avatar + count on the right.
+  Widget _ownerTab(String label, _SynOwner o, double sf) {
+    final active = _synOwner == o;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: GestureDetector(
+        onTap: () { Haptics.selection(); setState(() => _synOwner = o); },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          width: double.infinity,
+          height: 40 * sf,
+        decoration: BoxDecoration(
+          color: active
+              ? AppTheme.flair.primary.withValues(alpha: 0.16)
+              : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.15),
+            width: active ? 1.6 : 1.0,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GoopText(label, style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w800, letterSpacing: 0.8,
+                color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5))),
+            SizedBox(width: 5 * sf),
+            GoopText(
+                '${o == _SynOwner.all ? _allCount : o == _SynOwner.p1 ? _p1Count : _p2Count}',
+                style: TextStyle(
+                    fontSize: FontSizes.labelSmall,
+                    fontWeight: FontWeight.w700,
+                    color: active
+                        ? AppTheme.flair.primary
+                        : Colors.white.withValues(alpha: 0.35))),
+          ],
+        ),
+      ),
+      ),
+    );
+  }
+}

@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
@@ -69,7 +70,9 @@ class StatsDetailScreen extends StatelessWidget {
             ),
         ],
       ),
-      body: ListView(
+      body: SafeArea(
+        top: false,
+        child: ListView(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
         children: [
           _ValueCard(
@@ -98,6 +101,7 @@ class StatsDetailScreen extends StatelessWidget {
           // Event log — collapsed by default
           _EventLog(isCool: isCool),
         ],
+      ),
       ),
     );
   }
@@ -143,7 +147,7 @@ class _ValueCard extends StatelessWidget {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.all(Radii.lg),
         side: BorderSide(
           color: color.withValues(alpha: 0.25),
           width: 1.2,
@@ -226,14 +230,14 @@ class _ValueCard extends StatelessWidget {
                 ),
                 // Slider scale labels
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('0.0', style: TextStyle(fontSize: 10, color: Colors.white54, fontWeight: FontWeight.bold)),
-                      Text('5.0', style: TextStyle(fontSize: 10, color: Colors.white30)),
-                      Text('10.0', style: TextStyle(fontSize: 10, color: Colors.white30, fontWeight: FontWeight.bold)),
-                      GoopText('15.0+', style: TextStyle(fontSize: 10, color: Colors.white54, fontWeight: FontWeight.bold)),
+                      Text('0.0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white54, fontWeight: FontWeight.bold)),
+                      Text('5.0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white30)),
+                      Text('10.0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white30, fontWeight: FontWeight.bold)),
+                      GoopText('15.0+', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white54, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -244,7 +248,7 @@ class _ValueCard extends StatelessWidget {
 
           // Incremental presets (oiled quick buttons in a single spacious mobile-friendly row)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -260,7 +264,7 @@ class _ValueCard extends StatelessWidget {
           // Live Interactive Gungeon Meter
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(Insets.md),
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.15),
               borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15)),
@@ -296,7 +300,7 @@ class _ValueCard extends StatelessWidget {
               foregroundColor: isMinus ? Colors.redAccent : activeColor,
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 side: BorderSide(
                   color: isMinus
                       ? Colors.red.withValues(alpha: 0.15)
@@ -309,7 +313,7 @@ class _ValueCard extends StatelessWidget {
             child: GoopText(
               label,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.w900,
                 letterSpacing: -0.2,
               ),
@@ -490,7 +494,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
         if (curse >= 10)
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(Insets.md),
             decoration: BoxDecoration(
               color: Colors.red.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
@@ -551,7 +555,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
           _CurseTable(highlightIdx: currentIdx),
           const SizedBox(height: 8),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
             child: GoopText(
               'Jam E./B. = Jammed Enemy / Boss chance · Mimic = chest mimic chance · '
               'Fuse = fused chest chance · Room = room-clear reward mod · '
@@ -717,7 +721,7 @@ class _EffectRow extends StatelessWidget {
                   GoopText(
                     subtitle,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       color: Colors.white.withValues(alpha: 0.65),
                     ),
                   ),
@@ -965,12 +969,12 @@ class _EventLogState extends State<_EventLog> {
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.all(Radii.sm),
                     ),
                     child: Text(
                       '${entries.length}',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w700,
                         color: Colors.white.withValues(alpha: 0.5),
                       ),
@@ -1008,7 +1012,7 @@ class _EventLogState extends State<_EventLog> {
         if (_collapsed && entries.isEmpty)
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(Insets.lg),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(10),
@@ -1017,7 +1021,7 @@ class _EventLogState extends State<_EventLog> {
             child: GoopText(
               'No events yet. Pick up items or use quick actions above to start tracking.',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: FontSizes.labelMedium,
                 color: Colors.white.withValues(alpha: 0.4),
                 fontStyle: FontStyle.italic,
               ),
@@ -1051,12 +1055,10 @@ class _LogTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: catColor.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(8),
-          border: Border(
-            left: BorderSide(color: catColor, width: 3),
-            top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
-            right: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
-            bottom: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+          borderRadius: BorderRadius.all(Radii.sm),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.05),
+            width: 1,
           ),
         ),
         child: Padding(
@@ -1085,7 +1087,7 @@ class _LogTile extends StatelessWidget {
                         GoopText(
                           timeStr,
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: FontSizes.labelSmall,
                             color: Colors.white.withValues(alpha: 0.4),
                           ),
                         ),
@@ -1100,7 +1102,7 @@ class _LogTile extends StatelessWidget {
                             child: GoopText(
                               entry.playerName!,
                               style: TextStyle(
-                                fontSize: 9.5,
+                                fontSize: FontSizes.labelSmall,
                                 fontWeight: FontWeight.w700,
                                 color: catColor,
                               ),
@@ -1117,7 +1119,7 @@ class _LogTile extends StatelessWidget {
                 GoopText(
                   '${isPositive ? '+' : ''}${delta.toStringAsFixed(1)}',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.w900,
                     color: deltaColor,
                   ),
@@ -1152,7 +1154,7 @@ class _LogLegend extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.02),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Column(
@@ -1161,7 +1163,7 @@ class _LogLegend extends StatelessWidget {
           GoopText(
             'LEGEND',
             style: TextStyle(
-              fontSize: 9.5,
+              fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
               color: Colors.white.withValues(alpha: 0.4),

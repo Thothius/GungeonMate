@@ -1,7 +1,7 @@
 name: gungeon_mate
 description: "Gungeon Mate - Enter the Gungeon companion app for tracking runs, items, guns, and synergies"
 publish_to: 'none'
-version: 1.9.62+138
+version: 3.2.1+161
 
 environment:
   sdk: ^3.7.0
@@ -13,25 +13,26 @@ dependencies:
   cupertino_icons: ^1.0.8
   
   # State management
-  provider: ^6.1.1
-  
+  provider: ^6.1.5
+
   # Local storage
   shared_preferences: ^2.2.2
-  
-  # Utilities
-  intl: ^0.19.0
-  
+
   # Fonts
   google_fonts: ^6.2.1
 
   # Multiplayer transport (Google Nearby Connections = BT + WiFi Direct).
   # Android-only; requires Google Play Services, which is present on
   # every non-rooted Android install this app targets.
-  nearby_connections: ^4.2.0
+  nearby_connections: ^4.3.0
 
   # Runtime permission prompts for BT/location/nearby-wifi needed by
   # Nearby Connections on Android 12+.
   permission_handler: ^11.3.1
+
+  # Foreground service — keeps the MP session alive when the app is
+  # minimized or the screen is off (Paradox persistent sessions).
+  flutter_foreground_task: ^8.17.0
 
   # URL launcher for opening wiki pages
   url_launcher: ^6.3.1
@@ -47,6 +48,7 @@ dependencies:
   # Windows/Linux video backend for video_player (drop-in, no API change)
   video_player_media_kit: ^2.0.0
   media_kit_libs_windows_video: ^1.0.11
+  wakelock_plus: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -105,6 +107,7 @@ flutter:
     - assets/images/synergies/
     - assets/images/gungeoneers/
     - assets/images/gungeoneers/animated/
+    - assets/images/avatars/
     - assets/images/junkan/
     - assets/images/objects/
     - assets/images/pickups/

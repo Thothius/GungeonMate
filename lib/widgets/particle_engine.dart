@@ -327,17 +327,18 @@ extension ParticlePresetX on ParticlePreset {
 
   PresetConfig get config => switch (this) {
         ParticlePreset.gungeonDust => PresetConfig(
-            colors: [const Color(0xFFE0E0E0), const Color(0xFFBDBDBD), const Color(0xFF9E9E9E), const Color(0xFF757575)],
+            colors: [const Color(0xFFE0E0E0), const Color(0xFFBDBDBD), const Color(0xFF9E9E9E), const Color(0xFF757575), const Color(0xFFD7D7D7)],
             shape: ParticleShape.circle,
-            sizeMin: 1.5, sizeMax: 4.0,
-            speedMin: 8.0, speedMax: 20.0,
+            sizeMin: 0.8, sizeMax: 2.8,
+            speedMin: 3.0, speedMax: 10.0,
             glowEffect: GlowEffect.none,
             lineLinks: false,
             drift: DriftDirection.up,
-            wobble: 0.5,
-            // Upgrades: gentle turbulence for organic drift, long lifetime
-            turbulence: 0.3,
-            lifetimeMin: 6.0, lifetimeMax: 10.0,
+            wobble: 0.3,
+            // Upgrades: gentle turbulence for organic drift, long lifetime,
+            // slow fade — matches the real Gungeon's subtle chamber dust
+            turbulence: 0.15,
+            lifetimeMin: 8.0, lifetimeMax: 14.0,
           ),
         ParticlePreset.forgeEmbers => PresetConfig(
             colors: [const Color(0xFFFF3D00), const Color(0xFFFF9100), const Color(0xFFFFD600), const Color(0xFFFF5722)],
@@ -862,6 +863,136 @@ extension ParticlePresetX on ParticlePreset {
 
 enum ParticleShape { circle, star, triangle, edge, bullet, heart, skull, hexagon, paw, crescent, bolt, shard, smoke, scale }
 
+// =============================================================================
+// ParticleType — the user-facing shape system (replaces named presets).
+// Each type is a curated combo of shape + motion + glow; colors come
+// from the active theme's 3 flavored schemas.
+// =============================================================================
+
+enum ParticleType {
+  dot,          // tiny soft circles — the clean default
+  square,       // crisp pixel squares — minimalist
+  glowOrb,      // larger pulsing orbs — unicornSparkles energy
+  shell,        // tumbling brass bullet casings — gungeon flavor
+  rainbowDot,   // hue-cycling dots — playful
+  voidPixel,    // dark purple pixels w/ cursed aura — moody
+  glitchPixel,  // jittery cyan/magenta shards — paradox
+}
+
+extension ParticleTypeX on ParticleType {
+  String get label => switch (this) {
+        ParticleType.dot => 'DOT',
+        ParticleType.square => 'SQUARE',
+        ParticleType.glowOrb => 'GLOW ORB',
+        ParticleType.shell => 'SHELL',
+        ParticleType.rainbowDot => 'RAINBOW',
+        ParticleType.voidPixel => 'VOID',
+        ParticleType.glitchPixel => 'GLITCH',
+      };
+}
+
+/// Build the engine config for a user-facing type. Chaos ON adds
+/// turbulence (organic swirl); bounce + touch are widget-level flags.
+PresetConfig typedParticleConfig(ParticleType t, List<Color> colors,
+    {bool chaos = false}) {
+  final turb = chaos ? 0.9 : 0.0;
+  switch (t) {
+    case ParticleType.dot:
+      return PresetConfig(
+          colors: colors,
+          shape: ParticleShape.circle,
+          sizeMin: 1.5,
+          sizeMax: 3.5,
+          speedMin: 4,
+          speedMax: 10,
+          glowEffect: GlowEffect.smokey,
+          lineLinks: false,
+          drift: DriftDirection.random,
+          wobble: 0.4,
+          turbulence: turb);
+    case ParticleType.square:
+      return PresetConfig(
+          colors: colors,
+          shape: ParticleShape.edge,
+          sizeMin: 2,
+          sizeMax: 4,
+          speedMin: 3,
+          speedMax: 8,
+          glowEffect: GlowEffect.none,
+          lineLinks: false,
+          drift: DriftDirection.down,
+          wobble: 0.2,
+          turbulence: turb);
+    case ParticleType.glowOrb:
+      return PresetConfig(
+          colors: colors,
+          shape: ParticleShape.circle,
+          sizeMin: 3,
+          sizeMax: 7,
+          speedMin: 3,
+          speedMax: 8,
+          glowEffect: GlowEffect.pulse,
+          lineLinks: false,
+          drift: DriftDirection.up,
+          wobble: 0.6,
+          shimmer: true,
+          turbulence: turb);
+    case ParticleType.shell:
+      return PresetConfig(
+          colors: colors,
+          shape: ParticleShape.bullet,
+          sizeMin: 3,
+          sizeMax: 6,
+          speedMin: 6,
+          speedMax: 14,
+          glowEffect: GlowEffect.none,
+          lineLinks: false,
+          drift: DriftDirection.down,
+          rotate: true,
+          turbulence: turb);
+    case ParticleType.rainbowDot:
+      return PresetConfig(
+          colors: colors,
+          shape: ParticleShape.circle,
+          sizeMin: 2,
+          sizeMax: 5,
+          speedMin: 4,
+          speedMax: 10,
+          glowEffect: GlowEffect.smokey,
+          lineLinks: false,
+          drift: DriftDirection.random,
+          wobble: 0.5,
+          hueDriftSpeed: 40,
+          turbulence: turb);
+    case ParticleType.voidPixel:
+      return PresetConfig(
+          colors: colors,
+          shape: ParticleShape.edge,
+          sizeMin: 2.5,
+          sizeMax: 5,
+          speedMin: 3,
+          speedMax: 8,
+          glowEffect: GlowEffect.cursed,
+          lineLinks: false,
+          drift: DriftDirection.up,
+          wobble: 0.7,
+          turbulence: turb);
+    case ParticleType.glitchPixel:
+      return PresetConfig(
+          colors: colors,
+          shape: ParticleShape.shard,
+          sizeMin: 2,
+          sizeMax: 5,
+          speedMin: 8,
+          speedMax: 18,
+          glowEffect: GlowEffect.neon,
+          lineLinks: false,
+          drift: DriftDirection.random,
+          wobble: 0.3,
+          turbulence: chaos ? 1.4 : 0.6);
+  }
+}
+
 enum GlowEffect {
   none,
   smokey,
@@ -1075,9 +1206,19 @@ class ParticleField extends StatefulWidget {
   final bool bounce;
   final double speedMultiplier; // 0.3 (very slow) to 2.5 (very fast)
 
+  /// Typed-system override — when set, this config is used instead of
+  /// `preset.config` entirely (the ParticleType path).
+  final PresetConfig? config;
+
+  /// Whether device tilt nudges particles (the "move when moving
+  /// phone" toggle). When false, the existing gyro feed is ignored.
+  final bool tiltEnabled;
+
   const ParticleField({
     super.key,
     required this.preset,
+    this.config,
+    this.tiltEnabled = true,
     this.count = 16,
     this.sizeScale = 1.0,
     this.opacity = 0.7,
@@ -1115,6 +1256,7 @@ class _ParticleFieldState extends State<ParticleField>
   void didUpdateWidget(ParticleField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.preset != widget.preset ||
+        oldWidget.config != widget.config ||
         oldWidget.count != widget.count ||
         oldWidget.sizeScale != widget.sizeScale ||
         oldWidget.colorsOverride != widget.colorsOverride) {
@@ -1134,9 +1276,10 @@ class _ParticleFieldState extends State<ParticleField>
     _particles.clear();
     _lastSize = size;
 
-    final cfg = widget.colorsOverride != null
-        ? _withColors(widget.preset.config, widget.colorsOverride!)
-        : widget.preset.config;
+    final cfg = widget.config ??
+        (widget.colorsOverride != null
+            ? _withColors(widget.preset.config, widget.colorsOverride!)
+            : widget.preset.config);
     for (var i = 0; i < widget.count; i++) {
       _spawnParticle(size, cfg);
     }
@@ -1262,10 +1405,12 @@ class _ParticleFieldState extends State<ParticleField>
   void _update(double t, Size size) {
     final dt = (t - _lastT).clamp(0.001, 0.05) * widget.speedMultiplier;
     _lastT = t;
-    final tilt = ThemeOverlay.tiltNotifier.value;
-    final cfg = widget.colorsOverride != null
-        ? _withColors(widget.preset.config, widget.colorsOverride!)
-        : widget.preset.config;
+    final tilt =
+        widget.tiltEnabled ? ThemeOverlay.tiltNotifier.value : Offset.zero;
+    final cfg = widget.config ??
+        (widget.colorsOverride != null
+            ? _withColors(widget.preset.config, widget.colorsOverride!)
+            : widget.preset.config);
 
     for (final p in _particles) {
       p.age += dt;

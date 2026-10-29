@@ -1,9 +1,12 @@
+import '../../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/item.dart';
 import '../../models/player.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/haptics.dart';
+import 'description_blocks.dart';
 import 'gun_stats.dart';
 
 class ItemBody extends StatelessWidget {
@@ -111,7 +114,7 @@ class ItemBody extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.amber.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
         boxShadow: [
           BoxShadow(
@@ -132,7 +135,7 @@ class ItemBody extends StatelessWidget {
                 child: GoopText(
                   'SER JUNKAN LEVEL TRACKER',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
                     color: Colors.amber.shade300,
                     letterSpacing: 0.8,
@@ -159,6 +162,7 @@ class ItemBody extends StatelessWidget {
                 children: [
                   IconButton(
                     visualDensity: VisualDensity.compact,
+                    tooltip: 'Remove Junk',
                     icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
                     onPressed: junkCount > 0 && junkItem != null
                         ? () => p.removeItem(junkItem, slot: slot)
@@ -177,6 +181,7 @@ class ItemBody extends StatelessWidget {
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
+                    tooltip: 'Add Junk',
                     icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
                     onPressed: junkItem != null
                         ? () => p.addItem(junkItem, slot: slot)
@@ -221,7 +226,7 @@ class ItemBody extends StatelessWidget {
               Container(
                 width: 72,
                 height: 72,
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(Insets.xs),
                 decoration: BoxDecoration(
                   color: Colors.black38,
                   borderRadius: BorderRadius.circular(10),
@@ -233,6 +238,8 @@ class ItemBody extends StatelessWidget {
                     imgPath,
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.none,
+                    cacheWidth: 144,
+                    cacheHeight: 144,
                     errorBuilder: (_, __, ___) => const Icon(Icons.shield, color: Colors.amber, size: 32),
                   ),
                 ),
@@ -270,7 +277,7 @@ class ItemBody extends StatelessWidget {
           GoopText(
             description,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.35,
             ),
@@ -281,8 +288,8 @@ class ItemBody extends StatelessWidget {
   }
 
   Widget _buildSpiceInfo(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final count = p.spiceUsageCount;
+    final p = context.read<RunProvider>();
+    final count = context.select<RunProvider, int>((p) => p.spiceUsageCount);
 
     String currentEffects = '';
     String nextEffects = '';
@@ -311,7 +318,7 @@ class ItemBody extends StatelessWidget {
     }
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.red.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -328,7 +335,7 @@ class ItemBody extends StatelessWidget {
                 child: GoopText(
                   'Spice Addiction Tracker',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.redAccent.shade100,
                   ),
@@ -336,6 +343,7 @@ class ItemBody extends StatelessWidget {
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
+                tooltip: 'Remove armor',
                 icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
                 onPressed: count > 0
                     ? () {
@@ -355,6 +363,7 @@ class ItemBody extends StatelessWidget {
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
+                tooltip: 'Add armor',
                 icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
                 onPressed: () {
                   final double curseToAdd = (count == 0) ? 0.5 : 1.0;
@@ -372,7 +381,7 @@ class ItemBody extends StatelessWidget {
           GoopText(
             'CURRENT: $currentEffects',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w600,
               color: Colors.white.withValues(alpha: 0.9),
             ),
@@ -390,7 +399,7 @@ class ItemBody extends StatelessWidget {
           GoopText(
             'Note: Adjusting Spice count automatically syncs Curse to your active run (+0.5 for 1st use, +1.0 for each additional use).',
             style: TextStyle(
-              fontSize: 10,
+              fontSize: FontSizes.labelSmall,
               fontStyle: FontStyle.italic,
               color: Colors.redAccent.shade100.withValues(alpha: 0.8),
             ),
@@ -401,9 +410,10 @@ class ItemBody extends StatelessWidget {
   }
 
   Widget _buildSprunInfo(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final triggerIdx = p.sprunTriggerIndex;
-    final isWindgunnerActive = p.windgunnerCountdown > 0;
+    final p = context.read<RunProvider>();
+    final triggerIdx = context.select<RunProvider, int>((p) => p.sprunTriggerIndex);
+    final windgunnerCountdown = context.select<RunProvider, int>((p) => p.windgunnerCountdown);
+    final isWindgunnerActive = windgunnerCountdown > 0;
 
     final possibleTriggers = const [
       'Activating a Map Blank',
@@ -414,10 +424,10 @@ class ItemBody extends StatelessWidget {
     ];
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.cyan.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
           color: Colors.cyanAccent.withValues(alpha: 0.35),
           width: 1.2,
@@ -446,10 +456,10 @@ class ItemBody extends StatelessWidget {
           const SizedBox(height: 10),
           if (triggerIdx == -1) ...[
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(Insets.md),
               decoration: BoxDecoration(
                 color: Colors.black26,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.15)),
               ),
               child: Column(
@@ -465,7 +475,7 @@ class ItemBody extends StatelessWidget {
                   const GoopText(
                     'Each run pre-determines a randomized trigger to transform Sprun into the infinite-ammo Windgunner. Tap below to run active seed analysis.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 10, color: Colors.white54, height: 1.3),
+                    style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white54, height: 1.3),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
@@ -475,7 +485,7 @@ class ItemBody extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.cyan.shade900,
                         foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radii.sm)),
                       ),
                       icon: const Icon(Icons.biotech_outlined, size: 16),
                       label: const GoopText(
@@ -494,7 +504,7 @@ class ItemBody extends StatelessWidget {
           ] else ...[
             const GoopText(
               'ACTIVE SEED ANALYSIS RESULTS:',
-              style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.5),
+              style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.5),
             ),
             const SizedBox(height: 6),
             Column(
@@ -540,7 +550,7 @@ class ItemBody extends StatelessWidget {
               children: [
                 GoopText(
                   'Mystery seed decoded successfully.',
-                  style: TextStyle(fontSize: 9.5, color: Colors.cyanAccent.withValues(alpha: 0.5)),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.cyanAccent.withValues(alpha: 0.5)),
                 ),
                 InkWell(
                   onTap: () => p.setSprunTriggerIndex(-1),
@@ -548,7 +558,7 @@ class ItemBody extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     child: GoopText(
                       'RE-SET SEED',
-                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.cyanAccent.shade100, letterSpacing: 0.5),
+                      style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.bold, color: Colors.cyanAccent.shade100, letterSpacing: 0.5),
                     ),
                   ),
                 ),
@@ -557,10 +567,10 @@ class ItemBody extends StatelessWidget {
           ],
           const Divider(color: Colors.white12, height: 16),
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(Insets.sm),
             decoration: BoxDecoration(
               color: isWindgunnerActive ? Colors.cyan.withValues(alpha: 0.12) : Colors.black12,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
                 color: isWindgunnerActive ? Colors.cyanAccent.withValues(alpha: 0.3) : Colors.transparent,
               ),
@@ -583,9 +593,9 @@ class ItemBody extends StatelessWidget {
                       const SizedBox(height: 1.5),
                       GoopText(
                         isWindgunnerActive 
-                            ? 'Infinite Ammo, Flight, God-tier Burst! Count: ${p.windgunnerCountdown}s'
+                            ? 'Infinite Ammo, Flight, God-tier Burst! Count: ${windgunnerCountdown}s'
                             : 'Trigger criteria above to release power.',
-                        style: TextStyle(fontSize: 9.5, color: isWindgunnerActive ? Colors.white70 : Colors.white38),
+                        style: TextStyle(fontSize: FontSizes.labelSmall, color: isWindgunnerActive ? Colors.white70 : Colors.white38),
                       ),
                     ],
                   ),
@@ -624,11 +634,27 @@ class ItemBody extends StatelessWidget {
 
     final int itemsCount = (hasMask ? 1 : 0) + (hasDrill ? 1 : 0) + (hasBag ? 1 : 0);
 
+    /// Tap-to-toggle a heister: summons the companion by adding its
+    /// backing Payday item to the player's inventory (or dismisses it
+    /// by removing). Null callback when the item can't be resolved.
+    VoidCallback? heisterToggle(String itemName, bool active) {
+      final it = p.itemByName(itemName);
+      if (it == null) return null;
+      return () {
+        Haptics.light();
+        if (active) {
+          p.removeItem(it, slot: slot);
+        } else {
+          p.addItem(it, slot: slot);
+        }
+      };
+    }
+
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.blueAccent.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
           color: Colors.blueAccent.withValues(alpha: 0.35),
           width: 1.2,
@@ -657,7 +683,7 @@ class ItemBody extends StatelessWidget {
                     GoopText(
                       'Heister Count Exponential Matrix',
                       style: TextStyle(
-                        fontSize: 9.5,
+                        fontSize: FontSizes.labelSmall,
                         color: Colors.white38,
                         fontWeight: FontWeight.bold,
                       ),
@@ -693,6 +719,7 @@ class ItemBody extends StatelessWidget {
                 active: hasMask,
                 desc: 'Summoned • Periodically charges & stuns enemies with melee.',
                 avatar: Icons.face_retouching_natural_outlined,
+                onTap: heisterToggle('Clown Mask', hasMask),
               ),
               const SizedBox(width: 8),
               _buildHeisterSlot(
@@ -701,6 +728,7 @@ class ItemBody extends StatelessWidget {
                 active: hasDrill,
                 desc: 'Summoned • Drops mini blanks to delete incoming projectile matrices.',
                 avatar: Icons.build_outlined,
+                onTap: heisterToggle('Drill', hasDrill),
               ),
               const SizedBox(width: 8),
               _buildHeisterSlot(
@@ -709,16 +737,17 @@ class ItemBody extends StatelessWidget {
                 active: hasBag,
                 desc: 'Summoned • Automated shotgun scaling with floor difficulty tier.',
                 avatar: Icons.monetization_on_outlined,
+                onTap: heisterToggle('Loot Bag', hasBag),
               ),
             ],
           ),
           const SizedBox(height: 12),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(Insets.sm),
             decoration: BoxDecoration(
               color: Colors.black38,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.15)),
             ),
             child: Column(
@@ -726,7 +755,7 @@ class ItemBody extends StatelessWidget {
               children: [
                 const GoopText(
                   'SUMMON POWER PROFILE:',
-                  style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w900, color: Colors.blueAccent, letterSpacing: 0.5),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.blueAccent, letterSpacing: 0.5),
                 ),
                 const SizedBox(height: 4),
                 if (itemsCount == 0)
@@ -763,12 +792,20 @@ class ItemBody extends StatelessWidget {
     required bool active,
     required String desc,
     required IconData avatar,
+    VoidCallback? onTap,
   }) {
     return Expanded(
       child: Tooltip(
-        message: '$item: $desc',
-        child: Container(
-          padding: const EdgeInsets.all(8),
+        message: onTap != null
+            ? (active ? '$item — tap to dismiss' : 'Tap to summon $item: $desc')
+            : '$item: $desc',
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: onTap,
+            child: Container(
+          padding: const EdgeInsets.all(Insets.sm),
           height: 84,
           decoration: BoxDecoration(
             color: active ? Colors.blueAccent.withValues(alpha: 0.18) : Colors.black26,
@@ -789,16 +826,20 @@ class ItemBody extends StatelessWidget {
               const SizedBox(height: 4),
               GoopText(
                 name.toUpperCase(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.w900,
                   color: active ? Colors.white : Colors.white24,
                 ),
               ),
               GoopText(
                 active ? 'SUMMONED' : 'LOCKED',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 8,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.bold,
                   color: active ? Colors.greenAccent : Colors.white24,
                   letterSpacing: 0.5,
@@ -806,19 +847,21 @@ class ItemBody extends StatelessWidget {
               ),
             ],
           ),
+            ),
+          ),
         ),
       ),
     );
   }
 
   Widget _buildPlatinumBulletsInfo(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final seconds = p.platinumBulletsSeconds;
+    final p = context.read<RunProvider>();
+    final seconds = context.select<RunProvider, int>((p) => p.platinumBulletsSeconds);
     final dmgMult = seconds >= 750 ? 3.0 : 1.0 + (seconds / 750.0) * 2.0;
     final fireRateMult = seconds >= 375 ? 3.0 : 1.0 + (seconds / 375.0) * 2.0;
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.indigo.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -835,7 +878,7 @@ class ItemBody extends StatelessWidget {
                 child: GoopText(
                   'Platinum Bullets — Firing Time',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.indigoAccent.shade100,
                   ),
@@ -843,6 +886,7 @@ class ItemBody extends StatelessWidget {
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
+                tooltip: 'Decrease Platinum Bullets time',
                 icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
                 onPressed: seconds > 0 ? () => p.setPlatinumBulletsSeconds((seconds - 30).clamp(0, 999)) : null,
               ),
@@ -852,6 +896,7 @@ class ItemBody extends StatelessWidget {
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
+                tooltip: 'Increase Platinum Bullets time',
                 icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
                 onPressed: () => p.setPlatinumBulletsSeconds((seconds + 30).clamp(0, 999)),
               ),
@@ -870,7 +915,7 @@ class ItemBody extends StatelessWidget {
           GoopText(
             'Damage & fire rate scale with firing time. Damage maxes at 3x after 750s, fire rate at 3x after 375s. Starts partially powered on later floors.',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.3,
             ),
@@ -881,11 +926,11 @@ class ItemBody extends StatelessWidget {
   }
 
   Widget _buildIronCoinInfo(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final uses = p.ironCoinUses;
+    final p = context.read<RunProvider>();
+    final uses = context.select<RunProvider, int>((p) => p.ironCoinUses);
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.amber.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -902,7 +947,7 @@ class ItemBody extends StatelessWidget {
                 child: GoopText(
                   'Iron Coin — Charges',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.amberAccent.shade100,
                   ),
@@ -910,6 +955,7 @@ class ItemBody extends StatelessWidget {
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
+                tooltip: 'Decrease Iron Coin uses',
                 icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
                 onPressed: uses > 0 ? () => p.setIronCoinUses(uses - 1) : null,
               ),
@@ -919,6 +965,7 @@ class ItemBody extends StatelessWidget {
               ),
               IconButton(
                 visualDensity: VisualDensity.compact,
+                tooltip: 'Increase Iron Coin uses',
                 icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
                 onPressed: uses < 3 ? () => p.setIronCoinUses(uses + 1) : null,
               ),
@@ -942,7 +989,7 @@ class ItemBody extends StatelessWidget {
           GoopText(
             'Kills all enemies in a random room on the current floor. 3 uses per run. Also grants a 10% discount at shops while held.',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.3,
             ),
@@ -963,7 +1010,7 @@ class ItemBody extends StatelessWidget {
     final ownedCount = ingredients.where((n) => owned.contains(n)).length;
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.purple.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
@@ -980,7 +1027,7 @@ class ItemBody extends StatelessWidget {
                 child: GoopText(
                   'Bullet to Kill the Past — $ownedCount/4',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.bold,
                     color: Colors.purpleAccent.shade100,
                   ),
@@ -1019,7 +1066,7 @@ class ItemBody extends StatelessWidget {
           GoopText(
             'Collect all 4 ingredients and take them to the Blacksmith to forge the Bullet that can Kill the Past.',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               color: Colors.white.withValues(alpha: 0.75),
               height: 1.3,
             ),
@@ -1042,7 +1089,7 @@ class ItemBody extends StatelessWidget {
       if (durationStr != null) MapEntry('Duration', durationStr),
     ].where((e) => e.value.isNotEmpty).toList();
 
-    final junkanInfo = item.name.toLowerCase() == 'ser junkan'
+    final junkanInfo = item.name.toLowerCase().startsWith('ser junkan')
         ? _buildJunkanInfo(context)
         : null;
     final spiceInfo = item.name.toLowerCase() == 'spice'
@@ -1072,11 +1119,10 @@ class ItemBody extends StatelessWidget {
       child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (item.effect.isNotEmpty)
-                GoopText(
-                  item.effect,
-                  style: const TextStyle(fontSize: 14, height: 1.4),
-                ),
+              if (item.effect.isNotEmpty) ...[
+                DescriptionBlock(text: item.effect),
+                const SizedBox(height: 12),
+              ],
               if (junkanInfo != null) ...[
                 const SizedBox(height: 12),
                 junkanInfo,

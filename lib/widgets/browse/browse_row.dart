@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../game_icon.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
 
 class BrowseRow extends StatelessWidget {
   final String name;
@@ -81,7 +82,7 @@ class BrowseRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
+          padding: const EdgeInsets.fromLTRB(12, 12, 10, 12),
           child: Row(
             children: [
               GameIcon(
@@ -121,7 +122,7 @@ class BrowseRow extends StatelessWidget {
                             child: GoopText(
                               robotTag,
                               style: TextStyle(
-                                fontSize: 8.5,
+                                fontSize: FontSizes.labelSmall,
                                 fontWeight: FontWeight.bold,
                                 color: robotTagColor,
                                 letterSpacing: 0.3,
@@ -136,17 +137,16 @@ class BrowseRow extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
               GestureDetector(
                 onTap: inRun ? null : onAdd,
                 behavior: HitTestBehavior.opaque,
                 child: SizedBox(
-                  width: 44,
-                  height: 44,
+                  width: 48,
+                  height: 64,
                   child: Center(
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.all(6),
+                      padding: const EdgeInsets.all(7),
                       decoration: BoxDecoration(
                         color: inRun
                             ? Colors.green.withValues(alpha: 0.15)
@@ -160,9 +160,10 @@ class BrowseRow extends StatelessWidget {
                         ),
                       ),
                       child: Icon(
-                        inRun ? Icons.check : Icons.add_rounded,
-                        color: inRun ? Colors.green : AppTheme.flair.primary,
-                        size: 24,
+                        inRun ? Icons.check_rounded : Icons.add_rounded,
+                        color:
+                            inRun ? Colors.greenAccent : AppTheme.flair.primary,
+                        size: 22,
                       ),
                     ),
                   ),

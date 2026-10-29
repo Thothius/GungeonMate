@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:flutter/painting.dart' show Color;
+
 /// Wire protocol for local multiplayer. Every message is a compact JSON
 /// object sent as a single bytes payload over `nearby_connections`.
 ///
@@ -10,13 +12,40 @@ import 'dart:typed_data';
 ///   receiver re-resolves names against its own master data — that
 ///   keeps payloads small (a typical snapshot is ~300 bytes) and makes
 ///   stats consistent with whatever asset version each phone has.
-/// * Timestamps are milliseconds-since-epoch so snapshots can be
-///   last-write-wins when reconnecting after a drop.
+/// * Shared dungeon state (coolness/curse/shrines) is
+///   **Main-authoritative**: the Main Player's snapshot is the source
+///   of truth. The Sidekick sends [MpSharedStateDelta] messages when
+///   it modifies shared state; Main applies the delta and re-broadcasts
+///   via snapshot. This eliminates lost-write races.
 /// * `reqId` on requests is a short random token so the responder can
 ///   tie `requestResp` back to the original ask without needing a full
 ///   correlation framework.
 
+/// Semantic colors for MP UI states. These are intentionally NOT
+/// theme-bound — "connected" should always be green regardless of the
+/// active theme, just like a system status LED.
+class MpColors {
+  const MpColors._();
+  /// Connected / success state — used for checkmarks, link icons,
+  /// "Connection restored" snackbars, and the connected portrait pair.
+  static const Color connected = Color(0xFF00E676);
+
+  /// Reconnecting / warning state — used for the reconnect banner,
+  /// dialog border, spinner, and persistent banner text.
+  static const Color reconnecting = Color(0xFFFFC107);
+
+  /// Danger / cancel state — used for "Cancel Run" buttons and
+  /// destructive MP actions.
+  static const Color danger = Color(0xFFFF5252);
+}
+
 enum MpRole { main, sidekick }
+
+/// Which multiplayer flow a session belongs to. Classic = the original
+/// lobby flow; Paradox = the v3.0 avatar/lobby/pause flow. Cross-mode
+/// pairing is impossible because each mode uses a different Nearby
+/// Connections serviceId — this field is belt-and-suspenders.
+enum MpMode { classic, paradox }
 
 extension MpRoleWire on MpRole {
   String get wire => switch (this) {
@@ -28,6 +57,18 @@ extension MpRoleWire on MpRole {
     'main' => MpRole.main,
     'sidekick' => MpRole.sidekick,
     _ => throw FormatException('Unknown MpRole: $s'),
+  };
+}
+
+extension MpModeWire on MpMode {
+  String get wire => switch (this) {
+    MpMode.classic => 'classic',
+    MpMode.paradox => 'paradox',
+  };
+
+  static MpMode parse(String? s) => switch (s) {
+    'paradox' => MpMode.paradox,
+    _ => MpMode.classic,
   };
 }
 
@@ -76,8 +117,14 @@ sealed class MpMessage {
       'diceCancel' => const MpDiceCancel(),
       'diceResult' => MpDiceResult.fromJson(map),
       'emote' => MpEmote.fromJson(map),
-      'pair' => MpPair.fromJson(map),
-      'pairAck' => MpPairAck.fromJson(map),
+      'sharedStateDelta' => MpSharedStateDelta.fromJson(map),
+      'startRun' => const MpStartRun(),
+      'pause' => const MpPause(),
+      'resume' => const MpResume(),
+      'chat' => MpChat.fromJson(map),
+      'surprise' => MpSurprise.fromJson(map),
+      'peerEdit' => MpPeerEdit.fromJson(map),
+      'sessionMeta' => MpSessionMeta.fromJson(map),
       _ => throw FormatException('MpMessage: unknown type "$t"'),
     };
   }
@@ -92,22 +139,24 @@ final class MpHello extends MpMessage {
   final String userLabel; // free-form nickname shown in UI
   final String appVersion; // for compat diagnostics
   final int protocolVersion;
-  final String? sessionName;
-  final String? sessionId;
-  final String? pinCode;
+  final MpMode mode; // classic | paradox
+  final String avatarId; // cosmetic avatar id ('' = none)
+  final String runTitle; // Paradox RNG run name ('' = not generated)
+  final int sessionNumber; // Paradox session counter (0-based)
 
   const MpHello({
     required this.role,
     required this.character,
     required this.userLabel,
     required this.appVersion,
-    this.protocolVersion = 1,
-    this.sessionName,
-    this.sessionId,
-    this.pinCode,
+    this.protocolVersion = 3,
+    this.mode = MpMode.classic,
+    this.avatarId = '',
+    this.runTitle = '',
+    this.sessionNumber = 0,
   });
 
-  static const int currentProtocolVersion = 1;
+  static const int currentProtocolVersion = 3;
 
   @override
   String get type => 'hello';
@@ -119,9 +168,10 @@ final class MpHello extends MpMessage {
     'userLabel': userLabel,
     'appVersion': appVersion,
     'protocolVersion': protocolVersion,
-    'sessionName': sessionName,
-    'sessionId': sessionId,
-    if (pinCode != null) 'pinCode': pinCode,
+    if (mode != MpMode.classic) 'mode': mode.wire,
+    if (avatarId.isNotEmpty) 'avatarId': avatarId,
+    if (runTitle.isNotEmpty) 'runTitle': runTitle,
+    if (sessionNumber != 0) 'sessionNumber': sessionNumber,
   };
 
   factory MpHello.fromJson(Map<String, dynamic> j) => MpHello(
@@ -129,16 +179,23 @@ final class MpHello extends MpMessage {
     character: j['character'] as String? ?? '',
     userLabel: j['userLabel'] as String? ?? 'Player',
     appVersion: j['appVersion'] as String? ?? '',
-    protocolVersion: j['protocolVersion'] as int? ?? 1,
-    sessionName: j['sessionName'] as String?,
-    sessionId: j['sessionId'] as String?,
-    pinCode: j['pinCode'] as String?,
+    protocolVersion: j['protocolVersion'] as int? ?? 3,
+    mode: MpModeWire.parse(j['mode'] as String?),
+    avatarId: j['avatarId'] as String? ?? '',
+    runTitle: j['runTitle'] as String? ?? '',
+    sessionNumber: (j['sessionNumber'] as num?)?.toInt() ?? 0,
   );
 }
 
 /// Full state of the sender's local player (names only) + shared
 /// dungeon state (coolness/curse/shrines). Sent on every local
 /// mutation after a small debounce.
+///
+/// Shared state is **Main-authoritative**: only the Main Player's
+/// snapshot carries authoritative coolness/curse/shrines. The
+/// Sidekick's snapshot fields are ignored by Main. The Sidekick
+/// sends [MpSharedStateDelta] messages instead, which Main applies
+/// and then re-broadcasts via its own snapshot.
 final class MpSnapshot extends MpMessage {
   final String character;
   final List<String> gunNames;
@@ -146,7 +203,6 @@ final class MpSnapshot extends MpMessage {
   final double coolness;
   final double curse;
   final List<String> shrinesUsed;
-  final int tsMs;
 
   const MpSnapshot({
     required this.character,
@@ -155,7 +211,6 @@ final class MpSnapshot extends MpMessage {
     required this.coolness,
     required this.curse,
     required this.shrinesUsed,
-    required this.tsMs,
   });
 
   @override
@@ -169,7 +224,6 @@ final class MpSnapshot extends MpMessage {
     'coolness': coolness,
     'curse': curse,
     'shrinesUsed': shrinesUsed,
-    'ts': tsMs,
   };
 
   factory MpSnapshot.fromJson(Map<String, dynamic> j) => MpSnapshot(
@@ -179,7 +233,6 @@ final class MpSnapshot extends MpMessage {
     coolness: (j['coolness'] as num?)?.toDouble() ?? 0,
     curse: (j['curse'] as num?)?.toDouble() ?? 0,
     shrinesUsed: (j['shrinesUsed'] as List?)?.cast<String>() ?? const [],
-    tsMs: (j['ts'] as num?)?.toInt() ?? 0,
   );
 }
 
@@ -266,40 +319,28 @@ final class MpEndRun extends MpMessage {
   Map<String, dynamic> toJson() => const {};
 }
 
-/// Heartbeat. We send one every ~5s; miss 3 in a row and the session
-/// flips to disconnected.
+/// Heartbeat. Sent every 5s; if no message from peer within 25s the
+/// session flips to disconnected.
 final class MpPing extends MpMessage {
   final int tsMs;
-  final int? lastSeq;
-  const MpPing(this.tsMs, {this.lastSeq});
+  const MpPing(this.tsMs);
   @override
   String get type => 'ping';
   @override
-  Map<String, dynamic> toJson() => {
-    'ts': tsMs,
-    if (lastSeq != null) 'lastSeq': lastSeq,
-  };
-  factory MpPing.fromJson(Map<String, dynamic> j) => MpPing(
-    (j['ts'] as num?)?.toInt() ?? 0,
-    lastSeq: (j['lastSeq'] as num?)?.toInt(),
-  );
+  Map<String, dynamic> toJson() => {'ts': tsMs};
+  factory MpPing.fromJson(Map<String, dynamic> j) =>
+    MpPing((j['ts'] as num?)?.toInt() ?? 0);
 }
 
 final class MpPong extends MpMessage {
   final int tsMs;
-  final int? lastSeq;
-  const MpPong(this.tsMs, {this.lastSeq});
+  const MpPong(this.tsMs);
   @override
   String get type => 'pong';
   @override
-  Map<String, dynamic> toJson() => {
-    'ts': tsMs,
-    if (lastSeq != null) 'lastSeq': lastSeq,
-  };
-  factory MpPong.fromJson(Map<String, dynamic> j) => MpPong(
-    (j['ts'] as num?)?.toInt() ?? 0,
-    lastSeq: (j['lastSeq'] as num?)?.toInt(),
-  );
+  Map<String, dynamic> toJson() => {'ts': tsMs};
+  factory MpPong.fromJson(Map<String, dynamic> j) =>
+    MpPong((j['ts'] as num?)?.toInt() ?? 0);
 }
 
 /// Dice Roll Challenge: Sent to initiate a dice challenge.
@@ -378,48 +419,229 @@ final class MpEmote extends MpMessage {
   );
 }
 
-/// Device Pairing handshake. Sent by the pairing initiator (the device
-/// that advertised) immediately after a successful [MpHello] in pairing
-/// mode. Delivers the generated [pairId] — a persistent secret that
-/// replaces the per-session PIN for all future connections between these
-/// two devices. The receiver persists it and replies with [MpPairAck].
+/// Shared-state delta — sent by the Sidekick when it modifies
+/// coolness, curse, or shrine usage. Only the Main Player processes
+/// this: it applies the delta to its own RunProvider (which triggers
+/// a snapshot broadcast back to both sides). This is the
+/// Main-authoritative model — it eliminates lost-write races that
+/// occurred when both sides sent full shared-state snapshots
+/// simultaneously.
 ///
-/// `nickname` is the sender's nickname so the receiver can label the
-/// partner in their paired-partners list.
-final class MpPair extends MpMessage {
-  final String pairId;
-  final String nickname;
+/// `coolnessDelta` / `curseDelta` are signed deltas (e.g. +1 for
+/// smoking a cigarette, -1 for removing a cursed item). `shrineName`
+/// is set when a shrine is used (additive — shrines are a list, not
+/// a counter).
+final class MpSharedStateDelta extends MpMessage {
+  final double coolnessDelta;
+  final double curseDelta;
+  final String? shrineName;
 
-  const MpPair({required this.pairId, required this.nickname});
+  const MpSharedStateDelta({
+    this.coolnessDelta = 0,
+    this.curseDelta = 0,
+    this.shrineName,
+  });
 
   @override
-  String get type => 'pair';
+  String get type => 'sharedStateDelta';
 
   @override
-  Map<String, dynamic> toJson() => {'pairId': pairId, 'nickname': nickname};
+  Map<String, dynamic> toJson() => {
+    'coolnessDelta': coolnessDelta,
+    'curseDelta': curseDelta,
+    if (shrineName != null) 'shrineName': shrineName,
+  };
 
-  factory MpPair.fromJson(Map<String, dynamic> j) => MpPair(
-    pairId: j['pairId'] as String? ?? '',
-    nickname: j['nickname'] as String? ?? 'Partner',
+  factory MpSharedStateDelta.fromJson(Map<String, dynamic> j) =>
+    MpSharedStateDelta(
+      coolnessDelta: (j['coolnessDelta'] as num?)?.toDouble() ?? 0,
+      curseDelta: (j['curseDelta'] as num?)?.toDouble() ?? 0,
+      shrineName: j['shrineName'] as String?,
+    );
+}
+
+// =============================================================================
+// Protocol v3 — Paradox Mode messages
+// =============================================================================
+
+/// Main → Sidekick: the lobby "START RUN" button was pressed. Both sides
+/// leave the pre-run lobby and enter the run view.
+final class MpStartRun extends MpMessage {
+  const MpStartRun();
+  @override
+  String get type => 'startRun';
+  @override
+  Map<String, dynamic> toJson() => const {};
+}
+
+/// Either player paused the session. Idempotent — receivers already
+/// paused just ignore it. The authoritative paused flag also rides on
+/// [MpSessionMeta] so late-joining reconnects land on the right state.
+final class MpPause extends MpMessage {
+  const MpPause();
+  @override
+  String get type => 'pause';
+  @override
+  Map<String, dynamic> toJson() => const {};
+}
+
+/// Either player resumed the session. Idempotent, same semantics as
+/// [MpPause].
+final class MpResume extends MpMessage {
+  const MpResume();
+  @override
+  String get type => 'resume';
+  @override
+  Map<String, dynamic> toJson() => const {};
+}
+
+/// Session metadata — sent by the Main Player after every hello and
+/// whenever any field changes. **Main-authoritative**: the Sidekick
+/// adopts these values verbatim. This is how a peer that reconnects
+/// after missing an edge message (pause/resume) still lands on the
+/// correct session state.
+final class MpSessionMeta extends MpMessage {
+  final String runTitle;
+  final int sessionNumber;
+  final bool paused;
+
+  const MpSessionMeta({
+    this.runTitle = '',
+    this.sessionNumber = 0,
+    this.paused = false,
+  });
+
+  @override
+  String get type => 'sessionMeta';
+
+  @override
+  Map<String, dynamic> toJson() => {
+    'runTitle': runTitle,
+    'sessionNumber': sessionNumber,
+    'paused': paused,
+  };
+
+  factory MpSessionMeta.fromJson(Map<String, dynamic> j) => MpSessionMeta(
+    runTitle: j['runTitle'] as String? ?? '',
+    sessionNumber: (j['sessionNumber'] as num?)?.toInt() ?? 0,
+    paused: j['paused'] as bool? ?? false,
   );
 }
 
-/// Acknowledgement that the receiver persisted the [MpPair]. Sent back
-/// so the initiator knows it's safe to persist their own copy — if the
-/// ack never arrives, the initiator discards the pairId and the user
-/// can re-pair.
-final class MpPairAck extends MpMessage {
-  final String pairId;
+/// Peer-to-peer chat line. `text` may embed `:sprite_key:` tokens —
+/// resolved against the local emote sprite catalog at render time, so
+/// the wire payload stays pure text. `id` dedupes replays.
+final class MpChat extends MpMessage {
+  final String id;
+  final String from;
+  final String text;
 
-  const MpPairAck({required this.pairId});
-
-  @override
-  String get type => 'pairAck';
+  const MpChat({required this.id, required this.from, required this.text});
 
   @override
-  Map<String, dynamic> toJson() => {'pairId': pairId};
+  String get type => 'chat';
 
-  factory MpPairAck.fromJson(Map<String, dynamic> j) => MpPairAck(
-    pairId: j['pairId'] as String? ?? '',
+  @override
+  Map<String, dynamic> toJson() => {'id': id, 'from': from, 'text': text};
+
+  factory MpChat.fromJson(Map<String, dynamic> j) => MpChat(
+    id: j['id'] as String? ?? '',
+    from: j['from'] as String? ?? 'Player',
+    text: j['text'] as String? ?? '',
   );
+}
+
+/// A "Surprise" — a big floating card shown on the peer's screen.
+/// `preset` names a built-in surprise ('love' | 'goodjob' | 'meow' |
+/// 'gungeon' | 'ohshit'); when `preset` is 'custom', `text` (≤30 chars)
+/// and `spriteKey` carry the user-built content.
+final class MpSurprise extends MpMessage {
+  final String preset;
+  final String text;
+  final String spriteKey;
+  /// Extra fullscreen effect — 'bulletrain' | 'heartsburst' | 'explosion'
+  /// (empty = preset's own fx). Wire-additive: old peers ignore it.
+  final String fx;
+
+  const MpSurprise({
+    required this.preset,
+    this.text = '',
+    this.spriteKey = '',
+    this.fx = '',
+  });
+
+  @override
+  String get type => 'surprise';
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'preset': preset,
+        if (text.isNotEmpty) 'text': text,
+        if (spriteKey.isNotEmpty) 'spriteKey': spriteKey,
+        if (fx.isNotEmpty) 'fx': fx,
+      };
+
+  factory MpSurprise.fromJson(Map<String, dynamic> j) => MpSurprise(
+    preset: j['preset'] as String? ?? 'custom',
+    text: j['text'] as String? ?? '',
+    spriteKey:
+        (j['spriteKey'] ?? j['sprite']) as String? ?? '',
+    fx: j['fx'] as String? ?? '',
+  );
+}
+
+/// Direct edit on the peer's inventory — the co-op trust model where
+/// both players can modify both inventories. `op` is 'add' | 'remove' |
+/// 'clear'. Receiver applies it to *its own* slot with `force: true`
+/// and rebroadcasts a snapshot so both sides converge.
+final class MpPeerEdit extends MpMessage {
+  final String op; // 'add' | 'remove' | 'clear'
+  final String kind; // 'gun' | 'item'
+  final String name;
+
+  const MpPeerEdit({
+    required this.op,
+    this.kind = '',
+    this.name = '',
+  });
+
+  @override
+  String get type => 'peerEdit';
+
+  @override
+  Map<String, dynamic> toJson() => {
+    'op': op,
+    if (kind.isNotEmpty) 'kind': kind,
+    if (name.isNotEmpty) 'name': name,
+  };
+
+  factory MpPeerEdit.fromJson(Map<String, dynamic> j) => MpPeerEdit(
+    op: j['op'] as String? ?? '',
+    kind: j['kind'] as String? ?? '',
+    name: j['name'] as String? ?? '',
+  );
+}
+
+
+/// A logged activity entry for the messages panel — chat, surprise,
+/// emote, transfer, or connect/disconnect note.
+class MpEvent {
+  final String kind; // 'chat' | 'surprise' | 'emote' | 'transfer' | 'system'
+  final String from;
+  final String text;
+  final bool mine;
+  final DateTime ts;
+
+  MpEvent._(this.kind, this.from, this.text, this.mine)
+      : ts = DateTime.now();
+
+  factory MpEvent.chat(
+          {required String from, required String text, required bool mine}) =>
+      MpEvent._('chat', from, text, mine);
+  factory MpEvent.event(
+          {required String kind,
+          required String from,
+          required String text,
+          required bool mine}) =>
+      MpEvent._(kind, from, text, mine);
 }

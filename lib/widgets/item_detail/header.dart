@@ -1,3 +1,4 @@
+import '../../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
@@ -13,6 +14,7 @@ class ItemDetailHeader extends StatelessWidget {
   final String subtitle;
   final String quality;
   final String quote;
+  final String effect;
   final bool isGun;
   final bool isActive;
   final String iconPath;
@@ -28,6 +30,7 @@ class ItemDetailHeader extends StatelessWidget {
     required this.subtitle,
     required this.quality,
     required this.quote,
+    this.effect = '',
     required this.isGun,
     required this.isActive,
     required this.iconPath,
@@ -41,7 +44,7 @@ class ItemDetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isFav = context.watch<RunProvider>().isFavourite(name);
+    final isFav = context.select<RunProvider, bool>((p) => p.isFavourite(name));
     final favColor = isFav ? Colors.pinkAccent : Colors.white38;
     final sf = Responsive.factor(context);
 
@@ -91,8 +94,114 @@ class ItemDetailHeader extends StatelessWidget {
         ),
     ];
 
+    // ── Gun layout — simplified per redesign: no tag chips, no quote.
+    // Left: tier badge + sell badge. Right: favourite. Then name → icon
+    // → ornamental divider → effect line → elemental icon row. ──
+    if (isGun) {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    if (quality.isNotEmpty)
+                      QualityBadge(quality: quality, size: 32)
+                    else
+                      const SizedBox(width: 32),
+                    if (sellPrice.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      _SellBadge(price: sellPrice),
+                    ],
+                  ],
+                ),
+                IconButton(
+                  icon: Icon(
+                    isFav
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_rounded,
+                    color: favColor,
+                    size: 30,
+                  ),
+                  tooltip:
+                      isFav ? 'Remove from favourites' : 'Add to favourites',
+                  constraints:
+                      const BoxConstraints(minWidth: 44, minHeight: 44),
+                  onPressed: () {
+                    Haptics.light();
+                    final p = context.read<RunProvider>();
+                    final wasFav = p.isFavourite(name);
+                    p.toggleFavourite(name);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: GoopText(wasFav
+                            ? '$name removed from favourites'
+                            : '$name added to favourites'),
+                        duration: const Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            // Title
+            GoopText(
+              name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: FontSizes.headlineMedium * sf,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.5,
+              ),
+            ),
+            const SizedBox(height: 10),
+            // Gun graphic
+            GameIcon(
+              assetPath: iconPath,
+              fallback: Icons.gps_fixed,
+              quality: quality,
+              size: 96,
+              showRing: false,
+            ),
+            const SizedBox(height: 12),
+            const _AccentDivider(),
+            const SizedBox(height: 10),
+            // Main effect — replaces the flavor-quote slot.
+            if (effect.isNotEmpty)
+              GoopText(
+                effect,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13.5,
+                  color: Colors.white.withValues(alpha: 0.85),
+                  height: 1.35,
+                ),
+              ),
+            if (elements.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  for (final e in elements)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: _ElementDot(kind: e),
+                    ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      );
+    }
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 14, 18, 18),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -101,14 +210,14 @@ class ItemDetailHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (quality.isNotEmpty)
-                QualityBadge(quality: quality, size: 36)
+                QualityBadge(quality: quality, size: 32)
               else
-                const SizedBox(width: 36),
+                const SizedBox(width: 32),
               IconButton(
                 icon: Icon(
                   isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                   color: favColor,
-                  size: 36,
+                  size: 30,
                 ),
                 tooltip: isFav ? 'Remove from favourites' : 'Add to favourites',
                 constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
@@ -130,29 +239,29 @@ class ItemDetailHeader extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          // Icon — no ring, 25% smaller (128 → 96) to show more info on screen
+          const SizedBox(height: 4),
+          // Icon — no ring, compact for tighter top area
           GameIcon(
             assetPath: iconPath,
             fallback: isGun
                 ? Icons.gps_fixed
                 : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
             quality: quality,
-            size: 96,
+            size: 80,
             showRing: false,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           // Item name
           GoopText(
             name,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 28 * sf,
+              fontSize: FontSizes.headlineMedium * sf,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           // All tags inline in one Wrap
           Wrap(
             alignment: WrapAlignment.center,
@@ -160,24 +269,7 @@ class ItemDetailHeader extends StatelessWidget {
             runSpacing: 8,
             children: tags,
           ),
-          // Quote / description at the bottom with accent separator
-          if (quote.isNotEmpty) ...[
-            const SizedBox(height: 18),
-            _AccentDivider(),
-            const SizedBox(height: 14),
-            GoopText(
-              '"$quote"',
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 15.5,
-                color: Colors.white.withValues(alpha: 0.85),
-                fontStyle: FontStyle.italic,
-                height: 1.4,
-              ),
-            ),
-          ],
+          // Flavor quote removed.
         ],
       ),
     );
@@ -185,6 +277,68 @@ class ItemDetailHeader extends StatelessWidget {
 
   static String _fmtStat(double v) =>
       v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
+}
+
+/// Sell-price chip — lives beside the tier badge on gun detail.
+class _SellBadge extends StatelessWidget {
+  final String price;
+  const _SellBadge({required this.price});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.yellowAccent.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.yellowAccent.withValues(alpha: 0.4),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.sell_outlined, size: 13, color: Colors.yellowAccent),
+          const SizedBox(width: 4),
+          GoopText(
+            price,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+              color: Colors.yellowAccent,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Elemental status dot — icon-only tinted circle (fire/electric/etc).
+class _ElementDot extends StatelessWidget {
+  final ElementKind kind;
+  const _ElementDot({required this.kind});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: kind.label,
+      child: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+          color: kind.color.withValues(alpha: 0.14),
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: kind.color.withValues(alpha: 0.45),
+            width: 1.0,
+          ),
+        ),
+        child: Icon(kind.icon, size: 15, color: kind.color),
+      ),
+    );
+  }
 }
 
 class _TagChip extends StatelessWidget {
@@ -199,7 +353,7 @@ class _TagChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(color: color.withValues(alpha: 0.35), width: 0.8),
       ),
       child: Row(
@@ -210,7 +364,7 @@ class _TagChip extends StatelessWidget {
           GoopText(
             label,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w800,
               color: color,
               letterSpacing: 0.5,

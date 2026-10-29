@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -5,6 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/codex_entry.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/asset_paths.dart' show npcIdleGifPath;
+import '../utils/responsive.dart';
 
 /// Full-page view for a single Codex entry — large icon, name, category,
 /// description, and wiki link.
@@ -22,6 +25,11 @@ class CodexDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     final assetPath = codexAssetPath(section, entry.icon);
+    // For NPC entries, prefer the animated idle GIF if available.
+    final idleGif = section == CodexSection.npcs
+        ? npcIdleGifPath(entry.name)
+        : '';
+    final heroImgPath = idleGif.isNotEmpty ? idleGif : assetPath;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -30,17 +38,19 @@ class CodexDetailScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         title: GoopText(
           entry.name.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w900,
             letterSpacing: 1.0,
-            fontSize: 15,
+            fontSize: 15 * Responsive.factor(context),
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: SafeArea(
+        top: false,
+        child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
         child: Column(
@@ -68,13 +78,15 @@ class CodexDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: assetPath.isNotEmpty
+                  child: heroImgPath.isNotEmpty
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(9),
                           child: Image.asset(
-                            assetPath,
+                            heroImgPath,
                             fit: BoxFit.contain,
                             filterQuality: FilterQuality.none,
+                            cacheWidth: 160,
+                            cacheHeight: 160,
                             errorBuilder: (_, __, ___) => Icon(
                               Icons.widgets,
                               size: 32,
@@ -105,16 +117,16 @@ class CodexDetailScreen extends StatelessWidget {
                             accent: flair.primary),
                       if (entry.game != null && entry.game!.isNotEmpty)
                         _badge(flair, entry.game!,
-                            accent: const Color(0xFF42A5F5),
+                            accent: CodexColors.game,
                             icon: Icons.videogame_asset_outlined),
                       if (entry.health != null && entry.health!.isNotEmpty)
                         _badge(flair, 'HP: ${entry.health}',
-                            accent: const Color(0xFFEF5350),
+                            accent: CodexColors.health,
                             icon: Icons.favorite_outline),
                       if (entry.location != null &&
                           entry.location!.isNotEmpty)
                         _badge(flair, entry.location!,
-                            accent: const Color(0xFF66BB6A),
+                            accent: CodexColors.location,
                             icon: Icons.place_outlined),
                     ],
                   ),
@@ -191,7 +203,7 @@ class CodexDetailScreen extends StatelessWidget {
                             child: GoopText(
                               entry.tips[i],
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: FontSizes.labelMedium,
                                 height: 1.35,
                                 color: Colors.white.withValues(alpha: 0.75),
                               ),
@@ -257,7 +269,7 @@ class CodexDetailScreen extends StatelessWidget {
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.all(Radii.md),
                     side: BorderSide(
                       color: flair.primary.withValues(alpha: 0.3),
                       width: 1,
@@ -268,6 +280,7 @@ class CodexDetailScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -280,7 +293,7 @@ class CodexDetailScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: accent.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
           color: accent.withValues(alpha: 0.4),
           width: 0.8,
@@ -299,7 +312,7 @@ class CodexDetailScreen extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 9.5,
+                fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.4,
                 color: accent.withValues(alpha: 0.9),
@@ -322,7 +335,7 @@ class CodexDetailScreen extends StatelessWidget {
         GoopText(
           text,
           style: TextStyle(
-            fontSize: 10,
+            fontSize: FontSizes.labelSmall,
             fontWeight: FontWeight.w900,
             letterSpacing: 1.0,
             color: flair.secondary.withValues(alpha: 0.8),
@@ -340,7 +353,7 @@ class CodexDetailScreen extends StatelessWidget {
     final border = accent ?? flair.primary;
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: flair.card,
         borderRadius: BorderRadius.circular(10),

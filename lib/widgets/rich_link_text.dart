@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -66,7 +67,7 @@ class RichLinkText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = (baseStyle ?? const TextStyle(fontSize: 14, height: 1.4))
+    final base = (baseStyle ?? const TextStyle(fontSize: FontSizes.bodyMedium, height: 1.4))
         .copyWith(color: baseStyle?.color ?? Colors.white.withValues(alpha: 0.92));
     final spans = tokens.map((tok) => _buildSpan(context, tok, base)).toList();
     return Text.rich(
@@ -247,7 +248,7 @@ void showEntityPeekSheet(
   }
   showModalBottomSheet<void>(
     context: context,
-    backgroundColor: const Color(0xFF1E1E1E),
+    backgroundColor: AppTheme.flair.card,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
     ),
@@ -354,7 +355,7 @@ class _PeekSheet extends StatelessWidget {
                       GoopText(
                         name,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: FontSizes.titleMedium,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -469,7 +470,7 @@ class _CharacterPeekSheet extends StatelessWidget {
                       GoopText(
                         character.name,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: FontSizes.titleMedium,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -602,7 +603,7 @@ class _ShrinePeekSheet extends StatelessWidget {
                       GoopText(
                         shrine.name,
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: FontSizes.titleMedium,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -686,7 +687,7 @@ class _ShrineDeltaChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(color: color.withValues(alpha: 0.5)),
       ),
       child: Row(
@@ -747,6 +748,7 @@ class RichBulletList extends StatelessWidget {
             bullet: bullets[i],
             depth: 0,
             siblingIndex: i,
+            siblingCount: bullets.length,
             baseStyle: baseStyle,
           ),
         ),
@@ -759,11 +761,13 @@ class _BulletLine extends StatelessWidget {
   final RichBullet bullet;
   final int depth;
   final int siblingIndex;
+  final int siblingCount;
   final TextStyle? baseStyle;
   const _BulletLine({
     required this.bullet,
     required this.depth,
     this.siblingIndex = 0,
+    this.siblingCount = 0,
     this.baseStyle,
   });
 
@@ -813,11 +817,23 @@ class _BulletLine extends StatelessWidget {
               ),
             ],
           ),
+          // Subtle divider between top-level bullets — gives the list
+          // visual rhythm without heavy borders. Skipped on the last
+          // item and on nested bullets.
+          if (isTop && bullet.sub.isEmpty && siblingIndex < siblingCount - 1)
+            Padding(
+              padding: const EdgeInsets.only(left: 22, top: 6),
+              child: Container(
+                height: 0.5,
+                color: Colors.white.withValues(alpha: 0.06),
+              ),
+            ),
           ...List.generate(bullet.sub.length, (i) {
             return _BulletLine(
               bullet: bullet.sub[i],
               depth: depth + 1,
               siblingIndex: i,
+              siblingCount: bullet.sub.length,
               baseStyle: baseStyle,
             );
           }),
@@ -889,12 +905,27 @@ class _WikiSectionState extends State<WikiSection> {
     if (widget.bullets.isEmpty) return const SizedBox.shrink();
     final canCollapse = widget.collapseThreshold > 0 &&
         widget.bullets.length > widget.collapseThreshold;
+    final flair = AppTheme.flair;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-      child: Card(
-        margin: EdgeInsets.zero,
+      child: Container(
+        decoration: BoxDecoration(
+          color: flair.card,
+          borderRadius: BorderRadius.all(Radii.lg),
+          border: Border.all(
+            color: widget.iconColor.withValues(alpha: 0.18),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: widget.iconColor.withValues(alpha: 0.05),
+              blurRadius: 10,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -903,7 +934,7 @@ class _WikiSectionState extends State<WikiSection> {
                     ? () => setState(() => _expanded = !_expanded)
                     : null,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.xs),
                   child: ThemedSectionTitle(
                     icon: widget.icon,
                     iconColor: widget.iconColor,
@@ -922,7 +953,7 @@ class _WikiSectionState extends State<WikiSection> {
                 ),
               ),
               if (_expanded) ...[
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 RichBulletList(bullets: widget.bullets),
               ],
             ],

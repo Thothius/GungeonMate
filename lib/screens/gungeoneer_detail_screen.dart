@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,10 @@ import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../widgets/spoiler_tag.dart';
+import '../widgets/game_icon.dart';
+import '../widgets/scale_button.dart';
 import 'item_detail_screen.dart';
+import 'home_screen.dart';
 
 /// Rich, tabbed detail view for a single Gungeoneer.
 ///
@@ -20,7 +24,18 @@ import 'item_detail_screen.dart';
 class GungeoneerDetailScreen extends StatefulWidget {
   final Gungeoneer gungeoneer;
 
-  const GungeoneerDetailScreen({super.key, required this.gungeoneer});
+  /// Optional override for the "PLAY AS" button. When null (default),
+  /// the button starts a new solo run and navigates to HomeScreen.
+  /// When provided (e.g. from the MP lobby character picker), the
+  /// button calls this callback instead — typically to pop the detail
+  /// screen and return the gungeoneer to the caller.
+  final VoidCallback? onPlayAs;
+
+  const GungeoneerDetailScreen({
+    super.key,
+    required this.gungeoneer,
+    this.onPlayAs,
+  });
 
   @override
   State<GungeoneerDetailScreen> createState() => _GungeoneerDetailScreenState();
@@ -34,6 +49,7 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
   void initState() {
     super.initState();
     _tabCtrl = TabController(length: _tabs.length, vsync: this);
+    _tabCtrl.addListener(() { if (mounted) setState(() {}); });
   }
 
   @override
@@ -52,10 +68,10 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
         (g.altCostumeUnlock.isNotEmpty &&
             !g.altCostumeUnlock.contains('N/A'));
     return [
-      if (g.loreIntro.isNotEmpty) _DetailTab.lore,
       _DetailTab.loadout,
-      if (g.playstyle.isNotEmpty) _DetailTab.playstyle,
       if (g.tips.isNotEmpty) _DetailTab.tips,
+      if (g.playstyle.isNotEmpty) _DetailTab.playstyle,
+      if (g.loreIntro.isNotEmpty) _DetailTab.lore,
       if (hasSpoilers) _DetailTab.spoilers,
     ];
   }
@@ -88,50 +104,26 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
             ),
         ],
       ),
-      body: Column(
+      body: SafeArea(
+        top: false,
+        child: Column(
         children: [
           // ── Hero section (always visible) ──
           _HeroSection(gungeoneer: g, flair: flair),
 
-          // ── Tab bar ──
+          // ── Tab bar — 2 rows for clean layout ──
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
+            margin: const EdgeInsets.symmetric(horizontal: Insets.lg),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
             decoration: BoxDecoration(
               color: flair.card,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.all(Radii.md),
               border: Border.all(
                 color: flair.primary.withValues(alpha: 0.15),
                 width: 0.8,
               ),
             ),
-            child: TabBar(
-              controller: _tabCtrl,
-              isScrollable: true,
-              tabAlignment: TabAlignment.center,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicator: BoxDecoration(
-                color: flair.primary.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              dividerColor: Colors.transparent,
-              labelColor: flair.primary,
-              unselectedLabelColor: Colors.white.withValues(alpha: 0.4),
-              labelStyle: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0.5,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-              labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-              tabs: _tabs.map((t) => Tab(
-                icon: Icon(t.icon, size: 14),
-                text: t.label,
-              )).toList(),
-            ),
+            child: _buildTabRow(flair),
           ),
           const SizedBox(height: 8),
 
@@ -155,7 +147,74 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
               }).toList(),
             ),
           ),
+
+          // ── PLAY AS button (after all tabs) ──
+          Padding(
+            padding: const EdgeInsets.fromLTRB(Insets.lg, 8, Insets.lg, 16),
+            child: SizedBox(
+              width: double.infinity,
+              child: ScaleButton(
+                onTap: () {
+                  Haptics.selection();
+                  if (widget.onPlayAs != null) {
+                    widget.onPlayAs!();
+                    return;
+                  }
+                  final rp = context.read<RunProvider>();
+                  rp.startNewRun(widget.gungeoneer);
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    fastRoute(const HomeScreen()),
+                    (_) => false,
+                  );
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFFFFD54F),
+                        Color(0xFFFFB300),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: const Color(0xFFFFE082).withValues(alpha: 0.8),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFFFFD54F).withValues(alpha: 0.25),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.play_arrow_rounded,
+                          size: 24, color: Color(0xFF3E2723)),
+                      const SizedBox(width: 10),
+                      GoopText(
+                        'PLAY AS ${g.name.toUpperCase()}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: Color(0xFF3E2723),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
+      ),
       ),
     );
   }
@@ -168,13 +227,74 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
           Clipboard.setData(ClipboardData(text: url));
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: GoopText('Could not open — URL copied to clipboard'),
+              content: GoopText('Could not open. URL copied to clipboard.'),
               duration: Duration(seconds: 2),
             ),
           );
         }
         return false;
       },
+    );
+  }
+
+  /// Build a single-row tab layout. All tabs in one horizontal row,
+  /// each taking equal width via Expanded. Handles 2–5 tabs.
+  Widget _buildTabRow(ThemeFlair flair) {
+    final tabs = _tabs;
+
+    Widget buildTab(_DetailTab tab, int index) {
+      final isSelected = _tabCtrl.index == index;
+      return Expanded(
+        child: GestureDetector(
+          onTap: () {
+            Haptics.selection();
+            _tabCtrl.animateTo(index);
+            setState(() {});
+          },
+          behavior: HitTestBehavior.opaque,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            margin: const EdgeInsets.symmetric(horizontal: 3),
+            padding: const EdgeInsets.symmetric(vertical: Insets.sm),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? flair.primary.withValues(alpha: 0.15)
+                  : Colors.transparent,
+              borderRadius: const BorderRadius.all(Radii.sm),
+              border: Border.all(
+                color: isSelected
+                    ? flair.primary.withValues(alpha: 0.5)
+                    : Colors.transparent,
+                width: 1.0,
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(tab.icon, size: 16,
+                    color: isSelected ? flair.primary : Colors.white.withValues(alpha: 0.4)),
+                const SizedBox(height: 3),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: GoopText(tab.label,
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
+                        letterSpacing: 0.5,
+                        color: isSelected ? flair.primary : Colors.white.withValues(alpha: 0.4),
+                      )),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      children: [
+        for (var i = 0; i < tabs.length; i++) buildTab(tabs[i], i),
+      ],
     );
   }
 }
@@ -184,10 +304,10 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
 // =============================================================================
 
 enum _DetailTab {
-  lore('LORE', Icons.auto_stories),
   loadout('LOADOUT', Icons.inventory_2),
-  playstyle('PLAYSTYLE', Icons.sports_esports),
   tips('TIPS', Icons.lightbulb_outline),
+  playstyle('PLAYSTYLE', Icons.sports_esports),
+  lore('LORE', Icons.auto_stories),
   spoilers('SPOILERS', Icons.warning_amber_rounded);
 
   final String label;
@@ -207,45 +327,14 @@ class _HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final g = gungeoneer;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       child: Column(
         children: [
-          // In-game sprite (not card art — 2026 standard: always sprites)
+          // In-game sprite only — clean and simple, no extra labels.
           SizedBox(
             height: 120,
             child: Center(child: _buildSprite()),
-          ),
-          const SizedBox(height: 8),
-          // Short description
-          if (g.shortDesc.isNotEmpty)
-            GoopText(
-              g.shortDesc,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                fontStyle: FontStyle.italic,
-                color: Colors.white.withValues(alpha: 0.6),
-                height: 1.35,
-              ),
-            ),
-          const SizedBox(height: 6),
-          // Badges row
-          Wrap(
-            spacing: 6,
-            runSpacing: 4,
-            alignment: WrapAlignment.center,
-            children: [
-              if (g.isCoopOnly)
-                _Badge(label: 'CO-OP ONLY', color: Colors.cyanAccent, icon: Icons.group),
-              if (g.hegemonyCost > 0)
-                _Badge(label: '${g.hegemonyCost} Hegemony', color: Colors.amberAccent, icon: Icons.paid),
-              if (g.startingArmor > 0 && !g.name.contains('Robot'))
-                _Badge(label: '${g.startingArmor} Armor', color: Colors.blueAccent, icon: Icons.shield),
-              if (g.name == 'The Robot')
-                _Badge(label: '6 Armor, No Hearts', color: Colors.amberAccent, icon: Icons.precision_manufacturing),
-            ],
           ),
         ],
       ),
@@ -261,6 +350,8 @@ class _HeroSection extends StatelessWidget {
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
         gaplessPlayback: true,
+        cacheWidth: 240,
+        cacheHeight: 240,
         errorBuilder: (_, __, ___) => _buildFallback(),
       );
     }
@@ -273,6 +364,8 @@ class _HeroSection extends StatelessWidget {
         gungeoneer.icon,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
+        cacheWidth: 240,
+        cacheHeight: 240,
         errorBuilder: (_, __, ___) =>
             const Icon(Icons.person, size: 80, color: Colors.white54),
       );
@@ -320,13 +413,13 @@ class _LorePage extends StatelessWidget {
                   if (g.nicknames.isNotEmpty)
                     GoopText(
                       'Also called: ${g.nicknames.join(', ')}',
-                      style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6)),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, color: Colors.white.withValues(alpha: 0.6)),
                     ),
                   if (g.voice.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     GoopText(
                       'Voice: ${g.voice}',
-                      style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6)),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, color: Colors.white.withValues(alpha: 0.6)),
                     ),
                   ],
                 ],
@@ -350,51 +443,30 @@ class _LoadoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final guns = g.startingGuns;
-    final items = g.startingItems;
+    // Combine guns + items + armor into a single row of compact chips.
+    final chips = <Widget>[];
+    for (final name in g.startingGuns) {
+      chips.add(_LoadoutTile(
+        name: name, isRandom: name == 'Random', provider: provider,
+      ));
+    }
+    for (final name in g.startingItems) {
+      chips.add(_LoadoutTile(
+        name: name, isRandom: name == 'Random', provider: provider,
+      ));
+    }
+    if (g.startingArmor > 0) {
+      chips.add(_ArmorTile(armor: g.startingArmor));
+    }
+
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
       child: _ContentCard(
         color: AppTheme.flair.primary,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (guns.isNotEmpty) ...[
-              _SubLabel('Weapons'),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: guns.map((name) => _LoadoutTile(
-                  name: name, isRandom: name == 'Random', provider: provider,
-                )).toList(),
-              ),
-              const SizedBox(height: 12),
-            ],
-            if (items.isNotEmpty) ...[
-              _SubLabel('Items'),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: items.map((name) => _LoadoutTile(
-                  name: name, isRandom: name == 'Random', provider: provider,
-                )).toList(),
-              ),
-              const SizedBox(height: 12),
-            ],
-            if (g.startingArmor > 0) ...[
-              _SubLabel('Other'),
-              Row(
-                children: [
-                  Icon(Icons.shield, size: 16, color: Colors.blueAccent.withValues(alpha: 0.7)),
-                  const SizedBox(width: 6),
-                  GoopText(
-                    '${g.startingArmor} Armor',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.8)),
-                  ),
-                ],
-              ),
-            ],
-          ],
+        child: Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: chips,
         ),
       ),
     );
@@ -601,7 +673,7 @@ class _LoadoutTile extends StatelessWidget {
             const SizedBox(width: 6),
             GoopText(
               name,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.purpleAccent.withValues(alpha: 0.85)),
+              style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w700, color: Colors.purpleAccent.withValues(alpha: 0.85)),
             ),
           ],
         ),
@@ -611,6 +683,9 @@ class _LoadoutTile extends StatelessWidget {
     final gun = provider.gunByName(name);
     final item = provider.itemByName(name);
     final exists = gun != null || item != null;
+    final iconPath = gun?.icon ?? item?.icon ?? '';
+    final quality = gun?.quality ?? item?.quality ?? '';
+    final fallback = gun != null ? Icons.gps_fixed : Icons.inventory_2_outlined;
 
     return GestureDetector(
       onTap: exists
@@ -624,16 +699,19 @@ class _LoadoutTile extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              gun != null ? Icons.gps_fixed : Icons.inventory_2_outlined,
-              size: 16,
-              color: (gun != null ? Colors.cyanAccent : Colors.greenAccent).withValues(alpha: 0.7),
+            GameIcon(
+              assetPath: iconPath,
+              fallback: fallback,
+              quality: quality,
+              size: 22,
+              showRing: false,
+              semanticLabel: name,
             ),
             const SizedBox(width: 6),
             GoopText(
               name,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.w700,
                 color: Colors.white.withValues(alpha: 0.85),
                 decoration: exists ? null : TextDecoration.lineThrough,
@@ -656,7 +734,7 @@ class _LoadoutTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: AppTheme.flair.card,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.all(Radii.sm),
           border: Border.all(color: AppTheme.flair.primary.withValues(alpha: 0.15), width: 0.8),
         ),
         child: child,
@@ -665,46 +743,32 @@ class _LoadoutTile extends StatelessWidget {
   }
 }
 
-class _SubLabel extends StatelessWidget {
-  final String text;
-  const _SubLabel(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: GoopText(
-        text,
-        style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: Colors.white.withValues(alpha: 0.5), letterSpacing: 0.5),
-      ),
-    );
-  }
-}
-
-class _Badge extends StatelessWidget {
-  final String label;
-  final Color color;
-  final IconData icon;
-
-  const _Badge({required this.label, required this.color, required this.icon});
+/// Compact armor chip for the loadout row.
+class _ArmorTile extends StatelessWidget {
+  final int armor;
+  const _ArmorTile({required this.armor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.4), width: 0.8),
+        color: AppTheme.flair.card,
+        borderRadius: BorderRadius.all(Radii.sm),
+        border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.25), width: 0.8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: color.withValues(alpha: 0.85)),
-          const SizedBox(width: 4),
+          Icon(Icons.shield, size: 16, color: Colors.blueAccent.withValues(alpha: 0.7)),
+          const SizedBox(width: 6),
           GoopText(
-            label,
-            style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.95)),
+            '$armor Armor',
+            style: TextStyle(
+              fontSize: FontSizes.labelMedium,
+              fontWeight: FontWeight.w700,
+              color: Colors.white.withValues(alpha: 0.85),
+            ),
           ),
         ],
       ),

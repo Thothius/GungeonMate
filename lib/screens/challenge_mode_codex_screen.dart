@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -334,6 +335,8 @@ class _Header extends StatelessWidget {
             width: double.infinity,
             height: 200,
             fit: BoxFit.cover,
+            cacheWidth: 800,
+            cacheHeight: 400,
             errorBuilder: (_, __, ___) => Container(
               height: 200,
               color: ChallengeModeCodexScreen._void,
@@ -388,7 +391,7 @@ class _Header extends StatelessWidget {
               GoopText(
                 'CHALLENGE MODE',
                 style: TextStyle(
-                  fontSize: 28 * sf,
+                  fontSize: FontSizes.headlineMedium * sf,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 3,
                   color: Colors.white,
@@ -445,7 +448,7 @@ class _SectionTitle extends StatelessWidget {
               GoopText(
                 title.toUpperCase(),
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: FontSizes.bodyMedium,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
                   color: color,
@@ -506,7 +509,7 @@ class _InfoBlock extends StatelessWidget {
             GoopText(
               heading!,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.w800,
                 color: accent.withValues(alpha: 0.95),
                 letterSpacing: 0.3,
@@ -611,7 +614,7 @@ class _ModifierCard extends StatelessWidget {
                         child: GoopText(
                           'vs $exclusiveWith',
                           style: TextStyle(
-                            fontSize: 9,
+                            fontSize: FontSizes.labelSmall,
                             fontWeight: FontWeight.w700,
                             color: Colors.orange.withValues(alpha: 0.85),
                           ),
@@ -623,7 +626,7 @@ class _ModifierCard extends StatelessWidget {
                 GoopText(
                   body,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     height: 1.45,
                     color: Colors.white.withValues(alpha: 0.75),
                   ),
@@ -648,13 +651,13 @@ class _WikiLink extends StatelessWidget {
       child: TextButton.icon(
         style: TextButton.styleFrom(
           foregroundColor: ChallengeModeCodexScreen._dice,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.sm),
         ),
         icon: const Icon(Icons.open_in_new, size: 14),
         label: GoopText(
           'View on wiki.gg',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.w600,
             color: ChallengeModeCodexScreen._dice,
           ),

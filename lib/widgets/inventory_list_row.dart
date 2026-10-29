@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../models/gun.dart';
@@ -157,9 +158,9 @@ class _InventoryListRowState extends State<InventoryListRow>
 
     Widget row = Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.all(Radii.md),
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
         child: Padding(
@@ -172,7 +173,7 @@ class _InventoryListRowState extends State<InventoryListRow>
                     ? Icons.gps_fixed
                     : Icons.inventory_2_outlined,
                 quality: _quality,
-                size: 48,
+                size: 38,
                 showRing: false,
               ),
               const SizedBox(width: 12),
@@ -277,11 +278,11 @@ class _InventoryListRowState extends State<InventoryListRow>
     // Wrap in animated synergy glow overlay when active.
     if (gc == null || glowCtrl == null) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: Insets.xs),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: isS ? const Color(0xFF14120E) : Colors.white.withValues(alpha: 0.03),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
               color: isS 
                   ? const Color(0xFFFFD700) 
@@ -302,7 +303,7 @@ class _InventoryListRowState extends State<InventoryListRow>
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: Insets.xs),
       child: Stack(
         children: [
           SynergyGlowOverlay(
@@ -314,7 +315,7 @@ class _InventoryListRowState extends State<InventoryListRow>
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: isS ? const Color(0xFF14120E) : Colors.transparent,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.all(Radii.md),
                 border: Border.all(
                   color: isS 
                       ? const Color(0xFFFFD700) 
@@ -358,7 +359,7 @@ class _TypePill extends StatelessWidget {
       child: GoopText(
         label,
         style: TextStyle(
-          fontSize: 9,
+          fontSize: FontSizes.labelSmall,
           fontWeight: FontWeight.w700,
           color: color,
           letterSpacing: 0.3,

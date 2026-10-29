@@ -34753,16 +34753,7 @@
               "v": "Grants double damage until the player is hit.\n"
             }
           ],
-          "sub": [
-            {
-              "tokens": [
-                {
-                  "t": "text",
-                  "v": "In Exit the Gungeon, the effect will also wear off when the player ascends to the next chamber."
-                }
-              ]
-            }
-          ]
+          "sub": []
         }
       ],
       "notes": [
@@ -40118,16 +40109,7 @@
               "v": "If the player dies, the pig will jump in the way of the finishing shot, sparing the player and effectively granting an extra life. This fully heals the player and removes the item from the player's inventory.\n"
             }
           ],
-          "sub": [
-            {
-              "tokens": [
-                {
-                  "t": "text",
-                  "v": "In Exit the Gungeon, the Pig only heals a small amount of health."
-                }
-              ]
-            }
-          ]
+          "sub": []
         }
       ],
       "notes": [
@@ -40258,16 +40240,7 @@
               "v": "After the effect of the item occurs, it will be permanently renamed to \"Hero Pig\", with a new description and pick-up quote that remain even after the run is over.\n"
             }
           ],
-          "sub": [
-            {
-              "tokens": [
-                {
-                  "t": "text",
-                  "v": "In Exit the Gungeon, the Pig's name and description does not change."
-                }
-              ]
-            }
-          ]
+          "sub": []
         },
         {
           "tokens": [
@@ -57137,23 +57110,6 @@
                   "v": "The synergy with the various rifles alludes to Sniper Wolf's position as a sniper."
                 }
               ]
-            }
-          ]
-        },
-        {
-          "tokens": [
-            {
-              "t": "text",
-              "v": "In "
-            },
-            {
-              "t": "ref",
-              "v": "Exit the Gungeon",
-              "kind": "lore"
-            },
-            {
-              "t": "text",
-              "v": " Wolf can pick up money and powerups, but will not pathfind to them. Instead, he will pathfind to enemies."
             }
           ]
         }

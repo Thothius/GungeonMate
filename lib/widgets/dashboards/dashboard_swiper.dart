@@ -10,6 +10,8 @@ import 'junkan_dashboard.dart';
 import 'special_gun_dashboards.dart';
 import 'huntress_dashboard.dart';
 import 'compact_dashboards.dart';
+import '../../services/goop_talk_engine.dart';
+import '../../utils/responsive.dart';
 
 // Special Dashboard Tab System — swipeable panels with tappable tab chips
 // =============================================================================
@@ -100,7 +102,7 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
     if (ownedItemNames.any((n) => n.contains('ser junkan'))) {
       tabs.add(_DashboardTab(
         label: 'Junkan',
-        iconPath: localItemIcon('Ser Junkan'),
+        iconPath: localItemIcon('Ser Junkan 1'),
         color: Colors.tealAccent,
         widget: JunkanDashboardSliver(slot: widget.slot),
       ));
@@ -364,6 +366,8 @@ class _DashboardTabChip extends StatelessWidget {
                 height: 18,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.none,
+                cacheWidth: 36,
+                cacheHeight: 36,
                 errorBuilder: (_, __, ___) => Icon(
                   Icons.dashboard_outlined,
                   size: 16,
@@ -373,10 +377,10 @@ class _DashboardTabChip extends StatelessWidget {
             else
               Icon(Icons.dashboard_outlined, size: 16, color: color),
             const SizedBox(width: 6),
-            Text(
+            GoopText(
               tab.label,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: 11 * Responsive.factor(context),
                 fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
                 color: isActive
                     ? color

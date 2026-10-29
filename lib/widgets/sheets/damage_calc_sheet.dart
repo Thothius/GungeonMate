@@ -4,8 +4,11 @@ import '../../providers/run_provider.dart';
 import '../../models/player.dart';
 import '../../services/damage_calculator.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../services/haptics.dart';
 
-/// equipped gun's base DPS.
+/// Damage calculator bottom sheet — opened by tapping the DPS capsule
+/// in the active-run header. Shows per-gun DPS breakdown with multiplier
+/// contributions and a total DPS readout.
 class DamageCalcSheet extends StatelessWidget {
   final PlayerSlot slot;
   const DamageCalcSheet({super.key, required this.slot});
@@ -27,11 +30,13 @@ class DamageCalcSheet extends StatelessWidget {
       items: player.items,
     );
     final bonusPercent = (multiplier - 1.0) * 100.0;
+    final totalBase = guns.fold<double>(0, (sum, g) => sum + g.dpsValue);
+    final totalBoosted = totalBase * multiplier;
 
     return SafeArea(
       child: Padding(
       padding: EdgeInsets.fromLTRB(
-        20, 16, 20, 20 + MediaQuery.of(context).viewInsets.bottom,
+        16, 8, 16, 20 + MediaQuery.of(context).viewInsets.bottom,
       ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -43,24 +48,29 @@ class DamageCalcSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ── Title row: big close button (left) + title + bonus badge ──
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
-                children: [
-                  Icon(Icons.calculate_rounded, color: Colors.amberAccent, size: 22),
-                  SizedBox(width: 10),
-                  GoopText(
-                    'DAMAGE CALCULATOR',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.amberAccent,
-                      letterSpacing: 0.8,
-                    ),
-                  ),
-                ],
+              IconButton(
+                icon: const Icon(Icons.close_rounded, size: 28, color: Colors.white70),
+                tooltip: 'Close',
+                onPressed: () {
+                  Haptics.selection();
+                  Navigator.pop(context);
+                },
               ),
+              const SizedBox(width: 4),
+              const GoopText(
+                'dmg_calc v1.0',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.amberAccent,
+                  letterSpacing: 0.5,
+                  fontFamily: 'monospace',
+                ),
+              ),
+              const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
@@ -80,7 +90,8 @@ class DamageCalcSheet extends StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Colors.white12, height: 24),
+          const Divider(color: Colors.white12, height: 20),
+          // ── Contribution breakdown ──
           if (contributions.isNotEmpty) ...[
             for (final c in contributions)
               Padding(
@@ -115,116 +126,102 @@ class DamageCalcSheet extends StatelessWidget {
               ),
             const SizedBox(height: 12),
           ],
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF000800),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.green.withValues(alpha: 0.25), width: 1.0),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    GoopText(
-                      '> DMG_CALC v1.0',
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.green.withValues(alpha: 0.5),
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    GoopText(
-                      '×${multiplier.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 9,
-                        color: Colors.greenAccent,
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                for (final gun in guns)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 5,
-                          child: GoopText(
-                            gun.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.green.withValues(alpha: 0.85),
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: GoopText(
-                            gun.dpsValue.toStringAsFixed(1),
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.green.withValues(alpha: 0.6),
-                              fontFamily: 'monospace',
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: GoopText(
-                            (gun.dpsValue * multiplier).toStringAsFixed(1),
-                            textAlign: TextAlign.right,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.greenAccent,
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
+          // ── Weapon list — card-style tiles instead of raw monospace rows ──
+          if (guns.isNotEmpty) ...[
+            for (final gun in guns)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0A0F0A),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.greenAccent.withValues(alpha: 0.12),
+                      width: 1.0,
                     ),
                   ),
-                const SizedBox(height: 8),
-                Container(height: 1, color: Colors.green.withValues(alpha: 0.15)),
-                const SizedBox(height: 6),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GoopText(
-                      'TOTAL DPS',
-                      style: TextStyle(
-                        fontSize: 9,
-                        color: Colors.green.withValues(alpha: 0.5),
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.bold,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 5,
+                        child: GoopText(
+                          gun.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                    GoopText(
-                      '${guns.fold<double>(0, (sum, g) => sum + g.dpsValue).toStringAsFixed(1)} → ${guns.fold<double>(0, (sum, g) => sum + g.dpsValue * multiplier).toStringAsFixed(1)}',
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Colors.greenAccent,
-                        fontFamily: 'monospace',
-                        fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 2,
+                        child: GoopText(
+                          gun.dpsValue.toStringAsFixed(1),
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white.withValues(alpha: 0.4),
+                            fontFamily: 'monospace',
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
+                        child: GoopText(
+                          (gun.dpsValue * multiplier).toStringAsFixed(1),
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.greenAccent,
+                            fontFamily: 'monospace',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+          const SizedBox(height: 10),
+          // ── Total DPS row ──
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF000800),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.green.withValues(alpha: 0.3), width: 1.2),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GoopText(
+                  'TOTAL DPS',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.green.withValues(alpha: 0.6),
+                    fontFamily: 'monospace',
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+                GoopText(
+                  '${totalBase.toStringAsFixed(1)} → ${totalBoosted.toStringAsFixed(1)}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Colors.greenAccent,
+                    fontFamily: 'monospace',
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
         ],
       ),
       ),

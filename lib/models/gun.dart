@@ -6,6 +6,10 @@ class Gun {
   final String icon;
   final String notes;
   final String quote;
+
+  /// Ammonomicon flavour entry — the long-form description shown in the
+  /// in-game Ammonomicon. Parsed from `ammonomicon_entry` in guns.json.
+  final String ammonomiconEntry;
   final String quality;
   final String type;
   final String dps;
@@ -35,6 +39,7 @@ class Gun {
     this.icon = '',
     this.notes = '',
     this.quote = '',
+    this.ammonomiconEntry = '',
     this.quality = '',
     this.type = '',
     this.dps = '',
@@ -74,9 +79,14 @@ class Gun {
   }) {
     final nameLower = name.toLowerCase();
     if (nameLower == 'gunderfury') {
-      if (gunderLevel < 30) return 22.5;
-      if (gunderLevel < 60) return 45.5;
-      return 75.0;
+      // Wiki-verified per-form DPS. Forms unlock at level milestones
+      // 10/20/30/40/50/60 — same thresholds as GunderfuryDashboardSliver.
+      if (gunderLevel < 20) return 25.45;
+      if (gunderLevel < 30) return 29.57;
+      if (gunderLevel < 40) return 33.157;
+      if (gunderLevel < 50) return 34.09;
+      if (gunderLevel < 60) return 107.14;
+      return 181.82;
     }
     if (nameLower == 'triple gun') {
       if (tripleForm == 1) return 18.0;
@@ -116,6 +126,7 @@ class Gun {
       icon: localGunIcon(name),
       notes: json['notes'] ?? '',
       quote: json['quote'] ?? '',
+      ammonomiconEntry: json['ammonomicon_entry'] ?? '',
       quality: json['quality'] ?? '',
       type: json['type'] ?? '',
       dps: json['dps'] ?? '',
@@ -143,6 +154,7 @@ class Gun {
       'icon': icon,
       'notes': notes,
       'quote': quote,
+      'ammonomicon_entry': ammonomiconEntry,
       'quality': quality,
       'type': type,
       'dps': dps,

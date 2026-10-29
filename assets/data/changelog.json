@@ -1,5 +1,358 @@
 [
   {
+    "version": "3.2.1",
+    "build": 161,
+    "date": "2026-10-29",
+    "title": "Unification + Flat Detail",
+    "changes": [
+      "Unified MP run chrome — one bar + compact player panel for classic AND paradox (was paradox-only)",
+      "Panel stats now DPS·COOL·CURSE·SYN·MSG; tap your avatar to send a Surprise",
+      "END RUN unified via run_lifecycle — wipes chat+log, closes all sheets; leaves menus (settings/pause only)",
+      "Compact ⋮ menus — Pause/Resume added to panel menu, dead settings sheet removed",
+      "Console chat gains system lines — Connected / Connection lost / Partner ended the run",
+      "Detail screens flattened — no tabs: stats, element tags, synergies, notes last",
+      "Shrine tiles get wiki.gg buttons; paradox bar de-bloated",
+      "Theme studio + palette maker + icon-named saves; main menu rework; settings 2-col grid; codex scroll strip (DESIGNER)"
+    ]
+  },
+  {
+    "version": "3.2.0",
+    "build": 160,
+    "date": "2026-10-28",
+    "title": "Parity + Polish",
+    "changes": [
+      "Full classic/paradox parity — pause+surprise overlays, custom avatars, run timer, health chip, MSG unread in both modes",
+      "Menus synced both directions: Codex, Themes, Settings, Leave MP, per-player item resets",
+      "Effects panel now mounts on paradox pages (5-stat row + pull-down COOL/CURSE controls)",
+      "COOL/CURSE detail screen — duplicated value fixed, symmetric ± layout",
+      "Palette Studio: simple picker by default, full studio via ADVANCED; palette tiles show color bands",
+      "Shrine picker + main menu themed polish (VISUAL batch)",
+      "Dead code swept (TileActionsSheet)"
+    ]
+  },
+  {
+    "version": "3.1.4",
+    "build": 159,
+    "date": "2026-10-28",
+    "title": "Field-Test Polish",
+    "changes": [
+      "Palettes: 9 curated palettes in 3 families + Palette Maker with live preview and prime-color slots",
+      "Messages: messenger-style convo with avatars, themed bubbles, unified event log; MSG stat on paradox panel",
+      "Surprises: 6 curated fullscreen effects (LOVE/SLAP/BLANK/MIMIC/HEAL/GUNGEON)",
+      "Active run: Periodic grid locked, instant-transfer pill (two-tap arm), effects panel stats-only with pull-down COOL/CURSE",
+      "Paradox: SafeArea top bar, 9-avatar pages, avatar zoom fix, working back during seeking, Testing Mode entry fixed",
+      "Browse: kind filters, owner counts, COMPLETE section, tier pills removed, ADD padding",
+      "Detail views: flavor text removed, gun notes as bullets, battery/clock icons on active items",
+      "Settings: regrouped GENERAL/CUSTOMIZATION/APP, dev tools under APP",
+      "Typography: 6 curated fonts, weight 200-1000, letter spacing tweaks"
+    ]
+  },
+  {
+    "version": "v3.1.3",
+    "title": "Palettes + Messages + Surprises",
+    "date": "October 2026",
+    "items": [
+      "PALETTES: 9 curated palettes in 3 families — Unicorn (Candy Rush, Neon Prism), Forge (Blacksmiths Fire, Molten Steel), Minimalist (Paper & Ink, Void White). Studio tab renamed Palettes.",
+      "PALETTE MAKER: live preview pane + 6 PRIME color slots (canvas/panels/accent/highlight/numbers/bullets) — name it, save it, it lands in the grid.",
+      "MESSAGES: messenger-style convo — avatars, names, theme-colored bubbles. Chat, transfers, surprises and emotes all log in one scrollable list.",
+      "SURPRISES: 6 curated effects — LOVE (hearts burst), SLAP (screen shake), BLANK (white flash), MIMIC (jumpscare), HEAL (warm pulse), GUNGEON (bullet scatter).",
+      "FONTS: curated to 6 (Gungeon, Megrim + 4 clean). 5-step WEIGHT BIAS (200-1000) applies app-wide; new LETTER SPACING control.",
+      "EFFECTS PANEL: compact stats row (FUSE/CD/REWARD/JAM/BOSS) with pull-down COOL/CURSE controls.",
+      "BROWSE: sub-filters (guns/items/favs), owner tabs with live counts, COMPLETE synergy section, chest-color tier chips.",
+      "LONG-PRESS: two floating quick actions (transfer/trash) replace the bottom sheet — snappier 200ms hold."
+    ]
+  },
+  {
+    "version": "v3.1.2",
+    "title": "Typed Particles + Avatar Frames",
+    "date": "October 2026",
+    "items": [
+      "PARTICLES: Rebuilt from scratch — 7 shape types (Dot, Square, Glow Orb, Shell, Rainbow, Void, Glitch) replace the 37-preset grid. Count slider 0-1000, physics toggles (Bounce/Chaos/Tilt), 3 theme-flavored color schemas per theme.",
+      "AVATARS: 20 animated frame styles — 12 regular colors + 8 specials (gold/silver sheen, rainbow spin, cursed flicker, cool pulse, fiery gradient, cosmic stars, glitch jitter). Frames sync to your partner. Picker is 2-step: portrait then dedicated frame stage.",
+      "MP: Run timer now freezes on pause and survives reconnect; classic MP lobby gets the avatar picker; pause state is single-source.",
+      "POLISH: Quiz locked chests show as desaturated silhouettes; tier badges glow; chest stats show gun/item split; empty states get themed glow + flavor text."
+    ]
+  },
+  {
+    "version": "v3.1.1",
+    "title": "Quiz Hardening + Avatar Pack + Co-op Synergy Attribution",
+    "date": "October 2026",
+    "items": [
+      "QUIZ: System-back (gesture/button) now shows the same end-run confirm as the on-screen back button — a stray swipe can't kill a streak run.",
+      "QUIZ: Every chest's poof burst is now unique per drop (per-question particle seeding); chest pops back in between questions; shake is a physical rattle.",
+      "QUIZ: Long option names auto step the whole answer grid down a font size — every tile stays consistent and readable.",
+      "QUIZ: Empty-pool defensive guard + curated answer-set integrity test covering all 31 hand-written sets.",
+      "BROWSE: Synergy candidates now show owner attribution — COMPLETES pills read · P1 / P2 / P1+P2 in co-op so you know whose inventory supplies the pieces.",
+      "AVATARS: 126 portraits now — 108 new from the 12 3x3 grid sets; the picker is a paged popup (12 per sheet, swipe between sheets, PAGE x/y).",
+      "AVATARS: 20 avatar frame styles — 12 regular colors + 8 animated specials (gold/silver sheen, rainbow spin, cursed flicker, cool pulse, fiery gradient, cosmic stars, glitch jitter). Frames sync to your partner over multiplayer.",
+      "POLISH: Font-scale capped at 1.4x app-wide with ellipsis guards on fixed-height text; panel overhaul (Junkan icon, dynamic DPS, persistence gaps)."
+    ]
+  },
+  {
+    "version": "v3.1.0",
+    "title": "Gungeonmaster Quiz — Chest-Tier Loot Naming Game",
+    "date": "October 2026",
+    "items": [
+      "QUIZ: New minigame — tap a chest tier, it pops open with a random gun or item from that chest pool; name the drop from six options (A-F).",
+      "QUIZ: All five chests on one screen (brown/blue/green/red/black) with real sprites, loot counts, and your best streak per tier (X/N).",
+      "QUIZ: BONUS CHESTS — Rainbow (every tier mixed, the hard mode) unlocks after your first chest completion; Rat (S+A elite pool) after two. Both use animated sprites.",
+      "QUIZ: One wrong answer ends the chest run — the reveal holds until you tap through it, and your best streak saves live so quitting never loses progress.",
+      "QUIZ: A flawless run through the entire pool marks the chest COMPLETED! with a floating gold label on the select screen.",
+      "QUIZ: Three rotating answer sets per drop — real same-tier names plus fabricated Gungeon-flavored fakes keep replays fresh; curated sets for iconic loot.",
+      "QUIZ: AMMONOMICON HINT — once per run, reveal the item's real flavor quote to help name it.",
+      "QUIZ: Lootbox-feel chest opening — idle bob, shake, lid flip, poof burst, elastic item reveal; reduced-motion aware.",
+      "NAV: Quiz joins the bottom navigation (Inventory, Browse, Codex, Settings, Quiz); Themes lives inside Settings only.",
+      "MENU: Customization renamed to Theme on the home menu; Gungeonmaster Quiz button added.",
+      "PROGRESS: Quiz results persist across sessions (SharedPreferences)."
+    ]
+  },
+  {
+    "version": "v3.0.0",
+    "title": "Paradox Mode — Persistent Multiplayer, Chat & Browse Rework",
+    "date": "October 2026",
+    "items": [
+      "PARADOX: Brand-new multiplayer flow in the main menu — pick MAIN or SIDEKICK, pick an avatar, enter your name, ENTER THE VOID.",
+      "PARADOX: No connection timeout while seeking — both phones keep looking until they link or you cancel.",
+      "PARADOX: Pre-run lobby shows both players (avatar + name), the RNG run title, and Session # starting at 0. Main presses START RUN.",
+      "PARADOX: Dedicated Nearby service id — Paradox can never cross-connect with classic Multiplayer sessions.",
+      "PARADOX: Persistent sessions — minimize, lock, or close the app; the session auto-restores until someone picks END RUN.",
+      "PARADOX: Foreground service keeps the link alive in the background (notification shows while connected).",
+      "PARADOX: PAUSE RUN — either player can pause for a break; the whole screen goes monochrome with a big pause icon. Radios keep re-linking every ~6s so phones can drift out of range.",
+      "PARADOX: Top MP bar with run title + session #, optional run timer and connection-health (0-100) toggles, chat button with unread badge, and a settings popup (both avatars, toggles, PAUSE/END RUN).",
+      "PARADOX: Compact player panel per page — avatar, DPS, COOL, CURSE, chat, and a clean run menu (Shrines, Codex, Reset items, Diceroller, END RUN).",
+      "PARADOX: CHAT between players — text plus Gungeon sprite emotes from any gun/item/object/pickup. Type : to autocomplete or open the picker. SURPRISE button sends floating cards to your partner.",
+      "PARADOX: Cool & Curse fullscreen — dual meters with quick +/- buttons, live effect values, and a scroll-down explainer.",
+      "PARADOX: Both players can edit both inventories — add to partner, remove from partner, or clear their inventory (co-op trust model).",
+      "MP: Protocol v3 — pause/resume, chat, surprise, peer-edit, session-meta and start-run messages; connection health now measured from real ping times.",
+      "MP: Reconnecting no longer shows the modal + banner double bars in Paradox — status lives inline in the MP bar.",
+      "DICE: Dice Roll moved into the active-run header menu (was Settings-only).",
+      "DICE: Fixed the forever-stuck dice popup — closing during a challenge or roll now cancels for both players; peer cancels close the right dialog.",
+      "INVENTORY: Gun tiles decluttered — RANGE tag hidden, DPS moved to the bottom row as a dimmed yellow tag beside the gun type.",
+      "INVENTORY: Gun/item sprites 20% smaller; pickup-order sort pills removed.",
+      "QUICK ADD: Compact one-line rows — bigger names, kind tags (GUN/ACTIVE/PASSIVE/COMPANION), OWNED tag; the whole row taps to add. Title and ADVANCED LIBRARY link removed; bigger close icon.",
+      "BROWSE: New filter bar — ALL, TIERS (multi-select tier chips, none selected = everything), and SYNERGIES showing what would complete synergies for the combined inventories.",
+      "BROWSE: Slim list rows — name, gun type, DPS, price only; big rectangular ADD button baked into the right edge of each row.",
+      "THEMES: Picker cut to three — Unicorn, Forge Master, Moonlit Chamber. Users on removed or custom themes migrate to Moonlit Chamber; custom theme tiles removed.",
+      "VERSION: Protocol v3 requires both players on v3.0.0+ — classic multiplayer unchanged."
+    ]
+  },
+  {
+    "version": "v2.1.15",
+    "title": "Themes Everywhere + Font Fix + Particle Atmosphere",
+    "date": "September 2026",
+    "items": [
+      "THEME: Themes option added to active run header menu — no more leaving the run to change themes.",
+      "THEME: Themes tab added to bottom navigation (palette icon) — 5 destinations now: Inventory, Browse, Codex, Settings, Themes.",
+      "THEME: Themes & Customization tile added to top of Settings screen.",
+      "THEME: Experience Studio back button now hidden when opened as a bottom nav tab (no broken back arrow).",
+      "FONT: Picked font now applies to ALL text in the app — fixed missing fontFamily on textTheme meant active run panels/items used Roboto instead of the selected font.",
+      "FONT: Removed hardcoded ArcadeClassic/EnterTheGungeonBig overrides in gun stats and item body — these now respect the user's font choice.",
+      "FONT: Removed Montserrat override on main menu and settings — user's picked font now applies everywhere per the font rule.",
+      "PARTICLES: Particles now ON by default — matches the real Enter the Gungeon's atmospheric dust motes in every chamber.",
+      "PARTICLES: Gungeon Dust preset retuned — smaller (0.8-2.8px), slower (3-10 speed), longer lifetime (8-14s), lower turbulence for organic drift matching the real game.",
+      "PARTICLES: Default count doubled (16→32) for denser atmosphere. Default opacity tuned (0.7→0.55) for subtlety.",
+      "PARTICLES: ThemeCuration default count raised (16→28) for richer per-theme particle identity.",
+      "PARTICLES: Prefs key bumped to v2 so existing users get the new on-by-default experience.",
+      "THEME: Custom palette editor now shows descriptions under each color field explaining what it affects (Scaffold = background, Card = panels, Primary = accents, etc.).",
+      "THEME: Info icon (i) on each color field — tap or long-press for a detailed dialog explaining what the color controls."
+    ]
+  },
+  {
+    "version": "v2.2.0",
+    "title": "Custom Theme Color Picker + Theme System Overhaul",
+    "date": "August 2026",
+    "items": [
+      "THEME: New HSV color picker dialog with 2D saturation-value panel, hue slider, hex input, and live preview.",
+      "THEME: CUSTOM tile palette editor — 6 editable color fields (Scaffold, Card, Primary, Secondary, Headline, Bullet) + RANDOMIZE button.",
+      "THEME: Custom palette now persists to disk and loads at app startup.",
+      "THEME: SAVE button visible on any theme — save customized variants of premades too.",
+      "THEME: Saved themes now persist VisualPrefs on restore (was losing settings on restart).",
+      "THEME: Delete indicator on saved tiles fixed — only shows after long-press, not always visible.",
+      "THEME: Active checkmark added to saved theme tiles.",
+      "THEME: Name validation — 24-char max, empty check, duplicate detection.",
+      "UI: Settings tab hardcoded Colors.white replaced with theme-aware onSurface (dice picker, tile labels, chevron, MP status).",
+      "UI: Save/delete dialogs hardcoded Colors.white replaced with onSurface."
+    ]
+  },
+  {
+    "version": "v2.1.0",
+    "title": "Asset Optimization + Settings Reorg",
+    "date": "August 2026",
+    "items": [
+      "ASSET: Recompressed 14 theme splash JPGs from 2048×2048 to 1200×1200 — APK shrunk from 90.8MB to 37.6MB (59% smaller). Zero visible quality loss since max display size is 800px wide.",
+      "ASSET: Deleted unreferenced wp_anim_01_galaxy.mp4 (8.9MB dead asset with zero code references).",
+      "UI: Save Run button now always visible in Settings (was hidden during MP with no rationale).",
+      "UI: Dice Roll action moved into the DICE section (renamed from 'DICE STYLE') — action and appearance now co-located.",
+      "UI: MULTIPLAYER settings card hidden when solo (no MP, no co-op) — removes useless 'SOLO' status clutter.",
+      "UI: 'DEBUG' section renamed to 'DEV TOOLS' — matches the tile label, clearer intent.",
+      "CLEAN: Deleted dead AppearanceTab widget (580+ lines, zero references).",
+      "FIX: Missing closing paren in codex_detail_screen SafeArea wrapper.",
+      "FIX: _scheduleSave() infinite recursion — timer called itself instead of _saveRun(), preventing all persistence."
+    ]
+  },
+  {
+    "version": "v2.0.9",
+    "title": "Performance + Bughunt",
+    "date": "August 2026",
+    "items": [
+      "PERF: RepaintBoundary added to all animated widgets (header pulse, dice roll, connect screen, end-run dialog) and all inventory list items — stops unnecessary repaints on every frame.",
+      "PERF: All 56 Image.asset calls now use cacheWidth/cacheHeight — Flutter decodes at display size instead of full resolution, cutting memory usage significantly.",
+      "PERF: JSON loading parallelized with Future.wait — 6 asset files loaded simultaneously instead of sequentially. SharedPreferences loads also parallelized.",
+      "PERF: context.select replaces context.watch in 6 files — dashboards and item detail sections only rebuild when their specific fields change, not on every RunProvider notification.",
+      "PERF: _saveRun debounced — 28+ individual SharedPreferences writes batched into a single write after 400ms of quiet.",
+      "FIX: startCoopPlayer now guarded against double-call — prevents duplicate Cultist characters in MP sessions.",
+      "FIX: Shared-state cache cleared on MP disconnect — prevents stale coolness/curse values causing incorrect delta calculations after reconnect.",
+      "FIX: Pending gifts capped at 50 — prevents unbounded memory growth if peer never confirms.",
+      "FIX: Snapshot deduplication — duplicate gun/item names in peer snapshots no longer create duplicate inventory entries.",
+      "FIX: Mounted checks added to PageController.animateToPage and emote timer callback in active run screen.",
+      "FIX: Negative page index bounds check added to active run screen.",
+      "FIX: onRunChanged early-exits if MpSync is disposed.",
+      "DEP: provider updated to ^6.1.5, nearby_connections updated to ^4.3.0.",
+      "DEP: Removed unused intl dependency."
+    ]
+  },
+  {
+    "version": "v2.0.8",
+    "title": "FIX — MP Reconnect Blank Screen",
+    "date": "August 2026",
+    "items": [
+      "FIX: Critical — when one player refreshed/restarted, the other player got a blank 'No inventory loaded' screen. The restarting player broadcast a snapshot with an empty character name (run state not yet restored), which wiped the survivor's main slot. applyPeerSnapshot now ignores snapshots with empty character names instead of overwriting the slot with a null character.",
+      "FIX: Sidekick reconnect could lose the coop slot if the save timer didn't fire before app kill. tryRestore now ensures the coop slot has The Cultist with starting items when restoring a Sidekick session.",
+      "FIX: Main reconnect could broadcast the wrong character if RunProvider's own _loadSavedRun loaded a stale solo run. tryRestore now validates the main character against the saved MP character and re-initializes if they don't match."
+    ]
+  },
+  {
+    "version": "v2.0.7",
+    "title": "FIX — MP Sidekick View + Cultist Lock",
+    "date": "August 2026",
+    "items": [
+      "FIX: Critical — Sidekick saw no MP panels and had no coop page. startAsSidekick only set up the main slot, which got overwritten by Main's snapshot. The coop slot was never initialized, so hasCoop was false — Sidekick saw a solo view instead of the MP view. Now startAsSidekick also calls startCoopPlayer so the coop slot has Cultist with starting items.",
+      "FIX: Main couldn't see Sidekick's starting items. Sidekick's snapshot broadcasts from the coop slot, which was null. Now the coop slot is populated with Cultist's starting loadout.",
+      "UI: Sidekick role now locks character to The Cultist — the only valid Sidekick character. Character preview shows a lock icon and 'Sidekick always plays The Cultist' label instead of a chevron. Tapping the preview does nothing in Sidekick mode."
+    ]
+  },
+  {
+    "version": "v2.0.6",
+    "title": "FIX — MP Permission Softlock",
+    "date": "August 2026",
+    "items": [
+      "FIX: Critical — MP permission softlock. On Android 12+, locationWhenInUse is not required for Nearby Connections (nearbyWifiDevices replaces it), but the permission check required it anyway. Users with BT + nearbyWifiDevices granted but location denied were stuck on the permission-denied screen with no way forward. Now accepts nearbyWifiDevices as satisfying the location requirement.",
+      "FIX: Permission-denied screen had no RETRY button — after granting permissions in OS settings and returning, the screen stayed stuck. Only CANCEL (back to lobby) worked. Added RETRY button that re-checks permissions and resumes the connection flow in-place."
+    ]
+  },
+  {
+    "version": "v2.0.5",
+    "title": "UI Polish — Item Detail Cleanup, Premium Wiki Sections, Header Layout",
+    "date": "August 2026",
+    "items": [
+      "UI: Remove redundant effect text blob from item detail view — stats are already shown as pills, quote is in the header. Cleaner, less repetitive.",
+      "UI: Upgrade wiki section cards (Effects, Notes, Interactions, Tips) from plain Material cards to themed containers with accent-colored borders, soft glow shadows, and rounded corners.",
+      "UI: Add subtle hairline dividers between top-level bullet points in wiki sections for visual rhythm and premium feel.",
+      "UI: Active run header — single-row layout, remove sponge button, freeze font scaling for consistent stat display.",
+      "UI: Codex — NPC idle GIF support, collapsible bookmark tab strip, clamp tab index to prevent range errors on empty tab lists.",
+      "FIX: Android build — Kotlin daemon crash (in-process compilation), SDK 36 for media_kit_video, Java 8 warnings resolved.",
+      "FIX: Codex tab strip — clamp selected index to prevent RangeError when tabs list is empty."
+    ]
+  },
+  {
+    "version": "v2.0.4",
+    "title": "UI Polish — Stat Colors, Label Cleanup, Hit Targets, Cultist Filtering",
+    "date": "August 2026",
+    "items": [
+      "UI: Color stat cards by category (Combat/Handling/Meta) with theme-tied per-group colors. Compact detail header.",
+      "UI: Shrink secondary stat chips — tighter spacing, smaller icons, lighter borders for cleaner panel layout.",
+      "UI: Trim verbose labels — MP lobby 'YOUR IDENTITY'/'CHOOSE YOUR ROLE'/'YOUR GUNGEONEER'/'Tap to change' removed. Character select subtitles unified to 'Choose Gungeoneer'. Settings AppBar restored with back button.",
+      "UI: Hide The Cultist from solo and coop character select. Only MP Sidekick can pick Cultist. MAIN role filters it out.",
+      "UI: Fix CUSTOM theme tile sizing + add highlight border.",
+      "FIX: HeaderMenu panel toggle hit area — radio icon was 20px tappable, now 44px full-row height with HitTestBehavior.opaque. Meets Material/Apple minimum touch target.",
+      "FIX: MP map icon lookup — player tabs passed nicknames instead of character names to gungeoneerMapIconPath(). Now uses myCharacterName/peerCharacterName.",
+      "FIX: PLAY AS in multiplayerPick mode — character detail screen now returns the selected character instead of starting a solo run when opened from MP character picker.",
+      "REWORK: 10-item rework — MP lobby (PINs removed, role selection, visual overhaul), quick-add UX (search at bottom, auto-clear, toast), char select (10% padding, long-press detail, no '?' buttons), gungeoneer detail (hero sprite, compact loadout, PLAY AS button), settings (DANGER ZONE removed, END RUN/RESET full-width), codex tabs (full opacity, bigger), map icons (9x9 pixel art in headers)."
+    ]
+  },
+  {
+    "version": "v2.0.3",
+    "title": "Connectivity Hardening — Main-Authoritative Shared State + Reconnect Fixes",
+    "date": "August 2026",
+    "items": [
+      "FIX: Critical — phantom discovery after cancellation. _resumeDiscovery() could restart the BT/Wi-Fi radio after stopSearching() fired, because it checked _discovering but not _discoveryActive. A pending Future.delayed callback would relaunch discovery after the user cancelled. Now guarded.",
+      "FIX: Critical — shared-state sync lost concurrent writes. Both sides overwrote each other's coolness/curse/shrines with no ordering. Switched to Main-authoritative model: Main's snapshot is the source of truth. Sidekick sends MpSharedStateDelta messages (signed deltas) when it modifies shared state; Main applies and re-broadcasts. Eliminates lost-write races.",
+      "FIX: Critical — hello handshake always sent 'unknown' as app version. MpSync.appVersionString was never set by main.dart (which sets MpSession.appVersionString). Now wired in MpSession constructor.",
+      "FIX: Critical — host disconnect leaves Sidekick stuck in run. cancel() (used by 'Leave MP') didn't send MpEndRun to the peer, so the Sidekick never knew the host left. And when MpEndRun was received, the Sidekick's MP session wasn't torn down — the transport stayed live with no cleanup. Now cancel() always sends MpEndRun before teardown, and the receiver tears down via _onPeerEndRun().",
+      "TUNE: Heartbeat interval 10s → 5s — dead-peer detection was taking up to 35s, now 25–30s.",
+      "TUNE: Reconnect cadence cap at 50% duty cycle — after 5 min disconnected, Sidekick was dropping to 5s on / 15s off (25% duty). Caused 'can't reconnect' reports. Now capped at 5s/5s.",
+      "CLEAN: Extracted 800ms radio cooldown to named constant (MpSession.radioCooldownMs) with explanatory comment.",
+      "PURGE: Removed MpHello.sessionName/sessionId (never set, never read).",
+      "PURGE: Removed MpPing.lastSeq/MpPong.lastSeq (old desync-detection leftover).",
+      "PURGE: Removed MpSnapshot.tsMs (always 0, never read — Main-authoritative model doesn't need timestamp ordering).",
+      "CLEAN: Consolidated appVersionString — removed duplicate static, single source of truth.",
+      "DOCS: Fixed stale 'timestamp ordering' doc on applySharedStateFromPeer. Fixed heartbeat doc comment. Updated protocol design notes for Main-authoritative model."
+    ]
+  },
+  {
+    "version": "v2.0.2",
+    "title": "Simple Host/Join + Dead Code Purge + AutoConnect Fix",
+    "date": "August 2026",
+    "items": [
+      "FIX: Critical — joiner used AutoConnectModeNone (browse mode) instead of AutoConnectModePin. Joiner discovered hosts but never auto-connected. Now uses AutoConnectModePin(pinCode) to automatically connect to the host advertising the matching PIN.",
+      "FIX: Joiner connectReason changed from browsing to joining — connect screen now shows 'Connecting to host…' instead of 'Searching for games…'.",
+      "FIX: applyPeerSnapshot no longer creates a placeholder Cultist in the coop slot when null — peer snapshot arrives and sets the correct character directly. Eliminates brief Cultist flash before partner's character appears.",
+      "REWORK: Connect screen rewritten — clean connecting/connected/error/permission states. Pulsing portrait pair with link icon. PIN display for host. 'Connected!' success state with checkmark before auto-navigating to run. No pairing leftovers.",
+      "PURGE: Removed ~600 lines of dead pairing code. mp_pairing.dart and paired_partner.dart deleted entirely. paired_partners_store.dart simplified to nickname-only. mp_session.dart, mp_sync.dart, mp_recovery.dart, mp_store.dart, mp_link.dart all stripped of pairing/paired parameters, flags, and code paths.",
+      "CLEAN: main.dart no longer calls PairedPartnersStore.load() at startup.",
+      "CLEAN: MpEndpoint model simplified — removed isPaired field and matchesPairId method.",
+      "CLEAN: AutoConnectModePairId sealed class removed from mp_link.dart.",
+      "CLEAN: MpStore no longer persists isPaired or pairId keys. Old keys added to cleanup list."
+    ]
+  },
+  {
+    "version": "v2.0.1",
+    "title": "Paired Game Flow + Pairing Separation + Hello Handshake Fix",
+    "date": "August 2026",
+    "items": [
+      "FIX: Critical — onPeerConnected was never called in MpSync after hello handshake succeeded. Sessions never transitioned to connected, pairing initiator never sent MpPair, reconnect success never fired. Now called after hello validation passes.",
+      "REWORK: Host flow redesigned — after picking character, host chooses between Paired Game (auto-connect to a paired partner) or Random Game (generate a PIN for anyone to join). Clean game type selection cards.",
+      "REWORK: Pairing fully separated from hosting/joining. Pairing is accessed from bottom links only, not mixed into the host flow.",
+      "FIX: Paired connections always show a role picker dialog — never assume role from last connection. Both devices defaulting to the same role was the #1 paired-connection bug.",
+      "FIX: lastRole saved during pairing — initiator saves 'main', joiner saves 'sidekick'. Future connections default to the correct role.",
+      "FIX: markConnectedWithRole called after successful paired connection — persists the role for one-tap reconnect.",
+      "FEATURE: Pairing success celebration — elastic heart icon animation with 'Paired!' message on connect screen. Auto-pops back to lobby.",
+      "FEATURE: Pairing-specific connect screen messaging — shows 'Pairing devices… make sure both devices are on the same pairing PIN' and displays the pairing PIN for verification.",
+      "FIX: Pairing-specific error handling — shows 'Pairing failed' with clear instructions instead of generic 'Connection failed'.",
+      "FIX: setPairingMode flag in MpSync — snapshots are not exchanged during pairing, only pair handshake messages flow.",
+      "FIX: Pairing mode cleaned up on complete, error, and disconnect — no stale state.",
+      "FIX: Memory leak — pairing complete listener properly removed in connect screen dispose."
+    ]
+  },
+  {
+    "version": "v2.0.0",
+    "title": "Multiplayer Rebuilt From Scratch — Simple, Reliable, Automatic",
+    "date": "August 2026",
+    "items": [
+      "REBUILD: Entire multiplayer system rebuilt from scratch. The old 2,662-line god class (MultiplayerSession) replaced with 6 focused modules: MpLink (transport), MpSync (state sync), MpRecovery (reconnect + restore), MpPairing (one-time pairing), MpStore (persistence), and MpSession (thin facade). Each module has one job.",
+      "FEATURE: Host creates a game and gets a 4-digit PIN. Sidekick sees a live list of available games and joins by entering the PIN. Clean lobby with character picker, nickname, and step-by-step flow.",
+      "FEATURE: Paired devices connect with one tap — no PIN needed. One-time pairing flow creates a persistent partner record. Paired partners appear as one-tap entries in the lobby.",
+      "FEATURE: Automatic reconnect after Bluetooth/Wi-Fi range loss, app backgrounding, or unexpected disconnect. Dismissable dialog shows 'Reconnecting…' with a persistent banner if dismissed. Recovery uses adaptive cadence (aggressive for 60s, moderate for 5 min, relaxed after).",
+      "FEATURE: Silent app-kill restore. Run state saved every 5 seconds. On app restart, the session silently re-enters with the same role, character, and inventory. No manual reload needed.",
+      "REMOVED: Diagnostic console, multiplayer log panel, manual Saved Sessions list, pause/resume controls, and repair-oriented UI. No internal logs or confusing errors exposed to users.",
+      "FIX: Snapshot echo loop prevented with _applyingRemote guard. Gifts tracked as pending until confirmed by peer snapshot. Duplicate messages deduplicated via ID sets.",
+      "FIX: Solo run preservation — pre-MP run state backed up before Sidekick joins, restored on cancel. Solo run backup loaded before teardown to prevent data loss on app-kill restore cancel.",
+      "FIX: Heartbeat restarted on app resume to detect stale connections. Transport transitions guarded against double-tap races. Stale Nearby endpoints cleaned up after 8 seconds."
+    ]
+  },
+  {
+    "version": "v1.9.63",
+    "title": "Experience Studio Redesign + Matrix Removal + Border Crash Fix",
+    "date": "August 2026",
+    "items": [
+      "REWORK: Experience Studio redesigned from a 5-step wizard to a 4-tab picker (Theme, Particles, Typography, Ambiance). Tabs sit on top — no more Next/Back wizard navigation. Palette variants folded inline into the Theme tab. Apply button always visible in the top bar. A side bookmark button on the right edge slides in a fullscreen preview showing the theme splash + rich sample UI scene (item card, stat chips, buttons, synergy glow, color palette strip) in full glory. Tap anywhere to dismiss the preview and return to the picker.",
+      "FIX: borderRadius + non-uniform border color crashes fixed across compact_run_mode, experience_studio_screen, shrine_picker_screen, stats_detail_screen, run_log_screen, and home_customization_sheet. These were causing hundreds of 'A borderRadius can only be given on borders with uniform colors' exceptions that broke codex and compact modes.",
+      "REMOVED: Gungeon Matrix display mode (RunDisplayMode.matrix) removed entirely. matrix_mode.dart and gungeon_matrix_rain.dart deleted. All references removed from player_page, run_display_mode_bar, mode_picker_onboarding, and app_theme. RunDisplayMode enum now has 4 values: classic, codex, compact, signature.",
+      "FIX: Shrine button on active run panel now opens the shrine picker directly when no shrines are used yet, instead of showing a 'No Shrines' info dialog. Shrines are collected during runs as they appear as rooms — the empty state should be actionable, not informational.",
+      "ASSESSMENT: Mega critical UX/UI unification assessment written to docs/UX_UI_UNIFICATION_ASSESSMENT.md. Covers all 24 screens, 4 active-run modes, theme system, visual pattern inconsistencies, and prioritized action items."
+    ]
+  },
+  {
     "version": "v1.9.62",
     "title": "Unified Settings — Gameplay + App Merged, Dialogue Removed",
     "date": "August 2026",

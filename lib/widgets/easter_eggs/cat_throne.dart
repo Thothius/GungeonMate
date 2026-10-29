@@ -113,6 +113,8 @@ class _CuriousCatStareWidgetState extends State<CuriousCatStareWidget>
         'assets/images/items/cat_bullet_king_throne.webp',
         filterQuality: FilterQuality.none,
         fit: BoxFit.contain,
+        cacheWidth: 280,
+        cacheHeight: 280,
       ),
     );
   }

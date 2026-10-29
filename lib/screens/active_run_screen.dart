@@ -3,20 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
+import '../theme/tokens.dart';
 import '../models/gun.dart';
 import '../models/player.dart';
 import '../widgets/game_icon.dart';
 import '../services/haptics.dart';
-import 'browse_screen.dart';
-import '../services/multiplayer_session.dart';
+import '../services/mp_session.dart';
 import '../models/multiplayer_messages.dart';
-import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/player_header.dart';
 import '../widgets/active_run/player_page.dart';
-import '../widgets/active_run/modes/run_display_mode_bar.dart';
 import '../widgets/active_run/dice_roll.dart';
 import '../widgets/active_run/emote_animations.dart';
+import '../widgets/paradox/paradox_bar.dart';
+import '../widgets/paradox/pause_overlay.dart';
+import '../widgets/paradox/surprise_overlay.dart';
+import '../widgets/state_widgets.dart';
+import '../utils/responsive.dart';
 
 class ActiveRunScreen extends StatefulWidget {
   final VoidCallback? onRequestBrowse;
@@ -34,7 +37,7 @@ class ActiveRunScreen extends StatefulWidget {
 class _ActiveRunScreenState extends State<ActiveRunScreen> {
   late final PageController _page;
   int _currentPage = 0;
-  MultiplayerSession? _mpSession;
+  MpSession? _mpSession;
   String? _lastShownError;
 
   // Emote overlay state — kiss/slap animations shown via root Overlay.
@@ -48,10 +51,11 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      _mpSession = Provider.of<MultiplayerSession>(context, listen: false);
+      _mpSession = Provider.of<MpSession>(context, listen: false);
       _mpSession?.addListener(_onMpSessionChanged);
       _mpSession?.onDiceChallenge = _handleIncomingDiceChallenge;
       _mpSession?.onEmote = _handleIncomingEmote;
+      _mpSession?.onGiftReceived = _handleIncomingGift;
     });
   }
 
@@ -61,11 +65,12 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
+      routeSettings: const RouteSettings(name: '__dice_challenge'),
       builder:
           (ctx) => AlertDialog(
-            backgroundColor: const Color(0xFF1B1816),
+            backgroundColor: AppTheme.flair.card,
             title: const GoopText(
-              '≡ƒÄ▓ Gunfortuna Challenge! ≡ƒÄ▓',
+              '\u{1F3B2} Gunfortuna Challenge! \u{1F3B2}',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
                 color: Color(0xFFFFD54F),
@@ -87,14 +92,14 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                   style: TextStyle(color: Colors.white38),
                 ),
               ),
-              ElevatedButton(
+              FilledButton(
                 onPressed: () {
                   _mpSession?.onDiceCancel = null;
                   Navigator.pop(ctx);
                   _mpSession?.sendDiceAccept();
                   showDiceRollDialog(context, isChallenged: true);
                 },
-                style: ElevatedButton.styleFrom(
+                style: FilledButton.styleFrom(
                   backgroundColor: const Color(0xFFFFD54F),
                   foregroundColor: Colors.black,
                 ),
@@ -110,7 +115,14 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
 
   void _handleIncomingDiceCancel() {
     if (!mounted) return;
-    Navigator.of(context).pop();
+    // Pop ONLY a dice-related route — blindly popping the top route
+    // could close an unrelated sheet while leaving the dice dialog
+    // stuck open (the reported can't-close bug).
+    final navigator = Navigator.of(context);
+    navigator.popUntil((route) {
+      final name = route.settings.name;
+      return name == null || !name.startsWith('__dice');
+    });
   }
 
   // ---- MP Emotes (kiss / slap) ------------------------------------------
@@ -124,6 +136,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     if (i == myMpPage && _currentPage == myMpPage) {
       _showEmoteMenu();
     } else {
+      if (!mounted || !_page.hasClients) return;
       _page.animateToPage(i,
           duration: const Duration(milliseconds: 260),
           curve: Curves.easeOut);
@@ -135,7 +148,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     if (session == null || !session.isConnected) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: GoopText('Not connected — can\'t send emote'),
+          content: GoopText('Not connected: can\'t send emote'),
           duration: Duration(seconds: 2),
           behavior: SnackBarBehavior.floating,
         ),
@@ -144,27 +157,38 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     }
     Haptics.selection();
     final peerName = session.peerNickname ?? 'peer';
+    final flair = AppTheme.flair;
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: AppTheme.flair.card,
+      backgroundColor: flair.card,
       useSafeArea: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
       builder: (ctx) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            GoopText(
-              'Send to $peerName',
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                color: Colors.white70,
+            // Drag handle
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(2),
               ),
             ),
             const SizedBox(height: 16),
+            GoopText(
+              'Send to $peerName',
+              style: TextStyle(
+                fontSize: FontSizes.bodyMedium,
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+            ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -190,8 +214,69 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            Divider(color: Colors.white.withValues(alpha: 0.06)),
+            const SizedBox(height: 8),
+            // Quick session teardown
+            TextButton.icon(
+              onPressed: () {
+                Navigator.pop(ctx);
+                _confirmEndSession();
+              },
+              icon: Icon(Icons.logout_rounded,
+                  size: 16, color: MpColors.danger.withValues(alpha: 0.7)),
+              label: GoopText('End MP Session',
+                  style: TextStyle(
+                      fontSize: FontSizes.labelMedium,
+                      fontWeight: FontWeight.w700,
+                      color: MpColors.danger.withValues(alpha: 0.7))),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _confirmEndSession() {
+    Haptics.selection();
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.flair.card,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radii.lg),
+          side: BorderSide(
+              color: MpColors.danger.withValues(alpha: 0.3), width: 1.5),
+        ),
+        icon: const Icon(Icons.logout_rounded,
+            size: 32, color: MpColors.danger),
+        title: const GoopText('End Multiplayer Session?',
+            style: TextStyle(fontWeight: FontWeight.w900)),
+        content: GoopText(
+          'This will disconnect from your partner. Your run data is preserved.',
+          style: TextStyle(
+              fontSize: 12.5 * Responsive.factor(context),
+              color: Colors.white70, height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const GoopText('CANCEL',
+                style: TextStyle(fontWeight: FontWeight.w800)),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: MpColors.danger,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.pop(ctx);
+              _mpSession?.cancel();
+            },
+            child: const GoopText('END SESSION',
+                style: TextStyle(fontWeight: FontWeight.w900)),
+          ),
+        ],
       ),
     );
   }
@@ -223,9 +308,42 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     Overlay.of(context).insert(entry);
     _emoteTimer = Timer(duration, () {
       _emoteTimer = null;
+      if (!mounted) return;
       entry.remove();
       _emoteOverlayEntry = null;
     });
+  }
+
+  // ---- MP Gift received feedback ---------------------------------------
+
+  void _handleIncomingGift(String kind, String name) {
+    if (!mounted) return;
+    Haptics.success();
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (messenger == null) return;
+    final icon = kind == 'gun' ? Icons.gps_fixed : Icons.inventory_2_rounded;
+    final label = kind == 'gun' ? 'Received gun' : 'Received item';
+    messenger.showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(icon, color: MpColors.connected, size: 18),
+            const SizedBox(width: 10),
+            Expanded(
+              child: GoopText('$label: $name',
+                  style: const TextStyle(fontWeight: FontWeight.w700)),
+            ),
+          ],
+        ),
+        backgroundColor: AppTheme.flair.card,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 4),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radii.md),
+          side: const BorderSide(color: MpColors.connected, width: 1.5),
+        ),
+      ),
+    );
   }
 
   @override
@@ -242,6 +360,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       if (_mpSession!.onEmote == _handleIncomingEmote) {
         _mpSession!.onEmote = null;
       }
+      if (_mpSession!.onGiftReceived == _handleIncomingGift) {
+        _mpSession!.onGiftReceived = null;
+      }
       _mpSession!.removeListener(_onMpSessionChanged);
     }
     _page.dispose();
@@ -250,10 +371,16 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
 
   void _onMpSessionChanged() {
     if (!mounted || _mpSession == null) return;
-    final status = _mpSession!.status;
+    final phase = _mpSession!.phase;
     final error = _mpSession!.error;
 
-    if (status == MpStatus.error && error != null && error != _lastShownError) {
+    // Reset error tracking when leaving the error phase so the
+    // same error can be re-shown after a retry.
+    if (phase != MpPhase.error) {
+      _lastShownError = null;
+    }
+
+    if (phase == MpPhase.error && error != null && error != _lastShownError) {
       _lastShownError = error;
       _showErrorDialog(error);
     }
@@ -275,8 +402,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
             content: GoopText(message),
             actions: [
               TextButton(
-                onPressed: () async {
-                  await _mpSession?.saveCurrentSession();
+                onPressed: () {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -298,9 +424,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                 label: const GoopText('Retry Reconnect'),
                 onPressed: () {
                   Navigator.pop(context);
-                  if (_mpSession?.canReconnect == true) {
-                    _mpSession?.reconnect();
-                  }
+                  _mpSession?.reconnect();
                 },
               ),
             ],
@@ -315,21 +439,28 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final main = state.main;
 
     if (main.character == null) {
-      return const Scaffold(
-        body: Center(child: GoopText('No inventory loaded')),
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: EmptyState(
+          icon: Icons.inventory_2_outlined,
+          message: 'No run active. Pick a Gungeoneer to start tracking your inventory.',
+          actionLabel: 'Start a Run',
+          onAction: () => Navigator.of(context).maybePop(),
+        ),
       );
     }
 
-    final session = context.watch<MultiplayerSession>();
+    final session = context.watch<MpSession>();
     final isMpActive = session.isActive;
     final hasCoop = state.hasCoop;
-    // Snap back if current page no longer exists (coop removed or MP ended)
+    // Clamp current page synchronously to avoid rendering an
+    // out-of-range page before the post-frame jump.
     final maxPage = hasCoop ? 1 : 0;
-    if (_currentPage > maxPage) {
+    if (_currentPage < 0 || _currentPage > maxPage) {
+      _currentPage = _currentPage.clamp(0, maxPage);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted && _page.hasClients) {
-          _page.jumpToPage(maxPage);
-          setState(() => _currentPage = maxPage);
+          _page.jumpToPage(_currentPage);
         }
       });
     }
@@ -345,6 +476,14 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       duration: const Duration(milliseconds: 260),
       curve: Curves.easeOut,
     );
+
+    // MP sessions (paradox + classic) get the pause + surprise overlay
+    // treatment: pause desaturates/dims the whole screen, surprises
+    // float on top. Solo runs render the plain column.
+    final bool mpSession = isMpActive;
+    Widget wrapOverlays(Widget w) => mpSession
+        ? PauseOverlay(child: SurpriseOverlayHost(child: w))
+        : w;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -365,18 +504,20 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                 },
                 child: const Icon(Icons.add, size: 32),
               ),
-      body: Column(
+      body: wrapOverlays(Column(
         children: [
           if (p.windgunnerCountdown > 0) _buildWindgunnerBanner(p),
-          // In MP: unified MpHeader replaces both player switcher and
-          // old status bar. In solo coop: plain PlayerSwitcher.
+          // In MP: the unified session bar replaces both player
+          // switcher and old status bar — one chrome for classic +
+          // paradox. In solo coop: plain PlayerSwitcher.
           if (isMpActive)
-            MpHeader(
+            SafeArea(
+              bottom: false,
+              child: ParadoxBar(
               currentPage: _currentPage,
-              hasCoop: hasCoop,
-              session: session,
               onPick: mpTabTap,
-            )
+            ),
+          )
           else if (hasCoop)
             PlayerSwitcher(
               currentPage: _currentPage,
@@ -384,15 +525,12 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               coopName: state.coop!.character?.name ?? 'P2',
               onPick: navigateTo,
             ),
-          // Display mode switcher bar — run-scope, sits between the
-          // header and the per-player PageView. Collapsed by default.
-          const RunDisplayModeBar(),
           Expanded(
             child: PageView(
               controller: _page,
               physics:
                   hasCoop
-                      ? const ClampingScrollPhysics()
+                      ? const PageScrollPhysics(parent: ClampingScrollPhysics())
                       : const NeverScrollableScrollPhysics(),
               onPageChanged: (i) {
                 setState(() => _currentPage = i);
@@ -411,7 +549,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 
@@ -419,15 +557,20 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     final p = Provider.of<RunProvider>(context, listen: false);
     final focusNode = FocusNode();
     final quickAddController = TextEditingController(text: _quickQuery);
+    final addedToast = ValueNotifier<String?>(null);
+    Timer? addedToastTimer;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      backgroundColor: const Color(0xFF131316),
-      shape: const RoundedRectangleBorder(
+      // Cap sheet width on tablets/desktop — a full-width sheet on a
+      // 1600px window stretches rows absurdly.
+      constraints: const BoxConstraints(maxWidth: 640),
+      backgroundColor: AppTheme.flair.card,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        side: BorderSide(color: Color(0xFF303036), width: 1.5),
+        side: BorderSide(color: AppTheme.flair.primary.withValues(alpha: 0.2), width: 1.5),
       ),
       builder: (bContext) {
         return StatefulBuilder(
@@ -469,12 +612,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               duration: const Duration(milliseconds: 100),
               padding: MediaQuery.of(sContext).viewInsets,
               child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(sContext).size.height * 0.65,
-                ),
+                height: MediaQuery.of(sContext).size.height * 0.6,
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
                     // Handlebar indicator
                     Container(
@@ -487,324 +627,317 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                       ),
                     ),
 
+                    // Header — compact: centered "Tap to add" instruction
+                    // on the same row as a 25%-larger close icon. The old
+                    // title + "ADVANCED LIBRARY" link are gone (v3 cleanup).
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GoopText(
-                          () {
-                            final mpSession =
-                                context.read<MultiplayerSession>();
-                            if (mpSession.isActive &&
-                                !mpSession.isSimulated &&
-                                mpSession.mySlot != slot) {
-                              return 'ADD TO ${mpSession.peerNickname?.toUpperCase() ?? 'PEER'}';
-                            }
-                            return slot == PlayerSlot.coop
-                                ? 'QUICK ADD TO PLAYER 2'
-                                : 'QUICK ADD TO RUN';
-                          }(),
-                          style: const TextStyle(
-                            fontFamily: 'EnterTheGungeonBig',
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.amberAccent,
-                            letterSpacing: 1.0,
+                        const SizedBox(width: 40),
+                        const Expanded(
+                          child: Center(
+                            child: GoopText(
+                              'Tap to add',
+                              style: TextStyle(
+                                fontSize: FontSizes.labelMedium,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white54,
+                                fontStyle: FontStyle.italic,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
                           ),
                         ),
-                        TextButton(
+                        IconButton(
+                          icon: const Icon(Icons.close,
+                              color: Colors.white54, size: 25),
+                          tooltip: 'Close',
+                          padding: EdgeInsets.zero,
+                          constraints:
+                              const BoxConstraints(minWidth: 40, minHeight: 40),
                           onPressed: () {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.pop(bContext);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              if (!context.mounted) return;
-                              Navigator.push(
-                                context,
-                                fastRoute(
-                                  BrowseScreen(
-                                    targetSlot: slot,
-                                    showBackButton: true,
-                                  ),
-                                ),
-                              );
-                            });
                           },
-                          child: const GoopText(
-                            'ADVANCED LIBRARY Γ₧ö',
-                            style: TextStyle(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.cyanAccent,
-                            ),
-                          ),
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
 
-                    TextField(
-                      controller: quickAddController,
-                      autofocus: true,
-                      focusNode: focusNode,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 13.5,
-                      ),
-                      cursorColor: Colors.amberAccent,
-                      decoration: InputDecoration(
-                        hintText: 'Search items, guns...',
-                        hintStyle: const TextStyle(
-                          color: Colors.white30,
-                          fontSize: 13.5,
-                        ),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Colors.white30,
-                          size: 20,
-                        ),
-                        suffixIcon:
-                            query.isNotEmpty
-                                ? IconButton(
-                                  icon: const Icon(
-                                    Icons.close,
-                                    color: Colors.white54,
-                                    size: 18,
+                    // Results — one-line rows; the whole row taps to add.
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          if (results.isEmpty)
+                            const Center(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: Insets.xxl),
+                                child: GoopText(
+                                  'No matching guns or items found.',
+                                  style: TextStyle(
+                                    color: Colors.white60,
+                                    fontSize: FontSizes.labelMedium,
                                   ),
-                                  tooltip: 'Clear search',
-                                  onPressed: () {
-                                    quickAddController.clear();
-                                    setModalState(() {
-                                      _quickQuery = '';
-                                    });
-                                  },
-                                )
-                                : null,
-                        filled: true,
-                        fillColor: AppTheme.flair.card,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(
-                            color: Colors.amberAccent,
-                            width: 1.5,
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: const BorderSide(color: Colors.white10),
-                        ),
-                      ),
-                      onChanged: (val) {
-                        setModalState(() {
-                          _quickQuery = val;
-                        });
-                      },
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    if (results.length > 6)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 6),
-                        child: GoopText(
-                          '${results.length} results — scroll to see more',
-                          style: TextStyle(
-                            fontSize: 10.5,
-                            color: Colors.white.withValues(alpha: 0.4),
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-
-                    if (results.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32),
-                        child: GoopText(
-                          'No matching guns or items found.',
-                          style: TextStyle(
-                            color: Colors.white60,
-                            fontSize: 12.5,
-                          ),
-                        ),
-                      )
-                    else
-                      Flexible(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: results.length,
-                          separatorBuilder:
-                              (_, __) => Divider(
-                                color: Colors.white.withValues(alpha: 0.05),
-                                height: 1,
+                                ),
                               ),
-                          itemBuilder: (lContext, index) {
-                            final item = results[index];
-                            final isGun = item is Gun;
-                            final name = item.name;
-                            final quality = isGun ? item.quality : item.quality;
-                            final iconPath = isGun ? item.icon : item.icon;
+                            )
+                          else
+                            ListView.separated(
+                              itemCount: results.length,
+                              separatorBuilder:
+                                  (_, __) => Divider(
+                                    color: Colors.white.withValues(alpha: 0.05),
+                                    height: 1,
+                                  ),
+                              itemBuilder: (lContext, index) {
+                                final item = results[index];
+                                final isGun = item is Gun;
+                                final name = item.name;
+                                final quality = item.quality;
+                                final iconPath = item.icon;
+                                final kindTag = isGun
+                                    ? 'GUN'
+                                    : (item.isActive
+                                        ? 'ACTIVE'
+                                        : (item.isCompanion
+                                            ? 'COMPANION'
+                                            : 'PASSIVE'));
+                                final kindColor = isGun
+                                    ? Colors.amberAccent
+                                    : (item.isActive
+                                        ? Colors.lightBlueAccent
+                                        : (item.isCompanion
+                                            ? Colors.purpleAccent
+                                            : Colors.lightGreenAccent));
 
-                            // Read live run state directly to see if player already owns it
-                            return AnimatedBuilder(
-                              animation: p,
-                              builder: (abContext, _) {
-                                final activePlayer =
-                                    slot == PlayerSlot.coop
-                                        ? (p.runState.coop ?? Player())
-                                        : p.runState.main;
-                                final isOwned =
-                                    isGun
-                                        ? activePlayer.guns.any(
-                                          (g) => g.name == name,
-                                        )
+                                void addIt() {
+                                  Haptics.selection();
+                                  final mpSession =
+                                      context.read<MpSession>();
+                                  final isMpPeerAdd = mpSession.isActive &&
+                                      mpSession.mySlot != slot;
+                                  if (isMpPeerAdd) {
+                                    mpSession.sendAddToPeer(
+                                      kind: isGun ? 'gun' : 'item',
+                                      name: name,
+                                    ).then((_) {
+                                      addedToast.value = 'Added: $name';
+                                      addedToastTimer?.cancel();
+                                      addedToastTimer = Timer(
+                                        const Duration(milliseconds: 800),
+                                        () => addedToast.value = null,
+                                      );
+                                    }).catchError((Object _) {
+                                      addedToast.value =
+                                          'Could not send - check connection';
+                                      addedToastTimer?.cancel();
+                                      addedToastTimer = Timer(
+                                        const Duration(milliseconds: 2000),
+                                        () => addedToast.value = null,
+                                      );
+                                    });
+                                  } else {
+                                    if (isGun) {
+                                      p.addGun(item, slot: slot);
+                                    } else {
+                                      p.addItem(item, slot: slot);
+                                    }
+                                    addedToast.value = 'Added: $name';
+                                    addedToastTimer?.cancel();
+                                    addedToastTimer = Timer(
+                                      const Duration(milliseconds: 800),
+                                      () => addedToast.value = null,
+                                    );
+                                  }
+                                  quickAddController.clear();
+                                  setModalState(() {
+                                    _quickQuery = '';
+                                  });
+                                }
+
+                                return AnimatedBuilder(
+                                  animation: p,
+                                  builder: (abContext, _) {
+                                    final activePlayer =
+                                        slot == PlayerSlot.coop
+                                            ? (p.runState.coop ?? Player())
+                                            : p.runState.main;
+                                    final isOwned = isGun
+                                        ? activePlayer.guns
+                                            .any((g) => g.name == name)
                                         : (name.toLowerCase() == 'junk'
                                             ? false
-                                            : activePlayer.items.any(
-                                              (i) => i.name == name,
-                                            ));
+                                            : activePlayer.items
+                                                .any((i) => i.name == name));
 
-                                return ListTile(
-                                  dense: true,
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 2,
-                                  ),
-                                  leading: GameIcon(
-                                    assetPath: iconPath,
-                                    size: 32,
-                                    fallback:
-                                        isGun
-                                            ? Icons.gps_fixed
-                                            : Icons.extension,
-                                    quality: quality,
-                                  ),
-                                  title: GoopText(
-                                    name,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12.5,
-                                    ),
-                                  ),
-                                  subtitle: GoopText(
-                                    isGun
-                                        ? 'Gun • Quality $quality'
-                                        : 'Item • Quality $quality',
-                                    style: const TextStyle(
-                                      color: Colors.white38,
-                                      fontSize: 10.5,
-                                    ),
-                                  ),
-                                  trailing:
-                                      isOwned
-                                          ? Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 4,
+                                    return InkWell(
+                                      onTap: isOwned ? null : addIt,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4, vertical: 9),
+                                        child: Row(
+                                          children: [
+                                            GameIcon(
+                                              assetPath: iconPath,
+                                              size: 30,
+                                              fallback: isGun
+                                                  ? Icons.gps_fixed
+                                                  : Icons.extension,
+                                              quality: quality,
                                             ),
-                                            decoration: BoxDecoration(
-                                              color: Colors.green.withValues(
-                                                alpha: 0.15,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              border: Border.all(
-                                                color: Colors.greenAccent
-                                                    .withValues(alpha: 0.3),
-                                              ),
-                                            ),
-                                            child: const Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Icon(
-                                                  Icons.check,
-                                                  size: 12,
-                                                  color: Colors.greenAccent,
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: GoopText(
+                                                name,
+                                                maxLines: 1,
+                                                overflow:
+                                                    TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w800,
+                                                  fontSize:
+                                                      FontSizes.titleSmall,
                                                 ),
-                                                SizedBox(width: 4),
-                                                GoopText(
-                                                  'OWNED',
-                                                  style: TextStyle(
-                                                    color: Colors.greenAccent,
-                                                    fontSize: 9,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                          : ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                AppTheme.flair.card,
-                                              foregroundColor:
-                                                  Colors.amberAccent,
-                                              elevation: 0,
-                                              side: const BorderSide(
-                                                color: Colors.white10,
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 2,
-                                                  ),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(6),
                                               ),
                                             ),
-                                            onPressed: () {
-                                              Haptics.selection();
-                                              final mpSession =
-                                                  context
-                                                      .read<
-                                                        MultiplayerSession
-                                                      >();
-                                              final isMpPeerAdd =
-                                                  mpSession.isActive &&
-                                                  !mpSession.isSimulated &&
-                                                  mpSession.mySlot != slot;
-                                              if (isMpPeerAdd) {
-                                                mpSession.sendAddToPeer(
-                                                  kind: isGun ? 'gun' : 'item',
-                                                  name: name,
-                                                );
-                                              } else if (isGun) {
-                                                p.addGun(item, slot: slot);
-                                              } else {
-                                                p.addItem(item, slot: slot);
-                                              }
-                                              quickAddController.clear();
-                                              setModalState(() {
-                                                _quickQuery = '';
-                                              });
-                                            },
-                                            child: const GoopText(
-                                              'ADD',
+                                            const SizedBox(width: 8),
+                                            GoopText(
+                                              kindTag,
                                               style: TextStyle(
-                                                fontSize: 10,
-                                                fontWeight: FontWeight.bold,
+                                                color: kindColor.withValues(
+                                                    alpha: 0.85),
+                                                fontSize:
+                                                    FontSizes.labelSmall,
+                                                fontWeight: FontWeight.w900,
+                                                letterSpacing: 0.8,
                                               ),
                                             ),
-                                          ),
+                                            if (isOwned) ...[
+                                              const SizedBox(width: 6),
+                                              GoopText(
+                                                'OWNED',
+                                                style: TextStyle(
+                                                  color: Colors.greenAccent
+                                                      .withValues(alpha: 0.85),
+                                                  fontSize:
+                                                      FontSizes.labelSmall,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 );
                               },
-                            );
-                          },
+                            ),
+                  // Brief "Added: [name]" toast — auto-dismisses
+                  ValueListenableBuilder<String?>(
+                    valueListenable: addedToast,
+                    builder: (_, msg, __) {
+                      if (msg == null) return const SizedBox.shrink();
+                      return Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: Colors.green.withValues(alpha: 0.9),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: GoopText(
+                              msg,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 11 * Responsive.factor(context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                  ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Search field — at the bottom, above keyboard
+            TextField(
+              controller: quickAddController,
+              autofocus: true,
+              focusNode: focusNode,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: FontSizes.labelMedium,
+              ),
+              cursorColor: Colors.amberAccent,
+              decoration: InputDecoration(
+                hintText: 'Search items, guns...',
+                hintStyle: TextStyle(
+                  color: Colors.white30,
+                  fontSize: FontSizes.labelMedium,
+                ),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: Colors.white30,
+                  size: 20,
+                ),
+                suffixIcon: query.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white54,
+                          size: 18,
+                        ),
+                        tooltip: 'Clear search',
+                        onPressed: () {
+                          quickAddController.clear();
+                          setModalState(() {
+                            _quickQuery = '';
+                          });
+                        },
+                      )
+                    : null,
+                filled: true,
+                fillColor: AppTheme.flair.card,
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radii.sm),
+                  borderSide: const BorderSide(
+                    color: Colors.amberAccent,
+                    width: 1.5,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radii.sm),
+                  borderSide: const BorderSide(color: Colors.white10),
                 ),
               ),
-            );
+              onChanged: (val) {
+                setModalState(() {
+                  _quickQuery = val;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+      );
           },
         );
       },
     ).whenComplete(() {
       focusNode.dispose();
       quickAddController.dispose();
+      addedToastTimer?.cancel();
+      addedToast.dispose();
     });
   }
 
@@ -813,7 +946,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
   Widget _buildWindgunnerBanner(RunProvider p) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.sm),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -833,8 +966,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
               'WINDGUNNER STATE COMPASS ACTIVE (${p.windgunnerCountdown}s of Infinite Power)',
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 10,
-                fontFamily: 'EnterTheGungeonBig',
+                fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
                 letterSpacing: 0.8,
@@ -857,7 +989,8 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
 }
 
 /// Circular icon button used in the emote menu.
-class _EmoteButton extends StatelessWidget {
+/// Scales down on press for tactile feedback.
+class _EmoteButton extends StatefulWidget {
   final IconData icon;
   final String label;
   final Color color;
@@ -871,32 +1004,75 @@ class _EmoteButton extends StatelessWidget {
   });
 
   @override
+  State<_EmoteButton> createState() => _EmoteButtonState();
+}
+
+class _EmoteButtonState extends State<_EmoteButton>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _scaleCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _scaleCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 80),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scaleCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: color.withValues(alpha: 0.12),
-              border: Border.all(color: color.withValues(alpha: 0.5), width: 1.5),
+      onTapDown: (_) => _scaleCtrl.forward(),
+      onTapUp: (_) {
+        _scaleCtrl.reverse();
+        widget.onTap();
+      },
+      onTapCancel: () => _scaleCtrl.reverse(),
+      child: AnimatedBuilder(
+        animation: _scaleCtrl,
+        builder: (context, child) {
+          final scale = 1.0 - _scaleCtrl.value * 0.12;
+          return Transform.scale(scale: scale, child: child);
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 64,
+              height: 64,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: widget.color.withValues(alpha: 0.12),
+                border: Border.all(
+                    color: widget.color.withValues(alpha: 0.5), width: 1.5),
+                boxShadow: [
+                  BoxShadow(
+                    color: widget.color.withValues(alpha: 0.08),
+                    blurRadius: 12,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Icon(widget.icon, size: 32, color: widget.color),
             ),
-            child: Icon(icon, size: 32, color: color),
-          ),
-          const SizedBox(height: 8),
-          GoopText(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: color,
+            const SizedBox(height: 8),
+            GoopText(
+              widget.label,
+              style: TextStyle(
+                fontSize: 13 * Responsive.factor(context),
+                fontWeight: FontWeight.w700,
+                color: widget.color,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

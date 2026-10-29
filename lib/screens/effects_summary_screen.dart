@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +55,9 @@ class EffectsSummaryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(backgroundColor: Colors.transparent, title: GoopText(title)),
-      body: scan.isEmpty
+      body: SafeArea(
+        top: false,
+        child: scan.isEmpty
           ? _Empty(loadoutEmpty: guns.isEmpty && items.isEmpty)
           : ListView(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
@@ -74,6 +77,7 @@ class EffectsSummaryScreen extends StatelessWidget {
                     ),
               ],
             ),
+      ),
     );
   }
 }
@@ -104,14 +108,14 @@ class _Summary extends StatelessWidget {
                   GoopText(
                     '$totalTags distinct effects',
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: FontSizes.titleSmall,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   GoopText(
                     '$totalSources sources · $groupCount categories',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       color: Colors.white.withValues(alpha: 0.7),
                     ),
                   ),
@@ -132,7 +136,7 @@ class _Empty extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(Insets.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -197,7 +201,7 @@ class _CategorySection extends StatelessWidget {
                 child: Text(
                   '${tags.length}',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w700,
                     color: category.color,
                   ),
@@ -260,7 +264,7 @@ class _EffectRow extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: catColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(color: catColor.withValues(alpha: 0.35)),
             ),
             child: Icon(tag.icon, size: 16, color: catColor),
@@ -286,7 +290,7 @@ class _EffectRow extends StatelessWidget {
                           horizontal: 6, vertical: 1),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.all(Radii.sm),
                       ),
                       child: GoopText(
                         '×${occurrences.length}',
@@ -356,7 +360,7 @@ class _SourceLine extends StatelessWidget {
                 GoopText(
                   occurrence.sourceName,
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: FontSizes.labelMedium,
                     color: c.withValues(alpha: 0.95),
                     fontWeight: FontWeight.w700,
                   ),
@@ -365,14 +369,14 @@ class _SourceLine extends StatelessWidget {
                   GoopText(
                     '  —  ',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       color: Colors.white.withValues(alpha: 0.78),
                     ),
                   ),
                   GoopText(
                     occurrence.excerpt,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: FontSizes.labelMedium,
                       color: Colors.white.withValues(alpha: 0.78),
                       fontWeight: FontWeight.w500,
                     ),

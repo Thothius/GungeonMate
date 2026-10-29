@@ -2,13 +2,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player_media_kit/video_player_media_kit.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import 'providers/run_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/app_theme.dart';
 import 'services/home_customization.dart';
-import 'services/multiplayer_service.dart';
-import 'services/multiplayer_session.dart';
-import 'services/paired_partners_store.dart';
+import 'services/mp/mp_store.dart' as mp_store;
+import 'services/mp/mp_foreground_service.dart';
+import 'services/mp_session.dart';
 import 'utils/asset_paths.dart' show kAppVersion;
 import 'widgets/theme_overlay.dart';
 
@@ -17,15 +18,24 @@ void main() async {
   // Enable video_player on Windows/Linux via media_kit (libmpv) backend.
   // Drop-in — no API change to existing VideoPlayerController usage.
   VideoPlayerMediaKit.ensureInitialized(windows: true);
+  // Keep the screen awake while the app is open — runs are long and
+  // a sleeping screen mid-run drops MP sessions and loses context.
+  // .ignore() swallows MissingPluginException on platforms without a
+  // wakelock backend (Windows/Linux) instead of crashing startup.
+  WakelockPlus.enable().ignore();
   // Hydrate the user's persisted choices before any UI mounts so the
   // very first frame honours their prefs. Each init() swallows platform
   // failures internally — a broken plugin can't block app startup.
   await AppTheme.init();
   await VisualPrefs.init();
+  await CustomThemeStore.load();
   await HomeCustomization.load();
-  await PairedPartnersStore.load();
+  await mp_store.MpStore.cleanupOldKeys();
+  // Foreground-service config for persistent MP sessions (Paradox).
+  // Registration only — the service starts when a session connects.
+  MpForegroundService.init();
   // Expose the current app version for MP hello diagnostics.
-  MultiplayerSession.appVersionString = kAppVersion;
+  MpSession.appVersionString = kAppVersion;
   runApp(const GungeonMateApp());
 }
 
@@ -68,32 +78,30 @@ class _GungeonMateAppState extends State<GungeonMateApp>
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RunProvider()..loadData()),
-        // MultiplayerSession depends on the live RunProvider so it can
+        // MpSession depends on the live RunProvider so it can
         // read snapshots to broadcast and apply remote snapshots back.
         // ProxyProvider handles the "build after RunProvider exists"
         // ordering; the session is constructed once and lives for the
         // app lifetime (idle until the user opens the multiplayer
         // screen and picks a role).
-        ChangeNotifierProxyProvider<RunProvider, MultiplayerSession>(
-          create: (_) => MultiplayerSession(
-            MultiplayerService(),
-            // Placeholder - will be replaced immediately via update()
-            RunProvider(),
-          ),
+        ChangeNotifierProxyProvider<RunProvider, MpSession>(
+          // Create with a placeholder — the real RunProvider is injected
+          // via updateRunProvider on the first build. This avoids creating
+          // a throwaway RunProvider that would desync from the real one.
+          create: (context) => MpSession.placeholder(),
           update: (_, runProvider, previous) {
-            // Update the existing session's RunProvider reference rather
-            // than creating a new session (which would lose connection state).
             previous?.updateRunProvider(runProvider);
-            return previous ?? MultiplayerSession(MultiplayerService(), runProvider);
+            return previous ?? MpSession(runProvider);
           },
         ),
       ],
-      // Root-level theme subscription: every AppTheme.setMode() pulses a
-      // new value, which rebuilds MaterialApp with a fresh ThemeData so
-      // the palette swap is instant and covers every descendant.
-      child: ValueListenableBuilder<AppThemeMode>(
-        valueListenable: AppTheme.notifier,
-        builder: (_, mode, __) => ValueListenableBuilder<UnicornPalette>(
+      // Root-level theme subscription: every AppTheme.setMode() AND every
+      // previewNotifier pulse rebuilds MaterialApp with a fresh ThemeData
+      // so the palette swap is instant AND live-previews app-wide.
+      child: ListenableBuilder(
+        listenable: Listenable.merge(
+            [AppTheme.notifier, AppTheme.previewNotifier]),
+        builder: (_, __) => ValueListenableBuilder<UnicornPalette>(
           valueListenable: AppTheme.unicornPaletteNotifier,
           builder: (_, pal, __) => ValueListenableBuilder<int>(
           valueListenable: AppTheme.remixNotifier,
@@ -102,7 +110,7 @@ class _GungeonMateAppState extends State<GungeonMateApp>
             builder: (context, prefs, ___) => MaterialApp(
               title: 'Gungeon Mate',
               debugShowCheckedModeBanner: false,
-              theme: AppTheme.themeFor(mode),
+              theme: AppTheme.themeFor(AppTheme.displayedMode),
             scrollBehavior: const MaterialScrollBehavior().copyWith(
               dragDevices: {
                 PointerDeviceKind.touch,
@@ -115,10 +123,41 @@ class _GungeonMateAppState extends State<GungeonMateApp>
             // theme signature flair (Curseblaster red breath, future others)
             // paints above the scene without each screen needing to opt in.
             builder: (context, child) {
+              // In release mode, build exceptions render as a blank widget
+              // by default — the user sees particles but no UI ("blank view").
+              // This surfaces a visible error message instead, so crashes are
+              // diagnosable without a debugger attached.
+              ErrorWidget.builder = (FlutterErrorDetails details) {
+                return Material(
+                  color: const Color(0xFF1E1E22),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
+                          const SizedBox(height: 16),
+                          Text(
+                            'UI Error: ${details.exception}',
+                            style: const TextStyle(color: Colors.white70, fontSize: 13),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              };
               final mediaQuery = MediaQuery.of(context);
               return MediaQuery(
                 data: mediaQuery.copyWith(
-                  textScaler: TextScaler.linear(prefs.textScaleFactor),
+                  // Hard cap: 1.4x is the largest scale our fixed-height
+                  // layouts (heister slots, ADD strips, tier chips) can
+                  // absorb without clipping. The studio slider is
+                  // clamped to match — this guards stale prefs too.
+                  textScaler: TextScaler.linear(
+                      prefs.textScaleFactor.clamp(0.8, 1.4)),
                 ),
                 child: ThemeOverlay(child: child ?? const SizedBox.shrink()),
               );

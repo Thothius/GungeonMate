@@ -1,6 +1,8 @@
+import '../../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
+import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 
@@ -17,8 +19,15 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final double damageBoost = (p.robotJunk + (p.robotLies ? 1 : 0)) * 5.0 + (p.robotGoldJunk ? 500.0 : 0.0);
+    final robotJunk = context.select<RunProvider, int>((p) => p.robotJunk);
+    final robotLies = context.select<RunProvider, bool>((p) => p.robotLies);
+    final robotGoldJunk = context.select<RunProvider, bool>((p) => p.robotGoldJunk);
+    final robotArmor = context.select<RunProvider, int>((p) => p.robotArmor);
+    final fireplaceExtinguished = context.select<RunProvider, bool>((p) => p.fireplaceExtinguished);
+    final batteryBulletsSynergy = context.select<RunProvider, bool>((p) => p.batteryBulletsSynergy);
+    final fuseDisarmer = context.select<RunProvider, bool>((p) => p.fuseDisarmer);
+    final p = context.read<RunProvider>();
+    final double damageBoost = (robotJunk + (robotLies ? 1 : 0)) * 5.0 + (robotGoldJunk ? 500.0 : 0.0);
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -26,8 +35,8 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF0D1117),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.cyan.withValues(alpha: 0.35), width: 1.2),
             boxShadow: [
               BoxShadow(
@@ -43,9 +52,9 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
               // Header Row with big DMG boost badge
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -56,7 +65,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                         GoopText(
                           'THE ROBOT HUD',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: FontSizes.labelMedium,
                             fontWeight: FontWeight.w900,
                             color: Colors.cyanAccent,
                             letterSpacing: 0.8,
@@ -70,12 +79,12 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: p.robotGoldJunk
+                            color: robotGoldJunk
                                 ? Colors.amber.withValues(alpha: 0.18)
                                 : Colors.cyan.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.all(Radii.sm),
                             border: Border.all(
-                              color: p.robotGoldJunk
+                              color: robotGoldJunk
                                   ? Colors.amber.withValues(alpha: 0.5)
                                   : Colors.cyan.withValues(alpha: 0.4),
                               width: 1.0,
@@ -86,7 +95,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w900,
-                              color: p.robotGoldJunk ? Colors.amberAccent : Colors.cyanAccent,
+                              color: robotGoldJunk ? Colors.amberAccent : Colors.cyanAccent,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -135,7 +144,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                         SizedBox(height: 2),
                         GoopText(
                           '+5% DMG each',
-                          style: TextStyle(fontSize: 9, color: Colors.white38),
+                          style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white38),
                         ),
                       ],
                     ),
@@ -147,14 +156,14 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.remove_circle_outline, color: Colors.cyanAccent, size: 24),
                           tooltip: 'Decrease junk',
-                          onPressed: p.robotJunk > 0 ? () { Haptics.light(); p.setRobotJunk(p.robotJunk - 1); } : null,
+                          onPressed: robotJunk > 0 ? () { Haptics.light(); p.setRobotJunk(robotJunk - 1); } : null,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: Insets.md),
                           child: Text(
-                            '${p.robotJunk}',
+                            '$robotJunk',
                             style: const TextStyle(
-                              fontSize: 28,
+                              fontSize: FontSizes.headlineMedium,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               height: 1.0,
@@ -167,7 +176,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent, size: 24),
                           tooltip: 'Increase junk',
-                          onPressed: () { Haptics.light(); p.setRobotJunk(p.robotJunk + 1); },
+                          onPressed: () { Haptics.light(); p.setRobotJunk(robotJunk + 1); },
                         ),
                       ],
                     ),
@@ -202,7 +211,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                         SizedBox(height: 2),
                         GoopText(
                           'Hits before HP loss',
-                          style: TextStyle(fontSize: 9, color: Colors.white38),
+                          style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white38),
                         ),
                       ],
                     ),
@@ -214,14 +223,14 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.remove_circle_outline, color: Colors.cyanAccent, size: 24),
                           tooltip: 'Decrease armor',
-                          onPressed: p.robotArmor > 0 ? () { Haptics.light(); p.setRobotArmor(p.robotArmor - 1); } : null,
+                          onPressed: robotArmor > 0 ? () { Haptics.light(); p.setRobotArmor(robotArmor - 1); } : null,
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: Insets.md),
                           child: Text(
-                            '${p.robotArmor}',
+                            '$robotArmor',
                             style: const TextStyle(
-                              fontSize: 28,
+                              fontSize: FontSizes.headlineMedium,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               height: 1.0,
@@ -234,7 +243,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                           constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                           icon: const Icon(Icons.add_circle_outline, color: Colors.cyanAccent, size: 24),
                           tooltip: 'Increase armor',
-                          onPressed: () { Haptics.light(); p.setRobotArmor(p.robotArmor + 1); },
+                          onPressed: () { Haptics.light(); p.setRobotArmor(robotArmor + 1); },
                         ),
                       ],
                     ),
@@ -250,7 +259,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                     child: _buildCompactToggle(
                       label: 'GOLD JUNK',
                       subtitle: '+500%',
-                      value: p.robotGoldJunk,
+                      value: robotGoldJunk,
                       activeColor: Colors.amberAccent,
                       onChanged: p.setRobotGoldJunk,
                     ),
@@ -260,7 +269,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                     child: _buildCompactToggle(
                       label: 'LIES',
                       subtitle: '+5%',
-                      value: p.robotLies,
+                      value: robotLies,
                       activeColor: Colors.purpleAccent,
                       onChanged: p.setRobotLies,
                     ),
@@ -276,7 +285,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                     child: _buildCompactToggle(
                       label: 'FIREPLACE OUT',
                       subtitle: 'Extinguished',
-                      value: p.fireplaceExtinguished,
+                      value: fireplaceExtinguished,
                       activeColor: Colors.blueAccent,
                       onChanged: p.setFireplaceExtinguished,
                     ),
@@ -286,7 +295,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                     child: _buildCompactToggle(
                       label: 'BATTERY',
                       subtitle: 'Bullets synergy',
-                      value: p.batteryBulletsSynergy,
+                      value: batteryBulletsSynergy,
                       activeColor: Colors.greenAccent,
                       onChanged: p.setBatteryBulletsSynergy,
                     ),
@@ -299,7 +308,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
               _buildCompactToggle(
                 label: 'FUSE DISARMER',
                 subtitle: 'Disables bomb fuses',
-                value: p.fuseDisarmer,
+                value: fuseDisarmer,
                 activeColor: Colors.orangeAccent,
                 onChanged: p.setFuseDisarmer,
               ),
@@ -364,7 +373,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                   GoopText(
                     subtitle,
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: FontSizes.labelSmall,
                       color: value ? activeColor.withValues(alpha: 0.8) : Colors.white30,
                       fontWeight: FontWeight.bold,
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
+import '../utils/reduce_motion.dart';
 
 /// Rank-tier badge. Colors match the in-game chest tiers:
 ///   S → black pill, white label, golden glow (animated)
@@ -108,6 +109,23 @@ class _QualityBadgeState extends State<QualityBadge>
     );
 
     if (!isS || _glow == null) return badge;
+
+    // Reduced-motion: render a static golden glow (no pulsing).
+    if (ReduceMotion.of(context)) {
+      return Container(
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0x66FFD700),
+              blurRadius: 8,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: badge,
+      );
+    }
 
     return AnimatedBuilder(
       animation: _glow!,

@@ -1,3 +1,4 @@
+import '../../theme/tokens.dart';
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../scale_button.dart';
 import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
-import '../../services/multiplayer_session.dart';
+import '../../services/mp_session.dart';
 import '../../services/goop_talk_engine.dart';
 
 // =============================================================================
@@ -16,6 +17,9 @@ void showDiceRollDialog(BuildContext context, {bool isChallenged = false}) {
   showDialog<void>(
     context: context,
     barrierDismissible: false,
+    // Named so a peer's cancel can target this route specifically
+    // instead of blindly popping whatever is on top.
+    routeSettings: const RouteSettings(name: '__dice_roll'),
     builder: (_) => DiceRollDialog(isChallenged: isChallenged),
   );
 }
@@ -33,7 +37,7 @@ class DiceRollDialog extends StatefulWidget {
 class DiceRollDialogState extends State<DiceRollDialog>
     with TickerProviderStateMixin {
   late final AnimationController _infiniteController;
-  late final MultiplayerSession _mp;
+  late final MpSession _mp;
   DiceStatus _status = DiceStatus.idle;
 
   // Actual secret results rolled at the start of rolling
@@ -76,7 +80,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
     )..repeat();
     _particleController.addListener(_updateParticles);
 
-    _mp = Provider.of<MultiplayerSession>(context, listen: false);
+    _mp = Provider.of<MpSession>(context, listen: false);
     _prevChallenge = _mp.onDiceChallenge;
     _prevAccept = _mp.onDiceAccept;
     _prevDecline = _mp.onDiceDecline;
@@ -104,6 +108,30 @@ class DiceRollDialogState extends State<DiceRollDialog>
       }
     };
 
+    // Handle cancel from the challenger — the challenged player's
+    // dialog must close (or return to idle) so they're not stuck.
+    _mp.onDiceCancel = () {
+      if (!mounted) return;
+      setState(() {
+        if (_status == DiceStatus.rollingScreen && !_hasRolled) {
+          // Challenged but hadn't started rolling — go back to idle.
+          _status = DiceStatus.idle;
+          _announcement = 'Challenge cancelled.';
+        } else if (_status == DiceStatus.challenging) {
+          // Shouldn't happen (challenger cancels their own challenge),
+          // but handle gracefully — return to idle.
+          _status = DiceStatus.idle;
+          _announcement = 'Challenge cancelled.';
+        } else if (_status == DiceStatus.rollingScreen && _hasRolled) {
+          // Already rolled and waiting for peer result — treat as
+          // finished with our score only.
+          _status = DiceStatus.finished;
+          _announcement = 'Partner cancelled the duel.';
+        }
+        // If already finished or idle, ignore.
+      });
+    };
+
     _mp.onDiceResult = (peerScore, peerDice) {
       if (mounted) {
         setState(() {
@@ -113,10 +141,32 @@ class DiceRollDialogState extends State<DiceRollDialog>
         });
       }
     };
+
+    // Listen for disconnects so we don't sit waiting forever.
+    _mp.addListener(_onSessionChanged);
+  }
+
+  void _onSessionChanged() {
+    if (!mounted) return;
+    // If the peer disconnects during a challenge or while waiting for
+    // their roll result, bail out to a finished state so the user
+    // isn't stuck on a "waiting" screen.
+    if (!_mp.isActive || !_mp.isConnected) {
+      setState(() {
+        if (_status == DiceStatus.challenging) {
+          _status = DiceStatus.idle;
+          _announcement = 'Partner disconnected.';
+        } else if (_status == DiceStatus.rollingScreen && _hasRolled && _peerScore == null) {
+          _status = DiceStatus.finished;
+          _announcement = 'Partner disconnected. GUNFORTUNA DECLARES YOU VICTORIOUS BY DEFAULT!';
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _mp.removeListener(_onSessionChanged);
     _infiniteController.dispose();
     _particleController.removeListener(_updateParticles);
     _particleController.dispose();
@@ -282,17 +332,27 @@ class DiceRollDialogState extends State<DiceRollDialog>
     final f = AppTheme.flair;
     final prefs = VisualPrefs.notifier.value;
     final myDiceStyle = _getDiceStyle(prefs.customDiceType, f);
+    // Close is ALWAYS available — closing during an active challenge
+    // or roll sends a cancel to the peer so they're never stuck on a
+    // "waiting" screen they can't dismiss (the old stuck-popup bug).
 
     return PopScope(
-      canPop:
-          _status == DiceStatus.idle ||
-          _status == DiceStatus.challenging ||
-          _status == DiceStatus.finished,
+      canPop: true,
+      onPopInvokedWithResult: (didPop, _) {
+        // System-back dismiss during an active flow also notifies the
+        // peer — same guarantee as the close button.
+        if (didPop &&
+            (_status == DiceStatus.challenging ||
+                _status == DiceStatus.rollingScreen ||
+                _status == DiceStatus.rolling)) {
+          _mp.sendDiceCancel();
+        }
+      },
       child: Dialog(
-        backgroundColor: const Color(0xFF151211),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        backgroundColor: f.card.withValues(alpha: 0.98),
+        insetPadding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.xl),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.all(Radii.lg),
           side: BorderSide(color: f.primary, width: 2.0),
         ),
         child: ConstrainedBox(
@@ -323,7 +383,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                             GoopText(
                               'GUNFORTUNA\'S DUEL',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: FontSizes.titleMedium,
                                 fontWeight: FontWeight.w900,
                                 color: f.primary,
                                 letterSpacing: 1.5,
@@ -332,12 +392,22 @@ class DiceRollDialogState extends State<DiceRollDialog>
                           ],
                         ),
                         IconButton(
+                          tooltip: 'Close',
                           icon: const Icon(
                             Icons.close,
                             color: Colors.white38,
                             size: 20,
                           ),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () {
+                            // Any mid-flow close notifies the peer so
+                            // their dialog resolves instead of hanging.
+                            if (_status == DiceStatus.challenging ||
+                                _status == DiceStatus.rollingScreen ||
+                                _status == DiceStatus.rolling) {
+                              _mp.sendDiceCancel();
+                            }
+                            Navigator.pop(context);
+                          },
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
                         ),
@@ -348,7 +418,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                     // Flavour text (Only show in idle state!)
                     if (_status == DiceStatus.idle) ...[
                       Container(
-                        padding: const EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(Insets.md),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.03),
                           borderRadius: BorderRadius.circular(10),
@@ -447,7 +517,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                     foregroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.all(Radii.sm),
                     ),
                   ),
                 ),
@@ -463,7 +533,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   onPressed: () {},
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.white54,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: Insets.sm),
                   ),
                   child: const GoopText(
                     'or roll solo',
@@ -514,7 +584,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
           const GoopText(
             'THE CYLINDERS ARE SPINNING!',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w900,
               color: Colors.white54,
               letterSpacing: 1.0,
@@ -524,7 +594,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
           const GoopText(
             'Tap each die individually to stop its spin!',
             style: TextStyle(
-              fontSize: 10,
+              fontSize: FontSizes.labelSmall,
               color: Colors.amberAccent,
               fontWeight: FontWeight.bold,
             ),
@@ -537,14 +607,16 @@ class DiceRollDialogState extends State<DiceRollDialog>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(3, (index) {
                 final isStopped = _diceStopped[index];
-                return DiceWidget(
-                  dieKey: _dieKeys[index],
-                  value: _myDice[index],
-                  isRolling: !isStopped,
-                  infiniteController: _infiniteController,
-                  index: index,
-                  style: diceStyle,
-                  onTap: () => _stopDie(index, diceStyle.border),
+                return RepaintBoundary(
+                  child: DiceWidget(
+                    dieKey: _dieKeys[index],
+                    value: _myDice[index],
+                    isRolling: !isStopped,
+                    infiniteController: _infiniteController,
+                    index: index,
+                    style: diceStyle,
+                    onTap: () => _stopDie(index, diceStyle.border),
+                  ),
                 );
               }),
             ),
@@ -553,7 +625,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
           GoopText(
             'Current Sum: $_myScore',
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: FontSizes.titleSmall,
               fontWeight: FontWeight.w900,
               color: Colors.white,
             ),
@@ -596,7 +668,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
           GoopText(
             'Your Score: $_myScore',
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: FontSizes.bodyMedium,
               fontWeight: FontWeight.w900,
               color: Colors.white,
             ),
@@ -646,7 +718,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
         children: [
           // Flavour Winner announcement
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.md),
             decoration: BoxDecoration(
               color: bannerColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
@@ -692,7 +764,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 10,
+                        fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.bold,
                         color: Colors.white70,
                       ),
@@ -727,7 +799,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 const GoopText(
                   'VS',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: FontSizes.titleSmall,
                     fontWeight: FontWeight.w900,
                     color: Colors.white24,
                   ),
@@ -747,7 +819,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 10,
+                          fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.bold,
                           color: Colors.white70,
                         ),
@@ -785,9 +857,9 @@ class DiceRollDialogState extends State<DiceRollDialog>
 
           // Action buttons
           if (!connected)
-            ElevatedButton(
+            FilledButton(
               onPressed: _resetSolo,
-              style: ElevatedButton.styleFrom(
+              style: FilledButton.styleFrom(
                 backgroundColor: f.primary,
                 foregroundColor: Colors.black,
                 padding: const EdgeInsets.symmetric(
@@ -795,7 +867,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   vertical: 12,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.all(Radii.sm),
                 ),
               ),
               child: const GoopText(
@@ -806,7 +878,34 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 ),
               ),
             )
-          else
+          else ...[
+            // Rematch — send a new challenge to the same partner.
+            FilledButton.icon(
+              onPressed: () {
+                _resetSolo();
+                _sendChallenge();
+              },
+              icon: const Icon(Icons.casino_outlined, size: 18),
+              label: const GoopText(
+                'REMATCH',
+                style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              style: FilledButton.styleFrom(
+                backgroundColor: f.primary,
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radii.sm),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
             OutlinedButton(
               onPressed: () => Navigator.pop(context),
               style: OutlinedButton.styleFrom(
@@ -816,7 +915,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 ),
                 side: const BorderSide(color: Colors.white24),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.all(Radii.sm),
                 ),
               ),
               child: const GoopText(
@@ -827,6 +926,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 ),
               ),
             ),
+          ],
         ],
       );
     }
@@ -863,7 +963,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   foregroundColor: Colors.black,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.all(Radii.sm),
                   ),
                 ),
               ),
@@ -987,7 +1087,7 @@ class DiceWidgetState extends State<DiceWidget>
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: widget.style.bg,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.all(Radii.lg),
                   border: Border.all(
                     color: widget.style.border,
                     width: widget.isRolling ? 2.0 : 3.0,

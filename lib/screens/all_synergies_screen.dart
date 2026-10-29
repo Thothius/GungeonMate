@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/synergy.dart';
@@ -42,7 +43,7 @@ class AllSynergiesScreen extends StatelessWidget {
         elevation: 0,
         title: const GoopText(
           'SYNERGIES',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+          style: TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.w900),
         ),
         actions: [
           IconButton(
@@ -52,7 +53,9 @@ class AllSynergiesScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
+      body: SafeArea(
+        top: false,
+        child: Column(
         children: [
           // Summary bar
           Padding(
@@ -135,15 +138,16 @@ class AllSynergiesScreen extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
 
   Widget _summaryChip(String label, int count, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(color: color.withValues(alpha: 0.3), width: 0.7),
       ),
       child: Row(
@@ -156,7 +160,7 @@ class AllSynergiesScreen extends StatelessWidget {
           const SizedBox(width: 4),
           GoopText(
             label,
-            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.5),
+            style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.5),
           ),
         ],
       ),
@@ -187,7 +191,7 @@ class AllSynergiesScreen extends StatelessWidget {
                 ),
                 child: Text(
                   '$count',
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: color),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w800, color: color),
                 ),
               ),
             ],
@@ -206,7 +210,7 @@ class AllSynergiesScreen extends StatelessWidget {
               GoopText(
                 '$label ($count)',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.w700,
                   color: color.withValues(alpha: 0.7),
                   letterSpacing: 0.5,
@@ -234,7 +238,7 @@ class _SynergyGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: const EdgeInsets.symmetric(horizontal: Insets.md),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
@@ -279,7 +283,7 @@ class _SynergyCard extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(Insets.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -367,7 +371,7 @@ class _MiniChip extends StatelessWidget {
       child: Text(
         name,
         style: TextStyle(
-          fontSize: 9,
+          fontSize: FontSizes.labelSmall,
           color: fg,
           fontWeight: FontWeight.w600,
         ),

@@ -1,21 +1,21 @@
-import 'dart:convert';
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'character_select_screen.dart';
-import 'multiplayer_lobby_screen.dart';
+import 'mp_lobby_screen.dart';
 import 'experience_studio_screen.dart';
+import 'quiz/quiz_home_screen.dart';
+import 'codex_screen.dart';
+import '../services/app_theme.dart';
 import '../services/haptics.dart';
-import '../services/home_customization.dart';
 import '../widgets/scale_button.dart';
-import '../widgets/home/rotating_gungeoneer.dart';
-import '../widgets/home/junk_particle_field.dart';
-import '../widgets/home/vortex_lightning.dart';
-import '../widgets/home/home_customization_sheet.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../utils/asset_paths.dart' show kAppVersion;
 
-/// Opening screen. App title, subtitle, and primary action buttons.
+/// Opening screen. App title, subtitle, and primary action buttons —
+/// all colored by the active theme's palette (primary tint ghosts +
+/// one solid hero), never hardcoded rainbow accents.
 class MainMenuScreen extends StatefulWidget {
   const MainMenuScreen({super.key});
 
@@ -24,944 +24,333 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
-  /// Key for the Toggle Animations pill — used to position the popup
-  /// menu relative to the pill's actual on-screen position.
-  final GlobalKey _animPillKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
-    final btnHeight = 54 * sf;
-    final btnFontSize = 16 * sf;
-    final btnIconSize = 24 * sf;
+    final flair = AppTheme.flair;
+    // Luminance-checked label color — readable on every palette,
+    // including light ones. This is what keeps button labels from
+    // going invisible when the theme changes.
+    final onBtn =
+        flair.scaffold.computeLuminance() > 0.5
+            ? const Color(0xFF1C1C1E)
+            : Colors.white;
+    final sideInset = MediaQuery.sizeOf(context).width * 0.06;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
-          children: [
-          // ── Junk particle field (behind content, in front of vortex) ──
-          const Positioned.fill(child: JunkParticleField()),
-          // ── Rotating gungeoneer at the vortex center ──────────────────
-          const Positioned.fill(child: RotatingGungeoneer(size: 240)),
-          // ── Vortex lightning strikes (cycle boundary + ambient) ──────
-          const Positioned.fill(child: VortexLightning()),
+        children: [
+          // Theme-tinted depth layer over ThemeOverlay's base.
           Positioned.fill(
-              child: SafeArea(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 420),
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(flex: 1),
-                      // REDESIGNED STYLISH GUNGEON MATE TITLE HEADER
-                      // Anchored in the upper third via flex ratio
-                      // (1 top : 4 middle : 1 bottom) so the logo reads
-                      // as the hero and the action buttons settle in the
-                      // lower half.
-                      Column(
-                        children: [
-                          // Styled logo/title with an intense stroke outline and golden saloon look
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // Deep red backing stroke outline
-                                GoopText(
-                                  'GUNGEON MATE',
-                                  style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 2.0,
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 7
-                                      ..color = const Color(0xFFC62828), // Deep Gungeon Red
-                                  ),
-                                ),
-                                // Metallic gold foreground text with solid shadow
-                                const GoopText(
-                                  'GUNGEON MATE',
-                                  style: TextStyle(
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 2.0,
-                                    color: Color(0xFFFFD54F), // Bright Gold
-                                    shadows: [
-                                      Shadow(
-                                        offset: Offset(0, 3),
-                                        blurRadius: 4,
-                                        color: Colors.black54,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          // Premium Gungeon-style Ribbon Subtitle
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFC62828).withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                color: const Color(0xFFC62828).withValues(alpha: 0.6),
-                                width: 1.2,
-                              ),
-                            ),
-                            child: const GoopText(
-                              'YOUR COMPANION IN THE GUNGEON',
-                              style: TextStyle(
-                                fontSize: 13.5,
-                                fontWeight: FontWeight.w900,
-                                color: Color(0xFFE57373), // Soft active red
-                                letterSpacing: 1.8,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      const Spacer(flex: 4),
-                  // Local Run = single device solo play
-                  // Premium Gungeon-styled hero button: gold gradient,
-                  // glow shadow, scale-on-press.
-                  ScaleButton(
-                    onTap: () {
-                      Haptics.selection();
-                      Navigator.push(
-                        context,
-                        fastRoute(const CharacterSelectScreen()),
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: btnHeight,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Color(0xFFFFD54F), // Bright Gold
-                            Color(0xFFFFB300), // Deep Gold
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: const Color(0xFFFFE082).withValues(alpha: 0.8),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFFFFD54F).withValues(alpha: 0.25),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.play_arrow_rounded,
-                              size: btnIconSize, color: const Color(0xFF3E2723)),
-                          const SizedBox(width: 10),
-                          GoopText(
-                            'Local Run',
-                            style: TextStyle(
-                              fontSize: btnFontSize,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 1.2,
-                              color: const Color(0xFF3E2723),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Bluetooth Multiplayer = pair two devices
-                  // Premium outlined button: subtle gradient, cyan glow.
-                  ScaleButton(
-                    onTap: () {
-                      Haptics.selection();
-                      Navigator.push(
-                        context,
-                        fastRoute(const MultiplayerLobbyScreen()),
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: btnHeight,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.cyanAccent.withValues(alpha: 0.12),
-                            Colors.cyanAccent.withValues(alpha: 0.04),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: Colors.cyanAccent.withValues(alpha: 0.4),
-                          width: 1.4,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.cyanAccent.withValues(alpha: 0.12),
-                            blurRadius: 10,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.bluetooth_searching,
-                              size: 22 * sf, color: Colors.cyanAccent),
-                          const SizedBox(width: 10),
-                          GoopText(
-                            'Multiplayer',
-                            style: TextStyle(
-                              fontSize: btnFontSize,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 1.2,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  // ── Toggle Animations + Theme Picker row ──
-                  // Moved from the top corners into the menu flow so the
-                  // home screen reads as a single clean column. Both
-                  // buttons share one row at equal width.
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ValueListenableBuilder<HomeCustomization>(
-                          valueListenable: HomeCustomization.notifier,
-                          builder: (context, cust, _) {
-                            final anyActive = cust.showGungeoneer ||
-                                (cust.showJunk && cust.totalJunk > 0);
-                            return _MenuPillButton(
-                              key: _animPillKey,
-                              label: 'Animations',
-                              icon: Icons.animation_rounded,
-                              active: anyActive,
-                              activeColor: const Color(0xFFBCA0F8),
-                              onTap: () {
-                                Haptics.selection();
-                                _showAnimationsMenu(context, cust, _animPillKey);
-                              },
-                              onLongPress: () {
-                                Haptics.selection();
-                                showModalBottomSheet(
-                                  context: context,
-                                  backgroundColor: Colors.transparent,
-                                  isScrollControlled: true,
-                                  useSafeArea: false,
-                                  builder: (_) => const HomeCustomizationSheet(
-                                    initialSection: HomeCustomSection.gungeoneer,
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _MenuPillButton(
-                          label: 'Theme',
-                          icon: Icons.palette_rounded,
-                          active: true,
-                          activeColor: Colors.pinkAccent,
-                          onTap: () {
-                            Haptics.selection();
-                            Navigator.push(
-                              context,
-                              fastRoute(const ExperienceStudioScreen()),
-                            );
-                          },
-                        ),
-                      ),
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    center: const Alignment(0, -0.6),
+                    radius: 1.1,
+                    colors: [
+                      flair.primary.withValues(alpha: 0.10),
+                      Colors.transparent,
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  GoopText(
-                    'v$kAppVersion',
-                    style: TextStyle(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white.withValues(alpha: 0.35),
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  // Language toggle pill — hidden for now (feature disabled)
-                  // _LanguageToggle(),
-                  const Spacer(flex: 1),
-                ],
+                ),
               ),
             ),
           ),
-        ),
-          ),
-          ),
-          // Changelog button — centered at bottom, premium pill style
-          Positioned(
-            bottom: 16,
-            left: 0,
-            right: 0,
+          Positioned.fill(
             child: SafeArea(
-              child: Center(
-                child: ScaleButton(
-                  onTap: () => _showChangelogDialog(context),
-                  enableHaptics: false,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16 * sf, vertical: 9 * sf),
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          const Color(0xFFFFD54F).withValues(alpha: 0.12),
-                          const Color(0xFFFFD54F).withValues(alpha: 0.04),
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: const Color(0xFFFFD54F).withValues(alpha: 0.35),
-                        width: 1.2,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.history_edu_rounded, size: 16 * sf, color: const Color(0xFFFFD54F)),
-                        SizedBox(width: 7 * sf),
-                        GoopText(
-                          'Changelog (v$kAppVersion)',
-                          style: TextStyle(fontSize: 12.5 * sf, fontWeight: FontWeight.bold, color: Colors.white),
+              child: LayoutBuilder(
+                builder:
+                    (context, constraints) => SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          ],
-        ),
-    );
-  }
-
-  /// Popup menu for toggling individual vortex animations on/off.
-  /// Each item has a toggle switch and a "configure" arrow that opens
-  /// the relevant section of the home customization sheet.
-  /// The menu is positioned below the pill using its GlobalKey.
-  void _showAnimationsMenu(
-      BuildContext context, HomeCustomization cust, GlobalKey pillKey) {
-    // Compute the pill's position to place the menu below it.
-    final renderBox = pillKey.currentContext?.findRenderObject() as RenderBox?;
-    final pillPos = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
-    final pillSize = renderBox?.size ?? Size.zero;
-    final screenWidth = MediaQuery.sizeOf(context).width;
-    showMenu<_AnimAction>(
-      context: context,
-      position: RelativeRect.fromLTRB(
-        pillPos.dx,
-        pillPos.dy + pillSize.height + 4,
-        screenWidth - pillPos.dx - pillSize.width,
-        0,
-      ),
-      color: const Color(0xFF1E1E22),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.white.withValues(alpha: 0.12), width: 1),
-      ),
-      items: [
-        PopupMenuItem<_AnimAction>(
-          value: _AnimAction.toggleGungeoneer,
-          child: _AnimMenuRow(
-            icon: Icons.person_rounded,
-            label: 'Gungeoneer',
-            color: const Color(0xFFBCA0F8),
-            active: cust.showGungeoneer,
-          ),
-        ),
-        PopupMenuItem<_AnimAction>(
-          value: _AnimAction.configGungeoneer,
-          child: _AnimMenuRow(
-            icon: Icons.tune_rounded,
-            label: 'Configure Gungeoneer',
-            color: Colors.white54,
-            active: false,
-            trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
-          ),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem<_AnimAction>(
-          value: _AnimAction.toggleFloaters,
-          child: _AnimMenuRow(
-            icon: Icons.auto_awesome_rounded,
-            label: 'Floaters',
-            color: const Color(0xFFFFD54F),
-            active: cust.showJunk && cust.totalJunk > 0,
-          ),
-        ),
-        PopupMenuItem<_AnimAction>(
-          value: _AnimAction.configFloaters,
-          child: _AnimMenuRow(
-            icon: Icons.tune_rounded,
-            label: 'Configure Floaters',
-            color: Colors.white54,
-            active: false,
-            trailing: const Icon(Icons.chevron_right, size: 18, color: Colors.white38),
-          ),
-        ),
-      ],
-    ).then((action) {
-      if (action == null || !context.mounted) return;
-      Haptics.selection();
-      switch (action) {
-        case _AnimAction.toggleGungeoneer:
-          HomeCustomization.setShowGungeoneer(!cust.showGungeoneer);
-          break;
-        case _AnimAction.configGungeoneer:
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            isScrollControlled: true,
-            useSafeArea: false,
-            builder: (_) => const HomeCustomizationSheet(
-              initialSection: HomeCustomSection.gungeoneer,
-            ),
-          );
-          break;
-        case _AnimAction.toggleFloaters:
-          if (cust.totalJunk == 0) {
-            // No floaters configured — open config to pick.
-            showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.transparent,
-              isScrollControlled: true,
-              useSafeArea: false,
-              builder: (_) => const HomeCustomizationSheet(
-                initialSection: HomeCustomSection.junk,
-              ),
-            );
-          } else {
-            HomeCustomization.setShowJunk(!cust.showJunk);
-          }
-          break;
-        case _AnimAction.configFloaters:
-          showModalBottomSheet(
-            context: context,
-            backgroundColor: Colors.transparent,
-            isScrollControlled: true,
-            useSafeArea: false,
-            builder: (_) => const HomeCustomizationSheet(
-              initialSection: HomeCustomSection.junk,
-            ),
-          );
-          break;
-      }
-    });
-  }
-
-  void _showChangelogDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: const Color(0xFF0F0F12), // Deep black-wine slate
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(color: Color(0xFF332225), width: 1.5),
-          ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480),
-            child: Container(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                // Header
-                Row(
-                  children: [
-                    const Icon(Icons.history_edu_rounded, color: Color(0xFFFFD54F), size: 28),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const GoopText(
-                            'GUNGEON MATE COMPANION',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w900,
-                              color: Colors.white,
-                              letterSpacing: 1.0,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          const GoopText(
-                            'v1.9.62 — Unified Settings',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFFFFD54F),
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white54),
-                      tooltip: 'Close',
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                const Divider(color: Colors.white12, height: 24),
-
-                // Content Scroll View
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Section 1: Core App Features
-                        const GoopText(
-                          'MAIN COMPANION FEATURES',
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFFE57373),
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        _featureRow(Icons.inventory_2_outlined, 'Dynamic Inventory Management', 'Real-time logging of guns/items with live DPS, element properties, and synergy tracking.'),
-                        _featureRow(Icons.style_rounded, 'Side-by-Side Live Theme Customizer', '10+ rich themes (e.g. Winchester, Ice Tyrant, Curseblaster) with custom fonts and particle speed toggles.'),
-                        _featureRow(Icons.group_rounded, 'Dual-Player Live HUD / Multiplayer', 'Bluetooth/Wi-Fi event-driven co-op state synchronization with real-time stat-share mechanics.'),
-                        _featureRow(Icons.auto_stories_outlined, 'Interactive Tomes & Guides', 'Winchester target guides, Stealing guides, and offline Wiki back-reference sheets.'),
-
-                        const Divider(color: Colors.white12, height: 24),
-
-                        // Section 2: Recent Overhauls
-                        const GoopText(
-                          'VERSION HISTORY & RECENT UPDATES',
-                          style: TextStyle(
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.cyanAccent,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-
-                        FutureBuilder<String>(
-                          future: DefaultAssetBundle.of(context).loadString('assets/data/changelog.json'),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 24),
-                                  child: SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.cyanAccent),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 420),
+                            child: Padding(
+                              padding: const EdgeInsets.all(Insets.xl),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // ── Logo + subtitle (compact, centered) ──
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        GoopText(
+                                          'GUNGEON MATE',
+                                          style: TextStyle(
+                                            fontSize: 48,
+                                            fontWeight: FontWeight.w900,
+                                            letterSpacing: 2.0,
+                                            foreground:
+                                                Paint()
+                                                  ..style = PaintingStyle.stroke
+                                                  ..strokeWidth = 7
+                                                  ..color = const Color(
+                                                    0xFFC62828,
+                                                  ),
+                                          ),
+                                        ),
+                                        const GoopText(
+                                          'GUNGEON MATE',
+                                          style: TextStyle(
+                                            fontSize: 48,
+                                            fontWeight: FontWeight.w900,
+                                            letterSpacing: 2.0,
+                                            color: Color(0xFFFFD54F),
+                                            shadows: [
+                                              Shadow(
+                                                offset: Offset(0, 3),
+                                                blurRadius: 4,
+                                                color: Colors.black54,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                              );
-                            }
-                            if (snapshot.hasError || !snapshot.hasData) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                child: GoopText(
-                                  'Error loading changelog.',
-                                  style: TextStyle(color: Colors.white24, fontSize: 11),
-                                ),
-                              );
-                            }
-
-                            try {
-                              final List<dynamic> data = json.decode(snapshot.data!);
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: data.map((v) {
-                                  final String version = v['version'] ?? '';
-                                  final String title = v['title'] ?? '';
-                                  final List<dynamic> items = v['items'] ?? [];
-                                  final String groupTitle = '$title ($version)';
-                                  return _changelogGroup(
-                                    groupTitle,
-                                    items.map((i) => i.toString()).toList(),
-                                  );
-                                }).toList(),
-                              );
-                            } catch (e) {
-                              return const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                child: GoopText(
-                                  'Failed to parse changelog.',
-                                  style: TextStyle(color: Colors.white24, fontSize: 11),
-                                ),
-                              );
-                            }
-                          },
+                                  const SizedBox(height: 8),
+                                  // Sublabel pill — theme-tinted border, stat
+                                  // color text (contrast-safe on scaffold).
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: flair.primary.withValues(
+                                        alpha: 0.12,
+                                      ),
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(
+                                        color: flair.primary.withValues(
+                                          alpha: 0.55,
+                                        ),
+                                        width: 1.4,
+                                      ),
+                                    ),
+                                    child: GoopText(
+                                      'YOUR COMPANION IN THE GUNGEON',
+                                      style: TextStyle(
+                                        fontSize: FontSizes.labelMedium,
+                                        fontWeight: FontWeight.w900,
+                                        color: flair.headlineStat,
+                                        letterSpacing: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 28),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: sideInset,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        // Local Run = single device solo
+                                        // play — the solid hero button.
+                                        _menuButton(
+                                          icon: Icons.play_arrow_rounded,
+                                          label: 'Local Run',
+                                          solid: true,
+                                          sf: sf,
+                                          flair: flair,
+                                          labelColor: onBtn,
+                                          onTap: () {
+                                            Haptics.selection();
+                                            Navigator.push(
+                                              context,
+                                              fastRoute(
+                                                const CharacterSelectScreen(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(height: 10),
+                                        _menuButton(
+                                          icon: Icons.bluetooth_searching,
+                                          label: 'Multiplayer',
+                                          sf: sf,
+                                          flair: flair,
+                                          labelColor: onBtn,
+                                          onTap: () {
+                                            Haptics.selection();
+                                            Navigator.push(
+                                              context,
+                                              fastRoute(const MpLobbyScreen()),
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(height: 14),
+                                        _menuButton(
+                                          icon: Icons.palette_rounded,
+                                          label: 'Theme',
+                                          sf: sf,
+                                          flair: flair,
+                                          labelColor: onBtn,
+                                          onTap: () {
+                                            Haptics.selection();
+                                            Navigator.push(
+                                              context,
+                                              fastRoute(
+                                                const ExperienceStudioScreen(),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: _menuButton(
+                                                icon: Icons.quiz_rounded,
+                                                label: 'Quiz',
+                                                sf: sf,
+                                                flair: flair,
+                                                labelColor: onBtn,
+                                                onTap: () {
+                                                  Haptics.selection();
+                                                  Navigator.push(
+                                                    context,
+                                                    fastRoute(
+                                                      const QuizHomeScreen(
+                                                        showBackButton: true,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Expanded(
+                                              child: _menuButton(
+                                                icon: Icons.menu_book_rounded,
+                                                label: 'Codex',
+                                                sf: sf,
+                                                flair: flair,
+                                                labelColor: onBtn,
+                                                onTap: () {
+                                                  Haptics.selection();
+                                                  Navigator.push(
+                                                    context,
+                                                    fastRoute(
+                                                      const CodexScreen(
+                                                        showBackButton: true,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  GoopText(
+                                    'v$kAppVersion',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w700,
+                                      color: onBtn.withValues(alpha: 0.4),
+                                      letterSpacing: 1.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    },
-  );
-}
-
-  Widget _featureRow(IconData icon, String title, String body) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 16, color: const Color(0xFFFFD54F)),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GoopText(
-                  title,
-                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                const SizedBox(height: 1.5),
-                GoopText(
-                  body,
-                  style: const TextStyle(fontSize: 11, color: Colors.white54, height: 1.2),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _changelogGroup(String title, List<String> items) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GoopText(
-            title,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          const SizedBox(height: 4),
-          ...items.map((it) => Padding(
-                padding: const EdgeInsets.only(left: 8, bottom: 3),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('• ', style: const TextStyle(color: Colors.white54, fontSize: 11)),
-                    Expanded(
-                      child: GoopText(
-                        it,
-                        style: const TextStyle(fontSize: 11, color: Colors.white70, height: 1.25),
                       ),
                     ),
-                  ],
-                ),
-              )),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
-}
 
-// =============================================================================
-// _MenuPillButton — premium pill button for the home menu row.
-// Scale-on-press, themed glow when active, subtle inner highlight.
-// =============================================================================
-
-class _MenuPillButton extends StatelessWidget {
-  final String label;
-  final IconData icon;
-  final bool active;
-  final Color activeColor;
-  final VoidCallback onTap;
-  final VoidCallback? onLongPress;
-
-  const _MenuPillButton({
-    super.key,
-    required this.label,
-    required this.icon,
-    required this.active,
-    required this.activeColor,
-    required this.onTap,
-    this.onLongPress,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final sf = Responsive.factor(context);
-    return Semantics(
-      label: '$label${active ? ' (active)' : ''}',
-      button: true,
-      child: ScaleButton(
-        onTap: onTap,
-        onLongPress: onLongPress,
-        enableHaptics: false,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          height: 46 * sf,
-          decoration: BoxDecoration(
-            // Subtle vertical gradient for depth — premium feel
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: active
-                  ? [
-                      activeColor.withValues(alpha: 0.22),
-                      activeColor.withValues(alpha: 0.08),
-                    ]
-                  : [
-                      Colors.white.withValues(alpha: 0.08),
-                      Colors.white.withValues(alpha: 0.03),
+  /// Themed menu button — primary-tinted ghost, or a solid primary
+  /// hero when [solid] is set. Label color is passed in pre-checked
+  /// for the current palette so it can never go invisible.
+  Widget _menuButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    required double sf,
+    required ThemeFlair flair,
+    required Color labelColor,
+    bool solid = false,
+  }) {
+    final fg =
+        solid
+            ? (flair.primary.computeLuminance() > 0.5
+                ? const Color(0xFF1C1C1E)
+                : Colors.white)
+            : labelColor;
+    return ScaleButton(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 62 * sf,
+        decoration: BoxDecoration(
+          gradient:
+              solid
+                  ? null
+                  : LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      flair.primary.withValues(alpha: 0.16),
+                      flair.primary.withValues(alpha: 0.05),
                     ],
-            ),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: active
-                  ? activeColor.withValues(alpha: 0.6)
-                  : Colors.white.withValues(alpha: 0.12),
-              width: 1.2,
-            ),
-            boxShadow: active
-                ? [
-                    BoxShadow(
-                      color: activeColor.withValues(alpha: 0.18),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.15),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  ),
+          color: solid ? flair.primary : null,
+          borderRadius: const BorderRadius.all(Radii.lg),
+          border: Border.all(
+            color:
+                solid
+                    ? flair.primary.withValues(alpha: 0.8)
+                    : flair.primary.withValues(alpha: 0.55),
+            width: 1.8,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 18 * sf,
-                color: active ? activeColor : Colors.white54,
-              ),
-              SizedBox(width: 8 * sf),
-              GoopText(
-                label,
-                style: TextStyle(
-                  fontSize: 13 * sf,
-                  fontWeight: FontWeight.w800,
-                  color: active ? Colors.white : Colors.white60,
-                  letterSpacing: 0.5,
+          boxShadow: [
+            BoxShadow(
+              color: flair.primary.withValues(alpha: solid ? 0.35 : 0.15),
+              blurRadius: solid ? 16 : 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 24 * sf, color: solid ? fg : flair.primary),
+            const SizedBox(width: 10),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: GoopText(
+                  label,
+                  style: TextStyle(
+                    fontSize: 16 * sf,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                    color: fg,
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-// _LanguageToggle — hidden for now (Goopian feature disabled)
-// /// Segmented English / Goopian language toggle pill.
-// /// Tapping switches VisualPrefs.isGoopianLanguage, which triggers
-// /// all GoopText widgets across the app to animate.
-// class _LanguageToggle extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListenableBuilder(
-//       listenable: VisualPrefs.notifier,
-//       builder: (context, _) {
-//         final isGoopian = VisualPrefs.notifier.value.isGoopianLanguage;
-//         return ScaleButton(
-//           onTap: () {
-//             Haptics.selection();
-//             VisualPrefs.setIsGoopianLanguage(!isGoopian);
-//           },
-//           enableHaptics: false,
-//           child: Container(
-//             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-//             decoration: BoxDecoration(
-//               color: const Color(0xFF1E1E22),
-//               borderRadius: BorderRadius.circular(20),
-//               border: Border.all(
-//                 color: isGoopian
-//                     ? const Color(0xFF9C27B0).withValues(alpha: 0.5)
-//                     : Colors.white.withValues(alpha: 0.15),
-//                 width: 1.2,
-//               ),
-//             ),
-//             child: Row(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 _Segment(
-//                   label: 'English',
-//                   icon: Icons.language,
-//                   active: !isGoopian,
-//                   activeColor: Colors.cyanAccent,
-//                 ),
-//                 _Segment(
-//                   label: GoopTalkEngine.translateToGoop('Goopian'),
-//                   icon: Icons.translate,
-//                   active: isGoopian,
-//                   activeColor: const Color(0xFF9C27B0),
-//                   isGoopian: true,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-//
-// class _Segment extends StatelessWidget {
-//   final String label;
-//   final IconData icon;
-//   final bool active;
-//   final Color activeColor;
-//   final bool isGoopian;
-//
-//   const _Segment({
-//     required this.label,
-//     required this.icon,
-//     required this.active,
-//     required this.activeColor,
-//     this.isGoopian = false,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-//       decoration: BoxDecoration(
-//         color: active ? activeColor.withValues(alpha: 0.18) : Colors.transparent,
-//         borderRadius: BorderRadius.circular(16),
-//       ),
-//       child: Row(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Icon(
-//             icon,
-//             size: 13,
-//             color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
-//           ),
-//           const SizedBox(width: 5),
-//           isGoopian
-//               ? Text(
-//                   label,
-//                   style: TextStyle(
-//                     fontSize: 11.5,
-//                     fontWeight: FontWeight.w700,
-//                     color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
-//                     letterSpacing: 0.5,
-//                   ),
-//                 )
-//               : GoopText(
-//                   label,
-//                   style: TextStyle(
-//                     fontSize: 11.5,
-//                     fontWeight: FontWeight.w700,
-//                     color: active ? activeColor : Colors.white.withValues(alpha: 0.4),
-//                     letterSpacing: 0.5,
-//                   ),
-//                 ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-/// Actions available in the animations popup menu.
-enum _AnimAction {
-  toggleGungeoneer,
-  configGungeoneer,
-  toggleFloaters,
-  configFloaters,
-}
-
-/// A row in the animations popup menu — icon + label + toggle indicator.
-class _AnimMenuRow extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final bool active;
-  final Widget? trailing;
-
-  const _AnimMenuRow({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.active,
-    this.trailing,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: active ? color : Colors.white54),
-        const SizedBox(width: 10),
-        Expanded(
-          child: GoopText(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: active ? Colors.white : Colors.white60,
-            ),
-          ),
-        ),
-        if (trailing != null)
-          trailing!
-        else
-          Icon(
-            active ? Icons.toggle_on_rounded : Icons.toggle_off_rounded,
-            size: 22,
-            color: active ? color : Colors.white38,
-          ),
-      ],
-    );
-  }
-}
-

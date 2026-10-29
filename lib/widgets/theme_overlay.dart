@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,6 @@ import 'particle_engine.dart';
 import 'particles/touch_particle.dart';
 import 'particles/ambient_glow.dart';
 import 'backgrounds/page_frame.dart';
-import 'backgrounds/animated_wallpaper.dart';
 import 'backgrounds/ambient_shader.dart';
 
 class ThemeOverlay extends StatefulWidget {
@@ -40,6 +39,10 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
   final math.Random _rng = math.Random();
   StreamSubscription? _sensorSub;
   Offset _smoothedTilt = Offset.zero;
+
+  /// Cached reduced-motion preference (updated each build, read in
+  /// `_spawnTouchSparkles` which runs outside the build path).
+  bool _reduceMotion = false;
 
   // Scale a color's alpha by [scale] (0.0–1.0).
   static Color _scaleAlpha(Color c, double scale) =>
@@ -90,7 +93,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
   }
 
   void _spawnTouchSparkles(Offset globalPosition, VisualPrefs prefs) {
-    if (!prefs.particlesEnabled) return;
+    if (_reduceMotion || !prefs.particlesEnabled) return;
     final box = context.findRenderObject() as RenderBox?;
     if (box != null) {
       final localPos = box.globalToLocal(globalPosition);
@@ -127,6 +130,13 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
         return ValueListenableBuilder<VisualPrefs>(
           valueListenable: VisualPrefs.notifier,
           builder: (_, prefs, __) {
+            // Reduced-motion: respect the platform's "remove animations"
+            // accessibility setting. All animated decorative layers
+            // (particles, shader, glow, sparkles, wobble, video wallpaper)
+            // are skipped; static layers (base color, vignette, scrim,
+            // page frame) remain so the theme's color identity is preserved.
+            final reduceMotion = MediaQuery.disableAnimationsOf(context);
+            _reduceMotion = reduceMotion;
             // Determine isHomeScreen directly from RunProvider so the
             // galaxy background disappears the instant a run starts —
             // no 1-frame lag from a child-set ValueNotifier.
@@ -150,11 +160,11 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           final effectiveUserGlow = prefs.glowIntensity > 0.001
               ? prefs.glowIntensity
               : autoGlowIntensity;
-          final showGlow = effectiveUserGlow > 0.001;
-          // ponytail: cap effective glow at 0.6 so max doesn't wash out UI.
-          //           Now behind content, so even at cap it glows behind panels.
+          final showGlow = !reduceMotion && effectiveUserGlow > 0.001;
           final userGlowColor = VisualPrefs.glowColors[prefs.glowColorIndex];
-          final effectiveGlow = effectiveUserGlow * 0.6;
+          // 3x boost: user requested glow be more significant at 100%.
+          // Cap at 1.8 to prevent total washout while making max clearly visible.
+          final effectiveGlow = (effectiveUserGlow * 1.8).clamp(0.0, 1.8);
           final gP = showGlow
               ? _scaleAlpha(
                   Color.lerp(f.glowPrimary, userGlowColor, 0.5) ?? f.glowPrimary,
@@ -179,7 +189,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           final userOnDefault = prefs.particlePreset == ParticlePreset.gungeonDust;
           final effectivePreset = userOnDefault ? themeDefault : prefs.particlePreset;
           final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
-          final particlesOn = prefs.particlesEnabled || themeAutoOn;
+          final particlesOn = !reduceMotion && (prefs.particlesEnabled || themeAutoOn);
           // ponytail: color schema priority — explicit user schema > unicorn
           // palette > preset default. themeMatch uses the active flair's
           // primary/secondary/glow colors so particles always harmonize.
@@ -193,10 +203,22 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           } else if (mode == AppThemeMode.unicorn) {
             colorOverride = AppTheme.unicornPalette.particleColors;
           }
+          // Typed particle system — the user-facing type + per-theme
+          // flavored schema + chaos/tilt physics flags replace the old
+          // 37-preset × 16-schema layer entirely.
+          final schemaColors =
+              particleSchemaColors(mode, prefs.particleSchemaIndex);
+          final typedCfg = typedParticleConfig(
+            ParticleType.values[prefs.particleTypeIndex],
+            schemaColors,
+            chaos: prefs.particleChaos,
+          );
           final particleBackdropBg = !particlesOn
               ? null
               : ParticleField(
                   preset: effectivePreset,
+                  config: typedCfg,
+                  tiltEnabled: prefs.particleTouch,
                   count: prefs.particleCount,
                   sizeScale: prefs.particleSizeScale,
                   opacity: prefs.particleOpacity,
@@ -209,7 +231,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
           Widget content = widget.child;
 
           // Apply visual customizer wrappers based on active Theme Mode!
-          if (mode == AppThemeMode.bulletHell) {
+          if (!reduceMotion && mode == AppThemeMode.bulletHell) {
             content = ElasticWobbleContainer(
               intensity: 0.05,
               speed: 0.6,
@@ -230,37 +252,14 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                   child: Container(color: f.scaffold),
                 ),
 
-                // 0.4. Home Screen Vortex — the orbiting purple portal animation.
-                // Always mounted (keeps the video controller warm so returning
-                // to the home screen is instant — no re-init flicker), but only
-                // visible when on the home screen.
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: AnimatedOpacity(
-                      opacity: isHomeScreen ? 0.85 : 0.0,
-                      duration: const Duration(milliseconds: 200),
-                      child: const AnimatedWallpaperBackground(
-                        key: ValueKey('home_vortex'),
-                        assetName: ThemeOverlay.kHomeGalaxyAsset,
-                      ),
-                    ),
-                  ),
-                ),
-
-                // 0.6. Home Screen Contrast Backing (subtle — lets vortex glow show through)
-                if (isHomeScreen)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: Container(
-                        color: Colors.black.withValues(alpha: 0.35),
-                      ),
-                    ),
-                  ),
+                // Home screen vortex animation removed — default to
+                // Minimalist. ThemeOverlay provides only the base color
+                // and themed layers (particles, glow, shader).
 
                 // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
                 // rain or dark neon fog. Sits behind particles but above the
                 // base background + video wallpaper. Opt-in via VisualPrefs.
-                if (prefs.shaderEnabled)
+                if (!reduceMotion && prefs.shaderEnabled)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: AmbientShaderLayer(
@@ -284,6 +283,8 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                         key: ValueKey('ambient_glow_${mode.index}'),
                         primary: gP,
                         secondary: gS,
+                        style: f.glowStyle,
+                        tertiary: f.headlineStat.withValues(alpha: 0.3),
                       ),
                     ),
                   ),
@@ -357,7 +358,7 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
                     ),
                   ),
 
-                if (!isHomeScreen && prefs.particlesEnabled && _touchParticles.isNotEmpty)
+                if (!reduceMotion && !isHomeScreen && prefs.particlesEnabled && _touchParticles.isNotEmpty)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: RepaintBoundary(

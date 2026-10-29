@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -15,15 +17,21 @@ class AnimatedWallpaperBackground extends StatefulWidget {
 }
 
 class _AnimatedWallpaperBackgroundState
-    extends State<AnimatedWallpaperBackground> {
+    extends State<AnimatedWallpaperBackground>
+    with SingleTickerProviderStateMixin {
   VideoPlayerController? _controller;
   bool _initialized = false;
   bool _hasError = false;
   int _videoInitToken = 0;
+  late final AnimationController _fallbackCtrl;
 
   @override
   void initState() {
     super.initState();
+    _fallbackCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 20),
+    )..repeat();
     _initializeVideo();
   }
 
@@ -84,14 +92,23 @@ class _AnimatedWallpaperBackgroundState
   @override
   void dispose() {
     _controller?.dispose();
+    _fallbackCtrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final controller = _controller;
+    // Video failed (e.g. on Windows desktop where video_player is not
+    // implemented) — fall back to an animated CustomPaint vortex.
     if (_hasError || controller == null) {
-      return const SizedBox.shrink();
+      return AnimatedBuilder(
+        animation: _fallbackCtrl,
+        builder: (_, __) => CustomPaint(
+          painter: _VortexFallbackPainter(_fallbackCtrl.value),
+          size: Size.infinite,
+        ),
+      );
     }
 
     if (!_initialized) {
@@ -108,4 +125,64 @@ class _AnimatedWallpaperBackgroundState
       ),
     );
   }
+}
+
+/// Animated vortex portal fallback for platforms where video_player is
+/// unavailable (Windows desktop). Draws rotating concentric purple rings
+/// with a radial glow center — visually consistent with the mp4 vortex.
+class _VortexFallbackPainter extends CustomPainter {
+  final double t;
+
+  _VortexFallbackPainter(this.t);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final maxR = math.max(size.width, size.height) * 0.7;
+
+    // Radial glow background.
+    final glowPaint = Paint()
+      ..shader = RadialGradient(
+        center: Alignment.center,
+        radius: 0.8,
+        colors: [
+          const Color(0xFF4A148C).withValues(alpha: 0.5),
+          const Color(0xFF1A0F2E).withValues(alpha: 0.2),
+          Colors.transparent,
+        ],
+      ).createShader(Rect.fromCircle(center: center, radius: maxR));
+    canvas.drawRect(Offset.zero & size, glowPaint);
+
+    // Rotating concentric rings — the swirling portal.
+    const ringCount = 12;
+    for (int i = 0; i < ringCount; i++) {
+      final progress = (i / ringCount + t) % 1.0;
+      final radius = maxR * progress;
+      if (radius < 5) continue;
+      final alpha = (1.0 - progress) * 0.35;
+      final hue = 270.0 + i * 8.0;
+      canvas.drawOval(
+        Rect.fromCenter(center: center, width: radius * 2, height: radius * 1.6),
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5 + (1.0 - progress) * 2
+          ..color = HSLColor.fromAHSL(alpha, hue, 0.7, 0.5).toColor(),
+      );
+    }
+
+    // Bright center.
+    final corePaint = Paint()
+      ..shader = RadialGradient(
+        center: Alignment.center,
+        radius: 0.15,
+        colors: [
+          const Color(0xFFCE93D8).withValues(alpha: 0.6),
+          Colors.transparent,
+        ],
+      ).createShader(Rect.fromCircle(center: center, radius: maxR * 0.15));
+    canvas.drawRect(Offset.zero & size, corePaint);
+  }
+
+  @override
+  bool shouldRepaint(_VortexFallbackPainter old) => old.t != t;
 }

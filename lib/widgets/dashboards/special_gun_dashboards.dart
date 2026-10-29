@@ -1,7 +1,9 @@
+import '../../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/player.dart';
+import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 
@@ -20,37 +22,39 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final lvl = p.gunderfuryLevel.clamp(1, 60);
+    final p = context.read<RunProvider>();
+    final lvl = context.select<RunProvider, int>((p) => p.gunderfuryLevel).clamp(1, 60);
 
     String formName = '';
     String description = '';
     String statsDesc = '';
 
+    // Per-form stats verified against the wiki (guns.json multi-value
+    // fields hold these same numbers, space-separated per form).
     if (lvl < 20) {
       formName = 'Base Form';
       description = 'Fires wide shotgun-like energy blasts.';
-      statsDesc = 'Damage: 4.5 • Reload: 1.5s • Capacity: 450 • Spread: 10°';
+      statsDesc = 'Damage: 3.5x6 (21) • Fire Rate: 0.7s • Mag: 8 • Ammo: 200 • DPS: 25.5';
     } else if (lvl < 30) {
       formName = 'Automatic Form';
       description = 'Increases fire rate and becomes fully automatic.';
-      statsDesc = 'Damage: 4.5 • Reload: 1.5s • Capacity: 450 • Spread: 10° (Auto)';
+      statsDesc = 'Damage: 3.5 • Fire Rate: 0.085s • Mag: 30 • Ammo: 300 • DPS: 29.6';
     } else if (lvl < 40) {
       formName = 'Defender Form';
       description = 'Shoots larger, high-velocity energy spheres.';
-      statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 5°';
+      statsDesc = 'Damage: 21 • Fire Rate: 0.6s • Mag: 30 • Ammo: 350 • DPS: 33.2';
     } else if (lvl < 50) {
       formName = 'Vindicator Form';
       description = 'Fires faster with elevated accuracy and tighter groupings.';
-      statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 3°';
+      statsDesc = 'Damage: 15 • Fire Rate: 0.4s • Mag: 40 • Ammo: 400 • DPS: 34.1';
     } else if (lvl < 60) {
       formName = 'Laser Rifle';
       description = 'Fires sustained continuous rapid energy laser pulses.';
-      statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 2°';
+      statsDesc = 'Damage: 15 • Fire Rate: 0.12s • Mag: 50 • Ammo: 500 • DPS: 107.1';
     } else {
       formName = 'Awakened Gunderfury';
       description = 'Legendary form of the Blessed Gunseeker. Rapidly shoots twin light beams with absolute 0° spread, bouncing, and piercing!';
-      statsDesc = 'Damage: 10.0 • Reload: 0.6s • Capacity: 650 • Spread: 0° (Perfect, Piercing, Bouncing)';
+      statsDesc = 'Damage: 20x2 (40) • Fire Rate: 0.085s • Mag: 40 • Ammo: 600 • DPS: 181.8';
     }
 
     return SliverToBoxAdapter(
@@ -58,8 +62,8 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
         padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF13151A),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
             boxShadow: [
               BoxShadow(
@@ -73,7 +77,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.all(Radii.md),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
@@ -86,7 +90,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                           GoopText(
                             'GUNDERFURY HUD - LVL $lvl',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: FontSizes.labelMedium,
                               fontWeight: FontWeight.w900,
                               color: Colors.purpleAccent.shade100,
                               letterSpacing: 0.8,
@@ -105,7 +109,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                             child: GoopText(
                               formName.toUpperCase(),
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: FontSizes.labelSmall,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.purpleAccent.shade100,
                               ),
@@ -138,13 +142,15 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                         height: 72,
                         decoration: BoxDecoration(
                           color: Colors.black26,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.all(Radii.sm),
                           border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.15)),
                         ),
                         padding: const EdgeInsets.all(6),
                         child: Image.asset(
                           'assets/images/guns/gunderfury.webp',
                           fit: BoxFit.contain,
+                          cacheWidth: 144,
+                          cacheHeight: 144,
                           errorBuilder: (_, __, ___) => const Icon(
                             Icons.broken_image_outlined,
                             color: Colors.white24,
@@ -165,7 +171,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                             GoopText(
                               statsDesc,
                               style: TextStyle(
-                                fontSize: 9.5,
+                                fontSize: FontSizes.labelSmall,
                                 color: Colors.purpleAccent.shade100.withValues(alpha: 0.8),
                                 fontWeight: FontWeight.bold,
                               ),
@@ -175,10 +181,10 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(alpha: 0.02),
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
                                     ),
                                     child: Row(
@@ -186,7 +192,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                       children: [
                                         const GoopText(
                                           'GUNDER LEVEL',
-                                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
+                                          style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
                                         Row(
                                           children: [
@@ -206,7 +212,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               child: Text(
                                                 '$lvl',
-                                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                                                style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white),
                                               ),
                                             ),
                                             GestureDetector(
@@ -259,8 +265,8 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final form = p.tripleGunForm;
+    final p = context.read<RunProvider>();
+    final form = context.select<RunProvider, int>((p) => p.tripleGunForm);
 
     String formName = '';
     String formDesc = '';
@@ -280,8 +286,8 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
         padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF13151A),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.35), width: 1.2),
             boxShadow: [
               BoxShadow(
@@ -295,7 +301,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.all(Radii.md),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
@@ -308,7 +314,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                           GoopText(
                             'TRIPLE GUN HUD',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: FontSizes.labelMedium,
                               fontWeight: FontWeight.w900,
                               color: Colors.blueAccent.shade100,
                               letterSpacing: 0.8,
@@ -327,7 +333,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                             child: GoopText(
                               'FORM $form',
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: FontSizes.labelSmall,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.blueAccent.shade100,
                               ),
@@ -360,13 +366,15 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                         height: 72,
                         decoration: BoxDecoration(
                           color: Colors.black26,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.all(Radii.sm),
                           border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.15)),
                         ),
                         padding: const EdgeInsets.all(6),
                         child: Image.asset(
                           'assets/images/guns/triple_gun.webp',
                           fit: BoxFit.contain,
+                          cacheWidth: 144,
+                          cacheHeight: 144,
                           errorBuilder: (_, __, ___) => const Icon(
                             Icons.broken_image_outlined,
                             color: Colors.white24,
@@ -386,17 +394,17 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                             const SizedBox(height: 4),
                             GoopText(
                               formDesc,
-                              style: const TextStyle(fontSize: 10, color: Colors.white70, height: 1.3),
+                              style: const TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white70, height: 1.3),
                             ),
                             const SizedBox(height: 10),
                             Row(
                               children: [
                                 Expanded(
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(alpha: 0.02),
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
                                     ),
                                     child: Row(
@@ -404,7 +412,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                       children: [
                                         const GoopText(
                                           'ACTIVE FORM',
-                                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
+                                          style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
                                         Row(
                                           children: [
@@ -424,7 +432,7 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               child: Text(
                                                 '$form',
-                                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                                                style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white),
                                               ),
                                             ),
                                             GestureDetector(
@@ -477,8 +485,8 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
 
   @override
   Widget build(BuildContext context) {
-    final p = context.watch<RunProvider>();
-    final activeStage = p.evolverForm;
+    final p = context.read<RunProvider>();
+    final activeStage = context.select<RunProvider, int>((p) => p.evolverForm);
 
     final stages = const [
       EvolverStageSpec(id: 1, name: 'Amoeba', dps: '13.5 DPS', bullet: 'Base round shots', color: Colors.tealAccent),
@@ -496,8 +504,8 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
         padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF13151A),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.35), width: 1.2),
             boxShadow: [
               BoxShadow(
@@ -511,7 +519,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.all(Radii.md),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
@@ -524,7 +532,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                           GoopText(
                             'EVOLVER HUD',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: FontSizes.labelMedium,
                               fontWeight: FontWeight.w900,
                               color: Colors.greenAccent.shade100,
                               letterSpacing: 0.8,
@@ -543,7 +551,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                             child: GoopText(
                               'STAGE $activeStage: ${currentSpec.name.toUpperCase()}',
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: FontSizes.labelSmall,
                                 fontWeight: FontWeight.w900,
                                 color: currentSpec.color,
                               ),
@@ -576,13 +584,15 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                         height: 72,
                         decoration: BoxDecoration(
                           color: Colors.black26,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.all(Radii.sm),
                           border: Border.all(color: currentSpec.color.withValues(alpha: 0.25)),
                         ),
                         padding: const EdgeInsets.all(6),
                         child: Image.asset(
                           'assets/images/guns/evolver.webp',
                           fit: BoxFit.contain,
+                          cacheWidth: 144,
+                          cacheHeight: 144,
                           errorBuilder: (_, __, ___) => const Icon(
                             Icons.broken_image_outlined,
                             color: Colors.white24,
@@ -602,17 +612,17 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                             const SizedBox(height: 4),
                             GoopText(
                               'Form Bullet: ${currentSpec.bullet}',
-                              style: const TextStyle(fontSize: 10, color: Colors.white70, height: 1.3),
+                              style: const TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white70, height: 1.3),
                             ),
                             const SizedBox(height: 10),
                             Row(
                               children: [
                                 Expanded(
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(alpha: 0.02),
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
                                     ),
                                     child: Row(
@@ -620,7 +630,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                       children: [
                                         const GoopText(
                                           'EVOLUTION STAGE',
-                                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
+                                          style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
                                         Row(
                                           children: [
@@ -640,7 +650,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               child: Text(
                                                 '$activeStage',
-                                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                                                style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white),
                                               ),
                                             ),
                                             GestureDetector(

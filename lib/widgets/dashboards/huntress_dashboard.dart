@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
 
 /// Compact Huntress HUD: dig chance + item weights. Single concise card.
 /// Toggle on left switches between full pickup weights and health-focused stats.
@@ -78,7 +79,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                           Text(
                             _healthMode ? 'HP' : 'ALL',
                             style: TextStyle(
-                              fontSize: 8,
+                              fontSize: FontSizes.labelSmall,
                               fontWeight: FontWeight.w800,
                               color: _healthMode ? Colors.redAccent : Colors.white38,
                               letterSpacing: 0.5,
@@ -107,7 +108,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                 const SizedBox(height: 6),
                 GoopText(
                   'Baby Good Mimic active — dig rate doubled',
-                  style: TextStyle(fontSize: 9.5, fontStyle: FontStyle.italic, color: Colors.purpleAccent.shade100),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, fontStyle: FontStyle.italic, color: Colors.purpleAccent.shade100),
                 ),
               ],
               const SizedBox(height: 10),
@@ -162,7 +163,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
         children: [
           GoopText(
             label,
-            style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.5),
+            style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.5),
           ),
           const SizedBox(height: 2),
           GoopText(value, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),

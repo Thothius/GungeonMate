@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/app_theme.dart';
 import '../../services/haptics.dart';
+import '../../theme/tokens.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/asset_paths.dart';
 import '../quality_badge.dart';
@@ -69,6 +70,7 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white70),
+          tooltip: 'Back',
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -196,6 +198,8 @@ class _SpecialGridTile extends StatelessWidget {
                   child: Image.asset(
                     entry.iconPath,
                     fit: BoxFit.contain,
+                    cacheWidth: 88,
+                    cacheHeight: 88,
                     errorBuilder: (_, __, ___) => Icon(
                       entry.isGun ? Icons.gps_fixed : Icons.star,
                       color: Colors.white24,
@@ -222,7 +226,7 @@ class _SpecialGridTile extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 8.5,
+                fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w700,
                 color: entry.owned ? accent : Colors.white.withValues(alpha: 0.5),
                 height: 1.1,

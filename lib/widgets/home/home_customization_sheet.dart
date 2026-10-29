@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
+import '../../services/app_theme.dart';
+import '../../theme/tokens.dart';
 import '../../services/home_customization.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
@@ -36,11 +38,12 @@ class _HomeCustomizationSheetState extends State<HomeCustomizationSheet> {
       builder: (context, cust, _) {
         return SafeArea(
           child: Container(
-            decoration: const BoxDecoration(
-              color: Color(0xFF1E1E22),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              border: Border(
-                top: BorderSide(color: Color(0xFFBCA0F8), width: 1.2),
+            decoration: BoxDecoration(
+              color: AppTheme.flair.card,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              border: Border.all(
+                color: AppTheme.flair.primary,
+                width: 1.2,
               ),
             ),
             padding: const EdgeInsets.fromLTRB(16, 10, 16, 12),
@@ -62,7 +65,7 @@ class _HomeCustomizationSheetState extends State<HomeCustomizationSheet> {
                 // Title + section toggle
                 Row(
                   children: [
-                    const Icon(Icons.tune_rounded, color: Color(0xFFBCA0F8), size: 20),
+                    Icon(Icons.tune_rounded, color: AppTheme.flair.primary, size: 20),
                     const SizedBox(width: 8),
                     const GoopText(
                       'CUSTOMIZE HOME',
@@ -123,10 +126,10 @@ class _SectionChip extends StatelessWidget {
         duration: const Duration(milliseconds: 160),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: active ? const Color(0xFFBCA0F8).withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.05),
+          color: active ? AppTheme.flair.primary.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: active ? const Color(0xFFBCA0F8).withValues(alpha: 0.7) : Colors.white24,
+            color: active ? AppTheme.flair.primary.withValues(alpha: 0.7) : Colors.white24,
             width: active ? 1.2 : 0.8,
           ),
         ),
@@ -161,7 +164,7 @@ class _GungeoneerPicker extends StatelessWidget {
       children: [
         GoopText(
           'Pick a Gungeoneer to rotate in the vortex, or let it cycle randomly.',
-          style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+          style: TextStyle(fontSize: FontSizes.labelMedium, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
         ),
         const SizedBox(height: 10),
         // Special options row: RNG + Off
@@ -283,15 +286,15 @@ class _GungeoneerTile extends StatelessWidget {
         duration: const Duration(milliseconds: 160),
         decoration: BoxDecoration(
           color: selected
-              ? const Color(0xFFBCA0F8).withValues(alpha: 0.18)
+              ? AppTheme.flair.primary.withValues(alpha: 0.18)
               : Colors.white.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: selected ? const Color(0xFFBCA0F8).withValues(alpha: 0.85) : Colors.white24,
+            color: selected ? AppTheme.flair.primary.withValues(alpha: 0.85) : Colors.white24,
             width: selected ? 1.6 : 0.8,
           ),
           boxShadow: selected
-              ? [BoxShadow(color: const Color(0xFFBCA0F8).withValues(alpha: 0.25), blurRadius: 8)]
+              ? [BoxShadow(color: AppTheme.flair.primary.withValues(alpha: 0.25), blurRadius: 8)]
               : null,
         ),
         child: Column(
@@ -301,6 +304,7 @@ class _GungeoneerTile extends StatelessWidget {
                 padding: const EdgeInsets.all(3),
                 child: gif.isNotEmpty
                     ? Image.asset(gif, fit: BoxFit.contain, filterQuality: FilterQuality.none,
+                        cacheWidth: 160, cacheHeight: 160,
                         errorBuilder: (_, __, ___) => _fallback(icon))
                     : _fallback(icon),
               ),
@@ -313,7 +317,7 @@ class _GungeoneerTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 8.5,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.w700,
                   color: selected ? Colors.white : Colors.white70,
                   height: 1.1,
@@ -329,6 +333,7 @@ class _GungeoneerTile extends StatelessWidget {
   Widget _fallback(String icon) {
     if (icon.isNotEmpty) {
       return Image.asset(icon, fit: BoxFit.contain, filterQuality: FilterQuality.none,
+          cacheWidth: 160, cacheHeight: 160,
           errorBuilder: (_, __, ___) => const Icon(Icons.person, size: 28, color: Colors.white54));
     }
     return const Icon(Icons.person, size: 28, color: Colors.white54);
@@ -350,7 +355,7 @@ class _JunkSettings extends StatelessWidget {
       children: [
         GoopText(
           'Choose which pickups drift through the vortex and how many of each.',
-          style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+          style: TextStyle(fontSize: FontSizes.labelMedium, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
         ),
         const SizedBox(height: 12),
         // Master toggle row
@@ -396,7 +401,7 @@ class _MasterToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: Insets.sm),
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(10),
@@ -452,6 +457,8 @@ class _JunkStepper extends StatelessWidget {
               height: 26,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.none,
+              cacheWidth: 52,
+              cacheHeight: 52,
               errorBuilder: (_, __, ___) => const SizedBox(width: 26, height: 26),
             ),
           ),
@@ -499,7 +506,7 @@ class _StepBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.all(Radii.lg),
       child: Container(
         width: 30,
         height: 30,

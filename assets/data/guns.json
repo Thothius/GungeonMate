@@ -5428,25 +5428,7 @@
               "v": " Shells can also pierce up to 4 times.\n"
             }
           ],
-          "sub": [
-            {
-              "tokens": [
-                {
-                  "t": "text",
-                  "v": " In "
-                },
-                {
-                  "t": "text",
-                  "v": "Exit the Gungeon",
-                  "style": "i"
-                },
-                {
-                  "t": "text",
-                  "v": ", instead of piercing through enemies, shells will bounce off of enemies, expending one of their six bounces without the need to pierce."
-                }
-              ]
-            }
-          ]
+          "sub": []
         },
         {
           "tokens": [

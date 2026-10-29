@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/player.dart';
+import '../../services/app_theme.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
 
 // =============================================================================
 // New compact dashboards for Shellegun, Chamber Gun, Platinum Bullets, Iron Coin
@@ -43,8 +45,8 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF0E1218),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.cyan.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -52,16 +54,16 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.shield_moon_rounded, color: Colors.cyanAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'SHELLEGUN',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -96,7 +98,7 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
                 modes[mode - 1],
                 style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: Insets.xs),
               GoopText(
                 descriptions[mode - 1],
                 style: TextStyle(fontSize: 11, color: Colors.white.withValues(alpha: 0.7), height: 1.3),
@@ -116,7 +118,7 @@ class ShellegunDashboardState extends State<ShellegunDashboard>
       onTap: () { Haptics.light(); onTap(); },
       borderRadius: BorderRadius.circular(6),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: Insets.md, vertical: 6),
         decoration: BoxDecoration(
           color: active ? Colors.cyan.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(6),
@@ -160,8 +162,8 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF120E08),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -169,16 +171,16 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.apartment_rounded, color: Colors.amberAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'CHAMBER GUN',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -199,19 +201,19 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-              const SizedBox(height: 8),
+              const SizedBox(height: Insets.sm),
               GoopText(
                 'FLOOR ${floor + 1}: ${_floors[floor]}',
                 style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: Insets.sm),
               // Floor selector — horizontal scrollable row
               SizedBox(
-                height: 32,
+                height: Insets.xxl,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: 10,
-                  separatorBuilder: (_, __) => const SizedBox(width: 4),
+                  separatorBuilder: (_, __) => const SizedBox(width: Insets.xs),
                   itemBuilder: (context, i) {
                     final active = i == floor;
                     return InkWell(
@@ -282,8 +284,8 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF100E18),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -291,16 +293,16 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.military_tech_rounded, color: Colors.purpleAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'PLATINUM BULLETS',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -324,13 +326,13 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
               const SizedBox(height: 10),
               // Damage multiplier row
               _buildMultRow('DMG', dmgMult, seconds, 750, Colors.redAccent, tierLabel(dmgMult)),
-              const SizedBox(height: 8),
+              const SizedBox(height: Insets.sm),
               // Fire rate multiplier row
               _buildMultRow('RATE', fireRateMult, seconds, 375, Colors.orangeAccent, tierLabel(fireRateMult)),
               const SizedBox(height: 10),
               GoopText(
                 'Damage & fire rate scale with firing time. Max 3x each. Tap +30s after each fight.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -340,19 +342,19 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                     onPressed: seconds > 0 ? () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds - 30).clamp(0, 999)); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 24),
                     tooltip: 'Decrease platinum bullets',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  GoopText('${seconds}s', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                  GoopText('${seconds}s', style: const TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPlatinumBulletsSeconds((seconds + 30).clamp(0, 999)); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 24),
                     tooltip: 'Increase platinum bullets',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: Insets.sm),
                   TextButton(
                     onPressed: () { Haptics.selection(); p.setPlatinumBulletsSeconds(0); },
-                    child: const GoopText('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
+                    child: const GoopText('Reset', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.redAccent)),
                   ),
                 ],
               ),
@@ -372,7 +374,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
       children: [
         SizedBox(
           width: 36,
-          child: GoopText(label, style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: color)),
+          child: GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: color)),
         ),
         Expanded(
           child: ClipRRect(
@@ -385,7 +387,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: Insets.sm),
         SizedBox(
           width: 56,
           child: GoopText(
@@ -394,12 +396,12 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
             textAlign: TextAlign.right,
           ),
         ),
-        const SizedBox(width: 4),
+        const SizedBox(width: Insets.xs),
         SizedBox(
           width: 32,
           child: GoopText(
             tier,
-            style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: color.withValues(alpha: 0.6)),
+            style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: color.withValues(alpha: 0.6)),
             textAlign: TextAlign.right,
           ),
         ),
@@ -434,8 +436,8 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF181210),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.brown.withValues(alpha: 0.4), width: 1.2),
           ),
           child: Column(
@@ -443,16 +445,16 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.paid_rounded, color: Colors.amber, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'IRON COIN',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.amber, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -489,7 +491,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
               const SizedBox(height: 10),
               GoopText(
                 "Flip to reveal/destroy a chest's contents. 3 uses per run. Use wisely on high-tier chests.",
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -499,13 +501,13 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                     onPressed: uses < 3 ? () { Haptics.light(); p.setIronCoinUses(uses + 1); } : null,
                     icon: const Icon(Icons.add_circle_outline, color: Colors.amber, size: 24),
                     tooltip: 'Increase iron coin uses',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
                   IconButton(
                     onPressed: uses > 0 ? () { Haptics.light(); p.setIronCoinUses(uses - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.amber, size: 24),
                     tooltip: 'Decrease iron coin uses',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
                 ],
               ),
@@ -562,8 +564,8 @@ class SpiceDashboardState extends State<SpiceDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF180E0E),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.redAccent.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -571,16 +573,16 @@ class SpiceDashboardState extends State<SpiceDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.spa, color: Colors.redAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'SPICE',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.redAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.redAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -622,7 +624,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                     : count < 5
                         ? 'Escalating bonuses. Each use: -1 Heart, +15% Damage, +10% Spread, +1 Curse.'
                         : 'Diminishing returns: +15% Dmg, +1.0 Curse per additional use.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -632,14 +634,14 @@ class SpiceDashboardState extends State<SpiceDashboard>
                     onPressed: count > 0 ? () { Haptics.light(); p.setSpiceUsageCount(count - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent, size: 24),
                     tooltip: 'Decrease spice uses',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  Text('$count', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+                  Text('$count', style: const TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.bold, color: Colors.redAccent)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setSpiceUsageCount(count + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.redAccent, size: 24),
                     tooltip: 'Increase spice uses',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
                 ],
               ),
@@ -656,8 +658,8 @@ class SpiceDashboardState extends State<SpiceDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.redAccent)),
+        GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.bold, color: Colors.redAccent)),
       ],
     );
   }
@@ -691,8 +693,8 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF0E1218),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.tealAccent.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -700,16 +702,16 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.speed, color: Colors.tealAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'METRONOME',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.tealAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.tealAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -747,18 +749,18 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                 children: [
                   GoopText(
                     '$kills / 75 kills',
-                    style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5)),
+                    style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.5)),
                   ),
                   GoopText(
                     kills >= 75 ? 'MAX STACK' : '${75 - kills} to max',
-                    style: TextStyle(fontSize: 10, color: Colors.tealAccent.withValues(alpha: 0.6)),
+                    style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.tealAccent.withValues(alpha: 0.6)),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: Insets.sm),
               GoopText(
                 '+2% damage per kill. Resets if you take damage or swap guns. Max +150% at 75 kills.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -768,19 +770,19 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                     onPressed: kills > 0 ? () { Haptics.light(); p.setMetronomeKills(kills - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.tealAccent, size: 24),
                     tooltip: 'Decrease metronome kills',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  Text('$kills', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
+                  Text('$kills', style: const TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.bold, color: Colors.tealAccent)),
                   IconButton(
                     onPressed: kills < 75 ? () { Haptics.light(); p.setMetronomeKills(kills + 1); } : null,
                     icon: const Icon(Icons.add_circle_outline, color: Colors.tealAccent, size: 24),
                     tooltip: 'Increase metronome kills',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: Insets.sm),
                   TextButton(
                     onPressed: () { Haptics.selection(); p.setMetronomeKills(0); },
-                    child: const GoopText('Reset', style: TextStyle(fontSize: 10, color: Colors.redAccent)),
+                    child: const GoopText('Reset', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.redAccent)),
                   ),
                 ],
               ),
@@ -830,8 +832,8 @@ class SprunDashboardState extends State<SprunDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF0E1018),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.cyanAccent.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -839,21 +841,21 @@ class SprunDashboardState extends State<SprunDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     Icon(Icons.radar, color: Colors.cyanAccent.shade200, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'SPRUN',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.cyanAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     if (isWindgunnerActive)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 3),
                         decoration: BoxDecoration(
                           color: Colors.cyan.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(6),
@@ -861,13 +863,13 @@ class SprunDashboardState extends State<SprunDashboard>
                         ),
                         child: GoopText(
                           'WINDGUNNER ${p.windgunnerCountdown}s',
-                          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
+                          style: const TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.bold, color: Colors.cyanAccent),
                         ),
                       )
                     else
                       GoopText(
                         idx >= 0 ? 'REVEALED' : 'UNKNOWN',
-                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
+                        style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.cyanAccent.withValues(alpha: 0.6)),
                       ),
                     const SizedBox(width: 6),
                     Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
@@ -889,13 +891,13 @@ class SprunDashboardState extends State<SprunDashboard>
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     color: Colors.cyan.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.all(Radii.sm),
                     border: Border.all(color: Colors.cyan.withValues(alpha: 0.2)),
                   ),
                   child: Row(
                     children: [
                       const Icon(Icons.flash_on, color: Colors.cyanAccent, size: 16),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: Insets.sm),
                       Expanded(
                         child: GoopText(
                           _triggers[idx],
@@ -908,7 +910,7 @@ class SprunDashboardState extends State<SprunDashboard>
               else
                 GoopText(
                   'Trigger unknown. Tap "Reveal" to discover this run\'s Windgunner activation condition.',
-                  style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.5), height: 1.3),
                 ),
               const SizedBox(height: 10),
               Row(
@@ -923,7 +925,7 @@ class SprunDashboardState extends State<SprunDashboard>
                     child: const GoopText('Reveal Trigger', style: TextStyle(fontSize: 11, color: Colors.cyanAccent)),
                   ),
                   if (idx >= 0) ...[
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     TextButton(
                       onPressed: () { Haptics.light(); p.setSprunTriggerIndex(-1); },
                       child: const GoopText('Hide', style: TextStyle(fontSize: 11, color: Colors.white38)),
@@ -968,8 +970,8 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF181410),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.orangeAccent.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -977,16 +979,16 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.sports_mma_rounded, color: Colors.orangeAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'BOXING GLOVE',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.orangeAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.orangeAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -1027,7 +1029,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                 stars == 3
                     ? '3 stars! Charge the gun to consume stars and fire a high-damage super punch.'
                     : 'Gains a star per kill (up to 3). Chance to stun on hit. Increases curse by 1.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -1037,14 +1039,14 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                     onPressed: stars > 0 ? () { Haptics.light(); p.setBoxingGloveStars(stars - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.orangeAccent, size: 24),
                     tooltip: 'Decrease boxing glove stars',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  Text('$stars', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
+                  Text('$stars', style: const TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
                   IconButton(
                     onPressed: stars < 3 ? () { Haptics.light(); p.setBoxingGloveStars(stars + 1); } : null,
                     icon: const Icon(Icons.add_circle_outline, color: Colors.orangeAccent, size: 24),
                     tooltip: 'Increase boxing glove stars',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
                 ],
               ),
@@ -1085,8 +1087,8 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF121418),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.blueGrey.withValues(alpha: 0.4), width: 1.2),
           ),
           child: Column(
@@ -1094,16 +1096,16 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.smoking_rooms, color: Colors.blueGrey, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'CIGARETTES',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.blueGrey, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.blueGrey, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     GoopText(
@@ -1136,7 +1138,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
               const SizedBox(height: 10),
               GoopText(
                 'Each use: -half a heart, +1 Coolness. Coolness decreases active item cooldowns and increases luck.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -1146,14 +1148,14 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                     onPressed: uses > 0 ? () { Haptics.light(); p.setCigarettesUses(uses - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.blueGrey, size: 24),
                     tooltip: 'Decrease cigarette uses',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  Text('$uses', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+                  Text('$uses', style: const TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setCigarettesUses(uses + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.blueGrey, size: 24),
                     tooltip: 'Increase cigarette uses',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
                 ],
               ),
@@ -1170,8 +1172,8 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
+        GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.bold, color: Colors.blueGrey)),
       ],
     );
   }
@@ -1219,8 +1221,8 @@ class PolarisDashboardState extends State<PolarisDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF0E1218),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -1228,20 +1230,20 @@ class PolarisDashboardState extends State<PolarisDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.auto_awesome, color: Colors.amberAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'POLARIS',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.amberAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.amber.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
@@ -1278,13 +1280,13 @@ class PolarisDashboardState extends State<PolarisDashboard>
                     valueColor: const AlwaysStoppedAnimation(Colors.amberAccent),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: Insets.xs),
                 GoopText(
                   '$kills / $nextThreshold kills to Lv ${effectiveLevel + 1}',
-                  style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.5)),
                 ),
               ] else
-                GoopText('MAX LEVEL', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.amberAccent.withValues(alpha: 0.8))),
+                GoopText('MAX LEVEL', style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.bold, color: Colors.amberAccent.withValues(alpha: 0.8))),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1301,7 +1303,7 @@ class PolarisDashboardState extends State<PolarisDashboard>
                     : effectiveLevel == 2
                         ? 'L2: Fires 2 bullets (5 dmg each). Double chance-based effect triggers.'
                         : 'L1: 5 damage per shot. Kill enemies to level up.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -1311,28 +1313,28 @@ class PolarisDashboardState extends State<PolarisDashboard>
                     onPressed: kills > 0 ? () { Haptics.light(); p.setPolarisKills(kills - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.amberAccent, size: 24),
                     tooltip: 'Decrease Polaris kills',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  GoopText('$kills kills', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
+                  GoopText('$kills kills', style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPolarisKills(kills + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.amberAccent, size: 24),
                     tooltip: 'Increase Polaris kills',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: Insets.md),
                   IconButton(
                     onPressed: hits > 0 ? () { Haptics.light(); p.setPolarisDamageHits(hits - 1); } : null,
                     icon: const Icon(Icons.remove, color: Colors.redAccent, size: 22),
                     tooltip: 'Reduce damage hits',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  GoopText('-$hits', style: TextStyle(fontSize: 12, color: Colors.redAccent.withValues(alpha: 0.8))),
+                  GoopText('-$hits', style: TextStyle(fontSize: FontSizes.labelMedium, color: Colors.redAccent.withValues(alpha: 0.8))),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setPolarisDamageHits(hits + 1); },
                     icon: const Icon(Icons.add, color: Colors.redAccent, size: 22),
                     tooltip: 'Took damage (level drop)',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
                 ],
               ),
@@ -1349,8 +1351,8 @@ class PolarisDashboardState extends State<PolarisDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
+        GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
       ],
     );
   }
@@ -1392,8 +1394,8 @@ class GuntherDashboardState extends State<GuntherDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF0F0E18),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(color: Colors.purple.withValues(alpha: 0.35), width: 1.2),
           ),
           child: Column(
@@ -1401,20 +1403,20 @@ class GuntherDashboardState extends State<GuntherDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     const Icon(Icons.chat_bubble, color: Colors.purpleAccent, size: 18),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'GUNTHER',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 3),
                       decoration: BoxDecoration(
                         color: Colors.purple.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
@@ -1451,13 +1453,13 @@ class GuntherDashboardState extends State<GuntherDashboard>
                     valueColor: const AlwaysStoppedAnimation(Colors.purpleAccent),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: Insets.xs),
                 GoopText(
                   '$friendship / $nextFriendship friendship to Stage ${stage + 1}',
-                  style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.5)),
+                  style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.5)),
                 ),
               ] else
-                GoopText('MAX STAGE — Sentient & Homing', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.purpleAccent.withValues(alpha: 0.8))),
+                GoopText('MAX STAGE: Sentient & Homing', style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.bold, color: Colors.purpleAccent.withValues(alpha: 0.8))),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1474,7 +1476,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                     : stage == 2
                         ? 'L2: 9 dmg, bullets bounce twice. Growing personality.'
                         : 'L1: 6 dmg, piercing bullets. Clear rooms to gain friendship.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(
@@ -1484,14 +1486,14 @@ class GuntherDashboardState extends State<GuntherDashboard>
                     onPressed: friendship > 0 ? () { Haptics.light(); p.setGuntherFriendship(friendship - 1); } : null,
                     icon: const Icon(Icons.remove_circle_outline, color: Colors.purpleAccent, size: 24),
                     tooltip: 'Decrease Gunther friendship',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
-                  Text('$friendship', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                  Text('$friendship', style: const TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.bold, color: Colors.white)),
                   IconButton(
                     onPressed: () { Haptics.light(); p.setGuntherFriendship(friendship + 1); },
                     icon: const Icon(Icons.add_circle_outline, color: Colors.purpleAccent, size: 24),
                     tooltip: 'Increase Gunther friendship',
-                    constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
                   ),
                 ],
               ),
@@ -1508,8 +1510,8 @@ class GuntherDashboardState extends State<GuntherDashboard>
   Widget _statChip(String label, String value) {
     return Column(
       children: [
-        GoopText(label, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.4))),
-        GoopText(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.purpleAccent)),
+        GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.4))),
+        GoopText(value, style: const TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.bold, color: Colors.purpleAccent)),
       ],
     );
   }
@@ -1545,8 +1547,8 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF180E0E),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.card,
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
               color: activated ? Colors.orange.withValues(alpha: 0.5) : Colors.deepOrange.withValues(alpha: 0.3),
               width: 1.2,
@@ -1557,9 +1559,9 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.sm),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                   children: [
                     Icon(
@@ -1567,14 +1569,14 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                       color: activated ? Colors.orangeAccent : Colors.deepOrangeAccent,
                       size: 18,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: Insets.sm),
                     const GoopText(
                       'GUN SOUL',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: Colors.deepOrangeAccent, letterSpacing: 0.8),
+                      style: TextStyle(fontSize: FontSizes.labelMedium, fontWeight: FontWeight.w900, color: Colors.deepOrangeAccent, letterSpacing: 0.8),
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 3),
                       decoration: BoxDecoration(
                         color: activated ? Colors.orange.withValues(alpha: 0.2) : Colors.green.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(6),
@@ -1585,7 +1587,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                       child: GoopText(
                         activated ? 'SOUL LOST' : 'ACTIVE',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w900,
                           color: activated ? Colors.orangeAccent : Colors.greenAccent,
                         ),
@@ -1610,7 +1612,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                 activated
                     ? 'You died and respawned at floor start. Gun Soul is removed from your inventory. Reach the location of your death and interact with your soul to reclaim it — dying now will end the run.'
                     : 'Grants +1 heart container. Upon death, respawns you at the start of the current floor with all items and guns retained. Enemies respawn.',
-                style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
+                style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.6), height: 1.3),
               ),
               const SizedBox(height: 10),
               Row(

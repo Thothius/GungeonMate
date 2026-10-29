@@ -12,8 +12,23 @@ import '../models/synergy.dart';
 import '../models/shrine.dart';
 import '../models/gungeoneer.dart';
 import '../models/player.dart';
+import 'dart:math' as math;
 import '../models/run_state.dart';
 import '../models/run_log_entry.dart';
+
+// ── Isolate parse helpers ──────────────────────────────────────
+// Top-level functions for compute() — can't be closures or instance
+// methods. Each takes the raw JSON string and returns the parsed list.
+List<Gun> _parseGuns(String jsonStr) =>
+    (json.decode(jsonStr) as List).map((g) => Gun.fromJson(g)).toList();
+List<Item> _parseItems(String jsonStr) =>
+    (json.decode(jsonStr) as List).map((i) => Item.fromJson(i)).toList();
+List<Synergy> _parseSynergies(String jsonStr) =>
+    (json.decode(jsonStr) as List).map((s) => Synergy.fromJson(s)).toList();
+List<Shrine> _parseShrines(String jsonStr) =>
+    (json.decode(jsonStr) as List).map((s) => Shrine.fromJson(s)).toList();
+List<Gungeoneer> _parseGungeoneers(String jsonStr) =>
+    (json.decode(jsonStr) as List).map((g) => Gungeoneer.fromJson(g)).toList();
 
 class RunProvider with ChangeNotifier {
   RunState _runState = RunState();
@@ -87,6 +102,10 @@ class RunProvider with ChangeNotifier {
   Timer? _windgunnerTimer;
   int _windgunnerCountdown = 0;
 
+  /// Debounce timer for _saveRun — batches rapid successive saves
+  /// (e.g. adding multiple guns) into a single disk write.
+  Timer? _saveDebounce;
+
   // Payday crew: which of Clown Mask / Drill / Loot Bag the user has
   // manually marked as "crew active" is derived from inventory, no state.
 
@@ -145,19 +164,6 @@ class RunProvider with ChangeNotifier {
 
   bool _isLoading = true;
   String? _error;
-
-  /// When true, inventory mutations are blocked to prevent state drift
-  /// during MP disconnect. Set by MultiplayerSession when status transitions
-  /// to/from disconnected. The drop dialog already prevents most UI taps,
-  /// but this is the belt-and-suspenders guard for programmatic calls.
-  bool _mpDisconnected = false;
-  bool get mpDisconnected => _mpDisconnected;
-  set mpDisconnected(bool value) {
-    if (_mpDisconnected != value) {
-      _mpDisconnected = value;
-      notifyListeners();
-    }
-  }
 
   RunState get runState => _runState;
   List<Gun> get allGuns => _allGuns;
@@ -241,53 +247,62 @@ class RunProvider with ChangeNotifier {
       _isLoading = true;
       notifyListeners();
 
-      final gunsJson = await rootBundle.loadString('assets/data/guns.json');
-      final itemsJson = await rootBundle.loadString('assets/data/items.json');
+      // Load all JSON files in parallel — much faster than sequential
+      // awaits on slow storage / first asset bundle read.
+      final jsonResults = await Future.wait([
+        rootBundle.loadString('assets/data/guns.json'),
+        rootBundle.loadString('assets/data/items.json'),
+        rootBundle.loadString('assets/data/synergies.json').catchError((_) => ''),
+        rootBundle.loadString('assets/data/shrines.json').catchError((_) => ''),
+        rootBundle.loadString('assets/data/gungeoneers.json').catchError((_) => ''),
+        rootBundle.loadString('assets/data/back_refs.json').catchError((_) => ''),
+      ]);
 
-      final gunsList = json.decode(gunsJson) as List;
-      final itemsList = json.decode(itemsJson) as List;
+      // Parse the core data in parallel isolates.
+      final gunsFuture = compute(_parseGuns, jsonResults[0]);
+      final itemsFuture = compute(_parseItems, jsonResults[1]);
+      _allGuns = await gunsFuture;
+      _allItems = await itemsFuture;
 
-      _allGuns = gunsList.map((g) => Gun.fromJson(g)).toList();
-      _allItems = itemsList.map((i) => Item.fromJson(i)).toList();
-
-      try {
-        final synergiesJson =
-            await rootBundle.loadString('assets/data/synergies.json');
-        final synergiesList = json.decode(synergiesJson) as List;
-        _allSynergies =
-            synergiesList.map((s) => Synergy.fromJson(s)).toList();
-      } catch (e) {
-// Removed debugPrint for production
+      // Parse secondary data in parallel isolates (non-fatal on failure).
+      if (jsonResults[2].isNotEmpty) {
+        try {
+          _allSynergies = await compute(_parseSynergies, jsonResults[2]);
+        } catch (_) {
+          _allSynergies = [];
+        }
+      } else {
         _allSynergies = [];
       }
 
-      try {
-        final shrinesJson =
-            await rootBundle.loadString('assets/data/shrines.json');
-        final shrinesList = json.decode(shrinesJson) as List;
-        _allShrines = shrinesList.map((s) => Shrine.fromJson(s)).toList();
-      } catch (e) {
-// Removed debugPrint for production
+      if (jsonResults[3].isNotEmpty) {
+        try {
+          _allShrines = await compute(_parseShrines, jsonResults[3]);
+        } catch (_) {
+          _allShrines = [];
+        }
+      } else {
         _allShrines = [];
       }
 
-      try {
-        final gungeoneerJson =
-            await rootBundle.loadString('assets/data/gungeoneers.json');
-        final gungeoneerList = json.decode(gungeoneerJson) as List;
-        _allGungeoneers =
-            gungeoneerList.map((g) => Gungeoneer.fromJson(g)).toList();
-      } catch (e) {
-// Removed debugPrint for production
+      if (jsonResults[4].isNotEmpty) {
+        try {
+          _allGungeoneers = await compute(_parseGungeoneers, jsonResults[4]);
+        } catch (_) {
+          _allGungeoneers = [];
+        }
+      } else {
         _allGungeoneers = [];
       }
 
-      try {
-        final backRefsJson =
-            await rootBundle.loadString('assets/data/back_refs.json');
-        _backRefs = BackRefs.fromJsonString(backRefsJson);
-      } catch (e) {
-// Removed debugPrint for production
+      // Back-refs parsed on main thread (small JSON, fast).
+      if (jsonResults[5].isNotEmpty) {
+        try {
+          _backRefs = BackRefs.fromJsonString(jsonResults[5]);
+        } catch (_) {
+          _backRefs = BackRefs.empty;
+        }
+      } else {
         _backRefs = BackRefs.empty;
       }
 
@@ -305,10 +320,13 @@ class RunProvider with ChangeNotifier {
         for (final s in _allSynergies) s.name.toLowerCase(): s,
       };
 
-      await _loadSavedRun();
-      await _loadFavourites();
-      await _loadSpecialUpgrades();
-      await _loadLastPlayedChar();
+      // Load persisted prefs in parallel.
+      await Future.wait([
+        _loadSavedRun(),
+        _loadFavourites(),
+        _loadSpecialUpgrades(),
+        _loadLastPlayedChar(),
+      ]);
 
       _isLoading = false;
       _error = null;
@@ -412,6 +430,16 @@ class RunProvider with ChangeNotifier {
   /// but can be called from the UI for a "Save Run" button.
   Future<void> saveRun() => _saveRun();
 
+  /// Debounced save — batches rapid successive state changes into a
+  /// single disk write after 400ms of quiet. This prevents 28+
+  /// individual SharedPreferences writes when adding/removing items.
+  void _scheduleSave() {
+    _saveDebounce?.cancel();
+    _saveDebounce = Timer(const Duration(milliseconds: 400), () {
+      _saveRun();
+    });
+  }
+
   Future<void> _saveRun() async {
     try {
       final jsonMap = _runState.toJson();
@@ -495,6 +523,9 @@ class RunProvider with ChangeNotifier {
       _polarisDamageHits = prefs.getInt('special.polaris.hits') ?? 0;
       _guntherFriendship = prefs.getInt('special.gunther.friendship') ?? 0;
       _gunSoulActivated = prefs.getBool('special.gunsoul.activated') ?? false;
+      _metronomeKills = prefs.getInt('special.metronome.kills') ?? 0;
+      _boxingGloveStars = prefs.getInt('special.boxingglove.stars') ?? 0;
+      _cigarettesUses = prefs.getInt('special.cigarettes.uses') ?? 0;
 
       // Robot specific values
       _robotArmor = prefs.getInt('special.robot.armor') ?? 6;
@@ -658,6 +689,7 @@ class RunProvider with ChangeNotifier {
   @override
   void dispose() {
     _windgunnerTimer?.cancel();
+    _saveDebounce?.cancel();
     super.dispose();
   }
 
@@ -753,17 +785,36 @@ class RunProvider with ChangeNotifier {
 
   void setMetronomeKills(int kills) {
     _metronomeKills = kills.clamp(0, 75);
+    _persistSpecial('special.metronome.kills', kills);
     notifyListeners();
   }
 
   void setBoxingGloveStars(int stars) {
     _boxingGloveStars = stars.clamp(0, 3);
+    _persistSpecial('special.boxingglove.stars', stars);
     notifyListeners();
   }
 
   void setCigarettesUses(int uses) {
     _cigarettesUses = uses.clamp(0, 999);
+    _persistSpecial('special.cigarettes.uses', uses);
     notifyListeners();
+  }
+
+  /// Shared fire-and-forget prefs write for special-state fields —
+  /// matches the per-setter pattern used by the older special fields.
+  void _persistSpecial(String key, Object value) {
+    SharedPreferences.getInstance().then((prefs) {
+      switch (value) {
+        case int v:
+          prefs.setInt(key, v);
+        case bool v:
+          prefs.setBool(key, v);
+        case String v:
+          prefs.setString(key, v);
+        default:
+      }
+    }).catchError((Object _) {});
   }
 
   bool isFavourite(String name) => _favourites.contains(name);
@@ -807,12 +858,29 @@ class RunProvider with ChangeNotifier {
   /// Internal: build a freshly-loaded Player for a Gungeoneer, pulling
   /// starting guns/items by name from the master data.
   Player _buildPlayerFor(Gungeoneer character) {
+    final rng = math.Random();
     final startingGuns = _allGuns
         .where((g) => character.startingGuns.contains(g.name))
         .toList();
     final startingItems = _allItems
         .where((i) => character.startingItems.contains(i.name))
         .toList();
+    // Characters whose starter list is 'Random' (or otherwise resolves
+    // empty — e.g. The Paradox/Cultist) get a rolled piece of gear
+    // instead of starting with nothing. Matches the in-game Paradox:
+    // random loadout, not an empty inventory.
+    if (character.startingGuns.any((s) => s.toLowerCase() == 'random') ||
+        startingGuns.isEmpty) {
+      if (_allGuns.isNotEmpty) {
+        startingGuns.add(_allGuns[rng.nextInt(_allGuns.length)]);
+      }
+    }
+    if (character.startingItems.any((s) => s.toLowerCase() == 'random') ||
+        startingItems.isEmpty) {
+      if (_allItems.isNotEmpty) {
+        startingItems.add(_allItems[rng.nextInt(_allItems.length)]);
+      }
+    }
     return Player(
       character: character,
       guns: startingGuns,
@@ -823,21 +891,37 @@ class RunProvider with ChangeNotifier {
   void startNewRun(Gungeoneer character) {
     _runState = RunState(main: _buildPlayerFor(character));
     _saveLastPlayedChar(character.name);
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
+  /// One-shot flag for the MP path: on the Sidekick device the coop slot
+  /// is built before the host's character arrives via snapshot, so the
+  /// paradox-empty rule can't apply in startCoopPlayer. Set once the
+  /// first host snapshot reveals a Paradox main — see applyPeerSnapshot.
+  bool _paradoxSidekickEmptied = false;
+
+  /// True when the main player is The Paradox. The main player rolls a
+  /// random loadout (see _buildPlayerFor), but the sidekick mirrors the
+  /// 'Random' fantasy by starting with nothing (user-requested).
+  bool get _isParadoxMain => _runState.main.character?.name == 'The Paradox';
+
   /// Add a second (local co-op) player to the current run.
   void startCoopPlayer(Gungeoneer character) {
-    _runState = _runState.copyWith(coop: _buildPlayerFor(character));
-    _saveRun();
+    _runState = _runState.copyWith(
+      coop: _isParadoxMain
+          ? Player(character: character)
+          : _buildPlayerFor(character),
+    );
+    _paradoxSidekickEmptied = false;
+    _scheduleSave();
     notifyListeners();
   }
 
   /// Remove the co-op player slot entirely.
   void endCoopPlayer() {
     _runState = _runState.copyWith(clearCoop: true);
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -849,15 +933,17 @@ class RunProvider with ChangeNotifier {
     final current = _playerFor(slot);
     final char = current.character;
     if (char == null) return;
-    final fresh = _buildPlayerFor(char);
+    final fresh = (slot == PlayerSlot.coop && _isParadoxMain)
+        ? Player(character: char)
+        : _buildPlayerFor(char);
     _runState = _replacePlayer(slot, fresh);
     _runState = _runState.copyWith(coolness: 0.0, curse: 0.0, shrinesUsed: []);
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
   // --- Multiplayer snapshot hooks ----------------------------------------
-  // Called only by MultiplayerSession when it receives a snapshot from
+  // Called only by MpSession when it receives a snapshot from
   // the connected peer. Keep these non-obvious mutations isolated from
   // the solo code paths by giving them distinct, multiplayer-only names.
 
@@ -882,7 +968,7 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       coop: Player(character: char, guns: guns, items: items),
     );
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -893,7 +979,20 @@ class RunProvider with ChangeNotifier {
   /// clear the slot when the user had no solo run.
   void restoreMainSlot(Player main) {
     _runState = _runState.copyWith(main: main);
-    _saveRun();
+    _scheduleSave();
+    notifyListeners();
+  }
+
+  /// Reset the main slot to a fresh character with starting loadout,
+  /// preserving the coop slot and all shared state (coolness, curse,
+  /// shrines). Used by MP recovery when the saved character doesn't
+  /// match the loaded one — we need the correct character's starting
+  /// loadout, not the wrong character's guns/items.
+  void resetMainToCharacter(Gungeoneer character) {
+    final freshPlayer = _buildPlayerFor(character);
+    _runState = _runState.copyWith(main: freshPlayer);
+    _saveLastPlayedChar(character.name);
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -913,14 +1012,14 @@ class RunProvider with ChangeNotifier {
       curse: curse,
       shrinesUsed: shrinesUsed,
     );
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
   /// Restore the entire run state atomically (used when loading a saved multiplayer session).
   void restoreEntireRunState(RunState state) {
     _runState = state;
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -933,7 +1032,17 @@ class RunProvider with ChangeNotifier {
     required List<String> itemNames,
     required bool targetMainSlot,
   }) {
-    final char = characterName.isEmpty ? null : gungeoneerByName(characterName);
+    // Guard: if the peer sends an empty character name, don't
+    // overwrite our slot with a null character. This happens when
+    // the peer restarts and their run state hasn't been restored
+    // yet — they broadcast a snapshot with an empty character.
+    // Without this guard, the receiver's main slot gets nulled →
+    // blank "No inventory loaded" screen.
+    if (characterName.isEmpty) return;
+
+    final char = gungeoneerByName(characterName);
+    // Don't use toSet() — it collapses stackable items like Junk.
+    // Resolve names directly, preserving duplicates and order.
     final guns = gunNames
         .map((n) => gunByName(n))
         .whereType<Gun>()
@@ -942,31 +1051,69 @@ class RunProvider with ChangeNotifier {
         .map((n) => itemByName(n))
         .whereType<Item>()
         .toList();
-    final player = Player(character: char, guns: guns, items: items);
 
-    var currentCoop = _runState.coop;
-    if (currentCoop == null) {
-      final cultist = gungeoneerByName('The Cultist') ?? gungeoneerByName('Cultist');
-      currentCoop = Player(
-        character: cultist,
-        guns: cultist != null ? cultist.startingGuns.map((g) => gunByName(g)).whereType<Gun>().toList() : [],
-        items: const [],
-      );
+    // CRITICAL: If the character can't be found (e.g. data not loaded
+    // yet, or character name mismatch between devices), do NOT wipe
+    // an existing valid character with a null one. That would wipe
+    // selectedCharacter (main.character) and flip the HomeScreen to
+    // MainMenu — the user sees "blank view" (particles but no run UI).
+    // Instead, preserve the existing character and only update
+    // guns/items. If there's no existing character, still create the
+    // player (backward compatible with tests that expect slot population).
+    if (char == null) {
+      final existing = targetMainSlot
+          ? _runState.main
+          : _runState.coop;
+      final existingChar = existing?.character;
+      if (existingChar != null) {
+        // Preserve existing character, update guns/items only.
+        final player = Player(
+          character: existingChar,
+          guns: guns,
+          items: items,
+        );
+        if (targetMainSlot) {
+          _runState = _runState.copyWith(main: player);
+        } else {
+          _runState = _runState.copyWith(coop: player);
+        }
+        _scheduleSave();
+        notifyListeners();
+        return;
+      }
+      // No existing character — fall through to create player with
+      // null character. This maintains backward compatibility.
     }
 
-    _runState = _runState.copyWith(
-      main: targetMainSlot ? player : _runState.main,
-      coop: targetMainSlot ? currentCoop : player,
-    );
-    _saveRun();
+    final player = Player(character: char, guns: guns, items: items);
+
+    if (targetMainSlot) {
+      // Sidekick receiving host's data → main slot.
+      _runState = _runState.copyWith(main: player);
+      // Paradox rule (MP): the coop slot was built before the host's
+      // character was known, so it still holds real starters. Clear it
+      // once when the first snapshot reveals a Paradox main — mirrors
+      // the local startCoopPlayer behaviour.
+      if (char?.name == 'The Paradox' &&
+          !_paradoxSidekickEmptied &&
+          _runState.coop != null) {
+        _paradoxSidekickEmptied = true;
+        _runState = _runState.copyWith(
+          coop: Player(character: _runState.coop!.character),
+        );
+      }
+    } else {
+      // Main receiving joiner's data → coop slot.
+      _runState = _runState.copyWith(coop: player);
+    }
+    _scheduleSave();
     notifyListeners();
   }
 
   /// Overwrite shared dungeon state (coolness / curse / shrines used)
-  /// with values from a peer snapshot. Last-write-wins — the session
-  /// layer only calls this when the incoming snapshot's timestamp is
-  /// newer than what we've already applied, so concurrent edits on
-  /// both devices still converge within a frame or two.
+  /// with values from a peer snapshot. Only called for snapshots from
+  /// the Main Player (Main-authoritative model). Sidekick snapshots
+  /// carry shared-state fields but they are ignored by Main.
   void applySharedStateFromPeer({
     double? coolness,
     double? curse,
@@ -977,13 +1124,104 @@ class RunProvider with ChangeNotifier {
       curse: curse ?? _runState.curse,
       shrinesUsed: shrinesUsed ?? _runState.shrinesUsed,
     );
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
+  }
+
+  /// Apply a signed delta to shared dungeon state. Used by the Main
+  /// Player when it receives an [MpSharedStateDelta] from the
+  /// Sidekick. The delta is applied silently (no log entry) — the
+  /// Sidekick already logged the action locally. After applying, Main
+  /// broadcasts a snapshot so both sides converge.
+  void applySharedStateDelta({
+    double coolnessDelta = 0,
+    double curseDelta = 0,
+    String? shrineName,
+  }) {
+    _runState = _runState.copyWith(
+      coolness: (_runState.coolness + coolnessDelta).clamp(-100.0, 100.0),
+      curse: (_runState.curse + curseDelta).clamp(-100.0, 100.0),
+      shrinesUsed: shrineName != null && shrineName.isNotEmpty
+          ? [..._runState.shrinesUsed, shrineName]
+          : _runState.shrinesUsed,
+    );
+    _scheduleSave();
+    notifyListeners();
+  }
+
+  /// Run-scoped special-gear state: per-run in-game, so a fresh run
+  /// starts them clean. Gunderfury level is the exception — its XP is
+  /// save-file permanent and survives across runs (by design).
+  void _resetRunScopedSpecials() {
+    _tripleGunForm = 1;
+    _evolverForm = 1;
+    _evolverKills = 0;
+    _shellegunMode = 1;
+    _chamberGunFloor = 0;
+    _platinumBulletsSeconds = 0;
+    _ironCoinUses = 3;
+    _polarisKills = 0;
+    _polarisDamageHits = 0;
+    _guntherFriendship = 0;
+    _gunSoulActivated = false;
+    _metronomeKills = 0;
+    _boxingGloveStars = 0;
+    _cigarettesUses = 0;
+    _sprunTriggerIndex = -1;
+    _windgunnerCountdown = 0;
+    _windgunnerTimer?.cancel();
+    _spiceUsageCount = 0;
+    _robotArmor = 6;
+    _robotJunk = 0;
+    _robotGoldJunk = false;
+    _robotLies = false;
+    _fireplaceExtinguished = false;
+    _batteryBulletsSynergy = false;
+    _fuseDisarmer = false;
+    _huntressRoomClears = 0;
+    _huntressInjured = false;
+    _persistAllSpecials();
+  }
+
+  /// One-shot rewrite of every special.* prefs key — used after a bulk
+  /// reset so a reload doesn't resurrect the old counters.
+  Future<void> _persistAllSpecials() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('special.triple_gun.form', _tripleGunForm);
+      await prefs.setInt('special.evolver.form', _evolverForm);
+      await prefs.setInt('special.evolver.kills', _evolverKills);
+      await prefs.setInt('special.shellegun.mode', _shellegunMode);
+      await prefs.setInt('special.chambergun.floor', _chamberGunFloor);
+      await prefs.setInt('special.platinum.seconds', _platinumBulletsSeconds);
+      await prefs.setInt('special.ironcoin.uses', _ironCoinUses);
+      await prefs.setInt('special.polaris.kills', _polarisKills);
+      await prefs.setInt('special.polaris.hits', _polarisDamageHits);
+      await prefs.setInt('special.gunther.friendship', _guntherFriendship);
+      await prefs.setBool('special.gunsoul.activated', _gunSoulActivated);
+      await prefs.setInt('special.metronome.kills', _metronomeKills);
+      await prefs.setInt('special.boxingglove.stars', _boxingGloveStars);
+      await prefs.setInt('special.cigarettes.uses', _cigarettesUses);
+      await prefs.setInt('special.sprun.trigger', _sprunTriggerIndex);
+      await prefs.setInt('special.spice.count', _spiceUsageCount);
+      await prefs.setInt('special.robot.armor', _robotArmor);
+      await prefs.setInt('special.robot.junk', _robotJunk);
+      await prefs.setBool('special.robot.goldjunk', _robotGoldJunk);
+      await prefs.setBool('special.robot.lies', _robotLies);
+      await prefs.setBool('special.robot.fireplace', _fireplaceExtinguished);
+      await prefs.setBool('special.robot.battery', _batteryBulletsSynergy);
+      await prefs.setBool('special.robot.fusedisarmer', _fuseDisarmer);
+      await prefs.setInt('special.huntress.roomclears', _huntressRoomClears);
+      await prefs.setBool('special.huntress.injured', _huntressInjured);
+    } catch (e) {
+      debugPrint('[RunProvider] special-persist error: $e');
+    }
   }
 
   void endRun() {
     _runState = RunState();
-    _saveRun();
+    _resetRunScopedSpecials();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1000,9 +1238,8 @@ class RunProvider with ChangeNotifier {
   }
 
   void addGun(Gun gun, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
-    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
-    if (p.guns.any((g) => g.name == gun.name)) return;
+    if (!force && p.guns.any((g) => g.name == gun.name)) return;
     final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(slot, p.copyWith(guns: [...p.guns, gun]));
     _log(RunLogEntry(
@@ -1015,12 +1252,11 @@ class RunProvider with ChangeNotifier {
       playerName: p.character?.name,
     ));
     _checkNewSynergies(synergyBefore);
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
   void removeGun(Gun gun, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
-    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
     _runState = _replacePlayer(
         slot, p.copyWith(guns: p.guns.where((g) => g.name != gun.name).toList()));
@@ -1033,15 +1269,14 @@ class RunProvider with ChangeNotifier {
       entityName: gun.name,
       playerName: p.character?.name,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
   void addItem(Item item, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
-    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
     final isJunk = item.name.toLowerCase() == 'junk';
-    if (!isJunk && p.items.any((i) => i.name == item.name)) return;
+    if (!force && !isJunk && p.items.any((i) => i.name == item.name)) return;
     final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(slot, p.copyWith(items: [...p.items, item]));
 
@@ -1075,7 +1310,7 @@ class RunProvider with ChangeNotifier {
       _autoTrackRobotJunk(nameLower, added: true);
     }
 
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1093,7 +1328,6 @@ class RunProvider with ChangeNotifier {
   }
 
   void removeItem(Item item, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
-    if (_mpDisconnected && !force) return;
     final p = _playerFor(slot);
 
     _log(RunLogEntry(
@@ -1126,7 +1360,7 @@ class RunProvider with ChangeNotifier {
       _autoTrackRobotJunk(item.name.toLowerCase(), added: false);
     }
 
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1152,7 +1386,7 @@ class RunProvider with ChangeNotifier {
       playerName: from.character?.name,
     ));
     _checkNewSynergies(synergyBefore);
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
     return true;
   }
@@ -1163,10 +1397,16 @@ class RunProvider with ChangeNotifier {
         fromSlot == PlayerSlot.main ? PlayerSlot.coop : PlayerSlot.main;
     final from = _playerFor(fromSlot);
     final to = _playerFor(toSlot);
-    if (to.items.any((i) => i.name == item.name)) return false;
+    final isJunk = item.name.toLowerCase() == 'junk';
+    // Only block non-junk duplicates — junk is stackable.
+    if (!isJunk && to.items.any((i) => i.name == item.name)) return false;
+    // Remove only one copy from source (not the whole stack).
+    final newFrom = List<Item>.from(from.items);
+    final index = newFrom.indexWhere((i) => i.name == item.name);
+    if (index == -1) return false;
+    newFrom.removeAt(index);
     final synergyBefore = getActiveSynergiesCombined();
-    _runState = _replacePlayer(fromSlot,
-        from.copyWith(items: from.items.where((i) => i.name != item.name).toList()));
+    _runState = _replacePlayer(fromSlot, from.copyWith(items: newFrom));
     _runState = _replacePlayer(toSlot, to.copyWith(items: [...to.items, item]));
     _log(RunLogEntry(
       timestamp: DateTime.now(),
@@ -1176,7 +1416,7 @@ class RunProvider with ChangeNotifier {
       playerName: from.character?.name,
     ));
     _checkNewSynergies(synergyBefore);
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
     return true;
   }
@@ -1193,7 +1433,7 @@ class RunProvider with ChangeNotifier {
       description: 'Manual coolness ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
       coolnessDelta: delta,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1207,7 +1447,7 @@ class RunProvider with ChangeNotifier {
       description: 'Manual curse ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
       curseDelta: delta,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1224,7 +1464,7 @@ class RunProvider with ChangeNotifier {
         curseDelta: -oldCurse,
       ));
     }
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1241,22 +1481,22 @@ class RunProvider with ChangeNotifier {
       description: 'Stole from a shop (+1 curse)',
       curseDelta: 1,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
-  /// Visiting Cursula — +2 curse per visit.
+  /// Visiting Cursula — +2.5 curse per visit.
   void logCursula() {
     _runState = _runState.copyWith(
-      curse: (_runState.curse + 2).clamp(-100.0, 100.0),
+      curse: (_runState.curse + 2.5).clamp(-100.0, 100.0),
     );
     _log(RunLogEntry(
       timestamp: DateTime.now(),
       category: RunLogCategory.cursula,
-      description: 'Visited Cursula (+2 curse)',
-      curseDelta: 2,
+      description: 'Visited Cursula (+2.5 curse)',
+      curseDelta: 2.5,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1271,7 +1511,7 @@ class RunProvider with ChangeNotifier {
       description: 'Smoked a cigarette (+1 coolness)',
       coolnessDelta: 1,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1286,7 +1526,7 @@ class RunProvider with ChangeNotifier {
       description: 'Rainbow Run reward (+1 coolness)',
       coolnessDelta: 1,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
   }
 
@@ -1371,7 +1611,7 @@ class RunProvider with ChangeNotifier {
       coolnessDelta: coolDelta,
       entityName: s.name,
     ));
-    _saveRun();
+    _scheduleSave();
     notifyListeners();
 
     return ShrineApplyResult(shrine: s, applied: applied, manual: manual);

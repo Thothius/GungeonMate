@@ -1,3 +1,4 @@
+import '../../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
@@ -35,7 +36,7 @@ class StatAdjusterSheet extends StatelessWidget {
       final text = '${positive ? '+' : ''}${formatStat(delta)}';
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
           child: OutlinedButton(
             onPressed: () => apply(delta),
             style: OutlinedButton.styleFrom(
@@ -51,7 +52,7 @@ class StatAdjusterSheet extends StatelessWidget {
             child: GoopText(
               text,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: FontSizes.bodyMedium,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.4,
               ),
@@ -86,7 +87,7 @@ class StatAdjusterSheet extends StatelessWidget {
                 GoopText(
                   'Adjust $label',
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: FontSizes.titleSmall,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.4,
                   ),
@@ -95,7 +96,7 @@ class StatAdjusterSheet extends StatelessWidget {
                 GoopText(
                   formatStat(value),
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: FontSizes.headlineSmall,
                     fontWeight: FontWeight.w900,
                     color: accent,
                     height: 1,
@@ -112,7 +113,7 @@ class StatAdjusterSheet extends StatelessWidget {
                 // Premium large central Reset button!
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
                     child: OutlinedButton(
                       onPressed: () {
                         if (isCool) {
@@ -122,7 +123,7 @@ class StatAdjusterSheet extends StatelessWidget {
                         }
                       },
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: Insets.lg),
                         foregroundColor: Colors.white60,
                         side: BorderSide(
                           color: Colors.white.withValues(alpha: 0.12),
@@ -179,7 +180,7 @@ class CoolnessSheet extends StatelessWidget {
     }) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -215,7 +216,7 @@ class CoolnessSheet extends StatelessWidget {
                     GoopText(
                       subtitle,
                       style: TextStyle(
-                        fontSize: 9,
+                        fontSize: FontSizes.labelSmall,
                         color: Colors.white.withValues(alpha: 0.45),
                       ),
                     ),
@@ -408,14 +409,14 @@ class CoolnessSheet extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.10),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
       ),
       child: Column(
         children: [
           GoopText(val, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
           const SizedBox(height: 2),
-          GoopText(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+          GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
         ],
       ),
     );
@@ -446,7 +447,7 @@ class CurseSheet extends StatelessWidget {
     }) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
@@ -482,7 +483,7 @@ class CurseSheet extends StatelessWidget {
                     GoopText(
                       subtitle,
                       style: TextStyle(
-                        fontSize: 9,
+                        fontSize: FontSizes.labelSmall,
                         color: Colors.white.withValues(alpha: 0.45),
                       ),
                     ),
@@ -627,9 +628,9 @@ class CurseSheet extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('0', style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
-                      Text('5', style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
-                      Text('10', style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
+                      Text('0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
+                      Text('5', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
+                      Text('10', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ],
@@ -643,7 +644,7 @@ class CurseSheet extends StatelessWidget {
               child: GoopText(
                 'EFFECTS AT CURRENT LEVEL',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.w700,
                   color: Colors.white38,
                   letterSpacing: 0.8,
@@ -658,14 +659,14 @@ class CurseSheet extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
                 ),
                 child: Column(
                   children: [
-                    GoopText(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
+                    GoopText(val, style: TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.w900, color: color)),
                     const SizedBox(height: 3),
-                    GoopText(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                    GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
                   ],
                 ),
               );
@@ -689,14 +690,14 @@ class CurseSheet extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
                 ),
                 child: Column(
                   children: [
-                    GoopText(val, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: color)),
+                    GoopText(val, style: TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.w900, color: color)),
                     const SizedBox(height: 3),
-                    GoopText(label, style: TextStyle(fontSize: 8, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                    GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
                   ],
                 ),
               );

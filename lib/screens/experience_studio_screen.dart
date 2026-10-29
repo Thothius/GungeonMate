@@ -1,48 +1,40 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../theme/tokens.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
-import '../utils/responsive.dart';
 import '../widgets/scale_button.dart';
-import '../widgets/particle_engine.dart'
-    show
-        ParticlePreset,
-        ParticlePresetX,
-        ParticleColorSchema,
-        ParticleColorSchemaX,
-        ParticleSpeed,
-        ParticleSpeedX,
-        GlowEffect,
-        GlowEffectX,
-        ParticleShape,
-        PresetConfig,
-        ParticleField;
+import '../widgets/particle_engine.dart';
+import 'palette_maker_screen.dart';
+import '../utils/fast_route.dart';
 
-/// Experience Studio — a tabbed picker for creating your Gungeon Mate
-/// experience. Four tabs (Theme, Particles, Typography, Ambiance) sit
-/// on top. A side bookmark button on the right edge slides in a
-/// fullscreen preview showing the theme splash + sample UI scene in
-/// full glory. Tap anywhere to dismiss the preview and return to the
-/// picker. Apply commits everything.
+/// Palettes — the default view is a simple list of tall palette
+/// panels (name + organized color chips) with a back/preview/apply
+/// bar. The screen skins itself with the previewed theme, so tapping
+/// a panel is the live preview. A full-screen swipeable preview
+/// modal sits behind the PREVIEW button. Apply commits.
+///
+/// [initialTab] > 0 opens the full studio chrome (Palettes /
+/// Particles / Typography / Ambiance tabs) straight on that tab —
+/// reached via the picker's ADVANCED row.
 class ExperienceStudioScreen extends StatefulWidget {
-  const ExperienceStudioScreen({super.key});
+  final int initialTab;
+  const ExperienceStudioScreen({super.key, this.initialTab = 0});
 
   @override
   State<ExperienceStudioScreen> createState() => _ExperienceStudioScreenState();
 }
 
-class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
-    with SingleTickerProviderStateMixin {
-  int _tab = 0;
+class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
+  late int _tab;
   late AppThemeMode _previewMode;
   late final AppThemeMode _originalMode;
-  bool _previewOpen = false;
-  late final AnimationController _previewAnim;
+  // Simple view's own tab — PALETTES / FONTS / PARTICLES / GLOWS / PREVIEW.
+  int _simpleTab = 0;
 
-  static const _tabLabels = ['Theme', 'Particles', 'Typography', 'Ambiance'];
+  static const _tabLabels = ['Palettes', 'Particles', 'Typography', 'Ambiance'];
   static const _tabIcons = [
     Icons.palette_rounded,
     Icons.scatter_plot_rounded,
@@ -53,43 +45,31 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   @override
   void initState() {
     super.initState();
+    _tab = widget.initialTab;
     _previewMode = AppTheme.mode;
     _originalMode = AppTheme.mode;
     AppTheme.previewNotifier.value = _previewMode;
-    _previewAnim = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 350),
-    );
   }
 
   @override
   void dispose() {
     AppTheme.previewNotifier.value = null;
-    _previewAnim.dispose();
     super.dispose();
   }
 
-  void _applyAndClose() {
+  Future<void> _applyAndClose() async {
     Haptics.success();
     AppTheme.previewNotifier.value = null;
-    AppTheme.setMode(_previewMode);
+    await AppTheme.setMode(_previewMode);
+    if (!mounted) return;
     if (Navigator.of(context).canPop()) Navigator.of(context).pop();
-  }
-
-  void _togglePreview() {
-    Haptics.selection();
-    setState(() => _previewOpen = !_previewOpen);
-    if (_previewOpen) {
-      _previewAnim.forward();
-    } else {
-      _previewAnim.reverse();
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final cleanTextTheme =
-        GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme);
+    final cleanTextTheme = GoogleFonts.montserratTextTheme(
+      ThemeData.dark().textTheme,
+    );
     final cleanTheme = Theme.of(context).copyWith(textTheme: cleanTextTheme);
 
     return Theme(
@@ -99,23 +79,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
         body: SafeArea(
           child: Stack(
             children: [
-              // ── Main picker layout ──
-              Column(
-                children: [
-                  _buildTopBar(),
-                  _buildTabBar(),
-                  Expanded(child: _buildTabContent()),
-                ],
-              ),
-              // ── Side bookmark button (right edge) ──
-              Positioned(
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: _buildPreviewBookmark(),
-              ),
-              // ── Slide-in fullscreen preview ──
-              if (_previewOpen) _buildFullscreenPreview(),
+              // ── Theme background — skins with the PREVIEW theme, not the
+              // actual app theme, so the whole screen updates on tap ──
+              _buildPreviewBackground(),
+              widget.initialTab == 0 ? _buildSimpleBody() : _buildStudioBody(),
             ],
           ),
         ),
@@ -123,71 +90,564 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     );
   }
 
-  Widget _buildTopBar() {
-    final flair = AppTheme.flair;
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 8, top: 4, bottom: 4),
+  /// Background that skins with the preview theme so the entire screen
+  /// immediately reflects the selected theme — not just the preview box.
+  Widget _buildPreviewBackground() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return Positioned.fill(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [flair.scaffold, flair.scaffold.withValues(alpha: 0.95)],
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  // ── Simple picker (initialTab == 0) ───────────────────────────
+  // Tall palette panels + a back/preview/apply bar. Nothing else —
+  // the screen itself is the preview.
+
+  /// Tap-to-preview: session skin + notifier + curated preset
+  /// application — same path the studio grid uses.
+  void _previewTheme(AppThemeMode m) {
+    Haptics.selection();
+    setState(() => _previewMode = m);
+    AppTheme.previewNotifier.value = m;
+    final curation = kThemeCuration[m];
+    if (curation != null) VisualPrefs.applyCuration(curation);
+  }
+
+  Widget _buildSimpleBody() {
+    return Column(
+      children: [
+        _buildCurrentPanel(),
+        _buildSimpleTabBar(),
+        Expanded(child: _buildSimpleTabContent()),
+        _buildSimpleBottomBar(),
+      ],
+    );
+  }
+
+  static const _simpleTabs = ['PALETTES', 'FONTS', 'PARTICLES', 'GLOWS', 'PREVIEW'];
+
+  /// Top panel — current active picks at a glance.
+  Widget _buildCurrentPanel() {
+    final flair = AppTheme.flairFor(_previewMode);
+    final prefs = VisualPrefs.notifier.value;
+    final pType = ParticleType.values[prefs.particleTypeIndex];
+    final glow = VisualPrefs.glowColors[
+        prefs.glowColorIndex.clamp(0, VisualPrefs.glowColors.length - 1)];
+    return Container(
+      margin: const EdgeInsets.fromLTRB(
+          Insets.lg, Insets.sm, Insets.lg, Insets.xs),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: flair.card.withValues(alpha: 0.85),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: flair.primary.withValues(alpha: 0.4), width: 1.4),
+        boxShadow: [
+          BoxShadow(color: flair.glowPrimary.withValues(alpha: 0.3), blurRadius: 10),
+        ],
+      ),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () => Navigator.of(context).maybePop(),
-            tooltip: 'Back',
-            icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                size: 20, color: Colors.white70),
-          ),
-          const Spacer(),
-          GoopText(
-            'EXPERIENCE STUDIO',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w900,
-              color: flair.primary.withValues(alpha: 0.5),
-              letterSpacing: 2.5,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(_previewMode.label.toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1,
+                        color: flair.primary)),
+                const SizedBox(height: 4),
+                GoopText('${prefs.font.label} · ${pType.name.toUpperCase()}',
+                    style: TextStyle(
+                        fontSize: 9.5,
+                        color: flair.secondary.withValues(alpha: 0.8))),
+              ],
             ),
           ),
-          const Spacer(),
+          // Current glow swatch
+          Container(
+            width: 22, height: 22,
+            decoration: BoxDecoration(
+              color: glow,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1.2),
+              boxShadow: [BoxShadow(color: glow.withValues(alpha: 0.6), blurRadius: 8)],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Compact pill tab bar for the simple view.
+  Widget _buildSimpleTabBar() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+          Insets.lg, Insets.xs, Insets.lg, Insets.sm),
+      child: Row(
+        children: List.generate(_simpleTabs.length, (i) {
+          final active = _simpleTab == i;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _simpleTab = i);
+                Haptics.selection();
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                padding: const EdgeInsets.symmetric(vertical: 9),
+                decoration: BoxDecoration(
+                  color: active
+                      ? flair.primary.withValues(alpha: 0.18)
+                      : Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: active
+                        ? flair.primary.withValues(alpha: 0.7)
+                        : Colors.white.withValues(alpha: 0.12),
+                    width: active ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Center(
+                  child: GoopText(_simpleTabs[i],
+                      style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.8,
+                          color: active
+                              ? flair.primary
+                              : Colors.white.withValues(alpha: 0.45))),
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildSimpleTabContent() {
+    switch (_simpleTab) {
+      case 0:
+        return _buildPaletteList();
+      case 1:
+        return const _TypographyStep();
+      case 2:
+        return const _ParticlesStep();
+      case 3:
+        return const _AmbianceStep();
+      default:
+        return _buildPreviewPane();
+    }
+  }
+
+  /// PREVIEW — themed card chrome with the working palette.
+  Widget _buildPreviewPane() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.all(Insets.lg),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: flair.card,
+          borderRadius: BorderRadius.circular(flair.cardRadius),
+          border: Border.all(
+              color: flair.cardBorderColor ?? flair.primary.withValues(alpha: 0.3)),
+          boxShadow: [
+            BoxShadow(color: flair.glowPrimary.withValues(alpha: 0.4), blurRadius: 14),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GoopText(_previewMode.label.toUpperCase(),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.5,
+                    color: flair.headlineStat)),
+            const SizedBox(height: 8),
+            GoopText(_previewMode.vibe,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 10,
+                    fontStyle: FontStyle.italic,
+                    color: flair.secondary)),
+            const SizedBox(height: 14),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final c in [flair.scaffold, flair.card, flair.primary, flair.secondary, flair.headlineStat])
+                  Container(
+                    width: 22, height: 22,
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    decoration: BoxDecoration(
+                      color: c,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.2)),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaletteList() {
+    final activeMode = AppTheme.mode;
+    return ValueListenableBuilder<List<SavedCustomTheme>>(
+      valueListenable: CustomThemeStore.notifier,
+      builder: (context, saved, _) {
+        return CustomScrollView(
+          slivers: [
+            // Palettes in a 2-column grid — picker + saved.
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                  Insets.lg, Insets.sm, Insets.lg, Insets.sm),
+              sliver: SliverGrid.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 1.15,
+                children: [
+                  for (final m in kPickerThemes)
+                    () {
+                      final f = AppTheme.flairFor(m);
+                      return _PalettePanel(
+                        name: m.label,
+                        subtitle: '${m.vibe} · ${m.elem}',
+                        colors: [
+                          f.scaffold,
+                          f.card,
+                          f.primary,
+                          f.secondary,
+                          f.headlineStat,
+                        ],
+                        nameColor: f.primary,
+                        isActive: m == activeMode,
+                        isPreview: m == _previewMode,
+                        onTap: () => _previewTheme(m),
+                      );
+                    }(),
+                  for (final t in saved) _buildSavedPanel(t),
+                ],
+              ),
+            ),
+            // Full-width rows below the grid — make + advanced.
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.sm),
+                child: Column(
+                  children: [
+                    _buildMakePanel(),
+                    _buildAdvancedPanel(),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// '+ MAKE YOUR PALETTE' — opens the palette maker.
+  Widget _buildMakePanel() {
+    final f = AppTheme.flairFor(_previewMode);
+    return GestureDetector(
+      onTap: () {
+        Haptics.selection();
+        Navigator.push(context, fastRoute(const PaletteMakerScreen()));
+      },
+      child: Container(
+        height: 64,
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: f.primary.withValues(alpha: 0.4),
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add_rounded, size: 22, color: f.primary),
+            const SizedBox(width: 8),
+            GoopText(
+              'MAKE YOUR PALETTE',
+              style: TextStyle(
+                fontSize: FontSizes.labelMedium,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+                color: f.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Saved user palette — tap applies it via the custom theme path.
+  Widget _buildSavedPanel(SavedCustomTheme t) {
+    final d = t.customData ?? CustomThemeData.defaultTheme;
+    return _PalettePanel(
+      name: t.name,
+      subtitle: 'SAVED PALETTE',
+      colors: [d.scaffold, d.card, d.primary, d.secondary, d.headlineStat],
+      nameColor: d.primary,
+      isActive: false,
+      isPreview: _previewMode == AppThemeMode.custom,
+      onTap: () {
+        AppTheme.saveCustomThemeData(d);
+        _previewTheme(AppThemeMode.custom);
+      },
+    );
+  }
+
+  /// Quiet footer row — opens the full studio (particles / fonts /
+  /// glow / the old tabbed chrome) on the Particles tab.
+  Widget _buildAdvancedPanel() {
+    return GestureDetector(
+      onTap: () {
+        Haptics.selection();
+        Navigator.push(
+          context,
+          fastRoute(const ExperienceStudioScreen(initialTab: 1)),
+        );
+      },
+      child: Container(
+        height: 52,
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.03),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.tune_rounded,
+              size: 15,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
+            const SizedBox(width: 8),
+            GoopText(
+              'ADVANCED — PARTICLES · FONTS · GLOW',
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 16,
+              color: Colors.white.withValues(alpha: 0.3),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSimpleBottomBar() {
+    final flair = AppTheme.flairFor(_previewMode);
+    final fg =
+        flair.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.lg,
+        Insets.xs,
+        Insets.lg,
+        Insets.md,
+      ),
+      child: Row(
+        children: [
+          // BACK — bottom-left ghost.
           ScaleButton(
-            onTap: _showResetDialog,
+            onTap: () {
+              Haptics.selection();
+              Navigator.of(context).maybePop();
+            },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              height: 48,
+              width: 92,
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.all(Radii.md),
                 border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.12),
-                  width: 1.0,
+                  color: Colors.white.withValues(alpha: 0.18),
+                  width: 1.2,
                 ),
               ),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.refresh_rounded, size: 13, color: Colors.white54),
-                  const SizedBox(width: 5),
+                  Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 14,
+                    color: Colors.white70,
+                  ),
+                  const SizedBox(width: 4),
                   GoopText(
-                    'RESET',
+                    'BACK',
                     style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white54,
-                      letterSpacing: 0.8,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white70,
+                      letterSpacing: 1.0,
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          // Apply — always visible in top bar
+          const SizedBox(width: 10),
+          // PREVIEW — center ghost-green.
+          const SizedBox(width: 10),
+          // APPLY — bottom-right, primary solid.
+          Expanded(
+            child: ScaleButton(
+              onTap: _applyAndClose,
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  borderRadius: BorderRadius.all(Radii.md),
+                  boxShadow: [
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: 0.5),
+                      blurRadius: 16,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.check_rounded, size: 16, color: fg),
+                    const SizedBox(width: 8),
+                    GoopText(
+                      'APPLY',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w900,
+                        color: fg,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Full studio (initialTab > 0) ───────────────────────────────
+
+  Widget _buildStudioBody() {
+    return Column(
+      children: [
+        _buildTopBar(),
+        _buildTabBar(),
+        // ── Tab content (bottom portion, scrollable) ──
+        Expanded(child: _buildTabContent()),
+        // ── Reset / Preview / Apply bar ──
+        _buildBottomBar(),
+      ],
+    );
+  }
+
+  Widget _buildTopBar() {
+    final f = AppTheme.flairFor(_previewMode);
+    final canPop = Navigator.of(context).canPop();
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: Insets.xs,
+        right: Insets.xs,
+        top: Insets.xs,
+        bottom: Insets.xs,
+      ),
+      child: Row(
+        children: [
+          if (canPop)
+            IconButton(
+              onPressed: () => Navigator.of(context).maybePop(),
+              tooltip: 'Back',
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 20,
+                color: Colors.white70,
+              ),
+            )
+          else
+            const SizedBox(width: 48),
+          // Theme name + vibe inline
+          Expanded(
+            child: Column(
+              children: [
+                GoopText(
+                  _previewMode.label.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    color: f.primary.withValues(alpha: 0.8),
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                GoopText(
+                  '${_previewMode.vibe} · ${_previewMode.elem}',
+                  style: TextStyle(
+                    fontSize: FontSizes.labelSmall,
+                    fontWeight: FontWeight.w700,
+                    color: f.headlineStat.withValues(alpha: 0.6),
+                    letterSpacing: 1.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // SAVE THEME button (top-right) — visible on any theme so users
+          // can save a customized variant of any premade or the custom palette.
           ScaleButton(
-            onTap: _applyAndClose,
+            onTap: _showSaveThemeDialog,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: flair.primary,
-                borderRadius: BorderRadius.circular(8),
+                color: Colors.amber.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.all(Radii.sm),
+                border: Border.all(
+                  color: Colors.amber.withValues(alpha: 0.6),
+                  width: 1.2,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: flair.primary.withValues(alpha: 0.3),
+                    color: Colors.amber.withValues(alpha: 0.3),
                     blurRadius: 8,
                   ),
                 ],
@@ -195,15 +655,21 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.check_rounded, size: 14, color: flair.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white),
+                  Icon(Icons.save_rounded, size: 14, color: Colors.amber),
                   const SizedBox(width: 5),
                   GoopText(
-                    'APPLY',
+                    'SAVE THEME',
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: FontSizes.labelSmall,
                       fontWeight: FontWeight.w900,
-                      color: flair.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white,
+                      color: Colors.amber,
                       letterSpacing: 0.8,
+                      shadows: [
+                        Shadow(
+                          color: Colors.amber.withValues(alpha: 0.5),
+                          blurRadius: 4,
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -216,12 +682,17 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
   }
 
   Widget _buildTabBar() {
-    final flair = AppTheme.flair;
+    final flair = AppTheme.flairFor(_previewMode);
+    final themeActive = _previewMode == AppTheme.mode;
+    final isCustomMode = _previewMode == AppThemeMode.custom;
     return Container(
-      margin: const EdgeInsets.fromLTRB(12, 2, 60, 4),
+      margin: const EdgeInsets.fromLTRB(Insets.md, 2, Insets.md, Insets.xs),
       child: Row(
         children: List.generate(_tabLabels.length, (i) {
           final isCurrent = i == _tab;
+          final showGreenOutline = i == 0 && themeActive;
+          // When CUSTOM is selected, glow the non-theme tabs to direct users
+          final showCustomGlow = isCustomMode && i > 0;
           return Expanded(
             child: GestureDetector(
               onTap: () {
@@ -231,34 +702,79 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 margin: const EdgeInsets.symmetric(horizontal: 3),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: Insets.sm),
                 decoration: BoxDecoration(
-                  color: isCurrent
-                      ? flair.primary.withValues(alpha: 0.15)
-                      : Colors.transparent,
+                  color:
+                      isCurrent
+                          ? (showGreenOutline
+                              ? Colors.green.withValues(alpha: 0.12)
+                              : flair.primary.withValues(alpha: 0.15))
+                          : (showCustomGlow
+                              ? Colors.amber.withValues(alpha: 0.08)
+                              : Colors.transparent),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: isCurrent
-                        ? flair.primary.withValues(alpha: 0.5)
-                        : Colors.white.withValues(alpha: 0.08),
-                    width: isCurrent ? 1.2 : 1.0,
+                    color:
+                        showGreenOutline
+                            ? (isCurrent
+                                ? Colors.green
+                                : Colors.green.withValues(alpha: 0.5))
+                            : (showCustomGlow
+                                ? Colors.amber.withValues(
+                                  alpha: isCurrent ? 0.6 : 0.3,
+                                )
+                                : (isCurrent
+                                    ? flair.primary.withValues(alpha: 0.5)
+                                    : Colors.white.withValues(alpha: 0.08))),
+                    width: isCurrent ? 1.5 : 1.0,
                   ),
+                  boxShadow:
+                      showCustomGlow && !isCurrent
+                          ? [
+                            BoxShadow(
+                              color: Colors.amber.withValues(alpha: 0.15),
+                              blurRadius: 6,
+                            ),
+                          ]
+                          : null,
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       _tabIcons[i],
-                      size: 18,
-                      color: isCurrent ? flair.primary : Colors.white.withValues(alpha: 0.4),
+                      size: 16,
+                      color:
+                          showGreenOutline
+                              ? (isCurrent
+                                  ? Colors.green
+                                  : Colors.green.withValues(alpha: 0.6))
+                              : (showCustomGlow
+                                  ? (isCurrent
+                                      ? Colors.amber
+                                      : Colors.amber.withValues(alpha: 0.7))
+                                  : (isCurrent
+                                      ? flair.primary
+                                      : Colors.white.withValues(alpha: 0.4))),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
                     GoopText(
                       _tabLabels[i].toUpperCase(),
                       style: TextStyle(
-                        fontSize: 9,
+                        fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w900,
-                        color: isCurrent ? flair.primary : Colors.white.withValues(alpha: 0.4),
+                        color:
+                            showGreenOutline
+                                ? (isCurrent
+                                    ? Colors.green
+                                    : Colors.green.withValues(alpha: 0.6))
+                                : (showCustomGlow
+                                    ? (isCurrent
+                                        ? Colors.amber
+                                        : Colors.amber.withValues(alpha: 0.7))
+                                    : (isCurrent
+                                        ? flair.primary
+                                        : Colors.white.withValues(alpha: 0.4))),
                         letterSpacing: 0.8,
                       ),
                     ),
@@ -268,6 +784,113 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
             ),
           );
         }),
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    final flair = AppTheme.flairFor(_previewMode);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.md,
+        Insets.sm,
+        Insets.md,
+        Insets.sm,
+      ),
+      child: Row(
+        children: [
+          // RESET
+          Expanded(
+            child: ScaleButton(
+              onTap: _showResetDialog,
+              child: Container(
+                height: 44,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.all(Radii.md),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    width: 1.2,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.refresh_rounded,
+                      size: 16,
+                      color: Colors.white70,
+                    ),
+                    const SizedBox(width: 6),
+                    GoopText(
+                      'RESET',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white70,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: Insets.sm),
+          // APPLY
+          Expanded(
+            flex: 2,
+            child: ScaleButton(
+              onTap: _applyAndClose,
+              child: Container(
+                height: 44,
+                decoration: BoxDecoration(
+                  color: flair.primary,
+                  borderRadius: BorderRadius.all(Radii.md),
+                  boxShadow: [
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: 0.5),
+                      blurRadius: 16,
+                      spreadRadius: 0,
+                      offset: const Offset(0, 3),
+                    ),
+                    BoxShadow(
+                      color: flair.primary.withValues(alpha: 0.2),
+                      blurRadius: 24,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.check_rounded,
+                      size: 16,
+                      color:
+                          flair.primary.computeLuminance() > 0.5
+                              ? Colors.black87
+                              : Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    GoopText(
+                      'APPLY',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w900,
+                        color:
+                            flair.primary.computeLuminance() > 0.5
+                                ? Colors.black87
+                                : Colors.white,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -289,10 +912,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           ),
         );
       },
-      child: KeyedSubtree(
-        key: ValueKey(_tab),
-        child: _buildTabWidget(),
-      ),
+      child: KeyedSubtree(key: ValueKey(_tab), child: _buildTabWidget()),
     );
   }
 
@@ -304,6 +924,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
           onPreview: (m) {
             setState(() => _previewMode = m);
             AppTheme.previewNotifier.value = m;
+            // Apply curated settings for premade themes to the session
+            final curation = kThemeCuration[m];
+            if (curation != null) {
+              VisualPrefs.applyCuration(curation);
+            }
           },
           onQuickApply: (m) {
             setState(() => _previewMode = m);
@@ -322,127 +947,40 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
     }
   }
 
-  /// Side bookmark button on the right edge — tap to slide in the
-  /// fullscreen preview.
-  Widget _buildPreviewBookmark() {
-    final flair = AppTheme.flair;
-    return GestureDetector(
-      onTap: _togglePreview,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        width: 44,
-        margin: const EdgeInsets.symmetric(vertical: 80),
-        decoration: BoxDecoration(
-          color: flair.primary.withValues(alpha: 0.15),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(12),
-            bottomLeft: Radius.circular(12),
-          ),
-          border: Border.all(
-            color: flair.primary.withValues(alpha: 0.4),
-            width: 1.0,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              _previewOpen ? Icons.close_rounded : Icons.visibility_rounded,
-              size: 20,
-              color: flair.primary,
-            ),
-            const SizedBox(height: 8),
-            RotatedBox(
-              quarterTurns: 1,
-              child: GoopText(
-                'PREVIEW',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w900,
-                  color: flair.primary,
-                  letterSpacing: 1.5,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// Fullscreen slide-in preview — shows the theme splash + sample UI
-  /// scene in full glory. Tap anywhere to dismiss.
-  Widget _buildFullscreenPreview() {
-    return GestureDetector(
-      onTap: _togglePreview,
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedBuilder(
-        animation: _previewAnim,
-        builder: (context, child) {
-          return Opacity(
-            opacity: _previewAnim.value,
-            child: child,
-          );
-        },
-        child: Container(
-          color: Colors.black.withValues(alpha: 0.95),
-          child: SafeArea(
-            child: Stack(
-              children: [
-                // Fullscreen preview content
-                Center(child: _FullscreenPreview()),
-                // Close hint
-                Positioned(
-                  bottom: 30,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: GoopText(
-                      'Tap anywhere to close',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white.withValues(alpha: 0.4),
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   void _showResetDialog() {
     showDialog(
       context: context,
-      builder: (c) => AlertDialog(
-        backgroundColor: AppTheme.flair.card,
-        title: const GoopText('Reset to defaults?',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-        content: const GoopText(
-          'Reverts your preview back to the theme you started with. Your saved settings won\'t change until you Apply.',
-          style: TextStyle(fontSize: 13, height: 1.4),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const GoopText('Cancel'),
+      builder:
+          (c) => AlertDialog(
+            backgroundColor: AppTheme.flair.card,
+            title: const GoopText(
+              'Reset to defaults?',
+              style: TextStyle(
+                fontSize: FontSizes.titleSmall,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            content: const GoopText(
+              'Reverts your preview back to the theme you started with. Your saved settings won\'t change until you Apply.',
+              style: TextStyle(fontSize: 13, height: 1.4),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(c),
+                child: const GoopText('Cancel'),
+              ),
+              FilledButton.tonal(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.red.shade900,
+                ),
+                onPressed: () {
+                  Navigator.pop(c);
+                  _resetAll();
+                },
+                child: const GoopText('Reset'),
+              ),
+            ],
           ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(
-                backgroundColor: Colors.red.shade900),
-            onPressed: () {
-              Navigator.pop(c);
-              _resetAll();
-            },
-            child: const GoopText('Reset'),
-          ),
-        ],
-      ),
     );
   }
 
@@ -453,109 +991,667 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen>
       AppTheme.previewNotifier.value = _originalMode;
     });
   }
-}
 
-// =============================================================================
-// FULLSCREEN PREVIEW — theme splash + rich sample UI scene in full glory
-// =============================================================================
+  /// Show the save-theme dialog — user names the theme and picks a graphic.
+  /// Works for any theme (premade or custom). When saving a custom palette,
+  /// the CustomThemeData is captured alongside the VisualPrefs.
+  void _showSaveThemeDialog() {
+    Haptics.selection();
+    final nameCtrl = TextEditingController(text: 'My Theme');
+    String selectedSplash =
+        _previewMode == AppThemeMode.custom
+            ? kPickerThemes.first.splashSlug
+            : _previewMode.splashSlug;
+    String? validationError;
 
-class _FullscreenPreview extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final sf = Responsive.factor(context);
-    return ValueListenableBuilder<AppThemeMode?>(
-      valueListenable: AppTheme.previewNotifier,
-      builder: (context, previewMode, _) {
-        final flair = AppTheme.displayedFlair;
-        return ValueListenableBuilder<VisualPrefs>(
-          valueListenable: VisualPrefs.notifier,
-          builder: (context, prefs, _) {
-            return _buildScene(flair, prefs, sf);
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setDialogState) {
+            final onSurface = Theme.of(ctx).colorScheme.onSurface;
+            final flair = AppTheme.flair;
+            return AlertDialog(
+              backgroundColor: flair.scaffold,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radii.lg),
+              ),
+              title: GoopText(
+                'Save Theme',
+                style: TextStyle(
+                  fontSize: FontSizes.titleSmall,
+                  fontWeight: FontWeight.w900,
+                  color: flair.primary,
+                ),
+              ),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      'Theme Name',
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w700,
+                        color: onSurface.withValues(alpha: 0.5),
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    TextField(
+                      controller: nameCtrl,
+                      autofocus: true,
+                      maxLength: 24,
+                      style: TextStyle(
+                        color: onSurface,
+                        fontSize: FontSizes.bodyMedium,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Enter theme name...',
+                        hintStyle: TextStyle(
+                          color: onSurface.withValues(alpha: 0.3),
+                        ),
+                        filled: true,
+                        fillColor: onSurface.withValues(alpha: 0.06),
+                        counterText: '',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: flair.primary.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: flair.primary.withValues(alpha: 0.7),
+                          ),
+                        ),
+                        errorText: validationError,
+                      ),
+                      onChanged: (value) {
+                        if (validationError != null) {
+                          setDialogState(() => validationError = null);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    GoopText(
+                      'Select Graphic',
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w700,
+                        color: onSurface.withValues(alpha: 0.5),
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      height: 200,
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        itemCount: kPickerThemes.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 0.75,
+                              crossAxisSpacing: 6,
+                              mainAxisSpacing: 6,
+                            ),
+                        itemBuilder: (ctx, i) {
+                          final mode = kPickerThemes[i];
+                          final slug = mode.splashSlug;
+                          final isSelected = slug == selectedSplash;
+                          return GestureDetector(
+                            onTap: () {
+                              Haptics.selection();
+                              setDialogState(() => selectedSplash = slug);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radii.sm),
+                                border: Border.all(
+                                  color:
+                                      isSelected
+                                          ? flair.primary
+                                          : onSurface.withValues(alpha: 0.1),
+                                  width: isSelected ? 2 : 1,
+                                ),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(7),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/themes/splash/$slug.jpg',
+                                      fit: BoxFit.cover,
+                                      cacheWidth: 200,
+                                      cacheHeight: 266,
+                                      errorBuilder:
+                                          (_, __, ___) => Container(
+                                            color: flair.card,
+                                            child: Icon(
+                                              Icons.image,
+                                              size: 24,
+                                              color: onSurface.withValues(
+                                                alpha: 0.3,
+                                              ),
+                                            ),
+                                          ),
+                                    ),
+                                    Positioned(
+                                      bottom: 0,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 2,
+                                          horizontal: 4,
+                                        ),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.6,
+                                        ),
+                                        child: GoopText(
+                                          mode.label,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: FontSizes.labelSmall,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  child: GoopText(
+                    'CANCEL',
+                    style: TextStyle(
+                      fontSize: FontSizes.labelMedium,
+                      fontWeight: FontWeight.w700,
+                      color: onSurface.withValues(alpha: 0.5),
+                    ),
+                  ),
+                ),
+                ScaleButton(
+                  onTap: () async {
+                    final name = nameCtrl.text.trim();
+                    if (name.isEmpty) {
+                      setDialogState(
+                        () => validationError = 'Name cannot be empty',
+                      );
+                      return;
+                    }
+                    // Check for duplicates
+                    final existing =
+                        CustomThemeStore.themes
+                            .where(
+                              (t) => t.name.toLowerCase() == name.toLowerCase(),
+                            )
+                            .toList();
+                    if (existing.isNotEmpty) {
+                      setDialogState(
+                        () =>
+                            validationError =
+                                'A theme named "$name" already exists',
+                      );
+                      return;
+                    }
+                    Haptics.success();
+                    final theme = SavedCustomTheme(
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      name: name,
+                      splashSlug: selectedSplash,
+                      baseMode: _previewMode,
+                      prefs: VisualPrefs.notifier.value,
+                      // Capture custom palette data if saving from CUSTOM mode
+                      customData:
+                          _previewMode == AppThemeMode.custom
+                              ? (AppTheme.cachedCustomTheme ??
+                                      CustomThemeData.defaultTheme)
+                                  .copyWith(name: name)
+                              : null,
+                    );
+                    await CustomThemeStore.save(theme);
+                    if (!ctx.mounted) return;
+                    Navigator.of(ctx).pop();
+                    // Show confirmation snackbar
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: GoopText('Theme "$name" saved!'),
+                          duration: const Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Insets.lg,
+                      vertical: Insets.sm,
+                    ),
+                    decoration: BoxDecoration(
+                      color: flair.primary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: GoopText(
+                      'SAVE',
+                      style: TextStyle(
+                        fontSize: FontSizes.labelMedium,
+                        fontWeight: FontWeight.w900,
+                        color:
+                            flair.primary.computeLuminance() > 0.5
+                                ? Colors.black87
+                                : Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
           },
         );
+      },
+    ).then((_) => nameCtrl.dispose());
+  }
+}
+
+/// Compact always-visible live preview showing theme BG + particles + glow.
+/// Particles are always shown here (regardless of the enable toggle)
+/// so users can see what they're picking.
+/// Tall palette panel — name + vibe on top, the theme's five core
+/// colors as labeled chips along the bottom. The panel's own surface
+/// is the theme's card color, so the panel previews the theme.
+class _PalettePanel extends StatelessWidget {
+  final String name;
+  final String subtitle;
+  final List<Color> colors; // canvas · panel · prime · second · stat
+  final Color nameColor;
+  final bool isActive;
+  final bool isPreview;
+  final VoidCallback onTap;
+
+  const _PalettePanel({
+    required this.name,
+    required this.subtitle,
+    required this.colors,
+    required this.nameColor,
+    required this.isActive,
+    required this.isPreview,
+    required this.onTap,
+  });
+
+  static const _chipLabels = ['CANVAS', 'PANEL', 'PRIME', 'SECOND', 'STAT'];
+
+  @override
+  Widget build(BuildContext context) {
+    final borderColor =
+        isActive
+            ? Colors.green
+            : isPreview
+            ? nameColor
+            : Colors.white.withValues(alpha: 0.08);
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
+        decoration: BoxDecoration(
+          color: colors[1].withValues(alpha: 0.85),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: borderColor,
+            width: isActive || isPreview ? 1.8 : 1.0,
+          ),
+          boxShadow:
+              isPreview
+                  ? [
+                    BoxShadow(
+                      color: nameColor.withValues(alpha: 0.18),
+                      blurRadius: 10,
+                    ),
+                  ]
+                  : null,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GoopText(
+                        name.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1,
+                          color: nameColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      GoopText(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          letterSpacing: 0.8,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (isActive)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: Colors.green.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    child: GoopText(
+                      'ACTIVE',
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1,
+                        color: Colors.green,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                for (var i = 0; i < colors.length && i < 5; i++) ...[
+                  Expanded(child: _colorChip(colors[i], _chipLabels[i])),
+                  if (i < 4) const SizedBox(width: 6),
+                ],
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _colorChip(Color c, String label) {
+    return Column(
+      children: [
+        Container(
+          height: 18,
+          decoration: BoxDecoration(
+            color: c,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+          ),
+        ),
+        const SizedBox(height: 3),
+        GoopText(
+          label,
+          style: TextStyle(
+            fontSize: 7,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class _ThemeStepState extends State<_ThemeStep> {
+  /// Open the color picker for a single palette field and persist the result.
+  /// Show the custom palette editor — a bottom sheet with color swatches
+  /// for each palette field. Tapping a swatch opens the color picker.
+  @override
+  Widget build(BuildContext context) {
+    final activeMode = AppTheme.mode;
+
+    // 9 premade palettes + MAKE + saved user palettes.
+    final saved = CustomThemeStore.notifier.value;
+    return GridView.builder(
+      padding: const EdgeInsets.fromLTRB(
+        Insets.lg,
+        Insets.sm,
+        Insets.lg,
+        Insets.lg,
+      ),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        childAspectRatio: 0.75,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+      ),
+      itemCount: kPickerThemes.length + 1 + saved.length,
+      itemBuilder: (context, i) {
+        if (i < kPickerThemes.length) {
+          return _buildPremadeTile(kPickerThemes[i], activeMode, i);
+        }
+        if (i == kPickerThemes.length) return _buildMakeTile();
+        final t = saved[i - kPickerThemes.length - 1];
+        return _buildSavedTile(t);
       },
     );
   }
 
-  Widget _buildScene(ThemeFlair flair, VisualPrefs prefs, double sf) {
-    // Resolve particle colors
-    List<Color>? particleColors;
-    if (prefs.particleColorSchema != ParticleColorSchema.presetDefault) {
-      if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
-        particleColors = [flair.primary, flair.secondary, flair.glowPrimary, flair.headlineStat];
-      } else {
-        particleColors = prefs.particleColorSchema.colors;
-      }
-    }
-    final themeDefault = kThemeParticleDefaults[AppTheme.displayedMode] ??
-        ParticlePreset.gungeonDust;
-    final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
-    final particlesOn = prefs.particlesEnabled || themeAutoOn;
-
-    return Padding(
-      padding: const EdgeInsets.all(16),
+  /// The '+ MAKE' tile — opens the palette maker.
+  Widget _buildMakeTile() {
+    final f = AppTheme.flair;
+    return GestureDetector(
+      onTap: () {
+        Haptics.selection();
+        Navigator.push(context, fastRoute(const PaletteMakerScreen()));
+      },
       child: Container(
         decoration: BoxDecoration(
-          color: flair.scaffold,
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: flair.primary.withValues(alpha: 0.3),
-            width: 2,
+            color: f.primary.withValues(alpha: 0.4),
+            width: 1.5,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: flair.primary.withValues(alpha: 0.15),
-              blurRadius: 24,
-              spreadRadius: 4,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add_rounded, size: 28, color: f.primary),
+            const SizedBox(height: 6),
+            GoopText(
+              'MAKE',
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 2,
+                color: f.primary,
+              ),
+            ),
+            const SizedBox(height: 2),
+            GoopText(
+              'your palette',
+              style: TextStyle(
+                fontSize: 9,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// Saved user palette — tap applies it via the custom theme path.
+  Widget _buildSavedTile(SavedCustomTheme t) {
+    final d = t.customData ?? CustomThemeData.defaultTheme;
+    return GestureDetector(
+      onTap: () {
+        Haptics.selection();
+        AppTheme.saveCustomThemeData(d);
+        widget.onPreview(AppThemeMode.custom);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: d.card,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: d.primary.withValues(alpha: 0.4)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Same band language as premade tiles.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: SizedBox(
+                height: 5,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: d.primary,
+                          borderRadius: const BorderRadius.horizontal(
+                            left: Radius.circular(3),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: Container(color: d.secondary)),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: d.headlineStat,
+                          borderRadius: const BorderRadius.horizontal(
+                            right: Radius.circular(3),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: GoopText(
+                t.name.toUpperCase(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                  color: d.primary,
+                ),
+              ),
+            ),
+            const SizedBox(height: 2),
+            GoopText(
+              'SAVED',
+              style: TextStyle(
+                fontSize: 8,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPremadeTile(AppThemeMode m, AppThemeMode activeMode, int index) {
+    final f = AppTheme.flairFor(m);
+    final isPreview = m == widget.previewMode;
+    final isActive = m == activeMode;
+
+    return GestureDetector(
+      onTap: () {
+        widget.onPreview(m);
+        Haptics.selection();
+      },
+      onLongPress: () {
+        widget.onQuickApply(m);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
         clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          color: f.scaffold.withValues(alpha: 0.85),
+          borderRadius: BorderRadius.all(Radii.md),
+          border: Border.all(
+            color:
+                isActive
+                    ? Colors.green
+                    : (isPreview
+                        ? f.primary
+                        : Colors.white.withValues(alpha: 0.08)),
+            width: isActive ? 2.0 : (isPreview ? 2.0 : 1.0),
+          ),
+          boxShadow:
+              isPreview
+                  ? [
+                    BoxShadow(
+                      color: f.primary.withValues(alpha: 0.2),
+                      blurRadius: 8,
+                    ),
+                  ]
+                  : null,
+        ),
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // ── Theme splash image as full background ──
-            if (AppTheme.displayedMode.splashSlug.isNotEmpty)
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/images/themes/splash/${AppTheme.displayedMode.splashSlug}.jpg',
-                  fit: BoxFit.cover,
-                  opacity: AlwaysStoppedAnimation(0.55),
-                ),
-              ),
-            // ── Particle field ──
-            if (particlesOn)
-              Positioned.fill(
-                child: ParticleField(
-                  preset: prefs.particlePreset,
-                  count: (prefs.particleCount * 0.8).round().clamp(8, 30),
-                  sizeScale: prefs.particleSizeScale,
-                  opacity: prefs.particleOpacity,
-                  glowOverride: prefs.particleGlowEffect,
-                  lineLinksOverride: prefs.particleLineLinks ? true : null,
-                  colorsOverride: particleColors,
-                  bounce: prefs.particleBounce,
-                  speedMultiplier: prefs.particleSpeed.multiplier,
-                ),
-              ),
-            // ── Glow overlay ──
-            if (prefs.glowIntensity > 0)
-              Positioned.fill(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: RadialGradient(
-                      center: Alignment.center,
-                      radius: 1.5,
-                      colors: [
-                        VisualPrefs.glowColors[prefs.glowColorIndex]
-                            .withValues(alpha: prefs.glowIntensity * 0.4),
-                        Colors.transparent,
-                      ],
+            if (m.splashSlug.isNotEmpty)
+              Image.asset(
+                'assets/images/themes/splash/${m.splashSlug}.jpg',
+                fit: BoxFit.cover,
+                opacity: AlwaysStoppedAnimation(isPreview ? 1.0 : 0.88),
+                cacheWidth: 160,
+                cacheHeight: 200,
+                errorBuilder:
+                    (_, __, ___) => DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          center: Alignment.center,
+                          radius: 1.2,
+                          colors: [
+                            f.primary.withValues(alpha: 0.15),
+                            f.scaffold,
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
-            // ── Dark scrim for content readability ──
             Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -563,353 +1659,310 @@ class _FullscreenPreview extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      flair.scaffold.withValues(alpha: 0.3),
-                      flair.scaffold.withValues(alpha: 0.85),
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.7),
                     ],
-                    stops: const [0.0, 0.5],
+                    stops: const [0.3, 1.0],
                   ),
                 ),
               ),
             ),
-            // ── Theme name header ──
+            // Palette signature band — instant read of the palette's
+            // three prime colors across the tile top.
             Positioned(
-              top: 20,
-              left: 0,
-              right: 0,
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+              top: 8,
+              left: 8,
+              right: 8,
+              child: Container(
+                height: 5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.4),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Row(
                   children: [
-                    GoopText(
-                      AppTheme.displayedMode.label.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 24 * sf,
-                        fontWeight: FontWeight.w900,
-                        color: flair.headlineStat,
-                        letterSpacing: 3,
-                        shadows: [
-                          Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 8),
-                        ],
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: f.primary,
+                          borderRadius: const BorderRadius.horizontal(
+                            left: Radius.circular(3),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    GoopText(
-                      AppTheme.displayedMode.vibe,
-                      style: TextStyle(
-                        fontSize: 12 * sf,
-                        fontWeight: FontWeight.w700,
-                        color: flair.primary,
-                        letterSpacing: 2,
+                    Expanded(child: Container(color: f.secondary)),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: f.headlineStat,
+                          borderRadius: const BorderRadius.horizontal(
+                            right: Radius.circular(3),
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            // ── Sample UI scene (centered, rich) ──
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Sample item card with 2.5D depth
-                    _sampleItemCard(flair, prefs, sf),
-                    const SizedBox(height: 12),
-                    // Sample stat row
-                    _sampleStatRow(flair, sf),
-                    const SizedBox(height: 12),
-                    // Sample button + chip
-                    _sampleButtonRow(flair, prefs, sf),
-                    const SizedBox(height: 16),
-                    // Sample synergy glow
-                    _sampleSynergyGlow(flair, sf),
+            Positioned(
+              left: 4,
+              bottom: 4,
+              right: 4,
+              child: GoopText(
+                m.label.toUpperCase(),
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w900,
+                  color: isPreview ? f.headlineStat : Colors.white,
+                  letterSpacing: 0.5,
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withValues(alpha: 0.8),
+                      blurRadius: 3,
+                    ),
                   ],
                 ),
               ),
             ),
-            // ── Color palette strip (bottom) ──
-            Positioned(
-              bottom: 20,
-              left: 20,
-              right: 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _paletteDot(flair.scaffold, 'Scaffold', sf),
-                  const SizedBox(width: 10),
-                  _paletteDot(flair.card, 'Card', sf),
-                  const SizedBox(width: 10),
-                  _paletteDot(flair.primary, 'Primary', sf),
-                  const SizedBox(width: 10),
-                  _paletteDot(flair.secondary, 'Secondary', sf),
-                  const SizedBox(width: 10),
-                  _paletteDot(flair.headlineStat, 'Accent', sf),
-                ],
+            if (isActive)
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.check_rounded,
+                    size: 10,
+                    color: Colors.black,
+                  ),
+                ),
               ),
-            ),
           ],
         ),
       ),
-    );
+    ).animate().fadeIn(duration: 200.ms, delay: (index * 30).ms);
   }
+}
 
-  Widget _sampleItemCard(ThemeFlair flair, VisualPrefs prefs, double sf) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: flair.card.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(flair.cardRadius.toDouble()),
-        border: Border.all(
-          color: flair.primary.withValues(alpha: 0.3),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Item icon with quality badge
-          Container(
-            width: 56 * sf,
-            height: 56 * sf,
-            decoration: BoxDecoration(
-              color: flair.scaffold,
-              borderRadius: BorderRadius.circular(flair.chipRadius.toDouble()),
-              border: Border.all(
-                color: flair.primary.withValues(alpha: 0.4),
-                width: 1,
-              ),
-            ),
-            child: Stack(
-              children: [
-                Center(
-                  child: Icon(Icons.gps_fixed,
-                      size: 28 * sf,
-                      color: flair.primary.withValues(alpha: 0.7)),
-                ),
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFD700),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: GoopText('A',
-                        style: TextStyle(
-                          fontSize: 9 * sf,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.black,
-                        )),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Item text in selected font
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GoopText(
-                  'Sample Gun Name',
-                  style: prefs.font.textStyle.copyWith(
-                    fontSize: (16 * sf).clamp(10.0, 20.0),
-                    fontWeight: FontWeight.w800,
-                    color: flair.headlineStat,
-                    height: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                GoopText(
-                  'A semiautomatic pistol with decent damage and good synergy potential',
-                  style: prefs.font.textStyle.copyWith(
-                    fontSize: (11 * sf).clamp(8.0, 14.0),
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withValues(alpha: 0.5),
-                    height: 1.3,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+/// A single color field row for the custom palette editor.
+/// Shows a label + description + color swatch; tapping opens the color picker.
+/// Long-press the info icon for a detailed tooltip of what this color affects.
 
-  Widget _sampleStatRow(ThemeFlair flair, double sf) {
-    return Row(
-      children: [
-        _statChip('DMG', '56.0', flair, sf),
-        const SizedBox(width: 8),
-        _statChip('DPS', '168', flair, sf),
-        const SizedBox(width: 8),
-        _statChip('AMMO', '300', flair, sf),
-        const SizedBox(width: 8),
-        _statChip('RATE', '4.2', flair, sf),
-      ],
-    );
-  }
+// =============================================================================
+// TAB 2 — PARTICLES (preset + schema + speed + studio)
+// =============================================================================
 
-  Widget _statChip(String label, String value, ThemeFlair flair, double sf) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.35),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: flair.primary.withValues(alpha: 0.15)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GoopText(label,
-                style: TextStyle(
-                    fontSize: 8 * sf,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white.withValues(alpha: 0.4))),
-            const SizedBox(height: 2),
-            GoopText(value,
-                style: TextStyle(
-                    fontSize: 14 * sf,
-                    fontWeight: FontWeight.w900,
-                    color: flair.headlineStat)),
-          ],
-        ),
-      ),
-    );
-  }
+class _ParticlesStep extends StatelessWidget {
+  const _ParticlesStep();
 
-  Widget _sampleButtonRow(ThemeFlair flair, VisualPrefs prefs, double sf) {
-    final onPrimary = flair.primary.computeLuminance() > 0.5
-        ? Colors.black87
-        : Colors.white;
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: flair.primary,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: flair.primary.withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: GoopText(
-            'Sample Button',
-            style: TextStyle(
-              fontSize: 12 * sf,
-              fontWeight: FontWeight.w800,
-              color: onPrimary,
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-            color: flair.secondary.withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: flair.secondary.withValues(alpha: 0.4)),
-          ),
-          child: GoopText(
-            '✓ Synergy Active',
-            style: TextStyle(
-              fontSize: 10 * sf,
-              fontWeight: FontWeight.w700,
-              color: flair.secondary,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _sampleSynergyGlow(ThemeFlair flair, double sf) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: flair.primary.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: flair.primary.withValues(alpha: 0.5),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: flair.primary.withValues(alpha: 0.2),
-            blurRadius: 12,
-            spreadRadius: 1,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.bolt_rounded, size: 16 * sf, color: flair.primary),
-          const SizedBox(width: 6),
-          GoopText(
-            'GLOWING SYNERGY BORDER',
-            style: TextStyle(
-              fontSize: 10 * sf,
-              fontWeight: FontWeight.w900,
-              color: flair.primary,
-              letterSpacing: 1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _paletteDot(Color color, String label, double sf) {
+  /// Uniform 4-across tile grid for the shape types — equal cells,
+  /// glyph + label, short row padded so widths stay consistent.
+  Widget _typeGrid(VisualPrefs prefs) {
+    const cols = 4;
+    final types = ParticleType.values;
     return Column(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          width: 24 * sf,
-          height: 24 * sf,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
-            boxShadow: [
-              BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 6),
-            ],
+        for (var r = 0; r * cols < types.length; r++)
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: (r + 1) * cols < types.length ? 8 : 0,
+            ),
+            child: Row(
+              children: [
+                for (var c = 0; c < cols; c++) ...[
+                  Expanded(
+                    child:
+                        r * cols + c < types.length
+                            ? _ParticleTypeTile(
+                              type: types[r * cols + c],
+                              active: r * cols + c == prefs.particleTypeIndex,
+                              onTap: () {
+                                VisualPrefs.setParticleTypeIndex(r * cols + c);
+                                Haptics.selection();
+                              },
+                            )
+                            : const SizedBox(),
+                  ),
+                  if (c < cols - 1) const SizedBox(width: 8),
+                ],
+              ],
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        GoopText(label,
-            style: TextStyle(
-                fontSize: 7 * sf,
-                fontWeight: FontWeight.w600,
-                color: Colors.white.withValues(alpha: 0.4))),
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<VisualPrefs>(
+      valueListenable: VisualPrefs.notifier,
+      builder: (context, prefs, _) {
+        return CustomScrollView(
+          slivers: [
+            // Sticky header: enable toggle + live preview
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _StickyParticleHeader(prefs: prefs),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                Insets.lg,
+                Insets.sm,
+                Insets.lg,
+                Insets.lg,
+              ),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  // Typed particle system — 7 shapes × per-theme
+                  // schemas × 3 physics flags. Clean, minimal, all
+                  // user-facing (replaces the 37-preset × 16-schema
+                  // layer entirely).
+                  _StepLabel('COUNT'),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Slider(
+                          value: prefs.particleCount.toDouble(),
+                          min: 0,
+                          max: 200,
+                          divisions: 100,
+                          label: '${prefs.particleCount}',
+                          onChanged:
+                              (v) => VisualPrefs.setParticleCount(v.round()),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 44,
+                        child: GoopText(
+                          '${prefs.particleCount}',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontSize: FontSizes.labelMedium,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white.withValues(alpha: 0.7),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  _StepLabel('TYPE'),
+                  const SizedBox(height: 8),
+                  _typeGrid(prefs),
+                  const SizedBox(height: 16),
+                  _StepLabel('PHYSICS'),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _PhysicsToggle(
+                          label: 'BOUNCE',
+                          on: prefs.particleBounce,
+                          onTap: () {
+                            VisualPrefs.setParticleBounce(
+                              !prefs.particleBounce,
+                            );
+                            Haptics.selection();
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _PhysicsToggle(
+                          label: 'CHAOS',
+                          on: prefs.particleChaos,
+                          onTap: () {
+                            VisualPrefs.setParticleChaos(!prefs.particleChaos);
+                            Haptics.selection();
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _PhysicsToggle(
+                          label: 'TILT',
+                          on: prefs.particleTouch,
+                          onTap: () {
+                            VisualPrefs.setParticleTouch(!prefs.particleTouch);
+                            Haptics.selection();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  _StepLabel('COLOR'),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      for (
+                        var i = 0;
+                        i <
+                            (kThemeParticleSchemas[AppTheme.notifier.value] ??
+                                    kThemeParticleSchemas[AppThemeMode
+                                        .moonlitChamber]!)
+                                .length;
+                        i++
+                      ) ...[
+                        Expanded(
+                          child: _SchemaChip(
+                            schema:
+                                (kThemeParticleSchemas[AppTheme
+                                        .notifier
+                                        .value] ??
+                                    kThemeParticleSchemas[AppThemeMode
+                                        .moonlitChamber]!)[i],
+                            active: i == prefs.particleSchemaIndex,
+                            onTap: () {
+                              VisualPrefs.setParticleSchemaIndex(i);
+                              Haptics.selection();
+                            },
+                          ),
+                        ),
+                        if (i < 2) const SizedBox(width: 8),
+                      ],
+                    ],
+                  ),
+                ]),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
-// =============================================================================
-// STEP 1 — THEME (grid of 10 themes)
-// =============================================================================
+/// Swipable 2-column x 4-row paged grid. Each page shows 8 items.
+/// Swipe horizontally to see more pages. Saves vertical space.
+/// A grid item for the swipable grid.
+class _GridItem {
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+  final Widget child;
+  const _GridItem({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+    required this.child,
+  });
+}
 
-class _ThemeStep extends StatelessWidget {
+class _ThemeStep extends StatefulWidget {
   final AppThemeMode previewMode;
   final ValueChanged<AppThemeMode> onPreview;
   final ValueChanged<AppThemeMode> onQuickApply;
@@ -920,1206 +1973,528 @@ class _ThemeStep extends StatelessWidget {
     required this.onQuickApply,
   });
 
-  bool _hasVariants() {
-    return previewMode == AppThemeMode.unicorn ||
-        kThemeRemixes.containsKey(previewMode) ||
-        previewMode == AppThemeMode.custom;
-  }
+  @override
+  State<_ThemeStep> createState() => _ThemeStepState();
+}
+
+class _SwipableGrid2x4 extends StatefulWidget {
+  final List<_GridItem> items;
+  const _SwipableGrid2x4({required this.items});
+
+  @override
+  State<_SwipableGrid2x4> createState() => _SwipableGrid2x4State();
+}
+
+class _SwipableGrid2x4State extends State<_SwipableGrid2x4> {
+  int _page = 0;
+  static const _perPage = 8; // 2 cols x 4 rows
+  static const _rowHeight = 44.0;
+  static const _spacing = 6.0;
 
   @override
   Widget build(BuildContext context) {
-    final modes = kVisibleThemes;
-    final activeMode = AppTheme.mode;
-
+    final pageCount = (widget.items.length / _perPage).ceil();
+    final flair = AppTheme.flair;
     return Column(
       children: [
-        // Discoverability hint
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-          child: GoopText(
-            'Tap to preview  ·  Long-press to apply instantly',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withValues(alpha: 0.45),
-              letterSpacing: 0.3,
-            ),
-          ),
-        ),
-        Expanded(
-          child: GridView.builder(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1.4,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: modes.length,
-            itemBuilder: (context, i) {
-              final m = modes[i];
-              final f = AppTheme.flairFor(m);
-              final isPreview = m == previewMode;
-              final isActive = m == activeMode;
-
-              return GestureDetector(
-                onTap: () {
-                  onPreview(m);
-                  Haptics.selection();
-                },
-                onLongPress: () {
-                  // _applyAndClose (called inside onQuickApply) already
-                  // fires Haptics.success() — no duplicate haptic here.
-                  onQuickApply(m);
-                },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOutCubic,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: f.scaffold.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: isPreview ? f.primary : Colors.white.withValues(alpha: 0.08),
-                width: isPreview ? 2.0 : 1.0,
-              ),
-              boxShadow: isPreview
-                  ? [BoxShadow(color: f.primary.withValues(alpha: 0.2), blurRadius: 10)]
-                  : null,
-            ),
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                // Theme splash image background
-                if (m.splashSlug.isNotEmpty)
-                  Image.asset(
-                    'assets/images/themes/splash/${m.splashSlug}.jpg',
-                    fit: BoxFit.cover,
-                    opacity: AlwaysStoppedAnimation(isPreview ? 1.0 : 0.7),
-                  ),
-                // Dark gradient scrim for label readability
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.65),
-                        ],
-                        stops: const [0.4, 1.0],
-                      ),
-                    ),
-                  ),
-                ),
-                // Label
-                Positioned(
-                  left: 8,
-                  bottom: 6,
-                  right: 8,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+        SizedBox(
+          height: _rowHeight * 4 + _spacing * 3, // 4 rows + 3 gaps
+          child: PageView.builder(
+            itemCount: pageCount,
+            onPageChanged: (i) {
+              setState(() => _page = i);
+              Haptics.selection();
+            },
+            itemBuilder: (context, page) {
+              final start = page * _perPage;
+              final end = (start + _perPage).clamp(0, widget.items.length);
+              final pageItems = widget.items.sublist(start, end);
+              // Build 4 rows of 2 items each — reliable fixed sizing
+              final rows = <Widget>[];
+              for (int r = 0; r < 4; r++) {
+                final idx0 = r * 2;
+                final idx1 = r * 2 + 1;
+                if (idx0 >= pageItems.length) break;
+                rows.add(
+                  Row(
                     children: [
-                      GoopText(
-                        m.label.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w900,
-                          color: isPreview ? f.headlineStat : Colors.white,
-                          letterSpacing: 1.0,
-                          shadows: [
-                            Shadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 4),
-                          ],
-                        ),
-                      ),
-                      if (isActive) ...[
-                        const SizedBox(height: 2),
-                        GoopText('ACTIVE',
-                            style: TextStyle(
-                                fontSize: 9,
-                                fontWeight: FontWeight.w900,
-                                color: f.primary,
-                                letterSpacing: 0.8)),
-                      ],
+                      Expanded(child: _buildTile(pageItems[idx0], flair)),
+                      const SizedBox(width: _spacing),
+                      if (idx1 < pageItems.length)
+                        Expanded(child: _buildTile(pageItems[idx1], flair))
+                      else
+                        const Expanded(child: SizedBox()),
                     ],
                   ),
-                ),
-                // Selected checkmark
-                if (isPreview)
-                  Positioned(
-                    top: 6,
-                    right: 6,
-                    child: Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: f.primary,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.check_rounded, size: 12, color: Colors.black),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ).animate().fadeIn(duration: 200.ms, delay: (i * 40).ms);
+                );
+                if (r < 3 && idx1 < pageItems.length) {
+                  rows.add(const SizedBox(height: _spacing));
+                }
+              }
+              return Column(children: rows);
             },
           ),
         ),
-        // ── Palette variants (inline, only if the selected theme has them) ──
-        if (_hasVariants()) ...[
-          const SizedBox(height: 4),
-          Expanded(
-            child: _PaletteStep(
-              previewMode: previewMode,
-              onRefresh: () {},
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-// =============================================================================
-// STEP 2 — PALETTE (variants / custom colors)
-// =============================================================================
-
-class _PaletteStep extends StatelessWidget {
-  final AppThemeMode previewMode;
-  final VoidCallback onRefresh;
-
-  const _PaletteStep({required this.previewMode, required this.onRefresh});
-
-  @override
-  Widget build(BuildContext context) {
-    final hasVariants = previewMode == AppThemeMode.unicorn ||
-        kThemeRemixes.containsKey(previewMode);
-    final isCustom = previewMode == AppThemeMode.custom;
-
-    if (!hasVariants && !isCustom) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.palette_outlined,
-                  size: 48, color: Colors.white.withValues(alpha: 0.3)),
-              const SizedBox(height: 12),
-              GoopText(
-                'This theme has no palette variants.\n\nPick a different theme in Step 1, or use the Custom theme to define your own colors.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.white.withValues(alpha: 0.5),
-                    height: 1.5),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    if (isCustom) {
-      return _CustomColorsStep(onRefresh: onRefresh);
-    }
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GoopText(
-            'PALETTE VARIANTS',
-            style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w900,
-                color: AppTheme.flair.primary.withValues(alpha: 0.8),
-                letterSpacing: 1.5),
-          ),
-          const SizedBox(height: 14),
-          if (previewMode == AppThemeMode.unicorn)
-            _UnicornPalettes(onRefresh: onRefresh)
-          else
-            _RemixPalettes(mode: previewMode, onRefresh: onRefresh),
-        ],
-      ),
-    );
-  }
-}
-
-class _UnicornPalettes extends StatelessWidget {
-  final VoidCallback onRefresh;
-  const _UnicornPalettes({required this.onRefresh});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: AppTheme.unicornPaletteNotifier,
-      builder: (context, _) {
-        final active = AppTheme.unicornPalette;
-        final palettes = UnicornPalette.values;
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.6,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: palettes.length,
-          itemBuilder: (context, i) {
-            final p = palettes[i];
-            final pf = p.flair;
-            final isSelected = p == active;
-            return GestureDetector(
-              onTap: () {
-                AppTheme.setUnicornPalette(p);
-                Haptics.selection();
-                onRefresh();
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? pf.primary.withValues(alpha: 0.15)
-                      : Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isSelected ? pf.primary : Colors.white.withValues(alpha: 0.08),
-                    width: isSelected ? 2.0 : 1.0,
-                  ),
-                  boxShadow: isSelected
-                      ? [BoxShadow(color: pf.primary.withValues(alpha: 0.15), blurRadius: 8)]
-                      : null,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Color swatches row
-                    Row(
-                      children: [
-                        _miniSwatch(pf.scaffold, true, false),
-                        _miniSwatch(pf.primary, false, false),
-                        _miniSwatch(pf.headlineStat, false, true),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    GoopText(p.label,
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-                            color: isSelected ? pf.primary : Colors.white.withValues(alpha: 0.6))),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-}
-
-class _RemixPalettes extends StatelessWidget {
-  final AppThemeMode mode;
-  final VoidCallback onRefresh;
-  const _RemixPalettes({required this.mode, required this.onRefresh});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: AppTheme.remixNotifier,
-      builder: (context, _) {
-        final remixes = kThemeRemixes[mode]!;
-        final active = AppTheme.remixFor(mode);
-        final f = AppTheme.flairFor(mode);
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.6,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: remixes.length,
-          itemBuilder: (context, i) {
-            final r = remixes[i];
-            final rf = r.flair;
-            final colors = rf != null
-                ? [rf.scaffold, rf.primary, rf.headlineStat]
-                : [f.scaffold, f.primary, f.headlineStat];
-            final isSelected = i == active;
-            return GestureDetector(
-              onTap: () {
-                AppTheme.setRemix(mode, i);
-                Haptics.selection();
-                onRefresh();
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? f.primary.withValues(alpha: 0.15)
-                      : Colors.white.withValues(alpha: 0.04),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: isSelected ? f.primary : Colors.white.withValues(alpha: 0.08),
-                    width: isSelected ? 2.0 : 1.0,
-                  ),
-                  boxShadow: isSelected
-                      ? [BoxShadow(color: f.primary.withValues(alpha: 0.15), blurRadius: 8)]
-                      : null,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        for (int c = 0; c < colors.length; c++) ...[
-                          if (c > 0) const SizedBox(width: 1),
-                          _miniSwatch(colors[c], c == 0, c == colors.length - 1),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    GoopText(r.label,
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-                            color: isSelected ? f.primary : Colors.white.withValues(alpha: 0.6))),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-}
-
-class _CustomColorsStep extends StatefulWidget {
-  final VoidCallback onRefresh;
-  const _CustomColorsStep({required this.onRefresh});
-
-  @override
-  State<_CustomColorsStep> createState() => _CustomColorsStepState();
-}
-
-class _CustomColorsStepState extends State<_CustomColorsStep> {
-  late CustomThemeData _data;
-  bool _loaded = false;
-  Timer? _saveTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  @override
-  void dispose() {
-    _saveTimer?.cancel();
-    // Flush any pending save on dispose
-    if (_loaded) {
-      CustomThemeData.save(_data);
-      AppTheme.setCustomThemeData(_data);
-    }
-    super.dispose();
-  }
-
-  Future<void> _loadData() async {
-    _data = await CustomThemeData.loadAsync();
-    if (mounted) setState(() => _loaded = true);
-  }
-
-  /// Debounced save — updates in-memory data instantly for live preview,
-  /// but only writes to disk 500ms after the last change. Prevents
-  /// excessive SharedPreferences writes when rapidly tapping colors.
-  void _scheduleSave() {
-    AppTheme.setCustomThemeData(_data);
-    AppTheme.refresh();
-    widget.onRefresh();
-    _saveTimer?.cancel();
-    _saveTimer = Timer(const Duration(milliseconds: 500), () {
-      CustomThemeData.save(_data);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_loaded) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const GoopText('CUSTOM THEME COLORS',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.5,
-                      color: Colors.white54)),
-              const Spacer(),
-              TextButton.icon(
-                onPressed: () {
-                  setState(() => _data = CustomThemeData.random());
-                  _scheduleSave();
-                  Haptics.selection();
-                },
-                icon: const Icon(Icons.casino, size: 14),
-                label: const GoopText('Randomize',
-                    style: TextStyle(fontSize: 11)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          _ColorSlot('Background', _data.scaffold,
-              (c) { setState(() => _data = _data.copyWith(scaffold: c)); _scheduleSave(); }),
-          _ColorSlot('Card', _data.card,
-              (c) { setState(() => _data = _data.copyWith(card: c)); _scheduleSave(); }),
-          _ColorSlot('Primary', _data.primary,
-              (c) { setState(() => _data = _data.copyWith(primary: c)); _scheduleSave(); }),
-          _ColorSlot('Secondary', _data.secondary,
-              (c) { setState(() => _data = _data.copyWith(secondary: c)); _scheduleSave(); }),
-          _ColorSlot('Accent / Headline', _data.headlineStat,
-              (c) { setState(() => _data = _data.copyWith(headlineStat: c)); _scheduleSave(); }),
-          _ColorSlot('Bullet', _data.bulletColor,
-              (c) { setState(() => _data = _data.copyWith(bulletColor: c)); _scheduleSave(); }),
-        ],
-      ),
-    );
-  }
-}
-
-const _kColorPalette = <Color>[
-  Color(0xFF0D0C0B), Color(0xFF1A1A1A), Color(0xFF1A101F), Color(0xFF0F0A14),
-  Color(0xFF0A030C), Color(0xFF080510), Color(0xFF050308), Color(0xFF0A0F0E),
-  Color(0xFF0E1018), Color(0xFF120D0A), Color(0xFF0D110E), Color(0xFF0A1118),
-  Color(0xFFFF69B4), Color(0xFFFF1493), Color(0xFFE91E63), Color(0xFFFF4500),
-  Color(0xFFFFD700), Color(0xFF00E5FF), Color(0xFF00E676), Color(0xFF7C4DFF),
-  Color(0xFFB71C1C), Color(0xFF1B5E20), Color(0xFF1A237E), Color(0xFF4A148C),
-];
-
-class _ColorSlot extends StatelessWidget {
-  final String label;
-  final Color current;
-  final ValueChanged<Color> onPicked;
-  const _ColorSlot(this.label, this.current, this.onPicked);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              GoopText(label,
-                  style: const TextStyle(
-                      fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white60)),
-              const SizedBox(width: 8),
-              Container(
-                width: 14, height: 14,
-                decoration: BoxDecoration(
-                    color: current,
-                    borderRadius: BorderRadius.circular(3),
-                    border: Border.all(color: Colors.white24, width: 0.8)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          SizedBox(
-            height: 34,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: _kColorPalette.length + 1,
-              separatorBuilder: (_, __) => const SizedBox(width: 6),
-              itemBuilder: (_, i) {
-                if (i == _kColorPalette.length) {
-                  return GestureDetector(
-                    onTap: () async {
-                      final picked = await showDialog<Color>(
-                        context: context,
-                        builder: (_) => _HsvPicker(initial: current),
-                      );
-                      if (picked != null) {
-                        onPicked(picked);
-                        Haptics.selection();
-                      }
-                    },
-                    child: Container(
-                      width: 34, height: 34,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.white30, width: 1.5)),
-                      child: const Icon(Icons.add, size: 16, color: Colors.white60),
-                    ),
-                  );
-                }
-                final c = _kColorPalette[i];
-                final selected = c.toARGB32() == current.toARGB32();
-                return GestureDetector(
-                  onTap: () { onPicked(c); Haptics.selection(); },
-                  child: Container(
-                    width: 34, height: 34,
-                    decoration: BoxDecoration(
-                        color: c,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                            color: selected ? Colors.white : Colors.white12,
-                            width: selected ? 2.0 : 1.0)),
+        if (pageCount > 1)
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(pageCount, (i) {
+                final isActive = i == _page;
+                return Container(
+                  width: isActive ? 7 : 5,
+                  height: isActive ? 7 : 5,
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                  decoration: BoxDecoration(
+                    color:
+                        isActive
+                            ? flair.primary
+                            : Colors.white.withValues(alpha: 0.2),
+                    shape: BoxShape.circle,
                   ),
                 );
-              },
+              }),
             ),
           ),
-        ],
-      ),
+      ],
     );
   }
-}
 
-class _HsvPicker extends StatefulWidget {
-  final Color initial;
-  const _HsvPicker({required this.initial});
-
-  @override
-  State<_HsvPicker> createState() => _HsvPickerState();
-}
-
-class _HsvPickerState extends State<_HsvPicker> {
-  late double _h, _s, _v;
-
-  @override
-  void initState() {
-    super.initState();
-    final hsv = HSVColor.fromColor(widget.initial);
-    _h = hsv.hue; _s = hsv.saturation; _v = hsv.value;
-  }
-
-  Color get _color => HSVColor.fromAHSV(1.0, _h, _s, _v).toColor();
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: AppTheme.flair.card,
-      title: const Text('Pick Color', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800)),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: double.infinity, height: 40,
-            margin: const EdgeInsets.only(bottom: 12),
-            decoration: BoxDecoration(
-                color: _color,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.white24, width: 1.5)),
+  Widget _buildTile(_GridItem item, ThemeFlair flair) {
+    return GestureDetector(
+      onTap: item.onTap,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: _rowHeight,
+        padding: const EdgeInsets.symmetric(
+          horizontal: Insets.sm,
+          vertical: Insets.xs,
+        ),
+        decoration: BoxDecoration(
+          color:
+              item.isActive
+                  ? flair.primary.withValues(alpha: 0.18)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.all(Radii.sm),
+          border: Border.all(
+            color:
+                item.isActive
+                    ? flair.primary.withValues(alpha: 0.7)
+                    : Colors.white.withValues(alpha: 0.08),
+            width: item.isActive ? 1.5 : 1.0,
           ),
-          _slider('Hue', _h, 0, 360, (v) => setState(() => _h = v),
-              HSVColor.fromAHSV(1.0, _h, 1.0, 1.0).toColor()),
-          _slider('Saturation', _s, 0, 1, (v) => setState(() => _s = v),
-              HSVColor.fromAHSV(1.0, _h, _s, 1.0).toColor()),
-          _slider('Lightness', _v, 0, 1, (v) => setState(() => _v = v), _color),
-        ],
+        ),
+        child: Row(
+          children: [
+            item.child,
+            const SizedBox(width: 6),
+            Expanded(
+              child: GoopText(
+                item.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: item.isActive ? FontWeight.w900 : FontWeight.w700,
+                  color:
+                      item.isActive
+                          ? flair.primary
+                          : Colors.white.withValues(alpha: 0.5),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-      actions: [
-        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-        FilledButton(onPressed: () => Navigator.pop(context, _color), child: const Text('OK')),
-      ],
-    );
-  }
-
-  Widget _slider(String label, double value, double min, double max,
-      ValueChanged<double> onChanged, Color color) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white60)),
-        Slider(value: value, min: min, max: max, activeColor: color, onChanged: onChanged),
-      ],
     );
   }
 }
 
-Widget _miniSwatch(Color color, bool left, bool right) {
-  return Container(
-    width: 14, height: 26,
-    decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.horizontal(
-        left: left ? const Radius.circular(3) : Radius.zero,
-        right: right ? const Radius.circular(3) : Radius.zero,
+/// Compact visual for a color schema.
+
+/// Sticky pinned header for the particles tab — holds the enable
+/// toggle and the live particle preview so they're always visible.
+class _StickyParticleHeader extends SliverPersistentHeaderDelegate {
+  final VisualPrefs prefs;
+  _StickyParticleHeader({required this.prefs});
+
+  @override
+  double get minExtent => 160;
+  @override
+  double get maxExtent => 160;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppTheme.flair.scaffold.withValues(alpha: 0.95),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.white.withValues(alpha: 0.06),
+            width: 1,
+          ),
+        ),
       ),
-    ),
-  );
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          Insets.lg,
+          Insets.xs,
+          Insets.lg,
+          Insets.sm,
+        ),
+        child: Column(
+          children: [
+            _ToggleRow(
+              icon: Icons.auto_awesome_outlined,
+              label: 'Enable Particles',
+              value: prefs.particlesEnabled,
+              onChanged: (v) {
+                VisualPrefs.setParticles(v);
+                Haptics.selection();
+              },
+            ),
+            const SizedBox(height: 8),
+            // Always show preview (even if disabled, to show what they'd get)
+            Expanded(child: _ParticlePreview(prefs: prefs)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(_StickyParticleHeader old) => prefs != old.prefs;
 }
 
-// =============================================================================
-// STEP 3 — PARTICLES (preset + schema + speed + studio)
-// =============================================================================
-
-class _ParticlesStep extends StatelessWidget {
-  const _ParticlesStep();
+/// Live preview box that renders the current particle preset at its
+/// actual settings so users can see exactly what they're choosing.
+class _ParticlePreview extends StatelessWidget {
+  final VisualPrefs prefs;
+  const _ParticlePreview({required this.prefs});
 
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    return ValueListenableBuilder<VisualPrefs>(
-      valueListenable: VisualPrefs.notifier,
-      builder: (context, prefs, _) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Enable toggle
-              _ToggleRow(
-                icon: Icons.auto_awesome_outlined,
-                label: 'Enable Particles',
-                value: prefs.particlesEnabled,
-                onChanged: (v) { VisualPrefs.setParticles(v); Haptics.selection(); },
-              ),
-              const SizedBox(height: 18),
-              if (prefs.particlesEnabled) ...[
-                _StepLabel('PRESET'),
-                const SizedBox(height: 10),
-                _PresetGrid(current: prefs.particlePreset),
-                const SizedBox(height: 18),
-                _StepLabel('COLOR SCHEMA'),
-                const SizedBox(height: 10),
-                _SchemaGrid(current: prefs.particleColorSchema),
-                const SizedBox(height: 18),
-                _StepLabel('SPEED'),
-                const SizedBox(height: 10),
-                _SpeedRow(current: prefs.particleSpeed),
-                const SizedBox(height: 18),
-                _StepLabel('STUDIO'),
-                const SizedBox(height: 10),
-                _StudioSlider('Count', '${prefs.particleCount}', prefs.particleCount.toDouble(),
-                    1, 32, 31, flair.headlineStat, (v) => VisualPrefs.setParticleCount(v.toInt())),
-                const SizedBox(height: 10),
-                _StudioSlider('Size', '${prefs.particleSizeScale.toStringAsFixed(1)}x',
-                    prefs.particleSizeScale, 0.3, 2.0, 17, flair.headlineStat,
-                    (v) => VisualPrefs.setParticleSizeScale(v)),
-                const SizedBox(height: 10),
-                _StudioSlider('Opacity', '${(prefs.particleOpacity * 100).toStringAsFixed(0)}%',
-                    prefs.particleOpacity, 0.0, 1.0, 20, flair.headlineStat,
-                    (v) => VisualPrefs.setParticleOpacity(v)),
-                const SizedBox(height: 18),
-                _StepLabel('GLOW EFFECT'),
-                const SizedBox(height: 10),
-                _GlowRow(current: prefs.particleGlowEffect),
-                const SizedBox(height: 14),
-                _ToggleRow(icon: Icons.timeline_outlined, label: 'Line Links',
-                    value: prefs.particleLineLinks, onChanged: (v) { VisualPrefs.setParticleLineLinks(v); Haptics.selection(); }),
-                const SizedBox(height: 10),
-                _ToggleRow(icon: Icons.sports_baseball_outlined, label: 'Edge Bounce',
-                    value: prefs.particleBounce, onChanged: (v) { VisualPrefs.setParticleBounce(v); Haptics.selection(); }),
-              ],
-            ],
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radii.md),
+      child: Container(
+        height: 240,
+        decoration: BoxDecoration(
+          color: flair.scaffold.withValues(alpha: 0.6),
+          border: Border.all(
+            color: flair.primary.withValues(alpha: 0.2),
+            width: 1.0,
           ),
-        );
-      },
+          borderRadius: BorderRadius.all(Radii.md),
+        ),
+        child: Stack(
+          children: [
+            // Subtle gradient backdrop so particles are visible.
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      flair.scaffold.withValues(alpha: 0.3),
+                      flair.card.withValues(alpha: 0.5),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // The live particle field.
+            Positioned.fill(
+              child: ParticleField(
+                preset: prefs.particlePreset,
+                count: prefs.particleCount,
+                sizeScale: prefs.particleSizeScale,
+                opacity: prefs.particleOpacity,
+                glowOverride: prefs.particleGlowEffect,
+                lineLinksOverride: prefs.particleLineLinks,
+                bounce: prefs.particleBounce,
+                speedMultiplier: prefs.particleSpeed.multiplier,
+              ),
+            ),
+            // Label overlay.
+            Positioned(
+              left: 12,
+              bottom: 8,
+              child: GoopText(
+                'LIVE PREVIEW',
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white.withValues(alpha: 0.3),
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
-class _PresetGrid extends StatelessWidget {
-  final ParticlePreset current;
-  const _PresetGrid({required this.current});
-
-  @override
-  Widget build(BuildContext context) {
-    // Curated preset list — originals + 6 artful + 3 Gungeon-unique.
-    final presets = [
-      // Originals
-      ParticlePreset.gungeonDust, ParticlePreset.cosmicStars,
-      ParticlePreset.forgeEmbers, ParticlePreset.frostShards,
-      ParticlePreset.unicornSparkles, ParticlePreset.goldenSparkle,
-      ParticlePreset.cursedSmoke, ParticlePreset.bulletHell,
-      // 6 artful
-      ParticlePreset.auroraVeil, ParticlePreset.crystalLattice,
-      ParticlePreset.inkSplatter, ParticlePreset.solarFlare,
-      ParticlePreset.tidePool, ParticlePreset.stainedGlass,
-      // 3 Gungeon-unique
-      ParticlePreset.blankShells, ParticlePreset.hegemonyCredits,
-      ParticlePreset.masterRoundAura,
-    ];
-    return Wrap(
-      spacing: 10, runSpacing: 10,
-      children: presets.map((p) {
-        final isActive = p == current;
-        final flair = AppTheme.flair;
-        final cfg = p.config;
-        return GestureDetector(
-          onTap: () { VisualPrefs.setParticlePreset(p); Haptics.selection(); },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: isActive ? flair.primary.withValues(alpha: 0.18) : Colors.white.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: isActive ? flair.primary.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.1),
-                width: isActive ? 1.5 : 1.0,
-              ),
-              boxShadow: isActive
-                  ? [BoxShadow(color: flair.primary.withValues(alpha: 0.1), blurRadius: 6)]
-                  : null,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Visual representation: color swatches + shape icon
-                _PresetVisual(config: cfg, size: 18),
-                const SizedBox(width: 8),
-                GoopText(p.label,
-                    style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: isActive ? FontWeight.w900 : FontWeight.w700,
-                        color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.55))),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
+/// Live mini particle preview. Renders a tiny [ParticleField] with a low
+/// particle count when motion is enabled; falls back to the static
+/// [_PresetVisual] swatch strip when reduced motion is active.
 
 /// Compact visual representation of a preset — shows the preset's
 /// colors as a horizontal swatch strip + a tiny shape icon.
-class _PresetVisual extends StatelessWidget {
-  final PresetConfig config;
-  final double size;
-  const _PresetVisual({required this.config, required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size + (config.colors.length.clamp(0, 4) * 4),
-      height: size,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
-      ),
-      child: Stack(
-        children: [
-          // Color swatches as horizontal strip
-          Row(
-            children: config.colors.take(4).map((c) => Expanded(
-              child: Container(color: c),
-            )).toList(),
-          ),
-          // Shape icon overlay (centered, semi-transparent)
-          Center(
-            child: Icon(
-              _shapeIcon(config.shape),
-              size: size * 0.7,
-              color: Colors.white.withValues(alpha: 0.85),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  IconData _shapeIcon(ParticleShape s) => switch (s) {
-        ParticleShape.circle => Icons.circle,
-        ParticleShape.star => Icons.star,
-        ParticleShape.triangle => Icons.change_history,
-        ParticleShape.edge => Icons.square,
-        ParticleShape.bullet => Icons.water_drop,
-        ParticleShape.heart => Icons.favorite,
-        ParticleShape.skull => Icons.warning,
-        ParticleShape.hexagon => Icons.hexagon,
-        ParticleShape.paw => Icons.pets,
-        ParticleShape.crescent => Icons.nightlight,
-        ParticleShape.bolt => Icons.bolt,
-        ParticleShape.shard => Icons.diamond,
-        ParticleShape.smoke => Icons.cloud,
-        ParticleShape.scale => Icons.shield,
-      };
-}
-
-class _SchemaGrid extends StatelessWidget {
-  final ParticleColorSchema current;
-  const _SchemaGrid({required this.current});
-
-  @override
-  Widget build(BuildContext context) {
-    final schemas = ParticleColorSchema.values;
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: schemas.map((s) {
-        final isActive = s == current;
-        final colors = s.colors;
-        return GestureDetector(
-          onTap: () { VisualPrefs.setParticleColorSchema(s); Haptics.selection(); },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: isActive ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.04),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: isActive ? Colors.white.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
-                width: isActive ? 1.4 : 0.8,
-              ),
-              boxShadow: isActive
-                  ? [BoxShadow(color: Colors.white.withValues(alpha: 0.05), blurRadius: 4)]
-                  : null,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Visual representation: color swatch strip
-                if (colors != null)
-                  Container(
-                    width: 36,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Row(
-                        children: colors.take(4).map((c) => Expanded(
-                          child: Container(color: c),
-                        )).toList(),
-                      ),
-                    ),
-                  )
-                else
-                  // "Preset Default" / "Theme Match" — icon instead of swatches
-                  Container(
-                    width: 36,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 0.5),
-                    ),
-                    child: Icon(
-                      s == ParticleColorSchema.presetDefault ? Icons.palette_outlined : Icons.auto_awesome,
-                      size: 12,
-                      color: Colors.white54,
-                    ),
-                  ),
-                const SizedBox(width: 8),
-                GoopText(s.label,
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                        color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.55))),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class _SpeedRow extends StatelessWidget {
-  final ParticleSpeed current;
-  const _SpeedRow({required this.current});
-
-  @override
-  Widget build(BuildContext context) {
-    final speeds = ParticleSpeed.values;
-    return Row(
-      children: speeds.map((s) {
-        final isActive = s == current;
-        return Expanded(
-          child: GestureDetector(
-            onTap: () { VisualPrefs.setParticleSpeed(s); Haptics.selection(); },
-            child: Container(
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: isActive ? Colors.white.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.04),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: isActive ? Colors.white.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.08),
-                ),
-              ),
-              child: Center(
-                child: GoopText(s.label,
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                        color: isActive ? Colors.white : Colors.white.withValues(alpha: 0.55))),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class _GlowRow extends StatelessWidget {
-  final GlowEffect current;
-  const _GlowRow({required this.current});
-
-  @override
-  Widget build(BuildContext context) {
-    final flair = AppTheme.flair;
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
-      children: GlowEffect.values.map((e) {
-        final isActive = e == current;
-        return GestureDetector(
-          onTap: () { VisualPrefs.setParticleGlowEffect(e); Haptics.selection(); },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: isActive ? flair.card.withValues(alpha: 0.9) : flair.card.withValues(alpha: 0.5),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: isActive ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
-                width: isActive ? 1.5 : 1.0,
-              ),
-              boxShadow: isActive
-                  ? [BoxShadow(color: flair.primary.withValues(alpha: 0.1), blurRadius: 6)]
-                  : null,
-            ),
-            child: GoopText(e.label,
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                    color: isActive ? Colors.white : Colors.white54)),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
 
 // =============================================================================
-// STEP 4 — TYPOGRAPHY (font family + sizes + weight)
+// TAB 3 — TYPOGRAPHY (font family tabbed by category + sizes + weight)
 // =============================================================================
 
 class _TypographyStep extends StatelessWidget {
   const _TypographyStep();
 
+  /// The curated six — one flat 2-col grid, no sub-categories.
+  static const _fonts = [
+    AppFont.gungeon,
+    AppFont.megrim,
+    AppFont.russoOne,
+    AppFont.fredoka,
+    AppFont.dmSans,
+    AppFont.jetBrainsMono,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<VisualPrefs>(
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _StepLabel('FONT FAMILY'),
-              const SizedBox(height: 10),
-              _FontFamilyGrid(current: prefs.font),
-              const SizedBox(height: 18),
-              _StepLabel('BASE FONT SIZE'),
-              const SizedBox(height: 10),
-              _FontSizeSlider(
-                current: prefs.fontSize,
-                onChanged: (v) => VisualPrefs.setFontSize(v),
+        return CustomScrollView(
+          slivers: [
+            // Sticky font preview header
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _StickyFontHeader(prefs: prefs),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(
+                Insets.lg,
+                Insets.sm,
+                Insets.lg,
+                Insets.lg,
               ),
-              const SizedBox(height: 18),
-              _StepLabel('INVENTORY FONT SIZE'),
-              const SizedBox(height: 10),
-              _FontSizeSlider(
-                current: prefs.inventoryFontSize,
-                onChanged: (v) => VisualPrefs.setInventoryFontSize(v),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  _StepLabel('FONT FAMILY'),
+                  const SizedBox(height: 8),
+                  // 2-col uniform tiles — font name rendered in its font.
+                  for (var r = 0; r * 2 < _fonts.length; r++)
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: (r + 1) * 2 < _fonts.length ? 8 : 0,
+                      ),
+                      child: Row(
+                        children: [
+                          for (var c = 0; c < 2; c++) ...[
+                            Expanded(
+                              child:
+                                  r * 2 + c < _fonts.length
+                                      ? _FontTile(
+                                        font: _fonts[r * 2 + c],
+                                        selected:
+                                            _fonts[r * 2 + c] == prefs.font,
+                                      )
+                                      : const SizedBox(),
+                            ),
+                            if (c < 1) const SizedBox(width: 8),
+                          ],
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 18),
+                  _StepLabel('BASE FONT SIZE'),
+                  const SizedBox(height: 10),
+                  _FontSizeSlider(
+                    current: prefs.fontSize,
+                    onChanged: (v) => VisualPrefs.setFontSize(v),
+                  ),
+                  const SizedBox(height: 18),
+                  _StepLabel('WEIGHT BIAS'),
+                  const SizedBox(height: 10),
+                  _WeightRow(current: prefs.fontWeightBias),
+                  const SizedBox(height: 14),
+                  _StepLabel('LETTER SPACING'),
+                  const SizedBox(height: 10),
+                  _LetterRow(current: prefs.fontLetterSpacing),
+                ]),
               ),
-              const SizedBox(height: 18),
-              _StepLabel('WEIGHT BIAS'),
-              const SizedBox(height: 10),
-              _WeightRow(current: prefs.fontWeightBias),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
   }
 }
 
-class _FontFamilyGrid extends StatelessWidget {
-  final AppFont current;
-  const _FontFamilyGrid({required this.current});
+/// Sticky pinned header for the typography tab — shows a live font
+/// preview sample so users can see how their font choice looks.
+class _StickyFontHeader extends SliverPersistentHeaderDelegate {
+  final VisualPrefs prefs;
+  _StickyFontHeader({required this.prefs});
 
-  // Font categories for organized browsing. The first category
-  // ("Featured") pins the two Gungeon-defining fonts at the top so
-  // they're always easy to find: the official Gungeon pixel font and
-  // Megrim (the app's signature thin-wire display font).
-  static const _categories = <_FontCategory>[
-    _FontCategory('Featured', [
-      AppFont.gungeon,
-      AppFont.megrim,
-    ]),
-    _FontCategory('Pixel & Retro', [
-      AppFont.pressStart2p,
-      AppFont.silkscreen,
-      AppFont.vt323,
-      AppFont.pixelifySans,
-      AppFont.bungee,
-      AppFont.bungeeShade,
-      AppFont.rubik8bit,
-      AppFont.dotgothic16,
-    ]),
-    _FontCategory('Sci-Fi & Tech', [
-      AppFont.monoton,
-      AppFont.blackOpsOne,
-      AppFont.orbitron,
-      AppFont.shareTechMono,
-      AppFont.syncopate,
-      AppFont.rajdhani,
-      AppFont.audiowide,
-      AppFont.russoOne,
-      AppFont.fasterOne,
-      AppFont.spaceGrotesk,
-      AppFont.jetBrainsMono,
-    ]),
-    _FontCategory('Display & Impact', [
-      AppFont.archivoBlack,
-      AppFont.anton,
-      AppFont.rowdies,
-      AppFont.righteous,
-      AppFont.teko,
-      AppFont.fjallaOne,
-      AppFont.bebasNeue,
-      AppFont.kanit,
-    ]),
-    _FontCategory('Casual & Fun', [
-      AppFont.comicNeue,
-      AppFont.fredoka,
-      AppFont.sniglet,
-      AppFont.lemon,
-      AppFont.lilitaOne,
-      AppFont.spicyRice,
-      AppFont.chewy,
-      AppFont.boogaloo,
-      AppFont.carterOne,
-      AppFont.permanentMarker,
-    ]),
-    _FontCategory('Clean & Modern', [
-      AppFont.dmSans,
-      AppFont.outfit,
-      AppFont.syne,
-      AppFont.montserrat,
-      AppFont.lexend,
-      AppFont.comfortaa,
-      AppFont.alata,
-    ]),
-    _FontCategory('Gothic & Fantasy', [
-      AppFont.medievalSharp,
-      AppFont.cinzelDecorative,
-      AppFont.almendra,
-      AppFont.metalMania,
-      AppFont.unifrakturMaguntia,
-      AppFont.newRocker,
-      AppFont.rye,
-      AppFont.nosifer,
-      AppFont.cinzel,
-    ]),
-    _FontCategory('Serif & Editorial', [
-      AppFont.playfairDisplay,
-      AppFont.ebGaramond,
-      AppFont.merriweather,
-      AppFont.libreBaskerville,
-      AppFont.specialElite,
-      AppFont.coustard,
-    ]),
-    _FontCategory('Handwritten & Script', [
-      AppFont.architectsDaughter,
-      AppFont.rockSalt,
-      AppFont.shadowsIntoLight,
-      AppFont.lobster,
-      AppFont.caveat,
-    ]),
-  ];
+  @override
+  double get minExtent => 90;
+  @override
+  double get maxExtent => 90;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    final flair = AppTheme.flair;
+    final font = prefs.font;
+    final isBold = prefs.fontWeightBias > 0;
+    // Build the font style — use a consistent base size; FittedBox
+    // normalizes visual size across fonts with different metrics.
+    TextStyle baseStyle;
+    if (font == AppFont.gungeon) {
+      baseStyle = TextStyle(
+        fontFamily: 'EnterTheGungeonBig',
+        fontSize: FontSizes.headlineSmall,
+        fontWeight: isBold ? FontWeight.w900 : FontWeight.w700,
+        color: flair.headlineStat,
+        letterSpacing: 1.5,
+      );
+    } else {
+      baseStyle = GoogleFonts.getFont(font.label).copyWith(
+        fontSize: FontSizes.headlineSmall,
+        fontWeight: isBold ? FontWeight.w900 : FontWeight.w700,
+        color: flair.headlineStat,
+        letterSpacing: 1.5,
+      );
+    }
+    return Container(
+      decoration: BoxDecoration(
+        color: flair.scaffold.withValues(alpha: 0.95),
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.white.withValues(alpha: 0.06),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          Insets.lg,
+          Insets.xs,
+          Insets.lg,
+          Insets.xs,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Font name label (always Montserrat — system chrome)
+            GoopText(
+              '${font.label.toUpperCase()} · ${(prefs.fontSize * 100).toStringAsFixed(0)}%',
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w700,
+                color: Colors.white.withValues(alpha: 0.3),
+                letterSpacing: 1.0,
+              ),
+            ),
+            const SizedBox(height: 4),
+            // Primary preview — FittedBox in fixed height = uniform visual size
+            SizedBox(
+              height: 28,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: GoopText('The Gungeon Awaits', style: baseStyle),
+              ),
+            ),
+            const SizedBox(height: 2),
+            // Secondary preview — also FittedBox in fixed height
+            SizedBox(
+              height: 14,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: GoopText(
+                  'DPS 42 · Quality S · Master Round',
+                  style: baseStyle.copyWith(
+                    color: Colors.white.withValues(alpha: 0.5),
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool shouldRebuild(_StickyFontHeader old) => prefs != old.prefs;
+}
+
+/// Uniform font tile — the font's name rendered in its own face,
+/// fixed height so all tiles read identically.
+class _FontTile extends StatelessWidget {
+  final AppFont font;
+  final bool selected;
+  const _FontTile({required this.font, required this.selected});
 
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: _categories.map((cat) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Category header
-              GoopText(cat.name.toUpperCase(),
-                  style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      color: flair.primary.withValues(alpha: 0.6),
-                      letterSpacing: 1.2)),
-              const SizedBox(height: 8),
-              // Font chips in this category
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: cat.fonts.map((font) {
-                  final isSelected = font == current;
-                  return GestureDetector(
-                    onTap: () { VisualPrefs.setFont(font); Haptics.selection(); },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: isSelected ? flair.primary.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.04),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: isSelected ? flair.primary.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.08),
-                          width: isSelected ? 1.5 : 1.0,
-                        ),
-                        boxShadow: isSelected
-                            ? [BoxShadow(color: flair.primary.withValues(alpha: 0.1), blurRadius: 6)]
-                            : null,
-                      ),
-                      child: GoopText(font.label,
-                          style: font.textStyle.copyWith(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.white54)),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        VisualPrefs.setFont(font);
+        Haptics.selection();
+      },
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: 48,
+        decoration: BoxDecoration(
+          color:
+              selected
+                  ? flair.primary.withValues(alpha: 0.15)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                selected
+                    ? flair.primary.withValues(alpha: 0.7)
+                    : Colors.white.withValues(alpha: 0.08),
+            width: selected ? 1.5 : 1.0,
           ),
-        );
-      }).toList(),
+        ),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: GoopText(
+                font.label,
+                style: font.textStyle.copyWith(
+                  fontSize: FontSizes.titleMedium,
+                  fontWeight: FontWeight.bold,
+                  color: selected ? Colors.white : Colors.white54,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
-}
-
-class _FontCategory {
-  final String name;
-  final List<AppFont> fonts;
-  const _FontCategory(this.name, this.fonts);
 }
 
 class _FontSizeSlider extends StatelessWidget {
@@ -2140,7 +2515,7 @@ class _FontSizeSlider extends StatelessWidget {
         // Live preview text in the actual size
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(Insets.md),
           margin: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
             color: flair.card.withValues(alpha: 0.6),
@@ -2160,8 +2535,22 @@ class _FontSizeSlider extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GoopText('Size', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white60)),
-            GoopText(stepLabel, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w900, color: flair.headlineStat)),
+            GoopText(
+              'Size',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: Colors.white60,
+              ),
+            ),
+            GoopText(
+              stepLabel,
+              style: TextStyle(
+                fontSize: FontSizes.labelMedium,
+                fontWeight: FontWeight.w900,
+                color: flair.headlineStat,
+              ),
+            ),
           ],
         ),
         SliderTheme(
@@ -2187,11 +2576,14 @@ class _FontSizeSlider extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(steps.length, (i) {
             final on = i == (activeStep >= 0 ? activeStep : 3);
-            return GoopText(steps[i].toStringAsFixed(0),
-                style: TextStyle(
-                    fontSize: 7,
-                    fontWeight: on ? FontWeight.w900 : FontWeight.w400,
-                    color: on ? flair.primary : Colors.white.withValues(alpha: 0.3)));
+            return GoopText(
+              steps[i].toStringAsFixed(0),
+              style: TextStyle(
+                fontSize: 7,
+                fontWeight: on ? FontWeight.w900 : FontWeight.w400,
+                color: on ? flair.primary : Colors.white.withValues(alpha: 0.3),
+              ),
+            );
           }),
         ),
       ],
@@ -2205,31 +2597,46 @@ class _WeightRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = [-2, -1, 0, 1, 2];
-    final labels = ['Lighter', 'Light', 'Normal', 'Bold', 'Bolder'];
+    final options = [-2, 0, 2];
+    final labels = ['200\nTHIN', '400\nNORMAL', '800\nBOLD'];
     final flair = AppTheme.flair;
     return Row(
       children: List.generate(options.length, (i) {
         final isActive = options[i] == current;
         return Expanded(
           child: GestureDetector(
-            onTap: () { VisualPrefs.setFontWeightBias(options[i]); Haptics.selection(); },
+            onTap: () {
+              VisualPrefs.setFontWeightBias(options[i]);
+              Haptics.selection();
+            },
             child: Container(
-              margin: const EdgeInsets.only(right: 8),
+              margin: const EdgeInsets.only(right: Insets.sm),
               padding: const EdgeInsets.symmetric(vertical: 11),
               decoration: BoxDecoration(
-                color: isActive ? flair.primary.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.04),
-                borderRadius: BorderRadius.circular(8),
+                color:
+                    isActive
+                        ? flair.primary.withValues(alpha: 0.15)
+                        : Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.all(Radii.sm),
                 border: Border.all(
-                  color: isActive ? flair.primary.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+                  color:
+                      isActive
+                          ? flair.primary.withValues(alpha: 0.6)
+                          : Colors.white.withValues(alpha: 0.08),
                 ),
               ),
               child: Center(
-                child: GoopText(labels[i],
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                        color: isActive ? flair.primary : Colors.white.withValues(alpha: 0.55))),
+                child: GoopText(
+                  labels[i],
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+                    color:
+                        isActive
+                            ? flair.primary
+                            : Colors.white.withValues(alpha: 0.55),
+                  ),
+                ),
               ),
             ),
           ),
@@ -2240,7 +2647,7 @@ class _WeightRow extends StatelessWidget {
 }
 
 // =============================================================================
-// STEP 5 — AMBIANCE (glow + dialogue haptics + text speed)
+// TAB 4 — AMBIANCE (glow + dialogue haptics + text speed)
 // =============================================================================
 
 class _AmbianceStep extends StatelessWidget {
@@ -2253,33 +2660,31 @@ class _AmbianceStep extends StatelessWidget {
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
         return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          padding: const EdgeInsets.fromLTRB(
+            Insets.lg,
+            Insets.sm,
+            Insets.lg,
+            Insets.lg,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _StepLabel('SCREEN GLOW'),
-              const SizedBox(height: 10),
-              _StudioSlider('Glow Intensity',
-                  '${(prefs.glowIntensity * 100).toStringAsFixed(0)}%',
-                  prefs.glowIntensity, 0.0, 1.0, 20, flair.headlineStat,
-                  (v) => VisualPrefs.setGlow(v)),
-              const SizedBox(height: 18),
-              _StepLabel('GLOW COLOR'),
-              const SizedBox(height: 10),
-              _GlowColorRow(currentIndex: prefs.glowColorIndex),
-              const SizedBox(height: 18),
-              _StepLabel('DIALOGUE'),
-              const SizedBox(height: 10),
-              _ToggleRow(
-                icon: Icons.vibration,
-                label: 'Dialogue Haptics',
-                value: prefs.dialogueHapticsEnabled,
-                onChanged: (v) { VisualPrefs.setDialogueHapticsEnabled(v); Haptics.selection(); },
+              const SizedBox(height: 8),
+              _StudioSlider(
+                'Glow Intensity',
+                '${(prefs.glowIntensity * 100).toStringAsFixed(0)}%',
+                prefs.glowIntensity,
+                0.0,
+                1.0,
+                20,
+                flair.headlineStat,
+                (v) => VisualPrefs.setGlow(v),
               ),
-              const SizedBox(height: 12),
-              _StudioSlider('Text Speed', '${prefs.dialogueTextSpeedMs}ms',
-                  prefs.dialogueTextSpeedMs.toDouble(), 5, 80, 75, flair.headlineStat,
-                  (v) => VisualPrefs.setDialogueTextSpeedMs(v.toInt())),
+              const SizedBox(height: 14),
+              _StepLabel('GLOW COLOR'),
+              const SizedBox(height: 8),
+              _GlowColorPaged(currentIndex: prefs.glowColorIndex),
             ],
           ),
         );
@@ -2288,77 +2693,42 @@ class _AmbianceStep extends StatelessWidget {
   }
 }
 
-class _GlowColorRow extends StatelessWidget {
+/// 5x2 paged swipable glow color grid. Each page shows 10 colors
+/// (5 columns x 2 rows). Swipe horizontally to see more pages.
+class _GlowColorPaged extends StatelessWidget {
+  const _GlowColorPaged({required this.currentIndex});
   final int currentIndex;
-  const _GlowColorRow({required this.currentIndex});
-
-  // Names for the 12 curated glow colors (mirrors VisualPrefs.glowColors
-  // order). Defined here because VisualPrefs.glowColors lives in
-  // app_theme.dart which is another agent's file-in-progress.
-  static const _names = [
-    'Abyssal Blue',
-    'Curse Crimson',
-    'Forge Amber',
-    'Frost Cyan',
-    'Toxic Green',
-    'Void Purple',
-    'Gungeon Gold',
-    'Shadow Indigo',
-    'Blood Rose',
-    'Ethereal Teal',
-    'Magenta Pulse',
-    'Obsidian Grey',
-  ];
+  static const _spacing = 6.0;
 
   @override
   Widget build(BuildContext context) {
     final colors = VisualPrefs.glowColors;
-    return Wrap(
-      spacing: 10,
-      runSpacing: 10,
+    return GridView.count(
+      crossAxisCount: 4,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: _spacing,
+      crossAxisSpacing: _spacing,
       children: List.generate(colors.length, (i) {
         final c = colors[i];
         final isSelected = i == currentIndex;
-        final name = i < _names.length ? _names[i] : 'Color ${i + 1}';
         return GestureDetector(
-          onTap: () { VisualPrefs.setGlowColorIndex(i); Haptics.selection(); },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          onTap: () {
+            VisualPrefs.setGlowColorIndex(i);
+            Haptics.selection();
+          },
+          behavior: HitTestBehavior.opaque,
+          child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.04),
-              borderRadius: BorderRadius.circular(10),
+              color: c,
+              borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
-                color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.08),
-                width: isSelected ? 2.0 : 1.0,
+                color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.12),
+                width: isSelected ? 2.5 : 0.8,
               ),
               boxShadow: isSelected
-                  ? [BoxShadow(color: c.withValues(alpha: 0.4), blurRadius: 8)]
+                  ? [BoxShadow(color: c.withValues(alpha: 0.6), blurRadius: 10)]
                   : null,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Color swatch
-                Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    color: c,
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.15),
-                      width: isSelected ? 1.5 : 0.8,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GoopText(name,
-                    style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                        color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.55))),
-              ],
             ),
           ),
         );
@@ -2367,22 +2737,21 @@ class _GlowColorRow extends StatelessWidget {
   }
 }
 
-// =============================================================================
-// Shared widgets
-// =============================================================================
-
 class _StepLabel extends StatelessWidget {
   final String text;
   const _StepLabel(this.text);
 
   @override
   Widget build(BuildContext context) {
-    return GoopText(text,
-        style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w900,
-            color: AppTheme.flair.primary.withValues(alpha: 0.85),
-            letterSpacing: 1.5));
+    return GoopText(
+      text,
+      style: TextStyle(
+        fontSize: FontSizes.bodyMedium,
+        fontWeight: FontWeight.w900,
+        color: AppTheme.flair.primary.withValues(alpha: 0.85),
+        letterSpacing: 1.5,
+      ),
+    );
   }
 }
 
@@ -2391,16 +2760,21 @@ class _ToggleRow extends StatelessWidget {
   final String label;
   final bool value;
   final ValueChanged<bool> onChanged;
-  const _ToggleRow({required this.icon, required this.label, required this.value, required this.onChanged});
+  const _ToggleRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: Insets.sm),
       decoration: BoxDecoration(
         color: flair.card.withValues(alpha: 0.6),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.all(Radii.sm),
         border: Border.all(color: flair.primary.withValues(alpha: 0.15)),
       ),
       child: Row(
@@ -2408,8 +2782,14 @@ class _ToggleRow extends StatelessWidget {
           Icon(icon, size: 18, color: Colors.white54),
           const SizedBox(width: 10),
           Expanded(
-            child: GoopText(label,
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white70)),
+            child: GoopText(
+              label,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: Colors.white70,
+              ),
+            ),
           ),
           Switch(
             value: value,
@@ -2429,21 +2809,43 @@ class _StudioSlider extends StatelessWidget {
   final int divisions;
   final Color color;
   final ValueChanged<double> onChanged;
-  const _StudioSlider(this.label, this.displayValue, this.value, this.min, this.max,
-      this.divisions, this.color, this.onChanged);
+  const _StudioSlider(
+    this.label,
+    this.displayValue,
+    this.value,
+    this.min,
+    this.max,
+    this.divisions,
+    this.color,
+    this.onChanged,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: Insets.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GoopText(label, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white70)),
-              GoopText(displayValue, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
+              GoopText(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white70,
+                ),
+              ),
+              GoopText(
+                displayValue,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w900,
+                  color: color,
+                ),
+              ),
             ],
           ),
           SizedBox(
@@ -2451,13 +2853,23 @@ class _StudioSlider extends StatelessWidget {
             child: SliderTheme(
               data: SliderThemeData(
                 trackHeight: 3.0,
-                thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                overlayShape: const RoundSliderOverlayShape(overlayRadius: 12.0),
+                thumbShape: const RoundSliderThumbShape(
+                  enabledThumbRadius: 6.0,
+                ),
+                overlayShape: const RoundSliderOverlayShape(
+                  overlayRadius: 12.0,
+                ),
                 activeTrackColor: color,
                 inactiveTrackColor: Colors.white12,
                 thumbColor: Colors.white,
               ),
-              child: Slider(value: value, min: min, max: max, divisions: divisions, onChanged: onChanged),
+              child: Slider(
+                value: value,
+                min: min,
+                max: max,
+                divisions: divisions,
+                onChanged: onChanged,
+              ),
             ),
           ),
         ],
@@ -2465,3 +2877,318 @@ class _StudioSlider extends StatelessWidget {
     );
   }
 }
+
+/// Type tile — fixed-size cell with a painted shape glyph + label,
+/// used by the uniform TYPE grid.
+class _ParticleTypeTile extends StatelessWidget {
+  final ParticleType type;
+  final bool active;
+  final VoidCallback onTap;
+  const _ParticleTypeTile({
+    required this.type,
+    required this.active,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final c = active ? flair.primary : Colors.white.withValues(alpha: 0.5);
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        height: 56,
+        decoration: BoxDecoration(
+          color:
+              active
+                  ? flair.primary.withValues(alpha: 0.18)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color:
+                active ? flair.primary : Colors.white.withValues(alpha: 0.12),
+            width: active ? 1.6 : 1.0,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _TypeGlyph(type: type, color: c),
+            const SizedBox(height: 5),
+            GoopText(
+              type.label,
+              style: TextStyle(
+                fontSize: 8,
+                fontWeight: active ? FontWeight.w900 : FontWeight.w700,
+                letterSpacing: 0.6,
+                color: c,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Tiny painted glyph for each particle shape — honest preview of the
+/// actual particle look instead of a borrowed icon.
+class _TypeGlyph extends StatelessWidget {
+  final ParticleType type;
+  final Color color;
+  const _TypeGlyph({required this.type, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 18,
+      height: 18,
+      child: CustomPaint(painter: _TypeGlyphPainter(type, color)),
+    );
+  }
+}
+
+class _TypeGlyphPainter extends CustomPainter {
+  final ParticleType type;
+  final Color color;
+  const _TypeGlyphPainter(this.type, this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Paint()..color = color;
+    final c = Offset(size.width / 2, size.height / 2);
+    switch (type) {
+      case ParticleType.dot:
+        canvas.drawCircle(c, 4, p);
+      case ParticleType.square:
+        canvas.drawRect(Rect.fromCenter(center: c, width: 9, height: 9), p);
+      case ParticleType.glowOrb:
+        p.shader = RadialGradient(
+          colors: [color, color.withValues(alpha: 0)],
+        ).createShader(Rect.fromCircle(center: c, radius: 8));
+        canvas.drawCircle(c, 8, p);
+      case ParticleType.shell:
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            Rect.fromCenter(center: c, width: 6, height: 12),
+            const Radius.circular(3),
+          ),
+          p,
+        );
+      case ParticleType.rainbowDot:
+        p.shader = const SweepGradient(
+          colors: [
+            Colors.red,
+            Colors.orange,
+            Colors.yellow,
+            Colors.green,
+            Colors.blue,
+            Colors.purple,
+            Colors.red,
+          ],
+        ).createShader(Rect.fromCircle(center: c, radius: 6));
+        canvas.drawCircle(c, 6, p);
+      case ParticleType.voidPixel:
+        p.style = PaintingStyle.stroke;
+        p.strokeWidth = 2;
+        canvas.drawRect(Rect.fromCenter(center: c, width: 9, height: 9), p);
+      case ParticleType.glitchPixel:
+        canvas.drawRect(
+          Rect.fromLTWH(2, 2, 7, 7),
+          p..color = color.withValues(alpha: 0.6),
+        );
+        canvas.drawRect(Rect.fromLTWH(9, 9, 7, 7), p..color = color);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_TypeGlyphPainter old) =>
+      old.type != type || old.color != color;
+}
+
+/// Physics toggle pill — on/off chip for bounce/chaos/tilt.
+class _PhysicsToggle extends StatelessWidget {
+  final String label;
+  final bool on;
+  final VoidCallback onTap;
+  const _PhysicsToggle({
+    required this.label,
+    required this.on,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color:
+              on
+                  ? flair.primary.withValues(alpha: 0.16)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: on ? flair.primary : Colors.white.withValues(alpha: 0.15),
+            width: on ? 1.6 : 1.0,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              on ? Icons.check_circle : Icons.circle_outlined,
+              size: 13,
+              color: on ? flair.primary : Colors.white.withValues(alpha: 0.3),
+            ),
+            const SizedBox(width: 6),
+            GoopText(
+              label,
+              style: TextStyle(
+                fontSize: FontSizes.labelMedium,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.8,
+                color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Schema chip — colored dots + name for the per-theme color pick.
+class _SchemaChip extends StatelessWidget {
+  final ({String name, List<Color> colors}) schema;
+  final bool active;
+  final VoidCallback onTap;
+  const _SchemaChip({
+    required this.schema,
+    required this.active,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color:
+              active
+                  ? flair.primary.withValues(alpha: 0.16)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color:
+                active ? flair.primary : Colors.white.withValues(alpha: 0.15),
+            width: active ? 1.6 : 1.0,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var i = 0; i < schema.colors.length && i < 4; i++)
+                  Container(
+                    width: 10,
+                    height: 10,
+                    margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                    decoration: BoxDecoration(
+                      color: schema.colors[i],
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.25),
+                        width: 0.8,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            GoopText(
+              schema.name,
+              style: TextStyle(
+                fontSize: FontSizes.labelSmall,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.0,
+                color:
+                    active
+                        ? flair.primary
+                        : Colors.white.withValues(alpha: 0.55),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 5-step letter spacing pills — -2..2 × 0.5pt (tight → wide).
+class _LetterRow extends StatelessWidget {
+  final int current;
+  const _LetterRow({required this.current});
+
+  @override
+  Widget build(BuildContext context) {
+    final options = [-2, -1, 0, 1, 2];
+    final labels = ['TIGHT', '-0.5', '0', '+0.5', 'WIDE'];
+    final flair = AppTheme.flair;
+    return Row(
+      children: List.generate(options.length, (i) {
+        final isActive = options[i] == current;
+        return Expanded(
+          child: GestureDetector(
+            onTap: () {
+              VisualPrefs.setFontLetterSpacing(options[i]);
+              Haptics.selection();
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: Insets.sm),
+              padding: const EdgeInsets.symmetric(vertical: 11),
+              decoration: BoxDecoration(
+                color:
+                    isActive
+                        ? flair.primary.withValues(alpha: 0.15)
+                        : Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.all(Radii.sm),
+                border: Border.all(
+                  color:
+                      isActive
+                          ? flair.primary.withValues(alpha: 0.6)
+                          : Colors.white.withValues(alpha: 0.08),
+                ),
+              ),
+              child: Center(
+                child: GoopText(
+                  labels[i],
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
+                    color:
+                        isActive
+                            ? flair.primary
+                            : Colors.white.withValues(alpha: 0.55),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+

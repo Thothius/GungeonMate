@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -12,6 +13,7 @@ import '../services/goop_talk_engine.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
+import '../utils/reduce_motion.dart';
 import '../utils/responsive.dart';
 
 /// Periodic-table inspired tile for Active Run inventory.
@@ -69,7 +71,7 @@ class _PeriodicTileState extends State<PeriodicTile>
 
   /// Duration the user must hold to fire [onLongPress]. Tuned so normal
   /// tap-and-release feels instant while the shake gives clear feedback.
-  static const Duration _holdDuration = Duration(milliseconds: 250);
+  static const Duration _holdDuration = Duration(milliseconds: 200);
 
   @override
   void initState() {
@@ -362,119 +364,6 @@ class _PeriodicTileState extends State<PeriodicTile>
     return s;
   }
 
-  /// Builds the bottom-center stats badge for guns on the periodic grid.
-  /// Shows DPS (with top-DPS shimmer if applicable) alongside RANGE.
-  Widget _buildGunStatsBadge() {
-    final dps = _corner;
-    final range = _cleanStat(widget.gun!.range);
-    if (dps.isEmpty && range.isEmpty) return const SizedBox.shrink();
-    final sf = Responsive.factor(context);
-
-    final dpsBadge = dps.isEmpty
-        ? const SizedBox.shrink()
-        : (() {
-            final badge = Container(
-              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-              decoration: BoxDecoration(
-                color: widget.isTopDps
-                    ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-                    : Colors.black.withValues(alpha: 0.55),
-                borderRadius: BorderRadius.circular(4),
-                border: widget.isTopDps
-                    ? Border.all(color: const Color(0xFFFFD700), width: 1)
-                    : null,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GoopText(
-                    dps,
-                    style: TextStyle(
-                      fontSize: 10.5 * sf,
-                      fontWeight: FontWeight.w900,
-                      color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
-                      height: 1.1,
-                    ),
-                  ),
-                  const SizedBox(width: 1),
-                  GoopText(
-                    'DMG',
-                    style: TextStyle(
-                      fontSize: 7 * sf,
-                      fontWeight: FontWeight.w700,
-                      color: widget.isTopDps
-                          ? const Color(0xFFFFD700).withValues(alpha: 0.7)
-                          : Colors.white60,
-                      height: 1.1,
-                      letterSpacing: 0.3,
-                    ),
-                  ),
-                ],
-              ),
-            );
-            if (widget.isTopDps) {
-              return badge.animate(
-                onPlay: (controller) => controller.repeat(reverse: true),
-              ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
-               .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
-            }
-            return badge;
-          })();
-
-    final rangeBadge = range.isEmpty
-        ? const SizedBox.shrink()
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.55),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GoopText(
-                  range,
-                  style: TextStyle(
-                    fontSize: 8.5 * sf,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white70,
-                    height: 1.1,
-                  ),
-                ),
-                const SizedBox(width: 1),
-                GoopText(
-                  'RNG',
-                  style: TextStyle(
-                    fontSize: 6 * sf,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white54,
-                    height: 1.1,
-                    letterSpacing: 0.3,
-                  ),
-                ),
-              ],
-            ),
-          );
-
-    // Single FittedBox wraps both badges so they scale together as a
-    // unit — maintaining relative proportions and never clipping.
-    return Center(
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            dpsBadge,
-            if (rangeBadge is! SizedBox) ...[
-              const SizedBox(width: 3),
-              rangeBadge,
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-
   /// Builds the bottom-center stats badge for active items on the periodic
   /// grid. Shows RCHRG (recharge) and DUR (duration) side by side, mirroring
   /// the gun DPS/RANGE pattern. Passives/companions without recharge fall
@@ -511,15 +400,10 @@ class _PeriodicTileState extends State<PeriodicTile>
             ),
           ),
           const SizedBox(width: 1),
-          GoopText(
-            'RCHRG',
-            style: TextStyle(
-              fontSize: 6 * sf,
-              fontWeight: FontWeight.w700,
-              color: Colors.orangeAccent.withValues(alpha: 0.6),
-              height: 1.1,
-              letterSpacing: 0.3,
-            ),
+          Icon(
+            Icons.battery_charging_full_rounded,
+            size: 8 * sf,
+            color: Colors.orangeAccent.withValues(alpha: 0.8),
           ),
         ],
       ),
@@ -546,15 +430,10 @@ class _PeriodicTileState extends State<PeriodicTile>
                   ),
                 ),
                 const SizedBox(width: 1),
-                GoopText(
-                  'DUR',
-                  style: TextStyle(
-                    fontSize: 6 * sf,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.lightBlueAccent.withValues(alpha: 0.6),
-                    height: 1.1,
-                    letterSpacing: 0.3,
-                  ),
+                Icon(
+                  Icons.schedule_rounded,
+                  size: 8 * sf,
+                  color: Colors.lightBlueAccent.withValues(alpha: 0.8),
                 ),
               ],
             ),
@@ -674,7 +553,16 @@ class _PeriodicTileState extends State<PeriodicTile>
     // ponytail: removed the textScaler clamp (0.8–1.05) that prevented
     // fonts from scaling on bigger screens. Font sizes are now scaled
     // individually via Responsive.font() in _buildCard.
-    final constrainedBody = body;
+    // Semantic label: announce the entity name and quality tier so
+    // screen-reader users can navigate the grid meaningfully.
+    final semLabel = _name.isNotEmpty
+        ? '$_name, quality $_quality'
+        : 'Item tile';
+    final constrainedBody = Semantics(
+      label: semLabel,
+      button: true,
+      child: body,
+    );
     if (widget.onLongPress == null) {
       // No long-press wiring needed — the inner InkWell handles the tap
       // (and its haptic) by itself, no outer GestureDetector required.
@@ -721,7 +609,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                       child: IgnorePointer(
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.all(Radii.sm),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.amber.withValues(alpha: 0.45 * glow),
@@ -745,7 +633,10 @@ class _PeriodicTileState extends State<PeriodicTile>
 
   Widget _buildBody(BuildContext context) {
     final card = _buildCard(context);
+    // Reduced-motion: skip the animated synergy glow overlay — the card
+    // still shows its quality border and content, just without the glow.
     if (widget.synergyGlowColor == null || _glow == null) return card;
+    if (ReduceMotion.of(context)) return card;
     return SynergyGlowOverlay(
       controller: _glow!,
       color: widget.synergyGlowColor!,
@@ -766,7 +657,7 @@ class _PeriodicTileState extends State<PeriodicTile>
     final isHighTier = isS || _quality.toUpperCase() == 'A';
 
     final cardShape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.all(Radii.sm),
       side: BorderSide(
         color: isS 
             ? const Color(0xFFFFD700) // Gold border
@@ -807,6 +698,21 @@ class _PeriodicTileState extends State<PeriodicTile>
     // Helper: Fast active item pulsing green dot
     Widget maybeFastActiveDot({double topOffset = 24}) {
       if (!_isFastActive || _pulse == null) return const SizedBox.shrink();
+      // Reduced-motion: static green dot (no pulse).
+      if (ReduceMotion.of(context)) {
+        return Positioned(
+          top: topOffset,
+          left: 6,
+          child: Container(
+            width: 9,
+            height: 9,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0xFF66E07A),
+            ),
+          ),
+        );
+      }
       return Positioned(
         top: topOffset,
         left: 6,
@@ -1005,7 +911,9 @@ class _PeriodicTileState extends State<PeriodicTile>
                                         ? Icons.flash_on
                                         : Icons.inventory_2_outlined),
                                 quality: _quality,
-                                size: 66,
+                                // 20% smaller inventory graphics
+                                // (66 → 53) per the declutter pass.
+                                size: 53,
                                 showRing: false,
                               ),
                             ),
@@ -1024,19 +932,20 @@ class _PeriodicTileState extends State<PeriodicTile>
                         right: 3,
                         child: maybeElements(),
                       ),
-                      // Bottom-center: DPS + RANGE (guns) / corner badge (items)
-                      Positioned(
-                        left: 4,
-                        right: 4,
-                        bottom: 4,
-                        child: Center(
-                          child: isGun
-                              ? _buildGunStatsBadge()
-                              : (widget.item != null && widget.item!.isActive
-                                  ? _buildItemStatsBadge()
-                                  : _buildLegacyItemBadge()),
+                      // Bottom-center: item badges only (RCHRG/DUR, Junkan
+                      // rank). Guns keep the tile face clean — DPS moved
+                      // to the bottom subtitle row next to the gun type.
+                      if (!isGun)
+                        Positioned(
+                          left: 4,
+                          right: 4,
+                          bottom: 4,
+                          child: Center(
+                            child: widget.item != null && widget.item!.isActive
+                                ? _buildItemStatsBadge()
+                                : _buildLegacyItemBadge(),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -1059,20 +968,44 @@ class _PeriodicTileState extends State<PeriodicTile>
                           height: 1.15,
                         ),
                       ),
-                      // Type subtitle — centered addon-panel below the name
-                      if (_typeTag.isNotEmpty) ...[
+                      // Type subtitle — centered below the name. Guns get
+                      // the DPS value beside the type as a dimmed yellow
+                      // tag (RANGE hidden per the declutter pass).
+                      if (_typeTag.isNotEmpty || (isGun && _corner.isNotEmpty)) ...[
                         const SizedBox(height: 2),
-                        GoopText(
-                          _typeTag,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 8.5 * sf,
-                            fontWeight: FontWeight.w700,
-                            color: _typeColor(),
-                            letterSpacing: 0.3,
-                            height: 1.1,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (_typeTag.isNotEmpty)
+                              Flexible(
+                                child: GoopText(
+                                  _typeTag,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: FontSizes.labelSmall * sf,
+                                    fontWeight: FontWeight.w700,
+                                    color: _typeColor(),
+                                    letterSpacing: 0.3,
+                                    height: 1.1,
+                                  ),
+                                ),
+                              ),
+                            if (isGun && _corner.isNotEmpty) ...[
+                              const SizedBox(width: 4),
+                              GoopText(
+                                _corner,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontSize: FontSizes.labelSmall * sf,
+                                  fontWeight: FontWeight.w800,
+                                  color: const Color(0xFFFFD54F)
+                                      .withValues(alpha: 0.6),
+                                  height: 1.1,
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
                       ],
                     ],

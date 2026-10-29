@@ -1,3 +1,4 @@
+import '../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
@@ -132,7 +133,7 @@ class _ItemGroupCard extends StatelessWidget {
             color: activeCount > 0
                 ? Colors.amber
                 : Colors.white.withValues(alpha: 0.6),
-            fontSize: 12,
+            fontSize: FontSizes.labelMedium,
           ),
         ),
         children: group.entries.map((s) => _SynergyRow(status: s)).toList(),
@@ -150,12 +151,12 @@ class _SynergyRow extends StatelessWidget {
     final s = status.synergy;
     return Container(
       margin: const EdgeInsets.only(top: 6),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: status.active
             ? Colors.amber.withValues(alpha: 0.08)
             : Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
           color: status.active
               ? Colors.amber.withValues(alpha: 0.5)
@@ -181,7 +182,7 @@ class _SynergyRow extends StatelessWidget {
                   s.name,
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 14,
+                    fontSize: FontSizes.bodyMedium,
                   ),
                 ),
               ),
@@ -291,7 +292,7 @@ class _AnyOfChips extends StatelessWidget {
             color: isOwned
                 ? Colors.amber.withValues(alpha: 0.15)
                 : Colors.white.withValues(alpha: 0.04),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
               color: isOwned
                   ? Colors.amber.withValues(alpha: 0.5)
@@ -319,7 +320,7 @@ class _AnyOfChips extends StatelessWidget {
               GoopText(
                 n,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: FontSizes.labelMedium,
                   color: isOwned ? Colors.white : Colors.white70,
                 ),
               ),
@@ -339,7 +340,7 @@ class _AnyOfChips extends StatelessWidget {
         return Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.all(Radii.md),
             onTap: () => Navigator.push(
               context,
               fastRoute(ItemDetailScreen(gun: gun, item: item)),

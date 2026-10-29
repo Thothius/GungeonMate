@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
+import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
 import '../../services/haptics.dart';
 import '../../utils/fast_route.dart';
 import '../rich_link_text.dart';
@@ -306,7 +308,7 @@ class SynergyChip extends StatelessWidget {
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           color: missing
-              ? const Color(0xFF0D1117)
+              ? AppTheme.flair.scaffold
               : Colors.amber.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: pillColor, width: 1.8),
@@ -330,7 +332,7 @@ class SynergyChip extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 9.5,
+                fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w700,
                 color: missing ? Colors.white30 : Colors.white70,
               ),
@@ -375,13 +377,15 @@ class SynergyChip extends StatelessWidget {
       path,
       fit: BoxFit.contain,
       filterQuality: FilterQuality.none,
+      cacheWidth: 104,
+      cacheHeight: 104,
       errorBuilder: (_, __, ___) => _fallback(),
     );
   }
 
   Widget _fallback() {
     return Container(
-      color: const Color(0xFF0D1117),
+      color: AppTheme.flair.scaffold,
       child: Center(
         child: GoopText(
           name.isNotEmpty ? name[0].toUpperCase() : '?',

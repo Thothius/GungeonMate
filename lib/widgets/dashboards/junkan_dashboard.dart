@@ -1,7 +1,9 @@
+import '../../theme/tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../models/player.dart';
+import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 
@@ -102,8 +104,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
         padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFF13151A),
-            borderRadius: BorderRadius.circular(12),
+            color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
+            borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
               color: hasGoldJunk ? Colors.amber.withValues(alpha: 0.4) : Colors.teal.withValues(alpha: 0.35),
               width: 1.2,
@@ -120,7 +122,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
             children: [
               InkWell(
                 onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.all(Radii.md),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
                   child: Row(
@@ -137,7 +139,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                           GoopText(
                             hasGoldJunk ? 'MECHA JUNKAN HUD' : 'SER JUNKAN - LVL ${hasGoldJunk ? "MAX" : (junkCount > 7 ? "7+" : junkCount)}',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: FontSizes.labelMedium,
                               fontWeight: FontWeight.w900,
                               color: hasGoldJunk ? Colors.amberAccent : Colors.tealAccent,
                               letterSpacing: 0.8,
@@ -156,7 +158,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                             child: GoopText(
                               rankName,
                               style: TextStyle(
-                                fontSize: 9,
+                                fontSize: FontSizes.labelSmall,
                                 fontWeight: FontWeight.w900,
                                 color: hasGoldJunk ? Colors.amberAccent : Colors.tealAccent,
                               ),
@@ -189,7 +191,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                         height: 72,
                         decoration: BoxDecoration(
                           color: Colors.black26,
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.all(Radii.sm),
                           border: Border.all(
                             color: hasGoldJunk ? Colors.amber.withValues(alpha: 0.2) : Colors.teal.withValues(alpha: 0.15),
                           ),
@@ -198,6 +200,8 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                         child: Image.asset(
                           imgPath,
                           fit: BoxFit.contain,
+                          cacheWidth: 144,
+                          cacheHeight: 144,
                           errorBuilder: (_, __, ___) => const Icon(
                             Icons.broken_image_outlined,
                             color: Colors.white24,
@@ -222,7 +226,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                             GoopText(
                               stats,
                               style: TextStyle(
-                                fontSize: 9.5,
+                                fontSize: FontSizes.labelSmall,
                                 color: hasGoldJunk ? Colors.amberAccent.withValues(alpha: 0.8) : Colors.tealAccent.withValues(alpha: 0.8),
                                 fontWeight: FontWeight.bold,
                               ),
@@ -232,10 +236,10 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                               children: [
                                 Expanded(
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(alpha: 0.02),
-                                      borderRadius: BorderRadius.circular(8),
+                                      borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
                                     ),
                                     child: Row(
@@ -243,7 +247,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                       children: [
                                         const GoopText(
                                           'JUNK',
-                                          style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white60),
+                                          style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.white60),
                                         ),
                                         Row(
                                           children: [
@@ -265,7 +269,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                               padding: const EdgeInsets.symmetric(horizontal: 10),
                                               child: Text(
                                                 '$junkCount',
-                                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                                                style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white),
                                               ),
                                             ),
                                             GestureDetector(
@@ -300,12 +304,12 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                         }
                                       }
                                     },
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.all(Radii.sm),
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                                       decoration: BoxDecoration(
                                         color: hasGoldJunk ? Colors.amber.withValues(alpha: 0.12) : Colors.white.withValues(alpha: 0.02),
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.all(Radii.sm),
                                         border: Border.all(
                                           color: hasGoldJunk ? Colors.amber.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.04),
                                         ),
@@ -322,7 +326,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                           GoopText(
                                             hasGoldJunk ? 'MECH ACTIVE' : 'ACTIVATE MECH',
                                             style: TextStyle(
-                                              fontSize: 8.5,
+                                              fontSize: FontSizes.labelSmall,
                                               fontWeight: FontWeight.w900,
                                               color: hasGoldJunk ? Colors.amberAccent : Colors.white60,
                                             ),

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../services/app_theme.dart';
+import '../utils/reduce_motion.dart';
 
 /// Wraps a fixed-size avatar (typically a square pixel-art portrait)
 /// with a per-theme animated border. Reads [AppTheme.flair.auraStyle]
@@ -143,6 +144,22 @@ class _AuraLayerState extends State<_AuraLayer>
   Widget build(BuildContext context) {
     if (widget.style == AvatarAuraStyle.none) {
       return const SizedBox.shrink();
+    }
+    // Reduced-motion: render a static frame (t=0) — the aura's visual
+    // identity (color, ring shape) is preserved, just without animation.
+    if (ReduceMotion.of(context)) {
+      return RepaintBoundary(
+        child: CustomPaint(
+          painter: _AuraPainter(
+            style: widget.style,
+            t: 0,
+            primary: widget.primary,
+            secondary: widget.secondary,
+            radius: widget.radius,
+          ),
+          size: Size.infinite,
+        ),
+      );
     }
     return RepaintBoundary(
       child: AnimatedBuilder(

@@ -4,6 +4,7 @@ import '../../models/gun.dart';
 import '../../models/item.dart';
 import '../quality_badge.dart';
 import '../../services/goop_talk_engine.dart';
+import '../../theme/tokens.dart';
 
 Widget metaPill(String text, Color color, {IconData? icon}) {
   return Container(
@@ -66,7 +67,7 @@ Widget qualityPill(String quality) {
           child: GoopText(
             letter,
             style: const TextStyle(
-              fontSize: 10,
+              fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
               color: Colors.white,
               height: 1,
@@ -130,7 +131,7 @@ Widget coinPill(String price) {
           child: const GoopText(
             '\$',
             style: TextStyle(
-              fontSize: 10,
+              fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
               color: Color(0xFF7A4E00),
               height: 1,
@@ -167,7 +168,7 @@ Widget synergyPill(int count) {
       child: GoopText(
         'no synergy',
         style: TextStyle(
-          fontSize: 10,
+          fontSize: FontSizes.labelSmall,
           color: Colors.white.withValues(alpha: 0.35),
           fontStyle: FontStyle.italic,
           height: 1.1,
@@ -183,11 +184,17 @@ Widget synergyPill(int count) {
 /// Synergy Predictor pill — gold/amber badge shown on browse rows when
 /// acquiring this item/gun would complete a partial synergy. Shows the
 /// synergy name for a single completion, or a count for multiple.
-Widget completesPill(List<String> synergyNames) {
+Widget completesPill(List<String> synergyNames, {String? ownerLabel}) {
   if (synergyNames.isEmpty) return const SizedBox.shrink();
+  // Truncate long synergy names — the raw label overflowed browse rows
+  // by ~15px on narrow screens.
+  final first = synergyNames.first;
+  final short =
+      first.length > 22 ? '${first.substring(0, 21)}…' : first;
+  final owner = ownerLabel == null ? '' : ' · $ownerLabel';
   final label = synergyNames.length == 1
-      ? 'COMPLETES: ${synergyNames.first}'
-      : 'COMPLETES ${synergyNames.length}';
+      ? 'COMPLETES: $short$owner'
+      : 'COMPLETES ${synergyNames.length}$owner';
   return metaPill(label, const Color(0xFFFFD700), icon: Icons.link);
 }
 
@@ -195,30 +202,32 @@ class GunMeta extends StatelessWidget {
   final Gun gun;
   final int synergyCount;
   final List<String> completesSynergies;
+  final String? ownerLabel;
   const GunMeta({
     super.key,
     required this.gun,
     required this.synergyCount,
     this.completesSynergies = const [],
+    this.ownerLabel,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Slim row meta (v3): quality + gun class + DPS + price only.
+    // The busy tag soup (gun type, synergy count, recharge) is gone —
+    // "COMPLETES" only surfaces when the caller passes completions
+    // (the SYNERGIES browse view).
     final bits = <Widget>[
-      qualityPill(gun.quality),
       if (gun.gunClass.isNotEmpty && gun.gunClass.toUpperCase() != 'NONE')
         metaPill(_titleCase(gun.gunClass), Colors.orangeAccent),
       if (gun.dps.isNotEmpty)
         metaPill('DPS ${gun.dpsValue.toStringAsFixed(0)}',
             Colors.deepOrangeAccent,
             icon: Icons.flash_on),
-      if (gun.type.isNotEmpty)
-        metaPill(gun.type, Colors.white70),
       if (gun.sellPrice.isNotEmpty && gun.sellPrice != 'N/A')
         coinPill(gun.sellPrice),
       if (completesSynergies.isNotEmpty)
-        completesPill(completesSynergies),
-      synergyPill(synergyCount),
+        completesPill(completesSynergies, ownerLabel: ownerLabel),
     ];
     return Wrap(
       spacing: 5,
@@ -238,24 +247,23 @@ class ItemMeta extends StatelessWidget {
   final Item item;
   final int synergyCount;
   final List<String> completesSynergies;
+  final String? ownerLabel;
   const ItemMeta({
     super.key,
     required this.item,
     required this.synergyCount,
     this.completesSynergies = const [],
+    this.ownerLabel,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bits = <Widget>[qualityPill(item.quality)];
+    // Slim row meta (v3): quality + role tag + price only.
+    final bits = <Widget>[];
     if (item.isCompanion) {
       bits.add(metaPill('Companion', Colors.purpleAccent));
     } else if (item.isActive) {
       bits.add(metaPill('Active', Colors.lightBlueAccent));
-      if (item.rechargeTime.isNotEmpty) {
-        bits.add(metaPill(item.rechargeTime, Colors.white70,
-            icon: Icons.schedule));
-      }
     } else if (item.isPassive) {
       bits.add(metaPill('Passive', Colors.lightGreenAccent));
     }
@@ -263,9 +271,8 @@ class ItemMeta extends StatelessWidget {
       bits.add(coinPill(item.sellPrice));
     }
     if (completesSynergies.isNotEmpty) {
-      bits.add(completesPill(completesSynergies));
+      bits.add(completesPill(completesSynergies, ownerLabel: ownerLabel));
     }
-    bits.add(synergyPill(synergyCount));
     return Wrap(
       spacing: 5,
       runSpacing: 4,
