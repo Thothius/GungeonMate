@@ -16,6 +16,7 @@ import '../../utils/fast_route.dart';
 import '../../models/player.dart';
 import '../item_detail_screen.dart';
 import '../../widgets/game_icon.dart';
+import '../../widgets/active_run/bottom_back_bar.dart';
 import '../../widgets/quality_badge.dart';
 import '../../widgets/quiz/quiz_answers.dart';
 import '../../widgets/quiz/quiz_chest.dart';
@@ -252,6 +253,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       },
       child: Scaffold(
       backgroundColor: Colors.transparent,
+      // Back moved to the bottom thumb zone (task 17 sweep) — same
+      // stage-aware _onBack the top-bar arrow used to call.
+      bottomNavigationBar: BottomBackBar(onPressed: _onBack),
       body: SafeArea(
         child: Column(
           children: [
@@ -275,11 +279,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           Insets.xs, Insets.xs, Insets.lg, 0),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
-            tooltip: 'Back to chests',
-            onPressed: _onBack,
-          ),
+          const SizedBox(width: 40),
           _tierBadge(tier),
           const SizedBox(width: Insets.sm),
           Expanded(

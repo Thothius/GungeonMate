@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/codex_entry.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
+import '../widgets/active_run/bottom_back_bar.dart';
 import '../utils/asset_paths.dart' show npcIdleGifPath;
 import '../utils/responsive.dart';
 
@@ -33,6 +34,9 @@ class CodexDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      // Persistent bottom back bar (task 17 sweep) — replaces the
+      // inline "Back to Codex" TextButton in the scroll content.
+      bottomNavigationBar: const BottomBackBar(label: 'Back to Codex'),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
@@ -252,32 +256,10 @@ class CodexDetailScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Back button — quick nav back to codex list
-            Center(
-              child: TextButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back_rounded,
-                    size: 18, color: flair.primary.withValues(alpha: 0.7)),
-                label: GoopText(
-                  'Back to Codex',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: flair.primary.withValues(alpha: 0.7),
-                  ),
-                ),
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radii.md),
-                    side: BorderSide(
-                      color: flair.primary.withValues(alpha: 0.3),
-                      width: 1,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Persistent back lives in the bottom bar now — keep
+            // breathing room at the end of the scroll.
+            const SizedBox(height: 10),
+            const SizedBox.shrink(),
           ],
         ),
       ),

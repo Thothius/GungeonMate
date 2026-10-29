@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
+import '../widgets/active_run/bottom_back_bar.dart';
 import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
 import 'palette_maker_screen.dart';
@@ -76,6 +77,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       data: cleanTheme,
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        // Back moved to the bottom thumb zone (task 17 sweep).
+        bottomNavigationBar: Navigator.of(context).canPop()
+            ? const BottomBackBar()
+            : null,
         body: SafeArea(
           child: Stack(
             children: [
@@ -595,18 +600,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       ),
       child: Row(
         children: [
-          if (canPop)
-            IconButton(
-              onPressed: () => Navigator.of(context).maybePop(),
-              tooltip: 'Back',
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                size: 20,
-                color: Colors.white70,
-              ),
-            )
-          else
-            const SizedBox(width: 48),
+          if (!canPop) const SizedBox(width: 48),
           // Theme name + vibe inline
           Expanded(
             child: Column(

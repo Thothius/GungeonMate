@@ -14,6 +14,7 @@ import '../../theme/tokens.dart';
 import '../../utils/asset_paths.dart';
 import '../../utils/responsive.dart';
 import '../../utils/run_name_generator.dart';
+import '../../widgets/active_run/bottom_back_bar.dart';
 import '../../widgets/paradox/avatar_frame.dart';
 import '../../widgets/scale_button.dart';
 
@@ -178,6 +179,9 @@ class _ParadoxFlowScreenState extends State<ParadoxFlowScreen>
       },
       child: Scaffold(
       backgroundColor: const Color(0xFF0B0714),
+      // Back moved to the bottom thumb zone (task 17 sweep) — same
+      // stage-aware _onBack the top-bar arrow used to call.
+      bottomNavigationBar: BottomBackBar(onPressed: _onBack),
       body: SafeArea(
         child: Stack(
           children: [
@@ -210,12 +214,7 @@ class _ParadoxFlowScreenState extends State<ParadoxFlowScreen>
                       horizontal: 12 * sf, vertical: 10 * sf),
                   child: Row(
                     children: [
-                      IconButton(
-                        tooltip: 'Back',
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                            size: 20, color: Colors.white70),
-                        onPressed: _onBack,
-                      ),
+                      const SizedBox(width: 48),
                       Expanded(
                         child: GoopText(
                           _title(),
