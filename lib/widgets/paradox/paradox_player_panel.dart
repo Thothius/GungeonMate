@@ -87,6 +87,13 @@ class ParadoxPlayerPanel extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8 * sf),
+          // Stats scroll horizontally if the row exceeds available
+          // width — avatar + menu stay pinned at the ends.
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
           // MSG — messages entry; value shows the unread count.
           ValueListenableBuilder<int>(
             valueListenable: session.unreadChat,
@@ -133,7 +140,10 @@ class ParadoxPlayerPanel extends StatelessWidget {
             onTap: () => Navigator.push(
                 context, fastRoute(const AllSynergiesScreen())),
           ),
-          const Spacer(),
+                ],
+              ),
+            ),
+          ),
           // Chat lives in the MSG stat (left) — deduped 10-28.
           // Run menu
           PopupMenuButton<String>(
