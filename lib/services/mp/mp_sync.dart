@@ -416,8 +416,9 @@ class MpSync {
             if (g != null) _runProvider.removeGun(g, slot: mySlot, force: true);
           } else if (e.kind == 'item') {
             final it = _runProvider.itemByName(e.name);
-            if (it != null)
+            if (it != null) {
               _runProvider.removeItem(it, slot: mySlot, force: true);
+            }
           }
         case 'clear':
           _runProvider.clearInventory(slot: mySlot);
@@ -765,13 +766,15 @@ class MpSync {
     switch (kind) {
       case 'gun':
         removedGun = _runProvider.gunByName(name);
-        if (removedGun != null)
+        if (removedGun != null) {
           _runProvider.removeGun(removedGun, slot: mySlot);
+        }
         break;
       case 'item':
         removedItem = _runProvider.itemByName(name);
-        if (removedItem != null)
+        if (removedItem != null) {
           _runProvider.removeItem(removedItem, slot: mySlot);
+        }
         break;
     }
     if (removedGun == null && removedItem == null) return;
@@ -843,13 +846,15 @@ class MpSync {
       switch (req.kind) {
         case 'gun':
           removedGun = _runProvider.gunByName(req.name);
-          if (removedGun != null)
+          if (removedGun != null) {
             _runProvider.removeGun(removedGun, slot: mySlot);
+          }
           break;
         case 'item':
           removedItem = _runProvider.itemByName(req.name);
-          if (removedItem != null)
+          if (removedItem != null) {
             _runProvider.removeItem(removedItem, slot: mySlot);
+          }
           break;
       }
       if (removedGun == null && removedItem == null) {

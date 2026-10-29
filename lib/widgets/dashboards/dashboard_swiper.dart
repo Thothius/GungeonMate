@@ -76,8 +76,9 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
     final p = context.watch<RunProvider>();
     final player =
         widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
-    if (player == null)
+    if (player == null) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
 
     final ownedGunNames = player.guns.map((g) => g.name.toLowerCase()).toSet();
     final ownedItemNames =
