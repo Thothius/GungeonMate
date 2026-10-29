@@ -12,6 +12,7 @@ import '../services/haptics.dart';
 import '../services/mp_session.dart';
 import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
+import '../widgets/active_run/bottom_back_bar.dart';
 import '../widgets/avatar_aura.dart';
 
 /// Clean connecting / connected view.
@@ -78,6 +79,12 @@ class _MpConnectScreenState extends State<MpConnectScreen>
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      bottomNavigationBar: BottomBackBar(
+        onPressed: () {
+          if (session.isActive) session.cancel();
+          Navigator.of(context).pop();
+        },
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -87,15 +94,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                   horizontal: 16 * sf, vertical: 12 * sf),
               child: Row(
                 children: [
-                  IconButton(
-                    tooltip: 'Back',
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                        size: 20),
-                    onPressed: () {
-                      if (session.isActive) session.cancel();
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                  const SizedBox(width: 48),
                   Expanded(
                     child: GoopText(
                       _titleForSession(session),

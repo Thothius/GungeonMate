@@ -10,6 +10,7 @@ import '../../services/haptics.dart';
 import '../../services/quiz_engine.dart';
 import '../../services/quiz_progress.dart';
 import '../../theme/tokens.dart';
+import '../../widgets/active_run/bottom_back_bar.dart';
 import '../../utils/fast_route.dart';
 import '../../utils/reduce_motion.dart';
 import '../../widgets/quality_badge.dart';
@@ -69,6 +70,8 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      bottomNavigationBar:
+          widget.showBackButton ? const BottomBackBar() : null,
       body: SafeArea(
         child: Column(
           children: [
@@ -78,14 +81,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                   Insets.sm, Insets.sm, Insets.lg, 0),
               child: Row(
                 children: [
-                  if (widget.showBackButton)
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded),
-                      tooltip: 'Back',
-                      onPressed: () => Navigator.maybePop(context),
-                    )
-                  else
-                    const SizedBox(width: 8),
+                  if (!widget.showBackButton) const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,

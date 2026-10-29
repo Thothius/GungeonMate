@@ -8,6 +8,7 @@ import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../theme/tokens.dart';
+import '../widgets/active_run/bottom_back_bar.dart';
 import '../widgets/codex/ammonomicon_tabs.dart';
 import '../widgets/state_widgets.dart';
 import 'bullet_hell_codex_screen.dart';
@@ -238,17 +239,12 @@ class _CodexScreenState extends State<CodexScreen> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      bottomNavigationBar: widget.showBackButton ? const BottomBackBar() : null,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
         toolbarHeight: widget.showBackButton ? kToolbarHeight : 0,
-        leading: widget.showBackButton
-            ? IconButton(
-                tooltip: 'Back',
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.pop(context),
-              )
-            : null,
+        leading: null,
         title: widget.showBackButton
             ? const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

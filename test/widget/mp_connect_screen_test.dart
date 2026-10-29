@@ -96,7 +96,9 @@ void main() {
     await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
     await tester.pump();
 
-    expect(find.byType(IconButton), findsOneWidget);
+    // Back moved to the shared bottom bar (task 17 sweep) — arrow icon
+    // inside the OutlinedButton, not an IconButton.
+    expect(find.byIcon(Icons.arrow_back), findsOneWidget);
   });
 
   testWidgets('Host connecting state shows waiting message', (tester) async {
