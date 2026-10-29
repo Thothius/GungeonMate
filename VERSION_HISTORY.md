@@ -16,6 +16,7 @@ One MP chrome for all sessions, lifecycle-consistent END RUN, flattened detail s
 - **Wire fix** — `MpSurprise.toJson` conditional field emission, no redundant `type` (unbroke `mp_protocol_v3`).
 - **DESIGNER batch** — theme studio + palette maker + icon-named saves, main menu rework (no paradox btn, Quiz|Codex row, version last), settings 2-col grid, codex scroll strip.
 - **GENERAL (partial)** — `bottom_back_bar.dart` shared widget landed; lobby rework/big-screen fit/memoize deferred.
+- **Post-release sweep (same version)** — Back→bottom thumb zone on codex/quiz/paradox/studio/connect; subtle Paradox entry in MP lobby; TESTING MODE demoted to text link; 760px caps on codex detail + synergy overview; panel stats horizontal-scroll fix; mp_lobby back left on AppBar (stage-aware nav doesn't fit thumb-zone pattern).
 
 ## v3.2.0 — Parity + Polish (October 2026)
 

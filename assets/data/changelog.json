@@ -12,7 +12,11 @@
       "Console chat gains system lines — Connected / Connection lost / Partner ended the run",
       "Detail screens flattened — no tabs: stats, element tags, synergies, notes last",
       "Shrine tiles get wiki.gg buttons; paradox bar de-bloated",
-      "Theme studio + palette maker + icon-named saves; main menu rework; settings 2-col grid; codex scroll strip (DESIGNER)"
+      "Theme studio + palette maker + icon-named saves; main menu rework; settings 2-col grid; codex scroll strip (DESIGNER)",
+      "Back buttons moved to the bottom thumb zone on codex, quiz, paradox flow, studio, MP connect (shared BottomBackBar)",
+      "Subtle Paradox entry inside the MP lobby role pick (main-menu button removed)",
+      "Big-screen fit: codex detail + synergy overview capped at 760px; panel stats scroll on narrow screens",
+      "TESTING MODE demoted to a low-key text link on role pick"
     ]
   },
   {
