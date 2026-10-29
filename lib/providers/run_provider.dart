@@ -2096,15 +2096,30 @@ class RunProvider with ChangeNotifier {
     final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;
     if (player == null) return const [];
     final owned = player.allItemNames;
-    final ownedLower = owned.map((n) => n.toLowerCase()).toSet();
+    // Inventory signature — any content change produces a new signature,
+    // which clears the memo. Self-invalidating; no explicit versioning.
+    final sig = '${slot.index}|${owned.join('')}';
+    if (sig != _completesSig) {
+      _completesCache.clear();
+      _completesOwnedLower = null;
+      _completesSig = sig;
+    }
+    final ownedLower =
+        _completesOwnedLower ??= owned.map((n) => n.toLowerCase()).toSet();
     final lower = itemName.toLowerCase();
     if (ownedLower.contains(lower)) return const []; // already owned
-    final wouldOwn = [...owned, itemName];
-    return _allSynergies
-        .where((s) => !s.matchesItems(owned) && s.matchesItems(wouldOwn))
+    final cached = _completesCache[lower];
+    if (cached != null) return cached;
+    final wouldOwn = {...ownedLower, lower};
+    return _completesCache[lower] = _allSynergies
+        .where((s) => !s.matchesOwnedSet(ownedLower) && s.matchesOwnedSet(wouldOwn))
         .map((s) => s.name)
         .toList();
   }
+
+  String? _completesSig;
+  Set<String>? _completesOwnedLower;
+  final Map<String, List<String>> _completesCache = {};
 
   Map<String, int> _buildSynergyCountCache() {
     final map = <String, int>{};

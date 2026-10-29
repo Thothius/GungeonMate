@@ -534,11 +534,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
   }) {
     final lower = name.toLowerCase();
     if (combined.contains(lower)) return const [];
-    final owned = combined.toList();
-    final wouldOwn = [...combined, lower];
+    final wouldOwn = {...combined, lower};
     final out = <({String name, String owners})>[];
     for (final s in p.allSynergies) {
-      if (s.matchesItems(owned) || !s.matchesItems(wouldOwn)) {
+      if (s.matchesOwnedSet(combined) || !s.matchesOwnedSet(wouldOwn)) {
         continue;
       }
       var p1 = false, p2 = false;
@@ -575,7 +574,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
   ) {
     final out = <({String name, String owners})>[];
     for (final s in p.allSynergies) {
-      if (!s.matchesItems(owned.toList())) continue;
+      if (!s.matchesOwnedSet(owned)) continue;
       var p1 = false, p2 = false;
       for (final piece in [...s.items, ...s.anyOf]) {
         final pl = piece.toLowerCase();
@@ -597,6 +596,57 @@ class _BrowseScreenState extends State<BrowseScreen> {
     return out;
   }
 
+  // Memoized candidate scan for _synergyCandidatesList — see sig check.
+  String? _candSig;
+  List<(AnyEntry, List<({String name, String owners})>)> _candHits =
+      const [];
+  List<({String name, String owners})> _candCompleted = const [];
+
+  /// The O(guns+items × synergies) candidate scan. Runs only when the
+  /// inventory+query signature changes (see _synergyCandidatesList).
+  List<(AnyEntry, List<({String name, String owners})>)> _computeHits(
+    Set<String> combined,
+    Set<String> mainNames,
+    Set<String> coopNames,
+    Player? coop,
+    RunProvider p,
+  ) {
+    final hits = <(AnyEntry, List<({String name, String owners})>)>[];
+    for (final g in p.allGuns) {
+      if (!g.name.toLowerCase().contains(_query)) continue;
+      final done = _completesFor(
+        g.name,
+        combined: combined,
+        mainNames: mainNames,
+        coopNames: coopNames,
+        coop: coop,
+        p: p,
+      );
+      if (done.isNotEmpty) hits.add((AnyEntry.gun(g), done));
+    }
+    for (final it in p.allItems) {
+      if (!it.name.toLowerCase().contains(_query)) continue;
+      final done = _completesFor(
+        it.name,
+        combined: combined,
+        mainNames: mainNames,
+        coopNames: coopNames,
+        coop: coop,
+        p: p,
+      );
+      if (done.isNotEmpty) hits.add((AnyEntry.item(it), done));
+    }
+    hits.sort((a, b) {
+      final c = b.$2.length.compareTo(a.$2.length);
+      if (c != 0) return c;
+      final q = (_qualityOrder[a.$1.quality] ?? 99).compareTo(
+        _qualityOrder[b.$1.quality] ?? 99,
+      );
+      return q != 0 ? q : a.$1.name.compareTo(b.$1.name);
+    });
+    return hits;
+  }
+
   /// Synergy candidates — guns/items neither player owns that would
   /// complete (or extend) a synergy given BOTH players' inventories.
   /// Sorted by completions desc, then quality, then name.
@@ -614,35 +664,23 @@ class _BrowseScreenState extends State<BrowseScreen> {
             ? const <String>{}
             : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
 
-    List<({String name, String owners})> completesFor(String name) =>
-        _completesFor(
-          name,
-          combined: combined,
-          mainNames: mainNames,
-          coopNames: coopNames,
-          coop: coop,
-          p: p,
-        );
-
-    final hits = <(AnyEntry, List<({String name, String owners})>)>[];
-    for (final g in p.allGuns) {
-      if (!g.name.toLowerCase().contains(_query)) continue;
-      final done = completesFor(g.name);
-      if (done.isNotEmpty) hits.add((AnyEntry.gun(g), done));
-    }
-    for (final it in p.allItems) {
-      if (!it.name.toLowerCase().contains(_query)) continue;
-      final done = completesFor(it.name);
-      if (done.isNotEmpty) hits.add((AnyEntry.item(it), done));
-    }
-    hits.sort((a, b) {
-      final c = b.$2.length.compareTo(a.$2.length);
-      if (c != 0) return c;
-      final q = (_qualityOrder[a.$1.quality] ?? 99).compareTo(
-        _qualityOrder[b.$1.quality] ?? 99,
+    // Candidate scan is O(guns+items × synergies) — memoize on the
+    // inventory+query signature so rebuilds (notifyListeners, tab swaps)
+    // don't rescan. Any inventory/query change produces a new signature.
+    final sig = '$_query|${combined.join('')}';
+    if (sig != _candSig) {
+      _candSig = sig;
+      _candHits = _computeHits(combined, mainNames, coopNames, coop, p);
+      _candCompleted = _completedSynergies(
+        combined,
+        mainNames,
+        coopNames,
+        coop,
+        p,
       );
-      return q != 0 ? q : a.$1.name.compareTo(b.$1.name);
-    });
+    }
+    final hits = [..._candHits];
+    final completed = _candCompleted;
 
     // Per-owner counts for the tabs — same predicate each tab uses.
     final newAll = hits.length;
@@ -664,17 +702,6 @@ class _BrowseScreenState extends State<BrowseScreen> {
       final tag = _synOwner == _SynOwner.p1 ? 'P1' : 'P2';
       hits.retainWhere((h) => h.$2.any((sy) => sy.owners.contains(tag)));
     }
-
-    // 'Already hits' — synergies fully satisfied by the combined
-    // inventory, shown on top with owner labels, separated from the
-    // candidate list below.
-    final completed = _completedSynergies(
-      combined,
-      mainNames,
-      coopNames,
-      coop,
-      p,
-    );
 
     if (hits.isEmpty && completed.isEmpty) {
       return Center(

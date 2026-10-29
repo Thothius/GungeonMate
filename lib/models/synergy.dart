@@ -58,9 +58,13 @@ class Synergy {
 
   /// All required items present, AND (if any_of exists) at least one
   /// alternative present.
-  bool matchesItems(List<String> itemNames) {
-    final owned = itemNames.map((n) => n.toLowerCase()).toSet();
+  bool matchesItems(List<String> itemNames) =>
+      matchesOwnedSet(itemNames.map((n) => n.toLowerCase()).toSet());
 
+  /// Set-based variant for hot paths (browse list builders) — the caller
+  /// supplies a precomputed lowercase ownership set instead of paying a
+  /// `toSet()` allocation per call.
+  bool matchesOwnedSet(Set<String> owned) {
     // Special cases for synergies with empty required items list:
     if (name == 'Smart Bombs' || name == 'Unbelievably Charming') {
       final matchesCount =
