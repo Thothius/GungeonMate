@@ -16,12 +16,24 @@ class SpecialItemsGridScreen extends StatefulWidget {
   const SpecialItemsGridScreen({super.key});
 
   static const specialGunNames = [
-    'Gunderfury', 'Triple Gun', 'Evolver', 'Shellegun',
-    'Chamber Gun', 'Boxing Glove', 'Polaris', 'Gunther',
+    'Gunderfury',
+    'Triple Gun',
+    'Evolver',
+    'Shellegun',
+    'Chamber Gun',
+    'Boxing Glove',
+    'Polaris',
+    'Gunther',
   ];
   static const specialItemNames = [
-    'Ser Junkan', 'Platinum Bullets', 'Iron Coin', 'Spice',
-    'Metronome', 'Sprun', 'Cigarettes', 'Gun Soul',
+    'Ser Junkan',
+    'Platinum Bullets',
+    'Iron Coin',
+    'Spice',
+    'Metronome',
+    'Sprun',
+    'Cigarettes',
+    'Gun Soul',
   ];
 
   @override
@@ -34,29 +46,34 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
     final p = context.watch<RunProvider>();
     final player = p.runState.main;
     final ownedGunNames = player.guns.map((g) => g.name.toLowerCase()).toSet();
-    final ownedItemNames = player.items.map((i) => i.name.toLowerCase()).toSet();
+    final ownedItemNames =
+        player.items.map((i) => i.name.toLowerCase()).toSet();
 
     final entries = <_SpecialEntry>[];
 
     for (final name in SpecialItemsGridScreen.specialGunNames) {
       final gun = p.gunByName(name);
-      entries.add(_SpecialEntry(
-        name: name,
-        isGun: true,
-        owned: ownedGunNames.contains(name.toLowerCase()),
-        iconPath: gun?.icon ?? localGunIcon(name),
-        quality: gun?.quality ?? '',
-      ));
+      entries.add(
+        _SpecialEntry(
+          name: name,
+          isGun: true,
+          owned: ownedGunNames.contains(name.toLowerCase()),
+          iconPath: gun?.icon ?? localGunIcon(name),
+          quality: gun?.quality ?? '',
+        ),
+      );
     }
     for (final name in SpecialItemsGridScreen.specialItemNames) {
       final item = p.itemByName(name);
-      entries.add(_SpecialEntry(
-        name: name,
-        isGun: false,
-        owned: ownedItemNames.contains(name.toLowerCase()),
-        iconPath: item?.icon ?? localItemIcon(name),
-        quality: item?.quality ?? '',
-      ));
+      entries.add(
+        _SpecialEntry(
+          name: name,
+          isGun: false,
+          owned: ownedItemNames.contains(name.toLowerCase()),
+          iconPath: item?.icon ?? localItemIcon(name),
+          quality: item?.quality ?? '',
+        ),
+      );
     }
 
     final allOwned = entries.every((e) => e.owned);
@@ -66,7 +83,14 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
-        title: const GoopText('SPECIAL ITEMS & GUNS', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+        title: const GoopText(
+          'SPECIAL ITEMS & GUNS',
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.2,
+          ),
+        ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white70),
@@ -80,35 +104,47 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
               if (allOwned) {
                 for (final name in SpecialItemsGridScreen.specialGunNames) {
                   final gun = p.gunByName(name);
-                  if (gun != null && ownedGunNames.contains(name.toLowerCase())) {
+                  if (gun != null &&
+                      ownedGunNames.contains(name.toLowerCase())) {
                     p.removeGun(gun, force: true);
                   }
                 }
                 for (final name in SpecialItemsGridScreen.specialItemNames) {
                   final item = p.itemByName(name);
-                  if (item != null && ownedItemNames.contains(name.toLowerCase())) {
+                  if (item != null &&
+                      ownedItemNames.contains(name.toLowerCase())) {
                     p.removeItem(item, force: true);
                   }
                 }
               } else {
                 for (final name in SpecialItemsGridScreen.specialGunNames) {
                   final gun = p.gunByName(name);
-                  if (gun != null && !ownedGunNames.contains(name.toLowerCase())) {
+                  if (gun != null &&
+                      !ownedGunNames.contains(name.toLowerCase())) {
                     p.addGun(gun, force: true);
                   }
                 }
                 for (final name in SpecialItemsGridScreen.specialItemNames) {
                   final item = p.itemByName(name);
-                  if (item != null && !ownedItemNames.contains(name.toLowerCase())) {
+                  if (item != null &&
+                      !ownedItemNames.contains(name.toLowerCase())) {
                     p.addItem(item, force: true);
                   }
                 }
               }
             },
-            icon: Icon(allOwned ? Icons.remove_circle : Icons.add_circle, size: 18, color: Colors.greenAccent),
+            icon: Icon(
+              allOwned ? Icons.remove_circle : Icons.add_circle,
+              size: 18,
+              color: Colors.greenAccent,
+            ),
             label: GoopText(
               allOwned ? 'Remove All' : 'Add All',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.greenAccent),
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: Colors.greenAccent,
+              ),
             ),
           ),
         ],
@@ -159,7 +195,13 @@ class _SpecialEntry {
   final bool owned;
   final String iconPath;
   final String quality;
-  const _SpecialEntry({required this.name, required this.isGun, required this.owned, required this.iconPath, required this.quality});
+  const _SpecialEntry({
+    required this.name,
+    required this.isGun,
+    required this.owned,
+    required this.iconPath,
+    required this.quality,
+  });
 }
 
 class _SpecialGridTile extends StatelessWidget {
@@ -175,10 +217,16 @@ class _SpecialGridTile extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         decoration: BoxDecoration(
-          color: entry.owned ? accent.withValues(alpha: 0.08) : Colors.white.withValues(alpha: 0.02),
+          color:
+              entry.owned
+                  ? accent.withValues(alpha: 0.08)
+                  : Colors.white.withValues(alpha: 0.02),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: entry.owned ? accent.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.08),
+            color:
+                entry.owned
+                    ? accent.withValues(alpha: 0.6)
+                    : Colors.white.withValues(alpha: 0.08),
             width: entry.owned ? 1.5 : 1,
           ),
         ),
@@ -200,11 +248,12 @@ class _SpecialGridTile extends StatelessWidget {
                     fit: BoxFit.contain,
                     cacheWidth: 88,
                     cacheHeight: 88,
-                    errorBuilder: (_, __, ___) => Icon(
-                      entry.isGun ? Icons.gps_fixed : Icons.star,
-                      color: Colors.white24,
-                      size: 20,
-                    ),
+                    errorBuilder:
+                        (_, __, ___) => Icon(
+                          entry.isGun ? Icons.gps_fixed : Icons.star,
+                          color: Colors.white24,
+                          size: 20,
+                        ),
                   ),
                 ),
                 if (entry.owned)
@@ -213,8 +262,15 @@ class _SpecialGridTile extends StatelessWidget {
                     right: 0,
                     child: Container(
                       padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
-                      child: const Icon(Icons.check, size: 10, color: Colors.white),
+                      decoration: BoxDecoration(
+                        color: accent,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.check,
+                        size: 10,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
               ],
@@ -228,7 +284,8 @@ class _SpecialGridTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w700,
-                color: entry.owned ? accent : Colors.white.withValues(alpha: 0.5),
+                color:
+                    entry.owned ? accent : Colors.white.withValues(alpha: 0.5),
                 height: 1.1,
               ),
             ),

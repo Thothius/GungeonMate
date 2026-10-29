@@ -25,9 +25,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => RunProvider()),
         ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
       ],
-      child: MaterialApp(
-        home: child,
-      ),
+      child: MaterialApp(home: child),
     );
   }
 
@@ -51,8 +49,9 @@ void main() {
     await settleStages(tester);
   }
 
-  testWidgets('Role stage shows HOST and SIDEKICK cards, no TextField',
-      (tester) async {
+  testWidgets('Role stage shows HOST and SIDEKICK cards, no TextField', (
+    tester,
+  ) async {
     await tester.pumpWidget(wrap(const MpLobbyScreen()));
     await tester.pump();
 
@@ -65,8 +64,9 @@ void main() {
     expect(find.text('JOIN GAME'), findsNothing);
   });
 
-  testWidgets('SIDEKICK skips gungeoneer and lands on identity stage',
-      (tester) async {
+  testWidgets('SIDEKICK skips gungeoneer and lands on identity stage', (
+    tester,
+  ) async {
     await tester.pumpWidget(wrap(const MpLobbyScreen()));
     await tester.pump();
 
@@ -78,8 +78,7 @@ void main() {
     expect(find.byType(TextField), findsOneWidget);
   });
 
-  testWidgets('HOST goes through gungeoneer stage to identity',
-      (tester) async {
+  testWidgets('HOST goes through gungeoneer stage to identity', (tester) async {
     await tester.pumpWidget(wrap(const MpLobbyScreen()));
     await tester.pump();
 
@@ -117,8 +116,9 @@ void main() {
     expect(find.text('Please enter a nickname.'), findsOneWidget);
   });
 
-  testWidgets('Back button on identity stage returns to role stage',
-      (tester) async {
+  testWidgets('Back button on identity stage returns to role stage', (
+    tester,
+  ) async {
     await tester.pumpWidget(wrap(const MpLobbyScreen()));
     await tester.pump();
     await toIdentityViaSidekick(tester);
@@ -130,8 +130,9 @@ void main() {
     expect(find.text('WHO ARE YOU?'), findsOneWidget);
   });
 
-  testWidgets('Back button on gungeoneer stage returns to role stage',
-      (tester) async {
+  testWidgets('Back button on gungeoneer stage returns to role stage', (
+    tester,
+  ) async {
     await tester.pumpWidget(wrap(const MpLobbyScreen()));
     await tester.pump();
     await tester.tap(find.text('HOST'));
@@ -161,8 +162,9 @@ void main() {
     expect(find.textContaining('nickname'), findsWidgets);
   });
 
-  testWidgets('Identity stage has exactly one TextField (no PIN)',
-      (tester) async {
+  testWidgets('Identity stage has exactly one TextField (no PIN)', (
+    tester,
+  ) async {
     await tester.pumpWidget(wrap(const MpLobbyScreen()));
     await tester.pump();
     await toIdentityViaSidekick(tester);

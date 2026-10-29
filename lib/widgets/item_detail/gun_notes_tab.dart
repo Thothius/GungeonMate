@@ -32,10 +32,13 @@ class GunNotesTab extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('•',
-                        style: TextStyle(
-                            fontSize: 13.5,
-                            color: Colors.white.withValues(alpha: 0.5))),
+                    Text(
+                      '•',
+                      style: TextStyle(
+                        fontSize: 13.5,
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
+                    ),
                     const SizedBox(width: 7),
                     Expanded(
                       child: GoopText(
@@ -56,10 +59,7 @@ class GunNotesTab extends StatelessWidget {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: [
-                for (final e in elements)
-                  _ElementChip(kind: e),
-              ],
+              children: [for (final e in elements) _ElementChip(kind: e)],
             ),
           ],
         ],
@@ -99,7 +99,10 @@ class _ElementChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: kind.color.withValues(alpha: 0.10),
         borderRadius: BorderRadius.all(Radii.sm),
-        border: Border.all(color: kind.color.withValues(alpha: 0.35), width: 0.8),
+        border: Border.all(
+          color: kind.color.withValues(alpha: 0.35),
+          width: 0.8,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

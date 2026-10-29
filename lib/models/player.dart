@@ -13,17 +13,9 @@ class Player {
   final List<Gun> guns;
   final List<Item> items;
 
-  Player({
-    this.character,
-    this.guns = const [],
-    this.items = const [],
-  });
+  Player({this.character, this.guns = const [], this.items = const []});
 
-  Player copyWith({
-    Gungeoneer? character,
-    List<Gun>? guns,
-    List<Item>? items,
-  }) {
+  Player copyWith({Gungeoneer? character, List<Gun>? guns, List<Item>? items}) {
     return Player(
       character: character ?? this.character,
       guns: guns ?? this.guns,
@@ -33,27 +25,30 @@ class Player {
 
   /// Names of all owned guns + items (preserves original casing).
   List<String> get allItemNames => [
-        ...guns.map((g) => g.name),
-        ...items.map((i) => i.name),
-      ];
+    ...guns.map((g) => g.name),
+    ...items.map((i) => i.name),
+  ];
 
   Map<String, dynamic> toJson() => {
-        'character': character?.toJson(),
-        'guns': guns.map((g) => g.toJson()).toList(),
-        'items': items.map((i) => i.toJson()).toList(),
-      };
+    'character': character?.toJson(),
+    'guns': guns.map((g) => g.toJson()).toList(),
+    'items': items.map((i) => i.toJson()).toList(),
+  };
 
   factory Player.fromJson(Map<String, dynamic> json) => Player(
-        character: json['character'] != null
+    character:
+        json['character'] != null
             ? Gungeoneer.fromJson(json['character'])
             : null,
-        guns: (json['guns'] as List<dynamic>?)
-                ?.map((g) => Gun.fromJson(g))
-                .toList() ??
-            const [],
-        items: (json['items'] as List<dynamic>?)
-                ?.map((i) => Item.fromJson(i))
-                .toList() ??
-            const [],
-      );
+    guns:
+        (json['guns'] as List<dynamic>?)
+            ?.map((g) => Gun.fromJson(g))
+            .toList() ??
+        const [],
+    items:
+        (json['items'] as List<dynamic>?)
+            ?.map((i) => Item.fromJson(i))
+            .toList() ??
+        const [],
+  );
 }

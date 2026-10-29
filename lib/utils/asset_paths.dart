@@ -36,10 +36,7 @@ String slugForAssetName(String name) {
   // mutable static.
   final lowered = name.toLowerCase();
   // Replace any non-[a-z0-9] run with a single underscore.
-  final withUnderscores = lowered.replaceAll(
-    RegExp(r'[^a-z0-9]+'),
-    '_',
-  );
+  final withUnderscores = lowered.replaceAll(RegExp(r'[^a-z0-9]+'), '_');
   // Trim leading/trailing underscores left over from punctuation at
   // the edges (e.g. "'94 Vamp" → "_94_vamp" → "94_vamp").
   return withUnderscores.replaceAll(RegExp(r'^_+|_+$'), '');
@@ -62,6 +59,7 @@ String gungeoneerGifPath(String name) {
   if (slug.isEmpty) return '';
   return 'assets/images/gungeoneers/$slug.gif';
 }
+
 String localShrineIcon(String name) => _pathFor('shrines', name);
 String localSynergyIcon(String name) => _pathFor('synergies', name);
 
@@ -226,8 +224,7 @@ String avatarPath(String id) {
 }
 
 /// Frame slug from a composite avatar id ('' = plain/no frame).
-String avatarFrameId(String id) =>
-    id.contains(':') ? id.split(':').last : '';
+String avatarFrameId(String id) => id.contains(':') ? id.split(':').last : '';
 
 /// Base portrait slug without the frame suffix.
 String avatarBaseId(String id) => id.split(':').first;

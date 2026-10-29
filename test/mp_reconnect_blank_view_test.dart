@@ -56,102 +56,149 @@ void main() {
   });
 
   group('R1 — Snapshot with unknown character does not wipe selectedCharacter', () {
-    test('Sidekick selectedCharacter survives unknown-character snapshot', () async {
-      await mainSession!.startAsMain(nickname: 'Host', character: marine);
-      await sidekickSession!.startAsSidekick(nickname: 'Guest', character: cultist);
-      guestLink.simulateDiscovery();
-      await Future.delayed(const Duration(milliseconds: 150));
+    test(
+      'Sidekick selectedCharacter survives unknown-character snapshot',
+      () async {
+        await mainSession!.startAsMain(nickname: 'Host', character: marine);
+        await sidekickSession!.startAsSidekick(
+          nickname: 'Guest',
+          character: cultist,
+        );
+        guestLink.simulateDiscovery();
+        await Future.delayed(const Duration(milliseconds: 150));
 
-      // Sidekick should have a character from Main's snapshot
-      expect(sidekickRp.runState.selectedCharacter, isNotNull,
-          reason: 'Sidekick should have a character after initial snapshot');
+        // Sidekick should have a character from Main's snapshot
+        expect(
+          sidekickRp.runState.selectedCharacter,
+          isNotNull,
+          reason: 'Sidekick should have a character after initial snapshot',
+        );
 
-      // Simulate Main reconnecting and sending a snapshot with a character
-      // name that Sidekick's gungeoneerByName can't find (data not loaded).
-      hostLink.sendMessage(const MpSnapshot(
-        character: 'Unknown Character',
-        gunNames: [],
-        itemNames: [],
-        coolness: 0,
-        curse: 0,
-        shrinesUsed: [],
-      ));
-      await Future.delayed(const Duration(milliseconds: 50));
+        // Simulate Main reconnecting and sending a snapshot with a character
+        // name that Sidekick's gungeoneerByName can't find (data not loaded).
+        hostLink.sendMessage(
+          const MpSnapshot(
+            character: 'Unknown Character',
+            gunNames: [],
+            itemNames: [],
+            coolness: 0,
+            curse: 0,
+            shrinesUsed: [],
+          ),
+        );
+        await Future.delayed(const Duration(milliseconds: 50));
 
-      // CRITICAL: selectedCharacter should NOT be null (no blank view)
-      expect(sidekickRp.runState.selectedCharacter, isNotNull,
-          reason: 'selectedCharacter must survive unknown-character snapshot');
-    });
+        // CRITICAL: selectedCharacter should NOT be null (no blank view)
+        expect(
+          sidekickRp.runState.selectedCharacter,
+          isNotNull,
+          reason: 'selectedCharacter must survive unknown-character snapshot',
+        );
+      },
+    );
 
-    test('Main selectedCharacter survives unknown-character snapshot from Sidekick', () async {
-      await mainSession!.startAsMain(nickname: 'Host', character: marine);
-      await sidekickSession!.startAsSidekick(nickname: 'Guest', character: cultist);
-      guestLink.simulateDiscovery();
-      await Future.delayed(const Duration(milliseconds: 150));
+    test(
+      'Main selectedCharacter survives unknown-character snapshot from Sidekick',
+      () async {
+        await mainSession!.startAsMain(nickname: 'Host', character: marine);
+        await sidekickSession!.startAsSidekick(
+          nickname: 'Guest',
+          character: cultist,
+        );
+        guestLink.simulateDiscovery();
+        await Future.delayed(const Duration(milliseconds: 150));
 
-      expect(mainRp.runState.selectedCharacter, isNotNull);
+        expect(mainRp.runState.selectedCharacter, isNotNull);
 
-      // Sidekick sends a snapshot with an unknown character
-      guestLink.sendMessage(const MpSnapshot(
-        character: 'Unknown Character',
-        gunNames: [],
-        itemNames: [],
-        coolness: 0,
-        curse: 0,
-        shrinesUsed: [],
-      ));
-      await Future.delayed(const Duration(milliseconds: 50));
+        // Sidekick sends a snapshot with an unknown character
+        guestLink.sendMessage(
+          const MpSnapshot(
+            character: 'Unknown Character',
+            gunNames: [],
+            itemNames: [],
+            coolness: 0,
+            curse: 0,
+            shrinesUsed: [],
+          ),
+        );
+        await Future.delayed(const Duration(milliseconds: 50));
 
-      // Main's selectedCharacter should be preserved (it's in the main slot,
-      // not the coop slot, but the test verifies the guard works)
-      expect(mainRp.runState.selectedCharacter, isNotNull,
-          reason: 'Main selectedCharacter must survive unknown-character snapshot');
-    });
+        // Main's selectedCharacter should be preserved (it's in the main slot,
+        // not the coop slot, but the test verifies the guard works)
+        expect(
+          mainRp.runState.selectedCharacter,
+          isNotNull,
+          reason:
+              'Main selectedCharacter must survive unknown-character snapshot',
+        );
+      },
+    );
   });
 
   group('R2 — Full reconnect cycle preserves selectedCharacter', () {
-    test('Both sides preserve selectedCharacter through disconnect+reconnect', () async {
-      await mainSession!.startAsMain(nickname: 'Host', character: marine);
-      await sidekickSession!.startAsSidekick(nickname: 'Guest', character: cultist);
-      guestLink.simulateDiscovery();
-      await Future.delayed(const Duration(milliseconds: 150));
+    test(
+      'Both sides preserve selectedCharacter through disconnect+reconnect',
+      () async {
+        await mainSession!.startAsMain(nickname: 'Host', character: marine);
+        await sidekickSession!.startAsSidekick(
+          nickname: 'Guest',
+          character: cultist,
+        );
+        guestLink.simulateDiscovery();
+        await Future.delayed(const Duration(milliseconds: 150));
 
-      expect(mainRp.runState.selectedCharacter, isNotNull);
-      expect(sidekickRp.runState.selectedCharacter, isNotNull);
+        expect(mainRp.runState.selectedCharacter, isNotNull);
+        expect(sidekickRp.runState.selectedCharacter, isNotNull);
 
-      // Disconnect
-      await hostLink.disconnectPeer();
-      await Future.delayed(const Duration(milliseconds: 200));
+        // Disconnect
+        await hostLink.disconnectPeer();
+        await Future.delayed(const Duration(milliseconds: 200));
 
-      // Both should still have their characters
-      expect(mainRp.runState.selectedCharacter, isNotNull,
-          reason: 'Main should keep character through disconnect');
-      expect(sidekickRp.runState.selectedCharacter, isNotNull,
-          reason: 'Sidekick should keep character through disconnect');
+        // Both should still have their characters
+        expect(
+          mainRp.runState.selectedCharacter,
+          isNotNull,
+          reason: 'Main should keep character through disconnect',
+        );
+        expect(
+          sidekickRp.runState.selectedCharacter,
+          isNotNull,
+          reason: 'Sidekick should keep character through disconnect',
+        );
 
-      // Reconnect
-      await mainSession!.reconnect();
-      await sidekickSession!.reconnect();
-      await Future.delayed(const Duration(milliseconds: 100));
-      guestLink.simulateDiscovery();
-      await Future.delayed(const Duration(milliseconds: 200));
+        // Reconnect
+        await mainSession!.reconnect();
+        await sidekickSession!.reconnect();
+        await Future.delayed(const Duration(milliseconds: 100));
+        guestLink.simulateDiscovery();
+        await Future.delayed(const Duration(milliseconds: 200));
 
-      // Both should be connected
-      expect(mainSession!.phase, MpPhase.connected);
-      expect(sidekickSession!.phase, MpPhase.connected);
+        // Both should be connected
+        expect(mainSession!.phase, MpPhase.connected);
+        expect(sidekickSession!.phase, MpPhase.connected);
 
-      // CRITICAL: both should still have selectedCharacter after reconnect
-      expect(mainRp.runState.selectedCharacter, isNotNull,
-          reason: 'Main selectedCharacter must survive reconnect');
-      expect(sidekickRp.runState.selectedCharacter, isNotNull,
-          reason: 'Sidekick selectedCharacter must survive reconnect');
-    });
+        // CRITICAL: both should still have selectedCharacter after reconnect
+        expect(
+          mainRp.runState.selectedCharacter,
+          isNotNull,
+          reason: 'Main selectedCharacter must survive reconnect',
+        );
+        expect(
+          sidekickRp.runState.selectedCharacter,
+          isNotNull,
+          reason: 'Sidekick selectedCharacter must survive reconnect',
+        );
+      },
+    );
   });
 
   group('R3 — App restart (tryRestore) preserves selectedCharacter', () {
     test('Main restart restores selectedCharacter from saved state', () async {
       await mainSession!.startAsMain(nickname: 'Host', character: marine);
-      await sidekickSession!.startAsSidekick(nickname: 'Guest', character: cultist);
+      await sidekickSession!.startAsSidekick(
+        nickname: 'Guest',
+        character: cultist,
+      );
       guestLink.simulateDiscovery();
       await Future.delayed(const Duration(milliseconds: 150));
 
@@ -177,15 +224,23 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 50));
 
       // CRITICAL: selectedCharacter should be restored
-      expect(newRp.runState.selectedCharacter, isNotNull,
-          reason: 'Main selectedCharacter must be restored after app restart');
+      expect(
+        newRp.runState.selectedCharacter,
+        isNotNull,
+        reason: 'Main selectedCharacter must be restored after app restart',
+      );
 
-      try { newSession.dispose(); } catch (_) {}
+      try {
+        newSession.dispose();
+      } catch (_) {}
     });
 
     test('Sidekick restart restores coop slot from saved character', () async {
       await mainSession!.startAsMain(nickname: 'Host', character: marine);
-      await sidekickSession!.startAsSidekick(nickname: 'Guest', character: cultist);
+      await sidekickSession!.startAsSidekick(
+        nickname: 'Guest',
+        character: cultist,
+      );
       guestLink.simulateDiscovery();
       await Future.delayed(const Duration(milliseconds: 150));
 
@@ -210,19 +265,30 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 50));
 
       // Sidekick's coop slot should have a character
-      expect(newRp.runState.coop, isNotNull,
-          reason: 'Sidekick coop slot must be restored after app restart');
-      expect(newRp.runState.coop!.character, isNotNull,
-          reason: 'Sidekick coop character must be restored');
+      expect(
+        newRp.runState.coop,
+        isNotNull,
+        reason: 'Sidekick coop slot must be restored after app restart',
+      );
+      expect(
+        newRp.runState.coop!.character,
+        isNotNull,
+        reason: 'Sidekick coop character must be restored',
+      );
 
-      try { newSession.dispose(); } catch (_) {}
+      try {
+        newSession.dispose();
+      } catch (_) {}
     });
   });
 
   group('R4 — Empty character snapshot does not wipe slot', () {
     test('Empty character snapshot is skipped entirely', () async {
       await mainSession!.startAsMain(nickname: 'Host', character: marine);
-      await sidekickSession!.startAsSidekick(nickname: 'Guest', character: cultist);
+      await sidekickSession!.startAsSidekick(
+        nickname: 'Guest',
+        character: cultist,
+      );
       guestLink.simulateDiscovery();
       await Future.delayed(const Duration(milliseconds: 150));
 
@@ -230,18 +296,23 @@ void main() {
       expect(charBefore, isNotNull);
 
       // Send empty-character snapshot
-      hostLink.sendMessage(const MpSnapshot(
-        character: '',
-        gunNames: [],
-        itemNames: [],
-        coolness: 0,
-        curse: 0,
-        shrinesUsed: [],
-      ));
+      hostLink.sendMessage(
+        const MpSnapshot(
+          character: '',
+          gunNames: [],
+          itemNames: [],
+          coolness: 0,
+          curse: 0,
+          shrinesUsed: [],
+        ),
+      );
       await Future.delayed(const Duration(milliseconds: 50));
 
-      expect(sidekickRp.runState.selectedCharacter, charBefore,
-          reason: 'Empty character snapshot should not change anything');
+      expect(
+        sidekickRp.runState.selectedCharacter,
+        charBefore,
+        reason: 'Empty character snapshot should not change anything',
+      );
     });
   });
 
@@ -253,7 +324,10 @@ void main() {
       // With the fix, neither should get blanked.
 
       await mainSession!.startAsMain(nickname: 'Host', character: marine);
-      await sidekickSession!.startAsSidekick(nickname: 'Guest', character: cultist);
+      await sidekickSession!.startAsSidekick(
+        nickname: 'Guest',
+        character: cultist,
+      );
       guestLink.simulateDiscovery();
       await Future.delayed(const Duration(milliseconds: 150));
 
@@ -271,8 +345,11 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 200));
 
       // P2 (Sidekick) should NOT have blank view
-      expect(sidekickRp.runState.selectedCharacter, isNotNull,
-          reason: 'P2 should not get blank view after P1 reconnects');
+      expect(
+        sidekickRp.runState.selectedCharacter,
+        isNotNull,
+        reason: 'P2 should not get blank view after P1 reconnects',
+      );
 
       // Step 2: P2 (Sidekick) closes app and reopens
       // Save P2's state
@@ -287,22 +364,31 @@ void main() {
       sidekickSession = null;
       final newSidekickRp = RunProvider();
       final newSidekickLink = FakeMpLink();
-      final newSidekickSession = MpSession.withLink(newSidekickRp, newSidekickLink);
+      final newSidekickSession = MpSession.withLink(
+        newSidekickRp,
+        newSidekickLink,
+      );
 
       await newSidekickSession.tryRestorePersistedSession();
       await Future.delayed(const Duration(milliseconds: 50));
 
       // P2 should have restored their character
-      expect(newSidekickRp.runState.selectedCharacter, isNotNull,
-          reason: 'P2 should restore selectedCharacter after restart');
+      expect(
+        newSidekickRp.runState.selectedCharacter,
+        isNotNull,
+        reason: 'P2 should restore selectedCharacter after restart',
+      );
 
       // P1 (Main) should still have their character
-      expect(mainRp.runState.selectedCharacter, isNotNull,
-          reason: 'P1 should not get blank view when P2 restarts');
+      expect(
+        mainRp.runState.selectedCharacter,
+        isNotNull,
+        reason: 'P1 should not get blank view when P2 restarts',
+      );
 
-      try { newSidekickSession.dispose(); } catch (_) {}
+      try {
+        newSidekickSession.dispose();
+      } catch (_) {}
     });
   });
 }
-
-

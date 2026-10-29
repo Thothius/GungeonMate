@@ -37,12 +37,15 @@ class CoolCurseScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF0D0716),
       appBar: AppBar(
         backgroundColor: const Color(0xFF140B22),
-        title: GoopText('COOL & CURSE',
-            style: TextStyle(
-                fontSize: FontSizes.titleSmall * sf,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 2,
-                color: const Color(0xFFB388FF))),
+        title: GoopText(
+          'COOL & CURSE',
+          style: TextStyle(
+            fontSize: FontSizes.titleSmall * sf,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2,
+            color: const Color(0xFFB388FF),
+          ),
+        ),
         centerTitle: true,
       ),
       body: CustomScrollView(
@@ -137,13 +140,19 @@ class CoolCurseScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 14 * sf),
               child: Column(
                 children: [
-                  Icon(Icons.keyboard_arrow_down_rounded,
-                      size: 28 * sf, color: Colors.white.withValues(alpha: 0.35)),
-                  GoopText('scroll for the full picture',
-                      style: TextStyle(
-                          fontSize: 10.5 * sf,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white.withValues(alpha: 0.35))),
+                  Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 28 * sf,
+                    color: Colors.white.withValues(alpha: 0.35),
+                  ),
+                  GoopText(
+                    'scroll for the full picture',
+                    style: TextStyle(
+                      fontSize: 10.5 * sf,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.white.withValues(alpha: 0.35),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -231,29 +240,43 @@ class _MeterPanel extends StatelessWidget {
       ),
       child: Column(
         children: [
-          GoopText(title,
-              style: TextStyle(
-                  fontSize: 10 * sf,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2,
-                  color: color.withValues(alpha: 0.8))),
+          GoopText(
+            title,
+            style: TextStyle(
+              fontSize: 10 * sf,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              color: color.withValues(alpha: 0.8),
+            ),
+          ),
           SizedBox(height: 12 * sf),
           // Single centered value flanked by symmetric −/+ — the
           // duplicate number was the broken indicator.
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _DeltaBtn(label: '−1', onTap: () => onDelta(-1), color: color, sf: sf),
+              _DeltaBtn(
+                label: '−1',
+                onTap: () => onDelta(-1),
+                color: color,
+                sf: sf,
+              ),
               GoopText(
                 value.toStringAsFixed(value % 1 == 0 ? 0 : 1),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 36 * sf,
-                    fontWeight: FontWeight.w900,
-                    color: color,
-                    height: 1),
+                  fontSize: 36 * sf,
+                  fontWeight: FontWeight.w900,
+                  color: color,
+                  height: 1,
+                ),
               ),
-              _DeltaBtn(label: '+1', onTap: () => onDelta(1), color: color, sf: sf),
+              _DeltaBtn(
+                label: '+1',
+                onTap: () => onDelta(1),
+                color: color,
+                sf: sf,
+              ),
             ],
           ),
           SizedBox(height: 10 * sf),
@@ -262,9 +285,11 @@ class _MeterPanel extends StatelessWidget {
               onReset();
               Haptics.medium();
             },
-            child: Icon(Icons.refresh_rounded,
-                size: 16 * sf,
-                color: Colors.white.withValues(alpha: 0.35)),
+            child: Icon(
+              Icons.refresh_rounded,
+              size: 16 * sf,
+              color: Colors.white.withValues(alpha: 0.35),
+            ),
           ),
         ],
       ),
@@ -277,29 +302,32 @@ class _DeltaBtn extends StatelessWidget {
   final VoidCallback onTap;
   final Color color;
   final double sf;
-  const _DeltaBtn(
-      {required this.label,
-      required this.onTap,
-      required this.color,
-      required this.sf});
+  const _DeltaBtn({
+    required this.label,
+    required this.onTap,
+    required this.color,
+    required this.sf,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: 14 * sf, vertical: 6 * sf),
+        padding: EdgeInsets.symmetric(horizontal: 14 * sf, vertical: 6 * sf),
         decoration: BoxDecoration(
           color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: color.withValues(alpha: 0.5)),
         ),
-        child: GoopText(label,
-            style: TextStyle(
-                fontSize: 14 * sf,
-                fontWeight: FontWeight.w900,
-                color: color)),
+        child: GoopText(
+          label,
+          style: TextStyle(
+            fontSize: 14 * sf,
+            fontWeight: FontWeight.w900,
+            color: color,
+          ),
+        ),
       ),
     );
   }
@@ -330,9 +358,7 @@ class _EffectsCard extends StatelessWidget {
         children: [
           for (var i = 0; i < rows.length; i++) ...[
             if (i > 0)
-              Divider(
-                  height: 1,
-                  color: Colors.white.withValues(alpha: 0.06)),
+              Divider(height: 1, color: Colors.white.withValues(alpha: 0.06)),
             Padding(
               padding: EdgeInsets.all(12 * sf),
               child: Row(
@@ -342,36 +368,47 @@ class _EffectsCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GoopText(rows[i].name,
-                            style: TextStyle(
-                                fontSize: 12.5 * sf,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white.withValues(alpha: 0.85))),
+                        GoopText(
+                          rows[i].name,
+                          style: TextStyle(
+                            fontSize: 12.5 * sf,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
+                        ),
                         const SizedBox(height: 2),
-                        GoopText(rows[i].desc,
-                            style: TextStyle(
-                                fontSize: 10.5 * sf,
-                                height: 1.35,
-                                color:
-                                    Colors.white.withValues(alpha: 0.45))),
+                        GoopText(
+                          rows[i].desc,
+                          style: TextStyle(
+                            fontSize: 10.5 * sf,
+                            height: 1.35,
+                            color: Colors.white.withValues(alpha: 0.45),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   SizedBox(width: 10 * sf),
                   Container(
                     padding: EdgeInsets.symmetric(
-                        horizontal: 8 * sf, vertical: 4 * sf),
+                      horizontal: 8 * sf,
+                      vertical: 4 * sf,
+                    ),
                     decoration: BoxDecoration(
                       color: rows[i].color.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
-                          color: rows[i].color.withValues(alpha: 0.5)),
+                        color: rows[i].color.withValues(alpha: 0.5),
+                      ),
                     ),
-                    child: GoopText(rows[i].value,
-                        style: TextStyle(
-                            fontSize: 11 * sf,
-                            fontWeight: FontWeight.w900,
-                            color: rows[i].color)),
+                    child: GoopText(
+                      rows[i].value,
+                      style: TextStyle(
+                        fontSize: 11 * sf,
+                        fontWeight: FontWeight.w900,
+                        color: rows[i].color,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -388,11 +425,12 @@ class _InfoBlock extends StatelessWidget {
   final Color color;
   final String body;
   final double sf;
-  const _InfoBlock(
-      {required this.title,
-      required this.color,
-      required this.body,
-      required this.sf});
+  const _InfoBlock({
+    required this.title,
+    required this.color,
+    required this.body,
+    required this.sf,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -407,18 +445,24 @@ class _InfoBlock extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GoopText(title,
-              style: TextStyle(
-                  fontSize: 11 * sf,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2,
-                  color: color.withValues(alpha: 0.85))),
+          GoopText(
+            title,
+            style: TextStyle(
+              fontSize: 11 * sf,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              color: color.withValues(alpha: 0.85),
+            ),
+          ),
           SizedBox(height: 8 * sf),
-          GoopText(body,
-              style: TextStyle(
-                  fontSize: 12 * sf,
-                  height: 1.5,
-                  color: Colors.white.withValues(alpha: 0.7))),
+          GoopText(
+            body,
+            style: TextStyle(
+              fontSize: 12 * sf,
+              height: 1.5,
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
+          ),
         ],
       ),
     );

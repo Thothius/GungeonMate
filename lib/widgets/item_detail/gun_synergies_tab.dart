@@ -13,19 +13,22 @@ import '../state_widgets.dart';
 class GunSynergiesTab extends StatelessWidget {
   final List<SynergyStatus> statuses;
   final String currentName;
-  const GunSynergiesTab(
-      {super.key, required this.statuses, required this.currentName});
+  const GunSynergiesTab({
+    super.key,
+    required this.statuses,
+    required this.currentName,
+  });
 
   @override
   Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
-    final mainNames = p.runState.main.allItemNames
-        .map((n) => n.toLowerCase())
-        .toSet();
+    final mainNames =
+        p.runState.main.allItemNames.map((n) => n.toLowerCase()).toSet();
     final coop = p.runState.coop;
-    final coopNames = coop == null
-        ? const <String>{}
-        : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
+    final coopNames =
+        coop == null
+            ? const <String>{}
+            : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
     final owned = p.currentOwnedLower;
 
     final complete = <SynergyStatus>[];
@@ -58,7 +61,13 @@ class GunSynergiesTab extends StatelessWidget {
         if (mainNames.contains(pl)) p1 = true;
         if (coopNames.contains(pl)) p2 = true;
       }
-      return coop == null ? 'P1' : (p1 && p2 ? 'P1+P2' : p2 ? 'P2' : 'P1');
+      return coop == null
+          ? 'P1'
+          : (p1 && p2
+              ? 'P1+P2'
+              : p2
+              ? 'P2'
+              : 'P1');
     }
 
     return Padding(
@@ -68,22 +77,34 @@ class GunSynergiesTab extends StatelessWidget {
         children: [
           if (complete.isNotEmpty) ...[
             _GroupHeader(
-                label: 'COMPLETE', color: Colors.greenAccent, icon: Icons.check_circle_rounded),
+              label: 'COMPLETE',
+              color: Colors.greenAccent,
+              icon: Icons.check_circle_rounded,
+            ),
             const SizedBox(height: 6),
             for (final st in complete)
-              _SynergyRow(status: st, owners: ownersOf(st), missing: null, p: p),
+              _SynergyRow(
+                status: st,
+                owners: ownersOf(st),
+                missing: null,
+                p: p,
+              ),
           ],
           if (partial.isNotEmpty) ...[
             const SizedBox(height: 14),
             _GroupHeader(
-                label: 'PARTIAL', color: Colors.amberAccent, icon: Icons.pie_chart_outline_rounded),
+              label: 'PARTIAL',
+              color: Colors.amberAccent,
+              icon: Icons.pie_chart_outline_rounded,
+            ),
             const SizedBox(height: 6),
             for (final st in partial)
               _SynergyRow(
-                  status: st,
-                  owners: ownersOf(st),
-                  missing: _firstMissing(st, owned, currentName),
-                  p: p),
+                status: st,
+                owners: ownersOf(st),
+                missing: _firstMissing(st, owned, currentName),
+                p: p,
+              ),
           ],
         ],
       ),
@@ -93,7 +114,10 @@ class GunSynergiesTab extends StatelessWidget {
   /// True when the player owns at least one OTHER piece of this
   /// synergy (the current gun doesn't count — they have it already).
   static bool _hasAnyPiece(
-      SynergyStatus st, Set<String> owned, String currentName) {
+    SynergyStatus st,
+    Set<String> owned,
+    String currentName,
+  ) {
     final cur = currentName.toLowerCase();
     for (final piece in [...st.synergy.items, ...st.synergy.anyOf]) {
       final pl = piece.toLowerCase();
@@ -104,7 +128,10 @@ class GunSynergiesTab extends StatelessWidget {
 
   /// First unowned required piece — drives the "missing item" icon.
   static String _firstMissing(
-      SynergyStatus st, Set<String> owned, String currentName) {
+    SynergyStatus st,
+    Set<String> owned,
+    String currentName,
+  ) {
     final cur = currentName.toLowerCase();
     for (final piece in st.synergy.items) {
       final pl = piece.toLowerCase();
@@ -122,8 +149,11 @@ class _GroupHeader extends StatelessWidget {
   final String label;
   final Color color;
   final IconData icon;
-  const _GroupHeader(
-      {required this.label, required this.color, required this.icon});
+  const _GroupHeader({
+    required this.label,
+    required this.color,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -150,11 +180,12 @@ class _SynergyRow extends StatelessWidget {
   final String owners;
   final String? missing;
   final RunProvider p;
-  const _SynergyRow(
-      {required this.status,
-      required this.owners,
-      required this.missing,
-      required this.p});
+  const _SynergyRow({
+    required this.status,
+    required this.owners,
+    required this.missing,
+    required this.p,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -172,8 +203,7 @@ class _SynergyRow extends StatelessWidget {
       iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
     }
 
-    final accent =
-        status.active ? Colors.greenAccent : Colors.amberAccent;
+    final accent = status.active ? Colors.greenAccent : Colors.amberAccent;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -244,9 +274,10 @@ class _OwnerPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = label.contains('+')
-        ? Colors.cyanAccent
-        : label == 'P2'
+    final color =
+        label.contains('+')
+            ? Colors.cyanAccent
+            : label == 'P2'
             ? Colors.orangeAccent
             : Colors.lightGreenAccent;
     return Container(

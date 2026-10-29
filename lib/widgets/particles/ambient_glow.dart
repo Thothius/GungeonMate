@@ -61,12 +61,17 @@ class _AmbientGlowState extends State<AmbientGlow>
         final t = _c.value * 2 * math.pi;
 
         final pColor = widget.primary.withValues(
-            alpha: (widget.primary.a * 1.55).clamp(0.0, 0.95));
+          alpha: (widget.primary.a * 1.55).clamp(0.0, 0.95),
+        );
         final sColor = widget.secondary.withValues(
-            alpha: (widget.secondary.a * 1.55).clamp(0.0, 0.95));
+          alpha: (widget.secondary.a * 1.55).clamp(0.0, 0.95),
+        );
         final tColor = (widget.tertiary ?? widget.secondary).withValues(
-            alpha: ((widget.tertiary ?? widget.secondary).a * 1.4)
-                .clamp(0.0, 0.85));
+          alpha: ((widget.tertiary ?? widget.secondary).a * 1.4).clamp(
+            0.0,
+            0.85,
+          ),
+        );
 
         return switch (widget.style) {
           GlowStyle.orbit => _buildOrbit(t, pColor, sColor),
@@ -117,9 +122,7 @@ class _AmbientGlowState extends State<AmbientGlow>
   // ── Ember: bottom-anchored flicker, fast and erratic ────────────────────
   Widget _buildEmber(double t, Color pColor, Color sColor) {
     // Erratic flicker — multiple sine waves at different frequencies
-    final flicker = 0.6 +
-        0.25 * math.sin(t * 5) +
-        0.15 * math.sin(t * 11);
+    final flicker = 0.6 + 0.25 * math.sin(t * 5) + 0.15 * math.sin(t * 11);
     final drift = 0.5 + 0.15 * math.sin(t * 3);
 
     return Stack(

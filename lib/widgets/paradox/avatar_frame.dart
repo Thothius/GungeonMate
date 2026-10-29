@@ -5,8 +5,12 @@ import '../../utils/asset_paths.dart';
 /// An avatar frame style — a border/decoration painted around the
 /// portrait. Regular frames are static; specials animate.
 class AvatarFrameStyle {
-  const AvatarFrameStyle(this.id, this.label, this.color,
-      {this.special = false});
+  const AvatarFrameStyle(
+    this.id,
+    this.label,
+    this.color, {
+    this.special = false,
+  });
   final String id;
   final String label;
   final Color color;
@@ -52,8 +56,12 @@ AvatarFrameStyle? avatarFrameStyleOf(String id) {
 /// Framed avatar portrait — resolves `avatarPath`, paints the picked
 /// frame (animated for specials), falls back to a person icon.
 class FramedAvatar extends StatelessWidget {
-  const FramedAvatar(
-      {super.key, required this.id, this.size = 48, this.radius = 10});
+  const FramedAvatar({
+    super.key,
+    required this.id,
+    this.size = 48,
+    this.radius = 10,
+  });
 
   final String id;
   final double size;
@@ -73,8 +81,9 @@ class FramedAvatar extends StatelessWidget {
           avatarPath(id),
           fit: BoxFit.cover,
           filterQuality: FilterQuality.none,
-          errorBuilder: (_, __, ___) =>
-              Icon(Icons.person, size: size * 0.6, color: Colors.white38),
+          errorBuilder:
+              (_, __, ___) =>
+                  Icon(Icons.person, size: size * 0.6, color: Colors.white38),
         ),
       ),
     );
@@ -84,36 +93,44 @@ class FramedAvatar extends StatelessWidget {
     return SizedBox(
       width: w,
       height: w,
-      child: frame.special
-          ? _AnimatedSpecialFrame(frame: frame, radius: radius, child: inner)
-          : Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: frame.color, width: 2.2),
+      child:
+          frame.special
+              ? _AnimatedSpecialFrame(
+                frame: frame,
+                radius: radius,
+                child: inner,
+              )
+              : Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: frame.color, width: 2.2),
+                ),
+                child: inner,
               ),
-              child: inner,
-            ),
     );
   }
 }
 
 /// One widget per special frame — animated border painters.
 class _AnimatedSpecialFrame extends StatefulWidget {
-  const _AnimatedSpecialFrame(
-      {required this.frame, required this.radius, required this.child});
+  const _AnimatedSpecialFrame({
+    required this.frame,
+    required this.radius,
+    required this.child,
+  });
   final AvatarFrameStyle frame;
   final double radius;
   final Widget child;
 
   @override
-  State<_AnimatedSpecialFrame> createState() =>
-      _AnimatedSpecialFrameState();
+  State<_AnimatedSpecialFrame> createState() => _AnimatedSpecialFrameState();
 }
 
 class _AnimatedSpecialFrameState extends State<_AnimatedSpecialFrame>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl = AnimationController(
-      vsync: this, duration: const Duration(milliseconds: 2400))
-    ..repeat();
+    vsync: this,
+    duration: const Duration(milliseconds: 2400),
+  )..repeat();
 
   @override
   void dispose() {
@@ -126,11 +143,15 @@ class _AnimatedSpecialFrameState extends State<_AnimatedSpecialFrame>
     return RepaintBoundary(
       child: AnimatedBuilder(
         animation: _ctrl,
-        builder: (_, child) => CustomPaint(
-          painter: _SpecialFramePainter(
-              style: widget.frame.id, t: _ctrl.value, radius: widget.radius),
-          child: Padding(padding: const EdgeInsets.all(3), child: child),
-        ),
+        builder:
+            (_, child) => CustomPaint(
+              painter: _SpecialFramePainter(
+                style: widget.frame.id,
+                t: _ctrl.value,
+                radius: widget.radius,
+              ),
+              child: Padding(padding: const EdgeInsets.all(3), child: child),
+            ),
         child: widget.child,
       ),
     );
@@ -139,8 +160,11 @@ class _AnimatedSpecialFrameState extends State<_AnimatedSpecialFrame>
 
 /// Paints each special border — every style has a distinct animation.
 class _SpecialFramePainter extends CustomPainter {
-  _SpecialFramePainter(
-      {required this.style, required this.t, required this.radius});
+  _SpecialFramePainter({
+    required this.style,
+    required this.t,
+    required this.radius,
+  });
   final String style;
   final double t;
   final double radius;
@@ -149,8 +173,7 @@ class _SpecialFramePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // Square frame path — matches the square clip; corners get full
     // border coverage so no white edges show.
-    final r = RRect.fromRectAndRadius(
-        Offset.zero & size, Radius.zero);
+    final r = RRect.fromRectAndRadius(Offset.zero & size, Radius.zero);
     final p = Paint()..style = PaintingStyle.stroke;
 
     switch (style) {
@@ -161,7 +184,7 @@ class _SpecialFramePainter extends CustomPainter {
             Color(0xFFFFD700),
             Color(0xFFFFF8DC),
             Color(0xFFB8860B),
-            Color(0xFFFFD700)
+            Color(0xFFFFD700),
           ],
           transform: GradientRotation(t * math.pi * 2),
         ).createShader(Offset.zero & size);
@@ -173,7 +196,7 @@ class _SpecialFramePainter extends CustomPainter {
             Color(0xFFC0C0C0),
             Color(0xFFFFFFFF),
             Color(0xFF808080),
-            Color(0xFFC0C0C0)
+            Color(0xFFC0C0C0),
           ],
           transform: GradientRotation(t * math.pi * 2),
         ).createShader(Offset.zero & size);
@@ -189,7 +212,7 @@ class _SpecialFramePainter extends CustomPainter {
             Colors.cyan,
             Colors.blue,
             Colors.purple,
-            Colors.red
+            Colors.red,
           ],
           transform: GradientRotation(t * math.pi * 2),
         ).createShader(Offset.zero & size);
@@ -202,15 +225,14 @@ class _SpecialFramePainter extends CustomPainter {
         p.strokeWidth = 3.5;
         canvas.drawRRect(r, p);
         // Inner ember line, phase-shifted.
-        p.color =
-            const Color(0xFFFF1744).withValues(alpha: flick * 0.5);
+        p.color = const Color(0xFFFF1744).withValues(alpha: flick * 0.5);
         p.strokeWidth = 1.2;
         canvas.drawRRect(r.deflate(2.5), p);
       case 'cool':
         // Breathing ice border.
         final pulse = 0.5 + 0.5 * math.sin(t * math.pi * 2);
-        p.color = Color.lerp(
-            const Color(0xFF4DD0E1), Colors.white, pulse * 0.6)!;
+        p.color =
+            Color.lerp(const Color(0xFF4DD0E1), Colors.white, pulse * 0.6)!;
         p.strokeWidth = 2.5 + pulse * 1.2;
         canvas.drawRRect(r, p);
       case 'fiery':
@@ -219,8 +241,11 @@ class _SpecialFramePainter extends CustomPainter {
         p.shader = LinearGradient(
           colors: [
             const Color(0xFFFF5722),
-            Color.lerp(const Color(0xFFFFC107),
-                const Color(0xFFFF1744), pulse)!,
+            Color.lerp(
+              const Color(0xFFFFC107),
+              const Color(0xFFFF1744),
+              pulse,
+            )!,
             const Color(0xFFFF5722),
           ],
         ).createShader(Offset.zero & size);
@@ -235,10 +260,9 @@ class _SpecialFramePainter extends CustomPainter {
         for (var i = 0; i < 5; i++) {
           final a = t * math.pi * 2 + i * math.pi * 2 / 5;
           final tw = 0.4 + 0.6 * (0.5 + 0.5 * math.sin(a * 3 + i));
-          final x = size.width / 2 +
-              (size.width / 2 - 2) * math.cos(a) * 0.92;
-          final y = size.height / 2 +
-              (size.height / 2 - 2) * math.sin(a) * 0.92;
+          final x = size.width / 2 + (size.width / 2 - 2) * math.cos(a) * 0.92;
+          final y =
+              size.height / 2 + (size.height / 2 - 2) * math.sin(a) * 0.92;
           star.color = Colors.white.withValues(alpha: tw);
           canvas.drawCircle(Offset(x, y), 1.6 + tw, star);
         }

@@ -29,13 +29,16 @@ Future<void> showParadoxChatSheet(BuildContext context) {
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    builder: (ctx) => Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
-      child: SizedBox(
-        height: MediaQuery.of(ctx).size.height * 0.62,
-        child: const ParadoxChatSheet(),
-      ),
-    ),
+    builder:
+        (ctx) => Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+          ),
+          child: SizedBox(
+            height: MediaQuery.of(ctx).size.height * 0.62,
+            child: const ParadoxChatSheet(),
+          ),
+        ),
   );
 }
 
@@ -100,8 +103,7 @@ class _ParadoxChatSheetState extends State<ParadoxChatSheet> {
     final replaced = '${before.substring(0, m.start)}:${s.key}:';
     final after = text.substring(sel.end);
     _ctrl.text = '$replaced$after';
-    _ctrl.selection =
-        TextSelection.collapsed(offset: replaced.length);
+    _ctrl.selection = TextSelection.collapsed(offset: replaced.length);
     setState(() => _suggestions = []);
     Haptics.selection();
   }
@@ -140,35 +142,42 @@ class _ParadoxChatSheetState extends State<ParadoxChatSheet> {
             borderRadius: BorderRadius.circular(2),
           ),
         ),
-        GoopText('CHAT',
-            style: TextStyle(
-                fontSize: 11 * sf,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 2,
-                color: const Color(0xFFB388FF).withValues(alpha: 0.8))),
+        GoopText(
+          'CHAT',
+          style: TextStyle(
+            fontSize: 11 * sf,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2,
+            color: const Color(0xFFB388FF).withValues(alpha: 0.8),
+          ),
+        ),
         // History
         Expanded(
-          child: session.sessionEvents.isEmpty
-              ? Center(
-                  child: GoopText(
-                    'No messages yet.\nType below — or try :heart or :gun_',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13 * sf,
-                      color: Colors.white.withValues(alpha: 0.35),
-                      fontStyle: FontStyle.italic,
-                      height: 1.5,
+          child:
+              session.sessionEvents.isEmpty
+                  ? Center(
+                    child: GoopText(
+                      'No messages yet.\nType below — or try :heart or :gun_',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13 * sf,
+                        color: Colors.white.withValues(alpha: 0.35),
+                        fontStyle: FontStyle.italic,
+                        height: 1.5,
+                      ),
                     ),
+                  )
+                  : ListView.builder(
+                    controller: _scroll,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 14 * sf,
+                      vertical: 8,
+                    ),
+                    itemCount: session.sessionEvents.length,
+                    itemBuilder:
+                        (_, i) =>
+                            _ConvoRow(e: session.sessionEvents[i], sf: sf),
                   ),
-                )
-              : ListView.builder(
-                  controller: _scroll,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 14 * sf, vertical: 8),
-                  itemCount: session.sessionEvents.length,
-                  itemBuilder: (_, i) =>
-                      _ConvoRow(e: session.sessionEvents[i], sf: sf),
-                ),
         ),
         // Autocomplete strip
         if (_suggestions.isNotEmpty)
@@ -189,23 +198,24 @@ class _ParadoxChatSheetState extends State<ParadoxChatSheet> {
           ),
         // Composer
         Container(
-          padding: EdgeInsets.fromLTRB(
-              10 * sf, 6 * sf, 10 * sf, 10 * sf),
+          padding: EdgeInsets.fromLTRB(10 * sf, 6 * sf, 10 * sf, 10 * sf),
           decoration: BoxDecoration(
             border: Border(
               top: BorderSide(
-                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.3)),
+                color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
+              ),
             ),
           ),
           child: Row(
             children: [
               IconButton(
                 tooltip: 'Pick a Gungeon icon',
-                icon: Icon(Icons.grid_view_rounded,
-                    size: 22 * sf,
-                    color: _catalogReady
-                        ? const Color(0xFFB388FF)
-                        : Colors.white24),
+                icon: Icon(
+                  Icons.grid_view_rounded,
+                  size: 22 * sf,
+                  color:
+                      _catalogReady ? const Color(0xFFB388FF) : Colors.white24,
+                ),
                 onPressed: _catalogReady ? _openSpritePicker : null,
               ),
               Expanded(
@@ -216,25 +226,29 @@ class _ParadoxChatSheetState extends State<ParadoxChatSheet> {
                   maxLines: null,
                   style: TextStyle(fontSize: 14 * sf),
                   decoration: InputDecoration(
-                    hintText: connected
-                        ? 'Message… (: for icons)'
-                        : 'Offline — messages send on reconnect',
+                    hintText:
+                        connected
+                            ? 'Message… (: for icons)'
+                            : 'Offline — messages send on reconnect',
                     hintStyle: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.3),
-                        fontSize: 13 * sf),
+                      color: Colors.white.withValues(alpha: 0.3),
+                      fontSize: 13 * sf,
+                    ),
                     counterText: '',
                     isDense: true,
                     contentPadding: EdgeInsets.symmetric(
-                        horizontal: 12 * sf, vertical: 10 * sf),
+                      horizontal: 12 * sf,
+                      vertical: 10 * sf,
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(
-                          color: Colors.white.withValues(alpha: 0.15)),
+                        color: Colors.white.withValues(alpha: 0.15),
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                          color: Color(0xFFB388FF)),
+                      borderSide: const BorderSide(color: Color(0xFFB388FF)),
                     ),
                   ),
                   onSubmitted: (_) => _send(),
@@ -243,8 +257,11 @@ class _ParadoxChatSheetState extends State<ParadoxChatSheet> {
               SizedBox(width: 6 * sf),
               IconButton(
                 tooltip: 'Send',
-                icon: Icon(Icons.send_rounded,
-                    size: 22 * sf, color: const Color(0xFF00E676)),
+                icon: Icon(
+                  Icons.send_rounded,
+                  size: 22 * sf,
+                  color: const Color(0xFF00E676),
+                ),
                 onPressed: _send,
               ),
             ],
@@ -262,24 +279,21 @@ class _ParadoxChatSheetState extends State<ParadoxChatSheet> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
-      builder: (_) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
-        child: const _SpritePickerSheet(),
-      ),
+      builder:
+          (_) => SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: const _SpritePickerSheet(),
+          ),
     );
     if (picked != null && mounted) {
       final text = _ctrl.text;
-      final sel = _ctrl.selection.isValid
-          ? _ctrl.selection.start
-          : text.length;
+      final sel = _ctrl.selection.isValid ? _ctrl.selection.start : text.length;
       final inserted = ':${picked.key}:';
       _ctrl.text = text.substring(0, sel) + inserted + text.substring(sel);
-      _ctrl.selection =
-          TextSelection.collapsed(offset: sel + inserted.length);
+      _ctrl.selection = TextSelection.collapsed(offset: sel + inserted.length);
       _focus.requestFocus();
     }
   }
-
 }
 
 // ── Chat bubble with inline sprite rendering ─────────────────────
@@ -314,16 +328,20 @@ class _ConvoRow extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(icon, size: 13 * sf,
-                  color: flair.primary.withValues(alpha: 0.7)),
+              Icon(
+                icon,
+                size: 13 * sf,
+                color: flair.primary.withValues(alpha: 0.7),
+              ),
               SizedBox(width: 6 * sf),
               GoopText(
                 e.kind == 'transfer' || e.kind == 'surprise'
                     ? e.text
                     : '${e.from} · ${e.text}',
                 style: TextStyle(
-                    fontSize: 11 * sf,
-                    color: Colors.white.withValues(alpha: 0.6)),
+                  fontSize: 11 * sf,
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
               ),
             ],
           ),
@@ -335,8 +353,9 @@ class _ConvoRow extends StatelessWidget {
     final bubble = Container(
       margin: const EdgeInsets.symmetric(vertical: 3),
       padding: EdgeInsets.symmetric(horizontal: 12 * sf, vertical: 8 * sf),
-      constraints:
-          BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.68),
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.68,
+      ),
       decoration: BoxDecoration(
         color: mine ? flair.primary.withValues(alpha: 0.25) : flair.card,
         borderRadius: BorderRadius.only(
@@ -345,15 +364,17 @@ class _ConvoRow extends StatelessWidget {
           bottomLeft: Radius.circular(mine ? 14 : 4),
           bottomRight: Radius.circular(mine ? 4 : 14),
         ),
-        border: mine
-            ? Border.all(color: flair.primary.withValues(alpha: 0.3))
-            : null,
+        border:
+            mine
+                ? Border.all(color: flair.primary.withValues(alpha: 0.3))
+                : null,
       ),
       child: Text.rich(
         _buildContent(e.text, sf),
         style: TextStyle(
-            fontSize: 13.5 * sf,
-            color: Colors.white.withValues(alpha: 0.92)),
+          fontSize: 13.5 * sf,
+          color: Colors.white.withValues(alpha: 0.92),
+        ),
       ),
     );
     final avatar = Column(
@@ -366,9 +387,8 @@ class _ConvoRow extends StatelessWidget {
             fontSize: 8 * sf,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.5,
-            color: mine
-                ? flair.primary
-                : flair.secondary.withValues(alpha: 0.7),
+            color:
+                mine ? flair.primary : flair.secondary.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -379,9 +399,10 @@ class _ConvoRow extends StatelessWidget {
         mainAxisAlignment:
             mine ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: mine
-            ? [bubble, SizedBox(width: 6 * sf), avatar]
-            : [avatar, SizedBox(width: 6 * sf), bubble],
+        children:
+            mine
+                ? [bubble, SizedBox(width: 6 * sf), avatar]
+                : [avatar, SizedBox(width: 6 * sf), bubble],
       ),
     );
   }
@@ -397,25 +418,29 @@ class _ConvoRow extends StatelessWidget {
       }
       final sprite = EmoteSpriteCatalog.byKey(m.group(1)!);
       if (sprite != null) {
-        spans.add(WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2),
-            child: Tooltip(
-              message: sprite.label,
-              child: Image.asset(
-                sprite.assetPath,
-                width: 52 * sf,
-                height: 52 * sf,
-                filterQuality: FilterQuality.none,
-                errorBuilder: (_, __, ___) => Icon(
-                    Icons.broken_image_outlined,
-                    size: 18 * sf,
-                    color: Colors.white24),
+        spans.add(
+          WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2),
+              child: Tooltip(
+                message: sprite.label,
+                child: Image.asset(
+                  sprite.assetPath,
+                  width: 52 * sf,
+                  height: 52 * sf,
+                  filterQuality: FilterQuality.none,
+                  errorBuilder:
+                      (_, __, ___) => Icon(
+                        Icons.broken_image_outlined,
+                        size: 18 * sf,
+                        color: Colors.white24,
+                      ),
+                ),
               ),
             ),
           ),
-        ));
+        );
       } else {
         spans.add(TextSpan(text: m.group(0)));
       }
@@ -432,8 +457,11 @@ class _SuggestionChip extends StatelessWidget {
   final EmoteSprite sprite;
   final VoidCallback onTap;
   final double sf;
-  const _SuggestionChip(
-      {required this.sprite, required this.onTap, required this.sf});
+  const _SuggestionChip({
+    required this.sprite,
+    required this.onTap,
+    required this.sf,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -442,30 +470,33 @@ class _SuggestionChip extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: 8 * sf, vertical: 4 * sf),
+          padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 4 * sf),
           decoration: BoxDecoration(
             color: const Color(0xFF7C4DFF).withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-                color: const Color(0xFFB388FF).withValues(alpha: 0.4)),
+              color: const Color(0xFFB388FF).withValues(alpha: 0.4),
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(sprite.assetPath,
-                  width: 20 * sf,
-                  height: 20 * sf,
-                  filterQuality: FilterQuality.none,
-                  errorBuilder: (_, __, ___) =>
-                      const Icon(Icons.extension, size: 16)),
+              Image.asset(
+                sprite.assetPath,
+                width: 20 * sf,
+                height: 20 * sf,
+                filterQuality: FilterQuality.none,
+                errorBuilder:
+                    (_, __, ___) => const Icon(Icons.extension, size: 16),
+              ),
               SizedBox(width: 5 * sf),
               GoopText(
                 sprite.label,
                 style: TextStyle(
-                    fontSize: 10.5 * sf,
-                    color: Colors.white.withValues(alpha: 0.85),
-                    fontWeight: FontWeight.w600),
+                  fontSize: 10.5 * sf,
+                  color: Colors.white.withValues(alpha: 0.85),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),
@@ -497,11 +528,15 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
   @override
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
-    final results = EmoteSpriteCatalog.search(_search.text,
-        kind: _kind, limit: 9999);
+    final results = EmoteSpriteCatalog.search(
+      _search.text,
+      kind: _kind,
+      limit: 9999,
+    );
     return Padding(
       padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom),
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Column(
         children: [
           Container(
@@ -522,9 +557,13 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
               decoration: InputDecoration(
                 hintText: 'Search icons…',
                 hintStyle: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.3)),
-                prefixIcon:
-                    const Icon(Icons.search, size: 20, color: Colors.white38),
+                  color: Colors.white.withValues(alpha: 0.3),
+                ),
+                prefixIcon: const Icon(
+                  Icons.search,
+                  size: 20,
+                  color: Colors.white38,
+                ),
                 isDense: true,
                 filled: true,
                 fillColor: Colors.white.withValues(alpha: 0.05),
@@ -553,11 +592,12 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
                   Padding(
                     padding: const EdgeInsets.only(right: 6),
                     child: ChoiceChip(
-                      label: GoopText(label,
-                          style: TextStyle(fontSize: 11 * sf)),
+                      label: GoopText(
+                        label,
+                        style: TextStyle(fontSize: 11 * sf),
+                      ),
                       selected: _kind == kind,
-                      onSelected: (_) =>
-                          setState(() => _kind = kind),
+                      onSelected: (_) => setState(() => _kind = kind),
                       visualDensity: VisualDensity.compact,
                     ),
                   ),
@@ -568,8 +608,7 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
           Expanded(
             child: GridView.builder(
               padding: EdgeInsets.all(12 * sf),
-              gridDelegate:
-                  const SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
@@ -586,15 +625,19 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
                         color: Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                            color:
-                                Colors.white.withValues(alpha: 0.12)),
+                          color: Colors.white.withValues(alpha: 0.12),
+                        ),
                       ),
-                      child: Image.asset(s.assetPath,
-                          filterQuality: FilterQuality.none,
-                          fit: BoxFit.contain,
-                          errorBuilder: (_, __, ___) => const Icon(
+                      child: Image.asset(
+                        s.assetPath,
+                        filterQuality: FilterQuality.none,
+                        fit: BoxFit.contain,
+                        errorBuilder:
+                            (_, __, ___) => const Icon(
                               Icons.extension,
-                              color: Colors.white38)),
+                              color: Colors.white38,
+                            ),
+                      ),
                     ),
                   ),
                 );
@@ -630,12 +673,15 @@ class SurpriseSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GoopText('SURPRISE',
-              style: TextStyle(
-                  fontSize: 11 * sf,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2,
-                  color: Colors.amberAccent.withValues(alpha: 0.9))),
+          GoopText(
+            'SURPRISE',
+            style: TextStyle(
+              fontSize: 11 * sf,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              color: Colors.amberAccent.withValues(alpha: 0.9),
+            ),
+          ),
           SizedBox(height: 14 * sf),
           Wrap(
             spacing: 10 * sf,
@@ -663,7 +709,8 @@ class SurpriseSheet extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: const Color(0xFFB388FF),
               side: BorderSide(
-                  color: const Color(0xFFB388FF).withValues(alpha: 0.5)),
+                color: const Color(0xFFB388FF).withValues(alpha: 0.5),
+              ),
             ),
             onPressed: () => _customSurprise(context, session),
           ),
@@ -676,35 +723,39 @@ class SurpriseSheet extends StatelessWidget {
     final ctrl = TextEditingController();
     showDialog<void>(
       context: context,
-      builder: (dctx) => AlertDialog(
-        backgroundColor: const Color(0xFF1E122E),
-        title: const GoopText('Custom surprise'),
-        content: TextField(
-          controller: ctrl,
-          maxLength: 30,
-          autofocus: true,
-          decoration: const InputDecoration(
-              hintText: 'Up to 30 chars + optional :icon:'),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dctx).pop(),
-            child: const GoopText('CANCEL'),
+      builder:
+          (dctx) => AlertDialog(
+            backgroundColor: const Color(0xFF1E122E),
+            title: const GoopText('Custom surprise'),
+            content: TextField(
+              controller: ctrl,
+              maxLength: 30,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: 'Up to 30 chars + optional :icon:',
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dctx).pop(),
+                child: const GoopText('CANCEL'),
+              ),
+              TextButton(
+                onPressed: () {
+                  final text = ctrl.text.trim();
+                  if (text.isNotEmpty) {
+                    session.sendSurprise(preset: 'custom', text: text);
+                  }
+                  Navigator.of(dctx).pop();
+                  Navigator.of(context).maybePop();
+                },
+                child: const GoopText(
+                  'SEND',
+                  style: TextStyle(color: Colors.amberAccent),
+                ),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              final text = ctrl.text.trim();
-              if (text.isNotEmpty) {
-                session.sendSurprise(preset: 'custom', text: text);
-              }
-              Navigator.of(dctx).pop();
-              Navigator.of(context).maybePop();
-            },
-            child: const GoopText('SEND',
-                style: TextStyle(color: Colors.amberAccent)),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -728,25 +779,26 @@ class _SurprisePreset extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: 14 * sf, vertical: 12 * sf),
+        padding: EdgeInsets.symmetric(horizontal: 14 * sf, vertical: 12 * sf),
         decoration: BoxDecoration(
           color: Colors.amberAccent.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-              color: Colors.amberAccent.withValues(alpha: 0.45)),
+          border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.45)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, color: Colors.amberAccent, size: 26 * sf),
             SizedBox(height: 4 * sf),
-            GoopText(label,
-                style: TextStyle(
-                    fontSize: 10 * sf,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1,
-                    color: Colors.amberAccent.withValues(alpha: 0.9))),
+            GoopText(
+              label,
+              style: TextStyle(
+                fontSize: 10 * sf,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1,
+                color: Colors.amberAccent.withValues(alpha: 0.9),
+              ),
+            ),
           ],
         ),
       ),

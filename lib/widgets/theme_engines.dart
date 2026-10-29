@@ -33,10 +33,8 @@ class _EdgeDripWidgetState extends State<EdgeDripWidget>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    )..repeat();
+    _controller = AnimationController(vsync: this, duration: widget.duration)
+      ..repeat();
   }
 
   @override
@@ -84,9 +82,10 @@ class _EdgeDripPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.fill;
 
     final path = Path();
     path.moveTo(0, 0);
@@ -106,7 +105,8 @@ class _EdgeDripPainter extends CustomPainter {
       if (adjustedProgress < 0.2) {
         currentHeight = (adjustedProgress / 0.2) * (maxDripHeight * 0.15);
       } else if (adjustedProgress < 0.8) {
-        currentHeight = maxDripHeight * 0.15 +
+        currentHeight =
+            maxDripHeight * 0.15 +
             ((adjustedProgress - 0.2) / 0.6) * (maxDripHeight * 0.85);
       } else {
         currentHeight = maxDripHeight * (1.0 - (adjustedProgress - 0.8) / 0.2);
@@ -115,12 +115,7 @@ class _EdgeDripPainter extends CustomPainter {
       final double bezierControlY = currentHeight * 1.4;
 
       path.lineTo(startX, 0);
-      path.quadraticBezierTo(
-        midX,
-        bezierControlY,
-        endX,
-        0,
-      );
+      path.quadraticBezierTo(midX, bezierControlY, endX, 0);
     }
 
     path.lineTo(size.width, 0);
@@ -138,14 +133,19 @@ class _EdgeDripPainter extends CustomPainter {
       final double adjustedProgress = ((progress * viscosity) + phase) % 1.0;
 
       if (adjustedProgress > 0.4 && adjustedProgress < 0.85) {
-        final double currentHeight = maxDripHeight * 0.15 +
+        final double currentHeight =
+            maxDripHeight * 0.15 +
             ((adjustedProgress - 0.2) / 0.6) * (maxDripHeight * 0.85);
         final double dripY = currentHeight * 0.95;
-        final double dropAlpha = (1.0 - (adjustedProgress - 0.4) / 0.45).clamp(0.0, 1.0);
+        final double dropAlpha = (1.0 - (adjustedProgress - 0.4) / 0.45).clamp(
+          0.0,
+          1.0,
+        );
 
-        final dropPaint = Paint()
-          ..color = color.withValues(alpha: dropAlpha)
-          ..style = PaintingStyle.fill;
+        final dropPaint =
+            Paint()
+              ..color = color.withValues(alpha: dropAlpha)
+              ..style = PaintingStyle.fill;
 
         canvas.drawCircle(Offset(midX, dripY + 4), 3.0, dropPaint);
       }
@@ -188,10 +188,7 @@ class _GlintSheenOverlayState extends State<GlintSheenOverlay>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
+    _controller = AnimationController(vsync: this, duration: widget.duration);
     _scheduleSheen();
   }
 
@@ -297,13 +294,16 @@ class _ElasticWobbleContainerState extends State<ElasticWobbleContainer>
         // Apply custom matrix deformation
         final double skewX = math.sin(t) * widget.intensity * 0.04;
         final double skewY = math.cos(t * 1.3) * widget.intensity * 0.02;
-        final double scaleX = 1.0 + math.sin(t * 2.0) * widget.intensity * 0.015;
-        final double scaleY = 1.0 + math.cos(t * 2.0) * widget.intensity * 0.015;
+        final double scaleX =
+            1.0 + math.sin(t * 2.0) * widget.intensity * 0.015;
+        final double scaleY =
+            1.0 + math.cos(t * 2.0) * widget.intensity * 0.015;
 
-        final matrix = Matrix4.identity()
-          ..setEntry(0, 1, skewX)
-          ..setEntry(1, 0, skewY)
-          ..scale(scaleX, scaleY);
+        final matrix =
+            Matrix4.identity()
+              ..setEntry(0, 1, skewX)
+              ..setEntry(1, 0, skewY)
+              ..scale(scaleX, scaleY);
 
         return Transform(
           transform: matrix,

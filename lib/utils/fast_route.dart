@@ -17,36 +17,35 @@ import '../theme/tokens.dart';
 /// Also re-triggers the Goop sponge animation so new views show the
 /// cool Goopian→English text scramble when sponge is active.
 PageRoute<T> fastRoute<T>(Widget child) => PageRouteBuilder<T>(
-      pageBuilder: (_, __, ___) {
-        GoopAnimationManager.instance.pulse();
-        return ValueListenableBuilder<AppThemeMode>(
-          valueListenable: AppTheme.notifier,
-          builder: (_, __, ___) => ColoredBox(
-            color: AppTheme.flair.scaffold,
-            child: child,
-          ),
-        );
-      },
-      transitionsBuilder: (_, anim, __, child) {
-        // Fade + subtle 16dp upward slide. The slide is small enough
-        // to feel native, not gimmicky — it communicates spatial
-        // direction (forward = up/over) without ghosting.
-        final curved = CurvedAnimation(
-          parent: anim,
-          curve: Easing.emphasizedDecelerate,
-          reverseCurve: Easing.emphasizedAccelerate,
-        );
-        return FadeTransition(
-          opacity: curved,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.04),
-              end: Offset.zero,
-            ).animate(curved),
-            child: child,
-          ),
-        );
-      },
-      transitionDuration: Motion.enter,
-      reverseTransitionDuration: Motion.exit,
+  pageBuilder: (_, __, ___) {
+    GoopAnimationManager.instance.pulse();
+    return ValueListenableBuilder<AppThemeMode>(
+      valueListenable: AppTheme.notifier,
+      builder:
+          (_, __, ___) =>
+              ColoredBox(color: AppTheme.flair.scaffold, child: child),
     );
+  },
+  transitionsBuilder: (_, anim, __, child) {
+    // Fade + subtle 16dp upward slide. The slide is small enough
+    // to feel native, not gimmicky — it communicates spatial
+    // direction (forward = up/over) without ghosting.
+    final curved = CurvedAnimation(
+      parent: anim,
+      curve: Easing.emphasizedDecelerate,
+      reverseCurve: Easing.emphasizedAccelerate,
+    );
+    return FadeTransition(
+      opacity: curved,
+      child: SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, 0.04),
+          end: Offset.zero,
+        ).animate(curved),
+        child: child,
+      ),
+    );
+  },
+  transitionDuration: Motion.enter,
+  reverseTransitionDuration: Motion.exit,
+);

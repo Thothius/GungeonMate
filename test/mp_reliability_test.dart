@@ -35,26 +35,28 @@ void main() {
   });
 
   group('T1 — App-kill restore (MpRecovery.tryRestore + MpStore)', () {
-    test('MpStore round-trip: save session → load → all fields preserved',
-        () async {
-      await MpStore.saveSession(
-        role: MpRole.main,
-        nickname: 'HostPlayer',
-        character: 'The Marine',
-      );
+    test(
+      'MpStore round-trip: save session → load → all fields preserved',
+      () async {
+        await MpStore.saveSession(
+          role: MpRole.main,
+          nickname: 'HostPlayer',
+          character: 'The Marine',
+        );
 
-      // Save a run state too.
-      rp.startNewRun(marine);
-      await MpStore.saveRunState(rp.runState, force: true);
+        // Save a run state too.
+        rp.startNewRun(marine);
+        await MpStore.saveRunState(rp.runState, force: true);
 
-      final saved = await MpStore.load();
-      expect(saved, isNotNull);
-      expect(saved!.role, MpRole.main);
-      expect(saved.nickname, 'HostPlayer');
-      expect(saved.character, 'The Marine');
-      expect(saved.runState, isNotNull);
-      expect(saved.runState!.main.character?.name, 'The Marine');
-    });
+        final saved = await MpStore.load();
+        expect(saved, isNotNull);
+        expect(saved!.role, MpRole.main);
+        expect(saved.nickname, 'HostPlayer');
+        expect(saved.character, 'The Marine');
+        expect(saved.runState, isNotNull);
+        expect(saved.runState!.main.character?.name, 'The Marine');
+      },
+    );
 
     test('MpStore.clear removes all session data', () async {
       await MpStore.saveSession(
@@ -109,61 +111,66 @@ void main() {
       // The force save should have persisted the updated state.
       // Note: Player.fromJson can't fully resolve Gungeoneer without
       // loadData(), so we verify the runState was saved (not null).
-      expect(saved?.runState, isNotNull,
-          reason: 'Force save should persist run state');
+      expect(
+        saved?.runState,
+        isNotNull,
+        reason: 'Force save should persist run state',
+      );
     });
 
-    test('MpRecovery.tryRestore restores run state + calls onRestoreSession',
-        () async {
-      // Simulate a prior session that was killed.
-      final priorRp = RunProvider();
-      priorRp.startNewRun(marine);
-      priorRp.startCoopPlayer(cultist);
-      await MpStore.saveSession(
-        role: MpRole.main,
-        nickname: 'HostPlayer',
-        character: 'The Marine',
-      );
-      await MpStore.saveRunState(priorRp.runState, force: true);
+    test(
+      'MpRecovery.tryRestore restores run state + calls onRestoreSession',
+      () async {
+        // Simulate a prior session that was killed.
+        final priorRp = RunProvider();
+        priorRp.startNewRun(marine);
+        priorRp.startCoopPlayer(cultist);
+        await MpStore.saveSession(
+          role: MpRole.main,
+          nickname: 'HostPlayer',
+          character: 'The Marine',
+        );
+        await MpStore.saveRunState(priorRp.runState, force: true);
 
-      // Fresh RunProvider — simulates app restart.
-      final freshRp = RunProvider();
+        // Fresh RunProvider — simulates app restart.
+        final freshRp = RunProvider();
 
-      MpRole? restoredRole;
-      String? restoredNickname;
-      String? restoredCharacter;
+        MpRole? restoredRole;
+        String? restoredNickname;
+        String? restoredCharacter;
 
-      final recovery = MpRecovery(
-        MpLink(),
-        freshRp,
-        onRestoreSession: ({
-          required MpRole role,
-          required String nickname,
-          required String character,
-          RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
-        }) {
-          restoredRole = role;
-          restoredNickname = nickname;
-          restoredCharacter = character;
-        },
-      );
+        final recovery = MpRecovery(
+          MpLink(),
+          freshRp,
+          onRestoreSession: ({
+            required MpRole role,
+            required String nickname,
+            required String character,
+            RunState? preSidekickRun,
+            MpMode mode = MpMode.classic,
+            bool paused = false,
+            String avatarId = '',
+            String runTitle = '',
+            int sessionNumber = 0,
+            int runStartMs = 0,
+            int runAccumMs = 0,
+          }) {
+            restoredRole = role;
+            restoredNickname = nickname;
+            restoredCharacter = character;
+          },
+        );
 
-      await recovery.tryRestore();
+        await recovery.tryRestore();
 
-      expect(restoredRole, MpRole.main);
-      expect(restoredNickname, 'HostPlayer');
-      expect(restoredCharacter, 'The Marine');
-      // Run state should be restored into the fresh provider.
-      expect(freshRp.runState.main.character?.name, 'The Marine');
-      expect(freshRp.runState.coop?.character?.name, 'The Cultist');
-    });
+        expect(restoredRole, MpRole.main);
+        expect(restoredNickname, 'HostPlayer');
+        expect(restoredCharacter, 'The Marine');
+        // Run state should be restored into the fresh provider.
+        expect(freshRp.runState.main.character?.name, 'The Marine');
+        expect(freshRp.runState.coop?.character?.name, 'The Cultist');
+      },
+    );
 
     test('MpRecovery.tryRestore with no saved session is a no-op', () async {
       final recovery = MpRecovery(
@@ -174,13 +181,13 @@ void main() {
           required String nickname,
           required String character,
           RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
+          MpMode mode = MpMode.classic,
+          bool paused = false,
+          String avatarId = '',
+          String runTitle = '',
+          int sessionNumber = 0,
+          int runStartMs = 0,
+          int runAccumMs = 0,
         }) {
           fail('onRestoreSession should not be called when no session exists');
         },
@@ -191,53 +198,56 @@ void main() {
     });
 
     test(
-        'MpRecovery activation lifecycle: onPeerDisconnected → onPeerReconnected',
-        () {
-      final recovery = MpRecovery(
-        MpLink(),
-        rp,
-        onRestoreSession: ({
-          required MpRole role,
-          required String nickname,
-          required String character,
-          RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
-        }) {},
-      );
-      recovery.setSessionInfo(role: MpRole.main, nickname: 'Host');
+      'MpRecovery activation lifecycle: onPeerDisconnected → onPeerReconnected',
+      () {
+        final recovery = MpRecovery(
+          MpLink(),
+          rp,
+          onRestoreSession:
+              ({
+                required MpRole role,
+                required String nickname,
+                required String character,
+                RunState? preSidekickRun,
+                MpMode mode = MpMode.classic,
+                bool paused = false,
+                String avatarId = '',
+                String runTitle = '',
+                int sessionNumber = 0,
+                int runStartMs = 0,
+                int runAccumMs = 0,
+              }) {},
+        );
+        recovery.setSessionInfo(role: MpRole.main, nickname: 'Host');
 
-      expect(recovery.isActive, false);
+        expect(recovery.isActive, false);
 
-      recovery.onPeerDisconnected();
-      expect(recovery.isActive, true);
+        recovery.onPeerDisconnected();
+        expect(recovery.isActive, true);
 
-      recovery.onPeerReconnected();
-      expect(recovery.isActive, false);
-    });
+        recovery.onPeerReconnected();
+        expect(recovery.isActive, false);
+      },
+    );
 
     test('MpRecovery.cancel deactivates recovery', () {
       final recovery = MpRecovery(
         MpLink(),
         rp,
-        onRestoreSession: ({
-          required MpRole role,
-          required String nickname,
-          required String character,
-          RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
-        }) {},
+        onRestoreSession:
+            ({
+              required MpRole role,
+              required String nickname,
+              required String character,
+              RunState? preSidekickRun,
+              MpMode mode = MpMode.classic,
+              bool paused = false,
+              String avatarId = '',
+              String runTitle = '',
+              int sessionNumber = 0,
+              int runStartMs = 0,
+              int runAccumMs = 0,
+            }) {},
       );
 
       recovery.onPeerDisconnected();
@@ -251,19 +261,20 @@ void main() {
       final recovery = MpRecovery(
         MpLink(),
         rp,
-        onRestoreSession: ({
-          required MpRole role,
-          required String nickname,
-          required String character,
-          RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
-        }) {},
+        onRestoreSession:
+            ({
+              required MpRole role,
+              required String nickname,
+              required String character,
+              RunState? preSidekickRun,
+              MpMode mode = MpMode.classic,
+              bool paused = false,
+              String avatarId = '',
+              String runTitle = '',
+              int sessionNumber = 0,
+              int runStartMs = 0,
+              int runAccumMs = 0,
+            }) {},
       );
       recovery.setSessionInfo(role: MpRole.sidekick, nickname: 'P2');
 
@@ -414,19 +425,20 @@ void main() {
       final recovery = MpRecovery(
         MpLink(),
         rp,
-        onRestoreSession: ({
-          required MpRole role,
-          required String nickname,
-          required String character,
-          RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
-        }) {},
+        onRestoreSession:
+            ({
+              required MpRole role,
+              required String nickname,
+              required String character,
+              RunState? preSidekickRun,
+              MpMode mode = MpMode.classic,
+              bool paused = false,
+              String avatarId = '',
+              String runTitle = '',
+              int sessionNumber = 0,
+              int runStartMs = 0,
+              int runAccumMs = 0,
+            }) {},
       );
       recovery.setSessionInfo(role: MpRole.sidekick, nickname: 'P2');
 
@@ -443,19 +455,20 @@ void main() {
       final recovery = MpRecovery(
         MpLink(),
         rp,
-        onRestoreSession: ({
-          required MpRole role,
-          required String nickname,
-          required String character,
-          RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
-        }) {},
+        onRestoreSession:
+            ({
+              required MpRole role,
+              required String nickname,
+              required String character,
+              RunState? preSidekickRun,
+              MpMode mode = MpMode.classic,
+              bool paused = false,
+              String avatarId = '',
+              String runTitle = '',
+              int sessionNumber = 0,
+              int runStartMs = 0,
+              int runAccumMs = 0,
+            }) {},
       );
       recovery.setSessionInfo(role: MpRole.main, nickname: 'Host');
 

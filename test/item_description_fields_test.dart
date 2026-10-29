@@ -13,8 +13,10 @@ void main() {
         'ammonomicon_entry': 'A very flavourful description.',
       });
       expect(item.ammonomiconEntry, 'A very flavourful description.');
-      expect(item.toJson()['ammonomicon_entry'],
-          'A very flavourful description.');
+      expect(
+        item.toJson()['ammonomicon_entry'],
+        'A very flavourful description.',
+      );
     });
 
     test('Gun.fromJson parses and round-trips ammonomicon_entry', () {

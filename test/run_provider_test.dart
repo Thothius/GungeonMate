@@ -47,8 +47,11 @@ void main() {
       rp.startNewRun(hunter);
 
       expect(rp.runState.main.character?.name, 'The Hunter');
-      expect(rp.runState.coop, isNull,
-          reason: 'New run should not carry over coop player');
+      expect(
+        rp.runState.coop,
+        isNull,
+        reason: 'New run should not carry over coop player',
+      );
     });
 
     test('endCoopPlayer removes coop slot but keeps main', () {
@@ -83,10 +86,16 @@ void main() {
         targetMainSlot: false,
       );
 
-      expect(rp.runState.main.character?.name, 'The Marine',
-          reason: 'Host main slot should be untouched');
-      expect(rp.runState.coop, isNotNull,
-          reason: 'Coop slot should be populated by peer snapshot');
+      expect(
+        rp.runState.main.character?.name,
+        'The Marine',
+        reason: 'Host main slot should be untouched',
+      );
+      expect(
+        rp.runState.coop,
+        isNotNull,
+        reason: 'Coop slot should be populated by peer snapshot',
+      );
     });
 
     test('Joiner receives host snapshot → main slot overwritten', () {
@@ -116,8 +125,11 @@ void main() {
         itemNames: [],
         targetMainSlot: false,
       );
-      expect(rp.runState.coop, isNotNull,
-          reason: 'Coop slot should be populated by first snapshot');
+      expect(
+        rp.runState.coop,
+        isNotNull,
+        reason: 'Coop slot should be populated by first snapshot',
+      );
 
       // Now send an empty character snapshot — should NOT overwrite
       // the existing slot. This prevents the reconnect blank-screen
@@ -130,8 +142,11 @@ void main() {
       );
 
       // The slot should still be populated from the first snapshot.
-      expect(rp.runState.coop, isNotNull,
-          reason: 'Empty character name should not overwrite existing slot');
+      expect(
+        rp.runState.coop,
+        isNotNull,
+        reason: 'Empty character name should not overwrite existing slot',
+      );
     });
 
     test('Multiple snapshots overwrite the same slot', () {
@@ -181,8 +196,11 @@ void main() {
       );
 
       // Main slot should still be the previous Player, not wiped
-      expect(rp.runState.main, isNotNull,
-          reason: 'Empty character should not wipe existing main slot');
+      expect(
+        rp.runState.main,
+        isNotNull,
+        reason: 'Empty character should not wipe existing main slot',
+      );
     });
 
     test('Empty character does not wipe existing coop slot', () {
@@ -203,8 +221,11 @@ void main() {
         targetMainSlot: false,
       );
 
-      expect(rp.runState.coop, isNotNull,
-          reason: 'Empty character should not wipe existing coop slot');
+      expect(
+        rp.runState.coop,
+        isNotNull,
+        reason: 'Empty character should not wipe existing coop slot',
+      );
     });
 
     test('Rapid alternating empty and valid snapshots', () {
@@ -251,8 +272,11 @@ void main() {
       // character: player?.character?.name ?? 'The Cultist'
       final player = rp.runState.coop;
       final charName = player?.character?.name ?? 'The Cultist';
-      expect(charName, 'The Cultist',
-          reason: 'Fallback character name should be used when slot is null');
+      expect(
+        charName,
+        'The Cultist',
+        reason: 'Fallback character name should be used when slot is null',
+      );
     });
   });
 
@@ -271,10 +295,16 @@ void main() {
         shrinesUsed: ['Glass Guon Stone'],
       );
 
-      expect(rp.runState.coolness, 10.0,
-          reason: 'Main authoritative coolness should overwrite');
-      expect(rp.runState.curse, -1.0,
-          reason: 'Main authoritative curse should overwrite');
+      expect(
+        rp.runState.coolness,
+        10.0,
+        reason: 'Main authoritative coolness should overwrite',
+      );
+      expect(
+        rp.runState.curse,
+        -1.0,
+        reason: 'Main authoritative curse should overwrite',
+      );
       expect(rp.runState.shrinesUsed, ['Glass Guon Stone']);
     });
 
@@ -304,12 +334,18 @@ void main() {
       rp.startNewRun(marine);
 
       rp.applySharedStateDelta(coolnessDelta: 200.0);
-      expect(rp.runState.coolness, 100.0,
-          reason: 'Coolness should clamp at 100');
+      expect(
+        rp.runState.coolness,
+        100.0,
+        reason: 'Coolness should clamp at 100',
+      );
 
       rp.applySharedStateDelta(coolnessDelta: -300.0);
-      expect(rp.runState.coolness, -100.0,
-          reason: 'Coolness should clamp at -100');
+      expect(
+        rp.runState.coolness,
+        -100.0,
+        reason: 'Coolness should clamp at -100',
+      );
     });
 
     test('applySharedStateDelta adds shrine to list', () {
@@ -397,39 +433,45 @@ void main() {
       expect(rp.runState.selectedCharacter, isNull);
     });
 
-    test('Joiner lifecycle: create → receive host snapshot → cancel restore', () {
-      // 1. Joiner creates local run before connecting
-      final preMpRun = rp.runState;
-      rp.startNewRun(cultist);
-      expect(rp.runState.selectedCharacter?.name, 'The Cultist');
+    test(
+      'Joiner lifecycle: create → receive host snapshot → cancel restore',
+      () {
+        // 1. Joiner creates local run before connecting
+        final preMpRun = rp.runState;
+        rp.startNewRun(cultist);
+        expect(rp.runState.selectedCharacter?.name, 'The Cultist');
 
-      // 2. Host snapshot overwrites main slot
-      rp.applyPeerSnapshot(
-        characterName: 'The Marine',
-        gunNames: [],
-        itemNames: [],
-        targetMainSlot: true,
-      );
-      expect(rp.runState.main, isNotNull);
+        // 2. Host snapshot overwrites main slot
+        rp.applyPeerSnapshot(
+          characterName: 'The Marine',
+          gunNames: [],
+          itemNames: [],
+          targetMainSlot: true,
+        );
+        expect(rp.runState.main, isNotNull);
 
-      // 3. Host sends authoritative shared state
-      rp.applySharedStateFromPeer(
-        coolness: 7.5,
-        curse: 1.0,
-        shrinesUsed: ['Glass Guon Stone'],
-      );
-      expect(rp.runState.coolness, 7.5);
+        // 3. Host sends authoritative shared state
+        rp.applySharedStateFromPeer(
+          coolness: 7.5,
+          curse: 1.0,
+          shrinesUsed: ['Glass Guon Stone'],
+        );
+        expect(rp.runState.coolness, 7.5);
 
-      // 4. Joiner cancels → restore pre-MP state
-      rp.restoreRunScopeState(
-        main: preMpRun.main,
-        coolness: preMpRun.coolness,
-        curse: preMpRun.curse,
-        shrinesUsed: preMpRun.shrinesUsed,
-      );
-      expect(rp.runState.coolness, 0.0,
-          reason: 'Pre-MP coolness should be restored');
-    });
+        // 4. Joiner cancels → restore pre-MP state
+        rp.restoreRunScopeState(
+          main: preMpRun.main,
+          coolness: preMpRun.coolness,
+          curse: preMpRun.curse,
+          shrinesUsed: preMpRun.shrinesUsed,
+        );
+        expect(
+          rp.runState.coolness,
+          0.0,
+          reason: 'Pre-MP coolness should be restored',
+        );
+      },
+    );
 
     test('Both players: snapshots route to correct slots', () {
       // Simulate two RunProviders (host and joiner)

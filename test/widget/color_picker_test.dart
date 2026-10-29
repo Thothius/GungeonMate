@@ -4,55 +4,58 @@ import 'package:gungeon_mate/widgets/color_picker_dialog.dart';
 
 /// Widget tests for the HSV color picker dialog.
 void main() {
-  testWidgets('Dialog renders title, SV panel, hue slider, hex input, and buttons',
-      (tester) async {
-    Color? result;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
-          builder: (context) => Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                result = await showColorPickerDialog(
-                  context,
-                  initialColor: Colors.red,
-                  title: 'Pick Primary',
-                );
-              },
-              child: const Text('Open'),
-            ),
+  testWidgets(
+    'Dialog renders title, SV panel, hue slider, hex input, and buttons',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder:
+                (context) => Center(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      await showColorPickerDialog(
+                        context,
+                        initialColor: Colors.red,
+                        title: 'Pick Primary',
+                      );
+                    },
+                    child: const Text('Open'),
+                  ),
+                ),
           ),
         ),
-      ),
-    );
+      );
 
-    await tester.tap(find.text('Open'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('Pick Primary'), findsOneWidget);
-    expect(find.text('HEX'), findsOneWidget);
-    expect(find.text('CANCEL'), findsOneWidget);
-    expect(find.text('DONE'), findsOneWidget);
-    // TextField for hex input
-    expect(find.byType(TextField), findsOneWidget);
-  });
+      expect(find.text('Pick Primary'), findsOneWidget);
+      expect(find.text('HEX'), findsOneWidget);
+      expect(find.text('CANCEL'), findsOneWidget);
+      expect(find.text('DONE'), findsOneWidget);
+      // TextField for hex input
+      expect(find.byType(TextField), findsOneWidget);
+    },
+  );
 
   testWidgets('DONE returns the current color', (tester) async {
     Color? result;
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
-          builder: (context) => Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                result = await showColorPickerDialog(
-                  context,
-                  initialColor: Colors.blue,
-                );
-              },
-              child: const Text('Open'),
-            ),
-          ),
+          builder:
+              (context) => Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    result = await showColorPickerDialog(
+                      context,
+                      initialColor: Colors.blue,
+                    );
+                  },
+                  child: const Text('Open'),
+                ),
+              ),
         ),
       ),
     );
@@ -65,7 +68,7 @@ void main() {
 
     expect(result, isNotNull);
     // The returned color should be blue (or very close — HSV round-trip)
-    expect(result!.blue, greaterThan(200));
+    expect(result!.b, greaterThan(200 / 255));
   });
 
   testWidgets('CANCEL returns null', (tester) async {
@@ -73,17 +76,18 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
-          builder: (context) => Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                result = await showColorPickerDialog(
-                  context,
-                  initialColor: Colors.red,
-                );
-              },
-              child: const Text('Open'),
-            ),
-          ),
+          builder:
+              (context) => Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    result = await showColorPickerDialog(
+                      context,
+                      initialColor: Colors.red,
+                    );
+                  },
+                  child: const Text('Open'),
+                ),
+              ),
         ),
       ),
     );
@@ -101,15 +105,17 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
-          builder: (context) => Center(
-            child: ElevatedButton(
-              onPressed: () => showColorPickerDialog(
-                context,
-                initialColor: const Color(0xFFFF0000),
+          builder:
+              (context) => Center(
+                child: ElevatedButton(
+                  onPressed:
+                      () => showColorPickerDialog(
+                        context,
+                        initialColor: const Color(0xFFFF0000),
+                      ),
+                  child: const Text('Open'),
+                ),
               ),
-              child: const Text('Open'),
-            ),
-          ),
         ),
       ),
     );
@@ -128,15 +134,17 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Builder(
-          builder: (context) => Center(
-            child: ElevatedButton(
-              onPressed: () => showColorPickerDialog(
-                context,
-                initialColor: Colors.white,
+          builder:
+              (context) => Center(
+                child: ElevatedButton(
+                  onPressed:
+                      () => showColorPickerDialog(
+                        context,
+                        initialColor: Colors.white,
+                      ),
+                  child: const Text('Open'),
+                ),
               ),
-              child: const Text('Open'),
-            ),
-          ),
         ),
       ),
     );
@@ -150,7 +158,8 @@ void main() {
     await tester.pump();
 
     // Hex should have changed from #FFFFFF
-    final controller = tester.widget<TextField>(find.byType(TextField)).controller;
+    final controller =
+        tester.widget<TextField>(find.byType(TextField)).controller;
     expect(controller!.text, isNot('#FFFFFF'));
   });
 }

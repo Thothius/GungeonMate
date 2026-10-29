@@ -7,14 +7,13 @@ import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 
-
-
 class GunderfuryDashboardSliver extends StatefulWidget {
   final PlayerSlot slot;
   const GunderfuryDashboardSliver({super.key, required this.slot});
 
   @override
-  State<GunderfuryDashboardSliver> createState() => GunderfuryDashboardSliverState();
+  State<GunderfuryDashboardSliver> createState() =>
+      GunderfuryDashboardSliverState();
 }
 
 class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
@@ -23,7 +22,9 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
   @override
   Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
-    final lvl = context.select<RunProvider, int>((p) => p.gunderfuryLevel).clamp(1, 60);
+    final lvl = context
+        .select<RunProvider, int>((p) => p.gunderfuryLevel)
+        .clamp(1, 60);
 
     String formName = '';
     String description = '';
@@ -34,27 +35,35 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
     if (lvl < 20) {
       formName = 'Base Form';
       description = 'Fires wide shotgun-like energy blasts.';
-      statsDesc = 'Damage: 3.5x6 (21) • Fire Rate: 0.7s • Mag: 8 • Ammo: 200 • DPS: 25.5';
+      statsDesc =
+          'Damage: 3.5x6 (21) • Fire Rate: 0.7s • Mag: 8 • Ammo: 200 • DPS: 25.5';
     } else if (lvl < 30) {
       formName = 'Automatic Form';
       description = 'Increases fire rate and becomes fully automatic.';
-      statsDesc = 'Damage: 3.5 • Fire Rate: 0.085s • Mag: 30 • Ammo: 300 • DPS: 29.6';
+      statsDesc =
+          'Damage: 3.5 • Fire Rate: 0.085s • Mag: 30 • Ammo: 300 • DPS: 29.6';
     } else if (lvl < 40) {
       formName = 'Defender Form';
       description = 'Shoots larger, high-velocity energy spheres.';
-      statsDesc = 'Damage: 21 • Fire Rate: 0.6s • Mag: 30 • Ammo: 350 • DPS: 33.2';
+      statsDesc =
+          'Damage: 21 • Fire Rate: 0.6s • Mag: 30 • Ammo: 350 • DPS: 33.2';
     } else if (lvl < 50) {
       formName = 'Vindicator Form';
-      description = 'Fires faster with elevated accuracy and tighter groupings.';
-      statsDesc = 'Damage: 15 • Fire Rate: 0.4s • Mag: 40 • Ammo: 400 • DPS: 34.1';
+      description =
+          'Fires faster with elevated accuracy and tighter groupings.';
+      statsDesc =
+          'Damage: 15 • Fire Rate: 0.4s • Mag: 40 • Ammo: 400 • DPS: 34.1';
     } else if (lvl < 60) {
       formName = 'Laser Rifle';
       description = 'Fires sustained continuous rapid energy laser pulses.';
-      statsDesc = 'Damage: 15 • Fire Rate: 0.12s • Mag: 50 • Ammo: 500 • DPS: 107.1';
+      statsDesc =
+          'Damage: 15 • Fire Rate: 0.12s • Mag: 50 • Ammo: 500 • DPS: 107.1';
     } else {
       formName = 'Awakened Gunderfury';
-      description = 'Legendary form of the Blessed Gunseeker. Rapidly shoots twin light beams with absolute 0° spread, bouncing, and piercing!';
-      statsDesc = 'Damage: 20x2 (40) • Fire Rate: 0.085s • Mag: 40 • Ammo: 600 • DPS: 181.8';
+      description =
+          'Legendary form of the Blessed Gunseeker. Rapidly shoots twin light beams with absolute 0° spread, bouncing, and piercing!';
+      statsDesc =
+          'Damage: 20x2 (40) • Fire Rate: 0.085s • Mag: 40 • Ammo: 600 • DPS: 181.8';
     }
 
     return SliverToBoxAdapter(
@@ -64,7 +73,10 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
           decoration: BoxDecoration(
             color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
             borderRadius: BorderRadius.all(Radii.md),
-            border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
+            border: Border.all(
+              color: Colors.purpleAccent.withValues(alpha: 0.35),
+              width: 1.2,
+            ),
             boxShadow: [
               BoxShadow(
                 color: Colors.purpleAccent.withValues(alpha: 0.04),
@@ -76,7 +88,10 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
+                onTap: () {
+                  setState(() => _collapsed = !_collapsed);
+                  Haptics.selection();
+                },
                 borderRadius: BorderRadius.all(Radii.md),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -85,7 +100,11 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.bolt, color: Colors.purpleAccent.shade100, size: 20),
+                          Icon(
+                            Icons.bolt,
+                            color: Colors.purpleAccent.shade100,
+                            size: 20,
+                          ),
                           const SizedBox(width: 8),
                           GoopText(
                             'GUNDERFURY HUD - LVL $lvl',
@@ -101,7 +120,10 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.purple.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
@@ -116,7 +138,11 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
+                          Icon(
+                            _collapsed ? Icons.expand_more : Icons.expand_less,
+                            size: 16,
+                            color: Colors.white54,
+                          ),
                         ],
                       ),
                     ],
@@ -126,104 +152,193 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _collapsed
-                  ? const SizedBox.shrink()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                const Divider(color: Colors.white12, height: 1),
-                Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.black26,
-                          borderRadius: BorderRadius.all(Radii.sm),
-                          border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.15)),
-                        ),
-                        padding: const EdgeInsets.all(6),
-                        child: Image.asset(
-                          'assets/images/guns/gunderfury.webp',
-                          fit: BoxFit.contain,
-                          cacheWidth: 144,
-                          cacheHeight: 144,
-                          errorBuilder: (_, __, ___) => const Icon(
-                            Icons.broken_image_outlined,
-                            color: Colors.white24,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
+                child:
+                    _collapsed
+                        ? const SizedBox.shrink()
+                        : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GoopText(
-                              description,
-                              style: const TextStyle(fontSize: 10.5, color: Colors.white70, height: 1.3),
-                            ),
-                            const SizedBox(height: 6),
-                            GoopText(
-                              statsDesc,
-                              style: TextStyle(
-                                fontSize: FontSizes.labelSmall,
-                                color: Colors.purpleAccent.shade100.withValues(alpha: 0.8),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
+                            const Divider(color: Colors.white12, height: 1),
+                            Padding(
+                              padding: const EdgeInsets.all(14),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 72,
+                                    height: 72,
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.02),
+                                      color: Colors.black26,
                                       borderRadius: BorderRadius.all(Radii.sm),
-                                      border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const GoopText(
-                                          'GUNDER LEVEL',
-                                          style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.white60),
+                                      border: Border.all(
+                                        color: Colors.purpleAccent.withValues(
+                                          alpha: 0.15,
                                         ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(6),
+                                    child: Image.asset(
+                                      'assets/images/guns/gunderfury.webp',
+                                      fit: BoxFit.contain,
+                                      cacheWidth: 144,
+                                      cacheHeight: 144,
+                                      errorBuilder:
+                                          (_, __, ___) => const Icon(
+                                            Icons.broken_image_outlined,
+                                            color: Colors.white24,
+                                            size: 24,
+                                          ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GoopText(
+                                          description,
+                                          style: const TextStyle(
+                                            fontSize: 10.5,
+                                            color: Colors.white70,
+                                            height: 1.3,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        GoopText(
+                                          statsDesc,
+                                          style: TextStyle(
+                                            fontSize: FontSizes.labelSmall,
+                                            color: Colors.purpleAccent.shade100
+                                                .withValues(alpha: 0.8),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
                                         Row(
                                           children: [
-                                            GestureDetector(
-                                              onTap: lvl > 1 ? () { Haptics.light(); p.setGunderfuryLevel(lvl - 1); } : null,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: Icon(
-                                                  Icons.remove_circle_rounded,
-                                                  color: lvl > 1 ? Colors.purpleAccent : Colors.white24,
-                                                  size: 24,
+                                            Expanded(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: Insets.sm,
+                                                      vertical: Insets.xs,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.02),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                        Radii.sm,
+                                                      ),
+                                                  border: Border.all(
+                                                    color: Colors.white
+                                                        .withValues(
+                                                          alpha: 0.04,
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: Text(
-                                                '$lvl',
-                                                style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: lvl < 60 ? () { Haptics.light(); p.setGunderfuryLevel(lvl + 1); } : null,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: const Icon(
-                                                  Icons.add_circle_rounded,
-                                                  color: Colors.purpleAccent,
-                                                  size: 24,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const GoopText(
+                                                      'GUNDER LEVEL',
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            FontSizes
+                                                                .labelSmall,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors.white60,
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap:
+                                                              lvl > 1
+                                                                  ? () {
+                                                                    Haptics.light();
+                                                                    p.setGunderfuryLevel(
+                                                                      lvl - 1,
+                                                                    );
+                                                                  }
+                                                                  : null,
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 6,
+                                                                ),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .remove_circle_rounded,
+                                                              color:
+                                                                  lvl > 1
+                                                                      ? Colors
+                                                                          .purpleAccent
+                                                                      : Colors
+                                                                          .white24,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 10,
+                                                              ),
+                                                          child: Text(
+                                                            '$lvl',
+                                                            style: const TextStyle(
+                                                              fontSize:
+                                                                  FontSizes
+                                                                      .bodyMedium,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap:
+                                                              lvl < 60
+                                                                  ? () {
+                                                                    Haptics.light();
+                                                                    p.setGunderfuryLevel(
+                                                                      lvl + 1,
+                                                                    );
+                                                                  }
+                                                                  : null,
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 6,
+                                                                ),
+                                                            child: const Icon(
+                                                              Icons
+                                                                  .add_circle_rounded,
+                                                              color:
+                                                                  Colors
+                                                                      .purpleAccent,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -232,17 +347,11 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                      ],
-                    ),
               ),
             ],
           ),
@@ -257,7 +366,8 @@ class TripleGunDashboardSliver extends StatefulWidget {
   const TripleGunDashboardSliver({super.key, required this.slot});
 
   @override
-  State<TripleGunDashboardSliver> createState() => TripleGunDashboardSliverState();
+  State<TripleGunDashboardSliver> createState() =>
+      TripleGunDashboardSliverState();
 }
 
 class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
@@ -278,7 +388,8 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
       formDesc = 'Fires a 3-bullet spread shot at closer range. High stagger.';
     } else {
       formName = 'Form 3: Laser Machine Gun (<11% Ammo)';
-      formDesc = 'Fires continuous energy beam blasts. Incredibly high damage and rapid rate of fire.';
+      formDesc =
+          'Fires continuous energy beam blasts. Incredibly high damage and rapid rate of fire.';
     }
 
     return SliverToBoxAdapter(
@@ -288,7 +399,10 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
           decoration: BoxDecoration(
             color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
             borderRadius: BorderRadius.all(Radii.md),
-            border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.35), width: 1.2),
+            border: Border.all(
+              color: Colors.blueAccent.withValues(alpha: 0.35),
+              width: 1.2,
+            ),
             boxShadow: [
               BoxShadow(
                 color: Colors.blueAccent.withValues(alpha: 0.04),
@@ -300,7 +414,10 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
+                onTap: () {
+                  setState(() => _collapsed = !_collapsed);
+                  Haptics.selection();
+                },
                 borderRadius: BorderRadius.all(Radii.md),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -309,7 +426,11 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.alt_route, color: Colors.blueAccent.shade100, size: 20),
+                          Icon(
+                            Icons.alt_route,
+                            color: Colors.blueAccent.shade100,
+                            size: 20,
+                          ),
                           const SizedBox(width: 8),
                           GoopText(
                             'TRIPLE GUN HUD',
@@ -325,7 +446,10 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.blue.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
@@ -340,7 +464,11 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
+                          Icon(
+                            _collapsed ? Icons.expand_more : Icons.expand_less,
+                            size: 16,
+                            color: Colors.white54,
+                          ),
                         ],
                       ),
                     ],
@@ -350,100 +478,192 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _collapsed
-                  ? const SizedBox.shrink()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                const Divider(color: Colors.white12, height: 1),
-                Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.black26,
-                          borderRadius: BorderRadius.all(Radii.sm),
-                          border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.15)),
-                        ),
-                        padding: const EdgeInsets.all(6),
-                        child: Image.asset(
-                          'assets/images/guns/triple_gun.webp',
-                          fit: BoxFit.contain,
-                          cacheWidth: 144,
-                          cacheHeight: 144,
-                          errorBuilder: (_, __, ___) => const Icon(
-                            Icons.broken_image_outlined,
-                            color: Colors.white24,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
+                child:
+                    _collapsed
+                        ? const SizedBox.shrink()
+                        : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GoopText(
-                              formName,
-                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
-                            ),
-                            const SizedBox(height: 4),
-                            GoopText(
-                              formDesc,
-                              style: const TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white70, height: 1.3),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
+                            const Divider(color: Colors.white12, height: 1),
+                            Padding(
+                              padding: const EdgeInsets.all(14),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 72,
+                                    height: 72,
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.02),
+                                      color: Colors.black26,
                                       borderRadius: BorderRadius.all(Radii.sm),
-                                      border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const GoopText(
-                                          'ACTIVE FORM',
-                                          style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.white60),
+                                      border: Border.all(
+                                        color: Colors.blueAccent.withValues(
+                                          alpha: 0.15,
                                         ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(6),
+                                    child: Image.asset(
+                                      'assets/images/guns/triple_gun.webp',
+                                      fit: BoxFit.contain,
+                                      cacheWidth: 144,
+                                      cacheHeight: 144,
+                                      errorBuilder:
+                                          (_, __, ___) => const Icon(
+                                            Icons.broken_image_outlined,
+                                            color: Colors.white24,
+                                            size: 24,
+                                          ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GoopText(
+                                          formName,
+                                          style: const TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        GoopText(
+                                          formDesc,
+                                          style: const TextStyle(
+                                            fontSize: FontSizes.labelSmall,
+                                            color: Colors.white70,
+                                            height: 1.3,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
                                         Row(
                                           children: [
-                                            GestureDetector(
-                                              onTap: form > 1 ? () { Haptics.light(); p.setTripleGunForm(form - 1); } : null,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: Icon(
-                                                  Icons.remove_circle_rounded,
-                                                  color: form > 1 ? Colors.blueAccent : Colors.white24,
-                                                  size: 24,
+                                            Expanded(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: Insets.sm,
+                                                      vertical: Insets.xs,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.02),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                        Radii.sm,
+                                                      ),
+                                                  border: Border.all(
+                                                    color: Colors.white
+                                                        .withValues(
+                                                          alpha: 0.04,
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: Text(
-                                                '$form',
-                                                style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: form < 3 ? () { Haptics.light(); p.setTripleGunForm(form + 1); } : null,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: const Icon(
-                                                  Icons.add_circle_rounded,
-                                                  color: Colors.blueAccent,
-                                                  size: 24,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const GoopText(
+                                                      'ACTIVE FORM',
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            FontSizes
+                                                                .labelSmall,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors.white60,
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap:
+                                                              form > 1
+                                                                  ? () {
+                                                                    Haptics.light();
+                                                                    p.setTripleGunForm(
+                                                                      form - 1,
+                                                                    );
+                                                                  }
+                                                                  : null,
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 6,
+                                                                ),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .remove_circle_rounded,
+                                                              color:
+                                                                  form > 1
+                                                                      ? Colors
+                                                                          .blueAccent
+                                                                      : Colors
+                                                                          .white24,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 10,
+                                                              ),
+                                                          child: Text(
+                                                            '$form',
+                                                            style: const TextStyle(
+                                                              fontSize:
+                                                                  FontSizes
+                                                                      .bodyMedium,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap:
+                                                              form < 3
+                                                                  ? () {
+                                                                    Haptics.light();
+                                                                    p.setTripleGunForm(
+                                                                      form + 1,
+                                                                    );
+                                                                  }
+                                                                  : null,
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 6,
+                                                                ),
+                                                            child: const Icon(
+                                                              Icons
+                                                                  .add_circle_rounded,
+                                                              color:
+                                                                  Colors
+                                                                      .blueAccent,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -452,17 +672,11 @@ class TripleGunDashboardSliverState extends State<TripleGunDashboardSliver> {
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                      ],
-                    ),
               ),
             ],
           ),
@@ -489,12 +703,48 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
     final activeStage = context.select<RunProvider, int>((p) => p.evolverForm);
 
     final stages = const [
-      EvolverStageSpec(id: 1, name: 'Amoeba', dps: '13.5 DPS', bullet: 'Base round shots', color: Colors.tealAccent),
-      EvolverStageSpec(id: 2, name: 'Sponge', dps: '19.1 DPS', bullet: 'Soaks up shots', color: Colors.greenAccent),
-      EvolverStageSpec(id: 3, name: 'Flatworm', dps: '25.8 DPS', bullet: 'Wide flattened shots', color: Colors.limeAccent),
-      EvolverStageSpec(id: 4, name: 'Snail', dps: '34.5 DPS', bullet: '3-spiked shell spread', color: Colors.amberAccent),
-      EvolverStageSpec(id: 5, name: 'Frog', dps: '23.0 DPS/sec', bullet: 'Tracking tongue', color: Colors.orangeAccent),
-      EvolverStageSpec(id: 6, name: 'Dragon', dps: '93.8 DPS', bullet: 'Accelerating homing blue flames', color: Colors.redAccent),
+      EvolverStageSpec(
+        id: 1,
+        name: 'Amoeba',
+        dps: '13.5 DPS',
+        bullet: 'Base round shots',
+        color: Colors.tealAccent,
+      ),
+      EvolverStageSpec(
+        id: 2,
+        name: 'Sponge',
+        dps: '19.1 DPS',
+        bullet: 'Soaks up shots',
+        color: Colors.greenAccent,
+      ),
+      EvolverStageSpec(
+        id: 3,
+        name: 'Flatworm',
+        dps: '25.8 DPS',
+        bullet: 'Wide flattened shots',
+        color: Colors.limeAccent,
+      ),
+      EvolverStageSpec(
+        id: 4,
+        name: 'Snail',
+        dps: '34.5 DPS',
+        bullet: '3-spiked shell spread',
+        color: Colors.amberAccent,
+      ),
+      EvolverStageSpec(
+        id: 5,
+        name: 'Frog',
+        dps: '23.0 DPS/sec',
+        bullet: 'Tracking tongue',
+        color: Colors.orangeAccent,
+      ),
+      EvolverStageSpec(
+        id: 6,
+        name: 'Dragon',
+        dps: '93.8 DPS',
+        bullet: 'Accelerating homing blue flames',
+        color: Colors.redAccent,
+      ),
     ];
 
     final currentSpec = stages[activeStage - 1];
@@ -506,7 +756,10 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
           decoration: BoxDecoration(
             color: AppTheme.flair.scaffold.withValues(alpha: 0.6),
             borderRadius: BorderRadius.all(Radii.md),
-            border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.35), width: 1.2),
+            border: Border.all(
+              color: Colors.greenAccent.withValues(alpha: 0.35),
+              width: 1.2,
+            ),
             boxShadow: [
               BoxShadow(
                 color: Colors.greenAccent.withValues(alpha: 0.04),
@@ -518,7 +771,10 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
           child: Column(
             children: [
               InkWell(
-                onTap: () { setState(() => _collapsed = !_collapsed); Haptics.selection(); },
+                onTap: () {
+                  setState(() => _collapsed = !_collapsed);
+                  Haptics.selection();
+                },
                 borderRadius: BorderRadius.all(Radii.md),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
@@ -527,7 +783,11 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.bubble_chart, color: Colors.greenAccent.shade100, size: 20),
+                          Icon(
+                            Icons.bubble_chart,
+                            color: Colors.greenAccent.shade100,
+                            size: 20,
+                          ),
                           const SizedBox(width: 8),
                           GoopText(
                             'EVOLVER HUD',
@@ -543,7 +803,10 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.green.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(6),
@@ -558,7 +821,11 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Icon(_collapsed ? Icons.expand_more : Icons.expand_less, size: 16, color: Colors.white54),
+                          Icon(
+                            _collapsed ? Icons.expand_more : Icons.expand_less,
+                            size: 16,
+                            color: Colors.white54,
+                          ),
                         ],
                       ),
                     ],
@@ -568,100 +835,195 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _collapsed
-                  ? const SizedBox.shrink()
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                const Divider(color: Colors.white12, height: 1),
-                Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.black26,
-                          borderRadius: BorderRadius.all(Radii.sm),
-                          border: Border.all(color: currentSpec.color.withValues(alpha: 0.25)),
-                        ),
-                        padding: const EdgeInsets.all(6),
-                        child: Image.asset(
-                          'assets/images/guns/evolver.webp',
-                          fit: BoxFit.contain,
-                          cacheWidth: 144,
-                          cacheHeight: 144,
-                          errorBuilder: (_, __, ___) => const Icon(
-                            Icons.broken_image_outlined,
-                            color: Colors.white24,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
+                child:
+                    _collapsed
+                        ? const SizedBox.shrink()
+                        : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GoopText(
-                              'Stage $activeStage: ${currentSpec.name} • ${currentSpec.dps}',
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: currentSpec.color),
-                            ),
-                            const SizedBox(height: 4),
-                            GoopText(
-                              'Form Bullet: ${currentSpec.bullet}',
-                              style: const TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white70, height: 1.3),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
+                            const Divider(color: Colors.white12, height: 1),
+                            Padding(
+                              padding: const EdgeInsets.all(14),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 72,
+                                    height: 72,
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.02),
+                                      color: Colors.black26,
                                       borderRadius: BorderRadius.all(Radii.sm),
-                                      border: Border.all(color: Colors.white.withValues(alpha: 0.04)),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const GoopText(
-                                          'EVOLUTION STAGE',
-                                          style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.white60),
+                                      border: Border.all(
+                                        color: currentSpec.color.withValues(
+                                          alpha: 0.25,
                                         ),
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(6),
+                                    child: Image.asset(
+                                      'assets/images/guns/evolver.webp',
+                                      fit: BoxFit.contain,
+                                      cacheWidth: 144,
+                                      cacheHeight: 144,
+                                      errorBuilder:
+                                          (_, __, ___) => const Icon(
+                                            Icons.broken_image_outlined,
+                                            color: Colors.white24,
+                                            size: 24,
+                                          ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        GoopText(
+                                          'Stage $activeStage: ${currentSpec.name} • ${currentSpec.dps}',
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.bold,
+                                            color: currentSpec.color,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        GoopText(
+                                          'Form Bullet: ${currentSpec.bullet}',
+                                          style: const TextStyle(
+                                            fontSize: FontSizes.labelSmall,
+                                            color: Colors.white70,
+                                            height: 1.3,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
                                         Row(
                                           children: [
-                                            GestureDetector(
-                                              onTap: activeStage > 1 ? () { Haptics.light(); p.setEvolverForm(activeStage - 1); } : null,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: Icon(
-                                                  Icons.remove_circle_rounded,
-                                                  color: activeStage > 1 ? Colors.greenAccent : Colors.white24,
-                                                  size: 24,
+                                            Expanded(
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: Insets.sm,
+                                                      vertical: Insets.xs,
+                                                    ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.02),
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                        Radii.sm,
+                                                      ),
+                                                  border: Border.all(
+                                                    color: Colors.white
+                                                        .withValues(
+                                                          alpha: 0.04,
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                                              child: Text(
-                                                '$activeStage',
-                                                style: const TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.bold, color: Colors.white),
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: activeStage < 6 ? () { Haptics.light(); p.setEvolverForm(activeStage + 1); } : null,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                                child: const Icon(
-                                                  Icons.add_circle_rounded,
-                                                  color: Colors.greenAccent,
-                                                  size: 24,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const GoopText(
+                                                      'EVOLUTION STAGE',
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            FontSizes
+                                                                .labelSmall,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors.white60,
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap:
+                                                              activeStage > 1
+                                                                  ? () {
+                                                                    Haptics.light();
+                                                                    p.setEvolverForm(
+                                                                      activeStage -
+                                                                          1,
+                                                                    );
+                                                                  }
+                                                                  : null,
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 6,
+                                                                ),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .remove_circle_rounded,
+                                                              color:
+                                                                  activeStage >
+                                                                          1
+                                                                      ? Colors
+                                                                          .greenAccent
+                                                                      : Colors
+                                                                          .white24,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets.symmetric(
+                                                                horizontal: 10,
+                                                              ),
+                                                          child: Text(
+                                                            '$activeStage',
+                                                            style: const TextStyle(
+                                                              fontSize:
+                                                                  FontSizes
+                                                                      .bodyMedium,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap:
+                                                              activeStage < 6
+                                                                  ? () {
+                                                                    Haptics.light();
+                                                                    p.setEvolverForm(
+                                                                      activeStage +
+                                                                          1,
+                                                                    );
+                                                                  }
+                                                                  : null,
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 6,
+                                                                ),
+                                                            child: const Icon(
+                                                              Icons
+                                                                  .add_circle_rounded,
+                                                              color:
+                                                                  Colors
+                                                                      .greenAccent,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -670,17 +1032,11 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                       ],
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                      ],
-                    ),
               ),
             ],
           ),
@@ -704,7 +1060,6 @@ class EvolverStageSpec {
     required this.color,
   });
 }
-
 
 /// Damage Calculator bottom sheet — opened via the calc icon in the
 /// GungeoneerHeader trailing row. Sums quantifiable "Damage Up"/"Damage

@@ -18,7 +18,8 @@ class QuizProgress {
   }
 
   int bestStreak(String tier) => _prefs?.getInt('$_kBest$tier') ?? 0;
-  bool isCompleted(String tier) => _prefs?.getBool('$_kCompleted$tier') ?? false;
+  bool isCompleted(String tier) =>
+      _prefs?.getBool('$_kCompleted$tier') ?? false;
   int runsPlayed(String tier) => _prefs?.getInt('$_kRuns$tier') ?? 0;
 
   /// Live-saves the streak high-water mark during a run so quitting or

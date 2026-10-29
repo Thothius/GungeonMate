@@ -29,29 +29,32 @@ class _ScaleButtonState extends State<ScaleButton> {
     final enabled = widget.onTap != null || widget.onLongPress != null;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTapDown: enabled
-          ? (_) {
-              setState(() => _isPressed = true);
-              if (widget.enableHaptics) {
-                Haptics.light();
+      onTapDown:
+          enabled
+              ? (_) {
+                setState(() => _isPressed = true);
+                if (widget.enableHaptics) {
+                  Haptics.light();
+                }
               }
-            }
-          : null,
-      onTap: enabled && widget.onTap != null
-          ? () {
-              setState(() => _isPressed = false);
-              widget.onTap!();
-            }
-          : null,
+              : null,
+      onTap:
+          enabled && widget.onTap != null
+              ? () {
+                setState(() => _isPressed = false);
+                widget.onTap!();
+              }
+              : null,
       onTapCancel: enabled ? () => setState(() => _isPressed = false) : null,
-      onLongPress: enabled && widget.onLongPress != null
-          ? () {
-              if (widget.enableHaptics) {
-                Haptics.medium();
+      onLongPress:
+          enabled && widget.onLongPress != null
+              ? () {
+                if (widget.enableHaptics) {
+                  Haptics.medium();
+                }
+                widget.onLongPress!();
               }
-              widget.onLongPress!();
-            }
-          : null,
+              : null,
       child: AnimatedScale(
         scale: _isPressed ? 0.96 : 1.0,
         duration: const Duration(milliseconds: 100),

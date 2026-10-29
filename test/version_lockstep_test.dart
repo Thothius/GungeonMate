@@ -9,14 +9,17 @@ import 'package:gungeon_mate/utils/asset_paths.dart' show kAppVersion;
 void main() {
   String pubspecVersion() {
     final text = File('pubspec.yaml').readAsStringSync();
-    final m = RegExp(r'^version:\s*(\d+\.\d+\.\d+)', multiLine: true)
-        .firstMatch(text);
+    final m = RegExp(
+      r'^version:\s*(\d+\.\d+\.\d+)',
+      multiLine: true,
+    ).firstMatch(text);
     return m?.group(1) ?? '';
   }
 
   String changelogTopVersion() {
-    final json =
-        jsonDecode(File('assets/data/changelog.json').readAsStringSync());
+    final json = jsonDecode(
+      File('assets/data/changelog.json').readAsStringSync(),
+    );
     // changelog.json is a bare list of entries.
     final entries = json is List ? json : json['entries'] as List;
     final v = entries.first['version'] as String;

@@ -133,277 +133,307 @@ class PlayerPageState extends State<PlayerPage> {
     if (player == null || player.character == null) {
       return const Center(child: GoopText('No player'));
     }
-    final activeSynergies =
-        isMain ? p.getActiveSynergies().length : 0;
-    final partialSynergies =
-        isMain ? p.getPartialSynergies().length : 0;
+    final activeSynergies = isMain ? p.getActiveSynergies().length : 0;
+    final partialSynergies = isMain ? p.getPartialSynergies().length : 0;
     final hasCoop = state.hasCoop;
     // Robot +DMG boost for the cyber badge next to the avatar.
     final isRobot = player.character!.name.toLowerCase().contains('robot');
-    final robotDmgBoost = isRobot
-        ? (p.robotJunk + (p.robotLies ? 1 : 0)) * 5.0 +
-            (p.robotGoldJunk ? 500.0 : 0.0)
-        : 0.0;
+    final robotDmgBoost =
+        isRobot
+            ? (p.robotJunk + (p.robotLies ? 1 : 0)) * 5.0 +
+                (p.robotGoldJunk ? 500.0 : 0.0)
+            : 0.0;
 
     return ValueListenableBuilder<VisualPrefs>(
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
         // Apply the active sort modes. Pickup-order is a no-op pass-through.
         final guns = sortGuns(player.guns, _gunSort);
-    final items = sortItems(player.items, _itemSort);
+        final items = sortItems(player.items, _itemSort);
 
-    // Identify the highest-DPS gun in this player's loadout so both
-    // grid and list views can surface it subtly (gold crown tint).
-    double effectiveDps(Gun g) {
-      if (g.name.toLowerCase() == 'gunderfury') {
-        return g.getDynamicDps(gunderLevel: p.gunderfuryLevel);
-      }
-      return g.dpsValue;
-    }
-    final topDpsName = player.guns.isEmpty
-        ? ''
-        : player.guns
-            .reduce((a, b) => effectiveDps(a) > effectiveDps(b) ? a : b)
-            .name;
-    final topDps = player.guns.isEmpty
-        ? 0.0
-        : player.guns.map(effectiveDps).reduce((a, b) => a > b ? a : b);
+        // Identify the highest-DPS gun in this player's loadout so both
+        // grid and list views can surface it subtly (gold crown tint).
+        double effectiveDps(Gun g) {
+          if (g.name.toLowerCase() == 'gunderfury') {
+            return g.getDynamicDps(gunderLevel: p.gunderfuryLevel);
+          }
+          return g.dpsValue;
+        }
 
-    // Synergy glow: map of lowercased name → Color for every item/gun
-    // that is part of a currently-active synergy (combined inventories).
-    final glowColors = p.activeSynergyGlowColors;
+        final topDpsName =
+            player.guns.isEmpty
+                ? ''
+                : player.guns
+                    .reduce((a, b) => effectiveDps(a) > effectiveDps(b) ? a : b)
+                    .name;
+        final topDps =
+            player.guns.isEmpty
+                ? 0.0
+                : player.guns.map(effectiveDps).reduce((a, b) => a > b ? a : b);
 
-    final scrollWidget = CustomScrollView(
-      slivers: [
-        SliverToBoxAdapter(
-          child: SafeArea(
-            bottom: false,
-            top: !hasCoop,
-            // MP sessions (paradox + classic) swap the heavy gungeoneer
-            // header for the compact player panel (avatar + stats +
-            // run menu) — same info density, less chrome.
-            child: context.read<MpSession>().isActive
-                ? Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ParadoxPlayerPanel(
-                        slot: _slot,
-                        onTapMsg: () => showParadoxChatSheet(context),
+        // Synergy glow: map of lowercased name → Color for every item/gun
+        // that is part of a currently-active synergy (combined inventories).
+        final glowColors = p.activeSynergyGlowColors;
+
+        final scrollWidget = CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: SafeArea(
+                bottom: false,
+                top: !hasCoop,
+                // MP sessions (paradox + classic) swap the heavy gungeoneer
+                // header for the compact player panel (avatar + stats +
+                // run menu) — same info density, less chrome.
+                child:
+                    context.read<MpSession>().isActive
+                        ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ParadoxPlayerPanel(
+                              slot: _slot,
+                              onTapMsg: () => showParadoxChatSheet(context),
+                            ),
+                            // Paradox kept its own compact panel, which meant
+                            // the shared effects block (inside GungeoneerHeader
+                            // for classic) never mounted — the DISPLAY→Effects
+                            // menu toggle was a no-op. Same gate, same block.
+                            if (VisualPrefs.notifier.value.showEffectsPanel)
+                              const RunEffectsBlock(),
+                          ],
+                        )
+                        : GungeoneerHeader(
+                          character: player.character!,
+                          topDps: topDps,
+                          onTapDPS: () => _showDamageCalcSheet(context, _slot),
+                          gunCount: player.guns.length,
+                          itemCount: player.items.length,
+                          activeSynergies: activeSynergies,
+                          partialSynergies: partialSynergies,
+                          showSynergies: isMain,
+                          coolness: state.totalCoolness,
+                          curse: state.totalCurse,
+                          robotDamageBoost: robotDmgBoost,
+                          onTapCoolness: () => _showCoolnessSheet(context),
+                          onTapCurse: () => _showCurseSheet(context),
+                          onLongPressCoolness:
+                              () => _showStatAdjuster(context, isCool: true),
+                          onLongPressCurse:
+                              () => _showStatAdjuster(context, isCool: false),
+                          onTapSynergies:
+                              () => Navigator.push(
+                                context,
+                                fastRoute(const AllSynergiesScreen()),
+                              ),
+                          trailing: const HeaderMenu(),
+                          effectChips: EffectTagger.summaryChips(
+                            guns: player.guns,
+                            items: player.items,
+                          ),
+                          shrinesUsed: state.shrinesUsed,
+                        ),
+              ),
+            ),
+            ListenableBuilder(
+              listenable: VisualPrefs.notifier,
+              builder: (context, _) {
+                if (!VisualPrefs.notifier.value.showDashboards) {
+                  return const SliverToBoxAdapter(child: SizedBox.shrink());
+                }
+                return DashboardSwiper(slot: _slot);
+              },
+            ),
+            SectionHeaderSliver(
+              title: 'Guns',
+              count: guns.length,
+              icon: Icons.gps_fixed,
+              showLayoutSelector: false,
+              currentInvView: _invView,
+              currentDisplayMode:
+                  VisualPrefs.notifier.value.inventoryDisplayMode,
+              onLayoutChanged: _changeLayout,
+            ),
+            if (guns.isEmpty)
+              SliverToBoxAdapter(
+                child: StarterHint(
+                  character: player.character!,
+                  kind: StarterKind.guns,
+                  slot: _slot,
+                  tileGrid: _tileGrid(context),
+                ),
+              )
+            else if (_invView == InvView.grid)
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: Insets.md),
+                sliver: SliverGrid.builder(
+                  gridDelegate: _tileGrid(context),
+                  itemCount: guns.length,
+                  itemBuilder: (c, i) {
+                    final g = guns[i];
+                    return RepaintBoundary(
+                      child: PeriodicTile(
+                        gun: g,
+                        isTopDps: g.name == topDpsName,
+                        synergyGlowColor: glowColors[g.name.toLowerCase()],
+                        onTap:
+                            () => Navigator.push(
+                              c,
+                              fastRoute(
+                                ItemDetailScreen(gun: g, ownerSlot: _slot),
+                              ),
+                            ),
+                        onLongPress: () => _promptTileActions(c, gun: g),
                       ),
-                      // Paradox kept its own compact panel, which meant
-                      // the shared effects block (inside GungeoneerHeader
-                      // for classic) never mounted — the DISPLAY→Effects
-                      // menu toggle was a no-op. Same gate, same block.
-                      if (VisualPrefs.notifier.value.showEffectsPanel)
-                        const RunEffectsBlock(),
-                    ],
-                  )
-                : GungeoneerHeader(
-              character: player.character!,
-              topDps: topDps,
-              onTapDPS: () => _showDamageCalcSheet(context, _slot),
-              gunCount: player.guns.length,
-              itemCount: player.items.length,
-              activeSynergies: activeSynergies,
-              partialSynergies: partialSynergies,
-              showSynergies: isMain,
-              coolness: state.totalCoolness,
-              curse: state.totalCurse,
-              robotDamageBoost: robotDmgBoost,
-              onTapCoolness: () => _showCoolnessSheet(context),
-              onTapCurse: () => _showCurseSheet(context),
-              onLongPressCoolness: () =>
-                  _showStatAdjuster(context, isCool: true),
-              onLongPressCurse: () =>
-                  _showStatAdjuster(context, isCool: false),
-              onTapSynergies: () => Navigator.push(
-                context,
-                fastRoute(const AllSynergiesScreen()),
-              ),
-              trailing: const HeaderMenu(),
-              effectChips: EffectTagger.summaryChips(
-                guns: player.guns,
-                items: player.items,
-              ),
-              shrinesUsed: state.shrinesUsed,
-            ),
-          ),
-        ),
-        ListenableBuilder(
-          listenable: VisualPrefs.notifier,
-          builder: (context, _) {
-            if (!VisualPrefs.notifier.value.showDashboards) {
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            }
-            return DashboardSwiper(slot: _slot);
-          },
-        ),
-        SectionHeaderSliver(
-          title: 'Guns',
-          count: guns.length,
-          icon: Icons.gps_fixed,
-          showLayoutSelector: false,
-          currentInvView: _invView,
-          currentDisplayMode: VisualPrefs.notifier.value.inventoryDisplayMode,
-          onLayoutChanged: _changeLayout,
-        ),
-        if (guns.isEmpty)
-          SliverToBoxAdapter(
-            child: StarterHint(
-              character: player.character!,
-              kind: StarterKind.guns,
-              slot: _slot,
-              tileGrid: _tileGrid(context),
-            ),
-          )
-        else if (_invView == InvView.grid)
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: Insets.md),
-            sliver: SliverGrid.builder(
-              gridDelegate: _tileGrid(context),
-              itemCount: guns.length,
-              itemBuilder: (c, i) {
-                final g = guns[i];
-                return RepaintBoundary(
-                  child: PeriodicTile(
-                    gun: g,
-                    isTopDps: g.name == topDpsName,
-                    synergyGlowColor: glowColors[g.name.toLowerCase()],
-                    onTap: () => Navigator.push(
-                      c,
-                      fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
-                    ),
-                    onLongPress: () => _promptTileActions(c, gun: g),
-                  ),
-                );
-              },
-            ),
-          )
-        else
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: Insets.md),
-            sliver: SliverList.builder(
-              itemCount: guns.length,
-              itemBuilder: (c, i) {
-                final g = guns[i];
-                return RepaintBoundary(
-                  child: Dismissible(
-                  key: Key('gun_${g.name}_$_slot'),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    margin: const EdgeInsets.symmetric(vertical: Insets.xs),
-                    padding: const EdgeInsets.only(right: 16),
-                    alignment: Alignment.centerRight,
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent.withValues(alpha: 0.8),
-                      borderRadius: BorderRadius.all(Radii.sm),
-                    ),
-                    child: const Icon(Icons.delete_sweep_rounded, color: Colors.white, size: 24),
-                  ),
-                  onDismissed: (_) {
-                    final p = context.read<RunProvider>();
-                    p.removeGun(g, slot: _slot);
-                    _toast(context, 'Removed ${g.name}');
+                    );
                   },
-                  child: InventoryListRow(
-                    gun: g,
-                    isTopDps: g.name == topDpsName,
-                    synergyGlowColor: glowColors[g.name.toLowerCase()],
-                    onTap: () => Navigator.push(
-                      c,
-                      fastRoute(ItemDetailScreen(gun: g, ownerSlot: _slot)),
-                    ),
-                    onLongPress: () => _promptTileActions(c, gun: g),
-                  ),
                 ),
-                );
-              },
-            ),
-          ),
-        SectionHeaderSliver(
-          title: 'Items',
-          count: items.length,
-          icon: Icons.inventory_2_outlined,
-          showLayoutSelector: false,
-          currentInvView: _invView,
-          currentDisplayMode: VisualPrefs.notifier.value.inventoryDisplayMode,
-          onLayoutChanged: _changeLayout,
-        ),
-        if (items.isEmpty)
-          SliverToBoxAdapter(
-            child: StarterHint(
-              character: player.character!,
-              kind: StarterKind.items,
-              slot: _slot,
-              tileGrid: _tileGrid(context),
-            ),
-          )
-        else if (_invView == InvView.grid)
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 96),
-            sliver: SliverGrid.builder(
-              gridDelegate: _tileGrid(context),
-              itemCount: items.length,
-              itemBuilder: (c, i) {
-                final it = items[i];
-                return RepaintBoundary(
-                  child: PeriodicTile(
-                    item: it,
-                    synergyGlowColor: glowColors[it.name.toLowerCase()],
-                    onTap: () => Navigator.push(
-                      c,
-                      fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
-                    ),
-                    onLongPress: () => _promptTileActions(c, item: it),
-                  ),
-                );
-              },
-            ),
-          )
-        else
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 96),
-            sliver: SliverList.builder(
-              itemCount: items.length,
-              itemBuilder: (c, i) {
-                final it = items[i];
-                return RepaintBoundary(
-                  child: Dismissible(
-                  key: Key('item_${it.name}_$_slot'),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    margin: const EdgeInsets.symmetric(vertical: Insets.xs),
-                    padding: const EdgeInsets.only(right: 16),
-                    alignment: Alignment.centerRight,
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent.withValues(alpha: 0.8),
-                      borderRadius: BorderRadius.all(Radii.sm),
-                    ),
-                    child: const Icon(Icons.delete_sweep_rounded, color: Colors.white, size: 24),
-                  ),
-                  onDismissed: (_) {
-                    final p = context.read<RunProvider>();
-                    p.removeItem(it, slot: _slot);
-                    _toast(context, 'Removed ${it.name}');
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: Insets.md),
+                sliver: SliverList.builder(
+                  itemCount: guns.length,
+                  itemBuilder: (c, i) {
+                    final g = guns[i];
+                    return RepaintBoundary(
+                      child: Dismissible(
+                        key: Key('gun_${g.name}_$_slot'),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: Insets.xs,
+                          ),
+                          padding: const EdgeInsets.only(right: 16),
+                          alignment: Alignment.centerRight,
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent.withValues(alpha: 0.8),
+                            borderRadius: BorderRadius.all(Radii.sm),
+                          ),
+                          child: const Icon(
+                            Icons.delete_sweep_rounded,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                        onDismissed: (_) {
+                          final p = context.read<RunProvider>();
+                          p.removeGun(g, slot: _slot);
+                          _toast(context, 'Removed ${g.name}');
+                        },
+                        child: InventoryListRow(
+                          gun: g,
+                          isTopDps: g.name == topDpsName,
+                          synergyGlowColor: glowColors[g.name.toLowerCase()],
+                          onTap:
+                              () => Navigator.push(
+                                c,
+                                fastRoute(
+                                  ItemDetailScreen(gun: g, ownerSlot: _slot),
+                                ),
+                              ),
+                          onLongPress: () => _promptTileActions(c, gun: g),
+                        ),
+                      ),
+                    );
                   },
-                  child: InventoryListRow(
-                    item: it,
-                    synergyGlowColor: glowColors[it.name.toLowerCase()],
-                    onTap: () => Navigator.push(
-                      c,
-                      fastRoute(ItemDetailScreen(item: it, ownerSlot: _slot)),
-                    ),
-                    onLongPress: () => _promptTileActions(c, item: it),
-                  ),
                 ),
-                );
-              },
+              ),
+            SectionHeaderSliver(
+              title: 'Items',
+              count: items.length,
+              icon: Icons.inventory_2_outlined,
+              showLayoutSelector: false,
+              currentInvView: _invView,
+              currentDisplayMode:
+                  VisualPrefs.notifier.value.inventoryDisplayMode,
+              onLayoutChanged: _changeLayout,
             ),
-          ),
-      ],
-    );
+            if (items.isEmpty)
+              SliverToBoxAdapter(
+                child: StarterHint(
+                  character: player.character!,
+                  kind: StarterKind.items,
+                  slot: _slot,
+                  tileGrid: _tileGrid(context),
+                ),
+              )
+            else if (_invView == InvView.grid)
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 96),
+                sliver: SliverGrid.builder(
+                  gridDelegate: _tileGrid(context),
+                  itemCount: items.length,
+                  itemBuilder: (c, i) {
+                    final it = items[i];
+                    return RepaintBoundary(
+                      child: PeriodicTile(
+                        item: it,
+                        synergyGlowColor: glowColors[it.name.toLowerCase()],
+                        onTap:
+                            () => Navigator.push(
+                              c,
+                              fastRoute(
+                                ItemDetailScreen(item: it, ownerSlot: _slot),
+                              ),
+                            ),
+                        onLongPress: () => _promptTileActions(c, item: it),
+                      ),
+                    );
+                  },
+                ),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 96),
+                sliver: SliverList.builder(
+                  itemCount: items.length,
+                  itemBuilder: (c, i) {
+                    final it = items[i];
+                    return RepaintBoundary(
+                      child: Dismissible(
+                        key: Key('item_${it.name}_$_slot'),
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: Insets.xs,
+                          ),
+                          padding: const EdgeInsets.only(right: 16),
+                          alignment: Alignment.centerRight,
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent.withValues(alpha: 0.8),
+                            borderRadius: BorderRadius.all(Radii.sm),
+                          ),
+                          child: const Icon(
+                            Icons.delete_sweep_rounded,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                        onDismissed: (_) {
+                          final p = context.read<RunProvider>();
+                          p.removeItem(it, slot: _slot);
+                          _toast(context, 'Removed ${it.name}');
+                        },
+                        child: InventoryListRow(
+                          item: it,
+                          synergyGlowColor: glowColors[it.name.toLowerCase()],
+                          onTap:
+                              () => Navigator.push(
+                                c,
+                                fastRoute(
+                                  ItemDetailScreen(item: it, ownerSlot: _slot),
+                                ),
+                              ),
+                          onLongPress: () => _promptTileActions(c, item: it),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+          ],
+        );
 
-    return scrollWidget;
+        return scrollWidget;
       },
     );
   }
@@ -478,29 +508,36 @@ class PlayerPageState extends State<PlayerPage> {
       final isMyInv = session.mySlot == _slot;
       if (isMyInv) {
         unawaited(
-            session.sendGift(kind: gun != null ? 'gun' : 'item', name: name));
-        session.logEvent(MpEvent.event(
+          session.sendGift(kind: gun != null ? 'gun' : 'item', name: name),
+        );
+        session.logEvent(
+          MpEvent.event(
             kind: 'transfer',
             from: session.myNickname,
             text: '$name → $peerName',
-            mine: true));
+            mine: true,
+          ),
+        );
       } else {
-        unawaited(session.sendRequest(
-            kind: gun != null ? 'gun' : 'item', name: name));
-        session.logEvent(MpEvent.event(
+        unawaited(
+          session.sendRequest(kind: gun != null ? 'gun' : 'item', name: name),
+        );
+        session.logEvent(
+          MpEvent.event(
             kind: 'transfer',
             from: session.myNickname,
             text: 'Asked $peerName for $name',
-            mine: true));
+            mine: true,
+          ),
+        );
       }
     } else {
-      final ok = gun != null
-          ? p.transferGun(gun, _slot)
-          : p.transferItem(item!, _slot);
+      final ok =
+          gun != null
+              ? p.transferGun(gun, _slot)
+              : p.transferItem(item!, _slot);
       if (c.mounted) {
-        _toast(c, ok
-            ? '$name → $peerName'
-            : '$peerName already has $name');
+        _toast(c, ok ? '$name → $peerName' : '$peerName already has $name');
       }
     }
     Haptics.medium();
@@ -512,13 +549,13 @@ class PlayerPageState extends State<PlayerPage> {
     final m = ScaffoldMessenger.maybeOf(c);
     if (m == null) return;
     m.hideCurrentSnackBar();
-    m.showSnackBar(SnackBar(
-      content: GoopText(msg),
-      duration: const Duration(milliseconds: 1500),
-    ));
+    m.showSnackBar(
+      SnackBar(
+        content: GoopText(msg),
+        duration: const Duration(milliseconds: 1500),
+      ),
+    );
   }
-
-
 
   SliverGridDelegate _tileGrid(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -530,12 +567,25 @@ class PlayerPageState extends State<PlayerPage> {
     // the saved display-mode pref. Other renderers stay dormant.
     switch (InventoryDisplayMode.classicPeriodic) {
       case InventoryDisplayMode.classicPeriodic:
-        final savedColCount = VisualPrefs.notifier.value.periodicGridColumnCount;
-        cross = (savedColCount > 0) ? savedColCount : (w < 360 ? 3 : w < 600 ? 4 : 6);
+        final savedColCount =
+            VisualPrefs.notifier.value.periodicGridColumnCount;
+        cross =
+            (savedColCount > 0)
+                ? savedColCount
+                : (w < 360
+                    ? 3
+                    : w < 600
+                    ? 4
+                    : 6);
         ratio = 0.75; // BUG-035: bumped from 0.80 to fit type subtitle + RANGE
         break;
       case InventoryDisplayMode.tacticalStats:
-        cross = w < 500 ? 2 : w < 850 ? 3 : 4;
+        cross =
+            w < 500
+                ? 2
+                : w < 850
+                ? 3
+                : 4;
         ratio = 0.95;
         break;
     }
@@ -575,50 +625,56 @@ class PlayerPageState extends State<PlayerPage> {
               color: AppTheme.flair.card,
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                  color: AppTheme.flair.primary.withValues(alpha: 0.25),
-                  width: 1.0),
+                color: AppTheme.flair.primary.withValues(alpha: 0.25),
+                width: 1.0,
+              ),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.45),
-                    blurRadius: 16),
+                  color: Colors.black.withValues(alpha: 0.45),
+                  blurRadius: 16,
+                ),
               ],
             ),
             child: StatefulBuilder(
               builder: (_, setArmed) {
                 var armed = _transferArmed;
                 return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (canTransfer)
-                  _QuickActionBtn(
-                    icon: armed
-                        ? Icons.check_rounded
-                        : Icons.swap_horiz_rounded,
-                    color: armed ? Colors.orangeAccent : AppTheme.flair.primary,
-                    onTap: () {
-                      if (!armed) {
-                        setArmed(() => _transferArmed = true);
-                        return;
-                      }
-                      Navigator.pop(dlgCtx);
-                      _transferDirect(c, gun: gun, item: item);
-                    },
-                  ),
-                if (canTransfer) const SizedBox(width: 14),
-                _QuickActionBtn(
-                  icon: Icons.delete_outline_rounded,
-                  color: Colors.redAccent,
-                  onTap: () {
-                    Navigator.pop(dlgCtx);
-                    if (gun != null) {
-                      _removeGunWithUndo(c, gun);
-                    } else {
-                      _removeItemWithUndo(c, item!);
-                    }
-                  },
-                ),
-              ],
-            );
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (canTransfer)
+                      _QuickActionBtn(
+                        icon:
+                            armed
+                                ? Icons.check_rounded
+                                : Icons.swap_horiz_rounded,
+                        color:
+                            armed
+                                ? Colors.orangeAccent
+                                : AppTheme.flair.primary,
+                        onTap: () {
+                          if (!armed) {
+                            setArmed(() => _transferArmed = true);
+                            return;
+                          }
+                          Navigator.pop(dlgCtx);
+                          _transferDirect(c, gun: gun, item: item);
+                        },
+                      ),
+                    if (canTransfer) const SizedBox(width: 14),
+                    _QuickActionBtn(
+                      icon: Icons.delete_outline_rounded,
+                      color: Colors.redAccent,
+                      onTap: () {
+                        Navigator.pop(dlgCtx);
+                        if (gun != null) {
+                          _removeGunWithUndo(c, gun);
+                        } else {
+                          _removeItemWithUndo(c, item!);
+                        }
+                      },
+                    ),
+                  ],
+                );
               },
             ),
           ),
@@ -641,16 +697,22 @@ class PlayerPageState extends State<PlayerPage> {
     p.removeGun(g, slot: capturedSlot);
     final messenger = ScaffoldMessenger.of(c);
     messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(SnackBar(
-      content: GoopText('Removed ${g.name}', maxLines: 1, overflow: TextOverflow.ellipsis),
-      duration: const Duration(seconds: 5),
-      action: SnackBarAction(
-        label: 'UNDO',
-        onPressed: () {
-          p.addGun(g, slot: capturedSlot);
-        },
+    messenger.showSnackBar(
+      SnackBar(
+        content: GoopText(
+          'Removed ${g.name}',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'UNDO',
+          onPressed: () {
+            p.addGun(g, slot: capturedSlot);
+          },
+        ),
       ),
-    ));
+    );
   }
 
   void _removeItemWithUndo(BuildContext c, Item it) {
@@ -659,16 +721,22 @@ class PlayerPageState extends State<PlayerPage> {
     p.removeItem(it, slot: capturedSlot);
     final messenger = ScaffoldMessenger.of(c);
     messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(SnackBar(
-      content: GoopText('Removed ${it.name}', maxLines: 1, overflow: TextOverflow.ellipsis),
-      duration: const Duration(seconds: 5),
-      action: SnackBarAction(
-        label: 'UNDO',
-        onPressed: () {
-          p.addItem(it, slot: capturedSlot);
-        },
+    messenger.showSnackBar(
+      SnackBar(
+        content: GoopText(
+          'Removed ${it.name}',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'UNDO',
+          onPressed: () {
+            p.addItem(it, slot: capturedSlot);
+          },
+        ),
       ),
-    ));
+    );
   }
 }
 
@@ -692,10 +760,11 @@ class _SynergyPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     final ownedList = ownedLower.toList();
-    final relevant = allSynergies.where((s) {
-      final allItems = [...s.items, ...s.anyOf];
-      return allItems.any((n) => ownedLower.contains(n.toLowerCase()));
-    }).toList();
+    final relevant =
+        allSynergies.where((s) {
+          final allItems = [...s.items, ...s.anyOf];
+          return allItems.any((n) => ownedLower.contains(n.toLowerCase()));
+        }).toList();
 
     relevant.sort((a, b) {
       final aActive = a.matchesItems(ownedList);
@@ -716,7 +785,11 @@ class _SynergyPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.auto_awesome, size: 18, color: Colors.amberAccent),
+              const Icon(
+                Icons.auto_awesome,
+                size: 18,
+                color: Colors.amberAccent,
+              ),
               const SizedBox(width: 8),
               GoopText(
                 'SYNERGIES',
@@ -729,26 +802,41 @@ class _SynergyPanel extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 3,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.amber.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.amber.withValues(alpha: 0.35), width: 1.2),
+                  border: Border.all(
+                    color: Colors.amber.withValues(alpha: 0.35),
+                    width: 1.2,
+                  ),
                 ),
                 child: GoopText(
                   '$activeCount active',
-                  style: const TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w800, color: Colors.amberAccent),
+                  style: const TextStyle(
+                    fontSize: FontSizes.labelSmall,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.amberAccent,
+                  ),
                 ),
               ),
               const Spacer(),
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  fastRoute(const SynergiesOverviewScreen()),
-                ),
+                onTap:
+                    () => Navigator.push(
+                      context,
+                      fastRoute(const SynergiesOverviewScreen()),
+                    ),
                 child: GoopText(
                   'View All',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: onSurface.withValues(alpha: 0.6)),
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: onSurface.withValues(alpha: 0.6),
+                  ),
                 ),
               ),
             ],
@@ -791,9 +879,10 @@ class _SynergyRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: isActive
-            ? Colors.green.withValues(alpha: 0.07)
-            : Colors.amber.withValues(alpha: 0.04),
+        color:
+            isActive
+                ? Colors.green.withValues(alpha: 0.07)
+                : Colors.amber.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
           color: statusColor.withValues(alpha: isActive ? 0.3 : 0.15),
@@ -816,18 +905,25 @@ class _SynergyRow extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14.5,
                     fontWeight: FontWeight.w800,
-                    color: isActive ? onSurface : onSurface.withValues(alpha: 0.8),
+                    color:
+                        isActive ? onSurface : onSurface.withValues(alpha: 0.8),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 3,
+                ),
                 decoration: BoxDecoration(
                   color: statusColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.all(Radii.sm),
-                  border: Border.all(color: statusColor.withValues(alpha: 0.35), width: 1.2),
+                  border: Border.all(
+                    color: statusColor.withValues(alpha: 0.35),
+                    width: 1.2,
+                  ),
                 ),
                 child: GoopText(
                   isActive ? 'ACTIVE' : 'PARTIAL',
@@ -843,7 +939,9 @@ class _SynergyRow extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           GoopText(
-            synergy.prettyEffect.isNotEmpty ? synergy.prettyEffect : synergy.effect,
+            synergy.prettyEffect.isNotEmpty
+                ? synergy.prettyEffect
+                : synergy.effect,
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
               color: onSurface.withValues(alpha: 0.55),
@@ -861,7 +959,11 @@ class _SynergyRow extends StatelessWidget {
                 if (i > 0 && i < synergy.items.length)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Icon(Icons.add, size: 12, color: onSurface.withValues(alpha: 0.2)),
+                    child: Icon(
+                      Icons.add,
+                      size: 12,
+                      color: onSurface.withValues(alpha: 0.2),
+                    ),
                   ),
                 _SynergyItemPill(
                   itemName: allItems[i],
@@ -898,9 +1000,10 @@ class _SynergyItemPill extends StatelessWidget {
     final iconPath = gun?.icon ?? item?.icon ?? '';
     final onSurface = Theme.of(context).colorScheme.onSurface;
 
-    final pillColor = isActive
-        ? Colors.greenAccent.withValues(alpha: 0.4)
-        : isOwned
+    final pillColor =
+        isActive
+            ? Colors.greenAccent.withValues(alpha: 0.4)
+            : isOwned
             ? onSurface.withValues(alpha: 0.3)
             : onSurface.withValues(alpha: 0.08);
 
@@ -910,14 +1013,21 @@ class _SynergyItemPill extends StatelessWidget {
         width: 72,
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: isOwned
-              ? onSurface.withValues(alpha: 0.08)
-              : AppTheme.flair.scaffold,
+          color:
+              isOwned
+                  ? onSurface.withValues(alpha: 0.08)
+                  : AppTheme.flair.scaffold,
           borderRadius: BorderRadius.all(Radii.md),
           border: Border.all(color: pillColor, width: 1.8),
-          boxShadow: isOwned && isActive
-              ? [BoxShadow(color: Colors.greenAccent.withValues(alpha: 0.15), blurRadius: 8)]
-              : null,
+          boxShadow:
+              isOwned && isActive
+                  ? [
+                    BoxShadow(
+                      color: Colors.greenAccent.withValues(alpha: 0.15),
+                      blurRadius: 8,
+                    ),
+                  ]
+                  : null,
         ),
         child: Column(
           children: [
@@ -937,7 +1047,10 @@ class _SynergyItemPill extends StatelessWidget {
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w700,
-                color: isOwned ? onSurface.withValues(alpha: 0.7) : onSurface.withValues(alpha: 0.6),
+                color:
+                    isOwned
+                        ? onSurface.withValues(alpha: 0.7)
+                        : onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -967,29 +1080,36 @@ class _SynergyItemPill extends StatelessWidget {
   }
 
   Widget _fallback() {
-    final onSurface = Contrast.luminance(AppTheme.flair.card) > 0.5
-        ? const Color(0xFF1E1E22)
-        : const Color(0xFFF0F0F0);
+    final onSurface =
+        Contrast.luminance(AppTheme.flair.card) > 0.5
+            ? const Color(0xFF1E1E22)
+            : const Color(0xFFF0F0F0);
     return Container(
       color: AppTheme.flair.scaffold,
       child: Center(
         child: GoopText(
           itemName.isNotEmpty ? itemName[0].toUpperCase() : '?',
-          style: TextStyle(fontSize: FontSizes.titleSmall, fontWeight: FontWeight.bold, color: onSurface.withValues(alpha: 0.7)),
+          style: TextStyle(
+            fontSize: FontSizes.titleSmall,
+            fontWeight: FontWeight.bold,
+            color: onSurface.withValues(alpha: 0.7),
+          ),
         ),
       ),
     );
   }
 }
 
-
 /// Circular quick-action button for the floating tile-actions pill.
 class _QuickActionBtn extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
-  const _QuickActionBtn(
-      {required this.icon, required this.color, required this.onTap});
+  const _QuickActionBtn({
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {

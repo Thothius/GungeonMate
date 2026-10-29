@@ -51,8 +51,11 @@ void main() {
       final list = [older, newer]
         ..sort((a, b) => b.lastSeenMs.compareTo(a.lastSeenMs));
 
-      expect(list.first.endpointId, 'ep-1',
-          reason: 'Newer endpoint should sort first');
+      expect(
+        list.first.endpointId,
+        'ep-1',
+        reason: 'Newer endpoint should sort first',
+      );
     });
   });
 

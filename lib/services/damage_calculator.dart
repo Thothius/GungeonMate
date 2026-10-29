@@ -56,11 +56,13 @@ class DamageCalculator {
           final m = RegExp(r'(\d+(?:\.\d+)?)').firstMatch(raw);
           if (m != null) pct = double.tryParse(m.group(1)!) ?? 0;
         }
-        out.add(DamageContribution(
-          sourceName: occ.sourceName,
-          sourceIsGun: occ.sourceIsGun,
-          percent: pct * sign,
-        ));
+        out.add(
+          DamageContribution(
+            sourceName: occ.sourceName,
+            sourceIsGun: occ.sourceIsGun,
+            percent: pct * sign,
+          ),
+        );
       }
     }
     return out;
@@ -74,8 +76,10 @@ class DamageCalculator {
     required List<Gun> guns,
     required List<Item> items,
   }) {
-    final total = contributions(guns: guns, items: items)
-        .fold<double>(0, (sum, c) => sum + c.percent);
+    final total = contributions(
+      guns: guns,
+      items: items,
+    ).fold<double>(0, (sum, c) => sum + c.percent);
     return 1.0 + (total / 100.0);
   }
 }

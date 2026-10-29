@@ -19,7 +19,7 @@ import 'package:gungeon_mate/screens/codex_screen.dart';
 /// CodexScreen triggers SkeletonLoader (perpetual animation), so we
 /// use pump() after that navigation.
 void main() {
-  Widget _wrap(Widget child) {
+  Widget wrap(Widget child) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RunProvider()),
@@ -30,21 +30,21 @@ void main() {
   }
 
   testWidgets('Renders app title GUNGEON MATE', (tester) async {
-    await tester.pumpWidget(_wrap(const MainMenuScreen()));
+    await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('GUNGEON MATE'), findsWidgets);
   });
 
   testWidgets('Renders subtitle YOUR COMPANION IN THE GUNGEON', (tester) async {
-    await tester.pumpWidget(_wrap(const MainMenuScreen()));
+    await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('YOUR COMPANION IN THE GUNGEON'), findsOneWidget);
   });
 
   testWidgets('Renders all four primary action buttons', (tester) async {
-    await tester.pumpWidget(_wrap(const MainMenuScreen()));
+    await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
     expect(find.text('Local Run'), findsOneWidget);
@@ -55,16 +55,17 @@ void main() {
   });
 
   testWidgets('Renders version label', (tester) async {
-    await tester.pumpWidget(_wrap(const MainMenuScreen()));
+    await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
     // Version label is "v" + kAppVersion (e.g. "v2.0.3")
     expect(find.textContaining('v'), findsWidgets);
   });
 
-  testWidgets('Tapping Local Run navigates to CharacterSelectScreen',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const MainMenuScreen()));
+  testWidgets('Tapping Local Run navigates to CharacterSelectScreen', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Local Run'));
@@ -74,7 +75,7 @@ void main() {
   });
 
   testWidgets('Tapping Codex navigates to CodexScreen', (tester) async {
-    await tester.pumpWidget(_wrap(const MainMenuScreen()));
+    await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
     await tester.ensureVisible(find.text('Codex'));
@@ -83,9 +84,10 @@ void main() {
     // Use pump() not pumpAndSettle() — CodexScreen shows SkeletonLoader
     // which has a perpetual shimmer animation that would time out.
     await tester.pump(); // Process the tap callback
-    await tester.pump(const Duration(milliseconds: 500)); // Complete route transition
+    await tester.pump(
+      const Duration(milliseconds: 500),
+    ); // Complete route transition
 
     expect(find.byType(CodexScreen), findsOneWidget);
   });
-
 }

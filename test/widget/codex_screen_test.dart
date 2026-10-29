@@ -18,7 +18,7 @@ import 'package:gungeon_mate/widgets/state_widgets.dart';
 /// compute() may not complete, so we test the loading state and the
 /// AppBar (which is always rendered).
 void main() {
-  Widget _wrap(Widget child) {
+  Widget wrap(Widget child) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RunProvider()),
@@ -28,9 +28,8 @@ void main() {
     );
   }
 
-  testWidgets('Shows skeleton loaders while data is loading',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen()));
+  testWidgets('Shows skeleton loaders while data is loading', (tester) async {
+    await tester.pumpWidget(wrap(const CodexScreen()));
     // Only pump one frame — data hasn't loaded yet
     await tester.pump();
 
@@ -39,7 +38,7 @@ void main() {
   });
 
   testWidgets('Does not show category tabs while loading', (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const CodexScreen()));
     await tester.pump();
 
     // The AmmonomiconTabStrip is only rendered when _loaded is true
@@ -49,15 +48,16 @@ void main() {
   });
 
   testWidgets('Does not show search field while loading', (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const CodexScreen()));
     await tester.pump();
 
     expect(find.byType(TextField), findsNothing);
   });
 
-  testWidgets('showBackButton true renders back button and CODEX title',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen(showBackButton: true)));
+  testWidgets('showBackButton true renders back button and CODEX title', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: true)));
     await tester.pump();
 
     // The AppBar uses IconButton with Icons.arrow_back, not BackButton
@@ -66,43 +66,48 @@ void main() {
     expect(find.text('Encyclopedia of the Gungeon'), findsOneWidget);
   });
 
-  testWidgets('showBackButton false does not render back button',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen(showBackButton: false)));
+  testWidgets('showBackButton false does not render back button', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: false)));
     await tester.pump();
 
     expect(find.byIcon(Icons.arrow_back), findsNothing);
   });
 
-  testWidgets('Screen renders without crashing with empty provider data',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen()));
+  testWidgets('Screen renders without crashing with empty provider data', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen()));
     await tester.pump();
 
     expect(find.byType(Scaffold), findsOneWidget);
   });
 
-  testWidgets('Renders multiple skeleton loader lines during loading',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen()));
+  testWidgets('Renders multiple skeleton loader lines during loading', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen()));
     await tester.pump();
 
     // The loading state shows 4 skeleton loaders
     expect(find.byType(SkeletonLoader), findsNWidgets(4));
   });
 
-  testWidgets('showBackButton true renders AppBar with correct height',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen(showBackButton: true)));
+  testWidgets('showBackButton true renders AppBar with correct height', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: true)));
     await tester.pump();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));
     expect(appBar.toolbarHeight, kToolbarHeight);
   });
 
-  testWidgets('showBackButton false renders AppBar with zero height',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen(showBackButton: false)));
+  testWidgets('showBackButton false renders AppBar with zero height', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: false)));
     await tester.pump();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));
@@ -111,40 +116,44 @@ void main() {
 
   // ── New tests for Item 7 + Item 8 changes ──────────────────────────────
 
-  testWidgets('showBackButton false includes SafeArea with top: true',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen(showBackButton: false)));
+  testWidgets('showBackButton false includes SafeArea with top: true', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: false)));
     await tester.pump();
 
     // SafeArea should be present in the widget tree
     expect(find.byType(SafeArea), findsWidgets);
   });
 
-  testWidgets('showBackButton true still renders without crashing',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const CodexScreen(showBackButton: true)));
+  testWidgets('showBackButton true still renders without crashing', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: true)));
     await tester.pump();
 
     expect(find.byType(Scaffold), findsOneWidget);
     expect(find.byIcon(Icons.arrow_back), findsOneWidget);
   });
 
-  testWidgets('renders without overflow on narrow viewport (320px)',
-      (tester) async {
+  testWidgets('renders without overflow on narrow viewport (320px)', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(320, 640);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.pumpWidget(_wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const CodexScreen()));
     await tester.pump();
 
     expect(tester.takeException(), isNull);
     expect(find.byType(Scaffold), findsOneWidget);
   });
 
-  testWidgets('renders without overflow on notched device (top inset)',
-      (tester) async {
+  testWidgets('renders without overflow on notched device (top inset)', (
+    tester,
+  ) async {
     // Wrap in MediaQuery with simulated notch insets
     await tester.pumpWidget(
       MaterialApp(

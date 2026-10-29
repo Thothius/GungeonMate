@@ -45,7 +45,9 @@ class BrowseScreen extends StatefulWidget {
 }
 
 enum _BrowseMode { all, tiers, synergies }
+
 enum _KindFilter { all, guns, items, favourites }
+
 enum _SynOwner { all, p1, p2 }
 
 class _BrowseScreenState extends State<BrowseScreen> {
@@ -124,8 +126,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     );
   }
 
-  Widget _buildScaffold(
-      BuildContext context, RunProvider p, bool isCoop) {
+  Widget _buildScaffold(BuildContext context, RunProvider p, bool isCoop) {
     final sf = Responsive.factor(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -136,19 +137,21 @@ class _BrowseScreenState extends State<BrowseScreen> {
         // AppBar back arrow. When inside the bottom-nav IndexedStack,
         // keep toolbarHeight 0 — the tab strip labels the section.
         toolbarHeight: widget.showBackButton ? kToolbarHeight : 0,
-        title: widget.showBackButton
-            ? const GoopText('Browse')
-            : const SizedBox.shrink(),
+        title:
+            widget.showBackButton
+                ? const GoopText('Browse')
+                : const SizedBox.shrink(),
         bottom: PreferredSize(
           // Height is scale-factor aware — the mode bar and tier
           // strip size by Responsive.factor, so a fixed 64/108
           // overflowed vertically whenever sf > ~1.2.
           preferredSize: Size.fromHeight(
-              (46 * sf) +
-                  (_mode == _BrowseMode.tiers ? (8 + 46 * sf) : 0) +
-                  (_mode == _BrowseMode.all ? (8 + 40 * sf) : 0) +
-                  (_mode == _BrowseMode.synergies ? (8 + 40 * sf) : 0) +
-                  12),
+            (46 * sf) +
+                (_mode == _BrowseMode.tiers ? (8 + 46 * sf) : 0) +
+                (_mode == _BrowseMode.all ? (8 + 40 * sf) : 0) +
+                (_mode == _BrowseMode.synergies ? (8 + 40 * sf) : 0) +
+                12,
+          ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 4, 8, 6),
             child: Column(
@@ -156,13 +159,30 @@ class _BrowseScreenState extends State<BrowseScreen> {
               children: [
                 // Filter mode bar — ALL / TIERS / SYNERGIES.
                 Row(
-                  children: [
-                    _modeBtn('ALL', Icons.apps, _BrowseMode.all, isCoop ? 'ALL · P2' : 'ALL', sf),
-                    _modeBtn('TIERS', Icons.military_tech_outlined,
-                        _BrowseMode.tiers, 'TIERS', sf),
-                    _modeBtn('SYN', Icons.hub_outlined,
-                        _BrowseMode.synergies, 'SYNERGIES', sf),
-                  ].map((w) => Expanded(child: w)).toList(),
+                  children:
+                      [
+                        _modeBtn(
+                          'ALL',
+                          Icons.apps,
+                          _BrowseMode.all,
+                          isCoop ? 'ALL · P2' : 'ALL',
+                          sf,
+                        ),
+                        _modeBtn(
+                          'TIERS',
+                          Icons.military_tech_outlined,
+                          _BrowseMode.tiers,
+                          'TIERS',
+                          sf,
+                        ),
+                        _modeBtn(
+                          'SYN',
+                          Icons.hub_outlined,
+                          _BrowseMode.synergies,
+                          'SYNERGIES',
+                          sf,
+                        ),
+                      ].map((w) => Expanded(child: w)).toList(),
                 ),
                 // Tier strip — only while TIERS mode is active. Nothing
                 // selected means "show everything".
@@ -185,9 +205,17 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       children: [
                         for (final k in const [
                           (Icons.apps, 'ALL', _KindFilter.all),
-                          (Icons.sports_martial_arts_rounded, 'GUNS', _KindFilter.guns),
+                          (
+                            Icons.sports_martial_arts_rounded,
+                            'GUNS',
+                            _KindFilter.guns,
+                          ),
                           (Icons.backpack_rounded, 'ITEMS', _KindFilter.items),
-                          (Icons.favorite_rounded, 'FAVS', _KindFilter.favourites),
+                          (
+                            Icons.favorite_rounded,
+                            'FAVS',
+                            _KindFilter.favourites,
+                          ),
                         ])
                           Expanded(child: _kindChip(k.$1, k.$2, k.$3, sf)),
                       ],
@@ -215,8 +243,8 @@ class _BrowseScreenState extends State<BrowseScreen> {
       ),
       body: SafeArea(
         child: Column(
-        children: [
-          Padding(
+          children: [
+            Padding(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
               // Align+heightFactor centers horizontally AND
               // shrink-wraps vertically — bare Center expands to eat
@@ -227,72 +255,84 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 child: ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 680),
                   child: Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 44,
-                      child: TextField(
-                        controller: _searchCtrl,
-                        focusNode: _searchFocusNode,
-                        decoration: InputDecoration(
-                          hintText: "Search...",
-                          prefixIcon: const Icon(Icons.search, size: 20),
-                          isDense: true,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 6),
-                          suffixIcon: _searchCtrl.text.isEmpty
-                              ? null
-                              : IconButton(
-                                  tooltip: 'Clear',
-                                  icon: const Icon(Icons.close, size: 18),
-                                  onPressed: () {
-                                    _searchCtrl.clear();
-                                  },
-                                ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 44,
+                          child: TextField(
+                            controller: _searchCtrl,
+                            focusNode: _searchFocusNode,
+                            decoration: InputDecoration(
+                              hintText: "Search...",
+                              prefixIcon: const Icon(Icons.search, size: 20),
+                              isDense: true,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 6,
+                              ),
+                              suffixIcon:
+                                  _searchCtrl.text.isEmpty
+                                      ? null
+                                      : IconButton(
+                                        tooltip: 'Clear',
+                                        icon: const Icon(Icons.close, size: 18),
+                                        onPressed: () {
+                                          _searchCtrl.clear();
+                                        },
+                                      ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  if (widget.showBackButton && Navigator.canPop(context)) ...[
-                    const SizedBox(width: 6),
-                    IconButton(
-                      tooltip: 'Close Browse',
-                      icon: const Icon(Icons.close_rounded, size: 22, color: Colors.white70),
-                      onPressed: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        Navigator.maybePop(context);
-                      },
-                      constraints: const BoxConstraints(),
-                      padding: const EdgeInsets.all(Insets.xs),
-                    ),
-                  ],
-                ],
+                      if (widget.showBackButton &&
+                          Navigator.canPop(context)) ...[
+                        const SizedBox(width: 6),
+                        IconButton(
+                          tooltip: 'Close Browse',
+                          icon: const Icon(
+                            Icons.close_rounded,
+                            size: 22,
+                            color: Colors.white70,
+                          ),
+                          onPressed: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            Navigator.maybePop(context);
+                          },
+                          constraints: const BoxConstraints(),
+                          padding: const EdgeInsets.all(Insets.xs),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ),
             ),
-          // Wide screens: cap the row width so lists don't stretch
-          // edge-to-edge on tablets/desktop windows.
-          Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 680),
-                child: _modeList(p),
+            // Wide screens: cap the row width so lists don't stretch
+            // edge-to-edge on tablets/desktop windows.
+            Expanded(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 680),
+                  child: _modeList(p),
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
 
   /// One mode button in the ALL/TIERS/SYNERGIES bar.
-  Widget _modeBtn(String key, IconData icon, _BrowseMode mode,
-      String label, double sf) {
+  Widget _modeBtn(
+    String key,
+    IconData icon,
+    _BrowseMode mode,
+    String label,
+    double sf,
+  ) {
     final active = _mode == mode;
     final primary = Theme.of(context).colorScheme.primary;
     return Padding(
@@ -307,25 +347,25 @@ class _BrowseScreenState extends State<BrowseScreen> {
           duration: const Duration(milliseconds: 180),
           height: 46 * sf,
           decoration: BoxDecoration(
-            color: active
-                ? primary.withValues(alpha: 0.22)
-                : Colors.transparent,
+            color:
+                active ? primary.withValues(alpha: 0.22) : Colors.transparent,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: active
-                  ? primary.withValues(alpha: 0.7)
-                  : Colors.white.withValues(alpha: 0.12),
+              color:
+                  active
+                      ? primary.withValues(alpha: 0.7)
+                      : Colors.white.withValues(alpha: 0.12),
               width: 1.2,
             ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon,
-                  size: 17 * sf,
-                  color: active
-                      ? primary
-                      : Colors.white.withValues(alpha: 0.45)),
+              Icon(
+                icon,
+                size: 17 * sf,
+                color: active ? primary : Colors.white.withValues(alpha: 0.45),
+              ),
               SizedBox(width: 5 * sf),
               Flexible(
                 child: GoopText(
@@ -336,9 +376,8 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     fontSize: FontSizes.labelMedium * sf,
                     fontWeight: active ? FontWeight.w800 : FontWeight.w600,
                     letterSpacing: 0.6,
-                    color: active
-                        ? primary
-                        : Colors.white.withValues(alpha: 0.5),
+                    color:
+                        active ? primary : Colors.white.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -354,58 +393,62 @@ class _BrowseScreenState extends State<BrowseScreen> {
   Widget _tierChip(String tier, double sf) {
     final sel = _tiers.contains(tier);
     // Real chest colors — D brown, C blue, B green, A red, S black.
-    final accent = tier == 'S'
-        ? const Color(0xFFFFD700) // gold trim — EtG black chests are gold-ringed
-        : tier == 'A'
+    final accent =
+        tier == 'S'
+            ? const Color(
+              0xFFFFD700,
+            ) // gold trim — EtG black chests are gold-ringed
+            : tier == 'A'
             ? const Color(0xFFE53935) // red chest
             : tier == 'B'
-                ? const Color(0xFF43A047) // green chest
-                : tier == 'C'
-                    ? const Color(0xFF1E88E5) // blue chest
-                    : tier == 'D'
-                        ? const Color(0xFF8D6E63) // brown chest
-                        : Colors.white54;
+            ? const Color(0xFF43A047) // green chest
+            : tier == 'C'
+            ? const Color(0xFF1E88E5) // blue chest
+            : tier == 'D'
+            ? const Color(0xFF8D6E63) // brown chest
+            : Colors.white54;
     return Expanded(
       child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: GestureDetector(
-        key: Key('tier_chip_$tier'),
-        onTap: () {
-          Haptics.selection();
-          setState(() {
-            if (sel) {
-              _tiers.remove(tier);
-            } else {
-              _tiers.add(tier);
-            }
-          });
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          width: double.infinity,
-          height: 46 * sf,
-          decoration: BoxDecoration(
-            color: sel ? accent.withValues(alpha: 0.2) : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: sel
-                  ? accent.withValues(alpha: 0.8)
-                  : Colors.white.withValues(alpha: 0.15),
-              width: sel ? 1.5 : 1,
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        child: GestureDetector(
+          key: Key('tier_chip_$tier'),
+          onTap: () {
+            Haptics.selection();
+            setState(() {
+              if (sel) {
+                _tiers.remove(tier);
+              } else {
+                _tiers.add(tier);
+              }
+            });
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            width: double.infinity,
+            height: 46 * sf,
+            decoration: BoxDecoration(
+              color: sel ? accent.withValues(alpha: 0.2) : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color:
+                    sel
+                        ? accent.withValues(alpha: 0.8)
+                        : Colors.white.withValues(alpha: 0.15),
+                width: sel ? 1.5 : 1,
+              ),
             ),
-          ),
-          child: Center(
-            child: GoopText(tier,
+            child: Center(
+              child: GoopText(
+                tier,
                 style: TextStyle(
                   fontSize: 13 * sf,
                   fontWeight: FontWeight.w900,
-                  color: sel
-                      ? accent
-                      : Colors.white.withValues(alpha: 0.4),
-                )),
+                  color: sel ? accent : Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -423,12 +466,12 @@ class _BrowseScreenState extends State<BrowseScreen> {
   /// Combined guns+items, search-filtered, then tier-filtered when the
   /// TIERS strip has selections.
   Widget _combinedList(RunProvider p) {
-    final guns = p.allGuns
-        .where((g) => g.name.toLowerCase().contains(_query))
-        .toList();
-    final items = p.allItems
-        .where((it) => it.name.toLowerCase().contains(_query))
-        .toList();
+    final guns =
+        p.allGuns.where((g) => g.name.toLowerCase().contains(_query)).toList();
+    final items =
+        p.allItems
+            .where((it) => it.name.toLowerCase().contains(_query))
+            .toList();
 
     var entries = <AnyEntry>[
       for (final g in guns) AnyEntry.gun(g),
@@ -436,15 +479,17 @@ class _BrowseScreenState extends State<BrowseScreen> {
     ];
 
     entries.sort((a, b) {
-      final c = (_qualityOrder[a.quality] ?? 99)
-          .compareTo(_qualityOrder[b.quality] ?? 99);
+      final c = (_qualityOrder[a.quality] ?? 99).compareTo(
+        _qualityOrder[b.quality] ?? 99,
+      );
       return c != 0 ? c : a.name.compareTo(b.name);
     });
 
     if (_mode == _BrowseMode.tiers && _tiers.isNotEmpty) {
-      entries = entries
-          .where((e) => _tiers.contains(e.quality.toUpperCase()))
-          .toList();
+      entries =
+          entries
+              .where((e) => _tiers.contains(e.quality.toUpperCase()))
+              .toList();
     }
     // TIERS always spans guns + items + favourites — the ALL-mode
     // kind chips must not shrink the tier pool.
@@ -466,14 +511,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemCount: entries.length,
-      prototypeItem: entries.first.gun != null
-          ? _gunRow(context, p, entries.first.gun!)
-          : _itemRow(context, p, entries.first.item!),
+      prototypeItem:
+          entries.first.gun != null
+              ? _gunRow(context, p, entries.first.gun!)
+              : _itemRow(context, p, entries.first.item!),
       itemBuilder: (c, i) {
         final e = entries[i];
-        return e.gun != null
-            ? _gunRow(c, p, e.gun!)
-            : _itemRow(c, p, e.item!);
+        return e.gun != null ? _gunRow(c, p, e.gun!) : _itemRow(c, p, e.item!);
       },
     );
   }
@@ -508,7 +552,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
       out.add((
         name: s.name,
         owners:
-            coop == null ? 'P1' : (p1 && p2 ? 'P1+P2' : p2 ? 'P2' : 'P1'),
+            coop == null
+                ? 'P1'
+                : (p1 && p2
+                    ? 'P1+P2'
+                    : p2
+                    ? 'P2'
+                    : 'P1'),
       ));
     }
     return out;
@@ -517,8 +567,12 @@ class _BrowseScreenState extends State<BrowseScreen> {
   /// Synergies already fully satisfied by [owned] — the 'already hits'
   /// section on top of the synergies list.
   List<({String name, String owners})> _completedSynergies(
-      Set<String> owned, Set<String> mainNames, Set<String> coopNames,
-      Player? coop, RunProvider p) {
+    Set<String> owned,
+    Set<String> mainNames,
+    Set<String> coopNames,
+    Player? coop,
+    RunProvider p,
+  ) {
     final out = <({String name, String owners})>[];
     for (final s in p.allSynergies) {
       if (!s.matchesItems(owned.toList())) continue;
@@ -531,7 +585,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
       out.add((
         name: s.name,
         owners:
-            coop == null ? 'P1' : (p1 && p2 ? 'P1+P2' : p2 ? 'P2' : 'P1'),
+            coop == null
+                ? 'P1'
+                : (p1 && p2
+                    ? 'P1+P2'
+                    : p2
+                    ? 'P2'
+                    : 'P1'),
       ));
     }
     return out;
@@ -547,16 +607,22 @@ class _BrowseScreenState extends State<BrowseScreen> {
         ...p.runState.coop!.allItemNames.map((n) => n.toLowerCase()),
     };
     final coop = p.runState.coop;
-    final mainNames = p.runState.main.allItemNames
-        .map((n) => n.toLowerCase())
-        .toSet();
-    final coopNames = coop == null
-        ? const <String>{}
-        : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
+    final mainNames =
+        p.runState.main.allItemNames.map((n) => n.toLowerCase()).toSet();
+    final coopNames =
+        coop == null
+            ? const <String>{}
+            : coop.allItemNames.map((n) => n.toLowerCase()).toSet();
 
     List<({String name, String owners})> completesFor(String name) =>
-        _completesFor(name, combined: combined, mainNames: mainNames,
-            coopNames: coopNames, coop: coop, p: p);
+        _completesFor(
+          name,
+          combined: combined,
+          mainNames: mainNames,
+          coopNames: coopNames,
+          coop: coop,
+          p: p,
+        );
 
     final hits = <(AnyEntry, List<({String name, String owners})>)>[];
     for (final g in p.allGuns) {
@@ -572,21 +638,22 @@ class _BrowseScreenState extends State<BrowseScreen> {
     hits.sort((a, b) {
       final c = b.$2.length.compareTo(a.$2.length);
       if (c != 0) return c;
-      final q = (_qualityOrder[a.$1.quality] ?? 99)
-          .compareTo(_qualityOrder[b.$1.quality] ?? 99);
+      final q = (_qualityOrder[a.$1.quality] ?? 99).compareTo(
+        _qualityOrder[b.$1.quality] ?? 99,
+      );
       return q != 0 ? q : a.$1.name.compareTo(b.$1.name);
     });
 
     // Per-owner counts for the tabs — same predicate each tab uses.
     final newAll = hits.length;
-    final newP1 = hits
-        .where((h) => h.$2.any((sy) => sy.owners.contains('P1')))
-        .length;
-    final newP2 = hits
-        .where((h) => h.$2.any((sy) => sy.owners.contains('P2')))
-        .length;
+    final newP1 =
+        hits.where((h) => h.$2.any((sy) => sy.owners.contains('P1'))).length;
+    final newP2 =
+        hits.where((h) => h.$2.any((sy) => sy.owners.contains('P2'))).length;
     if (newAll != _allCount || newP1 != _p1Count || newP2 != _p2Count) {
-      _allCount = newAll; _p1Count = newP1; _p2Count = newP2;
+      _allCount = newAll;
+      _p1Count = newP1;
+      _p2Count = newP2;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) setState(() {});
       });
@@ -601,8 +668,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
     // 'Already hits' — synergies fully satisfied by the combined
     // inventory, shown on top with owner labels, separated from the
     // candidate list below.
-    final completed =
-        _completedSynergies(combined, mainNames, coopNames, coop, p);
+    final completed = _completedSynergies(
+      combined,
+      mainNames,
+      coopNames,
+      coop,
+      p,
+    );
 
     if (hits.isEmpty && completed.isEmpty) {
       return Center(
@@ -633,15 +705,21 @@ class _BrowseScreenState extends State<BrowseScreen> {
             padding: const EdgeInsets.fromLTRB(4, 8, 4, 4),
             child: Row(
               children: [
-                Icon(Icons.check_circle_rounded,
-                    size: 13, color: Colors.greenAccent),
+                Icon(
+                  Icons.check_circle_rounded,
+                  size: 13,
+                  color: Colors.greenAccent,
+                ),
                 const SizedBox(width: 6),
-                GoopText('COMPLETE',
-                    style: TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.4,
-                        color: Colors.greenAccent.withValues(alpha: 0.9))),
+                GoopText(
+                  'COMPLETE',
+                  style: TextStyle(
+                    fontSize: FontSizes.labelSmall,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.4,
+                    color: Colors.greenAccent.withValues(alpha: 0.9),
+                  ),
+                ),
               ],
             ),
           );
@@ -651,52 +729,64 @@ class _BrowseScreenState extends State<BrowseScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 10, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.greenAccent.withValues(alpha: 0.05),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                    color: Colors.greenAccent.withValues(alpha: 0.15)),
+                  color: Colors.greenAccent.withValues(alpha: 0.15),
+                ),
               ),
               child: Row(
-              children: [
-                Icon(Icons.auto_awesome,
+                children: [
+                  Icon(
+                    Icons.auto_awesome,
                     size: 11,
-                    color: Colors.greenAccent.withValues(alpha: 0.5)),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: GoopText(cs.name,
-                      style: TextStyle(
-                          fontSize: FontSizes.labelSmall,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.75))),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.greenAccent.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                        color: Colors.greenAccent.withValues(alpha: 0.4)),
+                    color: Colors.greenAccent.withValues(alpha: 0.5),
                   ),
-                  child: GoopText(cs.owners,
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: GoopText(
+                      cs.name,
                       style: TextStyle(
-                          fontSize: FontSizes.labelSmall,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.greenAccent)),
-                ),
-              ],
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white.withValues(alpha: 0.75),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.greenAccent.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: Colors.greenAccent.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: GoopText(
+                      cs.owners,
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.greenAccent,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
         }
         if (completed.isNotEmpty && i == completed.length + 1) {
           return Divider(
-              color: Colors.white.withValues(alpha: 0.10),
-              height: 16,
-              thickness: 1);
+            color: Colors.white.withValues(alpha: 0.10),
+            height: 16,
+            thickness: 1,
+          );
         }
         final hi = i - headCount;
         final e = hits[hi].$1;
@@ -710,23 +800,26 @@ class _BrowseScreenState extends State<BrowseScreen> {
           owner = set.length == 1 ? set.first : 'P1+P2';
         }
         return e.gun != null
-            ? _gunRow(c, p, e.gun!,
-                completes: names, ownerLabel: owner)
-            : _itemRow(c, p, e.item!,
-                completes: names, ownerLabel: owner);
+            ? _gunRow(c, p, e.gun!, completes: names, ownerLabel: owner)
+            : _itemRow(c, p, e.item!, completes: names, ownerLabel: owner);
       },
     );
   }
 
   /// Tappable row for a gun — combined + synergies views.
-  Widget _gunRow(BuildContext c, RunProvider p, Gun g,
-      {List<String>? completes, String? ownerLabel}) {
+  Widget _gunRow(
+    BuildContext c,
+    RunProvider p,
+    Gun g, {
+    List<String>? completes,
+    String? ownerLabel,
+  }) {
     final syn = p.synergyCountFor(g.name);
-    completes ??=
-        p.synergiesCompletedBy(g.name, slot: widget.targetSlot);
-    final targetPlayer = widget.targetSlot == PlayerSlot.coop
-        ? p.runState.coop
-        : p.runState.main;
+    completes ??= p.synergiesCompletedBy(g.name, slot: widget.targetSlot);
+    final targetPlayer =
+        widget.targetSlot == PlayerSlot.coop
+            ? p.runState.coop
+            : p.runState.main;
     final charName = targetPlayer?.character?.name.toLowerCase() ?? '';
     final isRobot = charName.contains('robot');
 
@@ -736,18 +829,16 @@ class _BrowseScreenState extends State<BrowseScreen> {
       iconPath: g.icon,
       fallback: Icons.gps_fixed,
       meta: GunMeta(
-          gun: g,
-          synergyCount: syn,
-          completesSynergies: completes,
-          ownerLabel: ownerLabel),
+        gun: g,
+        synergyCount: syn,
+        completesSynergies: completes,
+        ownerLabel: ownerLabel,
+      ),
       inRun: p.ownerSlotOfGun(g.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
-        await Navigator.push(
-          c,
-          fastRoute(ItemDetailScreen(gun: g)),
-        );
+        await Navigator.push(c, fastRoute(ItemDetailScreen(gun: g)));
         if (!mounted) return;
         // Drop the keyboard again on return — Flutter likes to restore
         // focus to the search field, which would re-open the IME.
@@ -757,9 +848,11 @@ class _BrowseScreenState extends State<BrowseScreen> {
         p.addGun(g, slot: widget.targetSlot);
         ScaffoldMessenger.of(c).showSnackBar(
           SnackBar(
-            content: GoopText(widget.targetSlot == PlayerSlot.coop
-                ? '${g.name} added to P2'
-                : '${g.name} added'),
+            content: GoopText(
+              widget.targetSlot == PlayerSlot.coop
+                  ? '${g.name} added to P2'
+                  : '${g.name} added',
+            ),
             duration: const Duration(seconds: 1),
           ),
         );
@@ -768,14 +861,19 @@ class _BrowseScreenState extends State<BrowseScreen> {
   }
 
   /// Tappable row for an item — combined + synergies views.
-  Widget _itemRow(BuildContext c, RunProvider p, Item it,
-      {List<String>? completes, String? ownerLabel}) {
+  Widget _itemRow(
+    BuildContext c,
+    RunProvider p,
+    Item it, {
+    List<String>? completes,
+    String? ownerLabel,
+  }) {
     final syn = p.synergyCountFor(it.name);
-    completes ??=
-        p.synergiesCompletedBy(it.name, slot: widget.targetSlot);
-    final targetPlayer = widget.targetSlot == PlayerSlot.coop
-        ? p.runState.coop
-        : p.runState.main;
+    completes ??= p.synergiesCompletedBy(it.name, slot: widget.targetSlot);
+    final targetPlayer =
+        widget.targetSlot == PlayerSlot.coop
+            ? p.runState.coop
+            : p.runState.main;
     final charName = targetPlayer?.character?.name.toLowerCase() ?? '';
     final isRobot = charName.contains('robot');
 
@@ -785,40 +883,41 @@ class _BrowseScreenState extends State<BrowseScreen> {
       iconPath: it.icon,
       fallback: it.isActive ? Icons.flash_on : Icons.inventory_2_outlined,
       meta: ItemMeta(
-          item: it,
-          synergyCount: syn,
-          completesSynergies: completes,
-          ownerLabel: ownerLabel),
+        item: it,
+        synergyCount: syn,
+        completesSynergies: completes,
+        ownerLabel: ownerLabel,
+      ),
       inRun: p.ownerSlotOfItem(it.name) == widget.targetSlot,
       isRobot: isRobot,
       onTap: () async {
         FocusManager.instance.primaryFocus?.unfocus();
-        await Navigator.push(
-          c,
-          fastRoute(ItemDetailScreen(item: it)),
-        );
+        await Navigator.push(c, fastRoute(ItemDetailScreen(item: it)));
         if (!mounted) return;
         FocusManager.instance.primaryFocus?.unfocus();
       },
       onAdd: () {
         p.addItem(it, slot: widget.targetSlot);
         final nameLower = it.name.toLowerCase();
-        final isHpUp = nameLower.contains('master round') ||
-                       nameLower.contains('heart container') ||
-                       nameLower.contains('heart holster') ||
-                       nameLower.contains('heart locket') ||
-                       nameLower.contains('heart purse') ||
-                       nameLower.contains('heart bottle') ||
-                       nameLower.contains('yellow chamber') ||
-                       nameLower.contains('pink guon stone');
+        final isHpUp =
+            nameLower.contains('master round') ||
+            nameLower.contains('heart container') ||
+            nameLower.contains('heart holster') ||
+            nameLower.contains('heart locket') ||
+            nameLower.contains('heart purse') ||
+            nameLower.contains('heart bottle') ||
+            nameLower.contains('yellow chamber') ||
+            nameLower.contains('pink guon stone');
 
         ScaffoldMessenger.of(c).showSnackBar(
           SnackBar(
-            content: GoopText(isRobot && isHpUp
-                ? 'Robot Tax: ${it.name} converted to +1 Armor & grants 10-15 casings!'
-                : (widget.targetSlot == PlayerSlot.coop
-                    ? '${it.name} added to P2'
-                    : '${it.name} added')),
+            content: GoopText(
+              isRobot && isHpUp
+                  ? 'Robot Tax: ${it.name} converted to +1 Armor & grants 10-15 casings!'
+                  : (widget.targetSlot == PlayerSlot.coop
+                      ? '${it.name} added to P2'
+                      : '${it.name} added'),
+            ),
             duration: Duration(seconds: isRobot && isHpUp ? 3 : 1),
             backgroundColor: isRobot && isHpUp ? Colors.blue.shade900 : null,
           ),
@@ -830,45 +929,69 @@ class _BrowseScreenState extends State<BrowseScreen> {
   Widget _emptyState() {
     return EmptyState(
       icon: Icons.search_off_rounded,
-      message: _query.isEmpty
-          ? 'No guns or items to show.'
-          : 'No results for "$_query".',
-      flavor: _query.isEmpty
-          ? 'The Gungeon keeps its secrets.'
-          : 'Not even the Resourceful Rat has that.',
+      message:
+          _query.isEmpty
+              ? 'No guns or items to show.'
+              : 'No results for "$_query".',
+      flavor:
+          _query.isEmpty
+              ? 'The Gungeon keeps its secrets.'
+              : 'Not even the Resourceful Rat has that.',
     );
   }
+
   /// Kind chip for the ALL sub-filter — gun / item / heart icons.
   Widget _kindChip(IconData icon, String label, _KindFilter k, double sf) {
     final active = _kind == k;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: GestureDetector(
-        onTap: () { Haptics.selection(); setState(() => _kind = k); },
+        onTap: () {
+          Haptics.selection();
+          setState(() => _kind = k);
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           width: double.infinity,
           height: 40 * sf,
-        decoration: BoxDecoration(
-          color: active
-              ? AppTheme.flair.primary.withValues(alpha: 0.16)
-              : Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.15),
-            width: active ? 1.6 : 1.0,
+          decoration: BoxDecoration(
+            color:
+                active
+                    ? AppTheme.flair.primary.withValues(alpha: 0.16)
+                    : Colors.white.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color:
+                  active
+                      ? AppTheme.flair.primary
+                      : Colors.white.withValues(alpha: 0.15),
+              width: active ? 1.6 : 1.0,
+            ),
           ),
-        ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 14 * sf,
-                  color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5)),
+              Icon(
+                icon,
+                size: 14 * sf,
+                color:
+                    active
+                        ? AppTheme.flair.primary
+                        : Colors.white.withValues(alpha: 0.5),
+              ),
               SizedBox(width: 5 * sf),
-              GoopText(label, style: TextStyle(
+              GoopText(
+                label,
+                style: TextStyle(
                   fontSize: FontSizes.labelSmall,
-                  fontWeight: FontWeight.w800, letterSpacing: 0.8,
-                  color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5))),
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.8,
+                  color:
+                      active
+                          ? AppTheme.flair.primary
+                          : Colors.white.withValues(alpha: 0.5),
+                ),
+              ),
             ],
           ),
         ),
@@ -882,40 +1005,62 @@ class _BrowseScreenState extends State<BrowseScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: GestureDetector(
-        onTap: () { Haptics.selection(); setState(() => _synOwner = o); },
+        onTap: () {
+          Haptics.selection();
+          setState(() => _synOwner = o);
+        },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
           width: double.infinity,
           height: 40 * sf,
-        decoration: BoxDecoration(
-          color: active
-              ? AppTheme.flair.primary.withValues(alpha: 0.16)
-              : Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.15),
-            width: active ? 1.6 : 1.0,
+          decoration: BoxDecoration(
+            color:
+                active
+                    ? AppTheme.flair.primary.withValues(alpha: 0.16)
+                    : Colors.white.withValues(alpha: 0.04),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color:
+                  active
+                      ? AppTheme.flair.primary
+                      : Colors.white.withValues(alpha: 0.15),
+              width: active ? 1.6 : 1.0,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GoopText(
+                label,
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.8,
+                  color:
+                      active
+                          ? AppTheme.flair.primary
+                          : Colors.white.withValues(alpha: 0.5),
+                ),
+              ),
+              SizedBox(width: 5 * sf),
+              GoopText(
+                '${o == _SynOwner.all
+                    ? _allCount
+                    : o == _SynOwner.p1
+                    ? _p1Count
+                    : _p2Count}',
+                style: TextStyle(
+                  fontSize: FontSizes.labelSmall,
+                  fontWeight: FontWeight.w700,
+                  color:
+                      active
+                          ? AppTheme.flair.primary
+                          : Colors.white.withValues(alpha: 0.35),
+                ),
+              ),
+            ],
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GoopText(label, style: TextStyle(
-                fontSize: FontSizes.labelSmall,
-                fontWeight: FontWeight.w800, letterSpacing: 0.8,
-                color: active ? AppTheme.flair.primary : Colors.white.withValues(alpha: 0.5))),
-            SizedBox(width: 5 * sf),
-            GoopText(
-                '${o == _SynOwner.all ? _allCount : o == _SynOwner.p1 ? _p1Count : _p2Count}',
-                style: TextStyle(
-                    fontSize: FontSizes.labelSmall,
-                    fontWeight: FontWeight.w700,
-                    color: active
-                        ? AppTheme.flair.primary
-                        : Colors.white.withValues(alpha: 0.35))),
-          ],
-        ),
-      ),
       ),
     );
   }

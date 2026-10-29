@@ -30,8 +30,8 @@ class CharacterSelectScreen extends StatelessWidget {
 
   /// Quick constructor for multiplayer lobby picking.
   const CharacterSelectScreen.multiplayerPick({super.key})
-      : mode = CharSelectMode.multiplayerPick,
-        gungeoneers = null;
+    : mode = CharSelectMode.multiplayerPick,
+      gungeoneers = null;
 
   @override
   Widget build(BuildContext context) {
@@ -57,65 +57,71 @@ class CharacterSelectScreen extends StatelessWidget {
               isCoop
                   ? 'Add Co-op Player'
                   : isMultiplayerPick
-                      ? 'Pick your Gungeoneer'
-                      : 'Gungeon Mate',
+                  ? 'Pick your Gungeoneer'
+                  : 'Gungeon Mate',
             ),
             centerTitle: true,
           ),
           body: SafeArea(
             top: false,
             child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, profile.isShort ? 8 : 16, 16, 4),
-                child: GoopText(
-                  'Choose Gungeoneer',
-                  style: prefs.font.textStyle.copyWith(
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-              if (showDescription)
+              children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                  padding: EdgeInsets.fromLTRB(
+                    16,
+                    profile.isShort ? 8 : 16,
+                    16,
+                    4,
+                  ),
                   child: GoopText(
-                    isCoop
-                        ? 'Adds a second player to the current run with the character\'s default loadout. Long-press tiles to transfer items between players.'
-                        : 'Starts a new run with character\'s default loadout.',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white.withValues(alpha: 0.55),
-                      height: 1.35,
+                    'Choose Gungeoneer',
+                    style: prefs.font.textStyle.copyWith(
+                      fontSize: titleFontSize,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
                 ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
-                child: Divider(
-                  height: 1,
-                  thickness: 0.5,
-                  color: flair.primary.withValues(alpha: 0.12),
+                if (showDescription)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                    child: GoopText(
+                      isCoop
+                          ? 'Adds a second player to the current run with the character\'s default loadout. Long-press tiles to transfer items between players.'
+                          : 'Starts a new run with character\'s default loadout.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white.withValues(alpha: 0.55),
+                        height: 1.35,
+                      ),
+                    ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
+                  child: Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    color: flair.primary.withValues(alpha: 0.12),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _CharacterGrid(
-                  // Cultist is only pickable as MP Sidekick — the lobby
-                  // passes the full list (incl. Cultist) for Sidekick.
-                  // Solo/Coop get a filtered list with Cultist excluded.
-                  gungeoneers: gungeoneers ??
-                      p.allGungeoneers
-                          .where((g) => g.name != 'The Cultist')
-                          .toList(),
-                  flair: flair,
-                  prefs: prefs,
-                  profile: profile,
-                  isMultiplayerPick: isMultiplayerPick,
-                  isCoop: isCoop,
+                Expanded(
+                  child: _CharacterGrid(
+                    // Cultist is only pickable as MP Sidekick — the lobby
+                    // passes the full list (incl. Cultist) for Sidekick.
+                    // Solo/Coop get a filtered list with Cultist excluded.
+                    gungeoneers:
+                        gungeoneers ??
+                        p.allGungeoneers
+                            .where((g) => g.name != 'The Cultist')
+                            .toList(),
+                    flair: flair,
+                    prefs: prefs,
+                    profile: profile,
+                    isMultiplayerPick: isMultiplayerPick,
+                    isCoop: isCoop,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
           ),
         );
       },
@@ -155,7 +161,8 @@ class _CharacterGrid extends StatelessWidget {
         // the cards fill their cells cleanly with breathing room.
         final mq = MediaQuery.of(context);
         final hPad = mq.size.width * 0.10;
-        final vPad = profile.isShort ? mq.size.height * 0.04 : mq.size.height * 0.05;
+        final vPad =
+            profile.isShort ? mq.size.height * 0.04 : mq.size.height * 0.05;
         final crossSpacing = 8.0;
         final mainSpacing = profile.isShort ? 6.0 : 10.0;
 
@@ -190,6 +197,7 @@ class _CharacterGrid extends StatelessWidget {
                 if (Navigator.canPop(c)) Navigator.pop(c);
               }
             }
+
             final card = _CharacterCard(
               character: char,
               flair: flair,
@@ -199,27 +207,30 @@ class _CharacterGrid extends StatelessWidget {
                 Haptics.selection();
                 Navigator.push(
                   c,
-                  fastRoute(GungeoneerDetailScreen(
-                    gungeoneer: char,
-                    // In multiplayerPick mode, "PLAY AS" should return
-                    // the character to the MP lobby, not start a solo run.
-                    onPlayAs: isMultiplayerPick
-                        ? () {
-                            if (Navigator.canPop(c)) Navigator.pop(c, char);
-                          }
-                        : null,
-                  )),
+                  fastRoute(
+                    GungeoneerDetailScreen(
+                      gungeoneer: char,
+                      // In multiplayerPick mode, "PLAY AS" should return
+                      // the character to the MP lobby, not start a solo run.
+                      onPlayAs:
+                          isMultiplayerPick
+                              ? () {
+                                if (Navigator.canPop(c)) Navigator.pop(c, char);
+                              }
+                              : null,
+                    ),
+                  ),
                 );
               },
             );
-            return card.animate().fadeIn(
-              duration: 300.ms,
-              delay: (i * 60).ms,
-            ).slide(
-              begin: const Offset(0, 0.08),
-              duration: 300.ms,
-              curve: Curves.easeOutCubic,
-            );
+            return card
+                .animate()
+                .fadeIn(duration: 300.ms, delay: (i * 60).ms)
+                .slide(
+                  begin: const Offset(0, 0.08),
+                  duration: 300.ms,
+                  curve: Curves.easeOutCubic,
+                );
           },
         );
       },
@@ -303,7 +314,10 @@ class _CharacterCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.black.withValues(alpha: 0.6),
                   border: Border(
-                    top: BorderSide(color: flair.primary.withValues(alpha: 0.15), width: 0.5),
+                    top: BorderSide(
+                      color: flair.primary.withValues(alpha: 0.15),
+                      width: 0.5,
+                    ),
                   ),
                 ),
                 child: GoopText(
@@ -356,8 +370,9 @@ class _CharacterCard extends StatelessWidget {
         filterQuality: FilterQuality.none,
         cacheWidth: 200,
         cacheHeight: 200,
-        errorBuilder: (_, __, ___) =>
-            const Icon(Icons.person, size: 64, color: Colors.white70),
+        errorBuilder:
+            (_, __, ___) =>
+                const Icon(Icons.person, size: 64, color: Colors.white70),
       );
     }
     return const Icon(Icons.person, size: 64, color: Colors.white70);

@@ -9,8 +9,7 @@ void main() {
   });
 
   test('avatarPath strips the frame suffix', () {
-    expect(avatarPath('g1_2:rainbow'),
-        'assets/images/avatars/g1_2.webp');
+    expect(avatarPath('g1_2:rainbow'), 'assets/images/avatars/g1_2.webp');
     expect(avatarPath('g3_9:void'), 'assets/images/avatars/g3_9.webp');
   });
 

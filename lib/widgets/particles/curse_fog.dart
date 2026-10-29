@@ -7,16 +7,15 @@ class CurseFog extends StatefulWidget {
   State<CurseFog> createState() => _CurseFogState();
 }
 
-class _CurseFogState extends State<CurseFog> with SingleTickerProviderStateMixin {
+class _CurseFogState extends State<CurseFog>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _c;
 
   @override
   void initState() {
     super.initState();
-    _c = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 15),
-    )..repeat();
+    _c = AnimationController(vsync: this, duration: const Duration(seconds: 15))
+      ..repeat();
   }
 
   @override
@@ -71,11 +70,7 @@ class CurseFogPainter extends CustomPainter {
       const Color(0x184A0E4E),
     ];
 
-    final radii = [
-      size.width * 0.45,
-      size.width * 0.5,
-      size.width * 0.4,
-    ];
+    final radii = [size.width * 0.45, size.width * 0.5, size.width * 0.4];
 
     for (int i = 0; i < centers.length; i++) {
       paint.shader = RadialGradient(

@@ -147,9 +147,10 @@ const kQuizBonusTiers = <QuizChestTier>[
 /// Every chest the quiz offers, in display order.
 final kQuizAllTiers = <QuizChestTier>[...kQuizChestTiers, ...kQuizBonusTiers];
 
-QuizChestTier quizTierFor(String quality) =>
-    kQuizAllTiers.firstWhere((t) => t.id == quality,
-        orElse: () => kQuizAllTiers.first);
+QuizChestTier quizTierFor(String quality) => kQuizAllTiers.firstWhere(
+  (t) => t.id == quality,
+  orElse: () => kQuizAllTiers.first,
+);
 
 /// One quiz question: the revealed loot plus six labelled options,
 /// exactly one of which is the loot's real name.
@@ -221,14 +222,16 @@ class QuizEngine {
       tier.poolQualities.fold(0, (sum, q) => sum + poolSizeFor(q));
 
   /// Gun count inside a tier's pool — for the "14 guns" stat line.
-  int gunsForTier(QuizChestTier tier) =>
-      tier.poolQualities.fold(
-          0, (sum, q) => sum + (_gunNamesByTier[q]?.length ?? 0));
+  int gunsForTier(QuizChestTier tier) => tier.poolQualities.fold(
+    0,
+    (sum, q) => sum + (_gunNamesByTier[q]?.length ?? 0),
+  );
 
   /// Item count inside a tier's pool.
-  int itemsForTier(QuizChestTier tier) =>
-      tier.poolQualities.fold(
-          0, (sum, q) => sum + (_itemNamesByTier[q]?.length ?? 0));
+  int itemsForTier(QuizChestTier tier) => tier.poolQualities.fold(
+    0,
+    (sum, q) => sum + (_itemNamesByTier[q]?.length ?? 0),
+  );
 
   /// Number of hand-curated distractor sets — test hook + stats.
   int get curatedSetCount => _kCuratedSets.length;
@@ -237,7 +240,8 @@ class QuizEngine {
   /// from this list in order — no repeats inside a single run.
   List<QuizLoot> poolFor(String quality, {Random? rng}) {
     final pool = List<QuizLoot>.of(
-        _poolByTier[quality.toUpperCase()] ?? const <QuizLoot>[]);
+      _poolByTier[quality.toUpperCase()] ?? const <QuizLoot>[],
+    );
     pool.shuffle(rng ?? Random());
     return pool;
   }
@@ -246,8 +250,7 @@ class QuizEngine {
   /// [QuizChestTier.poolQualities] for bonus chests.
   List<QuizLoot> poolForTier(QuizChestTier tier, {Random? rng}) {
     final pool = <QuizLoot>[
-      for (final q in tier.poolQualities)
-        ...?_poolByTier[q.toUpperCase()],
+      for (final q in tier.poolQualities) ...?_poolByTier[q.toUpperCase()],
     ];
     pool.shuffle(rng ?? Random());
     return pool;
@@ -283,9 +286,7 @@ class QuizEngine {
     // distractors distinct between sets whenever the pool allows it.
     final rng = Random(seed);
     final used = <String>{loot.name.toLowerCase()};
-    return [
-      for (var i = 0; i < 3; i++) _buildSet(loot, rng, used),
-    ];
+    return [for (var i = 0; i < 3; i++) _buildSet(loot, rng, used)];
   }
 
   /// Assembles one set of five distractors: up to three real names from
@@ -294,13 +295,13 @@ class QuizEngine {
     final out = <String>[];
 
     final sameKind = List<String>.of(
-        (loot.isGun ? _gunNamesByTier : _itemNamesByTier)[loot.quality] ??
-            const <String>[])
-      ..shuffle(rng);
+      (loot.isGun ? _gunNamesByTier : _itemNamesByTier)[loot.quality] ??
+          const <String>[],
+    )..shuffle(rng);
     final crossKind = List<String>.of(
-        (loot.isGun ? _itemNamesByTier : _gunNamesByTier)[loot.quality] ??
-            const <String>[])
-      ..shuffle(rng);
+      (loot.isGun ? _itemNamesByTier : _gunNamesByTier)[loot.quality] ??
+          const <String>[],
+    )..shuffle(rng);
 
     // Real names are the strongest misdirection — plausible answers that
     // genuinely exist in the same chest pool.
@@ -347,63 +348,199 @@ class QuizEngine {
   // ── Fabricated name generation ─────────────────────────────────────
 
   static const _adjectives = <String>[
-    'Rusted', 'Gilded', 'Hollow', 'Cursed', 'Blessed', 'Molten', 'Frozen',
-    'Brass', 'Chrome', 'Leaden', 'Ancient', 'Forsaken', 'Jammed', 'Grim',
-    'Silent', 'Swift', 'Heavy', 'Blasphemous', 'Copper', 'Void-Touched',
+    'Rusted',
+    'Gilded',
+    'Hollow',
+    'Cursed',
+    'Blessed',
+    'Molten',
+    'Frozen',
+    'Brass',
+    'Chrome',
+    'Leaden',
+    'Ancient',
+    'Forsaken',
+    'Jammed',
+    'Grim',
+    'Silent',
+    'Swift',
+    'Heavy',
+    'Blasphemous',
+    'Copper',
+    'Void-Touched',
   ];
   static const _gunNouns = <String>[
-    'Blaster', 'Carbine', 'Revolver', 'Cannon', 'Repeater', 'Longshot',
-    'Scattergun', 'Wand', 'Pistol', 'Rifle', 'Launcher', 'Sidearm',
-    'Musket', 'Volley', 'Raildriver', 'Bore',
+    'Blaster',
+    'Carbine',
+    'Revolver',
+    'Cannon',
+    'Repeater',
+    'Longshot',
+    'Scattergun',
+    'Wand',
+    'Pistol',
+    'Rifle',
+    'Launcher',
+    'Sidearm',
+    'Musket',
+    'Volley',
+    'Raildriver',
+    'Bore',
   ];
   static const _itemNouns = <String>[
-    'Idol', 'Relic', 'Charm', 'Core', 'Engine', 'Boots', 'Cape', 'Ring',
-    'Heart', 'Skull', 'Fang', 'Eye', 'Tonic', 'Ration', 'Coupon', 'Map',
-    'Key', 'Medal', 'Sack', 'Gland',
+    'Idol',
+    'Relic',
+    'Charm',
+    'Core',
+    'Engine',
+    'Boots',
+    'Cape',
+    'Ring',
+    'Heart',
+    'Skull',
+    'Fang',
+    'Eye',
+    'Tonic',
+    'Ration',
+    'Coupon',
+    'Map',
+    'Key',
+    'Medal',
+    'Sack',
+    'Gland',
   ];
   static const _owners = <String>[
-    'Bello', 'Cadence', 'Ox', 'Frifle', 'Winchester', 'Doug', 'Ser Manuel',
-    'Ledge', 'Blobby', 'Tinker', 'Old Red', 'Albern', 'Norwich', 'Daisuke',
+    'Bello',
+    'Cadence',
+    'Ox',
+    'Frifle',
+    'Winchester',
+    'Doug',
+    'Ser Manuel',
+    'Ledge',
+    'Blobby',
+    'Tinker',
+    'Old Red',
+    'Albern',
+    'Norwich',
+    'Daisuke',
   ];
   static const _places = <String>[
-    'the Forge', 'the Hollow', 'the Keep', 'the Mine', 'the Abbey',
-    'Bullet Hell', 'the Breach', 'the Oubliette', 'the Fifth Chamber',
+    'the Forge',
+    'the Hollow',
+    'the Keep',
+    'the Mine',
+    'the Abbey',
+    'Bullet Hell',
+    'the Breach',
+    'the Oubliette',
+    'the Fifth Chamber',
   ];
   static const _marks = <String>['MK.II', 'MK.III', 'MK.IV'];
 
   /// Theme-tinted adjectives, picked when the loot's lore matches a
   /// keyword family — makes fakes feel crafted rather than generic.
   static const _themeAdjs = <String, List<String>>{
-    'fire|burn|flame|dragun|molten|incendiary|explosive':
-        ['Ember', 'Pyre', 'Scorching', 'Blazing', 'Furnace', 'Incendiary'],
-    'ice|frost|freeze|cold|glacier|snow|chill':
-        ['Frozen', 'Glacial', 'Arctic', 'Shivering', 'Cryo', 'Wintry'],
-    'poison|venom|toxic|acid|plague':
-        ['Venomous', 'Caustic', 'Virulent', 'Noxious', 'Festering'],
-    'electric|shock|spark|thunder|lightning|volt|tesla|coil':
-        ['Charged', 'Voltaic', 'Galvanic', 'Static', 'Surging'],
-    'beam|laser|light|prism|radiant|photon|luminous':
-        ['Luminous', 'Prismatic', 'Radiant', 'Coherent', 'Reflected'],
-    'rocket|grenade|bomb|missile|blast|explode':
-        ['Blast', 'Demolition', 'Breaching', 'Volatile', 'Heavy'],
-    'sword|blade|bat|saber|melee|slash|katana':
-        ['Tempered', 'Keen', 'Dueling', 'Whetted', 'Singing'],
-    'magic|wand|charm|arcane|spell|rune|crystal|hex':
-        ['Arcane', 'Runic', 'Eldritch', 'Mystic', 'Hallowed'],
-    'companion|familiar|pet|turtle|pig|owl|dog|friend':
-        ['Loyal', 'Tamed', 'Kindred', 'Faithful', 'Trusted'],
-    'heal|health|heart|regen|life|restore|armor|shield':
-        ['Vital', 'Mending', 'Restorative', 'Aegis', 'Bulwark'],
-    'ammo|bullet|shot|shell|reload|magazine|clip':
-        ['Loaded', 'Brass-Jacketed', 'Full-Metal', 'Hollow-Point'],
-    'curse|jammed|demon|dark|void|shadow|ghost|spirit':
-        ['Cursed', 'Forsaken', 'Umbral', 'Hollow', 'Whispered'],
-    'mimic|chest|key|lock|coin|shop|sell|price|hegemony':
-        ['Mimic', 'Gilded', 'Miserly', 'Coveted', 'Hoarded'],
-    'roll|dodge|speed|fast|quick|agile|dash':
-        ['Swift', 'Nimble', 'Fleet', 'Rolling', 'Quickdraw'],
-    'synergy|combo|link|chain':
-        ['Twinned', 'Linked', 'Chained', 'Resonant'],
+    'fire|burn|flame|dragun|molten|incendiary|explosive': [
+      'Ember',
+      'Pyre',
+      'Scorching',
+      'Blazing',
+      'Furnace',
+      'Incendiary',
+    ],
+    'ice|frost|freeze|cold|glacier|snow|chill': [
+      'Frozen',
+      'Glacial',
+      'Arctic',
+      'Shivering',
+      'Cryo',
+      'Wintry',
+    ],
+    'poison|venom|toxic|acid|plague': [
+      'Venomous',
+      'Caustic',
+      'Virulent',
+      'Noxious',
+      'Festering',
+    ],
+    'electric|shock|spark|thunder|lightning|volt|tesla|coil': [
+      'Charged',
+      'Voltaic',
+      'Galvanic',
+      'Static',
+      'Surging',
+    ],
+    'beam|laser|light|prism|radiant|photon|luminous': [
+      'Luminous',
+      'Prismatic',
+      'Radiant',
+      'Coherent',
+      'Reflected',
+    ],
+    'rocket|grenade|bomb|missile|blast|explode': [
+      'Blast',
+      'Demolition',
+      'Breaching',
+      'Volatile',
+      'Heavy',
+    ],
+    'sword|blade|bat|saber|melee|slash|katana': [
+      'Tempered',
+      'Keen',
+      'Dueling',
+      'Whetted',
+      'Singing',
+    ],
+    'magic|wand|charm|arcane|spell|rune|crystal|hex': [
+      'Arcane',
+      'Runic',
+      'Eldritch',
+      'Mystic',
+      'Hallowed',
+    ],
+    'companion|familiar|pet|turtle|pig|owl|dog|friend': [
+      'Loyal',
+      'Tamed',
+      'Kindred',
+      'Faithful',
+      'Trusted',
+    ],
+    'heal|health|heart|regen|life|restore|armor|shield': [
+      'Vital',
+      'Mending',
+      'Restorative',
+      'Aegis',
+      'Bulwark',
+    ],
+    'ammo|bullet|shot|shell|reload|magazine|clip': [
+      'Loaded',
+      'Brass-Jacketed',
+      'Full-Metal',
+      'Hollow-Point',
+    ],
+    'curse|jammed|demon|dark|void|shadow|ghost|spirit': [
+      'Cursed',
+      'Forsaken',
+      'Umbral',
+      'Hollow',
+      'Whispered',
+    ],
+    'mimic|chest|key|lock|coin|shop|sell|price|hegemony': [
+      'Mimic',
+      'Gilded',
+      'Miserly',
+      'Coveted',
+      'Hoarded',
+    ],
+    'roll|dodge|speed|fast|quick|agile|dash': [
+      'Swift',
+      'Nimble',
+      'Fleet',
+      'Rolling',
+      'Quickdraw',
+    ],
+    'synergy|combo|link|chain': ['Twinned', 'Linked', 'Chained', 'Resonant'],
   };
 
   String _noun(QuizLoot loot, Random rng) {
@@ -478,250 +615,632 @@ class QuizEngine {
 /// Extensible: add an entry keyed by the exact item/gun name.
 const Map<String, List<List<String>>> _kCuratedSets = {
   'Casey': [
-    ["Slugger's Bat", 'Bat of the Blacksmith', 'Mahoguny',
-        'The Louisville Lead', 'Homerun Hammer'],
-    ["Winchester's Bat", 'The Bunt', 'Grand Slam', 'Slugger',
-        'Bullet Bat'],
-    ['Aluminium Avenger', 'The Strikeout', 'Bat of the Gungeoneer',
-        'Ninth Inning', 'Curveball Cannon'],
+    [
+      "Slugger's Bat",
+      'Bat of the Blacksmith',
+      'Mahoguny',
+      'The Louisville Lead',
+      'Homerun Hammer',
+    ],
+    ["Winchester's Bat", 'The Bunt', 'Grand Slam', 'Slugger', 'Bullet Bat'],
+    [
+      'Aluminium Avenger',
+      'The Strikeout',
+      'Bat of the Gungeoneer',
+      'Ninth Inning',
+      'Curveball Cannon',
+    ],
   ],
   'Blasphemy': [
-    ['Sacred Edge', 'Fightsabre', 'The Untouchable', 'Wood Sword',
-        'Sinner\'s Blade'],
-    ['The Blessed Blade', 'Stick of Truth', 'Old Reliable',
-        'Plunger of Faith', 'Sacrifice Sabre'],
-    ['Unbending Edge', 'The Sixth Sword', 'Broomstick', 'Holy Poker',
-        'The Heretic'],
+    [
+      'Sacred Edge',
+      'Fightsabre',
+      'The Untouchable',
+      'Wood Sword',
+      'Sinner\'s Blade',
+    ],
+    [
+      'The Blessed Blade',
+      'Stick of Truth',
+      'Old Reliable',
+      'Plunger of Faith',
+      'Sacrifice Sabre',
+    ],
+    [
+      'Unbending Edge',
+      'The Sixth Sword',
+      'Broomstick',
+      'Holy Poker',
+      'The Heretic',
+    ],
   ],
   'Gunther': [
-    ['The Chatty Sidearm', 'Talking Pistol', 'Blabbergun', 'Dragunfire',
-        'The Loyal One'],
-    ['Friendship Cannon', 'The Companion', 'Mouthy Musket',
-        'Trusty Talker', 'Old Chatterbox'],
-    ['Sentient Sidearm', 'The Voice', 'Chattershooter', 'Pew-Talker',
-        'Level-Headed'],
+    [
+      'The Chatty Sidearm',
+      'Talking Pistol',
+      'Blabbergun',
+      'Dragunfire',
+      'The Loyal One',
+    ],
+    [
+      'Friendship Cannon',
+      'The Companion',
+      'Mouthy Musket',
+      'Trusty Talker',
+      'Old Chatterbox',
+    ],
+    [
+      'Sentient Sidearm',
+      'The Voice',
+      'Chattershooter',
+      'Pew-Talker',
+      'Level-Headed',
+    ],
   ],
   'Yari Launcher': [
-    ['Spear Volley', 'Hellfire Speargun', 'Javelin Jet', 'Mourning Star',
-        'The Skewer'],
-    ['Rapid Spears', 'Pike Pult', 'Lance-a-Lot', 'Ballistic Harpoon',
-        'Searing Spray'],
-    ['The Impaler', 'Doombringer', 'Rocket Javelin', 'Scorcher',
-        'Triple Skewer'],
+    [
+      'Spear Volley',
+      'Hellfire Speargun',
+      'Javelin Jet',
+      'Mourning Star',
+      'The Skewer',
+    ],
+    [
+      'Rapid Spears',
+      'Pike Pult',
+      'Lance-a-Lot',
+      'Ballistic Harpoon',
+      'Searing Spray',
+    ],
+    [
+      'The Impaler',
+      'Doombringer',
+      'Rocket Javelin',
+      'Scorcher',
+      'Triple Skewer',
+    ],
   ],
   'Spice': [
-    ['Flavor Crystal', 'The Seasoning', 'Salt of the Gungeon',
-        'Pepper Core', 'Rare Herb'],
-    ['The Craving', 'Savory Shard', 'Cinnamon Relic', 'The Ingredient',
-        'Sweet Nectar'],
-    ['Melange', 'The Spice Flow', 'Golden Grain', 'Taste Bud',
-        'Secret Sauce'],
+    [
+      'Flavor Crystal',
+      'The Seasoning',
+      'Salt of the Gungeon',
+      'Pepper Core',
+      'Rare Herb',
+    ],
+    [
+      'The Craving',
+      'Savory Shard',
+      'Cinnamon Relic',
+      'The Ingredient',
+      'Sweet Nectar',
+    ],
+    ['Melange', 'The Spice Flow', 'Golden Grain', 'Taste Bud', 'Secret Sauce'],
   ],
   'Pig': [
-    ['Battle Swine', 'Ham on Wheels', 'The Oinker', 'War Hog',
-        'Pork Pal'],
-    ['Sacrificial Swine', 'The Baconator', 'Loyal Piglet', 'Boar Buddy',
-        'Sir Snorts'],
-    ['Ham Familiar', 'The Tribute', 'Squealer', 'Pig of War',
-        'Chunky Companion'],
+    ['Battle Swine', 'Ham on Wheels', 'The Oinker', 'War Hog', 'Pork Pal'],
+    [
+      'Sacrificial Swine',
+      'The Baconator',
+      'Loyal Piglet',
+      'Boar Buddy',
+      'Sir Snorts',
+    ],
+    [
+      'Ham Familiar',
+      'The Tribute',
+      'Squealer',
+      'Pig of War',
+      'Chunky Companion',
+    ],
   ],
   'Sixth Chamber': [
-    ['The Seventh Seal', 'Final Chamber', 'Blessing of Kaliber',
-        'The Last Room', 'Chamber Relic'],
-    ['Seventh Chamber', 'The Chambered One', 'Kaliber\'s Gift',
-        'Deep Chamber', 'The Countdown'],
-    ['Chamber Idol', 'The Loading', 'Fifth Chamber', 'Chamber Charm',
-        'Reward of the Deep'],
+    [
+      'The Seventh Seal',
+      'Final Chamber',
+      'Blessing of Kaliber',
+      'The Last Room',
+      'Chamber Relic',
+    ],
+    [
+      'Seventh Chamber',
+      'The Chambered One',
+      'Kaliber\'s Gift',
+      'Deep Chamber',
+      'The Countdown',
+    ],
+    [
+      'Chamber Idol',
+      'The Loading',
+      'Fifth Chamber',
+      'Chamber Charm',
+      'Reward of the Deep',
+    ],
   ],
   'Clone': [
-    ['The Duplicate', 'Second Self', 'Mirror Mimic', 'Carbon Copy',
-        'The Echo'],
-    ['Twin Token', 'Backup Gungeoneer', 'The Double', 'Spare Life',
-        'Xerox Idol'],
-    ['Doppelganger Drop', 'Another You', 'The Recycle', 'Extra Life',
-        'Second Run'],
+    ['The Duplicate', 'Second Self', 'Mirror Mimic', 'Carbon Copy', 'The Echo'],
+    [
+      'Twin Token',
+      'Backup Gungeoneer',
+      'The Double',
+      'Spare Life',
+      'Xerox Idol',
+    ],
+    [
+      'Doppelganger Drop',
+      'Another You',
+      'The Recycle',
+      'Extra Life',
+      'Second Run',
+    ],
   ],
   'Super Meat Gun': [
-    ['Meat Blaster', 'The Tenderizer', 'Sir Loin', 'Beef Cannon',
-        'Sausage Shooter'],
-    ['Bandage Blaster', 'The Meat Grinder', 'Steak Shot', 'Raw Repeater',
-        'Flesh Volley'],
-    ['Ham Hock Howitzer', 'The Carnivore', 'Meat Missile',
-        'Brisket Buster', 'Protein Pack'],
+    [
+      'Meat Blaster',
+      'The Tenderizer',
+      'Sir Loin',
+      'Beef Cannon',
+      'Sausage Shooter',
+    ],
+    [
+      'Bandage Blaster',
+      'The Meat Grinder',
+      'Steak Shot',
+      'Raw Repeater',
+      'Flesh Volley',
+    ],
+    [
+      'Ham Hock Howitzer',
+      'The Carnivore',
+      'Meat Missile',
+      'Brisket Buster',
+      'Protein Pack',
+    ],
   ],
   'Banana': [
-    ['Peel Cannon', 'The Split', 'Monkey Wrench', 'Potassium Pipe',
-        'Boomerang Blaster'],
-    ['The Slipstream', 'Fruit Volley', 'Chiquita Charge', 'Peeler',
-        'Ripe Repeater'],
-    ['Yellow Jacket', 'The Bunch', 'Plantain Pistol', 'Smoothie Shooter',
-        'Cannon Banana'],
+    [
+      'Peel Cannon',
+      'The Split',
+      'Monkey Wrench',
+      'Potassium Pipe',
+      'Boomerang Blaster',
+    ],
+    [
+      'The Slipstream',
+      'Fruit Volley',
+      'Chiquita Charge',
+      'Peeler',
+      'Ripe Repeater',
+    ],
+    [
+      'Yellow Jacket',
+      'The Bunch',
+      'Plantain Pistol',
+      'Smoothie Shooter',
+      'Cannon Banana',
+    ],
   ],
   'Turtle Problem': [
-    ['Shell Shock', 'The Slowdown', 'Terrapin Trouble', 'Snapper Squad',
-        'Box Turtle'],
-    ['Tiny Tortoises', 'The Stampede', 'Shell Swarm', 'Reptile Riot',
-        'Pond Problem'],
-    ['The Menagerie', 'Tortoise Trail', 'Baby Snappers', 'Shell Parade',
-        'Slow Surge'],
+    [
+      'Shell Shock',
+      'The Slowdown',
+      'Terrapin Trouble',
+      'Snapper Squad',
+      'Box Turtle',
+    ],
+    [
+      'Tiny Tortoises',
+      'The Stampede',
+      'Shell Swarm',
+      'Reptile Riot',
+      'Pond Problem',
+    ],
+    [
+      'The Menagerie',
+      'Tortoise Trail',
+      'Baby Snappers',
+      'Shell Parade',
+      'Slow Surge',
+    ],
   ],
   'Sunglasses': [
-    ['Cool Shades', 'The Aviators', 'Sun Blockers', 'Stunner Shades',
-        'Shutter Specs'],
-    ['Deal-With-Its', 'The Blinds', 'Ray Blockers', 'Midnight Specs',
-        'Flash Frames'],
-    ['The Cooldown', 'Polarized Pair', 'Glamour Guards', 'Sun Specs',
-        'The Squinters'],
+    [
+      'Cool Shades',
+      'The Aviators',
+      'Sun Blockers',
+      'Stunner Shades',
+      'Shutter Specs',
+    ],
+    [
+      'Deal-With-Its',
+      'The Blinds',
+      'Ray Blockers',
+      'Midnight Specs',
+      'Flash Frames',
+    ],
+    [
+      'The Cooldown',
+      'Polarized Pair',
+      'Glamour Guards',
+      'Sun Specs',
+      'The Squinters',
+    ],
   ],
   'Gunderfury': [
-    ['The Grit', 'Level Ten', 'Experience Engine', 'Veteran Volley',
-        'The Loyal Gun'],
-    ['Growing Gun', 'The Evolver', 'Seasoned Sidearm', 'Rank-Up Rifle',
-        'Fury of Ages'],
-    ['The Apprentice', 'Mastery Musket', 'Leveled Launcher',
-        'Old Faithful', 'The Graduate'],
+    [
+      'The Grit',
+      'Level Ten',
+      'Experience Engine',
+      'Veteran Volley',
+      'The Loyal Gun',
+    ],
+    [
+      'Growing Gun',
+      'The Evolver',
+      'Seasoned Sidearm',
+      'Rank-Up Rifle',
+      'Fury of Ages',
+    ],
+    [
+      'The Apprentice',
+      'Mastery Musket',
+      'Leveled Launcher',
+      'Old Faithful',
+      'The Graduate',
+    ],
   ],
   'Dragunfire': [
-    ['Dragon\'s Breath', 'The Firebreather', 'Scale Cannon',
-        'Ember Engine', 'The Wyrm'],
-    ['Flame Volley', 'Kindled Cannon', 'The Scorcher', 'Ash Blaster',
-        'Blaze Repeater'],
-    ['Inferno Injector', 'The Afterburner', 'Smolder Shot',
-        'Dragonspit', 'Fire Lance'],
+    [
+      'Dragon\'s Breath',
+      'The Firebreather',
+      'Scale Cannon',
+      'Ember Engine',
+      'The Wyrm',
+    ],
+    [
+      'Flame Volley',
+      'Kindled Cannon',
+      'The Scorcher',
+      'Ash Blaster',
+      'Blaze Repeater',
+    ],
+    [
+      'Inferno Injector',
+      'The Afterburner',
+      'Smolder Shot',
+      'Dragonspit',
+      'Fire Lance',
+    ],
   ],
   'Mourning Star': [
-    ['The Eulogy', 'Falling Star', 'Dusk Repeater', 'Orbital Cannon',
-        'Sky Burial'],
-    ['Event Horizon', 'The Comet', 'Nova Launcher', 'Grieving Star',
-        'The Meteor'],
-    ['Starfall', 'Cosmic Wake', 'The Requiem', 'Funeral Volley',
-        'Nightfall'],
+    [
+      'The Eulogy',
+      'Falling Star',
+      'Dusk Repeater',
+      'Orbital Cannon',
+      'Sky Burial',
+    ],
+    [
+      'Event Horizon',
+      'The Comet',
+      'Nova Launcher',
+      'Grieving Star',
+      'The Meteor',
+    ],
+    ['Starfall', 'Cosmic Wake', 'The Requiem', 'Funeral Volley', 'Nightfall'],
   ],
   'Fightsabre': [
-    ['The Glowblade', 'Light Foil', 'Jedi\'s Regret', 'Plasma Edge',
-        'Laser Rapier'],
-    ['Beam Sabre', 'The Duellist', 'Photon Fencer', 'Neon Katana',
-        'The Parry'],
-    ['Energy Edge', 'Saber of Light', 'The Elegant Weapon', 'Arc Foil',
-        'Luminous Lance'],
+    [
+      'The Glowblade',
+      'Light Foil',
+      'Jedi\'s Regret',
+      'Plasma Edge',
+      'Laser Rapier',
+    ],
+    ['Beam Sabre', 'The Duellist', 'Photon Fencer', 'Neon Katana', 'The Parry'],
+    [
+      'Energy Edge',
+      'Saber of Light',
+      'The Elegant Weapon',
+      'Arc Foil',
+      'Luminous Lance',
+    ],
   ],
   'Finished Gun': [
-    ['The Incomplete', 'Almost Gun', 'The Final Piece', 'Last Gun',
-        'Prototype Zero'],
-    ['The Completed One', 'Unfinished Gun', 'The Blueprint', 'Whole Gun',
-        'Missing Link'],
-    ['The Apocrypha', 'Seventh Gun', 'The Unmade', 'Draft Cannon',
-        'Final Draft'],
+    [
+      'The Incomplete',
+      'Almost Gun',
+      'The Final Piece',
+      'Last Gun',
+      'Prototype Zero',
+    ],
+    [
+      'The Completed One',
+      'Unfinished Gun',
+      'The Blueprint',
+      'Whole Gun',
+      'Missing Link',
+    ],
+    [
+      'The Apocrypha',
+      'Seventh Gun',
+      'The Unmade',
+      'Draft Cannon',
+      'Final Draft',
+    ],
   ],
   'AU Gun': [
     ['The Formula', 'Gold Gun', 'X-Blade', 'Z Gun', 'The Letter'],
-    ['Periodic Pistol', 'Element 79', 'The Equation', 'Killer Variable',
-        'Au-79'],
-    ['The Artifact', 'Bullion Blaster', 'Golden Ratio', 'Symbol Gun',
-        'The Unknown'],
+    [
+      'Periodic Pistol',
+      'Element 79',
+      'The Equation',
+      'Killer Variable',
+      'Au-79',
+    ],
+    [
+      'The Artifact',
+      'Bullion Blaster',
+      'Golden Ratio',
+      'Symbol Gun',
+      'The Unknown',
+    ],
   ],
   'Crestfaller': [
-    ['The Broken Sword', 'Fallen Blade', 'Pride Splitter', 'Ruined Edge',
-        'Shattered Sabre'],
-    ['Knight\'s Regret', 'The Defeated', 'Bonfire Blade', 'Ashen Edge',
-        'Waning Sword'],
-    ['Crown Splitter', 'The Beaten Path', 'Sundered Steel', 'Lost Blade',
-        'Hope\'s End'],
+    [
+      'The Broken Sword',
+      'Fallen Blade',
+      'Pride Splitter',
+      'Ruined Edge',
+      'Shattered Sabre',
+    ],
+    [
+      'Knight\'s Regret',
+      'The Defeated',
+      'Bonfire Blade',
+      'Ashen Edge',
+      'Waning Sword',
+    ],
+    [
+      'Crown Splitter',
+      'The Beaten Path',
+      'Sundered Steel',
+      'Lost Blade',
+      'Hope\'s End',
+    ],
   ],
   'Devolver': [
-    ['The Reverse', 'Un-Evolver', 'Backwards Gun', 'The Devolution',
-        'De-Evolver'],
-    ['Regression Ray', 'The Reversal', 'Backward Blaster', 'Undo Gun',
-        'Time Turner'],
-    ['The Downgrade', 'Evolution Undoer', 'Reverse Gun', 'The Rewind',
-        'Progress Ender'],
+    [
+      'The Reverse',
+      'Un-Evolver',
+      'Backwards Gun',
+      'The Devolution',
+      'De-Evolver',
+    ],
+    [
+      'Regression Ray',
+      'The Reversal',
+      'Backward Blaster',
+      'Undo Gun',
+      'Time Turner',
+    ],
+    [
+      'The Downgrade',
+      'Evolution Undoer',
+      'Reverse Gun',
+      'The Rewind',
+      'Progress Ender',
+    ],
   ],
   'Magic Lamp': [
-    ['The Genie Lamp', 'Three Wishes', 'Brass Lantern', 'Smoke Lamp',
-        'Wishing Well'],
-    ['The Ifrit', 'Aladdin\'s Relic', 'Djinn Bottle', 'Oil Lamp',
-        'The Wish Granter'],
-    ['Spirit Lamp', 'The Conjurer', 'Smoke Vessel', 'The Lantern',
-        'Wishbone Lamp'],
+    [
+      'The Genie Lamp',
+      'Three Wishes',
+      'Brass Lantern',
+      'Smoke Lamp',
+      'Wishing Well',
+    ],
+    [
+      'The Ifrit',
+      'Aladdin\'s Relic',
+      'Djinn Bottle',
+      'Oil Lamp',
+      'The Wish Granter',
+    ],
+    [
+      'Spirit Lamp',
+      'The Conjurer',
+      'Smoke Vessel',
+      'The Lantern',
+      'Wishbone Lamp',
+    ],
   ],
   'Owl': [
-    ['The Hooter', 'Night Watch', 'Feathered Friend', 'Barn Owl',
-        'The Perch'],
-    ['Silent Watcher', 'Talon Scout', 'The Lookout', 'Wise One',
-        'Night Bird'],
-    ['The Companion', 'Great Horned', 'Swoop', 'Feather Scout',
-        'Hollow Owl'],
+    ['The Hooter', 'Night Watch', 'Feathered Friend', 'Barn Owl', 'The Perch'],
+    ['Silent Watcher', 'Talon Scout', 'The Lookout', 'Wise One', 'Night Bird'],
+    ['The Companion', 'Great Horned', 'Swoop', 'Feather Scout', 'Hollow Owl'],
   ],
   'Phoenix': [
-    ['The Rebirth', 'Ash Bird', 'Sunbird', 'Immortal Flame',
-        'Pyre Phoenix'],
-    ['Reborn Raptor', 'The Rising', 'Ember Wings', 'Solar Falcon',
-        'Ashen Eagle'],
-    ['Firebird', 'The Resurrected', 'Flame Fowl', 'Rising Sun',
-        'Undying Bird'],
+    ['The Rebirth', 'Ash Bird', 'Sunbird', 'Immortal Flame', 'Pyre Phoenix'],
+    [
+      'Reborn Raptor',
+      'The Rising',
+      'Ember Wings',
+      'Solar Falcon',
+      'Ashen Eagle',
+    ],
+    ['Firebird', 'The Resurrected', 'Flame Fowl', 'Rising Sun', 'Undying Bird'],
   ],
   'Shellegun': [
-    ['Shell Shot', 'The Snail Gun', 'Casing Cannon', 'Exoskeleton',
-        'Turret Tortoise'],
-    ['Hermit Howitzer', 'The Carapace', 'Mollusk Mortar', 'Escargun',
-        'Bunker Beast'],
-    ['The Snail Trail', 'Conch Cannon', 'Shell Shield', 'Slow Roll',
-        'Home on Back'],
+    [
+      'Shell Shot',
+      'The Snail Gun',
+      'Casing Cannon',
+      'Exoskeleton',
+      'Turret Tortoise',
+    ],
+    [
+      'Hermit Howitzer',
+      'The Carapace',
+      'Mollusk Mortar',
+      'Escargun',
+      'Bunker Beast',
+    ],
+    [
+      'The Snail Trail',
+      'Conch Cannon',
+      'Shell Shield',
+      'Slow Roll',
+      'Home on Back',
+    ],
   ],
   'Super Space Turtle': [
-    ['Cosmic Tortoise', 'The Terrapin', 'Star Turtle', 'Orbit Shell',
-        'Galaxy Guardian'],
-    ['Space Shell', 'The Voyager', 'Astro Turtle', 'Comet Companion',
-        'Void Terrapin'],
-    ['The Slow Cosmonaut', 'Shelled Explorer', 'Turbo Turtle',
-        'Moon Shell', 'Star Shell'],
+    [
+      'Cosmic Tortoise',
+      'The Terrapin',
+      'Star Turtle',
+      'Orbit Shell',
+      'Galaxy Guardian',
+    ],
+    [
+      'Space Shell',
+      'The Voyager',
+      'Astro Turtle',
+      'Comet Companion',
+      'Void Terrapin',
+    ],
+    [
+      'The Slow Cosmonaut',
+      'Shelled Explorer',
+      'Turbo Turtle',
+      'Moon Shell',
+      'Star Shell',
+    ],
   ],
   'Bundle of Wands': [
-    ['The Sextet', 'Wand Collection', 'Six Shooter', 'Staff Bundle',
-        'The Arsenal'],
-    ['Wizard\'s Hoard', 'The Rainbow', 'Prismatic Pack', 'Wand Wheel',
-        'Magic Quiver'],
-    ['The Ensemble', 'Six of Wands', 'Spell Sampler', 'Coven Cache',
-        'The Selection'],
+    [
+      'The Sextet',
+      'Wand Collection',
+      'Six Shooter',
+      'Staff Bundle',
+      'The Arsenal',
+    ],
+    [
+      'Wizard\'s Hoard',
+      'The Rainbow',
+      'Prismatic Pack',
+      'Wand Wheel',
+      'Magic Quiver',
+    ],
+    [
+      'The Ensemble',
+      'Six of Wands',
+      'Spell Sampler',
+      'Coven Cache',
+      'The Selection',
+    ],
   ],
   'Elimentaler': [
-    ['The Element Gun', 'Periodic Blaster', 'Form Fuser', 'Matter Maker',
-        'The Alchemist'],
-    ['Element Cannon', 'Phase Pistol', 'The Transformer', 'Formulator',
-        'Reaction Ray'],
-    ['The Fabricator', 'Matter Mixer', 'State Changer', 'The Chemist',
-        'Element Lab'],
+    [
+      'The Element Gun',
+      'Periodic Blaster',
+      'Form Fuser',
+      'Matter Maker',
+      'The Alchemist',
+    ],
+    [
+      'Element Cannon',
+      'Phase Pistol',
+      'The Transformer',
+      'Formulator',
+      'Reaction Ray',
+    ],
+    [
+      'The Fabricator',
+      'Matter Mixer',
+      'State Changer',
+      'The Chemist',
+      'Element Lab',
+    ],
   ],
   'Railgun': [
-    ['The Accelerator', 'Magnet Cannon', 'Coil Driver', 'Slug Thrower',
-        'Hypervelocity'],
-    ['Gauss Cannon', 'The Linear', 'Rail Driver', 'Mag Blaster',
-        'Ferro Launcher'],
-    ['The Penetrator', 'Coil Cannon', 'Magnetic Musket', 'Slug Rail',
-        'The Railer'],
+    [
+      'The Accelerator',
+      'Magnet Cannon',
+      'Coil Driver',
+      'Slug Thrower',
+      'Hypervelocity',
+    ],
+    [
+      'Gauss Cannon',
+      'The Linear',
+      'Rail Driver',
+      'Mag Blaster',
+      'Ferro Launcher',
+    ],
+    [
+      'The Penetrator',
+      'Coil Cannon',
+      'Magnetic Musket',
+      'Slug Rail',
+      'The Railer',
+    ],
   ],
   'Mimic Tooth Necklace': [
-    ['False Teeth', 'The Deceiver', 'Maw Charm', 'Biter\'s Prize',
-        'Chest Teeth'],
-    ['The Imposter', 'Fool\'s Fang', 'Greedy Gnashers', 'Trap Jaw',
-        'Mimic Bite'],
-    ['The False Friend', 'Chomp Chain', 'Liar\'s Locket', 'Maw Medal',
-        'Bait Pendant'],
+    [
+      'False Teeth',
+      'The Deceiver',
+      'Maw Charm',
+      'Biter\'s Prize',
+      'Chest Teeth',
+    ],
+    [
+      'The Imposter',
+      'Fool\'s Fang',
+      'Greedy Gnashers',
+      'Trap Jaw',
+      'Mimic Bite',
+    ],
+    [
+      'The False Friend',
+      'Chomp Chain',
+      'Liar\'s Locket',
+      'Maw Medal',
+      'Bait Pendant',
+    ],
   ],
   'Partially-Eaten Cheese': [
-    ['The Leftover', 'Nibbled Wedge', 'Someone\'s Lunch', 'Half Ration',
-        'Mouldy Morsel'],
-    ['The Secondhand', 'Pre-Eaten', 'Rat\'s Share', 'Bitten Brie',
-        'The Scrap'],
-    ['Cheese Remains', 'The Nibbled', 'Gnawed Gold', 'Half-Eaten',
-        'Leftover Loot'],
+    [
+      'The Leftover',
+      'Nibbled Wedge',
+      'Someone\'s Lunch',
+      'Half Ration',
+      'Mouldy Morsel',
+    ],
+    ['The Secondhand', 'Pre-Eaten', 'Rat\'s Share', 'Bitten Brie', 'The Scrap'],
+    [
+      'Cheese Remains',
+      'The Nibbled',
+      'Gnawed Gold',
+      'Half-Eaten',
+      'Leftover Loot',
+    ],
   ],
   'Unicorn Horn': [
-    ['The Spiral', 'Alicorn', 'Rainbow Lance', 'Mythic Horn',
-        'The Narwhal'],
-    ['Magic Piercer', 'The Unicorn\'s Gift', 'Spiral Spear',
-        'Glitter Horn', 'Fairy Lance'],
-    ['The Pegasus', 'Horn of Purity', 'Rainbow Rapier', 'Starlight Pike',
-        'The Majestic'],
+    ['The Spiral', 'Alicorn', 'Rainbow Lance', 'Mythic Horn', 'The Narwhal'],
+    [
+      'Magic Piercer',
+      'The Unicorn\'s Gift',
+      'Spiral Spear',
+      'Glitter Horn',
+      'Fairy Lance',
+    ],
+    [
+      'The Pegasus',
+      'Horn of Purity',
+      'Rainbow Rapier',
+      'Starlight Pike',
+      'The Majestic',
+    ],
   ],
 };

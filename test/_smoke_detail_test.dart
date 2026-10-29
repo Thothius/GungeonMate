@@ -12,10 +12,13 @@ void main() {
     await p.loadData();
   });
 
-  Widget wrap(Widget child) => MultiProvider(providers: [
-        ChangeNotifierProvider.value(value: p),
-        ChangeNotifierProvider(create: (_) => MpSession(p)),
-      ], child: MaterialApp(home: child));
+  Widget wrap(Widget child) => MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: p),
+      ChangeNotifierProvider(create: (_) => MpSession(p)),
+    ],
+    child: MaterialApp(home: child),
+  );
 
   testWidgets('detail renders body for a gun', (t) async {
     await t.pumpWidget(wrap(ItemDetailScreen(gun: p.allGuns.first)));
@@ -54,20 +57,27 @@ void main() {
   testWidgets('STATS tab is the default and shows hero stats', (t) async {
     // Pick a gun guaranteed to have the hero stats.
     final gun = p.allGuns.firstWhere(
-        (g) => g.range.isNotEmpty || g.spread.isNotEmpty || g.force.isNotEmpty,
-        orElse: () => p.allGuns.first);
+      (g) => g.range.isNotEmpty || g.spread.isNotEmpty || g.force.isNotEmpty,
+      orElse: () => p.allGuns.first,
+    );
     await t.pumpWidget(wrap(ItemDetailScreen(gun: gun)));
     await t.pump();
     expect(t.takeException(), isNull);
     // Hero row — DPS panel + Range/Spread/Force cards.
-    final heroFound = ['Range', 'Spread', 'Force', 'Damage / sec']
-        .any((l) => find.textContaining(l).evaluate().isNotEmpty);
+    final heroFound = [
+      'Range',
+      'Spread',
+      'Force',
+      'Damage / sec',
+    ].any((l) => find.textContaining(l).evaluate().isNotEmpty);
     expect(heroFound, true);
   });
 
   testWidgets('notes render at the bottom of the flat scroll', (t) async {
-    final gun = p.allGuns.firstWhere((g) => g.notes.isNotEmpty,
-        orElse: () => p.allGuns.first);
+    final gun = p.allGuns.firstWhere(
+      (g) => g.notes.isNotEmpty,
+      orElse: () => p.allGuns.first,
+    );
     await t.pumpWidget(wrap(ItemDetailScreen(gun: gun)));
     await t.pump();
     await t.scrollUntilVisible(find.text('EFFECT'), 400);
@@ -82,8 +92,10 @@ void main() {
     // Either the grouped lists or the empty state renders — scroll
     // until one of them appears.
     await t.scrollUntilVisible(
-        find.text('No synergies to show.'), 400,
-        maxScrolls: 20);
+      find.text('No synergies to show.'),
+      400,
+      maxScrolls: 20,
+    );
     await t.pump();
     expect(t.takeException(), isNull);
   });

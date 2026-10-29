@@ -123,8 +123,9 @@ void main() {
 
   group('Protocol v3 — decode robustness', () {
     test('unknown type throws FormatException (drop, not crash)', () {
-      final bytes =
-          Uint8List.fromList(utf8.encode('{"type":"teleport","x":1}'));
+      final bytes = Uint8List.fromList(
+        utf8.encode('{"type":"teleport","x":1}'),
+      );
       expect(() => MpMessage.decode(bytes), throwsFormatException);
       final badJson = Uint8List.fromList(utf8.encode('not json'));
       expect(() => MpMessage.decode(badJson), throwsFormatException);
@@ -137,8 +138,11 @@ void main() {
     test('rolls non-empty themed title', () {
       final name = RunNameGenerator.roll();
       expect(name.trim(), isNotEmpty);
-      expect(name.contains(' '), isTrue,
-          reason: 'run titles combine an adjective with a themed noun');
+      expect(
+        name.contains(' '),
+        isTrue,
+        reason: 'run titles combine an adjective with a themed noun',
+      );
     });
 
     test('successive rolls vary (not a constant)', () {

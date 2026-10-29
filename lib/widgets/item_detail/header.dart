@@ -49,19 +49,23 @@ class ItemDetailHeader extends StatelessWidget {
     final sf = Responsive.factor(context);
 
     // Build all tag chips in one list for a single inline Wrap
-    final typeLabel = isGun
-        ? subtitle.toUpperCase()
-        : (isActive ? 'ACTIVE' : (subtitle.isNotEmpty ? subtitle.toUpperCase() : 'PASSIVE'));
-    final typeColor = isGun
-        ? Colors.deepOrangeAccent
-        : (isActive ? Colors.lightBlueAccent : Colors.lightGreenAccent);
-    final typeIcon = isGun
-        ? Icons.gps_fixed
-        : (isActive ? Icons.flash_on : Icons.inventory_2_outlined);
+    final typeLabel =
+        isGun
+            ? subtitle.toUpperCase()
+            : (isActive
+                ? 'ACTIVE'
+                : (subtitle.isNotEmpty ? subtitle.toUpperCase() : 'PASSIVE'));
+    final typeColor =
+        isGun
+            ? Colors.deepOrangeAccent
+            : (isActive ? Colors.lightBlueAccent : Colors.lightGreenAccent);
+    final typeIcon =
+        isGun
+            ? Icons.gps_fixed
+            : (isActive ? Icons.flash_on : Icons.inventory_2_outlined);
 
     final tags = <Widget>[
-      if (!isGun)
-        _TagChip(icon: typeIcon, label: typeLabel, color: typeColor),
+      if (!isGun) _TagChip(icon: typeIcon, label: typeLabel, color: typeColor),
       for (final e in elements)
         _TagChip(icon: e.icon, label: e.label, color: e.color),
       if (chestColor.isNotEmpty) _ChestChip(chestColor: chestColor),
@@ -128,8 +132,10 @@ class ItemDetailHeader extends StatelessWidget {
                   ),
                   tooltip:
                       isFav ? 'Remove from favourites' : 'Add to favourites',
-                  constraints:
-                      const BoxConstraints(minWidth: 44, minHeight: 44),
+                  constraints: const BoxConstraints(
+                    minWidth: 44,
+                    minHeight: 44,
+                  ),
                   onPressed: () {
                     Haptics.light();
                     final p = context.read<RunProvider>();
@@ -137,9 +143,11 @@ class ItemDetailHeader extends StatelessWidget {
                     p.toggleFavourite(name);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: GoopText(wasFav
-                            ? '$name removed from favourites'
-                            : '$name added to favourites'),
+                        content: GoopText(
+                          wasFav
+                              ? '$name removed from favourites'
+                              : '$name added to favourites',
+                        ),
                         duration: const Duration(seconds: 1),
                         behavior: SnackBarBehavior.floating,
                       ),
@@ -215,7 +223,9 @@ class ItemDetailHeader extends StatelessWidget {
                 const SizedBox(width: 32),
               IconButton(
                 icon: Icon(
-                  isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                  isFav
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
                   color: favColor,
                   size: 30,
                 ),
@@ -228,9 +238,11 @@ class ItemDetailHeader extends StatelessWidget {
                   p.toggleFavourite(name);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: GoopText(wasFav
-                          ? '$name removed from favourites'
-                          : '$name added to favourites'),
+                      content: GoopText(
+                        wasFav
+                            ? '$name removed from favourites'
+                            : '$name added to favourites',
+                      ),
                       duration: const Duration(seconds: 1),
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -243,9 +255,10 @@ class ItemDetailHeader extends StatelessWidget {
           // Icon — no ring, compact for tighter top area
           GameIcon(
             assetPath: iconPath,
-            fallback: isGun
-                ? Icons.gps_fixed
-                : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
+            fallback:
+                isGun
+                    ? Icons.gps_fixed
+                    : (isActive ? Icons.flash_on : Icons.inventory_2_outlined),
             quality: quality,
             size: 80,
             showRing: false,
@@ -345,7 +358,11 @@ class _TagChip extends StatelessWidget {
   final IconData icon;
   final String label;
   final Color color;
-  const _TagChip({required this.icon, required this.label, required this.color});
+  const _TagChip({
+    required this.icon,
+    required this.label,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -454,10 +471,7 @@ class MetadataChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: color.withValues(alpha: 0.3),
-          width: 0.8,
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 0.8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -528,23 +542,31 @@ class _ChestChip extends StatelessWidget {
         color: accent.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: isS ? accent.withValues(alpha: 0.7) : color.withValues(alpha: 0.45),
+          color:
+              isS
+                  ? accent.withValues(alpha: 0.7)
+                  : color.withValues(alpha: 0.45),
           width: isS ? 1.2 : 0.8,
         ),
-        boxShadow: isS
-            ? [
-                BoxShadow(
-                  color: accent.withValues(alpha: 0.25),
-                  blurRadius: 8,
-                  spreadRadius: 1,
-                ),
-              ]
-            : null,
+        boxShadow:
+            isS
+                ? [
+                  BoxShadow(
+                    color: accent.withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    spreadRadius: 1,
+                  ),
+                ]
+                : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.inventory_2_outlined, size: 14, color: isS ? accent : color),
+          Icon(
+            Icons.inventory_2_outlined,
+            size: 14,
+            color: isS ? accent : color,
+          ),
           const SizedBox(width: 5),
           GoopText(
             'Chest ',

@@ -173,13 +173,27 @@ class RunProvider with ChangeNotifier {
   /// Log entries relevant to curse: pickups with curse, steals, shrines,
   /// manual adjustments, plus synergy/transfer context entries.
   List<RunLogEntry> get curseLog =>
-      _runState.log.where((e) => e.affectsCurse || e.category == RunLogCategory.synergy || e.category == RunLogCategory.transfer).toList()
+      _runState.log
+          .where(
+            (e) =>
+                e.affectsCurse ||
+                e.category == RunLogCategory.synergy ||
+                e.category == RunLogCategory.transfer,
+          )
+          .toList()
         ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
 
   /// Log entries relevant to coolness: pickups with coolness, cigs, shrines,
   /// manual adjustments, plus synergy/transfer context entries.
   List<RunLogEntry> get coolnessLog =>
-      _runState.log.where((e) => e.affectsCoolness || e.category == RunLogCategory.synergy || e.category == RunLogCategory.transfer).toList()
+      _runState.log
+          .where(
+            (e) =>
+                e.affectsCoolness ||
+                e.category == RunLogCategory.synergy ||
+                e.category == RunLogCategory.transfer,
+          )
+          .toList()
         ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
   List<Shrine> get allShrines => _allShrines;
   List<Gungeoneer> get allGungeoneers => _allGungeoneers;
@@ -188,7 +202,9 @@ class RunProvider with ChangeNotifier {
   /// Persists across run end and app kill — only updates when a new
   /// character is picked for SP or MP.
   Gungeoneer? get lastPlayedCharacter =>
-      _lastPlayedCharName.isEmpty ? null : gungeoneerByName(_lastPlayedCharName);
+      _lastPlayedCharName.isEmpty
+          ? null
+          : gungeoneerByName(_lastPlayedCharName);
   BackRefs get backRefs => _backRefs;
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -252,10 +268,16 @@ class RunProvider with ChangeNotifier {
       final jsonResults = await Future.wait([
         rootBundle.loadString('assets/data/guns.json'),
         rootBundle.loadString('assets/data/items.json'),
-        rootBundle.loadString('assets/data/synergies.json').catchError((_) => ''),
+        rootBundle
+            .loadString('assets/data/synergies.json')
+            .catchError((_) => ''),
         rootBundle.loadString('assets/data/shrines.json').catchError((_) => ''),
-        rootBundle.loadString('assets/data/gungeoneers.json').catchError((_) => ''),
-        rootBundle.loadString('assets/data/back_refs.json').catchError((_) => ''),
+        rootBundle
+            .loadString('assets/data/gungeoneers.json')
+            .catchError((_) => ''),
+        rootBundle
+            .loadString('assets/data/back_refs.json')
+            .catchError((_) => ''),
       ]);
 
       // Parse the core data in parallel isolates.
@@ -310,12 +332,8 @@ class RunProvider with ChangeNotifier {
       // Keys are lowercased so callers don't have to normalize at every
       // call-site. Values point at the same Gun/Item/Synergy instances
       // stored in the master lists (no copy).
-      _gunsByLowerName = {
-        for (final g in _allGuns) g.name.toLowerCase(): g,
-      };
-      _itemsByLowerName = {
-        for (final i in _allItems) i.name.toLowerCase(): i,
-      };
+      _gunsByLowerName = {for (final g in _allGuns) g.name.toLowerCase(): g};
+      _itemsByLowerName = {for (final i in _allItems) i.name.toLowerCase(): i};
       _synergiesByLowerName = {
         for (final s in _allSynergies) s.name.toLowerCase(): s,
       };
@@ -360,7 +378,7 @@ class RunProvider with ChangeNotifier {
       final loaded = RunState.fromJson(runJson);
       _runState = _refreshAgainstData(loaded);
     } catch (e) {
-// Removed debugPrint for production
+      // Removed debugPrint for production
     }
   }
 
@@ -388,7 +406,10 @@ class RunProvider with ChangeNotifier {
         }
       }
       return p.copyWith(
-          character: freshChar, guns: freshGuns, items: freshItems);
+        character: freshChar,
+        guns: freshGuns,
+        items: freshItems,
+      );
     }
 
     return s.copyWith(
@@ -403,7 +424,9 @@ class RunProvider with ChangeNotifier {
   void _log(RunLogEntry entry) {
     final updated = [..._runState.log, entry];
     if (updated.length > 200) {
-      _runState = _runState.copyWith(log: updated.sublist(updated.length - 200));
+      _runState = _runState.copyWith(
+        log: updated.sublist(updated.length - 200),
+      );
     } else {
       _runState = _runState.copyWith(log: updated);
     }
@@ -416,12 +439,14 @@ class RunProvider with ChangeNotifier {
     final beforeNames = before.map((s) => s.name).toSet();
     for (final s in after) {
       if (!beforeNames.contains(s.name)) {
-        _log(RunLogEntry(
-          timestamp: DateTime.now(),
-          category: RunLogCategory.synergy,
-          description: 'Synergy activated: ${s.name}',
-          entityName: s.name,
-        ));
+        _log(
+          RunLogEntry(
+            timestamp: DateTime.now(),
+            category: RunLogCategory.synergy,
+            description: 'Synergy activated: ${s.name}',
+            entityName: s.name,
+          ),
+        );
       }
     }
   }
@@ -445,16 +470,16 @@ class RunProvider with ChangeNotifier {
       final jsonMap = _runState.toJson();
       final encoded = await compute(_encodeRunState, jsonMap);
       final prefs = await SharedPreferences.getInstance();
-      
+
       // Double-buffering atomic recovery: keep the last known good string as backup before overwrite
       final lastGood = prefs.getString('current_run');
       if (lastGood != null && lastGood.isNotEmpty) {
         await prefs.setString('current_run_backup', lastGood);
       }
-      
+
       await prefs.setString('current_run', encoded);
     } catch (e) {
-// Removed debugPrint for production
+      // Removed debugPrint for production
     }
   }
 
@@ -466,7 +491,7 @@ class RunProvider with ChangeNotifier {
       final list = prefs.getStringList('favourites_v1');
       if (list != null) _favourites = list.toSet();
     } catch (e) {
-// Removed debugPrint for production
+      // Removed debugPrint for production
     }
   }
 
@@ -475,7 +500,7 @@ class RunProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setStringList('favourites_v1', _favourites.toList());
     } catch (e) {
-// Removed debugPrint for production
+      // Removed debugPrint for production
     }
   }
 
@@ -486,7 +511,7 @@ class RunProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       _lastPlayedCharName = prefs.getString('last_played_character') ?? '';
     } catch (e) {
-// Removed debugPrint for production
+      // Removed debugPrint for production
     }
   }
 
@@ -496,7 +521,7 @@ class RunProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('last_played_character', name);
     } catch (e) {
-// Removed debugPrint for production
+      // Removed debugPrint for production
     }
   }
 
@@ -532,14 +557,17 @@ class RunProvider with ChangeNotifier {
       _robotJunk = prefs.getInt('special.robot.junk') ?? 0;
       _robotGoldJunk = prefs.getBool('special.robot.goldjunk') ?? false;
       _robotLies = prefs.getBool('special.robot.lies') ?? false;
-      _fireplaceExtinguished = prefs.getBool('special.robot.fireplace') ?? false;
+      _fireplaceExtinguished =
+          prefs.getBool('special.robot.fireplace') ?? false;
       _batteryBulletsSynergy = prefs.getBool('special.robot.battery') ?? false;
       _fuseDisarmer = prefs.getBool('special.robot.fusedisarmer') ?? false;
 
       // Huntress specific values
       _huntressRoomClears = prefs.getInt('special.huntress.roomclears') ?? 0;
       _huntressInjured = prefs.getBool('special.huntress.injured') ?? false;
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
   }
 
   Future<void> setHuntressRoomClears(int clears) async {
@@ -547,7 +575,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.huntress.roomclears', _huntressRoomClears);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -556,7 +586,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.huntress.injured', _huntressInjured);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -565,7 +597,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.robot.armor', _robotArmor);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -574,7 +608,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.robot.junk', _robotJunk);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -583,7 +619,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.goldjunk', _robotGoldJunk);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -592,7 +630,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.lies', _robotLies);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -601,7 +641,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.fireplace', _fireplaceExtinguished);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -610,7 +652,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.battery', _batteryBulletsSynergy);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -619,7 +663,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.robot.fusedisarmer', _fuseDisarmer);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -628,7 +674,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.gunderfury.level', _gunderfuryLevel);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -637,7 +685,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.triple_gun.form', _tripleGunForm);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -651,7 +701,9 @@ class RunProvider with ChangeNotifier {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.evolver.kills', _evolverKills);
       await prefs.setInt('special.evolver.form', _evolverForm);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -662,7 +714,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.sprun.trigger', _sprunTriggerIndex);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -698,7 +752,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.shellegun.mode', _shellegunMode);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -707,7 +763,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.chambergun.floor', _chamberGunFloor);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -716,7 +774,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.platinum.seconds', _platinumBulletsSeconds);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -725,7 +785,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.ironcoin.uses', _ironCoinUses);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -734,7 +796,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.polaris.kills', _polarisKills);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -743,7 +807,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.polaris.hits', _polarisDamageHits);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -752,7 +818,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.gunther.friendship', _guntherFriendship);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -761,7 +829,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('special.gunsoul.activated', _gunSoulActivated);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -770,7 +840,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.evolver.form', _evolverForm);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -779,7 +851,9 @@ class RunProvider with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('special.spice.count', _spiceUsageCount);
-    } catch (e) { debugPrint('[RunProvider] persistence error: $e'); }
+    } catch (e) {
+      debugPrint('[RunProvider] persistence error: $e');
+    }
     notifyListeners();
   }
 
@@ -804,17 +878,19 @@ class RunProvider with ChangeNotifier {
   /// Shared fire-and-forget prefs write for special-state fields —
   /// matches the per-setter pattern used by the older special fields.
   void _persistSpecial(String key, Object value) {
-    SharedPreferences.getInstance().then((prefs) {
-      switch (value) {
-        case int v:
-          prefs.setInt(key, v);
-        case bool v:
-          prefs.setBool(key, v);
-        case String v:
-          prefs.setString(key, v);
-        default:
-      }
-    }).catchError((Object _) {});
+    SharedPreferences.getInstance()
+        .then((prefs) {
+          switch (value) {
+            case int v:
+              prefs.setInt(key, v);
+            case bool v:
+              prefs.setBool(key, v);
+            case String v:
+              prefs.setString(key, v);
+            default:
+          }
+        })
+        .catchError((Object _) {});
   }
 
   bool isFavourite(String name) => _favourites.contains(name);
@@ -843,15 +919,13 @@ class RunProvider with ChangeNotifier {
   /// Resolved Gun objects for the favourited names (preserves insertion
   /// order approximately — actually set-insertion order on Dart is
   /// unordered, so we sort by name for stable UI).
-  List<Gun> get favouriteGuns => _allGuns
-      .where((g) => _favourites.contains(g.name))
-      .toList()
-    ..sort((a, b) => a.name.compareTo(b.name));
+  List<Gun> get favouriteGuns =>
+      _allGuns.where((g) => _favourites.contains(g.name)).toList()
+        ..sort((a, b) => a.name.compareTo(b.name));
 
-  List<Item> get favouriteItems => _allItems
-      .where((i) => _favourites.contains(i.name))
-      .toList()
-    ..sort((a, b) => a.name.compareTo(b.name));
+  List<Item> get favouriteItems =>
+      _allItems.where((i) => _favourites.contains(i.name)).toList()
+        ..sort((a, b) => a.name.compareTo(b.name));
 
   // --- Run lifecycle ------------------------------------------------------
 
@@ -859,12 +933,12 @@ class RunProvider with ChangeNotifier {
   /// starting guns/items by name from the master data.
   Player _buildPlayerFor(Gungeoneer character) {
     final rng = math.Random();
-    final startingGuns = _allGuns
-        .where((g) => character.startingGuns.contains(g.name))
-        .toList();
-    final startingItems = _allItems
-        .where((i) => character.startingItems.contains(i.name))
-        .toList();
+    final startingGuns =
+        _allGuns.where((g) => character.startingGuns.contains(g.name)).toList();
+    final startingItems =
+        _allItems
+            .where((i) => character.startingItems.contains(i.name))
+            .toList();
     // Characters whose starter list is 'Random' (or otherwise resolves
     // empty — e.g. The Paradox/Cultist) get a rolled piece of gear
     // instead of starting with nothing. Matches the in-game Paradox:
@@ -909,9 +983,10 @@ class RunProvider with ChangeNotifier {
   /// Add a second (local co-op) player to the current run.
   void startCoopPlayer(Gungeoneer character) {
     _runState = _runState.copyWith(
-      coop: _isParadoxMain
-          ? Player(character: character)
-          : _buildPlayerFor(character),
+      coop:
+          _isParadoxMain
+              ? Player(character: character)
+              : _buildPlayerFor(character),
     );
     _paradoxSidekickEmptied = false;
     _scheduleSave();
@@ -933,9 +1008,10 @@ class RunProvider with ChangeNotifier {
     final current = _playerFor(slot);
     final char = current.character;
     if (char == null) return;
-    final fresh = (slot == PlayerSlot.coop && _isParadoxMain)
-        ? Player(character: char)
-        : _buildPlayerFor(char);
+    final fresh =
+        (slot == PlayerSlot.coop && _isParadoxMain)
+            ? Player(character: char)
+            : _buildPlayerFor(char);
     _runState = _replacePlayer(slot, fresh);
     _runState = _runState.copyWith(coolness: 0.0, curse: 0.0, shrinesUsed: []);
     _scheduleSave();
@@ -957,14 +1033,9 @@ class RunProvider with ChangeNotifier {
     required List<String> itemNames,
   }) {
     final char = characterName.isEmpty ? null : gungeoneerByName(characterName);
-    final guns = gunNames
-        .map((n) => gunByName(n))
-        .whereType<Gun>()
-        .toList();
-    final items = itemNames
-        .map((n) => itemByName(n))
-        .whereType<Item>()
-        .toList();
+    final guns = gunNames.map((n) => gunByName(n)).whereType<Gun>().toList();
+    final items =
+        itemNames.map((n) => itemByName(n)).whereType<Item>().toList();
     _runState = _runState.copyWith(
       coop: Player(character: char, guns: guns, items: items),
     );
@@ -1043,14 +1114,9 @@ class RunProvider with ChangeNotifier {
     final char = gungeoneerByName(characterName);
     // Don't use toSet() — it collapses stackable items like Junk.
     // Resolve names directly, preserving duplicates and order.
-    final guns = gunNames
-        .map((n) => gunByName(n))
-        .whereType<Gun>()
-        .toList();
-    final items = itemNames
-        .map((n) => itemByName(n))
-        .whereType<Item>()
-        .toList();
+    final guns = gunNames.map((n) => gunByName(n)).whereType<Gun>().toList();
+    final items =
+        itemNames.map((n) => itemByName(n)).whereType<Item>().toList();
 
     // CRITICAL: If the character can't be found (e.g. data not loaded
     // yet, or character name mismatch between devices), do NOT wipe
@@ -1061,9 +1127,7 @@ class RunProvider with ChangeNotifier {
     // guns/items. If there's no existing character, still create the
     // player (backward compatible with tests that expect slot population).
     if (char == null) {
-      final existing = targetMainSlot
-          ? _runState.main
-          : _runState.coop;
+      final existing = targetMainSlot ? _runState.main : _runState.coop;
       final existingChar = existing?.character;
       if (existingChar != null) {
         // Preserve existing character, update guns/items only.
@@ -1141,9 +1205,10 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       coolness: (_runState.coolness + coolnessDelta).clamp(-100.0, 100.0),
       curse: (_runState.curse + curseDelta).clamp(-100.0, 100.0),
-      shrinesUsed: shrineName != null && shrineName.isNotEmpty
-          ? [..._runState.shrinesUsed, shrineName]
-          : _runState.shrinesUsed,
+      shrinesUsed:
+          shrineName != null && shrineName.isNotEmpty
+              ? [..._runState.shrinesUsed, shrineName]
+              : _runState.shrinesUsed,
     );
     _scheduleSave();
     notifyListeners();
@@ -1237,72 +1302,93 @@ class RunProvider with ChangeNotifier {
     return _runState.copyWith(coop: p);
   }
 
-  void addGun(Gun gun, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+  void addGun(
+    Gun gun, {
+    PlayerSlot slot = PlayerSlot.main,
+    bool force = false,
+  }) {
     final p = _playerFor(slot);
     if (!force && p.guns.any((g) => g.name == gun.name)) return;
     final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(slot, p.copyWith(guns: [...p.guns, gun]));
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.pickupGun,
-      description: 'Picked up ${gun.name}',
-      curseDelta: gun.curse,
-      coolnessDelta: gun.coolness,
-      entityName: gun.name,
-      playerName: p.character?.name,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.pickupGun,
+        description: 'Picked up ${gun.name}',
+        curseDelta: gun.curse,
+        coolnessDelta: gun.coolness,
+        entityName: gun.name,
+        playerName: p.character?.name,
+      ),
+    );
     _checkNewSynergies(synergyBefore);
     _scheduleSave();
     notifyListeners();
   }
 
-  void removeGun(Gun gun, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+  void removeGun(
+    Gun gun, {
+    PlayerSlot slot = PlayerSlot.main,
+    bool force = false,
+  }) {
     final p = _playerFor(slot);
     _runState = _replacePlayer(
-        slot, p.copyWith(guns: p.guns.where((g) => g.name != gun.name).toList()));
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.removeGun,
-      description: 'Removed ${gun.name}',
-      curseDelta: -gun.curse,
-      coolnessDelta: -gun.coolness,
-      entityName: gun.name,
-      playerName: p.character?.name,
-    ));
+      slot,
+      p.copyWith(guns: p.guns.where((g) => g.name != gun.name).toList()),
+    );
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.removeGun,
+        description: 'Removed ${gun.name}',
+        curseDelta: -gun.curse,
+        coolnessDelta: -gun.coolness,
+        entityName: gun.name,
+        playerName: p.character?.name,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
   }
 
-  void addItem(Item item, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+  void addItem(
+    Item item, {
+    PlayerSlot slot = PlayerSlot.main,
+    bool force = false,
+  }) {
     final p = _playerFor(slot);
     final isJunk = item.name.toLowerCase() == 'junk';
     if (!force && !isJunk && p.items.any((i) => i.name == item.name)) return;
     final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(slot, p.copyWith(items: [...p.items, item]));
 
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.pickupItem,
-      description: 'Picked up ${item.name}',
-      curseDelta: item.curse,
-      coolnessDelta: item.coolness,
-      entityName: item.name,
-      playerName: p.character?.name,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.pickupItem,
+        description: 'Picked up ${item.name}',
+        curseDelta: item.curse,
+        coolnessDelta: item.coolness,
+        entityName: item.name,
+        playerName: p.character?.name,
+      ),
+    );
     _checkNewSynergies(synergyBefore);
 
     // Robot Tax: Automatically convert HP Upgrades and Master Rounds to +1 Armor!
     final charName = p.character?.name.toLowerCase() ?? '';
     if (charName.contains('robot')) {
       final nameLower = item.name.toLowerCase();
-      final isHpUp = nameLower.contains('master round') ||
-                     nameLower.contains('heart container') ||
-                     nameLower.contains('heart holster') ||
-                     nameLower.contains('heart locket') ||
-                     nameLower.contains('heart purse') ||
-                     nameLower.contains('heart bottle') ||
-                     nameLower.contains('yellow chamber') ||
-                     nameLower.contains('pink guon stone');
+      final isHpUp =
+          nameLower.contains('master round') ||
+          nameLower.contains('heart container') ||
+          nameLower.contains('heart holster') ||
+          nameLower.contains('heart locket') ||
+          nameLower.contains('heart purse') ||
+          nameLower.contains('heart bottle') ||
+          nameLower.contains('yellow chamber') ||
+          nameLower.contains('pink guon stone');
       if (isHpUp) {
         setRobotArmor(_robotArmor + 1);
       }
@@ -1320,25 +1406,32 @@ class RunProvider with ChangeNotifier {
     final delta = added ? 1 : -1;
     if (nameLower == 'junk' || nameLower == 'sack of junk') {
       setRobotJunk(_robotJunk + delta);
-    } else if (nameLower.contains('gold junk') || nameLower.contains('golden junk')) {
+    } else if (nameLower.contains('gold junk') ||
+        nameLower.contains('golden junk')) {
       setRobotGoldJunk(added);
     } else if (nameLower == 'lies') {
       setRobotLies(added);
     }
   }
 
-  void removeItem(Item item, {PlayerSlot slot = PlayerSlot.main, bool force = false}) {
+  void removeItem(
+    Item item, {
+    PlayerSlot slot = PlayerSlot.main,
+    bool force = false,
+  }) {
     final p = _playerFor(slot);
 
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.removeItem,
-      description: 'Removed ${item.name}',
-      curseDelta: -item.curse,
-      coolnessDelta: -item.coolness,
-      entityName: item.name,
-      playerName: p.character?.name,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.removeItem,
+        description: 'Removed ${item.name}',
+        curseDelta: -item.curse,
+        coolnessDelta: -item.coolness,
+        entityName: item.name,
+        playerName: p.character?.name,
+      ),
+    );
 
     // Only remove one copy if it's Junk (to allow incremental stacking/unstacking)
     List<Item> newItems;
@@ -1351,7 +1444,7 @@ class RunProvider with ChangeNotifier {
     } else {
       newItems = p.items.where((i) => i.name != item.name).toList();
     }
-    
+
     _runState = _replacePlayer(slot, p.copyWith(items: newItems));
 
     // Keep the Robot's auto Junk tracking in sync on removal too.
@@ -1375,16 +1468,21 @@ class RunProvider with ChangeNotifier {
     final to = _playerFor(toSlot);
     if (to.guns.any((g) => g.name == gun.name)) return false;
     final synergyBefore = getActiveSynergiesCombined();
-    _runState = _replacePlayer(fromSlot,
-        from.copyWith(guns: from.guns.where((g) => g.name != gun.name).toList()));
+    _runState = _replacePlayer(
+      fromSlot,
+      from.copyWith(guns: from.guns.where((g) => g.name != gun.name).toList()),
+    );
     _runState = _replacePlayer(toSlot, to.copyWith(guns: [...to.guns, gun]));
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.transfer,
-      description: 'Transferred ${gun.name} → ${to.character?.name ?? 'Co-op'}',
-      entityName: gun.name,
-      playerName: from.character?.name,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.transfer,
+        description:
+            'Transferred ${gun.name} → ${to.character?.name ?? 'Co-op'}',
+        entityName: gun.name,
+        playerName: from.character?.name,
+      ),
+    );
     _checkNewSynergies(synergyBefore);
     _scheduleSave();
     notifyListeners();
@@ -1408,13 +1506,16 @@ class RunProvider with ChangeNotifier {
     final synergyBefore = getActiveSynergiesCombined();
     _runState = _replacePlayer(fromSlot, from.copyWith(items: newFrom));
     _runState = _replacePlayer(toSlot, to.copyWith(items: [...to.items, item]));
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.transfer,
-      description: 'Transferred ${item.name} → ${to.character?.name ?? 'Co-op'}',
-      entityName: item.name,
-      playerName: from.character?.name,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.transfer,
+        description:
+            'Transferred ${item.name} → ${to.character?.name ?? 'Co-op'}',
+        entityName: item.name,
+        playerName: from.character?.name,
+      ),
+    );
     _checkNewSynergies(synergyBefore);
     _scheduleSave();
     notifyListeners();
@@ -1427,12 +1528,15 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       coolness: (_runState.coolness + delta).clamp(-100.0, 100.0),
     );
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.manual,
-      description: 'Manual coolness ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
-      coolnessDelta: delta,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.manual,
+        description:
+            'Manual coolness ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
+        coolnessDelta: delta,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
   }
@@ -1441,12 +1545,15 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       curse: (_runState.curse + delta).clamp(-100.0, 100.0),
     );
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.manual,
-      description: 'Manual curse ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
-      curseDelta: delta,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.manual,
+        description:
+            'Manual curse ${delta > 0 ? "+" : ""}${delta.toStringAsFixed(1)}',
+        curseDelta: delta,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
   }
@@ -1456,13 +1563,15 @@ class RunProvider with ChangeNotifier {
     final oldCurse = _runState.curse;
     _runState = _runState.copyWith(coolness: 0, curse: 0);
     if (oldCool != 0 || oldCurse != 0) {
-      _log(RunLogEntry(
-        timestamp: DateTime.now(),
-        category: RunLogCategory.manual,
-        description: 'Reset manual stats to 0',
-        coolnessDelta: -oldCool,
-        curseDelta: -oldCurse,
-      ));
+      _log(
+        RunLogEntry(
+          timestamp: DateTime.now(),
+          category: RunLogCategory.manual,
+          description: 'Reset manual stats to 0',
+          coolnessDelta: -oldCool,
+          curseDelta: -oldCurse,
+        ),
+      );
     }
     _scheduleSave();
     notifyListeners();
@@ -1475,12 +1584,14 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       curse: (_runState.curse + 1).clamp(-100.0, 100.0),
     );
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.steal,
-      description: 'Stole from a shop (+1 curse)',
-      curseDelta: 1,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.steal,
+        description: 'Stole from a shop (+1 curse)',
+        curseDelta: 1,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
   }
@@ -1490,12 +1601,14 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       curse: (_runState.curse + 2.5).clamp(-100.0, 100.0),
     );
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.cursula,
-      description: 'Visited Cursula (+2.5 curse)',
-      curseDelta: 2.5,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.cursula,
+        description: 'Visited Cursula (+2.5 curse)',
+        curseDelta: 2.5,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
   }
@@ -1505,12 +1618,14 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       coolness: (_runState.coolness + 1).clamp(-100.0, 100.0),
     );
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.smokeCig,
-      description: 'Smoked a cigarette (+1 coolness)',
-      coolnessDelta: 1,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.smokeCig,
+        description: 'Smoked a cigarette (+1 coolness)',
+        coolnessDelta: 1,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
   }
@@ -1520,12 +1635,14 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       coolness: (_runState.coolness + 1).clamp(-100.0, 100.0),
     );
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.rainbowRun,
-      description: 'Rainbow Run reward (+1 coolness)',
-      coolnessDelta: 1,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.rainbowRun,
+        description: 'Rainbow Run reward (+1 coolness)',
+        coolnessDelta: 1,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
   }
@@ -1563,9 +1680,13 @@ class RunProvider with ChangeNotifier {
     } else if (name == 'angel' || name == 'fallen angel') {
       manual.add('Lose 1 heart container · +25% damage');
     } else if (name == 'blood') {
-      manual.add('Lose 1 heart container · damaging aura near highlighted enemies');
+      manual.add(
+        'Lose 1 heart container · damaging aura near highlighted enemies',
+      );
     } else if (name == 'companion') {
-      manual.add('Lose 1 heart container · pick up the familiar item in Browse');
+      manual.add(
+        'Lose 1 heart container · pick up the familiar item in Browse',
+      );
     } else if (name == 'challenge') {
       manual.add('Survive 3 enemy waves → chest');
     } else if (name == 'dice') {
@@ -1603,14 +1724,16 @@ class RunProvider with ChangeNotifier {
     _runState = _runState.copyWith(
       shrinesUsed: [..._runState.shrinesUsed, s.name],
     );
-    _log(RunLogEntry(
-      timestamp: DateTime.now(),
-      category: RunLogCategory.shrine,
-      description: 'Activated ${s.name} shrine',
-      curseDelta: curseDelta,
-      coolnessDelta: coolDelta,
-      entityName: s.name,
-    ));
+    _log(
+      RunLogEntry(
+        timestamp: DateTime.now(),
+        category: RunLogCategory.shrine,
+        description: 'Activated ${s.name} shrine',
+        curseDelta: curseDelta,
+        coolnessDelta: coolDelta,
+        entityName: s.name,
+      ),
+    );
     _scheduleSave();
     notifyListeners();
 
@@ -1649,9 +1772,11 @@ class RunProvider with ChangeNotifier {
   List<Synergy> getSynergiesFor(String itemName) {
     final lower = itemName.toLowerCase();
     return _allSynergies
-        .where((s) =>
-            s.items.any((i) => i.toLowerCase() == lower) ||
-            s.anyOf.any((i) => i.toLowerCase() == lower))
+        .where(
+          (s) =>
+              s.items.any((i) => i.toLowerCase() == lower) ||
+              s.anyOf.any((i) => i.toLowerCase() == lower),
+        )
         .toList();
   }
 
@@ -1678,21 +1803,24 @@ class RunProvider with ChangeNotifier {
 
   ItemSynergies _collectFor(String name, bool isGun, Set<String> owned) {
     final lower = name.toLowerCase();
-    final related = _allSynergies.where((s) =>
-        s.items.any((i) => i.toLowerCase() == lower) ||
-        s.anyOf.any((i) => i.toLowerCase() == lower));
-    final synergies = related.map((s) {
-      final missing = s.missingFor(owned);
-      return SynergyStatus(
-        synergy: s,
-        missing: missing,
-        active: s.matchesItems(owned.toList()),
-      );
-    }).toList()
-      ..sort((a, b) {
-        if (a.active != b.active) return a.active ? -1 : 1;
-        return a.missing.length.compareTo(b.missing.length);
-      });
+    final related = _allSynergies.where(
+      (s) =>
+          s.items.any((i) => i.toLowerCase() == lower) ||
+          s.anyOf.any((i) => i.toLowerCase() == lower),
+    );
+    final synergies =
+        related.map((s) {
+            final missing = s.missingFor(owned);
+            return SynergyStatus(
+              synergy: s,
+              missing: missing,
+              active: s.matchesItems(owned.toList()),
+            );
+          }).toList()
+          ..sort((a, b) {
+            if (a.active != b.active) return a.active ? -1 : 1;
+            return a.missing.length.compareTo(b.missing.length);
+          });
     return ItemSynergies(itemName: name, isGun: isGun, entries: synergies);
   }
 
@@ -1726,13 +1854,17 @@ class RunProvider with ChangeNotifier {
 
   double _avgDpsFor(List<Gun> guns) {
     if (guns.isEmpty) return 0;
-    final total = guns.map((g) => g.getDynamicDps(
-      gunderLevel: _gunderfuryLevel,
-      tripleForm: _tripleGunForm,
-      evolverStage: _evolverForm,
-      shellegunMode: _shellegunMode,
-      chamberGunFloor: _chamberGunFloor,
-    )).fold<double>(0, (a, b) => a + b);
+    final total = guns
+        .map(
+          (g) => g.getDynamicDps(
+            gunderLevel: _gunderfuryLevel,
+            tripleForm: _tripleGunForm,
+            evolverStage: _evolverForm,
+            shellegunMode: _shellegunMode,
+            chamberGunFloor: _chamberGunFloor,
+          ),
+        )
+        .fold<double>(0, (a, b) => a + b);
     return total / guns.length;
   }
 
@@ -1742,25 +1874,28 @@ class RunProvider with ChangeNotifier {
   // --- Combined (both-player) metrics for Summary page ------------------
 
   List<Gun> get _allGunsInRun => [
-        ..._runState.main.guns,
-        ...?_runState.coop?.guns,
-      ];
+    ..._runState.main.guns,
+    ...?_runState.coop?.guns,
+  ];
 
   List<Item> get _allItemsInRun => [
-        ..._runState.main.items,
-        ...?_runState.coop?.items,
-      ];
+    ..._runState.main.items,
+    ...?_runState.coop?.items,
+  ];
 
   double get combinedAvgDps => _avgDpsFor(_allGunsInRun);
 
-  double get combinedSumDps =>
-      _allGunsInRun.map((g) => g.getDynamicDps(
-        gunderLevel: _gunderfuryLevel,
-        tripleForm: _tripleGunForm,
-        evolverStage: _evolverForm,
-        shellegunMode: _shellegunMode,
-        chamberGunFloor: _chamberGunFloor,
-      )).fold<double>(0, (a, b) => a + b);
+  double get combinedSumDps => _allGunsInRun
+      .map(
+        (g) => g.getDynamicDps(
+          gunderLevel: _gunderfuryLevel,
+          tripleForm: _tripleGunForm,
+          evolverStage: _evolverForm,
+          shellegunMode: _shellegunMode,
+          chamberGunFloor: _chamberGunFloor,
+        ),
+      )
+      .fold<double>(0, (a, b) => a + b);
 
   /// Parse "123", "N/A", "" to an int (0 on fail).
   int _parsePrice(String s) {
@@ -1772,8 +1907,12 @@ class RunProvider with ChangeNotifier {
   /// Combined sell-price total across both players' guns + items.
   int get combinedTotalWorth {
     int total = 0;
-    for (final g in _allGunsInRun) { total += _parsePrice(g.sellPrice); }
-    for (final i in _allItemsInRun) { total += _parsePrice(i.sellPrice); }
+    for (final g in _allGunsInRun) {
+      total += _parsePrice(g.sellPrice);
+    }
+    for (final i in _allItemsInRun) {
+      total += _parsePrice(i.sellPrice);
+    }
     return total;
   }
 
@@ -1797,8 +1936,12 @@ class RunProvider with ChangeNotifier {
 
   int get combinedQualityScore {
     int s = 0;
-    for (final g in _allGunsInRun) { s += _qualityPoints(g.quality); }
-    for (final i in _allItemsInRun) { s += _qualityPoints(i.quality); }
+    for (final g in _allGunsInRun) {
+      s += _qualityPoints(g.quality);
+    }
+    for (final i in _allItemsInRun) {
+      s += _qualityPoints(i.quality);
+    }
     return s;
   }
 
@@ -1874,7 +2017,8 @@ class RunProvider with ChangeNotifier {
     if (owned.isEmpty) return 0;
     int n = 0;
     for (final s in _allSynergies) {
-      final hits = s.items.any((i) => owned.contains(i.toLowerCase())) ||
+      final hits =
+          s.items.any((i) => owned.contains(i.toLowerCase())) ||
           s.anyOf.any((i) => owned.contains(i.toLowerCase()));
       if (hits) n++;
     }
@@ -1913,7 +2057,8 @@ class RunProvider with ChangeNotifier {
 
   /// Loadout composition per-slot: guns, actives, passives, companions.
   ({int guns, int actives, int passives, int companions}) composition(
-      PlayerSlot slot) {
+    PlayerSlot slot,
+  ) {
     final p = slot == PlayerSlot.main ? _runState.main : _runState.coop;
     if (p == null) {
       return (guns: 0, actives: 0, passives: 0, companions: 0);
@@ -1944,10 +2089,11 @@ class RunProvider with ChangeNotifier {
   ///
   /// Returns an empty list if the item is already owned (can't complete
   /// what's already counted) or if no synergy would be completed.
-  List<String> synergiesCompletedBy(String itemName,
-      {PlayerSlot slot = PlayerSlot.main}) {
-    final player =
-        slot == PlayerSlot.main ? _runState.main : _runState.coop;
+  List<String> synergiesCompletedBy(
+    String itemName, {
+    PlayerSlot slot = PlayerSlot.main,
+  }) {
+    final player = slot == PlayerSlot.main ? _runState.main : _runState.coop;
     if (player == null) return const [];
     final owned = player.allItemNames;
     final ownedLower = owned.map((n) => n.toLowerCase()).toSet();
@@ -1955,8 +2101,7 @@ class RunProvider with ChangeNotifier {
     if (ownedLower.contains(lower)) return const []; // already owned
     final wouldOwn = [...owned, itemName];
     return _allSynergies
-        .where((s) =>
-            !s.matchesItems(owned) && s.matchesItems(wouldOwn))
+        .where((s) => !s.matchesItems(owned) && s.matchesItems(wouldOwn))
         .map((s) => s.name)
         .toList();
   }
@@ -1965,8 +2110,12 @@ class RunProvider with ChangeNotifier {
     final map = <String, int>{};
     for (final s in _allSynergies) {
       final seen = <String>{};
-      for (final i in s.items) { seen.add(i.toLowerCase()); }
-      for (final i in s.anyOf) { seen.add(i.toLowerCase()); }
+      for (final i in s.items) {
+        seen.add(i.toLowerCase());
+      }
+      for (final i in s.anyOf) {
+        seen.add(i.toLowerCase());
+      }
       for (final k in seen) {
         map[k] = (map[k] ?? 0) + 1;
       }

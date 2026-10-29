@@ -28,8 +28,7 @@ void main() {
     );
   }
 
-  testWidgets('ParadoxBar shows run title + session number',
-      (tester) async {
+  testWidgets('ParadoxBar shows run title + session number', (tester) async {
     // NOTE: ParadoxBar overflows ~15px horizontally at ≤500px width
     // (title cluster + tab dots + icons) — a real narrow-device bug.
     tester.view.physicalSize = const Size(700, 900);
@@ -46,9 +45,9 @@ void main() {
       sessionNumber: 2,
     );
 
-    await tester.pumpWidget(wrap(
-        session, rp,
-        ParadoxBar(currentPage: 0, onPick: (_) {})));
+    await tester.pumpWidget(
+      wrap(session, rp, ParadoxBar(currentPage: 0, onPick: (_) {})),
+    );
     await tester.pump();
 
     expect(find.textContaining('CURSED HUNTER'), findsWidgets);
@@ -59,8 +58,9 @@ void main() {
     expect(find.byIcon(Icons.forum_rounded), findsNothing);
   });
 
-  testWidgets('PauseOverlay renders GAME PAUSED when session paused',
-      (tester) async {
+  testWidgets('PauseOverlay renders GAME PAUSED when session paused', (
+    tester,
+  ) async {
     final (session, rp) = makeSession();
     await session.startParadox(
       role: MpRole.main,
@@ -70,9 +70,9 @@ void main() {
       sessionNumber: 0,
     );
 
-    await tester.pumpWidget(wrap(
-        session, rp,
-        const PauseOverlay(child: SizedBox.expand())));
+    await tester.pumpWidget(
+      wrap(session, rp, const PauseOverlay(child: SizedBox.expand())),
+    );
     await tester.pump();
 
     // Not paused — no overlay text.

@@ -41,21 +41,24 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  Widget _wrap(Widget child, {RunProvider? rp, MpSession? session}) {
+  Widget wrap(Widget child, {RunProvider? rp, MpSession? session}) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => rp ?? RunProvider()),
-        ChangeNotifierProvider(create: (_) => session ?? MpSession.placeholder()),
+        ChangeNotifierProvider(
+          create: (_) => session ?? MpSession.placeholder(),
+        ),
       ],
       child: MaterialApp(home: child),
     );
   }
 
   group('Loading state', () {
-    testWidgets('Shows skeleton loaders when isLoading is true',
-        (tester) async {
+    testWidgets('Shows skeleton loaders when isLoading is true', (
+      tester,
+    ) async {
       // Default RunProvider has _isLoading = true
-      await tester.pumpWidget(_wrap(const HomeScreen()));
+      await tester.pumpWidget(wrap(const HomeScreen()));
       // Use pump() — SkeletonLoader has a perpetual shimmer animation
       await tester.pump();
 
@@ -63,7 +66,7 @@ void main() {
     });
 
     testWidgets('Does not show bottom nav while loading', (tester) async {
-      await tester.pumpWidget(_wrap(const HomeScreen()));
+      await tester.pumpWidget(wrap(const HomeScreen()));
       await tester.pump();
 
       expect(find.byType(NavigationBar), findsNothing);
@@ -71,12 +74,13 @@ void main() {
   });
 
   group('Main menu state (no active run)', () {
-    testWidgets('Shows MainMenuScreen when loaded with no character',
-        (tester) async {
+    testWidgets('Shows MainMenuScreen when loaded with no character', (
+      tester,
+    ) async {
       // Use _LoadedRunProvider to bypass isLoading without calling loadData()
       final rp = _LoadedRunProvider();
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pumpAndSettle();
 
       // MainMenuScreen should be shown
@@ -88,7 +92,7 @@ void main() {
     testWidgets('Does not show bottom nav when no active run', (tester) async {
       final rp = _LoadedRunProvider();
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pumpAndSettle();
 
       expect(find.byType(NavigationBar), findsNothing);
@@ -96,13 +100,14 @@ void main() {
   });
 
   group('Active run state (bottom nav)', () {
-    testWidgets('Shows bottom nav with 5 tabs when run is active',
-        (tester) async {
+    testWidgets('Shows bottom nav with 5 tabs when run is active', (
+      tester,
+    ) async {
       final rp = _LoadedRunProvider();
       // Start a run to set selectedCharacter
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       // Use pump() not pumpAndSettle() — ActiveRunScreen has perpetual
       // animations (AvatarAura, particle engines, etc.) that would time out.
       await tester.pump();
@@ -119,7 +124,7 @@ void main() {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pump();
 
       // The NavigationBar should have selectedIndex 0 (Inventory)
@@ -131,7 +136,7 @@ void main() {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pump();
 
       // Tap the Browse destination
@@ -151,7 +156,7 @@ void main() {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pump();
 
       await tester.tap(find.text('Settings'));
@@ -165,7 +170,7 @@ void main() {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pump();
 
       await tester.tap(find.text('Codex'));
@@ -179,7 +184,7 @@ void main() {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
-      await tester.pumpWidget(_wrap(const HomeScreen(), rp: rp));
+      await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pump();
 
       final navBar = tester.widget<NavigationBar>(find.byType(NavigationBar));

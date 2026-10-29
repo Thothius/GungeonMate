@@ -76,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
       return Scaffold(
         backgroundColor: Colors.transparent,
         body: ErrorState(
-          message: 'Could not load game data. Check your connection and try again.',
+          message:
+              'Could not load game data. Check your connection and try again.',
           onRetry: () => runProvider.loadData(),
         ),
       );
@@ -109,9 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
       // clear the search box the instant the user picks another tab.
       _visitedTabs.contains(1)
           ? BrowseScreen(
-              isVisible: _selectedIndex == 1,
-              targetSlot: _currentPlayerSlot,
-            )
+            isVisible: _selectedIndex == 1,
+            targetSlot: _currentPlayerSlot,
+          )
           : const SizedBox.shrink(),
       // Codex: deferred until first visit — avoids loading 5 JSON files
       // in initState if the user never opens the Codex tab.
@@ -138,58 +139,58 @@ class _HomeScreenState extends State<HomeScreen> {
     return MpReconnectBanner(
       child: MpRequestListener(
         child: PopScope(
-        canPop: canPop,
-        onPopInvokedWithResult: (didPop, _) {
-          if (didPop) return;
-          if (_selectedIndex != 0) {
-            setState(() => _selectedIndex = 0);
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: IndexedStack(index: _selectedIndex, children: screens),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: _selectedIndex,
-            onDestinationSelected: (index) {
-              // Always drop the soft keyboard when swapping tabs so the
-              // search field in Browse can never haunt other tabs.
-              FocusManager.instance.primaryFocus?.unfocus();
-              GoopAnimationManager.instance.pulse();
-              setState(() {
-                _selectedIndex = index;
-                _visitedTabs.add(index);
-              });
-            },
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.inventory_2_outlined),
-                selectedIcon: Icon(Icons.inventory_2),
-                label: 'Inventory',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.search),
-                selectedIcon: Icon(Icons.search),
-                label: 'Browse',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.menu_book_outlined),
-                selectedIcon: Icon(Icons.menu_book),
-                label: 'Codex',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.quiz_outlined),
-                selectedIcon: Icon(Icons.quiz),
-                label: 'Quiz',
-              ),
-            ],
+          canPop: canPop,
+          onPopInvokedWithResult: (didPop, _) {
+            if (didPop) return;
+            if (_selectedIndex != 0) {
+              setState(() => _selectedIndex = 0);
+            }
+          },
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: IndexedStack(index: _selectedIndex, children: screens),
+            bottomNavigationBar: NavigationBar(
+              selectedIndex: _selectedIndex,
+              onDestinationSelected: (index) {
+                // Always drop the soft keyboard when swapping tabs so the
+                // search field in Browse can never haunt other tabs.
+                FocusManager.instance.primaryFocus?.unfocus();
+                GoopAnimationManager.instance.pulse();
+                setState(() {
+                  _selectedIndex = index;
+                  _visitedTabs.add(index);
+                });
+              },
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.inventory_2_outlined),
+                  selectedIcon: Icon(Icons.inventory_2),
+                  label: 'Inventory',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.search),
+                  selectedIcon: Icon(Icons.search),
+                  label: 'Browse',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.menu_book_outlined),
+                  selectedIcon: Icon(Icons.menu_book),
+                  label: 'Codex',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.settings_outlined),
+                  selectedIcon: Icon(Icons.settings),
+                  label: 'Settings',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.quiz_outlined),
+                  selectedIcon: Icon(Icons.quiz),
+                  label: 'Quiz',
+                ),
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }

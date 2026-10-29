@@ -52,16 +52,16 @@ class GoopText extends StatelessWidget {
     final spacing = VisualPrefs.notifier.value.fontLetterSpacing;
     if (spacing != 0) {
       effective = (effective ?? const TextStyle()).copyWith(
-          letterSpacing:
-              ((effective?.letterSpacing ?? 0) + spacing * 0.5));
+        letterSpacing: ((effective?.letterSpacing ?? 0) + spacing * 0.5),
+      );
     }
     return Text(
-        text,
-        style: effective,
-        textAlign: textAlign,
-        maxLines: maxLines,
-        overflow: overflow,
-        softWrap: softWrap,
-      );
+      text,
+      style: effective,
+      textAlign: textAlign,
+      maxLines: maxLines,
+      overflow: overflow,
+      softWrap: softWrap,
+    );
   }
 }

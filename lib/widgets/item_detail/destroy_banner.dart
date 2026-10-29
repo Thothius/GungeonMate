@@ -13,7 +13,10 @@ class DestroyBanner extends StatelessWidget {
         elevation: 0,
         color: Colors.red.withValues(alpha: 0.06),
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.redAccent.withValues(alpha: 0.5), width: 1),
+          side: BorderSide(
+            color: Colors.redAccent.withValues(alpha: 0.5),
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Padding(

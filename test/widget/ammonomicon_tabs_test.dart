@@ -11,7 +11,7 @@ import 'package:gungeon_mate/widgets/codex/ammonomicon_tabs.dart';
 /// AmmonomiconTabStrip uses flutter_animate entrance animations, so
 /// pumpAndSettle is safe after animations complete.
 void main() {
-  final _testTabs = <AmmonomiconTab>[
+  final testTabs = <AmmonomiconTab>[
     const AmmonomiconTab(
       label: 'Guns',
       icon: Icons.gps_fixed,
@@ -32,19 +32,21 @@ void main() {
     ),
   ];
 
-  Widget _wrap(Widget child) {
+  Widget wrap(Widget child) {
     return MaterialApp(home: Scaffold(body: child));
   }
 
   testWidgets('renders all tab labels', (tester) async {
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: _testTabs,
-        selected: 0,
-        collapsed: false,
-        onSelect: (_) {},
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: testTabs,
+          selected: 0,
+          collapsed: false,
+          onSelect: (_) {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Guns'), findsOneWidget);
@@ -52,16 +54,19 @@ void main() {
     expect(find.text('NPCs'), findsOneWidget);
   });
 
-  testWidgets('renders Material icons for tabs without asset icons',
-      (tester) async {
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: _testTabs,
-        selected: 0,
-        collapsed: false,
-        onSelect: (_) {},
+  testWidgets('renders Material icons for tabs without asset icons', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: testTabs,
+          selected: 0,
+          collapsed: false,
+          onSelect: (_) {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     expect(find.byIcon(Icons.gps_fixed), findsOneWidget);
@@ -69,16 +74,19 @@ void main() {
     expect(find.byIcon(Icons.person), findsOneWidget);
   });
 
-  testWidgets('inactive tab icons do not use BlendMode.srcIn color tint',
-      (tester) async {
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: _testTabs,
-        selected: 0, // First tab active, others inactive
-        collapsed: false,
-        onSelect: (_) {},
+  testWidgets('inactive tab icons do not use BlendMode.srcIn color tint', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: testTabs,
+          selected: 0, // First tab active, others inactive
+          collapsed: false,
+          onSelect: (_) {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     // Check all Image widgets — none should have color + BlendMode.srcIn
@@ -88,23 +96,27 @@ void main() {
         expect(
           img.colorBlendMode,
           isNot(BlendMode.srcIn),
-          reason: 'Image should not use BlendMode.srcIn — it replaces '
+          reason:
+              'Image should not use BlendMode.srcIn — it replaces '
               'pixel art with a solid color silhouette',
         );
       }
     }
   });
 
-  testWidgets('active tab icon also does not use BlendMode.srcIn',
-      (tester) async {
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: _testTabs,
-        selected: 1, // Second tab active
-        collapsed: false,
-        onSelect: (_) {},
+  testWidgets('active tab icon also does not use BlendMode.srcIn', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: testTabs,
+          selected: 1, // Second tab active
+          collapsed: false,
+          onSelect: (_) {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     final images = tester.widgetList<Image>(find.byType(Image));
@@ -119,17 +131,20 @@ void main() {
     }
   });
 
-  testWidgets('tapping a tab calls onSelect with correct index',
-      (tester) async {
+  testWidgets('tapping a tab calls onSelect with correct index', (
+    tester,
+  ) async {
     int? selectedIndex;
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: _testTabs,
-        selected: 0,
-        collapsed: false,
-        onSelect: (i) => selectedIndex = i,
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: testTabs,
+          selected: 0,
+          collapsed: false,
+          onSelect: (i) => selectedIndex = i,
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Items'));
@@ -138,35 +153,40 @@ void main() {
     expect(selectedIndex, 1);
   });
 
-  testWidgets('renders without overflow on narrow viewport (320px)',
-      (tester) async {
+  testWidgets('renders without overflow on narrow viewport (320px)', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(320, 640);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: _testTabs,
-        selected: 0,
-        collapsed: false,
-        onSelect: (_) {},
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: testTabs,
+          selected: 0,
+          collapsed: false,
+          onSelect: (_) {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
   });
 
   testWidgets('renders collapsed state without crashing', (tester) async {
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: _testTabs,
-        selected: 0,
-        collapsed: true,
-        onSelect: (_) {},
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: testTabs,
+          selected: 0,
+          collapsed: true,
+          onSelect: (_) {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
@@ -188,14 +208,16 @@ void main() {
       ),
     ];
 
-    await tester.pumpWidget(_wrap(
-      AmmonomiconTabStrip(
-        tabs: assetTabs,
-        selected: 0,
-        collapsed: false,
-        onSelect: (_) {},
+    await tester.pumpWidget(
+      wrap(
+        AmmonomiconTabStrip(
+          tabs: assetTabs,
+          selected: 0,
+          collapsed: false,
+          onSelect: (_) {},
+        ),
       ),
-    ));
+    );
     await tester.pumpAndSettle();
 
     // Asset images will fail to load in tests (no real assets), but

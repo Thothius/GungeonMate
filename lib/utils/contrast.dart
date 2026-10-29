@@ -21,7 +21,9 @@ class Contrast {
   static double luminance(Color c) {
     double channel(double v) {
       v /= 255.0;
-      return v <= 0.03928 ? v / 12.92 : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
+      return v <= 0.03928
+          ? v / 12.92
+          : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
     }
 
     return 0.2126 * channel(c.r) +
@@ -69,9 +71,10 @@ class ContrastResult {
 
   @override
   String toString() {
-    final status = passesBody
-        ? 'OK'
-        : passesLarge
+    final status =
+        passesBody
+            ? 'OK'
+            : passesLarge
             ? 'WARN (large only)'
             : 'FAIL';
     return '$label: ${ratio.toStringAsFixed(2)}:1 [$status]';

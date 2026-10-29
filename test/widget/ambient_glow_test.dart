@@ -15,12 +15,15 @@ void main() {
     });
 
     test('values are orbit, ember, halo, drip', () {
-      expect(GlowStyle.values, containsAll([
-        GlowStyle.orbit,
-        GlowStyle.ember,
-        GlowStyle.halo,
-        GlowStyle.drip,
-      ]));
+      expect(
+        GlowStyle.values,
+        containsAll([
+          GlowStyle.orbit,
+          GlowStyle.ember,
+          GlowStyle.halo,
+          GlowStyle.drip,
+        ]),
+      );
     });
   });
 
@@ -106,7 +109,9 @@ void main() {
       expect(find.byType(AmbientGlow), findsOneWidget);
     });
 
-    testWidgets('renders without tertiary color (null fallback)', (tester) async {
+    testWidgets('renders without tertiary color (null fallback)', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -137,8 +142,9 @@ void main() {
       expect(find.byType(AmbientGlow), findsOneWidget);
     });
 
-    testWidgets('renders with transparent colors without crashing',
-        (tester) async {
+    testWidgets('renders with transparent colors without crashing', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -154,8 +160,9 @@ void main() {
       expect(find.byType(AmbientGlow), findsOneWidget);
     });
 
-    testWidgets('renders with fully opaque colors without crashing',
-        (tester) async {
+    testWidgets('renders with fully opaque colors without crashing', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -197,7 +204,11 @@ void main() {
           }
           return false;
         });
-        expect(hasGradient, isTrue, reason: 'Style $style should produce a gradient');
+        expect(
+          hasGradient,
+          isTrue,
+          reason: 'Style $style should produce a gradient',
+        );
       }
     });
 

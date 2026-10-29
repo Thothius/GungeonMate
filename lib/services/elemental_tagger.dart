@@ -182,9 +182,7 @@ class ElementalTagger {
     ),
     ElementKind.charm: _Rule(
       gunClasses: {'CHARM'},
-      patterns: [
-        _re(r'\bcharm(s|ed|ing)?\b'),
-      ],
+      patterns: [_re(r'\bcharm(s|ed|ing)?\b')],
     ),
     ElementKind.explosive: _Rule(
       gunClasses: {'EXPLOSIVE'},

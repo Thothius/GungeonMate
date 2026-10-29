@@ -35,11 +35,15 @@ class QuizAnswerGrid extends StatelessWidget {
     final locked = pickedIndex != null;
     // Uniform step-down when the longest option runs long — every tile
     // uses the same size so the grid stays visually consistent.
-    final maxLen =
-        options.fold(0, (m, o) => o.length > m ? o.length : m);
-    final fontSize = FontSizes.labelMedium +
+    final maxLen = options.fold(0, (m, o) => o.length > m ? o.length : m);
+    final fontSize =
+        FontSizes.labelMedium +
         1 -
-        (maxLen > 26 ? 2.5 : maxLen > 18 ? 1.25 : 0);
+        (maxLen > 26
+            ? 2.5
+            : maxLen > 18
+            ? 1.25
+            : 0);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -51,23 +55,18 @@ class QuizAnswerGrid extends StatelessWidget {
                 for (var col = 0; col < 2; col++)
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(
-                        left: col == 0 ? 0 : Insets.sm,
-                      ),
+                      padding: EdgeInsets.only(left: col == 0 ? 0 : Insets.sm),
                       child: _AnswerTile(
-                        letter: _letters[row * 2 + col],
-                        label: options[row * 2 + col],
-                        fontSize: fontSize,
-                        accent: accent,
-                        state: _stateFor(row * 2 + col, locked),
-                        onTap: locked
-                            ? null
-                            : () => onPick(row * 2 + col),
-                      )
+                            letter: _letters[row * 2 + col],
+                            label: options[row * 2 + col],
+                            fontSize: fontSize,
+                            accent: accent,
+                            state: _stateFor(row * 2 + col, locked),
+                            onTap: locked ? null : () => onPick(row * 2 + col),
+                          )
                           .animate(
                             key: ValueKey('a${row * 2 + col}'),
-                            delay: Duration(
-                                milliseconds: 60 * (row * 2 + col)),
+                            delay: Duration(milliseconds: 60 * (row * 2 + col)),
                           )
                           .fadeIn(duration: 280.ms)
                           .slideY(begin: 0.3, end: 0, duration: 280.ms),
@@ -113,19 +112,22 @@ class _AnswerTile extends StatelessWidget {
     final isWrong = state == _TileState.wrong;
     final dimmed = state == _TileState.dimmed;
 
-    final borderColor = isCorrect
-        ? const Color(0xFF4CAF50)
-        : isWrong
+    final borderColor =
+        isCorrect
+            ? const Color(0xFF4CAF50)
+            : isWrong
             ? const Color(0xFFE53935)
             : accent.withValues(alpha: dimmed ? 0.15 : 0.5);
-    final fillTop = isCorrect
-        ? const Color(0xFF4CAF50).withValues(alpha: 0.25)
-        : isWrong
+    final fillTop =
+        isCorrect
+            ? const Color(0xFF4CAF50).withValues(alpha: 0.25)
+            : isWrong
             ? const Color(0xFFE53935).withValues(alpha: 0.22)
             : accent.withValues(alpha: dimmed ? 0.03 : 0.10);
-    final fillBottom = isCorrect
-        ? const Color(0xFF4CAF50).withValues(alpha: 0.10)
-        : isWrong
+    final fillBottom =
+        isCorrect
+            ? const Color(0xFF4CAF50).withValues(alpha: 0.10)
+            : isWrong
             ? const Color(0xFFE53935).withValues(alpha: 0.08)
             : accent.withValues(alpha: dimmed ? 0.01 : 0.03);
 
@@ -148,16 +150,18 @@ class _AnswerTile extends StatelessWidget {
               ),
               borderRadius: Radii.card,
               border: Border.all(color: borderColor, width: 1.4),
-              boxShadow: isCorrect
-                  ? [
-                      BoxShadow(
-                        color: const Color(0xFF4CAF50)
-                            .withValues(alpha: 0.35),
-                        blurRadius: 14,
-                        offset: const Offset(0, 3),
-                      ),
-                    ]
-                  : null,
+              boxShadow:
+                  isCorrect
+                      ? [
+                        BoxShadow(
+                          color: const Color(
+                            0xFF4CAF50,
+                          ).withValues(alpha: 0.35),
+                          blurRadius: 14,
+                          offset: const Offset(0, 3),
+                        ),
+                      ]
+                      : null,
             ),
             child: Row(
               children: [
@@ -168,24 +172,20 @@ class _AnswerTile extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isCorrect
-                        ? const Color(0xFF4CAF50)
-                        : isWrong
+                    color:
+                        isCorrect
+                            ? const Color(0xFF4CAF50)
+                            : isWrong
                             ? const Color(0xFFE53935)
                             : accent.withValues(alpha: 0.22),
-                    border: Border.all(
-                      color: borderColor,
-                      width: 1.2,
-                    ),
+                    border: Border.all(color: borderColor, width: 1.2),
                   ),
                   child: GoopText(
                     letter,
                     style: TextStyle(
                       fontSize: FontSizes.bodyMedium,
                       fontWeight: FontWeight.w900,
-                      color: isCorrect || isWrong
-                          ? Colors.white
-                          : accent,
+                      color: isCorrect || isWrong ? Colors.white : accent,
                     ),
                   ),
                 ),
@@ -199,22 +199,29 @@ class _AnswerTile extends StatelessWidget {
                       fontSize: fontSize,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.4,
-                      color: Colors.white
-                          .withValues(alpha: dimmed ? 0.6 : 0.95),
+                      color: Colors.white.withValues(
+                        alpha: dimmed ? 0.6 : 0.95,
+                      ),
                     ),
                   ),
                 ),
                 if (isCorrect)
                   const Padding(
                     padding: EdgeInsets.only(right: Insets.sm),
-                    child: Icon(Icons.check_rounded,
-                        color: Color(0xFF4CAF50), size: 20),
+                    child: Icon(
+                      Icons.check_rounded,
+                      color: Color(0xFF4CAF50),
+                      size: 20,
+                    ),
                   ),
                 if (isWrong)
                   const Padding(
                     padding: EdgeInsets.only(right: Insets.sm),
-                    child: Icon(Icons.close_rounded,
-                        color: Color(0xFFE53935), size: 20),
+                    child: Icon(
+                      Icons.close_rounded,
+                      color: Color(0xFFE53935),
+                      size: 20,
+                    ),
                   ),
               ],
             ),

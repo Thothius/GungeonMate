@@ -40,7 +40,12 @@ class _SwipePickerState<T> extends State<SwipePicker<T>> {
     if (newIdx >= 0 && newIdx != _index) {
       _index = newIdx;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_pc.hasClients) _pc.animateToPage(newIdx, duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
+        if (_pc.hasClients)
+          _pc.animateToPage(
+            newIdx,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOut,
+          );
       });
     }
   }

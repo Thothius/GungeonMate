@@ -144,7 +144,11 @@ class EffectTagger {
       blurb: 'Immune to pits and floor hazards',
       icon: Icons.air,
       category: EffectCategory.mobility,
-      patterns: [_re(r'grants? flight'), _re(r'gains? flight'), _re(r'\bflight\b')],
+      patterns: [
+        _re(r'grants? flight'),
+        _re(r'gains? flight'),
+        _re(r'\bflight\b'),
+      ],
     ),
     EffectTag(
       id: 'speed_up',
@@ -284,10 +288,7 @@ class EffectTagger {
       blurb: 'Stuns or briefly stops enemies',
       icon: Icons.bolt_outlined,
       category: EffectCategory.damage,
-      patterns: [
-        _re(r'\bstun[s]?\b'),
-        _re(r'briefly stops? enemies'),
-      ],
+      patterns: [_re(r'\bstun[s]?\b'), _re(r'briefly stops? enemies')],
     ),
     EffectTag(
       id: 'knockback',
@@ -295,7 +296,10 @@ class EffectTagger {
       blurb: 'Pushes enemies back harder',
       icon: Icons.open_in_new,
       category: EffectCategory.damage,
-      patterns: [_re(r'increase[sd]? knockback'), _re(r'\+\s*\d+%?\s*knockback')],
+      patterns: [
+        _re(r'increase[sd]? knockback'),
+        _re(r'\+\s*\d+%?\s*knockback'),
+      ],
     ),
 
     // ======== AMMO / RELOAD ========
@@ -437,7 +441,10 @@ class EffectTagger {
       blurb: 'Unlock anything w/o a key',
       icon: Icons.lock_open,
       category: EffectCategory.economy,
-      patterns: [_re(r'open(ed)? without using a key'), _re(r'open any chest or lock')],
+      patterns: [
+        _re(r'open(ed)? without using a key'),
+        _re(r'open any chest or lock'),
+      ],
     ),
     EffectTag(
       id: 'shop_discount',
@@ -445,7 +452,11 @@ class EffectTagger {
       blurb: 'Cheaper shop prices',
       icon: Icons.local_offer,
       category: EffectCategory.economy,
-      patterns: [_re(r'discount at shops?'), _re(r'cheaper at shops?'), _re(r'shop.* discount')],
+      patterns: [
+        _re(r'discount at shops?'),
+        _re(r'cheaper at shops?'),
+        _re(r'shop.* discount'),
+      ],
     ),
     EffectTag(
       id: 'shop_steal',
@@ -506,7 +517,11 @@ class EffectTagger {
       blurb: 'Time slows on trigger',
       icon: Icons.hourglass_bottom,
       category: EffectCategory.utility,
-      patterns: [_re(r'slows? down time'), _re(r'slow motion'), _re(r'time slows')],
+      patterns: [
+        _re(r'slows? down time'),
+        _re(r'slow motion'),
+        _re(r'time slows'),
+      ],
     ),
     EffectTag(
       id: 'companion_summon',
@@ -515,7 +530,9 @@ class EffectTagger {
       icon: Icons.pets,
       category: EffectCategory.utility,
       patterns: [
-        _re(r'summons? (a )?(friendly )?(companion|dog|turkey|chicken|ghost|clone)'),
+        _re(
+          r'summons? (a )?(friendly )?(companion|dog|turkey|chicken|ghost|clone)',
+        ),
         _re(r'follows? the player'),
         _re(r'follows? you'),
       ],
@@ -528,7 +545,10 @@ class EffectTagger {
       blurb: 'Increases coolness',
       icon: Icons.ac_unit,
       category: EffectCategory.status,
-      patterns: [_re(r'increase[sd]? coolness by'), _re(r'\+\s*\d+\s*coolness')],
+      patterns: [
+        _re(r'increase[sd]? coolness by'),
+        _re(r'\+\s*\d+\s*coolness'),
+      ],
     ),
 
     // ======== DEBUFFS ========
@@ -628,8 +648,7 @@ class EffectTagger {
   }
 
   /// Enumerate every (tag, excerpt) pair that fires for [text].
-  static Iterable<(EffectTag, String)> _extractWithExcerpts(
-      String text) sync* {
+  static Iterable<(EffectTag, String)> _extractWithExcerpts(String text) sync* {
     if (text.trim().isEmpty) return;
     for (final t in _all) {
       if (t.patterns.any((p) => p.hasMatch(text))) {
@@ -648,7 +667,9 @@ class EffectTagger {
     for (final g in guns) {
       final text = '${g.notes} ${g.type}';
       for (final (tag, excerpt) in _extractWithExcerpts(text)) {
-        out.putIfAbsent(tag, () => []).add(
+        out
+            .putIfAbsent(tag, () => [])
+            .add(
               EffectOccurrence(
                 tag: tag,
                 sourceName: g.name,
@@ -661,7 +682,9 @@ class EffectTagger {
     for (final it in items) {
       final text = it.effect;
       for (final (tag, excerpt) in _extractWithExcerpts(text)) {
-        out.putIfAbsent(tag, () => []).add(
+        out
+            .putIfAbsent(tag, () => [])
+            .add(
               EffectOccurrence(
                 tag: tag,
                 sourceName: it.name,
@@ -676,7 +699,8 @@ class EffectTagger {
 
   /// Group a scan() result by category, preserving registration order.
   static Map<EffectCategory, List<EffectTag>> groupByCategory(
-      Map<EffectTag, List<EffectOccurrence>> scan) {
+    Map<EffectTag, List<EffectOccurrence>> scan,
+  ) {
     final groups = <EffectCategory, List<EffectTag>>{};
     for (final t in _all) {
       if (!scan.containsKey(t)) continue;
@@ -742,11 +766,7 @@ class EffectTagger {
           break;
         }
       }
-      out.add(EffectChip(
-        tag: tag,
-        value: value,
-        sourceCount: occs.length,
-      ));
+      out.add(EffectChip(tag: tag, value: value, sourceCount: occs.length));
     }
     return out;
   }
@@ -760,9 +780,5 @@ class EffectChip {
   final EffectTag tag;
   final String? value;
   final int sourceCount;
-  const EffectChip({
-    required this.tag,
-    this.value,
-    this.sourceCount = 1,
-  });
+  const EffectChip({required this.tag, this.value, this.sourceCount = 1});
 }

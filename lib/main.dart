@@ -99,74 +99,95 @@ class _GungeonMateAppState extends State<GungeonMateApp>
       // previewNotifier pulse rebuilds MaterialApp with a fresh ThemeData
       // so the palette swap is instant AND live-previews app-wide.
       child: ListenableBuilder(
-        listenable: Listenable.merge(
-            [AppTheme.notifier, AppTheme.previewNotifier]),
-        builder: (_, __) => ValueListenableBuilder<UnicornPalette>(
-          valueListenable: AppTheme.unicornPaletteNotifier,
-          builder: (_, pal, __) => ValueListenableBuilder<int>(
-          valueListenable: AppTheme.remixNotifier,
-          builder: (_, remix, __) => ValueListenableBuilder<VisualPrefs>(
-            valueListenable: VisualPrefs.notifier,
-            builder: (context, prefs, ___) => MaterialApp(
-              title: 'Gungeon Mate',
-              debugShowCheckedModeBanner: false,
-              theme: AppTheme.themeFor(AppTheme.displayedMode),
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              dragDevices: {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-                PointerDeviceKind.trackpad,
-                PointerDeviceKind.stylus,
-              },
-            ),
-            // Wraps every route's content in a theme-aware overlay so per-
-            // theme signature flair (Curseblaster red breath, future others)
-            // paints above the scene without each screen needing to opt in.
-            builder: (context, child) {
-              // In release mode, build exceptions render as a blank widget
-              // by default — the user sees particles but no UI ("blank view").
-              // This surfaces a visible error message instead, so crashes are
-              // diagnosable without a debugger attached.
-              ErrorWidget.builder = (FlutterErrorDetails details) {
-                return Material(
-                  color: const Color(0xFF1E1E22),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
-                          const SizedBox(height: 16),
-                          Text(
-                            'UI Error: ${details.exception}',
-                            style: const TextStyle(color: Colors.white70, fontSize: 13),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
+        listenable: Listenable.merge([
+          AppTheme.notifier,
+          AppTheme.previewNotifier,
+        ]),
+        builder:
+            (_, __) => ValueListenableBuilder<UnicornPalette>(
+              valueListenable: AppTheme.unicornPaletteNotifier,
+              builder:
+                  (_, pal, __) => ValueListenableBuilder<int>(
+                    valueListenable: AppTheme.remixNotifier,
+                    builder:
+                        (_, remix, __) => ValueListenableBuilder<VisualPrefs>(
+                          valueListenable: VisualPrefs.notifier,
+                          builder:
+                              (context, prefs, ___) => MaterialApp(
+                                title: 'Gungeon Mate',
+                                debugShowCheckedModeBanner: false,
+                                theme: AppTheme.themeFor(
+                                  AppTheme.displayedMode,
+                                ),
+                                scrollBehavior: const MaterialScrollBehavior()
+                                    .copyWith(
+                                      dragDevices: {
+                                        PointerDeviceKind.touch,
+                                        PointerDeviceKind.mouse,
+                                        PointerDeviceKind.trackpad,
+                                        PointerDeviceKind.stylus,
+                                      },
+                                    ),
+                                // Wraps every route's content in a theme-aware overlay so per-
+                                // theme signature flair (Curseblaster red breath, future others)
+                                // paints above the scene without each screen needing to opt in.
+                                builder: (context, child) {
+                                  // In release mode, build exceptions render as a blank widget
+                                  // by default — the user sees particles but no UI ("blank view").
+                                  // This surfaces a visible error message instead, so crashes are
+                                  // diagnosable without a debugger attached.
+                                  ErrorWidget.builder = (
+                                    FlutterErrorDetails details,
+                                  ) {
+                                    return Material(
+                                      color: const Color(0xFF1E1E22),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(24),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Icon(
+                                                Icons.error_outline,
+                                                size: 48,
+                                                color: Colors.redAccent,
+                                              ),
+                                              const SizedBox(height: 16),
+                                              Text(
+                                                'UI Error: ${details.exception}',
+                                                style: const TextStyle(
+                                                  color: Colors.white70,
+                                                  fontSize: 13,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  };
+                                  final mediaQuery = MediaQuery.of(context);
+                                  return MediaQuery(
+                                    data: mediaQuery.copyWith(
+                                      // Hard cap: 1.4x is the largest scale our fixed-height
+                                      // layouts (heister slots, ADD strips, tier chips) can
+                                      // absorb without clipping. The studio slider is
+                                      // clamped to match — this guards stale prefs too.
+                                      textScaler: TextScaler.linear(
+                                        prefs.textScaleFactor.clamp(0.8, 1.4),
+                                      ),
+                                    ),
+                                    child: ThemeOverlay(
+                                      child: child ?? const SizedBox.shrink(),
+                                    ),
+                                  );
+                                },
+                                home: const HomeScreen(),
+                              ),
+                        ),
                   ),
-                );
-              };
-              final mediaQuery = MediaQuery.of(context);
-              return MediaQuery(
-                data: mediaQuery.copyWith(
-                  // Hard cap: 1.4x is the largest scale our fixed-height
-                  // layouts (heister slots, ADD strips, tier chips) can
-                  // absorb without clipping. The studio slider is
-                  // clamped to match — this guards stale prefs too.
-                  textScaler: TextScaler.linear(
-                      prefs.textScaleFactor.clamp(0.8, 1.4)),
-                ),
-                child: ThemeOverlay(child: child ?? const SizedBox.shrink()),
-              );
-            },
-            home: const HomeScreen(),
-          ),
-        ),
-        ),
-        ),
+            ),
       ),
     );
   }

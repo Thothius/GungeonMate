@@ -41,7 +41,9 @@ class MpSync {
   void Function(MpRole role) onPeerConnected;
   void Function(String peerNickname, String peerCharacter) onPeerMetadata;
 
-  MpSync(this._link, this._runProvider, {
+  MpSync(
+    this._link,
+    this._runProvider, {
     required this.onPeerConnected,
     required this.onPeerMetadata,
   });
@@ -53,6 +55,7 @@ class MpSync {
   /// listener broadcasts → peer applies → ...
   bool _applyingRemote = false;
   bool _helloReceived = false;
+
   /// Tracks whether we believe a transport connection is active.
   /// If onConnected fires while this is true, it means the transport
   /// didn't deliver an onDisconnected first — we must reset all
@@ -152,7 +155,11 @@ class MpSync {
   String _runTitle = '';
   int _sessionNumber = 0;
 
-  void setIdentity({required MpRole role, required String nickname, required String character}) {
+  void setIdentity({
+    required MpRole role,
+    required String nickname,
+    required String character,
+  }) {
     _myRole = role;
     _myNickname = nickname;
     _myCharacterName = character;
@@ -246,7 +253,9 @@ class MpSync {
     for (final pg in _pendingGifts.toList()) {
       unawaited(
         _link
-            .sendMessage(MpGift(kind: pg.kind, name: pg.name, giftId: pg.giftId))
+            .sendMessage(
+              MpGift(kind: pg.kind, name: pg.name, giftId: pg.giftId),
+            )
             .catchError((Object _) {}),
       );
     }
@@ -316,9 +325,11 @@ class MpSync {
         } else {
           // Auto-decline the new request if one is already pending.
           // The peer will see a denial and can retry.
-          unawaited(_link.sendMessage(
-            MpRequestResp(reqId: msg.reqId, approved: false),
-          ).catchError((Object _) {}));
+          unawaited(
+            _link
+                .sendMessage(MpRequestResp(reqId: msg.reqId, approved: false))
+                .catchError((Object _) {}),
+          );
         }
       case MpRequestResp():
         final out = _outgoingRequests.remove(msg.reqId);
@@ -405,7 +416,8 @@ class MpSync {
             if (g != null) _runProvider.removeGun(g, slot: mySlot, force: true);
           } else if (e.kind == 'item') {
             final it = _runProvider.itemByName(e.name);
-            if (it != null) _runProvider.removeItem(it, slot: mySlot, force: true);
+            if (it != null)
+              _runProvider.removeItem(it, slot: mySlot, force: true);
           }
         case 'clear':
           _runProvider.clearInventory(slot: mySlot);
@@ -427,14 +439,18 @@ class MpSync {
 
     // Protocol version check.
     if (h.protocolVersion != MpHello.currentProtocolVersion) {
-      _fail('Protocol version mismatch. Update both apps to the latest version.');
+      _fail(
+        'Protocol version mismatch. Update both apps to the latest version.',
+      );
       unawaited(_link.disconnectPeer());
       return;
     }
     // Role pairing check.
     if (h.role == _myRole) {
-      _fail('Both players picked ${_myRole == MpRole.main ? 'Host' : 'Join'}. '
-          'One needs to pick the other role.');
+      _fail(
+        'Both players picked ${_myRole == MpRole.main ? 'Host' : 'Join'}. '
+        'One needs to pick the other role.',
+      );
       unawaited(_link.disconnectPeer());
       return;
     }
@@ -587,22 +603,25 @@ class MpSync {
     // the next onRunChanged will re-detect the diff and retry.
     if (dCool != 0 || dCurse != 0) {
       _link
-          .sendMessage(MpSharedStateDelta(
-              coolnessDelta: dCool, curseDelta: dCurse))
+          .sendMessage(
+            MpSharedStateDelta(coolnessDelta: dCool, curseDelta: dCurse),
+          )
           .then((_) {
-        _cachedCoolness = cur.coolness;
-        _cachedCurse = cur.curse;
-      }).catchError((Object _) {});
+            _cachedCoolness = cur.coolness;
+            _cachedCurse = cur.curse;
+          })
+          .catchError((Object _) {});
     }
     // Send each new shrine as a separate delta.
     for (final shrine in newShrines) {
       _link
           .sendMessage(MpSharedStateDelta(shrineName: shrine))
           .then((_) {
-        if (!_cachedShrines.contains(shrine)) {
-          _cachedShrines = [..._cachedShrines, shrine];
-        }
-      }).catchError((Object _) {});
+            if (!_cachedShrines.contains(shrine)) {
+              _cachedShrines = [..._cachedShrines, shrine];
+            }
+          })
+          .catchError((Object _) {});
     }
   }
 
@@ -676,9 +695,8 @@ class MpSync {
 
   Future<void> _sendOneSnapshot() async {
     final isMain = _myRole == MpRole.main;
-    final player = isMain
-        ? _runProvider.runState.main
-        : _runProvider.runState.coop;
+    final player =
+        isMain ? _runProvider.runState.main : _runProvider.runState.coop;
     final snap = MpSnapshot(
       character: player?.character?.name ?? _myCharacterName,
       gunNames: player?.guns.map((g) => g.name).toList() ?? [],
@@ -701,16 +719,18 @@ class MpSync {
     final role = _myRole;
     if (role == null) return;
     try {
-      await _link.sendMessage(MpHello(
-        role: role,
-        character: _myCharacterName,
-        userLabel: _myNickname,
-        appVersion: MpSync.appVersionString,
-        mode: _mode,
-        avatarId: _avatarId,
-        runTitle: _runTitle,
-        sessionNumber: _sessionNumber,
-      ));
+      await _link.sendMessage(
+        MpHello(
+          role: role,
+          character: _myCharacterName,
+          userLabel: _myNickname,
+          appVersion: MpSync.appVersionString,
+          mode: _mode,
+          avatarId: _avatarId,
+          runTitle: _runTitle,
+          sessionNumber: _sessionNumber,
+        ),
+      );
     } catch (_) {}
   }
 
@@ -745,11 +765,13 @@ class MpSync {
     switch (kind) {
       case 'gun':
         removedGun = _runProvider.gunByName(name);
-        if (removedGun != null) _runProvider.removeGun(removedGun, slot: mySlot);
+        if (removedGun != null)
+          _runProvider.removeGun(removedGun, slot: mySlot);
         break;
       case 'item':
         removedItem = _runProvider.itemByName(name);
-        if (removedItem != null) _runProvider.removeItem(removedItem, slot: mySlot);
+        if (removedItem != null)
+          _runProvider.removeItem(removedItem, slot: mySlot);
         break;
     }
     if (removedGun == null && removedItem == null) return;
@@ -767,12 +789,15 @@ class MpSync {
     }
   }
 
-  Future<void> sendAddToPeer({required String kind, required String name}) async {
+  Future<void> sendAddToPeer({
+    required String kind,
+    required String name,
+  }) async {
     if (!_link.isConnected) return;
     final giftId = _newReqId();
-    _addPendingGift(_PendingGift(
-      giftId: giftId, kind: kind, name: name, localRemoval: false,
-    ));
+    _addPendingGift(
+      _PendingGift(giftId: giftId, kind: kind, name: name, localRemoval: false),
+    );
     try {
       await _link.sendMessage(MpGift(kind: kind, name: name, giftId: giftId));
     } catch (_) {
@@ -780,7 +805,10 @@ class MpSync {
     }
   }
 
-  Future<String?> sendRequest({required String kind, required String name}) async {
+  Future<String?> sendRequest({
+    required String kind,
+    required String name,
+  }) async {
     if (!_link.isConnected) return null;
     final reqId = _newReqId();
     _outgoingRequests[reqId] = _OutgoingRequest(kind, name);
@@ -815,11 +843,13 @@ class MpSync {
       switch (req.kind) {
         case 'gun':
           removedGun = _runProvider.gunByName(req.name);
-          if (removedGun != null) _runProvider.removeGun(removedGun, slot: mySlot);
+          if (removedGun != null)
+            _runProvider.removeGun(removedGun, slot: mySlot);
           break;
         case 'item':
           removedItem = _runProvider.itemByName(req.name);
-          if (removedItem != null) _runProvider.removeItem(removedItem, slot: mySlot);
+          if (removedItem != null)
+            _runProvider.removeItem(removedItem, slot: mySlot);
           break;
       }
       if (removedGun == null && removedItem == null) {
@@ -827,9 +857,13 @@ class MpSync {
         actuallyApproved = false;
       } else {
         final giftId = _newReqId();
-        _addPendingGift(_PendingGift(giftId: giftId, kind: req.kind, name: req.name));
+        _addPendingGift(
+          _PendingGift(giftId: giftId, kind: req.kind, name: req.name),
+        );
         try {
-          await _link.sendMessage(MpGift(kind: req.kind, name: req.name, giftId: giftId));
+          await _link.sendMessage(
+            MpGift(kind: req.kind, name: req.name, giftId: giftId),
+          );
         } catch (_) {
           _pendingGifts.removeWhere((g) => g.giftId == giftId);
           if (removedGun != null) {
@@ -843,7 +877,9 @@ class MpSync {
     }
     // Always send a response so the requester doesn't time out.
     try {
-      await _link.sendMessage(MpRequestResp(reqId: req.reqId, approved: actuallyApproved));
+      await _link.sendMessage(
+        MpRequestResp(reqId: req.reqId, approved: actuallyApproved),
+      );
     } catch (_) {}
   }
 
@@ -901,11 +937,13 @@ class MpSync {
     bool? paused,
   }) async {
     if (!_link.isConnected || _myRole != MpRole.main) return;
-    await _link.sendMessage(MpSessionMeta(
-      runTitle: runTitle ?? _runTitle,
-      sessionNumber: sessionNumber ?? _sessionNumber,
-      paused: paused ?? false,
-    ));
+    await _link.sendMessage(
+      MpSessionMeta(
+        runTitle: runTitle ?? _runTitle,
+        sessionNumber: sessionNumber ?? _sessionNumber,
+        paused: paused ?? false,
+      ),
+    );
   }
 
   Future<void> sendChat(MpChat chat) async {

@@ -190,15 +190,13 @@ class VortexConfig {
 
   /// Gungeoneer scale at a given depth [0..1].
   double gungeoneerScaleAt(double depth) =>
-      (gungeoneerScaleFar +
-              (gungeoneerScaleNear - gungeoneerScaleFar) * depth)
+      (gungeoneerScaleFar + (gungeoneerScaleNear - gungeoneerScaleFar) * depth)
           .clamp(0.1, 1.5);
 
   /// Gungeoneer opacity at a given depth [0..1].
-  double gungeoneerOpacityAt(double depth) =>
-      (gungeoneerOpacityFar +
-              (gungeoneerOpacityNear - gungeoneerOpacityFar) * depth)
-          .clamp(0.0, 1.0);
+  double gungeoneerOpacityAt(double depth) => (gungeoneerOpacityFar +
+          (gungeoneerOpacityNear - gungeoneerOpacityFar) * depth)
+      .clamp(0.0, 1.0);
 
   /// Total cycle duration (descent + ascent) in seconds.
   double get gungeoneerCycleDuration =>
@@ -222,17 +220,17 @@ class VortexConfig {
     if (t < gungeoneerDescentDuration) {
       // Descent: 0 → 1 (top → bottom), ease-in (accelerating fall).
       // ease-in = p² (quadratic) — starts slow, accelerates.
-      final p = gungeoneerDescentDuration > 0
-          ? t / gungeoneerDescentDuration
-          : 1.0;
+      final p =
+          gungeoneerDescentDuration > 0 ? t / gungeoneerDescentDuration : 1.0;
       final eased = p * p;
       return (-range + 2 * range * eased); // -range → +range
     } else {
       // Ascent: 1 → 0 (bottom → top), ease-out (decelerating rise).
       // ease-out = 1 - (1-p)² — starts fast, decelerates.
-      final p = gungeoneerAscentDuration > 0
-          ? (t - gungeoneerDescentDuration) / gungeoneerAscentDuration
-          : 1.0;
+      final p =
+          gungeoneerAscentDuration > 0
+              ? (t - gungeoneerDescentDuration) / gungeoneerAscentDuration
+              : 1.0;
       final eased = 1 - (1 - p) * (1 - p);
       return (range - 2 * range * eased); // +range → -range
     }
@@ -246,15 +244,15 @@ class VortexConfig {
     final t = elapsed % cycle;
     if (t < gungeoneerDescentDuration) {
       // Descent: depth 1 → 0 (near → far), ease-in.
-      final p = gungeoneerDescentDuration > 0
-          ? t / gungeoneerDescentDuration
-          : 1.0;
+      final p =
+          gungeoneerDescentDuration > 0 ? t / gungeoneerDescentDuration : 1.0;
       return 1.0 - (p * p);
     } else {
       // Ascent: depth 0 → 1 (far → near), ease-out.
-      final p = gungeoneerAscentDuration > 0
-          ? (t - gungeoneerDescentDuration) / gungeoneerAscentDuration
-          : 1.0;
+      final p =
+          gungeoneerAscentDuration > 0
+              ? (t - gungeoneerDescentDuration) / gungeoneerAscentDuration
+              : 1.0;
       return 1 - (1 - p) * (1 - p);
     }
   }
@@ -273,8 +271,11 @@ class VortexConfig {
     final baseOmega = 2 * math.pi / gungeoneerSpinDuration; // rad/s
 
     // Spin accumulated from completed full cycles.
-    final cycleSpin = baseOmega * gungeoneerSpinDescentMultiplier *
-        gungeoneerDescentDuration + baseOmega * gungeoneerAscentDuration;
+    final cycleSpin =
+        baseOmega *
+            gungeoneerSpinDescentMultiplier *
+            gungeoneerDescentDuration +
+        baseOmega * gungeoneerAscentDuration;
     final cycleCount = (elapsed / cycle).floor();
     final completedSpin = cycleCount * cycleSpin;
 
@@ -286,8 +287,11 @@ class VortexConfig {
       currentSpin = baseOmega * gungeoneerSpinDescentMultiplier * t;
     } else {
       // Ascent: normal spin, continuing from where descent left off.
-      currentSpin = baseOmega * gungeoneerSpinDescentMultiplier *
-          gungeoneerDescentDuration + baseOmega * (t - gungeoneerDescentDuration);
+      currentSpin =
+          baseOmega *
+              gungeoneerSpinDescentMultiplier *
+              gungeoneerDescentDuration +
+          baseOmega * (t - gungeoneerDescentDuration);
     }
 
     return completedSpin + currentSpin;

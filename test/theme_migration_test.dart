@@ -10,7 +10,8 @@ void main() {
 
   Future<void> initWith(int? themeIdx) async {
     SharedPreferences.setMockInitialValues(
-        themeIdx == null ? {} : {'theme.mode.v2': themeIdx});
+      themeIdx == null ? {} : {'theme.mode.v2': themeIdx},
+    );
     await AppTheme.init();
   }
 

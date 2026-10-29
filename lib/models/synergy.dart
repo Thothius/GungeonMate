@@ -30,11 +30,13 @@ class Synergy {
     final name = json['name'] as String? ?? '';
     return Synergy(
       name: name,
-      items: (json['items'] as List<dynamic>?)
+      items:
+          (json['items'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
-      anyOf: (json['any_of'] as List<dynamic>?)
+      anyOf:
+          (json['any_of'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],
@@ -61,12 +63,15 @@ class Synergy {
 
     // Special cases for synergies with empty required items list:
     if (name == 'Smart Bombs' || name == 'Unbelievably Charming') {
-      final matchesCount = anyOf.where((i) => owned.contains(i.toLowerCase())).length;
+      final matchesCount =
+          anyOf.where((i) => owned.contains(i.toLowerCase())).length;
       return matchesCount >= 2;
     }
     if (name == 'Super Serum') {
-      final hasGuns = owned.contains('plague pistol') || owned.contains('plunger');
-      final hasDefense = owned.contains('gas mask') || owned.contains('hazmat suit');
+      final hasGuns =
+          owned.contains('plague pistol') || owned.contains('plunger');
+      final hasDefense =
+          owned.contains('gas mask') || owned.contains('hazmat suit');
       return hasGuns && hasDefense;
     }
 
@@ -87,16 +92,18 @@ class Synergy {
     final raw = effect.trim();
     if (raw.isEmpty || anyOf.isEmpty) return raw;
     final lower = raw.toLowerCase();
-    final isPrefixOnly = lower.startsWith('one of the following') ||
+    final isPrefixOnly =
+        lower.startsWith('one of the following') ||
         lower.startsWith('any of the following');
     if (!isPrefixOnly) return raw;
     // Reformat alternatives as a clean human-readable list. We don't try
     // to invent the per-combination effect text — that information isn't
     // in the wiki's synergy table, it lives on each item's own page.
     final alts = anyOf;
-    final joined = alts.length == 1
-        ? alts.first
-        : alts.length == 2
+    final joined =
+        alts.length == 1
+            ? alts.first
+            : alts.length == 2
             ? '${alts[0]} or ${alts[1]}'
             : '${alts.take(alts.length - 1).join(", ")} or ${alts.last}';
     return 'Activates with one of: $joined.';
@@ -106,16 +113,18 @@ class Synergy {
   /// this synergy, given the current inventory. For `any_of` synergies,
   /// returns only ONE representative missing alternative (the first one).
   List<String> missingFor(Set<String> ownedLower) {
-    final missing = items
-        .where((i) => !ownedLower.contains(i.toLowerCase()))
-        .toList();
+    final missing =
+        items.where((i) => !ownedLower.contains(i.toLowerCase())).toList();
     if (anyOf.isNotEmpty) {
-      final anySatisfied =
-          anyOf.any((i) => ownedLower.contains(i.toLowerCase()));
+      final anySatisfied = anyOf.any(
+        (i) => ownedLower.contains(i.toLowerCase()),
+      );
       if (!anySatisfied) {
         // Show the alternatives as a single "one of" entry.
-        missing.add('any of: ${anyOf.take(3).join(", ")}'
-            '${anyOf.length > 3 ? "…" : ""}');
+        missing.add(
+          'any of: ${anyOf.take(3).join(", ")}'
+          '${anyOf.length > 3 ? "…" : ""}',
+        );
       }
     }
     return missing;

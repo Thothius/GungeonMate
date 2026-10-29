@@ -82,18 +82,24 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
     if (messenger == null) return;
     messenger.showSnackBar(
       SnackBar(
-        content: GoopText('Connected again',
-            style: TextStyle(
-                fontWeight: FontWeight.w800,
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.95))),
+        content: GoopText(
+          'Connected again',
+          style: TextStyle(
+            fontWeight: FontWeight.w800,
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.95),
+          ),
+        ),
         backgroundColor: AppTheme.flair.card,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radii.md),
           side: BorderSide(
-              color: AppTheme.flair.primary.withValues(alpha: 0.4),
-              width: 1.0),
+            color: AppTheme.flair.primary.withValues(alpha: 0.4),
+            width: 1.0,
+          ),
         ),
       ),
     );
@@ -157,21 +163,21 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
   @override
   Widget build(BuildContext context) {
     final session = context.watch<MpSession>();
-    final showBanner = _dismissed &&
-        session.phase == MpPhase.disconnected;
+    final showBanner = _dismissed && session.phase == MpPhase.disconnected;
 
     return Column(
       children: [
-        if (showBanner) SafeArea(
-          bottom: false,
-          child: _PersistentBanner(
-            onTap: _reopenDialog,
-            onCancel: () {
-              session.cancel();
-              setState(() => _dismissed = false);
-            },
+        if (showBanner)
+          SafeArea(
+            bottom: false,
+            child: _PersistentBanner(
+              onTap: _reopenDialog,
+              onCancel: () {
+                session.cancel();
+                setState(() => _dismissed = false);
+              },
+            ),
           ),
-        ),
         Expanded(child: widget.child),
       ],
     );
@@ -210,14 +216,20 @@ class _ReconnectDialog extends StatelessWidget {
           borderRadius: BorderRadius.all(Radii.lg),
           side: const BorderSide(color: MpColors.reconnecting, width: 1.5),
         ),
-        icon: const Icon(Icons.wifi_off_rounded,
-            size: 36, color: MpColors.reconnecting),
-        title: GoopText('Connection lost',
-            style: TextStyle(
-                color: onSurface,
-                fontWeight: FontWeight.w900,
-                fontSize: FontSizes.titleMedium,
-                letterSpacing: 0.5)),
+        icon: const Icon(
+          Icons.wifi_off_rounded,
+          size: 36,
+          color: MpColors.reconnecting,
+        ),
+        title: GoopText(
+          'Connection lost',
+          style: TextStyle(
+            color: onSurface,
+            fontWeight: FontWeight.w900,
+            fontSize: FontSizes.titleMedium,
+            letterSpacing: 0.5,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,9 +239,10 @@ class _ReconnectDialog extends StatelessWidget {
               'Your run is preserved. You can dismiss this and keep playing — '
               'changes will sync when the connection is restored.',
               style: TextStyle(
-                  color: onSurface.withValues(alpha: 0.7),
-                  fontSize: 12.5,
-                  height: 1.4),
+                color: onSurface.withValues(alpha: 0.7),
+                fontSize: 12.5,
+                height: 1.4,
+              ),
             ),
             SizedBox(height: 16 * sf),
             Center(
@@ -251,12 +264,15 @@ class _ReconnectDialog extends StatelessWidget {
               foregroundColor: MpColors.danger,
               side: const BorderSide(color: MpColors.danger, width: 1.5),
               padding: EdgeInsets.symmetric(
-                  horizontal: 12 * sf, vertical: 10 * sf),
+                horizontal: 12 * sf,
+                vertical: 10 * sf,
+              ),
             ),
             icon: const Icon(Icons.close, size: 16),
-            label: GoopText('CANCEL RUN',
-                style: TextStyle(
-                    fontSize: 11 * sf, fontWeight: FontWeight.bold)),
+            label: GoopText(
+              'CANCEL RUN',
+              style: TextStyle(fontSize: 11 * sf, fontWeight: FontWeight.bold),
+            ),
             onPressed: onCancelRun,
           ),
           FilledButton.icon(
@@ -264,12 +280,15 @@ class _ReconnectDialog extends StatelessWidget {
               backgroundColor: MpColors.reconnecting,
               foregroundColor: const Color(0xFF1E1E22),
               padding: EdgeInsets.symmetric(
-                  horizontal: 14 * sf, vertical: 10 * sf),
+                horizontal: 14 * sf,
+                vertical: 10 * sf,
+              ),
             ),
             icon: const Icon(Icons.visibility_off, size: 16),
-            label: GoopText('DISMISS',
-                style: TextStyle(
-                    fontSize: 11 * sf, fontWeight: FontWeight.w900)),
+            label: GoopText(
+              'DISMISS',
+              style: TextStyle(fontSize: 11 * sf, fontWeight: FontWeight.w900),
+            ),
             onPressed: onDismiss,
           ),
         ],
@@ -284,10 +303,7 @@ class _PersistentBanner extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onCancel;
 
-  const _PersistentBanner({
-    required this.onTap,
-    required this.onCancel,
-  });
+  const _PersistentBanner({required this.onTap, required this.onCancel});
 
   @override
   Widget build(BuildContext context) {
@@ -298,8 +314,7 @@ class _PersistentBanner extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(
-              horizontal: 16 * sf, vertical: 10 * sf),
+          padding: EdgeInsets.symmetric(horizontal: 16 * sf, vertical: 10 * sf),
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -323,19 +338,24 @@ class _PersistentBanner extends StatelessWidget {
                 child: GoopText(
                   'Reconnecting…',
                   style: TextStyle(
-                      fontSize: FontSizes.labelMedium * sf,
-                      fontWeight: FontWeight.w600,
-                      color: MpColors.reconnecting),
+                    fontSize: FontSizes.labelMedium * sf,
+                    fontWeight: FontWeight.w600,
+                    color: MpColors.reconnecting,
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: onCancel,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: 8 * sf, vertical: 4 * sf),
-                  child: Icon(Icons.close_rounded,
-                      size: 16 * sf,
-                      color: MpColors.reconnecting.withValues(alpha: 0.7)),
+                    horizontal: 8 * sf,
+                    vertical: 4 * sf,
+                  ),
+                  child: Icon(
+                    Icons.close_rounded,
+                    size: 16 * sf,
+                    color: MpColors.reconnecting.withValues(alpha: 0.7),
+                  ),
                 ),
               ),
             ],

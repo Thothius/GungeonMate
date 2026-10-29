@@ -30,6 +30,7 @@ class PeriodicTile extends StatefulWidget {
   final bool isTopDps;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
+
   /// When non-null the tile renders a pulsing colored glow ring to signal
   /// an active synergy. Each synergy gets a distinct deterministic color
   /// from [RunProvider.activeSynergyGlowColors].
@@ -46,10 +47,10 @@ class PeriodicTile extends StatefulWidget {
     this.synergyGlowColor,
     this.wideMode = false,
   }) : assert(
-          (gun == null) != (item == null),
-          'PeriodicTile needs exactly one of gun/item — '
-          'the icon/type fallbacks assume the other is non-null.',
-        );
+         (gun == null) != (item == null),
+         'PeriodicTile needs exactly one of gun/item — '
+         'the icon/type fallbacks assume the other is non-null.',
+       );
 
   @override
   State<PeriodicTile> createState() => _PeriodicTileState();
@@ -64,6 +65,7 @@ class _PeriodicTileState extends State<PeriodicTile>
   /// allocated for tiles that actually need it (active items with a
   /// short recharge), so the rest of the grid stays cheap.
   AnimationController? _pulse;
+
   /// Repeating pulse controller for the synergy glow ring. Allocated only
   /// when [PeriodicTile.synergyGlowColor] is non-null.
   AnimationController? _glow;
@@ -122,7 +124,8 @@ class _PeriodicTileState extends State<PeriodicTile>
     // Sync glow controller with current synergyGlowColor.
     // If the name changed the effect index may differ — recreate.
     final wantsGlow = widget.synergyGlowColor != null;
-    final nameChanged = oldWidget.gun?.name != widget.gun?.name ||
+    final nameChanged =
+        oldWidget.gun?.name != widget.gun?.name ||
         oldWidget.item?.name != widget.item?.name;
     if (wantsGlow && (_glow == null || nameChanged)) {
       _glow?.dispose();
@@ -180,10 +183,8 @@ class _PeriodicTileState extends State<PeriodicTile>
 
   bool get isGun => widget.gun != null;
   String get _name => widget.gun?.name ?? widget.item?.name ?? '';
-  String get _quality =>
-      widget.gun?.quality ?? widget.item?.quality ?? '';
-  String get _iconPath =>
-      widget.gun?.icon ?? widget.item?.icon ?? '';
+  String get _quality => widget.gun?.quality ?? widget.item?.quality ?? '';
+  String get _iconPath => widget.gun?.icon ?? widget.item?.icon ?? '';
 
   String get _corner {
     if (widget.gun != null) {
@@ -197,21 +198,39 @@ class _PeriodicTileState extends State<PeriodicTile>
     if (it != null) {
       if (it.name.toLowerCase() == 'ser junkan') {
         final p = context.read<RunProvider>();
-        final hasP1 = p.runState.main.items.any((i) => i.name.toLowerCase() == 'ser junkan');
-        final hasCoop = p.runState.coop?.items.any((i) => i.name.toLowerCase() == 'ser junkan') ?? false;
-        final player = hasCoop && !hasP1 ? (p.runState.coop ?? Player()) : p.runState.main;
-        final junkCount = player.items.where((i) => i.name.toLowerCase() == 'junk').length;
-        final hasGoldJunk = player.items.any((i) => i.name.toLowerCase() == 'gold junk');
+        final hasP1 = p.runState.main.items.any(
+          (i) => i.name.toLowerCase() == 'ser junkan',
+        );
+        final hasCoop =
+            p.runState.coop?.items.any(
+              (i) => i.name.toLowerCase() == 'ser junkan',
+            ) ??
+            false;
+        final player =
+            hasCoop && !hasP1 ? (p.runState.coop ?? Player()) : p.runState.main;
+        final junkCount =
+            player.items.where((i) => i.name.toLowerCase() == 'junk').length;
+        final hasGoldJunk = player.items.any(
+          (i) => i.name.toLowerCase() == 'gold junk',
+        );
         if (hasGoldJunk) return 'MECHA';
         switch (junkCount) {
-          case 0: return 'PEASANT';
-          case 1: return 'SQUIRE';
-          case 2: return 'HEDGE';
-          case 3: return 'KNIGHT';
-          case 4: return 'LIEUT';
-          case 5: return 'CMDR';
-          case 6: return 'HOLY';
-          default: return 'ANGEL';
+          case 0:
+            return 'PEASANT';
+          case 1:
+            return 'SQUIRE';
+          case 2:
+            return 'HEDGE';
+          case 3:
+            return 'KNIGHT';
+          case 4:
+            return 'LIEUT';
+          case 5:
+            return 'CMDR';
+          case 6:
+            return 'HOLY';
+          default:
+            return 'ANGEL';
         }
       }
       if (it.isActive && it.rechargeTime.isNotEmpty) {
@@ -344,13 +363,22 @@ class _PeriodicTileState extends State<PeriodicTile>
       return '—';
     }
     // "<N> dmg" → "<N>d"
-    final dmgMatch = RegExp(r'^(\d+)\s*dmg', caseSensitive: false).firstMatch(s);
+    final dmgMatch = RegExp(
+      r'^(\d+)\s*dmg',
+      caseSensitive: false,
+    ).firstMatch(s);
     if (dmgMatch != null) return '${dmgMatch.group(1)}d';
     // "<N> kills" → "<N>k"
-    final killMatch = RegExp(r'^(\d+)\s*kill', caseSensitive: false).firstMatch(s);
+    final killMatch = RegExp(
+      r'^(\d+)\s*kill',
+      caseSensitive: false,
+    ).firstMatch(s);
     if (killMatch != null) return '${killMatch.group(1)}k';
     // "<N> seconds" → "<N>s"
-    final secMatch = RegExp(r'^([\d.]+)\s*sec', caseSensitive: false).firstMatch(s);
+    final secMatch = RegExp(
+      r'^([\d.]+)\s*sec',
+      caseSensitive: false,
+    ).firstMatch(s);
     if (secMatch != null) {
       final n = double.tryParse(secMatch.group(1)!) ?? 0;
       return n == n.roundToDouble() ? '${n.toInt()}s' : '${n}s';
@@ -409,35 +437,36 @@ class _PeriodicTileState extends State<PeriodicTile>
       ),
     );
 
-    final durationBadge = duration.isEmpty
-        ? const SizedBox.shrink()
-        : Container(
-            padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-            decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.55),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GoopText(
-                  duration,
-                  style: TextStyle(
-                    fontSize: 10.5 * sf,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.lightBlueAccent,
-                    height: 1.1,
+    final durationBadge =
+        duration.isEmpty
+            ? const SizedBox.shrink()
+            : Container(
+              padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.55),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GoopText(
+                    duration,
+                    style: TextStyle(
+                      fontSize: 10.5 * sf,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.lightBlueAccent,
+                      height: 1.1,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 1),
-                Icon(
-                  Icons.schedule_rounded,
-                  size: 8 * sf,
-                  color: Colors.lightBlueAccent.withValues(alpha: 0.8),
-                ),
-              ],
-            ),
-          );
+                  const SizedBox(width: 1),
+                  Icon(
+                    Icons.schedule_rounded,
+                    size: 8 * sf,
+                    color: Colors.lightBlueAccent.withValues(alpha: 0.8),
+                  ),
+                ],
+              ),
+            );
 
     // Single FittedBox wraps both badges so they scale together as a
     // unit — maintaining relative proportions and never clipping.
@@ -466,13 +495,15 @@ class _PeriodicTileState extends State<PeriodicTile>
     final badge = Container(
       padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
       decoration: BoxDecoration(
-        color: widget.isTopDps
-            ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-            : Colors.black.withValues(alpha: 0.55),
+        color:
+            widget.isTopDps
+                ? const Color(0xFFFFD700).withValues(alpha: 0.25)
+                : Colors.black.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(4),
-        border: widget.isTopDps
-            ? Border.all(color: const Color(0xFFFFD700), width: 1)
-            : null,
+        border:
+            widget.isTopDps
+                ? Border.all(color: const Color(0xFFFFD700), width: 1)
+                : null,
       ),
       child: GoopText(
         _corner,
@@ -485,10 +516,14 @@ class _PeriodicTileState extends State<PeriodicTile>
       ),
     );
     if (widget.isTopDps) {
-      return badge.animate(
-        onPlay: (controller) => controller.repeat(reverse: true),
-      ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
-       .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.5));
+      return badge
+          .animate(onPlay: (controller) => controller.repeat(reverse: true))
+          .scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
+          .shimmer(
+            delay: 1500.ms,
+            duration: 1200.ms,
+            color: Colors.white.withValues(alpha: 0.5),
+          );
     }
     return badge;
   }
@@ -500,9 +535,10 @@ class _PeriodicTileState extends State<PeriodicTile>
   /// declaration so a given loadout always renders indicators in a
   /// stable order.
   List<({IconData icon, Color color, String tooltip})> get _elements {
-    final Set<ElementKind> els = widget.gun != null
-        ? ElementalTagger.elementsOfGun(widget.gun!)
-        : widget.item != null
+    final Set<ElementKind> els =
+        widget.gun != null
+            ? ElementalTagger.elementsOfGun(widget.gun!)
+            : widget.item != null
             ? ElementalTagger.elementsOfItem(widget.item!)
             : const <ElementKind>{};
     if (els.isEmpty) return const [];
@@ -555,9 +591,8 @@ class _PeriodicTileState extends State<PeriodicTile>
     // individually via Responsive.font() in _buildCard.
     // Semantic label: announce the entity name and quality tier so
     // screen-reader users can navigate the grid meaningfully.
-    final semLabel = _name.isNotEmpty
-        ? '$_name, quality $_quality'
-        : 'Item tile';
+    final semLabel =
+        _name.isNotEmpty ? '$_name, quality $_quality' : 'Item tile';
     final constrainedBody = Semantics(
       label: semLabel,
       button: true,
@@ -580,9 +615,10 @@ class _PeriodicTileState extends State<PeriodicTile>
       child: AnimatedBuilder(
         animation: Listenable.merge([_shake, _poof]),
         builder: (ctx, child) {
-          final shakeOffset = _shake.isAnimating
-              ? math.sin(_shake.value * math.pi * 6) * 2.2
-              : 0.0;
+          final shakeOffset =
+              _shake.isAnimating
+                  ? math.sin(_shake.value * math.pi * 6) * 2.2
+                  : 0.0;
           // Poof: quick scale 1.0 → 1.15 → 0.92, fading ring
           double scale = 1.0;
           double glow = 0.0;
@@ -612,7 +648,9 @@ class _PeriodicTileState extends State<PeriodicTile>
                             borderRadius: BorderRadius.all(Radii.sm),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.amber.withValues(alpha: 0.45 * glow),
+                                color: Colors.amber.withValues(
+                                  alpha: 0.45 * glow,
+                                ),
                                 blurRadius: 14,
                                 spreadRadius: 2,
                               ),
@@ -653,16 +691,19 @@ class _PeriodicTileState extends State<PeriodicTile>
 
     final rawQColor = _qualityColor;
     final isS = _quality.toUpperCase() == 'S';
-    final qColor = isS ? const Color(0xFFFFD700) : rawQColor; // Gold/yellow for S
+    final qColor =
+        isS ? const Color(0xFFFFD700) : rawQColor; // Gold/yellow for S
     final isHighTier = isS || _quality.toUpperCase() == 'A';
 
     final cardShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radii.sm),
       side: BorderSide(
-        color: isS 
-            ? const Color(0xFFFFD700) // Gold border
-            : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35),
-        width: isS ? 1.9 : (isHighTier ? 1.4 : 0.8), // Fatter border frame for S
+        color:
+            isS
+                ? const Color(0xFFFFD700) // Gold border
+                : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35),
+        width:
+            isS ? 1.9 : (isHighTier ? 1.4 : 0.8), // Fatter border frame for S
       ),
     );
 
@@ -725,7 +766,9 @@ class _PeriodicTileState extends State<PeriodicTile>
               height: 9,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF66E07A).withValues(alpha: 0.55 + 0.45 * t),
+                color: const Color(
+                  0xFF66E07A,
+                ).withValues(alpha: 0.55 + 0.45 * t),
                 boxShadow: [
                   BoxShadow(
                     color: const Color(0xFF66E07A).withValues(alpha: 0.55 * t),
@@ -769,7 +812,10 @@ class _PeriodicTileState extends State<PeriodicTile>
     // Branch visual representation based on displayMode
     switch (displayMode) {
       case InventoryDisplayMode.tacticalStats:
-        final double statsFontSize = (prefs.inventoryFontSize - 2.0).clamp(9.0, 13.0);
+        final double statsFontSize = (prefs.inventoryFontSize - 2.0).clamp(
+          9.0,
+          13.0,
+        );
         final double labelFontSize = (statsFontSize - 2.0).clamp(7.0, 10.0);
         final flair = AppTheme.flair;
 
@@ -823,14 +869,21 @@ class _PeriodicTileState extends State<PeriodicTile>
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: flair.secondary.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: flair.secondary.withValues(alpha: 0.45), width: 0.6),
+                          border: Border.all(
+                            color: flair.secondary.withValues(alpha: 0.45),
+                            width: 0.6,
+                          ),
                         ),
                         child: GoopText(
-                          (isGun ? widget.gun!.type : widget.item!.type).toUpperCase(),
+                          (isGun ? widget.gun!.type : widget.item!.type)
+                              .toUpperCase(),
                           style: TextStyle(
                             fontSize: labelFontSize,
                             fontWeight: FontWeight.w900,
@@ -841,39 +894,92 @@ class _PeriodicTileState extends State<PeriodicTile>
                       ),
                       const Spacer(),
                       if (widget.isTopDps)
-                        const Icon(Icons.local_fire_department_rounded, color: Colors.orangeAccent, size: 16),
+                        const Icon(
+                          Icons.local_fire_department_rounded,
+                          color: Colors.orangeAccent,
+                          size: 16,
+                        ),
                     ],
                   ),
                   const SizedBox(height: 6),
-                  const Divider(height: 1, thickness: 0.5, color: Colors.white10),
+                  const Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    color: Colors.white10,
+                  ),
                   const SizedBox(height: 4),
                   // 2×3 stat grid — all stats visible
                   Expanded(
-                    child: isGun
-                        ? _StatGrid(
-                            stats: [
-                              ('DPS', _cleanStat(widget.gun!.dps), Colors.amberAccent),
-                              ('MAG', _cleanStat(widget.gun!.magazineSize), Colors.cyanAccent),
-                              ('RELOAD', _cleanStat(widget.gun!.reloadTime), Colors.orangeAccent),
-                              ('RANGE', _cleanStat(widget.gun!.range), Colors.lightBlueAccent),
-                              ('FORCE', _cleanStat(widget.gun!.force), Colors.redAccent),
-                              ('SPREAD', _cleanStat(widget.gun!.spread), Colors.purpleAccent),
-                            ],
-                            valueSize: statsFontSize,
-                            labelSize: labelFontSize,
-                          )
-                        : _StatGrid(
-                            stats: [
-                              ('CURSE', '+${widget.item!.curse.toStringAsFixed(0)}', Colors.deepPurpleAccent),
-                              ('COOL', '+${widget.item!.coolness.toStringAsFixed(0)}', Colors.tealAccent),
-                              ('RCHRG', _cleanStat(widget.item!.rechargeTime), Colors.orangeAccent),
-                              ('DUR', _cleanStat(widget.item!.duration), Colors.pinkAccent),
-                              ('CLASS', widget.item!.type, Colors.white60),
-                              ('PRICE', _cleanStat(widget.item!.sellPrice), Colors.greenAccent),
-                            ],
-                            valueSize: statsFontSize,
-                            labelSize: labelFontSize,
-                          ),
+                    child:
+                        isGun
+                            ? _StatGrid(
+                              stats: [
+                                (
+                                  'DPS',
+                                  _cleanStat(widget.gun!.dps),
+                                  Colors.amberAccent,
+                                ),
+                                (
+                                  'MAG',
+                                  _cleanStat(widget.gun!.magazineSize),
+                                  Colors.cyanAccent,
+                                ),
+                                (
+                                  'RELOAD',
+                                  _cleanStat(widget.gun!.reloadTime),
+                                  Colors.orangeAccent,
+                                ),
+                                (
+                                  'RANGE',
+                                  _cleanStat(widget.gun!.range),
+                                  Colors.lightBlueAccent,
+                                ),
+                                (
+                                  'FORCE',
+                                  _cleanStat(widget.gun!.force),
+                                  Colors.redAccent,
+                                ),
+                                (
+                                  'SPREAD',
+                                  _cleanStat(widget.gun!.spread),
+                                  Colors.purpleAccent,
+                                ),
+                              ],
+                              valueSize: statsFontSize,
+                              labelSize: labelFontSize,
+                            )
+                            : _StatGrid(
+                              stats: [
+                                (
+                                  'CURSE',
+                                  '+${widget.item!.curse.toStringAsFixed(0)}',
+                                  Colors.deepPurpleAccent,
+                                ),
+                                (
+                                  'COOL',
+                                  '+${widget.item!.coolness.toStringAsFixed(0)}',
+                                  Colors.tealAccent,
+                                ),
+                                (
+                                  'RCHRG',
+                                  _cleanStat(widget.item!.rechargeTime),
+                                  Colors.orangeAccent,
+                                ),
+                                (
+                                  'DUR',
+                                  _cleanStat(widget.item!.duration),
+                                  Colors.pinkAccent,
+                                ),
+                                ('CLASS', widget.item!.type, Colors.white60),
+                                (
+                                  'PRICE',
+                                  _cleanStat(widget.item!.sellPrice),
+                                  Colors.greenAccent,
+                                ),
+                              ],
+                              valueSize: statsFontSize,
+                              labelSize: labelFontSize,
+                            ),
                   ),
                 ],
               ),
@@ -898,58 +1004,52 @@ class _PeriodicTileState extends State<PeriodicTile>
                   child: SizedBox.expand(
                     child: Stack(
                       children: [
-                      Positioned.fill(
-                        child: Padding(
-                          padding: const EdgeInsets.all(2),
-                          child: Center(
-                            child: maybeStrikethrough(
-                              GameIcon(
-                                assetPath: _iconPath,
-                                fallback: isGun
-                                    ? Icons.gps_fixed
-                                    : (widget.item!.isActive
-                                        ? Icons.flash_on
-                                        : Icons.inventory_2_outlined),
-                                quality: _quality,
-                                // 20% smaller inventory graphics
-                                // (66 → 53) per the declutter pass.
-                                size: 53,
-                                showRing: false,
+                        Positioned.fill(
+                          child: Padding(
+                            padding: const EdgeInsets.all(2),
+                            child: Center(
+                              child: maybeStrikethrough(
+                                GameIcon(
+                                  assetPath: _iconPath,
+                                  fallback:
+                                      isGun
+                                          ? Icons.gps_fixed
+                                          : (widget.item!.isActive
+                                              ? Icons.flash_on
+                                              : Icons.inventory_2_outlined),
+                                  quality: _quality,
+                                  // 20% smaller inventory graphics
+                                  // (66 → 53) per the declutter pass.
+                                  size: 53,
+                                  showRing: false,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        top: 4,
-                        left: 4,
-                        child: maybeQualityBadge(),
-                      ),
-                      maybeFastActiveDot(),
-                      // Top-right: elemental icons only (type moved to subtitle below name)
-                      Positioned(
-                        top: 3,
-                        right: 3,
-                        child: maybeElements(),
-                      ),
-                      // Bottom-center: item badges only (RCHRG/DUR, Junkan
-                      // rank). Guns keep the tile face clean — DPS moved
-                      // to the bottom subtitle row next to the gun type.
-                      if (!isGun)
-                        Positioned(
-                          left: 4,
-                          right: 4,
-                          bottom: 4,
-                          child: Center(
-                            child: widget.item != null && widget.item!.isActive
-                                ? _buildItemStatsBadge()
-                                : _buildLegacyItemBadge(),
+                        Positioned(top: 4, left: 4, child: maybeQualityBadge()),
+                        maybeFastActiveDot(),
+                        // Top-right: elemental icons only (type moved to subtitle below name)
+                        Positioned(top: 3, right: 3, child: maybeElements()),
+                        // Bottom-center: item badges only (RCHRG/DUR, Junkan
+                        // rank). Guns keep the tile face clean — DPS moved
+                        // to the bottom subtitle row next to the gun type.
+                        if (!isGun)
+                          Positioned(
+                            left: 4,
+                            right: 4,
+                            bottom: 4,
+                            child: Center(
+                              child:
+                                  widget.item != null && widget.item!.isActive
+                                      ? _buildItemStatsBadge()
+                                      : _buildLegacyItemBadge(),
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(4, 3, 4, 5),
@@ -971,7 +1071,8 @@ class _PeriodicTileState extends State<PeriodicTile>
                       // Type subtitle — centered below the name. Guns get
                       // the DPS value beside the type as a dimmed yellow
                       // tag (RANGE hidden per the declutter pass).
-                      if (_typeTag.isNotEmpty || (isGun && _corner.isNotEmpty)) ...[
+                      if (_typeTag.isNotEmpty ||
+                          (isGun && _corner.isNotEmpty)) ...[
                         const SizedBox(height: 2),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -999,8 +1100,9 @@ class _PeriodicTileState extends State<PeriodicTile>
                                 style: TextStyle(
                                   fontSize: FontSizes.labelSmall * sf,
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(0xFFFFD54F)
-                                      .withValues(alpha: 0.6),
+                                  color: const Color(
+                                    0xFFFFD54F,
+                                  ).withValues(alpha: 0.6),
                                   height: 1.1,
                                 ),
                               ),
@@ -1029,10 +1131,11 @@ class _StrikethroughPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1.6
-      ..strokeCap = StrokeCap.round;
+    final paint =
+        Paint()
+          ..color = color
+          ..strokeWidth = 1.6
+          ..strokeCap = StrokeCap.round;
     // Top-right → bottom-left, leaving a small inset so the line doesn't
     // hug the tile corners.
     final inset = size.shortestSide * 0.18;

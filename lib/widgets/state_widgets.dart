@@ -28,9 +28,9 @@ class SkeletonLoader extends StatefulWidget {
 
   /// A stack of [count] skeleton lines, simulating text content.
   const SkeletonLoader.lines(int count, {super.key})
-      : width = double.infinity,
-        height = 16 * count * 1.5,
-        borderRadius = const BorderRadius.all(Radii.sm);
+    : width = double.infinity,
+      height = 16 * count * 1.5,
+      borderRadius = const BorderRadius.all(Radii.sm);
 
   @override
   State<SkeletonLoader> createState() => _SkeletonLoaderState();
@@ -120,8 +120,9 @@ class EmptyState extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: flair.primary.withValues(alpha: 0.08),
                 border: Border.all(
-                    color: flair.primary.withValues(alpha: 0.35),
-                    width: 1.4),
+                  color: flair.primary.withValues(alpha: 0.35),
+                  width: 1.4,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: flair.primary.withValues(alpha: 0.18),
@@ -129,17 +130,19 @@ class EmptyState extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Icon(icon,
-                  size: 36,
-                  color: flair.primary.withValues(alpha: 0.65)),
+              child: Icon(
+                icon,
+                size: 36,
+                color: flair.primary.withValues(alpha: 0.65),
+              ),
             ),
             const SizedBox(height: Insets.lg),
             Text(
               message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: flair.onSurface.withValues(alpha: 0.7),
-                  ),
+                color: flair.onSurface.withValues(alpha: 0.7),
+              ),
             ),
             if (flavor != null) ...[
               const SizedBox(height: 6),
@@ -147,17 +150,14 @@ class EmptyState extends StatelessWidget {
                 flavor!,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: flair.onSurface.withValues(alpha: 0.35),
-                      fontStyle: FontStyle.italic,
-                    ),
+                  color: flair.onSurface.withValues(alpha: 0.35),
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ],
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: Insets.xl),
-              FilledButton(
-                onPressed: onAction,
-                child: Text(actionLabel!),
-              ),
+              FilledButton(onPressed: onAction, child: Text(actionLabel!)),
             ],
           ],
         ),
@@ -199,8 +199,8 @@ class ErrorState extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: flair.onSurface.withValues(alpha: 0.5),
-                  ),
+                color: flair.onSurface.withValues(alpha: 0.5),
+              ),
             ),
             const SizedBox(height: Insets.xl),
             FilledButton.icon(

@@ -33,7 +33,6 @@ class Gun {
   /// number of guns whose wiki page wasn't in cache.
   final WikiContent wiki;
 
-
   Gun({
     required this.name,
     this.icon = '',
@@ -95,12 +94,18 @@ class Gun {
     }
     if (nameLower == 'evolver') {
       switch (evolverStage) {
-        case 1: return 13.5;
-        case 2: return 19.1;
-        case 3: return 25.8;
-        case 4: return 34.5;
-        case 5: return 23.0;
-        default: return 93.8;
+        case 1:
+          return 13.5;
+        case 2:
+          return 19.1;
+        case 3:
+          return 25.8;
+        case 4:
+          return 34.5;
+        case 5:
+          return 23.0;
+        default:
+          return 93.8;
       }
     }
     if (nameLower == 'shellegun') {
@@ -112,7 +117,18 @@ class Gun {
     if (nameLower == 'chamber gun') {
       // Floor index: 0=Keep, 1=Oubliette, 2=Proper, 3=Abbey,
       // 4=Black Powder Mine, 5=Rat's Lair, 6=Hollow, 7=R&G, 8=Forge, 9=Bullet Hell
-      const floorDps = [15.9, 30.3, 25.1, 80.0, 300.0, 20.0, 68.0, 100.0, 70.0, 180.0];
+      const floorDps = [
+        15.9,
+        30.3,
+        25.1,
+        80.0,
+        300.0,
+        20.0,
+        68.0,
+        100.0,
+        70.0,
+        180.0,
+      ];
       return floorDps[chamberGunFloor.clamp(0, 9)];
     }
     return dpsValue;

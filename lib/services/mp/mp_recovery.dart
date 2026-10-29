@@ -34,7 +34,8 @@ class MpRecovery {
     int sessionNumber,
     int runStartMs,
     int runAccumMs,
-  }) onRestoreSession;
+  })
+  onRestoreSession;
 
   Timer? _cadenceTimer;
   int _disconnectMs = 0;
@@ -46,14 +47,9 @@ class MpRecovery {
   MpRole? _role;
   String _nickname = 'Player';
 
-  MpRecovery(this._link, this._runProvider, {
-    required this.onRestoreSession,
-  });
+  MpRecovery(this._link, this._runProvider, {required this.onRestoreSession});
 
-  void setSessionInfo({
-    MpRole? role,
-    required String nickname,
-  }) {
+  void setSessionInfo({MpRole? role, required String nickname}) {
     _role = role;
     _nickname = nickname;
   }
@@ -90,12 +86,14 @@ class MpRecovery {
     _disconnectMs = DateTime.now().millisecondsSinceEpoch;
     _applyCadence();
     if (_role == MpRole.sidekick) {
-      unawaited(_link.stopAll().then((_) {
-        Future.delayed(const Duration(milliseconds: _radioCooldownMs), () {
-          if (!_active) return;
-          _startSidekickDiscovery();
-        });
-      }));
+      unawaited(
+        _link.stopAll().then((_) {
+          Future.delayed(const Duration(milliseconds: _radioCooldownMs), () {
+            if (!_active) return;
+            _startSidekickDiscovery();
+          });
+        }),
+      );
     }
   }
 
@@ -119,7 +117,8 @@ class MpRecovery {
     final role = _role;
     if (role != MpRole.sidekick) return;
 
-    final elapsedSec = (DateTime.now().millisecondsSinceEpoch - _disconnectMs) ~/ 1000;
+    final elapsedSec =
+        (DateTime.now().millisecondsSinceEpoch - _disconnectMs) ~/ 1000;
 
     // Adaptive discovery cadence — aggressive at first, relaxing over
     // time but never dropping below 50% duty cycle. The old 5s/15s
@@ -150,10 +149,9 @@ class MpRecovery {
   }
 
   void _startSidekickDiscovery() {
-    unawaited(_link.startDiscovery(
-      _nickname,
-      autoConnect: const AutoConnectModeAny(),
-    ));
+    unawaited(
+      _link.startDiscovery(_nickname, autoConnect: const AutoConnectModeAny()),
+    );
   }
 
   // ── App-kill restore ───────────────────────────────────────────
@@ -182,8 +180,7 @@ class MpRecovery {
       // this called startNewRun() which destroyed the entire
       // RunState, and then added a hardcoded Cultist placeholder
       // that got broadcast as the Sidekick's character.
-      if (saved.role == MpRole.main &&
-          saved.character.isNotEmpty) {
+      if (saved.role == MpRole.main && saved.character.isNotEmpty) {
         final mainChar = _runProvider.runState.main.character;
         if (mainChar == null || mainChar.name != saved.character) {
           final g = _runProvider.gungeoneerByName(saved.character);
@@ -208,9 +205,8 @@ class MpRecovery {
       // Use the saved character name (not a hardcoded Cultist) so
       // the Sidekick gets their actual character back.
       if (saved.role == MpRole.sidekick) {
-        final charName = saved.character.isNotEmpty
-            ? saved.character
-            : 'The Cultist';
+        final charName =
+            saved.character.isNotEmpty ? saved.character : 'The Cultist';
         final g = _runProvider.gungeoneerByName(charName);
         if (g != null) {
           // Ensure coop slot has the Sidekick's character.

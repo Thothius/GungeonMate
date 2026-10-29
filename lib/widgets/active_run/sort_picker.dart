@@ -107,8 +107,7 @@ List<Gun> sortGuns(List<Gun> src, GunSort mode) {
       });
       break;
     case GunSort.name:
-      out.sort((a, b) =>
-          a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      out.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       break;
     case GunSort.dps:
       out.sort((a, b) => b.dpsValue.compareTo(a.dpsValue));
@@ -137,8 +136,7 @@ List<Item> sortItems(List<Item> src, ItemSort mode) {
       });
       break;
     case ItemSort.name:
-      out.sort((a, b) =>
-          a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+      out.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
       break;
     case ItemSort.type:
       out.sort((a, b) {
@@ -227,9 +225,10 @@ class SortPickerSheet<T> extends StatelessWidget {
                     color: opt == current ? Colors.amber : Colors.white,
                   ),
                 ),
-                trailing: opt == current
-                    ? const Icon(Icons.check, color: Colors.amber, size: 18)
-                    : null,
+                trailing:
+                    opt == current
+                        ? const Icon(Icons.check, color: Colors.amber, size: 18)
+                        : null,
                 onTap: () {
                   onPick(opt);
                   Navigator.pop(context);

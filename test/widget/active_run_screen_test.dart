@@ -7,7 +7,6 @@ import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/active_run_screen.dart';
-import 'package:gungeon_mate/theme/tokens.dart';
 
 /// Widget tests for ActiveRunScreen — the main run tracking screen.
 ///
@@ -24,7 +23,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  Widget _wrap(Widget child, {RunProvider? rp}) {
+  Widget wrap(Widget child, {RunProvider? rp}) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => rp ?? _LoadedRunProvider()),
@@ -37,15 +36,16 @@ void main() {
   testWidgets('renders without crashing with an active run', (tester) async {
     final rp = _LoadedRunProvider();
     rp.startNewRun(Gungeoneer(name: 'Marine'));
-    await tester.pumpWidget(_wrap(const ActiveRunScreen(), rp: rp));
+    await tester.pumpWidget(wrap(const ActiveRunScreen(), rp: rp));
     await tester.pump();
 
     expect(find.byType(ActiveRunScreen), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('renders without overflow on narrow viewport (320px)',
-      (tester) async {
+  testWidgets('renders without overflow on narrow viewport (320px)', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(320, 640);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -53,14 +53,15 @@ void main() {
 
     final rp = _LoadedRunProvider();
     rp.startNewRun(Gungeoneer(name: 'Marine'));
-    await tester.pumpWidget(_wrap(const ActiveRunScreen(), rp: rp));
+    await tester.pumpWidget(wrap(const ActiveRunScreen(), rp: rp));
     await tester.pump();
 
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('renders without overflow on tall viewport (900px)',
-      (tester) async {
+  testWidgets('renders without overflow on tall viewport (900px)', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(400, 900);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -68,17 +69,18 @@ void main() {
 
     final rp = _LoadedRunProvider();
     rp.startNewRun(Gungeoneer(name: 'Marine'));
-    await tester.pumpWidget(_wrap(const ActiveRunScreen(), rp: rp));
+    await tester.pumpWidget(wrap(const ActiveRunScreen(), rp: rp));
     await tester.pump();
 
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('does not use hardcoded EnterTheGungeonBig fontFamily',
-      (tester) async {
+  testWidgets('does not use hardcoded EnterTheGungeonBig fontFamily', (
+    tester,
+  ) async {
     final rp = _LoadedRunProvider();
     rp.startNewRun(Gungeoneer(name: 'Marine'));
-    await tester.pumpWidget(_wrap(const ActiveRunScreen(), rp: rp));
+    await tester.pumpWidget(wrap(const ActiveRunScreen(), rp: rp));
     await tester.pump();
 
     // Search all Text widgets for hardcoded fontFamily
@@ -95,11 +97,12 @@ void main() {
     }
   });
 
-  testWidgets('Quick Add sheet uses FontSizes tokens not hardcoded sizes',
-      (tester) async {
+  testWidgets('Quick Add sheet uses FontSizes tokens not hardcoded sizes', (
+    tester,
+  ) async {
     final rp = _LoadedRunProvider();
     rp.startNewRun(Gungeoneer(name: 'Marine'));
-    await tester.pumpWidget(_wrap(const ActiveRunScreen(), rp: rp));
+    await tester.pumpWidget(wrap(const ActiveRunScreen(), rp: rp));
     await tester.pump();
 
     // Open the Quick Add sheet by tapping the FAB or quick-add button
@@ -128,7 +131,7 @@ void main() {
   testWidgets('disposes controllers without leaking', (tester) async {
     final rp = _LoadedRunProvider();
     rp.startNewRun(Gungeoneer(name: 'Marine'));
-    await tester.pumpWidget(_wrap(const ActiveRunScreen(), rp: rp));
+    await tester.pumpWidget(wrap(const ActiveRunScreen(), rp: rp));
     await tester.pump();
 
     // Replace with empty screen to trigger disposal

@@ -360,9 +360,11 @@ class _ShrineListTile extends StatelessWidget {
                   IconButton(
                     tooltip: 'Open ${shrine.name} on the Gungeon wiki',
                     visualDensity: VisualDensity.compact,
-                    icon: Icon(Icons.open_in_browser_rounded,
-                        size: 18,
-                        color: Colors.white.withValues(alpha: 0.45)),
+                    icon: Icon(
+                      Icons.open_in_browser_rounded,
+                      size: 18,
+                      color: Colors.white.withValues(alpha: 0.45),
+                    ),
                     onPressed: () => _openShrineWiki(shrine.name),
                   ),
                 ],
@@ -1235,8 +1237,10 @@ class _DiceEffectCard extends StatelessWidget {
 Future<void> _openShrineWiki(String shrineName) async {
   try {
     final slug = Uri.encodeComponent(shrineName.replaceAll(' ', '_'));
-    await launchUrl(Uri.parse('https://enterthegungeon.wiki.gg/wiki/$slug'),
-        mode: LaunchMode.externalApplication);
+    await launchUrl(
+      Uri.parse('https://enterthegungeon.wiki.gg/wiki/$slug'),
+      mode: LaunchMode.externalApplication,
+    );
   } catch (e) {
     debugPrint('[ShrinePicker] wiki launch error: $e');
   }

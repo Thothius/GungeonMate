@@ -73,8 +73,7 @@ void main() {
       expect(engine.poolSizeForTier(rat), 49);
 
       final pool = engine.poolForTier(rat, rng: Random(9));
-      expect(pool.every((l) => l.quality == 'S' || l.quality == 'A'),
-          isTrue);
+      expect(pool.every((l) => l.quality == 'S' || l.quality == 'A'), isTrue);
     });
 
     test('standard chests are unlocked, bonus chests are locked', () {
@@ -94,8 +93,11 @@ void main() {
       for (final set in sets) {
         expect(set.length, 5);
         expect(set.toSet().length, 5, reason: 'dupes inside a set');
-        expect(set.contains(loot.name), isFalse,
-            reason: 'correct name leaked into distractors');
+        expect(
+          set.contains(loot.name),
+          isFalse,
+          reason: 'correct name leaked into distractors',
+        );
       }
     });
 
@@ -110,10 +112,7 @@ void main() {
     test('fabricated names never collide with real loot names', () {
       final engine = _engine();
       final realNames = <String>{
-        for (var i = 0; i < 100; i++) ...[
-          'Test Gun A_$i',
-          'Test Item A_$i'
-        ],
+        for (var i = 0; i < 100; i++) ...['Test Gun A_$i', 'Test Item A_$i'],
       };
       for (final loot in engine.poolFor('A', rng: Random(11))) {
         for (final set in engine.distractorSetsFor(loot)) {
@@ -131,7 +130,11 @@ void main() {
     test('curated override sets are used verbatim', () {
       final engine = _engine();
       const loot = QuizLoot(
-          name: 'Casey', iconPath: '', isGun: true, quality: 'D');
+        name: 'Casey',
+        iconPath: '',
+        isGun: true,
+        quality: 'D',
+      );
       final sets = engine.distractorSetsFor(loot);
       expect(sets.length, 3);
       expect(sets.expand((s) => s).contains('Mahoguny'), isTrue);
@@ -202,14 +205,37 @@ void main() {
     // NEVER containing the correct answer — a hand-edit slip would
     // silently ship broken questions otherwise.
     const curated = [
-      'Casey', 'Blasphemy', 'Gunther', 'Yari Launcher', 'Spice', 'Pig',
-      'Sixth Chamber', 'Clone', 'Super Meat Gun', 'Banana',
-      'Turtle Problem', 'Sunglasses', 'Gunderfury', 'Dragunfire',
-      'Mourning Star', 'Fightsabre', 'Finished Gun', 'AU Gun',
-      'Crestfaller', 'Devolver', 'Magic Lamp', 'Owl', 'Phoenix',
-      'Shellegun', 'Super Space Turtle', 'Bundle of Wands',
-      'Elimentaler', 'Railgun', 'Mimic Tooth Necklace',
-      'Partially-Eaten Cheese', 'Unicorn Horn',
+      'Casey',
+      'Blasphemy',
+      'Gunther',
+      'Yari Launcher',
+      'Spice',
+      'Pig',
+      'Sixth Chamber',
+      'Clone',
+      'Super Meat Gun',
+      'Banana',
+      'Turtle Problem',
+      'Sunglasses',
+      'Gunderfury',
+      'Dragunfire',
+      'Mourning Star',
+      'Fightsabre',
+      'Finished Gun',
+      'AU Gun',
+      'Crestfaller',
+      'Devolver',
+      'Magic Lamp',
+      'Owl',
+      'Phoenix',
+      'Shellegun',
+      'Super Space Turtle',
+      'Bundle of Wands',
+      'Elimentaler',
+      'Railgun',
+      'Mimic Tooth Necklace',
+      'Partially-Eaten Cheese',
+      'Unicorn Horn',
     ];
 
     test('all curated sets are 3x5 unique and never the answer', () {
@@ -217,16 +243,25 @@ void main() {
       expect(engine.curatedSetCount, greaterThanOrEqualTo(25));
       for (final name in curated) {
         final loot = QuizLoot(
-            name: name, iconPath: 'x', isGun: true, quality: 'B');
+          name: name,
+          iconPath: 'x',
+          isGun: true,
+          quality: 'B',
+        );
         final sets = engine.distractorSetsFor(loot);
         expect(sets.length, 3, reason: '$name must have 3 sets');
         for (var i = 0; i < 3; i++) {
-          expect(sets[i].length, 5,
-              reason: '$name set $i must have 5 options');
-          expect(sets[i].toSet().length, 5,
-              reason: '$name set $i has duplicate options');
-          expect(sets[i].contains(name), isFalse,
-              reason: '$name set $i contains the correct answer');
+          expect(sets[i].length, 5, reason: '$name set $i must have 5 options');
+          expect(
+            sets[i].toSet().length,
+            5,
+            reason: '$name set $i has duplicate options',
+          );
+          expect(
+            sets[i].contains(name),
+            isFalse,
+            reason: '$name set $i contains the correct answer',
+          );
         }
       }
     });

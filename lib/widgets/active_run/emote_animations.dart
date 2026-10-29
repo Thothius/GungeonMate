@@ -89,7 +89,9 @@ class _KissAnimationState extends State<KissAnimation>
                   const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 6),
+                      horizontal: 14,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.6),
                       borderRadius: BorderRadius.circular(20),
@@ -222,21 +224,25 @@ class _SlapAnimationState extends State<SlapAnimation>
                             child: Icon(
                               Icons.sentiment_very_dissatisfied,
                               size: 100,
-                              color: t < 0.15
-                                  ? Colors.orange
-                                  : Colors.red.shade700,
+                              color:
+                                  t < 0.15
+                                      ? Colors.orange
+                                      : Colors.red.shade700,
                             ),
                           ),
                           const SizedBox(height: 12),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.black.withValues(alpha: 0.7),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: Colors.red.shade700
-                                    .withValues(alpha: 0.5),
+                                color: Colors.red.shade700.withValues(
+                                  alpha: 0.5,
+                                ),
                                 width: 1,
                               ),
                             ),

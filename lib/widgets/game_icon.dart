@@ -10,6 +10,7 @@ class GameIcon extends StatelessWidget {
   final String quality;
   final double size;
   final bool showRing;
+
   /// Screen-reader label describing what this icon represents (e.g.
   /// "M1911, quality A"). When empty, the icon is treated as decorative
   /// and excluded from semantics.
@@ -27,9 +28,8 @@ class GameIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rawColor = quality.isEmpty
-        ? Colors.white24
-        : QualityBadge.colorFor(quality);
+    final rawColor =
+        quality.isEmpty ? Colors.white24 : QualityBadge.colorFor(quality);
     // S-tier uses near-black for the filled badge, but near-black ring
     // chrome is invisible on dark panels. Use gold for the ring so S-tier
     // items/guns are clearly framed on any background.
@@ -38,36 +38,46 @@ class GameIcon extends StatelessWidget {
 
     final imgScale = showRing ? 0.72 : 0.83;
     final iconScale = showRing ? 0.58 : 0.67;
-    final inner = (assetPath.isNotEmpty && assetPath.startsWith('assets/'))
-        ? Image.asset(
-            assetPath,
-            width: size * imgScale,
-            height: size * imgScale,
-            fit: BoxFit.contain,
-            filterQuality: FilterQuality.none, // crisp pixel art
-            cacheWidth: (size * imgScale * 2).round(),
-            cacheHeight: (size * imgScale * 2).round(),
-            semanticLabel: semanticLabel.isNotEmpty ? semanticLabel : null,
-            errorBuilder: (_, __, ___) =>
-                Icon(fallback, size: size * iconScale, color: Colors.white),
-          )
-        : (assetPath.isNotEmpty && assetPath.startsWith('http'))
+    final inner =
+        (assetPath.isNotEmpty && assetPath.startsWith('assets/'))
+            ? Image.asset(
+              assetPath,
+              width: size * imgScale,
+              height: size * imgScale,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.none, // crisp pixel art
+              cacheWidth: (size * imgScale * 2).round(),
+              cacheHeight: (size * imgScale * 2).round(),
+              semanticLabel: semanticLabel.isNotEmpty ? semanticLabel : null,
+              errorBuilder:
+                  (_, __, ___) => Icon(
+                    fallback,
+                    size: size * iconScale,
+                    color: Colors.white,
+                  ),
+            )
+            : (assetPath.isNotEmpty && assetPath.startsWith('http'))
             ? Image.network(
-                assetPath,
-                width: size * imgScale,
-                height: size * imgScale,
-                fit: BoxFit.contain,
-                filterQuality: FilterQuality.none, // crisp pixel art
-                errorBuilder: (_, __, ___) =>
-                    Icon(fallback, size: size * iconScale, color: Colors.white),
-              )
+              assetPath,
+              width: size * imgScale,
+              height: size * imgScale,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.none, // crisp pixel art
+              errorBuilder:
+                  (_, __, ___) => Icon(
+                    fallback,
+                    size: size * iconScale,
+                    color: Colors.white,
+                  ),
+            )
             : Icon(fallback, size: size * iconScale, color: Colors.white);
 
     // Wrap with Semantics: if a label is provided, announce it; otherwise
     // exclude the decorative icon from the accessibility tree.
-    final labeled = semanticLabel.isNotEmpty
-        ? Semantics(label: semanticLabel, image: true, child: inner)
-        : ExcludeSemantics(child: inner);
+    final labeled =
+        semanticLabel.isNotEmpty
+            ? Semantics(label: semanticLabel, image: true, child: inner)
+            : ExcludeSemantics(child: inner);
 
     if (!showRing) {
       return SizedBox(width: size, height: size, child: Center(child: labeled));

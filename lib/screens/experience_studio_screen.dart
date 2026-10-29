@@ -78,9 +78,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         // Back moved to the bottom thumb zone (task 17 sweep).
-        bottomNavigationBar: Navigator.of(context).canPop()
-            ? const BottomBackBar()
-            : null,
+        bottomNavigationBar:
+            Navigator.of(context).canPop() ? const BottomBackBar() : null,
         body: SafeArea(
           child: Stack(
             children: [
@@ -112,7 +111,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-
   // ── Simple picker (initialTab == 0) ───────────────────────────
   // Tall palette panels + a back/preview/apply bar. Nothing else —
   // the screen itself is the preview.
@@ -138,25 +136,44 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-  static const _simpleTabs = ['PALETTES', 'FONTS', 'PARTICLES', 'GLOWS', 'PREVIEW'];
+  static const _simpleTabs = [
+    'PALETTES',
+    'FONTS',
+    'PARTICLES',
+    'GLOWS',
+    'PREVIEW',
+  ];
 
   /// Top panel — current active picks at a glance.
   Widget _buildCurrentPanel() {
     final flair = AppTheme.flairFor(_previewMode);
     final prefs = VisualPrefs.notifier.value;
     final pType = ParticleType.values[prefs.particleTypeIndex];
-    final glow = VisualPrefs.glowColors[
-        prefs.glowColorIndex.clamp(0, VisualPrefs.glowColors.length - 1)];
+    final glow =
+        VisualPrefs.glowColors[prefs.glowColorIndex.clamp(
+          0,
+          VisualPrefs.glowColors.length - 1,
+        )];
     return Container(
       margin: const EdgeInsets.fromLTRB(
-          Insets.lg, Insets.sm, Insets.lg, Insets.xs),
+        Insets.lg,
+        Insets.sm,
+        Insets.lg,
+        Insets.xs,
+      ),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: flair.card.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: flair.primary.withValues(alpha: 0.4), width: 1.4),
+        border: Border.all(
+          color: flair.primary.withValues(alpha: 0.4),
+          width: 1.4,
+        ),
         boxShadow: [
-          BoxShadow(color: flair.glowPrimary.withValues(alpha: 0.3), blurRadius: 10),
+          BoxShadow(
+            color: flair.glowPrimary.withValues(alpha: 0.3),
+            blurRadius: 10,
+          ),
         ],
       ),
       child: Row(
@@ -165,28 +182,40 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GoopText(_previewMode.label.toUpperCase(),
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1,
-                        color: flair.primary)),
+                GoopText(
+                  _previewMode.label.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1,
+                    color: flair.primary,
+                  ),
+                ),
                 const SizedBox(height: 4),
-                GoopText('${prefs.font.label} · ${pType.name.toUpperCase()}',
-                    style: TextStyle(
-                        fontSize: 9.5,
-                        color: flair.secondary.withValues(alpha: 0.8))),
+                GoopText(
+                  '${prefs.font.label} · ${pType.name.toUpperCase()}',
+                  style: TextStyle(
+                    fontSize: 9.5,
+                    color: flair.secondary.withValues(alpha: 0.8),
+                  ),
+                ),
               ],
             ),
           ),
           // Current glow swatch
           Container(
-            width: 22, height: 22,
+            width: 22,
+            height: 22,
             decoration: BoxDecoration(
               color: glow,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1.2),
-              boxShadow: [BoxShadow(color: glow.withValues(alpha: 0.6), blurRadius: 8)],
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.3),
+                width: 1.2,
+              ),
+              boxShadow: [
+                BoxShadow(color: glow.withValues(alpha: 0.6), blurRadius: 8),
+              ],
             ),
           ),
         ],
@@ -199,7 +228,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     final flair = AppTheme.flairFor(_previewMode);
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-          Insets.lg, Insets.xs, Insets.lg, Insets.sm),
+        Insets.lg,
+        Insets.xs,
+        Insets.lg,
+        Insets.sm,
+      ),
       child: Row(
         children: List.generate(_simpleTabs.length, (i) {
           final active = _simpleTab == i;
@@ -214,26 +247,32 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 3),
                 padding: const EdgeInsets.symmetric(vertical: 9),
                 decoration: BoxDecoration(
-                  color: active
-                      ? flair.primary.withValues(alpha: 0.18)
-                      : Colors.white.withValues(alpha: 0.04),
+                  color:
+                      active
+                          ? flair.primary.withValues(alpha: 0.18)
+                          : Colors.white.withValues(alpha: 0.04),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
-                    color: active
-                        ? flair.primary.withValues(alpha: 0.7)
-                        : Colors.white.withValues(alpha: 0.12),
+                    color:
+                        active
+                            ? flair.primary.withValues(alpha: 0.7)
+                            : Colors.white.withValues(alpha: 0.12),
                     width: active ? 1.5 : 1.0,
                   ),
                 ),
                 child: Center(
-                  child: GoopText(_simpleTabs[i],
-                      style: TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.8,
-                          color: active
+                  child: GoopText(
+                    _simpleTabs[i],
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.8,
+                      color:
+                          active
                               ? flair.primary
-                              : Colors.white.withValues(alpha: 0.45))),
+                              : Colors.white.withValues(alpha: 0.45),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -269,40 +308,59 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           color: flair.card,
           borderRadius: BorderRadius.circular(flair.cardRadius),
           border: Border.all(
-              color: flair.cardBorderColor ?? flair.primary.withValues(alpha: 0.3)),
+            color:
+                flair.cardBorderColor ?? flair.primary.withValues(alpha: 0.3),
+          ),
           boxShadow: [
-            BoxShadow(color: flair.glowPrimary.withValues(alpha: 0.4), blurRadius: 14),
+            BoxShadow(
+              color: flair.glowPrimary.withValues(alpha: 0.4),
+              blurRadius: 14,
+            ),
           ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            GoopText(_previewMode.label.toUpperCase(),
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.5,
-                    color: flair.headlineStat)),
+            GoopText(
+              _previewMode.label.toUpperCase(),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.5,
+                color: flair.headlineStat,
+              ),
+            ),
             const SizedBox(height: 8),
-            GoopText(_previewMode.vibe,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 10,
-                    fontStyle: FontStyle.italic,
-                    color: flair.secondary)),
+            GoopText(
+              _previewMode.vibe,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10,
+                fontStyle: FontStyle.italic,
+                color: flair.secondary,
+              ),
+            ),
             const SizedBox(height: 14),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (final c in [flair.scaffold, flair.card, flair.primary, flair.secondary, flair.headlineStat])
+                for (final c in [
+                  flair.scaffold,
+                  flair.card,
+                  flair.primary,
+                  flair.secondary,
+                  flair.headlineStat,
+                ])
                   Container(
-                    width: 22, height: 22,
+                    width: 22,
+                    height: 22,
                     margin: const EdgeInsets.symmetric(horizontal: 3),
                     decoration: BoxDecoration(
                       color: c,
                       shape: BoxShape.circle,
                       border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.2)),
+                        color: Colors.white.withValues(alpha: 0.2),
+                      ),
                     ),
                   ),
               ],
@@ -323,7 +381,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             // Palettes in a 2-column grid — picker + saved.
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(
-                  Insets.lg, Insets.sm, Insets.lg, Insets.sm),
+                Insets.lg,
+                Insets.sm,
+                Insets.lg,
+                Insets.sm,
+              ),
               sliver: SliverGrid.count(
                 crossAxisCount: 2,
                 mainAxisSpacing: 10,
@@ -356,13 +418,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             // Full-width rows below the grid — make + advanced.
             SliverToBoxAdapter(
               child: Padding(
-                padding:
-                    const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.sm),
+                padding: const EdgeInsets.fromLTRB(
+                  Insets.lg,
+                  0,
+                  Insets.lg,
+                  Insets.sm,
+                ),
                 child: Column(
-                  children: [
-                    _buildMakePanel(),
-                    _buildAdvancedPanel(),
-                  ],
+                  children: [_buildMakePanel(), _buildAdvancedPanel()],
                 ),
               ),
             ),
@@ -1422,7 +1485,6 @@ class _PalettePanel extends StatelessWidget {
     );
   }
 }
-
 
 class _ThemeStepState extends State<_ThemeStep> {
   /// Open the color picker for a single palette field and persist the result.
@@ -2717,12 +2779,21 @@ class _GlowColorPaged extends StatelessWidget {
               color: c,
               borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
-                color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.12),
+                color:
+                    isSelected
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.12),
                 width: isSelected ? 2.5 : 0.8,
               ),
-              boxShadow: isSelected
-                  ? [BoxShadow(color: c.withValues(alpha: 0.6), blurRadius: 10)]
-                  : null,
+              boxShadow:
+                  isSelected
+                      ? [
+                        BoxShadow(
+                          color: c.withValues(alpha: 0.6),
+                          blurRadius: 10,
+                        ),
+                      ]
+                      : null,
             ),
           ),
         );
@@ -3185,4 +3256,3 @@ class _LetterRow extends StatelessWidget {
     );
   }
 }
-

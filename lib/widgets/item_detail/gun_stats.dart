@@ -63,17 +63,49 @@ class StatGroup extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: Insets.sm),
-          child: useFilledPill
-              ? Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.all(Radii.sm),
-                    border: Border.all(color: color.withValues(alpha: 0.5), width: 1.0),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
+          child:
+              useFilledPill
+                  ? Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.all(Radii.sm),
+                      border: Border.all(
+                        color: color.withValues(alpha: 0.5),
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(icon, size: 18, color: color),
+                        const SizedBox(width: 7),
+                        GoopText(
+                          label.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 1.5,
+                            color: color,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  : Row(
                     children: [
+                      Container(
+                        width: 3,
+                        height: 18,
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: Insets.sm),
                       Icon(icon, size: 18, color: color),
                       const SizedBox(width: 7),
                       GoopText(
@@ -87,38 +119,20 @@ class StatGroup extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
-              : Row(
-                  children: [
-                    Container(
-                      width: 3,
-                      height: 18,
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                    const SizedBox(width: Insets.sm),
-                    Icon(icon, size: 18, color: color),
-                    const SizedBox(width: 7),
-                    GoopText(
-                      label.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.5,
-                        color: color,
-                      ),
-                    ),
-                  ],
-                ),
         ),
         Wrap(
           spacing: 10,
           runSpacing: 8,
-          children: stats
-              .map((e) => StatPill(label: e.key, value: e.value, groupColor: color))
-              .toList(),
+          children:
+              stats
+                  .map(
+                    (e) => StatPill(
+                      label: e.key,
+                      value: e.value,
+                      groupColor: color,
+                    ),
+                  )
+                  .toList(),
         ),
       ],
     );
@@ -129,7 +143,12 @@ class StatPill extends StatelessWidget {
   final String label;
   final String value;
   final Color? groupColor;
-  const StatPill({super.key, required this.label, required this.value, this.groupColor});
+  const StatPill({
+    super.key,
+    required this.label,
+    required this.value,
+    this.groupColor,
+  });
 
   static const Map<String, Color> _chestColors = {
     'red': Color(0xFFE53935),
@@ -159,9 +178,10 @@ class StatPill extends StatelessWidget {
     final hasDigit = RegExp(r'\d').hasMatch(value);
     final flair = AppTheme.flair;
     final filled = flair.chipFilled;
-    final accentColor = isCharge
-        ? Colors.lightBlueAccent
-        : isDuration
+    final accentColor =
+        isCharge
+            ? Colors.lightBlueAccent
+            : isDuration
             ? Colors.greenAccent.shade200
             : null;
     return Container(
@@ -170,35 +190,48 @@ class StatPill extends StatelessWidget {
         vertical: filled ? 6 : 2,
       ),
       decoration: BoxDecoration(
-        color: filled
-            ? (accentColor?.withValues(alpha: 0.08) ??
-                Colors.white.withValues(alpha: 0.06))
-            : null,
+        color:
+            filled
+                ? (accentColor?.withValues(alpha: 0.08) ??
+                    Colors.white.withValues(alpha: 0.06))
+                : null,
         borderRadius: BorderRadius.circular(flair.chipRadius),
-        border: filled
-            ? (accentColor != null
-                ? Border.all(
-                    color: accentColor.withValues(alpha: 0.35),
-                    width: 0.8,
-                  )
-                : null)
-            : Border(
-                bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.25),
-                  width: 1,
+        border:
+            filled
+                ? (accentColor != null
+                    ? Border.all(
+                      color: accentColor.withValues(alpha: 0.35),
+                      width: 0.8,
+                    )
+                    : null)
+                : Border(
+                  bottom: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.25),
+                    width: 1,
+                  ),
                 ),
-              ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (isCharge) ...[Icon(Icons.electric_bolt, size: 12, color: Colors.lightBlueAccent), const SizedBox(width: 3)],
-          if (isDuration) ...[Icon(Icons.timer_outlined, size: 12, color: Colors.greenAccent.shade200), const SizedBox(width: 3)],
+          if (isCharge) ...[
+            Icon(Icons.electric_bolt, size: 12, color: Colors.lightBlueAccent),
+            const SizedBox(width: 3),
+          ],
+          if (isDuration) ...[
+            Icon(
+              Icons.timer_outlined,
+              size: 12,
+              color: Colors.greenAccent.shade200,
+            ),
+            const SizedBox(width: 3),
+          ],
           GoopText(
             '$label  ',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
-              color: accentColor?.withValues(alpha: 0.85) ??
+              color:
+                  accentColor?.withValues(alpha: 0.85) ??
                   groupColor?.withValues(alpha: 0.75) ??
                   Colors.white.withValues(alpha: 0.6),
             ),
@@ -225,23 +258,17 @@ class StatPill extends StatelessWidget {
           else
             GoopText(
               value,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           if (chestRank != null) ...[
             const SizedBox(width: 6),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
               decoration: BoxDecoration(
-                color: (chestColor ?? Colors.white24)
-                    .withValues(alpha: 0.22),
+                color: (chestColor ?? Colors.white24).withValues(alpha: 0.22),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: (chestColor ?? Colors.white24)
-                      .withValues(alpha: 0.7),
+                  color: (chestColor ?? Colors.white24).withValues(alpha: 0.7),
                   width: 0.7,
                 ),
               ),
@@ -267,7 +294,9 @@ class GunStats extends StatelessWidget {
   const GunStats({super.key, required this.gun});
 
   Widget _buildGunderfuryInfo(BuildContext context, RunProvider p) {
-    final lvl = context.select<RunProvider, int>((p) => p.gunderfuryLevel).clamp(1, 60);
+    final lvl = context
+        .select<RunProvider, int>((p) => p.gunderfuryLevel)
+        .clamp(1, 60);
     String formName = '';
     String description = '';
     String statsDesc = '';
@@ -281,16 +310,19 @@ class GunStats extends StatelessWidget {
     } else if (lvl < 30) {
       formName = 'Automatic Form';
       description = 'Increases fire rate and becomes fully automatic.';
-      statsDesc = 'Damage: 4.5 • Reload: 1.5s • Capacity: 450 • Spread: 10° (Auto)';
+      statsDesc =
+          'Damage: 4.5 • Reload: 1.5s • Capacity: 450 • Spread: 10° (Auto)';
       currentXp = 8000 + (((lvl - 20) / 10) * 13000).round();
     } else if (lvl < 40) {
       formName = 'Defender Form';
-      description = 'Shoots larger, high-velocity energy spheres with increased punch.';
+      description =
+          'Shoots larger, high-velocity energy spheres with increased punch.';
       statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 5°';
       currentXp = 21000 + (((lvl - 30) / 10) * 16500).round();
     } else if (lvl < 50) {
       formName = 'Vindicator Form';
-      description = 'Fires faster with elevated accuracy and tighter groupings.';
+      description =
+          'Fires faster with elevated accuracy and tighter groupings.';
       statsDesc = 'Damage: 6.5 • Reload: 1.1s • Capacity: 550 • Spread: 3°';
       currentXp = 37500 + (((lvl - 40) / 10) * 17500).round();
     } else if (lvl < 60) {
@@ -300,8 +332,10 @@ class GunStats extends StatelessWidget {
       currentXp = 55000 + (((lvl - 50) / 10) * 20000).round();
     } else {
       formName = 'Awakened Gunderfury';
-      description = 'Legendary form of the Blessed Gunseeker. Rapidly shoots twin light beams with absolute 0° spread, bouncing, and piercing!';
-      statsDesc = 'Damage: 10.0 • Reload: 0.6s • Capacity: 650 • Spread: 0° (Perfect accuracy, Piercing, Bouncing)';
+      description =
+          'Legendary form of the Blessed Gunseeker. Rapidly shoots twin light beams with absolute 0° spread, bouncing, and piercing!';
+      statsDesc =
+          'Damage: 10.0 • Reload: 0.6s • Capacity: 650 • Spread: 0° (Perfect accuracy, Piercing, Bouncing)';
       currentXp = 75000;
     }
 
@@ -312,7 +346,10 @@ class GunStats extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.purple.withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.md),
-        border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.35), width: 1.2),
+        border: Border.all(
+          color: Colors.purpleAccent.withValues(alpha: 0.35),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.purpleAccent.withValues(alpha: 0.04),
@@ -344,25 +381,42 @@ class GunStats extends StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Decrease Gunderfury level',
-                    icon: const Icon(Icons.remove_circle_outline, size: 22, color: Colors.white70),
-                    onPressed: lvl > 1 ? () => p.setGunderfuryLevel(lvl - 1) : null,
+                    icon: const Icon(
+                      Icons.remove_circle_outline,
+                      size: 22,
+                      color: Colors.white70,
+                    ),
+                    onPressed:
+                        lvl > 1 ? () => p.setGunderfuryLevel(lvl - 1) : null,
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black26,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
                       '$lvl',
-                      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.purpleAccent),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purpleAccent,
+                      ),
                     ),
                   ),
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Increase Gunderfury level',
-                    icon: const Icon(Icons.add_circle_outline, size: 22, color: Colors.white70),
-                    onPressed: lvl < 60 ? () => p.setGunderfuryLevel(lvl + 1) : null,
+                    icon: const Icon(
+                      Icons.add_circle_outline,
+                      size: 22,
+                      color: Colors.white70,
+                    ),
+                    onPressed:
+                        lvl < 60 ? () => p.setGunderfuryLevel(lvl + 1) : null,
                   ),
                 ],
               ),
@@ -407,11 +461,16 @@ class GunStats extends StatelessWidget {
                 ),
               ),
               GoopText(
-                lvl == 60 ? 'MAX LEVEL' : '${currentXp.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} / 75,000 XP',
+                lvl == 60
+                    ? 'MAX LEVEL'
+                    : '${currentXp.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} / 75,000 XP',
                 style: TextStyle(
                   fontSize: FontSizes.labelSmall,
                   fontWeight: FontWeight.bold,
-                  color: lvl == 60 ? Colors.amberAccent : Colors.purpleAccent.shade100,
+                  color:
+                      lvl == 60
+                          ? Colors.amberAccent
+                          : Colors.purpleAccent.shade100,
                 ),
               ),
             ],
@@ -423,7 +482,9 @@ class GunStats extends StatelessWidget {
               value: xpProgress,
               minHeight: 6,
               backgroundColor: Colors.purple.withValues(alpha: 0.15),
-              valueColor: AlwaysStoppedAnimation<Color>(lvl == 60 ? Colors.amber : Colors.purpleAccent),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                lvl == 60 ? Colors.amber : Colors.purpleAccent,
+              ),
             ),
           ),
           const SizedBox(height: Insets.md),
@@ -474,7 +535,10 @@ class GunStats extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.black38,
                   borderRadius: BorderRadius.all(Radii.sm),
-                  border: Border.all(color: Colors.purpleAccent.withValues(alpha: 0.3), width: 1.2),
+                  border: Border.all(
+                    color: Colors.purpleAccent.withValues(alpha: 0.3),
+                    width: 1.2,
+                  ),
                 ),
                 child: Image.asset(
                   'assets/images/guns/gunderfury.webp',
@@ -539,7 +603,8 @@ class GunStats extends StatelessWidget {
       formDesc = 'Fires a 3-bullet spread shot at closer range. High stagger.';
     } else {
       formName = 'Form 3: Laser Machine Gun (<11% Ammo)';
-      formDesc = 'Fires continuous energy beam blasts. Incredibly high damage and rapid rate of fire.';
+      formDesc =
+          'Fires continuous energy beam blasts. Incredibly high damage and rapid rate of fire.';
     }
 
     return Container(
@@ -554,7 +619,11 @@ class GunStats extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.alt_route, color: Colors.blueAccent.shade100, size: 20),
+              Icon(
+                Icons.alt_route,
+                color: Colors.blueAccent.shade100,
+                size: 20,
+              ),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
@@ -674,7 +743,10 @@ class GunStats extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.green.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.35), width: 1.2),
+        border: Border.all(
+          color: Colors.greenAccent.withValues(alpha: 0.35),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.green.withValues(alpha: 0.03),
@@ -688,7 +760,11 @@ class GunStats extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.science_outlined, color: Colors.greenAccent.shade200, size: 22),
+              Icon(
+                Icons.science_outlined,
+                color: Colors.greenAccent.shade200,
+                size: 22,
+              ),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: Column(
@@ -718,7 +794,9 @@ class GunStats extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.black38,
                   borderRadius: BorderRadius.all(Radii.sm),
-                  border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.25)),
+                  border: Border.all(
+                    color: Colors.greenAccent.withValues(alpha: 0.25),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -726,11 +804,20 @@ class GunStats extends StatelessWidget {
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       tooltip: 'Decrease Evolver kills',
-                      icon: const Icon(Icons.remove, size: 16, color: Colors.greenAccent),
-                      onPressed: totalKills > 0 ? () => p.setEvolverKills(totalKills - 1) : null,
+                      icon: const Icon(
+                        Icons.remove,
+                        size: 16,
+                        color: Colors.greenAccent,
+                      ),
+                      onPressed:
+                          totalKills > 0
+                              ? () => p.setEvolverKills(totalKills - 1)
+                              : null,
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Insets.xs,
+                      ),
                       child: GoopText(
                         '$totalKills/25',
                         style: const TextStyle(
@@ -744,8 +831,15 @@ class GunStats extends StatelessWidget {
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       tooltip: 'Increase Evolver kills',
-                      icon: const Icon(Icons.add, size: 16, color: Colors.greenAccent),
-                      onPressed: totalKills < 25 ? () => p.setEvolverKills(totalKills + 1) : null,
+                      icon: const Icon(
+                        Icons.add,
+                        size: 16,
+                        color: Colors.greenAccent,
+                      ),
+                      onPressed:
+                          totalKills < 25
+                              ? () => p.setEvolverKills(totalKills + 1)
+                              : null,
                     ),
                   ],
                 ),
@@ -761,7 +855,10 @@ class GunStats extends StatelessWidget {
                 final spec = stages[i];
                 final isUnlocked = activeStage >= spec.id;
                 final isActive = activeStage == spec.id;
-                final color = isActive ? spec.color : (isUnlocked ? Colors.green.shade700 : Colors.white12);
+                final color =
+                    isActive
+                        ? spec.color
+                        : (isUnlocked ? Colors.green.shade700 : Colors.white12);
 
                 return Expanded(
                   child: Stack(
@@ -774,9 +871,10 @@ class GunStats extends StatelessWidget {
                           top: 24,
                           child: Container(
                             height: 2.5,
-                            color: isUnlocked && activeStage > spec.id
-                                ? Colors.green.withValues(alpha: 0.5)
-                                : Colors.white10,
+                            color:
+                                isUnlocked && activeStage > spec.id
+                                    ? Colors.green.withValues(alpha: 0.5)
+                                    : Colors.white10,
                           ),
                         ),
                       GestureDetector(
@@ -791,21 +889,31 @@ class GunStats extends StatelessWidget {
                               height: 44,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: isActive ? Colors.black45 : Colors.black26,
+                                color:
+                                    isActive ? Colors.black45 : Colors.black26,
                                 border: Border.all(
                                   color: color,
                                   width: isActive ? 2.5 : 1.2,
                                 ),
-                                boxShadow: isActive ? [
-                                  BoxShadow(
-                                    color: spec.color.withValues(alpha: 0.2),
-                                    blurRadius: 8,
-                                    spreadRadius: 2,
-                                  )
-                                ] : null,
+                                boxShadow:
+                                    isActive
+                                        ? [
+                                          BoxShadow(
+                                            color: spec.color.withValues(
+                                              alpha: 0.2,
+                                            ),
+                                            blurRadius: 8,
+                                            spreadRadius: 2,
+                                          ),
+                                        ]
+                                        : null,
                               ),
                               child: Icon(
-                                isActive ? spec.icon : (isUnlocked ? spec.icon : Icons.lock_outline),
+                                isActive
+                                    ? spec.icon
+                                    : (isUnlocked
+                                        ? spec.icon
+                                        : Icons.lock_outline),
                                 size: isActive ? 22 : 18,
                                 color: color,
                               ),
@@ -815,7 +923,10 @@ class GunStats extends StatelessWidget {
                               spec.name,
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                fontWeight: isActive ? FontWeight.w900 : FontWeight.bold,
+                                fontWeight:
+                                    isActive
+                                        ? FontWeight.w900
+                                        : FontWeight.bold,
                                 color: isActive ? spec.color : Colors.white60,
                               ),
                             ),
@@ -831,7 +942,12 @@ class GunStats extends StatelessWidget {
           const SizedBox(height: Insets.md),
           const GoopText(
             'UNIQUE ENEMY TYPES SLAIN CHECKLIST',
-            style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w900, color: Colors.greenAccent, letterSpacing: 0.5),
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w900,
+              color: Colors.greenAccent,
+              letterSpacing: 0.5,
+            ),
           ),
           const SizedBox(height: 6),
           Wrap(
@@ -854,28 +970,44 @@ class GunStats extends StatelessWidget {
                   width: 28,
                   height: 28,
                   decoration: BoxDecoration(
-                    color: isChecked 
-                        ? (isThresholdNode ? Colors.green.shade800 : Colors.green.withValues(alpha: 0.35))
-                        : Colors.black38,
+                    color:
+                        isChecked
+                            ? (isThresholdNode
+                                ? Colors.green.shade800
+                                : Colors.green.withValues(alpha: 0.35))
+                            : Colors.black38,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: isChecked 
-                          ? Colors.greenAccent 
-                          : (isThresholdNode ? Colors.greenAccent.withValues(alpha: 0.3) : Colors.white12),
+                      color:
+                          isChecked
+                              ? Colors.greenAccent
+                              : (isThresholdNode
+                                  ? Colors.greenAccent.withValues(alpha: 0.3)
+                                  : Colors.white12),
                       width: isThresholdNode ? 1.5 : 1.0,
                     ),
                   ),
                   child: Center(
-                    child: isChecked 
-                        ? Icon(isThresholdNode ? Icons.star : Icons.check, size: 13, color: Colors.greenAccent)
-                        : Text(
-                            '$killNum',
-                            style: TextStyle(
-                              fontSize: FontSizes.labelSmall,
-                              fontWeight: FontWeight.bold, 
-                              color: isThresholdNode ? Colors.greenAccent.withValues(alpha: 0.4) : Colors.white54
+                    child:
+                        isChecked
+                            ? Icon(
+                              isThresholdNode ? Icons.star : Icons.check,
+                              size: 13,
+                              color: Colors.greenAccent,
+                            )
+                            : Text(
+                              '$killNum',
+                              style: TextStyle(
+                                fontSize: FontSizes.labelSmall,
+                                fontWeight: FontWeight.bold,
+                                color:
+                                    isThresholdNode
+                                        ? Colors.greenAccent.withValues(
+                                          alpha: 0.4,
+                                        )
+                                        : Colors.white54,
+                              ),
                             ),
-                          ),
                   ),
                 ),
               );
@@ -884,11 +1016,17 @@ class GunStats extends StatelessWidget {
           const SizedBox(height: Insets.md),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: Insets.sm),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: Insets.sm,
+            ),
             decoration: BoxDecoration(
               color: Colors.black45,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: currentSpec.color.withValues(alpha: 0.3), width: 1.0),
+              border: Border.all(
+                color: currentSpec.color.withValues(alpha: 0.3),
+                width: 1.0,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -928,7 +1066,11 @@ class GunStats extends StatelessWidget {
                 const SizedBox(height: 6),
                 GoopText(
                   'Projectiles: ${currentSpec.bullet}',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white70),
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white70,
+                  ),
                 ),
                 const SizedBox(height: 3),
                 GoopText(
@@ -1037,21 +1179,38 @@ class GunStats extends StatelessWidget {
       'The Forge',
       'Bullet Hell',
     ];
-    const floorDps = [15.9, 30.3, 25.1, 80.0, 300.0, 20.0, 68.0, 100.0, 70.0, 180.0];
+    const floorDps = [
+      15.9,
+      30.3,
+      25.1,
+      80.0,
+      300.0,
+      20.0,
+      68.0,
+      100.0,
+      70.0,
+      180.0,
+    ];
 
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
         color: Colors.deepOrange.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.deepOrangeAccent.withValues(alpha: 0.3)),
+        border: Border.all(
+          color: Colors.deepOrangeAccent.withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.layers, color: Colors.deepOrangeAccent.shade100, size: 20),
+              Icon(
+                Icons.layers,
+                color: Colors.deepOrangeAccent.shade100,
+                size: 20,
+              ),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
@@ -1113,7 +1272,11 @@ class GunStats extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.sports_baseball, color: Colors.limeAccent.shade100, size: 20),
+              Icon(
+                Icons.sports_baseball,
+                color: Colors.limeAccent.shade100,
+                size: 20,
+              ),
               const SizedBox(width: Insets.sm),
               Expanded(
                 child: GoopText(
@@ -1144,33 +1307,38 @@ class GunStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
-    final gunderfuryLevel = context.select<RunProvider, int>((p) => p.gunderfuryLevel);
-    final gunderfuryInfo = gun.name.toLowerCase() == 'gunderfury'
-        ? _buildGunderfuryInfo(context, p)
-        : null;
-    final tripleGunInfo = gun.name.toLowerCase() == 'triple gun'
-        ? _buildTripleGunInfo(context, p)
-        : null;
-    final evolverInfo = gun.name.toLowerCase() == 'evolver'
-        ? _buildEvolverInfo(context, p)
-        : null;
-    final shellegunInfo = gun.name.toLowerCase() == 'shellegun'
-        ? _buildShellegunInfo(context, p)
-        : null;
-    final chamberGunInfo = gun.name.toLowerCase() == 'chamber gun'
-        ? _buildChamberGunInfo(context, p)
-        : null;
-    final caseyInfo = gun.name.toLowerCase() == 'casey'
-        ? _buildCaseyInfo(context)
-        : null;
+    final gunderfuryLevel = context.select<RunProvider, int>(
+      (p) => p.gunderfuryLevel,
+    );
+    final gunderfuryInfo =
+        gun.name.toLowerCase() == 'gunderfury'
+            ? _buildGunderfuryInfo(context, p)
+            : null;
+    final tripleGunInfo =
+        gun.name.toLowerCase() == 'triple gun'
+            ? _buildTripleGunInfo(context, p)
+            : null;
+    final evolverInfo =
+        gun.name.toLowerCase() == 'evolver'
+            ? _buildEvolverInfo(context, p)
+            : null;
+    final shellegunInfo =
+        gun.name.toLowerCase() == 'shellegun'
+            ? _buildShellegunInfo(context, p)
+            : null;
+    final chamberGunInfo =
+        gun.name.toLowerCase() == 'chamber gun'
+            ? _buildChamberGunInfo(context, p)
+            : null;
+    final caseyInfo =
+        gun.name.toLowerCase() == 'casey' ? _buildCaseyInfo(context) : null;
 
     final String typeLower = gun.type.toLowerCase();
     if (typeLower.contains('charged') || typeLower.contains('charge')) {
     } else if (typeLower.contains('beam')) {
     } else if (typeLower.contains('burst')) {
     } else if (typeLower.contains('automatic') || typeLower.contains('auto')) {
-    } else {
-    }
+    } else {}
 
     // All form-stateful guns get their dynamic DPS — same params
     // _avgDpsFor uses, so the header stat matches run averages.
@@ -1180,8 +1348,9 @@ class GunStats extends StatelessWidget {
         tripleForm: context.select<RunProvider, int>((p) => p.tripleGunForm),
         evolverStage: context.select<RunProvider, int>((p) => p.evolverForm),
         shellegunMode: context.select<RunProvider, int>((p) => p.shellegunMode),
-        chamberGunFloor:
-            context.select<RunProvider, int>((p) => p.chamberGunFloor),
+        chamberGunFloor: context.select<RunProvider, int>(
+          (p) => p.chamberGunFloor,
+        ),
       );
       return dyn > 0
           ? dyn.toStringAsFixed(1)
@@ -1190,27 +1359,94 @@ class GunStats extends StatelessWidget {
 
     // Hero row — the four stats that matter most (per redesign):
     // DPS panel + RANGE/SPREAD/FORCE uniform cards.
-    final heroStats = <_StatSpec>[
-      _StatSpec(label: 'Range', value: gun.range, icon: Icons.linear_scale, category: _StatCategory.handling),
-      _StatSpec(label: 'Spread', value: gun.spread, icon: Icons.scatter_plot, category: _StatCategory.handling),
-      _StatSpec(label: 'Force', value: gun.force, icon: Icons.waves, category: _StatCategory.handling),
-    ].where((s) => s.value.isNotEmpty).toList();
+    final heroStats =
+        <_StatSpec>[
+          _StatSpec(
+            label: 'Range',
+            value: gun.range,
+            icon: Icons.linear_scale,
+            category: _StatCategory.handling,
+          ),
+          _StatSpec(
+            label: 'Spread',
+            value: gun.spread,
+            icon: Icons.scatter_plot,
+            category: _StatCategory.handling,
+          ),
+          _StatSpec(
+            label: 'Force',
+            value: gun.force,
+            icon: Icons.waves,
+            category: _StatCategory.handling,
+          ),
+        ].where((s) => s.value.isNotEmpty).toList();
 
     // Secondary grid — everything else, compact.
-    final secondaryStats = <_StatSpec>[
-      _StatSpec(label: 'Damage', value: gun.damage, icon: Icons.bolt, category: _StatCategory.combat),
-      _StatSpec(label: 'Fire Rate', value: gun.fireRate, icon: Icons.speed, category: _StatCategory.combat),
-      _StatSpec(label: 'Reload', value: gun.reloadTime, icon: Icons.refresh, category: _StatCategory.combat),
-      _StatSpec(label: 'Shot Speed', value: gun.shotSpeed, icon: Icons.fast_forward, category: _StatCategory.handling),
-      _StatSpec(label: 'Magazine', value: gun.magazineSize, icon: Icons.inventory_2_outlined, category: _StatCategory.combat),
-      _StatSpec(label: 'Max Ammo', value: gun.ammoCapacity, icon: Icons.all_inclusive_outlined, category: _StatCategory.combat),
-      _StatSpec(label: 'Class', value: gun.gunClass, icon: Icons.category_outlined, category: _StatCategory.meta),
-      _StatSpec(label: 'Chest', value: gun.chestColorDisplay, icon: Icons.inventory_2_outlined, category: _StatCategory.meta),
-      if (gun.curse > 0)
-        _StatSpec(label: 'Curse', value: '+${gun.curse}', icon: Icons.mood_bad_outlined, category: _StatCategory.meta),
-      if (gun.coolness > 0)
-        _StatSpec(label: 'Cool', value: '+${gun.coolness}', icon: Icons.ac_unit, category: _StatCategory.meta),
-    ].where((s) => s.value.isNotEmpty).toList();
+    final secondaryStats =
+        <_StatSpec>[
+          _StatSpec(
+            label: 'Damage',
+            value: gun.damage,
+            icon: Icons.bolt,
+            category: _StatCategory.combat,
+          ),
+          _StatSpec(
+            label: 'Fire Rate',
+            value: gun.fireRate,
+            icon: Icons.speed,
+            category: _StatCategory.combat,
+          ),
+          _StatSpec(
+            label: 'Reload',
+            value: gun.reloadTime,
+            icon: Icons.refresh,
+            category: _StatCategory.combat,
+          ),
+          _StatSpec(
+            label: 'Shot Speed',
+            value: gun.shotSpeed,
+            icon: Icons.fast_forward,
+            category: _StatCategory.handling,
+          ),
+          _StatSpec(
+            label: 'Magazine',
+            value: gun.magazineSize,
+            icon: Icons.inventory_2_outlined,
+            category: _StatCategory.combat,
+          ),
+          _StatSpec(
+            label: 'Max Ammo',
+            value: gun.ammoCapacity,
+            icon: Icons.all_inclusive_outlined,
+            category: _StatCategory.combat,
+          ),
+          _StatSpec(
+            label: 'Class',
+            value: gun.gunClass,
+            icon: Icons.category_outlined,
+            category: _StatCategory.meta,
+          ),
+          _StatSpec(
+            label: 'Chest',
+            value: gun.chestColorDisplay,
+            icon: Icons.inventory_2_outlined,
+            category: _StatCategory.meta,
+          ),
+          if (gun.curse > 0)
+            _StatSpec(
+              label: 'Curse',
+              value: '+${gun.curse}',
+              icon: Icons.mood_bad_outlined,
+              category: _StatCategory.meta,
+            ),
+          if (gun.coolness > 0)
+            _StatSpec(
+              label: 'Cool',
+              value: '+${gun.coolness}',
+              icon: Icons.ac_unit,
+              category: _StatCategory.meta,
+            ),
+        ].where((s) => s.value.isNotEmpty).toList();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
@@ -1244,10 +1480,7 @@ class GunStats extends StatelessWidget {
             tripleGunInfo,
             const SizedBox(height: 14),
           ],
-          if (evolverInfo != null) ...[
-            evolverInfo,
-            const SizedBox(height: 14),
-          ],
+          if (evolverInfo != null) ...[evolverInfo, const SizedBox(height: 14)],
           if (shellegunInfo != null) ...[
             shellegunInfo,
             const SizedBox(height: 14),
@@ -1256,21 +1489,18 @@ class GunStats extends StatelessWidget {
             chamberGunInfo,
             const SizedBox(height: 14),
           ],
-          if (caseyInfo != null) ...[
-            caseyInfo,
-            const SizedBox(height: 14),
-          ],
+          if (caseyInfo != null) ...[caseyInfo, const SizedBox(height: 14)],
 
           // ── Row 3: secondary stats — compact responsive wrap ──
           if (secondaryStats.isNotEmpty)
             Wrap(
               spacing: 6,
               runSpacing: 6,
-              children: secondaryStats
-                  .map((s) => _SecondaryStatChip(spec: s))
-                  .toList(),
+              children:
+                  secondaryStats
+                      .map((s) => _SecondaryStatChip(spec: s))
+                      .toList(),
             ),
-
         ],
       ),
     );
@@ -1338,7 +1568,6 @@ class GunStats extends StatelessWidget {
       ),
     );
   }
-
 }
 
 /// Stat category — mirrors the old Combat/Handling/Meta grouping so the
@@ -1389,10 +1618,7 @@ class _PrimaryStatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: catColor.withValues(alpha: 0.06),
         borderRadius: BorderRadius.all(Radii.md),
-        border: Border.all(
-          color: catColor.withValues(alpha: 0.3),
-          width: 0.8,
-        ),
+        border: Border.all(color: catColor.withValues(alpha: 0.3), width: 0.8),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -1444,10 +1670,7 @@ class _SecondaryStatChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: catColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: catColor.withValues(alpha: 0.22),
-          width: 0.6,
-        ),
+        border: Border.all(color: catColor.withValues(alpha: 0.22), width: 0.6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

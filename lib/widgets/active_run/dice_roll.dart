@@ -156,9 +156,12 @@ class DiceRollDialogState extends State<DiceRollDialog>
         if (_status == DiceStatus.challenging) {
           _status = DiceStatus.idle;
           _announcement = 'Partner disconnected.';
-        } else if (_status == DiceStatus.rollingScreen && _hasRolled && _peerScore == null) {
+        } else if (_status == DiceStatus.rollingScreen &&
+            _hasRolled &&
+            _peerScore == null) {
           _status = DiceStatus.finished;
-          _announcement = 'Partner disconnected. GUNFORTUNA DECLARES YOU VICTORIOUS BY DEFAULT!';
+          _announcement =
+              'Partner disconnected. GUNFORTUNA DECLARES YOU VICTORIOUS BY DEFAULT!';
         }
       });
     }
@@ -350,7 +353,10 @@ class DiceRollDialogState extends State<DiceRollDialog>
       },
       child: Dialog(
         backgroundColor: f.card.withValues(alpha: 0.98),
-        insetPadding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.xl),
+        insetPadding: const EdgeInsets.symmetric(
+          horizontal: Insets.lg,
+          vertical: Insets.xl,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radii.lg),
           side: BorderSide(color: f.primary, width: 2.0),
@@ -718,7 +724,10 @@ class DiceRollDialogState extends State<DiceRollDialog>
         children: [
           // Flavour Winner announcement
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.md),
+            padding: const EdgeInsets.symmetric(
+              horizontal: Insets.lg,
+              vertical: Insets.md,
+            ),
             decoration: BoxDecoration(
               color: bannerColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),

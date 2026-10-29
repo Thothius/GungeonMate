@@ -113,13 +113,17 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     if (q.loot.isGun) {
       final gun = p.allGuns.where((g) => g.name == name).firstOrNull;
       if (gun == null) return;
-      Navigator.push(context,
-          fastRoute(ItemDetailScreen(gun: gun, ownerSlot: PlayerSlot.main)));
+      Navigator.push(
+        context,
+        fastRoute(ItemDetailScreen(gun: gun, ownerSlot: PlayerSlot.main)),
+      );
     } else {
       final item = p.allItems.where((i) => i.name == name).firstOrNull;
       if (item == null) return;
-      Navigator.push(context,
-          fastRoute(ItemDetailScreen(item: item, ownerSlot: PlayerSlot.main)));
+      Navigator.push(
+        context,
+        fastRoute(ItemDetailScreen(item: item, ownerSlot: PlayerSlot.main)),
+      );
     }
   }
 
@@ -136,8 +140,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
       if (_streak > _sessionBest) {
         _sessionBest = _streak;
         // Live-save the high-water mark — quitting early keeps progress.
-        QuizProgress.instance
-            .recordStreak(widget.tier.id, _sessionBest);
+        QuizProgress.instance.recordStreak(widget.tier.id, _sessionBest);
       }
       _revealTimer = Timer(
         ReduceMotion.of(context)
@@ -155,8 +158,10 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   /// Once per run: reveal the loot's real Ammonomicon quote/effect.
   void _useHint() {
     final q = _question;
-    if (_phase != _Phase.question || _hintUsed ||
-        q == null || q.loot.hint.isEmpty) {
+    if (_phase != _Phase.question ||
+        _hintUsed ||
+        q == null ||
+        q.loot.hint.isEmpty) {
       return;
     }
     Haptics.light();
@@ -201,8 +206,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   /// System back (gesture/button) routes through PopScope — it must
   /// clear the same guard as the in-app back button. [_exiting] lets
   /// a confirmed pop pass canPop on the next frame.
-  bool get _canPop =>
-      _exiting || _phase == _Phase.gameOver || _streak == 0;
+  bool get _canPop => _exiting || _phase == _Phase.gameOver || _streak == 0;
 
   /// Back during a live streak asks first — progress is saved either
   /// way, but a mis-tap shouldn't end a good run for free.
@@ -215,21 +219,23 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     _backDialogOpen = true;
     final leave = await showDialog<bool>(
       context: context,
-      builder: (c) => AlertDialog(
-        title: const GoopText('End chest run?'),
-        content: GoopText(
-            'Your streak of $_streak is already saved as your best.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c, false),
-            child: const GoopText('Keep Going'),
+      builder:
+          (c) => AlertDialog(
+            title: const GoopText('End chest run?'),
+            content: GoopText(
+              'Your streak of $_streak is already saved as your best.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(c, false),
+                child: const GoopText('Keep Going'),
+              ),
+              FilledButton.tonal(
+                onPressed: () => Navigator.pop(c, true),
+                child: const GoopText('End Run'),
+              ),
+            ],
           ),
-          FilledButton.tonal(
-            onPressed: () => Navigator.pop(c, true),
-            child: const GoopText('End Run'),
-          ),
-        ],
-      ),
     );
     _backDialogOpen = false;
     if (leave == true && mounted) {
@@ -252,31 +258,30 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         if (!didPop) _onBack();
       },
       child: Scaffold(
-      backgroundColor: Colors.transparent,
-      // Back moved to the bottom thumb zone (task 17 sweep) — same
-      // stage-aware _onBack the top-bar arrow used to call.
-      bottomNavigationBar: BottomBackBar(onPressed: _onBack),
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildTopBar(tier),
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 260),
-                child: _buildPhase(tier),
+        backgroundColor: Colors.transparent,
+        // Back moved to the bottom thumb zone (task 17 sweep) — same
+        // stage-aware _onBack the top-bar arrow used to call.
+        bottomNavigationBar: BottomBackBar(onPressed: _onBack),
+        body: SafeArea(
+          child: Column(
+            children: [
+              _buildTopBar(tier),
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 260),
+                  child: _buildPhase(tier),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
 
   Widget _buildTopBar(QuizChestTier tier) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(
-          Insets.xs, Insets.xs, Insets.lg, 0),
+      padding: const EdgeInsets.fromLTRB(Insets.xs, Insets.xs, Insets.lg, 0),
       child: Row(
         children: [
           const SizedBox(width: 40),
@@ -306,42 +311,49 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           // Streak pill — pulses when the streak grows.
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
-            transitionBuilder: (child, anim) => ScaleTransition(
-              scale: Tween(begin: 1.25, end: 1.0).animate(anim),
-              child: FadeTransition(opacity: anim, child: child),
-            ),
+            transitionBuilder:
+                (child, anim) => ScaleTransition(
+                  scale: Tween(begin: 1.25, end: 1.0).animate(anim),
+                  child: FadeTransition(opacity: anim, child: child),
+                ),
             child: Container(
               key: ValueKey(_streak),
               padding: const EdgeInsets.symmetric(
-                  horizontal: Insets.sm + 2, vertical: Insets.xs),
+                horizontal: Insets.sm + 2,
+                vertical: Insets.xs,
+              ),
               decoration: BoxDecoration(
-                color: _streak > 0
-                    ? tier.accent.withValues(alpha: 0.20)
-                    : Colors.white.withValues(alpha: 0.06),
+                color:
+                    _streak > 0
+                        ? tier.accent.withValues(alpha: 0.20)
+                        : Colors.white.withValues(alpha: 0.06),
                 borderRadius: Radii.pill,
                 border: Border.all(
-                  color: _streak > 0
-                      ? tier.accent.withValues(alpha: 0.6)
-                      : Colors.white.withValues(alpha: 0.15),
+                  color:
+                      _streak > 0
+                          ? tier.accent.withValues(alpha: 0.6)
+                          : Colors.white.withValues(alpha: 0.15),
                 ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.local_fire_department_rounded,
-                      size: 14,
-                      color: _streak > 0
-                          ? const Color(0xFFFFB300)
-                          : Colors.white38),
+                  Icon(
+                    Icons.local_fire_department_rounded,
+                    size: 14,
+                    color:
+                        _streak > 0 ? const Color(0xFFFFB300) : Colors.white38,
+                  ),
                   const SizedBox(width: 3),
                   GoopText(
                     '$_streak',
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
                       fontWeight: FontWeight.w900,
-                      color: _streak > 0
-                          ? const Color(0xFFFFB300)
-                          : Colors.white38,
+                      color:
+                          _streak > 0
+                              ? const Color(0xFFFFB300)
+                              : Colors.white38,
                     ),
                   ),
                 ],
@@ -375,14 +387,14 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           QuizChest(
-            asset: tier.asset,
-            accent: tier.accent,
-            size: 150 * tier.spriteScale,
-            opening: opening,
-            onTap: _onChestTap,
-            onOpened: _onChestOpened,
-            poofSeed: _index,
-          )
+                asset: tier.asset,
+                accent: tier.accent,
+                size: 150 * tier.spriteScale,
+                opening: opening,
+                onTap: _onChestTap,
+                onOpened: _onChestOpened,
+                poofSeed: _index,
+              )
               .animate(key: ValueKey('chest_$_index'))
               .fadeIn(duration: 200.ms)
               .scale(
@@ -395,12 +407,12 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           AnimatedOpacity(
             opacity: opening ? 0 : 1,
             duration: const Duration(milliseconds: 200),
-            child: (opening || ReduceMotion.of(context))
-                ? _tapToOpenText(tier)
-                : _tapToOpenText(tier)
-                    .animate(
-                        onPlay: (c) => c.repeat(reverse: true))
-                    .fadeIn(duration: 900.ms),
+            child:
+                (opening || ReduceMotion.of(context))
+                    ? _tapToOpenText(tier)
+                    : _tapToOpenText(tier)
+                        .animate(onPlay: (c) => c.repeat(reverse: true))
+                        .fadeIn(duration: 900.ms),
           ),
           const SizedBox(height: Insets.xs),
           GoopText(
@@ -462,161 +474,174 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
   Widget _buildQuestion(QuizChestTier tier) {
     final q = _question!;
     final revealed = _phase == _Phase.reveal;
-    final wasCorrect =
-        revealed && _pickedIndex == q.correctIndex;
+    final wasCorrect = revealed && _pickedIndex == q.correctIndex;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: revealed && !wasCorrect ? _endRun : null,
       child: LayoutBuilder(
-        builder: (context, constraints) => SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: IntrinsicHeight(
-              child: Padding(
-                key: ValueKey('q_$_index'),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: Insets.lg),
-                child: Column(
-                  children: [
-          const Spacer(),
-          // Revealed loot card — springs in like it popped from the chest.
-          Container(
-            padding: const EdgeInsets.all(Insets.lg),
-            decoration: BoxDecoration(
-              color: tier.accent.withValues(alpha: 0.08),
-              borderRadius: Radii.card,
-              border: Border.all(
-                color: tier.accent.withValues(alpha: 0.3),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: tier.accent.withValues(alpha: 0.18),
-                  blurRadius: 24,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: GameIcon(
-              assetPath: q.loot.iconPath,
-              quality: q.loot.quality,
-              size: 118,
-              fallback: q.loot.isGun
-                  ? Icons.gps_fixed_rounded
-                  : Icons.inventory_2_rounded,
-              semanticLabel: 'Mystery loot',
-            ),
-          )
-              .animate()
-              .scale(
-                begin: const Offset(0.3, 0.3),
-                end: const Offset(1, 1),
-                duration: 520.ms,
-                curve: Curves.elasticOut,
-              )
-              .fadeIn(duration: 200.ms),
-          const SizedBox(height: Insets.lg),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: GoopText(
-              !revealed
-                  ? 'WHAT IS THIS LOOT?'
-                  : wasCorrect
-                      ? 'CORRECT!'
-                      : 'IT WAS:  ${q.loot.name}',
-              key: ValueKey('$revealed$wasCorrect'),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: FontSizes.titleSmall,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.4,
-                color: !revealed
-                    ? Colors.white.withValues(alpha: 0.75)
-                    : wasCorrect
-                        ? const Color(0xFF4CAF50)
-                        : const Color(0xFFE53935),
-              ),
-            ),
-          ),
-          if (revealed)
-            GestureDetector(
-              onTap: () => _openAmmonomicon(q),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.menu_book_rounded,
-                        size: 14,
-                        color: tier.accent.withValues(alpha: 0.8)),
-                    const SizedBox(width: 5),
-                    GoopText(
-                      'AMMONOMICON',
-                      style: TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1.2,
-                        color: tier.accent.withValues(alpha: 0.8),
-                      ),
+        builder:
+            (context, constraints) => SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    key: ValueKey('q_$_index'),
+                    padding: const EdgeInsets.symmetric(horizontal: Insets.lg),
+                    child: Column(
+                      children: [
+                        const Spacer(),
+                        // Revealed loot card — springs in like it popped from the chest.
+                        Container(
+                              padding: const EdgeInsets.all(Insets.lg),
+                              decoration: BoxDecoration(
+                                color: tier.accent.withValues(alpha: 0.08),
+                                borderRadius: Radii.card,
+                                border: Border.all(
+                                  color: tier.accent.withValues(alpha: 0.3),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: tier.accent.withValues(alpha: 0.18),
+                                    blurRadius: 24,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
+                              ),
+                              child: GameIcon(
+                                assetPath: q.loot.iconPath,
+                                quality: q.loot.quality,
+                                size: 118,
+                                fallback:
+                                    q.loot.isGun
+                                        ? Icons.gps_fixed_rounded
+                                        : Icons.inventory_2_rounded,
+                                semanticLabel: 'Mystery loot',
+                              ),
+                            )
+                            .animate()
+                            .scale(
+                              begin: const Offset(0.3, 0.3),
+                              end: const Offset(1, 1),
+                              duration: 520.ms,
+                              curve: Curves.elasticOut,
+                            )
+                            .fadeIn(duration: 200.ms),
+                        const SizedBox(height: Insets.lg),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          child: GoopText(
+                            !revealed
+                                ? 'WHAT IS THIS LOOT?'
+                                : wasCorrect
+                                ? 'CORRECT!'
+                                : 'IT WAS:  ${q.loot.name}',
+                            key: ValueKey('$revealed$wasCorrect'),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: FontSizes.titleSmall,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.4,
+                              color:
+                                  !revealed
+                                      ? Colors.white.withValues(alpha: 0.75)
+                                      : wasCorrect
+                                      ? const Color(0xFF4CAF50)
+                                      : const Color(0xFFE53935),
+                            ),
+                          ),
+                        ),
+                        if (revealed)
+                          GestureDetector(
+                            onTap: () => _openAmmonomicon(q),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.menu_book_rounded,
+                                    size: 14,
+                                    color: tier.accent.withValues(alpha: 0.8),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  GoopText(
+                                    'AMMONOMICON',
+                                    style: TextStyle(
+                                      fontSize: FontSizes.labelSmall,
+                                      fontWeight: FontWeight.w800,
+                                      letterSpacing: 1.2,
+                                      color: tier.accent.withValues(alpha: 0.8),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.chevron_right_rounded,
+                                    size: 14,
+                                    color: tier.accent.withValues(alpha: 0.6),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: Insets.sm),
+                        // Ammonomicon hint — once per run, shows the item's real
+                        // flavor quote/effect. Sits in a fixed slot so the grid
+                        // never jumps when it's used.
+                        SizedBox(
+                          height: 40,
+                          child: Center(
+                            child: AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 200),
+                              child: _buildHintSlot(tier, q),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        QuizAnswerGrid(
+                          options: q.options,
+                          correctIndex: q.correctIndex,
+                          accent: tier.accent,
+                          pickedIndex: _pickedIndex,
+                          onPick: _onPick,
+                        ),
+                        const SizedBox(height: Insets.md),
+                        // Wrong-pick reveal: the run is over but the answer stays up
+                        // until the player taps through it.
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          child:
+                              revealed && !wasCorrect
+                                  ? GoopText(
+                                        'TAP TO CONTINUE',
+                                        key: const ValueKey('tapout'),
+                                        style: TextStyle(
+                                          fontSize: FontSizes.labelMedium,
+                                          fontWeight: FontWeight.w900,
+                                          letterSpacing: 2.0,
+                                          color: Colors.white.withValues(
+                                            alpha: 0.5,
+                                          ),
+                                        ),
+                                      )
+                                      .animate(
+                                        onPlay:
+                                            (c) =>
+                                                ReduceMotion.of(context)
+                                                    ? null
+                                                    : c.repeat(reverse: true),
+                                      )
+                                      .fadeIn(duration: 800.ms)
+                                  : const SizedBox(
+                                    height: 18,
+                                    key: ValueKey('tapin'),
+                                  ),
+                        ),
+                        const SizedBox(height: Insets.lg),
+                      ],
                     ),
-                    Icon(Icons.chevron_right_rounded,
-                        size: 14,
-                        color: tier.accent.withValues(alpha: 0.6)),
-                  ],
+                  ),
                 ),
               ),
             ),
-          const SizedBox(height: Insets.sm),
-          // Ammonomicon hint — once per run, shows the item's real
-          // flavor quote/effect. Sits in a fixed slot so the grid
-          // never jumps when it's used.
-          SizedBox(
-            height: 40,
-            child: Center(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: _buildHintSlot(tier, q),
-              ),
-            ),
-          ),
-          const Spacer(),
-          QuizAnswerGrid(
-            options: q.options,
-            correctIndex: q.correctIndex,
-            accent: tier.accent,
-            pickedIndex: _pickedIndex,
-            onPick: _onPick,
-          ),
-          const SizedBox(height: Insets.md),
-          // Wrong-pick reveal: the run is over but the answer stays up
-          // until the player taps through it.
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: revealed && !wasCorrect
-                ? GoopText(
-                    'TAP TO CONTINUE',
-                    key: const ValueKey('tapout'),
-                    style: TextStyle(
-                      fontSize: FontSizes.labelMedium,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2.0,
-                      color: Colors.white.withValues(alpha: 0.5),
-                    ),
-                  )
-                    .animate(
-                      onPlay: (c) => ReduceMotion.of(context)
-                          ? null
-                          : c.repeat(reverse: true),
-                    )
-                    .fadeIn(duration: 800.ms)
-                : const SizedBox(height: 18, key: ValueKey('tapin')),
-          ),
-          const SizedBox(height: Insets.lg),
-          ],
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -631,7 +656,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         key: const ValueKey('hintcard'),
         constraints: const BoxConstraints(maxWidth: 360),
         padding: const EdgeInsets.symmetric(
-            horizontal: Insets.md, vertical: Insets.xs + 2),
+          horizontal: Insets.md,
+          vertical: Insets.xs + 2,
+        ),
         decoration: BoxDecoration(
           color: const Color(0xFF1E1E22),
           borderRadius: Radii.card,
@@ -642,8 +669,11 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.auto_stories_rounded,
-                size: 14, color: Color(0xFFCDA349)),
+            const Icon(
+              Icons.auto_stories_rounded,
+              size: 14,
+              color: Color(0xFFCDA349),
+            ),
             const SizedBox(width: Insets.sm),
             Flexible(
               child: GoopText(
@@ -669,7 +699,9 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         onTap: _useHint,
         child: Container(
           padding: const EdgeInsets.symmetric(
-              horizontal: Insets.md, vertical: Insets.xs + 2),
+            horizontal: Insets.md,
+            vertical: Insets.xs + 2,
+          ),
           decoration: BoxDecoration(
             color: const Color(0xFFCDA349).withValues(alpha: 0.10),
             borderRadius: Radii.pill,
@@ -680,8 +712,11 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
           child: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.auto_stories_rounded,
-                  size: 13, color: Color(0xFFCDA349)),
+              Icon(
+                Icons.auto_stories_rounded,
+                size: 13,
+                color: Color(0xFFCDA349),
+              ),
               SizedBox(width: 6),
               GoopText(
                 'AMMONOMICON HINT',
@@ -705,138 +740,141 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
     return Center(
       key: const ValueKey('over'),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(Insets.xl),
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 340),
-          padding: const EdgeInsets.all(Insets.xl),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                tier.accent.withValues(alpha: 0.16),
-                tier.accent.withValues(alpha: 0.05),
-              ],
-            ),
-            borderRadius: Radii.card,
-            border: Border.all(
-              color: tier.accent.withValues(alpha: 0.55),
-              width: 1.6,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: tier.accent.withValues(alpha: 0.25),
-                blurRadius: 30,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                tier.asset,
-                height: 84,
-                filterQuality: FilterQuality.none,
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.inventory_2_rounded, size: 64),
-              ),
-              const SizedBox(height: Insets.md),
-              GoopText(
-                _flawless ? 'COMPLETED!' : 'RUN OVER',
-                style: TextStyle(
-                  fontSize: FontSizes.headlineSmall,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2.0,
-                  color: _flawless
-                      ? const Color(0xFFFFD700)
-                      : tier.accent,
-                  shadows: _flawless
-                      ? const [
-                          Shadow(
-                              blurRadius: 18,
-                              color: Color(0x88FFD700)),
-                        ]
-                      : null,
+            padding: const EdgeInsets.all(Insets.xl),
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 340),
+              padding: const EdgeInsets.all(Insets.xl),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    tier.accent.withValues(alpha: 0.16),
+                    tier.accent.withValues(alpha: 0.05),
+                  ],
                 ),
-              )
-                  .animate()
-                  .fadeIn(duration: 300.ms)
-                  .scale(
-                      begin: const Offset(0.7, 0.7),
-                      end: const Offset(1, 1),
-                      duration: 400.ms,
-                      curve: Curves.easeOutBack),
-              const SizedBox(height: Insets.xs),
-              GoopText(
-                _flawless
-                    ? 'Every single drop named. Flawless!'
-                    : 'The chest slams shut...',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: FontSizes.labelMedium,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.55),
+                borderRadius: Radii.card,
+                border: Border.all(
+                  color: tier.accent.withValues(alpha: 0.55),
+                  width: 1.6,
                 ),
-              ),
-              const SizedBox(height: Insets.lg),
-              _statRow('STREAK', '$_sessionBest'),
-              const SizedBox(height: Insets.xs),
-              _statRow('POOL', '$_poolSize'),
-              const SizedBox(height: Insets.xs),
-              _statRow(
-                'BEST',
-                '${QuizProgress.instance.bestStreak(widget.tier.id)}/$_poolSize',
-              ),
-              if (_newBest && !_flawless) ...[
-                const SizedBox(height: Insets.sm),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Insets.md, vertical: Insets.xs),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFD700)
-                        .withValues(alpha: 0.15),
-                    borderRadius: Radii.pill,
-                    border: Border.all(
-                      color: const Color(0xFFFFD700)
-                          .withValues(alpha: 0.6),
-                    ),
+                boxShadow: [
+                  BoxShadow(
+                    color: tier.accent.withValues(alpha: 0.25),
+                    blurRadius: 30,
+                    spreadRadius: 2,
                   ),
-                  child: const GoopText(
-                    'NEW BEST!',
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    tier.asset,
+                    height: 84,
+                    filterQuality: FilterQuality.none,
+                    errorBuilder:
+                        (_, __, ___) =>
+                            const Icon(Icons.inventory_2_rounded, size: 64),
+                  ),
+                  const SizedBox(height: Insets.md),
+                  GoopText(
+                        _flawless ? 'COMPLETED!' : 'RUN OVER',
+                        style: TextStyle(
+                          fontSize: FontSizes.headlineSmall,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 2.0,
+                          color:
+                              _flawless ? const Color(0xFFFFD700) : tier.accent,
+                          shadows:
+                              _flawless
+                                  ? const [
+                                    Shadow(
+                                      blurRadius: 18,
+                                      color: Color(0x88FFD700),
+                                    ),
+                                  ]
+                                  : null,
+                        ),
+                      )
+                      .animate()
+                      .fadeIn(duration: 300.ms)
+                      .scale(
+                        begin: const Offset(0.7, 0.7),
+                        end: const Offset(1, 1),
+                        duration: 400.ms,
+                        curve: Curves.easeOutBack,
+                      ),
+                  const SizedBox(height: Insets.xs),
+                  GoopText(
+                    _flawless
+                        ? 'Every single drop named. Flawless!'
+                        : 'The chest slams shut...',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.6,
-                      color: Color(0xFFFFD700),
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white.withValues(alpha: 0.55),
                     ),
                   ),
-                ),
-              ],
-              const SizedBox(height: Insets.xl),
-              _gameOverButton(
-                label: 'OPEN ANOTHER',
-                accent: tier.accent,
-                filled: true,
-                onTap: () {
-                  Haptics.selection();
-                  setState(_startRun);
-                },
+                  const SizedBox(height: Insets.lg),
+                  _statRow('STREAK', '$_sessionBest'),
+                  const SizedBox(height: Insets.xs),
+                  _statRow('POOL', '$_poolSize'),
+                  const SizedBox(height: Insets.xs),
+                  _statRow(
+                    'BEST',
+                    '${QuizProgress.instance.bestStreak(widget.tier.id)}/$_poolSize',
+                  ),
+                  if (_newBest && !_flawless) ...[
+                    const SizedBox(height: Insets.sm),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: Insets.md,
+                        vertical: Insets.xs,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFD700).withValues(alpha: 0.15),
+                        borderRadius: Radii.pill,
+                        border: Border.all(
+                          color: const Color(0xFFFFD700).withValues(alpha: 0.6),
+                        ),
+                      ),
+                      child: const GoopText(
+                        'NEW BEST!',
+                        style: TextStyle(
+                          fontSize: FontSizes.labelMedium,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.6,
+                          color: Color(0xFFFFD700),
+                        ),
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: Insets.xl),
+                  _gameOverButton(
+                    label: 'OPEN ANOTHER',
+                    accent: tier.accent,
+                    filled: true,
+                    onTap: () {
+                      Haptics.selection();
+                      setState(_startRun);
+                    },
+                  ),
+                  const SizedBox(height: Insets.sm),
+                  _gameOverButton(
+                    label: 'BACK TO CHESTS',
+                    accent: tier.accent,
+                    filled: false,
+                    onTap: () {
+                      Haptics.light();
+                      Navigator.maybePop(context);
+                    },
+                  ),
+                ],
               ),
-              const SizedBox(height: Insets.sm),
-              _gameOverButton(
-                label: 'BACK TO CHESTS',
-                accent: tier.accent,
-                filled: false,
-                onTap: () {
-                  Haptics.light();
-                  Navigator.maybePop(context);
-                },
-              ),
-            ],
-          ),
-        ),
-      )
+            ),
+          )
           .animate()
           .fadeIn(duration: 280.ms)
           .slideY(begin: 0.12, end: 0, duration: 320.ms),
@@ -881,31 +919,33 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
         height: 48,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          gradient: filled
-              ? LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    accent.withValues(alpha: 0.85),
-                    accent.withValues(alpha: 0.6),
-                  ],
-                )
-              : null,
+          gradient:
+              filled
+                  ? LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      accent.withValues(alpha: 0.85),
+                      accent.withValues(alpha: 0.6),
+                    ],
+                  )
+                  : null,
           color: filled ? null : accent.withValues(alpha: 0.10),
           borderRadius: Radii.card,
           border: Border.all(
             color: accent.withValues(alpha: filled ? 0.9 : 0.45),
             width: 1.4,
           ),
-          boxShadow: filled
-              ? [
-                  BoxShadow(
-                    color: accent.withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : null,
+          boxShadow:
+              filled
+                  ? [
+                    BoxShadow(
+                      color: accent.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                  : null,
         ),
         child: GoopText(
           label,

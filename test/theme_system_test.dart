@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
-import 'package:gungeon_mate/widgets/particle_engine.dart'
-    show ParticlePreset, GlowEffect, ParticleColorSchema, ParticleSpeed;
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Unit tests for the custom theme system — serialization round-trips,
@@ -56,10 +54,7 @@ void main() {
 
     test('copyWith overrides only specified fields', () {
       final original = CustomThemeData.defaultTheme;
-      final updated = original.copyWith(
-        primary: Colors.red,
-        name: 'Red Theme',
-      );
+      final updated = original.copyWith(primary: Colors.red, name: 'Red Theme');
 
       expect(updated.name, 'Red Theme');
       expect(updated.primary, Colors.red);
@@ -89,15 +84,19 @@ void main() {
       final r1 = CustomThemeData.random();
       final r2 = CustomThemeData.random();
 
-      final allFieldsMatch = r1.primary == r2.primary &&
+      final allFieldsMatch =
+          r1.primary == r2.primary &&
           r1.secondary == r2.secondary &&
           r1.scaffold == r2.scaffold &&
           r1.card == r2.card &&
           r1.headlineStat == r2.headlineStat &&
           r1.bulletColor == r2.bulletColor;
 
-      expect(allFieldsMatch, isFalse,
-          reason: 'Two random themes should not match on every field');
+      expect(
+        allFieldsMatch,
+        isFalse,
+        reason: 'Two random themes should not match on every field',
+      );
     });
   });
 
@@ -269,8 +268,10 @@ void main() {
           bulletColor: const Color(0xFF555555),
         ),
       );
-      await prefs.setString('custom.themes.v1',
-          '[${theme.toJson().toString()}]');
+      await prefs.setString(
+        'custom.themes.v1',
+        '[${theme.toJson().toString()}]',
+      );
 
       // This won't work because the JSON encoding needs proper encoding
       // Use the store's own save method instead
@@ -284,8 +285,10 @@ void main() {
       expect(CustomThemeStore.themes.length, 1);
       expect(CustomThemeStore.themes.first.name, 'Loaded Theme');
       expect(CustomThemeStore.themes.first.customData, isNotNull);
-      expect(CustomThemeStore.themes.first.customData!.primary,
-          const Color(0xFF222222));
+      expect(
+        CustomThemeStore.themes.first.customData!.primary,
+        const Color(0xFF222222),
+      );
     });
 
     test('load() with empty storage is a no-op', () async {
@@ -309,10 +312,7 @@ void main() {
     });
 
     test('persists to SharedPreferences', () async {
-      const newPrefs = VisualPrefs(
-        glowIntensity: 0.7,
-        particlesEnabled: true,
-      );
+      const newPrefs = VisualPrefs(glowIntensity: 0.7, particlesEnabled: true);
       await VisualPrefs.replaceAndPersist(newPrefs);
 
       // Verify it was persisted

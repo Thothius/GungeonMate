@@ -41,8 +41,11 @@ void main() {
         }
       }
     }
-    expect(broken, isEmpty,
-        reason: 'unresolvable synergy pieces:\n${broken.join('\n')}');
+    expect(
+      broken,
+      isEmpty,
+      reason: 'unresolvable synergy pieces:\n${broken.join('\n')}',
+    );
   });
 
   test('gun/item icon paths point at files that exist', () {
@@ -50,9 +53,8 @@ void main() {
     void check(String owner, String icon) {
       if (icon.isEmpty) return;
       // Icon fields may be bare stems or full asset paths.
-      final path = icon.startsWith('assets/')
-          ? icon
-          : 'assets/images/icons/$icon';
+      final path =
+          icon.startsWith('assets/') ? icon : 'assets/images/icons/$icon';
       if (!File(path).existsSync()) missing.add('$owner -> $icon');
     }
 
@@ -62,9 +64,12 @@ void main() {
     for (final i in p.allItems) {
       check('item:${i.name}', i.icon);
     }
-    expect(missing, isEmpty,
-        reason:
-            '${missing.length} missing icons:\n${missing.take(20).join('\n')}');
+    expect(
+      missing,
+      isEmpty,
+      reason:
+          '${missing.length} missing icons:\n${missing.take(20).join('\n')}',
+    );
   });
 
   test('every gun has a name and a quality tier', () {

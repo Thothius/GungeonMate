@@ -53,8 +53,10 @@ class _SpoilerTagState extends State<SpoilerTag>
                 setState(() => _expanded = !_expanded);
               },
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     Icon(
@@ -91,12 +93,13 @@ class _SpoilerTagState extends State<SpoilerTag>
             duration: const Duration(milliseconds: 220),
             curve: Curves.easeInOutCubic,
             alignment: Alignment.topCenter,
-            child: _expanded
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(14, 4, 14, 14),
-                    child: widget.content,
-                  )
-                : const SizedBox.shrink(),
+            child:
+                _expanded
+                    ? Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 4, 14, 14),
+                      child: widget.content,
+                    )
+                    : const SizedBox.shrink(),
           ),
         ],
       ),

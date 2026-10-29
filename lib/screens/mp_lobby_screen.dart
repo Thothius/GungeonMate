@@ -77,7 +77,9 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     // Sidekick is always The Cultist — no other option.
     if (!isMain) {
       return rp.gungeoneerByName('The Cultist') ??
-          (rp.allGungeoneers.isNotEmpty ? rp.allGungeoneers.first : Gungeoneer(name: 'The Cultist'));
+          (rp.allGungeoneers.isNotEmpty
+              ? rp.allGungeoneers.first
+              : Gungeoneer(name: 'The Cultist'));
     }
     // If the user explicitly picked a character, use it.
     if (_selectedChar != null) return _selectedChar!;
@@ -87,9 +89,11 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     // First non-Cultist gungeoneer for Main.
     return rp.allGungeoneers.firstWhere(
       (g) => g.name != 'The Cultist',
-      orElse: () => rp.allGungeoneers.isNotEmpty
-          ? rp.allGungeoneers.first
-          : Gungeoneer(name: 'The Marine'),
+      orElse:
+          () =>
+              rp.allGungeoneers.isNotEmpty
+                  ? rp.allGungeoneers.first
+                  : Gungeoneer(name: 'The Marine'),
     );
   }
 
@@ -104,18 +108,20 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const GoopText('MULTIPLAYER',
-            style: TextStyle(
-                fontSize: FontSizes.titleSmall,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.5)),
+        title: const GoopText(
+          'MULTIPLAYER',
+          style: TextStyle(
+            fontSize: FontSizes.titleSmall,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.5,
+          ),
+        ),
         leading: IconButton(
           tooltip: _stage == 0 ? 'Leave lobby' : 'Back',
           icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
           onPressed: () {
             if (_stage > 0) {
-              setState(() =>
-                  _stage -= (_role == _LobbyRole.sidekick ? 2 : 1));
+              setState(() => _stage -= (_role == _LobbyRole.sidekick ? 2 : 1));
               return;
             }
             final session = context.read<MpSession>();
@@ -136,9 +142,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             ),
           ),
           // Main content
-          SafeArea(
-            child: _stageBody(sf, flair),
-          ),
+          SafeArea(child: _stageBody(sf, flair)),
         ],
       ),
     );
@@ -163,8 +167,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       duration: const Duration(milliseconds: 220),
       child: Padding(
         key: ValueKey(_stage),
-        padding:
-            EdgeInsets.symmetric(horizontal: 20 * sf, vertical: 8 * sf),
+        padding: EdgeInsets.symmetric(horizontal: 20 * sf, vertical: 8 * sf),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -173,16 +176,17 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             // still scrollable when it can't fit (keyboard, small screens).
             Expanded(
               child: LayoutBuilder(
-                builder: (context, c) => SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: c.maxHeight),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: widgets,
+                builder:
+                    (context, c) => SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: c.maxHeight),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: widgets,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
             ),
           ],
@@ -202,22 +206,27 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 6),
               child: Container(
-                width: 7, height: 7,
+                width: 7,
+                height: 7,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: i <= _stage
-                      ? AppTheme.flair.primary
-                      : Colors.white.withValues(alpha: 0.18),
+                  color:
+                      i <= _stage
+                          ? AppTheme.flair.primary
+                          : Colors.white.withValues(alpha: 0.18),
                 ),
               ),
             ),
           const SizedBox(width: 8),
-          GoopText(title,
-              style: TextStyle(
-                  fontSize: FontSizes.titleSmall,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2,
-                  color: Colors.white.withValues(alpha: 0.7))),
+          GoopText(
+            title,
+            style: TextStyle(
+              fontSize: FontSizes.titleSmall,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2,
+              color: Colors.white.withValues(alpha: 0.7),
+            ),
+          ),
         ],
       ),
       SizedBox(height: 18 * sf),
@@ -225,113 +234,127 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
   }
 
   List<Widget> _roleStage(double sf, ThemeFlair flair) => [
-        _stageCard(
-          title: 'HOST',
-          subtitle: 'Main player\nLeads the run',
-          icon: Icons.military_tech_rounded,
-          color: const Color(0xFF4DD0E1),
-          sf: sf,
-          onTap: () {
-            Haptics.selection();
-            setState(() { _role = _LobbyRole.main; _stage = 1; });
-          },
+    _stageCard(
+      title: 'HOST',
+      subtitle: 'Main player\nLeads the run',
+      icon: Icons.military_tech_rounded,
+      color: const Color(0xFF4DD0E1),
+      sf: sf,
+      onTap: () {
+        Haptics.selection();
+        setState(() {
+          _role = _LobbyRole.main;
+          _stage = 1;
+        });
+      },
+    ),
+    SizedBox(height: 16 * sf),
+    _stageCard(
+      title: 'SIDEKICK',
+      subtitle: 'Join as The Cultist\nBackup for the main player',
+      icon: Icons.groups_rounded,
+      color: flair.secondary,
+      sf: sf,
+      onTap: () {
+        Haptics.selection();
+        setState(() {
+          _role = _LobbyRole.sidekick;
+          _selectedChar = null;
+          _stage = 2; // skip gungeoneer pick
+        });
+      },
+    ),
+    SizedBox(height: 22 * sf),
+    // Subtle paradox entry — alt co-op mode with avatars/surprises,
+    // demoted to a text link since the main menu paradox button
+    // was removed.
+    Center(
+      child: TextButton.icon(
+        onPressed: () {
+          Haptics.selection();
+          Navigator.push(context, fastRoute(const ParadoxFlowScreen()));
+        },
+        icon: Icon(
+          Icons.auto_awesome_outlined,
+          size: 14,
+          color: Colors.white.withValues(alpha: 0.35),
         ),
-        SizedBox(height: 16 * sf),
-        _stageCard(
-          title: 'SIDEKICK',
-          subtitle: 'Join as The Cultist\nBackup for the main player',
-          icon: Icons.groups_rounded,
-          color: flair.secondary,
-          sf: sf,
-          onTap: () {
-            Haptics.selection();
-            setState(() {
-              _role = _LobbyRole.sidekick;
-              _selectedChar = null;
-              _stage = 2; // skip gungeoneer pick
-            });
-          },
-        ),
-        SizedBox(height: 22 * sf),
-        // Subtle paradox entry — alt co-op mode with avatars/surprises,
-        // demoted to a text link since the main menu paradox button
-        // was removed.
-        Center(
-          child: TextButton.icon(
-            onPressed: () {
-              Haptics.selection();
-              Navigator.push(
-                  context, fastRoute(const ParadoxFlowScreen()));
-            },
-            icon: Icon(Icons.auto_awesome_outlined,
-                size: 14, color: Colors.white.withValues(alpha: 0.35)),
-            label: GoopText(
-              'Paradox mode — avatar co-op',
-              style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.white.withValues(alpha: 0.35)),
-            ),
+        label: GoopText(
+          'Paradox mode — avatar co-op',
+          style: TextStyle(
+            fontSize: 11,
+            color: Colors.white.withValues(alpha: 0.35),
           ),
         ),
-      ];
+      ),
+    ),
+  ];
 
   List<Widget> _gungeoneerStage(double sf, ThemeFlair flair) => [
-        _buildCharacterPreview(sf, flair),
-        SizedBox(height: 24 * sf),
-        FilledButton.icon(
-          style: FilledButton.styleFrom(
-            backgroundColor: flair.primary,
-            foregroundColor: Colors.white,
-            minimumSize: Size.fromHeight(56 * sf),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14)),
-          ),
-          icon: Icon(Icons.arrow_forward_rounded, size: 24 * sf),
-          label: GoopText('CONTINUE',
-              style: TextStyle(
-                  fontSize: FontSizes.titleSmall * sf,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1)),
-          onPressed: () {
-            Haptics.selection();
-            setState(() => _stage = 2);
-          },
+    _buildCharacterPreview(sf, flair),
+    SizedBox(height: 24 * sf),
+    FilledButton.icon(
+      style: FilledButton.styleFrom(
+        backgroundColor: flair.primary,
+        foregroundColor: Colors.white,
+        minimumSize: Size.fromHeight(56 * sf),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+      icon: Icon(Icons.arrow_forward_rounded, size: 24 * sf),
+      label: GoopText(
+        'CONTINUE',
+        style: TextStyle(
+          fontSize: FontSizes.titleSmall * sf,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1,
         ),
-      ];
+      ),
+      onPressed: () {
+        Haptics.selection();
+        setState(() => _stage = 2);
+      },
+    ),
+  ];
 
   List<Widget> _identityStage(double sf, ThemeFlair flair) => [
-        Row(
-          children: [
-            GestureDetector(
-              onTap: _pickAvatar,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: flair.primary.withValues(alpha: 0.5), width: 1.5),
-                ),
-                child: FramedAvatar(
-                    id: _avatarId, size: 52 * sf, radius: 26 * sf),
+    Row(
+      children: [
+        GestureDetector(
+          onTap: _pickAvatar,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: flair.primary.withValues(alpha: 0.5),
+                width: 1.5,
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(child: _buildNicknameField(sf, flair)),
-          ],
+            child: FramedAvatar(id: _avatarId, size: 52 * sf, radius: 26 * sf),
+          ),
         ),
-        SizedBox(height: 24 * sf),
-        _buildActionButton(sf, flair),
-        SizedBox(height: 24 * sf),
-        TextButton.icon(
-          onPressed: _showHowToPlay,
-          icon: Icon(Icons.help_outline_rounded,
-              size: 18 * sf,
-              color: Colors.white.withValues(alpha: 0.4)),
-          label: GoopText('How to Play',
-              style: TextStyle(
-                  fontSize: FontSizes.labelMedium * sf,
-                  color: Colors.white.withValues(alpha: 0.4))),
+        const SizedBox(width: 12),
+        Expanded(child: _buildNicknameField(sf, flair)),
+      ],
+    ),
+    SizedBox(height: 24 * sf),
+    _buildActionButton(sf, flair),
+    SizedBox(height: 24 * sf),
+    TextButton.icon(
+      onPressed: _showHowToPlay,
+      icon: Icon(
+        Icons.help_outline_rounded,
+        size: 18 * sf,
+        color: Colors.white.withValues(alpha: 0.4),
+      ),
+      label: GoopText(
+        'How to Play',
+        style: TextStyle(
+          fontSize: FontSizes.labelMedium * sf,
+          color: Colors.white.withValues(alpha: 0.4),
         ),
-      ];
+      ),
+    ),
+  ];
 
   /// Bold tappable card — same visual language as Paradox's _BigCard.
   Widget _stageCard({
@@ -361,19 +384,25 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             children: [
               Icon(icon, size: 44 * sf, color: color),
               SizedBox(height: 12 * sf),
-              GoopText(title,
-                  style: TextStyle(
-                      fontSize: FontSizes.titleMedium * sf,
-                      fontWeight: FontWeight.w900,
-                      color: color,
-                      letterSpacing: 1.5)),
+              GoopText(
+                title,
+                style: TextStyle(
+                  fontSize: FontSizes.titleMedium * sf,
+                  fontWeight: FontWeight.w900,
+                  color: color,
+                  letterSpacing: 1.5,
+                ),
+              ),
               SizedBox(height: 8 * sf),
-              GoopText(subtitle,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12 * sf,
-                      color: Colors.white.withValues(alpha: 0.6),
-                      height: 1.4)),
+              GoopText(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12 * sf,
+                  color: Colors.white.withValues(alpha: 0.6),
+                  height: 1.4,
+                ),
+              ),
             ],
           ),
         ),
@@ -399,10 +428,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
         decoration: BoxDecoration(
           color: flair.card.withValues(alpha: 0.7),
           borderRadius: BorderRadius.all(Radii.lg),
-          border: Border.all(
-            color: glowColor.withValues(alpha: 0.3),
-            width: 2,
-          ),
+          border: Border.all(color: glowColor.withValues(alpha: 0.3), width: 2),
           boxShadow: [
             BoxShadow(
               color: glowColor.withValues(alpha: 0.12),
@@ -446,48 +472,77 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  GoopText(char.name,
-                      style: TextStyle(
-                          fontSize: FontSizes.titleLarge * sf,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.white.withValues(alpha: 0.95))),
+                  GoopText(
+                    char.name,
+                    style: TextStyle(
+                      fontSize: FontSizes.titleLarge * sf,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white.withValues(alpha: 0.95),
+                    ),
+                  ),
                   if (!isMain)
-                    GoopText('Sidekick always plays The Cultist',
-                        style: TextStyle(
-                            fontSize: FontSizes.labelSmall * sf,
-                            color: Colors.white.withValues(alpha: 0.4),
-                            fontWeight: FontWeight.w500)),
+                    GoopText(
+                      'Sidekick always plays The Cultist',
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall * sf,
+                        color: Colors.white.withValues(alpha: 0.4),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                 ],
               ),
             ),
             Icon(
-                isMain ? Icons.chevron_right_rounded : Icons.lock_rounded,
-                size: 28 * sf,
-                color: Colors.white.withValues(alpha: 0.3)),
+              isMain ? Icons.chevron_right_rounded : Icons.lock_rounded,
+              size: 28 * sf,
+              color: Colors.white.withValues(alpha: 0.3),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _characterImage(Gungeoneer c, String animPath, String gifPath,
-      double sf, ThemeFlair flair) {
+  Widget _characterImage(
+    Gungeoneer c,
+    String animPath,
+    String gifPath,
+    double sf,
+    ThemeFlair flair,
+  ) {
     return SizedBox(
       width: 96 * sf,
       height: 96 * sf,
-      child: animPath.isNotEmpty
-          ? Image.asset(animPath,
-              fit: BoxFit.contain,
-              cacheWidth: 192,
-              cacheHeight: 192,
-              errorBuilder: (_, __, ___) => gifPath.isNotEmpty
-                  ? Image.asset(gifPath, fit: BoxFit.contain, cacheWidth: 192, cacheHeight: 192)
-                  : Icon(Icons.person_rounded,
-                      size: 40 * sf, color: flair.primary))
-          : gifPath.isNotEmpty
-              ? Image.asset(gifPath, fit: BoxFit.contain, cacheWidth: 192, cacheHeight: 192)
-              : Icon(Icons.person_rounded,
-                  size: 40 * sf, color: flair.primary),
+      child:
+          animPath.isNotEmpty
+              ? Image.asset(
+                animPath,
+                fit: BoxFit.contain,
+                cacheWidth: 192,
+                cacheHeight: 192,
+                errorBuilder:
+                    (_, __, ___) =>
+                        gifPath.isNotEmpty
+                            ? Image.asset(
+                              gifPath,
+                              fit: BoxFit.contain,
+                              cacheWidth: 192,
+                              cacheHeight: 192,
+                            )
+                            : Icon(
+                              Icons.person_rounded,
+                              size: 40 * sf,
+                              color: flair.primary,
+                            ),
+              )
+              : gifPath.isNotEmpty
+              ? Image.asset(
+                gifPath,
+                fit: BoxFit.contain,
+                cacheWidth: 192,
+                cacheHeight: 192,
+              )
+              : Icon(Icons.person_rounded, size: 40 * sf, color: flair.primary),
     );
   }
 
@@ -495,15 +550,18 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     Haptics.selection();
     final rp = context.read<RunProvider>();
     // Main player can't pick The Cultist — filter it out.
-    final available = _role == _LobbyRole.main
-        ? rp.allGungeoneers.where((g) => g.name != 'The Cultist').toList()
-        : rp.allGungeoneers;
+    final available =
+        _role == _LobbyRole.main
+            ? rp.allGungeoneers.where((g) => g.name != 'The Cultist').toList()
+            : rp.allGungeoneers;
     final Gungeoneer? picked = await Navigator.push<Gungeoneer>(
       context,
-      fastRoute(CharacterSelectScreen(
-        mode: CharSelectMode.multiplayerPick,
-        gungeoneers: available,
-      )),
+      fastRoute(
+        CharacterSelectScreen(
+          mode: CharSelectMode.multiplayerPick,
+          gungeoneers: available,
+        ),
+      ),
     );
     if (mounted && picked != null) {
       setState(() => _selectedChar = picked);
@@ -525,19 +583,23 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       decoration: InputDecoration(
         labelText: 'NICKNAME',
         labelStyle: TextStyle(
-            fontSize: FontSizes.labelSmall * sf,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 2,
-            color: flair.primary.withValues(alpha: 0.7)),
+          fontSize: FontSizes.labelSmall * sf,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 2,
+          color: flair.primary.withValues(alpha: 0.7),
+        ),
         hintText: 'Enter your nickname',
         hintStyle: TextStyle(
-            fontSize: 20 * sf,
-            fontWeight: FontWeight.w600,
-            color: Colors.white.withValues(alpha: 0.3)),
+          fontSize: 20 * sf,
+          fontWeight: FontWeight.w600,
+          color: Colors.white.withValues(alpha: 0.3),
+        ),
         prefixIcon: Icon(Icons.person_outline, size: 26 * sf),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: 18 * sf, vertical: 16 * sf),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 18 * sf,
+          vertical: 16 * sf,
+        ),
       ),
       onChanged: (value) async {
         await PairedPartnersStore.saveNickname(value);
@@ -555,14 +617,18 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
           foregroundColor: Colors.white,
           minimumSize: Size.fromHeight(56 * sf),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14)),
+            borderRadius: BorderRadius.circular(14),
+          ),
         ),
         icon: Icon(Icons.wifi_tethering_rounded, size: 24 * sf),
-        label: GoopText('HOST GAME',
-            style: TextStyle(
-                fontSize: FontSizes.titleSmall * sf,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1)),
+        label: GoopText(
+          'HOST GAME',
+          style: TextStyle(
+            fontSize: FontSizes.titleSmall * sf,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1,
+          ),
+        ),
         onPressed: _host,
       );
     }
@@ -571,15 +637,17 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
         backgroundColor: flair.secondary,
         foregroundColor: Colors.white,
         minimumSize: Size.fromHeight(56 * sf),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
       icon: Icon(Icons.login_rounded, size: 24 * sf),
-      label: GoopText('JOIN GAME',
-          style: TextStyle(
-              fontSize: FontSizes.titleSmall * sf,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1)),
+      label: GoopText(
+        'JOIN GAME',
+        style: TextStyle(
+          fontSize: FontSizes.titleSmall * sf,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1,
+        ),
+      ),
       onPressed: _join,
     );
   }
@@ -603,7 +671,11 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     final session = context.read<MpSession>();
     await _showPermissionRationale();
     if (!mounted) return;
-    await session.startAsMain(nickname: nick, character: char, avatarId: _avatarId);
+    await session.startAsMain(
+      nickname: nick,
+      character: char,
+      avatarId: _avatarId,
+    );
     if (!mounted) return;
     await Navigator.pushReplacement(
       context,
@@ -663,27 +735,40 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                 ),
               ),
               SizedBox(height: 16 * sf),
-              GoopText('HOW TO PLAY',
-                  style: TextStyle(
-                      fontSize: FontSizes.titleSmall * sf, fontWeight: FontWeight.w900)),
+              GoopText(
+                'HOW TO PLAY',
+                style: TextStyle(
+                  fontSize: FontSizes.titleSmall * sf,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
               SizedBox(height: 16 * sf),
-              _HowToStep(num: '1', text: 'Both players enter a nickname.', sf: sf),
+              _HowToStep(
+                num: '1',
+                text: 'Both players enter a nickname.',
+                sf: sf,
+              ),
               SizedBox(height: 6 * sf),
               _HowToStep(
-                  num: '2',
-                  text: 'One player picks MAIN and taps HOST GAME, then picks a character.',
-                  sf: sf),
+                num: '2',
+                text:
+                    'One player picks MAIN and taps HOST GAME, then picks a character.',
+                sf: sf,
+              ),
               SizedBox(height: 6 * sf),
               _HowToStep(
-                  num: '3',
-                  text: 'The other player picks SIDEKICK and taps JOIN GAME.',
-                  sf: sf),
+                num: '3',
+                text: 'The other player picks SIDEKICK and taps JOIN GAME.',
+                sf: sf,
+              ),
               SizedBox(height: 6 * sf),
               _HowToStep(
-                  num: '4',
-                  text: 'Your inventories sync automatically. Send gifts, '
-                      'roll dice, and emote!',
-                  sf: sf),
+                num: '4',
+                text:
+                    'Your inventories sync automatically. Send gifts, '
+                    'roll dice, and emote!',
+                sf: sf,
+              ),
             ],
           ),
         );
@@ -698,46 +783,51 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     final sf = Responsive.factor(context);
     await showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: flair.card,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radii.lg),
-            side: BorderSide(
-                color: flair.primary.withValues(alpha: 0.3), width: 1.5)),
-        icon: Icon(Icons.bluetooth_rounded,
-            size: 36, color: flair.primary),
-        title: const GoopText('Bluetooth + Wi-Fi',
-            style: TextStyle(
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: flair.card,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radii.lg),
+              side: BorderSide(
+                color: flair.primary.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
+            ),
+            icon: Icon(Icons.bluetooth_rounded, size: 36, color: flair.primary),
+            title: const GoopText(
+              'Bluetooth + Wi-Fi',
+              style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w900,
-                fontSize: FontSizes.titleMedium)),
-        content: GoopText(
-          'GungeonMate uses Bluetooth and Wi-Fi to connect devices. '
-          'You\'ll be asked to grant permissions — please allow them.',
-          style: TextStyle(
-              fontSize: 13 * sf,
-              color: Colors.white.withValues(alpha: 0.7),
-              height: 1.5),
-        ),
-        actions: [
-          FilledButton(
-            style: FilledButton.styleFrom(
-                backgroundColor: flair.primary,
-                foregroundColor: Colors.white),
-            onPressed: () => Navigator.pop(ctx),
-            child: const GoopText('GOT IT'),
+                fontSize: FontSizes.titleMedium,
+              ),
+            ),
+            content: GoopText(
+              'GungeonMate uses Bluetooth and Wi-Fi to connect devices. '
+              'You\'ll be asked to grant permissions — please allow them.',
+              style: TextStyle(
+                fontSize: 13 * sf,
+                color: Colors.white.withValues(alpha: 0.7),
+                height: 1.5,
+              ),
+            ),
+            actions: [
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: flair.primary,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () => Navigator.pop(ctx),
+                child: const GoopText('GOT IT'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   void _toast(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: GoopText(msg),
-        duration: const Duration(seconds: 2),
-      ),
+      SnackBar(content: GoopText(msg), duration: const Duration(seconds: 2)),
     );
   }
 }
@@ -750,11 +840,7 @@ class _HowToStep extends StatelessWidget {
   final String text;
   final double sf;
 
-  const _HowToStep({
-    required this.num,
-    required this.text,
-    required this.sf,
-  });
+  const _HowToStep({required this.num, required this.text, required this.sf});
 
   @override
   Widget build(BuildContext context) {
@@ -775,20 +861,26 @@ class _HowToStep extends StatelessWidget {
                 border: Border.all(color: color, width: 1.5),
               ),
               child: Center(
-                child: GoopText(num,
-                    style: TextStyle(
-                        fontSize: FontSizes.labelMedium * sf,
-                        fontWeight: FontWeight.w900,
-                        color: color)),
+                child: GoopText(
+                  num,
+                  style: TextStyle(
+                    fontSize: FontSizes.labelMedium * sf,
+                    fontWeight: FontWeight.w900,
+                    color: color,
+                  ),
+                ),
               ),
             ),
             SizedBox(width: 12 * sf),
             Expanded(
-              child: GoopText(text,
-                  style: TextStyle(
-                      fontSize: 13 * sf,
-                      color: Colors.white.withValues(alpha: 0.8),
-                      height: 1.4)),
+              child: GoopText(
+                text,
+                style: TextStyle(
+                  fontSize: 13 * sf,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  height: 1.4,
+                ),
+              ),
             ),
           ],
         ),

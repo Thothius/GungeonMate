@@ -137,7 +137,11 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                 },
                 child: Row(
                   children: [
-                    Icon(Icons.share_outlined, size: 16, color: Colors.lightBlueAccent),
+                    Icon(
+                      Icons.share_outlined,
+                      size: 16,
+                      color: Colors.lightBlueAccent,
+                    ),
                     const SizedBox(width: 6),
                     GoopText(
                       'REFERENCED BY',
@@ -150,7 +154,10 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 1,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
@@ -193,9 +200,8 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
   Widget _buildGroup(String label, List<String> names) {
     final expanded = _expanded[label] ?? false;
     final shouldCollapse = names.length > _collapseThreshold && !expanded;
-    final visible = shouldCollapse
-        ? names.take(_collapseThreshold).toList()
-        : names;
+    final visible =
+        shouldCollapse ? names.take(_collapseThreshold).toList() : names;
     final hiddenCount = names.length - visible.length;
 
     return Padding(
@@ -345,9 +351,8 @@ class BackRefChip extends StatelessWidget {
               if (iconPath.isNotEmpty) ...[
                 GameIcon(
                   assetPath: iconPath,
-                  fallback: g != null
-                      ? Icons.gps_fixed
-                      : Icons.inventory_2_outlined,
+                  fallback:
+                      g != null ? Icons.gps_fixed : Icons.inventory_2_outlined,
                   quality: quality,
                   size: 22,
                 ),

@@ -35,10 +35,7 @@ enum AmbientShader {
 class AmbientShaderLayer extends StatefulWidget {
   final AmbientShader shader;
 
-  const AmbientShaderLayer({
-    super.key,
-    required this.shader,
-  });
+  const AmbientShaderLayer({super.key, required this.shader});
 
   @override
   State<AmbientShaderLayer> createState() => _AmbientShaderLayerState();
@@ -112,12 +109,13 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
     return RepaintBoundary(
       child: AnimatedBuilder(
         animation: _controller,
-        builder: (_, __) => CustomPaint(
-          painter: _ShaderPainter(
-            shader: _program!.fragmentShader(),
-            time: _stopwatch.elapsedMilliseconds / 1000.0,
-          ),
-        ),
+        builder:
+            (_, __) => CustomPaint(
+              painter: _ShaderPainter(
+                shader: _program!.fragmentShader(),
+                time: _stopwatch.elapsedMilliseconds / 1000.0,
+              ),
+            ),
       ),
     );
   }
@@ -135,9 +133,9 @@ class _ShaderPainter extends CustomPainter {
 
   @override
   void paint(ui.Canvas canvas, ui.Size size) {
-    shader.setFloat(0, size.width);   // uResolution.x
-    shader.setFloat(1, size.height);  // uResolution.y
-    shader.setFloat(2, time);         // uTime
+    shader.setFloat(0, size.width); // uResolution.x
+    shader.setFloat(1, size.height); // uResolution.y
+    shader.setFloat(2, time); // uTime
 
     final paint = ui.Paint()..shader = shader;
     canvas.drawRect(Offset.zero & size, paint);

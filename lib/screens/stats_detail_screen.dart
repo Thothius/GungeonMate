@@ -73,35 +73,35 @@ class StatsDetailScreen extends StatelessWidget {
       body: SafeArea(
         top: false,
         child: ListView(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-        children: [
-          _ValueCard(
-            isCool: isCool,
-            value: total,
-            base: base,
-            fromItems: fromItems,
-            isTeam: p.runState.hasCoop,
-            onDelta: (delta) {
-              if (isCool) {
-                p.adjustCoolness(delta);
-              } else {
-                p.adjustCurse(delta);
-              }
-            },
-          ),
-          const SizedBox(height: 16),
-          // Live effects — most relevant, right under the value card
-          if (isCool)
-            _CoolnessEffects(coolness: total, curse: p.runState.totalCurse)
-          else
-            _CurseEffects(curse: total, coolness: p.runState.totalCoolness),
-          const SizedBox(height: 16),
-          _QuickActions(isCool: isCool),
-          const SizedBox(height: 16),
-          // Event log — collapsed by default
-          _EventLog(isCool: isCool),
-        ],
-      ),
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+          children: [
+            _ValueCard(
+              isCool: isCool,
+              value: total,
+              base: base,
+              fromItems: fromItems,
+              isTeam: p.runState.hasCoop,
+              onDelta: (delta) {
+                if (isCool) {
+                  p.adjustCoolness(delta);
+                } else {
+                  p.adjustCurse(delta);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            // Live effects — most relevant, right under the value card
+            if (isCool)
+              _CoolnessEffects(coolness: total, curse: p.runState.totalCurse)
+            else
+              _CurseEffects(curse: total, coolness: p.runState.totalCoolness),
+            const SizedBox(height: 16),
+            _QuickActions(isCool: isCool),
+            const SizedBox(height: 16),
+            // Event log — collapsed by default
+            _EventLog(isCool: isCool),
+          ],
+        ),
       ),
     );
   }
@@ -140,18 +140,16 @@ class _ValueCard extends StatelessWidget {
     final double clampedVal = value.clamp(minSlider, maxSlider);
 
     // Active item reduction percent (max 50%) or Lord of the Jammed Threat percentage
-    final meterLabel = isCool
-        ? 'Active Cooldown Speedup: +${(value * 5).clamp(0, 50).toStringAsFixed(1)}%' 
-        : 'Bullet Hell Threat Level: ${(value * 10).clamp(0, 100).toStringAsFixed(1)}%';
+    final meterLabel =
+        isCool
+            ? 'Active Cooldown Speedup: +${(value * 5).clamp(0, 50).toStringAsFixed(1)}%'
+            : 'Bullet Hell Threat Level: ${(value * 10).clamp(0, 100).toStringAsFixed(1)}%';
 
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radii.lg),
-        side: BorderSide(
-          color: color.withValues(alpha: 0.25),
-          width: 1.2,
-        ),
+        side: BorderSide(color: color.withValues(alpha: 0.25), width: 1.2),
       ),
       child: Column(
         children: [
@@ -161,7 +159,9 @@ class _ValueCard extends StatelessWidget {
             child: Column(
               children: [
                 Icon(
-                  isCool ? Icons.ac_unit_rounded : Icons.local_fire_department_rounded,
+                  isCool
+                      ? Icons.ac_unit_rounded
+                      : Icons.local_fire_department_rounded,
                   size: 48,
                   color: color,
                 ),
@@ -234,10 +234,37 @@ class _ValueCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('0.0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white54, fontWeight: FontWeight.bold)),
-                      Text('5.0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white30)),
-                      Text('10.0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white30, fontWeight: FontWeight.bold)),
-                      GoopText('15.0+', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white54, fontWeight: FontWeight.bold)),
+                      Text(
+                        '0.0',
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          color: Colors.white54,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        '5.0',
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          color: Colors.white30,
+                        ),
+                      ),
+                      Text(
+                        '10.0',
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          color: Colors.white30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      GoopText(
+                        '15.0+',
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          color: Colors.white54,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -267,7 +294,9 @@ class _ValueCard extends StatelessWidget {
             padding: const EdgeInsets.all(Insets.md),
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.15),
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15)),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(15),
+              ),
             ),
             child: GungeonMeter(
               value: value.clamp(0.0, 15.0),
@@ -284,7 +313,8 @@ class _ValueCard extends StatelessWidget {
 
   Widget _btn(String label, VoidCallback cb, Color btnColor, bool isCoolMode) {
     final isMinus = label.startsWith('-');
-    final showWarningColor = !isCoolMode && !isMinus; // Curse addition highlights orange-red
+    final showWarningColor =
+        !isCoolMode && !isMinus; // Curse addition highlights orange-red
     final activeColor = showWarningColor ? Colors.deepOrange : btnColor;
 
     return Expanded(
@@ -294,17 +324,19 @@ class _ValueCard extends StatelessWidget {
           height: 38,
           child: FilledButton.tonal(
             style: FilledButton.styleFrom(
-              backgroundColor: isMinus
-                  ? Colors.red.withValues(alpha: 0.12)
-                  : activeColor.withValues(alpha: 0.12),
+              backgroundColor:
+                  isMinus
+                      ? Colors.red.withValues(alpha: 0.12)
+                      : activeColor.withValues(alpha: 0.12),
               foregroundColor: isMinus ? Colors.redAccent : activeColor,
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radii.sm),
                 side: BorderSide(
-                  color: isMinus
-                      ? Colors.red.withValues(alpha: 0.15)
-                      : activeColor.withValues(alpha: 0.15),
+                  color:
+                      isMinus
+                          ? Colors.red.withValues(alpha: 0.15)
+                          : activeColor.withValues(alpha: 0.15),
                   width: 0.8,
                 ),
               ),
@@ -593,11 +625,15 @@ class _CurseTable extends StatelessWidget {
           columnSpacing: 18,
           columns: const [
             DataColumn(
-              label: Tooltip(message: 'Current curse level', child: GoopText('Curse')),
+              label: Tooltip(
+                message: 'Current curse level',
+                child: GoopText('Curse'),
+              ),
             ),
             DataColumn(
               label: Tooltip(
-                message: 'Chance a regular enemy spawns Jammed (golden, tougher)',
+                message:
+                    'Chance a regular enemy spawns Jammed (golden, tougher)',
                 child: GoopText('Jam E.'),
               ),
             ),
@@ -635,19 +671,25 @@ class _CurseTable extends StatelessWidget {
           rows: [
             for (int i = 0; i < curseTable.length; i++)
               DataRow(
-                color: i == highlightIdx
-                    ? WidgetStatePropertyAll(Colors.amber.withValues(alpha: 0.18))
-                    : null,
+                color:
+                    i == highlightIdx
+                        ? WidgetStatePropertyAll(
+                          Colors.amber.withValues(alpha: 0.18),
+                        )
+                        : null,
                 cells: [
-                  DataCell(GoopText(
-                    '${curseTable[i].curse}',
-                    style: TextStyle(
-                      fontWeight: i == highlightIdx
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: i == highlightIdx ? Colors.amber : null,
+                  DataCell(
+                    GoopText(
+                      '${curseTable[i].curse}',
+                      style: TextStyle(
+                        fontWeight:
+                            i == highlightIdx
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                        color: i == highlightIdx ? Colors.amber : null,
+                      ),
                     ),
-                  )),
+                  ),
                   DataCell(GoopText(curseTable[i].jammedEnemy)),
                   DataCell(GoopText(curseTable[i].jammedBoss)),
                   DataCell(GoopText(curseTable[i].mimicChance)),
@@ -670,17 +712,17 @@ class _SectionTitle extends StatelessWidget {
   const _SectionTitle(this.text);
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
-        child: GoopText(
-          text.toUpperCase(),
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.4,
-            color: Colors.white.withValues(alpha: 0.65),
-          ),
-        ),
-      );
+    padding: const EdgeInsets.fromLTRB(4, 8, 4, 6),
+    child: GoopText(
+      text.toUpperCase(),
+      style: TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1.4,
+        color: Colors.white.withValues(alpha: 0.65),
+      ),
+    ),
+  );
 }
 
 class _EffectRow extends StatelessWidget {
@@ -782,44 +824,47 @@ class _QuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.read<RunProvider>();
 
-    final actions = isCool
-        ? [
-            _QuickAction(
-              icon: runLogCategoryIcon(RunLogCategory.smokeCig),
-              label: 'Smoke Cig',
-              subtitle: '+1 cool',
-              color: runLogCategoryColor(RunLogCategory.smokeCig),
-              onTap: p.logSmokeCig,
-            ),
-            _QuickAction(
-              icon: runLogCategoryIcon(RunLogCategory.rainbowRun),
-              label: 'Rainbow Run',
-              subtitle: '+1 cool',
-              color: runLogCategoryColor(RunLogCategory.rainbowRun),
-              onTap: p.logRainbowRun,
-            ),
-          ]
-        : [
-            _QuickAction(
-              icon: runLogCategoryIcon(RunLogCategory.steal),
-              label: 'Steal',
-              subtitle: '+1 curse',
-              color: runLogCategoryColor(RunLogCategory.steal),
-              onTap: p.logSteal,
-            ),
-            _QuickAction(
-              icon: runLogCategoryIcon(RunLogCategory.cursula),
-              label: 'Cursula',
-              subtitle: '+2 curse',
-              color: runLogCategoryColor(RunLogCategory.cursula),
-              onTap: p.logCursula,
-            ),
-          ];
+    final actions =
+        isCool
+            ? [
+              _QuickAction(
+                icon: runLogCategoryIcon(RunLogCategory.smokeCig),
+                label: 'Smoke Cig',
+                subtitle: '+1 cool',
+                color: runLogCategoryColor(RunLogCategory.smokeCig),
+                onTap: p.logSmokeCig,
+              ),
+              _QuickAction(
+                icon: runLogCategoryIcon(RunLogCategory.rainbowRun),
+                label: 'Rainbow Run',
+                subtitle: '+1 cool',
+                color: runLogCategoryColor(RunLogCategory.rainbowRun),
+                onTap: p.logRainbowRun,
+              ),
+            ]
+            : [
+              _QuickAction(
+                icon: runLogCategoryIcon(RunLogCategory.steal),
+                label: 'Steal',
+                subtitle: '+1 curse',
+                color: runLogCategoryColor(RunLogCategory.steal),
+                onTap: p.logSteal,
+              ),
+              _QuickAction(
+                icon: runLogCategoryIcon(RunLogCategory.cursula),
+                label: 'Cursula',
+                subtitle: '+2 curse',
+                color: runLogCategoryColor(RunLogCategory.cursula),
+                onTap: p.logCursula,
+              ),
+            ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(isCool ? 'Quick coolness actions' : 'Quick curse actions'),
+        _SectionTitle(
+          isCool ? 'Quick coolness actions' : 'Quick curse actions',
+        ),
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -827,9 +872,7 @@ class _QuickActions extends StatelessWidget {
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
           childAspectRatio: 2.8,
-          children: actions
-              .map((a) => _QuickActionCard(action: a))
-              .toList(),
+          children: actions.map((a) => _QuickActionCard(action: a)).toList(),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(4, 6, 4, 0),
@@ -880,7 +923,10 @@ class _QuickActionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: action.color.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: action.color.withValues(alpha: 0.25), width: 1),
+            border: Border.all(
+              color: action.color.withValues(alpha: 0.25),
+              width: 1,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -944,12 +990,13 @@ class _EventLogState extends State<_EventLog> {
       children: [
         // Tap-to-expand header with entry count badge
         InkWell(
-          onTap: entries.isEmpty
-              ? null
-              : () {
-                  Haptics.selection();
-                  setState(() => _collapsed = !_collapsed);
-                },
+          onTap:
+              entries.isEmpty
+                  ? null
+                  : () {
+                    Haptics.selection();
+                    setState(() => _collapsed = !_collapsed);
+                  },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(4, 12, 4, 10),
             child: Row(
@@ -966,7 +1013,10 @@ class _EventLogState extends State<_EventLog> {
                 const SizedBox(width: 8),
                 if (entries.isNotEmpty)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 1,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.all(Radii.sm),
@@ -998,16 +1048,21 @@ class _EventLogState extends State<_EventLog> {
         AnimatedSize(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
-          child: (!_collapsed && entries.isNotEmpty)
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-          ...entries.take(20).map((e) => _LogTile(entry: e, isCool: widget.isCool)),
-          const SizedBox(height: 8),
-          _LogLegend(entries: entries),
-                ],
-              )
-            : const SizedBox.shrink(),
+          child:
+              (!_collapsed && entries.isNotEmpty)
+                  ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...entries
+                          .take(20)
+                          .map(
+                            (e) => _LogTile(entry: e, isCool: widget.isCool),
+                          ),
+                      const SizedBox(height: 8),
+                      _LogLegend(entries: entries),
+                    ],
+                  )
+                  : const SizedBox.shrink(),
         ),
         if (_collapsed && entries.isEmpty)
           Container(
@@ -1065,7 +1120,11 @@ class _LogTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Row(
             children: [
-              Icon(runLogCategoryIcon(entry.category), size: 18, color: catColor),
+              Icon(
+                runLogCategoryIcon(entry.category),
+                size: 18,
+                color: catColor,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -1094,7 +1153,10 @@ class _LogTile extends StatelessWidget {
                         if (entry.playerName != null) ...[
                           const SizedBox(width: 6),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 1,
+                            ),
                             decoration: BoxDecoration(
                               color: catColor.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(4),
@@ -1125,8 +1187,11 @@ class _LogTile extends StatelessWidget {
                   ),
                 )
               else
-                Icon(runLogCategoryIcon(entry.category),
-                    size: 14, color: catColor.withValues(alpha: 0.4)),
+                Icon(
+                  runLogCategoryIcon(entry.category),
+                  size: 14,
+                  color: catColor.withValues(alpha: 0.4),
+                ),
             ],
           ),
         ),
@@ -1173,37 +1238,38 @@ class _LogLegend extends StatelessWidget {
           Wrap(
             spacing: 10,
             runSpacing: 6,
-            children: cats.map((c) {
-              final color = runLogCategoryColor(c);
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: color.withValues(alpha: 0.4),
-                          blurRadius: 3,
+            children:
+                cats.map((c) {
+                  final color = runLogCategoryColor(c);
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: color.withValues(alpha: 0.4),
+                              blurRadius: 3,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  GoopText(
-                    runLogCategoryLabel(c),
-                    style: TextStyle(
-                      fontSize: 10.5,
-                      color: Colors.white.withValues(alpha: 0.7),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              );
-            }).toList(),
+                      ),
+                      const SizedBox(width: 4),
+                      GoopText(
+                        runLogCategoryLabel(c),
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          color: Colors.white.withValues(alpha: 0.7),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  );
+                }).toList(),
           ),
         ],
       ),

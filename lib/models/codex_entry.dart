@@ -37,9 +37,8 @@ class CodexEntry {
       game: j['game'] as String?,
       health: j['health'] as String?,
       ammonomicon: j['ammonomicon'] as String?,
-      tips: (j['tips'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
+      tips:
+          (j['tips'] as List<dynamic>?)?.map((e) => e as String).toList() ??
           const [],
     );
   }

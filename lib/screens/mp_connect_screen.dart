@@ -91,7 +91,9 @@ class _MpConnectScreenState extends State<MpConnectScreen>
             // Top bar
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: 16 * sf, vertical: 12 * sf),
+                horizontal: 16 * sf,
+                vertical: 12 * sf,
+              ),
               child: Row(
                 children: [
                   const SizedBox(width: 48),
@@ -99,9 +101,10 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                     child: GoopText(
                       _titleForSession(session),
                       style: TextStyle(
-                          fontSize: FontSizes.titleSmall * sf,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1),
+                        fontSize: FontSizes.titleSmall * sf,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1,
+                      ),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -111,9 +114,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 ],
               ),
             ),
-            Expanded(
-              child: _buildContent(session, rp, sf, flair),
-            ),
+            Expanded(child: _buildContent(session, rp, sf, flair)),
           ],
         ),
       ),
@@ -121,7 +122,11 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   }
 
   Widget _buildContent(
-      MpSession session, RunProvider rp, double sf, ThemeFlair flair) {
+    MpSession session,
+    RunProvider rp,
+    double sf,
+    ThemeFlair flair,
+  ) {
     switch (session.phase) {
       case MpPhase.permissionDenied:
         return _buildPermissionDenied(sf, flair);
@@ -137,7 +142,11 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   // ── Connecting ─────────────────────────────────────────────────
 
   Widget _buildConnecting(
-      MpSession session, RunProvider rp, double sf, ThemeFlair flair) {
+    MpSession session,
+    RunProvider rp,
+    double sf,
+    ThemeFlair flair,
+  ) {
     final myChar = rp.gungeoneerByName(session.myCharacterName);
     final message = _connectingMessage(session);
 
@@ -173,8 +182,9 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: flair.primary
-                                    .withValues(alpha: 0.15 + t * 0.2),
+                                color: flair.primary.withValues(
+                                  alpha: 0.15 + t * 0.2,
+                                ),
                                 blurRadius: 12 + t * 8,
                                 spreadRadius: 2 + t * 2,
                               ),
@@ -182,9 +192,11 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                           ),
                           child: FadeTransition(
                             opacity: _pulseCtrl,
-                            child: Icon(Icons.link_rounded,
-                                size: 28 * sf,
-                                color: flair.primary.withValues(alpha: 0.7)),
+                            child: Icon(
+                              Icons.link_rounded,
+                              size: 28 * sf,
+                              color: flair.primary.withValues(alpha: 0.7),
+                            ),
                           ),
                         );
                       },
@@ -207,9 +219,10 @@ class _MpConnectScreenState extends State<MpConnectScreen>
             GoopText(
               message,
               style: TextStyle(
-                  fontSize: 15 * sf,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.7)),
+                fontSize: 15 * sf,
+                fontWeight: FontWeight.w600,
+                color: Colors.white.withValues(alpha: 0.7),
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20 * sf),
@@ -227,12 +240,15 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 session.cancel();
                 Navigator.of(context).pop();
               },
-              child: GoopText('CANCEL',
-                  style: TextStyle(
-                      fontSize: FontSizes.labelMedium * sf,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.5,
-                      color: Colors.white.withValues(alpha: 0.4))),
+              child: GoopText(
+                'CANCEL',
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium * sf,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.5,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
             ),
           ],
         ),
@@ -268,7 +284,11 @@ class _MpConnectScreenState extends State<MpConnectScreen>
   // ── Connected ──────────────────────────────────────────────────
 
   Widget _buildConnected(
-      MpSession session, RunProvider rp, double sf, ThemeFlair flair) {
+    MpSession session,
+    RunProvider rp,
+    double sf,
+    ThemeFlair flair,
+  ) {
     final myChar = rp.gungeoneerByName(session.myCharacterName);
     final peerChar = rp.gungeoneerByName(session.peerCharacterName ?? '');
 
@@ -290,8 +310,11 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                   flair: flair,
                 ),
                 SizedBox(width: 20 * sf),
-                Icon(Icons.link_rounded,
-                    size: 28 * sf, color: MpColors.connected),
+                Icon(
+                  Icons.link_rounded,
+                  size: 28 * sf,
+                  color: MpColors.connected,
+                ),
                 SizedBox(width: 20 * sf),
                 _Portrait(
                   character: peerChar,
@@ -312,27 +335,37 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                   curve: Curves.elasticOut,
                 ),
               ),
-              child: Icon(Icons.check_circle_rounded,
-                  size: 48 * sf, color: MpColors.connected),
+              child: Icon(
+                Icons.check_circle_rounded,
+                size: 48 * sf,
+                color: MpColors.connected,
+              ),
             ),
             SizedBox(height: 12 * sf),
-            GoopText('Connected!',
-                style: TextStyle(
-                    fontSize: FontSizes.titleLarge * sf,
-                    fontWeight: FontWeight.w900,
-                    color: MpColors.connected)),
+            GoopText(
+              'Connected!',
+              style: TextStyle(
+                fontSize: FontSizes.titleLarge * sf,
+                fontWeight: FontWeight.w900,
+                color: MpColors.connected,
+              ),
+            ),
             SizedBox(height: 8 * sf),
             GoopText(
               '${session.myNickname} & ${session.peerNickname ?? "Partner"}',
               style: TextStyle(
-                  fontSize: 13 * sf,
-                  color: Colors.white.withValues(alpha: 0.6)),
+                fontSize: 13 * sf,
+                color: Colors.white.withValues(alpha: 0.6),
+              ),
             ),
             SizedBox(height: 24 * sf),
-            GoopText('Entering the Gungeon…',
-                style: TextStyle(
-                    fontSize: FontSizes.labelMedium * sf,
-                    color: Colors.white.withValues(alpha: 0.4))),
+            GoopText(
+              'Entering the Gungeon…',
+              style: TextStyle(
+                fontSize: FontSizes.labelMedium * sf,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
           ],
         ),
       ),
@@ -348,20 +381,28 @@ class _MpConnectScreenState extends State<MpConnectScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wifi_off_rounded,
-                size: 48 * sf, color: Colors.redAccent),
+            Icon(
+              Icons.wifi_off_rounded,
+              size: 48 * sf,
+              color: Colors.redAccent,
+            ),
             SizedBox(height: 16 * sf),
-            GoopText('Connection failed',
-                style: TextStyle(
-                    fontSize: FontSizes.titleMedium * sf, fontWeight: FontWeight.w900)),
+            GoopText(
+              'Connection failed',
+              style: TextStyle(
+                fontSize: FontSizes.titleMedium * sf,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
             SizedBox(height: 8 * sf),
             GoopText(
               session.error ?? 'Something went wrong. Try again.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 13 * sf,
-                  color: Colors.white.withValues(alpha: 0.6),
-                  height: 1.5),
+                fontSize: 13 * sf,
+                color: Colors.white.withValues(alpha: 0.6),
+                height: 1.5,
+              ),
             ),
             SizedBox(height: 12 * sf),
             GoopText(
@@ -369,9 +410,10 @@ class _MpConnectScreenState extends State<MpConnectScreen>
               'and are within range.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 11 * sf,
-                  color: Colors.white.withValues(alpha: 0.35),
-                  height: 1.4),
+                fontSize: 11 * sf,
+                color: Colors.white.withValues(alpha: 0.35),
+                height: 1.4,
+              ),
             ),
             SizedBox(height: 24 * sf),
             FilledButton.icon(
@@ -380,14 +422,18 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 foregroundColor: Colors.white,
                 minimumSize: Size.fromHeight(44 * sf),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
               icon: Icon(Icons.refresh_rounded, size: 20 * sf),
-              label: GoopText('RETRY',
-                  style: TextStyle(
-                      fontSize: 13 * sf,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5)),
+              label: GoopText(
+                'RETRY',
+                style: TextStyle(
+                  fontSize: 13 * sf,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
+              ),
               onPressed: () => session.reconnect(),
             ),
             SizedBox(height: 12 * sf),
@@ -396,11 +442,14 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 session.cancel();
                 Navigator.of(context).pop();
               },
-              child: GoopText('CANCEL',
-                  style: TextStyle(
-                      fontSize: FontSizes.labelMedium * sf,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white.withValues(alpha: 0.4))),
+              child: GoopText(
+                'CANCEL',
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium * sf,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
             ),
           ],
         ),
@@ -417,20 +466,28 @@ class _MpConnectScreenState extends State<MpConnectScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.bluetooth_disabled_rounded,
-                size: 48 * sf, color: Colors.amberAccent),
+            Icon(
+              Icons.bluetooth_disabled_rounded,
+              size: 48 * sf,
+              color: Colors.amberAccent,
+            ),
             SizedBox(height: 16 * sf),
-            GoopText('Permissions needed',
-                style: TextStyle(
-                    fontSize: FontSizes.titleMedium * sf, fontWeight: FontWeight.w900)),
+            GoopText(
+              'Permissions needed',
+              style: TextStyle(
+                fontSize: FontSizes.titleMedium * sf,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
             SizedBox(height: 8 * sf),
             GoopText(
               'GungeonMate needs Bluetooth and Wi-Fi permissions to connect devices.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 13 * sf,
-                  color: Colors.white.withValues(alpha: 0.6),
-                  height: 1.5),
+                fontSize: 13 * sf,
+                color: Colors.white.withValues(alpha: 0.6),
+                height: 1.5,
+              ),
             ),
             SizedBox(height: 24 * sf),
             FilledButton.icon(
@@ -439,14 +496,18 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 foregroundColor: Colors.white,
                 minimumSize: Size.fromHeight(44 * sf),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
               icon: Icon(Icons.refresh_rounded, size: 20 * sf),
-              label: GoopText('RETRY',
-                  style: TextStyle(
-                      fontSize: 13 * sf,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.5)),
+              label: GoopText(
+                'RETRY',
+                style: TextStyle(
+                  fontSize: 13 * sf,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                ),
+              ),
               onPressed: () {
                 // Re-request permissions and resume the connection
                 // flow if granted. This handles the case where the
@@ -461,13 +522,19 @@ class _MpConnectScreenState extends State<MpConnectScreen>
               onPressed: () {
                 openAppSettings();
               },
-              icon: Icon(Icons.settings_rounded, size: 18 * sf,
-                  color: Colors.white.withValues(alpha: 0.5)),
-              label: GoopText('OPEN DEVICE SETTINGS',
-                  style: TextStyle(
-                      fontSize: FontSizes.labelMedium * sf,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white.withValues(alpha: 0.5))),
+              icon: Icon(
+                Icons.settings_rounded,
+                size: 18 * sf,
+                color: Colors.white.withValues(alpha: 0.5),
+              ),
+              label: GoopText(
+                'OPEN DEVICE SETTINGS',
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium * sf,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white.withValues(alpha: 0.5),
+                ),
+              ),
             ),
             SizedBox(height: 12 * sf),
             TextButton(
@@ -475,11 +542,14 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 context.read<MpSession>().cancel();
                 Navigator.of(context).pop();
               },
-              child: GoopText('CANCEL',
-                  style: TextStyle(
-                      fontSize: FontSizes.labelMedium * sf,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white.withValues(alpha: 0.4))),
+              child: GoopText(
+                'CANCEL',
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium * sf,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
             ),
           ],
         ),
@@ -540,44 +610,46 @@ class _Portrait extends StatelessWidget {
             height: 84 * sf,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: color.withValues(alpha: 0.5),
-                width: 2,
-              ),
+              border: Border.all(color: color.withValues(alpha: 0.5), width: 2),
               color: color.withValues(alpha: 0.08),
-              boxShadow: pulse != null
-                  ? [
-                      BoxShadow(
-                        color: color.withValues(alpha: 0.15),
-                        blurRadius: 16 * sf,
-                        spreadRadius: 2 * sf,
-                      ),
-                    ]
-                  : null,
+              boxShadow:
+                  pulse != null
+                      ? [
+                        BoxShadow(
+                          color: color.withValues(alpha: 0.15),
+                          blurRadius: 16 * sf,
+                          spreadRadius: 2 * sf,
+                        ),
+                      ]
+                      : null,
             ),
-            child: character != null
-                ? ClipRRect(
-                    borderRadius: BorderRadius.all(Radii.lg),
-                    child: AvatarAura(
-                      size: 84 * sf,
-                      borderRadius: 16,
-                      child: _characterImage(character!, sf, color),
-                    ),
-                  )
-                : Center(
-                    child: Icon(Icons.person_rounded,
+            child:
+                character != null
+                    ? ClipRRect(
+                      borderRadius: BorderRadius.all(Radii.lg),
+                      child: AvatarAura(
+                        size: 84 * sf,
+                        borderRadius: 16,
+                        child: _characterImage(character!, sf, color),
+                      ),
+                    )
+                    : Center(
+                      child: Icon(
+                        Icons.person_rounded,
                         size: 36 * sf,
-                        color: color.withValues(alpha: 0.4)),
-                  ),
+                        color: color.withValues(alpha: 0.4),
+                      ),
+                    ),
           ),
         ),
         SizedBox(height: 10 * sf),
         GoopText(
           label,
           style: TextStyle(
-              fontSize: FontSizes.labelMedium * sf,
-              fontWeight: FontWeight.w700,
-              color: Colors.white.withValues(alpha: 0.8)),
+            fontSize: FontSizes.labelMedium * sf,
+            fontWeight: FontWeight.w700,
+            color: Colors.white.withValues(alpha: 0.8),
+          ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -585,10 +657,11 @@ class _Portrait extends StatelessWidget {
         GoopText(
           isMe ? 'You' : 'Partner',
           style: TextStyle(
-              fontSize: FontSizes.labelSmall * sf,
-              fontWeight: FontWeight.w600,
-              color: color.withValues(alpha: 0.6),
-              letterSpacing: 1),
+            fontSize: FontSizes.labelSmall * sf,
+            fontWeight: FontWeight.w600,
+            color: color.withValues(alpha: 0.6),
+            letterSpacing: 1,
+          ),
         ),
       ],
     );
@@ -600,16 +673,29 @@ class _Portrait extends StatelessWidget {
     return SizedBox(
       width: 84 * sf,
       height: 84 * sf,
-      child: animPath.isNotEmpty
-          ? Image.asset(animPath,
-              fit: BoxFit.contain,
-              cacheWidth: 168,
-              cacheHeight: 168,
-              errorBuilder: (_, __, ___) => gifPath.isNotEmpty
-                  ? Image.asset(gifPath, fit: BoxFit.contain, cacheWidth: 168, cacheHeight: 168)
-                  : Icon(Icons.person_rounded,
-                      size: 36 * sf, color: color))
-          : Icon(Icons.person_rounded, size: 36 * sf, color: color),
+      child:
+          animPath.isNotEmpty
+              ? Image.asset(
+                animPath,
+                fit: BoxFit.contain,
+                cacheWidth: 168,
+                cacheHeight: 168,
+                errorBuilder:
+                    (_, __, ___) =>
+                        gifPath.isNotEmpty
+                            ? Image.asset(
+                              gifPath,
+                              fit: BoxFit.contain,
+                              cacheWidth: 168,
+                              cacheHeight: 168,
+                            )
+                            : Icon(
+                              Icons.person_rounded,
+                              size: 36 * sf,
+                              color: color,
+                            ),
+              )
+              : Icon(Icons.person_rounded, size: 36 * sf, color: color),
     );
   }
 }

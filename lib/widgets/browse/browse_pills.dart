@@ -62,7 +62,10 @@ Widget qualityPill(String quality) {
           decoration: BoxDecoration(
             color: rawColor,
             shape: BoxShape.circle,
-            border: isS ? Border.all(color: const Color(0xFFE0E0E0), width: 1.0) : null,
+            border:
+                isS
+                    ? Border.all(color: const Color(0xFFE0E0E0), width: 1.0)
+                    : null,
           ),
           child: GoopText(
             letter,
@@ -115,17 +118,10 @@ Widget coinPill(String price) {
             gradient: const RadialGradient(
               center: Alignment(-0.3, -0.3),
               radius: 0.9,
-              colors: [
-                Color(0xFFFFE082),
-                Color(0xFFFFC107),
-                Color(0xFFB8860B),
-              ],
+              colors: [Color(0xFFFFE082), Color(0xFFFFC107), Color(0xFFB8860B)],
               stops: [0.0, 0.55, 1.0],
             ),
-            border: Border.all(
-              color: const Color(0xFF8B6508),
-              width: 0.6,
-            ),
+            border: Border.all(color: const Color(0xFF8B6508), width: 0.6),
           ),
           alignment: Alignment.center,
           child: const GoopText(
@@ -176,9 +172,11 @@ Widget synergyPill(int count) {
       ),
     );
   }
-  return metaPill('$count ${count == 1 ? 'synergy' : 'synergies'}',
-      Colors.blueAccent,
-      icon: Icons.hub);
+  return metaPill(
+    '$count ${count == 1 ? 'synergy' : 'synergies'}',
+    Colors.blueAccent,
+    icon: Icons.hub,
+  );
 }
 
 /// Synergy Predictor pill — gold/amber badge shown on browse rows when
@@ -189,12 +187,12 @@ Widget completesPill(List<String> synergyNames, {String? ownerLabel}) {
   // Truncate long synergy names — the raw label overflowed browse rows
   // by ~15px on narrow screens.
   final first = synergyNames.first;
-  final short =
-      first.length > 22 ? '${first.substring(0, 21)}…' : first;
+  final short = first.length > 22 ? '${first.substring(0, 21)}…' : first;
   final owner = ownerLabel == null ? '' : ' · $ownerLabel';
-  final label = synergyNames.length == 1
-      ? 'COMPLETES: $short$owner'
-      : 'COMPLETES ${synergyNames.length}$owner';
+  final label =
+      synergyNames.length == 1
+          ? 'COMPLETES: $short$owner'
+          : 'COMPLETES ${synergyNames.length}$owner';
   return metaPill(label, const Color(0xFFFFD700), icon: Icons.link);
 }
 
@@ -221,19 +219,17 @@ class GunMeta extends StatelessWidget {
       if (gun.gunClass.isNotEmpty && gun.gunClass.toUpperCase() != 'NONE')
         metaPill(_titleCase(gun.gunClass), Colors.orangeAccent),
       if (gun.dps.isNotEmpty)
-        metaPill('DPS ${gun.dpsValue.toStringAsFixed(0)}',
-            Colors.deepOrangeAccent,
-            icon: Icons.flash_on),
+        metaPill(
+          'DPS ${gun.dpsValue.toStringAsFixed(0)}',
+          Colors.deepOrangeAccent,
+          icon: Icons.flash_on,
+        ),
       if (gun.sellPrice.isNotEmpty && gun.sellPrice != 'N/A')
         coinPill(gun.sellPrice),
       if (completesSynergies.isNotEmpty)
         completesPill(completesSynergies, ownerLabel: ownerLabel),
     ];
-    return Wrap(
-      spacing: 5,
-      runSpacing: 4,
-      children: bits,
-    );
+    return Wrap(spacing: 5, runSpacing: 4, children: bits);
   }
 
   String _titleCase(String s) {
@@ -273,10 +269,6 @@ class ItemMeta extends StatelessWidget {
     if (completesSynergies.isNotEmpty) {
       bits.add(completesPill(completesSynergies, ownerLabel: ownerLabel));
     }
-    return Wrap(
-      spacing: 5,
-      runSpacing: 4,
-      children: bits,
-    );
+    return Wrap(spacing: 5, runSpacing: 4, children: bits);
   }
 }

@@ -44,39 +44,40 @@ class EffectsSummaryScreen extends StatelessWidget {
       title = 'Effects · ${c?.character?.name ?? "P2"}';
     }
 
-    final scan = EffectTagger.scan(
-      guns: guns.cast(),
-      items: items.cast(),
-    );
+    final scan = EffectTagger.scan(guns: guns.cast(), items: items.cast());
     final groups = EffectTagger.groupByCategory(scan);
     final totalTags = scan.length;
     final totalSources = scan.values.fold<int>(0, (a, b) => a + b.length);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(backgroundColor: Colors.transparent, title: GoopText(title)),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: GoopText(title),
+      ),
       body: SafeArea(
         top: false,
-        child: scan.isEmpty
-          ? _Empty(loadoutEmpty: guns.isEmpty && items.isEmpty)
-          : ListView(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
-              children: [
-                _Summary(
-                  totalTags: totalTags,
-                  totalSources: totalSources,
-                  groupCount: groups.length,
-                ),
-                const SizedBox(height: 12),
-                for (final cat in EffectCategory.values)
-                  if (groups.containsKey(cat))
-                    _CategorySection(
-                      category: cat,
-                      tags: groups[cat]!,
-                      occurrences: scan,
+        child:
+            scan.isEmpty
+                ? _Empty(loadoutEmpty: guns.isEmpty && items.isEmpty)
+                : ListView(
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+                  children: [
+                    _Summary(
+                      totalTags: totalTags,
+                      totalSources: totalSources,
+                      groupCount: groups.length,
                     ),
-              ],
-            ),
+                    const SizedBox(height: 12),
+                    for (final cat in EffectCategory.values)
+                      if (groups.containsKey(cat))
+                        _CategorySection(
+                          category: cat,
+                          tags: groups[cat]!,
+                          occurrences: scan,
+                        ),
+                  ],
+                ),
       ),
     );
   }
@@ -192,8 +193,7 @@ class _CategorySection extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
                 decoration: BoxDecoration(
                   color: category.color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
@@ -247,13 +247,14 @@ class _EffectRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
       decoration: BoxDecoration(
-        border: isLast
-            ? null
-            : Border(
-                bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.05),
+        border:
+            isLast
+                ? null
+                : Border(
+                  bottom: BorderSide(
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
-              ),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +288,9 @@ class _EffectRow extends StatelessWidget {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 1),
+                        horizontal: 6,
+                        vertical: 1,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.all(Radii.sm),
@@ -336,9 +339,10 @@ class _SourceLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = occurrence.sourceIsGun
-        ? Colors.deepOrangeAccent
-        : Colors.lightGreenAccent;
+    final c =
+        occurrence.sourceIsGun
+            ? Colors.deepOrangeAccent
+            : Colors.lightGreenAccent;
     final hasExcerpt = occurrence.excerpt.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.only(top: 3),

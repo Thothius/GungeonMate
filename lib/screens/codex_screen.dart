@@ -245,40 +245,49 @@ class _CodexScreenState extends State<CodexScreen> {
         scrolledUnderElevation: 0,
         toolbarHeight: widget.showBackButton ? kToolbarHeight : 0,
         leading: null,
-        title: widget.showBackButton
-            ? const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  GoopText('CODEX',
+        title:
+            widget.showBackButton
+                ? const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GoopText(
+                      'CODEX',
                       style: TextStyle(
-                          fontWeight: FontWeight.w900, letterSpacing: 1.2)),
-                  GoopText('Encyclopedia of the Gungeon',
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                    GoopText(
+                      'Encyclopedia of the Gungeon',
                       style: TextStyle(
-                          fontSize: FontSizes.labelSmall,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white54,
-                          letterSpacing: 0.3)),
-                ],
-              )
-            : const SizedBox.shrink(),
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white54,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                  ],
+                )
+                : const SizedBox.shrink(),
       ),
-      body: !_loaded
-          ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SkeletonLoader(width: 220, height: 28),
-                  const SizedBox(height: Insets.md),
-                  const SkeletonLoader(width: 180, height: 16),
-                  const SizedBox(height: Insets.sm),
-                  const SkeletonLoader(width: 200, height: 16),
-                  const SizedBox(height: Insets.sm),
-                  const SkeletonLoader(width: 160, height: 16),
-                ],
-              ),
-            )
-          : _selected < 0
+      body:
+          !_loaded
+              ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SkeletonLoader(width: 220, height: 28),
+                    const SizedBox(height: Insets.md),
+                    const SkeletonLoader(width: 180, height: 16),
+                    const SizedBox(height: Insets.sm),
+                    const SkeletonLoader(width: 200, height: 16),
+                    const SizedBox(height: Insets.sm),
+                    const SkeletonLoader(width: 160, height: 16),
+                  ],
+                ),
+              )
+              : _selected < 0
               ? _buildCategoryGrid(flair)
               : _buildPickedCategory(flair),
     );
@@ -315,42 +324,47 @@ class _CodexScreenState extends State<CodexScreen> {
               splashColor: c.color.withValues(alpha: 0.25),
               highlightColor: c.color.withValues(alpha: 0.10),
               child: Container(
-              decoration: BoxDecoration(
-                color: c.color.withValues(alpha: 0.10),
-                borderRadius: BorderRadius.all(Radii.md),
-                border: Border.all(
-                  color: c.color.withValues(alpha: 0.5),
-                  width: 1.2,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (c.assetIcon != null)
-                    Image.asset(
-                      AmmonomiconTabStrip.tabAssetPath(c.assetIcon!),
-                      width: 34, height: 34,
-                      fit: BoxFit.contain,
-                      filterQuality: FilterQuality.none,
-                      errorBuilder: (_, __, ___) => Icon(
-                          c.icon ?? Icons.bookmark, size: 30, color: c.color),
-                    )
-                  else
-                    Icon(c.icon ?? Icons.bookmark, size: 30, color: c.color),
-                  const SizedBox(height: 8),
-                  GoopText(
-                    c.label.toUpperCase(),
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    style: TextStyle(
-                      fontSize: FontSizes.labelSmall,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 0.6,
-                      color: c.color,
-                    ),
+                decoration: BoxDecoration(
+                  color: c.color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.all(Radii.md),
+                  border: Border.all(
+                    color: c.color.withValues(alpha: 0.5),
+                    width: 1.2,
                   ),
-                ],
-              ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (c.assetIcon != null)
+                      Image.asset(
+                        AmmonomiconTabStrip.tabAssetPath(c.assetIcon!),
+                        width: 34,
+                        height: 34,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.none,
+                        errorBuilder:
+                            (_, __, ___) => Icon(
+                              c.icon ?? Icons.bookmark,
+                              size: 30,
+                              color: c.color,
+                            ),
+                      )
+                    else
+                      Icon(c.icon ?? Icons.bookmark, size: 30, color: c.color),
+                    const SizedBox(height: 8),
+                    GoopText(
+                      c.label.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontSize: FontSizes.labelSmall,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.6,
+                        color: c.color,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -400,7 +414,10 @@ class _CodexScreenState extends State<CodexScreen> {
           // Category scroll strip — quick jump between categories.
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: Insets.sm,
+              vertical: 4,
+            ),
             child: Row(
               children: List.generate(_categories.length, (i) {
                 final c = _categories[i];
@@ -418,16 +435,20 @@ class _CodexScreenState extends State<CodexScreen> {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? c.color.withValues(alpha: 0.25)
-                            : c.color.withValues(alpha: 0.08),
+                        color:
+                            isSelected
+                                ? c.color.withValues(alpha: 0.25)
+                                : c.color.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
-                          color: isSelected
-                              ? c.color
-                              : c.color.withValues(alpha: 0.35),
+                          color:
+                              isSelected
+                                  ? c.color
+                                  : c.color.withValues(alpha: 0.35),
                           width: isSelected ? 1.5 : 1,
                         ),
                       ),
@@ -441,15 +462,19 @@ class _CodexScreenState extends State<CodexScreen> {
                               height: 16,
                               fit: BoxFit.contain,
                               filterQuality: FilterQuality.none,
-                              errorBuilder: (_, __, ___) => Icon(
-                                c.icon ?? Icons.bookmark,
-                                size: 14,
-                                color: c.color,
-                              ),
+                              errorBuilder:
+                                  (_, __, ___) => Icon(
+                                    c.icon ?? Icons.bookmark,
+                                    size: 14,
+                                    color: c.color,
+                                  ),
                             )
                           else
-                            Icon(c.icon ?? Icons.bookmark,
-                                size: 14, color: c.color),
+                            Icon(
+                              c.icon ?? Icons.bookmark,
+                              size: 14,
+                              color: c.color,
+                            ),
                           const SizedBox(width: 6),
                           GoopText(
                             c.label.toUpperCase(),
@@ -479,18 +504,20 @@ class _CodexScreenState extends State<CodexScreen> {
                     hintText: 'Search ${cat.label.toLowerCase()}...',
                     prefixIcon: const Icon(Icons.search, size: 18),
                     isDense: true,
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: Insets.xs),
-                    suffixIcon: _searchCtrl.text.isNotEmpty
-                        ? IconButton(
-                            tooltip: 'Clear search',
-                            icon: const Icon(Icons.clear, size: 16),
-                            onPressed: () {
-                              _searchCtrl.clear();
-                              _onSearchChanged();
-                            },
-                          )
-                        : null,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: Insets.xs,
+                    ),
+                    suffixIcon:
+                        _searchCtrl.text.isNotEmpty
+                            ? IconButton(
+                              tooltip: 'Clear search',
+                              icon: const Icon(Icons.clear, size: 16),
+                              onPressed: () {
+                                _searchCtrl.clear();
+                                _onSearchChanged();
+                              },
+                            )
+                            : null,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radii.sm),
                       borderSide: BorderSide(
@@ -509,12 +536,13 @@ class _CodexScreenState extends State<CodexScreen> {
             ),
           // ── Content ────────────────────────────────────────────────
           Expanded(
-            child: cat.isSpecial
-                ? _specialPage(_selected)
-                : _CodexList(
-                    entries: _entriesFor(_selected),
-                    section: _sectionFor(_selected),
-                  ),
+            child:
+                cat.isSpecial
+                    ? _specialPage(_selected)
+                    : _CodexList(
+                      entries: _entriesFor(_selected),
+                      section: _sectionFor(_selected),
+                    ),
           ),
         ],
       ),
@@ -557,8 +585,11 @@ class _CodexList extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off,
-                size: 48, color: onSurface.withValues(alpha: 0.3)),
+            Icon(
+              Icons.search_off,
+              size: 48,
+              color: onSurface.withValues(alpha: 0.3),
+            ),
             const SizedBox(height: 12),
             GoopText(
               'No results found',
@@ -575,39 +606,45 @@ class _CodexList extends StatelessWidget {
 
     return RepaintBoundary(
       child: CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.fromLTRB(Insets.sm, Insets.xs, Insets.sm, Insets.xxl),
-          sliver: SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final entry = entries[index];
-                  return _CodexCard(
-                    entry: entry,
-                    section: section,
-                    onTap: () {
-                      Haptics.selection();
-                      Navigator.push(
-                        context,
-                        fastRoute(CodexDetailScreen(
-                          entry: entry,
-                          section: section,
-                        )),
-                      );
-                    },
-                  );
-                },
-                childCount: entries.length,
-              ),
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              Insets.sm,
+              Insets.xs,
+              Insets.sm,
+              Insets.xxl,
+            ),
+            sliver: SliverGrid(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final entry = entries[index];
+                return _CodexCard(
+                  entry: entry,
+                  section: section,
+                  onTap: () {
+                    Haptics.selection();
+                    Navigator.push(
+                      context,
+                      fastRoute(
+                        CodexDetailScreen(entry: entry, section: section),
+                      ),
+                    );
+                  },
+                );
+              }, childCount: entries.length),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: MediaQuery.of(context).size.width < 360 ? 3 : MediaQuery.of(context).size.width < 500 ? 4 : 6,
+                crossAxisCount:
+                    MediaQuery.of(context).size.width < 360
+                        ? 3
+                        : MediaQuery.of(context).size.width < 500
+                        ? 4
+                        : 6,
                 mainAxisSpacing: Insets.xs,
                 crossAxisSpacing: Insets.xs,
                 childAspectRatio: 0.82,
               ),
             ),
-        ),
-      ],
+          ),
+        ],
       ),
     );
   }
@@ -634,9 +671,8 @@ class _CodexCard extends StatelessWidget {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     final assetPath = codexAssetPath(section, entry.icon);
     // For NPC entries, prefer the animated idle GIF if available.
-    final idleGif = section == CodexSection.npcs
-        ? npcIdleGifPath(entry.name)
-        : '';
+    final idleGif =
+        section == CodexSection.npcs ? npcIdleGifPath(entry.name) : '';
     final imgPath = idleGif.isNotEmpty ? idleGif : assetPath;
 
     return GestureDetector(
@@ -663,24 +699,26 @@ class _CodexCard extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(Insets.xs),
-                child: imgPath.isNotEmpty
-                    ? Image.asset(
-                        imgPath,
-                        fit: BoxFit.contain,
-                        filterQuality: FilterQuality.none,
-                        cacheWidth: 160,
-                        cacheHeight: 160,
-                        errorBuilder: (_, __, ___) => Icon(
+                child:
+                    imgPath.isNotEmpty
+                        ? Image.asset(
+                          imgPath,
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.none,
+                          cacheWidth: 160,
+                          cacheHeight: 160,
+                          errorBuilder:
+                              (_, __, ___) => Icon(
+                                _iconForCategory(entry.category),
+                                size: 24,
+                                color: flair.primary.withValues(alpha: 0.5),
+                              ),
+                        )
+                        : Icon(
                           _iconForCategory(entry.category),
                           size: 24,
                           color: flair.primary.withValues(alpha: 0.5),
                         ),
-                      )
-                    : Icon(
-                        _iconForCategory(entry.category),
-                        size: 24,
-                        color: flair.primary.withValues(alpha: 0.5),
-                      ),
               ),
             ),
             Padding(
@@ -756,62 +794,63 @@ class _GungeoneersCodexPage extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(Insets.sm, Insets.xs, Insets.sm, Insets.xxl),
+          padding: const EdgeInsets.fromLTRB(
+            Insets.sm,
+            Insets.xs,
+            Insets.sm,
+            Insets.xxl,
+          ),
           sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final g = gungeoneers[index];
-                return GestureDetector(
-                  onTap: () {
-                    Haptics.selection();
-                    Navigator.push(
-                      context,
-                      fastRoute(GungeoneerDetailScreen(gungeoneer: g)),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: flair.card,
-                      borderRadius: BorderRadius.all(Radii.sm),
-                      border: Border.all(
-                        color: flair.primary.withValues(alpha: 0.12),
-                        width: 0.8,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.all(Insets.xs),
-                            child: _buildGungeoneerArt(g.name),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(3, 0, 3, 4),
-                          child: GoopText(
-                            g.name,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: FontSizes.labelSmall,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                              height: 1.1,
-                            ),
-                          ),
-                        ),
-                      ],
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final g = gungeoneers[index];
+              return GestureDetector(
+                onTap: () {
+                  Haptics.selection();
+                  Navigator.push(
+                    context,
+                    fastRoute(GungeoneerDetailScreen(gungeoneer: g)),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: flair.card,
+                    borderRadius: BorderRadius.all(Radii.sm),
+                    border: Border.all(
+                      color: flair.primary.withValues(alpha: 0.12),
+                      width: 0.8,
                     ),
                   ),
-                ).animate().fadeIn(duration: 200.ms, delay: (index * 40).ms);
-              },
-              childCount: gungeoneers.length,
-            ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(Insets.xs),
+                          child: _buildGungeoneerArt(g.name),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(3, 0, 3, 4),
+                        child: GoopText(
+                          g.name,
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: FontSizes.labelSmall,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            height: 1.1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ).animate().fadeIn(duration: 200.ms, delay: (index * 40).ms);
+            }, childCount: gungeoneers.length),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:
-                  MediaQuery.of(context).size.width < 360 ? 3 : 4,
+              crossAxisCount: MediaQuery.of(context).size.width < 360 ? 3 : 4,
               mainAxisSpacing: 6,
               crossAxisSpacing: 6,
               childAspectRatio: 0.82,
@@ -831,11 +870,12 @@ class _GungeoneersCodexPage extends StatelessWidget {
         filterQuality: FilterQuality.none,
         cacheWidth: 180,
         cacheHeight: 180,
-        errorBuilder: (_, __, ___) => Icon(
-          Icons.person,
-          size: 32,
-          color: AppTheme.flair.primary.withValues(alpha: 0.5),
-        ),
+        errorBuilder:
+            (_, __, ___) => Icon(
+              Icons.person,
+              size: 32,
+              color: AppTheme.flair.primary.withValues(alpha: 0.5),
+            ),
       );
     }
     return Icon(

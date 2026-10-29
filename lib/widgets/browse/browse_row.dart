@@ -31,30 +31,36 @@ class BrowseRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BorderSide borderSide = const BorderSide(color: Colors.transparent, width: 0);
+    BorderSide borderSide = const BorderSide(
+      color: Colors.transparent,
+      width: 0,
+    );
 
     String robotTag = '';
     Color? robotTagColor;
 
     if (isRobot) {
       final nameLower = name.toLowerCase();
-      final isGod = nameLower.contains('armor synthesizer') ||
-                    nameLower.contains('gunknight') ||
-                    nameLower.contains('riddle of lead') ||
-                    nameLower.contains('nanomachines');
-                    
-      final isConverter = nameLower.contains('master round') ||
-                          nameLower.contains('heart container') ||
-                          nameLower.contains('heart holster') ||
-                          nameLower.contains('heart locket') ||
-                          nameLower.contains('heart purse') ||
-                          nameLower.contains('heart bottle') ||
-                          nameLower.contains('yellow chamber') ||
-                          nameLower.contains('pink guon stone');
-                          
-      final isDeadWeight = nameLower.contains('vampire') ||
-                           nameLower.contains('patches and mendy') ||
-                           nameLower.contains('blasphemy');
+      final isGod =
+          nameLower.contains('armor synthesizer') ||
+          nameLower.contains('gunknight') ||
+          nameLower.contains('riddle of lead') ||
+          nameLower.contains('nanomachines');
+
+      final isConverter =
+          nameLower.contains('master round') ||
+          nameLower.contains('heart container') ||
+          nameLower.contains('heart holster') ||
+          nameLower.contains('heart locket') ||
+          nameLower.contains('heart purse') ||
+          nameLower.contains('heart bottle') ||
+          nameLower.contains('yellow chamber') ||
+          nameLower.contains('pink guon stone');
+
+      final isDeadWeight =
+          nameLower.contains('vampire') ||
+          nameLower.contains('patches and mendy') ||
+          nameLower.contains('blasphemy');
 
       if (isGod) {
         borderSide = const BorderSide(color: Colors.greenAccent, width: 1.5);
@@ -113,11 +119,17 @@ class BrowseRow extends StatelessWidget {
                         if (robotTag.isNotEmpty) ...[
                           const SizedBox(width: 6),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 5,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
                               color: robotTagColor!.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(4),
-                              border: Border.all(color: robotTagColor.withValues(alpha: 0.4), width: 0.8),
+                              border: Border.all(
+                                color: robotTagColor.withValues(alpha: 0.4),
+                                width: 0.8,
+                              ),
                             ),
                             child: GoopText(
                               robotTag,
@@ -148,14 +160,20 @@ class BrowseRow extends StatelessWidget {
                       duration: const Duration(milliseconds: 200),
                       padding: const EdgeInsets.all(7),
                       decoration: BoxDecoration(
-                        color: inRun
-                            ? Colors.green.withValues(alpha: 0.15)
-                            : AppTheme.flair.primary.withValues(alpha: 0.12),
+                        color:
+                            inRun
+                                ? Colors.green.withValues(alpha: 0.15)
+                                : AppTheme.flair.primary.withValues(
+                                  alpha: 0.12,
+                                ),
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: inRun
-                              ? Colors.green.withValues(alpha: 0.5)
-                              : AppTheme.flair.primary.withValues(alpha: 0.4),
+                          color:
+                              inRun
+                                  ? Colors.green.withValues(alpha: 0.5)
+                                  : AppTheme.flair.primary.withValues(
+                                    alpha: 0.4,
+                                  ),
                           width: 1.5,
                         ),
                       ),

@@ -115,19 +115,20 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     _recovery = MpRecovery(
       _link,
       _runProvider,
-      onRestoreSession: ({
-        required MpRole role,
-        required String nickname,
-        required String character,
-        RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
-        bool paused = false,
-        String avatarId = '',
-        String runTitle = '',
-        int sessionNumber = 0,
-        int runStartMs = 0,
-        int runAccumMs = 0,
-      }) {},
+      onRestoreSession:
+          ({
+            required MpRole role,
+            required String nickname,
+            required String character,
+            RunState? preSidekickRun,
+            MpMode mode = MpMode.classic,
+            bool paused = false,
+            String avatarId = '',
+            String runTitle = '',
+            int sessionNumber = 0,
+            int runStartMs = 0,
+            int runAccumMs = 0,
+          }) {},
     );
     _wireComponents();
     WidgetsBinding.instance.addObserver(this);
@@ -217,9 +218,13 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
 
   // ── Slots ──────────────────────────────────────────────────────
   PlayerSlot? get mySlot =>
-      _myRole == MpRole.main ? PlayerSlot.main : (_myRole == MpRole.sidekick ? PlayerSlot.coop : null);
+      _myRole == MpRole.main
+          ? PlayerSlot.main
+          : (_myRole == MpRole.sidekick ? PlayerSlot.coop : null);
   PlayerSlot? get peerSlot =>
-      _myRole == MpRole.main ? PlayerSlot.coop : (_myRole == MpRole.sidekick ? PlayerSlot.main : null);
+      _myRole == MpRole.main
+          ? PlayerSlot.coop
+          : (_myRole == MpRole.sidekick ? PlayerSlot.main : null);
 
   // ── Discovered endpoints ───────────────────────────────────────
   List<MpEndpoint> get discoveredEndpoints => _link.discoveredEndpoints;
@@ -236,7 +241,8 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   int get pendingGiftCount => _sync.pendingGiftCount;
 
   // ── Dice/emote callbacks (set by UI) ───────────────────────────
-  void Function(String challengerName)? get onDiceChallenge => _sync.onDiceChallenge;
+  void Function(String challengerName)? get onDiceChallenge =>
+      _sync.onDiceChallenge;
   set onDiceChallenge(void Function(String)? fn) => _sync.onDiceChallenge = fn;
   void Function()? get onDiceAccept => _sync.onDiceAccept;
   set onDiceAccept(void Function()? fn) => _sync.onDiceAccept = fn;
@@ -245,13 +251,16 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   void Function()? get onDiceCancel => _sync.onDiceCancel;
   set onDiceCancel(void Function()? fn) => _sync.onDiceCancel = fn;
   void Function(int, List<int>)? get onDiceResult => _sync.onDiceResult;
-  set onDiceResult(void Function(int, List<int>)? fn) => _sync.onDiceResult = fn;
+  set onDiceResult(void Function(int, List<int>)? fn) =>
+      _sync.onDiceResult = fn;
   void Function(String, String)? get onEmote => _sync.onEmote;
   set onEmote(void Function(String, String)? fn) => _sync.onEmote = fn;
 
   /// Fired when the peer sends us a gift — UI shows a snackbar.
-  void Function(String kind, String name)? get onGiftReceived => _sync.onGiftReceived;
-  set onGiftReceived(void Function(String kind, String name)? fn) => _sync.onGiftReceived = fn;
+  void Function(String kind, String name)? get onGiftReceived =>
+      _sync.onGiftReceived;
+  set onGiftReceived(void Function(String kind, String name)? fn) =>
+      _sync.onGiftReceived = fn;
 
   // ── Static ─────────────────────────────────────────────────────
   static String appVersionString = 'unknown';
@@ -291,11 +300,14 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     _sync.onStartRun = () => onStartRun?.call();
     _sync.onChat = _onChatReceived;
     _sync.onSurprise = (s) {
-      logEvent(MpEvent.event(
+      logEvent(
+        MpEvent.event(
           kind: 'surprise',
           from: _peerNickname ?? 'Peer',
           text: s.text.isEmpty ? s.preset : s.text,
-          mine: false));
+          mine: false,
+        ),
+      );
       onSurpriseReceived?.call(s);
     };
 
@@ -340,11 +352,14 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
       reconnectNotifier.value = false;
     });
     _recovery.onPeerDisconnected();
-    logEvent(MpEvent.event(
+    logEvent(
+      MpEvent.event(
         kind: 'system',
         from: _peerNickname ?? 'Peer',
         text: 'Connection lost — reconnecting…',
-        mine: false));
+        mine: false,
+      ),
+    );
     if (_runProvider.runState.main.character != null) {
       unawaited(MpStore.saveRunState(_runProvider.runState, force: true));
     }
@@ -364,11 +379,14 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   void _onSyncPeerConnected(MpRole peerRole) {
     // Hello succeeded — transition to connected.
     _setPhase(MpPhase.connected);
-    logEvent(MpEvent.event(
+    logEvent(
+      MpEvent.event(
         kind: 'system',
         from: _peerNickname ?? 'Peer',
         text: 'Connected',
-        mine: false));
+        mine: false,
+      ),
+    );
     reconnectSuccessNotifier.value = true;
     Future.delayed(const Duration(milliseconds: 100), () {
       reconnectSuccessNotifier.value = false;
@@ -414,11 +432,13 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     // peer lands on the correct title/number/paused state even if it
     // missed an earlier edge message (e.g. reconnect during pause).
     if (_myRole == MpRole.main && _mode == MpMode.paradox) {
-      unawaited(_sync.sendSessionMeta(
-        runTitle: _runTitle,
-        sessionNumber: _sessionNumber,
-        paused: pausedNotifier.value,
-      ));
+      unawaited(
+        _sync.sendSessionMeta(
+          runTitle: _runTitle,
+          sessionNumber: _sessionNumber,
+          paused: pausedNotifier.value,
+        ),
+      );
     }
     notifyListeners();
   }
@@ -504,10 +524,9 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     if (role == MpRole.main) {
       unawaited(_link.startAdvertising(nickname));
     } else {
-      unawaited(_link.startDiscovery(
-        nickname,
-        autoConnect: const AutoConnectModeAny(),
-      ));
+      unawaited(
+        _link.startDiscovery(nickname, autoConnect: const AutoConnectModeAny()),
+      );
     }
   }
 
@@ -527,17 +546,18 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     _error = null;
     _connectReason = MpConnectReason.hosting;
 
-    _sync.setIdentity(role: MpRole.main, nickname: nickname, character: character.name);
+    _sync.setIdentity(
+      role: MpRole.main,
+      nickname: nickname,
+      character: character.name,
+    );
     _sync.setSessionMeta(
       mode: MpMode.classic,
       avatarId: avatarId,
       runTitle: '',
       sessionNumber: 0,
     );
-    _recovery.setSessionInfo(
-      role: MpRole.main,
-      nickname: nickname,
-    );
+    _recovery.setSessionInfo(role: MpRole.main, nickname: nickname);
 
     // Save the current solo run before overwriting it with the MP
     // run. Without this, the Main player loses their pre-MP run
@@ -586,7 +606,8 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     // Sidekick's own character and inventory. Without this, the
     // Sidekick sees no coop page, no MP panels, and broadcasts an
     // empty snapshot (Main can't see Cultist's starting items).
-    final sidekickChar = character ?? _runProvider.gungeoneerByName('The Cultist');
+    final sidekickChar =
+        character ?? _runProvider.gungeoneerByName('The Cultist');
     if (sidekickChar != null) {
       _runProvider.startNewRun(sidekickChar);
       if (_runProvider.runState.coop == null) {
@@ -605,10 +626,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
       runTitle: '',
       sessionNumber: 0,
     );
-    _recovery.setSessionInfo(
-      role: MpRole.sidekick,
-      nickname: nickname,
-    );
+    _recovery.setSessionInfo(role: MpRole.sidekick, nickname: nickname);
 
     final granted = await _link.requestPermissions();
     if (!granted) {
@@ -645,8 +663,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     _runTitle = runTitle;
     _sessionNumber = sessionNumber;
     pausedNotifier.value = false;
-    _myCharacterName =
-        role == MpRole.main ? 'The Paradox' : 'The Cultist';
+    _myCharacterName = role == MpRole.main ? 'The Paradox' : 'The Cultist';
     _error = null;
     _connectReason = MpConnectReason.seeking;
 
@@ -726,11 +743,13 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
       // here since banking zeroes it, kept for belt-and-braces).
       _runStartMs = DateTime.now().millisecondsSinceEpoch;
     }
-    unawaited(MpStore.savePauseState(
-      paused: paused,
-      runStartMs: _runStartMs,
-      runAccumMs: _runAccumMs,
-    ));
+    unawaited(
+      MpStore.savePauseState(
+        paused: paused,
+        runStartMs: _runStartMs,
+        runAccumMs: _runAccumMs,
+      ),
+    );
     if (paused) {
       // Pause cadence — both sides poll every ~6s.
       _link.setDiscoveryCadence(
@@ -801,13 +820,17 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     String fx = '',
   }) async {
     if (!_link.isConnected) return;
-    logEvent(MpEvent.event(
+    logEvent(
+      MpEvent.event(
         kind: 'surprise',
         from: _myNickname,
         text: text.isEmpty ? preset : text,
-        mine: true));
+        mine: true,
+      ),
+    );
     await _sync.sendSurprise(
-        MpSurprise(preset: preset, text: text, spriteKey: spriteKey, fx: fx));
+      MpSurprise(preset: preset, text: text, spriteKey: spriteKey, fx: fx),
+    );
   }
 
   void markChatRead() {
@@ -921,7 +944,12 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     _runAccumMs = 0;
     wipeSessionActivity();
     _link.setServiceId(MpLink.serviceIdClassic);
-    _sync.setSessionMeta(mode: MpMode.classic, avatarId: '', runTitle: '', sessionNumber: 0);
+    _sync.setSessionMeta(
+      mode: MpMode.classic,
+      avatarId: '',
+      runTitle: '',
+      sessionNumber: 0,
+    );
   }
 
   /// Peer sent [MpEndRun] — tear down our MP session without
@@ -931,11 +959,14 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> _onPeerEndRun() async {
     if (_tearingDown) return;
     _tearingDown = true;
-    logEvent(MpEvent.event(
+    logEvent(
+      MpEvent.event(
         kind: 'system',
         from: _peerNickname ?? 'Peer',
         text: 'Partner ended the run',
-        mine: false));
+        mine: false,
+      ),
+    );
     try {
       final saved = await MpStore.load();
       final savedSoloBackup = saved?.soloRunBackup;
@@ -1022,8 +1053,9 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   Future<void> sendDiceResult(int score, List<int> dice) =>
       _sync.sendDiceResult(score, dice);
   Future<void> sendEmote(String action) async {
-    logEvent(MpEvent.event(
-        kind: 'emote', from: _myNickname, text: action, mine: true));
+    logEvent(
+      MpEvent.event(kind: 'emote', from: _myNickname, text: action, mine: true),
+    );
     await _sync.sendEmote(action);
   }
 
@@ -1064,11 +1096,14 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     _sync.onStartRun = () => onStartRun?.call();
     _sync.onChat = _onChatReceived;
     _sync.onSurprise = (s) {
-      logEvent(MpEvent.event(
+      logEvent(
+        MpEvent.event(
           kind: 'surprise',
           from: _peerNickname ?? 'Peer',
           text: s.text.isEmpty ? s.preset : s.text,
-          mine: false));
+          mine: false,
+        ),
+      );
       onSurpriseReceived?.call(s);
     };
     _sync.setSessionMeta(
@@ -1096,10 +1131,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
       newProvider,
       onRestoreSession: _onRecoveryRestore,
     );
-    _recovery.setSessionInfo(
-      role: _myRole,
-      nickname: _myNickname,
-    );
+    _recovery.setSessionInfo(role: _myRole, nickname: _myNickname);
   }
 
   // ── App lifecycle ──────────────────────────────────────────────
@@ -1113,12 +1145,14 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
         // Main needs advertising restarted if the OS paused it.
         if (!_demoMode) _recovery.onAppResumed();
         if (_myRole == MpRole.main) {
-          unawaited(_link.stopAll().then((_) {
-            Future.delayed(const Duration(milliseconds: radioCooldownMs), () {
-              if (_phase != MpPhase.disconnected) return;
-              unawaited(_link.startAdvertising(_myNickname));
-            });
-          }));
+          unawaited(
+            _link.stopAll().then((_) {
+              Future.delayed(const Duration(milliseconds: radioCooldownMs), () {
+                if (_phase != MpPhase.disconnected) return;
+                unawaited(_link.startAdvertising(_myNickname));
+              });
+            }),
+          );
         }
       } else if (_phase == MpPhase.connected) {
         _link.restartHeartbeat();
@@ -1128,10 +1162,12 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
         if (_myRole == MpRole.main) {
           unawaited(_link.startAdvertising(_myNickname));
         } else if (_myRole == MpRole.sidekick) {
-          unawaited(_link.startDiscovery(
-            _myNickname,
-            autoConnect: const AutoConnectModeAny(),
-          ));
+          unawaited(
+            _link.startDiscovery(
+              _myNickname,
+              autoConnect: const AutoConnectModeAny(),
+            ),
+          );
         }
       }
     }

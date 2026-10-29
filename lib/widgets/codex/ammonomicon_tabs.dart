@@ -24,8 +24,10 @@ class AmmonomiconTab {
     this.assetIcon,
     required this.color,
     required this.isSpecial,
-  }) : assert(icon != null || assetIcon != null,
-            'either icon or assetIcon must be provided');
+  }) : assert(
+         icon != null || assetIcon != null,
+         'either icon or assetIcon must be provided',
+       );
 }
 
 /// A vertical strip of bookmark tabs anchored to the left edge.
@@ -77,7 +79,8 @@ class AmmonomiconTabStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    final activeTab = tabs.isNotEmpty ? tabs[selected.clamp(0, tabs.length - 1)] : null;
+    final activeTab =
+        tabs.isNotEmpty ? tabs[selected.clamp(0, tabs.length - 1)] : null;
 
     // ── Collapsed: show only a small toggle button ──
     if (collapsed) {
@@ -86,41 +89,44 @@ class AmmonomiconTabStrip extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(top: topPadding),
           child: GestureDetector(
-            onTap: () {
-              Haptics.selection();
-              onToggleCollapse?.call();
-            },
-            behavior: HitTestBehavior.opaque,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOutCubic,
-              width: 32,
-              height: 48,
-              decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.22),
-                borderRadius: const BorderRadius.only(
-                  topRight: Radius.circular(14),
-                  bottomRight: Radius.circular(14),
-                ),
-                border: Border.all(
-                  color: accent.withValues(alpha: 0.6),
-                  width: 1.2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: accent.withValues(alpha: 0.2),
-                    blurRadius: 6,
-                    offset: const Offset(2, 0),
+                onTap: () {
+                  Haptics.selection();
+                  onToggleCollapse?.call();
+                },
+                behavior: HitTestBehavior.opaque,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOutCubic,
+                  width: 32,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: accent.withValues(alpha: 0.22),
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(14),
+                      bottomRight: Radius.circular(14),
+                    ),
+                    border: Border.all(
+                      color: accent.withValues(alpha: 0.6),
+                      width: 1.2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: accent.withValues(alpha: 0.2),
+                        blurRadius: 6,
+                        offset: const Offset(2, 0),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: Icon(
-                Icons.chevron_right_rounded,
-                size: 20,
-                color: accent,
-              ),
-            ),
-          ).animate().fadeIn(duration: 200.ms).slideX(
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    size: 20,
+                    color: accent,
+                  ),
+                ),
+              )
+              .animate()
+              .fadeIn(duration: 200.ms)
+              .slideX(
                 begin: -0.5,
                 end: 0.0,
                 duration: 250.ms,
@@ -171,16 +177,16 @@ class AmmonomiconTabStrip extends StatelessWidget {
               ).animate().fadeIn(duration: 200.ms),
             for (var i = 0; i < tabs.length; i++)
               _BookmarkTab(
-                tab: tabs[i],
-                active: i == selected,
-                onTap: () {
-                  Haptics.selection();
-                  onSelect(i);
-                },
-              ).animate().fadeIn(
-                    duration: 220.ms,
-                    delay: (i * 35).ms,
-                  ).slideX(
+                    tab: tabs[i],
+                    active: i == selected,
+                    onTap: () {
+                      Haptics.selection();
+                      onSelect(i);
+                    },
+                  )
+                  .animate()
+                  .fadeIn(duration: 220.ms, delay: (i * 35).ms)
+                  .slideX(
                     begin: -1.0,
                     end: 0.0,
                     duration: 280.ms,
@@ -228,9 +234,10 @@ class _BookmarkTab extends StatelessWidget {
           width: active ? 68 : 56,
           height: active ? 68 : 56,
           decoration: BoxDecoration(
-            color: active
-                ? color.withValues(alpha: 0.22)
-                : flair.card.withValues(alpha: 0.7),
+            color:
+                active
+                    ? color.withValues(alpha: 0.22)
+                    : flair.card.withValues(alpha: 0.7),
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(6),
               topRight: Radius.circular(14),
@@ -238,21 +245,23 @@ class _BookmarkTab extends StatelessWidget {
               bottomLeft: Radius.circular(6),
             ),
             border: Border.all(
-              color: active
-                  ? color.withValues(alpha: 0.9)
-                  : color.withValues(alpha: 0.5),
+              color:
+                  active
+                      ? color.withValues(alpha: 0.9)
+                      : color.withValues(alpha: 0.5),
               width: active ? 1.6 : 1.1,
             ),
-            boxShadow: active
-                ? [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.35),
-                      blurRadius: 10,
-                      spreadRadius: 0,
-                      offset: const Offset(2, 0),
-                    ),
-                  ]
-                : null,
+            boxShadow:
+                active
+                    ? [
+                      BoxShadow(
+                        color: color.withValues(alpha: 0.35),
+                        blurRadius: 10,
+                        spreadRadius: 0,
+                        offset: const Offset(2, 0),
+                      ),
+                    ]
+                    : null,
           ),
           child: Padding(
             padding: const EdgeInsets.all(Insets.sm),
@@ -268,9 +277,10 @@ class _BookmarkTab extends StatelessWidget {
                   style: TextStyle(
                     fontSize: active ? 8.5 : 7.5,
                     fontWeight: FontWeight.w800,
-                    color: active
-                        ? Colors.white
-                        : Colors.white.withValues(alpha: 0.55),
+                    color:
+                        active
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.55),
                     letterSpacing: 0.2,
                     height: 1.0,
                   ),
@@ -297,17 +307,14 @@ class _BookmarkTab extends StatelessWidget {
         filterQuality: FilterQuality.none,
         cacheWidth: 56,
         cacheHeight: 56,
-        errorBuilder: (_, __, ___) => Icon(
-          tab.icon ?? Icons.bookmark,
-          size: active ? 26 : 22,
-          color: iconColor,
-        ),
+        errorBuilder:
+            (_, __, ___) => Icon(
+              tab.icon ?? Icons.bookmark,
+              size: active ? 26 : 22,
+              color: iconColor,
+            ),
       );
     }
-    return Icon(
-      tab.icon,
-      size: active ? 26 : 22,
-      color: iconColor,
-    );
+    return Icon(tab.icon, size: active ? 26 : 22, color: iconColor);
   }
 }

@@ -137,9 +137,11 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       _showEmoteMenu();
     } else {
       if (!mounted || !_page.hasClients) return;
-      _page.animateToPage(i,
-          duration: const Duration(milliseconds: 260),
-          curve: Curves.easeOut);
+      _page.animateToPage(
+        i,
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOut,
+      );
     }
   }
 
@@ -165,75 +167,84 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Drag handle
-            Container(
-              width: 36,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 16),
-            GoopText(
-              'Send to $peerName',
-              style: TextStyle(
-                fontSize: FontSizes.bodyMedium,
-                fontWeight: FontWeight.w700,
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      builder:
+          (ctx) => Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                _EmoteButton(
-                  icon: Icons.favorite,
-                  label: 'Kiss',
-                  color: Colors.pinkAccent,
-                  onTap: () {
-                    Navigator.pop(ctx);
-                    session.sendEmote('kiss');
-                    Haptics.light();
-                  },
+                // Drag handle
+                Container(
+                  width: 36,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
-                _EmoteButton(
-                  icon: Icons.sentiment_very_dissatisfied,
-                  label: 'Slap',
-                  color: Colors.orangeAccent,
-                  onTap: () {
+                const SizedBox(height: 16),
+                GoopText(
+                  'Send to $peerName',
+                  style: TextStyle(
+                    fontSize: FontSizes.bodyMedium,
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _EmoteButton(
+                      icon: Icons.favorite,
+                      label: 'Kiss',
+                      color: Colors.pinkAccent,
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        session.sendEmote('kiss');
+                        Haptics.light();
+                      },
+                    ),
+                    _EmoteButton(
+                      icon: Icons.sentiment_very_dissatisfied,
+                      label: 'Slap',
+                      color: Colors.orangeAccent,
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        session.sendEmote('slap');
+                        Haptics.heavy();
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Divider(color: Colors.white.withValues(alpha: 0.06)),
+                const SizedBox(height: 8),
+                // Quick session teardown
+                TextButton.icon(
+                  onPressed: () {
                     Navigator.pop(ctx);
-                    session.sendEmote('slap');
-                    Haptics.heavy();
+                    _confirmEndSession();
                   },
+                  icon: Icon(
+                    Icons.logout_rounded,
+                    size: 16,
+                    color: MpColors.danger.withValues(alpha: 0.7),
+                  ),
+                  label: GoopText(
+                    'End MP Session',
+                    style: TextStyle(
+                      fontSize: FontSizes.labelMedium,
+                      fontWeight: FontWeight.w700,
+                      color: MpColors.danger.withValues(alpha: 0.7),
+                    ),
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Divider(color: Colors.white.withValues(alpha: 0.06)),
-            const SizedBox(height: 8),
-            // Quick session teardown
-            TextButton.icon(
-              onPressed: () {
-                Navigator.pop(ctx);
-                _confirmEndSession();
-              },
-              icon: Icon(Icons.logout_rounded,
-                  size: 16, color: MpColors.danger.withValues(alpha: 0.7)),
-              label: GoopText('End MP Session',
-                  style: TextStyle(
-                      fontSize: FontSizes.labelMedium,
-                      fontWeight: FontWeight.w700,
-                      color: MpColors.danger.withValues(alpha: 0.7))),
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
@@ -241,43 +252,57 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     Haptics.selection();
     showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.flair.card,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radii.lg),
-          side: BorderSide(
-              color: MpColors.danger.withValues(alpha: 0.3), width: 1.5),
-        ),
-        icon: const Icon(Icons.logout_rounded,
-            size: 32, color: MpColors.danger),
-        title: const GoopText('End Multiplayer Session?',
-            style: TextStyle(fontWeight: FontWeight.w900)),
-        content: GoopText(
-          'This will disconnect from your partner. Your run data is preserved.',
-          style: TextStyle(
-              fontSize: 12.5 * Responsive.factor(context),
-              color: Colors.white70, height: 1.4),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const GoopText('CANCEL',
-                style: TextStyle(fontWeight: FontWeight.w800)),
-          ),
-          FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: MpColors.danger,
-              foregroundColor: Colors.white,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: AppTheme.flair.card,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radii.lg),
+              side: BorderSide(
+                color: MpColors.danger.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
             ),
-            onPressed: () {
-              Navigator.pop(ctx);
-              _mpSession?.cancel();
-            },
-            child: const GoopText('END SESSION',
-                style: TextStyle(fontWeight: FontWeight.w900)),
+            icon: const Icon(
+              Icons.logout_rounded,
+              size: 32,
+              color: MpColors.danger,
+            ),
+            title: const GoopText(
+              'End Multiplayer Session?',
+              style: TextStyle(fontWeight: FontWeight.w900),
+            ),
+            content: GoopText(
+              'This will disconnect from your partner. Your run data is preserved.',
+              style: TextStyle(
+                fontSize: 12.5 * Responsive.factor(context),
+                color: Colors.white70,
+                height: 1.4,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const GoopText(
+                  'CANCEL',
+                  style: TextStyle(fontWeight: FontWeight.w800),
+                ),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: MpColors.danger,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(ctx);
+                  _mpSession?.cancel();
+                },
+                child: const GoopText(
+                  'END SESSION',
+                  style: TextStyle(fontWeight: FontWeight.w900),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -295,14 +320,16 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     _emoteTimer?.cancel();
     _emoteOverlayEntry?.remove();
     final entry = OverlayEntry(
-      builder: (_) => IgnorePointer(
-        child: Material(
-          color: Colors.transparent,
-          child: action == 'slap'
-              ? SlapAnimation(from: from)
-              : KissAnimation(from: from),
-        ),
-      ),
+      builder:
+          (_) => IgnorePointer(
+            child: Material(
+              color: Colors.transparent,
+              child:
+                  action == 'slap'
+                      ? SlapAnimation(from: from)
+                      : KissAnimation(from: from),
+            ),
+          ),
     );
     _emoteOverlayEntry = entry;
     Overlay.of(context).insert(entry);
@@ -330,8 +357,10 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
             Icon(icon, color: MpColors.connected, size: 18),
             const SizedBox(width: 10),
             Expanded(
-              child: GoopText('$label: $name',
-                  style: const TextStyle(fontWeight: FontWeight.w700)),
+              child: GoopText(
+                '$label: $name',
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         ),
@@ -443,7 +472,8 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
         backgroundColor: Colors.transparent,
         body: EmptyState(
           icon: Icons.inventory_2_outlined,
-          message: 'No run active. Pick a Gungeoneer to start tracking your inventory.',
+          message:
+              'No run active. Pick a Gungeoneer to start tracking your inventory.',
           actionLabel: 'Start a Run',
           onAction: () => Navigator.of(context).maybePop(),
         ),
@@ -481,75 +511,72 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
     // treatment: pause desaturates/dims the whole screen, surprises
     // float on top. Solo runs render the plain column.
     final bool mpSession = isMpActive;
-    Widget wrapOverlays(Widget w) => mpSession
-        ? PauseOverlay(child: SurpriseOverlayHost(child: w))
-        : w;
+    Widget wrapOverlays(Widget w) =>
+        mpSession ? PauseOverlay(child: SurpriseOverlayHost(child: w)) : w;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButton:
-          FloatingActionButton(
-                heroTag: 'fab_add',
-                tooltip:
-                    isMpActive && !onMyMpPage
-                        ? 'Add to ${session.peerNickname ?? 'Peer'}'
-                        : (_currentPage == 1
-                            ? 'Add to P2'
-                            : 'Add to inventory'),
-                onPressed: () {
-                  _showQuickAddBottomSheet(
-                    context,
-                    _currentPage == 1 ? PlayerSlot.coop : PlayerSlot.main,
-                  );
-                },
-                child: const Icon(Icons.add, size: 32),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'fab_add',
+        tooltip:
+            isMpActive && !onMyMpPage
+                ? 'Add to ${session.peerNickname ?? 'Peer'}'
+                : (_currentPage == 1 ? 'Add to P2' : 'Add to inventory'),
+        onPressed: () {
+          _showQuickAddBottomSheet(
+            context,
+            _currentPage == 1 ? PlayerSlot.coop : PlayerSlot.main,
+          );
+        },
+        child: const Icon(Icons.add, size: 32),
+      ),
+      body: wrapOverlays(
+        Column(
+          children: [
+            if (p.windgunnerCountdown > 0) _buildWindgunnerBanner(p),
+            // In MP: the unified session bar replaces both player
+            // switcher and old status bar — one chrome for classic +
+            // paradox. In solo coop: plain PlayerSwitcher.
+            if (isMpActive)
+              SafeArea(
+                bottom: false,
+                child: ParadoxBar(currentPage: _currentPage, onPick: mpTabTap),
+              )
+            else if (hasCoop)
+              PlayerSwitcher(
+                currentPage: _currentPage,
+                mainName: main.character!.name,
+                coopName: state.coop!.character?.name ?? 'P2',
+                onPick: navigateTo,
               ),
-      body: wrapOverlays(Column(
-        children: [
-          if (p.windgunnerCountdown > 0) _buildWindgunnerBanner(p),
-          // In MP: the unified session bar replaces both player
-          // switcher and old status bar — one chrome for classic +
-          // paradox. In solo coop: plain PlayerSwitcher.
-          if (isMpActive)
-            SafeArea(
-              bottom: false,
-              child: ParadoxBar(
-              currentPage: _currentPage,
-              onPick: mpTabTap,
+            Expanded(
+              child: PageView(
+                controller: _page,
+                physics:
+                    hasCoop
+                        ? const PageScrollPhysics(
+                          parent: ClampingScrollPhysics(),
+                        )
+                        : const NeverScrollableScrollPhysics(),
+                onPageChanged: (i) {
+                  setState(() => _currentPage = i);
+                  final slot =
+                      i == 0
+                          ? PlayerSlot.main
+                          : (i == 1 && hasCoop ? PlayerSlot.coop : null);
+                  if (slot != null) {
+                    widget.onPlayerChanged?.call(slot);
+                  }
+                },
+                children: [
+                  const PlayerPage(slot: PlayerSlot.main),
+                  if (hasCoop) const PlayerPage(slot: PlayerSlot.coop),
+                ],
+              ),
             ),
-          )
-          else if (hasCoop)
-            PlayerSwitcher(
-              currentPage: _currentPage,
-              mainName: main.character!.name,
-              coopName: state.coop!.character?.name ?? 'P2',
-              onPick: navigateTo,
-            ),
-          Expanded(
-            child: PageView(
-              controller: _page,
-              physics:
-                  hasCoop
-                      ? const PageScrollPhysics(parent: ClampingScrollPhysics())
-                      : const NeverScrollableScrollPhysics(),
-              onPageChanged: (i) {
-                setState(() => _currentPage = i);
-                final slot =
-                    i == 0
-                        ? PlayerSlot.main
-                        : (i == 1 && hasCoop ? PlayerSlot.coop : null);
-                if (slot != null) {
-                  widget.onPlayerChanged?.call(slot);
-                }
-              },
-              children: [
-                const PlayerPage(slot: PlayerSlot.main),
-                if (hasCoop) const PlayerPage(slot: PlayerSlot.coop),
-              ],
-            ),
-          ),
-        ],
-      )),
+          ],
+        ),
+      ),
     );
   }
 
@@ -570,7 +597,10 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
       backgroundColor: AppTheme.flair.card,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        side: BorderSide(color: AppTheme.flair.primary.withValues(alpha: 0.2), width: 1.5),
+        side: BorderSide(
+          color: AppTheme.flair.primary.withValues(alpha: 0.2),
+          width: 1.5,
+        ),
       ),
       builder: (bContext) {
         return StatefulBuilder(
@@ -648,12 +678,17 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.close,
-                              color: Colors.white54, size: 25),
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white54,
+                            size: 25,
+                          ),
                           tooltip: 'Close',
                           padding: EdgeInsets.zero,
-                          constraints:
-                              const BoxConstraints(minWidth: 40, minHeight: 40),
+                          constraints: const BoxConstraints(
+                            minWidth: 40,
+                            minHeight: 40,
+                          ),
                           onPressed: () {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.pop(bContext);
@@ -671,7 +706,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                           if (results.isEmpty)
                             const Center(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: Insets.xxl),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: Insets.xxl,
+                                ),
                                 child: GoopText(
                                   'No matching guns or items found.',
                                   style: TextStyle(
@@ -695,47 +732,52 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                 final name = item.name;
                                 final quality = item.quality;
                                 final iconPath = item.icon;
-                                final kindTag = isGun
-                                    ? 'GUN'
-                                    : (item.isActive
-                                        ? 'ACTIVE'
-                                        : (item.isCompanion
-                                            ? 'COMPANION'
-                                            : 'PASSIVE'));
-                                final kindColor = isGun
-                                    ? Colors.amberAccent
-                                    : (item.isActive
-                                        ? Colors.lightBlueAccent
-                                        : (item.isCompanion
-                                            ? Colors.purpleAccent
-                                            : Colors.lightGreenAccent));
+                                final kindTag =
+                                    isGun
+                                        ? 'GUN'
+                                        : (item.isActive
+                                            ? 'ACTIVE'
+                                            : (item.isCompanion
+                                                ? 'COMPANION'
+                                                : 'PASSIVE'));
+                                final kindColor =
+                                    isGun
+                                        ? Colors.amberAccent
+                                        : (item.isActive
+                                            ? Colors.lightBlueAccent
+                                            : (item.isCompanion
+                                                ? Colors.purpleAccent
+                                                : Colors.lightGreenAccent));
 
                                 void addIt() {
                                   Haptics.selection();
-                                  final mpSession =
-                                      context.read<MpSession>();
-                                  final isMpPeerAdd = mpSession.isActive &&
+                                  final mpSession = context.read<MpSession>();
+                                  final isMpPeerAdd =
+                                      mpSession.isActive &&
                                       mpSession.mySlot != slot;
                                   if (isMpPeerAdd) {
-                                    mpSession.sendAddToPeer(
-                                      kind: isGun ? 'gun' : 'item',
-                                      name: name,
-                                    ).then((_) {
-                                      addedToast.value = 'Added: $name';
-                                      addedToastTimer?.cancel();
-                                      addedToastTimer = Timer(
-                                        const Duration(milliseconds: 800),
-                                        () => addedToast.value = null,
-                                      );
-                                    }).catchError((Object _) {
-                                      addedToast.value =
-                                          'Could not send - check connection';
-                                      addedToastTimer?.cancel();
-                                      addedToastTimer = Timer(
-                                        const Duration(milliseconds: 2000),
-                                        () => addedToast.value = null,
-                                      );
-                                    });
+                                    mpSession
+                                        .sendAddToPeer(
+                                          kind: isGun ? 'gun' : 'item',
+                                          name: name,
+                                        )
+                                        .then((_) {
+                                          addedToast.value = 'Added: $name';
+                                          addedToastTimer?.cancel();
+                                          addedToastTimer = Timer(
+                                            const Duration(milliseconds: 800),
+                                            () => addedToast.value = null,
+                                          );
+                                        })
+                                        .catchError((Object _) {
+                                          addedToast.value =
+                                              'Could not send - check connection';
+                                          addedToastTimer?.cancel();
+                                          addedToastTimer = Timer(
+                                            const Duration(milliseconds: 2000),
+                                            () => addedToast.value = null,
+                                          );
+                                        });
                                   } else {
                                     if (isGun) {
                                       p.addGun(item, slot: slot);
@@ -762,27 +804,33 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                         slot == PlayerSlot.coop
                                             ? (p.runState.coop ?? Player())
                                             : p.runState.main;
-                                    final isOwned = isGun
-                                        ? activePlayer.guns
-                                            .any((g) => g.name == name)
-                                        : (name.toLowerCase() == 'junk'
-                                            ? false
-                                            : activePlayer.items
-                                                .any((i) => i.name == name));
+                                    final isOwned =
+                                        isGun
+                                            ? activePlayer.guns.any(
+                                              (g) => g.name == name,
+                                            )
+                                            : (name.toLowerCase() == 'junk'
+                                                ? false
+                                                : activePlayer.items.any(
+                                                  (i) => i.name == name,
+                                                ));
 
                                     return InkWell(
                                       onTap: isOwned ? null : addIt,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 4, vertical: 9),
+                                          horizontal: 4,
+                                          vertical: 9,
+                                        ),
                                         child: Row(
                                           children: [
                                             GameIcon(
                                               assetPath: iconPath,
                                               size: 30,
-                                              fallback: isGun
-                                                  ? Icons.gps_fixed
-                                                  : Icons.extension,
+                                              fallback:
+                                                  isGun
+                                                      ? Icons.gps_fixed
+                                                      : Icons.extension,
                                               quality: quality,
                                             ),
                                             const SizedBox(width: 10),
@@ -790,8 +838,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                               child: GoopText(
                                                 name,
                                                 maxLines: 1,
-                                                overflow:
-                                                    TextOverflow.ellipsis,
+                                                overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.w800,
@@ -805,9 +852,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                               kindTag,
                                               style: TextStyle(
                                                 color: kindColor.withValues(
-                                                    alpha: 0.85),
-                                                fontSize:
-                                                    FontSizes.labelSmall,
+                                                  alpha: 0.85,
+                                                ),
+                                                fontSize: FontSizes.labelSmall,
                                                 fontWeight: FontWeight.w900,
                                                 letterSpacing: 0.8,
                                               ),
@@ -833,103 +880,110 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
                                 );
                               },
                             ),
-                  // Brief "Added: [name]" toast — auto-dismisses
-                  ValueListenableBuilder<String?>(
-                    valueListenable: addedToast,
-                    builder: (_, msg, __) {
-                      if (msg == null) return const SizedBox.shrink();
-                      return Positioned(
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Colors.green.withValues(alpha: 0.9),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: GoopText(
-                              msg,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 11 * Responsive.factor(context),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                          // Brief "Added: [name]" toast — auto-dismisses
+                          ValueListenableBuilder<String?>(
+                            valueListenable: addedToast,
+                            builder: (_, msg, __) {
+                              if (msg == null) return const SizedBox.shrink();
+                              return Positioned(
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                child: Center(
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green.withValues(
+                                        alpha: 0.9,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: GoopText(
+                                      msg,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                            11 * Responsive.factor(context),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Search field — at the bottom, above keyboard
+                    TextField(
+                      controller: quickAddController,
+                      autofocus: true,
+                      focusNode: focusNode,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: FontSizes.labelMedium,
+                      ),
+                      cursorColor: Colors.amberAccent,
+                      decoration: InputDecoration(
+                        hintText: 'Search items, guns...',
+                        hintStyle: TextStyle(
+                          color: Colors.white30,
+                          fontSize: FontSizes.labelMedium,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.white30,
+                          size: 20,
+                        ),
+                        suffixIcon:
+                            query.isNotEmpty
+                                ? IconButton(
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.white54,
+                                    size: 18,
+                                  ),
+                                  tooltip: 'Clear search',
+                                  onPressed: () {
+                                    quickAddController.clear();
+                                    setModalState(() {
+                                      _quickQuery = '';
+                                    });
+                                  },
+                                )
+                                : null,
+                        filled: true,
+                        fillColor: AppTheme.flair.card,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radii.sm),
+                          borderSide: const BorderSide(
+                            color: Colors.amberAccent,
+                            width: 1.5,
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Search field — at the bottom, above keyboard
-            TextField(
-              controller: quickAddController,
-              autofocus: true,
-              focusNode: focusNode,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: FontSizes.labelMedium,
-              ),
-              cursorColor: Colors.amberAccent,
-              decoration: InputDecoration(
-                hintText: 'Search items, guns...',
-                hintStyle: TextStyle(
-                  color: Colors.white30,
-                  fontSize: FontSizes.labelMedium,
-                ),
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: Colors.white30,
-                  size: 20,
-                ),
-                suffixIcon: query.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white54,
-                          size: 18,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radii.sm),
+                          borderSide: const BorderSide(color: Colors.white10),
                         ),
-                        tooltip: 'Clear search',
-                        onPressed: () {
-                          quickAddController.clear();
-                          setModalState(() {
-                            _quickQuery = '';
-                          });
-                        },
-                      )
-                    : null,
-                filled: true,
-                fillColor: AppTheme.flair.card,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radii.sm),
-                  borderSide: const BorderSide(
-                    color: Colors.amberAccent,
-                    width: 1.5,
-                  ),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radii.sm),
-                  borderSide: const BorderSide(color: Colors.white10),
+                      ),
+                      onChanged: (val) {
+                        setModalState(() {
+                          _quickQuery = val;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
-              onChanged: (val) {
-                setModalState(() {
-                  _quickQuery = val;
-                });
-              },
-            ),
-          ],
-        ),
-      ),
-      );
+            );
           },
         );
       },
@@ -946,7 +1000,10 @@ class _ActiveRunScreenState extends State<ActiveRunScreen> {
   Widget _buildWindgunnerBanner(RunProvider p) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.lg,
+        vertical: Insets.sm,
+      ),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -1051,7 +1108,9 @@ class _EmoteButtonState extends State<_EmoteButton>
                 shape: BoxShape.circle,
                 color: widget.color.withValues(alpha: 0.12),
                 border: Border.all(
-                    color: widget.color.withValues(alpha: 0.5), width: 1.5),
+                  color: widget.color.withValues(alpha: 0.5),
+                  width: 1.5,
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: widget.color.withValues(alpha: 0.08),

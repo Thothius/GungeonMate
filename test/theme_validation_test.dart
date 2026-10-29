@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,11 +28,15 @@ void main() {
       await CustomThemeStore.save(t1);
 
       // Simulate the duplicate check from the save dialog
-      final existing = CustomThemeStore.themes
-          .where((t) => t.name.toLowerCase() == 'my theme'.toLowerCase())
-          .toList();
-      expect(existing.isNotEmpty, true,
-          reason: 'Duplicate name should be detectable');
+      final existing =
+          CustomThemeStore.themes
+              .where((t) => t.name.toLowerCase() == 'my theme'.toLowerCase())
+              .toList();
+      expect(
+        existing.isNotEmpty,
+        true,
+        reason: 'Duplicate name should be detectable',
+      );
     });
 
     test('case-insensitive duplicate detection', () async {
@@ -46,11 +49,17 @@ void main() {
       );
       await CustomThemeStore.save(t1);
 
-      final existing = CustomThemeStore.themes
-          .where((t) => t.name.toLowerCase() == 'FORGE MASTER'.toLowerCase())
-          .toList();
-      expect(existing.isNotEmpty, true,
-          reason: 'Duplicate should be detected case-insensitively');
+      final existing =
+          CustomThemeStore.themes
+              .where(
+                (t) => t.name.toLowerCase() == 'FORGE MASTER'.toLowerCase(),
+              )
+              .toList();
+      expect(
+        existing.isNotEmpty,
+        true,
+        reason: 'Duplicate should be detected case-insensitively',
+      );
     });
 
     test('unique name passes duplicate check', () async {
@@ -63,24 +72,36 @@ void main() {
       );
       await CustomThemeStore.save(t1);
 
-      final existing = CustomThemeStore.themes
-          .where((t) => t.name.toLowerCase() == 'different name'.toLowerCase())
-          .toList();
-      expect(existing.isEmpty, true,
-          reason: 'Different name should not trigger duplicate');
+      final existing =
+          CustomThemeStore.themes
+              .where(
+                (t) => t.name.toLowerCase() == 'different name'.toLowerCase(),
+              )
+              .toList();
+      expect(
+        existing.isEmpty,
+        true,
+        reason: 'Different name should not trigger duplicate',
+      );
     });
 
     test('empty name after trim is detectable', () {
       const name = '   ';
       final trimmed = name.trim();
-      expect(trimmed.isEmpty, true,
-          reason: 'Whitespace-only name should be empty after trim');
+      expect(
+        trimmed.isEmpty,
+        true,
+        reason: 'Whitespace-only name should be empty after trim',
+      );
     });
 
     test('name with only spaces is rejected', () {
       const name = '';
-      expect(name.trim().isEmpty, true,
-          reason: 'Empty name should be rejected');
+      expect(
+        name.trim().isEmpty,
+        true,
+        reason: 'Empty name should be rejected',
+      );
     });
 
     test('name at max length (24 chars) is accepted', () {
@@ -104,39 +125,51 @@ void main() {
     });
 
     test('multiple themes with different names coexist', () async {
-      await CustomThemeStore.save(SavedCustomTheme(
-        id: '1',
-        name: 'Alpha',
-        splashSlug: 'unicorn',
-        baseMode: AppThemeMode.unicorn,
-        prefs: const VisualPrefs(),
-      ));
-      await CustomThemeStore.save(SavedCustomTheme(
-        id: '2',
-        name: 'Beta',
-        splashSlug: 'forge_master',
-        baseMode: AppThemeMode.forgeMaster,
-        prefs: const VisualPrefs(),
-      ));
-      await CustomThemeStore.save(SavedCustomTheme(
-        id: '3',
-        name: 'Gamma',
-        splashSlug: 'the_bullet',
-        baseMode: AppThemeMode.theBullet,
-        prefs: const VisualPrefs(),
-      ));
+      await CustomThemeStore.save(
+        SavedCustomTheme(
+          id: '1',
+          name: 'Alpha',
+          splashSlug: 'unicorn',
+          baseMode: AppThemeMode.unicorn,
+          prefs: const VisualPrefs(),
+        ),
+      );
+      await CustomThemeStore.save(
+        SavedCustomTheme(
+          id: '2',
+          name: 'Beta',
+          splashSlug: 'forge_master',
+          baseMode: AppThemeMode.forgeMaster,
+          prefs: const VisualPrefs(),
+        ),
+      );
+      await CustomThemeStore.save(
+        SavedCustomTheme(
+          id: '3',
+          name: 'Gamma',
+          splashSlug: 'the_bullet',
+          baseMode: AppThemeMode.theBullet,
+          prefs: const VisualPrefs(),
+        ),
+      );
 
       expect(CustomThemeStore.themes.length, 3);
 
       // None should conflict with each other
       for (final theme in CustomThemeStore.themes) {
-        final dupes = CustomThemeStore.themes
-            .where((t) =>
-                t.id != theme.id &&
-                t.name.toLowerCase() == theme.name.toLowerCase())
-            .toList();
-        expect(dupes.isEmpty, true,
-            reason: '${theme.name} should not have duplicates');
+        final dupes =
+            CustomThemeStore.themes
+                .where(
+                  (t) =>
+                      t.id != theme.id &&
+                      t.name.toLowerCase() == theme.name.toLowerCase(),
+                )
+                .toList();
+        expect(
+          dupes.isEmpty,
+          true,
+          reason: '${theme.name} should not have duplicates',
+        );
       }
     });
   });

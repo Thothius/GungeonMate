@@ -58,11 +58,13 @@ class Gungeoneer {
     return Gungeoneer(
       name: name,
       icon: localGungeoneerIcon(name),
-      startingGuns: (json['starting_guns'] as List<dynamic>?)
+      startingGuns:
+          (json['starting_guns'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
-      startingItems: (json['starting_items'] as List<dynamic>?)
+      startingItems:
+          (json['starting_items'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
@@ -70,11 +72,11 @@ class Gungeoneer {
       shortDesc: json['short_desc'] as String? ?? '',
       loreIntro: json['lore_intro'] as String? ?? '',
       playstyle: json['playstyle'] as String? ?? '',
-      tips: (json['tips'] as List<dynamic>?)
-              ?.map((e) => e.toString())
-              .toList() ??
+      tips:
+          (json['tips'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
           [],
-      nicknames: (json['nicknames'] as List<dynamic>?)
+      nicknames:
+          (json['nicknames'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],

@@ -40,14 +40,14 @@ class RunLogEntry {
   }
 
   Map<String, dynamic> toJson() => {
-        't': timestamp.toIso8601String(),
-        'c': category.name,
-        'd': description,
-        if (curseDelta != 0) 'cu': curseDelta,
-        if (coolnessDelta != 0) 'co': coolnessDelta,
-        if (entityName != null) 'e': entityName,
-        if (playerName != null) 'p': playerName,
-      };
+    't': timestamp.toIso8601String(),
+    'c': category.name,
+    'd': description,
+    if (curseDelta != 0) 'cu': curseDelta,
+    if (coolnessDelta != 0) 'co': coolnessDelta,
+    if (entityName != null) 'e': entityName,
+    if (playerName != null) 'p': playerName,
+  };
 }
 
 enum RunLogCategory {

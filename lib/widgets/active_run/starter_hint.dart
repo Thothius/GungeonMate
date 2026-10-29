@@ -24,7 +24,8 @@ class StarterHint extends StatelessWidget {
   final SliverGridDelegate tileGrid;
   final bool wideMode;
 
-  const StarterHint({super.key, 
+  const StarterHint({
+    super.key,
     required this.character,
     required this.kind,
     required this.slot,
@@ -45,18 +46,20 @@ class StarterHint extends StatelessWidget {
 
     // Resolve starter names to actual entities via the indexed lookups.
     // Names that don't resolve (typo, removed item) are silently dropped.
-    final List<Gun> starterGuns = isGuns
-        ? character.startingGuns
-            .map((n) => p.gunByName(n))
-            .whereType<Gun>()
-            .toList()
-        : const [];
-    final List<Item> starterItems = !isGuns
-        ? character.startingItems
-            .map((n) => p.itemByName(n))
-            .whereType<Item>()
-            .toList()
-        : const [];
+    final List<Gun> starterGuns =
+        isGuns
+            ? character.startingGuns
+                .map((n) => p.gunByName(n))
+                .whereType<Gun>()
+                .toList()
+            : const [];
+    final List<Item> starterItems =
+        !isGuns
+            ? character.startingItems
+                .map((n) => p.itemByName(n))
+                .whereType<Item>()
+                .toList()
+            : const [];
 
     final hasStarters = (isGuns ? starterGuns : starterItems).isNotEmpty;
 
@@ -72,11 +75,10 @@ class StarterHint extends StatelessWidget {
                     ? 'The Paradox starts with a random loadout — '
                         'add ${isGuns ? "guns" : "items"} as you pick them up.'
                     : isGuns
-                        ? 'No guns yet — hit ADD to bring in your first.'
-                        : 'No items yet — pick some up!',
+                    ? 'No guns yet — hit ADD to bring in your first.'
+                    : 'No items yet — pick some up!',
                 textAlign: TextAlign.center,
-                style:
-                    TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
               ),
             ),
           ),
@@ -84,9 +86,8 @@ class StarterHint extends StatelessWidget {
       );
     }
 
-    final headline = isGuns
-        ? '${character.name} usually starts with'
-        : 'Plus this passive';
+    final headline =
+        isGuns ? '${character.name} usually starts with' : 'Plus this passive';
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
       child: Column(
@@ -150,11 +151,12 @@ class StarterHint extends StatelessWidget {
                           } else {
                             p.addItem(it!, slot: slot);
                           }
-                          messenger.showSnackBar(SnackBar(
-                            content: GoopText('Added $name'),
-                            duration:
-                                const Duration(milliseconds: 1200),
-                          ));
+                          messenger.showSnackBar(
+                            SnackBar(
+                              content: GoopText('Added $name'),
+                              duration: const Duration(milliseconds: 1200),
+                            ),
+                          );
                         },
                       ),
                     ),

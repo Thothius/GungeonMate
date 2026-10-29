@@ -27,8 +27,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
 
   @override
   Widget build(BuildContext context) {
-    final activeCount =
-        widget.statuses.where((s) => s.active).length;
+    final activeCount = widget.statuses.where((s) => s.active).length;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
@@ -36,12 +35,13 @@ class _SynergiesSectionState extends State<SynergiesSection> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
-            onTap: widget.statuses.isEmpty
-                ? null
-                : () {
-                    Haptics.selection();
-                    setState(() => _collapsed = !_collapsed);
-                  },
+            onTap:
+                widget.statuses.isEmpty
+                    ? null
+                    : () {
+                      Haptics.selection();
+                      setState(() => _collapsed = !_collapsed);
+                    },
             child: Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: Row(
@@ -60,8 +60,10 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                   const SizedBox(width: 8),
                   if (widget.statuses.isNotEmpty)
                     Container(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 1,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
@@ -79,7 +81,9 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                     const SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 1),
+                        horizontal: 6,
+                        vertical: 1,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.amber.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(8),
@@ -121,10 +125,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
             )
           else if (!_collapsed)
             ...widget.statuses.map(
-              (s) => SynergyCard(
-                status: s,
-                currentName: widget.currentName,
-              ),
+              (s) => SynergyCard(status: s, currentName: widget.currentName),
             ),
         ],
       ),
@@ -144,13 +145,11 @@ class SynergyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = status.synergy;
-    final color = status.active
-        ? Colors.amber
-        : Colors.white.withValues(alpha: 0.25);
+    final color =
+        status.active ? Colors.amber : Colors.white.withValues(alpha: 0.25);
 
     final currentLower = currentName.toLowerCase();
-    final currentIsAnyOf =
-        s.anyOf.any((i) => i.toLowerCase() == currentLower);
+    final currentIsAnyOf = s.anyOf.any((i) => i.toLowerCase() == currentLower);
     final ownedLower = context.read<RunProvider>().currentOwnedLower;
 
     return Card(
@@ -187,11 +186,7 @@ class SynergyCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const Icon(
-                        Icons.verified,
-                        size: 14,
-                        color: Colors.cyan,
-                      ),
+                      const Icon(Icons.verified, size: 14, color: Colors.cyan),
                     ],
                   ),
                 ),
@@ -201,13 +196,16 @@ class SynergyCard extends StatelessWidget {
             Wrap(
               spacing: 8,
               runSpacing: 6,
-              children: s.items
-                  .where((i) => i.toLowerCase() != currentLower)
-                  .map((i) => SynergyChip(
-                        name: i,
-                        missing: status.missing.contains(i),
-                      ))
-                  .toList(),
+              children:
+                  s.items
+                      .where((i) => i.toLowerCase() != currentLower)
+                      .map(
+                        (i) => SynergyChip(
+                          name: i,
+                          missing: status.missing.contains(i),
+                        ),
+                      )
+                      .toList(),
             ),
             if (s.anyOf.isNotEmpty) ...[
               const SizedBox(height: 8),
@@ -254,10 +252,11 @@ class SynergyCard extends StatelessWidget {
                 Wrap(
                   spacing: 6,
                   runSpacing: 4,
-                  children: s.anyOf.map((i) {
-                    final isOwned = ownedLower.contains(i.toLowerCase());
-                    return SynergyChip(name: i, missing: !isOwned);
-                  }).toList(),
+                  children:
+                      s.anyOf.map((i) {
+                        final isOwned = ownedLower.contains(i.toLowerCase());
+                        return SynergyChip(name: i, missing: !isOwned);
+                      }).toList(),
                 ),
               ],
             ],
@@ -297,9 +296,10 @@ class SynergyChip extends StatelessWidget {
     final resolvable = gun != null || item != null;
 
     final iconPath = gun?.icon ?? item?.icon ?? '';
-    final pillColor = missing
-        ? Colors.white.withValues(alpha: 0.08)
-        : Colors.amber.withValues(alpha: 0.4);
+    final pillColor =
+        missing
+            ? Colors.white.withValues(alpha: 0.08)
+            : Colors.amber.withValues(alpha: 0.4);
 
     final body = Opacity(
       opacity: missing ? 0.4 : 1.0,
@@ -307,14 +307,21 @@ class SynergyChip extends StatelessWidget {
         width: 72,
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
-          color: missing
-              ? AppTheme.flair.scaffold
-              : Colors.amber.withValues(alpha: 0.08),
+          color:
+              missing
+                  ? AppTheme.flair.scaffold
+                  : Colors.amber.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: pillColor, width: 1.8),
-          boxShadow: !missing
-              ? [BoxShadow(color: Colors.amber.withValues(alpha: 0.12), blurRadius: 6)]
-              : null,
+          boxShadow:
+              !missing
+                  ? [
+                    BoxShadow(
+                      color: Colors.amber.withValues(alpha: 0.12),
+                      blurRadius: 6,
+                    ),
+                  ]
+                  : null,
         ),
         child: Column(
           children: [
@@ -389,7 +396,11 @@ class SynergyChip extends StatelessWidget {
       child: Center(
         child: GoopText(
           name.isNotEmpty ? name[0].toUpperCase() : '?',
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white38),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white38,
+          ),
         ),
       ),
     );

@@ -67,8 +67,11 @@ class RichLinkText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base = (baseStyle ?? const TextStyle(fontSize: FontSizes.bodyMedium, height: 1.4))
-        .copyWith(color: baseStyle?.color ?? Colors.white.withValues(alpha: 0.92));
+    final base = (baseStyle ??
+            const TextStyle(fontSize: FontSizes.bodyMedium, height: 1.4))
+        .copyWith(
+          color: baseStyle?.color ?? Colors.white.withValues(alpha: 0.92),
+        );
     final spans = tokens.map((tok) => _buildSpan(context, tok, base)).toList();
     return Text.rich(
       TextSpan(children: spans, style: base),
@@ -129,12 +132,10 @@ class RichLinkText extends StatelessWidget {
 
     // Non-navigable refs render as styled-but-flat text.
     if (!ref.isNavigable) {
-      final style = ref.kind == RefKind.lore
-          ? base.copyWith(
-              color: color,
-              fontStyle: FontStyle.italic,
-            )
-          : base.copyWith(color: color);
+      final style =
+          ref.kind == RefKind.lore
+              ? base.copyWith(color: color, fontStyle: FontStyle.italic)
+              : base.copyWith(color: color);
       return TextSpan(text: ref.name, style: style);
     }
 
@@ -158,13 +159,11 @@ class RichLinkText extends StatelessWidget {
     final p = context.read<RunProvider>();
     switch (ref.kind) {
       case RefKind.stat:
-        final t = ref.name.toLowerCase() == 'curse'
-            ? StatType.curse
-            : StatType.coolness;
-        Navigator.push(
-          context,
-          fastRoute(StatsDetailScreen(statType: t)),
-        );
+        final t =
+            ref.name.toLowerCase() == 'curse'
+                ? StatType.curse
+                : StatType.coolness;
+        Navigator.push(context, fastRoute(StatsDetailScreen(statType: t)));
         return;
       case RefKind.gun:
         final g = p.gunByName(ref.name);
@@ -223,10 +222,7 @@ class RichLinkText extends StatelessWidget {
 
   static void _openItemDetail(BuildContext context, {Gun? gun, Item? item}) {
     FocusManager.instance.primaryFocus?.unfocus();
-    Navigator.push(
-      context,
-      fastRoute(ItemDetailScreen(gun: gun, item: item)),
-    );
+    Navigator.push(context, fastRoute(ItemDetailScreen(gun: gun, item: item)));
   }
 }
 
@@ -306,8 +302,7 @@ class _RefChipText extends StatelessWidget {
 class _PeekSheet extends StatelessWidget {
   final Gun? gun;
   final Item? item;
-  const _PeekSheet({this.gun, this.item})
-      : assert(gun != null || item != null);
+  const _PeekSheet({this.gun, this.item}) : assert(gun != null || item != null);
 
   @override
   Widget build(BuildContext context) {
@@ -341,9 +336,10 @@ class _PeekSheet extends StatelessWidget {
               children: [
                 GameIcon(
                   assetPath: iconPath,
-                  fallback: gun != null
-                      ? Icons.gps_fixed
-                      : Icons.inventory_2_outlined,
+                  fallback:
+                      gun != null
+                          ? Icons.gps_fixed
+                          : Icons.inventory_2_outlined,
                   quality: quality,
                   size: 56,
                 ),
@@ -680,9 +676,10 @@ class _ShrineDeltaChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sign = value > 0 ? '+' : '';
-    final txt = value == value.roundToDouble()
-        ? value.toStringAsFixed(0)
-        : value.toStringAsFixed(1);
+    final txt =
+        value == value.roundToDouble()
+            ? value.toStringAsFixed(0)
+            : value.toStringAsFixed(1);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
@@ -778,21 +775,16 @@ class _BulletLine extends StatelessWidget {
     // Nested bullets stay neutral so the eye reads depth, not theme,
     // on indented quirks/exceptions.
     final isTop = depth == 0;
-    final glyph = isTop
-        ? ThemedBullet(
-            index: siblingIndex,
-            size: _glyphSize(),
-          )
-        : Icon(
-            Icons.fiber_manual_record,
-            size: 5,
-            color: Colors.white.withValues(alpha: 0.6),
-          );
+    final glyph =
+        isTop
+            ? ThemedBullet(index: siblingIndex, size: _glyphSize())
+            : Icon(
+              Icons.fiber_manual_record,
+              size: 5,
+              color: Colors.white.withValues(alpha: 0.6),
+            );
     return Padding(
-      padding: EdgeInsets.only(
-        left: depth * 18.0,
-        top: depth == 0 ? 6 : 4,
-      ),
+      padding: EdgeInsets.only(left: depth * 18.0, top: depth == 0 ? 6 : 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -804,10 +796,7 @@ class _BulletLine extends StatelessWidget {
                 // themed glyphs (✦) sit visually larger than a Material
                 // circle icon — keep the text column aligned across themes.
                 padding: const EdgeInsets.only(top: 1, right: 8),
-                child: SizedBox(
-                  width: 14,
-                  child: Center(child: glyph),
-                ),
+                child: SizedBox(width: 14, child: Center(child: glyph)),
               ),
               Expanded(
                 child: RichLinkText(
@@ -896,14 +885,16 @@ class _WikiSectionState extends State<WikiSection> {
   @override
   void initState() {
     super.initState();
-    _expanded = widget.collapseThreshold == 0 ||
+    _expanded =
+        widget.collapseThreshold == 0 ||
         widget.bullets.length <= widget.collapseThreshold;
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.bullets.isEmpty) return const SizedBox.shrink();
-    final canCollapse = widget.collapseThreshold > 0 &&
+    final canCollapse =
+        widget.collapseThreshold > 0 &&
         widget.bullets.length > widget.collapseThreshold;
     final flair = AppTheme.flair;
     return Padding(
@@ -930,9 +921,10 @@ class _WikiSectionState extends State<WikiSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: canCollapse
-                    ? () => setState(() => _expanded = !_expanded)
-                    : null,
+                onTap:
+                    canCollapse
+                        ? () => setState(() => _expanded = !_expanded)
+                        : null,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: Insets.xs),
                   child: ThemedSectionTitle(
@@ -940,15 +932,14 @@ class _WikiSectionState extends State<WikiSection> {
                     iconColor: widget.iconColor,
                     title: widget.title,
                     count: widget.bullets.length,
-                    trailing: canCollapse
-                        ? Icon(
-                            _expanded
-                                ? Icons.expand_less
-                                : Icons.expand_more,
-                            size: 22,
-                            color: Colors.white54,
-                          )
-                        : null,
+                    trailing:
+                        canCollapse
+                            ? Icon(
+                              _expanded ? Icons.expand_less : Icons.expand_more,
+                              size: 22,
+                              color: Colors.white54,
+                            )
+                            : null,
                   ),
                 ),
               ),

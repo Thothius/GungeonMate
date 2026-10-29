@@ -48,10 +48,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
 
   Future<void> _openTier(QuizChestTier tier) async {
     Haptics.selection();
-    await Navigator.push(
-      context,
-      fastRoute(QuizSessionScreen(tier: tier)),
-    );
+    await Navigator.push(context, fastRoute(QuizSessionScreen(tier: tier)));
     // Refresh best-streak labels after a run.
     if (mounted) setState(() {});
   }
@@ -59,26 +56,27 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final rp = context.read<RunProvider>();
-    final engine = _engine ??=
-        QuizEngine(guns: rp.allGuns, items: rp.allItems);
+    final engine = _engine ??= QuizEngine(guns: rp.allGuns, items: rp.allItems);
     final progress = QuizProgress.instance;
     // Only standard chests count toward bonus-chest unlocks — the
     // Rainbow chest can't cheese the Rat chest open.
-    final completedCount = kQuizChestTiers
-        .where((t) => progress.isCompleted(t.id))
-        .length;
+    final completedCount =
+        kQuizChestTiers.where((t) => progress.isCompleted(t.id)).length;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      bottomNavigationBar:
-          widget.showBackButton ? const BottomBackBar() : null,
+      bottomNavigationBar: widget.showBackButton ? const BottomBackBar() : null,
       body: SafeArea(
         child: Column(
           children: [
             // ── Header ──
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                  Insets.sm, Insets.sm, Insets.lg, 0),
+                Insets.sm,
+                Insets.sm,
+                Insets.lg,
+                0,
+              ),
               child: Row(
                 children: [
                   if (!widget.showBackButton) const SizedBox(width: 8),
@@ -125,42 +123,41 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
 
             // ── Chest list ──
             Expanded(
-              child: _loaded
-                  ? ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: Insets.lg,
-                        vertical: Insets.sm,
-                      ),
-                      itemCount: kQuizAllTiers.length,
-                      separatorBuilder: (_, __) =>
-                          const SizedBox(height: Insets.md),
-                      itemBuilder: (context, i) {
-                        final tier = kQuizAllTiers[i];
-                        final pool = engine.poolSizeForTier(tier);
-                        final guns = engine.gunsForTier(tier);
-                        final items = engine.itemsForTier(tier);
-                        final locked =
-                            tier.unlocksAfter > completedCount;
-                        return _ChestCard(
-                          tier: tier,
-                          guns: guns,
-                          items: items,
-                          poolSize: pool,
-                          best: progress.bestStreak(tier.id),
-                          completed: progress.isCompleted(tier.id),
-                          locked: locked,
-                          unlockHint:
-                              'CLEAR ${tier.unlocksAfter - completedCount} MORE '
-                              'CHEST${tier.unlocksAfter - completedCount == 1 ? '' : 'S'} TO UNLOCK',
-                          onTap: locked ? () {} : () => _openTier(tier),
-                        )
-                            .animate(
-                                delay: Duration(milliseconds: 70 * i))
-                            .fadeIn(duration: 300.ms)
-                            .slideY(begin: 0.15, end: 0);
-                      },
-                    )
-                  : const SizedBox.shrink(),
+              child:
+                  _loaded
+                      ? ListView.separated(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Insets.lg,
+                          vertical: Insets.sm,
+                        ),
+                        itemCount: kQuizAllTiers.length,
+                        separatorBuilder:
+                            (_, __) => const SizedBox(height: Insets.md),
+                        itemBuilder: (context, i) {
+                          final tier = kQuizAllTiers[i];
+                          final pool = engine.poolSizeForTier(tier);
+                          final guns = engine.gunsForTier(tier);
+                          final items = engine.itemsForTier(tier);
+                          final locked = tier.unlocksAfter > completedCount;
+                          return _ChestCard(
+                                tier: tier,
+                                guns: guns,
+                                items: items,
+                                poolSize: pool,
+                                best: progress.bestStreak(tier.id),
+                                completed: progress.isCompleted(tier.id),
+                                locked: locked,
+                                unlockHint:
+                                    'CLEAR ${tier.unlocksAfter - completedCount} MORE '
+                                    'CHEST${tier.unlocksAfter - completedCount == 1 ? '' : 'S'} TO UNLOCK',
+                                onTap: locked ? () {} : () => _openTier(tier),
+                              )
+                              .animate(delay: Duration(milliseconds: 70 * i))
+                              .fadeIn(duration: 300.ms)
+                              .slideY(begin: 0.15, end: 0);
+                        },
+                      )
+                      : const SizedBox.shrink(),
             ),
 
             // ── Overall progress footer ──
@@ -168,13 +165,14 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
               padding: const EdgeInsets.only(bottom: Insets.lg),
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: Insets.lg, vertical: Insets.sm),
+                  horizontal: Insets.lg,
+                  vertical: Insets.sm,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFD54F).withValues(alpha: 0.10),
                   borderRadius: Radii.pill,
                   border: Border.all(
-                    color:
-                        const Color(0xFFFFD54F).withValues(alpha: 0.35),
+                    color: const Color(0xFFFFD54F).withValues(alpha: 0.35),
                   ),
                 ),
                 child: GoopText(
@@ -224,26 +222,29 @@ class _ChestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // Locked cards read as silhouettes — desaturated + dimmed so the
     // chest shape shows but the loot stays mysterious.
-    final card = locked
-        ? ColorFiltered(
-            colorFilter: const ColorFilter.matrix(<double>[
-              0.2126, 0.7152, 0.0722, 0, 0, // greyscale
-              0.2126, 0.7152, 0.0722, 0, 0,
-              0.2126, 0.7152, 0.0722, 0, 0,
-              0, 0, 0, 0.55, 0, // dimmed alpha
-            ]),
-            child: _cardContent(),
-          )
-        : _cardContent();
+    final card =
+        locked
+            ? ColorFiltered(
+              colorFilter: const ColorFilter.matrix(<double>[
+                0.2126, 0.7152, 0.0722, 0, 0, // greyscale
+                0.2126, 0.7152, 0.0722, 0, 0,
+                0.2126, 0.7152, 0.0722, 0, 0,
+                0, 0, 0, 0.55, 0, // dimmed alpha
+              ]),
+              child: _cardContent(),
+            )
+            : _cardContent();
     return IgnorePointer(ignoring: locked, child: card);
   }
 
   Widget _cardContent() {
     return ScaleButton(
-        onTap: onTap,
-        child: Container(
+      onTap: onTap,
+      child: Container(
         padding: const EdgeInsets.symmetric(
-            horizontal: Insets.lg, vertical: Insets.md),
+          horizontal: Insets.lg,
+          vertical: Insets.md,
+        ),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -266,7 +267,7 @@ class _ChestCard extends StatelessWidget {
             ),
           ],
         ),
-          child: Column(
+        child: Column(
           children: [
             // Stats row above the chest.
             Row(
@@ -283,8 +284,7 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.titleSmall,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
-                          color: Colors.white
-                              .withValues(alpha: 0.95),
+                          color: Colors.white.withValues(alpha: 0.95),
                         ),
                       ),
                       GoopText(
@@ -302,9 +302,11 @@ class _ChestCard extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.lock_rounded,
-                          size: 14,
-                          color: Colors.white.withValues(alpha: 0.5)),
+                      Icon(
+                        Icons.lock_rounded,
+                        size: 14,
+                        color: Colors.white.withValues(alpha: 0.5),
+                      ),
                       const SizedBox(width: 4),
                       GoopText(
                         unlockHint,
@@ -353,16 +355,17 @@ class _ChestCard extends StatelessWidget {
               height: 108,
               child: Center(
                 child: Image.asset(
-              tier.asset,
-              height: 92 * tier.spriteScale,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.none,
-              errorBuilder: (_, __, ___) => Icon(
-                Icons.inventory_2_rounded,
-                size: 72,
-                color: tier.accent.withValues(alpha: 0.6),
-              ),
-            ),
+                  tier.asset,
+                  height: 92 * tier.spriteScale,
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.none,
+                  errorBuilder:
+                      (_, __, ___) => Icon(
+                        Icons.inventory_2_rounded,
+                        size: 72,
+                        color: tier.accent.withValues(alpha: 0.6),
+                      ),
+                ),
               ),
             ),
             const SizedBox(height: Insets.xs),
@@ -370,8 +373,8 @@ class _ChestCard extends StatelessWidget {
               locked
                   ? 'LOCKED'
                   : completed
-                      ? 'OPEN FOR FUN'
-                      : 'TAP TO START',
+                  ? 'OPEN FOR FUN'
+                  : 'TAP TO START',
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w800,
@@ -395,30 +398,31 @@ class _TierBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final badge = tier.isBonus
-        ? Container(
-            height: 26,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: tier.accent.withValues(alpha: 0.18),
-              borderRadius: Radii.pill,
-              border: Border.all(
-                color: tier.accent.withValues(alpha: 0.7),
-                width: 1.2,
+    final badge =
+        tier.isBonus
+            ? Container(
+              height: 26,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: tier.accent.withValues(alpha: 0.18),
+                borderRadius: Radii.pill,
+                border: Border.all(
+                  color: tier.accent.withValues(alpha: 0.7),
+                  width: 1.2,
+                ),
               ),
-            ),
-            child: GoopText(
-              tier.title,
-              style: TextStyle(
-                fontSize: FontSizes.labelMedium,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0.8,
-                color: tier.accent,
+              child: GoopText(
+                tier.title,
+                style: TextStyle(
+                  fontSize: FontSizes.labelMedium,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.8,
+                  color: tier.accent,
+                ),
               ),
-            ),
-          )
-        : QualityBadge(quality: tier.id, size: 26);
+            )
+            : QualityBadge(quality: tier.id, size: 26);
     // Polished chip — soft accent ring + tier-colored glow so the
     // badge reads as loot-tier chrome, not a flat letter.
     return Container(
@@ -427,7 +431,9 @@ class _TierBadge extends StatelessWidget {
         shape: BoxShape.circle,
         color: tier.accent.withValues(alpha: 0.10),
         border: Border.all(
-            color: tier.accent.withValues(alpha: 0.55), width: 1.1),
+          color: tier.accent.withValues(alpha: 0.55),
+          width: 1.1,
+        ),
         boxShadow: [
           BoxShadow(
             color: tier.accent.withValues(alpha: 0.35),
@@ -484,10 +490,11 @@ class _CompletedLabelState extends State<_CompletedLabel>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _float,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(0, sin(_float.value * pi) * 3.5),
-        child: child,
-      ),
+      builder:
+          (context, child) => Transform.translate(
+            offset: Offset(0, sin(_float.value * pi) * 3.5),
+            child: child,
+          ),
       child: GoopText(
         'COMPLETED!',
         style: TextStyle(
@@ -501,10 +508,7 @@ class _CompletedLabelState extends State<_CompletedLabel>
               blurRadius: 8,
               color: Color(0xAA000000),
             ),
-            Shadow(
-              blurRadius: 16,
-              color: Color(0x66FFD700),
-            ),
+            Shadow(blurRadius: 16, color: Color(0x66FFD700)),
           ],
         ),
       ),

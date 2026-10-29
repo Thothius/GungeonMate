@@ -70,10 +70,12 @@ class _RunEffectsBlockState extends State<RunEffectsBlock> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2),
             child: Container(
-              width: 34, height: 4,
+              width: 34,
+              height: 4,
               decoration: BoxDecoration(
                 color: AppTheme.flair.primary.withValues(
-                    alpha: _open ? 0.6 : 0.3),
+                  alpha: _open ? 0.6 : 0.3,
+                ),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -83,22 +85,38 @@ class _RunEffectsBlockState extends State<RunEffectsBlock> {
         AnimatedSize(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOut,
-          child: _open
-              ? Padding(
-                  padding: EdgeInsets.fromLTRB(8 * sf, 2 * sf, 8 * sf, 8 * sf),
-                  child: Row(
-                    children: [
-                      _ctrl('COOL', cool, coolCol,
+          child:
+              _open
+                  ? Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      8 * sf,
+                      2 * sf,
+                      8 * sf,
+                      8 * sf,
+                    ),
+                    child: Row(
+                      children: [
+                        _ctrl(
+                          'COOL',
+                          cool,
+                          coolCol,
                           () => p.adjustCoolness(-1),
-                          () => p.adjustCoolness(1), sf),
-                      SizedBox(width: 12 * sf),
-                      _ctrl('CURSE', curse, curseCol,
+                          () => p.adjustCoolness(1),
+                          sf,
+                        ),
+                        SizedBox(width: 12 * sf),
+                        _ctrl(
+                          'CURSE',
+                          curse,
+                          curseCol,
                           () => p.adjustCurse(-1),
-                          () => p.adjustCurse(1), sf),
-                    ],
-                  ),
-                )
-              : const SizedBox.shrink(),
+                          () => p.adjustCurse(1),
+                          sf,
+                        ),
+                      ],
+                    ),
+                  )
+                  : const SizedBox.shrink(),
         ),
       ],
     );
@@ -109,16 +127,22 @@ class _RunEffectsBlockState extends State<RunEffectsBlock> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GoopText(value,
-              style: TextStyle(
-                  fontSize: 12 * sf,
-                  fontWeight: FontWeight.w900,
-                  color: col)),
-          GoopText(label,
-              style: TextStyle(
-                  fontSize: 7.5 * sf,
-                  letterSpacing: 1,
-                  color: Colors.white.withValues(alpha: 0.4))),
+          GoopText(
+            value,
+            style: TextStyle(
+              fontSize: 12 * sf,
+              fontWeight: FontWeight.w900,
+              color: col,
+            ),
+          ),
+          GoopText(
+            label,
+            style: TextStyle(
+              fontSize: 7.5 * sf,
+              letterSpacing: 1,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
+          ),
         ],
       ),
     );
@@ -127,8 +151,14 @@ class _RunEffectsBlockState extends State<RunEffectsBlock> {
   /// Flat, minimalist control — label up top, value dead-center, −/+
   /// symmetric on either side, generous inner spacing. No border, no
   /// glow — a soft tinted pill is the only chrome.
-  Widget _ctrl(String label, double value, Color col,
-      VoidCallback onMinus, VoidCallback onPlus, double sf) {
+  Widget _ctrl(
+    String label,
+    double value,
+    Color col,
+    VoidCallback onMinus,
+    VoidCallback onPlus,
+    double sf,
+  ) {
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10 * sf, horizontal: 6 * sf),
@@ -142,45 +172,60 @@ class _RunEffectsBlockState extends State<RunEffectsBlock> {
             GoopText(
               label,
               style: TextStyle(
-                  fontSize: 9 * sf,
-                  letterSpacing: 1.6,
-                  fontWeight: FontWeight.w700,
-                  color: col.withValues(alpha: 0.7)),
+                fontSize: 9 * sf,
+                letterSpacing: 1.6,
+                fontWeight: FontWeight.w700,
+                color: col.withValues(alpha: 0.7),
+              ),
             ),
             SizedBox(height: 8 * sf),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ScaleButton(
-                    onTap: () { onMinus(); Haptics.light(); },
-                    child: Container(
-                      width: 34 * sf, height: 34 * sf,
-                      decoration: BoxDecoration(
-                        color: col.withValues(alpha: 0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.remove_rounded,
-                          size: 18 * sf, color: col),
-                    )),
+                  onTap: () {
+                    onMinus();
+                    Haptics.light();
+                  },
+                  child: Container(
+                    width: 34 * sf,
+                    height: 34 * sf,
+                    decoration: BoxDecoration(
+                      color: col.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.remove_rounded,
+                      size: 18 * sf,
+                      color: col,
+                    ),
+                  ),
+                ),
                 GoopText(
-                    value == value.truncateToDouble()
-                        ? value.toInt().toString()
-                        : value.toStringAsFixed(1),
-                    style: TextStyle(
-                        fontSize: 22 * sf,
-                        fontWeight: FontWeight.w900,
-                        color: col)),
+                  value == value.truncateToDouble()
+                      ? value.toInt().toString()
+                      : value.toStringAsFixed(1),
+                  style: TextStyle(
+                    fontSize: 22 * sf,
+                    fontWeight: FontWeight.w900,
+                    color: col,
+                  ),
+                ),
                 ScaleButton(
-                    onTap: () { onPlus(); Haptics.light(); },
-                    child: Container(
-                      width: 34 * sf, height: 34 * sf,
-                      decoration: BoxDecoration(
-                        color: col.withValues(alpha: 0.12),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.add_rounded,
-                          size: 18 * sf, color: col),
-                    )),
+                  onTap: () {
+                    onPlus();
+                    Haptics.light();
+                  },
+                  child: Container(
+                    width: 34 * sf,
+                    height: 34 * sf,
+                    decoration: BoxDecoration(
+                      color: col.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.add_rounded, size: 18 * sf, color: col),
+                  ),
+                ),
               ],
             ),
           ],

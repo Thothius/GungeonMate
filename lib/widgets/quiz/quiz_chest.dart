@@ -41,8 +41,7 @@ class QuizChest extends StatefulWidget {
   State<QuizChest> createState() => _QuizChestState();
 }
 
-class _QuizChestState extends State<QuizChest>
-    with TickerProviderStateMixin {
+class _QuizChestState extends State<QuizChest> with TickerProviderStateMixin {
   late final AnimationController _idle;
   late final AnimationController _open;
   bool _poofFired = false;
@@ -116,18 +115,17 @@ class _QuizChestState extends State<QuizChest>
           builder: (context, _) {
             final t = _open.value;
             // Idle bob: smooth up/down sine on the repeat-reverse loop.
-            final bob = _reduceMotion
-                ? 0.0
-                : (sin(_idle.value * pi) * 5.0) * (1 - t);
+            final bob =
+                _reduceMotion ? 0.0 : (sin(_idle.value * pi) * 5.0) * (1 - t);
             // Shake: decays as the open progresses into the pop.
             final shakeT = t.clamp(0.0, 0.5) / 0.5;
-            final shake = _reduceMotion
-                ? 0.0
-                : sin(t * 40) * 0.05 * (1 - shakeT);
+            final shake =
+                _reduceMotion ? 0.0 : sin(t * 40) * 0.05 * (1 - shakeT);
             // Scale punch peaks mid-open then settles.
-            final punch = t < 0.55
-                ? 1 + (t / 0.55) * 0.14
-                : 1 + (1 - (t - 0.55) / 0.45) * 0.14;
+            final punch =
+                t < 0.55
+                    ? 1 + (t / 0.55) * 0.14
+                    : 1 + (1 - (t - 0.55) / 0.45) * 0.14;
             final dim = 1 - (t * 0.55);
 
             return Stack(
@@ -142,7 +140,8 @@ class _QuizChestState extends State<QuizChest>
                     gradient: RadialGradient(
                       colors: [
                         widget.accent.withValues(
-                            alpha: 0.28 + _idle.value * 0.1 + t * 0.3),
+                          alpha: 0.28 + _idle.value * 0.1 + t * 0.3,
+                        ),
                         widget.accent.withValues(alpha: 0.0),
                       ],
                     ),
@@ -153,10 +152,9 @@ class _QuizChestState extends State<QuizChest>
                 // makes the rattle read physical, not mechanical.
                 Transform.translate(
                   offset: Offset(
-                      _reduceMotion
-                          ? 0
-                          : sin(t * 43) * 3.0 * (1 - shakeT),
-                      bob),
+                    _reduceMotion ? 0 : sin(t * 43) * 3.0 * (1 - shakeT),
+                    bob,
+                  ),
                   child: Transform.rotate(
                     angle: shake,
                     child: Transform.scale(
@@ -203,13 +201,8 @@ class _SplitChest extends StatelessWidget {
   final double size;
   final double lidT;
 
-  Widget _half(Alignment align, Widget child) => ClipRect(
-        child: Align(
-          alignment: align,
-          heightFactor: 0.5,
-          child: child,
-        ),
-      );
+  Widget _half(Alignment align, Widget child) =>
+      ClipRect(child: Align(alignment: align, heightFactor: 0.5, child: child));
 
   @override
   Widget build(BuildContext context) {
@@ -225,11 +218,12 @@ class _SplitChest extends StatelessWidget {
       height: size,
       fit: BoxFit.contain,
       filterQuality: FilterQuality.none,
-      errorBuilder: (_, __, ___) => Icon(
-        Icons.inventory_2_rounded,
-        size: size * 0.7,
-        color: Colors.white54,
-      ),
+      errorBuilder:
+          (_, __, ___) => Icon(
+            Icons.inventory_2_rounded,
+            size: size * 0.7,
+            color: Colors.white54,
+          ),
     );
 
     return SizedBox(
@@ -270,8 +264,7 @@ class _PoofBurst extends StatelessWidget {
     required this.size,
     required this.accent,
     required this.seed,
-  }) : _seeds = List.generate(
-            16, (i) => Random(seed * 31 + i).nextDouble());
+  }) : _seeds = List.generate(16, (i) => Random(seed * 31 + i).nextDouble());
 
   final double progress;
   final double size;
@@ -310,8 +303,9 @@ class _PoofPainter extends CustomPainter {
       final dist = ease * size.shortestSide * (0.45 + jitter * 0.5);
       final r = (1 - t) * (3.5 + jitter * 5);
       final pos = center + Offset(cos(angle) * dist, sin(angle) * dist);
-      paint.color =
-          (i.isEven ? Colors.white : accent).withValues(alpha: (1 - t) * 0.9);
+      paint.color = (i.isEven ? Colors.white : accent).withValues(
+        alpha: (1 - t) * 0.9,
+      );
       canvas.drawCircle(pos, r.clamp(0.5, 10.0), paint);
     }
     // Central flash ring that expands and fades with the burst.

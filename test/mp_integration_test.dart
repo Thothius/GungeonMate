@@ -61,10 +61,7 @@ void main() {
   group('I1 — Full handshake', () {
     test('Main + Sidekick connect and reach connected phase', () async {
       // Main starts hosting
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       expect(mainSession.phase, MpPhase.connecting);
 
       // Sidekick starts joining (no PIN needed)
@@ -81,17 +78,20 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 100));
 
       // Both should be connected
-      expect(mainSession.phase, MpPhase.connected,
-          reason: 'Main should be connected after handshake');
-      expect(sidekickSession.phase, MpPhase.connected,
-          reason: 'Sidekick should be connected after handshake');
+      expect(
+        mainSession.phase,
+        MpPhase.connected,
+        reason: 'Main should be connected after handshake',
+      );
+      expect(
+        sidekickSession.phase,
+        MpPhase.connected,
+        reason: 'Sidekick should be connected after handshake',
+      );
     });
 
     test('Peer metadata is exchanged after handshake', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -109,37 +109,43 @@ void main() {
   });
 
   group('I2 — Snapshot sync', () {
-    test('Snapshot exchange completes without crash after connection', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+    test(
+      'Snapshot exchange completes without crash after connection',
+      () async {
+        await mainSession.startAsMain(
+          nickname: 'HostPlayer',
+          character: marine,
+        );
 
-      await sidekickSession.startAsSidekick(
-        nickname: 'GuestPlayer',
-        character: cultist,
-      );
+        await sidekickSession.startAsSidekick(
+          nickname: 'GuestPlayer',
+          character: cultist,
+        );
 
-      guestLink.simulateDiscovery();
-      await Future.delayed(const Duration(milliseconds: 150));
+        guestLink.simulateDiscovery();
+        await Future.delayed(const Duration(milliseconds: 150));
 
-      // Both sides should still be connected after snapshot exchange
-      // (snapshot sync runs automatically after hello handshake).
-      // Without loaded asset data, gun/item names can't resolve, but
-      // the snapshot exchange itself should not crash the session.
-      expect(mainSession.phase, MpPhase.connected,
-          reason: 'Main should remain connected after snapshot sync');
-      expect(sidekickSession.phase, MpPhase.connected,
-          reason: 'Sidekick should remain connected after snapshot sync');
-    });
+        // Both sides should still be connected after snapshot exchange
+        // (snapshot sync runs automatically after hello handshake).
+        // Without loaded asset data, gun/item names can't resolve, but
+        // the snapshot exchange itself should not crash the session.
+        expect(
+          mainSession.phase,
+          MpPhase.connected,
+          reason: 'Main should remain connected after snapshot sync',
+        );
+        expect(
+          sidekickSession.phase,
+          MpPhase.connected,
+          reason: 'Sidekick should remain connected after snapshot sync',
+        );
+      },
+    );
   });
 
   group('I3 — Gift flow', () {
     test('Gift send completes without crash (no loaded data)', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -157,17 +163,17 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 50));
 
       // Session should still be connected
-      expect(sidekickSession.phase, MpPhase.connected,
-          reason: 'Session should remain connected after gift send');
+      expect(
+        sidekickSession.phase,
+        MpPhase.connected,
+        reason: 'Session should remain connected after gift send',
+      );
     });
   });
 
   group('I4 — Request flow', () {
     test('Sidekick sends request — Main receives pending request', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -187,8 +193,11 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 50));
 
       // Main should have a pending request
-      expect(mainSession.pendingRequest, isNotNull,
-          reason: 'Main should have received the request');
+      expect(
+        mainSession.pendingRequest,
+        isNotNull,
+        reason: 'Main should have received the request',
+      );
       expect(mainSession.pendingRequest?.kind, 'item');
       expect(mainSession.pendingRequest?.name, 'Military Training');
     });
@@ -204,10 +213,7 @@ void main() {
         challengerName = name;
       };
 
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -221,8 +227,11 @@ void main() {
       await sidekickSession.sendDiceChallenge('GuestPlayer');
       await Future.delayed(const Duration(milliseconds: 50));
 
-      expect(diceChallengeReceived, true,
-          reason: 'Main should receive dice challenge');
+      expect(
+        diceChallengeReceived,
+        true,
+        reason: 'Main should receive dice challenge',
+      );
       expect(challengerName, 'GuestPlayer');
     });
 
@@ -233,10 +242,7 @@ void main() {
       sidekickSession.onDiceAccept = () => diceAccepted = true;
       sidekickSession.onDiceDecline = () => diceDeclined = true;
 
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -255,7 +261,11 @@ void main() {
       diceAccepted = false;
       await mainSession.sendDiceDecline();
       await Future.delayed(const Duration(milliseconds: 50));
-      expect(diceDeclined, true, reason: 'Sidekick should receive dice decline');
+      expect(
+        diceDeclined,
+        true,
+        reason: 'Sidekick should receive dice decline',
+      );
     });
   });
 
@@ -269,10 +279,7 @@ void main() {
         receivedEmoteAction = action;
       };
 
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -292,10 +299,7 @@ void main() {
 
   group('I7 — Disconnect', () {
     test('Both sides detect disconnect', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -317,17 +321,17 @@ void main() {
       expect(mainSession.phase, MpPhase.disconnected);
 
       // Sidekick should also detect disconnect
-      expect(sidekickSession.phase, MpPhase.disconnected,
-          reason: 'Sidekick should detect peer disconnect');
+      expect(
+        sidekickSession.phase,
+        MpPhase.disconnected,
+        reason: 'Sidekick should detect peer disconnect',
+      );
     });
   });
 
   group('I8 — Cancel (End Run)', () {
     test('Main cancels — Sidekick receives MpEndRun and tears down', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -347,17 +351,17 @@ void main() {
       expect(mainSession.phase, MpPhase.idle);
 
       // Sidekick should have received the end-run and torn down
-      expect(sidekickSession.phase, isNot(MpPhase.connected),
-          reason: 'Sidekick should not be connected after Main cancels');
+      expect(
+        sidekickSession.phase,
+        isNot(MpPhase.connected),
+        reason: 'Sidekick should not be connected after Main cancels',
+      );
     });
   });
 
   group('I9 — Add-to-peer (gift without removal)', () {
     test('Main sends add-to-peer for Sidekick — no crash', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -373,17 +377,17 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 50));
 
       // Session should still be connected
-      expect(mainSession.phase, MpPhase.connected,
-          reason: 'Session should remain connected after add-to-peer');
+      expect(
+        mainSession.phase,
+        MpPhase.connected,
+        reason: 'Session should remain connected after add-to-peer',
+      );
     });
   });
 
   group('I10 — Ping/Pong heartbeat', () {
     test('Ping is answered with Pong (no crash)', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
 
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
@@ -395,9 +399,7 @@ void main() {
 
       // Manually send a ping from Main — MpSync should auto-respond
       // with a Pong on the Sidekick side. Just verify no crash.
-      await hostLink.sendMessage(
-        MpPing(DateTime.now().millisecondsSinceEpoch),
-      );
+      await hostLink.sendMessage(MpPing(DateTime.now().millisecondsSinceEpoch));
       await Future.delayed(const Duration(milliseconds: 50));
 
       // If we got here without throwing, the ping/pong cycle works.
@@ -411,10 +413,7 @@ void main() {
 
   group('I11 — Reconnect: Main disconnects, Sidekick keeps view', () {
     test('Sidekick main slot survives Main disconnect', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -424,8 +423,11 @@ void main() {
 
       // After connect, Sidekick's main slot has Marine (from snapshot)
       expect(sidekickRp.runState.main, isNotNull);
-      expect(sidekickRp.runState.coop, isNotNull,
-          reason: 'Sidekick coop slot should have Cultist');
+      expect(
+        sidekickRp.runState.coop,
+        isNotNull,
+        reason: 'Sidekick coop slot should have Cultist',
+      );
 
       // Main disconnects (simulates app refresh)
       await hostLink.disconnectPeer();
@@ -435,17 +437,17 @@ void main() {
       expect(sidekickSession.phase, MpPhase.disconnected);
 
       // Sidekick's main slot should NOT be null (no blank screen)
-      expect(sidekickRp.runState.main, isNotNull,
-          reason: 'Sidekick main slot should survive peer disconnect');
+      expect(
+        sidekickRp.runState.main,
+        isNotNull,
+        reason: 'Sidekick main slot should survive peer disconnect',
+      );
     });
   });
 
   group('I12 — Reconnect: Sidekick disconnects, Main keeps view', () {
     test('Main coop slot survives Sidekick disconnect', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -464,17 +466,17 @@ void main() {
       expect(mainSession.phase, MpPhase.disconnected);
 
       // Main's main slot should NOT be null (no blank screen)
-      expect(mainRp.runState.main, isNotNull,
-          reason: 'Main main slot should survive peer disconnect');
+      expect(
+        mainRp.runState.main,
+        isNotNull,
+        reason: 'Main main slot should survive peer disconnect',
+      );
     });
   });
 
   group('I13 — Reconnect: snapshot with empty character does not wipe', () {
     test('Empty character snapshot preserves existing slot', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -488,29 +490,31 @@ void main() {
 
       // Simulate a restarting peer sending a snapshot with empty
       // character (before their run state is restored).
-      hostLink.sendMessage(const MpSnapshot(
-        character: '',
-        gunNames: [],
-        itemNames: [],
-        coolness: 0,
-        curse: 0,
-        shrinesUsed: [],
-      ));
+      hostLink.sendMessage(
+        const MpSnapshot(
+          character: '',
+          gunNames: [],
+          itemNames: [],
+          coolness: 0,
+          curse: 0,
+          shrinesUsed: [],
+        ),
+      );
       await Future.delayed(const Duration(milliseconds: 50));
 
       // Sidekick's main slot should still be populated (not wiped)
       final mainAfter = sidekickRp.runState.main;
-      expect(mainAfter, isNotNull,
-          reason: 'Empty character snapshot should not wipe main slot');
+      expect(
+        mainAfter,
+        isNotNull,
+        reason: 'Empty character snapshot should not wipe main slot',
+      );
     });
   });
 
   group('I14 — Reconnect: both disconnect simultaneously', () {
     test('Both sides go to disconnected without crashing', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -535,10 +539,7 @@ void main() {
 
   group('I15 — Reconnect: reconnect after disconnect restores connected', () {
     test('Both sides reconnect after disconnect', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -561,19 +562,22 @@ void main() {
       await Future.delayed(const Duration(milliseconds: 200));
 
       // Both should be connected again
-      expect(mainSession.phase, MpPhase.connected,
-          reason: 'Main should reconnect');
-      expect(sidekickSession.phase, MpPhase.connected,
-          reason: 'Sidekick should reconnect');
+      expect(
+        mainSession.phase,
+        MpPhase.connected,
+        reason: 'Main should reconnect',
+      );
+      expect(
+        sidekickSession.phase,
+        MpPhase.connected,
+        reason: 'Sidekick should reconnect',
+      );
     });
   });
 
   group('I16 — Reconnect: cancel during disconnected tears down cleanly', () {
     test('Main cancels while disconnected → idle, no crash', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -594,10 +598,7 @@ void main() {
     });
 
     test('Sidekick cancels while disconnected → idle, no crash', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -620,10 +621,7 @@ void main() {
 
   group('I17 — Reconnect: rapid double disconnect', () {
     test('Double disconnect does not crash or corrupt state', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -644,10 +642,7 @@ void main() {
 
   group('I18 — Reconnect: snapshot with unknown character name', () {
     test('Unknown character name does not crash', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -658,14 +653,16 @@ void main() {
       // Send a snapshot with a character name that doesn't exist
       // in the data (gungeoneerByName returns null without loadData).
       // This should NOT crash — the slot gets a Player with null char.
-      hostLink.sendMessage(const MpSnapshot(
-        character: 'Unknown Character',
-        gunNames: [],
-        itemNames: [],
-        coolness: 0,
-        curse: 0,
-        shrinesUsed: [],
-      ));
+      hostLink.sendMessage(
+        const MpSnapshot(
+          character: 'Unknown Character',
+          gunNames: [],
+          itemNames: [],
+          coolness: 0,
+          curse: 0,
+          shrinesUsed: [],
+        ),
+      );
       await Future.delayed(const Duration(milliseconds: 50));
 
       // Sidekick should still be connected and have a main slot
@@ -676,10 +673,7 @@ void main() {
 
   group('I19 — Reconnect: MpEndRun during reconnect', () {
     test('Sidekick cancels while disconnected → clean teardown', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -709,10 +703,7 @@ void main() {
 
   group('I20 — Reconnect: snapshot after reconnect updates state', () {
     test('Post-reconnect snapshot updates peer inventory', () async {
-      await mainSession.startAsMain(
-        nickname: 'HostPlayer',
-        character: marine,
-      );
+      await mainSession.startAsMain(nickname: 'HostPlayer', character: marine);
       await sidekickSession.startAsSidekick(
         nickname: 'GuestPlayer',
         character: cultist,
@@ -733,10 +724,16 @@ void main() {
 
       // After reconnect, a snapshot should be exchanged.
       // Sidekick's main slot should be populated (from Main's snapshot).
-      expect(sidekickRp.runState.main, isNotNull,
-          reason: 'Main slot should be populated after reconnect snapshot');
-      expect(sidekickRp.runState.coop, isNotNull,
-          reason: 'Coop slot should survive reconnect');
+      expect(
+        sidekickRp.runState.main,
+        isNotNull,
+        reason: 'Main slot should be populated after reconnect snapshot',
+      );
+      expect(
+        sidekickRp.runState.coop,
+        isNotNull,
+        reason: 'Coop slot should survive reconnect',
+      );
     });
   });
 }

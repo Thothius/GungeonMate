@@ -43,32 +43,38 @@ class _SettingsTabState extends State<SettingsTab> {
     final isSidekick = session.myRole == MpRole.sidekick;
     showDialog(
       context: context,
-      builder: (c) => AlertDialog(
-        icon: const Icon(Icons.bluetooth_disabled,
-            color: Colors.lightBlueAccent),
-        title: const GoopText('Leave Multiplayer?'),
-        content: GoopText(
-          isSidekick
-              ? 'You will disconnect from the host. Your inventory will be restored to your pre-MP state.'
-              : 'You will disconnect and end the multiplayer session.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const GoopText('Cancel'),
+      builder:
+          (c) => AlertDialog(
+            icon: const Icon(
+              Icons.bluetooth_disabled,
+              color: Colors.lightBlueAccent,
+            ),
+            title: const GoopText('Leave Multiplayer?'),
+            content: GoopText(
+              isSidekick
+                  ? 'You will disconnect from the host. Your inventory will be restored to your pre-MP state.'
+                  : 'You will disconnect and end the multiplayer session.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(c),
+                child: const GoopText('Cancel'),
+              ),
+              FilledButton.tonal(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.lightBlueAccent.withValues(
+                    alpha: 0.15,
+                  ),
+                  foregroundColor: Colors.lightBlueAccent,
+                ),
+                onPressed: () {
+                  session.cancel();
+                  Navigator.pop(c);
+                },
+                child: const GoopText('Leave'),
+              ),
+            ],
           ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(
-                backgroundColor: Colors.lightBlueAccent.withValues(alpha: 0.15),
-                foregroundColor: Colors.lightBlueAccent),
-            onPressed: () {
-              session.cancel();
-              Navigator.pop(c);
-            },
-            child: const GoopText('Leave'),
-          ),
-        ],
-      ),
     );
   }
 
@@ -76,27 +82,33 @@ class _SettingsTabState extends State<SettingsTab> {
     if (p.runState.hasCoop) {
       showDialog(
         context: context,
-        builder: (c) => AlertDialog(
-          icon: const Icon(Icons.remove_circle_outline, color: Colors.redAccent),
-          title: const GoopText('Remove Co-op Player?'),
-          content: GoopText(
-            'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(c),
-              child: const GoopText('Cancel'),
+        builder:
+            (c) => AlertDialog(
+              icon: const Icon(
+                Icons.remove_circle_outline,
+                color: Colors.redAccent,
+              ),
+              title: const GoopText('Remove Co-op Player?'),
+              content: GoopText(
+                'Removes ${p.runState.coop?.character?.name ?? 'Player 2'} from the run.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(c),
+                  child: const GoopText('Cancel'),
+                ),
+                FilledButton.tonal(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.red.shade900,
+                  ),
+                  onPressed: () {
+                    p.endCoopPlayer();
+                    Navigator.pop(c);
+                  },
+                  child: const GoopText('Remove'),
+                ),
+              ],
             ),
-            FilledButton.tonal(
-              style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
-              onPressed: () {
-                p.endCoopPlayer();
-                Navigator.pop(c);
-              },
-              child: const GoopText('Remove'),
-            ),
-          ],
-        ),
       );
     } else {
       final cultist =
@@ -114,30 +126,37 @@ class _SettingsTabState extends State<SettingsTab> {
   Future<void> _confirmResetAppData(BuildContext context) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (c) => AlertDialog(
-        icon: const Icon(Icons.restart_alt, color: Colors.deepOrange, size: 32),
-        title: const GoopText('Reset All App Data?'),
-        content: const GoopText(
-          'This permanently erases ALL saved data:\n\n'
-          '• Active run & inventory\n'
-          '• Favourites\n'
-          '• Theme & visual preferences\n'
-          '• Special weapon upgrades\n'
-          '• Multiplayer session data\n\n'
-          'The app will restart. This cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c, false),
-            child: const GoopText('Cancel'),
+      builder:
+          (c) => AlertDialog(
+            icon: const Icon(
+              Icons.restart_alt,
+              color: Colors.deepOrange,
+              size: 32,
+            ),
+            title: const GoopText('Reset All App Data?'),
+            content: const GoopText(
+              'This permanently erases ALL saved data:\n\n'
+              '• Active run & inventory\n'
+              '• Favourites\n'
+              '• Theme & visual preferences\n'
+              '• Special weapon upgrades\n'
+              '• Multiplayer session data\n\n'
+              'The app will restart. This cannot be undone.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(c, false),
+                child: const GoopText('Cancel'),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.deepOrange,
+                ),
+                onPressed: () => Navigator.pop(c, true),
+                child: const GoopText('RESET EVERYTHING'),
+              ),
+            ],
           ),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Colors.deepOrange),
-            onPressed: () => Navigator.pop(c, true),
-            child: const GoopText('RESET EVERYTHING'),
-          ),
-        ],
-      ),
     );
     if (confirmed != true) return;
     if (!context.mounted) return;
@@ -188,19 +207,20 @@ class _SettingsTabState extends State<SettingsTab> {
                   icon: Icons.temple_buddhist,
                   label: 'Shrine Picker',
                   color: Colors.amber,
-                  onTap: () => Navigator.push(
-                    context,
-                    fastRoute(const ShrinePickerScreen()),
-                  ),
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        fastRoute(const ShrinePickerScreen()),
+                      ),
                 ),
                 _TileData(
-                  icon: p.runState.hasCoop
-                      ? Icons.remove_circle_outline
-                      : Icons.person_add_alt_1,
+                  icon:
+                      p.runState.hasCoop
+                          ? Icons.remove_circle_outline
+                          : Icons.person_add_alt_1,
                   label: p.runState.hasCoop ? 'Remove Co-op' : 'Add Co-op',
-                  color: p.runState.hasCoop
-                      ? Colors.redAccent
-                      : Colors.pinkAccent,
+                  color:
+                      p.runState.hasCoop ? Colors.redAccent : Colors.pinkAccent,
                   onTap: () => _handleAddCoop(context, p),
                 ),
                 _TileData(
@@ -208,27 +228,32 @@ class _SettingsTabState extends State<SettingsTab> {
                   label: 'Save Run',
                   color: Colors.greenAccent,
                   onTap: () {
-                    unawaited(p.saveRun().then((_) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: GoopText('Run saved'),
-                            duration: Duration(seconds: 2),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    }).catchError((e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: GoopText('Failed to save run: $e'),
-                            duration: const Duration(seconds: 3),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      }
-                    }));
+                    unawaited(
+                      p
+                          .saveRun()
+                          .then((_) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: GoopText('Run saved'),
+                                  duration: Duration(seconds: 2),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          })
+                          .catchError((e) {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: GoopText('Failed to save run: $e'),
+                                  duration: const Duration(seconds: 3),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          }),
+                    );
                   },
                 ),
               ]),
@@ -271,7 +296,13 @@ class _SettingsTabState extends State<SettingsTab> {
                 initiallyExpanded: mpActive,
                 child: Column(
                   children: [
-                    _buildMpStatusBar(context, p, hasCoop, player2Name, mpActive),
+                    _buildMpStatusBar(
+                      context,
+                      p,
+                      hasCoop,
+                      player2Name,
+                      mpActive,
+                    ),
                     if (mpActive) ...[
                       const SizedBox(height: 10),
                       _buildGrid([
@@ -301,14 +332,24 @@ class _SettingsTabState extends State<SettingsTab> {
                   icon: Icons.restart_alt_rounded,
                   label: 'Reset $player1Name',
                   color: Colors.cyanAccent,
-                  onTap: () => confirmClearInventoryDialog(context, p, PlayerSlot.main),
+                  onTap:
+                      () => confirmClearInventoryDialog(
+                        context,
+                        p,
+                        PlayerSlot.main,
+                      ),
                 ),
                 if (hasCoop)
                   _TileData(
                     icon: Icons.restart_alt_rounded,
                     label: 'Reset $player2Name',
                     color: Colors.pinkAccent,
-                    onTap: () => confirmClearInventoryDialog(context, p, PlayerSlot.coop),
+                    onTap:
+                        () => confirmClearInventoryDialog(
+                          context,
+                          p,
+                          PlayerSlot.coop,
+                        ),
                   ),
               ]),
             ),
@@ -321,10 +362,11 @@ class _SettingsTabState extends State<SettingsTab> {
                 icon: Icons.palette_rounded,
                 label: 'Themes & Customization',
                 color: Colors.pinkAccent,
-                onTap: () => Navigator.push(
-                  context,
-                  fastRoute(const ExperienceStudioScreen()),
-                ),
+                onTap:
+                    () => Navigator.push(
+                      context,
+                      fastRoute(const ExperienceStudioScreen()),
+                    ),
               ),
             ),
           ),
@@ -340,18 +382,24 @@ class _SettingsTabState extends State<SettingsTab> {
                 Wrap(
                   spacing: 12,
                   runSpacing: 12,
-                  children: sections.map((s) => SizedBox(
-                    width: (screenWidth - 2 * Insets.lg - 12) / 2,
-                    child: s,
-                  )).toList(),
+                  children:
+                      sections
+                          .map(
+                            (s) => SizedBox(
+                              width: (screenWidth - 2 * Insets.lg - 12) / 2,
+                              child: s,
+                            ),
+                          )
+                          .toList(),
                 ),
               ] else ...[
                 // Narrow: vertical stack
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: sections
-                      .expand((s) => [s, const SizedBox(height: 12)])
-                      .toList(),
+                  children:
+                      sections
+                          .expand((s) => [s, const SizedBox(height: 12)])
+                          .toList(),
                 ),
               ],
 
@@ -377,11 +425,16 @@ class _SettingsTabState extends State<SettingsTab> {
                     onTap: () {
                       if (p.runState.main.character != null) {
                         Haptics.selection();
-                        Navigator.push(context, fastRoute(const SpecialItemsGridScreen()));
+                        Navigator.push(
+                          context,
+                          fastRoute(const SpecialItemsGridScreen()),
+                        );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: GoopText('Start a run first to spawn special items.'),
+                            content: GoopText(
+                              'Start a run first to spawn special items.',
+                            ),
                             duration: Duration(seconds: 2),
                             behavior: SnackBarBehavior.floating,
                           ),
@@ -447,41 +500,58 @@ class _SettingsTabState extends State<SettingsTab> {
               value: prefs.customDiceType,
               onChanged: (t) => VisualPrefs.setCustomDiceType(t),
               height: 56,
-              itemBuilder: (type, isSelected) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? flair.card.withValues(alpha: 0.9)
-                      : flair.card.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: isSelected ? flair.primary.withValues(alpha: 0.6) : onSurface.withValues(alpha: 0.12),
-                    width: isSelected ? 1.5 : 1.0,
-                  ),
-                ),
-                child: Center(
-                  child: GoopText(
-                    type.label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w900,
-                      color: isSelected ? onSurface : onSurface.withValues(alpha: 0.5),
-                      letterSpacing: 0.5,
+              itemBuilder:
+                  (type, isSelected) => Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color:
+                          isSelected
+                              ? flair.card.withValues(alpha: 0.9)
+                              : flair.card.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color:
+                            isSelected
+                                ? flair.primary.withValues(alpha: 0.6)
+                                : onSurface.withValues(alpha: 0.12),
+                        width: isSelected ? 1.5 : 1.0,
+                      ),
+                    ),
+                    child: Center(
+                      child: GoopText(
+                        type.label,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          color:
+                              isSelected
+                                  ? onSurface
+                                  : onSurface.withValues(alpha: 0.5),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
             ),
             const SizedBox(height: 16),
-            Center(child: _dicePreview(type: prefs.customDiceType, flair: flair)),
+            Center(
+              child: _dicePreview(type: prefs.customDiceType, flair: flair),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _dicePreview({required CustomDiceType type, required ThemeFlair flair, int value = 5}) {
+  Widget _dicePreview({
+    required CustomDiceType type,
+    required ThemeFlair flair,
+    int value = 5,
+  }) {
     final colors = _diceColors(type, flair);
     return Container(
       width: 120,
@@ -491,7 +561,9 @@ class _SettingsTabState extends State<SettingsTab> {
         color: colors.$1,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: colors.$2, width: 3),
-        boxShadow: [BoxShadow(color: colors.$4, blurRadius: 12, spreadRadius: 3)],
+        boxShadow: [
+          BoxShadow(color: colors.$4, blurRadius: 12, spreadRadius: 3),
+        ],
       ),
       child: Text(
         '$value',
@@ -504,22 +576,60 @@ class _SettingsTabState extends State<SettingsTab> {
     );
   }
 
-  (Color, Color, Color, Color) _diceColors(CustomDiceType type, ThemeFlair flair) {
+  (Color, Color, Color, Color) _diceColors(
+    CustomDiceType type,
+    ThemeFlair flair,
+  ) {
     switch (type) {
       case CustomDiceType.classicWhite:
-        return (const Color(0xFFFAFAFA), const Color(0xFF90A4AE), const Color(0xFF263238), Colors.white24);
+        return (
+          const Color(0xFFFAFAFA),
+          const Color(0xFF90A4AE),
+          const Color(0xFF263238),
+          Colors.white24,
+        );
       case CustomDiceType.goldGlimmer:
-        return (const Color(0xFF2C2210), const Color(0xFFFFD54F), const Color(0xFFFFD54F), const Color(0x33FFD54F));
+        return (
+          const Color(0xFF2C2210),
+          const Color(0xFFFFD54F),
+          const Color(0xFFFFD54F),
+          const Color(0x33FFD54F),
+        );
       case CustomDiceType.frostShard:
-        return (const Color(0xFF101C2C), const Color(0xFF00E5FF), const Color(0xFF00E5FF), const Color(0x3300E5FF));
+        return (
+          const Color(0xFF101C2C),
+          const Color(0xFF00E5FF),
+          const Color(0xFF00E5FF),
+          const Color(0x3300E5FF),
+        );
       case CustomDiceType.moltenAmber:
-        return (const Color(0xFF2C1010), const Color(0xFFFF3D00), const Color(0xFFFF3D00), const Color(0x33FF3D00));
+        return (
+          const Color(0xFF2C1010),
+          const Color(0xFFFF3D00),
+          const Color(0xFFFF3D00),
+          const Color(0x33FF3D00),
+        );
       case CustomDiceType.voidPurple:
-        return (const Color(0xFF1F102C), const Color(0xFFD500F9), const Color(0xFFD500F9), const Color(0x33D500F9));
+        return (
+          const Color(0xFF1F102C),
+          const Color(0xFFD500F9),
+          const Color(0xFFD500F9),
+          const Color(0x33D500F9),
+        );
       case CustomDiceType.toxicOoze:
-        return (const Color(0xFF102C13), const Color(0xFF00E676), const Color(0xFF00E676), const Color(0x3300E676));
+        return (
+          const Color(0xFF102C13),
+          const Color(0xFF00E676),
+          const Color(0xFF00E676),
+          const Color(0x3300E676),
+        );
       case CustomDiceType.themeDefault:
-        return (const Color(0xFF161413), flair.primary, flair.primary, flair.primary.withValues(alpha: 0.3));
+        return (
+          const Color(0xFF161413),
+          flair.primary,
+          flair.primary,
+          flair.primary.withValues(alpha: 0.3),
+        );
     }
   }
 
@@ -556,11 +666,12 @@ class _SettingsTabState extends State<SettingsTab> {
               filterQuality: FilterQuality.none,
               cacheWidth: 72,
               cacheHeight: 72,
-              errorBuilder: (_, __, ___) => const Icon(
-                Icons.cancel_presentation_rounded,
-                size: 28,
-                color: Colors.redAccent,
-              ),
+              errorBuilder:
+                  (_, __, ___) => const Icon(
+                    Icons.cancel_presentation_rounded,
+                    size: 28,
+                    color: Colors.redAccent,
+                  ),
             ),
             const SizedBox(width: 12),
             const GoopText(
@@ -609,11 +720,7 @@ class _SettingsTabState extends State<SettingsTab> {
         child: Row(
           children: [
             const SizedBox(width: 14),
-            const Icon(
-              Icons.restart_alt,
-              size: 28,
-              color: Colors.deepOrange,
-            ),
+            const Icon(Icons.restart_alt, size: 28, color: Colors.deepOrange),
             const SizedBox(width: 12),
             const GoopText(
               'RESET DATA',
@@ -644,11 +751,19 @@ class _SettingsTabState extends State<SettingsTab> {
     String player2Name,
     bool mpActive,
   ) {
-    final iconColor = mpActive
-        ? Colors.greenAccent
-        : (hasCoop ? Colors.pinkAccent : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5));
+    final iconColor =
+        mpActive
+            ? Colors.greenAccent
+            : (hasCoop
+                ? Colors.pinkAccent
+                : Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.5));
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.md),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.lg,
+        vertical: Insets.md,
+      ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -820,7 +935,11 @@ class _CollapsibleCardState extends State<_CollapsibleCard>
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Row(
                 children: [
-                  Icon(widget.icon, size: 18, color: accentColor.withValues(alpha: 0.8)),
+                  Icon(
+                    widget.icon,
+                    size: 18,
+                    color: accentColor.withValues(alpha: 0.8),
+                  ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: GoopText(
@@ -853,9 +972,10 @@ class _CollapsibleCardState extends State<_CollapsibleCard>
               child: widget.child,
             ),
             secondChild: const SizedBox.shrink(),
-            crossFadeState: _expanded
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
+            crossFadeState:
+                _expanded
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
             duration: const Duration(milliseconds: 200),
           ),
         ],

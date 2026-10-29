@@ -22,39 +22,47 @@ import '../paradox/chat_sheet.dart';
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
 void confirmClearInventoryDialog(
-    BuildContext context, RunProvider p, PlayerSlot slot) {
+  BuildContext context,
+  RunProvider p,
+  PlayerSlot slot,
+) {
   final player = slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
   if (player == null || player.character == null) return;
   final name = player.character!.name;
 
   showDialog(
     context: context,
-    builder: (c) => AlertDialog(
-      icon: const Icon(Icons.delete_sweep_rounded, color: Colors.redAccent),
-      title: GoopText("Clear $name's inventory?"),
-      content: const GoopText(
-        'Removes all guns and items except their starter loadout. '
-        'Coolness, curse, and shrine status are unchanged.',
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(c),
-          child: const GoopText('Cancel'),
+    builder:
+        (c) => AlertDialog(
+          icon: const Icon(Icons.delete_sweep_rounded, color: Colors.redAccent),
+          title: GoopText("Clear $name's inventory?"),
+          content: const GoopText(
+            'Removes all guns and items except their starter loadout. '
+            'Coolness, curse, and shrine status are unchanged.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(c),
+              child: const GoopText('Cancel'),
+            ),
+            FilledButton.tonal(
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.red.shade900,
+              ),
+              onPressed: () {
+                p.clearInventory(slot: slot);
+                Navigator.pop(c);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: GoopText("$name's items cleared!"),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+              child: const GoopText('Clear Inventory'),
+            ),
+          ],
         ),
-        FilledButton.tonal(
-          style: FilledButton.styleFrom(backgroundColor: Colors.red.shade900),
-          onPressed: () {
-            p.clearInventory(slot: slot);
-            Navigator.pop(c);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: GoopText("$name's items cleared!"),
-              duration: const Duration(seconds: 1),
-            ));
-          },
-          child: const GoopText('Clear Inventory'),
-        ),
-      ],
-    ),
   );
 }
 
@@ -76,8 +84,7 @@ class EffectsTileState extends State<EffectsTile> {
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final state = p.runState;
-    final player =
-        widget.slot == PlayerSlot.main ? state.main : state.coop;
+    final player = widget.slot == PlayerSlot.main ? state.main : state.coop;
     if (player == null) return const SizedBox.shrink();
     final scan = EffectTagger.scan(guns: player.guns, items: player.items);
     final tags = scan.keys.toList();
@@ -91,16 +98,19 @@ class EffectsTileState extends State<EffectsTile> {
           children: [
             // Header bar — always visible, single compact line.
             InkWell(
-              onTap: totalTags == 0
-                  ? null
-                  : () => setState(() => _expanded = !_expanded),
+              onTap:
+                  totalTags == 0
+                      ? null
+                      : () => setState(() => _expanded = !_expanded),
               child: Padding(
-                padding:
-                    const EdgeInsets.fromLTRB(12, 10, 6, 10),
+                padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
                 child: Row(
                   children: [
-                    const Icon(Icons.auto_awesome,
-                        color: Colors.amber, size: 18),
+                    const Icon(
+                      Icons.auto_awesome,
+                      color: Colors.amber,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     const GoopText(
                       'Effects',
@@ -113,11 +123,14 @@ class EffectsTileState extends State<EffectsTile> {
                     const SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 7, vertical: 1),
+                        horizontal: 7,
+                        vertical: 1,
+                      ),
                       decoration: BoxDecoration(
-                        color: totalTags == 0
-                            ? Colors.white.withValues(alpha: 0.05)
-                            : Colors.amber.withValues(alpha: 0.18),
+                        color:
+                            totalTags == 0
+                                ? Colors.white.withValues(alpha: 0.05)
+                                : Colors.amber.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -125,9 +138,10 @@ class EffectsTileState extends State<EffectsTile> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
-                          color: totalTags == 0
-                              ? Colors.white.withValues(alpha: 0.6)
-                              : Colors.amber,
+                          color:
+                              totalTags == 0
+                                  ? Colors.white.withValues(alpha: 0.6)
+                                  : Colors.amber,
                         ),
                       ),
                     ),
@@ -135,19 +149,27 @@ class EffectsTileState extends State<EffectsTile> {
                     if (totalTags > 0)
                       IconButton(
                         tooltip: 'Open detailed breakdown',
-                        icon: const Icon(Icons.open_in_new,
-                            size: 16, color: Colors.white54),
-                        onPressed: () => Navigator.push(
-                          context,
-                          fastRoute(EffectsSummaryScreen(slot: widget.slot)),
+                        icon: const Icon(
+                          Icons.open_in_new,
+                          size: 16,
+                          color: Colors.white54,
                         ),
+                        onPressed:
+                            () => Navigator.push(
+                              context,
+                              fastRoute(
+                                EffectsSummaryScreen(slot: widget.slot),
+                              ),
+                            ),
                       ),
                     if (totalTags > 0)
                       AnimatedRotation(
                         turns: _expanded ? 0.5 : 0,
                         duration: const Duration(milliseconds: 180),
-                        child: const Icon(Icons.expand_more,
-                            color: Colors.white54),
+                        child: const Icon(
+                          Icons.expand_more,
+                          color: Colors.white54,
+                        ),
                       )
                     else
                       Padding(
@@ -170,49 +192,56 @@ class EffectsTileState extends State<EffectsTile> {
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeOut,
               alignment: Alignment.topCenter,
-              child: _expanded && totalTags > 0
-                  ? Container(
-                      width: double.infinity,
-                      padding:
-                          const EdgeInsets.fromLTRB(12, 0, 12, 12),
-                      child: Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          for (final t in tags)
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 7, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: t.category.color
-                                    .withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                    color: t.category.color
-                                        .withValues(alpha: 0.35)),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(t.icon,
-                                      size: 12,
-                                      color: t.category.color),
-                                  const SizedBox(width: 4),
-                                  GoopText(
-                                    t.label,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w700,
-                                      color: t.category.color,
+              child:
+                  _expanded && totalTags > 0
+                      ? Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            for (final t in tags)
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 7,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: t.category.color.withValues(
+                                    alpha: 0.1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: t.category.color.withValues(
+                                      alpha: 0.35,
                                     ),
                                   ),
-                                ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      t.icon,
+                                      size: 12,
+                                      color: t.category.color,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    GoopText(
+                                      t.label,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w700,
+                                        color: t.category.color,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                        ],
-                      ),
-                    )
-                  : const SizedBox(width: double.infinity),
+                          ],
+                        ),
+                      )
+                      : const SizedBox(width: double.infinity),
             ),
           ],
         ),
@@ -230,34 +259,28 @@ class HeaderMenu extends StatelessWidget {
     final mpSession = context.watch<MpSession>();
     final mpActive = mpSession.isActive;
     return PopupMenuButton<String>(
-          tooltip: 'Run tools',
-          // Bigger gear icon — 44×44 hit target, 24px icon.
-          padding: EdgeInsets.zero,
-          offset: const Offset(0, 48),
-          child: Container(
-            width: 44,
-            height: 44,
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.06),
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-            ),
-            child: const Icon(Icons.tune_rounded, size: 24, color: Colors.white70),
-          ),
+      tooltip: 'Run tools',
+      // Bigger gear icon — 44×44 hit target, 24px icon.
+      padding: EdgeInsets.zero,
+      offset: const Offset(0, 48),
+      child: Container(
+        width: 44,
+        height: 44,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.06),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        child: const Icon(Icons.tune_rounded, size: 24, color: Colors.white70),
+      ),
       onSelected: (v) {
         switch (v) {
           case 'themes':
-            Navigator.push(
-              context,
-              fastRoute(const ExperienceStudioScreen()),
-            );
+            Navigator.push(context, fastRoute(const ExperienceStudioScreen()));
             break;
           case 'settings':
-            Navigator.push(
-              context,
-              fastRoute(const SettingsScreen()),
-            );
+            Navigator.push(context, fastRoute(const SettingsScreen()));
             break;
           case 'leave_mp':
             _confirmLeaveMp(context, mpSession);
@@ -269,10 +292,7 @@ class HeaderMenu extends StatelessWidget {
             confirmClearInventoryDialog(context, p, PlayerSlot.coop);
             break;
           case 'shrine':
-            Navigator.push(
-              context,
-              fastRoute(const ShrinePickerScreen()),
-            );
+            Navigator.push(context, fastRoute(const ShrinePickerScreen()));
             break;
           case 'dice':
             showDiceRollDialog(context);
@@ -286,8 +306,8 @@ class HeaderMenu extends StatelessWidget {
               isScrollControlled: true,
               backgroundColor: const Color(0xFF140B22),
               shape: const RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(18))),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+              ),
               builder: (_) => const SurpriseSheet(),
             );
             break;
@@ -296,132 +316,195 @@ class HeaderMenu extends StatelessWidget {
             break;
         }
       },
-      itemBuilder: (ctx) => [
-        // ── PANELS ──
-        _menuLabel('PANELS'),
-        _panelToggleItem(
-          ctx,
-          icon: Icons.auto_awesome,
-          label: 'Effects',
-          isOn: VisualPrefs.notifier.value.showEffectsPanel,
-          onToggle: () => VisualPrefs.setShowEffectsPanel(
-              !VisualPrefs.notifier.value.showEffectsPanel),
-        ),
-        _panelToggleItem(
-          ctx,
-          icon: Icons.view_agenda_rounded,
-          label: 'Panels',
-          isOn: VisualPrefs.notifier.value.showDashboards,
-          onToggle: () => VisualPrefs.setShowDashboards(
-              !VisualPrefs.notifier.value.showDashboards),
-        ),
+      itemBuilder:
+          (ctx) => [
+            // ── PANELS ──
+            _menuLabel('PANELS'),
+            _panelToggleItem(
+              ctx,
+              icon: Icons.auto_awesome,
+              label: 'Effects',
+              isOn: VisualPrefs.notifier.value.showEffectsPanel,
+              onToggle:
+                  () => VisualPrefs.setShowEffectsPanel(
+                    !VisualPrefs.notifier.value.showEffectsPanel,
+                  ),
+            ),
+            _panelToggleItem(
+              ctx,
+              icon: Icons.view_agenda_rounded,
+              label: 'Panels',
+              isOn: VisualPrefs.notifier.value.showDashboards,
+              onToggle:
+                  () => VisualPrefs.setShowDashboards(
+                    !VisualPrefs.notifier.value.showDashboards,
+                  ),
+            ),
 
-        // ── SHRINES ──
-        const PopupMenuItem(
-          value: 'shrine',
-          child: Row(children: [
-            Icon(Icons.temple_buddhist, size: 18, color: Colors.amberAccent),
-            SizedBox(width: 10),
-            GoopText('Shrines'),
-          ]),
-        ),
+            // ── SHRINES ──
+            const PopupMenuItem(
+              value: 'shrine',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.temple_buddhist,
+                    size: 18,
+                    color: Colors.amberAccent,
+                  ),
+                  SizedBox(width: 10),
+                  GoopText('Shrines'),
+                ],
+              ),
+            ),
 
-        // ── CODEX ──
-        const PopupMenuItem(
-          value: 'codex',
-          child: Row(children: [
-            Icon(Icons.menu_book_rounded, size: 18, color: Color(0xFF4DD0E1)),
-            SizedBox(width: 10),
-            GoopText('Codex'),
-          ]),
-        ),
+            // ── CODEX ──
+            const PopupMenuItem(
+              value: 'codex',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.menu_book_rounded,
+                    size: 18,
+                    color: Color(0xFF4DD0E1),
+                  ),
+                  SizedBox(width: 10),
+                  GoopText('Codex'),
+                ],
+              ),
+            ),
 
-        // ── DICE ──
-        const PopupMenuItem(
-          value: 'dice',
-          child: Row(children: [
-            Icon(Icons.casino_rounded, size: 18, color: Color(0xFFFFD54F)),
-            SizedBox(width: 10),
-            GoopText('Dice Roll'),
-          ]),
-        ),
+            // ── DICE ──
+            const PopupMenuItem(
+              value: 'dice',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.casino_rounded,
+                    size: 18,
+                    color: Color(0xFFFFD54F),
+                  ),
+                  SizedBox(width: 10),
+                  GoopText('Dice Roll'),
+                ],
+              ),
+            ),
 
-        // ── SURPRISE (MP only) ──
-        if (mpActive)
-          const PopupMenuItem(
-            value: 'surprise',
-            child: Row(children: [
-              Icon(Icons.auto_awesome_rounded, size: 18, color: Colors.amberAccent),
-              SizedBox(width: 10),
-              GoopText('Surprise'),
-            ]),
-          ),
+            // ── SURPRISE (MP only) ──
+            if (mpActive)
+              const PopupMenuItem(
+                value: 'surprise',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.auto_awesome_rounded,
+                      size: 18,
+                      color: Colors.amberAccent,
+                    ),
+                    SizedBox(width: 10),
+                    GoopText('Surprise'),
+                  ],
+                ),
+              ),
 
-        // ── MESSAGES (MP only) ──
-        if (mpActive)
-          const PopupMenuItem(
-            value: 'messages',
-            child: Row(children: [
-              Icon(Icons.chat_bubble_rounded,
-                  size: 18, color: Color(0xFFB388FF)),
-              SizedBox(width: 10),
-              GoopText('Messages'),
-            ]),
-          ),
+            // ── MESSAGES (MP only) ──
+            if (mpActive)
+              const PopupMenuItem(
+                value: 'messages',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.chat_bubble_rounded,
+                      size: 18,
+                      color: Color(0xFFB388FF),
+                    ),
+                    SizedBox(width: 10),
+                    GoopText('Messages'),
+                  ],
+                ),
+              ),
 
-        // ── RESET ──
-        _menuLabel('RESET'),
-        const PopupMenuItem(
-          value: 'reset_items_p1',
-          child: Row(children: [
-            Icon(Icons.restart_alt_rounded, size: 18, color: Colors.cyanAccent),
-            SizedBox(width: 10),
-            GoopText('Reset P1 Items'),
-          ]),
-        ),
-        if (p.runState.hasCoop)
-          const PopupMenuItem(
-            value: 'reset_items_p2',
-            child: Row(children: [
-              Icon(Icons.restart_alt_rounded, size: 18, color: Colors.pinkAccent),
-              SizedBox(width: 10),
-              GoopText('Reset P2 Items'),
-            ]),
-          ),
+            // ── RESET ──
+            _menuLabel('RESET'),
+            const PopupMenuItem(
+              value: 'reset_items_p1',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.restart_alt_rounded,
+                    size: 18,
+                    color: Colors.cyanAccent,
+                  ),
+                  SizedBox(width: 10),
+                  GoopText('Reset P1 Items'),
+                ],
+              ),
+            ),
+            if (p.runState.hasCoop)
+              const PopupMenuItem(
+                value: 'reset_items_p2',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.restart_alt_rounded,
+                      size: 18,
+                      color: Colors.pinkAccent,
+                    ),
+                    SizedBox(width: 10),
+                    GoopText('Reset P2 Items'),
+                  ],
+                ),
+              ),
 
-        // ── SESSION ──
-        if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
-          _menuLabel('SESSION'),
-          const PopupMenuItem(
-            value: 'leave_mp',
-            child: Row(children: [
-              Icon(Icons.bluetooth_disabled,
-                  size: 18, color: Colors.lightBlueAccent),
-              SizedBox(width: 10),
-              GoopText('Leave Multiplayer'),
-            ]),
-          ),
-        ],
+            // ── SESSION ──
+            if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
+              _menuLabel('SESSION'),
+              const PopupMenuItem(
+                value: 'leave_mp',
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.bluetooth_disabled,
+                      size: 18,
+                      color: Colors.lightBlueAccent,
+                    ),
+                    SizedBox(width: 10),
+                    GoopText('Leave Multiplayer'),
+                  ],
+                ),
+              ),
+            ],
 
-        // ── SETTINGS ──
-        _menuLabel('SETTINGS'),
-        const PopupMenuItem(
-          value: 'themes',
-          child: Row(children: [
-            Icon(Icons.palette_rounded, size: 18, color: Colors.pinkAccent),
-            SizedBox(width: 10),
-            GoopText('Themes'),
-          ]),
-        ),
-        const PopupMenuItem(
-          value: 'settings',
-          child: Row(children: [
-            Icon(Icons.settings_rounded, size: 18, color: Colors.cyanAccent),
-            SizedBox(width: 10),
-            GoopText('Settings'),
-          ]),
-        ),
-      ],
+            // ── SETTINGS ──
+            _menuLabel('SETTINGS'),
+            const PopupMenuItem(
+              value: 'themes',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.palette_rounded,
+                    size: 18,
+                    color: Colors.pinkAccent,
+                  ),
+                  SizedBox(width: 10),
+                  GoopText('Themes'),
+                ],
+              ),
+            ),
+            const PopupMenuItem(
+              value: 'settings',
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.settings_rounded,
+                    size: 18,
+                    color: Colors.cyanAccent,
+                  ),
+                  SizedBox(width: 10),
+                  GoopText('Settings'),
+                ],
+              ),
+            ),
+          ],
     );
   }
 
@@ -441,13 +524,17 @@ class HeaderMenu extends StatelessWidget {
       child: ListenableBuilder(
         listenable: VisualPrefs.notifier,
         builder: (_, __) {
-          final current = label == 'Effects'
-              ? VisualPrefs.notifier.value.showEffectsPanel
-              : VisualPrefs.notifier.value.showDashboards;
+          final current =
+              label == 'Effects'
+                  ? VisualPrefs.notifier.value.showEffectsPanel
+                  : VisualPrefs.notifier.value.showDashboards;
           return Row(
             children: [
-              Icon(icon, size: 18,
-                  color: current ? Colors.amberAccent : Colors.white38),
+              Icon(
+                icon,
+                size: 18,
+                color: current ? Colors.amberAccent : Colors.white38,
+              ),
               const SizedBox(width: 10),
               Expanded(child: GoopText(label)),
               // Wrap in a larger hit area (44×44 minimum touch target).
@@ -458,9 +545,14 @@ class HeaderMenu extends StatelessWidget {
                   onToggle();
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 8,
+                  ),
                   child: Icon(
-                    current ? Icons.radio_button_checked : Icons.radio_button_unchecked,
+                    current
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
                     size: 20,
                     color: current ? Colors.amberAccent : Colors.white38,
                   ),
@@ -506,37 +598,40 @@ class HeaderMenu extends StatelessWidget {
     final isSidekick = session.myRole == MpRole.sidekick;
     showDialog(
       context: context,
-      builder: (c) => AlertDialog(
-        icon: const Icon(Icons.bluetooth_disabled,
-            color: Colors.lightBlueAccent),
-        title: const GoopText('Leave Multiplayer?'),
-        content: GoopText(
-          isSidekick
-              ? 'Disconnects from the host. Your pre-multiplayer solo '
-                  'run (if any) will be restored. Items the host gave '
-                  'you during this session are not kept.'
-              : 'Disconnects from the sidekick. Your run continues '
-                  'locally with whatever you currently have.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(c),
-            child: const GoopText('Stay'),
+      builder:
+          (c) => AlertDialog(
+            icon: const Icon(
+              Icons.bluetooth_disabled,
+              color: Colors.lightBlueAccent,
+            ),
+            title: const GoopText('Leave Multiplayer?'),
+            content: GoopText(
+              isSidekick
+                  ? 'Disconnects from the host. Your pre-multiplayer solo '
+                      'run (if any) will be restored. Items the host gave '
+                      'you during this session are not kept.'
+                  : 'Disconnects from the sidekick. Your run continues '
+                      'locally with whatever you currently have.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(c),
+                child: const GoopText('Stay'),
+              ),
+              FilledButton.tonal(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.red.shade900,
+                ),
+                onPressed: () async {
+                  Navigator.pop(c);
+                  await session.cancel();
+                },
+                child: const GoopText('Leave'),
+              ),
+            ],
           ),
-          FilledButton.tonal(
-            style: FilledButton.styleFrom(
-                backgroundColor: Colors.red.shade900),
-            onPressed: () async {
-              Navigator.pop(c);
-              await session.cancel();
-            },
-            child: const GoopText('Leave'),
-          ),
-        ],
-      ),
     );
   }
-
 }
 
 class SectionHeaderSliver extends StatelessWidget {
@@ -556,7 +651,8 @@ class SectionHeaderSliver extends StatelessWidget {
   final InventoryDisplayMode? currentDisplayMode;
   final ValueChanged<Object>? onLayoutChanged;
 
-  const SectionHeaderSliver({super.key, 
+  const SectionHeaderSliver({
+    super.key,
     required this.title,
     required this.count,
     required this.icon,
@@ -606,7 +702,10 @@ class SectionHeaderSliver extends StatelessWidget {
               ),
               child: Text(
                 '$count',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const Spacer(),
@@ -638,11 +737,7 @@ class SectionHeaderSliver extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Icon(
-                          Icons.sort,
-                          size: 13,
-                          color: Colors.white54,
-                        ),
+                        const Icon(Icons.sort, size: 13, color: Colors.white54),
                       ],
                     ),
                   ),
@@ -652,7 +747,11 @@ class SectionHeaderSliver extends StatelessWidget {
               const SizedBox(width: 6),
               PopupMenuButton<Object>(
                 tooltip: 'Select layout style',
-                icon: Icon(getActiveLayoutIcon(), size: 18, color: Colors.white70),
+                icon: Icon(
+                  getActiveLayoutIcon(),
+                  size: 18,
+                  color: Colors.white70,
+                ),
                 offset: const Offset(0, 36),
                 color: const Color(0xFF232326),
                 shape: RoundedRectangleBorder(
@@ -660,39 +759,100 @@ class SectionHeaderSliver extends StatelessWidget {
                   side: const BorderSide(color: Colors.white10),
                 ),
                 onSelected: onLayoutChanged,
-                itemBuilder: (ctx) => [
-                  PopupMenuItem(
-                    value: InvView.list,
-                    child: Row(
-                      children: [
-                        Icon(Icons.view_list_rounded, size: 15, color: currentInvView == InvView.list ? Colors.amberAccent : Colors.white60),
-                        const SizedBox(width: 8),
-                        GoopText('List View', style: TextStyle(fontSize: 12, color: currentInvView == InvView.list ? Colors.amberAccent : Colors.white)),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuDivider(height: 1),
-                  PopupMenuItem(
-                    value: InventoryDisplayMode.classicPeriodic,
-                    child: Row(
-                      children: [
-                        Icon(Icons.grid_view_rounded, size: 15, color: (currentInvView == InvView.grid && currentDisplayMode == InventoryDisplayMode.classicPeriodic) ? Colors.amberAccent : Colors.white60),
-                        const SizedBox(width: 8),
-                        GoopText('Periodic Grid', style: TextStyle(fontSize: 12, color: (currentInvView == InvView.grid && currentDisplayMode == InventoryDisplayMode.classicPeriodic) ? Colors.amberAccent : Colors.white)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: InventoryDisplayMode.tacticalStats,
-                    child: Row(
-                      children: [
-                        Icon(Icons.assessment_outlined, size: 15, color: (currentInvView == InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white60),
-                        const SizedBox(width: 8),
-                        GoopText('Tactical Stats', style: TextStyle(fontSize: 12, color: (currentInvView == InvView.grid && currentDisplayMode == InventoryDisplayMode.tacticalStats) ? Colors.amberAccent : Colors.white)),
-                      ],
-                    ),
-                  ),
-                ],
+                itemBuilder:
+                    (ctx) => [
+                      PopupMenuItem(
+                        value: InvView.list,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.view_list_rounded,
+                              size: 15,
+                              color:
+                                  currentInvView == InvView.list
+                                      ? Colors.amberAccent
+                                      : Colors.white60,
+                            ),
+                            const SizedBox(width: 8),
+                            GoopText(
+                              'List View',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color:
+                                    currentInvView == InvView.list
+                                        ? Colors.amberAccent
+                                        : Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuDivider(height: 1),
+                      PopupMenuItem(
+                        value: InventoryDisplayMode.classicPeriodic,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.grid_view_rounded,
+                              size: 15,
+                              color:
+                                  (currentInvView == InvView.grid &&
+                                          currentDisplayMode ==
+                                              InventoryDisplayMode
+                                                  .classicPeriodic)
+                                      ? Colors.amberAccent
+                                      : Colors.white60,
+                            ),
+                            const SizedBox(width: 8),
+                            GoopText(
+                              'Periodic Grid',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color:
+                                    (currentInvView == InvView.grid &&
+                                            currentDisplayMode ==
+                                                InventoryDisplayMode
+                                                    .classicPeriodic)
+                                        ? Colors.amberAccent
+                                        : Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: InventoryDisplayMode.tacticalStats,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.assessment_outlined,
+                              size: 15,
+                              color:
+                                  (currentInvView == InvView.grid &&
+                                          currentDisplayMode ==
+                                              InventoryDisplayMode
+                                                  .tacticalStats)
+                                      ? Colors.amberAccent
+                                      : Colors.white60,
+                            ),
+                            const SizedBox(width: 8),
+                            GoopText(
+                              'Tactical Stats',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color:
+                                    (currentInvView == InvView.grid &&
+                                            currentDisplayMode ==
+                                                InventoryDisplayMode
+                                                    .tacticalStats)
+                                        ? Colors.amberAccent
+                                        : Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
               ),
             ],
           ],

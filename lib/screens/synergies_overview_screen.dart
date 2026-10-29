@@ -23,19 +23,21 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final all = p.getSynergiesByInventory();
-    final filtered = all
-        .map((group) {
-          final entries = _onlyActive
-              ? group.entries.where((e) => e.active).toList()
-              : group.entries;
-          return ItemSynergies(
-            itemName: group.itemName,
-            isGun: group.isGun,
-            entries: entries,
-          );
-        })
-        .where((g) => g.entries.isNotEmpty)
-        .toList();
+    final filtered =
+        all
+            .map((group) {
+              final entries =
+                  _onlyActive
+                      ? group.entries.where((e) => e.active).toList()
+                      : group.entries;
+              return ItemSynergies(
+                itemName: group.itemName,
+                isGun: group.isGun,
+                entries: entries,
+              );
+            })
+            .where((g) => g.entries.isNotEmpty)
+            .toList();
 
     final activeCount = all.fold<int>(
       0,
@@ -83,29 +85,29 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
             ),
           ),
           Expanded(
-            child: filtered.isEmpty
-                ? Center(
-                    child: GoopText(
-                      'No synergies for current inventory.',
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
+            child:
+                filtered.isEmpty
+                    ? Center(
+                      child: GoopText(
+                        'No synergies for current inventory.',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    )
+                    // Cap list width on tablets/big screens — long
+                    // full-bleed cards read poorly beyond ~760px.
+                    : Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 760),
+                        child: ListView.builder(
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+                          itemCount: filtered.length,
+                          itemBuilder:
+                              (c, i) => _ItemGroupCard(group: filtered[i]),
+                        ),
                       ),
                     ),
-                  )
-                // Cap list width on tablets/big screens — long
-                // full-bleed cards read poorly beyond ~760px.
-                : Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 760),
-                      child: ListView.builder(
-                        padding: const EdgeInsets.fromLTRB(
-                            12, 8, 12, 24),
-                        itemCount: filtered.length,
-                        itemBuilder: (c, i) =>
-                            _ItemGroupCard(group: filtered[i]),
-                      ),
-                    ),
-                  ),
           ),
         ],
       ),
@@ -138,9 +140,10 @@ class _ItemGroupCard extends StatelessWidget {
           '${group.entries.length} synergies'
           '${activeCount > 0 ? '  •  $activeCount active' : ''}',
           style: TextStyle(
-            color: activeCount > 0
-                ? Colors.amber
-                : Colors.white.withValues(alpha: 0.6),
+            color:
+                activeCount > 0
+                    ? Colors.amber
+                    : Colors.white.withValues(alpha: 0.6),
             fontSize: FontSizes.labelMedium,
           ),
         ),
@@ -161,14 +164,16 @@ class _SynergyRow extends StatelessWidget {
       margin: const EdgeInsets.only(top: 6),
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: status.active
-            ? Colors.amber.withValues(alpha: 0.08)
-            : Colors.white.withValues(alpha: 0.03),
+        color:
+            status.active
+                ? Colors.amber.withValues(alpha: 0.08)
+                : Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
-          color: status.active
-              ? Colors.amber.withValues(alpha: 0.5)
-              : Colors.white.withValues(alpha: 0.08),
+          color:
+              status.active
+                  ? Colors.amber.withValues(alpha: 0.5)
+                  : Colors.white.withValues(alpha: 0.08),
           width: 1.2,
         ),
       ),
@@ -209,26 +214,31 @@ class _SynergyRow extends StatelessWidget {
             Wrap(
               spacing: 8,
               runSpacing: 6,
-              children: status.missing
-                  .map((m) => Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.15),
+              children:
+                  status.missing
+                      .map(
+                        (m) => Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.04),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.15),
+                            ),
+                          ),
+                          child: GoopText(
+                            m,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: Colors.white70,
+                            ),
                           ),
                         ),
-                        child: GoopText(
-                          m,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ))
-                  .toList(),
+                      )
+                      .toList(),
             ),
           ],
           if (s.anyOf.isNotEmpty) ...[
@@ -284,79 +294,83 @@ class _AnyOfChips extends StatelessWidget {
     return Wrap(
       spacing: 6,
       runSpacing: 4,
-      children: names.map((n) {
-        final r = p.entityByName(n);
-        final gun = r.gun;
-        final item = r.item;
-        final resolvable = gun != null || item != null;
-        final isOwned = owned.contains(n.toLowerCase());
-        final iconPath = gun?.icon ?? item?.icon ?? '';
-        final quality = gun?.quality ?? item?.quality ?? '';
+      children:
+          names.map((n) {
+            final r = p.entityByName(n);
+            final gun = r.gun;
+            final item = r.item;
+            final resolvable = gun != null || item != null;
+            final isOwned = owned.contains(n.toLowerCase());
+            final iconPath = gun?.icon ?? item?.icon ?? '';
+            final quality = gun?.quality ?? item?.quality ?? '';
 
-        final body = Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-          decoration: BoxDecoration(
-            color: isOwned
-                ? Colors.amber.withValues(alpha: 0.15)
-                : Colors.white.withValues(alpha: 0.04),
-            borderRadius: BorderRadius.all(Radii.md),
-            border: Border.all(
-              color: isOwned
-                  ? Colors.amber.withValues(alpha: 0.5)
-                  : Colors.white.withValues(alpha: 0.15),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (resolvable && iconPath.isNotEmpty) ...[
-                Opacity(
-                  opacity: isOwned ? 1.0 : 0.55,
-                  child: GameIcon(
-                    assetPath: iconPath,
-                    fallback: gun != null
-                        ? Icons.gps_fixed
-                        : Icons.inventory_2_outlined,
-                    quality: quality,
-                    size: 18,
-                    showRing: false,
-                  ),
-                ),
-                const SizedBox(width: 4),
-              ],
-              GoopText(
-                n,
-                style: TextStyle(
-                  fontSize: FontSizes.labelMedium,
-                  color: isOwned ? Colors.white : Colors.white70,
+            final body = Container(
+              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+              decoration: BoxDecoration(
+                color:
+                    isOwned
+                        ? Colors.amber.withValues(alpha: 0.15)
+                        : Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.all(Radii.md),
+                border: Border.all(
+                  color:
+                      isOwned
+                          ? Colors.amber.withValues(alpha: 0.5)
+                          : Colors.white.withValues(alpha: 0.15),
                 ),
               ),
-              if (resolvable) ...[
-                const SizedBox(width: 2),
-                Icon(
-                  Icons.chevron_right,
-                  size: 13,
-                  color: isOwned ? Colors.amber : Colors.white38,
-                ),
-              ],
-            ],
-          ),
-        );
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (resolvable && iconPath.isNotEmpty) ...[
+                    Opacity(
+                      opacity: isOwned ? 1.0 : 0.55,
+                      child: GameIcon(
+                        assetPath: iconPath,
+                        fallback:
+                            gun != null
+                                ? Icons.gps_fixed
+                                : Icons.inventory_2_outlined,
+                        quality: quality,
+                        size: 18,
+                        showRing: false,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                  ],
+                  GoopText(
+                    n,
+                    style: TextStyle(
+                      fontSize: FontSizes.labelMedium,
+                      color: isOwned ? Colors.white : Colors.white70,
+                    ),
+                  ),
+                  if (resolvable) ...[
+                    const SizedBox(width: 2),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 13,
+                      color: isOwned ? Colors.amber : Colors.white38,
+                    ),
+                  ],
+                ],
+              ),
+            );
 
-        if (!resolvable) return body;
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.all(Radii.md),
-            onTap: () => Navigator.push(
-              context,
-              fastRoute(ItemDetailScreen(gun: gun, item: item)),
-            ),
-            child: body,
-          ),
-        );
-      }).toList(),
+            if (!resolvable) return body;
+            return Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.all(Radii.md),
+                onTap:
+                    () => Navigator.push(
+                      context,
+                      fastRoute(ItemDetailScreen(gun: gun, item: item)),
+                    ),
+                child: body,
+              ),
+            );
+          }).toList(),
     );
   }
 }

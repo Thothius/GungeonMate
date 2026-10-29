@@ -33,7 +33,8 @@ class ThemeOverlay extends StatefulWidget {
   State<ThemeOverlay> createState() => _ThemeOverlayState();
 }
 
-class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderStateMixin {
+class _ThemeOverlayState extends State<ThemeOverlay>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _touchTicker;
   final List<TouchParticle> _touchParticles = [];
   final math.Random _rng = math.Random();
@@ -51,23 +52,26 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _touchTicker = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..addListener(_onFrame)..repeat();
+    _touchTicker =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..addListener(_onFrame)
+          ..repeat();
 
     // Standard low-pass filter to smooth out gyroscope sways
-    _sensorSub = accelerometerEventStream().listen((event) {
-      final tx = -event.x.clamp(-10.0, 10.0);
-      final ty = event.y.clamp(-10.0, 10.0);
-      _smoothedTilt = Offset(
-        _smoothedTilt.dx + (tx - _smoothedTilt.dx) * 0.18,
-        _smoothedTilt.dy + (ty - _smoothedTilt.dy) * 0.18,
-      );
-      ThemeOverlay.tiltNotifier.value = _smoothedTilt;
-    }, onError: (_) {
-      // Graceful fallback for non-gyro devices (e.g. desktop/emulators)
-    });
+    _sensorSub = accelerometerEventStream().listen(
+      (event) {
+        final tx = -event.x.clamp(-10.0, 10.0);
+        final ty = event.y.clamp(-10.0, 10.0);
+        _smoothedTilt = Offset(
+          _smoothedTilt.dx + (tx - _smoothedTilt.dx) * 0.18,
+          _smoothedTilt.dy + (ty - _smoothedTilt.dy) * 0.18,
+        );
+        ThemeOverlay.tiltNotifier.value = _smoothedTilt;
+      },
+      onError: (_) {
+        // Graceful fallback for non-gyro devices (e.g. desktop/emulators)
+      },
+    );
   }
 
   @override
@@ -105,12 +109,14 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
         for (var i = 0; i < 5; i++) {
           final angle = _rng.nextDouble() * 2 * math.pi;
           final speed = 0.5 + _rng.nextDouble() * 1.5;
-          _touchParticles.add(TouchParticle(
-            pos: localPos,
-            vel: Offset(math.cos(angle) * speed, math.sin(angle) * speed),
-            color: colors[i % 2],
-            size: 3.0 + _rng.nextDouble() * 3.0,
-          ));
+          _touchParticles.add(
+            TouchParticle(
+              pos: localPos,
+              vel: Offset(math.cos(angle) * speed, math.sin(angle) * speed),
+              color: colors[i % 2],
+              size: 3.0 + _rng.nextDouble() * 3.0,
+            ),
+          );
         }
       });
     }
@@ -141,7 +147,8 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
             // galaxy background disappears the instant a run starts —
             // no 1-frame lag from a child-set ValueNotifier.
             final runProvider = context.watch<RunProvider>();
-            final isHomeScreen = runProvider.isLoading ||
+            final isHomeScreen =
+                runProvider.isLoading ||
                 runProvider.runState.selectedCharacter == null;
             // Keep the static notifier in sync for the touch-sparkle
             // guard below (which runs outside the build path).
@@ -150,232 +157,256 @@ class _ThemeOverlayState extends State<ThemeOverlay> with SingleTickerProviderSt
               ThemeOverlay.currentScreenIndex.value = desiredIndex;
             }
             final f = AppTheme.displayedFlair;
-          // Auto-glow: themes with a non-transparent glowPrimary get a
-          // subtle ambient glow even if the user hasn't manually enabled
-          // it. This ensures every themed mode "feels" alive out of the
-          // box. The user's explicit glowIntensity always overrides/
-          // enhances the auto-glow.
-          final themeHasGlow = f.glowPrimary.a > 0.01;
-          final autoGlowIntensity = themeHasGlow ? 0.15 : 0.0;
-          final effectiveUserGlow = prefs.glowIntensity > 0.001
-              ? prefs.glowIntensity
-              : autoGlowIntensity;
-          final showGlow = !reduceMotion && effectiveUserGlow > 0.001;
-          final userGlowColor = VisualPrefs.glowColors[prefs.glowColorIndex];
-          // 3x boost: user requested glow be more significant at 100%.
-          // Cap at 1.8 to prevent total washout while making max clearly visible.
-          final effectiveGlow = (effectiveUserGlow * 1.8).clamp(0.0, 1.8);
-          final gP = showGlow
-              ? _scaleAlpha(
-                  Color.lerp(f.glowPrimary, userGlowColor, 0.5) ?? f.glowPrimary,
-                  effectiveGlow,
-                )
-              : const Color(0x00000000);
-          final gS = showGlow
-              ? _scaleAlpha(
-                  Color.lerp(f.glowSecondary, userGlowColor, 0.5) ?? f.glowSecondary,
-                  effectiveGlow,
-                )
-              : const Color(0x00000000);
-          // ponytail: auto-bind particles to the active theme. Every visible
-          //           theme has a default preset in kThemeParticleDefaults. When
-          //           the user hasn't explicitly chosen a preset (still on
-          //           gungeonDust), the theme's default is used. Particles are
-          //           also auto-enabled for any theme with a non-dust default so
-          //           each theme shows its identity out of the box. An explicit
-          //           user preset choice is always respected.
-          final themeDefault = kThemeParticleDefaults[mode] ??
-              ParticlePreset.gungeonDust;
-          final userOnDefault = prefs.particlePreset == ParticlePreset.gungeonDust;
-          final effectivePreset = userOnDefault ? themeDefault : prefs.particlePreset;
-          final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
-          final particlesOn = !reduceMotion && (prefs.particlesEnabled || themeAutoOn);
-          // ponytail: color schema priority — explicit user schema > unicorn
-          // palette > preset default. themeMatch uses the active flair's
-          // primary/secondary/glow colors so particles always harmonize.
-          List<Color>? colorOverride;
-          if (prefs.particleColorSchema != ParticleColorSchema.presetDefault) {
-            if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
-              colorOverride = [f.primary, f.secondary, f.glowPrimary, f.headlineStat];
-            } else {
-              colorOverride = prefs.particleColorSchema.colors;
+            // Auto-glow: themes with a non-transparent glowPrimary get a
+            // subtle ambient glow even if the user hasn't manually enabled
+            // it. This ensures every themed mode "feels" alive out of the
+            // box. The user's explicit glowIntensity always overrides/
+            // enhances the auto-glow.
+            final themeHasGlow = f.glowPrimary.a > 0.01;
+            final autoGlowIntensity = themeHasGlow ? 0.15 : 0.0;
+            final effectiveUserGlow =
+                prefs.glowIntensity > 0.001
+                    ? prefs.glowIntensity
+                    : autoGlowIntensity;
+            final showGlow = !reduceMotion && effectiveUserGlow > 0.001;
+            final userGlowColor = VisualPrefs.glowColors[prefs.glowColorIndex];
+            // 3x boost: user requested glow be more significant at 100%.
+            // Cap at 1.8 to prevent total washout while making max clearly visible.
+            final effectiveGlow = (effectiveUserGlow * 1.8).clamp(0.0, 1.8);
+            final gP =
+                showGlow
+                    ? _scaleAlpha(
+                      Color.lerp(f.glowPrimary, userGlowColor, 0.5) ??
+                          f.glowPrimary,
+                      effectiveGlow,
+                    )
+                    : const Color(0x00000000);
+            final gS =
+                showGlow
+                    ? _scaleAlpha(
+                      Color.lerp(f.glowSecondary, userGlowColor, 0.5) ??
+                          f.glowSecondary,
+                      effectiveGlow,
+                    )
+                    : const Color(0x00000000);
+            // ponytail: auto-bind particles to the active theme. Every visible
+            //           theme has a default preset in kThemeParticleDefaults. When
+            //           the user hasn't explicitly chosen a preset (still on
+            //           gungeonDust), the theme's default is used. Particles are
+            //           also auto-enabled for any theme with a non-dust default so
+            //           each theme shows its identity out of the box. An explicit
+            //           user preset choice is always respected.
+            final themeDefault =
+                kThemeParticleDefaults[mode] ?? ParticlePreset.gungeonDust;
+            final userOnDefault =
+                prefs.particlePreset == ParticlePreset.gungeonDust;
+            final effectivePreset =
+                userOnDefault ? themeDefault : prefs.particlePreset;
+            final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
+            final particlesOn =
+                !reduceMotion && (prefs.particlesEnabled || themeAutoOn);
+            // ponytail: color schema priority — explicit user schema > unicorn
+            // palette > preset default. themeMatch uses the active flair's
+            // primary/secondary/glow colors so particles always harmonize.
+            List<Color>? colorOverride;
+            if (prefs.particleColorSchema !=
+                ParticleColorSchema.presetDefault) {
+              if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
+                colorOverride = [
+                  f.primary,
+                  f.secondary,
+                  f.glowPrimary,
+                  f.headlineStat,
+                ];
+              } else {
+                colorOverride = prefs.particleColorSchema.colors;
+              }
+            } else if (mode == AppThemeMode.unicorn) {
+              colorOverride = AppTheme.unicornPalette.particleColors;
             }
-          } else if (mode == AppThemeMode.unicorn) {
-            colorOverride = AppTheme.unicornPalette.particleColors;
-          }
-          // Typed particle system — the user-facing type + per-theme
-          // flavored schema + chaos/tilt physics flags replace the old
-          // 37-preset × 16-schema layer entirely.
-          final schemaColors =
-              particleSchemaColors(mode, prefs.particleSchemaIndex);
-          final typedCfg = typedParticleConfig(
-            ParticleType.values[prefs.particleTypeIndex],
-            schemaColors,
-            chaos: prefs.particleChaos,
-          );
-          final particleBackdropBg = !particlesOn
-              ? null
-              : ParticleField(
-                  preset: effectivePreset,
-                  config: typedCfg,
-                  tiltEnabled: prefs.particleTouch,
-                  count: prefs.particleCount,
-                  sizeScale: prefs.particleSizeScale,
-                  opacity: prefs.particleOpacity,
-                  glowOverride: prefs.particleGlowEffect,
-                  lineLinksOverride: prefs.particleLineLinks ? true : null,
-                  colorsOverride: colorOverride,
-                  bounce: prefs.particleBounce,
-                  speedMultiplier: prefs.particleSpeed.multiplier,
-                );
-          Widget content = widget.child;
-
-          // Apply visual customizer wrappers based on active Theme Mode!
-          if (!reduceMotion && mode == AppThemeMode.bulletHell) {
-            content = ElasticWobbleContainer(
-              intensity: 0.05,
-              speed: 0.6,
-              child: content,
+            // Typed particle system — the user-facing type + per-theme
+            // flavored schema + chaos/tilt physics flags replace the old
+            // 37-preset × 16-schema layer entirely.
+            final schemaColors = particleSchemaColors(
+              mode,
+              prefs.particleSchemaIndex,
             );
-          }
+            final typedCfg = typedParticleConfig(
+              ParticleType.values[prefs.particleTypeIndex],
+              schemaColors,
+              chaos: prefs.particleChaos,
+            );
+            final particleBackdropBg =
+                !particlesOn
+                    ? null
+                    : ParticleField(
+                      preset: effectivePreset,
+                      config: typedCfg,
+                      tiltEnabled: prefs.particleTouch,
+                      count: prefs.particleCount,
+                      sizeScale: prefs.particleSizeScale,
+                      opacity: prefs.particleOpacity,
+                      glowOverride: prefs.particleGlowEffect,
+                      lineLinksOverride: prefs.particleLineLinks ? true : null,
+                      colorsOverride: colorOverride,
+                      bounce: prefs.particleBounce,
+                      speedMultiplier: prefs.particleSpeed.multiplier,
+                    );
+            Widget content = widget.child;
 
-          return Listener(
-            onPointerDown: (event) {
-              if (ThemeOverlay.currentScreenIndex.value == 0) return;
-              _spawnTouchSparkles(event.position, prefs);
-            },
-            behavior: HitTestBehavior.translucent,
-            child: Stack(
-              children: [
-                // 0. Absolute Base Solid Background Color (since scaffolds are transparent)
-                Positioned.fill(
-                  child: Container(color: f.scaffold),
-                ),
+            // Apply visual customizer wrappers based on active Theme Mode!
+            if (!reduceMotion && mode == AppThemeMode.bulletHell) {
+              content = ElasticWobbleContainer(
+                intensity: 0.05,
+                speed: 0.6,
+                child: content,
+              );
+            }
 
-                // Home screen vortex animation removed — default to
-                // Minimalist. ThemeOverlay provides only the base color
-                // and themed layers (particles, glow, shader).
+            return Listener(
+              onPointerDown: (event) {
+                if (ThemeOverlay.currentScreenIndex.value == 0) return;
+                _spawnTouchSparkles(event.position, prefs);
+              },
+              behavior: HitTestBehavior.translucent,
+              child: Stack(
+                children: [
+                  // 0. Absolute Base Solid Background Color (since scaffolds are transparent)
+                  Positioned.fill(child: Container(color: f.scaffold)),
 
-                // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
-                // rain or dark neon fog. Sits behind particles but above the
-                // base background + video wallpaper. Opt-in via VisualPrefs.
-                if (!reduceMotion && prefs.shaderEnabled)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: AmbientShaderLayer(
-                        shader: prefs.shaderPreset == ShaderPreset.darkNeonFog
-                            ? AmbientShader.darkNeonFog
-                            : AmbientShader.digitalRain,
-                      ),
-                    ),
-                  ),
+                  // Home screen vortex animation removed — default to
+                  // Minimalist. ThemeOverlay provides only the base color
+                  // and themed layers (particles, glow, shader).
 
-                // 1b. Particles / Theme Backdrops (Background Layer)
-                if (particleBackdropBg != null)
-                  Positioned.fill(child: IgnorePointer(child: particleBackdropBg)),
-
-                // 1c. Ambient Glow — behind content so it glows behind panels,
-                //     not covering layered content on top.
-                if (showGlow)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: AmbientGlow(
-                        key: ValueKey('ambient_glow_${mode.index}'),
-                        primary: gP,
-                        secondary: gS,
-                        style: f.glowStyle,
-                        tertiary: f.headlineStat.withValues(alpha: 0.3),
-                      ),
-                    ),
-                  ),
-
-                // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
-                content,
-
-                // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: RadialGradient(
-                          center: Alignment.center,
-                          radius: 1.25,
-                          colors: [
-                            Colors.transparent,
-                            Colors.black.withValues(alpha: 0.05),
-                            Colors.black.withValues(alpha: 0.25),
-                            Colors.black.withValues(alpha: 0.48),
-                          ],
-                          stops: const [0.0, 0.45, 0.82, 1.0],
+                  // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
+                  // rain or dark neon fog. Sits behind particles but above the
+                  // base background + video wallpaper. Opt-in via VisualPrefs.
+                  if (!reduceMotion && prefs.shaderEnabled)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: AmbientShaderLayer(
+                          shader:
+                              prefs.shaderPreset == ShaderPreset.darkNeonFog
+                                  ? AmbientShader.darkNeonFog
+                                  : AmbientShader.digitalRain,
                         ),
                       ),
                     ),
-                  ),
-                ),
 
-                // 3.6. Enhanced Readability Scrim — when the Galaxy bg is
-                // active on the Home screen, lay down a semi-opaque dark veil
-                // so foreground cards, text, and panels stay crisp.
-                if (isHomeScreen)
+                  // 1b. Particles / Theme Backdrops (Background Layer)
+                  if (particleBackdropBg != null)
+                    Positioned.fill(
+                      child: IgnorePointer(child: particleBackdropBg),
+                    ),
+
+                  // 1c. Ambient Glow — behind content so it glows behind panels,
+                  //     not covering layered content on top.
+                  if (showGlow)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: AmbientGlow(
+                          key: ValueKey('ambient_glow_${mode.index}'),
+                          primary: gP,
+                          secondary: gS,
+                          style: f.glowStyle,
+                          tertiary: f.headlineStat.withValues(alpha: 0.3),
+                        ),
+                      ),
+                    ),
+
+                  // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
+                  content,
+
+                  // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
+                          gradient: RadialGradient(
+                            center: Alignment.center,
+                            radius: 1.25,
                             colors: [
-                              Colors.black.withValues(alpha: 0.22),
-                              Colors.black.withValues(alpha: 0.08),
-                              Colors.black.withValues(alpha: 0.14),
-                              Colors.black.withValues(alpha: 0.28),
+                              Colors.transparent,
+                              Colors.black.withValues(alpha: 0.05),
+                              Colors.black.withValues(alpha: 0.25),
+                              Colors.black.withValues(alpha: 0.48),
                             ],
-                            stops: const [0.0, 0.3, 0.6, 1.0],
+                            stops: const [0.0, 0.45, 0.82, 1.0],
                           ),
                         ),
                       ),
                     ),
                   ),
 
-                if (f.pageFrame)
-                  const Positioned.fill(
-                      child: IgnorePointer(child: PageFrame())),
-
-                // 4. Special Top-Edge Drip Overlay (Curseblaster / Oubliette themes)
-                if (mode == AppThemeMode.lordJammed)
-                  const Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: 60,
-                    child: IgnorePointer(
-                      child: EdgeDripWidget(
-                        color: Color(0x66990000), // Translucent Curse crimson drip
-                        dripCount: 5,
-                        maxDripHeight: 25.0,
-                        viscosity: 1.2,
-                      ),
-                    ),
-                  ),
-
-                if (!reduceMotion && !isHomeScreen && prefs.particlesEnabled && _touchParticles.isNotEmpty)
-                  Positioned.fill(
-                    child: IgnorePointer(
-                      child: RepaintBoundary(
-                        child: CustomPaint(
-                          painter: TouchParticlePainter(particles: _touchParticles),
+                  // 3.6. Enhanced Readability Scrim — when the Galaxy bg is
+                  // active on the Home screen, lay down a semi-opaque dark veil
+                  // so foreground cards, text, and panels stay crisp.
+                  if (isHomeScreen)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.black.withValues(alpha: 0.22),
+                                Colors.black.withValues(alpha: 0.08),
+                                Colors.black.withValues(alpha: 0.14),
+                                Colors.black.withValues(alpha: 0.28),
+                              ],
+                              stops: const [0.0, 0.3, 0.6, 1.0],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
-              ],
-            ),
-          );
-        },
-      );
-    },
-  );
-}
+                  if (f.pageFrame)
+                    const Positioned.fill(
+                      child: IgnorePointer(child: PageFrame()),
+                    ),
 
+                  // 4. Special Top-Edge Drip Overlay (Curseblaster / Oubliette themes)
+                  if (mode == AppThemeMode.lordJammed)
+                    const Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: 60,
+                      child: IgnorePointer(
+                        child: EdgeDripWidget(
+                          color: Color(
+                            0x66990000,
+                          ), // Translucent Curse crimson drip
+                          dripCount: 5,
+                          maxDripHeight: 25.0,
+                          viscosity: 1.2,
+                        ),
+                      ),
+                    ),
+
+                  if (!reduceMotion &&
+                      !isHomeScreen &&
+                      prefs.particlesEnabled &&
+                      _touchParticles.isNotEmpty)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: RepaintBoundary(
+                          child: CustomPaint(
+                            painter: TouchParticlePainter(
+                              particles: _touchParticles,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }

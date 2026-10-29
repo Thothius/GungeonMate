@@ -62,14 +62,13 @@ class EmoteSpriteCatalog {
     ]) {
       try {
         final raw = await rootBundle.loadString(spec.$2);
-        final list = (json.decode(raw) as List<dynamic>)
-            .cast<Map<String, dynamic>>();
+        final list =
+            (json.decode(raw) as List<dynamic>).cast<Map<String, dynamic>>();
         for (final j in list) {
           final name = j['name'] as String? ?? '';
           if (name.isEmpty) continue;
-          final path = spec.$1 == 'gun'
-              ? localGunIcon(name)
-              : localItemIcon(name);
+          final path =
+              spec.$1 == 'gun' ? localGunIcon(name) : localItemIcon(name);
           add(spec.$1, name, path);
         }
       } catch (_) {}
@@ -83,8 +82,8 @@ class EmoteSpriteCatalog {
     ]) {
       try {
         final raw = await rootBundle.loadString(spec.$2);
-        final list = (json.decode(raw) as List<dynamic>)
-            .cast<Map<String, dynamic>>();
+        final list =
+            (json.decode(raw) as List<dynamic>).cast<Map<String, dynamic>>();
         for (final j in list) {
           final name = j['name'] as String? ?? '';
           final icon = j['icon'] as String? ?? '';
@@ -97,15 +96,16 @@ class EmoteSpriteCatalog {
 
   /// Search helper for picker + `:autocomplete` — case-insensitive
   /// substring on label and key, capped for perf.
-  static List<EmoteSprite> search(String query,
-      {String? kind, int limit = 24}) {
+  static List<EmoteSprite> search(
+    String query, {
+    String? kind,
+    int limit = 24,
+  }) {
     final q = query.trim().toLowerCase();
     final out = <EmoteSprite>[];
     for (final s in _all) {
       if (kind != null && s.kind != kind) continue;
-      if (q.isEmpty ||
-          s.label.toLowerCase().contains(q) ||
-          s.key.contains(q)) {
+      if (q.isEmpty || s.label.toLowerCase().contains(q) || s.key.contains(q)) {
         out.add(s);
         if (out.length >= limit) break;
       }

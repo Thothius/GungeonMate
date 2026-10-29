@@ -26,7 +26,8 @@ void main() {
       var notified = 0;
       session.addListener(() => notified++);
       session.logEvent(
-          MpEvent.event(kind: 'system', from: 'Sys', text: 'hi', mine: false));
+        MpEvent.event(kind: 'system', from: 'Sys', text: 'hi', mine: false),
+      );
       expect(session.sessionEvents.length, 1);
       expect(session.sessionEvents.first.kind, 'system');
       expect(session.sessionEvents.first.text, 'hi');
@@ -36,8 +37,7 @@ void main() {
 
     test('logEvent caps history at 150 entries (oldest evicted)', () {
       for (var i = 0; i < 160; i++) {
-        session.logEvent(
-            MpEvent.chat(from: 'P', text: 'msg $i', mine: true));
+        session.logEvent(MpEvent.chat(from: 'P', text: 'msg $i', mine: true));
       }
       expect(session.sessionEvents.length, 150);
       // First ten should have been evicted — oldest is 'msg 10'.
@@ -56,7 +56,11 @@ void main() {
 
     test('MpEvent.event factory produces arbitrary kinds', () {
       final e = MpEvent.event(
-          kind: 'transfer', from: 'Me', text: 'Gun → Pal', mine: true);
+        kind: 'transfer',
+        from: 'Me',
+        text: 'Gun → Pal',
+        mine: true,
+      );
       expect(e.kind, 'transfer');
       expect(e.mine, true);
     });
@@ -119,8 +123,7 @@ void main() {
       expect(session.sessionEvents.single.mine, true);
     });
 
-    test('sendSurprise early-returns when not connected (no event)',
-        () async {
+    test('sendSurprise early-returns when not connected (no event)', () async {
       await session.sendSurprise(preset: 'poke', text: 'boop');
       // Guard: if (!_link.isConnected) return — runs BEFORE logEvent.
       expect(session.sessionEvents, isEmpty);
@@ -180,8 +183,7 @@ void main() {
       expect(notified, greaterThan(0));
     });
 
-    test('demo session accepts chat (events + messages append)',
-        () async {
+    test('demo session accepts chat (events + messages append)', () async {
       session.enableDemo();
       await session.sendChatMessage('demo chat');
       expect(session.chatMessages.single.text, 'demo chat');
@@ -200,7 +202,10 @@ void main() {
   group('Message round-trips — uncovered types', () {
     test('MpSessionMeta — runTitle/sessionNumber/paused round-trip', () {
       const meta = MpSessionMeta(
-          runTitle: 'Cursed Dragunfall', sessionNumber: 7, paused: true);
+        runTitle: 'Cursed Dragunfall',
+        sessionNumber: 7,
+        paused: true,
+      );
       final decoded = MpMessage.decode(meta.encode());
       expect(decoded, isA<MpSessionMeta>());
       final m = decoded as MpSessionMeta;
@@ -232,15 +237,16 @@ void main() {
 
     test('MpPause / MpResume — types decode (empty bodies)', () {
       expect(MpMessage.decode(const MpPause().encode()), isA<MpPause>());
-      expect(
-          MpMessage.decode(const MpResume().encode()), isA<MpResume>());
+      expect(MpMessage.decode(const MpResume().encode()), isA<MpResume>());
     });
 
     test('MpSharedStateDelta — deltas + shrine round-trip', () {
       const delta = MpSharedStateDelta(
-          coolnessDelta: 1.5, curseDelta: -2, shrineName: 'Cleanse');
-      final d =
-          MpMessage.decode(delta.encode()) as MpSharedStateDelta;
+        coolnessDelta: 1.5,
+        curseDelta: -2,
+        shrineName: 'Cleanse',
+      );
+      final d = MpMessage.decode(delta.encode()) as MpSharedStateDelta;
       expect(d.coolnessDelta, 1.5);
       expect(d.curseDelta, -2);
       expect(d.shrineName, 'Cleanse');
@@ -248,8 +254,7 @@ void main() {
 
     test('MpSharedStateDelta — absent shrineName round-trips', () {
       const delta = MpSharedStateDelta(coolnessDelta: 2);
-      final d =
-          MpMessage.decode(delta.encode()) as MpSharedStateDelta;
+      final d = MpMessage.decode(delta.encode()) as MpSharedStateDelta;
       expect(d.shrineName, isNull);
     });
   });

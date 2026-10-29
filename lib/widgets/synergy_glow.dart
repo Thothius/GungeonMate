@@ -25,8 +25,7 @@ import 'package:flutter/material.dart';
 int synergyEffectFor(String name) => name.hashCode.abs() % 10;
 
 /// Returned for API compatibility.
-Duration synergyEffectDuration(int idx) =>
-    const Duration(milliseconds: 500);
+Duration synergyEffectDuration(int idx) => const Duration(milliseconds: 500);
 
 /// Returned for API compatibility.
 bool synergyEffectReverse(int idx) => false;
@@ -86,13 +85,14 @@ class SynergyGlowOverlay extends StatelessWidget {
             child: RepaintBoundary(
               child: AnimatedBuilder(
                 animation: controller,
-                builder: (_, __) => CustomPaint(
-                  painter: _SynergyBorderPainter(
-                    color: color,
-                    t: controller.value,
-                    radius: radius,
-                  ),
-                ),
+                builder:
+                    (_, __) => CustomPaint(
+                      painter: _SynergyBorderPainter(
+                        color: color,
+                        t: controller.value,
+                        radius: radius,
+                      ),
+                    ),
               ),
             ),
           ),
@@ -131,20 +131,22 @@ class _SynergyBorderPainter extends CustomPainter {
 
     // Draw 1: outer halo — thick stroke + outer blur (the glow that extends
     // beyond the border). Alpha and blur radius breathe with the pulse.
-    final glowPaint = Paint()
-      ..color = color.withValues(alpha: 0.12 + 0.22 * pulse)
-      ..maskFilter = MaskFilter.blur(BlurStyle.outer, 6 + 8 * pulse)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.0;
+    final glowPaint =
+        Paint()
+          ..color = color.withValues(alpha: 0.12 + 0.22 * pulse)
+          ..maskFilter = MaskFilter.blur(BlurStyle.outer, 6 + 8 * pulse)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3.0;
 
     canvas.drawRRect(rrect, glowPaint);
 
     // Draw 2: crisp inner border — thin stroke, no blur. The visible
     // border line itself. Alpha breathes so the border "lives".
-    final borderPaint = Paint()
-      ..color = color.withValues(alpha: 0.40 + 0.35 * pulse)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4;
+    final borderPaint =
+        Paint()
+          ..color = color.withValues(alpha: 0.40 + 0.35 * pulse)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.4;
 
     canvas.drawRRect(rrect, borderPaint);
   }

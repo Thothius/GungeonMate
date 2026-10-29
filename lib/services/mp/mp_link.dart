@@ -7,7 +7,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../models/multiplayer_messages.dart';
 import 'mp_transport.dart';
 
-export 'mp_transport.dart' show MpEndpoint, AutoConnectMode, AutoConnectModeNone, AutoConnectModeAny;
+export 'mp_transport.dart'
+    show MpEndpoint, AutoConnectMode, AutoConnectModeNone, AutoConnectModeAny;
 
 /// Transport layer — thin, event-driven wrapper over `nearby_connections`.
 ///
@@ -118,14 +119,13 @@ class MpLink implements MpTransport {
   /// Fold one RTT sample into the EWMA health score. Sub-150ms links
   /// read as perfect; score decays to ~0 at 2s round-trip.
   void _sampleRtt(int rttMs) {
-    final raw = rttMs <= 150
-        ? 100.0
-        : rttMs >= 2000
+    final raw =
+        rttMs <= 150
+            ? 100.0
+            : rttMs >= 2000
             ? 0.0
             : (1.0 - (rttMs - 150) / 1850.0) * 100.0;
-    _healthEwma = _healthPrimed
-        ? _healthEwma * 0.65 + raw * 0.35
-        : raw;
+    _healthEwma = _healthPrimed ? _healthEwma * 0.65 + raw * 0.35 : raw;
     _healthPrimed = true;
     _publishHealth();
   }
@@ -165,7 +165,8 @@ class MpLink implements MpTransport {
       Permission.locationWhenInUse,
     ];
     final results = await needed.request();
-    final bt = results[Permission.bluetoothScan] == PermissionStatus.granted &&
+    final bt =
+        results[Permission.bluetoothScan] == PermissionStatus.granted &&
         results[Permission.bluetoothConnect] == PermissionStatus.granted;
     // On Android 12+ (API 31+), nearby_wifi_devices replaces
     // locationWhenInUse for Wi-Fi direct discovery. If the user granted
@@ -287,14 +288,16 @@ class MpLink implements MpTransport {
       }
       if (!_discovering || !_discoveryActive) return;
       // Pause discovery for the off duration, then resume.
-      unawaited(_pauseDiscovery().then((_) {
-        if (!_discoveryActive) return;
-        _discoveryOffTimer?.cancel();
-        _discoveryOffTimer = Timer(_discoveryOff, () {
+      unawaited(
+        _pauseDiscovery().then((_) {
           if (!_discoveryActive) return;
-          _resumeDiscovery();
-        });
-      }));
+          _discoveryOffTimer?.cancel();
+          _discoveryOffTimer = Timer(_discoveryOff, () {
+            if (!_discoveryActive) return;
+            _resumeDiscovery();
+          });
+        }),
+      );
     });
   }
 
@@ -431,8 +434,9 @@ class MpLink implements MpTransport {
         }
         // sendMessage rethrows on failure — catch it so the
         // unawaited future doesn't become an unhandled async error.
-        sendMessage(MpPing(DateTime.now().millisecondsSinceEpoch))
-            .catchError((Object _) {});
+        sendMessage(
+          MpPing(DateTime.now().millisecondsSinceEpoch),
+        ).catchError((Object _) {});
         // Check for timeout.
         final silentMs =
             DateTime.now().millisecondsSinceEpoch - _lastPeerTouchMs;
@@ -448,7 +452,9 @@ class MpLink implements MpTransport {
           _connectionInFlight = false;
           _resetHealth();
           if (id != null) {
-            unawaited(_nearby.disconnectFromEndpoint(id).catchError((Object _) {}));
+            unawaited(
+              _nearby.disconnectFromEndpoint(id).catchError((Object _) {}),
+            );
           }
           onDisconnected?.call();
         } else if (silentMs > _heartbeatIntervalSec * 1600) {
@@ -471,8 +477,9 @@ class MpLink implements MpTransport {
   void restartHeartbeat() {
     if (!isConnected) return;
     _startHeartbeat();
-    sendMessage(MpPing(DateTime.now().millisecondsSinceEpoch))
-        .catchError((Object _) {});
+    sendMessage(
+      MpPing(DateTime.now().millisecondsSinceEpoch),
+    ).catchError((Object _) {});
   }
 
   // ── Nearby callbacks ──────────────────────────────────────────
@@ -505,19 +512,21 @@ class MpLink implements MpTransport {
     if (_connectionRequestIds.contains(id)) return;
     _connectionRequestIds.add(id);
     _connectionInFlight = true; // Pause discovery loop.
-    unawaited(_nearby
-        .requestConnection(
-          _nickname,
-          id,
-          onConnectionInitiated: _onConnectionInitiated,
-          onConnectionResult: _onConnectionResult,
-          onDisconnected: _onDisconnected,
-        )
-        .catchError((Object e) {
-      _connectionRequestIds.remove(id);
-      _connectionInFlight = false; // Resume discovery loop.
-      return false;
-    }));
+    unawaited(
+      _nearby
+          .requestConnection(
+            _nickname,
+            id,
+            onConnectionInitiated: _onConnectionInitiated,
+            onConnectionResult: _onConnectionResult,
+            onDisconnected: _onDisconnected,
+          )
+          .catchError((Object e) {
+            _connectionRequestIds.remove(id);
+            _connectionInFlight = false; // Resume discovery loop.
+            return false;
+          }),
+    );
   }
 
   void _onEndpointLost(String? id) {
@@ -533,12 +542,14 @@ class MpLink implements MpTransport {
     // Guard: reject if already connected to another peer.
     if (_endpointId != null && _endpointId != id) return;
     // Auto-accept — both users already chose to play.
-    unawaited(_nearby
-        .acceptConnection(id, onPayLoadRecieved: _onPayloadReceived)
-        .catchError((Object e) {
-      onError?.call('acceptConnection failed: $e');
-      return false;
-    }));
+    unawaited(
+      _nearby
+          .acceptConnection(id, onPayLoadRecieved: _onPayloadReceived)
+          .catchError((Object e) {
+            onError?.call('acceptConnection failed: $e');
+            return false;
+          }),
+    );
   }
 
   void _onConnectionResult(String id, Status status) {

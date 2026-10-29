@@ -26,6 +26,7 @@ import 'package:flutter/painting.dart' show Color;
 /// active theme, just like a system status LED.
 class MpColors {
   const MpColors._();
+
   /// Connected / success state — used for checkmarks, link icons,
   /// "Connection restored" snackbars, and the connected portrait pair.
   static const Color connected = Color(0xFF00E676);
@@ -329,7 +330,7 @@ final class MpPing extends MpMessage {
   @override
   Map<String, dynamic> toJson() => {'ts': tsMs};
   factory MpPing.fromJson(Map<String, dynamic> j) =>
-    MpPing((j['ts'] as num?)?.toInt() ?? 0);
+      MpPing((j['ts'] as num?)?.toInt() ?? 0);
 }
 
 final class MpPong extends MpMessage {
@@ -340,7 +341,7 @@ final class MpPong extends MpMessage {
   @override
   Map<String, dynamic> toJson() => {'ts': tsMs};
   factory MpPong.fromJson(Map<String, dynamic> j) =>
-    MpPong((j['ts'] as num?)?.toInt() ?? 0);
+      MpPong((j['ts'] as num?)?.toInt() ?? 0);
 }
 
 /// Dice Roll Challenge: Sent to initiate a dice challenge.
@@ -453,11 +454,11 @@ final class MpSharedStateDelta extends MpMessage {
   };
 
   factory MpSharedStateDelta.fromJson(Map<String, dynamic> j) =>
-    MpSharedStateDelta(
-      coolnessDelta: (j['coolnessDelta'] as num?)?.toDouble() ?? 0,
-      curseDelta: (j['curseDelta'] as num?)?.toDouble() ?? 0,
-      shrineName: j['shrineName'] as String?,
-    );
+      MpSharedStateDelta(
+        coolnessDelta: (j['coolnessDelta'] as num?)?.toDouble() ?? 0,
+        curseDelta: (j['curseDelta'] as num?)?.toDouble() ?? 0,
+        shrineName: j['shrineName'] as String?,
+      );
 }
 
 // =============================================================================
@@ -559,6 +560,7 @@ final class MpSurprise extends MpMessage {
   final String preset;
   final String text;
   final String spriteKey;
+
   /// Extra fullscreen effect — 'bulletrain' | 'heartsburst' | 'explosion'
   /// (empty = preset's own fx). Wire-additive: old peers ignore it.
   final String fx;
@@ -575,17 +577,16 @@ final class MpSurprise extends MpMessage {
 
   @override
   Map<String, dynamic> toJson() => {
-        'preset': preset,
-        if (text.isNotEmpty) 'text': text,
-        if (spriteKey.isNotEmpty) 'spriteKey': spriteKey,
-        if (fx.isNotEmpty) 'fx': fx,
-      };
+    'preset': preset,
+    if (text.isNotEmpty) 'text': text,
+    if (spriteKey.isNotEmpty) 'spriteKey': spriteKey,
+    if (fx.isNotEmpty) 'fx': fx,
+  };
 
   factory MpSurprise.fromJson(Map<String, dynamic> j) => MpSurprise(
     preset: j['preset'] as String? ?? 'custom',
     text: j['text'] as String? ?? '',
-    spriteKey:
-        (j['spriteKey'] ?? j['sprite']) as String? ?? '',
+    spriteKey: (j['spriteKey'] ?? j['sprite']) as String? ?? '',
     fx: j['fx'] as String? ?? '',
   );
 }
@@ -599,11 +600,7 @@ final class MpPeerEdit extends MpMessage {
   final String kind; // 'gun' | 'item'
   final String name;
 
-  const MpPeerEdit({
-    required this.op,
-    this.kind = '',
-    this.name = '',
-  });
+  const MpPeerEdit({required this.op, this.kind = '', this.name = ''});
 
   @override
   String get type => 'peerEdit';
@@ -622,7 +619,6 @@ final class MpPeerEdit extends MpMessage {
   );
 }
 
-
 /// A logged activity entry for the messages panel — chat, surprise,
 /// emote, transfer, or connect/disconnect note.
 class MpEvent {
@@ -632,16 +628,17 @@ class MpEvent {
   final bool mine;
   final DateTime ts;
 
-  MpEvent._(this.kind, this.from, this.text, this.mine)
-      : ts = DateTime.now();
+  MpEvent._(this.kind, this.from, this.text, this.mine) : ts = DateTime.now();
 
-  factory MpEvent.chat(
-          {required String from, required String text, required bool mine}) =>
-      MpEvent._('chat', from, text, mine);
-  factory MpEvent.event(
-          {required String kind,
-          required String from,
-          required String text,
-          required bool mine}) =>
-      MpEvent._(kind, from, text, mine);
+  factory MpEvent.chat({
+    required String from,
+    required String text,
+    required bool mine,
+  }) => MpEvent._('chat', from, text, mine);
+  factory MpEvent.event({
+    required String kind,
+    required String from,
+    required String text,
+    required bool mine,
+  }) => MpEvent._(kind, from, text, mine);
 }

@@ -286,42 +286,27 @@ void main() {
   group('MpMessage decode error handling', () {
     test('Unknown type throws FormatException', () {
       final bytes = _encodeJson({'type': 'totallyFake'});
-      expect(
-        () => MpMessage.decode(bytes),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => MpMessage.decode(bytes), throwsA(isA<FormatException>()));
     });
 
     test('Missing type field throws FormatException', () {
       final bytes = _encodeJson({'role': 'main'});
-      expect(
-        () => MpMessage.decode(bytes),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => MpMessage.decode(bytes), throwsA(isA<FormatException>()));
     });
 
     test('Non-object root throws FormatException', () {
       final bytes = _encodeJson([1, 2, 3]);
-      expect(
-        () => MpMessage.decode(bytes),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => MpMessage.decode(bytes), throwsA(isA<FormatException>()));
     });
 
     test('Malformed JSON throws', () {
       final bytes = _rawBytes('not json at all');
-      expect(
-        () => MpMessage.decode(bytes),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => MpMessage.decode(bytes), throwsA(isA<FormatException>()));
     });
 
     test('Empty bytes throws', () {
       final bytes = _rawBytes('');
-      expect(
-        () => MpMessage.decode(bytes),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => MpMessage.decode(bytes), throwsA(isA<FormatException>()));
     });
   });
 
@@ -337,10 +322,7 @@ void main() {
     });
 
     test('Unknown role string throws FormatException', () {
-      expect(
-        () => MpRoleWire.parse('admin'),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => MpRoleWire.parse('admin'), throwsA(isA<FormatException>()));
     });
   });
 }
@@ -350,5 +332,4 @@ void main() {
 Uint8List _encodeJson(Object obj) =>
     Uint8List.fromList(utf8.encode(jsonEncode(obj)));
 
-Uint8List _rawBytes(String s) =>
-    Uint8List.fromList(utf8.encode(s));
+Uint8List _rawBytes(String s) => Uint8List.fromList(utf8.encode(s));

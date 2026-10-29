@@ -74,158 +74,197 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
-    final player = widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
-    if (player == null) return const SliverToBoxAdapter(child: SizedBox.shrink());
+    final player =
+        widget.slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
+    if (player == null)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
 
     final ownedGunNames = player.guns.map((g) => g.name.toLowerCase()).toSet();
-    final ownedItemNames = player.items.map((i) => i.name.toLowerCase()).toSet();
+    final ownedItemNames =
+        player.items.map((i) => i.name.toLowerCase()).toSet();
     final charName = player.character?.name.toLowerCase() ?? '';
 
     final tabs = <_DashboardTab>[];
 
     if (charName.contains('robot')) {
-      tabs.add(_DashboardTab(
-        label: 'Robot',
-        iconPath: localGungeoneerIcon('The Robot'),
-        color: Colors.greenAccent,
-        widget: const RobotDashboardSliver(),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Robot',
+          iconPath: localGungeoneerIcon('The Robot'),
+          color: Colors.greenAccent,
+          widget: const RobotDashboardSliver(),
+        ),
+      );
     }
     if (charName.contains('hunter')) {
-      tabs.add(_DashboardTab(
-        label: 'Huntress',
-        iconPath: localGungeoneerIcon('The Hunter'),
-        color: Colors.amberAccent,
-        widget: const HuntressDashboardSliver(),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Huntress',
+          iconPath: localGungeoneerIcon('The Hunter'),
+          color: Colors.amberAccent,
+          widget: const HuntressDashboardSliver(),
+        ),
+      );
     }
     if (ownedItemNames.any((n) => n.contains('ser junkan'))) {
-      tabs.add(_DashboardTab(
-        label: 'Junkan',
-        iconPath: localItemIcon('Ser Junkan 1'),
-        color: Colors.tealAccent,
-        widget: JunkanDashboardSliver(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Junkan',
+          iconPath: localItemIcon('Ser Junkan 1'),
+          color: Colors.tealAccent,
+          widget: JunkanDashboardSliver(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('gunderfury')) {
-      tabs.add(_DashboardTab(
-        label: 'Gunderfury',
-        iconPath: localGunIcon('Gunderfury'),
-        color: Colors.purpleAccent,
-        widget: GunderfuryDashboardSliver(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Gunderfury',
+          iconPath: localGunIcon('Gunderfury'),
+          color: Colors.purpleAccent,
+          widget: GunderfuryDashboardSliver(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('triple gun')) {
-      tabs.add(_DashboardTab(
-        label: 'Triple Gun',
-        iconPath: localGunIcon('Triple Gun'),
-        color: Colors.blueAccent,
-        widget: TripleGunDashboardSliver(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Triple Gun',
+          iconPath: localGunIcon('Triple Gun'),
+          color: Colors.blueAccent,
+          widget: TripleGunDashboardSliver(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('evolver')) {
-      tabs.add(_DashboardTab(
-        label: 'Evolver',
-        iconPath: localGunIcon('Evolver'),
-        color: Colors.greenAccent,
-        widget: EvolverDashboardSliver(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Evolver',
+          iconPath: localGunIcon('Evolver'),
+          color: Colors.greenAccent,
+          widget: EvolverDashboardSliver(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('shellegun')) {
-      tabs.add(_DashboardTab(
-        label: 'Shellegun',
-        iconPath: localGunIcon('Shellegun'),
-        color: Colors.cyanAccent,
-        widget: ShellegunDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Shellegun',
+          iconPath: localGunIcon('Shellegun'),
+          color: Colors.cyanAccent,
+          widget: ShellegunDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('chamber gun')) {
-      tabs.add(_DashboardTab(
-        label: 'Chamber Gun',
-        iconPath: localGunIcon('Chamber Gun'),
-        color: Colors.amberAccent,
-        widget: ChamberGunDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Chamber Gun',
+          iconPath: localGunIcon('Chamber Gun'),
+          color: Colors.amberAccent,
+          widget: ChamberGunDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedItemNames.contains('platinum bullets')) {
-      tabs.add(_DashboardTab(
-        label: 'Platinum',
-        iconPath: localItemIcon('Platinum Bullets'),
-        color: Colors.white70,
-        widget: PlatinumBulletsDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Platinum',
+          iconPath: localItemIcon('Platinum Bullets'),
+          color: Colors.white70,
+          widget: PlatinumBulletsDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedItemNames.contains('iron coin')) {
-      tabs.add(_DashboardTab(
-        label: 'Iron Coin',
-        iconPath: localItemIcon('Iron Coin'),
-        color: Colors.amber,
-        widget: IronCoinDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Iron Coin',
+          iconPath: localItemIcon('Iron Coin'),
+          color: Colors.amber,
+          widget: IronCoinDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedItemNames.contains('spice')) {
-      tabs.add(_DashboardTab(
-        label: 'Spice',
-        iconPath: localItemIcon('Spice'),
-        color: Colors.redAccent,
-        widget: SpiceDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Spice',
+          iconPath: localItemIcon('Spice'),
+          color: Colors.redAccent,
+          widget: SpiceDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedItemNames.contains('metronome')) {
-      tabs.add(_DashboardTab(
-        label: 'Metronome',
-        iconPath: localItemIcon('Metronome'),
-        color: Colors.purpleAccent,
-        widget: MetronomeDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Metronome',
+          iconPath: localItemIcon('Metronome'),
+          color: Colors.purpleAccent,
+          widget: MetronomeDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedItemNames.contains('sprun')) {
-      tabs.add(_DashboardTab(
-        label: 'Sprun',
-        iconPath: localItemIcon('Sprun'),
-        color: Colors.cyanAccent,
-        widget: SprunDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Sprun',
+          iconPath: localItemIcon('Sprun'),
+          color: Colors.cyanAccent,
+          widget: SprunDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('boxing glove')) {
-      tabs.add(_DashboardTab(
-        label: 'Boxing Glove',
-        iconPath: localGunIcon('Boxing Glove'),
-        color: Colors.redAccent,
-        widget: BoxingGloveDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Boxing Glove',
+          iconPath: localGunIcon('Boxing Glove'),
+          color: Colors.redAccent,
+          widget: BoxingGloveDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedItemNames.contains('cigarettes')) {
-      tabs.add(_DashboardTab(
-        label: 'Cigarettes',
-        iconPath: localItemIcon('Cigarettes'),
-        color: Colors.orangeAccent,
-        widget: CigarettesDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Cigarettes',
+          iconPath: localItemIcon('Cigarettes'),
+          color: Colors.orangeAccent,
+          widget: CigarettesDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('polaris')) {
-      tabs.add(_DashboardTab(
-        label: 'Polaris',
-        iconPath: localGunIcon('Polaris'),
-        color: Colors.blueAccent,
-        widget: PolarisDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Polaris',
+          iconPath: localGunIcon('Polaris'),
+          color: Colors.blueAccent,
+          widget: PolarisDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedGunNames.contains('gunther')) {
-      tabs.add(_DashboardTab(
-        label: 'Gunther',
-        iconPath: localGunIcon('Gunther'),
-        color: Colors.purpleAccent,
-        widget: GuntherDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Gunther',
+          iconPath: localGunIcon('Gunther'),
+          color: Colors.purpleAccent,
+          widget: GuntherDashboard(slot: widget.slot),
+        ),
+      );
     }
     if (ownedItemNames.contains('gun soul')) {
-      tabs.add(_DashboardTab(
-        label: 'Gun Soul',
-        iconPath: localItemIcon('Gun Soul'),
-        color: Colors.greenAccent,
-        widget: GunSoulDashboard(slot: widget.slot),
-      ));
+      tabs.add(
+        _DashboardTab(
+          label: 'Gun Soul',
+          iconPath: localItemIcon('Gun Soul'),
+          color: Colors.greenAccent,
+          widget: GunSoulDashboard(slot: widget.slot),
+        ),
+      );
     }
 
     if (tabs.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
@@ -251,7 +290,6 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
           decoration: BoxDecoration(
             color: AppTheme.flair.scaffold.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(14),
-
           ),
           child: Column(
             children: [
@@ -292,20 +330,21 @@ class _DashboardSwiperState extends State<DashboardSwiper> {
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
                 curve: Curves.easeOutCubic,
-                child: _collapsed
-                    ? const SizedBox.shrink()
-                    : Padding(
-                        padding: const EdgeInsets.fromLTRB(2, 0, 2, 2),
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          switchInCurve: Curves.easeOut,
-                          switchOutCurve: Curves.easeIn,
-                          child: KeyedSubtree(
-                            key: ValueKey(_selectedIndex),
-                            child: extractChild(tabs[_selectedIndex].widget),
+                child:
+                    _collapsed
+                        ? const SizedBox.shrink()
+                        : Padding(
+                          padding: const EdgeInsets.fromLTRB(2, 0, 2, 2),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 200),
+                            switchInCurve: Curves.easeOut,
+                            switchOutCurve: Curves.easeIn,
+                            child: KeyedSubtree(
+                              key: ValueKey(_selectedIndex),
+                              child: extractChild(tabs[_selectedIndex].widget),
+                            ),
                           ),
                         ),
-                      ),
               ),
             ],
           ),
@@ -336,25 +375,28 @@ class _DashboardTabChip extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         decoration: BoxDecoration(
-          color: isActive
-              ? color.withValues(alpha: 0.18)
-              : color.withValues(alpha: 0.06),
+          color:
+              isActive
+                  ? color.withValues(alpha: 0.18)
+                  : color.withValues(alpha: 0.06),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isActive
-                ? color.withValues(alpha: 0.7)
-                : color.withValues(alpha: 0.25),
+            color:
+                isActive
+                    ? color.withValues(alpha: 0.7)
+                    : color.withValues(alpha: 0.25),
             width: isActive ? 1.4 : 0.8,
           ),
-          boxShadow: isActive
-              ? [
-                  BoxShadow(
-                    color: color.withValues(alpha: 0.12),
-                    blurRadius: 6,
-                    spreadRadius: 1,
-                  ),
-                ]
-              : null,
+          boxShadow:
+              isActive
+                  ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.12),
+                      blurRadius: 6,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                  : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -368,11 +410,9 @@ class _DashboardTabChip extends StatelessWidget {
                 filterQuality: FilterQuality.none,
                 cacheWidth: 36,
                 cacheHeight: 36,
-                errorBuilder: (_, __, ___) => Icon(
-                  Icons.dashboard_outlined,
-                  size: 16,
-                  color: color,
-                ),
+                errorBuilder:
+                    (_, __, ___) =>
+                        Icon(Icons.dashboard_outlined, size: 16, color: color),
               )
             else
               Icon(Icons.dashboard_outlined, size: 16, color: color),
@@ -382,9 +422,7 @@ class _DashboardTabChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11 * Responsive.factor(context),
                 fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
-                color: isActive
-                    ? color
-                    : color.withValues(alpha: 0.6),
+                color: isActive ? color : color.withValues(alpha: 0.6),
                 letterSpacing: 0.3,
               ),
             ),

@@ -34,7 +34,9 @@ abstract final class Radii {
   static const Radius lg = Radius.circular(16);
 
   static const BorderRadius card = BorderRadius.all(md);
-  static const BorderRadius sheet = BorderRadius.vertical(top: Radius.circular(24));
+  static const BorderRadius sheet = BorderRadius.vertical(
+    top: Radius.circular(24),
+  );
   static const BorderRadius pill = BorderRadius.all(Radius.circular(999));
 }
 
@@ -166,11 +168,20 @@ abstract final class TypeScale {
 TextTheme buildAppTextTheme(ColorScheme scheme) {
   return TextTheme(
     displaySmall: TypeScale.displaySmall.copyWith(color: scheme.onSurface),
-    displayMedium: TypeScale.displaySmall.copyWith(color: scheme.onSurface, fontSize: 36),
-    displayLarge: TypeScale.displaySmall.copyWith(color: scheme.onSurface, fontSize: 40),
+    displayMedium: TypeScale.displaySmall.copyWith(
+      color: scheme.onSurface,
+      fontSize: 36,
+    ),
+    displayLarge: TypeScale.displaySmall.copyWith(
+      color: scheme.onSurface,
+      fontSize: 40,
+    ),
     headlineSmall: TypeScale.headlineSmall.copyWith(color: scheme.onSurface),
     headlineMedium: TypeScale.headlineMedium.copyWith(color: scheme.onSurface),
-    headlineLarge: TypeScale.headlineMedium.copyWith(color: scheme.onSurface, fontSize: 32),
+    headlineLarge: TypeScale.headlineMedium.copyWith(
+      color: scheme.onSurface,
+      fontSize: 32,
+    ),
     titleSmall: TypeScale.titleSmall.copyWith(color: scheme.onSurface),
     titleMedium: TypeScale.titleMedium.copyWith(color: scheme.onSurface),
     titleLarge: TypeScale.titleLarge.copyWith(color: scheme.onSurface),

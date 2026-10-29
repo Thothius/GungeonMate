@@ -12,14 +12,11 @@ class StatAdjusterSheet extends StatelessWidget {
   final bool isCool;
   const StatAdjusterSheet({super.key, required this.isCool});
 
-
   @override
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final value = isCool ? p.runState.coolness : p.runState.curse;
-    final accent = isCool
-        ? const Color(0xFF29B6F6)
-        : const Color(0xFFD32F2F);
+    final accent = isCool ? const Color(0xFF29B6F6) : const Color(0xFFD32F2F);
     final label = isCool ? 'Coolness' : 'Curse';
     final icon = isCool ? Icons.ac_unit : Icons.warning_amber_rounded;
 
@@ -123,7 +120,9 @@ class StatAdjusterSheet extends StatelessWidget {
                         }
                       },
                       style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: Insets.lg),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Insets.lg,
+                        ),
                         foregroundColor: Colors.white60,
                         side: BorderSide(
                           color: Colors.white.withValues(alpha: 0.12),
@@ -187,7 +186,10 @@ class CoolnessSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               onTap: onTap,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 8,
+                ),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(10),
@@ -261,7 +263,11 @@ class CoolnessSheet extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.ac_unit_rounded, color: accent, size: 18),
+                          const Icon(
+                            Icons.ac_unit_rounded,
+                            color: accent,
+                            size: 18,
+                          ),
                           const SizedBox(width: 6),
                           const GoopText(
                             'COOLNESS',
@@ -298,15 +304,27 @@ class CoolnessSheet extends StatelessWidget {
                   children: [
                     _bigStepButton(Icons.add_rounded, () => apply(1), accent),
                     const SizedBox(height: 6),
-                    _bigStepButton(Icons.remove_rounded, () => apply(-1), accent),
+                    _bigStepButton(
+                      Icons.remove_rounded,
+                      () => apply(-1),
+                      accent,
+                    ),
                   ],
                 ),
                 const SizedBox(width: 6),
                 Column(
                   children: [
-                    _bigStepButton(Icons.add_rounded, () => apply(0.5), accent.withValues(alpha: 0.7)),
+                    _bigStepButton(
+                      Icons.add_rounded,
+                      () => apply(0.5),
+                      accent.withValues(alpha: 0.7),
+                    ),
                     const SizedBox(height: 6),
-                    _bigStepButton(Icons.remove_rounded, () => apply(-0.5), accent.withValues(alpha: 0.7)),
+                    _bigStepButton(
+                      Icons.remove_rounded,
+                      () => apply(-0.5),
+                      accent.withValues(alpha: 0.7),
+                    ),
                   ],
                 ),
               ],
@@ -319,9 +337,21 @@ class CoolnessSheet extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                _coolEffectChip('CD SPEEDUP', '+${rechargeReduction.toStringAsFixed(0)}%', accent),
-                _coolEffectChip('FUSE REDUCTION', '${fuseReduction.toStringAsFixed(1)}%', accent),
-                _coolEffectChip('ROOM REWARD', '${roomReward.toStringAsFixed(0)}%', Colors.amber),
+                _coolEffectChip(
+                  'CD SPEEDUP',
+                  '+${rechargeReduction.toStringAsFixed(0)}%',
+                  accent,
+                ),
+                _coolEffectChip(
+                  'FUSE REDUCTION',
+                  '${fuseReduction.toStringAsFixed(1)}%',
+                  accent,
+                ),
+                _coolEffectChip(
+                  'ROOM REWARD',
+                  '${roomReward.toStringAsFixed(0)}%',
+                  Colors.amber,
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -390,7 +420,10 @@ class CoolnessSheet extends StatelessWidget {
   /// big number. 44×44 touch target.
   Widget _bigStepButton(IconData icon, VoidCallback onTap, Color color) {
     return GestureDetector(
-      onTap: () { onTap(); Haptics.selection(); },
+      onTap: () {
+        onTap();
+        Haptics.selection();
+      },
       child: Container(
         width: 40,
         height: 40,
@@ -414,9 +447,24 @@ class CoolnessSheet extends StatelessWidget {
       ),
       child: Column(
         children: [
-          GoopText(val, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w900, color: color)),
+          GoopText(
+            val,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+              color: color,
+            ),
+          ),
           const SizedBox(height: 2),
-          GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+          GoopText(
+            label,
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w700,
+              color: color.withValues(alpha: 0.7),
+              letterSpacing: 0.3,
+            ),
+          ),
         ],
       ),
     );
@@ -454,7 +502,10 @@ class CurseSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               onTap: onTap,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 8,
+                ),
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(10),
@@ -523,7 +574,11 @@ class CurseSheet extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.warning_amber_rounded, color: accent, size: 18),
+                          const Icon(
+                            Icons.warning_amber_rounded,
+                            color: accent,
+                            size: 18,
+                          ),
                           const SizedBox(width: 6),
                           const GoopText(
                             'CURSE',
@@ -560,15 +615,27 @@ class CurseSheet extends StatelessWidget {
                   children: [
                     _bigStepButton(Icons.add_rounded, () => apply(1), accent),
                     const SizedBox(height: 6),
-                    _bigStepButton(Icons.remove_rounded, () => apply(-1), accent),
+                    _bigStepButton(
+                      Icons.remove_rounded,
+                      () => apply(-1),
+                      accent,
+                    ),
                   ],
                 ),
                 const SizedBox(width: 6),
                 Column(
                   children: [
-                    _bigStepButton(Icons.add_rounded, () => apply(0.5), accent.withValues(alpha: 0.7)),
+                    _bigStepButton(
+                      Icons.add_rounded,
+                      () => apply(0.5),
+                      accent.withValues(alpha: 0.7),
+                    ),
                     const SizedBox(height: 6),
-                    _bigStepButton(Icons.remove_rounded, () => apply(-0.5), accent.withValues(alpha: 0.7)),
+                    _bigStepButton(
+                      Icons.remove_rounded,
+                      () => apply(-0.5),
+                      accent.withValues(alpha: 0.7),
+                    ),
                   ],
                 ),
               ],
@@ -576,66 +643,94 @@ class CurseSheet extends StatelessWidget {
             const SizedBox(height: 12),
 
             // Curse meter bar — visual 0-10 scale
-            Builder(builder: (context) {
-              final clamped = value.clamp(0.0, 10.0);
-              final pct = clamped / 10.0;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: SizedBox(
-                      height: 8,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.06),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                          FractionallySizedBox(
-                            widthFactor: pct,
-                            child: Container(
+            Builder(
+              builder: (context) {
+                final clamped = value.clamp(0.0, 10.0);
+                final pct = clamped / 10.0;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: SizedBox(
+                        height: 8,
+                        child: Stack(
+                          children: [
+                            Container(
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    accent.withValues(alpha: 0.5),
-                                    accent,
-                                  ],
-                                ),
+                                color: Colors.white.withValues(alpha: 0.06),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                             ),
-                          ),
-                          Row(
-                            children: List.generate(11, (i) => Expanded(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  width: 1,
-                                  height: 8,
-                                  color: Colors.white.withValues(alpha: 0.12),
+                            FractionallySizedBox(
+                              widthFactor: pct,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      accent.withValues(alpha: 0.5),
+                                      accent,
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(6),
                                 ),
                               ),
-                            )),
-                          ),
-                        ],
+                            ),
+                            Row(
+                              children: List.generate(
+                                11,
+                                (i) => Expanded(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      width: 1,
+                                      height: 8,
+                                      color: Colors.white.withValues(
+                                        alpha: 0.12,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('0', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
-                      Text('5', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
-                      Text('10', style: TextStyle(fontSize: FontSizes.labelSmall, color: Colors.white.withValues(alpha: 0.35), fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ],
-              );
-            }),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '0',
+                          style: TextStyle(
+                            fontSize: FontSizes.labelSmall,
+                            color: Colors.white.withValues(alpha: 0.35),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          '5',
+                          style: TextStyle(
+                            fontSize: FontSizes.labelSmall,
+                            color: Colors.white.withValues(alpha: 0.35),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          '10',
+                          style: TextStyle(
+                            fontSize: FontSizes.labelSmall,
+                            color: Colors.white.withValues(alpha: 0.35),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            ),
             const SizedBox(height: 14),
 
             // Section label
@@ -652,65 +747,149 @@ class CurseSheet extends StatelessWidget {
               ),
             ),
             // 3×2 grid of effect chips
-            Builder(builder: (context) {
-              final currentIdx = value.floor().clamp(0, 10);
-              final row = curseTable[currentIdx];
-              Widget effectChip(String label, String val, Color color) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.all(Radii.sm),
-                  border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
-                ),
-                child: Column(
+            Builder(
+              builder: (context) {
+                final currentIdx = value.floor().clamp(0, 10);
+                final row = curseTable[currentIdx];
+                Widget effectChip(String label, String val, Color color) =>
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.all(Radii.sm),
+                        border: Border.all(
+                          color: color.withValues(alpha: 0.30),
+                          width: 0.7,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          GoopText(
+                            val,
+                            style: TextStyle(
+                              fontSize: FontSizes.bodyMedium,
+                              fontWeight: FontWeight.w900,
+                              color: color,
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          GoopText(
+                            label,
+                            style: TextStyle(
+                              fontSize: FontSizes.labelSmall,
+                              fontWeight: FontWeight.w700,
+                              color: color.withValues(alpha: 0.7),
+                              letterSpacing: 0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                return Row(
                   children: [
-                    GoopText(val, style: TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.w900, color: color)),
-                    const SizedBox(height: 3),
-                    GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                    Expanded(
+                      child: effectChip(
+                        'JAMMED',
+                        row.jammedEnemy,
+                        Colors.deepOrangeAccent,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: effectChip(
+                        'JAM BOSS',
+                        row.jammedBoss,
+                        Colors.deepOrangeAccent,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: effectChip(
+                        'MIMIC',
+                        row.mimicChance,
+                        Colors.redAccent,
+                      ),
+                    ),
                   ],
-                ),
-              );
-              return Row(
-                children: [
-                  Expanded(child: effectChip('JAMMED', row.jammedEnemy, Colors.deepOrangeAccent)),
-                  const SizedBox(width: 6),
-                  Expanded(child: effectChip('JAM BOSS', row.jammedBoss, Colors.deepOrangeAccent)),
-                  const SizedBox(width: 6),
-                  Expanded(child: effectChip('MIMIC', row.mimicChance, Colors.redAccent)),
-                ],
-              );
-            }),
+                );
+              },
+            ),
             const SizedBox(height: 6),
-            Builder(builder: (context) {
-              final currentIdx = value.floor().clamp(0, 10);
-              final row = curseTable[currentIdx];
-              final coolness = p.runState.totalCoolness;
-              final roomReward = (1 + coolness - value).clamp(-50, 100);
-              Widget effectChip(String label, String val, Color color) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.all(Radii.sm),
-                  border: Border.all(color: color.withValues(alpha: 0.30), width: 0.7),
-                ),
-                child: Column(
+            Builder(
+              builder: (context) {
+                final currentIdx = value.floor().clamp(0, 10);
+                final row = curseTable[currentIdx];
+                final coolness = p.runState.totalCoolness;
+                final roomReward = (1 + coolness - value).clamp(-50, 100);
+                Widget effectChip(String label, String val, Color color) =>
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: color.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.all(Radii.sm),
+                        border: Border.all(
+                          color: color.withValues(alpha: 0.30),
+                          width: 0.7,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          GoopText(
+                            val,
+                            style: TextStyle(
+                              fontSize: FontSizes.bodyMedium,
+                              fontWeight: FontWeight.w900,
+                              color: color,
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          GoopText(
+                            label,
+                            style: TextStyle(
+                              fontSize: FontSizes.labelSmall,
+                              fontWeight: FontWeight.w700,
+                              color: color.withValues(alpha: 0.7),
+                              letterSpacing: 0.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                return Row(
                   children: [
-                    GoopText(val, style: TextStyle(fontSize: FontSizes.bodyMedium, fontWeight: FontWeight.w900, color: color)),
-                    const SizedBox(height: 3),
-                    GoopText(label, style: TextStyle(fontSize: FontSizes.labelSmall, fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.7), letterSpacing: 0.3)),
+                    Expanded(
+                      child: effectChip(
+                        'FUSE',
+                        row.fuseChance,
+                        Colors.redAccent,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: effectChip(
+                        'ROOM',
+                        '${roomReward.toStringAsFixed(0)}%',
+                        Colors.amber,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: effectChip(
+                        'AMMO',
+                        row.ammo,
+                        Colors.lightGreenAccent,
+                      ),
+                    ),
                   ],
-                ),
-              );
-              return Row(
-                children: [
-                  Expanded(child: effectChip('FUSE', row.fuseChance, Colors.redAccent)),
-                  const SizedBox(width: 6),
-                  Expanded(child: effectChip('ROOM', '${roomReward.toStringAsFixed(0)}%', Colors.amber)),
-                  const SizedBox(width: 6),
-                  Expanded(child: effectChip('AMMO', row.ammo, Colors.lightGreenAccent)),
-                ],
-              );
-            }),
+                );
+              },
+            ),
             const SizedBox(height: 14),
 
             // Compact reset row — just reset, no duplicate +/- controls
@@ -775,7 +954,10 @@ class CurseSheet extends StatelessWidget {
   /// Big circular +/- button for inline stat adjustment.
   Widget _bigStepButton(IconData icon, VoidCallback onTap, Color color) {
     return GestureDetector(
-      onTap: () { onTap(); Haptics.selection(); },
+      onTap: () {
+        onTap();
+        Haptics.selection();
+      },
       child: Container(
         width: 40,
         height: 40,

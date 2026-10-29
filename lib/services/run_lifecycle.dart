@@ -22,8 +22,7 @@ class RunLifecycle {
   /// run. The dialog dismisses itself before [endRun] runs.
   static Future<void> confirmEndRun(BuildContext context) {
     final session = context.read<MpSession>();
-    final isSidekick =
-        session.isActive && session.myRole == MpRole.sidekick;
+    final isSidekick = session.isActive && session.myRole == MpRole.sidekick;
     return EndRunConfirmDialog.show(
       context,
       isSidekick: isSidekick,
@@ -43,8 +42,7 @@ class RunLifecycle {
   static Future<void> endRun(BuildContext context) async {
     final session = context.read<MpSession>();
     final p = context.read<RunProvider>();
-    Navigator.maybeOf(context, rootNavigator: true)
-        ?.popUntil((r) => r.isFirst);
+    Navigator.maybeOf(context, rootNavigator: true)?.popUntil((r) => r.isFirst);
     if (session.isActive) {
       await session.cancel();
     }

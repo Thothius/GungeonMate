@@ -45,9 +45,8 @@ class MpForegroundService {
       }
       await FlutterForegroundTask.startService(
         notificationTitle: 'Paradox session active',
-        notificationText: runTitle.isEmpty
-            ? 'Staying connected to your partner'
-            : runTitle,
+        notificationText:
+            runTitle.isEmpty ? 'Staying connected to your partner' : runTitle,
       );
       _running = true;
     } catch (_) {

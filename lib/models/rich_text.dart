@@ -149,14 +149,17 @@ class RichBullet {
   /// Flattened display text of this bullet's own tokens (sub-bullets not
   /// included) — text runs plus ref/synergy/ext labels. Used for content
   /// filters that need to inspect a bullet without rendering it.
-  String get plainText => tokens
-      .map((t) => switch (t) {
-            RichTextRun(:final text) => text,
-            RichRef(:final name) => name,
-            RichSynRef(:final synergyName) => synergyName,
-            RichExt(:final label) => label,
-          })
-      .join();
+  String get plainText =>
+      tokens
+          .map(
+            (t) => switch (t) {
+              RichTextRun(:final text) => text,
+              RichRef(:final name) => name,
+              RichSynRef(:final synergyName) => synergyName,
+              RichExt(:final label) => label,
+            },
+          )
+          .join();
 
   /// Whether this bullet references the *Exit the Gungeon* spin-off game.
   /// Case-sensitive on purpose: lowercase "exit the Gungeon" is the verb
@@ -278,10 +281,12 @@ class BackRefs {
     Map<String, List<String>> bucket(String key) {
       final raw = m[key];
       if (raw is! Map) return const {};
-      return raw.map((k, v) => MapEntry(
-            k.toString(),
-            (v as List).map((e) => e.toString()).toList(growable: false),
-          ));
+      return raw.map(
+        (k, v) => MapEntry(
+          k.toString(),
+          (v as List).map((e) => e.toString()).toList(growable: false),
+        ),
+      );
     }
 
     return BackRefs(

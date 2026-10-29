@@ -7,8 +7,11 @@ void main() {
   test('roll() produces a non-empty two-word name', () {
     final name = RunNameGenerator.roll();
     expect(name.trim(), isNotEmpty);
-    expect(name.trim().contains(' '), true,
-        reason: 'expected adjective+noun form, got "$name"');
+    expect(
+      name.trim().contains(' '),
+      true,
+      reason: 'expected adjective+noun form, got "$name"',
+    );
   });
 
   test('500 rolls never crash and always produce names', () {

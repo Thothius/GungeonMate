@@ -60,9 +60,8 @@ class ThemedNumber extends StatelessWidget {
           fontWeight: f.numberWeight,
           fontStyle: f.numberStyle,
           color: color,
-          fontFeatures: f.tabularFigures
-              ? const [FontFeature.tabularFigures()]
-              : null,
+          fontFeatures:
+              f.tabularFigures ? const [FontFeature.tabularFigures()] : null,
           shadows: _shadowsFor(f),
         );
         Widget text = GoopText(value, style: style);
@@ -89,9 +88,7 @@ class ThemedNumber extends StatelessWidget {
           );
         }
 
-        if (f.glowCurse &&
-            role == ThemedNumberRole.curse &&
-            curseValue > 0) {
+        if (f.glowCurse && role == ThemedNumberRole.curse && curseValue > 0) {
           // Scale glow with curse value — clamp at ~8 so a legendary
           // curse stack doesn't bloom past readability.
           final t = (curseValue / 8).clamp(0.15, 1.0).toDouble();
@@ -121,7 +118,10 @@ class ThemedNumber extends StatelessWidget {
         }
 
         if (f.sparkleNumbers && role == ThemedNumberRole.headline) {
-          text = _SparkleOverlay(color: f.numberGlowColor ?? f.primary, child: text);
+          text = _SparkleOverlay(
+            color: f.numberGlowColor ?? f.primary,
+            child: text,
+          );
         }
 
         return text;
@@ -133,11 +133,7 @@ class ThemedNumber extends StatelessWidget {
     if (!f.embossNumbers) return null;
     return const [
       // Dark bottom edge + light top edge = engraved metal look.
-      Shadow(
-        offset: Offset(0, 1),
-        blurRadius: 0,
-        color: Color(0x99000000),
-      ),
+      Shadow(offset: Offset(0, 1), blurRadius: 0, color: Color(0x99000000)),
       Shadow(
         offset: Offset(0, -0.5),
         blurRadius: 0.5,
@@ -274,8 +270,7 @@ class _SparkleOverlayState extends State<_SparkleOverlay>
           children: [
             child!,
             // 4 sparkles at corners, each with a different phase offset.
-            for (int i = 0; i < 4; i++)
-              _buildSparkle(t, i),
+            for (int i = 0; i < 4; i++) _buildSparkle(t, i),
           ],
         );
       },

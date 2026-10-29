@@ -63,7 +63,8 @@ class _ParadoxBarState extends State<ParadoxBar> {
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
     final session = context.watch<MpSession>();
-    final reconnecting = session.phase == MpPhase.disconnected ||
+    final reconnecting =
+        session.phase == MpPhase.disconnected ||
         (session.phase == MpPhase.connecting &&
             session.connectReason == MpConnectReason.reconnecting);
     // Below ~460px the title + tabs + icons overflow — collapse to
@@ -116,9 +117,11 @@ class _ParadoxBarState extends State<ParadoxBar> {
                     ),
                     if (ParadoxBar.showTimer.value) ...[
                       SizedBox(width: 8 * sf),
-                      Icon(Icons.timer_outlined,
-                          size: 12 * sf,
-                          color: Colors.white.withValues(alpha: 0.4)),
+                      Icon(
+                        Icons.timer_outlined,
+                        size: 12 * sf,
+                        color: Colors.white.withValues(alpha: 0.4),
+                      ),
                       SizedBox(width: 3 * sf),
                       GoopText(
                         _fmtElapsed(session.runElapsedMs),
@@ -157,22 +160,24 @@ class _ParadoxBarState extends State<ParadoxBar> {
             ),
           // Player tabs
           _TabDot(
-            label: compact
-                ? (session.myRole == MpRole.main ? 'YOU' : 'P1')
-                : (session.myRole == MpRole.main
-                    ? 'YOU'
-                    : session.peerNickname ?? 'P1'),
+            label:
+                compact
+                    ? (session.myRole == MpRole.main ? 'YOU' : 'P1')
+                    : (session.myRole == MpRole.main
+                        ? 'YOU'
+                        : session.peerNickname ?? 'P1'),
             active: widget.currentPage == 0,
             onTap: () => widget.onPick(0),
             sf: sf,
             compact: compact,
           ),
           _TabDot(
-            label: compact
-                ? (session.myRole == MpRole.main ? 'P2' : 'YOU')
-                : (session.myRole == MpRole.main
-                    ? session.peerNickname ?? 'P2'
-                    : 'YOU'),
+            label:
+                compact
+                    ? (session.myRole == MpRole.main ? 'P2' : 'YOU')
+                    : (session.myRole == MpRole.main
+                        ? session.peerNickname ?? 'P2'
+                        : 'YOU'),
             active: widget.currentPage == 1,
             onTap: () => widget.onPick(1),
             sf: sf,
@@ -190,12 +195,13 @@ class _TabDot extends StatelessWidget {
   final VoidCallback onTap;
   final double sf;
   final bool compact;
-  const _TabDot(
-      {required this.label,
-      required this.active,
-      required this.onTap,
-      required this.sf,
-      this.compact = false});
+  const _TabDot({
+    required this.label,
+    required this.active,
+    required this.onTap,
+    required this.sf,
+    this.compact = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -205,16 +211,20 @@ class _TabDot extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         margin: EdgeInsets.symmetric(horizontal: (compact ? 1.5 : 3) * sf),
         padding: EdgeInsets.symmetric(
-            horizontal: (compact ? 6 : 10) * sf, vertical: 5 * sf),
+          horizontal: (compact ? 6 : 10) * sf,
+          vertical: 5 * sf,
+        ),
         decoration: BoxDecoration(
-          color: active
-              ? const Color(0xFF7C4DFF).withValues(alpha: 0.25)
-              : Colors.transparent,
+          color:
+              active
+                  ? const Color(0xFF7C4DFF).withValues(alpha: 0.25)
+                  : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: active
-                ? const Color(0xFFB388FF)
-                : Colors.white.withValues(alpha: 0.15),
+            color:
+                active
+                    ? const Color(0xFFB388FF)
+                    : Colors.white.withValues(alpha: 0.15),
           ),
         ),
         child: GoopText(
@@ -223,9 +233,10 @@ class _TabDot extends StatelessWidget {
             fontSize: 10.5 * sf,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.8,
-            color: active
-                ? const Color(0xFFB388FF)
-                : Colors.white.withValues(alpha: 0.5),
+            color:
+                active
+                    ? const Color(0xFFB388FF)
+                    : Colors.white.withValues(alpha: 0.5),
           ),
         ),
       ),
@@ -240,16 +251,16 @@ class _HealthChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = health >= 70
-        ? const Color(0xFF00E676)
-        : health >= 35
+    final c =
+        health >= 70
+            ? const Color(0xFF00E676)
+            : health >= 35
             ? Colors.orangeAccent
             : Colors.redAccent;
     return Tooltip(
       message: 'Connection health $health%',
       child: Container(
-        padding:
-            EdgeInsets.symmetric(horizontal: 6 * sf, vertical: 3 * sf),
+        padding: EdgeInsets.symmetric(horizontal: 6 * sf, vertical: 3 * sf),
         decoration: BoxDecoration(
           color: c.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(6),
@@ -260,11 +271,14 @@ class _HealthChip extends StatelessWidget {
           children: [
             Icon(Icons.signal_cellular_alt_rounded, size: 11 * sf, color: c),
             SizedBox(width: 3 * sf),
-            GoopText('$health',
-                style: TextStyle(
-                    fontSize: 10 * sf,
-                    fontWeight: FontWeight.w800,
-                    color: c)),
+            GoopText(
+              '$health',
+              style: TextStyle(
+                fontSize: 10 * sf,
+                fontWeight: FontWeight.w800,
+                color: c,
+              ),
+            ),
           ],
         ),
       ),

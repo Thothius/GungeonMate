@@ -68,35 +68,50 @@ class RunState {
   /// Coolness total = manual base + sum across both players' items/guns.
   double get totalCoolness {
     double total = coolness;
-    for (final g in main.guns) { total += g.coolness; }
-    for (final i in main.items) { total += i.coolness; }
+    for (final g in main.guns) {
+      total += g.coolness;
+    }
+    for (final i in main.items) {
+      total += i.coolness;
+    }
     if (coop != null) {
-      for (final g in coop!.guns) { total += g.coolness; }
-      for (final i in coop!.items) { total += i.coolness; }
+      for (final g in coop!.guns) {
+        total += g.coolness;
+      }
+      for (final i in coop!.items) {
+        total += i.coolness;
+      }
     }
     return total;
   }
 
   double get totalCurse {
     double total = curse;
-    for (final g in main.guns) { total += g.curse; }
-    for (final i in main.items) { total += i.curse; }
+    for (final g in main.guns) {
+      total += g.curse;
+    }
+    for (final i in main.items) {
+      total += i.curse;
+    }
     if (coop != null) {
-      for (final g in coop!.guns) { total += g.curse; }
-      for (final i in coop!.items) { total += i.curse; }
+      for (final g in coop!.guns) {
+        total += g.curse;
+      }
+      for (final i in coop!.items) {
+        total += i.curse;
+      }
     }
     return total;
   }
 
   Map<String, dynamic> toJson() => {
-        'main': main.toJson(),
-        if (coop != null) 'coop': coop!.toJson(),
-        'coolness': coolness,
-        'curse': curse,
-        if (shrinesUsed.isNotEmpty) 'shrines_used': shrinesUsed,
-        if (log.isNotEmpty)
-          'log': log.map((e) => e.toJson()).toList(),
-      };
+    'main': main.toJson(),
+    if (coop != null) 'coop': coop!.toJson(),
+    'coolness': coolness,
+    'curse': curse,
+    if (shrinesUsed.isNotEmpty) 'shrines_used': shrinesUsed,
+    if (log.isNotEmpty) 'log': log.map((e) => e.toJson()).toList(),
+  };
 
   factory RunState.fromJson(Map<String, dynamic> json) {
     // Handle both new and legacy (pre-0.4.0) serialized formats.
@@ -106,14 +121,17 @@ class RunState {
     } else {
       // Legacy shape: {selected_character, active_guns, active_items}
       main = Player(
-        character: json['selected_character'] != null
-            ? Gungeoneer.fromJson(json['selected_character'])
-            : null,
-        guns: (json['active_guns'] as List<dynamic>?)
+        character:
+            json['selected_character'] != null
+                ? Gungeoneer.fromJson(json['selected_character'])
+                : null,
+        guns:
+            (json['active_guns'] as List<dynamic>?)
                 ?.map((g) => Gun.fromJson(g))
                 .toList() ??
             const [],
-        items: (json['active_items'] as List<dynamic>?)
+        items:
+            (json['active_items'] as List<dynamic>?)
                 ?.map((i) => Item.fromJson(i))
                 .toList() ??
             const [],
@@ -125,11 +143,13 @@ class RunState {
       coop: coop,
       coolness: (json['coolness'] ?? 0).toDouble(),
       curse: (json['curse'] ?? 0).toDouble(),
-      shrinesUsed: (json['shrines_used'] as List<dynamic>?)
+      shrinesUsed:
+          (json['shrines_used'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],
-      log: (json['log'] as List<dynamic>?)
+      log:
+          (json['log'] as List<dynamic>?)
               ?.map((e) => RunLogEntry.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],

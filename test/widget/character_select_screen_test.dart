@@ -20,7 +20,7 @@ import 'package:gungeon_mate/screens/character_select_screen.dart';
 /// is false (needs >700px usable height) — otherwise the description
 /// text is hidden on short screens.
 void main() {
-  Widget _wrap(Widget child) {
+  Widget wrap(Widget child) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RunProvider()),
@@ -31,17 +31,18 @@ void main() {
   }
 
   /// Sets a tall viewport so the description text is visible.
-  void _setTallViewport(WidgetTester tester) {
+  void setTallViewport(WidgetTester tester) {
     tester.view.physicalSize = const Size(400, 900);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
   }
 
-  testWidgets('Solo mode renders title Gungeon Mate and subtitle',
-      (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(const CharacterSelectScreen()));
+  testWidgets('Solo mode renders title Gungeon Mate and subtitle', (
+    tester,
+  ) async {
+    setTallViewport(tester);
+    await tester.pumpWidget(wrap(const CharacterSelectScreen()));
     await tester.pumpAndSettle();
 
     // AppBar title
@@ -51,20 +52,21 @@ void main() {
   });
 
   testWidgets('Solo mode renders description text', (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(const CharacterSelectScreen()));
+    setTallViewport(tester);
+    await tester.pumpWidget(wrap(const CharacterSelectScreen()));
     await tester.pumpAndSettle();
 
     expect(
-        find.text("Starts a new run with character's default loadout."),
-        findsOneWidget);
+      find.text("Starts a new run with character's default loadout."),
+      findsOneWidget,
+    );
   });
 
   testWidgets('Coop mode renders Add Co-op Player title', (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(
-      const CharacterSelectScreen(mode: CharSelectMode.coop),
-    ));
+    setTallViewport(tester);
+    await tester.pumpWidget(
+      wrap(const CharacterSelectScreen(mode: CharSelectMode.coop)),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Add Co-op Player'), findsOneWidget);
@@ -72,12 +74,13 @@ void main() {
     expect(find.text('Choose Gungeoneer'), findsOneWidget);
   });
 
-  testWidgets('Multiplayer pick mode renders Pick your Gungeoneer title',
-      (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(
-      const CharacterSelectScreen.multiplayerPick(),
-    ));
+  testWidgets('Multiplayer pick mode renders Pick your Gungeoneer title', (
+    tester,
+  ) async {
+    setTallViewport(tester);
+    await tester.pumpWidget(
+      wrap(const CharacterSelectScreen.multiplayerPick()),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Pick your Gungeoneer'), findsOneWidget);
@@ -86,21 +89,22 @@ void main() {
   });
 
   testWidgets('Multiplayer pick mode hides description', (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(
-      const CharacterSelectScreen.multiplayerPick(),
-    ));
+    setTallViewport(tester);
+    await tester.pumpWidget(
+      wrap(const CharacterSelectScreen.multiplayerPick()),
+    );
     await tester.pumpAndSettle();
 
     // The description text should NOT appear in multiplayer pick mode
     expect(
-        find.text("Starts a new run with character's default loadout."),
-        findsNothing);
+      find.text("Starts a new run with character's default loadout."),
+      findsNothing,
+    );
   });
 
   testWidgets('Empty gungeoneer list does not crash', (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(const CharacterSelectScreen()));
+    setTallViewport(tester);
+    await tester.pumpWidget(wrap(const CharacterSelectScreen()));
     await tester.pumpAndSettle();
 
     // No cards rendered, but no crash either
@@ -110,16 +114,16 @@ void main() {
   });
 
   testWidgets('Renders a Divider between header and grid', (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(const CharacterSelectScreen()));
+    setTallViewport(tester);
+    await tester.pumpWidget(wrap(const CharacterSelectScreen()));
     await tester.pumpAndSettle();
 
     expect(find.byType(Divider), findsOneWidget);
   });
 
   testWidgets('AppBar is centered', (tester) async {
-    _setTallViewport(tester);
-    await tester.pumpWidget(_wrap(const CharacterSelectScreen()));
+    setTallViewport(tester);
+    await tester.pumpWidget(wrap(const CharacterSelectScreen()));
     await tester.pumpAndSettle();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));

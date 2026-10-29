@@ -140,21 +140,9 @@ class _GungeonMeterState extends State<GungeonMeter>
                   children: [
                     // Custom-painted meter
                     RepaintBoundary(
-                      child: reduceMotion
-                          ? CustomPaint(
-                              size: Size(barWidth, 28),
-                              painter: _MeterPainter(
-                                fillFraction: _fillFraction,
-                                thresholdFraction: _thresholdFraction,
-                                isOverThreshold: isOver,
-                                pulse: pulseValue,
-                                color: accent,
-                                isCool: widget.isCool,
-                              ),
-                            )
-                          : AnimatedBuilder(
-                              animation: _pulse,
-                              builder: (_, __) => CustomPaint(
+                      child:
+                          reduceMotion
+                              ? CustomPaint(
                                 size: Size(barWidth, 28),
                                 painter: _MeterPainter(
                                   fillFraction: _fillFraction,
@@ -164,8 +152,22 @@ class _GungeonMeterState extends State<GungeonMeter>
                                   color: accent,
                                   isCool: widget.isCool,
                                 ),
+                              )
+                              : AnimatedBuilder(
+                                animation: _pulse,
+                                builder:
+                                    (_, __) => CustomPaint(
+                                      size: Size(barWidth, 28),
+                                      painter: _MeterPainter(
+                                        fillFraction: _fillFraction,
+                                        thresholdFraction: _thresholdFraction,
+                                        isOverThreshold: isOver,
+                                        pulse: pulseValue,
+                                        color: accent,
+                                        isCool: widget.isCool,
+                                      ),
+                                    ),
                               ),
-                            ),
                     ),
 
                     // Skull icon at right edge when overflowed (curse only)
@@ -173,56 +175,62 @@ class _GungeonMeterState extends State<GungeonMeter>
                       Positioned(
                         right: -2,
                         top: -2,
-                        child: reduceMotion
-                            ? Transform.scale(
-                                scale: 0.85,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withValues(alpha: 0.6),
-                                    shape: BoxShape.circle,
+                        child:
+                            reduceMotion
+                                ? Transform.scale(
+                                  scale: 0.85,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.6,
+                                      ),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(2),
+                                    child: GoopText(
+                                      '☠',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.redAccent,
+                                        shadows: [
+                                          Shadow(
+                                            color: Colors.redAccent,
+                                            blurRadius: 8,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  padding: const EdgeInsets.all(2),
-                                  child: GoopText(
-                                    '☠',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.redAccent,
-                                      shadows: [
-                                        Shadow(
-                                          color: Colors.redAccent,
-                                          blurRadius: 8,
+                                )
+                                : AnimatedBuilder(
+                                  animation: _pulse,
+                                  builder:
+                                      (_, __) => Transform.scale(
+                                        scale: 0.85 + _pulse.value * 0.15,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.6,
+                                            ),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          padding: const EdgeInsets.all(2),
+                                          child: GoopText(
+                                            '☠',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.redAccent,
+                                              shadows: [
+                                                Shadow(
+                                                  color: Colors.redAccent,
+                                                  blurRadius: 8,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
                                 ),
-                              )
-                            : AnimatedBuilder(
-                                animation: _pulse,
-                                builder: (_, __) => Transform.scale(
-                                  scale: 0.85 + _pulse.value * 0.15,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withValues(alpha: 0.6),
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(2),
-                              child: GoopText(
-                                '☠',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.redAccent,
-                                  shadows: [
-                                    Shadow(
-                                      color: Colors.redAccent,
-                                      blurRadius: 8,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
                       ),
 
                     // Value text overlay
@@ -279,8 +287,11 @@ class _GungeonMeterState extends State<GungeonMeter>
             ),
             child: const Row(
               children: [
-                Icon(Icons.warning_amber_rounded,
-                    color: Colors.redAccent, size: 16),
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.redAccent,
+                  size: 16,
+                ),
                 SizedBox(width: 8),
                 Expanded(
                   child: GoopText(
@@ -307,9 +318,10 @@ class _GungeonMeterState extends State<GungeonMeter>
       style: TextStyle(
         fontSize: FontSizes.labelSmall,
         fontWeight: highlight ? FontWeight.w900 : FontWeight.w500,
-        color: highlight
-            ? (widget.isCool ? Colors.amber : Colors.redAccent)
-            : Colors.white.withValues(alpha: 0.3),
+        color:
+            highlight
+                ? (widget.isCool ? Colors.amber : Colors.redAccent)
+                : Colors.white.withValues(alpha: 0.3),
         fontFamily: 'monospace',
       ),
     );
@@ -348,18 +360,17 @@ class _MeterPainter extends CustomPainter {
     final r = Radius.circular(height / 2);
 
     // --- Background track ---
-    final bgPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.06)
-      ..style = PaintingStyle.fill;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(Offset.zero & size, r),
-      bgPaint,
-    );
+    final bgPaint =
+        Paint()
+          ..color = Colors.white.withValues(alpha: 0.06)
+          ..style = PaintingStyle.fill;
+    canvas.drawRRect(RRect.fromRectAndRadius(Offset.zero & size, r), bgPaint);
 
     // --- Tick marks at 0, 5, 10, 15 ---
-    final tickPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.12)
-      ..strokeWidth = 1;
+    final tickPaint =
+        Paint()
+          ..color = Colors.white.withValues(alpha: 0.12)
+          ..strokeWidth = 1;
     for (final tick in [0.0, 5.0 / 15.0, 10.0 / 15.0, 1.0]) {
       final x = tick * width;
       canvas.drawLine(
@@ -376,28 +387,28 @@ class _MeterPainter extends CustomPainter {
         Rect.fromLTWH(0, 0, fillWidth, height),
         r,
       );
-      final fillPaint = Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: isOverThreshold
-              ? [
-                  color.withValues(alpha: 0.6),
-                  color,
-                  Colors.redAccent.withValues(alpha: 0.8),
-                ]
-              : [
-                  color.withValues(alpha: 0.4),
-                  color,
-                ],
-        ).createShader(Rect.fromLTWH(0, 0, fillWidth, height))
-        ..style = PaintingStyle.fill;
+      final fillPaint =
+          Paint()
+            ..shader = LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors:
+                  isOverThreshold
+                      ? [
+                        color.withValues(alpha: 0.6),
+                        color,
+                        Colors.redAccent.withValues(alpha: 0.8),
+                      ]
+                      : [color.withValues(alpha: 0.4), color],
+            ).createShader(Rect.fromLTWH(0, 0, fillWidth, height))
+            ..style = PaintingStyle.fill;
       canvas.drawRRect(fillRect, fillPaint);
 
       // Shine highlight on top edge
-      final shinePaint = Paint()
-        ..color = Colors.white.withValues(alpha: 0.15)
-        ..style = PaintingStyle.fill;
+      final shinePaint =
+          Paint()
+            ..color = Colors.white.withValues(alpha: 0.15)
+            ..style = PaintingStyle.fill;
       canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, fillWidth, height * 0.35),
@@ -409,10 +420,12 @@ class _MeterPainter extends CustomPainter {
 
     // --- Threshold tick (prominent) ---
     final thresholdX = thresholdFraction * width;
-    final thresholdPaint = Paint()
-      ..color = (isCool ? Colors.amber : Colors.redAccent)
-          .withValues(alpha: 0.7)
-      ..strokeWidth = 1.5;
+    final thresholdPaint =
+        Paint()
+          ..color = (isCool ? Colors.amber : Colors.redAccent).withValues(
+            alpha: 0.7,
+          )
+          ..strokeWidth = 1.5;
     canvas.drawLine(
       Offset(thresholdX, 2),
       Offset(thresholdX, height - 2),
@@ -422,16 +435,14 @@ class _MeterPainter extends CustomPainter {
     // --- Overflow glow (pulsing border) ---
     if (isOverThreshold) {
       final glowAlpha = 0.3 + pulse * 0.4;
-      final glowPaint = Paint()
-        ..color = Colors.redAccent.withValues(alpha: glowAlpha)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 1.5 + pulse * 1.0
-        ..maskFilter = MaskFilter.blur(BlurStyle.outer, 4 + pulse * 4);
+      final glowPaint =
+          Paint()
+            ..color = Colors.redAccent.withValues(alpha: glowAlpha)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 1.5 + pulse * 1.0
+            ..maskFilter = MaskFilter.blur(BlurStyle.outer, 4 + pulse * 4);
       canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Offset.zero & size,
-          r,
-        ),
+        RRect.fromRectAndRadius(Offset.zero & size, r),
         glowPaint,
       );
     }

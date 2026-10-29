@@ -22,7 +22,9 @@ class QualityBadge extends StatefulWidget {
   static Color colorFor(String q) {
     switch (q.toUpperCase()) {
       case 'S':
-        return const Color(0xFF1A1A1A); // Near-black pill — golden glow animates around it
+        return const Color(
+          0xFF1A1A1A,
+        ); // Near-black pill — golden glow animates around it
       case 'A':
         return const Color(0xFFE53935); // red
       case 'B':
@@ -93,9 +95,13 @@ class _QualityBadgeState extends State<QualityBadge>
       decoration: BoxDecoration(
         color: bg,
         shape: BoxShape.circle,
-        border: isS
-            ? Border.all(color: const Color(0xFFE0E0E0), width: 1.6) // Silver/white fatter frame
-            : null,
+        border:
+            isS
+                ? Border.all(
+                  color: const Color(0xFFE0E0E0),
+                  width: 1.6,
+                ) // Silver/white fatter frame
+                : null,
       ),
       child: GoopText(
         letter,
@@ -116,11 +122,7 @@ class _QualityBadgeState extends State<QualityBadge>
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
           boxShadow: [
-            BoxShadow(
-              color: Color(0x66FFD700),
-              blurRadius: 8,
-              spreadRadius: 1,
-            ),
+            BoxShadow(color: Color(0x66FFD700), blurRadius: 8, spreadRadius: 1),
           ],
         ),
         child: badge,
@@ -136,7 +138,9 @@ class _QualityBadgeState extends State<QualityBadge>
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFFD700).withValues(alpha: 0.25 + 0.45 * t), // Golden glow
+                color: const Color(
+                  0xFFFFD700,
+                ).withValues(alpha: 0.25 + 0.45 * t), // Golden glow
                 blurRadius: 4 + 8 * t,
                 spreadRadius: 0.5 + t,
               ),

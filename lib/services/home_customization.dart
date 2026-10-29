@@ -66,7 +66,8 @@ class HomeCustomization {
   /// are .webp. The extension is inferred from the stem prefix.
   static String junkAssetPath(String stem) {
     // Pickups and enemies use .png, items use .webp.
-    final isPng = stem.startsWith('Pickup_') ||
+    final isPng =
+        stem.startsWith('Pickup_') ||
         stem.startsWith('Bullet_') ||
         stem.startsWith('Arrow') ||
         stem.startsWith('Bullat') ||
@@ -98,8 +99,9 @@ class HomeCustomization {
   static const _kShowJunk = 'home.show_junk';
   static const _kJunkCounts = 'home.junk_counts';
 
-  static final ValueNotifier<HomeCustomization> notifier =
-      ValueNotifier(const HomeCustomization());
+  static final ValueNotifier<HomeCustomization> notifier = ValueNotifier(
+    const HomeCustomization(),
+  );
 
   /// Load persisted state into [notifier]. Call once at startup.
   static Future<void> load() async {

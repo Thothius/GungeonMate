@@ -22,149 +22,149 @@ class BulletHellCodexScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          // Header image + title
-          SliverToBoxAdapter(child: _Header()),
-          // Content sections
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _SectionTitle(
-                    icon: Icons.auto_stories,
-                    title: 'Lore & Entry',
-                    color: _ember,
-                  ),
-                  _InfoBlock(
-                    body:
-                        'Bullet Hell is the true final domain of the Gungeon, home to the Lich — the cursed gunslinger who mastered the Gungeon and commands its undead legions.',
-                    accent: _ember,
-                  ),
-                  _InfoBlock(
-                    heading: 'Access Trigger',
-                    body:
-                        'The floor remains hidden until the player has successfully defeated the Pasts of the four main Gungeoneers (Marine, Pilot, Convict, Hunter).',
-                    accent: _ember,
-                  ),
-                  _InfoBlock(
-                    heading: 'The Descent',
-                    body:
-                        'Once unlocked, proceeding to the "Gun That Can Kill The Past" in the Aimless Void (after defeating the Dragun) will prompt a skeletal hand to drag the player down into Chamber 6. On subsequent runs, players can choose to walk around the central pit to end the run normally, or jump in to face the Lich.',
-                    accent: _ember,
-                  ),
-                  const SizedBox(height: 22),
-                  _SectionTitle(
-                    icon: Icons.block,
-                    title: 'Survival: The "No Loot" Rule',
-                    color: _bone,
-                  ),
-                  _InfoBlock(
-                    heading: 'Resource Starvation',
-                    body:
-                        'The engine restricts all standard loot generation. There are no chest rooms, no shops, and no shrines on this floor.',
-                    accent: _bone,
-                  ),
-                  _InfoBlock(
-                    heading: 'Drop Reliance',
-                    body:
-                        'Players are entirely dependent on random room-clear drops for health, armor, and ammo. Ammo conservation and cycling backup weapons is mechanically essential here.',
-                    accent: _bone,
-                  ),
-                  _InfoBlock(
-                    heading: 'High Jammed Rate',
-                    body:
-                        'Due to the late stage of the game, players carrying any Curse stat will encounter a significantly higher volume of "Jammed" (red/black) enemies, who deal double damage and have massive health pools.',
-                    accent: _bone,
-                  ),
-                  const SizedBox(height: 22),
-                  _SectionTitle(
-                    icon: Icons.route,
-                    title: 'The Three-Loop Layout',
-                    color: _ember,
-                  ),
-                  _InfoBlock(
-                    body:
-                        'Unlike the sprawling randomness of earlier chambers, Bullet Hell\'s map generation follows a strict mathematical ruleset built around three distinct junction points. Vital data for players trying to conserve ammo:',
-                    accent: _ember,
-                  ),
-                  _JunctionCard(
-                    label: 'Junction 1',
-                    body:
-                        'The starting room branches into three paths. One path is a hard dead-end. The other two paths will eventually merge together and lead to the next junction.',
-                  ),
-                  _JunctionCard(
-                    label: 'Junction 2',
-                    body:
-                        'Three new paths emerge. In this loop, two of the paths will connect to each other (often leading to a dead-end loop), while the singular third path pushes forward.',
-                  ),
-                  _JunctionCard(
-                    label: 'Junction 3',
-                    body:
-                        'The final three-way split. Two of these are extensive dead-ends. The third path leads straight to the boss.',
-                  ),
-                  _InfoBlock(
-                    heading: 'The Boss Door Rule',
-                    body:
-                        'The layout generation dictates that the final boss room can only be entered by moving North. The engine will never generate a South, East, or West-facing door into the final arena.',
-                    accent: _ember,
-                  ),
-                  const SizedBox(height: 22),
-                  _SectionTitle(
-                    icon: Icons.dangerous,
-                    title: 'Hazards & Enemies',
-                    color: _bone,
-                  ),
-                  _InfoBlock(
-                    heading: 'Flesh Cubes & Shotgrubs',
-                    body:
-                        'The floor uses a demonic, fleshy aesthetic. Players will face the highest-tier enemy variants, notably Shotgrubs (which fire fast, highly erratic, waving bullet patterns) and Flesh Cubes (which aggressively crush the player while releasing bullets).',
-                    accent: _bone,
-                  ),
-                  _InfoBlock(
-                    heading: 'Environmental Traps',
-                    body:
-                        'Rooms frequently lack cover and are surrounded by pits, forcing players into pure dodging mechanics rather than table-flipping.',
-                    accent: _bone,
-                  ),
-                  const SizedBox(height: 22),
-                  _SectionTitle(
-                    icon: Icons.emoji_events,
-                    title: 'The Boss: The Lich',
-                    color: _ember,
-                  ),
-                  _InfoBlock(
-                    body:
-                        'The final encounter is a grueling, three-phase endurance test that ignores the standard boss DPS-cap in its transitions.',
-                    accent: _ember,
-                  ),
-                  _PhaseCard(
-                    phase: 'Phase 1',
-                    name: 'The Gunslinger',
-                    body:
-                        'Fought in a standard room. The Lich uses fast, traditional revolver patterns, requiring tight dodge rolls and quick sidesteps.',
-                  ),
-                  _PhaseCard(
-                    phase: 'Phase 2',
-                    name: 'The Giant Skeleton',
-                    body:
-                        'The player falls into a massive arena. The Lich becomes a giant skeletal torso, sweeping the entire screen with dense, interlocking walls of bullets and slamming the ground.',
-                  ),
-                  _PhaseCard(
-                    phase: 'Phase 3',
-                    name: 'The Cosmic Entity',
-                    body:
-                        'The Lich transforms into a spinning, multi-armed entity traversing the room. This phase generates the most mathematically complex, overlapping geometric bullet patterns in the game, acting as the ultimate test of the player\'s i-frame mastery.',
-                  ),
-                  const SizedBox(height: 20),
-                  _WikiLink(),
-                ],
-              ),
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        // Header image + title
+        SliverToBoxAdapter(child: _Header()),
+        // Content sections
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(14, 4, 14, 28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _SectionTitle(
+                  icon: Icons.auto_stories,
+                  title: 'Lore & Entry',
+                  color: _ember,
+                ),
+                _InfoBlock(
+                  body:
+                      'Bullet Hell is the true final domain of the Gungeon, home to the Lich — the cursed gunslinger who mastered the Gungeon and commands its undead legions.',
+                  accent: _ember,
+                ),
+                _InfoBlock(
+                  heading: 'Access Trigger',
+                  body:
+                      'The floor remains hidden until the player has successfully defeated the Pasts of the four main Gungeoneers (Marine, Pilot, Convict, Hunter).',
+                  accent: _ember,
+                ),
+                _InfoBlock(
+                  heading: 'The Descent',
+                  body:
+                      'Once unlocked, proceeding to the "Gun That Can Kill The Past" in the Aimless Void (after defeating the Dragun) will prompt a skeletal hand to drag the player down into Chamber 6. On subsequent runs, players can choose to walk around the central pit to end the run normally, or jump in to face the Lich.',
+                  accent: _ember,
+                ),
+                const SizedBox(height: 22),
+                _SectionTitle(
+                  icon: Icons.block,
+                  title: 'Survival: The "No Loot" Rule',
+                  color: _bone,
+                ),
+                _InfoBlock(
+                  heading: 'Resource Starvation',
+                  body:
+                      'The engine restricts all standard loot generation. There are no chest rooms, no shops, and no shrines on this floor.',
+                  accent: _bone,
+                ),
+                _InfoBlock(
+                  heading: 'Drop Reliance',
+                  body:
+                      'Players are entirely dependent on random room-clear drops for health, armor, and ammo. Ammo conservation and cycling backup weapons is mechanically essential here.',
+                  accent: _bone,
+                ),
+                _InfoBlock(
+                  heading: 'High Jammed Rate',
+                  body:
+                      'Due to the late stage of the game, players carrying any Curse stat will encounter a significantly higher volume of "Jammed" (red/black) enemies, who deal double damage and have massive health pools.',
+                  accent: _bone,
+                ),
+                const SizedBox(height: 22),
+                _SectionTitle(
+                  icon: Icons.route,
+                  title: 'The Three-Loop Layout',
+                  color: _ember,
+                ),
+                _InfoBlock(
+                  body:
+                      'Unlike the sprawling randomness of earlier chambers, Bullet Hell\'s map generation follows a strict mathematical ruleset built around three distinct junction points. Vital data for players trying to conserve ammo:',
+                  accent: _ember,
+                ),
+                _JunctionCard(
+                  label: 'Junction 1',
+                  body:
+                      'The starting room branches into three paths. One path is a hard dead-end. The other two paths will eventually merge together and lead to the next junction.',
+                ),
+                _JunctionCard(
+                  label: 'Junction 2',
+                  body:
+                      'Three new paths emerge. In this loop, two of the paths will connect to each other (often leading to a dead-end loop), while the singular third path pushes forward.',
+                ),
+                _JunctionCard(
+                  label: 'Junction 3',
+                  body:
+                      'The final three-way split. Two of these are extensive dead-ends. The third path leads straight to the boss.',
+                ),
+                _InfoBlock(
+                  heading: 'The Boss Door Rule',
+                  body:
+                      'The layout generation dictates that the final boss room can only be entered by moving North. The engine will never generate a South, East, or West-facing door into the final arena.',
+                  accent: _ember,
+                ),
+                const SizedBox(height: 22),
+                _SectionTitle(
+                  icon: Icons.dangerous,
+                  title: 'Hazards & Enemies',
+                  color: _bone,
+                ),
+                _InfoBlock(
+                  heading: 'Flesh Cubes & Shotgrubs',
+                  body:
+                      'The floor uses a demonic, fleshy aesthetic. Players will face the highest-tier enemy variants, notably Shotgrubs (which fire fast, highly erratic, waving bullet patterns) and Flesh Cubes (which aggressively crush the player while releasing bullets).',
+                  accent: _bone,
+                ),
+                _InfoBlock(
+                  heading: 'Environmental Traps',
+                  body:
+                      'Rooms frequently lack cover and are surrounded by pits, forcing players into pure dodging mechanics rather than table-flipping.',
+                  accent: _bone,
+                ),
+                const SizedBox(height: 22),
+                _SectionTitle(
+                  icon: Icons.emoji_events,
+                  title: 'The Boss: The Lich',
+                  color: _ember,
+                ),
+                _InfoBlock(
+                  body:
+                      'The final encounter is a grueling, three-phase endurance test that ignores the standard boss DPS-cap in its transitions.',
+                  accent: _ember,
+                ),
+                _PhaseCard(
+                  phase: 'Phase 1',
+                  name: 'The Gunslinger',
+                  body:
+                      'Fought in a standard room. The Lich uses fast, traditional revolver patterns, requiring tight dodge rolls and quick sidesteps.',
+                ),
+                _PhaseCard(
+                  phase: 'Phase 2',
+                  name: 'The Giant Skeleton',
+                  body:
+                      'The player falls into a massive arena. The Lich becomes a giant skeletal torso, sweeping the entire screen with dense, interlocking walls of bullets and slamming the ground.',
+                ),
+                _PhaseCard(
+                  phase: 'Phase 3',
+                  name: 'The Cosmic Entity',
+                  body:
+                      'The Lich transforms into a spinning, multi-armed entity traversing the room. This phase generates the most mathematically complex, overlapping geometric bullet patterns in the game, acting as the ultimate test of the player\'s i-frame mastery.',
+                ),
+                const SizedBox(height: 20),
+                _WikiLink(),
+              ],
             ),
           ),
-        ],
+        ),
+      ],
     );
   }
 }
@@ -192,15 +192,18 @@ class _Header extends StatelessWidget {
             fit: BoxFit.cover,
             cacheWidth: 800,
             cacheHeight: 400,
-            errorBuilder: (_, __, ___) => Container(
-              height: 200,
-              color: BulletHellCodexScreen._void,
-              child: Center(
-                child: Icon(Icons.image_not_supported,
-                    size: 48,
-                    color: Colors.white.withValues(alpha: 0.2)),
-              ),
-            ),
+            errorBuilder:
+                (_, __, ___) => Container(
+                  height: 200,
+                  color: BulletHellCodexScreen._void,
+                  child: Center(
+                    child: Icon(
+                      Icons.image_not_supported,
+                      size: 48,
+                      color: Colors.white.withValues(alpha: 0.2),
+                    ),
+                  ),
+                ),
           ),
         ),
         // Gradient scrim for readability
@@ -252,10 +255,7 @@ class _Header extends StatelessWidget {
                   letterSpacing: 3,
                   color: Colors.white,
                   shadows: [
-                    Shadow(
-                      color: BulletHellCodexScreen._ember,
-                      blurRadius: 18,
-                    ),
+                    Shadow(color: BulletHellCodexScreen._ember, blurRadius: 18),
                   ],
                 ),
               ),
@@ -331,11 +331,7 @@ class _InfoBlock extends StatelessWidget {
   final String body;
   final Color accent;
 
-  const _InfoBlock({
-    this.heading,
-    required this.body,
-    required this.accent,
-  });
+  const _InfoBlock({this.heading, required this.body, required this.accent});
 
   @override
   Widget build(BuildContext context) {
@@ -345,10 +341,7 @@ class _InfoBlock extends StatelessWidget {
       decoration: BoxDecoration(
         color: BulletHellCodexScreen._panel,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: accent.withValues(alpha: 0.18),
-          width: 0.8,
-        ),
+        border: Border.all(color: accent.withValues(alpha: 0.18), width: 0.8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,7 +399,10 @@ class _JunctionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: Insets.sm, vertical: Insets.xs),
+            padding: const EdgeInsets.symmetric(
+              horizontal: Insets.sm,
+              vertical: Insets.xs,
+            ),
             decoration: BoxDecoration(
               color: BulletHellCodexScreen._emberDim.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(6),
@@ -552,7 +548,10 @@ class _WikiLink extends StatelessWidget {
       child: TextButton.icon(
         style: TextButton.styleFrom(
           foregroundColor: BulletHellCodexScreen._ember,
-          padding: const EdgeInsets.symmetric(horizontal: Insets.lg, vertical: Insets.sm),
+          padding: const EdgeInsets.symmetric(
+            horizontal: Insets.lg,
+            vertical: Insets.sm,
+          ),
         ),
         icon: const Icon(Icons.open_in_new, size: 14),
         label: GoopText(
@@ -565,7 +564,8 @@ class _WikiLink extends StatelessWidget {
         ),
         onPressed: () async {
           final uri = Uri.parse(
-              'https://enterthegungeon.wiki.gg/wiki/Bullet_Hell');
+            'https://enterthegungeon.wiki.gg/wiki/Bullet_Hell',
+          );
           if (await canLaunchUrl(uri)) await launchUrl(uri);
         },
       ),

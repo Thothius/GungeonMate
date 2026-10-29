@@ -21,7 +21,10 @@ class QuickJumpButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: active ? Colors.white.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.03),
+          color:
+              active
+                  ? Colors.white.withValues(alpha: 0.15)
+                  : Colors.white.withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: active ? Colors.white54 : Colors.white12,

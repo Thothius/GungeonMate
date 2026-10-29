@@ -37,8 +37,9 @@ void main() {
     }
   }
 
-  testWidgets('SYNERGIES mode lists combined-inventory candidates',
-      (tester) async {
+  testWidgets('SYNERGIES mode lists combined-inventory candidates', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(500, 900);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -59,8 +60,7 @@ void main() {
 
     final ownedName = synergy.items[0];
     final candidateName = synergy.items[1];
-    final ownedItem =
-        p.allItems.where((i) => i.name == ownedName).firstOrNull;
+    final ownedItem = p.allItems.where((i) => i.name == ownedName).firstOrNull;
     final ownedGun = p.allGuns.where((g) => g.name == ownedName).firstOrNull;
     if (ownedItem != null) {
       p.addItem(ownedItem, slot: PlayerSlot.main);
@@ -88,10 +88,14 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    final sGun = p.allGuns.firstWhere((g) => g.quality == 'S',
-        orElse: () => throw StateError('no S-tier gun'));
-    final dItem = p.allItems.firstWhere((i) => i.quality == 'D',
-        orElse: () => throw StateError('no D-tier item'));
+    final sGun = p.allGuns.firstWhere(
+      (g) => g.quality == 'S',
+      orElse: () => throw StateError('no S-tier gun'),
+    );
+    final dItem = p.allItems.firstWhere(
+      (i) => i.quality == 'D',
+      orElse: () => throw StateError('no D-tier item'),
+    );
 
     await tester.pumpWidget(wrapBrowse());
     await pumpFew(tester);

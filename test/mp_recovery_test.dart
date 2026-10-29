@@ -70,8 +70,11 @@ void main() {
     test('Returns silently when no MP session is saved', () async {
       await recovery.tryRestore();
 
-      expect(restoredRole, isNull,
-          reason: 'Should not restore when no session is saved');
+      expect(
+        restoredRole,
+        isNull,
+        reason: 'Should not restore when no session is saved',
+      );
     });
   });
 

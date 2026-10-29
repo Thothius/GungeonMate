@@ -116,18 +116,15 @@ class _AuraLayerState extends State<_AuraLayer>
     super.initState();
     // 4s base cycle. Each painter remaps t→its own visual rhythm.
     final ms = (4000 * widget.speedScale).round();
-    _c = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: ms),
-    )..repeat();
+    _c = AnimationController(vsync: this, duration: Duration(milliseconds: ms))
+      ..repeat();
   }
 
   @override
   void didUpdateWidget(covariant _AuraLayer old) {
     super.didUpdateWidget(old);
     if (old.speedScale != widget.speedScale) {
-      _c.duration =
-          Duration(milliseconds: (4000 * widget.speedScale).round());
+      _c.duration = Duration(milliseconds: (4000 * widget.speedScale).round());
       _c
         ..reset()
         ..repeat();
@@ -164,16 +161,17 @@ class _AuraLayerState extends State<_AuraLayer>
     return RepaintBoundary(
       child: AnimatedBuilder(
         animation: _c,
-        builder: (_, __) => CustomPaint(
-          painter: _AuraPainter(
-            style: widget.style,
-            t: _c.value,
-            primary: widget.primary,
-            secondary: widget.secondary,
-            radius: widget.radius,
-          ),
-          size: Size.infinite,
-        ),
+        builder:
+            (_, __) => CustomPaint(
+              painter: _AuraPainter(
+                style: widget.style,
+                t: _c.value,
+                primary: widget.primary,
+                secondary: widget.secondary,
+                radius: widget.radius,
+              ),
+              size: Size.infinite,
+            ),
       ),
     );
   }
@@ -260,17 +258,19 @@ class _AuraPainter extends CustomPainter {
       ],
       stops: const [0.0, 0.35, 0.5, 0.65, 1.0],
     ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
-    final paint = Paint()
-      ..shader = shader
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.4
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+    final paint =
+        Paint()
+          ..shader = shader
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.4
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
     canvas.drawRRect(rrect, paint);
     // Inner hairline keeps the avatar from "floating" inside the glow.
-    final inner = Paint()
-      ..color = primary.withValues(alpha: 0.55)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final inner =
+        Paint()
+          ..color = primary.withValues(alpha: 0.55)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     canvas.drawRRect(rrect.deflate(1.2), inner);
   }
 
@@ -280,22 +280,25 @@ class _AuraPainter extends CustomPainter {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
     final outerAlpha = 0.30 + 0.35 * tri;
     final innerAlpha = 0.55 + 0.30 * tri;
-    final outer = Paint()
-      ..color = primary.withValues(alpha: outerAlpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4 + 2 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
+    final outer =
+        Paint()
+          ..color = primary.withValues(alpha: outerAlpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 4 + 2 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
     canvas.drawRRect(rrect.inflate(2), outer);
-    final mid = Paint()
-      ..color = secondary.withValues(alpha: innerAlpha * 0.55)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.2
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
+    final mid =
+        Paint()
+          ..color = secondary.withValues(alpha: innerAlpha * 0.55)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.2
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
     canvas.drawRRect(rrect, mid);
-    final inner = Paint()
-      ..color = primary.withValues(alpha: innerAlpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4;
+    final inner =
+        Paint()
+          ..color = primary.withValues(alpha: innerAlpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.4;
     canvas.drawRRect(rrect.deflate(1.0), inner);
   }
 
@@ -303,21 +306,24 @@ class _AuraPainter extends CustomPainter {
   void _paintOxbloodBreath(Canvas canvas, Size size, RRect rrect) {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
     final glowAlpha = 0.35 + 0.45 * tri;
-    final outer = Paint()
-      ..color = primary.withValues(alpha: glowAlpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3 + 2.2 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3.5 + 2.5 * tri);
+    final outer =
+        Paint()
+          ..color = primary.withValues(alpha: glowAlpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3 + 2.2 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3.5 + 2.5 * tri);
     canvas.drawRRect(rrect.inflate(1.5), outer);
-    final rim = Paint()
-      ..color = const Color(0xFF400308).withValues(alpha: 0.85)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4;
+    final rim =
+        Paint()
+          ..color = const Color(0xFF400308).withValues(alpha: 0.85)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.4;
     canvas.drawRRect(rrect, rim);
-    final inner = Paint()
-      ..color = primary.withValues(alpha: 0.9)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final inner =
+        Paint()
+          ..color = primary.withValues(alpha: 0.9)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     canvas.drawRRect(rrect.deflate(1.4), inner);
   }
 
@@ -339,16 +345,18 @@ class _AuraPainter extends CustomPainter {
       ],
       stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
     ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
-    final outer = Paint()
-      ..shader = shader
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6;
+    final outer =
+        Paint()
+          ..shader = shader
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.6;
     canvas.drawRRect(rrect, outer);
     // Brass hairline 3px in for a "pressed brass plate" double-line look.
-    final inner = Paint()
-      ..color = primary.withValues(alpha: 0.7)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.9;
+    final inner =
+        Paint()
+          ..color = primary.withValues(alpha: 0.7)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 0.9;
     canvas.drawRRect(rrect.deflate(3), inner);
   }
 
@@ -356,20 +364,22 @@ class _AuraPainter extends CustomPainter {
   void _paintFrostRing(Canvas canvas, Size size, RRect rrect) {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
     final glowAlpha = 0.35 + 0.40 * tri;
-    final outer = Paint()
-      ..color = primary.withValues(alpha: glowAlpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5 + 1.5 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * tri);
+    final outer =
+        Paint()
+          ..color = primary.withValues(alpha: glowAlpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5 + 1.5 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * tri);
     canvas.drawRRect(rrect.inflate(1.5), outer);
-    final mid = Paint()
-      ..color = secondary.withValues(alpha: 0.65 + 0.25 * tri)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4;
+    final mid =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.65 + 0.25 * tri)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.4;
     canvas.drawRRect(rrect, mid);
     // Tiny frost sparkle dots at the corners.
-    final sparkle = Paint()
-      ..color = Colors.white.withValues(alpha: 0.5 + 0.3 * tri);
+    final sparkle =
+        Paint()..color = Colors.white.withValues(alpha: 0.5 + 0.3 * tri);
     final cornerInset = radius + 4;
     for (final corner in [
       Offset(cornerInset, cornerInset),
@@ -385,16 +395,18 @@ class _AuraPainter extends CustomPainter {
   void _paintVoidPulse(Canvas canvas, Size size, RRect rrect) {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
     final alpha = 0.08 + 0.10 * tri; // barely visible
-    final outer = Paint()
-      ..color = primary.withValues(alpha: alpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2 + 1.5 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
+    final outer =
+        Paint()
+          ..color = primary.withValues(alpha: alpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2 + 1.5 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
     canvas.drawRRect(rrect.inflate(1), outer);
-    final inner = Paint()
-      ..color = secondary.withValues(alpha: alpha * 1.5)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.7;
+    final inner =
+        Paint()
+          ..color = secondary.withValues(alpha: alpha * 1.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 0.7;
     canvas.drawRRect(rrect.deflate(1.5), inner);
   }
 
@@ -403,27 +415,30 @@ class _AuraPainter extends CustomPainter {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
     final glowAlpha = 0.40 + 0.40 * tri;
     // Outer toxic glow.
-    final outer = Paint()
-      ..color = primary.withValues(alpha: glowAlpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3 + 2 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 2 * tri);
+    final outer =
+        Paint()
+          ..color = primary.withValues(alpha: glowAlpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3 + 2 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 2 * tri);
     canvas.drawRRect(rrect.inflate(2), outer);
     // Dark swamp rim.
-    final rim = Paint()
-      ..color = const Color(0xFF0A1A0A).withValues(alpha: 0.85)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.4;
+    final rim =
+        Paint()
+          ..color = const Color(0xFF0A1A0A).withValues(alpha: 0.85)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.4;
     canvas.drawRRect(rrect, rim);
     // Inner ooze line.
-    final inner = Paint()
-      ..color = secondary.withValues(alpha: 0.9)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final inner =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.9)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     canvas.drawRRect(rrect.deflate(1.4), inner);
     // Two "bubbles" that drift around the border.
-    final bubblePaint = Paint()
-      ..color = primary.withValues(alpha: 0.6 + 0.3 * tri);
+    final bubblePaint =
+        Paint()..color = primary.withValues(alpha: 0.6 + 0.3 * tri);
     final cx = size.width / 2;
     final cy = size.height / 2;
     final bubbleR = radius * 0.5;
@@ -442,11 +457,12 @@ class _AuraPainter extends CustomPainter {
     final angle = t * 2 * math.pi;
 
     // Glowing molten backdrop ring
-    final glow = Paint()
-      ..color = primary.withValues(alpha: 0.35 + 0.35 * tri)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.5 + 2 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 3 * tri);
+    final glow =
+        Paint()
+          ..color = primary.withValues(alpha: 0.35 + 0.35 * tri)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3.5 + 2 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 3 * tri);
     canvas.drawRRect(rrect, glow);
 
     // Rotating hot-spots (SweepGradient)
@@ -464,10 +480,11 @@ class _AuraPainter extends CustomPainter {
       stops: const [0.0, 0.25, 0.5, 0.75, 1.0],
     ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
 
-    final sweep = Paint()
-      ..shader = shader
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.8;
+    final sweep =
+        Paint()
+          ..shader = shader
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.8;
     canvas.drawRRect(rrect, sweep);
 
     // Dynamic rising forge sparks
@@ -503,18 +520,20 @@ class _AuraPainter extends CustomPainter {
       stops: const [0.0, 0.3, 0.5, 0.7, 1.0],
     ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
 
-    final paint = Paint()
-      ..shader = shader
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5 + 1.5 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2 + 2 * tri);
+    final paint =
+        Paint()
+          ..shader = shader
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5 + 1.5 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 2 + 2 * tri);
     canvas.drawRRect(rrect, paint);
 
     // Outer ghostly border
-    final outer = Paint()
-      ..color = secondary.withValues(alpha: 0.35 + 0.25 * tri)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final outer =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.35 + 0.25 * tri)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     canvas.drawRRect(rrect.inflate(2.5), outer);
   }
 
@@ -539,10 +558,11 @@ class _AuraPainter extends CustomPainter {
       stops: const [0.0, 0.45, 0.5, 1.0],
     ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
 
-    final paint1 = Paint()
-      ..shader = shader1
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6;
+    final paint1 =
+        Paint()
+          ..shader = shader1
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.6;
     canvas.drawRRect(rrect.inflate(1), paint1);
 
     // Inner gold temporal sweep
@@ -558,14 +578,16 @@ class _AuraPainter extends CustomPainter {
       stops: const [0.0, 0.5, 1.0],
     ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
 
-    final paint2 = Paint()
-      ..shader = shader2
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2;
+    final paint2 =
+        Paint()
+          ..shader = shader2
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.2;
     canvas.drawRRect(rrect.deflate(1.5), paint2);
 
     // Cosmic sparkle stars orbiting the avatar
-    final sparkle = Paint()..color = Colors.white.withValues(alpha: 0.5 + 0.5 * tri);
+    final sparkle =
+        Paint()..color = Colors.white.withValues(alpha: 0.5 + 0.5 * tri);
     final radiusX = size.width / 2;
     final radiusY = size.height / 2;
     for (var i = 0; i < 2; i++) {
@@ -583,18 +605,20 @@ class _AuraPainter extends CustomPainter {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
 
     // Warm amber glow border
-    final glow = Paint()
-      ..color = primary.withValues(alpha: 0.25 + 0.2 * tri)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3 + 1.5 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * tri);
+    final glow =
+        Paint()
+          ..color = primary.withValues(alpha: 0.25 + 0.2 * tri)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3 + 1.5 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * tri);
     canvas.drawRRect(rrect.inflate(1.5), glow);
 
     // Inner hairline
-    final inner = Paint()
-      ..color = primary.withValues(alpha: 0.5)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final inner =
+        Paint()
+          ..color = primary.withValues(alpha: 0.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     canvas.drawRRect(rrect.deflate(0.8), inner);
 
     // 3 paw prints orbiting the border
@@ -623,18 +647,20 @@ class _AuraPainter extends CustomPainter {
     final glowAlpha = 0.20 + 0.35 * phase;
 
     // Outer silver-blue glow
-    final outer = Paint()
-      ..color = primary.withValues(alpha: glowAlpha)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3 + 2 * phase
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * phase);
+    final outer =
+        Paint()
+          ..color = primary.withValues(alpha: glowAlpha)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3 + 2 * phase
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * phase);
     canvas.drawRRect(rrect.inflate(2), outer);
 
     // Inner crescent highlight
-    final inner = Paint()
-      ..color = secondary.withValues(alpha: 0.4 + 0.3 * phase)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2;
+    final inner =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.4 + 0.3 * phase)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.2;
     canvas.drawRRect(rrect.deflate(1.0), inner);
 
     // Orbiting crescent moon
@@ -644,11 +670,15 @@ class _AuraPainter extends CustomPainter {
     final mx = center.dx + math.cos(angle) * rx;
     final my = center.dy + math.sin(angle) * ry;
     // Crescent: filled circle minus offset circle
-    final moonPath = Path()
-      ..addOval(Rect.fromCircle(center: Offset(mx, my), radius: 3.5))
-      ..addOval(Rect.fromCircle(center: Offset(mx + 1.4, my - 0.5), radius: 3.0))
-      ..fillType = PathFillType.evenOdd;
-    final moonPaint = Paint()..color = primary.withValues(alpha: 0.6 + 0.3 * phase);
+    final moonPath =
+        Path()
+          ..addOval(Rect.fromCircle(center: Offset(mx, my), radius: 3.5))
+          ..addOval(
+            Rect.fromCircle(center: Offset(mx + 1.4, my - 0.5), radius: 3.0),
+          )
+          ..fillType = PathFillType.evenOdd;
+    final moonPaint =
+        Paint()..color = primary.withValues(alpha: 0.6 + 0.3 * phase);
     canvas.drawPath(moonPath, moonPaint);
   }
 
@@ -659,19 +689,21 @@ class _AuraPainter extends CustomPainter {
     final flicker = (math.sin(t * 30) * 0.5 + 0.5) * (0.4 + 0.6 * tri);
 
     // Outer electric glow
-    final glow = Paint()
-      ..color = primary.withValues(alpha: 0.25 + 0.35 * flicker)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3 + 2 * flicker
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * flicker);
+    final glow =
+        Paint()
+          ..color = primary.withValues(alpha: 0.25 + 0.35 * flicker)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3 + 2 * flicker
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 3 + 2 * flicker);
     canvas.drawRRect(rrect.inflate(1.5), glow);
 
     // Crackling arc — jagged line segments around the border
-    final arcPaint = Paint()
-      ..color = secondary.withValues(alpha: 0.5 + 0.4 * flicker)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.2
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.0);
+    final arcPaint =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.5 + 0.4 * flicker)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.2
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 1.0);
     final center = _rectCenter(size);
     final rx = size.width / 2;
     final ry = size.height / 2;
@@ -680,7 +712,10 @@ class _AuraPainter extends CustomPainter {
     for (var i = 0; i <= segments; i++) {
       final theta = (i / segments) * 2 * math.pi;
       // Jagged offset perpendicular to the border
-      final jitter = (math.sin(t * 20 + i * 3.7) + math.sin(t * 13 + i * 5.3)) * 2.0 * flicker;
+      final jitter =
+          (math.sin(t * 20 + i * 3.7) + math.sin(t * 13 + i * 5.3)) *
+          2.0 *
+          flicker;
       final px = center.dx + math.cos(theta) * (rx + jitter);
       final py = center.dy + math.sin(theta) * (ry + jitter);
       if (i == 0) {
@@ -693,10 +728,11 @@ class _AuraPainter extends CustomPainter {
     canvas.drawPath(path, arcPaint);
 
     // Inner sharp hairline
-    final inner = Paint()
-      ..color = primary.withValues(alpha: 0.4)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.8;
+    final inner =
+        Paint()
+          ..color = primary.withValues(alpha: 0.4)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 0.8;
     canvas.drawRRect(rrect.deflate(1.0), inner);
   }
 
@@ -707,38 +743,42 @@ class _AuraPainter extends CustomPainter {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
 
     // Rift glow — pulsing purple-violet
-    final glow = Paint()
-      ..color = primary.withValues(alpha: 0.20 + 0.30 * tri)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3 + 2 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
+    final glow =
+        Paint()
+          ..color = primary.withValues(alpha: 0.20 + 0.30 * tri)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3 + 2 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
     canvas.drawRRect(rrect.inflate(2), glow);
 
     // Inner fractured border — slight irregularity
-    final inner = Paint()
-      ..color = secondary.withValues(alpha: 0.4 + 0.2 * tri)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final inner =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.4 + 0.2 * tri)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     canvas.drawRRect(rrect.deflate(0.8), inner);
 
     // 4 crystal shards orbiting at different speeds
     final rx = size.width / 2 - 1;
     final ry = size.height / 2 - 1;
-    final shardPaint = Paint()..color = primary.withValues(alpha: 0.6 + 0.3 * tri);
+    final shardPaint =
+        Paint()..color = primary.withValues(alpha: 0.6 + 0.3 * tri);
     for (var i = 0; i < 4; i++) {
       final theta = angle * (1 + i * 0.3) + (i / 4) * 2 * math.pi;
       final sx = center.dx + math.cos(theta) * rx;
       final sy = center.dy + math.sin(theta) * ry;
       // Draw small shard (irregular polygon)
       final shardR = 2.5 + 0.8 * tri;
-      final path = Path()
-        ..moveTo(sx, sy - shardR)
-        ..lineTo(sx + shardR * 0.6, sy - shardR * 0.3)
-        ..lineTo(sx + shardR * 0.4, sy + shardR * 0.5)
-        ..lineTo(sx - shardR * 0.2, sy + shardR * 0.7)
-        ..lineTo(sx - shardR * 0.7, sy + shardR * 0.1)
-        ..lineTo(sx - shardR * 0.5, sy - shardR * 0.5)
-        ..close();
+      final path =
+          Path()
+            ..moveTo(sx, sy - shardR)
+            ..lineTo(sx + shardR * 0.6, sy - shardR * 0.3)
+            ..lineTo(sx + shardR * 0.4, sy + shardR * 0.5)
+            ..lineTo(sx - shardR * 0.2, sy + shardR * 0.7)
+            ..lineTo(sx - shardR * 0.7, sy + shardR * 0.1)
+            ..lineTo(sx - shardR * 0.5, sy - shardR * 0.5)
+            ..close();
       canvas.drawPath(path, shardPaint);
     }
   }
@@ -750,18 +790,20 @@ class _AuraPainter extends CustomPainter {
     final tri = t < 0.5 ? t * 2 : (1 - t) * 2;
 
     // Molten glow — pulsing orange-red
-    final glow = Paint()
-      ..color = primary.withValues(alpha: 0.25 + 0.35 * tri)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3 + 2 * tri
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
+    final glow =
+        Paint()
+          ..color = primary.withValues(alpha: 0.25 + 0.35 * tri)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 3 + 2 * tri
+          ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4 + 3 * tri);
     canvas.drawRRect(rrect.inflate(2), glow);
 
     // Inner ember hairline
-    final inner = Paint()
-      ..color = secondary.withValues(alpha: 0.5)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final inner =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.5)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     canvas.drawRRect(rrect.deflate(0.8), inner);
 
     // 5 dragon scales orbiting the border
@@ -774,12 +816,13 @@ class _AuraPainter extends CustomPainter {
       final sy = center.dy + math.sin(theta) * ry;
       // Draw scale (fan shape)
       final sr = 3.0;
-      final path = Path()
-        ..moveTo(sx - sr, sy + sr * 0.3)
-        ..quadraticBezierTo(sx - sr, sy - sr * 0.8, sx, sy - sr * 0.9)
-        ..quadraticBezierTo(sx + sr, sy - sr * 0.8, sx + sr, sy + sr * 0.3)
-        ..quadraticBezierTo(sx, sy + sr * 0.6, sx - sr, sy + sr * 0.3)
-        ..close();
+      final path =
+          Path()
+            ..moveTo(sx - sr, sy + sr * 0.3)
+            ..quadraticBezierTo(sx - sr, sy - sr * 0.8, sx, sy - sr * 0.9)
+            ..quadraticBezierTo(sx + sr, sy - sr * 0.8, sx + sr, sy + sr * 0.3)
+            ..quadraticBezierTo(sx, sy + sr * 0.6, sx - sr, sy + sr * 0.3)
+            ..close();
       canvas.drawPath(path, scalePaint);
     }
   }
@@ -790,11 +833,12 @@ class _AuraPainter extends CustomPainter {
     final angle = t * 2 * math.pi;
 
     // Steady military green glow — no pulse, tactical is precise
-    final glow = Paint()
-      ..color = primary.withValues(alpha: 0.25)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+    final glow =
+        Paint()
+          ..color = primary.withValues(alpha: 0.25)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2.5
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
     canvas.drawRRect(rrect.inflate(1.5), glow);
 
     // Rotating sweep — like a radar/scanner
@@ -810,24 +854,27 @@ class _AuraPainter extends CustomPainter {
       ],
       stops: const [0.0, 0.7, 0.85, 1.0],
     ).createShader(Rect.fromCircle(center: center, radius: size.shortestSide));
-    final sweepPaint = Paint()
-      ..shader = shader
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+    final sweepPaint =
+        Paint()
+          ..shader = shader
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5;
     canvas.drawRRect(rrect, sweepPaint);
 
     // Inner hairline
-    final inner = Paint()
-      ..color = primary.withValues(alpha: 0.4)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 0.8;
+    final inner =
+        Paint()
+          ..color = primary.withValues(alpha: 0.4)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 0.8;
     canvas.drawRRect(rrect.deflate(1.0), inner);
 
     // Crosshair ticks at 4 cardinal points
-    final tickPaint = Paint()
-      ..color = secondary.withValues(alpha: 0.6)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
+    final tickPaint =
+        Paint()
+          ..color = secondary.withValues(alpha: 0.6)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0;
     final rx = size.width / 2;
     final ry = size.height / 2;
     for (var i = 0; i < 4; i++) {

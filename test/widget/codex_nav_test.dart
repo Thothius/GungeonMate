@@ -13,13 +13,12 @@ import 'package:gungeon_mate/services/mp_session.dart';
 /// _smoke_codex_test. Retained as a device/CI guard.
 void main() {
   Widget wrap(Widget child) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => RunProvider()),
-          ChangeNotifierProvider(
-              create: (_) => MpSession(RunProvider())),
-        ],
-        child: MaterialApp(home: child),
-      );
+    providers: [
+      ChangeNotifierProvider(create: (_) => RunProvider()),
+      ChangeNotifierProvider(create: (_) => MpSession(RunProvider())),
+    ],
+    child: MaterialApp(home: child),
+  );
 
   testWidgets('codex opens on the 4-col category grid', skip: true, (t) async {
     await t.pumpWidget(wrap(const CodexScreen()));
@@ -31,7 +30,9 @@ void main() {
     expect(find.byType(GridView), findsOneWidget);
   });
 
-  testWidgets('tapping a category opens it with title + back', skip: true, (t) async {
+  testWidgets('tapping a category opens it with title + back', skip: true, (
+    t,
+  ) async {
     await t.pumpWidget(wrap(const CodexScreen()));
     await t.pump();
     await t.tap(find.text('NPCs'));
@@ -41,7 +42,9 @@ void main() {
     expect(find.byIcon(Icons.arrow_back_ios_new_rounded), findsOneWidget);
   });
 
-  testWidgets('back from a category returns to the grid', skip: true, (t) async {
+  testWidgets('back from a category returns to the grid', skip: true, (
+    t,
+  ) async {
     await t.pumpWidget(wrap(const CodexScreen()));
     await t.pump();
     await t.tap(find.text('Bosses'));

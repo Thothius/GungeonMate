@@ -25,7 +25,7 @@ import 'package:gungeon_mate/screens/settings_screen.dart';
 /// (DATA & STORAGE, DEV TOOLS, END RUN, RESET DATA) need scrollUntilVisible
 /// to be brought on-screen before tapping.
 void main() {
-  Widget _wrap(Widget child) {
+  Widget wrap(Widget child) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RunProvider()),
@@ -38,8 +38,7 @@ void main() {
   /// Scrolls until the given finder is visible, then taps it.
   /// Uses pumpAndSettle() for the scroll (settings screen has no
   /// perpetual animations) to ensure the element is fully on-screen.
-  Future<void> _scrollAndTap(
-      WidgetTester tester, Finder finder) async {
+  Future<void> scrollAndTap(WidgetTester tester, Finder finder) async {
     await tester.scrollUntilVisible(
       finder,
       100.0,
@@ -50,9 +49,10 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('Renders all four collapsible section headers (solo mode)',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('Renders all four collapsible section headers (solo mode)', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // First two are on-screen
@@ -82,9 +82,10 @@ void main() {
     // now full-width buttons, always visible (no collapsible).
   });
 
-  testWidgets('RUN TOOLS is expanded by default and shows tiles',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('RUN TOOLS is expanded by default and shows tiles', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // RUN TOOLS is initiallyExpanded: true
@@ -95,16 +96,17 @@ void main() {
   });
 
   testWidgets('DICE is collapsed by default', (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // DICE header exists but content (dice preview "5") is hidden
     expect(find.text('DICE'), findsOneWidget);
   });
 
-  testWidgets('Tapping DICE header expands it and shows Dice Roll tile',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('Tapping DICE header expands it and shows Dice Roll tile', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Tap the DICE header to expand
@@ -116,9 +118,10 @@ void main() {
     expect(find.text('5'), findsOneWidget);
   });
 
-  testWidgets('MULTIPLAYER section is hidden when solo (no MP, no coop)',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('MULTIPLAYER section is hidden when solo (no MP, no coop)', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // MULTIPLAYER card is not rendered when !mpActive && !hasCoop
@@ -127,29 +130,30 @@ void main() {
   });
 
   testWidgets('DATA & STORAGE shows Reset Player 1 tile', (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Scroll to DATA & STORAGE and expand it
-    await _scrollAndTap(tester, find.text('DATA & STORAGE'));
+    await scrollAndTap(tester, find.text('DATA & STORAGE'));
 
     // With no loaded run, player1Name defaults to 'Player 1'
     expect(find.text('Reset Player 1'), findsOneWidget);
   });
 
   testWidgets('DEV TOOLS section shows Dev Tools tile', (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Scroll to DEV TOOLS and expand it
-    await _scrollAndTap(tester, find.text('DEV TOOLS'));
+    await scrollAndTap(tester, find.text('DEV TOOLS'));
 
     expect(find.text('Dev Tools'), findsOneWidget);
   });
 
-  testWidgets('END RUN and RESET DATA buttons are always visible',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('END RUN and RESET DATA buttons are always visible', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Scroll to the bottom — END RUN and RESET DATA are full-width
@@ -171,28 +175,30 @@ void main() {
     expect(find.text('RESET DATA'), findsOneWidget);
   });
 
-  testWidgets('Tapping Dev Tools with no active run shows snackbar',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('Tapping Dev Tools with no active run shows snackbar', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Scroll to DEV TOOLS and expand it
-    await _scrollAndTap(tester, find.text('DEV TOOLS'));
+    await scrollAndTap(tester, find.text('DEV TOOLS'));
 
     // Scroll to Dev Tools and tap it
-    await _scrollAndTap(tester, find.text('Dev Tools'));
+    await scrollAndTap(tester, find.text('Dev Tools'));
 
-    expect(find.text('Start a run first to spawn special items.'),
-        findsOneWidget);
+    expect(
+      find.text('Start a run first to spawn special items.'),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('Tapping RESET DATA opens confirmation dialog',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('Tapping RESET DATA opens confirmation dialog', (tester) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Scroll to RESET DATA (no DANGER ZONE collapsible anymore)
-    await _scrollAndTap(tester, find.text('RESET DATA'));
+    await scrollAndTap(tester, find.text('RESET DATA'));
 
     expect(find.text('Reset All App Data?'), findsOneWidget);
     expect(find.text('RESET EVERYTHING'), findsOneWidget);
@@ -200,11 +206,11 @@ void main() {
   });
 
   testWidgets('Cancelling reset dialog does not navigate', (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Scroll to RESET DATA and tap it
-    await _scrollAndTap(tester, find.text('RESET DATA'));
+    await scrollAndTap(tester, find.text('RESET DATA'));
 
     // Tap Cancel
     await tester.tap(find.text('Cancel').last);
@@ -215,11 +221,11 @@ void main() {
   });
 
   testWidgets('Tapping END RUN opens confirmation dialog', (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Scroll to END RUN — use manual scroll+tap with pump() instead
-    // of _scrollAndTap because the EndRunConfirmDialog that opens on
+    // of scrollAndTap because the EndRunConfirmDialog that opens on
     // tap has perpetual float/glow animations that would cause
     // pumpAndSettle() to time out.
     await tester.scrollUntilVisible(
@@ -240,9 +246,10 @@ void main() {
     expect(find.byType(Dialog), findsOneWidget);
   });
 
-  testWidgets('Screen renders without crashing with empty provider data',
-      (tester) async {
-    await tester.pumpWidget(_wrap(const SettingsScreen()));
+  testWidgets('Screen renders without crashing with empty provider data', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const SettingsScreen()));
     await tester.pumpAndSettle();
 
     // Just verify the scaffold exists

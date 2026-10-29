@@ -22,6 +22,7 @@ class InventoryListRow extends StatefulWidget {
   final bool isTopDps;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
+
   /// When non-null, renders a pulsing left accent bar + background tint
   /// in this color to signal an active synergy for the item/gun.
   final Color? synergyGlowColor;
@@ -35,9 +36,9 @@ class InventoryListRow extends StatefulWidget {
     this.onLongPress,
     this.synergyGlowColor,
   }) : assert(
-          (gun == null) != (item == null),
-          'Provide exactly one of gun or item',
-        );
+         (gun == null) != (item == null),
+         'Provide exactly one of gun or item',
+       );
 
   @override
   State<InventoryListRow> createState() => _InventoryListRowState();
@@ -65,7 +66,8 @@ class _InventoryListRowState extends State<InventoryListRow>
   void didUpdateWidget(covariant InventoryListRow oldWidget) {
     super.didUpdateWidget(oldWidget);
     final wants = widget.synergyGlowColor != null;
-    final nameChanged = oldWidget.gun?.name != widget.gun?.name ||
+    final nameChanged =
+        oldWidget.gun?.name != widget.gun?.name ||
         oldWidget.item?.name != widget.item?.name;
     if (wants && (_glow == null || nameChanged)) {
       _glow?.dispose();
@@ -104,9 +106,8 @@ class _InventoryListRowState extends State<InventoryListRow>
       return (
         value: str,
         unit: 'DPS',
-        color: widget.isTopDps
-            ? const Color(0xFFFFD700)
-            : const Color(0xFFFFB74D),
+        color:
+            widget.isTopDps ? const Color(0xFFFFD700) : const Color(0xFFFFB74D),
       );
     }
     final it = widget.item!;
@@ -144,9 +145,10 @@ class _InventoryListRowState extends State<InventoryListRow>
     return Colors.white54;
   }
 
-  Set<ElementKind> get _elements => _isGun
-      ? ElementalTagger.elementsOfGun(widget.gun!)
-      : ElementalTagger.elementsOfItem(widget.item!);
+  Set<ElementKind> get _elements =>
+      _isGun
+          ? ElementalTagger.elementsOfGun(widget.gun!)
+          : ElementalTagger.elementsOfItem(widget.item!);
 
   @override
   Widget build(BuildContext context) {
@@ -169,9 +171,7 @@ class _InventoryListRowState extends State<InventoryListRow>
             children: [
               GameIcon(
                 assetPath: _iconPath,
-                fallback: _isGun
-                    ? Icons.gps_fixed
-                    : Icons.inventory_2_outlined,
+                fallback: _isGun ? Icons.gps_fixed : Icons.inventory_2_outlined,
                 quality: _quality,
                 size: 38,
                 showRing: false,
@@ -202,15 +202,11 @@ class _InventoryListRowState extends State<InventoryListRow>
                         QualityBadge(quality: _quality, size: 18),
                         if (tag.isNotEmpty)
                           _TypePill(label: tag, color: _typeColor),
-                        if (els.isNotEmpty)
-                          ...[
-                            for (final e in ElementKind.values)
-                              if (els.contains(e))
-                                _ElementDot(
-                                  element: e,
-                                  size: 8,
-                                ),
-                          ],
+                        if (els.isNotEmpty) ...[
+                          for (final e in ElementKind.values)
+                            if (els.contains(e))
+                              _ElementDot(element: e, size: 8),
+                        ],
                       ],
                     ),
                   ],
@@ -229,12 +225,17 @@ class _InventoryListRowState extends State<InventoryListRow>
                         fontSize: widget.isTopDps ? 18 : 16,
                         fontWeight: FontWeight.w900,
                         color: primary.color,
-                        shadows: widget.isTopDps ? [
-                          Shadow(
-                            color: const Color(0xFFFFD700).withValues(alpha: 0.8),
-                            blurRadius: 10,
-                          ),
-                        ] : null,
+                        shadows:
+                            widget.isTopDps
+                                ? [
+                                  Shadow(
+                                    color: const Color(
+                                      0xFFFFD700,
+                                    ).withValues(alpha: 0.8),
+                                    blurRadius: 10,
+                                  ),
+                                ]
+                                : null,
                       ),
                     ),
                     if (primary.unit != null) ...[
@@ -245,22 +246,38 @@ class _InventoryListRowState extends State<InventoryListRow>
                           fontSize: widget.isTopDps ? 13 : 12,
                           fontWeight: FontWeight.w700,
                           color: primary.color.withValues(alpha: 0.85),
-                          shadows: widget.isTopDps ? [
-                            Shadow(
-                              color: const Color(0xFFFFD700).withValues(alpha: 0.5),
-                              blurRadius: 6,
-                            ),
-                          ] : null,
+                          shadows:
+                              widget.isTopDps
+                                  ? [
+                                    Shadow(
+                                      color: const Color(
+                                        0xFFFFD700,
+                                      ).withValues(alpha: 0.5),
+                                      blurRadius: 6,
+                                    ),
+                                  ]
+                                  : null,
                         ),
                       ),
                     ],
                   ],
                 );
                 if (widget.isTopDps) {
-                  return dpsRow.animate(
-                    onPlay: (controller) => controller.repeat(reverse: true),
-                  ).scaleXY(end: 1.08, duration: 1000.ms, curve: Curves.easeInOut)
-                   .shimmer(delay: 1500.ms, duration: 1200.ms, color: Colors.white.withValues(alpha: 0.55));
+                  return dpsRow
+                      .animate(
+                        onPlay:
+                            (controller) => controller.repeat(reverse: true),
+                      )
+                      .scaleXY(
+                        end: 1.08,
+                        duration: 1000.ms,
+                        curve: Curves.easeInOut,
+                      )
+                      .shimmer(
+                        delay: 1500.ms,
+                        duration: 1200.ms,
+                        color: Colors.white.withValues(alpha: 0.55),
+                      );
                 }
                 return dpsRow;
               })(),
@@ -271,7 +288,8 @@ class _InventoryListRowState extends State<InventoryListRow>
     );
 
     final isS = _quality.toUpperCase() == 'S';
-    final rawQColor = _quality.isEmpty ? Colors.white24 : QualityBadge.colorFor(_quality);
+    final rawQColor =
+        _quality.isEmpty ? Colors.white24 : QualityBadge.colorFor(_quality);
     final qColor = isS ? const Color(0xFFFFD700) : rawQColor;
     final isHighTier = isS || _quality.toUpperCase() == 'A';
 
@@ -281,21 +299,28 @@ class _InventoryListRowState extends State<InventoryListRow>
         padding: const EdgeInsets.symmetric(vertical: Insets.xs),
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: isS ? const Color(0xFF14120E) : Colors.white.withValues(alpha: 0.03),
+            color:
+                isS
+                    ? const Color(0xFF14120E)
+                    : Colors.white.withValues(alpha: 0.03),
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: isS 
-                  ? const Color(0xFFFFD700) 
-                  : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
+              color:
+                  isS
+                      ? const Color(0xFFFFD700)
+                      : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
               width: isS ? 1.6 : (isHighTier ? 1.1 : 0.7),
             ),
-            boxShadow: isHighTier ? [
-              BoxShadow(
-                color: qColor.withValues(alpha: isS ? 0.12 : 0.06),
-                blurRadius: 6,
-                spreadRadius: 0.5,
-              )
-            ] : null,
+            boxShadow:
+                isHighTier
+                    ? [
+                      BoxShadow(
+                        color: qColor.withValues(alpha: isS ? 0.12 : 0.06),
+                        blurRadius: 6,
+                        spreadRadius: 0.5,
+                      ),
+                    ]
+                    : null,
           ),
           child: row,
         ),
@@ -317,18 +342,22 @@ class _InventoryListRowState extends State<InventoryListRow>
                 color: isS ? const Color(0xFF14120E) : Colors.transparent,
                 borderRadius: BorderRadius.all(Radii.md),
                 border: Border.all(
-                  color: isS 
-                      ? const Color(0xFFFFD700) 
-                      : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
+                  color:
+                      isS
+                          ? const Color(0xFFFFD700)
+                          : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
                   width: isS ? 1.6 : (isHighTier ? 1.1 : 0.7),
                 ),
-                boxShadow: isHighTier ? [
-                  BoxShadow(
-                    color: qColor.withValues(alpha: isS ? 0.12 : 0.06),
-                    blurRadius: 8,
-                    spreadRadius: 1,
-                  )
-                ] : null,
+                boxShadow:
+                    isHighTier
+                        ? [
+                          BoxShadow(
+                            color: qColor.withValues(alpha: isS ? 0.12 : 0.06),
+                            blurRadius: 8,
+                            spreadRadius: 1,
+                          ),
+                        ]
+                        : null,
               ),
               child: row,
             ),
@@ -351,10 +380,7 @@ class _TypePill extends StatelessWidget {
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          color: color.withValues(alpha: 0.55),
-          width: 0.7,
-        ),
+        border: Border.all(color: color.withValues(alpha: 0.55), width: 0.7),
       ),
       child: GoopText(
         label,
@@ -374,21 +400,14 @@ class _ElementDot extends StatelessWidget {
   final ElementKind element;
   final double size;
 
-  const _ElementDot({
-    required this.element,
-    required this.size,
-  });
+  const _ElementDot({required this.element, required this.size});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: element.color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: element.color, shape: BoxShape.circle),
     );
   }
 }
-

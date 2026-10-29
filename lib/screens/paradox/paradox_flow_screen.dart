@@ -109,9 +109,9 @@ class _ParadoxFlowScreenState extends State<ParadoxFlowScreen>
   Future<void> _enterVoid() async {
     final nick = _nickCtrl.text.trim();
     if (nick.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: GoopText('Enter a name first.')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: GoopText('Enter a name first.')));
       return;
     }
     await PairedPartnersStore.saveNickname(nick);
@@ -178,81 +178,85 @@ class _ParadoxFlowScreenState extends State<ParadoxFlowScreen>
         _onBack();
       },
       child: Scaffold(
-      backgroundColor: const Color(0xFF0B0714),
-      // Back moved to the bottom thumb zone (task 17 sweep) — same
-      // stage-aware _onBack the top-bar arrow used to call.
-      bottomNavigationBar: BottomBackBar(onPressed: _onBack),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Ambient void glow
-            Positioned.fill(
-              child: IgnorePointer(
-                child: AnimatedBuilder(
-                  animation: _pulseCtrl,
-                  builder: (_, __) => Container(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        center: const Alignment(0, -0.3),
-                        radius: 1.2,
-                        colors: [
-                          const Color(0xFF7C4DFF)
-                              .withValues(alpha: 0.10 + _pulseCtrl.value * 0.05),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
+        backgroundColor: const Color(0xFF0B0714),
+        // Back moved to the bottom thumb zone (task 17 sweep) — same
+        // stage-aware _onBack the top-bar arrow used to call.
+        bottomNavigationBar: BottomBackBar(onPressed: _onBack),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // Ambient void glow
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: AnimatedBuilder(
+                    animation: _pulseCtrl,
+                    builder:
+                        (_, __) => Container(
+                          decoration: BoxDecoration(
+                            gradient: RadialGradient(
+                              center: const Alignment(0, -0.3),
+                              radius: 1.2,
+                              colors: [
+                                const Color(0xFF7C4DFF).withValues(
+                                  alpha: 0.10 + _pulseCtrl.value * 0.05,
+                                ),
+                                Colors.transparent,
+                              ],
+                            ),
+                          ),
+                        ),
                   ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                // Header
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 12 * sf, vertical: 10 * sf),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 48),
-                      Expanded(
-                        child: GoopText(
-                          _title(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: FontSizes.titleSmall * sf,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 2.5,
-                            color: const Color(0xFFB388FF),
+              Column(
+                children: [
+                  // Header
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12 * sf,
+                      vertical: 10 * sf,
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 48),
+                        Expanded(
+                          child: GoopText(
+                            _title(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: FontSizes.titleSmall * sf,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 2.5,
+                              color: const Color(0xFFB388FF),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 48),
-                    ],
+                        const SizedBox(width: 48),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 350),
-                    child: _buildStage(session, sf, flair),
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      child: _buildStage(session, sf, flair),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
 
   String _title() => switch (_stage) {
-        _Stage.role => 'CHOOSE YOUR ROLE',
-        _Stage.avatar => 'PICK YOUR AVATAR',
-        _Stage.identity => 'IDENTITY',
-        _Stage.void_ => 'THE VOID',
-        _Stage.lobby => 'PARADOX LINK',
-      };
+    _Stage.role => 'CHOOSE YOUR ROLE',
+    _Stage.avatar => 'PICK YOUR AVATAR',
+    _Stage.identity => 'IDENTITY',
+    _Stage.void_ => 'THE VOID',
+    _Stage.lobby => 'PARADOX LINK',
+  };
 
   Widget _buildStage(MpSession session, double sf, ThemeFlair flair) {
     switch (_stage) {
@@ -328,13 +332,14 @@ class _RoleStage extends StatelessWidget {
   final VoidCallback onDemo;
   final String? error;
   final double sf;
-  const _RoleStage(
-      {super.key,
-      required this.role,
-      required this.onPick,
-      required this.onDemo,
-      this.error,
-      required this.sf});
+  const _RoleStage({
+    super.key,
+    required this.role,
+    required this.onPick,
+    required this.onDemo,
+    this.error,
+    required this.sf,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -351,11 +356,16 @@ class _RoleStage extends StatelessWidget {
                 color: Colors.redAccent.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                    color: Colors.redAccent.withValues(alpha: 0.4)),
+                  color: Colors.redAccent.withValues(alpha: 0.4),
+                ),
               ),
-              child: GoopText(error!,
-                  style: TextStyle(
-                      fontSize: 12 * sf, color: Colors.redAccent.shade100)),
+              child: GoopText(
+                error!,
+                style: TextStyle(
+                  fontSize: 12 * sf,
+                  color: Colors.redAccent.shade100,
+                ),
+              ),
             ),
           ],
           const Spacer(),
@@ -390,14 +400,17 @@ class _RoleStage extends StatelessWidget {
           Center(
             child: TextButton.icon(
               onPressed: onDemo,
-              icon: Icon(Icons.science_outlined,
-                  size: 14,
-                  color: Colors.white.withValues(alpha: 0.35)),
+              icon: Icon(
+                Icons.science_outlined,
+                size: 14,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
               label: GoopText(
                 'Testing mode — solo demo, no second phone',
                 style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.white.withValues(alpha: 0.35)),
+                  fontSize: 11,
+                  color: Colors.white.withValues(alpha: 0.35),
+                ),
               ),
             ),
           ),
@@ -438,27 +451,32 @@ class _BigCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             border: Border.all(color: color.withValues(alpha: 0.5), width: 1.8),
             boxShadow: [
-              BoxShadow(
-                  color: color.withValues(alpha: 0.15), blurRadius: 24),
+              BoxShadow(color: color.withValues(alpha: 0.15), blurRadius: 24),
             ],
           ),
           child: Column(
             children: [
               Icon(icon, size: 44 * sf, color: color),
               SizedBox(height: 12 * sf),
-              GoopText(title,
-                  style: TextStyle(
-                      fontSize: FontSizes.titleMedium * sf,
-                      fontWeight: FontWeight.w900,
-                      color: color,
-                      letterSpacing: 1.5)),
+              GoopText(
+                title,
+                style: TextStyle(
+                  fontSize: FontSizes.titleMedium * sf,
+                  fontWeight: FontWeight.w900,
+                  color: color,
+                  letterSpacing: 1.5,
+                ),
+              ),
               SizedBox(height: 8 * sf),
-              GoopText(subtitle,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12 * sf,
-                      color: Colors.white.withValues(alpha: 0.6),
-                      height: 1.4)),
+              GoopText(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 12 * sf,
+                  color: Colors.white.withValues(alpha: 0.6),
+                  height: 1.4,
+                ),
+              ),
             ],
           ),
         ),
@@ -475,8 +493,12 @@ class _AvatarStage extends StatelessWidget {
   final String selected;
   final void Function(String) onPick;
   final double sf;
-  const _AvatarStage(
-      {super.key, required this.selected, required this.onPick, required this.sf});
+  const _AvatarStage({
+    super.key,
+    required this.selected,
+    required this.onPick,
+    required this.sf,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -495,13 +517,14 @@ class _AvatarStage extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: const Color(0xFFB388FF).withValues(alpha: 0.7),
-                    width: 2.5),
+                  color: const Color(0xFFB388FF).withValues(alpha: 0.7),
+                  width: 2.5,
+                ),
                 boxShadow: [
                   BoxShadow(
-                      color:
-                          const Color(0xFF7C4DFF).withValues(alpha: 0.35),
-                      blurRadius: 24),
+                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.35),
+                    blurRadius: 24,
+                  ),
                 ],
               ),
               child: FramedAvatar(id: selected, size: 150 * sf, radius: 17),
@@ -509,18 +532,24 @@ class _AvatarStage extends StatelessWidget {
             SizedBox(height: 18 * sf),
             Container(
               padding: EdgeInsets.symmetric(
-                  horizontal: 18 * sf, vertical: 10 * sf),
+                horizontal: 18 * sf,
+                vertical: 10 * sf,
+              ),
               decoration: BoxDecoration(
                 color: const Color(0xFF7C4DFF).withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                    color: const Color(0xFFB388FF).withValues(alpha: 0.4)),
+                  color: const Color(0xFFB388FF).withValues(alpha: 0.4),
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.grid_view_rounded,
-                      size: 16 * sf, color: const Color(0xFFB388FF)),
+                  Icon(
+                    Icons.grid_view_rounded,
+                    size: 16 * sf,
+                    color: const Color(0xFFB388FF),
+                  ),
                   SizedBox(width: 8 * sf),
                   GoopText(
                     'PICK AVATAR',
@@ -538,8 +567,9 @@ class _AvatarStage extends StatelessWidget {
             GoopText(
               '${kAvatarIds.length} avatars · swipe sheets',
               style: TextStyle(
-                  fontSize: 11 * sf,
-                  color: Colors.white.withValues(alpha: 0.35)),
+                fontSize: 11 * sf,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
             ),
           ],
         ),
@@ -572,8 +602,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
   late String _picked = widget.selected;
   bool _frameStage = false; // step 2: dedicated frame preview
 
-  int get _pageCount =>
-      (kAvatarIds.length + _perPage - 1) ~/ _perPage;
+  int get _pageCount => (kAvatarIds.length + _perPage - 1) ~/ _perPage;
 
   @override
   void initState() {
@@ -594,8 +623,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
   void _pickFrame(String frameId) {
     Haptics.selection();
     final base = avatarBaseId(_picked);
-    setState(() =>
-        _picked = frameId.isEmpty ? base : '$base:$frameId');
+    setState(() => _picked = frameId.isEmpty ? base : '$base:$frameId');
   }
 
   @override
@@ -605,8 +633,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
       backgroundColor: const Color(0xFF12081F),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(
-            color: const Color(0xFF7C4DFF).withValues(alpha: 0.4)),
+        side: BorderSide(color: const Color(0xFF7C4DFF).withValues(alpha: 0.4)),
       ),
       child: Padding(
         padding: EdgeInsets.all(16 * sf),
@@ -629,25 +656,34 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
               onTap: () => setState(() => _frameStage = false),
               child: Row(
                 children: [
-                  Icon(Icons.arrow_back_rounded,
-                      size: 16 * sf, color: const Color(0xFFB388FF)),
+                  Icon(
+                    Icons.arrow_back_rounded,
+                    size: 16 * sf,
+                    color: const Color(0xFFB388FF),
+                  ),
                   SizedBox(width: 4 * sf),
-                  GoopText('BACK',
-                      style: TextStyle(
-                          fontSize: 12 * sf,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.2,
-                          color: const Color(0xFFB388FF))),
+                  GoopText(
+                    'BACK',
+                    style: TextStyle(
+                      fontSize: 12 * sf,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                      color: const Color(0xFFB388FF),
+                    ),
+                  ),
                 ],
               ),
             ),
             const Spacer(),
-            GoopText('PICK A FRAME',
-                style: TextStyle(
-                    fontSize: 13 * sf,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.4,
-                    color: const Color(0xFFB388FF))),
+            GoopText(
+              'PICK A FRAME',
+              style: TextStyle(
+                fontSize: 13 * sf,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.4,
+                color: const Color(0xFFB388FF),
+              ),
+            ),
           ],
         ),
         SizedBox(height: 16 * sf),
@@ -656,10 +692,12 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
         GoopText(
           (avatarFrameStyleOf(frame)?.label ?? 'NONE').toUpperCase(),
           style: TextStyle(
-              fontSize: 12 * sf,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.2,
-              color: Colors.white.withValues(alpha: 0.6))),
+            fontSize: 12 * sf,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 1.2,
+            color: Colors.white.withValues(alpha: 0.6),
+          ),
+        ),
         SizedBox(height: 14 * sf),
         // Every style previewed live on the actual portrait — specials
         // animate because FramedAvatar renders the real painter.
@@ -678,9 +716,10 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                       alignment: Alignment.center,
                       children: [
                         FramedAvatar(
-                          id: f.id.isEmpty
-                              ? avatarBaseId(_picked)
-                              : '${avatarBaseId(_picked)}:${f.id}',
+                          id:
+                              f.id.isEmpty
+                                  ? avatarBaseId(_picked)
+                                  : '${avatarBaseId(_picked)}:${f.id}',
                           size: 52 * sf,
                           radius: 10,
                         ),
@@ -691,17 +730,23 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                  color: Colors.white, width: 2.5),
+                                color: Colors.white,
+                                width: 2.5,
+                              ),
                             ),
                             child: Align(
                               alignment: Alignment.bottomRight,
                               child: Container(
                                 decoration: const BoxDecoration(
-                                    color: Color(0xFFB388FF),
-                                    shape: BoxShape.circle),
+                                  color: Color(0xFFB388FF),
+                                  shape: BoxShape.circle,
+                                ),
                                 padding: const EdgeInsets.all(2),
-                                child: Icon(Icons.check,
-                                    size: 12 * sf, color: Colors.black),
+                                child: Icon(
+                                  Icons.check,
+                                  size: 12 * sf,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                           ),
@@ -711,12 +756,14 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                     GoopText(
                       f.label,
                       style: TextStyle(
-                          fontSize: 8.5 * sf,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.8,
-                          color: frame == f.id
-                              ? const Color(0xFFB388FF)
-                              : Colors.white.withValues(alpha: 0.45)),
+                        fontSize: 8.5 * sf,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.8,
+                        color:
+                            frame == f.id
+                                ? const Color(0xFFB388FF)
+                                : Colors.white.withValues(alpha: 0.45),
+                      ),
                     ),
                   ],
                 ),
@@ -739,7 +786,8 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
           color: const Color(0xFF7C4DFF).withValues(alpha: 0.25),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: const Color(0xFFB388FF).withValues(alpha: 0.6)),
+            color: const Color(0xFFB388FF).withValues(alpha: 0.6),
+          ),
         ),
         child: Center(
           child: GoopText(
@@ -759,32 +807,33 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
   /// Step 1 — the paged portrait grid (12 per sheet).
   Widget _buildGridStage(double sf) {
     return Column(
-          mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GoopText(
-                  'PAGE ${_page + 1}/$_pageCount',
-                  style: TextStyle(
-                    fontSize: 13 * sf,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.4,
-                    color: const Color(0xFFB388FF),
-                  ),
-                ),
-                // Live preview of the composite pick.
-                FramedAvatar(id: _picked, size: 40 * sf, radius: 9),
-              ],
+            GoopText(
+              'PAGE ${_page + 1}/$_pageCount',
+              style: TextStyle(
+                fontSize: 13 * sf,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.4,
+                color: const Color(0xFFB388FF),
+              ),
             ),
-            SizedBox(height: 12 * sf),
-            SizedBox(
-              height: 330 * sf,
-              child: PageView.builder(
-                controller: _pageCtrl,
-                itemCount: _pageCount,
-                onPageChanged: (p) => setState(() => _page = p),
-                itemBuilder: (_, page) => GridView.count(
+            // Live preview of the composite pick.
+            FramedAvatar(id: _picked, size: 40 * sf, radius: 9),
+          ],
+        ),
+        SizedBox(height: 12 * sf),
+        SizedBox(
+          height: 330 * sf,
+          child: PageView.builder(
+            controller: _pageCtrl,
+            itemCount: _pageCount,
+            onPageChanged: (p) => setState(() => _page = p),
+            itemBuilder:
+                (_, page) => GridView.count(
                   crossAxisCount: 3,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
@@ -797,7 +846,8 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                       return Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.05)),
+                            color: Colors.white.withValues(alpha: 0.05),
+                          ),
                         ),
                       );
                     }
@@ -817,19 +867,23 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: isSel
-                                ? const Color(0xFFB388FF)
-                                : Colors.white.withValues(alpha: 0.15),
+                            color:
+                                isSel
+                                    ? const Color(0xFFB388FF)
+                                    : Colors.white.withValues(alpha: 0.15),
                             width: isSel ? 2.5 : 1.2,
                           ),
-                          boxShadow: isSel
-                              ? [
-                                  BoxShadow(
-                                      color: const Color(0xFF7C4DFF)
-                                          .withValues(alpha: 0.35),
-                                      blurRadius: 14)
-                                ]
-                              : null,
+                          boxShadow:
+                              isSel
+                                  ? [
+                                    BoxShadow(
+                                      color: const Color(
+                                        0xFF7C4DFF,
+                                      ).withValues(alpha: 0.35),
+                                      blurRadius: 14,
+                                    ),
+                                  ]
+                                  : null,
                         ),
                         child: ClipRect(
                           // Overscale bleeds off the 1-2px white
@@ -841,10 +895,12 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                               avatarPath(id),
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.none,
-                              errorBuilder: (_, __, ___) => const Icon(
-                                  Icons.person,
-                                  size: 36,
-                                  color: Colors.white38),
+                              errorBuilder:
+                                  (_, __, ___) => const Icon(
+                                    Icons.person,
+                                    size: 36,
+                                    color: Colors.white38,
+                                  ),
                             ),
                           ),
                         ),
@@ -852,22 +908,22 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                     );
                   }),
                 ),
-              ),
-            ),
-            SizedBox(height: 8 * sf),
-            GoopText(
-              'swipe sheets · tap a portrait for frames',
-              style: TextStyle(
-                  fontSize: 11 * sf,
-                  color: Colors.white.withValues(alpha: 0.35)),
-            ),
-            SizedBox(height: 10 * sf),
-            _confirmButton(sf),
-          ],
+          ),
+        ),
+        SizedBox(height: 8 * sf),
+        GoopText(
+          'swipe sheets · tap a portrait for frames',
+          style: TextStyle(
+            fontSize: 11 * sf,
+            color: Colors.white.withValues(alpha: 0.35),
+          ),
+        ),
+        SizedBox(height: 10 * sf),
+        _confirmButton(sf),
+      ],
     );
   }
 }
-
 
 // ── Stage 3: identity + Enter the Void ────────────────────────────
 
@@ -898,12 +954,14 @@ class _IdentityStage extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(
-                  color: const Color(0xFFB388FF).withValues(alpha: 0.6),
-                  width: 2),
+                color: const Color(0xFFB388FF).withValues(alpha: 0.6),
+                width: 2,
+              ),
               boxShadow: [
                 BoxShadow(
-                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
-                    blurRadius: 20),
+                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
+                  blurRadius: 20,
+                ),
               ],
             ),
             child: FramedAvatar(id: avatarId, size: 110 * sf, radius: 16),
@@ -917,15 +975,20 @@ class _IdentityStage extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Your name',
               hintStyle: TextStyle(
-                  color: Colors.white.withValues(alpha: 0.3),
-                  fontWeight: FontWeight.w600),
-              counterStyle:
-                  TextStyle(color: Colors.white.withValues(alpha: 0.3)),
+                color: Colors.white.withValues(alpha: 0.3),
+                fontWeight: FontWeight.w600,
+              ),
+              counterStyle: TextStyle(
+                color: Colors.white.withValues(alpha: 0.3),
+              ),
               enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.5))),
+                borderSide: BorderSide(
+                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.5),
+                ),
+              ),
               focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFB388FF))),
+                borderSide: BorderSide(color: Color(0xFFB388FF)),
+              ),
             ),
           ),
           SizedBox(height: 12 * sf),
@@ -934,10 +997,11 @@ class _IdentityStage extends StatelessWidget {
                 ? 'You will host as THE PARADOX'
                 : 'You will join as THE CULTIST',
             style: TextStyle(
-                fontSize: 11 * sf,
-                letterSpacing: 1.2,
-                color: Colors.white.withValues(alpha: 0.45),
-                fontWeight: FontWeight.w700),
+              fontSize: 11 * sf,
+              letterSpacing: 1.2,
+              color: Colors.white.withValues(alpha: 0.45),
+              fontWeight: FontWeight.w700,
+            ),
           ),
           SizedBox(height: 36 * sf),
           GestureDetector(
@@ -951,22 +1015,27 @@ class _IdentityStage extends StatelessWidget {
                   colors: [Color(0xFF7C4DFF), Color(0xFF4A148C)],
                 ),
                 border: Border.all(
-                    color: const Color(0xFFB388FF).withValues(alpha: 0.8),
-                    width: 1.5),
+                  color: const Color(0xFFB388FF).withValues(alpha: 0.8),
+                  width: 1.5,
+                ),
                 boxShadow: [
                   BoxShadow(
-                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
-                      blurRadius: 24,
-                      spreadRadius: 1),
+                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
+                    blurRadius: 24,
+                    spreadRadius: 1,
+                  ),
                 ],
               ),
-              child: GoopText('ENTER THE VOID',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: FontSizes.titleSmall * sf,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 2,
-                      color: Colors.white)),
+              child: GoopText(
+                'ENTER THE VOID',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: FontSizes.titleSmall * sf,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
         ],
@@ -1004,58 +1073,78 @@ class _VoidStage extends StatelessWidget {
           children: [
             AnimatedBuilder(
               animation: pulse,
-              builder: (_, child) => Container(
-                width: 120 * sf,
-                height: 120 * sf,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF7C4DFF)
-                          .withValues(alpha: 0.2 + pulse.value * 0.3),
-                      blurRadius: 30 + pulse.value * 20,
-                      spreadRadius: 4 + pulse.value * 6,
+              builder:
+                  (_, child) => Container(
+                    width: 120 * sf,
+                    height: 120 * sf,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(
+                            0xFF7C4DFF,
+                          ).withValues(alpha: 0.2 + pulse.value * 0.3),
+                          blurRadius: 30 + pulse.value * 20,
+                          spreadRadius: 4 + pulse.value * 6,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: child,
+                    child: child,
+                  ),
+              child: FramedAvatar(
+                id: avatarId,
+                size: double.infinity,
+                radius: 60,
               ),
-              child: FramedAvatar(id: avatarId, size: double.infinity, radius: 60),
             ),
             SizedBox(height: 14 * sf),
-            GoopText(nickname,
-                style: TextStyle(
-                    fontSize: 15 * sf,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white.withValues(alpha: 0.85))),
+            GoopText(
+              nickname,
+              style: TextStyle(
+                fontSize: 15 * sf,
+                fontWeight: FontWeight.w800,
+                color: Colors.white.withValues(alpha: 0.85),
+              ),
+            ),
             SizedBox(height: 36 * sf),
             SizedBox(
               width: 26 * sf,
               height: 26 * sf,
               child: const CircularProgressIndicator(
-                  strokeWidth: 2.5, color: Color(0xFFB388FF)),
+                strokeWidth: 2.5,
+                color: Color(0xFFB388FF),
+              ),
             ),
             SizedBox(height: 16 * sf),
-            GoopText('Seeking partner through the Void…',
-                style: TextStyle(
-                    fontSize: 13 * sf,
-                    color: Colors.white.withValues(alpha: 0.6),
-                    fontStyle: FontStyle.italic)),
+            GoopText(
+              'Seeking partner through the Void…',
+              style: TextStyle(
+                fontSize: 13 * sf,
+                color: Colors.white.withValues(alpha: 0.6),
+                fontStyle: FontStyle.italic,
+              ),
+            ),
             SizedBox(height: 8 * sf),
-            GoopText('Keep both apps open — the link forms on its own.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 11 * sf,
-                    color: Colors.white.withValues(alpha: 0.35))),
+            GoopText(
+              'Keep both apps open — the link forms on its own.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 11 * sf,
+                color: Colors.white.withValues(alpha: 0.35),
+              ),
+            ),
             SizedBox(height: 36 * sf),
             TextButton(
               onPressed: onCancel,
-              child: GoopText('CANCEL',
-                  style: TextStyle(
-                      fontSize: 12 * sf,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1,
-                      color: Colors.white.withValues(alpha: 0.4))),
+              child: GoopText(
+                'CANCEL',
+                style: TextStyle(
+                  fontSize: 12 * sf,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
             ),
           ],
         ),
@@ -1070,11 +1159,12 @@ class _LobbyStage extends StatelessWidget {
   final MpSession session;
   final VoidCallback onStartRun;
   final double sf;
-  const _LobbyStage(
-      {super.key,
-      required this.session,
-      required this.onStartRun,
-      required this.sf});
+  const _LobbyStage({
+    super.key,
+    required this.session,
+    required this.onStartRun,
+    required this.sf,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1088,18 +1178,22 @@ class _LobbyStage extends StatelessWidget {
             session.runTitle.toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: FontSizes.titleLarge * sf,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.6,
-                color: const Color(0xFFB388FF)),
+              fontSize: FontSizes.titleLarge * sf,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.6,
+              color: const Color(0xFFB388FF),
+            ),
           ),
           SizedBox(height: 4 * sf),
-          GoopText('SESSION #${session.sessionNumber}',
+          GoopText(
+            'SESSION #${session.sessionNumber}',
             style: TextStyle(
-                fontSize: 12 * sf,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 2,
-                color: Colors.white.withValues(alpha: 0.5))),
+              fontSize: 12 * sf,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 2,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
+          ),
           SizedBox(height: 30 * sf),
           // Both players side by side
           Row(
@@ -1114,8 +1208,11 @@ class _LobbyStage extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16 * sf),
-                child: const Icon(Icons.link_rounded,
-                    color: Color(0xFF00E676), size: 30),
+                child: const Icon(
+                  Icons.link_rounded,
+                  color: Color(0xFF00E676),
+                  size: 30,
+                ),
               ),
               _LobbyPortrait(
                 avatarId: session.peerAvatarId,
@@ -1134,29 +1231,39 @@ class _LobbyStage extends StatelessWidget {
                 foregroundColor: Colors.white,
                 minimumSize: Size.fromHeight(56 * sf),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14)),
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
               onPressed: onStartRun,
-              child: GoopText('START RUN',
-                  style: TextStyle(
-                      fontSize: FontSizes.titleSmall * sf,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.5)),
+              child: GoopText(
+                'START RUN',
+                style: TextStyle(
+                  fontSize: FontSizes.titleSmall * sf,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.5,
+                ),
+              ),
             )
           else
             Column(
               children: [
                 const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                        strokeWidth: 2, color: Color(0xFF26C6DA))),
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Color(0xFF26C6DA),
+                  ),
+                ),
                 SizedBox(height: 12 * sf),
-                GoopText('Waiting to start…',
-                    style: TextStyle(
-                        fontSize: 13 * sf,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.white.withValues(alpha: 0.6))),
+                GoopText(
+                  'Waiting to start…',
+                  style: TextStyle(
+                    fontSize: 13 * sf,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
               ],
             ),
         ],
@@ -1190,24 +1297,30 @@ class _LobbyPortrait extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: color.withValues(alpha: 0.6), width: 2),
             boxShadow: [
-              BoxShadow(color: color.withValues(alpha: 0.25), blurRadius: 18)
+              BoxShadow(color: color.withValues(alpha: 0.25), blurRadius: 18),
             ],
           ),
           child: FramedAvatar(id: avatarId, size: double.infinity, radius: 14),
         ),
         SizedBox(height: 10 * sf),
-        GoopText(name,
-            style: TextStyle(
-                fontSize: 14 * sf,
-                fontWeight: FontWeight.w800,
-                color: Colors.white.withValues(alpha: 0.9))),
+        GoopText(
+          name,
+          style: TextStyle(
+            fontSize: 14 * sf,
+            fontWeight: FontWeight.w800,
+            color: Colors.white.withValues(alpha: 0.9),
+          ),
+        ),
         SizedBox(height: 2 * sf),
-        GoopText(role,
-            style: TextStyle(
-                fontSize: 10 * sf,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 1.5,
-                color: color.withValues(alpha: 0.8))),
+        GoopText(
+          role,
+          style: TextStyle(
+            fontSize: 10 * sf,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 1.5,
+            color: color.withValues(alpha: 0.8),
+          ),
+        ),
       ],
     );
   }

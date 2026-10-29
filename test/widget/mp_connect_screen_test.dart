@@ -14,31 +14,37 @@ void main() {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RunProvider()),
-        ChangeNotifierProvider(create: (_) => session ?? MpSession.placeholder()),
+        ChangeNotifierProvider(
+          create: (_) => session ?? MpSession.placeholder(),
+        ),
       ],
-      child: MaterialApp(
-        home: child,
-      ),
+      child: MaterialApp(home: child),
     );
   }
 
-  testWidgets('Shows HOSTING title when phase is connecting (hosting)',
-      (tester) async {
+  testWidgets('Shows HOSTING title when phase is connecting (hosting)', (
+    tester,
+  ) async {
     final session = MpSession.placeholder();
     session.setPhaseForTest(MpPhase.connecting, MpConnectReason.hosting);
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.text('HOSTING'), findsOneWidget);
   });
 
-  testWidgets('Shows CONNECTING title when phase is connecting (joining)',
-      (tester) async {
+  testWidgets('Shows CONNECTING title when phase is connecting (joining)', (
+    tester,
+  ) async {
     final session = MpSession.placeholder();
     session.setPhaseForTest(MpPhase.connecting, MpConnectReason.joining);
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.text('CONNECTING'), findsOneWidget);
@@ -48,18 +54,27 @@ void main() {
     final session = MpSession.placeholder();
     session.setPhaseForTest(MpPhase.connecting, MpConnectReason.reconnecting);
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.text('RECONNECTING'), findsOneWidget);
   });
 
-  testWidgets('Shows error UI with message when phase is error', (tester) async {
+  testWidgets('Shows error UI with message when phase is error', (
+    tester,
+  ) async {
     final session = MpSession.placeholder();
-    session.setPhaseForTest(MpPhase.error, MpConnectReason.hosting,
-        error: 'Could not find your partner.');
+    session.setPhaseForTest(
+      MpPhase.error,
+      MpConnectReason.hosting,
+      error: 'Could not find your partner.',
+    );
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     // Use pump() not pumpAndSettle() — the pulse animation repeats forever.
     await tester.pump();
 
@@ -69,10 +84,15 @@ void main() {
 
   testWidgets('Shows Bluetooth/Wi-Fi tip in error state', (tester) async {
     final session = MpSession.placeholder();
-    session.setPhaseForTest(MpPhase.error, MpConnectReason.hosting,
-        error: 'Test error');
+    session.setPhaseForTest(
+      MpPhase.error,
+      MpConnectReason.hosting,
+      error: 'Test error',
+    );
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.textContaining('Bluetooth and Wi-Fi'), findsOneWidget);
@@ -80,10 +100,15 @@ void main() {
 
   testWidgets('Shows RETRY button in error state', (tester) async {
     final session = MpSession.placeholder();
-    session.setPhaseForTest(MpPhase.error, MpConnectReason.hosting,
-        error: 'Test error');
+    session.setPhaseForTest(
+      MpPhase.error,
+      MpConnectReason.hosting,
+      error: 'Test error',
+    );
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.text('RETRY'), findsOneWidget);
@@ -93,7 +118,9 @@ void main() {
     final session = MpSession.placeholder();
     session.setPhaseForTest(MpPhase.connecting, MpConnectReason.hosting);
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     // Back moved to the shared bottom bar (task 17 sweep) — arrow icon
@@ -105,17 +132,23 @@ void main() {
     final session = MpSession.placeholder();
     session.setPhaseForTest(MpPhase.connecting, MpConnectReason.hosting);
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.text('Waiting for a partner to join…'), findsOneWidget);
   });
 
-  testWidgets('Joiner connecting state shows searching message', (tester) async {
+  testWidgets('Joiner connecting state shows searching message', (
+    tester,
+  ) async {
     final session = MpSession.placeholder();
     session.setPhaseForTest(MpPhase.connecting, MpConnectReason.joining);
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.text('Searching for host…'), findsOneWidget);
@@ -125,7 +158,9 @@ void main() {
     final session = MpSession.placeholder();
     session.setPhaseForTest(MpPhase.connecting, MpConnectReason.restoring);
 
-    await tester.pumpWidget(wrapWithProviders(const MpConnectScreen(), session: session));
+    await tester.pumpWidget(
+      wrapWithProviders(const MpConnectScreen(), session: session),
+    );
     await tester.pump();
 
     expect(find.text('RESTORING'), findsOneWidget);
