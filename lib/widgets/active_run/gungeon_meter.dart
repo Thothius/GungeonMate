@@ -156,15 +156,17 @@ class _GungeonMeterState extends State<GungeonMeter>
                               : AnimatedBuilder(
                                 animation: _pulse,
                                 builder:
-                                    (_, __) => CustomPaint(
-                                      size: Size(barWidth, 28),
-                                      painter: _MeterPainter(
-                                        fillFraction: _fillFraction,
-                                        thresholdFraction: _thresholdFraction,
-                                        isOverThreshold: isOver,
-                                        pulse: pulseValue,
-                                        color: accent,
-                                        isCool: widget.isCool,
+                                    (_, __) => RepaintBoundary(
+                                      child: CustomPaint(
+                                        size: Size(barWidth, 28),
+                                        painter: _MeterPainter(
+                                          fillFraction: _fillFraction,
+                                          thresholdFraction: _thresholdFraction,
+                                          isOverThreshold: isOver,
+                                          pulse: pulseValue,
+                                          color: accent,
+                                          isCool: widget.isCool,
+                                        ),
                                       ),
                                     ),
                               ),

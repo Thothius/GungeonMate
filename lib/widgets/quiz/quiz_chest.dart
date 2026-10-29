@@ -275,9 +275,11 @@ class _PoofBurst extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      child: CustomPaint(
-        size: Size(size * 1.7, size * 1.6),
-        painter: _PoofPainter(progress, accent, _seeds),
+      child: RepaintBoundary(
+        child: CustomPaint(
+          size: Size(size * 1.7, size * 1.6),
+          painter: _PoofPainter(progress, accent, _seeds),
+        ),
       ),
     );
   }

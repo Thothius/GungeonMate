@@ -274,12 +274,14 @@ class _SurpriseFxState extends State<_SurpriseFx>
                 Positioned.fill(child: widget.child),
               Positioned.fill(
                 child: IgnorePointer(
-                  child: CustomPaint(
-                    painter: _FxPainter(
-                      fx: widget.fx,
-                      t: _ctrl.value,
-                      color: widget.color,
-                      seeds: _seeds,
+                  child: RepaintBoundary(
+                    child: CustomPaint(
+                      painter: _FxPainter(
+                        fx: widget.fx,
+                        t: _ctrl.value,
+                        color: widget.color,
+                        seeds: _seeds,
+                      ),
                     ),
                   ),
                 ),
