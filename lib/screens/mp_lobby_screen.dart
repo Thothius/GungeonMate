@@ -14,7 +14,8 @@ import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../widgets/avatar_aura.dart';
 import '../widgets/paradox/avatar_frame.dart';
-import 'paradox/paradox_flow_screen.dart' show showAvatarPicker;
+import 'paradox/paradox_flow_screen.dart'
+    show ParadoxFlowScreen, showAvatarPicker;
 import '../widgets/particles/ambient_glow.dart';
 import 'character_select_screen.dart';
 import 'mp_connect_screen.dart';
@@ -250,6 +251,27 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
               _stage = 2; // skip gungeoneer pick
             });
           },
+        ),
+        SizedBox(height: 22 * sf),
+        // Subtle paradox entry — alt co-op mode with avatars/surprises,
+        // demoted to a text link since the main menu paradox button
+        // was removed.
+        Center(
+          child: TextButton.icon(
+            onPressed: () {
+              Haptics.selection();
+              Navigator.push(
+                  context, fastRoute(const ParadoxFlowScreen()));
+            },
+            icon: Icon(Icons.auto_awesome_outlined,
+                size: 14, color: Colors.white.withValues(alpha: 0.35)),
+            label: GoopText(
+              'Paradox mode — avatar co-op',
+              style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.white.withValues(alpha: 0.35)),
+            ),
+          ),
         ),
       ];
 

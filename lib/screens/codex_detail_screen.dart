@@ -57,7 +57,10 @@ class CodexDetailScreen extends StatelessWidget {
         child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 20),
-        child: Column(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 760),
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Compact hero icon + badges in a row
@@ -261,6 +264,8 @@ class CodexDetailScreen extends StatelessWidget {
             const SizedBox(height: 10),
             const SizedBox.shrink(),
           ],
+            ),
+          ),
         ),
       ),
       ),

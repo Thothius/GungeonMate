@@ -92,11 +92,19 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
                       ),
                     ),
                   )
-                : ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
-                    itemCount: filtered.length,
-                    itemBuilder: (c, i) =>
-                        _ItemGroupCard(group: filtered[i]),
+                // Cap list width on tablets/big screens — long
+                // full-bleed cards read poorly beyond ~760px.
+                : Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 760),
+                      child: ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(
+                            12, 8, 12, 24),
+                        itemCount: filtered.length,
+                        itemBuilder: (c, i) =>
+                            _ItemGroupCard(group: filtered[i]),
+                      ),
+                    ),
                   ),
           ),
         ],
