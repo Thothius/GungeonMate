@@ -120,9 +120,6 @@ flutter:
     - assets/images/home/
     - assets/images/home/junk/
     - assets/animations/
-    - assets/animations/gun_types/
-    - assets/animations/dog/
-    - assets/animations/bosses/
     - assets/images/wallpapers/animated/
     - assets/images/themes/splash/
 
