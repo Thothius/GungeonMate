@@ -18,6 +18,7 @@ import 'rat_codex_screen.dart';
 import 'codex_detail_screen.dart';
 import 'gungeoneer_detail_screen.dart';
 import 'item_detail_screen.dart';
+import 'synergy_detail_screen.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
@@ -408,7 +409,7 @@ class _CodexScreenState extends State<CodexScreen> {
                         fit: BoxFit.contain,
                         filterQuality: FilterQuality.none,
                         errorBuilder:
-                            (_, __, ___) => Icon(
+                            (_, _, _) => Icon(
                               c.icon ?? Icons.bookmark,
                               size: 30,
                               color: c.color,
@@ -528,7 +529,7 @@ class _CodexScreenState extends State<CodexScreen> {
                               fit: BoxFit.contain,
                               filterQuality: FilterQuality.none,
                               errorBuilder:
-                                  (_, __, ___) => Icon(
+                                  (_, _, _) => Icon(
                                     c.icon ?? Icons.bookmark,
                                     size: 14,
                                     color: c.color,
@@ -703,6 +704,9 @@ class _CodexList extends StatelessWidget {
                       'item' => ItemDetailScreen(
                           item: p.allItems
                               .firstWhere((i) => i.name == entry.name)),
+                      'synergy' => SynergyDetailScreen(
+                          synergy: p.allSynergies.firstWhere(
+                              (s) => s.name == entry.name)),
                       _ => CodexDetailScreen(
                           entry: entry, section: section),
                     };
@@ -787,7 +791,7 @@ class _CodexCard extends StatelessWidget {
                           cacheWidth: 160,
                           cacheHeight: 160,
                           errorBuilder:
-                              (_, __, ___) => Icon(
+                              (_, _, _) => Icon(
                                 _iconForCategory(entry.category),
                                 size: 24,
                                 color: flair.primary.withValues(alpha: 0.5),
@@ -950,7 +954,7 @@ class _GungeoneersCodexPage extends StatelessWidget {
         cacheWidth: 180,
         cacheHeight: 180,
         errorBuilder:
-            (_, __, ___) => Icon(
+            (_, _, _) => Icon(
               Icons.person,
               size: 32,
               color: AppTheme.flair.primary.withValues(alpha: 0.5),
