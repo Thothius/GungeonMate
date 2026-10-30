@@ -19,6 +19,7 @@ part 'synergy_queries.dart';
 part 'trackers/special_trackers.dart';
 part 'run_persistence.dart';
 part 'run_stats.dart';
+part 'peer_snapshots.dart';
 
 // ── Isolate parse helpers ──────────────────────────────────────
 // Top-level functions for compute() — can't be closures or instance
@@ -40,7 +41,8 @@ class RunProvider
         _SpecialTrackers,
         _SynergyQueries,
         _RunPersistence,
-        _RunStats {
+        _RunStats,
+        _PeerSnapshots {
   @override
   RunState _runState = RunState();
 
@@ -153,9 +155,11 @@ class RunProvider
 
   /// Case-insensitive gun lookup. Returns null if [name] is unknown.
   /// Prefer this over `allGuns.firstWhere(...)` everywhere.
+  @override
   Gun? gunByName(String name) => _gunsByLowerName[name.toLowerCase()];
 
   /// Case-insensitive item lookup. Returns null if [name] is unknown.
+  @override
   Item? itemByName(String name) => _itemsByLowerName[name.toLowerCase()];
 
   /// Case-insensitive synergy lookup. Returns null if [name] is unknown.
@@ -165,6 +169,7 @@ class RunProvider
   /// Case-insensitive character lookup. Returns null if [name] is
   /// unknown. The roster is tiny (≈7 entries) so a linear scan is
   /// faster in practice than maintaining another map.
+  @override
   Gungeoneer? gungeoneerByName(String name) {
     final lower = name.toLowerCase();
     for (final g in _allGungeoneers) {
@@ -417,6 +422,7 @@ class RunProvider
 
   /// Internal: build a freshly-loaded Player for a Gungeoneer, pulling
   /// starting guns/items by name from the master data.
+  @override
   Player _buildPlayerFor(Gungeoneer character) {
     final rng = math.Random();
     final startingGuns =
@@ -459,6 +465,7 @@ class RunProvider
   /// is built before the host's character arrives via snapshot, so the
   /// paradox-empty rule can't apply in startCoopPlayer. Set once the
   /// first host snapshot reveals a Paradox main — see applyPeerSnapshot.
+  @override
   bool _paradoxSidekickEmptied = false;
 
   /// True when the main player is The Paradox. The main player rolls a
@@ -508,177 +515,6 @@ class RunProvider
   // Called only by MpSession when it receives a snapshot from
   // the connected peer. Keep these non-obvious mutations isolated from
   // the solo code paths by giving them distinct, multiplayer-only names.
-
-  /// Replace the co-op slot wholesale from a partner's snapshot. Names
-  /// are resolved against the current master data; unknown names are
-  /// silently dropped (harmless — the peer will re-send shortly if the
-  /// name does actually exist on their side).
-  void applyPartnerSnapshot({
-    required String characterName,
-    required List<String> gunNames,
-    required List<String> itemNames,
-  }) {
-    final char = characterName.isEmpty ? null : gungeoneerByName(characterName);
-    final guns = gunNames.map((n) => gunByName(n)).whereType<Gun>().toList();
-    final items =
-        itemNames.map((n) => itemByName(n)).whereType<Item>().toList();
-    _runState = _runState.copyWith(
-      coop: Player(character: char, guns: guns, items: items),
-    );
-    _scheduleSave();
-    notifyListeners();
-  }
-
-  /// Restore the local `main` slot from a previously-captured Player.
-  /// Used by the multiplayer Sidekick flow when the user cancels the
-  /// session: their pre-MP solo run was overwritten by the peer's
-  /// snapshot, and this hands it back unchanged. Pass `Player()` to
-  /// clear the slot when the user had no solo run.
-  void restoreMainSlot(Player main) {
-    _runState = _runState.copyWith(main: main);
-    _scheduleSave();
-    notifyListeners();
-  }
-
-  /// Reset the main slot to a fresh character with starting loadout,
-  /// preserving the coop slot and all shared state (coolness, curse,
-  /// shrines). Used by MP recovery when the saved character doesn't
-  /// match the loaded one — we need the correct character's starting
-  /// loadout, not the wrong character's guns/items.
-  void resetMainToCharacter(Gungeoneer character) {
-    final freshPlayer = _buildPlayerFor(character);
-    _runState = _runState.copyWith(main: freshPlayer);
-    _saveLastPlayedChar(character.name);
-    _scheduleSave();
-    notifyListeners();
-  }
-
-  /// Restore the entire run state atomically (used when loading a saved multiplayer session).
-  void restoreEntireRunState(RunState state) {
-    _runState = state;
-    _scheduleSave();
-    notifyListeners();
-  }
-
-  /// Apply peer snapshot to either main or coop slot based on role.
-  /// Main Player receives Sidekick data into coop slot;
-  /// Sidekick receives Main data into main slot.
-  void applyPeerSnapshot({
-    required String characterName,
-    required List<String> gunNames,
-    required List<String> itemNames,
-    required bool targetMainSlot,
-  }) {
-    // Guard: if the peer sends an empty character name, don't
-    // overwrite our slot with a null character. This happens when
-    // the peer restarts and their run state hasn't been restored
-    // yet — they broadcast a snapshot with an empty character.
-    // Without this guard, the receiver's main slot gets nulled →
-    // blank "No inventory loaded" screen.
-    if (characterName.isEmpty) return;
-
-    final char = gungeoneerByName(characterName);
-    // Don't use toSet() — it collapses stackable items like Junk.
-    // Resolve names directly, preserving duplicates and order.
-    final guns = gunNames.map((n) => gunByName(n)).whereType<Gun>().toList();
-    final items =
-        itemNames.map((n) => itemByName(n)).whereType<Item>().toList();
-
-    // CRITICAL: If the character can't be found (e.g. data not loaded
-    // yet, or character name mismatch between devices), do NOT wipe
-    // an existing valid character with a null one. That would wipe
-    // selectedCharacter (main.character) and flip the HomeScreen to
-    // MainMenu — the user sees "blank view" (particles but no run UI).
-    // Instead, preserve the existing character and only update
-    // guns/items. If there's no existing character, still create the
-    // player (backward compatible with tests that expect slot population).
-    if (char == null) {
-      final existing = targetMainSlot ? _runState.main : _runState.coop;
-      final existingChar = existing?.character;
-      if (existingChar != null) {
-        // Preserve existing character, update guns/items only.
-        final player = Player(
-          character: existingChar,
-          guns: guns,
-          items: items,
-        );
-        if (targetMainSlot) {
-          _runState = _runState.copyWith(main: player);
-        } else {
-          _runState = _runState.copyWith(coop: player);
-        }
-        _scheduleSave();
-        notifyListeners();
-        return;
-      }
-      // No existing character — fall through to create player with
-      // null character. This maintains backward compatibility.
-    }
-
-    final player = Player(character: char, guns: guns, items: items);
-
-    if (targetMainSlot) {
-      // Sidekick receiving host's data → main slot.
-      _runState = _runState.copyWith(main: player);
-      // Paradox rule (MP): the coop slot was built before the host's
-      // character was known, so it still holds real starters. Clear it
-      // once when the first snapshot reveals a Paradox main — mirrors
-      // the local startCoopPlayer behaviour.
-      if (char?.name == 'The Paradox' &&
-          !_paradoxSidekickEmptied &&
-          _runState.coop != null) {
-        _paradoxSidekickEmptied = true;
-        _runState = _runState.copyWith(
-          coop: Player(character: _runState.coop!.character),
-        );
-      }
-    } else {
-      // Main receiving joiner's data → coop slot.
-      _runState = _runState.copyWith(coop: player);
-    }
-    _scheduleSave();
-    notifyListeners();
-  }
-
-  /// Overwrite shared dungeon state (coolness / curse / shrines used)
-  /// with values from a peer snapshot. Only called for snapshots from
-  /// the Main Player (Main-authoritative model). Sidekick snapshots
-  /// carry shared-state fields but they are ignored by Main.
-  void applySharedStateFromPeer({
-    double? coolness,
-    double? curse,
-    List<String>? shrinesUsed,
-  }) {
-    _runState = _runState.copyWith(
-      coolness: coolness ?? _runState.coolness,
-      curse: curse ?? _runState.curse,
-      shrinesUsed: shrinesUsed ?? _runState.shrinesUsed,
-    );
-    _scheduleSave();
-    notifyListeners();
-  }
-
-  /// Apply a signed delta to shared dungeon state. Used by the Main
-  /// Player when it receives an [MpSharedStateDelta] from the
-  /// Sidekick. The delta is applied silently (no log entry) — the
-  /// Sidekick already logged the action locally. After applying, Main
-  /// broadcasts a snapshot so both sides converge.
-  void applySharedStateDelta({
-    double coolnessDelta = 0,
-    double curseDelta = 0,
-    String? shrineName,
-  }) {
-    _runState = _runState.copyWith(
-      coolness: (_runState.coolness + coolnessDelta).clamp(-100.0, 100.0),
-      curse: (_runState.curse + curseDelta).clamp(-100.0, 100.0),
-      shrinesUsed:
-          shrineName != null && shrineName.isNotEmpty
-              ? [..._runState.shrinesUsed, shrineName]
-              : _runState.shrinesUsed,
-    );
-    _scheduleSave();
-    notifyListeners();
-  }
 
   /// Run-scoped special-gear state: per-run in-game, so a fresh run
   /// starts them clean. Gunderfury level is the exception — its XP is
