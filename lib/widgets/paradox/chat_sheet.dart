@@ -431,7 +431,7 @@ class _ConvoRow extends StatelessWidget {
                   height: 52 * sf,
                   filterQuality: FilterQuality.none,
                   errorBuilder:
-                      (_, __, ___) => Icon(
+                      (_, _, _) => Icon(
                         Icons.broken_image_outlined,
                         size: 18 * sf,
                         color: Colors.white24,
@@ -487,7 +487,7 @@ class _SuggestionChip extends StatelessWidget {
                 height: 20 * sf,
                 filterQuality: FilterQuality.none,
                 errorBuilder:
-                    (_, __, ___) => const Icon(Icons.extension, size: 16),
+                    (_, _, _) => const Icon(Icons.extension, size: 16),
               ),
               SizedBox(width: 5 * sf),
               GoopText(
@@ -633,7 +633,7 @@ class _SpritePickerSheetState extends State<_SpritePickerSheet> {
                         filterQuality: FilterQuality.none,
                         fit: BoxFit.contain,
                         errorBuilder:
-                            (_, __, ___) => const Icon(
+                            (_, _, _) => const Icon(
                               Icons.extension,
                               color: Colors.white38,
                             ),

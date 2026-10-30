@@ -774,7 +774,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                     height: 84,
                     filterQuality: FilterQuality.none,
                     errorBuilder:
-                        (_, __, ___) =>
+                        (_, _, _) =>
                             const Icon(Icons.inventory_2_rounded, size: 64),
                   ),
                   const SizedBox(height: Insets.md),

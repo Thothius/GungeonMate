@@ -100,8 +100,8 @@ class DiceWidgetState extends State<DiceWidget>
               transform:
                   Matrix4.identity()
                     ..setEntry(3, 2, 0.0018) // 3D projection
-                    ..translate(0.0, bobY)
-                    ..scale(scale)
+                    ..translateByDouble(0.0, bobY, 0.0, 1.0)
+                    ..scaleByDouble(scale, scale, scale, 1.0)
                     ..rotateX(rotX)
                     ..rotateY(rotY)
                     ..rotateZ(rotZ),

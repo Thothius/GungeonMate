@@ -166,7 +166,7 @@ class _ParadoxBarState extends State<ParadoxBar> {
               padding: EdgeInsets.only(right: 4 * sf),
               child: ValueListenableBuilder<int>(
                 valueListenable: session.healthListenable,
-                builder: (_, health, __) => _HealthChip(health: health, sf: sf),
+                builder: (_, health, _) => _HealthChip(health: health, sf: sf),
               ),
             ),
           // Player tabs

@@ -49,7 +49,6 @@ class MpSession extends ChangeNotifier
   /// Placeholder constructor — used by ProxyProvider before the real
   /// RunProvider is available. The real provider is injected via
   /// [updateRunProvider] on the first build.
-  @override
   MpSession.placeholder() : _runProvider = RunProvider(), _link = MpLink() {
     _initSession();
   }
@@ -60,7 +59,6 @@ class MpSession extends ChangeNotifier
     _initSession();
   }
 
-  @override
   MpSession(this._runProvider) : _link = MpLink() {
     _initSession();
   }

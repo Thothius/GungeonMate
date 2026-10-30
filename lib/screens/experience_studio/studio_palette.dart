@@ -366,7 +366,7 @@ class _ThemeStepState extends State<_ThemeStep> {
                 cacheWidth: 160,
                 cacheHeight: 200,
                 errorBuilder:
-                    (_, __, ___) => DecoratedBox(
+                    (_, _, _) => DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: RadialGradient(
                           center: Alignment.center,

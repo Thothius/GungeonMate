@@ -110,7 +110,7 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
       child: AnimatedBuilder(
         animation: _controller,
         builder:
-            (_, __) => CustomPaint(
+            (_, _) => CustomPaint(
               painter: _ShaderPainter(
                 shader: _program!.fragmentShader(),
                 time: _stopwatch.elapsedMilliseconds / 1000.0,

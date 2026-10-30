@@ -87,7 +87,7 @@ class ShrineActivationSheet extends StatelessWidget {
                                         cacheWidth: 320,
                                         cacheHeight: 320,
                                         errorBuilder:
-                                            (_, __, ___) => const Icon(
+                                            (_, _, _) => const Icon(
                                               Icons.temple_buddhist_outlined,
                                               size: 64,
                                               color: Colors.amber,
@@ -105,7 +105,7 @@ class ShrineActivationSheet extends StatelessWidget {
                                         fit: BoxFit.contain,
                                         filterQuality: FilterQuality.none,
                                         errorBuilder:
-                                            (_, __, ___) => const Icon(
+                                            (_, _, _) => const Icon(
                                               Icons.temple_buddhist_outlined,
                                               size: 64,
                                               color: Colors.amber,

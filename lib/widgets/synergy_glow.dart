@@ -86,7 +86,7 @@ class SynergyGlowOverlay extends StatelessWidget {
               child: AnimatedBuilder(
                 animation: controller,
                 builder:
-                    (_, __) => CustomPaint(
+                    (_, _) => CustomPaint(
                       painter: _SynergyBorderPainter(
                         color: color,
                         t: controller.value,

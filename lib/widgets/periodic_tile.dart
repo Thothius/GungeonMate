@@ -278,7 +278,7 @@ class _PeriodicTileState extends State<PeriodicTile>
         left: 6,
         child: AnimatedBuilder(
           animation: _pulse!,
-          builder: (_, __) {
+          builder: (_, _) {
             final t = _pulse!.value;
             return Container(
               width: 9,

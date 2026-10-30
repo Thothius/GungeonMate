@@ -219,7 +219,7 @@ class _SplitChest extends StatelessWidget {
       fit: BoxFit.contain,
       filterQuality: FilterQuality.none,
       errorBuilder:
-          (_, __, ___) => Icon(
+          (_, _, _) => Icon(
             Icons.inventory_2_rounded,
             size: size * 0.7,
             color: Colors.white54,

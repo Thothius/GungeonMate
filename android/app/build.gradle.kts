@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "com.gungeonmate.gungeon_mate"
-    compileSdk = 36  // media_kit_video requires SDK 36
-    ndkVersion = "27.0.12077973"
+    compileSdk = 37  // permission_handler_android requires 37; media_kit needs >=36
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

@@ -249,7 +249,7 @@ class _SpecialGridTile extends StatelessWidget {
                     cacheWidth: 88,
                     cacheHeight: 88,
                     errorBuilder:
-                        (_, __, ___) => Icon(
+                        (_, _, _) => Icon(
                           entry.isGun ? Icons.gps_fixed : Icons.star,
                           color: Colors.white24,
                           size: 20,

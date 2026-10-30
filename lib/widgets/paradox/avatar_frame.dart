@@ -82,7 +82,7 @@ class FramedAvatar extends StatelessWidget {
           fit: BoxFit.cover,
           filterQuality: FilterQuality.none,
           errorBuilder:
-              (_, __, ___) =>
+              (_, _, _) =>
                   Icon(Icons.person, size: size * 0.6, color: Colors.white38),
         ),
       ),

@@ -51,7 +51,7 @@ void main() {
     expect(find.text('Multiplayer'), findsOneWidget);
     expect(find.text('Quiz'), findsOneWidget);
     expect(find.text('Theme'), findsOneWidget);
-    expect(find.text('Codex'), findsOneWidget);
+    expect(find.text('Ammonomicon'), findsOneWidget);
   });
 
   testWidgets('Renders version label', (tester) async {
@@ -78,9 +78,9 @@ void main() {
     await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
-    await tester.ensureVisible(find.text('Codex'));
+    await tester.ensureVisible(find.text('Ammonomicon'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Codex'));
+    await tester.tap(find.text('Ammonomicon'));
     // Use pump() not pumpAndSettle() — CodexScreen shows SkeletonLoader
     // which has a perpetual shimmer animation that would time out.
     await tester.pump(); // Process the tap callback

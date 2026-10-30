@@ -131,11 +131,11 @@ class _ThemeOverlayState extends State<ThemeOverlay>
         AppTheme.unicornPaletteNotifier,
         AppTheme.remixNotifier,
       ]),
-      builder: (_, __) {
+      builder: (_, _) {
         final mode = AppTheme.displayedMode;
         return ValueListenableBuilder<VisualPrefs>(
           valueListenable: VisualPrefs.notifier,
-          builder: (_, prefs, __) {
+          builder: (_, prefs, _) {
             // Reduced-motion: respect the platform's "remove animations"
             // accessibility setting. All animated decorative layers
             // (particles, shader, glow, sparkles, wobble, video wallpaper)

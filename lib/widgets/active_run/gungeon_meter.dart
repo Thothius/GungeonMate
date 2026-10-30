@@ -156,7 +156,7 @@ class _GungeonMeterState extends State<GungeonMeter>
                               : AnimatedBuilder(
                                 animation: _pulse,
                                 builder:
-                                    (_, __) => RepaintBoundary(
+                                    (_, _) => RepaintBoundary(
                                       child: CustomPaint(
                                         size: Size(barWidth, 28),
                                         painter: _MeterPainter(
@@ -207,7 +207,7 @@ class _GungeonMeterState extends State<GungeonMeter>
                                 : AnimatedBuilder(
                                   animation: _pulse,
                                   builder:
-                                      (_, __) => Transform.scale(
+                                      (_, _) => Transform.scale(
                                         scale: 0.85 + _pulse.value * 0.15,
                                         child: Container(
                                           decoration: BoxDecoration(

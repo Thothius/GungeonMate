@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -285,7 +286,7 @@ class AppTheme {
     TextStyle? shift(TextStyle? s) {
       if (s == null) return null;
       final w = s.fontWeight ?? FontWeight.w400;
-      final idx = (w.index + bias * 3).clamp(0, 8);
+      final idx = (w.value ~/ 100 - 1 + bias * 3).clamp(0, 8);
       return s.copyWith(fontWeight: FontWeight.values[idx]);
     }
 
@@ -384,7 +385,7 @@ class AppTheme {
           letterSpacing: 0.5,
         ),
       ),
-      tabBarTheme: TabBarTheme(
+      tabBarTheme: TabBarThemeData(
         labelStyle: (textTheme.titleSmall ?? const TextStyle()).copyWith(
           fontWeight: FontWeight.w900,
           letterSpacing: 0.5,
@@ -392,7 +393,7 @@ class AppTheme {
         unselectedLabelStyle: (textTheme.titleSmall ?? const TextStyle())
             .copyWith(fontWeight: FontWeight.w600),
       ),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         titleTextStyle: textTheme.titleLarge,
         contentTextStyle: textTheme.bodyMedium,
       ),

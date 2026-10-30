@@ -1192,7 +1192,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                                       cacheWidth: 200,
                                       cacheHeight: 266,
                                       errorBuilder:
-                                          (_, __, ___) => Container(
+                                          (_, _, _) => Container(
                                             color: flair.card,
                                             child: Icon(
                                               Icons.image,

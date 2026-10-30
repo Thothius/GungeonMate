@@ -22,7 +22,7 @@ class PauseOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
       valueListenable: context.watch<MpSession>().pausedNotifier,
-      builder: (_, paused, __) {
+      builder: (_, paused, _) {
         final body =
             paused
                 ? ColorFiltered(

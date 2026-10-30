@@ -681,7 +681,7 @@ class _Portrait extends StatelessWidget {
                 cacheWidth: 168,
                 cacheHeight: 168,
                 errorBuilder:
-                    (_, __, ___) =>
+                    (_, _, _) =>
                         gifPath.isNotEmpty
                             ? Image.asset(
                               gifPath,

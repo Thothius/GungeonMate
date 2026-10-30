@@ -242,7 +242,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
               Switch(
                 value: hasGoldJunk,
-                activeColor: Colors.amber,
+                activeThumbColor: Colors.amber,
                 onChanged: (val) {
                   if (goldJunkItem == null) return;
                   if (val) {
@@ -279,7 +279,7 @@ mixin _ItemBodySections on StatelessWidget {
                     cacheWidth: 144,
                     cacheHeight: 144,
                     errorBuilder:
-                        (_, __, ___) => const Icon(
+                        (_, _, _) => const Icon(
                           Icons.shield,
                           color: Colors.amber,
                           size: 32,
@@ -742,7 +742,7 @@ mixin _ItemBodySections on StatelessWidget {
                   ),
                 ),
                 Switch(
-                  activeColor: Colors.cyanAccent,
+                  activeThumbColor: Colors.cyanAccent,
                   activeTrackColor: Colors.cyan.shade900,
                   value: isWindgunnerActive,
                   onChanged: (val) {

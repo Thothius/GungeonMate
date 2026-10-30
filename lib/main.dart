@@ -104,16 +104,16 @@ class _GungeonMateAppState extends State<GungeonMateApp>
           AppTheme.previewNotifier,
         ]),
         builder:
-            (_, __) => ValueListenableBuilder<UnicornPalette>(
+            (_, _) => ValueListenableBuilder<UnicornPalette>(
               valueListenable: AppTheme.unicornPaletteNotifier,
               builder:
-                  (_, pal, __) => ValueListenableBuilder<int>(
+                  (_, pal, _) => ValueListenableBuilder<int>(
                     valueListenable: AppTheme.remixNotifier,
                     builder:
-                        (_, remix, __) => ValueListenableBuilder<VisualPrefs>(
+                        (_, remix, _) => ValueListenableBuilder<VisualPrefs>(
                           valueListenable: VisualPrefs.notifier,
                           builder:
-                              (context, prefs, ___) => MaterialApp(
+                              (context, prefs, _) => MaterialApp(
                                 title: 'Gungeon Mate',
                                 debugShowCheckedModeBanner: false,
                                 theme: AppTheme.themeFor(

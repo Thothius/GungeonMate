@@ -337,7 +337,7 @@ class _Header extends StatelessWidget {
             cacheWidth: 800,
             cacheHeight: 400,
             errorBuilder:
-                (_, __, ___) => Container(
+                (_, _, _) => Container(
                   height: 200,
                   color: ChallengeModeCodexScreen._void,
                   child: Center(

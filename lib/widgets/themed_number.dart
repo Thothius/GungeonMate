@@ -51,7 +51,7 @@ class ThemedNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
-      builder: (_, __, ___) {
+      builder: (_, _, _) {
         final f = AppTheme.flair;
         final size = baseSize * f.numberSizeScale;
         final color = colorOverride ?? f.headlineStat;
@@ -221,7 +221,7 @@ class _SlideTransform extends GradientTransform {
 
   @override
   Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
-    return Matrix4.identity()..translate(dx, 0);
+    return Matrix4.identity()..translateByDouble(dx, 0.0, 0.0, 1.0);
   }
 }
 
@@ -349,7 +349,7 @@ class _ThemedBulletState extends State<ThemedBullet>
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
-      builder: (_, __, ___) {
+      builder: (_, _, _) {
         final f = AppTheme.flair;
         final glyph = GoopText(
           f.bulletGlyph,

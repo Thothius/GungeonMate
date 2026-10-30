@@ -376,7 +376,7 @@ class _ParticleFieldState extends State<ParticleField>
     return RepaintBoundary(
       child: AnimatedBuilder(
         animation: _ticker,
-        builder: (_, __) {
+        builder: (_, _) {
           return LayoutBuilder(
             builder: (_, constraints) {
               final size = Size(constraints.maxWidth, constraints.maxHeight);

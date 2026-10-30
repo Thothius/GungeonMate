@@ -174,7 +174,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                 // Pulsing glow halo
                 AnimatedBuilder(
                   animation: _glowCtrl,
-                  builder: (_, __) {
+                  builder: (_, _) {
                     final t = _glowCtrl.value;
                     return Container(
                       width: 190 + t * 40,
@@ -215,7 +215,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                     cacheWidth: 320,
                     cacheHeight: 320,
                     errorBuilder:
-                        (_, __, ___) => Image.asset(
+                        (_, _, _) => Image.asset(
                           _lordFallback,
                           width: 160,
                           height: 160,
@@ -224,7 +224,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                           cacheWidth: 320,
                           cacheHeight: 320,
                           errorBuilder:
-                              (_, __, ___) => const Icon(
+                              (_, _, _) => const Icon(
                                 Icons.dangerous_rounded,
                                 size: 128,
                                 color: Colors.redAccent,

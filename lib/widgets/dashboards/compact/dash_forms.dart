@@ -309,7 +309,7 @@ class ChamberGunDashboardState extends State<ChamberGunDashboard>
                                 scrollDirection: Axis.horizontal,
                                 itemCount: 10,
                                 separatorBuilder:
-                                    (_, __) => const SizedBox(width: Insets.xs),
+                                    (_, _) => const SizedBox(width: Insets.xs),
                                 itemBuilder: (context, i) {
                                   final active = i == floor;
                                   return InkWell(

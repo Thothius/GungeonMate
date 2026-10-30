@@ -166,7 +166,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
               cacheWidth: 72,
               cacheHeight: 72,
               errorBuilder:
-                  (_, __, ___) => const Icon(
+                  (_, _, _) => const Icon(
                     Icons.cancel_presentation_rounded,
                     size: 28,
                     color: Colors.redAccent,

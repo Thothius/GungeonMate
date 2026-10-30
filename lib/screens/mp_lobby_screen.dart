@@ -521,7 +521,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                 cacheWidth: 192,
                 cacheHeight: 192,
                 errorBuilder:
-                    (_, __, ___) =>
+                    (_, _, _) =>
                         gifPath.isNotEmpty
                             ? Image.asset(
                               gifPath,

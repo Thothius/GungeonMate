@@ -412,7 +412,7 @@ class _DashboardTabChip extends StatelessWidget {
                 cacheWidth: 36,
                 cacheHeight: 36,
                 errorBuilder:
-                    (_, __, ___) =>
+                    (_, _, _) =>
                         Icon(Icons.dashboard_outlined, size: 16, color: color),
               )
             else

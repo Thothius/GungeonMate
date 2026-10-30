@@ -229,7 +229,7 @@ class _GungeoneerHeaderState extends State<GungeoneerHeader>
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
-      builder: (context, _, __) {
+      builder: (context, _, _) {
         return _buildExpanded(context);
       },
     );

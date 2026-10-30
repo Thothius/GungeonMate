@@ -252,7 +252,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                       cacheWidth: 144,
                                       cacheHeight: 144,
                                       errorBuilder:
-                                          (_, __, ___) => const Icon(
+                                          (_, _, _) => const Icon(
                                             Icons.broken_image_outlined,
                                             color: Colors.white24,
                                             size: 24,

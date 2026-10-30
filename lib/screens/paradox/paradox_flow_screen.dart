@@ -193,7 +193,7 @@ class _ParadoxFlowScreenState extends State<ParadoxFlowScreen>
                   child: AnimatedBuilder(
                     animation: _pulseCtrl,
                     builder:
-                        (_, __) => Container(
+                        (_, _) => Container(
                           decoration: BoxDecoration(
                             gradient: RadialGradient(
                               center: const Alignment(0, -0.3),

@@ -377,7 +377,7 @@ class SynergyChip extends StatelessWidget {
         path,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.none,
-        errorBuilder: (_, __, ___) => _fallback(),
+        errorBuilder: (_, _, _) => _fallback(),
       );
     }
     return Image.asset(
@@ -386,7 +386,7 @@ class SynergyChip extends StatelessWidget {
       filterQuality: FilterQuality.none,
       cacheWidth: 104,
       cacheHeight: 104,
-      errorBuilder: (_, __, ___) => _fallback(),
+      errorBuilder: (_, _, _) => _fallback(),
     );
   }
 

@@ -57,7 +57,7 @@ class _AmbientGlowState extends State<AmbientGlow>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _c,
-      builder: (_, __) {
+      builder: (_, _) {
         final t = _c.value * 2 * math.pi;
 
         final pColor = widget.primary.withValues(

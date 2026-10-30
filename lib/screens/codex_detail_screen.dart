@@ -95,7 +95,7 @@ class CodexDetailScreen extends StatelessWidget {
                                         cacheWidth: 160,
                                         cacheHeight: 160,
                                         errorBuilder:
-                                            (_, __, ___) => Icon(
+                                            (_, _, _) => Icon(
                                               Icons.widgets,
                                               size: 32,
                                               color: flair.primary.withValues(

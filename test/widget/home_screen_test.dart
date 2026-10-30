@@ -115,7 +115,7 @@ void main() {
       expect(find.byType(NavigationBar), findsOneWidget);
       expect(find.text('Inventory'), findsOneWidget);
       expect(find.text('Browse'), findsOneWidget);
-      expect(find.text('Codex'), findsOneWidget);
+      expect(find.text('Ammonomicon'), findsOneWidget);
       expect(find.text('Settings'), findsOneWidget);
       expect(find.text('Quiz'), findsOneWidget);
     });
@@ -173,7 +173,7 @@ void main() {
       await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pump();
 
-      await tester.tap(find.text('Codex'));
+      await tester.tap(find.text('Ammonomicon'));
       await tester.pump();
 
       final navBar = tester.widget<NavigationBar>(find.byType(NavigationBar));

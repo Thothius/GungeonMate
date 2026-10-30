@@ -132,7 +132,7 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                         ),
                         itemCount: kQuizAllTiers.length,
                         separatorBuilder:
-                            (_, __) => const SizedBox(height: Insets.md),
+                            (_, _) => const SizedBox(height: Insets.md),
                         itemBuilder: (context, i) {
                           final tier = kQuizAllTiers[i];
                           final pool = engine.poolSizeForTier(tier);
@@ -360,7 +360,7 @@ class _ChestCard extends StatelessWidget {
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.none,
                   errorBuilder:
-                      (_, __, ___) => Icon(
+                      (_, _, _) => Icon(
                         Icons.inventory_2_rounded,
                         size: 72,
                         color: tier.accent.withValues(alpha: 0.6),

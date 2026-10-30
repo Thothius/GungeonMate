@@ -46,7 +46,7 @@ class GoopText extends StatelessWidget {
     final bias = VisualPrefs.notifier.value.fontWeightBias;
     var effective = style;
     if (bias != 0 && style?.fontWeight != null) {
-      final idx = (style!.fontWeight!.index + bias).clamp(0, 8);
+      final idx = (style!.fontWeight!.value ~/ 100 - 1 + bias).clamp(0, 8);
       effective = style!.copyWith(fontWeight: FontWeight.values[idx]);
     }
     final spacing = VisualPrefs.notifier.value.fontLetterSpacing;

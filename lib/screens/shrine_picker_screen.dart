@@ -225,7 +225,7 @@ class _ShrineListTile extends StatelessWidget {
                               cacheWidth: 184,
                               cacheHeight: 184,
                               errorBuilder:
-                                  (_, __, ___) => const Icon(
+                                  (_, _, _) => const Icon(
                                     Icons.temple_buddhist_outlined,
                                     size: 40,
                                     color: Colors.amber,
@@ -237,7 +237,7 @@ class _ShrineListTile extends StatelessWidget {
                               fit: BoxFit.contain,
                               filterQuality: FilterQuality.none,
                               errorBuilder:
-                                  (_, __, ___) => const Icon(
+                                  (_, _, _) => const Icon(
                                     Icons.temple_buddhist_outlined,
                                     size: 40,
                                     color: Colors.amber,

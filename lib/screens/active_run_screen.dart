@@ -346,7 +346,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                             ListView.separated(
                               itemCount: results.length,
                               separatorBuilder:
-                                  (_, __) => Divider(
+                                  (_, _) => Divider(
                                     color: Colors.white.withValues(alpha: 0.05),
                                     height: 1,
                                   ),
@@ -507,7 +507,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                           // Brief "Added: [name]" toast — auto-dismisses
                           ValueListenableBuilder<String?>(
                             valueListenable: addedToast,
-                            builder: (_, msg, __) {
+                            builder: (_, msg, _) {
                               if (msg == null) return const SizedBox.shrink();
                               return Positioned(
                                 top: 0,

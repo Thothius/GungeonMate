@@ -56,7 +56,7 @@ class _ToggleRow extends StatelessWidget {
           ),
           Switch(
             value: value,
-            activeColor: flair.primary,
+            activeThumbColor: flair.primary,
             activeTrackColor: flair.primary.withValues(alpha: 0.25),
             onChanged: onChanged,
           ),

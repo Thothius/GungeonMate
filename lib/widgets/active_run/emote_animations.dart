@@ -45,7 +45,7 @@ class _KissAnimationState extends State<KissAnimation>
     final screenH = MediaQuery.of(context).size.height;
     return AnimatedBuilder(
       animation: _ctrl,
-      builder: (_, __) {
+      builder: (_, _) {
         final t = _ctrl.value; // 0..1
         // Vertical drift: heart rises from lower-center upward
         final dy = (1.0 - t) * screenH * 0.3;
@@ -156,7 +156,7 @@ class _SlapAnimationState extends State<SlapAnimation>
     final shakeAmp = (screenW * 0.03).clamp(0.0, 20.0);
     return AnimatedBuilder(
       animation: _ctrl,
-      builder: (_, __) {
+      builder: (_, _) {
         final t = _ctrl.value; // 0..1
         // Phase 1 (0→0.15): angry face slams down from top to center
         // Phase 2 (0.15→0.65): screen shake + face visible

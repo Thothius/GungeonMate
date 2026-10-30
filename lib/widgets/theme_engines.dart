@@ -303,7 +303,7 @@ class _ElasticWobbleContainerState extends State<ElasticWobbleContainer>
             Matrix4.identity()
               ..setEntry(0, 1, skewX)
               ..setEntry(1, 0, skewY)
-              ..scale(scaleX, scaleY);
+              ..scaleByDouble(scaleX, scaleY, 1.0, 1.0);
 
         return Transform(
           transform: matrix,

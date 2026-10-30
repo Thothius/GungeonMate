@@ -50,7 +50,7 @@ class GameIcon extends StatelessWidget {
               cacheHeight: (size * imgScale * 2).round(),
               semanticLabel: semanticLabel.isNotEmpty ? semanticLabel : null,
               errorBuilder:
-                  (_, __, ___) => Icon(
+                  (_, _, _) => Icon(
                     fallback,
                     size: size * iconScale,
                     color: Colors.white,
@@ -64,7 +64,7 @@ class GameIcon extends StatelessWidget {
               fit: BoxFit.contain,
               filterQuality: FilterQuality.none, // crisp pixel art
               errorBuilder:
-                  (_, __, ___) => Icon(
+                  (_, _, _) => Icon(
                     fallback,
                     size: size * iconScale,
                     color: Colors.white,

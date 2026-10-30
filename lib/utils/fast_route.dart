@@ -17,16 +17,16 @@ import '../theme/tokens.dart';
 /// Also re-triggers the Goop sponge animation so new views show the
 /// cool Goopian→English text scramble when sponge is active.
 PageRoute<T> fastRoute<T>(Widget child) => PageRouteBuilder<T>(
-  pageBuilder: (_, __, ___) {
+  pageBuilder: (_, _, _) {
     GoopAnimationManager.instance.pulse();
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
       builder:
-          (_, __, ___) =>
+          (_, _, _) =>
               ColoredBox(color: AppTheme.flair.scaffold, child: child),
     );
   },
-  transitionsBuilder: (_, anim, __, child) {
+  transitionsBuilder: (_, anim, _, child) {
     // Fade + subtle 16dp upward slide. The slide is small enough
     // to feel native, not gimmicky — it communicates spatial
     // direction (forward = up/over) without ghosting.

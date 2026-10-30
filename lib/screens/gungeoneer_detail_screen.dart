@@ -366,7 +366,7 @@ class _HeroSection extends StatelessWidget {
         gaplessPlayback: true,
         cacheWidth: 240,
         cacheHeight: 240,
-        errorBuilder: (_, __, ___) => _buildFallback(),
+        errorBuilder: (_, _, _) => _buildFallback(),
       );
     }
     return _buildFallback();
@@ -381,7 +381,7 @@ class _HeroSection extends StatelessWidget {
         cacheWidth: 240,
         cacheHeight: 240,
         errorBuilder:
-            (_, __, ___) =>
+            (_, _, _) =>
                 const Icon(Icons.person, size: 80, color: Colors.white54),
       );
     }

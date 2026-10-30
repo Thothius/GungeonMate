@@ -523,7 +523,7 @@ class HeaderMenu extends StatelessWidget {
       value: '__panel_${label.toLowerCase()}',
       child: ListenableBuilder(
         listenable: VisualPrefs.notifier,
-        builder: (_, __) {
+        builder: (_, _) {
           final current =
               label == 'Effects'
                   ? VisualPrefs.notifier.value.showEffectsPanel

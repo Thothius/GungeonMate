@@ -51,7 +51,7 @@ class AvatarAura extends StatelessWidget {
     }
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
-      builder: (_, __, ___) {
+      builder: (_, _, _) {
         final flair = AppTheme.flair;
         return SizedBox(
           width: size,
@@ -162,7 +162,7 @@ class _AuraLayerState extends State<_AuraLayer>
       child: AnimatedBuilder(
         animation: _c,
         builder:
-            (_, __) => CustomPaint(
+            (_, _) => CustomPaint(
               painter: _AuraPainter(
                 style: widget.style,
                 t: _c.value,

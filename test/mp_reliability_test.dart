@@ -290,7 +290,7 @@ void main() {
         MpLink(),
         rp,
         onPeerConnected: (_) {},
-        onPeerMetadata: (_, __) {},
+        onPeerMetadata: (_, _) {},
       );
       expect(sync.pendingGiftCount, 0);
     });
@@ -300,7 +300,7 @@ void main() {
         MpLink(),
         rp,
         onPeerConnected: (_) {},
-        onPeerMetadata: (_, __) {},
+        onPeerMetadata: (_, _) {},
       );
       // Should not throw.
       sync.restorePendingGifts();
@@ -312,7 +312,7 @@ void main() {
         MpLink(),
         rp,
         onPeerConnected: (_) {},
-        onPeerMetadata: (_, __) {},
+        onPeerMetadata: (_, _) {},
       );
       // Should not throw even when not connected.
       sync.resendPendingGifts();
@@ -324,7 +324,7 @@ void main() {
         MpLink(),
         rp,
         onPeerConnected: (_) {},
-        onPeerMetadata: (_, __) {},
+        onPeerMetadata: (_, _) {},
       );
       // Should not throw.
       sync.dispose();

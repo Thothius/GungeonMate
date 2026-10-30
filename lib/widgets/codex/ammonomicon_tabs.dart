@@ -308,7 +308,7 @@ class _BookmarkTab extends StatelessWidget {
         cacheWidth: 56,
         cacheHeight: 56,
         errorBuilder:
-            (_, __, ___) => Icon(
+            (_, _, _) => Icon(
               tab.icon ?? Icons.bookmark,
               size: active ? 26 : 22,
               color: iconColor,

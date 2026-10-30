@@ -355,7 +355,7 @@ class _CharacterCard extends StatelessWidget {
         gaplessPlayback: true,
         cacheWidth: 200,
         cacheHeight: 200,
-        errorBuilder: (_, __, ___) => _buildFallbackIcon(),
+        errorBuilder: (_, _, _) => _buildFallbackIcon(),
       );
     }
     return _buildFallbackIcon();
@@ -371,7 +371,7 @@ class _CharacterCard extends StatelessWidget {
         cacheWidth: 200,
         cacheHeight: 200,
         errorBuilder:
-            (_, __, ___) =>
+            (_, _, _) =>
                 const Icon(Icons.person, size: 64, color: Colors.white70),
       );
     }

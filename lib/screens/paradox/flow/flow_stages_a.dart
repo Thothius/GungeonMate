@@ -559,7 +559,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.none,
                               errorBuilder:
-                                  (_, __, ___) => const Icon(
+                                  (_, _, _) => const Icon(
                                     Icons.person,
                                     size: 36,
                                     color: Colors.white38,

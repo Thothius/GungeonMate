@@ -14244,14 +14244,14 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/98/Evolver.png",
     "notes": "Evolves through 6 forms (amoeba to dragon) every 5 unique enemy types killed. Ammo refills on each evolution.",
     "quote": "Tamagunchi",
-    "quality": "C",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "13.5 19.1 25.8 43.125 23.0 93.8",
     "magazine_size": "24 24 24 8 300 200",
-    "ammo_capacity": "300 300 300 300 300 150",
+    "ammo_capacity": "100",
     "damage": "6 8.5 11.5 11.5 x3 (34.5) 23/s 37.5",
     "fire_rate": "0.4s 0.4s 0.4s 0.7s N/A 0.4s",
-    "reload_time": "1.5s",
+    "reload_time": "0.78",
     "shot_speed": "22 23 25 20 -1 25",
     "range": "10 1000 25 25 30 25",
     "force": "13 35 7 22 10 7",
@@ -14370,7 +14370,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This gun adapts.\n\nWhile some have disputed the claim that a gun can change shape or adapt to its new environment within the Gungeon, this weapon appears to be irrefutable proof of the phenomenon. Since its discovery, the number of self-proclaimed gunvolution deniers has increased by 4%."
+    "ammonomicon_entry": "This gun adapts.\n\nWhile some have disputed the claim that a gun can change shape or adapt to its new environment within the Gungeon, this weapon appears to be irrefutable proof of the phenomenon. Since its discovery, the number of self-proclaimed gunvolution deniers has increased by 4%.",
+    "id": 484
   },
   {
     "name": "Excaliber",
@@ -24784,10 +24785,10 @@
     "type": "Automatic",
     "dps": "45.1 Rocket: 50 Both: 46.0",
     "magazine_size": "50 (gun) 1 (rocket)",
-    "ammo_capacity": "500",
+    "ammo_capacity": "600",
     "damage": "4 Rocket: 20 (Impact) + 30 (Explosion)",
     "fire_rate": "0.07",
-    "reload_time": "1.0s",
+    "reload_time": "1.2",
     "shot_speed": "27",
     "range": "∞",
     "force": "15",
@@ -24894,7 +24895,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "According to legend, two men were each fitted with one of these hands. One the left, and the other the right.\nThe next time they met, only one walked away."
+    "ammonomicon_entry": "According to legend, two men were each fitted with one of these hands. One the left, and the other the right.\nThe next time they met, only one walked away.",
+    "id": 673
   },
   {
     "name": "Machine Pistol",
@@ -43748,10 +43750,10 @@
     "type": "Semiautomatic",
     "dps": "20.9",
     "magazine_size": "15",
-    "ammo_capacity": "350",
+    "ammo_capacity": "500",
     "damage": "6",
     "fire_rate": "0.20",
-    "reload_time": "1.5s",
+    "reload_time": "0.78",
     "shot_speed": "15",
     "range": "35",
     "force": "6",
@@ -43940,7 +43942,8 @@
     },
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This gun is still in the process of being forged! It barely functions in its current state, but could be a viable choice in a truly desperate situation. A small hourglass is embossed on the cylinder."
+    "ammonomicon_entry": "This gun is still in the process of being forged! It barely functions in its current state, but could be a viable choice in a truly desperate situation. A small hourglass is embossed on the cylinder.",
+    "id": 762
   },
   {
     "name": "Unicorn Horn",

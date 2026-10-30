@@ -266,7 +266,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
             gaplessPlayback: true,
             cacheWidth: 96,
             cacheHeight: 96,
-            errorBuilder: (_, __, ___) => fallback,
+            errorBuilder: (_, _, _) => fallback,
           )
           : fallback;
     }
@@ -283,7 +283,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
           cacheWidth: 96,
           cacheHeight: 96,
           errorBuilder:
-              (_, __, ___) =>
+              (_, _, _) =>
                   iconPath.startsWith('assets/')
                       ? Image.asset(
                         iconPath,
@@ -291,7 +291,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                         filterQuality: FilterQuality.none,
                         cacheWidth: 96,
                         cacheHeight: 96,
-                        errorBuilder: (_, __, ___) => fallback,
+                        errorBuilder: (_, _, _) => fallback,
                       )
                       : fallback,
         );
@@ -303,7 +303,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
             filterQuality: FilterQuality.none,
             cacheWidth: 96,
             cacheHeight: 96,
-            errorBuilder: (_, __, ___) => fallback,
+            errorBuilder: (_, _, _) => fallback,
           )
           : fallback;
     }
@@ -319,7 +319,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
         cacheWidth: 96,
         cacheHeight: 96,
         errorBuilder:
-            (_, __, ___) =>
+            (_, _, _) =>
                 iconPath.startsWith('assets/')
                     ? Image.asset(
                       iconPath,
@@ -327,7 +327,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                       filterQuality: FilterQuality.none,
                       cacheWidth: 96,
                       cacheHeight: 96,
-                      errorBuilder: (_, __, ___) => fallback,
+                      errorBuilder: (_, _, _) => fallback,
                     )
                     : fallback,
       );
@@ -339,7 +339,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
           filterQuality: FilterQuality.none,
           cacheWidth: 96,
           cacheHeight: 96,
-          errorBuilder: (_, __, ___) => fallback,
+          errorBuilder: (_, _, _) => fallback,
         )
         : fallback;
   }

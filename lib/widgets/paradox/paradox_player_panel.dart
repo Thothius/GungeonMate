@@ -105,7 +105,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   ValueListenableBuilder<int>(
                     valueListenable: session.unreadChat,
                     builder:
-                        (_, unread, __) => _PanelStat(
+                        (_, unread, _) => _PanelStat(
                           label: 'MSG',
                           value: unread > 0 ? '$unread' : '—',
                           color: const Color(0xFF00E676),

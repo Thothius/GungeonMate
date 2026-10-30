@@ -140,7 +140,7 @@ class BigPlayerTab extends StatelessWidget {
                               cacheWidth: 72,
                               cacheHeight: 72,
                               errorBuilder:
-                                  (_, __, ___) => Image.asset(
+                                  (_, _, _) => Image.asset(
                                     localGungeoneerIcon(iconName),
                                     width: 36,
                                     height: 36,
@@ -149,7 +149,7 @@ class BigPlayerTab extends StatelessWidget {
                                     cacheWidth: 72,
                                     cacheHeight: 72,
                                     errorBuilder:
-                                        (_, __, ___) => const SizedBox.shrink(),
+                                        (_, _, _) => const SizedBox.shrink(),
                                   ),
                             );
                           }(),
