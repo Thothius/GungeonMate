@@ -101,7 +101,11 @@ String codexImageFolder(CodexSection section) {
 }
 
 /// Build the full asset path for a codex entry given its section.
+/// Icons that already carry a folder prefix (e.g. `guns/x.png` from
+/// cross-category fabrication like synergy anchor icons) are used
+/// as-is rather than resolved under the section folder.
 String codexAssetPath(CodexSection section, String icon) {
   if (icon.isEmpty) return '';
+  if (icon.contains('/')) return 'assets/images/$icon';
   return 'assets/images/${codexImageFolder(section)}/$icon';
 }

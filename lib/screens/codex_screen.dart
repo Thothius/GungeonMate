@@ -264,15 +264,30 @@ class _CodexScreenState extends State<CodexScreen> {
         return _filter(context
             .read<RunProvider>()
             .allSynergies
-            .map((s) => CodexEntry(
+            .map((s) {
+            // Derive icon + folder from the first required item —
+            // most synergies have no own sprite; showing the anchor
+            // item's icon is the closest visual.
+            final p = context.read<RunProvider>();
+            final anchor = s.items.isNotEmpty ? s.items.first : '';
+            final gun = p.allGuns
+                .where((g) => g.name.toLowerCase() == anchor.toLowerCase())
+                .firstOrNull;
+            final item = p.allItems
+                .where((i) => i.name.toLowerCase() == anchor.toLowerCase())
+                .firstOrNull;
+            return CodexEntry(
                 name: s.name,
                 category: 'Synergies',
-                icon: '',
+                icon: gun != null
+                    ? 'guns/${gun.icon}'
+                    : item != null
+                        ? 'items/${item.icon}'
+                        : '',
                 game: 'synergy',
                 description: s.effect,
-                ammonomicon:
-                    [...s.items, ...s.anyOf].join(' · ')))
-            .toList());
+                ammonomicon: [...s.items, ...s.anyOf].join(' · '));
+          }).toList());
       default:
         return [];
     }
