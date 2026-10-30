@@ -6,9 +6,18 @@
 > Always work in this path.
 
 ## Agent coordination (mandatory)
-- I am **Slot 1 — VISUAL (Devin)**, claimed ACTIVE on `AGENT_STATUS.md`
-  (root repo). Update slot fields (Files in progress, Uncommitted, Last
-  board update) during work; release + Session Log row at end (AC1–AC7).
+- **Multiple agents share `master`.** Read `AGENT_STATUS.md` (root repo)
+  first, claim a free slot per AC1, and keep it updated (Files in
+  progress, Uncommitted, Last board update); release + Session Log row
+  at end (AC1–AC7).
+- **Attribution:** see the "Commit Attribution & Domains" section on the
+  board. Current split — SUPPORT (Devin): phases/splits/`mp_*`/SDK/
+  tests/releases (prefixed commit subjects). Ammonomicon agent: codex,
+  item detail, `*.json` data (unprefixed subjects — please adopt a
+  `codex:`/`data:` prefix).
+- When another agent's dirty files exist in the tree, use explicit
+  `git add` paths — never bare `git add -A` (an `-A` sweep already
+  caught in-flight codex work once).
 - **Two independent repos:** root `X:\GungeonMate` →
   `github.com/Thothius/game-roomian-battler.git` (docs/coordination);
   app `gungeon_mate/` → `github.com/Thothius/GungeonMate.git` (code).
