@@ -15,6 +15,12 @@
         "t": "text",
         "v": "Spinning 360 degrees provides a 3-second buff that gives the next shot a 1.5x damage multiplier. The buff stacks up to six times if the player spins multiple times."
       }
+    ],
+    "game_name_key": "#THREESIXTY",
+    "game_ids": [
+      5,
+      49,
+      102
     ]
   },
   {
@@ -272,8 +278,8 @@
     "effect": "Colt 1851 fires three tight spreads of three free bullets upon reloading. These projectiles ignore tables when fired from behind them.",
     "icon": "",
     "any_of": [
-      "Table Tech Sight",
       "Escape Rope",
+      "Table Tech Sight",
       "Heart Holster",
       "Hip Holster"
     ],
@@ -287,6 +293,14 @@
         "t": "text",
         "v": " fires three tight spreads of three free bullets upon reloading. These projectiles ignore tables when fired from behind them."
       }
+    ],
+    "game_name_key": "#OUTLAWSTAR",
+    "game_ids": [
+      62,
+      306,
+      396,
+      421,
+      500
     ]
   },
   {
@@ -1548,10 +1562,10 @@
     "effect": "Casey becomes spiked and fires a spread of 6 nails each time it is swung.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9b/Careful_Iteration.png",
     "any_of": [
-      "Armor of Thorns",
-      "Shotgun Full of Hate",
       "Nail Gun",
-      "Eyepatch"
+      "Eyepatch",
+      "Shotgun Full of Hate",
+      "Armor of Thorns"
     ],
     "effect_tokens": [
       {
@@ -1563,6 +1577,14 @@
         "t": "text",
         "v": " becomes spiked and fires a spread of 6 nails each time it is swung."
       }
+    ],
+    "game_name_key": "#NAILBAT",
+    "game_ids": [
+      26,
+      118,
+      143,
+      457,
+      541
     ]
   },
   {
@@ -1817,13 +1839,23 @@
     "icon": "",
     "any_of": [
       "Bundle of Wands",
-      "Hexagun"
+      "Witch Pistol",
+      "Hexagun",
+      "Staff of Firepower"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Increases the chance for the guns to transmogrify enemies."
       }
+    ],
+    "game_name_key": "#BEACHICKEN",
+    "game_ids": [
+      61,
+      145,
+      385,
+      395,
+      533
     ]
   },
   {
@@ -2335,9 +2367,11 @@
     "effect": "Doubles the chance for Zombie Bullets to refund missed shots for the guns.",
     "icon": "",
     "any_of": [
+      "VertebraeK-47",
+      "Skull Spitter",
+      "Fossilized Gun",
       "Gunslinger's Ashes",
-      "Shellegun",
-      "Fossilized Gun"
+      "Shellegun"
     ],
     "effect_tokens": [
       {
@@ -2353,6 +2387,15 @@
         "t": "text",
         "v": " to refund missed shots for the guns."
       }
+    ],
+    "game_name_key": "#LIVINGAMMO",
+    "game_ids": [
+      29,
+      45,
+      196,
+      198,
+      464,
+      528
     ]
   },
   {
@@ -2721,16 +2764,28 @@
     "effect": "Destroying small breakable objects (vases, barrels, etc.) has a small chance to activate a blank effect.",
     "icon": "",
     "any_of": [
+      "Gold Ammolet",
+      "Lodestone Ammolet",
       "Chaos Ammolet",
+      "Uranium Ammolet",
       "Copper Ammolet",
-      "Frost Ammolet",
-      "Gold Ammolet"
+      "Frost Ammolet"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Destroying small breakable objects (vases, barrels, etc.) has a small chance to activate a blank effect."
       }
+    ],
+    "game_name_key": "#MINORBLANKABLES1",
+    "game_ids": [
+      152,
+      321,
+      322,
+      325,
+      342,
+      343,
+      344
     ]
   },
   {
@@ -3045,8 +3100,8 @@
     "effect": "Kills with Proton Backpack spawn allied ghosts that attack enemies.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a2/Electron_Pack.png",
     "any_of": [
-      "Zombie Bullets",
-      "Ghost Bullets"
+      "Ghost Bullets",
+      "Zombie Bullets"
     ],
     "effect_tokens": [
       {
@@ -3062,6 +3117,12 @@
         "t": "text",
         "v": " spawn allied ghosts that attack enemies."
       }
+    ],
+    "game_name_key": "#GHOSTPROTONS",
+    "game_ids": [
+      172,
+      179,
+      528
     ]
   },
   {
@@ -3251,10 +3312,10 @@
     "effect": "Upon taking damage, spawns 3 Pulse Cannons that attack enemies.",
     "icon": "",
     "any_of": [
-      "Heart Lunchbox",
       "Heart Holster",
-      "Heart Bottle",
+      "Heart Lunchbox",
       "Heart Locket",
+      "Heart Bottle",
       "Heart Purse"
     ],
     "effect_tokens": [
@@ -3262,6 +3323,15 @@
         "t": "text",
         "v": "Upon taking damage, spawns 3 Pulse Cannons that attack enemies."
       }
+    ],
+    "game_name_key": "#FINGERPULSE",
+    "game_ids": [
+      123,
+      421,
+      422,
+      423,
+      424,
+      425
     ]
   },
   {
@@ -3272,9 +3342,9 @@
     "effect": "Decreases the reload time of Trick Gun by 33% and increases fire rate by 20%.",
     "icon": "",
     "any_of": [
-      "Blood Brooch",
       "Bloody Eye",
-      "Rolling Eye"
+      "Rolling Eye",
+      "Blood Brooch"
     ],
     "effect_tokens": [
       {
@@ -3290,6 +3360,13 @@
         "t": "text",
         "v": " by 33% and increases fire rate by 20%."
       }
+    ],
+    "game_name_key": "#BLOODBORNE",
+    "game_ids": [
+      167,
+      190,
+      285,
+      363
     ]
   },
   {
@@ -3367,9 +3444,9 @@
     "effect": "Flare Gun turns green and is guaranteed to inflict enemies with Green Fire (120s, 4 DPS), which has a massively increased duration.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fe/Firing_With_Flair.png",
     "any_of": [
-      "Copper Ammolet",
-      "Amulet of the Pit Lord",
       "Master of Unlocking",
+      "Amulet of the Pit Lord",
+      "Copper Ammolet",
       "Springheel Boots"
     ],
     "effect_tokens": [
@@ -3382,6 +3459,14 @@
         "t": "text",
         "v": " sets green fire, which leaves enemies permanently burning."
       }
+    ],
+    "game_name_key": "#FLAIR_GUN",
+    "game_ids": [
+      140,
+      158,
+      275,
+      343,
+      526
     ]
   },
   {
@@ -3392,10 +3477,12 @@
     "effect": "Reloading will fire a glass bottle that will stun enemies it hits. Reloading while standing on a liquid replenishes the ammo missing in the current magazine, similar to Gungine.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e6/Five_O%27Clock_Somewhere.png",
     "any_of": [
+      "Potion of Lead Skin",
+      "Double Vision",
+      "Potion of Gun Friendship",
       "Old Knight's Flask",
       "Shotga Cola",
-      "Double Vision",
-      "Potion of Gun Friendship"
+      "Shotgun Coffee"
     ],
     "effect_tokens": [
       {
@@ -3411,6 +3498,16 @@
         "t": "text",
         "v": " ."
       }
+    ],
+    "game_name_key": "#DRINKING_PROBLEM",
+    "game_ids": [
+      64,
+      168,
+      174,
+      178,
+      267,
+      426,
+      427
     ]
   },
   {
@@ -3588,6 +3685,14 @@
         "t": "text",
         "v": " fires lasers. Each laser does 6.5 damage instead of the normal 5 damage."
       }
+    ],
+    "game_name_key": "#LASERTHOMPSON",
+    "game_ids": [
+      2,
+      114,
+      273,
+      298,
+      314
     ]
   },
   {
@@ -3983,9 +4088,11 @@
     "effect": "Gungeon Ant becomes an ant queen and shoots rocket ants.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/93/Great_Queen_Ant.png",
     "any_of": [
-      "Gilded Bullets",
+      "Heck Blaster",
+      "Ring of Fire Resistance",
       "Coin Crown",
-      "Heck Blaster"
+      "Gilded Bullets",
+      "Crown of Guns"
     ],
     "effect_tokens": [
       {
@@ -3997,6 +4104,15 @@
         "t": "text",
         "v": " becomes an ant queen and shoots rocket ants."
       }
+    ],
+    "game_name_key": "#ANTQUEEN",
+    "game_ids": [
+      17,
+      176,
+      191,
+      214,
+      532,
+      551
     ]
   },
   {
@@ -4027,9 +4143,9 @@
     "effect": "Chance for the Green Guon Stone to heal upon taking damage is raised to 70% if that damage would have killed the player. 20 also appears whenever Green Guon Stone heals the player.",
     "icon": "",
     "any_of": [
-      "+1 Bullets",
+      "Amulet of the Pit Lord",
       "Pea Shooter",
-      "Amulet of the Pit Lord"
+      "+1 Bullets"
     ],
     "effect_tokens": [
       {
@@ -4054,6 +4170,13 @@
         "t": "text",
         "v": " heals the player."
       }
+    ],
+    "game_name_key": "#GUON_UPGRADE_GREEN",
+    "game_ids": [
+      158,
+      197,
+      286,
+      466
     ]
   },
   {
@@ -4622,15 +4745,22 @@
     "effect": "A swarm of bees replaces enemy bullets when a table is flipped.",
     "icon": "",
     "any_of": [
-      "Bumbullets",
+      "Bee Hive",
       "Jar of Bees",
-      "Bee Hive"
+      "Bumbullets"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "A swarm of bees replaces enemy bullets when a table is flipped."
       }
+    ],
+    "game_name_key": "#TABLETECHBEES1",
+    "game_ids": [
+      14,
+      400,
+      432,
+      630
     ]
   },
   {
@@ -4704,14 +4834,20 @@
     "effect": "Flipping a table briefly stops time. Only enemies currently on screen are stopped; new spawns are unaffected.",
     "icon": "",
     "any_of": [
-      "Liquid Valkyrie",
-      "Bloody Eye"
+      "Bloody Eye",
+      "Liquid Valkyrie"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Flipping a table briefly stops time."
       }
+    ],
+    "game_name_key": "#TABLETECHTIME",
+    "game_ids": [
+      167,
+      396,
+      431
     ]
   },
   {
@@ -5097,6 +5233,12 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#SNOWBREAKERS",
+    "game_ids": [
+      223,
+      225,
+      636
     ]
   },
   {
@@ -5136,8 +5278,8 @@
     "effect": "Freeze Ray freezes enemies much quicker.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d9/Ice_Cap.png",
     "any_of": [
-      "Camera",
-      "Flash Ray"
+      "Flash Ray",
+      "Camera"
     ],
     "effect_tokens": [
       {
@@ -5149,6 +5291,12 @@
         "t": "text",
         "v": " freezes enemies much quicker."
       }
+    ],
+    "game_name_key": "#CAPTAINCOLD",
+    "game_ids": [
+      40,
+      383,
+      481
     ]
   },
   {
@@ -5291,8 +5439,10 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/55/Iron_Slug.png",
     "any_of": [
       "Scope",
+      "Heavy Bullets",
       "Heavy Boots",
-      "Heavy Bullets"
+      "Fat Bullets",
+      "Stout Bullets"
     ],
     "effect_tokens": [
       {
@@ -5304,6 +5454,15 @@
         "t": "text",
         "v": " fires a single high-damage slug."
       }
+    ],
+    "game_name_key": "#SLUGIRON",
+    "game_ids": [
+      102,
+      111,
+      157,
+      256,
+      277,
+      523
     ]
   },
   {
@@ -6178,16 +6337,26 @@
     "effect": "Decreases M1's reload time by 20% and increases its magazine size, and maximum ammo. Increases movement speed. Changes appearance to resemble an M14.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/af/M1_Multi-Tool.png",
     "any_of": [
-      "Drum Clip",
       "Scope",
+      "Utility Belt",
+      "Backpack",
       "Ammo Belt",
-      "Utility Belt"
+      "Drum Clip"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Decreases M1's reload time by 20% and increases its magazine size, and maximum ammo. Increases movement speed. Changes appearance to resemble an M14."
       }
+    ],
+    "game_name_key": "#TACTICOOL",
+    "game_ids": [
+      25,
+      102,
+      131,
+      133,
+      134,
+      280
     ]
   },
   {
@@ -6742,18 +6911,28 @@
     "effect": "Nails are larger and deal triple damage.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f9/Nailed_It%21.png",
     "any_of": [
+      "H4mmer",
       "Heavy Bullets",
       "+1 Bullets",
       "Sunglasses",
       "Blast Helmet",
-      "Cobalt Hammer",
-      "H4mmer"
+      "Cobalt Hammer"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Nails deal triple damage."
       }
+    ],
+    "game_name_key": "#NAILCANNON",
+    "game_ids": [
+      26,
+      91,
+      111,
+      286,
+      290,
+      312,
+      390
     ]
   },
   {
@@ -6904,8 +7083,8 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/43/Not_Quite_As_Mini.png",
     "any_of": [
       "Ammo Belt",
-      "Drum Clip",
-      "Oiled Cylinder"
+      "Oiled Cylinder",
+      "Drum Clip"
     ],
     "effect_tokens": [
       {
@@ -6921,6 +7100,13 @@
         "t": "text",
         "v": "'s maximum ammo by 25% and significantly increases fire rate."
       }
+    ],
+    "game_name_key": "#LESS_MINI_GUN",
+    "game_ids": [
+      84,
+      134,
+      165,
+      280
     ]
   },
   {
@@ -6931,9 +7117,9 @@
     "effect": "Buzzkill's saw blades are linked by lightning.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e2/Not_So_Sawed-Off.png",
     "any_of": [
-      "Rattler",
+      "Winchester",
       "Regular Shotgun",
-      "Winchester"
+      "Rattler"
     ],
     "effect_tokens": [
       {
@@ -6945,6 +7131,13 @@
         "t": "text",
         "v": "'s saw blades are linked by lightning."
       }
+    ],
+    "game_name_key": "#SAWEDON",
+    "game_ids": [
+      1,
+      51,
+      341,
+      406
     ]
   },
   {
@@ -7249,9 +7442,9 @@
     "effect": "The guns home in on enemies.",
     "icon": "",
     "any_of": [
+      "Zorgun",
       "RPG",
       "Stinger",
-      "Zorgun",
       "Laser Lotus"
     ],
     "effect_tokens": [
@@ -7259,6 +7452,14 @@
         "t": "text",
         "v": "The guns home in on enemies."
       }
+    ],
+    "game_name_key": "#LASERPLASMA",
+    "game_ids": [
+      6,
+      39,
+      92,
+      156,
+      273
     ]
   },
   {
@@ -7417,11 +7618,11 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/82/Pistol_Machine.png",
     "any_of": [
       "Fortune's Favor",
-      "Laser Sight",
-      "Nanomachines",
       "Bionic Leg",
+      "Laser Sight",
+      "+1 Bullets",
       "Shock Rounds",
-      "+1 Bullets"
+      "Nanomachines"
     ],
     "effect_tokens": [
       {
@@ -7442,6 +7643,16 @@
         "t": "text",
         "v": " and are connected with electricity."
       }
+    ],
+    "game_name_key": "#MACHINEPISTOL",
+    "game_ids": [
+      43,
+      105,
+      114,
+      273,
+      286,
+      298,
+      314
     ]
   },
   {
@@ -7636,16 +7847,26 @@
     "effect": "Increases coolness by 2.",
     "icon": "",
     "any_of": [
-      "Box",
       "Ration",
       "Fortune's Favor",
-      "Nanomachines"
+      "Box",
+      "Nanomachines",
+      "Hip Holster"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Increases coolness by 2."
       }
+    ],
+    "game_name_key": "#OCELOT",
+    "game_ids": [
+      50,
+      104,
+      105,
+      216,
+      314,
+      500
     ]
   },
   {
@@ -7982,19 +8203,30 @@
     "effect": "Rolling reloads six bullets. Dodge roll distance is increased by 20% when the gun held.",
     "icon": "",
     "any_of": [
-      "Magnum",
-      "M1911",
       "Dungeon Eagle",
+      "M1911",
+      "Magnum",
+      "SAA",
       "38 Special",
       "Colt 1851",
-      "Makarov",
-      "SAA"
+      "Makarov"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Rolling reloads six bullets. Dodge roll distance is increased by 20% when the gun held."
       }
+    ],
+    "game_name_key": "#DODGELOAD",
+    "game_ids": [
+      23,
+      30,
+      38,
+      50,
+      56,
+      62,
+      79,
+      375
     ]
   },
   {
@@ -8034,8 +8266,8 @@
     "name": "Resourceful Indeed,",
     "items": [
       "Elimentaler",
-      "Resourceful Sack",
       "Partially-Eaten Cheese",
+      "Resourceful Sack",
       "Rat Boots"
     ],
     "effect": "Player becomes the Resourceful Rat. This prevents items from being stolen when they're left behind in rooms.",
@@ -8045,6 +8277,13 @@
         "t": "text",
         "v": "Player becomes the Resourceful Rat . This prevents items from being stolen when they're left behind in rooms."
       }
+    ],
+    "game_name_key": "#RESOURCEFULRAT",
+    "game_ids": [
+      626,
+      662,
+      663,
+      667
     ]
   },
   {
@@ -8634,6 +8873,12 @@
         "t": "text",
         "v": " fires 9 parallel arrows straight forward."
       }
+    ],
+    "game_name_key": "#TELEPORTERACCIDENT",
+    "game_ids": [
+      126,
+      449,
+      573
     ]
   },
   {
@@ -8822,8 +9067,8 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/77/Shot_Across_The_Bow.png",
     "any_of": [
       "Rocket-Powered Bullets",
-      "Air Strike",
       "iBomb Companion App",
+      "Air Strike",
       "Explosive Rounds"
     ],
     "effect_tokens": [
@@ -8836,6 +9081,14 @@
         "t": "text",
         "v": " fires explosive missiles."
       }
+    ],
+    "game_name_key": "#MISSILE_BOW",
+    "game_ids": [
+      113,
+      210,
+      234,
+      252,
+      304
     ]
   },
   {
@@ -8993,12 +9246,12 @@
   },
   {
     "name": "Smart Bombs",
-    "items": [],
+    "items": [
+      "Bomb"
+    ],
     "effect": "Bombs home in on enemies.",
     "icon": "",
     "any_of": [
-      "Bomb",
-      "Ice Bomb",
       "Crutch",
       "Homing Bullets"
     ],
@@ -9007,6 +9260,12 @@
         "t": "text",
         "v": "Bombs home in on enemies."
       }
+    ],
+    "game_name_key": "#HOMINGBOMBS2",
+    "game_ids": [
+      108,
+      240,
+      284
     ]
   },
   {
@@ -9430,8 +9689,8 @@
     "effect": "Increases Polaris ammo capacity to 700, increases its magazine size to 30, increases damage by 20%, increases fire rate when leveled up, and changes its appearance.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/79/Square_Brace.png",
     "any_of": [
-      "Bracket Key",
-      "Bionic Leg"
+      "Bionic Leg",
+      "Bracket Key"
     ],
     "effect_tokens": [
       {
@@ -9447,6 +9706,12 @@
         "t": "text",
         "v": " ammo capacity to 700, increases its magazine size to 30, increases damage by 20%, increases fire rate when leveled up, and changes its appearance."
       }
+    ],
+    "game_name_key": "#CURLY_BRACE",
+    "game_ids": [
+      97,
+      114,
+      439
     ]
   },
   {
@@ -9684,7 +9949,6 @@
     "name": "Synthetic Shield",
     "items": [
       "Heart Synthesizer",
-      "Ammo Synthesizer",
       "Armor Synthesizer"
     ],
     "effect": "Creates a companion that orbits the player and blocks shots. If the player has two of the three synthesizers, the companion will take the appearance of the third synthesizer. If the player has all three synthesizers, all three companions will spawn.",
@@ -9694,6 +9958,11 @@
         "t": "text",
         "v": "Creates a companion that orbits the player and blocks shots. If the player has two of the three synthesizers, the companion will take the appearance of the third synthesizer. If the player has all three synthesizers, all three companions will spawn."
       }
+    ],
+    "game_name_key": "#SYNTHESIZERS1",
+    "game_ids": [
+      164,
+      450
     ]
   },
   {
@@ -9887,9 +10156,15 @@
     "effect": "Pig fires bats and gains a green appearance.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/42/The_Return.png",
     "any_of": [
+      "Serious Cannon",
+      "Vulcan Cannon",
+      "Pulse Cannon",
+      "T-Shirt Cannon",
+      "Trashcannon",
       "Luxin Cannon",
+      "Science Cannon",
       "Makeshift Cannon",
-      "T-Shirt Cannon"
+      "Poxcannon"
     ],
     "effect_tokens": [
       {
@@ -9901,6 +10176,19 @@
         "t": "text",
         "v": " fires bats and gains a green appearance."
       }
+    ],
+    "game_name_key": "#CANNONREBORN",
+    "game_ids": [
+      37,
+      84,
+      123,
+      150,
+      154,
+      199,
+      331,
+      451,
+      480,
+      513
     ]
   },
   {
@@ -10124,22 +10412,33 @@
   {
     "name": "To Serve Android",
     "items": [
-      "Badge",
-      "Grasschopper"
+      "Badge"
     ],
     "effect": "Police Officer turns into a robot and becomes unkillable.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6b/To_Serve_Android.png",
     "any_of": [
-      "Full Metal Jacket",
-      "Mass Shotgun",
+      "Deck4rd",
+      "Bionic Leg",
+      "Grasschopper",
       "The Judge",
-      "Bionic Leg"
+      "Mass Shotgun",
+      "Full Metal Jacket"
     ],
     "effect_tokens": [
       {
         "t": "text",
         "v": "Police Officer turns into a robot and becomes unkillable."
       }
+    ],
+    "game_name_key": "#ROBOCOP",
+    "game_ids": [
+      81,
+      114,
+      180,
+      184,
+      365,
+      442,
+      564
     ]
   },
   {
@@ -10539,10 +10838,11 @@
     "effect": "Gives Mutation poison effect.",
     "icon": "",
     "any_of": [
-      "Monster Blood",
       "Bloody Eye",
-      "Bloody 9mm",
-      "Bloodied Scarf"
+      "Blood Brooch",
+      "Monster Blood",
+      "Bloodied Scarf",
+      "Bloody 9mm"
     ],
     "effect_tokens": [
       {
@@ -10558,14 +10858,22 @@
         "t": "text",
         "v": " poison effect."
       }
+    ],
+    "game_name_key": "#EXTRABLOODY",
+    "game_ids": [
+      167,
+      285,
+      313,
+      333,
+      436,
+      524
     ]
   },
   {
     "name": "The Void Corps",
     "items": [
       "Void Shotgun",
-      "Void Core Assault Rifle",
-      "Void Core Cannon"
+      "Void Core Assault Rifle"
     ],
     "effect": "When one of the guns is held, the other(s) orbit the player. Whenever the player reloads, the orbiting gun(s) fire towards the crosshair.",
     "icon": "",
@@ -10574,6 +10882,11 @@
         "t": "text",
         "v": "When one of the guns is held, the other(s) orbit the player. Whenever the player reloads, the orbiting gun(s) fire towards the crosshair."
       }
+    ],
+    "game_name_key": "#VOIDCORE",
+    "game_ids": [
+      55,
+      58
     ]
   },
   {
@@ -10877,13 +11190,12 @@
   {
     "name": "Willing To Sacrifice",
     "items": [
-      "Freeze Ray"
+      "Heart of Ice"
     ],
     "effect": "Freeze Ray gains piercing and slowly regenerates ammo over time.",
     "icon": "",
     "any_of": [
       "Ice Cube",
-      "Heart of Ice",
       "Frost Bullets"
     ],
     "effect_tokens": [
@@ -10896,6 +11208,12 @@
         "t": "text",
         "v": " gains piercing and slowly regenerates ammo over time."
       }
+    ],
+    "game_name_key": "#ICETOMEETYOU",
+    "game_ids": [
+      170,
+      278,
+      364
     ]
   },
   {
