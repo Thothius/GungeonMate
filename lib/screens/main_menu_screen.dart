@@ -230,7 +230,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                             Expanded(
                                               child: _menuButton(
                                                 icon: Icons.menu_book_rounded,
-                                                label: 'Codex',
+                                                label: 'Ammonomicon',
                                                 sf: sf,
                                                 flair: flair,
                                                 labelColor: onBtn,

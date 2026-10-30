@@ -184,7 +184,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   _item(
                     'codex',
                     Icons.menu_book_rounded,
-                    'Codex',
+                    'Ammonomicon',
                     const Color(0xFF4DD0E1),
                   ),
                   const PopupMenuDivider(),

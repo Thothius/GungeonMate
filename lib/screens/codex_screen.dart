@@ -17,6 +17,7 @@ import 'drake_codex_screen.dart';
 import 'rat_codex_screen.dart';
 import 'codex_detail_screen.dart';
 import 'gungeoneer_detail_screen.dart';
+import 'item_detail_screen.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
@@ -151,7 +152,7 @@ class _CodexScreenState extends State<CodexScreen> {
     AmmonomiconTab(
       label: 'Synergies',
       icon: Icons.auto_awesome,
-      color: const Color(0xFFB388FF),
+      color: Color(0xFFB388FF),
       isSpecial: false,
     ),
   ];
@@ -686,12 +687,26 @@ class _CodexList extends StatelessWidget {
                   section: section,
                   onTap: () {
                     Haptics.selection();
-                    Navigator.push(
-                      context,
-                      fastRoute(
-                        CodexDetailScreen(entry: entry, section: section),
-                      ),
-                    );
+                    // Ammonomicon wiki entries route to their native
+                    // detail screens; regular codex entries unchanged.
+                    final p = context.read<RunProvider>();
+                    final dest = switch (entry.game) {
+                      'gun' => p.allGuns
+                              .where((g) => g.name == entry.name)
+                              .firstOrNull !=
+                          null
+                          ? ItemDetailScreen(
+                              gun: p.allGuns.firstWhere(
+                                  (g) => g.name == entry.name))
+                          : CodexDetailScreen(
+                              entry: entry, section: section),
+                      'item' => ItemDetailScreen(
+                          item: p.allItems
+                              .firstWhere((i) => i.name == entry.name)),
+                      _ => CodexDetailScreen(
+                          entry: entry, section: section),
+                    };
+                    Navigator.push(context, fastRoute(dest));
                   },
                 );
               }, childCount: entries.length),

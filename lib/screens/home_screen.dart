@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 NavigationDestination(
                   icon: Icon(Icons.menu_book_outlined),
                   selectedIcon: Icon(Icons.menu_book),
-                  label: 'Codex',
+                  label: 'Ammonomicon',
                 ),
                 NavigationDestination(
                   icon: Icon(Icons.settings_outlined),

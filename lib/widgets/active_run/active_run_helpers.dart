@@ -368,7 +368,7 @@ class HeaderMenu extends StatelessWidget {
                     color: Color(0xFF4DD0E1),
                   ),
                   SizedBox(width: 10),
-                  GoopText('Codex'),
+                  GoopText('Ammonomicon'),
                 ],
               ),
             ),
