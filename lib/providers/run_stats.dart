@@ -152,19 +152,40 @@ mixin _RunStats on ChangeNotifier {
   /// across both players. Represents the synergy "design space" this run
   /// has opened up — more is more fun to chase.
   int get combinedSynergyPotential {
-    final owned = <String>{
-      for (final g in _allGunsInRun) g.name.toLowerCase(),
-      for (final i in _allItemsInRun) i.name.toLowerCase(),
-    };
+    final owned = _statsOwnedLower;
     if (owned.isEmpty) return 0;
-    int n = 0;
+    final cached = _potentialCache;
+    if (cached != null) return cached;
+    var n = 0;
     for (final s in _allSynergies) {
-      final hits =
-          s.items.any((i) => owned.contains(i.toLowerCase())) ||
-          s.anyOf.any((i) => owned.contains(i.toLowerCase()));
-      if (hits) n++;
+      if (s.items.any(owned.contains) || s.anyOf.any(owned.contains)) n++;
     }
-    return n;
+    return _potentialCache = n;
+  }
+
+  /// Owned name→lowercase set + its signature — rebuilt only when the
+  /// combined inventory changes (self-invalidating memo, same pattern
+  /// as the synergy predictor cache).
+  String? _statsSig;
+  Set<String>? _statsOwned;
+  int? _potentialCache;
+  Map<String, Color>? _glowCache;
+
+  Set<String> get _statsOwnedLower {
+    final guns = _allGunsInRun;
+    final items = _allItemsInRun;
+    final sig =
+        '${guns.length}.${items.length}|${guns.map((g) => g.name).join(' ')}|${items.map((i) => i.name).join(' ')}';
+    if (sig != _statsSig) {
+      _statsSig = sig;
+      _statsOwned = {
+        for (final g in guns) g.name.toLowerCase(),
+        for (final i in items) i.name.toLowerCase(),
+      };
+      _potentialCache = null;
+      _glowCache = null;
+    }
+    return _statsOwned!;
   }
 
   /// Maps every item/gun name (lowercased) that participates in a currently
@@ -172,6 +193,11 @@ mixin _RunStats on ChangeNotifier {
   /// Considers BOTH players' inventories so co-op synergies light up too.
   /// Returns an empty map when no synergies are active.
   Map<String, Color> get activeSynergyGlowColors {
+    _statsOwnedLower; // refresh the signature → invalidates on change
+    return _glowCache ??= _buildGlowColors();
+  }
+
+  Map<String, Color> _buildGlowColors() {
     final active = getActiveSynergiesCombined();
     if (active.isEmpty) return const {};
     final result = <String, Color>{};

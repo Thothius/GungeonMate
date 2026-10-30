@@ -91,10 +91,22 @@ mixin _SynergyQueries on ChangeNotifier {
   }
 
   /// Full-run active synergies (looks across BOTH players' inventories).
+  /// Memoized on the inventory signature — activeSynergyGlowColors and
+  /// panel stats call this per-build; without the cache each build
+  /// re-scans every synergy (~440 × matchesItems).
   List<Synergy> getActiveSynergiesCombined() {
     final names = _runState.allItemNames; // main + coop
-    return _allSynergies.where((s) => s.matchesItems(names)).toList();
+    final sig = names.join(' ');
+    if (sig != _activeCombinedSig) {
+      _activeCombinedSig = sig;
+      _activeCombinedCache =
+          _allSynergies.where((s) => s.matchesItems(names)).toList();
+    }
+    return _activeCombinedCache!;
   }
+
+  String? _activeCombinedSig;
+  List<Synergy>? _activeCombinedCache;
 
   Map<String, int>? _synergyCountCache;
 
