@@ -192,7 +192,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Masterwork bullets. Peer-reviewed studies have shown that these bullets are precisely 1 better than normal bullets."
+    "ammonomicon_entry": "Masterwork bullets. Peer-reviewed studies have shown that these bullets are precisely 1 better than normal bullets.",
+    "id": 286
   },
   {
     "name": "Aged Bell",
@@ -890,7 +891,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance to regain ammo upon killing an enemy."
+    "ammonomicon_entry": "Adds a chance to regain ammo upon killing an enemy.",
+    "id": 116
   },
   {
     "name": "Amulet of the Pit Lord",
@@ -951,7 +953,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Falling into pits no longer deals damage."
+    "ammonomicon_entry": "Falling into pits no longer deals damage.",
+    "id": 158
   },
   {
     "name": "Ancient Hero's Bandana",
@@ -1520,7 +1523,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Hitting an enemy has a chance to refire the projectile at a nearby enemy. These bullets are imbued with the white-hot rage of Kaliber herself."
+    "ammonomicon_entry": "Hitting an enemy has a chance to refire the projectile at a nearby enemy. These bullets are imbued with the white-hot rage of Kaliber herself.",
+    "id": 323
   },
   {
     "name": "Antibody",
@@ -1584,7 +1588,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance to heal the player for an extra half a heart whenever they receive healing."
+    "ammonomicon_entry": "Adds a chance to heal the player for an extra half a heart whenever they receive healing.",
+    "id": 259
   },
   {
     "name": "Arcane Gunpowder",
@@ -1770,7 +1775,8 @@
     },
     "recharge_time": "Cannot be used",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master."
+    "ammonomicon_entry": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master.",
+    "id": 351
   },
   {
     "name": "Armor of Thorns",
@@ -2089,7 +2095,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Greatly increases dodge roll damage. The barbs on this suit of armor are sure to ruin anyone's day, as long as that \"anyone\" is within a few inches of you."
+    "ammonomicon_entry": "Greatly increases dodge roll damage. The barbs on this suit of armor are sure to ruin anyone's day, as long as that \"anyone\" is within a few inches of you.",
+    "id": 457
   },
   {
     "name": "Armor Synthesizer",
@@ -2762,7 +2769,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This abandoned baby mimic misses its siblings, and imprints on the first follower it sees."
+    "ammonomicon_entry": "This abandoned baby mimic misses its siblings, and imprints on the first follower it sees.",
+    "id": 664
   },
   {
     "name": "Baby Good Shelleton",
@@ -3951,7 +3959,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A policeman's badge. It belongs to the officer on duty in the Gungeon's precinct.\n\nIt seems to be well worn. Whoever owns this badge is probably close to retirement."
+    "ammonomicon_entry": "A policeman's badge. It belongs to the officer on duty in the Gungeon's precinct.\n\nIt seems to be well worn. Whoever owns this badge is probably close to retirement.",
+    "id": 442
   },
   {
     "name": "Ballistic Boots",
@@ -4139,7 +4148,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This ballot is proof of participation in the democratic process.\n\nPSA: Voting is cool, no matter what anyone says!"
+    "ammonomicon_entry": "This ballot is proof of participation in the democratic process.\n\nPSA: Voting is cool, no matter what anyone says!",
+    "id": 115
   },
   {
     "name": "Battery Bullets",
@@ -4382,7 +4392,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Causes water that bullets pass over to become electrified, damaging enemies. Decreases shot spread by 50%."
+    "ammonomicon_entry": "Causes water that bullets pass over to become electrified, damaging enemies. Decreases shot spread by 50%.",
+    "id": 410
   },
   {
     "name": "Battle Standard",
@@ -5094,7 +5105,8 @@
     "sell_price": "30",
     "recharge_time": "450 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Nuclear arms were forbidden by the Third Interstellar Armistice, but as large sections of the Gungeon existed before that accord was signed, it is a bit of a grey area legally."
+    "ammonomicon_entry": "Nuclear arms were forbidden by the Third Interstellar Armistice, but as large sections of the Gungeon existed before that accord was signed, it is a bit of a grey area legally.",
+    "id": 443
   },
   {
     "name": "Bionic Leg",
@@ -5638,7 +5650,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Projectile impacts can trigger a short range blank. Increases curse by 1.5."
+    "ammonomicon_entry": "Projectile impacts can trigger a short range blank. Increases curse by 1.5.",
+    "id": 579
   },
   {
     "name": "Blank Companion's Ring",
@@ -5757,7 +5770,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Triggers a blank on active item use. Raised in the Gungeon and bored of gunfire, he gets excited whenever an item is used."
+    "ammonomicon_entry": "Triggers a blank on active item use. Raised in the Gungeon and bored of gunfire, he gets excited whenever an item is used.",
+    "id": 461
   },
   {
     "name": "Blast Helmet",
@@ -6051,7 +6065,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reduces hazard radius of explosions. This hardy helmet provides protection when too close to an explosion. Be wary though, it only works at a distance."
+    "ammonomicon_entry": "Reduces hazard radius of explosions. This hardy helmet provides protection when too close to an explosion. Be wary though, it only works at a distance.",
+    "id": 312
   },
   {
     "name": "Blood Brooch",
@@ -6759,7 +6774,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Replaces the dodge roll with a teleport. Increases reload speed."
+    "ammonomicon_entry": "Replaces the dodge roll with a teleport. Increases reload speed.",
+    "id": 436
   },
   {
     "name": "Bloody 9mm",
@@ -7119,7 +7135,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Upon taking damage, briefly slows time."
+    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Upon taking damage, briefly slows time.",
+    "id": 270
   },
   {
     "name": "Bomb",
@@ -7583,7 +7600,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Improves the contents of broken chests.\n\nThe collected learnings of generations of treasure hunters. This handy book details the mysterious inner mechanisms of the dungeon chests."
+    "ammonomicon_entry": "Improves the contents of broken chests.\n\nThe collected learnings of generations of treasure hunters. This handy book details the mysterious inner mechanisms of the dungeon chests.",
+    "id": 487
   },
   {
     "name": "Boomerang",
@@ -7888,7 +7906,8 @@
     "sell_price": "16",
     "recharge_time": "3 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Can hold hearts, ammo or other pickups for use later. Use once to collect something, and use again to drop!"
+    "ammonomicon_entry": "Can hold hearts, ammo or other pickups for use later. Use once to collect something, and use again to drop!",
+    "id": 558
   },
   {
     "name": "Bouncy Bullets",
@@ -8292,7 +8311,8 @@
     "recharge_time": "100 dmg",
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "If the player enters a room while under the box, enemies will not target the player. Firing a weapon will remove the box. Has no effect if used while enemies are already targeting the player. Can be used to steal items from shops."
+    "ammonomicon_entry": "If the player enters a room while under the box, enemies will not target the player. Firing a weapon will remove the box. Has no effect if used while enemies are already targeting the player. Can be used to steal items from shops.",
+    "id": 216
   },
   {
     "name": "Bracket Key",
@@ -8597,7 +8617,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reveals secret rooms."
+    "ammonomicon_entry": "Reveals secret rooms.",
+    "id": 490
   },
   {
     "name": "Briefcase of Cash",
@@ -8798,7 +8819,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "All the pain and suffering, the personal sacrifice... all the lies, the anger, the betrayal, and the revenge; was it worth it? Yes."
+    "ammonomicon_entry": "All the pain and suffering, the personal sacrifice... all the lies, the anger, the betrayal, and the revenge; was it worth it? Yes.",
+    "id": 493
   },
   {
     "name": "Broccoli",
@@ -9552,7 +9574,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Shooting occasionally spawns additional bees. These shells contain tiny beehives. Guns and bees, of course, have a strongly symbiotic relationship."
+    "ammonomicon_entry": "Shooting occasionally spawns additional bees. These shells contain tiny beehives. Guns and bees, of course, have a strongly symbiotic relationship.",
+    "id": 630
   },
   {
     "name": "Busted Television",
@@ -9838,7 +9861,8 @@
     "sell_price": "N/A",
     "recharge_time": "None",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Upon use, the television is thrown in the direction of the cursor. Dropped upon dodge rolling."
+    "ammonomicon_entry": "Upon use, the television is thrown in the direction of the cursor. Dropped upon dodge rolling.",
+    "id": 409
   },
   {
     "name": "C4 (Item)",
@@ -11126,7 +11150,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blanks have a chance to poison, freeze, and ignite enemies. This enchanted amulet is made of the most valuable metal of all, lead. There is an artificer's engravure on the bottom, but time has rendered it illegible."
+    "ammonomicon_entry": "Blanks have a chance to poison, freeze, and ignite enemies. This enchanted amulet is made of the most valuable metal of all, lead. There is an artificer's engravure on the bottom, but time has rendered it illegible.",
+    "id": 325
   },
   {
     "name": "Chaos Bullets",
@@ -11684,7 +11709,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A new type of ammunition developed after careful study of the Shotgun Full of Love.\n\nEach round is forged then quenched in the tears of young and unnoticed Bullet Kin."
+    "ammonomicon_entry": "A new type of ammunition developed after careful study of the Shotgun Full of Love.\n\nEach round is forged then quenched in the tears of young and unnoticed Bullet Kin.",
+    "id": 527
   },
   {
     "name": "Chest Teleporter",
@@ -12323,7 +12349,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The sounds from this strange instrument seem to have summoned a chicken.\n\nHow useful!"
+    "ammonomicon_entry": "The sounds from this strange instrument seem to have summoned a chicken.\n\nHow useful!",
+    "id": 572
   },
   {
     "name": "Cigarettes",
@@ -12777,7 +12804,8 @@
     "sell_price": "16",
     "recharge_time": "0.25 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Can result in serious health problems and even death. They do have a certain appeal though."
+    "ammonomicon_entry": "Can result in serious health problems and even death. They do have a certain appeal though.",
+    "id": 203
   },
   {
     "name": "Clear Guon Stone",
@@ -12881,7 +12909,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Negates poison damage."
+    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Negates poison damage.",
+    "id": 264
   },
   {
     "name": "Clone",
@@ -13786,7 +13815,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants anonymity, friendship. Masks of this design were used to explore primitive Gungeon-like structures filled with money, now referred to as \"Mungeons\". Anonymity was important to Mungeoneers of this time. The friendly clown design is thought to have helped Mungeoneers make peace with the native inhabitants."
+    "ammonomicon_entry": "Grants anonymity, friendship. Masks of this design were used to explore primitive Gungeon-like structures filled with money, now referred to as \"Mungeons\". Anonymity was important to Mungeoneers of this time. The friendly clown design is thought to have helped Mungeoneers make peace with the native inhabitants.",
+    "id": 607
   },
   {
     "name": "Cluster Mine",
@@ -14365,7 +14395,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases the chance to find shells upon completing rooms."
+    "ammonomicon_entry": "Increases the chance to find shells upon completing rooms.",
+    "id": 214
   },
   {
     "name": "Coolant Leak",
@@ -14516,7 +14547,8 @@
     "recharge_time": "300 dmg",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Sprays water forward."
+    "ammonomicon_entry": "Sprays water forward.",
+    "id": 411
   },
   {
     "name": "Copper Ammolet",
@@ -14728,7 +14760,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blanks have a chance to ignite enemies. This enchanted copper amulet was forged deep in the Forge. Warm to the touch."
+    "ammonomicon_entry": "Blanks have a chance to ignite enemies. This enchanted copper amulet was forged deep in the Forge. Warm to the touch.",
+    "id": 343
   },
   {
     "name": "Crisis Stone",
@@ -15302,7 +15335,8 @@
     "sell_price": "30",
     "recharge_time": "100 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Can be used immediately after dodging a bullet to activate a blank effect."
+    "ammonomicon_entry": "Can be used immediately after dodging a bullet to activate a blank effect.",
+    "id": 643
   },
   {
     "name": "Decoy",
@@ -15740,7 +15774,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Bullets have a chance to devolve enemies into simpler enemies."
+    "ammonomicon_entry": "Bullets have a chance to devolve enemies into simpler enemies.",
+    "id": 638
   },
   {
     "name": "Disarming Personality",
@@ -15843,7 +15878,8 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Reduces prices at shops.\n\nThe Pilot is able to talk his way into almost anything, usually gunfights."
+    "ammonomicon_entry": "Reduces prices at shops.\n\nThe Pilot is able to talk his way into almost anything, usually gunfights.",
+    "id": 187
   },
   {
     "name": "Dog",
@@ -16756,7 +16792,8 @@
     },
     "recharge_time": "Room cleared",
     "sell_price": "16",
-    "ammonomicon_entry": "If used on a locked chest, forces the player to fight two waves of enemies and unlocks the chest if they survive. If used on a locked door, opens it for free."
+    "ammonomicon_entry": "If used on a locked chest, forces the player to fight two waves of enemies and unlocks the chest if they survive. If used on a locked door, opens it for free.",
+    "id": 625
   },
   {
     "name": "Drum Clip",
@@ -18100,7 +18137,8 @@
     "sell_price": "30",
     "recharge_time": "300 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Unlike normal blanks, the Elder Blank may be reused.\n\nFeared strongly by the Order of the True Gun. Anathema to all Gunkind."
+    "ammonomicon_entry": "Unlike normal blanks, the Elder Blank may be reused.\n\nFeared strongly by the Order of the True Gun. Anathema to all Gunkind.",
+    "id": 499
   },
   {
     "name": "Enraging Photo",
@@ -18239,7 +18277,8 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "A photo that the Convict brought with her to the Gungeon. Deal extra damage for a short time after getting hit. On the journey to the Breach, the Pilot once asked her why she always stared at this photo. Later, she was released from the brig."
+    "ammonomicon_entry": "A photo that the Convict brought with her to the Gungeon. Deal extra damage for a short time after getting hit. On the journey to the Breach, the Pilot once asked her why she always stared at this photo. Later, she was released from the brig.",
+    "id": 353
   },
   {
     "name": "Escape Rope",
@@ -18721,7 +18760,8 @@
     "sell_price": "21",
     "recharge_time": "500 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Places a decoy that enemies will target. The decoy will explode after taking enough damage. Can be used to steal from shops."
+    "ammonomicon_entry": "Places a decoy that enemies will target. The decoy will explode after taking enough damage. Can be used to steal from shops.",
+    "id": 438
   },
   {
     "name": "Explosive Rounds",
@@ -19102,7 +19142,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance to fire bullets that explode upon hitting an enemy or object."
+    "ammonomicon_entry": "Adds a chance to fire bullets that explode upon hitting an enemy or object.",
+    "id": 304
   },
   {
     "name": "Eyepatch",
@@ -19832,7 +19873,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Projectiles fired explode into smaller bullets on impact. Though technically not how flak works, the Gungeon has always operated more on the naive assumption of how guns work than how they actually do."
+    "ammonomicon_entry": "Projectiles fired explode into smaller bullets on impact. Though technically not how flak works, the Gungeon has always operated more on the naive assumption of how guns work than how they actually do.",
+    "id": 531
   },
   {
     "name": "Fortune's Favor",
@@ -19986,7 +20028,8 @@
     "sell_price": "3",
     "recharge_time": "Single-Use",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Single use. Resurrects your co-op partner with full health."
+    "ammonomicon_entry": "Single use. Resurrects your co-op partner with full health.",
+    "id": 412
   },
   {
     "name": "Frost Ammolet",
@@ -20191,7 +20234,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blanks have a chance to freeze enemies. Cold to the touch."
+    "ammonomicon_entry": "Blanks have a chance to freeze enemies. Cold to the touch.",
+    "id": 344
   },
   {
     "name": "Frost Bullets",
@@ -20463,7 +20507,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance to fire bullets that freeze enemies."
+    "ammonomicon_entry": "Adds a chance to fire bullets that freeze enemies.",
+    "id": 278
   },
   {
     "name": "Full Metal Jacket",
@@ -21043,7 +21088,8 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Significantly increases damage dealt to powerful foes. Medal awarded for bravery in the face of certain doom. But most importantly, you didn't let down the unit. Good work, Marine."
+    "ammonomicon_entry": "Significantly increases damage dealt to powerful foes. Medal awarded for bravery in the face of certain doom. But most importantly, you didn't let down the unit. Good work, Marine.",
+    "id": 494
   },
   {
     "name": "Gas Mask",
@@ -21661,7 +21707,8 @@
     "sell_price": "5",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blocks projectiles, but shatters if its owner is wounded. A gift from the Lady of Pane. Gungeoneers who say a prayer to this silly goddess receive her blessing of three Glass Guon Stones."
+    "ammonomicon_entry": "Blocks projectiles, but shatters if its owner is wounded. A gift from the Lady of Pane. Gungeoneers who say a prayer to this silly goddess receive her blessing of three Glass Guon Stones.",
+    "id": 565
   },
   {
     "name": "Gold Ammolet",
@@ -21854,7 +21901,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blanks will deal increased damage to enemies. This enchanted amulet is not actually made of gold, but brass from melted bullet casings. Even now, it yearns to shoot at something."
+    "ammonomicon_entry": "Blanks will deal increased damage to enemies. This enchanted amulet is not actually made of gold, but brass from melted bullet casings. Even now, it yearns to shoot at something.",
+    "id": 321
   },
   {
     "name": "Gold Junk",
@@ -22047,7 +22095,8 @@
     "sell_price": "3",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants 500 on pickup."
+    "ammonomicon_entry": "Grants 500 on pickup.",
+    "id": 641
   },
   {
     "name": "Grappling Hook",
@@ -22412,7 +22461,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Chance to heal upon taking damage."
+    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Chance to heal upon taking damage.",
+    "id": 466
   },
   {
     "name": "Gun Soul",
@@ -23315,7 +23365,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reduces enemy health. Disease spreads quickly among the Gundead, as they sleep tightly packed together in magazines."
+    "ammonomicon_entry": "Reduces enemy health. Disease spreads quickly among the Gundead, as they sleep tightly packed together in magazines.",
+    "id": 159
   },
   {
     "name": "Gungeon Blueprint",
@@ -23395,7 +23446,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reveals all floor maps for the rest of the run."
+    "ammonomicon_entry": "Reveals all floor maps for the rest of the run.",
+    "id": 281
   },
   {
     "name": "Gungeon Pepper",
@@ -24055,7 +24107,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants immunity to fire, poison, and electricity."
+    "ammonomicon_entry": "Grants immunity to fire, poison, and electricity.",
+    "id": 454
   },
   {
     "name": "Heart Bottle",
@@ -24159,7 +24212,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants a heart container."
+    "ammonomicon_entry": "Grants a heart container.",
+    "id": 424
   },
   {
     "name": "Heart Holster",
@@ -24498,7 +24552,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds one heart container.\n\nThis heart-shaped locket contains a faded photo of two lovers embracing. Perhaps it once reminded a Gungeoneer of a past they hoped to change."
+    "ammonomicon_entry": "Adds one heart container.\n\nThis heart-shaped locket contains a faded photo of two lovers embracing. Perhaps it once reminded a Gungeoneer of a past they hoped to change.",
+    "id": 423
   },
   {
     "name": "Heart Lunchbox",
@@ -24628,7 +24683,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants a heart container."
+    "ammonomicon_entry": "Grants a heart container.",
+    "id": 422
   },
   {
     "name": "Heart of Ice",
@@ -25108,7 +25164,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A bag carried by a stylish Gungeoneer. Adds one heart container."
+    "ammonomicon_entry": "A bag carried by a stylish Gungeoneer. Adds one heart container.",
+    "id": 425
   },
   {
     "name": "Heart Synthesizer",
@@ -26337,7 +26394,8 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants an extra active item slot and increases maximum ammo by 10%."
+    "ammonomicon_entry": "Grants an extra active item slot and increases maximum ammo by 10%.",
+    "id": 473
   },
   {
     "name": "Hip Holster",
@@ -26875,7 +26933,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Triggers Blank effect upon taking damage, refills ammo.\n\nThis artifact of Kaliber was lost to time until the coming of the Mine Flayers and their interdimensional kin."
+    "ammonomicon_entry": "Triggers Blank effect upon taking damage, refills ammo.\n\nThis artifact of Kaliber was lost to time until the coming of the Mine Flayers and their interdimensional kin.",
+    "id": 631
   },
   {
     "name": "Homing Bullets",
@@ -27432,7 +27491,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "All bullets have a chance to ignite foes.\n\nFreshly formed shells, straight from the Gungeon's Forge. The metal slug at the center of each round is still molten."
+    "ammonomicon_entry": "All bullets have a chance to ignite foes.\n\nFreshly formed shells, straight from the Gungeon's Forge. The metal slug at the center of each round is still molten.",
+    "id": 295
   },
   {
     "name": "Hungry Bullets",
@@ -27653,7 +27713,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance for the player's bullets to block enemy projectiles, growing in damage and size as they do so."
+    "ammonomicon_entry": "Adds a chance for the player's bullets to block enemy projectiles, growing in damage and size as they do so.",
+    "id": 655
   },
   {
     "name": "iBomb Companion App",
@@ -28366,7 +28427,8 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "I've taken your stuff, but you keep pushing through; I'll have to try harder, so rats off to you! -R.R.\nSome chests are red, but more of them blue; no matter what's in 'em, I'll steal it from you! Thanks for the stuff, [random insult]! -R.R.\nWhat I wouldn't give to see the look on your face. You wished for an item, and found this note in its place! Thanks for your continued patronage. Fufufufufu... -R.R.\nI should just kill you, but that'd be no fun; so just for a laugh, I've stolen your gun! Good luck, [random insult]! -R.R.\nIf you were to find me, I'd make you bow on your knees. You're just a rodent, and I'm the Big Cheese! -R.R.\nSome say I'm a joker, but I'm bottling rage; it's tough getting a Mimic to gobble this page! Mimic bars. -R.R."
+    "ammonomicon_entry": "I've taken your stuff, but you keep pushing through; I'll have to try harder, so rats off to you! -R.R.\nSome chests are red, but more of them blue; no matter what's in 'em, I'll steal it from you! Thanks for the stuff, [random insult]! -R.R.\nWhat I wouldn't give to see the look on your face. You wished for an item, and found this note in its place! Thanks for your continued patronage. Fufufufufu... -R.R.\nI should just kill you, but that'd be no fun; so just for a laugh, I've stolen your gun! Good luck, [random insult]! -R.R.\nIf you were to find me, I'd make you bow on your knees. You're just a rodent, and I'm the Big Cheese! -R.R.\nSome say I'm a joker, but I'm bottling rage; it's tough getting a Mimic to gobble this page! Mimic bars. -R.R.",
+    "id": 243
   },
   {
     "name": "Iron Coin",
@@ -28819,7 +28881,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance to fire bullets that poison enemies."
+    "ammonomicon_entry": "Adds a chance to fire bullets that poison enemies.",
+    "id": 204
   },
   {
     "name": "Jar of Bees",
@@ -28881,7 +28944,8 @@
     "sell_price": "21",
     "recharge_time": "500 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "These bees have been carefully trained to hunt down enemy munitions... and destroy them."
+    "ammonomicon_entry": "These bees have been carefully trained to hunt down enemy munitions... and destroy them.",
+    "id": 432
   },
   {
     "name": "Jetpack",
@@ -29708,7 +29772,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Upon killing an enemy, bullets have a chance to unleash a flurry of slashes along the path of the original bullet, damaging enemies. Increases curse by 1."
+    "ammonomicon_entry": "Upon killing an enemy, bullets have a chance to unleash a flurry of slashes along the path of the original bullet, damaging enemies. Increases curse by 1.",
+    "id": 822
   },
   {
     "name": "Knife Shield",
@@ -30228,7 +30293,8 @@
     "sell_price": "41",
     "recharge_time": "666 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This puzzle box plays beautiful, melodic tones as it is solved.\n\nWho knows what mysterious wonders it contains?"
+    "ammonomicon_entry": "This puzzle box plays beautiful, melodic tones as it is solved.\n\nWho knows what mysterious wonders it contains?",
+    "id": 525
   },
   {
     "name": "Laser Sight",
@@ -31220,7 +31286,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Slows enemy projectiles.\n\nGreatly increases reaction times, with few side effects. Commonly used by rebel forces before raids on Hegemony outposts."
+    "ammonomicon_entry": "Slows enemy projectiles.\n\nGreatly increases reaction times, with few side effects. Commonly used by rebel forces before raids on Hegemony outposts.",
+    "id": 431
   },
   {
     "name": "Live Ammo",
@@ -31584,7 +31651,8 @@
     "recharge_time": "",
     "sell_price": "N/A",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Who needs bullets when you ARE a bullet? Provides immunity to contact damage, and rolling into enemies deals increased damage."
+    "ammonomicon_entry": "Who needs bullets when you ARE a bullet? Provides immunity to contact damage, and rolling into enemies deals increased damage.",
+    "id": 414
   },
   {
     "name": "Lodestone Ammolet",
@@ -31666,7 +31734,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blanks send enemies flying. This enchanted amulet is strangely polarized, repelling most objects that draw near. It hums softly in the presence of Blanks."
+    "ammonomicon_entry": "Blanks send enemies flying. This enchanted amulet is strangely polarized, repelling most objects that draw near. It hums softly in the presence of Blanks.",
+    "id": 322
   },
   {
     "name": "Loot Bag",
@@ -32018,7 +32087,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants wealth, prone to tearing.\n\nPerfectly proportioned for light travel or a trip to the gym, this classic duffle features a timeless aesthetic and a padded removable shoulder strap. Not bulletproof."
+    "ammonomicon_entry": "Grants wealth, prone to tearing.\n\nPerfectly proportioned for light travel or a trip to the gym, this classic duffle features a timeless aesthetic and a padded removable shoulder strap. Not bulletproof.",
+    "id": 605
   },
   {
     "name": "Macho Brace",
@@ -36175,7 +36245,8 @@
     "sell_price": "16",
     "recharge_time": "600 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Molotov cocktails aren't guns, and so they are frowned upon by long-dwelling Gungeoneers. They get the job done regardless.\nKnowing the Hegemony wouldn't let her bring her own weaponry to the Gungeon, the Convict smuggled these few bottles in with the transport's cargo."
+    "ammonomicon_entry": "Molotov cocktails aren't guns, and so they are frowned upon by long-dwelling Gungeoneers. They get the job done regardless.\nKnowing the Hegemony wouldn't let her bring her own weaponry to the Gungeon, the Convict smuggled these few bottles in with the transport's cargo.",
+    "id": 366
   },
   {
     "name": "Monster Blood",
@@ -36360,7 +36431,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Decreases bullet spread by 66%."
+    "ammonomicon_entry": "Decreases bullet spread by 66%.",
+    "id": 437
   },
   {
     "name": "Mustache",
@@ -37381,7 +37453,8 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Bullet Component. Carved from a fang of a High Dragun, this casing is the only material strong enough to jacket Planar Lead."
+    "ammonomicon_entry": "Bullet Component. Carved from a fang of a High Dragun, this casing is the only material strong enough to jacket Planar Lead.",
+    "id": 350
   },
   {
     "name": "Oiled Cylinder",
@@ -37416,7 +37489,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases the speed at which guns can be reloaded."
+    "ammonomicon_entry": "Increases the speed at which guns can be reloaded.",
+    "id": 165
   },
   {
     "name": "Old Crest",
@@ -37583,7 +37657,8 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants a piece of armor. Consumed upon taking any damage."
+    "ammonomicon_entry": "Grants a piece of armor. Consumed upon taking any damage.",
+    "id": 305
   },
   {
     "name": "Old Knight's Flask",
@@ -37783,7 +37858,8 @@
     "sell_price": "41",
     "recharge_time": "1 second",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Heals the player for one heart upon use. Gains 2 charges each floor."
+    "ammonomicon_entry": "Heals the player for one heart upon use. Gains 2 charges each floor.",
+    "id": 267
   },
   {
     "name": "Old Knight's Helm",
@@ -38833,7 +38909,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Shoots at enemies."
+    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Shoots at enemies.",
+    "id": 263
   },
   {
     "name": "Orbital Bullets",
@@ -39959,7 +40036,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Companion. Occasionally blanks enemy bullets. This fearless owl follows you, clutching a wad of Blanks in its talons."
+    "ammonomicon_entry": "Companion. Occasionally blanks enemy bullets. This fearless owl follows you, clutching a wad of Blanks in its talons.",
+    "id": 249
   },
   {
     "name": "Partially-Eaten Cheese",
@@ -40173,7 +40251,8 @@
     "recharge_time": "300 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "While active, the player is invincible and instantly kills enemies they come in contact with."
+    "ammonomicon_entry": "While active, the player is invincible and instantly kills enemies they come in contact with.",
+    "id": 662
   },
   {
     "name": "Pig",
@@ -40598,7 +40677,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Grants one extra heart container."
+    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Grants one extra heart container.",
+    "id": 260
   },
   {
     "name": "Planar Lead",
@@ -40686,7 +40766,8 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Bullet Component. This extraplanar lead was once part of the great Bullet that fell from the sky, the origin of all Gundead. It shimmers softly, shifting between the material and ethereal sides of the Curtain. Grows hot in the presence of enemies."
+    "ammonomicon_entry": "Bullet Component. This extraplanar lead was once part of the great Bullet that fell from the sky, the origin of all Gundead. It shimmers softly, shifting between the material and ethereal sides of the Curtain. Grows hot in the presence of enemies.",
+    "id": 349
   },
   {
     "name": "Platinum Bullets",
@@ -41089,7 +41170,8 @@
     "sell_price": "16",
     "recharge_time": "150 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Advanced polymers reinforce this state-of-the-art handheld dining surface."
+    "ammonomicon_entry": "Advanced polymers reinforce this state-of-the-art handheld dining surface.",
+    "id": 644
   },
   {
     "name": "Portable Turret",
@@ -41515,7 +41597,8 @@
     "recharge_time": "600 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Temporary invulnerability.\n\nA product of Professor Goopton's rigorous research."
+    "ammonomicon_entry": "Temporary invulnerability.\n\nA product of Professor Goopton's rigorous research.",
+    "id": 64
   },
   {
     "name": "Prime Primer",
@@ -41709,7 +41792,8 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Bullet Component. The primer of one of the first Gundead to ever walk the Gungeon. It still trembles with the energies released when the Bullet struck."
+    "ammonomicon_entry": "Bullet Component. The primer of one of the first Gundead to ever walk the Gungeon. It still trembles with the energies released when the Bullet struck.",
+    "id": 348
   },
   {
     "name": "Proximity Mine",
@@ -42342,7 +42426,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Improves dodging."
+    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Improves dodging.",
+    "id": 269
   },
   {
     "name": "Relodestone",
@@ -43142,7 +43227,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A relic of the first hero to master the Gungeon, whose skill attracted the envy of Kaliber herself. Bestows unreasonable courage in the face of danger, and the luck to survive it."
+    "ammonomicon_entry": "A relic of the first hero to master the Gungeon, whose skill attracted the envy of Kaliber herself. Bestows unreasonable courage in the face of danger, and the luck to survive it.",
+    "id": 271
   },
   {
     "name": "Ring of Chest Friendship",
@@ -43606,7 +43692,8 @@
     "recharge_time": "600 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Temporary incorporeality.\n\nThis mysterious ring briefly allows one to traverse the etheral planes. In addition to incorporeality, this bestows flight. Take care not to fall upon return!"
+    "ammonomicon_entry": "Temporary incorporeality.\n\nThis mysterious ring briefly allows one to traverse the etheral planes. In addition to incorporeality, this bestows flight. Take care not to fall upon return!",
+    "id": 458
   },
   {
     "name": "Ring of Fire Resistance",
@@ -44457,7 +44544,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A ring once worn by the Resourceful Rat. Represents a tenuous kinship with a one-time foe."
+    "ammonomicon_entry": "A ring once worn by the Resourceful Rat. Represents a tenuous kinship with a one-time foe.",
+    "id": 463
   },
   {
     "name": "Ring of Triggers",
@@ -44695,7 +44783,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Using an active item fires the currently held weapon in all directions."
+    "ammonomicon_entry": "Using an active item fires the currently held weapon in all directions.",
+    "id": 456
   },
   {
     "name": "Rocket-Powered Bullets",
@@ -47464,7 +47553,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Firing a weapon has a chance to fire an additional projectile."
+    "ammonomicon_entry": "Firing a weapon has a chance to fire an additional projectile.",
+    "id": 352
   },
   {
     "name": "Shadow Clone",
@@ -47697,7 +47787,8 @@
     "sell_price": "16",
     "recharge_time": "250 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Creates a copy of the player that mimics their movements in reverse and fires alongside them."
+    "ammonomicon_entry": "Creates a copy of the player that mimics their movements in reverse and fires alongside them.",
+    "id": 820
   },
   {
     "name": "Shelleton Key",
@@ -48136,7 +48227,8 @@
     "sell_price": "21",
     "recharge_time": "1.5 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Use to block bullets.\n\nThis old and battered shield has seen better days, but it still gets the job done. A useful addition to any Gungoneer's arsenal when used in moderation. Shields are nice, but not if they engender passivity."
+    "ammonomicon_entry": "Use to block bullets.\n\nThis old and battered shield has seen better days, but it still gets the job done. A useful addition to any Gungoneer's arsenal when used in moderation. Shields are nice, but not if they engender passivity.",
+    "id": 447
   },
   {
     "name": "Shock Rounds",
@@ -48616,7 +48708,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Links bullets together with chain lightning.\n\nThe signature weapon of Alistair, the Thunderbolt. Upon his second descent into the Gungeon, the Thunderbolt famously remarked, \"Lightning won't strike here again.\" He wasn't wrong."
+    "ammonomicon_entry": "Links bullets together with chain lightning.\n\nThe signature weapon of Alistair, the Thunderbolt. Upon his second descent into the Gungeon, the Thunderbolt famously remarked, \"Lightning won't strike here again.\" He wasn't wrong.",
+    "id": 298
   },
   {
     "name": "Shotga Cola",
@@ -49371,7 +49464,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Feeds upon curse.\n\nOne of three artifacts that led to the creation of the Jammed. As their curses grow louder, Kaliber smiles upon the bearer of this portentous omen."
+    "ammonomicon_entry": "Feeds upon curse.\n\nOne of three artifacts that led to the creation of the Jammed. As their curses grow louder, Kaliber smiles upon the bearer of this portentous omen.",
+    "id": 407
   },
   {
     "name": "Smoke Bomb",
@@ -49521,7 +49615,8 @@
     "sell_price": "21",
     "recharge_time": "500 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Temporarily become invisible to enemies. Can be used to steal from the Shop."
+    "ammonomicon_entry": "Temporarily become invisible to enemies. Can be used to steal from the Shop.",
+    "id": 462
   },
   {
     "name": "Snowballets",
@@ -50694,7 +50789,8 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Removes all goop in a small radius continuously. A normal sponge, useful for cleaning up messes. Holding it, you hear the whispers of an alien tongue."
+    "ammonomicon_entry": "Removes all goop in a small radius continuously. A normal sponge, useful for cleaning up messes. Holding it, you hear the whispers of an alien tongue.",
+    "id": 452
   },
   {
     "name": "Springheel Boots",
@@ -50865,7 +50961,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Allows a second dodge while rolling. Originally worn by a legendary thief to scale impossible heights, the peculiar properties of these boots allow a Gungeoneer to extend their dodge roll - and are therefore a tremendously powerful item."
+    "ammonomicon_entry": "Allows a second dodge while rolling. Originally worn by a legendary thief to scale impossible heights, the peculiar properties of these boots allow a Gungeoneer to extend their dodge roll - and are therefore a tremendously powerful item.",
+    "id": 526
   },
   {
     "name": "Sprun",
@@ -52298,7 +52395,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Time moves as you do.\n\nThis watch is extremely hot to the touch."
+    "ammonomicon_entry": "Time moves as you do.\n\nThis watch is extremely hot to the touch.",
+    "id": 279
   },
   {
     "name": "Super Space Turtle",
@@ -52709,7 +52807,8 @@
     "recharge_time": "",
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This miniscule weapon was wielded by the famous Super Space Turtle, a hero from beyond the stars. It is difficult for a normal human hand to wield, but can still function as a normal gun. It is best used in the hands of the Super Space Turtle, wherever they may be.\nFearsome bounty hunter from beyond the stars. Lives by a code all his own."
+    "ammonomicon_entry": "This miniscule weapon was wielded by the famous Super Space Turtle, a hero from beyond the stars. It is difficult for a normal human hand to wield, but can still function as a normal gun. It is best used in the hands of the Super Space Turtle, wherever they may be.\nFearsome bounty hunter from beyond the stars. Lives by a code all his own.",
+    "id": 299
   },
   {
     "name": "Supply Drop",
@@ -53156,7 +53255,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Flipping a table creates a large area in which all enemies will be set on fire."
+    "ammonomicon_entry": "Flipping a table creates a large area in which all enemies will be set on fire.",
+    "id": 666
   },
   {
     "name": "Table Tech Money",
@@ -54075,7 +54175,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This ancient technique briefly stuns enemies whenever a table is flipped.\n\nChapter one of the \"Tabla Sutra.\" And when a table is masterfully flipped, what a most magnificent sight! Surely all who witness the flip of a true master can only stand transfixed, agog."
+    "ammonomicon_entry": "This ancient technique briefly stuns enemies whenever a table is flipped.\n\nChapter one of the \"Tabla Sutra.\" And when a table is masterfully flipped, what a most magnificent sight! Surely all who witness the flip of a true master can only stand transfixed, agog.",
+    "id": 465
   },
   {
     "name": "Teleporter Prototype",
@@ -54675,7 +54776,8 @@
     "recharge_time": "400 dmg",
     "duration": "20 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Summons Gatling Gull as a temporary ally for the current room. Recharges after he leave or die."
+    "ammonomicon_entry": "Summons Gatling Gull as a temporary ally for the current room. Recharges after he leave or die.",
+    "id": 320
   },
   {
     "name": "Trusty Lockpicks",
@@ -54843,7 +54945,8 @@
     "recharge_time": "100 dmg",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Chance to pick locks. Can only be used once per lock.\n\nThese lockpicks have never let the Pilot down, except for the many times they did."
+    "ammonomicon_entry": "Chance to pick locks. Can only be used once per lock.\n\nThese lockpicks have never let the Pilot down, except for the many times they did.",
+    "id": 356
   },
   {
     "name": "Turkey",
@@ -55602,7 +55705,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increased combat effectiveness per gun.\n\nThis ring takes a small amount of power from each gun carried and adds it to the currently equipped gun."
+    "ammonomicon_entry": "Increased combat effectiveness per gun.\n\nThis ring takes a small amount of power from each gun carried and adds it to the currently equipped gun.",
+    "id": 495
   },
   {
     "name": "Uranium Ammolet",
@@ -55692,7 +55796,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blanks have a chance to poison enemies. This enchanted amulet was created by a great gunsmith. Her research with irradiated metals ultimately cost her life, but many of today's guns owe their existence to her work."
+    "ammonomicon_entry": "Blanks have a chance to poison enemies. This enchanted amulet was created by a great gunsmith. Her research with irradiated metals ultimately cost her life, but many of today's guns owe their existence to her work.",
+    "id": 342
   },
   {
     "name": "Utility Belt",
@@ -56314,7 +56419,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Whenever the player fires, occasionally fires a special high-damage bullet."
+    "ammonomicon_entry": "Whenever the player fires, occasionally fires a special high-damage bullet.",
+    "id": 640
   },
   {
     "name": "Wax Wings",
@@ -56477,7 +56583,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants flight while retaining maneuverability. A pair of finely-crafted wax wings."
+    "ammonomicon_entry": "Grants flight while retaining maneuverability. A pair of finely-crafted wax wings.",
+    "id": 307
   },
   {
     "name": "Weird Egg",
@@ -56701,7 +56808,8 @@
     "sell_price": "16",
     "recharge_time": "Single-Use",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Gestates over time. Use to acquire... something. A strange egg found in the Gungeon. High in protein."
+    "ammonomicon_entry": "Gestates over time. Use to acquire... something. A strange egg found in the Gungeon. High in protein.",
+    "id": 637
   },
   {
     "name": "White Guon Stone",
@@ -56841,7 +56949,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Grants an extra blank per floor."
+    "ammonomicon_entry": "Orbits the player, blocking enemy shots on contact. Grants an extra blank per floor.",
+    "id": 262
   },
   {
     "name": "Wingman",
@@ -57269,7 +57378,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Faithful companion. Waited years for his master's return. Kept the Hunter company, long ago. Reunited with his master through the fractured timestream."
+    "ammonomicon_entry": "Faithful companion. Waited years for his master's return. Kept the Hunter company, long ago. Reunited with his master through the fractured timestream.",
+    "id": 492
   },
   {
     "name": "Yellow Chamber",

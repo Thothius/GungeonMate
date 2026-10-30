@@ -35,6 +35,11 @@
         "t": "text",
         "v": "'s shots bounce 4 times and become homing."
       }
+    ],
+    "game_name_key": "#FLUBBER",
+    "game_ids": [
+      151,
+      288
     ]
   },
   {
@@ -50,6 +55,11 @@
         "t": "text",
         "v": "The first shot of each magazine is guaranteed to be a fire bullet."
       }
+    ],
+    "game_name_key": "#ALPHAFIRE",
+    "game_ids": [
+      295,
+      373
     ]
   },
   {
@@ -65,6 +75,11 @@
         "t": "text",
         "v": "The first shot of each magazine is guaranteed to be an ice bullet."
       }
+    ],
+    "game_name_key": "#ALPHAICE",
+    "game_ids": [
+      278,
+      373
     ]
   },
   {
@@ -80,6 +95,11 @@
         "t": "text",
         "v": "The first shot of each magazine is guaranteed to be a poison bullet."
       }
+    ],
+    "game_name_key": "#ALPHAPOISON",
+    "game_ids": [
+      204,
+      373
     ]
   },
   {
@@ -124,6 +144,11 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#IBOMBS",
+    "game_ids": [
+      234,
+      567
     ]
   },
   {
@@ -144,6 +169,11 @@
         "t": "text",
         "v": " covers a massive area."
       }
+    ],
+    "game_name_key": "#EXPLOSIVEAIRSTRIKE",
+    "game_ids": [
+      252,
+      304
     ]
   },
   {
@@ -177,6 +207,11 @@
         "t": "text",
         "v": " shots. Each orange does 7 damage per shot, as opposed to the usual 5.5."
       }
+    ],
+    "game_name_key": "#ISLANDAK",
+    "game_ids": [
+      15,
+      485
     ]
   },
   {
@@ -197,6 +232,11 @@
         "t": "text",
         "v": " transforms into a tiara that fires higher-damage crescent-shaped bullets."
       }
+    ],
+    "game_name_key": "#SNIPERION",
+    "game_ids": [
+      52,
+      551
     ]
   },
   {
@@ -217,6 +257,11 @@
         "t": "text",
         "v": " shoots 2 bullets instead of one."
       }
+    ],
+    "game_name_key": "#THUNDERBOLT",
+    "game_ids": [
+      13,
+      298
     ]
   },
   {
@@ -332,6 +377,11 @@
         "t": "text",
         "v": " spawns 7 homing flak bullets upon impact."
       }
+    ],
+    "game_name_key": "#ANTIAIR",
+    "game_ids": [
+      39,
+      531
     ]
   },
   {
@@ -464,6 +514,13 @@
         "t": "text",
         "v": "Touching enemies sets them on fire."
       }
+    ],
+    "game_name_key": "#FIERYTHORN",
+    "game_ids": [
+      191,
+      343,
+      440,
+      457
     ]
   },
   {
@@ -488,6 +545,11 @@
         "t": "text",
         "v": "'s eggs by 50%."
       }
+    ],
+    "game_name_key": "#CHICKENANDPIG",
+    "game_ids": [
+      445,
+      451
     ]
   },
   {
@@ -508,6 +570,11 @@
         "t": "text",
         "v": " fires a cone of three waves per shot."
       }
+    ],
+    "game_name_key": "#SCREECHINGLASER",
+    "game_ids": [
+      3,
+      508
     ]
   },
   {
@@ -532,6 +599,11 @@
         "t": "text",
         "v": " by 25%, increases reload time by 50%, and increases shot size."
       }
+    ],
+    "game_name_key": "#CHARGESHOT",
+    "game_ids": [
+      106,
+      328
     ]
   },
   {
@@ -605,6 +677,11 @@
         "t": "text",
         "v": " to spawn hornets, which travel faster and deal more damage than regular bees."
       }
+    ],
+    "game_name_key": "#HORNETS",
+    "game_ids": [
+      138,
+      432
     ]
   },
   {
@@ -719,6 +796,11 @@
         "t": "text",
         "v": " gains infinite ammo, a much larger magazine size, and extremely high fire rate. Like other guns with infinite ammo, it cannot reveal secret rooms."
       }
+    ],
+    "game_name_key": "#BETRAYER",
+    "game_ids": [
+      148,
+      380
     ]
   },
   {
@@ -958,6 +1040,11 @@
         "t": "text",
         "v": "Every jammed enemy killed grants a persistent, additive 0.0025 (0.25%) damage buff."
       }
+    ],
+    "game_name_key": "#BLESSEDCURSED",
+    "game_ids": [
+      538,
+      571
     ]
   },
   {
@@ -982,6 +1069,11 @@
         "t": "text",
         "v": "'s shells by 50%, and increases their damage by 25%."
       }
+    ],
+    "game_name_key": "#MARIOPARTY",
+    "game_ids": [
+      376,
+      435
     ]
   },
   {
@@ -1015,6 +1107,13 @@
         "t": "text",
         "v": " blocks a bullet, it deals 15 damage to all nearby enemies."
       }
+    ],
+    "game_name_key": "#GUON_UPGRADE_BLUE",
+    "game_ids": [
+      69,
+      158,
+      270,
+      286
     ]
   },
   {
@@ -1060,6 +1159,11 @@
         "t": "text",
         "v": " fires two bombs instead of one, charges twice as fast, and has 40% lower reload time."
       }
+    ],
+    "game_name_key": "#DOUBLEBOMBERMAN",
+    "game_ids": [
+      108,
+      332
     ]
   },
   {
@@ -1087,6 +1191,12 @@
         "t": "text",
         "v": " is held, spawns a fish companion which shows what items are inside chests without opening them."
       }
+    ],
+    "game_name_key": "",
+    "game_ids": [
+      114,
+      404,
+      444
     ]
   },
   {
@@ -1235,6 +1345,11 @@
         "t": "text",
         "v": "Scrambler shots become larger and split into 10 seekers instead of 5."
       }
+    ],
+    "game_name_key": "#SCRAMBLERFLUTE",
+    "game_ids": [
+      445,
+      572
     ]
   },
   {
@@ -1264,6 +1379,11 @@
         "t": "text",
         "v": " gains homing shots."
       }
+    ],
+    "game_name_key": "#SEAFOAM",
+    "game_ids": [
+      404,
+      599
     ]
   },
   {
@@ -1302,6 +1422,11 @@
         "t": "text",
         "v": "'s rate of fire. The glow disappears if the player stops moving. If the player switches to another gun while outlined, they can keep the rate of fire bonus."
       }
+    ],
+    "game_name_key": "#TIMINGBELT",
+    "game_ids": [
+      134,
+      401
     ]
   },
   {
@@ -1374,6 +1499,11 @@
         "t": "text",
         "v": " has a chance to stun enemies."
       }
+    ],
+    "game_name_key": "#STUNNINGFLASH",
+    "game_ids": [
+      460,
+      481
     ]
   },
   {
@@ -1448,6 +1578,11 @@
         "t": "text",
         "v": "When firing any gun, occasionally fires money which charms enemies."
       }
+    ],
+    "game_name_key": "#CREAM",
+    "game_ids": [
+      490,
+      493
     ]
   },
   {
@@ -1536,6 +1671,11 @@
         "t": "text",
         "v": " needles onto enemies when they maul them."
       }
+    ],
+    "game_name_key": "#FRIENDOFCATS",
+    "game_ids": [
+      357,
+      369
     ]
   },
   {
@@ -1589,6 +1729,11 @@
         "t": "text",
         "v": " connects bullets with electricity. Lightning can also connect to enemy bullets."
       }
+    ],
+    "game_name_key": "#TESLASHADOW",
+    "game_ids": [
+      298,
+      352
     ]
   },
   {
@@ -1656,6 +1801,11 @@
         "t": "text",
         "v": "'s 30%."
       }
+    ],
+    "game_name_key": "#GEAROFWAR",
+    "game_ids": [
+      135,
+      515
     ]
   },
   {
@@ -1808,6 +1958,13 @@
         "t": "text",
         "v": "Grants immunity to poison, fire, and electricity. Shooting enemies while standing on fire or ice will burn or freeze them, respectively."
       }
+    ],
+    "game_name_key": "#GUON_UPGRADE_CLEAR",
+    "game_ids": [
+      158,
+      264,
+      286,
+      558
     ]
   },
   {
@@ -1823,6 +1980,11 @@
         "t": "text",
         "v": "The guns are dual-wielded. Both guns' magazine sizes are doubled."
       }
+    ],
+    "game_name_key": "#COLTS",
+    "game_ids": [
+      62,
+      223
     ]
   },
   {
@@ -1892,6 +2054,11 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#GUNGEONPUB",
+    "game_ids": [
+      401,
+      484
     ]
   },
   {
@@ -1952,6 +2119,11 @@
         "t": "text",
         "v": " held gives the player a yellow glow, increasing movement speed. The glow disappears if the player stops moving."
       }
+    ],
+    "game_name_key": "#STRAFEPUB",
+    "game_ids": [
+      484,
+      542
     ]
   },
   {
@@ -2148,6 +2320,11 @@
         "t": "text",
         "v": " projectiles."
       }
+    ],
+    "game_name_key": "#LUXINCORN",
+    "game_ids": [
+      100,
+      199
     ]
   },
   {
@@ -2297,6 +2474,11 @@
         "t": "text",
         "v": " creates a large poison pool when attacked."
       }
+    ],
+    "game_name_key": "#BLOODEXPLOSIVEDECOY",
+    "game_ids": [
+      313,
+      438
     ]
   },
   {
@@ -2370,6 +2552,11 @@
         "t": "text",
         "v": " fires triple shots."
       }
+    ],
+    "game_name_key": "#GOODSOLDIER",
+    "game_ids": [
+      229,
+      494
     ]
   },
   {
@@ -2451,6 +2638,11 @@
         "t": "text",
         "v": " orbits the player, blocking enemy shots."
       }
+    ],
+    "game_name_key": "#IDOLHANDS",
+    "game_ids": [
+      434,
+      457
     ]
   },
   {
@@ -2466,6 +2658,11 @@
         "t": "text",
         "v": "The last shot of each magazine is guaranteed to be an ice bullet."
       }
+    ],
+    "game_name_key": "#OMEGAICE",
+    "game_ids": [
+      278,
+      374
     ]
   },
   {
@@ -2558,6 +2755,11 @@
         "t": "text",
         "v": "; every roll will fire bullets."
       }
+    ],
+    "game_name_key": "#DOWNERWELL",
+    "game_ids": [
+      315,
+      526
     ]
   },
   {
@@ -2578,6 +2780,11 @@
         "t": "text",
         "v": " Gun Fires 4 projectiles per shot instead of 2, damage is increased by 25%, and shot speed is increased by 50%."
       }
+    ],
+    "game_name_key": "#DOUBLEHELIX",
+    "game_ids": [
+      230,
+      568
     ]
   },
   {
@@ -2620,6 +2827,11 @@
         "t": "text",
         "v": " is held."
       }
+    ],
+    "game_name_key": "#RAINBROS",
+    "game_ids": [
+      100,
+      433
     ]
   },
   {
@@ -2744,6 +2956,11 @@
         "t": "text",
         "v": " triples shots instead of doubling them."
       }
+    ],
+    "game_name_key": "#STOUTBREW",
+    "game_ids": [
+      168,
+      523
     ]
   },
   {
@@ -2762,6 +2979,12 @@
         "t": "text",
         "v": "Increases the damage of both guns by 25%."
       }
+    ],
+    "game_name_key": "#LOVEGOLD",
+    "game_ids": [
+      93,
+      231,
+      532
     ]
   },
   {
@@ -2782,6 +3005,11 @@
         "t": "text",
         "v": "'s ducks periodically send out two Scrambler shots perpendicular to itself as it travels."
       }
+    ],
+    "game_name_key": "#DUCKEGG",
+    "game_ids": [
+      27,
+      445
     ]
   },
   {
@@ -2849,6 +3077,11 @@
         "t": "text",
         "v": "The last shot of each magazine is guaranteed to be a poison bullet."
       }
+    ],
+    "game_name_key": "#OMEGAPOISON",
+    "game_ids": [
+      204,
+      374
     ]
   },
   {
@@ -2965,6 +3198,11 @@
         "t": "text",
         "v": " causes corpses to shoot at enemies."
       }
+    ],
+    "game_name_key": "#CORPSESHOOT",
+    "game_ids": [
+      116,
+      403
     ]
   },
   {
@@ -2998,6 +3236,11 @@
         "t": "text",
         "v": " ."
       }
+    ],
+    "game_name_key": "#ZELDA",
+    "game_ids": [
+      8,
+      108
     ]
   },
   {
@@ -3192,6 +3435,11 @@
         "t": "text",
         "v": " by 50% and reduces its reload time by 33%."
       }
+    ],
+    "game_name_key": "#POSTMAN",
+    "game_ids": [
+      28,
+      216
     ]
   },
   {
@@ -3216,6 +3464,11 @@
         "t": "text",
         "v": " is active, a copy of the player's current gun appears and automatically fires at nearby enemies."
       }
+    ],
+    "game_name_key": "#FRIENDTOBOTH",
+    "game_ids": [
+      174,
+      286
     ]
   },
   {
@@ -3236,6 +3489,11 @@
         "t": "text",
         "v": " freezes enemies that attack it."
       }
+    ],
+    "game_name_key": "#ICEEXPLOSIVEDECOY",
+    "game_ids": [
+      364,
+      438
     ]
   },
   {
@@ -3276,6 +3534,11 @@
         "t": "text",
         "v": " shots increase in size and damage the further they travel."
       }
+    ],
+    "game_name_key": "#ROLLINGSNOWBALLS",
+    "game_ids": [
+      278,
+      402
     ]
   },
   {
@@ -3387,6 +3650,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#AIRBUSTER",
+    "game_ids": [
+      36,
+      520
     ]
   },
   {
@@ -3423,6 +3691,12 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#BUBBLEBUSTER",
+    "game_ids": [
+      10,
+      36,
+      599
     ]
   },
   {
@@ -3456,6 +3730,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#CRASHBUSTER",
+    "game_ids": [
+      36,
+      362
     ]
   },
   {
@@ -3483,6 +3762,12 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#FLASHBUSTER",
+    "game_ids": [
+      36,
+      237,
+      481
     ]
   },
   {
@@ -3507,6 +3792,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#HEATBUSTER",
+    "game_ids": [
+      36,
+      295
     ]
   },
   {
@@ -3540,6 +3830,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#METALBUSTER",
+    "game_ids": [
+      36,
+      341
     ]
   },
   {
@@ -3573,6 +3868,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#QUICKBUSTER",
+    "game_ids": [
+      36,
+      448
     ]
   },
   {
@@ -3606,6 +3906,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#LEAFBUSTER",
+    "game_ids": [
+      36,
+      339
     ]
   },
   {
@@ -3633,6 +3938,12 @@
         "t": "text",
         "v": " are larger and can freeze enemies. Reload time decreased by 20%."
       }
+    ],
+    "game_name_key": "#GHOSTBROS",
+    "game_ids": [
+      172,
+      198,
+      458
     ]
   },
   {
@@ -3787,6 +4098,11 @@
         "t": "text",
         "v": " has a 100% chance of firing shadow bullets."
       }
+    ],
+    "game_name_key": "#BEHINDME",
+    "game_ids": [
+      287,
+      352
     ]
   },
   {
@@ -3845,6 +4161,11 @@
         "t": "text",
         "v": " leaves poison on the ground."
       }
+    ],
+    "game_name_key": "#RADIOACTIVEROCK",
+    "game_ids": [
+      87,
+      264
     ]
   },
   {
@@ -3860,6 +4181,11 @@
         "t": "text",
         "v": "Increases the damage of thrown guns by 50%."
       }
+    ],
+    "game_name_key": "#BATMAN",
+    "game_ids": [
+      131,
+      448
     ]
   },
   {
@@ -3943,6 +4269,11 @@
         "t": "text",
         "v": "'s magazine size by 50% and damage by 20%."
       }
+    ],
+    "game_name_key": "#YARIOIL",
+    "game_ids": [
+      16,
+      165
     ]
   },
   {
@@ -4039,6 +4370,11 @@
         "t": "text",
         "v": " has a chance to regenerate ammo when hitting enemies."
       }
+    ],
+    "game_name_key": "#DOUBLELIGHT",
+    "game_ids": [
+      27,
+      504
     ]
   },
   {
@@ -4213,6 +4549,13 @@
         "t": "text",
         "v": " bullets are replaced by piercing lasers."
       }
+    ],
+    "game_name_key": "#SPECIAL_FORCES",
+    "game_ids": [
+      59,
+      134,
+      280,
+      494
     ]
   },
   {
@@ -4452,6 +4795,11 @@
         "t": "text",
         "v": " shots burn enemies."
       }
+    ],
+    "game_name_key": "#KILNPEOPLE",
+    "game_ids": [
+      152,
+      598
     ]
   },
   {
@@ -4487,6 +4835,11 @@
         "t": "text",
         "v": "Rolling creates a trail of fire."
       }
+    ],
+    "game_name_key": "#LITROLLS",
+    "game_ids": [
+      191,
+      309
     ]
   },
   {
@@ -4564,6 +4917,11 @@
         "t": "text",
         "v": " shield on every corpse."
       }
+    ],
+    "game_name_key": "#CRISISROCK",
+    "game_ids": [
+      403,
+      634
     ]
   },
   {
@@ -4659,6 +5017,11 @@
         "t": "text",
         "v": " will automatically revert to its original form after 30 seconds."
       }
+    ],
+    "game_name_key": "#SAMUSHYPER",
+    "game_ids": [
+      41,
+      451
     ]
   },
   {
@@ -4758,6 +5121,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#SAMUSICE",
+    "game_ids": [
+      41,
+      278
     ]
   },
   {
@@ -4862,6 +5230,12 @@
         "t": "text",
         "v": "Slightly increases movement speed and increases the shot speed of the guns by 25%."
       }
+    ],
+    "game_name_key": "#QUAKE",
+    "game_ids": [
+      13,
+      21,
+      542
     ]
   },
   {
@@ -4978,6 +5352,13 @@
         "t": "text",
         "v": " by 33%, increases its magazine size by 50%, and increases its knockback by 50%."
       }
+    ],
+    "game_name_key": "#SNAKEPLISSKIN",
+    "game_ids": [
+      94,
+      118,
+      190,
+      203
     ]
   },
   {
@@ -5022,6 +5403,11 @@
         "t": "text",
         "v": "Reduces reload times by 33%."
       }
+    ],
+    "game_name_key": "#ALPHAOMEGA",
+    "game_ids": [
+      373,
+      374
     ]
   },
   {
@@ -5060,6 +5446,11 @@
         "t": "text",
         "v": " can freeze enemies."
       }
+    ],
+    "game_name_key": "#SKULLANDBONES",
+    "game_ids": [
+      29,
+      45
     ]
   },
   {
@@ -5202,6 +5593,14 @@
         "t": "text",
         "v": " enemy 's attack."
       }
+    ],
+    "game_name_key": "#TRUESHOTGRUB",
+    "game_ids": [
+      347,
+      407,
+      434,
+      570,
+      631
     ]
   },
   {
@@ -5284,6 +5683,13 @@
         "t": "text",
         "v": "The split soul initially moves towards the player instead of away."
       }
+    ],
+    "game_name_key": "#KALIBERKBOOM",
+    "game_ids": [
+      570,
+      571,
+      631,
+      761
     ]
   },
   {
@@ -5368,6 +5774,11 @@
         "t": "text",
         "v": " empties its magazine."
       }
+    ],
+    "game_name_key": "#MYLITTLEFRIEND",
+    "game_ids": [
+      96,
+      461
     ]
   },
   {
@@ -5542,6 +5953,11 @@
         "t": "text",
         "v": "Taking damage will briefly stop time."
       }
+    ],
+    "game_name_key": "#CORMORANTFLIGHT",
+    "game_ids": [
+      161,
+      212
     ]
   },
   {
@@ -5678,6 +6094,13 @@
         "t": "text",
         "v": " shots leave a trail of fire."
       }
+    ],
+    "game_name_key": "#COMPOSITEMETAL",
+    "game_ids": [
+      290,
+      337,
+      451,
+      564
     ]
   },
   {
@@ -5740,6 +6163,11 @@
         "t": "text",
         "v": "Increases the damage of the guns by 25%."
       }
+    ],
+    "game_name_key": "#WOODAXE",
+    "game_ids": [
+      339,
+      346
     ]
   },
   {
@@ -5981,6 +6409,12 @@
         "t": "text",
         "v": " becomes green and creates pools of green fire. Green fire does not damage the player, and enemies that touch green fire are permanently aflame."
       }
+    ],
+    "game_name_key": "#LOADED_DICE",
+    "game_ids": [
+      125,
+      253,
+      521
     ]
   },
   {
@@ -6100,6 +6534,11 @@
         "t": "text",
         "v": " is equipped."
       }
+    ],
+    "game_name_key": "#MINEFRIEND",
+    "game_ids": [
+      308,
+      394
     ]
   },
   {
@@ -6149,6 +6588,11 @@
         "t": "text",
         "v": " fires a rocket in the direction of the crosshair. This has an approximate 5 second cooldown."
       }
+    ],
+    "game_name_key": "#BACKPACKROCKET",
+    "game_ids": [
+      106,
+      133
     ]
   },
   {
@@ -6165,6 +6609,12 @@
         "t": "text",
         "v": "Increases the damage, maximum ammo, and rate of fire of the guns by 25%."
       }
+    ],
+    "game_name_key": "#MGUNS",
+    "game_ids": [
+      25,
+      30,
+      96
     ]
   },
   {
@@ -6384,6 +6834,12 @@
         "t": "text",
         "v": " is held."
       }
+    ],
+    "game_name_key": "#ANGRIERBULLETS",
+    "game_ids": [
+      143,
+      323,
+      399
     ]
   },
   {
@@ -6416,6 +6872,12 @@
         "t": "text",
         "v": " is held."
       }
+    ],
+    "game_name_key": "#TECHARM",
+    "game_ids": [
+      114,
+      298,
+      333
     ]
   },
   {
@@ -6563,6 +7025,13 @@
         "t": "text",
         "v": " grows in size, fires more frequently, and deals more damage."
       }
+    ],
+    "game_name_key": "#GUON_UPGRADE_ORANGE",
+    "game_ids": [
+      158,
+      263,
+      286,
+      485
     ]
   },
   {
@@ -6632,6 +7101,11 @@
         "t": "text",
         "v": " no longer decreases shot speed."
       }
+    ],
+    "game_name_key": "#HEAVYBULLETSPUB",
+    "game_ids": [
+      111,
+      484
     ]
   },
   {
@@ -6709,6 +7183,13 @@
         "t": "text",
         "v": " bullets bounce and are connected with electricity."
       }
+    ],
+    "game_name_key": "#RUSTIERGOOPER",
+    "game_ids": [
+      159,
+      204,
+      207,
+      313
     ]
   },
   {
@@ -6835,6 +7316,12 @@
         "t": "text",
         "v": ", a dog appears and attacks that enemy."
       }
+    ],
+    "game_name_key": "#ZIP_ZAPPER",
+    "game_ids": [
+      27,
+      273,
+      307
     ]
   },
   {
@@ -6912,6 +7399,13 @@
         "t": "text",
         "v": "Enemies that damage the player become temporarily charmed ."
       }
+    ],
+    "game_name_key": "#GUON_UPGRADE_PINK",
+    "game_ids": [
+      158,
+      200,
+      260,
+      286
     ]
   },
   {
@@ -7024,6 +7518,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#SAMUSPLASMA",
+    "game_ids": [
+      41,
+      295
     ]
   },
   {
@@ -7039,6 +7538,11 @@
         "t": "text",
         "v": "Allows the player to make purchases without losing the Ring."
       }
+    ],
+    "game_name_key": "#PIGTECTION",
+    "game_ids": [
+      132,
+      451
     ]
   },
   {
@@ -7077,6 +7581,11 @@
         "t": "text",
         "v": " beams."
       }
+    ],
+    "game_name_key": "#KINGOFTHESEA",
+    "game_ids": [
+      444,
+      551
     ]
   },
   {
@@ -7112,6 +7621,11 @@
         "t": "text",
         "v": "Dodge roll recovery time is reduced. A bonfire spawns in every Shop and elevator to the next floor. If the player dies, they will respawn at the last bonfire they activated instead of at the start of the floor."
       }
+    ],
+    "game_name_key": "#REALDARKSOULS",
+    "game_ids": [
+      267,
+      489
     ]
   },
   {
@@ -7161,6 +7675,11 @@
         "t": "text",
         "v": "'s shots become rectangles and travel faster."
       }
+    ],
+    "game_name_key": "#RECTANGLERS",
+    "game_ids": [
+      175,
+      475
     ]
   },
   {
@@ -7184,6 +7703,12 @@
         "t": "text",
         "v": " shots bounce up to 5 times."
       }
+    ],
+    "game_name_key": "#ENGINEERINGDEPARTMENT",
+    "game_ids": [
+      314,
+      370,
+      449
     ]
   },
   {
@@ -7310,6 +7835,11 @@
         "t": "text",
         "v": " gain homing."
       }
+    ],
+    "game_name_key": "#NINJATOOLS",
+    "game_ids": [
+      250,
+      436
     ]
   },
   {
@@ -7368,6 +7898,11 @@
         "t": "text",
         "v": "'s attacks will significantly weaken enemies."
       }
+    ],
+    "game_name_key": "#REDRIDING",
+    "game_ids": [
+      346,
+      492
     ]
   },
   {
@@ -7410,6 +7945,13 @@
         "t": "text",
         "v": " blocks a bullet."
       }
+    ],
+    "game_name_key": "#GUON_UPGRADE_RED",
+    "game_ids": [
+      158,
+      191,
+      269,
+      286
     ]
   },
   {
@@ -7599,6 +8141,11 @@
         "t": "text",
         "v": "The last shot of each magazine is guaranteed to be a fire bullet."
       }
+    ],
+    "game_name_key": "#OMEGAFIRE",
+    "game_ids": [
+      295,
+      374
     ]
   },
   {
@@ -7632,6 +8179,11 @@
         "t": "text",
         "v": " knife."
       }
+    ],
+    "game_name_key": "#BLADESRUNNER",
+    "game_ids": [
+      65,
+      81
     ]
   },
   {
@@ -8002,6 +8554,11 @@
         "t": "text",
         "v": " explode."
       }
+    ],
+    "game_name_key": "#EXPLOSIVEHOLSTER",
+    "game_ids": [
+      440,
+      500
     ]
   },
   {
@@ -8049,6 +8606,11 @@
         "t": "text",
         "v": " fires 2 laser beams when fired."
       }
+    ],
+    "game_name_key": "#CAMERAFLASH",
+    "game_ids": [
+      383,
+      481
     ]
   },
   {
@@ -8143,6 +8705,11 @@
         "t": "text",
         "v": " also gains a chance to \"Devolve\" enemies."
       }
+    ],
+    "game_name_key": "#SERIOUSSAMPUB",
+    "game_ids": [
+      37,
+      484
     ]
   },
   {
@@ -8302,6 +8869,11 @@
         "t": "text",
         "v": " are not affected."
       }
+    ],
+    "game_name_key": "#SHOTGUNSPEED",
+    "game_ids": [
+      426,
+      427
     ]
   },
   {
@@ -8320,6 +8892,12 @@
         "t": "text",
         "v": "Doubles the spread of the guns, decreasing their accuracy."
       }
+    ],
+    "game_name_key": "#MUSIC",
+    "game_ids": [
+      119,
+      149,
+      482
     ]
   },
   {
@@ -8449,6 +9027,11 @@
         "t": "text",
         "v": "'s sharks will explode upon biting an enemy. These explosions can damage the player."
       }
+    ],
+    "game_name_key": "#EXPLOSIVESHARKS",
+    "game_ids": [
+      25,
+      359
     ]
   },
   {
@@ -8542,6 +9125,11 @@
         "t": "text",
         "v": ", the player regains ammo when walking over liquids. Increases range that reloading causes fear."
       }
+    ],
+    "game_name_key": "#AIRSOFT",
+    "game_ids": [
+      452,
+      510
     ]
   },
   {
@@ -8575,6 +9163,11 @@
         "t": "text",
         "v": " shells are continually fired in random directions."
       }
+    ],
+    "game_name_key": "#STUFFEDSHELL",
+    "game_ids": [
+      376,
+      433
     ]
   },
   {
@@ -8706,6 +9299,14 @@
         "t": "text",
         "v": " becomes skeletal in appearance and fires bouncing, letter-shaped bullets."
       }
+    ],
+    "game_name_key": "#HEDWIG",
+    "game_ids": [
+      61,
+      145,
+      249,
+      385,
+      395
     ]
   },
   {
@@ -8725,6 +9326,13 @@
         "t": "text",
         "v": "Molotovs create green fire pools. Green fire does not damage the player, and enemies that touch green fire are permanently aflame."
       }
+    ],
+    "game_name_key": "#IGNITION_REMIX",
+    "game_ids": [
+      168,
+      242,
+      292,
+      295
     ]
   },
   {
@@ -8749,6 +9357,11 @@
         "t": "text",
         "v": " with a short-ranged explosion."
       }
+    ],
+    "game_name_key": "#BLASTBOOTS",
+    "game_ids": [
+      312,
+      315
     ]
   },
   {
@@ -8773,6 +9386,11 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#DBOYFORLIFE",
+    "game_ids": [
+      290,
+      542
     ]
   },
   {
@@ -8797,6 +9415,11 @@
         "t": "text",
         "v": " by 50%."
       }
+    ],
+    "game_name_key": "#SPONGEBOB",
+    "game_ids": [
+      175,
+      452
     ]
   },
   {
@@ -8892,6 +9515,11 @@
         "t": "text",
         "v": " will remain in its powered-up form even if the player has no armor."
       }
+    ],
+    "game_name_key": "#NANOARMOR",
+    "game_ids": [
+      314,
+      545
     ]
   },
   {
@@ -8951,6 +9579,11 @@
         "t": "text",
         "v": " fires two bombs instead of one, charges twice as fast, and has 20% lower reload time."
       }
+    ],
+    "game_name_key": "#DOUBLEICEBOMBERMAN",
+    "game_ids": [
+      109,
+      332
     ]
   },
   {
@@ -9040,6 +9673,11 @@
         "t": "text",
         "v": "'s shot speed by 50%, decreases its charge time by 33%, and decreases its reload time by 20%."
       }
+    ],
+    "game_name_key": "#EXPLORER",
+    "game_ids": [
+      209,
+      327
     ]
   },
   {
@@ -9147,6 +9785,11 @@
         "t": "text",
         "v": "'s cooldown is decreased."
       }
+    ],
+    "game_name_key": "#DOUBLETELEPORTERS",
+    "game_ids": [
+      449,
+      573
     ]
   },
   {
@@ -9167,6 +9810,11 @@
         "t": "text",
         "v": "'s grenades fire 8 bullets in all directions upon exploding."
       }
+    ],
+    "game_name_key": "#TERMINATORTWO",
+    "game_ids": [
+      19,
+      64
     ]
   },
   {
@@ -9286,6 +9934,11 @@
         "t": "text",
         "v": " to fire a beam at nearby enemies."
       }
+    ],
+    "game_name_key": "#DEMONSLAYER",
+    "game_ids": [
+      47,
+      60
     ]
   },
   {
@@ -9370,6 +10023,11 @@
         "t": "text",
         "v": "Increases movement speed, doubles the damage of the guns, and increases their bullet speed by 20%."
       }
+    ],
+    "game_name_key": "#WINDINMYSAILS",
+    "game_ids": [
+      327,
+      520
     ]
   },
   {
@@ -9423,6 +10081,11 @@
         "t": "text",
         "v": " orbits the player and continually fires at enemies."
       }
+    ],
+    "game_name_key": "#LOOPERTIME",
+    "game_ids": [
+      18,
+      69
     ]
   },
   {
@@ -9571,6 +10234,11 @@
         "t": "text",
         "v": " will sometimes fire shots from guns in the player's inventory."
       }
+    ],
+    "game_name_key": "#TURRETRANDOMIZER",
+    "game_ids": [
+      201,
+      521
     ]
   },
   {
@@ -9674,6 +10342,11 @@
         "t": "text",
         "v": "'s homing shots will cause poison."
       }
+    ],
+    "game_name_key": "#TWOEGGS",
+    "game_ids": [
+      445,
+      637
     ]
   },
   {
@@ -9698,6 +10371,11 @@
         "t": "text",
         "v": " to spawn money upon completing a room."
       }
+    ],
+    "game_name_key": "#THECOINKING",
+    "game_ids": [
+      214,
+      551
     ]
   },
   {
@@ -9763,6 +10441,13 @@
         "t": "text",
         "v": ", all shots fired by the player (even shots fired via items other than either gun) and any companions are guaranteed to charm enemies. In addition, the player is followed by a fairy that blocks bullets and displays the contents of chests."
       }
+    ],
+    "game_name_key": "#CHARMING",
+    "game_ids": [
+      200,
+      260,
+      379,
+      527
     ]
   },
   {
@@ -9783,6 +10468,11 @@
         "t": "text",
         "v": " fires exploding Titanic ships."
       }
+    ],
+    "game_name_key": "#TITANIC",
+    "game_ids": [
+      130,
+      327
     ]
   },
   {
@@ -9937,6 +10627,11 @@
         "t": "text",
         "v": " with a full magazine."
       }
+    ],
+    "game_name_key": "#SAMUSWAVE",
+    "game_ids": [
+      41,
+      298
     ]
   },
   {
@@ -9970,6 +10665,11 @@
         "t": "text",
         "v": "'s main beam."
       }
+    ],
+    "game_name_key": "#SCIENCE",
+    "game_ids": [
+      121,
+      331
     ]
   },
   {
@@ -10067,6 +10767,11 @@
         "t": "text",
         "v": " fires a spread of three bullets per shot, but fires at 1/5th of its original speed."
       }
+    ],
+    "game_name_key": "#GUNGEONUNITY",
+    "game_ids": [
+      401,
+      495
     ]
   },
   {
@@ -10104,6 +10809,13 @@
         "t": "text",
         "v": " , its cooldown is halved."
       }
+    ],
+    "game_name_key": "#GUON_UPGRADE_WHITE",
+    "game_ids": [
+      158,
+      262,
+      286,
+      383
     ]
   },
   {
@@ -10119,6 +10831,11 @@
         "t": "text",
         "v": "Attacking a frozen enemy with one of the guns causes a yeti to attack it, dealing high damage."
       }
+    ],
+    "game_name_key": "#YETIDUNK",
+    "game_ids": [
+      223,
+      387
     ]
   },
   {
@@ -10253,6 +10970,11 @@
         "t": "text",
         "v": " is replaced with a crying bullet head that can only fire in cardinal directions, but deals double damage."
       }
+    ],
+    "game_name_key": "#ISAACLIKE",
+    "game_ids": [
+      33,
+      514
     ]
   },
   {
@@ -10286,6 +11008,11 @@
         "t": "text",
         "v": "'s explosions."
       }
+    ],
+    "game_name_key": "#METROIDCRAWL",
+    "game_ids": [
+      41,
+      567
     ]
   },
   {
@@ -10313,6 +11040,12 @@
         "t": "text",
         "v": " kills an enemy, it will spawn a circular zone that ignites all enemies within it."
       }
+    ],
+    "game_name_key": "#SOULAIR",
+    "game_ids": [
+      267,
+      489,
+      748
     ]
   }
 ]

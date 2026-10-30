@@ -309,7 +309,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Allows for direct control of foes.\n\nPurchased as a gift for a child of the Gungeon, upon their first successful trip to the mines. Due to an unfortunate combination of exceptional clumsiness and a living space full of pits, the controller was soon lost to the depths of the Gungeon.\n\nOne of the sticks is extremely wiggly."
+    "ammonomicon_entry": "Allows for direct control of foes.\n\nPurchased as a gift for a child of the Gungeon, upon their first successful trip to the mines. Due to an unfortunate combination of exceptional clumsiness and a living space full of pits, the controller was soon lost to the depths of the Gungeon.\n\nOne of the sticks is extremely wiggly.",
+    "id": 511
   },
   {
     "name": "A.W.P.",
@@ -729,7 +730,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A horrifying tentacle, cloven from some abyssal fiend.\n\nIt moves in very disquieting ways."
+    "ammonomicon_entry": "A horrifying tentacle, cloven from some abyssal fiend.\n\nIt moves in very disquieting ways.",
+    "id": 474
   },
   {
     "name": "AC-15",
@@ -1063,7 +1065,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Becomes more powerful while its bearer is armored. The engineers behind this gun originally tried to devise a system to see if any specific bullet would hit its target, but the math was so unintuitive that they gave up entirely. A few no longer speak to each other!"
+    "ammonomicon_entry": "Becomes more powerful while its bearer is armored. The engineers behind this gun originally tried to devise a system to see if any specific bullet would hit its target, but the math was so unintuitive that they gave up entirely. A few no longer speak to each other!",
+    "id": 545
   },
   {
     "name": "AK-47",
@@ -2028,7 +2031,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires anvils! A hometown favorite! The Anvillain has been shown to be the safest and most effective means of dispatching foes with an anvil."
+    "ammonomicon_entry": "Fires anvils! A hometown favorite! The Anvillain has been shown to be the safest and most effective means of dispatching foes with an anvil.",
+    "id": 393
   },
   {
     "name": "AU Gun",
@@ -2442,7 +2446,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Launches meat that attracts carnivores.\nThis esoteric weapon was devised by Emmitt Calx during one of his famous big game expeditions. The steak thrown by this small catapult will almost certainly draw the attention of any nearby predators."
+    "ammonomicon_entry": "Launches meat that attracts carnivores.\nThis esoteric weapon was devised by Emmitt Calx during one of his famous big game expeditions. The steak thrown by this small catapult will almost certainly draw the attention of any nearby predators.",
+    "id": 369
   },
   {
     "name": "Balloon Gun",
@@ -3235,7 +3240,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Generates a protective shield upon reload. Blockner lost his knighthood when he betrayed Ser Manuel, but he did not lose his gun. He did that much later."
+    "ammonomicon_entry": "Generates a protective shield upon reload. Blockner lost his knighthood when he betrayed Ser Manuel, but he did not lose his gun. He did that much later.",
+    "id": 380
   },
   {
     "name": "Big Iron",
@@ -4973,7 +4979,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The classic Bow will never go out of style."
+    "ammonomicon_entry": "The classic Bow will never go out of style.",
+    "id": 8
   },
   {
     "name": "Boxing Glove",
@@ -5537,7 +5544,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Legends tell of a mysterious alchemist who could turn bricks into coins, turtles, mushrooms, and a wide variety of other things. If true, this gun is a poor facsimile of his abilities, but is still useful nonetheless."
+    "ammonomicon_entry": "Legends tell of a mysterious alchemist who could turn bricks into coins, turtles, mushrooms, and a wide variety of other things. If true, this gun is a poor facsimile of his abilities, but is still useful nonetheless.",
+    "id": 376
   },
   {
     "name": "BSG",
@@ -6700,7 +6708,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The explosive drills this gun fires will stun enemies before exploding.\nThe Bullet Bore is an exotic weapon from the past, when the only creatures to carry guns were dinosaurs."
+    "ammonomicon_entry": "The explosive drills this gun fires will stun enemies before exploding.\nThe Bullet Bore is an exotic weapon from the past, when the only creatures to carry guns were dinosaurs.",
+    "id": 362
   },
   {
     "name": "Bundle of Wands",
@@ -7087,7 +7096,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires sawblades. The marketing team assigned to the Saw Blader wanted to call it the Sawed-On Shotgun, but were overruled by the gun's designer. It's more of a handgun, anyway."
+    "ammonomicon_entry": "Fires sawblades. The marketing team assigned to the Saw Blader wanted to call it the Sawed-On Shotgun, but were overruled by the gun's designer. It's more of a handgun, anyway.",
+    "id": 341
   },
   {
     "name": "Cactus",
@@ -8275,7 +8285,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires explosive homing darts."
+    "ammonomicon_entry": "Fires explosive homing darts.",
+    "id": 357
   },
   {
     "name": "Chamber Gun",
@@ -8703,7 +8714,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Transforms based on Chamber. This gun uses an advanced shape-memory alloy. When exposed to different environmental stimuli it reacts with the salts in Gungeoneer's bodies and transforms into a location-specific gun. Master rounds can also influence the shape of this curious weapon."
+    "ammonomicon_entry": "Transforms based on Chamber. This gun uses an advanced shape-memory alloy. When exposed to different environmental stimuli it reacts with the salts in Gungeoneer's bodies and transforms into a location-specific gun. Master rounds can also influence the shape of this curious weapon.",
+    "id": 647
   },
   {
     "name": "Charge Shot",
@@ -9140,7 +9152,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Shoots streaks of blue. Chargeable.\nBrought to the Gungeon by two of the first souls to conquer the Gungeon. Their ceaseless charge was driven by an unquenchable curiosity, and not even fatigue could slow their progress. Sleeping in shifts, the resting partner was carried into the depths on the other's back.\n\nMany adventurers throughout the galaxy would first learn of the Gungeon through tales of their exploits."
+    "ammonomicon_entry": "Shoots streaks of blue. Chargeable.\nBrought to the Gungeon by two of the first souls to conquer the Gungeon. Their ceaseless charge was driven by an unquenchable curiosity, and not even fatigue could slow their progress. Sleeping in shifts, the resting partner was carried into the depths on the other's back.\n\nMany adventurers throughout the galaxy would first learn of the Gungeon through tales of their exploits.",
+    "id": 390
   },
   {
     "name": "Cold 45",
@@ -9344,7 +9357,8 @@
     "sell_price": "21",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "An ancient example of fine guncraft, the Colt 1851 has been the gun of choice for many a nameless gunslinger.\n\nSkilled wielders have been known to quickly fire multiple shots, though the technique has been mostly lost to time."
+    "ammonomicon_entry": "An ancient example of fine guncraft, the Colt 1851 has been the gun of choice for many a nameless gunslinger.\n\nSkilled wielders have been known to quickly fire multiple shots, though the technique has been mostly lost to time.",
+    "id": 62
   },
   {
     "name": "Com4nd0",
@@ -10748,7 +10762,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Circumnavigates the room, then explodes.\nMany years ago, Gungeon mariners used wind to propel their bullets instead of combustion. The trips would take so long to cross a room that the bullets would sometimes mutiny and change course entirely."
+    "ammonomicon_entry": "Circumnavigates the room, then explodes.\nMany years ago, Gungeon mariners used wind to propel their bullets instead of combustion. The trips would take so long to cross a room that the bullets would sometimes mutiny and change course entirely.",
+    "id": 327
   },
   {
     "name": "Crescent Crossbow",
@@ -11351,7 +11366,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Freezes enemies.\nThis unique weapon was brought to the Gungeon by a disgraced warrior who discarded it when he gave up. The projectiles it fires are extremely low-energy, delivering a cold and highly depressing death."
+    "ammonomicon_entry": "Freezes enemies.\nThis unique weapon was brought to the Gungeon by a disgraced warrior who discarded it when he gave up. The projectiles it fires are extremely low-energy, delivering a cold and highly depressing death.",
+    "id": 178
   },
   {
     "name": "Crossbow",
@@ -12302,7 +12318,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires two projectiles. If they meet... Matter is composed largely of strong particles, and antimatter is composed of weak particles. When they meet, the strong particles overwhelm the weak particles and then explode in satisfaction. This gun is the favorite gun of the Gunsling King, who somewhat inscrutably says it reminds him of his servant."
+    "ammonomicon_entry": "Fires two projectiles. If they meet... Matter is composed largely of strong particles, and antimatter is composed of weak particles. When they meet, the strong particles overwhelm the weak particles and then explode in satisfaction. This gun is the favorite gun of the Gunsling King, who somewhat inscrutably says it reminds him of his servant.",
+    "id": 274
   },
   {
     "name": "Dart Gun",
@@ -12834,7 +12851,8 @@
     },
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This tiny pistol packs a correspondingly small punch, but it is well-known for getting its wielders out of tight spots."
+    "ammonomicon_entry": "This tiny pistol packs a correspondingly small punch, but it is well-known for getting its wielders out of tight spots.",
+    "id": 378
   },
   {
     "name": "Devolver",
@@ -13348,7 +13366,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires a beam that decoheres matter into its constituent particles.\nThis disintegration ray is outlawed on almost every planet with some form of government, and feared by all beings made primarily of matter. It can be fired legally in only two places: the Gungeon, and the waste disposal facilities of Popolon V."
+    "ammonomicon_entry": "Fires a beam that decoheres matter into its constituent particles.\nThis disintegration ray is outlawed on almost every planet with some form of government, and feared by all beings made primarily of matter. It can be fired legally in only two places: the Gungeon, and the waste disposal facilities of Popolon V.",
+    "id": 121
   },
   {
     "name": "Dragunfire",
@@ -13463,7 +13482,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Finely balanced, rapid fire. Can ignite foes.\nAn Edwin original. The Dragunfire was forged deep in the heart of the Gungeon, crafted to emulate the wrath of the beast from which it takes its name."
+    "ammonomicon_entry": "Finely balanced, rapid fire. Can ignite foes.\nAn Edwin original. The Dragunfire was forged deep in the heart of the Gungeon, crafted to emulate the wrath of the beast from which it takes its name.",
+    "id": 146
   },
   {
     "name": "Dueling Laser",
@@ -15087,7 +15107,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A normal electric guitar. Drops an amplifier on reload for double the power! Unfortunately, musical talent and Gungeoneering skill do not often overlap. Any damage caused by this \"gun\" has little to do with the Gungeon."
+    "ammonomicon_entry": "A normal electric guitar. Drops an amplifier on reload for double the power! Unfortunately, musical talent and Gungeoneering skill do not often overlap. Any damage caused by this \"gun\" has little to do with the Gungeon.",
+    "id": 149
   },
   {
     "name": "Fightsabre",
@@ -15310,7 +15331,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reload to reflect nearby bullets.\nAn ancient weapon, composed entirely of hardened light."
+    "ammonomicon_entry": "Reload to reflect nearby bullets.\nAn ancient weapon, composed entirely of hardened light.",
+    "id": 345
   },
   {
     "name": "Finished Gun",
@@ -15804,7 +15826,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Sets enemies aflame.\n\nAlben Smallbore, enthralled with the variety of guns he found in the Gungeon, created this spell. Upon casting, the wielder's hand bursts into flame, allowing fireballs to be thrown like bullets."
+    "ammonomicon_entry": "Sets enemies aflame.\n\nAlben Smallbore, enthralled with the variety of guns he found in the Gungeon, created this spell. Upon casting, the wielder's hand bursts into flame, allowing fireballs to be thrown like bullets.",
+    "id": 125
   },
   {
     "name": "Flare Gun",
@@ -16148,7 +16171,8 @@
     },
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The trusty sidearm of a spacefaring hero.\n\nFeaturing a stylish design and solid performance, this blaster is almost always worth keeping around."
+    "ammonomicon_entry": "The trusty sidearm of a spacefaring hero.\n\nFeaturing a stylish design and solid performance, this blaster is almost always worth keeping around.",
+    "id": 383
   },
   {
     "name": "Fossilized Gun",
@@ -16517,7 +16541,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The arctic blast this gun emits can freeze enemies at close range.\nThis gun was carried by a frost giant, long ago. Though they no longer rule the icy depths, a few of their artifacts remain."
+    "ammonomicon_entry": "The arctic blast this gun emits can freeze enemies at close range.\nThis gun was carried by a frost giant, long ago. Though they no longer rule the icy depths, a few of their artifacts remain.",
+    "id": 387
   },
   {
     "name": "Gamma Ray",
@@ -16774,7 +16799,8 @@
     "sell_price": "21",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This archaic laser has been studied for centuries. Gungeonologists can only conclude that it was used by primitive people to poison each other with radiation."
+    "ammonomicon_entry": "This archaic laser has been studied for centuries. Gungeonologists can only conclude that it was used by primitive people to poison each other with radiation.",
+    "id": 87
   },
   {
     "name": "Gilded Hydra",
@@ -17106,7 +17132,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Projectiles shatter and freeze enemies."
+    "ammonomicon_entry": "Projectiles shatter and freeze enemies.",
+    "id": 130
   },
   {
     "name": "Glass Cannon",
@@ -18165,7 +18192,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Blessed Gun of the Gunseeker.\n\nThis gun gains experience with every kill, and is strangely resistant to the Gungeon's temporal rifts. Any accrued experience will persist throughout time.\n\nA gun spoken of in legend. Once wielded by Gunderaan, Prince of Guns, this weapon ultimately found its way to the Gungeon after being mishandled by millions of idiots for countless hours."
+    "ammonomicon_entry": "Blessed Gun of the Gunseeker.\n\nThis gun gains experience with every kill, and is strangely resistant to the Gungeon's temporal rifts. Any accrued experience will persist throughout time.\n\nA gun spoken of in legend. Once wielded by Gunderaan, Prince of Guns, this weapon ultimately found its way to the Gungeon after being mishandled by millions of idiots for countless hours.",
+    "id": 732
   },
   {
     "name": "Gungeon Ant",
@@ -18603,7 +18631,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Move faster. Reloading converts goop into ammo. Old technology, but reliable. The Gungine, once revved up, emits 40x more bullets than it was rated for."
+    "ammonomicon_entry": "Move faster. Reloading converts goop into ammo. Old technology, but reliable. The Gungine, once revved up, emits 40x more bullets than it was rated for.",
+    "id": 401
   },
   {
     "name": "GuNNER",
@@ -19103,7 +19132,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Releases a vengeful, and armed, spirit. The precise methods needed to preserve a body with gun intact have been lost to time, but the High Priest, First of the Gun, still remembers..."
+    "ammonomicon_entry": "Releases a vengeful, and armed, spirit. The precise methods needed to preserve a body with gun intact have been lost to time, but the High Priest, First of the Gun, still remembers...",
+    "id": 198
   },
   {
     "name": "Gunther",
@@ -19407,7 +19437,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grows more powerful with each room cleared.\n\nThis distrustful gun has gained sentience. As with all intelligent weapons, he should be treated with respect and care."
+    "ammonomicon_entry": "Grows more powerful with each room cleared.\n\nThis distrustful gun has gained sentience. As with all intelligent weapons, he should be treated with respect and care.",
+    "id": 338
   },
   {
     "name": "Gunzheng",
@@ -19922,7 +19953,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Extremely rapid fire. Used by a wiggly hero in the early days of the Gungeon."
+    "ammonomicon_entry": "Extremely rapid fire. Used by a wiggly hero in the early days of the Gungeon.",
+    "id": 17
   },
   {
     "name": "Hegemony Carbine",
@@ -20011,7 +20043,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "An advanced issue rifle for Hegemony troops. Primarily wielded by elite human soldiers, as the Hegemony combat robots have superior weaponry."
+    "ammonomicon_entry": "An advanced issue rifle for Hegemony troops. Primarily wielded by elite human soldiers, as the Hegemony combat robots have superior weaponry.",
+    "id": 229
   },
   {
     "name": "Hegemony Rifle",
@@ -20111,7 +20144,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The standard issue rifle for all Hegemony of Man soldiers. Packs a decent punch, but the accuracy leaves much to be desired. Typical Hegemony work."
+    "ammonomicon_entry": "The standard issue rifle for all Hegemony of Man soldiers. Packs a decent punch, but the accuracy leaves much to be desired. Typical Hegemony work.",
+    "id": 59
   },
   {
     "name": "Helix",
@@ -20234,7 +20268,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires two wave projectiles.\nInspired by real science, the Helix is extremely useful for hitting two things at once, as long as they are a certain distance apart."
+    "ammonomicon_entry": "Fires two wave projectiles.\nInspired by real science, the Helix is extremely useful for hitting two things at once, as long as they are a certain distance apart.",
+    "id": 230
   },
   {
     "name": "Heroine",
@@ -20386,7 +20421,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The arm of a famous bounty hunter.\n\nThis arm cannon has seen substantial use, but its upkeep has been immaculate."
+    "ammonomicon_entry": "The arm of a famous bounty hunter.\n\nThis arm cannon has seen substantial use, but its upkeep has been immaculate.",
+    "id": 41
   },
   {
     "name": "Hexagun",
@@ -20590,7 +20626,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The Hexagun was created by a vengeful Gunjurer after his apprentices were slain by a Gungeoneer wielding the humble Bundle of Wands. The stock is formed from what was once his staff, and each piece of metal was enchanted thrice before assembly. His revenge came swiftly, and from a great distance."
+    "ammonomicon_entry": "The Hexagun was created by a vengeful Gunjurer after his apprentices were slain by a Gungeoneer wielding the humble Bundle of Wands. The stock is formed from what was once his staff, and each piece of metal was enchanted thrice before assembly. His revenge came swiftly, and from a great distance.",
+    "id": 385
   },
   {
     "name": "High Kaliber",
@@ -21119,7 +21156,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Can sever enemies' souls.\n\nThis pocked and swollen gun splits and rends the spirit from the body."
+    "ammonomicon_entry": "Can sever enemies' souls.\n\nThis pocked and swollen gun splits and rends the spirit from the body.",
+    "id": 761
   },
   {
     "name": "Huntsman",
@@ -21320,7 +21358,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reload for momentary safety.\n\nA misbegotten attempt to combine melee and ranged combat, the axe portion of this gun is mostly worthless. Reloading it involves swinging the blade around wildly, which might protect you from a stray bullet."
+    "ammonomicon_entry": "Reload for momentary safety.\n\nA misbegotten attempt to combine melee and ranged combat, the axe portion of this gun is mostly worthless. Reloading it involves swinging the blade around wildly, which might protect you from a stray bullet.",
+    "id": 346
   },
   {
     "name": "Hyper Light Blaster",
@@ -21802,7 +21841,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Shots that impact foes are refunded.\n\nA weapon once carried by a brave wanderer, whose exploits are lost to the drifts of time. Designed to work in tandem with a blade, this one has been modified to recharge itself."
+    "ammonomicon_entry": "Shots that impact foes are refunded.\n\nA weapon once carried by a brave wanderer, whose exploits are lost to the drifts of time. Designed to work in tandem with a blade, this one has been modified to recharge itself.",
+    "id": 504
   },
   {
     "name": "Ice Breaker",
@@ -22393,7 +22433,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Originally built to kill thick-skinned space mutants, the Jolter fires unreasonably large shells."
+    "ammonomicon_entry": "Originally built to kill thick-skinned space mutants, the Jolter fires unreasonably large shells.",
+    "id": 47
   },
   {
     "name": "Klobbe",
@@ -22894,7 +22935,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Unloads firepower at foes, digs. This trusty shovel was gifted to one of the first Gungeoneers, by a traveling race of sentient yachts."
+    "ammonomicon_entry": "Unloads firepower at foes, digs. This trusty shovel was gifted to one of the first Gungeoneers, by a traveling race of sentient yachts.",
+    "id": 550
   },
   {
     "name": "Kruller Glaive",
@@ -23098,7 +23140,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This shiny piece of die-cast metal was purchased from an ancient mall kiosk. The buyer's mom sold it at a flea market when they moved out to a middle-aged collector. That person swore it would eventually be worth many times what he paid for it. Unfortunately, he was disappointed, and it was valueless at the time of his death. Now it's in the Gungeon!"
+    "ammonomicon_entry": "This shiny piece of die-cast metal was purchased from an ancient mall kiosk. The buyer's mom sold it at a flea market when they moved out to a middle-aged collector. That person swore it would eventually be worth many times what he paid for it. Unfortunately, he was disappointed, and it was valueless at the time of his death. Now it's in the Gungeon!",
+    "id": 656
   },
   {
     "name": "Laser Lotus",
@@ -23189,7 +23232,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Pierce Weapon. Gifted to any who reach Level 5 in the Order of the True Gun."
+    "ammonomicon_entry": "Pierce Weapon. Gifted to any who reach Level 5 in the Order of the True Gun.",
+    "id": 156
   },
   {
     "name": "Laser Rifle",
@@ -23575,7 +23619,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "After a clumsy child of the Gungeon accidentally dropped this toy into a pit, they were forced to amuse themselves with the Dart Gun."
+    "ammonomicon_entry": "After a clumsy child of the Gungeon accidentally dropped this toy into a pit, they were forced to amuse themselves with the Dart Gun.",
+    "id": 27
   },
   {
     "name": "Lil' Bomber",
@@ -23842,7 +23887,8 @@
     },
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Charge to fire bombs.\nA forgetful adventurer left a pouch full of bombs deep in the Gungeon, and they eventually sprouted into this amusing weapon. A favorite of the Gunsling King, who often sends Manservantes to pick up the bombs."
+    "ammonomicon_entry": "Charge to fire bombs.\nA forgetful adventurer left a pouch full of bombs deep in the Gungeon, and they eventually sprouted into this amusing weapon. A favorite of the Gunsling King, who often sends Manservantes to pick up the bombs.",
+    "id": 332
   },
   {
     "name": "Lower Case r",
@@ -24254,7 +24300,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Rapid fire with a big finale.\nThis tricky prism requires guile to wield, but with the right lens, fires shreds of solidified light that slice enemies in their path. Falsely rumored to have natural healing abilities."
+    "ammonomicon_entry": "Rapid fire with a big finale.\nThis tricky prism requires guile to wield, but with the right lens, fires shreds of solidified light that slice enemies in their path. Falsely rumored to have natural healing abilities.",
+    "id": 199
   },
   {
     "name": "M1",
@@ -24367,7 +24414,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The most famous rifle in history. This gun's usefulness and reliability have become legend. Though not native to the Gungeon, its arrival seemed to be expected by the Gundead."
+    "ammonomicon_entry": "The most famous rifle in history. This gun's usefulness and reliability have become legend. Though not native to the Gungeon, its arrival seemed to be expected by the Gundead.",
+    "id": 25
   },
   {
     "name": "M16",
@@ -25698,7 +25746,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This leafy blaster is made of Mahoguny, a strange wood which will only take root near the Gungeon."
+    "ammonomicon_entry": "This leafy blaster is made of Mahoguny, a strange wood which will only take root near the Gungeon.",
+    "id": 339
   },
   {
     "name": "Mailbox",
@@ -26200,7 +26249,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A makeshift weapon filled with gunpowder and shrapnel. Immensely powerful, but it can only be fired once."
+    "ammonomicon_entry": "A makeshift weapon filled with gunpowder and shrapnel. Immensely powerful, but it can only be fired once.",
+    "id": 480
   },
   {
     "name": "Marine Sidearm",
@@ -26658,7 +26708,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A shotgun used by the highest ranking soldiers of the Hegemony. Designed for rapid deployment and easy storage, the Mass Shotgun fires a single large slug that bursts into smaller pellets."
+    "ammonomicon_entry": "A shotgun used by the highest ranking soldiers of the Hegemony. Designed for rapid deployment and easy storage, the Mass Shotgun fires a single large slug that bursts into smaller pellets.",
+    "id": 365
   },
   {
     "name": "Mega Douser",
@@ -27341,7 +27392,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The Megahand is a relic of the Ten Days' War against the robots. The most powerful robot masters would modify it for their own styles of combat. This one is basic, but it still works well."
+    "ammonomicon_entry": "The Megahand is a relic of the Ten Days' War against the robots. The most powerful robot masters would modify it for their own styles of combat. This one is basic, but it still works well.",
+    "id": 36
   },
   {
     "name": "Microtransaction Gun",
@@ -27503,7 +27555,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Everyone involved in the production of this gun thought it was a bad idea, but the higher-ups made them build it anyway. Later, management shut down that gun factory for making a gun no one liked."
+    "ammonomicon_entry": "Everyone involved in the production of this gun thought it was a bad idea, but the higher-ups made them build it anyway. Later, management shut down that gun factory for making a gun no one liked.",
+    "id": 476
   },
   {
     "name": "Mine Cutter",
@@ -27855,7 +27908,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This laser was designed to precisely cut rocks in the Gungeon's Black Powder Mining operations, but its powerful blasts are just as effective on Gundead."
+    "ammonomicon_entry": "This laser was designed to precisely cut rocks in the Gungeon's Black Powder Mining operations, but its powerful blasts are just as effective on Gundead.",
+    "id": 394
   },
   {
     "name": "Molotov Launcher",
@@ -28004,7 +28058,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Launches Molotovs.\n\nThe Molotov Launcher takes the principle of incendiary bottles and removes arm pain."
+    "ammonomicon_entry": "Launches Molotovs.\n\nThe Molotov Launcher takes the principle of incendiary bottles and removes arm pain.",
+    "id": 292
   },
   {
     "name": "Moonscraper",
@@ -28384,7 +28439,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires a tracking beam which, when held on an enemy target, calls down an orbital strike. Persists while the trigger is held. Can be guided."
+    "ammonomicon_entry": "Fires a tracking beam which, when held on an enemy target, calls down an orbital strike. Persists while the trigger is held. Can be guided.",
+    "id": 515
   },
   {
     "name": "Mr. Accretion Jr.",
@@ -28650,7 +28706,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires replicas of planets from a fictional solar system. Collect all eight! Due to a trick in perspective, these two-dimensional planets appear spherical. Though much smaller than the source material, the planets created by this device will pack quite a punch."
+    "ammonomicon_entry": "Fires replicas of planets from a fictional solar system. Collect all eight! Due to a trick in perspective, these two-dimensional planets appear spherical. Though much smaller than the source material, the planets created by this device will pack quite a punch.",
+    "id": 597
   },
   {
     "name": "Mutation",
@@ -28758,7 +28815,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A horrific consequence of radiation exposure.\n\nAt least the arm is still somewhat useful."
+    "ammonomicon_entry": "A horrific consequence of radiation exposure.\n\nAt least the arm is still somewhat useful.",
+    "id": 333
   },
   {
     "name": "Nail Gun",
@@ -29003,7 +29061,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A masterwork shotgun.\n\nThe right answer isn't always a gun that shoots bees, a water gun, or a flaming hand. Sometimes, all you need is a simple concept executed immaculately. This gold trimmed, double-barreled shotgun represents the best of traditional guncraft."
+    "ammonomicon_entry": "A masterwork shotgun.\n\nThe right answer isn't always a gun that shoots bees, a water gun, or a flaming hand. Sometimes, all you need is a simple concept executed immaculately. This gold trimmed, double-barreled shotgun represents the best of traditional guncraft.",
+    "id": 93
   },
   {
     "name": "Origuni",
@@ -29405,7 +29464,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "An initial burst of exotic particles triggers additional homing blasts.\nA weapon from the future. Perhaps a Gungeoneer from the distant future succeeded, and brought this gun back?\n\nGunesis 1:1 In the beginning, the Gungeon was formless and void, and bullets moved over the face of the deep."
+    "ammonomicon_entry": "An initial burst of exotic particles triggers additional homing blasts.\nA weapon from the future. Perhaps a Gungeoneer from the distant future succeeded, and brought this gun back?\n\nGunesis 1:1 In the beginning, the Gungeon was formless and void, and bullets moved over the face of the deep.",
+    "id": 228
   },
   {
     "name": "Patriot",
@@ -29722,7 +29782,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A powerful machine gun that once belonged to a forgotten hero. This gun's mechanism is overly complicated, but it proves extremely effective in the field. Beloved by many, despite its flaws."
+    "ammonomicon_entry": "A powerful machine gun that once belonged to a forgotten hero. This gun's mechanism is overly complicated, but it proves extremely effective in the field. Beloved by many, despite its flaws.",
+    "id": 98
   },
   {
     "name": "Pea Shooter",
@@ -30273,7 +30334,8 @@
     },
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires poisonous rounds."
+    "ammonomicon_entry": "Fires poisonous rounds.",
+    "id": 207
   },
   {
     "name": "Plunger",
@@ -30464,7 +30526,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires a stream of toxic goop. Ammo can be reused.\n\nThe Syringe Gun was ordered for the Gungeon by the Medecins Sans Diplome to perform complete blood transfusions all at once. When that proved dangerous, a crafty Gungeoneer filled the giant Syringe with a live Poisbulon."
+    "ammonomicon_entry": "Fires a stream of toxic goop. Ammo can be reused.\n\nThe Syringe Gun was ordered for the Gungeon by the Medecins Sans Diplome to perform complete blood transfusions all at once. When that proved dangerous, a crafty Gungeoneer filled the giant Syringe with a live Poisbulon.",
+    "id": 208
   },
   {
     "name": "Polaris",
@@ -31363,7 +31426,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Launches a dense metal slug at incredible speeds. A secret military prototype, built at great cost by the Hegemony of Man. A single shot can punch a hole in anything up to a Destroyer-class starship."
+    "ammonomicon_entry": "Launches a dense metal slug at incredible speeds. A secret military prototype, built at great cost by the Hegemony of Man. A single shot can punch a hole in anything up to a Destroyer-class starship.",
+    "id": 370
   },
   {
     "name": "Pulse Cannon",
@@ -31461,7 +31525,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires several pulses of decoherent energy. An early, less controlled version of modern energy weaponry."
+    "ammonomicon_entry": "Fires several pulses of decoherent energy. An early, less controlled version of modern energy weaponry.",
+    "id": 123
   },
   {
     "name": "Quad Laser",
@@ -31600,7 +31665,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This strange artifact fires an extremely powerful blast of Moon energy. While incredibly slow, it cannot be halted."
+    "ammonomicon_entry": "This strange artifact fires an extremely powerful blast of Moon energy. While incredibly slow, it cannot be halted.",
+    "id": 475
   },
   {
     "name": "Rad Gun",
@@ -32048,7 +32114,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Damages all enemies on screen, no matter what.\nThis cannon was built for mounting on Supersonic Attack Fighters, but has been retrofitted to be carried by infantry. An inscription on the barrel reads, \"Know thy own position, and all others inevitably fall.\""
+    "ammonomicon_entry": "Damages all enemies on screen, no matter what.\nThis cannon was built for mounting on Supersonic Attack Fighters, but has been retrofitted to be carried by infantry. An inscription on the barrel reads, \"Know thy own position, and all others inevitably fall.\"",
+    "id": 107
   },
   {
     "name": "Railgun",
@@ -32408,7 +32475,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The Rattler was one of Emmitt Calx's worst, and last, ideas. This is a Winchester shotgun with an extremely venomous snake wrapped around it, adding a poisonous blast to each volley. Requires extreme dexterity to reload."
+    "ammonomicon_entry": "The Rattler was one of Emmitt Calx's worst, and last, ideas. This is a Winchester shotgun with an extremely venomous snake wrapped around it, adding a poisonous blast to each volley. Requires extreme dexterity to reload.",
+    "id": 406
   },
   {
     "name": "RC Rocket",
@@ -32542,7 +32610,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires wire-guided missiles, controlled by aiming.\nThese missiles are excellent for catching an enemy off guard, or perhaps for traversing an electrified corridor."
+    "ammonomicon_entry": "Fires wire-guided missiles, controlled by aiming.\nThese missiles are excellent for catching an enemy off guard, or perhaps for traversing an electrified corridor.",
+    "id": 372
   },
   {
     "name": "Really Special Lute",
@@ -32940,7 +33009,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Energizes companionable listeners.\n\nBarely a gun at all, but a very, very special lute. Or so were told.\n\nSeems to get out of tune when blue fire is around."
+    "ammonomicon_entry": "Energizes companionable listeners.\n\nBarely a gun at all, but a very, very special lute. Or so were told.\n\nSeems to get out of tune when blue fire is around.",
+    "id": 506
   },
   {
     "name": "Regular Shotgun",
@@ -33245,7 +33315,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The left hand of an assault robot that fled to the Gungeon.\nIt turns out most robots are left-handed."
+    "ammonomicon_entry": "The left hand of an assault robot that fled to the Gungeon.\nIt turns out most robots are left-handed.",
+    "id": 576
   },
   {
     "name": "Robot's Right Hand",
@@ -33367,7 +33438,8 @@
       ]
     },
     "neckbear_approved": true,
-    "ammonomicon_entry": "The right hand of an assault robot that fled to the Gungeon. When weilded by the Robot, combines with Junk to increase all damage output.\nIt is a simple projectile delivery system. Reliable, but its short barrel is lacking in intricacy. Under the control of a targeting AI it becomes fearsome indeed."
+    "ammonomicon_entry": "The right hand of an assault robot that fled to the Gungeon. When weilded by the Robot, combines with Junk to increase all damage output.\nIt is a simple projectile delivery system. Reliable, but its short barrel is lacking in intricacy. Under the control of a targeting AI it becomes fearsome indeed.",
+    "id": 88
   },
   {
     "name": "Rogue Special",
@@ -34032,7 +34104,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A prototype ricochet blaster. This blaster was created to test the limits of projectile impact and ricochet physics."
+    "ammonomicon_entry": "A prototype ricochet blaster. This blaster was created to test the limits of projectile impact and ricochet physics.",
+    "id": 142
   },
   {
     "name": "Rubenstein's Monster",
@@ -34254,7 +34327,8 @@
     },
     "sell_price": "3",
     "neckbear_approved": true,
-    "ammonomicon_entry": "An extremely powerful ricochet rifle. Cobbled together from the compatible parts of the RUBE-ADYNE and its prototype, this makeshift gun provides maximum lethality in one convenient package."
+    "ammonomicon_entry": "An extremely powerful ricochet rifle. Cobbled together from the compatible parts of the RUBE-ADYNE and its prototype, this makeshift gun provides maximum lethality in one convenient package.",
+    "id": 609
   },
   {
     "name": "Rusty Sidearm",
@@ -34680,7 +34754,8 @@
     "sell_price": "16",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A shotgun modified for easy concealment. The shorter barrel widens the spread, but up-close, it's just as deadly as its full-barreled cousin."
+    "ammonomicon_entry": "A shotgun modified for easy concealment. The shorter barrel widens the spread, but up-close, it's just as deadly as its full-barreled cousin.",
+    "id": 202
   },
   {
     "name": "Science Cannon",
@@ -34767,7 +34842,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This immense beam cannon was developed as part of a bid to win the Hegemony's military contracts. The steady stream of intense science energy it fires is a true testament to what physics and engineering can accomplish."
+    "ammonomicon_entry": "This immense beam cannon was developed as part of a bid to win the Hegemony's military contracts. The steady stream of intense science energy it fires is a true testament to what physics and engineering can accomplish.",
+    "id": 331
   },
   {
     "name": "Screecher",
@@ -34924,7 +35000,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "An overcharged anti-loitering and mob dispersal device. Forces enemies to forget their purpose and conviction."
+    "ammonomicon_entry": "An overcharged anti-loitering and mob dispersal device. Forces enemies to forget their purpose and conviction.",
+    "id": 3
   },
   {
     "name": "Serious Cannon",
@@ -35309,7 +35386,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This strange gun, shaped like a shotgun shell, fires bullets that are shaped like shotguns.\n\nThose shotgun-shaped bullets will fire a spray of rounds upon impact, much like a shotgun would."
+    "ammonomicon_entry": "This strange gun, shaped like a shotgun shell, fires bullets that are shaped like shotguns.\n\nThose shotgun-shaped bullets will fire a spray of rounds upon impact, much like a shotgun would.",
+    "id": 756
   },
   {
     "name": "Shellegun",
@@ -35611,7 +35689,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The Shock Rifle uses a modified battery and coil to propel electricity."
+    "ammonomicon_entry": "The Shock Rifle uses a modified battery and coil to propel electricity.",
+    "id": 153
   },
   {
     "name": "Shotbow",
@@ -36486,7 +36565,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Can stun enemies at close range. Alben Smallbore was known for enchanting mundane objects to make them more gun-like. This pillow, which once decorated his guest chambers, is a perfect example of his unique strain of madness."
+    "ammonomicon_entry": "Can stun enemies at close range. Alben Smallbore was known for enchanting mundane objects to make them more gun-like. This pillow, which once decorated his guest chambers, is a perfect example of his unique strain of madness.",
+    "id": 335
   },
   {
     "name": "Siren",
@@ -36737,7 +36817,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Prevents goop effects.\n\nThe Siren's watery blasts can be a lifesaver when faced with toxic pools or patches of flame."
+    "ammonomicon_entry": "Prevents goop effects.\n\nThe Siren's watery blasts can be a lifesaver when faced with toxic pools or patches of flame.",
+    "id": 404
   },
   {
     "name": "Skull Spitter",
@@ -36834,7 +36915,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Even in death, bullets fly. This gun was crafted by Nuign the Cursed, from the skeleton of a Gundead that had become a Spectre.\nNuign's body still remains somewhere deep in the Hollow, and it is from his bones that all Curse arises."
+    "ammonomicon_entry": "Even in death, bullets fly. This gun was crafted by Nuign the Cursed, from the skeleton of a Gundead that had become a Spectre.\nNuign's body still remains somewhere deep in the Hollow, and it is from his bones that all Curse arises.",
+    "id": 45
   },
   {
     "name": "Sling",
@@ -37432,7 +37514,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Chance to transmogrify enemies.\nThe Snakemaker was an attempt to replicate the strange transformative power of certain magics with technology. Though the experiment was a success, further research into transfigurative weaponry seemed excessive."
+    "ammonomicon_entry": "Chance to transmogrify enemies.\nThe Snakemaker was an attempt to replicate the strange transformative power of certain magics with technology. Though the experiment was a success, further research into transfigurative weaponry seemed excessive.",
+    "id": 360
   },
   {
     "name": "Sniper Rifle",
@@ -37669,7 +37752,8 @@
     },
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This weapon was constructed the single time the Gungeon experienced a snow day. New Gundead simply appeared with these cannons strapped to their bodies and pelted everything in sight with powdery projectiles. There were also many chipped teeth."
+    "ammonomicon_entry": "This weapon was constructed the single time the Gungeon experienced a snow day. New Gundead simply appeared with these cannons strapped to their bodies and pelted everything in sight with powdery projectiles. There were also many chipped teeth.",
+    "id": 402
   },
   {
     "name": "Staff of Firepower",
@@ -37834,7 +37918,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reload to transform.\nOne of the earliest gun experiments, before the fires of the Forge were lit. This \"magic revolver\" was created when the then-master of the Gungeon taped one of his staves of power to the top of the barrel."
+    "ammonomicon_entry": "Reload to transform.\nOne of the earliest gun experiments, before the fires of the Forge were lit. This \"magic revolver\" was created when the then-master of the Gungeon taped one of his staves of power to the top of the barrel.",
+    "id": 395
   },
   {
     "name": "Starpew",
@@ -38296,7 +38381,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires sticky bolts.\n\nA crossbow modified to fire bolts that stick to enemies. The bolts detonate after a short delay."
+    "ammonomicon_entry": "Fires sticky bolts.\n\nA crossbow modified to fire bolts that stick to enemies. The bolts detonate after a short delay.",
+    "id": 4
   },
   {
     "name": "Stinger",
@@ -38868,7 +38954,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Spits bullets, fear. Chiseled from a large slab of the rare element Cranium, this terrifying stony visage is a totem of an angry god."
+    "ammonomicon_entry": "Spits bullets, fear. Chiseled from a large slab of the rare element Cranium, this terrifying stony visage is a totem of an angry god.",
+    "id": 598
   },
   {
     "name": "Strafe Gun",
@@ -39320,7 +39407,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Makes enemies grossly incandescent. This javelin was born from the chemistry of two heroes who conquered the Gungeon together."
+    "ammonomicon_entry": "Makes enemies grossly incandescent. This javelin was born from the chemistry of two heroes who conquered the Gungeon together.",
+    "id": 748
   },
   {
     "name": "Super Meat Gun",
@@ -39829,7 +39917,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires a spread of three tangling shots.\n\nUsed by the Gundead to hunt the great Bullet that fell from the sky. The tangling shots are designed to slow prey."
+    "ammonomicon_entry": "Fires a spread of three tangling shots.\n\nUsed by the Gundead to hunt the great Bullet that fell from the sky. The tangling shots are designed to slow prey.",
+    "id": 175
   },
   {
     "name": "Teapot",
@@ -40129,7 +40218,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires homing tears.\n\nA weapon favored by the saddest Gundead. The tears it fires are drawn to enemies, seeking them out with a melancholy certainty."
+    "ammonomicon_entry": "Fires homing tears.\n\nA weapon favored by the saddest Gundead. The tears it fires are drawn to enemies, seeking them out with a melancholy certainty.",
+    "id": 33
   },
   {
     "name": "Tetrominator",
@@ -40440,7 +40530,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The Tetrominator shoots every possible configuration of four bullets.\n\nStrangely, the \"line\" configuration seems rarer than others."
+    "ammonomicon_entry": "The Tetrominator shoots every possible configuration of four bullets.\n\nStrangely, the \"line\" configuration seems rarer than others.",
+    "id": 483
   },
   {
     "name": "The Emperor",
@@ -40593,7 +40684,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires linked projectiles.\nThis gun fires powerful electron bursts that imitate ancient spells of chained lightning."
+    "ammonomicon_entry": "Fires linked projectiles.\nThis gun fires powerful electron bursts that imitate ancient spells of chained lightning.",
+    "id": 330
   },
   {
     "name": "The Exotic",
@@ -40739,7 +40831,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires homing rockets that erupt into short-range swarms. Comes with a helpful pal. Though this gun was built unimaginably far away, it seems it was destined to eventually find its way to the Gungeon."
+    "ammonomicon_entry": "Fires homing rockets that erupt into short-range swarms. Comes with a helpful pal. Though this gun was built unimaginably far away, it seems it was destined to eventually find its way to the Gungeon.",
+    "id": 563
   },
   {
     "name": "The Fat Line",
@@ -40969,7 +41062,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires projectiles from the target position towards the gun.\n\nBecause Tachyons are particles that move faster than light, the Hegemony of Man has long used them for interstellar communication. As with all technology, it was eventually weaponized. However- tachyons travel backward in time, making this gun hard to aim."
+    "ammonomicon_entry": "Fires projectiles from the target position towards the gun.\n\nBecause Tachyons are particles that move faster than light, the Hegemony of Man has long used them for interstellar communication. As with all technology, it was eventually weaponized. However- tachyons travel backward in time, making this gun hard to aim.",
+    "id": 562
   },
   {
     "name": "The Judge",
@@ -41103,7 +41197,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Pass judgement on your enemies."
+    "ammonomicon_entry": "Pass judgement on your enemies.",
+    "id": 184
   },
   {
     "name": "The Kiln",
@@ -41199,7 +41294,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires homing fireballs.\n\nThis ancient kiln has been repurposed as a weapon. The fireballs it fires seek out enemies with relentless determination."
+    "ammonomicon_entry": "Fires homing fireballs.\n\nThis ancient kiln has been repurposed as a weapon. The fireballs it fires seek out enemies with relentless determination.",
+    "id": 152
   },
   {
     "name": "The Membrane",
@@ -41338,7 +41434,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires a spread of three bullets.\n\nA biological weapon of uncertain origin. The membrane-like barrel flexes with each shot."
+    "ammonomicon_entry": "Fires a spread of three bullets.\n\nA biological weapon of uncertain origin. The membrane-like barrel flexes with each shot.",
+    "id": 151
   },
   {
     "name": "The Predator",
@@ -41520,7 +41617,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Locks on. Tracks enemy heat signatures. This shoulder-mounted plasma cannon was used by an alien hunter. Generally, the Gundead do not bleed, but this gun can still make short work of them."
+    "ammonomicon_entry": "Locks on. Tracks enemy heat signatures. This shoulder-mounted plasma cannon was used by an alien hunter. Generally, the Gundead do not bleed, but this gun can still make short work of them.",
+    "id": 543
   },
   {
     "name": "The Scrambler",
@@ -42329,7 +42427,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "One of the first energy weapons created in the Gungeon. When lightning struck an old gunsmith's gun-rack, he decided to sand it down into a gun. The result is crude, as far as energy weapons go, but effective."
+    "ammonomicon_entry": "One of the first energy weapons created in the Gungeon. When lightning struck an old gunsmith's gun-rack, he decided to sand it down into a gun. The result is crude, as far as energy weapons go, but effective.",
+    "id": 13
   },
   {
     "name": "Trank Gun",
@@ -42722,7 +42821,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires trash.\n\nOne Gungeoneer's trash is another Gungeoneer's weapon. This gun fires a spread of garbage that somehow manages to be effective."
+    "ammonomicon_entry": "Fires trash.\n\nOne Gungeoneer's trash is another Gungeoneer's weapon. This gun fires a spread of garbage that somehow manages to be effective.",
+    "id": 154
   },
   {
     "name": "Trick Gun",
@@ -43011,7 +43111,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A gun that fires in two modes.\n\nThis clever weapon can switch between a single shot and a spread shot. The mechanism is a closely guarded secret."
+    "ammonomicon_entry": "A gun that fires in two modes.\n\nThis clever weapon can switch between a single shot and a spread shot. The mechanism is a closely guarded secret.",
+    "id": 363
   },
   {
     "name": "Trident",
@@ -43288,7 +43389,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires three bolts at once.\n\nA crossbow modified to fire three bolts simultaneously. The spread makes up for the reduced accuracy."
+    "ammonomicon_entry": "Fires three bolts at once.\n\nA crossbow modified to fire three bolts simultaneously. The spread makes up for the reduced accuracy.",
+    "id": 381
   },
   {
     "name": "Triple Gun",
@@ -43739,7 +43841,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires a rapid stream of bullets.\n\nThis gun is essentially a handheld Gatling gun. The barrels spin up to deliver a withering hail of bullets."
+    "ammonomicon_entry": "Fires a rapid stream of bullets.\n\nThis gun is essentially a handheld Gatling gun. The barrels spin up to deliver a withering hail of bullets.",
+    "id": 577
   },
   {
     "name": "Unfinished Gun",
@@ -44093,7 +44196,8 @@
     },
     "sell_price": "41",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This magic horn is proof that at least one unicorn existed, and now is either dead or hornless."
+    "ammonomicon_entry": "This magic horn is proof that at least one unicorn existed, and now is either dead or hornless.",
+    "id": 100
   },
   {
     "name": "VertebraeK-47",
@@ -44376,7 +44480,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Before the Void Core was disbanded by the Hegemony of Man, they were renowned throughout the sector for their feats on and off the battlefield. Following their dissolution, the famed Void Core captain known as the Thunderbolt made his way to the Gungeon."
+    "ammonomicon_entry": "Before the Void Core was disbanded by the Hegemony of Man, they were renowned throughout the sector for their feats on and off the battlefield. Following their dissolution, the famed Void Core captain known as the Thunderbolt made his way to the Gungeon.",
+    "id": 58
   },
   {
     "name": "Void Core Cannon",
@@ -44560,7 +44665,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Traditionally used by the Void Core for ship-to-ship combat, the VCC weapon fires an accelerating ball of plasma that delivers a devestating punch.\nThis hand-held model is a retrofit design made specifically for the Thunderbolt."
+    "ammonomicon_entry": "Traditionally used by the Void Core for ship-to-ship combat, the VCC weapon fires an accelerating ball of plasma that delivers a devestating punch.\nThis hand-held model is a retrofit design made specifically for the Thunderbolt.",
+    "id": 593
   },
   {
     "name": "Void Marshal",
@@ -44624,7 +44730,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Compact, but highly accurate, the Void Marshal is a favorite of smugglers and rogues across the galaxy."
+    "ammonomicon_entry": "Compact, but highly accurate, the Void Marshal is a favorite of smugglers and rogues across the galaxy.",
+    "id": 32
   },
   {
     "name": "Void Shotgun",
@@ -44772,7 +44879,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The favored weapon of the Void Core's frontline soldiers.\n\nIts short range ensures that any encounter will be lethal, one way or another."
+    "ammonomicon_entry": "The favored weapon of the Void Core's frontline soldiers.\n\nIts short range ensures that any encounter will be lethal, one way or another.",
+    "id": 55
   },
   {
     "name": "Vorpal Gun",
@@ -45109,7 +45217,8 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Occasionally deals massive damage.\n\nThis striking handgun was forged hundreds of years ago by a forgotten gunsmith. Though its power has weakened, it occasionally recalls its former might."
+    "ammonomicon_entry": "Occasionally deals massive damage.\n\nThis striking handgun was forged hundreds of years ago by a forgotten gunsmith. Though its power has weakened, it occasionally recalls its former might.",
+    "id": 537
   },
   {
     "name": "Vulcan Cannon",
@@ -45400,7 +45509,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A reliable lever-action rifle.\n\nNamed after the famous manufacturer, this rifle is known for its reliability and smooth action."
+    "ammonomicon_entry": "A reliable lever-action rifle.\n\nNamed after the famous manufacturer, this rifle is known for its reliability and smooth action.",
+    "id": 1
   },
   {
     "name": "Winchester Rifle",
@@ -45664,7 +45774,8 @@
     },
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Decreases in damage output as the clip empties.\n\nYou gotta wind it!"
+    "ammonomicon_entry": "Decreases in damage output as the clip empties.\n\nYou gotta wind it!",
+    "id": 334
   },
   {
     "name": "Witch Pistol",
@@ -45776,7 +45887,8 @@
     },
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires homing bullets.\n\nThis pistol is favored by Gungeon witches. The bullets it fires seek out enemies with magical precision."
+    "ammonomicon_entry": "Fires homing bullets.\n\nThis pistol is favored by Gungeon witches. The bullets it fires seek out enemies with magical precision.",
+    "id": 145
   },
   {
     "name": "Wood Beam",
@@ -46169,7 +46281,8 @@
     },
     "sell_price": "54",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Chain-fires homing rockets. A legendary weapon manufactured by Zilla Industries. This one was created bespoke for a powerful warrior, whose name has been lost to shadow."
+    "ammonomicon_entry": "Chain-fires homing rockets. A legendary weapon manufactured by Zilla Industries. This one was created bespoke for a powerful warrior, whose name has been lost to shadow.",
+    "id": 16
   },
   {
     "name": "Zilla Shotgun",
