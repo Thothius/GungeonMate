@@ -15,6 +15,7 @@ import 'mp/mp_recovery.dart';
 import 'mp/mp_store.dart';
 import 'mp/mp_sync.dart';
 import 'mp/mp_transport.dart';
+part 'session/mp_handlers.dart';
 
 /// High-level session phase from the UI's point of view.
 enum MpPhase {
@@ -38,7 +39,8 @@ enum MpConnectReason {
 
 /// The ONLY thing the UI talks to. Thin facade that wires together
 /// [MpLink], [MpSync], [MpRecovery], and [MpStore].
-class MpSession extends ChangeNotifier with WidgetsBindingObserver {
+class MpSession extends ChangeNotifier
+    with WidgetsBindingObserver, _MpSessionHandlers {
   /// Nearby Connections needs time to release the BT/Wi-Fi radio socket
   /// before re-acquiring. Below ~600ms on Android, startAdvertising /
   /// startDiscovery can silently fail.
@@ -47,6 +49,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   /// Placeholder constructor — used by ProxyProvider before the real
   /// RunProvider is available. The real provider is injected via
   /// [updateRunProvider] on the first build.
+  @override
   MpSession.placeholder() : _runProvider = RunProvider(), _link = MpLink() {
     _initSession();
   }
@@ -57,6 +60,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     _initSession();
   }
 
+  @override
   MpSession(this._runProvider) : _link = MpLink() {
     _initSession();
   }
@@ -134,62 +138,82 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
   }
 
+  @override
   RunProvider _runProvider;
+  @override
   final MpTransport _link;
+  @override
   late MpSync _sync;
+  @override
   late MpRecovery _recovery;
 
   // ── State ──────────────────────────────────────────────────────
+  @override
   MpPhase _phase = MpPhase.idle;
   MpPhase get phase => _phase;
+  @override
   MpConnectReason _connectReason = MpConnectReason.hosting;
   MpConnectReason get connectReason => _connectReason;
 
+  @override
   String? _error;
   String? get error => _error;
 
+  @override
   MpRole? _myRole;
   MpRole? get myRole => _myRole;
 
+  @override
   String _myNickname = 'Player';
   String get myNickname => _myNickname;
 
+  @override
   String _myCharacterName = '';
   String get myCharacterName => _myCharacterName;
 
   // ── Peer metadata ──────────────────────────────────────────────
+  @override
   String? _peerNickname;
   String? get peerNickname => _peerNickname;
+  @override
   String? _peerCharacterName;
   String? get peerCharacterName => _peerCharacterName;
 
   // ── Paradox session state (v3) ─────────────────────────────────
+  @override
   MpMode _mode = MpMode.classic;
   MpMode get mode => _mode;
   bool get isParadox => _mode == MpMode.paradox;
 
+  @override
   String _avatarId = '';
   String get avatarId => _avatarId;
+  @override
   String _peerAvatarId = '';
   String get peerAvatarId => _peerAvatarId;
 
+  @override
   String _runTitle = '';
   String get runTitle => _runTitle;
+  @override
   int _sessionNumber = 0;
   int get sessionNumber => _sessionNumber;
 
   bool get isPaused => pausedNotifier.value;
+  @override
   final ValueNotifier<bool> pausedNotifier = ValueNotifier(false);
 
   /// Connection health 0–100 (RTT-based), straight from the transport.
   ValueListenable<int> get healthListenable => _link.healthListenable;
 
   // ── Chat state (Paradox, in-memory) ────────────────────────────
+  @override
   final List<MpChat> chatMessages = [];
 
   /// Unified activity log — chat, surprises, emotes, transfers, and
   /// connect/disconnect notes all land here for the messages panel.
   final List<MpEvent> sessionEvents = [];
+  @override
   void logEvent(MpEvent e) {
     sessionEvents.add(e);
     if (sessionEvents.length > 150) sessionEvents.removeAt(0);
@@ -207,13 +231,18 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     unreadChat.value = 0;
   }
 
+  @override
   final ValueNotifier<int> unreadChat = ValueNotifier(0);
+  @override
   final List<MpChat> _queuedChat = [];
   static const int _maxChatHistory = 200;
 
   /// UI callbacks — set by the run screen / paradox widgets.
+  @override
   void Function(MpChat chat, bool mine)? onChatMessage;
+  @override
   void Function(MpSurprise surprise)? onSurpriseReceived;
+  @override
   void Function()? onStartRun;
 
   // ── Slots ──────────────────────────────────────────────────────
@@ -230,7 +259,9 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   List<MpEndpoint> get discoveredEndpoints => _link.discoveredEndpoints;
 
   // ── Notifiers ──────────────────────────────────────────────────
+  @override
   final ValueNotifier<bool> reconnectNotifier = ValueNotifier(false);
+  @override
   final ValueNotifier<bool> reconnectSuccessNotifier = ValueNotifier(false);
 
   // ── Request/gift state (delegated to MpSync) ───────────────────
@@ -266,6 +297,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   static String appVersionString = 'unknown';
 
   // ── Pre-MP run snapshot (for Sidekick cancel-restore) ──────────
+  @override
   RunState? _preSidekickRun;
   RunState? get preSidekickRun => _preSidekickRun;
 
@@ -273,6 +305,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   /// the exact moment the peer sends [MpEndRun], both [cancel] and
   /// [_onPeerEndRun] would execute simultaneously — double-restoring
   /// run state and double-calling _teardown. This guard prevents that.
+  @override
   bool _tearingDown = false;
   @visibleForTesting
   bool get isTearingDown => _tearingDown;
@@ -283,252 +316,13 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   /// Connection timeout — if we're stuck in `connecting` for too long,
   // ── Wiring ─────────────────────────────────────────────────────
 
-  void _wireComponents() {
-    _link.onEndpointsChanged = (_) => notifyListeners();
-    _link.onMessage = _onMessage;
-    _link.onConnected = _onLinkConnected;
-    _link.onDisconnected = _onLinkDisconnected;
-    _link.onError = _onLinkError;
-
-    _sync.onPeerConnected = _onSyncPeerConnected;
-    _sync.onPeerMetadata = _onSyncPeerMetadata;
-    _sync.onSyncError = _onSyncError;
-    _sync.onPeerEndRun = _onPeerEndRun;
-    _sync.onPeerHello = _onPeerHello;
-    _sync.onSessionMeta = _onSessionMeta;
-    _sync.onPauseChanged = _onPeerPauseChanged;
-    _sync.onStartRun = () => onStartRun?.call();
-    _sync.onChat = _onChatReceived;
-    _sync.onSurprise = (s) {
-      logEvent(
-        MpEvent.event(
-          kind: 'surprise',
-          from: _peerNickname ?? 'Peer',
-          text: s.text.isEmpty ? s.preset : s.text,
-          mine: false,
-        ),
-      );
-      onSurpriseReceived?.call(s);
-    };
-
-    _recovery.onRestoreSession = _onRecoveryRestore;
-    _runProvider.addListener(_onRunChanged);
-  }
-
-  void _onRunChanged() => _sync.onRunChanged();
-
   // ── Message routing ────────────────────────────────────────────
-
-  void _onMessage(MpMessage msg) {
-    _sync.onMessage(msg);
-    // MpSync sets _pendingRequest / _lastResp inside onMessage, but
-    // MpSync is not a ChangeNotifier. The MpRequestListener widget
-    // watches MpSession, so we must notify here for message types
-    // that change UI-visible state without going through RunProvider
-    // (which would notify on its own).
-    if (msg is MpRequest || msg is MpRequestResp) {
-      notifyListeners();
-    }
-  }
 
   // ── Link callbacks ─────────────────────────────────────────────
 
-  void _onLinkConnected() => _sync.onConnected();
-
-  void _onLinkDisconnected() {
-    // Guard: don't re-activate recovery during teardown or from
-    // error/permission-denied phases. During teardown, _teardown()
-    // calls _link.stopAll() which fires onDisconnected — we must
-    // not start recovery or flip to disconnected phase.
-    if (_tearingDown) return;
-    if (_phase == MpPhase.idle) return;
-    if (_phase == MpPhase.error || _phase == MpPhase.permissionDenied) return;
-    // Peer dropped during a live session — start recovery.
-    _sync.onDisconnected();
-    _setPhase(MpPhase.disconnected);
-    _connectReason = MpConnectReason.reconnecting;
-    reconnectNotifier.value = true;
-    Future.delayed(const Duration(milliseconds: 100), () {
-      reconnectNotifier.value = false;
-    });
-    _recovery.onPeerDisconnected();
-    logEvent(
-      MpEvent.event(
-        kind: 'system',
-        from: _peerNickname ?? 'Peer',
-        text: 'Connection lost — reconnecting…',
-        mine: false,
-      ),
-    );
-    if (_runProvider.runState.main.character != null) {
-      unawaited(MpStore.saveRunState(_runProvider.runState, force: true));
-    }
-  }
-
-  void _onLinkError(String error) {
-    _error = error;
-    if (_phase == MpPhase.connecting) {
-      _setPhase(MpPhase.error);
-      // Stop the radio — no point scanning/advertising after an error.
-      unawaited(_link.stopAll());
-    }
-  }
-
   // ── Sync callbacks ─────────────────────────────────────────────
 
-  void _onSyncPeerConnected(MpRole peerRole) {
-    // Hello succeeded — transition to connected.
-    _setPhase(MpPhase.connected);
-    logEvent(
-      MpEvent.event(
-        kind: 'system',
-        from: _peerNickname ?? 'Peer',
-        text: 'Connected',
-        mine: false,
-      ),
-    );
-    reconnectSuccessNotifier.value = true;
-    Future.delayed(const Duration(milliseconds: 100), () {
-      reconnectSuccessNotifier.value = false;
-    });
-    _recovery.onPeerReconnected();
-    _sync.resendPendingGifts();
-    _startSaveTimer();
-    // Keep the process alive so minimizing/screen-off doesn't drop
-    // the session — stopped on teardown.
-    unawaited(MpForegroundService.start(_runTitle));
-    // Flush queued chat — messages typed while disconnected are
-    // delivered now rather than silently dropped.
-    if (_queuedChat.isNotEmpty) {
-      for (final m in _queuedChat) {
-        unawaited(_sync.sendChat(m));
-      }
-      _queuedChat.clear();
-    }
-    // If we were paused and the user tapped resume while offline,
-    // push the resume now that the link is live.
-    if (!pausedNotifier.value) {
-      // no-op — flag already correct; meta sync handles peers
-    }
-    unawaited(_persistSession());
-  }
-
-  void _onSyncPeerMetadata(String peerNickname, String peerCharacter) {
-    _peerNickname = peerNickname;
-    _peerCharacterName = peerCharacter;
-    notifyListeners();
-  }
-
-  /// Hello handshake completed — capture Paradox identity fields.
-  /// Main generates the authoritative session meta (title/number are
-  /// already ours); Sidekick adopts whatever Main sent.
-  void _onPeerHello(MpHello h) {
-    _peerAvatarId = h.avatarId;
-    if (_myRole != MpRole.main && h.runTitle.isNotEmpty) {
-      _runTitle = h.runTitle;
-      _sessionNumber = h.sessionNumber;
-    }
-    // Main: rebroadcast authoritative meta right after handshake so the
-    // peer lands on the correct title/number/paused state even if it
-    // missed an earlier edge message (e.g. reconnect during pause).
-    if (_myRole == MpRole.main && _mode == MpMode.paradox) {
-      unawaited(
-        _sync.sendSessionMeta(
-          runTitle: _runTitle,
-          sessionNumber: _sessionNumber,
-          paused: pausedNotifier.value,
-        ),
-      );
-    }
-    notifyListeners();
-  }
-
-  /// Main-authoritative meta applied on the Sidekick.
-  void _onSessionMeta(MpSessionMeta meta) {
-    _runTitle = meta.runTitle;
-    _sessionNumber = meta.sessionNumber;
-    if (meta.paused != pausedNotifier.value) {
-      _applyPaused(meta.paused, notifyPeer: false);
-    } else {
-      notifyListeners();
-    }
-  }
-
-  void _onPeerPauseChanged(bool paused) {
-    _applyPaused(paused, notifyPeer: false);
-  }
-
-  void _onChatReceived(MpChat msg) {
-    logEvent(MpEvent.chat(from: msg.from, text: msg.text, mine: false));
-    chatMessages.add(msg);
-    if (chatMessages.length > _maxChatHistory) chatMessages.removeAt(0);
-    unreadChat.value++;
-    onChatMessage?.call(msg, false);
-    notifyListeners();
-  }
-
-  void _onSyncError(String error) {
-    _error = error;
-    _setPhase(MpPhase.error);
-    // Stop the radio on sync errors (protocol mismatch, etc.).
-    unawaited(_link.stopAll());
-  }
-
   // ── Recovery callback ──────────────────────────────────────────
-
-  void _onRecoveryRestore({
-    required MpRole role,
-    required String nickname,
-    required String character,
-    RunState? preSidekickRun,
-    MpMode mode = MpMode.classic,
-    bool paused = false,
-    String avatarId = '',
-    String runTitle = '',
-    int sessionNumber = 0,
-    int runStartMs = 0,
-    int runAccumMs = 0,
-  }) {
-    _myRole = role;
-    _myNickname = nickname;
-    _myCharacterName = character;
-    _mode = mode;
-    _avatarId = avatarId;
-    _runTitle = runTitle;
-    _sessionNumber = sessionNumber;
-    pausedNotifier.value = paused;
-    _runStartMs = runStartMs;
-    _runAccumMs = runAccumMs;
-    _connectReason = MpConnectReason.restoring;
-    if (mode == MpMode.paradox) {
-      // Kill any radios still running under the previous service ID —
-      // switching IDs while advertising/discovering leaves a stale
-      // broadcaster the peer can't find (and vice versa).
-      unawaited(_link.stopAll());
-      _link.setServiceId(MpLink.serviceIdParadox);
-    }
-    if (role == MpRole.sidekick) {
-      _preSidekickRun = preSidekickRun;
-    }
-
-    _sync.setIdentity(role: role, nickname: nickname, character: character);
-    _sync.setSessionMeta(
-      mode: mode,
-      avatarId: avatarId,
-      runTitle: runTitle,
-      sessionNumber: sessionNumber,
-    );
-    _recovery.setSessionInfo(role: role, nickname: nickname);
-
-    _setPhase(MpPhase.connecting);
-    if (role == MpRole.main) {
-      unawaited(_link.startAdvertising(nickname));
-    } else {
-      unawaited(
-        _link.startDiscovery(nickname, autoConnect: const AutoConnectModeAny()),
-      );
-    }
-  }
 
   // ── Session start ──────────────────────────────────────────────
 
@@ -728,6 +522,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   /// seeking; the resume is flushed in [_onSyncPeerConnected].
   Future<void> resume() async => _applyPaused(false, notifyPeer: true);
 
+  @override
   void _applyPaused(bool paused, {required bool notifyPeer}) {
     if (pausedNotifier.value == paused) return;
     pausedNotifier.value = paused;
@@ -772,7 +567,9 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   }
 
   // ── Run timer ──────────────────────────────────────────────────
+  @override
   int _runStartMs = 0;
+  @override
   int _runAccumMs = 0;
 
   /// Milliseconds of unpaused run time. 0 until the run starts.
@@ -956,6 +753,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
   /// sending another MpEndRun (avoids infinite loop). The peer
   /// already ended the run on their side; we just need to clean
   /// up our transport and restore our local state.
+  @override
   Future<void> _onPeerEndRun() async {
     if (_tearingDown) return;
     _tearingDown = true;
@@ -1175,6 +973,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
 
   // ── Helpers ────────────────────────────────────────────────────
 
+  @override
   void _setPhase(MpPhase newPhase) {
     if (_phase == newPhase) return;
     _phase = newPhase;
@@ -1194,6 +993,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     await MpStore.clear();
   }
 
+  @override
   Future<void> _persistSession() async {
     if (_demoMode) return; // demo sessions never persist/restore
     await MpStore.saveSession(
@@ -1207,6 +1007,7 @@ class MpSession extends ChangeNotifier with WidgetsBindingObserver {
     );
   }
 
+  @override
   void _startSaveTimer() {
     _saveTimer?.cancel();
     _saveTimer = Timer.periodic(const Duration(seconds: 5), (_) {
