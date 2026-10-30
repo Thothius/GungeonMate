@@ -65,3 +65,4 @@ coverage/
 
 # Temp commit message files
 .commit_msg*.txt
+android/build/
