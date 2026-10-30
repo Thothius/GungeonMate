@@ -5,7 +5,6 @@ import '../../providers/run_provider.dart';
 import '../../models/gun.dart';
 import '../../models/item.dart';
 import '../../models/player.dart';
-import '../../models/synergy.dart';
 import '../periodic_tile.dart';
 import '../gungeoneer_header.dart';
 import '../inventory_list_row.dart';
