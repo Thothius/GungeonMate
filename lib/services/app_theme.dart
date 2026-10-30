@@ -38,9 +38,12 @@ import '../widgets/particle_engine.dart'
 ///                    pulse — silence is the signature.
 /// - [oubliette]    : Toxic Depths. Poison green + swamp black. Rising
 ///                    toxic bubbles, bubbling ooze aura.
-part 'theme/theme_enums.dart';
+part 'theme/app_theme_modes.dart';
+part 'theme/theme_misc_enums.dart';
 part 'theme/theme_data_tables.dart';
-part 'theme/theme_models.dart';
+part 'theme/theme_custom_data.dart';
+part 'theme/theme_flair_prefs.dart';
+part 'theme/theme_store.dart';
 
 class AppTheme {
   const AppTheme._();
