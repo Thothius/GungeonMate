@@ -1,3 +1,20 @@
+## v3.3.0 — Lean Machine + Modern Stack (October 2026)
+
+**Build:** 162
+
+Full codebase modernization — Flutter 3.47.9, every oversized file split, MP hardening, dead-asset purge, Ammonomicon codex.
+
+### Changes
+- **Ammonomicon codex** — Guns/Items/Synergies categories fabricated from provider data; entries deep-link to ItemDetailScreen; synergy graph screen; deep-stats chip row.
+- **Game ground-truth merge** — PickupObjectIds + verified stats for 122 guns, 153 items; game_name_key/game_ids joins for 157 synergies.
+- **MP mis-pair race fix** — `_initiatedIds` handshake guard in mp_link: concurrent initiations are rejected, guarded-out connections actively torn down (no more phantom pairings).
+- **Host-gone hint** — `disconnectElapsedSec` feed from MpRecovery; at 2 min the banner/paradox bar escalate to "partner may have left" + a one-shot system event.
+- **Performance** — synergy browse memoization (signature-keyed, ~400k set-ops per build eliminated); RepaintBoundary on gungeon meter, surprise FX, quiz poof.
+- **De-monolithization** — every file ≥1000 lines split via same-library part/mixin pattern (app_theme 5.2k→479, experience_studio 3.3k, particle_engine, compact_dashboards, run_provider, +14 more).
+- **Asset purge** — 350 verified-dead files removed (~1.2MB) incl. unused animations dirs and stale synergy PNGs.
+- **Contract testnet** — persistence keys, 22 MP wire types, 26 tracker setters pinned by tests.
+- **Stack** — Flutter 3.29.0→3.47.9 (Dart bump), 73 deps upgraded incl. win32 6/xml 7/lints 6/video_player 2.14; Gradle 8.14, AGP 8.13, Kotlin 2.2.20, compileSdk 37, NDK 28.2.
+
 ## v3.2.1 — Unification + Flat Detail (October 2026)
 
 **Build:** 161

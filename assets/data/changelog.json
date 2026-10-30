@@ -1,5 +1,20 @@
 [
   {
+    "version": "3.3.0",
+    "build": 162,
+    "date": "2026-10-30",
+    "title": "Lean Machine + Modern Stack",
+    "changes": [
+      "Ammonomicon is the new codex — Guns/Items/Synergies sections with deep-stats, synergy graph, and detail deep-links",
+      "Game ground-truth data merged — 122 gun PickupObjectIds, 153 item ids, 157 synergy keys verified against the game",
+      "Multiplayer hardened — pairing race fixed (no more ghost connections), 'partner may have left' hint after 2 min",
+      "Faster synergy browsing — predictor scan now memoized; animated meters isolated behind repaint boundaries",
+      "Modern stack — Flutter 3.47.9, 73 dependencies updated, Gradle 8.14 / AGP 8.13 / compileSdk 37",
+      "Leaner codebase — ~350 dead assets removed, every oversized file reorganized, 482 tests keeping the contracts pinned"
+    ]
+  },
+
+  {
     "version": "3.2.1",
     "build": 161,
     "date": "2026-10-29",
