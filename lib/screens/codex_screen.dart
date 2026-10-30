@@ -133,6 +133,27 @@ class _CodexScreenState extends State<CodexScreen> {
       color: CodexColors.challenge,
       isSpecial: true,
     ),
+    // ── Ammonomicon wiki cats (fabricated from provider data) ──
+    AmmonomiconTab(
+      label: 'Guns',
+      assetIcon: 'Ammonomicon_Tab_Guns',
+      icon: Icons.gps_fixed,
+      color: CodexColors.objects,
+      isSpecial: false,
+    ),
+    AmmonomiconTab(
+      label: 'Items',
+      assetIcon: 'Ammonomicon_Tab_Items',
+      icon: Icons.inventory_2,
+      color: CodexColors.pickups,
+      isSpecial: false,
+    ),
+    AmmonomiconTab(
+      label: 'Synergies',
+      icon: Icons.auto_awesome,
+      color: const Color(0xFFB388FF),
+      isSpecial: false,
+    ),
   ];
 
   @override
@@ -213,6 +234,43 @@ class _CodexScreenState extends State<CodexScreen> {
         return _filter(_pickups);
       case 5:
         return _filter(_objects);
+      // Ammonomicon wiki cats — fabricated from provider models on
+      // demand (already loaded; no extra JSON parse).
+      case 9:
+        return _filter(context
+            .read<RunProvider>()
+            .allGuns
+            .map((g) => CodexEntry(
+                name: g.name,
+                category: 'Guns',
+                icon: g.icon,
+                game: 'gun',
+                description: g.notes))
+            .toList());
+      case 10:
+        return _filter(context
+            .read<RunProvider>()
+            .allItems
+            .map((i) => CodexEntry(
+                name: i.name,
+                category: 'Items',
+                icon: i.icon,
+                game: 'item',
+                description: i.ammonomiconEntry))
+            .toList());
+      case 11:
+        return _filter(context
+            .read<RunProvider>()
+            .allSynergies
+            .map((s) => CodexEntry(
+                name: s.name,
+                category: 'Synergies',
+                icon: '',
+                game: 'synergy',
+                description: s.effect,
+                ammonomicon:
+                    [...s.items, ...s.anyOf].join(' · ')))
+            .toList());
       default:
         return [];
     }
@@ -228,6 +286,12 @@ class _CodexScreenState extends State<CodexScreen> {
         return CodexSection.bosses;
       case 4:
         return CodexSection.pickups;
+      case 9:
+        return CodexSection.guns;
+      case 10:
+        return CodexSection.items;
+      case 11:
+        return CodexSection.synergies;
       default:
         return CodexSection.objects;
     }

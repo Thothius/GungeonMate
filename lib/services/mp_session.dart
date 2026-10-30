@@ -264,6 +264,18 @@ class MpSession extends ChangeNotifier
   @override
   final ValueNotifier<bool> reconnectSuccessNotifier = ValueNotifier(false);
 
+  /// Seconds since the peer dropped — ticks every ~10s while
+  /// [MpPhase.disconnected] (fed by [MpRecovery.onDisconnectElapsed]).
+  /// UI escalates copy past the 2-minute mark ("partner may have left").
+  /// Reset to 0 on connect/teardown.
+  @override
+  final ValueNotifier<int> disconnectElapsedSec = ValueNotifier(0);
+
+  /// One-shot latch so the "may have left" system event logs once per
+  /// disconnect episode, not on every elapsed tick.
+  @override
+  bool _peerGoneHinted = false;
+
   // ── Request/gift state (delegated to MpSync) ───────────────────
   MpRequest? get pendingRequest => _sync.pendingRequest;
   ({String name, bool approved})? get lastResp => _sync.lastResp;
@@ -1046,6 +1058,7 @@ class MpSession extends ChangeNotifier
     unawaited(_link.dispose());
     reconnectNotifier.dispose();
     reconnectSuccessNotifier.dispose();
+    disconnectElapsedSec.dispose();
     super.dispose();
   }
 }

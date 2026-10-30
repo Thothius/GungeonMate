@@ -37,6 +37,12 @@ class MpRecovery {
   })
   onRestoreSession;
 
+  /// Fired with the seconds elapsed since the peer dropped — once at 0
+  /// on disconnect, then on each cadence tick. Lets the session surface
+  /// an escalating "peer may have left" hint; recovery itself never
+  /// gives up (by design), so this is informational only.
+  void Function(int elapsedSec)? onDisconnectElapsed;
+
   Timer? _cadenceTimer;
   int _disconnectMs = 0;
   bool _active = false;
@@ -60,6 +66,7 @@ class MpRecovery {
     if (_active) return;
     _active = true;
     _disconnectMs = DateTime.now().millisecondsSinceEpoch;
+    onDisconnectElapsed?.call(0);
     _startCadenceTimer();
 
     final role = _role;
@@ -114,11 +121,12 @@ class MpRecovery {
   }
 
   void _applyCadence() {
-    final role = _role;
-    if (role != MpRole.sidekick) return;
-
     final elapsedSec =
         (DateTime.now().millisecondsSinceEpoch - _disconnectMs) ~/ 1000;
+    onDisconnectElapsed?.call(elapsedSec);
+
+    final role = _role;
+    if (role != MpRole.sidekick) return;
 
     // Adaptive discovery cadence — aggressive at first, relaxing over
     // time but never dropping below 50% duty cycle. The old 5s/15s

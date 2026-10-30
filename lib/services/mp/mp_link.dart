@@ -89,6 +89,13 @@ class MpLink implements MpTransport {
   /// silently abort the pending connection on some Android devices.
   bool _connectionInFlight = false;
 
+  /// Endpoints currently mid-handshake (initiated but no result yet).
+  /// Guards the accept window: a second initiator arriving before the
+  /// first CONNECTED result would be natively accepted, then dropped
+  /// by the _endpointId guard in _onConnectionResult — leaving a
+  /// phantom pairing on the peer's side.
+  final Set<String> _initiatedIds = {};
+
   /// Discovered endpoints (live list for Sidekick UI).
   final Map<String, MpEndpoint> _endpoints = {};
   @override
@@ -360,6 +367,7 @@ class MpLink implements MpTransport {
     _staleCleanupTimer = null;
     _endpoints.clear();
     _connectionRequestIds.clear();
+    _initiatedIds.clear();
     _connectionInFlight = false;
     onEndpointsChanged?.call(discoveredEndpoints);
     if (_advertising) {
@@ -385,6 +393,7 @@ class MpLink implements MpTransport {
     } catch (_) {}
     _endpointId = null;
     _connectionRequestIds.clear();
+    _initiatedIds.clear();
     _connectionInFlight = false;
     _stopHeartbeat();
     _discoveryOffTimer?.cancel();
@@ -449,6 +458,7 @@ class MpLink implements MpTransport {
           final id = _endpointId;
           _endpointId = null;
           _connectionRequestIds.clear();
+          _initiatedIds.clear();
           _connectionInFlight = false;
           _resetHealth();
           if (id != null) {
@@ -539,13 +549,26 @@ class MpLink implements MpTransport {
   }
 
   void _onConnectionInitiated(String id, ConnectionInfo info) {
-    // Guard: reject if already connected to another peer.
-    if (_endpointId != null && _endpointId != id) return;
+    // Guard: reject if already connected to another peer — actively,
+    // so the initiator isn't left hanging on the native side.
+    if (_endpointId != null && _endpointId != id) {
+      unawaited(_nearby.rejectConnection(id).catchError((Object _) => false));
+      return;
+    }
+    // Guard: one handshake at a time. A second initiator arriving while
+    // the first is mid-accept would otherwise be natively connected and
+    // then dropped by the result guard below — a phantom pairing.
+    if (_initiatedIds.isNotEmpty && !_initiatedIds.contains(id)) {
+      unawaited(_nearby.rejectConnection(id).catchError((Object _) => false));
+      return;
+    }
+    _initiatedIds.add(id);
     // Auto-accept — both users already chose to play.
     unawaited(
       _nearby
           .acceptConnection(id, onPayLoadRecieved: _onPayloadReceived)
           .catchError((Object e) {
+            _initiatedIds.remove(id);
             onError?.call('acceptConnection failed: $e');
             return false;
           }),
@@ -554,10 +577,18 @@ class MpLink implements MpTransport {
 
   void _onConnectionResult(String id, Status status) {
     _connectionInFlight = false; // Resume discovery loop if needed.
+    _initiatedIds.remove(id);
     switch (status) {
       case Status.CONNECTED:
-        // Guard: don't overwrite an existing active connection.
-        if (_endpointId != null && _endpointId != id) return;
+        // Guard: don't overwrite an existing active connection — tear
+        // the phantom down so the peer doesn't sit "connected" with no
+        // Dart-side state behind it.
+        if (_endpointId != null && _endpointId != id) {
+          unawaited(
+            _nearby.disconnectFromEndpoint(id).catchError((Object _) {}),
+          );
+          return;
+        }
         _endpointId = id;
         // Stop searching once connected — radios are heavy and pointless.
         unawaited(_stopSearchingKeepState());
@@ -606,6 +637,7 @@ class MpLink implements MpTransport {
   void _onDisconnected(String id) {
     // Clean up pending connection state even if this wasn't the
     // active endpoint (e.g. a handshake that never completed).
+    _initiatedIds.remove(id);
     _connectionRequestIds.remove(id);
     if (_connectionRequestIds.isEmpty) {
       _connectionInFlight = false;

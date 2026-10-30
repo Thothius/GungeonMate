@@ -135,13 +135,24 @@ class _ParadoxBarState extends State<ParadoxBar> {
                   ],
                 ),
                 if (reconnecting)
-                  GoopText(
-                    session.isPaused ? 'paused' : 'reconnecting…',
-                    style: TextStyle(
-                      fontSize: 10.5 * sf,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.orangeAccent.withValues(alpha: 0.8),
-                    ),
+                  ValueListenableBuilder<int>(
+                    valueListenable: session.disconnectElapsedSec,
+                    builder: (context, sec, _) {
+                      final label =
+                          session.isPaused
+                              ? 'paused'
+                              : sec >= 120
+                              ? 'reconnecting… partner may have left'
+                              : 'reconnecting…';
+                      return GoopText(
+                        label,
+                        style: TextStyle(
+                          fontSize: 10.5 * sf,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.orangeAccent.withValues(alpha: 0.8),
+                        ),
+                      );
+                    },
                   ),
               ],
             ),

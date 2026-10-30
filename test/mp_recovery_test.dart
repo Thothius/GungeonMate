@@ -1,3 +1,4 @@
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -278,6 +279,33 @@ void main() {
       // Second call should be a no-op (guard: if (_active) return)
       recovery.onPeerDisconnected();
       expect(recovery.isActive, isTrue);
+    });
+
+    test('onDisconnectElapsed fires at 0 then ticks on cadence', () {
+      fakeAsync((async) {
+        recovery.setSessionInfo(role: MpRole.sidekick, nickname: 'Test');
+        final ticks = <int>[];
+        recovery.onDisconnectElapsed = ticks.add;
+
+        // Immediate emission at disconnect — UI can stamp t=0.
+        recovery.onPeerDisconnected();
+        expect(ticks, [0]);
+
+        // The cadence timer fires every 10s with the elapsed reading.
+        // (The reading itself uses DateTime.now — wall clock, not fake
+        // time — so we assert the cadence, not the value.)
+        async.elapse(const Duration(seconds: 10));
+        expect(ticks.length, 2);
+        expect(ticks.last, isA<int>());
+        async.elapse(const Duration(seconds: 10));
+        expect(ticks.length, 3);
+
+        // Reconnect stops the feed entirely — no trailing tick.
+        recovery.onPeerReconnected();
+        final count = ticks.length;
+        async.elapse(const Duration(seconds: 30));
+        expect(ticks.length, count);
+      });
     });
   });
 }

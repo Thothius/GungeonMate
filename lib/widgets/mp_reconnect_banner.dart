@@ -1,4 +1,5 @@
 import '../theme/tokens.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -171,6 +172,7 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
           SafeArea(
             bottom: false,
             child: _PersistentBanner(
+              elapsedSec: session.disconnectElapsedSec,
               onTap: _reopenDialog,
               onCancel: () {
                 session.cancel();
@@ -300,10 +302,15 @@ class _ReconnectDialog extends StatelessWidget {
 // ── Persistent banner (after dismiss) ───────────────────────────
 
 class _PersistentBanner extends StatelessWidget {
+  final ValueListenable<int> elapsedSec;
   final VoidCallback onTap;
   final VoidCallback onCancel;
 
-  const _PersistentBanner({required this.onTap, required this.onCancel});
+  const _PersistentBanner({
+    required this.elapsedSec,
+    required this.onTap,
+    required this.onCancel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -335,13 +342,25 @@ class _PersistentBanner extends StatelessWidget {
               ),
               SizedBox(width: 10 * sf),
               Expanded(
-                child: GoopText(
-                  'Reconnecting…',
-                  style: TextStyle(
-                    fontSize: FontSizes.labelMedium * sf,
-                    fontWeight: FontWeight.w600,
-                    color: MpColors.reconnecting,
-                  ),
+                child: ValueListenableBuilder<int>(
+                  valueListenable: elapsedSec,
+                  builder: (context, sec, _) {
+                    // Past 2 minutes the recovery loop is still running —
+                    // tell the user the peer may be gone for good so the
+                    // wait doesn't look indefinite/broken.
+                    final label =
+                        sec >= 120
+                            ? 'Reconnecting… partner may have left'
+                            : 'Reconnecting…';
+                    return GoopText(
+                      label,
+                      style: TextStyle(
+                        fontSize: FontSizes.labelMedium * sf,
+                        fontWeight: FontWeight.w600,
+                        color: MpColors.reconnecting,
+                      ),
+                    );
+                  },
                 ),
               ),
               GestureDetector(

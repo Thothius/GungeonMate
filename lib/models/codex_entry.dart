@@ -60,6 +60,12 @@ class CodexEntry {
       case 'minor npc':
       case 'other npc':
         return 'npcs';
+      case 'guns':
+        return 'guns';
+      case 'items':
+        return 'items';
+      case 'synergies':
+        return 'codex';
       default:
         // Pickups have their own categories like Currency, Health, etc.
         // Objects have categories like Barrel, Chest, Trap, etc.
@@ -70,7 +76,7 @@ class CodexEntry {
 }
 
 /// Which codex section a list belongs to.
-enum CodexSection { objects, pickups, npcs, enemies, bosses }
+enum CodexSection { objects, pickups, npcs, enemies, bosses, guns, items, synergies }
 
 /// Helper to resolve the image folder for a codex section.
 String codexImageFolder(CodexSection section) {
@@ -85,6 +91,12 @@ String codexImageFolder(CodexSection section) {
       return 'enemies';
     case CodexSection.bosses:
       return 'bosses';
+    case CodexSection.guns:
+      return 'guns';
+    case CodexSection.items:
+      return 'items';
+    case CodexSection.synergies:
+      return 'codex';
   }
 }
 

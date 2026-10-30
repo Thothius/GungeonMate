@@ -37,6 +37,9 @@ mixin _MpSessionHandlers on ChangeNotifier {
   ValueNotifier<int> get unreadChat;
   ValueNotifier<bool> get reconnectNotifier;
   ValueNotifier<bool> get reconnectSuccessNotifier;
+  ValueNotifier<int> get disconnectElapsedSec;
+  bool get _peerGoneHinted;
+  set _peerGoneHinted(bool v);
   void Function(MpChat, bool)? get onChatMessage;
   void Function()? get onStartRun;
   void Function(MpSurprise)? get onSurpriseReceived;
@@ -76,6 +79,26 @@ mixin _MpSessionHandlers on ChangeNotifier {
     };
 
     _recovery.onRestoreSession = _onRecoveryRestore;
+    // Elapsed-time feed → notifier + one-shot "may have left" hint.
+    // Recovery itself never gives up (by design) — the hint is purely
+    // informational so the user isn't staring at "Reconnecting…"
+    // forever without context.
+    _recovery.onDisconnectElapsed = (sec) {
+      disconnectElapsedSec.value = sec;
+      if (sec >= 120 && !_peerGoneHinted) {
+        _peerGoneHinted = true;
+        logEvent(
+          MpEvent.event(
+            kind: 'system',
+            from: _peerNickname ?? 'Peer',
+            text:
+                'Still searching — your partner may have left. '
+                'The session keeps retrying; you can also cancel.',
+            mine: false,
+          ),
+        );
+      }
+    };
     _runProvider.addListener(_onRunChanged);
   }
 
@@ -137,6 +160,8 @@ mixin _MpSessionHandlers on ChangeNotifier {
   void _onSyncPeerConnected(MpRole peerRole) {
     // Hello succeeded — transition to connected.
     _setPhase(MpPhase.connected);
+    disconnectElapsedSec.value = 0;
+    _peerGoneHinted = false;
     logEvent(
       MpEvent.event(
         kind: 'system',

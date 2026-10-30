@@ -80,10 +80,10 @@ void main() {
   });
 
   testWidgets('TIERS mode filters to selected tiers only', (tester) async {
-    // NOTE: browse rows overflow ~15px at ≤500px width — same narrow-
-    // device issue as ParadoxBar. Testing at a wider viewport; the
-    // overflow itself is tracked as a layout bug.
-    tester.view.physicalSize = const Size(700, 900);
+    // Rows are exercised at the narrow 500px viewport — the ~15px
+    // COMPLETES-pill overflow was fixed by truncating the synergy name
+    // to 22 chars in completesPill (browse_pills.dart).
+    tester.view.physicalSize = const Size(500, 900);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
