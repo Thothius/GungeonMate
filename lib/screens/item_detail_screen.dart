@@ -193,6 +193,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         ),
                       ),
                     if (gun != null)
+                      SliverToBoxAdapter(child: _GunDeepStats(gun: gun)),
+                    if (gun != null)
                       SliverToBoxAdapter(
                         child: SizedBox(
                           key: _synergyKey,
@@ -439,6 +441,55 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 /// Element tags rendered inline under the header card — flat rework
 /// moved elements out of the notes tab into the stats area so the
 /// damage-type info is visible without scrolling to notes.
+/// Deep-dive stat chips — dump-verified fields (game extraction merge)
+/// shown when present: quality tier, shot speed, range, force, spread.
+class _GunDeepStats extends StatelessWidget {
+  final Gun gun;
+  const _GunDeepStats({required this.gun});
+
+  @override
+  Widget build(BuildContext context) {
+    final tags = <(String, String)>[
+      if (gun.quality.isNotEmpty) ('TIER', gun.quality),
+      if (gun.shotSpeed.isNotEmpty) ('SHOT SPD', gun.shotSpeed),
+      if (gun.range.isNotEmpty) ('RANGE', gun.range),
+      if (gun.force.isNotEmpty) ('FORCE', gun.force),
+      if (gun.spread.isNotEmpty) ('SPREAD', gun.spread),
+      if (gun.gunClass.isNotEmpty) ('CLASS', gun.gunClass),
+    ];
+    if (tags.isEmpty) return const SizedBox.shrink();
+    const accent = Color(0xFF7DD3FC);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 4, 14, 10),
+      child: Wrap(
+        spacing: 6,
+        runSpacing: 6,
+        children: [
+          for (final (label, value) in tags)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(6),
+                border:
+                    Border.all(color: accent.withValues(alpha: 0.35)),
+              ),
+              child: GoopText(
+                '$label $value'.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 9.5,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.8,
+                  color: accent.withValues(alpha: 0.9),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 class _ElementTagRow extends StatelessWidget {
   final Set<ElementKind> elements;
   const _ElementTagRow({required this.elements});
