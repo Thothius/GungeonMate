@@ -199,7 +199,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c5/Aged_Bell.png",
     "type": "Active",
     "quote": "Lacuna",
-    "quality": "A",
+    "quality": "S",
     "effect": "Freezes enemies and enemy bullets in time for 5 seconds. Can be used to steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -390,14 +390,15 @@
     "recharge_time": "600 dmg",
     "duration": "5 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Briefly stops time. This bell appears to be made of different materials at different times. The mournful tones it emits echo forwards and backwards. Some claim that they can hear it before it rings."
+    "ammonomicon_entry": "Briefly stops time. This bell appears to be made of different materials at different times. The mournful tones it emits echo forwards and backwards. Some claim that they can hear it before it rings.",
+    "id": 237
   },
   {
     "name": "Air Strike",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a2/Air_Strike.png",
     "type": "Active",
     "quote": "Superior!",
-    "quality": "B",
+    "quality": "A",
     "effect": "Calls down a series of explosions over a long rectangular area. Each explosion deals 25 damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -468,14 +469,15 @@
     "sell_price": "30",
     "recharge_time": "600 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Calls down a bombardment on a large rectangular area."
+    "ammonomicon_entry": "Calls down a bombardment on a large rectangular area.",
+    "id": 252
   },
   {
     "name": "Alpha Bullet",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/91/Alpha_Bullet.png",
     "type": "Passive",
     "quote": "First!",
-    "quality": "A",
+    "quality": "S",
     "effect": "The first shot of a weapon's magazine deals 80% more damage. No effect on beam guns.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -586,14 +588,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases the damage dealt by the first bullet in a clip. One of a pair of artifact bullets forged by Edwin's daughter as part of her journeyman's trial."
+    "ammonomicon_entry": "Increases the damage dealt by the first bullet in a clip. One of a pair of artifact bullets forged by Edwin's daughter as part of her journeyman's trial.",
+    "id": 373
   },
   {
     "name": "Ammo Belt",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fc/Ammo_Belt.png",
     "type": "Passive",
     "quote": "Ammo Capacity Up!",
-    "quality": "D",
+    "quality": "C",
     "effect": "Increases maximum ammo by 20%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -808,7 +811,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases maximum ammo by 20%."
+    "ammonomicon_entry": "Increases maximum ammo by 20%.",
+    "id": 134
   },
   {
     "name": "Ammo Synthesizer",
@@ -1347,7 +1351,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Quadruples maximum ammo."
+    "ammonomicon_entry": "Quadruples maximum ammo.",
+    "id": 255
   },
   {
     "name": "Angry Bullets",
@@ -2091,7 +2096,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d3/Armor_Synthesizer.png",
     "type": "Passive",
     "quote": "Play Well, Get Armor",
-    "quality": "A",
+    "quality": "S",
     "effect": "10% chance to gain armor upon completing a room without taking damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -2165,7 +2170,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Occasionally produces armor. Less effective if rattled."
+    "ammonomicon_entry": "Occasionally produces armor. Less effective if rattled.",
+    "id": 450
   },
   {
     "name": "Baby Good Mimic",
@@ -2910,14 +2916,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Follows the player and attacks enemies with a green laser."
+    "ammonomicon_entry": "Follows the player and attacks enemies with a green laser.",
+    "id": 818
   },
   {
     "name": "Backpack",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b1/Backpack.png",
     "type": "Passive",
     "quote": "Item Capacity Up!",
-    "quality": "D",
+    "quality": "C",
     "effect": "Allows the player to hold an extra active item.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -3102,14 +3109,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Allows the player to hold an extra active item."
+    "ammonomicon_entry": "Allows the player to hold an extra active item.",
+    "id": 133
   },
   {
     "name": "Backup Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fa/Backup_Gun.png",
     "type": "Passive",
     "quote": "Watch Your Back",
-    "quality": "B",
+    "quality": "A",
     "effect": "Fires a second bullet in the opposite direction with each shot. Less accurate than forward shots.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -3603,7 +3611,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "With each shot fired, a second bullet will be fired in the opposite direction that the player is aiming."
+    "ammonomicon_entry": "With each shot fired, a second bullet will be fired in the opposite direction that the player is aiming.",
+    "id": 287
   },
   {
     "name": "Badge",
@@ -3949,7 +3958,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/cc/Ballistic_Boots.png",
     "type": "Passive",
     "quote": "Speedier Than A Bullet",
-    "quality": "B",
+    "quality": "A",
     "effect": "Increases movement speed by 2.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -4039,7 +4048,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases movement speed."
+    "ammonomicon_entry": "Increases movement speed.",
+    "id": 212
   },
   {
     "name": "Ballot",
@@ -4379,7 +4389,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ee/Battle_Standard.png",
     "type": "Passive",
     "quote": "Set Your Own!",
-    "quality": "D",
+    "quality": "C",
     "effect": "Increases the damage of most companions and charmed enemies by 80%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -4728,7 +4738,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Improves the effectiveness of companions and charmed enemies. Before the advancement of Gundead society, belligerent bands of Bullet Kin would rally around these banners before their raids upon the upper chambers."
+    "ammonomicon_entry": "Improves the effectiveness of companions and charmed enemies. Before the advancement of Gundead society, belligerent bands of Bullet Kin would rally around these banners before their raids upon the upper chambers.",
+    "id": 529
   },
   {
     "name": "Big Boy",
@@ -5090,7 +5101,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fd/Bionic_Leg.png",
     "type": "Passive",
     "quote": "More Machine Than Man",
-    "quality": "C",
+    "quality": "B",
     "effect": "Increases movement speed by 1.5 and grants a piece of armor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -5221,7 +5232,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Movement speed increased."
+    "ammonomicon_entry": "Movement speed increased.",
+    "id": 114
   },
   {
     "name": "Blank Bullets",
@@ -6046,7 +6058,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3f/Blood_Brooch.png",
     "type": "Passive",
     "quote": "What Music They Make!",
-    "quality": "A",
+    "quality": "S",
     "effect": "Heals half a heart for every 1200 damage dealt to enemies. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
@@ -6227,7 +6239,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This sinister brooch was once worn by an unlucky inhabitant of the Gungeon, who used it to draw health from wounded enemies.\n\nThere is a curse upon it, however, and the cost may not be worth the benefit."
+    "ammonomicon_entry": "This sinister brooch was once worn by an unlucky inhabitant of the Gungeon, who used it to draw health from wounded enemies.\n\nThere is a curse upon it, however, and the cost may not be worth the benefit.",
+    "id": 285
   },
   {
     "name": "Bloodied Scarf",
@@ -6753,7 +6766,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1b/Bloody_9mm.png",
     "type": "Passive",
     "quote": "Be Realistic",
-    "quality": "B",
+    "quality": "A",
     "effect": "8% chance per second for a bullet to be replaced by a fast, homing, piercing, bouncing bullet that flies around the room damaging enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -6842,14 +6855,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Rare chance for a projectile to go berserk.\nSay one thing for these bullets, say they are coated with the blood of vanquished enemies."
+    "ammonomicon_entry": "Rare chance for a projectile to go berserk.\nSay one thing for these bullets, say they are coated with the blood of vanquished enemies.",
+    "id": 524
   },
   {
     "name": "Bloody Eye",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4e/Bloody_Eye.png",
     "type": "Passive",
     "quote": "Slower Enemy Bullets",
-    "quality": "B",
+    "quality": "S",
     "effect": "Decreases enemy bullet speed by 15%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -7008,7 +7022,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Slows enemy projectiles. This intoxicating substance grants the user vision that slows down enemy bullet speeds. Gun Cultists use it in their dark rituals, hoping to gain the favor of the Order of the True Gun."
+    "ammonomicon_entry": "Slows enemy projectiles. This intoxicating substance grants the user vision that slows down enemy bullet speeds. Gun Cultists use it in their dark rituals, hoping to gain the favor of the Order of the True Gun.",
+    "id": 431
   },
   {
     "name": "Blue Guon Stone",
@@ -7111,7 +7126,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3b/Bomb.png",
     "type": "Active",
     "quote": "Use For Boom",
-    "quality": "D",
+    "quality": "C",
     "effect": "Throws a bomb that explodes after a short delay, dealing 60 damage to nearby enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -7237,7 +7252,8 @@
     "recharge_time": "200 dmg",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Explodes after a short delay.\n\nCountless experienced adventurers have brought Bombs to the Gungeon seeking secret doors, only to be foiled by the existence of Blanks. Still, explosives have their place."
+    "ammonomicon_entry": "Explodes after a short delay.\n\nCountless experienced adventurers have brought Bombs to the Gungeon seeking secret doors, only to be foiled by the existence of Blanks. Still, explosives have their place.",
+    "id": 108
   },
   {
     "name": "Book of Chest Anatomy",
@@ -7574,7 +7590,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/7c/Boomerang.png",
     "type": "Active",
     "quote": "Usually Comes Back",
-    "quality": "B",
+    "quality": "A",
     "effect": "Throws a boomerang that stuns all enemies for 5 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -7681,7 +7697,8 @@
     "sell_price": "30",
     "recharge_time": "85 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Boomerangs predate Gun technology, but can still be useful in a pinch. A good throw is quite stunning!"
+    "ammonomicon_entry": "Boomerangs predate Gun technology, but can still be useful in a pinch. A good throw is quite stunning!",
+    "id": 448
   },
   {
     "name": "Bottle",
@@ -7878,7 +7895,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e1/Bouncy_Bullets.png",
     "type": "Passive",
     "quote": "Boiyoiyoing!",
-    "quality": "C",
+    "quality": "B",
     "effect": "Allows bullets to bounce off objects twice.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -8037,7 +8054,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants bullets the ability to bounce off objects."
+    "ammonomicon_entry": "Grants bullets the ability to bounce off objects.",
+    "id": 288
   },
   {
     "name": "Box",
@@ -8472,7 +8490,8 @@
     "sell_price": "54",
     "recharge_time": "325 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Deals a large amount of damage to all enemies in a room.\n\nA remnant from when the Gungeon was being built. Gungeon architects would use these artifacts to quickly make their way through Gundead infested chambers. Though this one has lost a portion of its power to the ages, it is still a potent weapon."
+    "ammonomicon_entry": "Deals a large amount of damage to all enemies in a room.\n\nA remnant from when the Gungeon was being built. Gungeon architects would use these artifacts to quickly make their way through Gundead infested chambers. Though this one has lost a portion of its power to the ages, it is still a potent weapon.",
+    "id": 439
   },
   {
     "name": "Brick of Cash",
@@ -8786,7 +8805,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f1/Broccoli.png",
     "type": "Passive",
     "quote": "Makes You Strong",
-    "quality": "A",
+    "quality": "S",
     "effect": "Increases damage by 10%, adds 10% chance to negate damage, and increases movement speed by 1.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -8915,14 +8934,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases damage by 10%, adds a 10% chance to negate damage, and increases movement speed."
+    "ammonomicon_entry": "Increases damage by 10%, adds a 10% chance to negate damage, and increases movement speed.",
+    "id": 258
   },
   {
     "name": "Bug Boots",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/32/Bug_Boots.png",
     "type": "Passive",
     "quote": "Yikes!",
-    "quality": "B",
+    "quality": "A",
     "effect": "Dodge rolling leaves a trail of poison goop. Grants immunity to poison.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -9027,14 +9047,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Creates poison on dodge roll, also grants immunity to poison."
+    "ammonomicon_entry": "Creates poison on dodge roll, also grants immunity to poison.",
+    "id": 193
   },
   {
     "name": "Bullet Idol",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/ce/Bullet_Idol.png",
     "type": "Passive",
     "quote": "Vengeful Spirit",
-    "quality": "B",
+    "quality": "A",
     "effect": "Taking damage deals 45 damage to all enemies in the room.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -9174,14 +9195,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Deals damage to enemies when bearer is wounded. Whosoever wields this idol will have swift vengeance visited upon any who trespass against them."
+    "ammonomicon_entry": "Deals damage to enemies when bearer is wounded. Whosoever wields this idol will have swift vengeance visited upon any who trespass against them.",
+    "id": 434
   },
   {
     "name": "Bullet Time",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/bd/Bullet_Time.png",
     "type": "Active",
     "quote": "Dodge This",
-    "quality": "D",
+    "quality": "C",
     "effect": "Slows down time for 3 seconds while active.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -9289,7 +9311,8 @@
     "recharge_time": "400 dmg",
     "duration": "6 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Slows down time while active."
+    "ammonomicon_entry": "Slows down time while active.",
+    "id": 69
   },
   {
     "name": "Bumbullets",
@@ -9908,7 +9931,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/24/Cartographer%27s_Ring.png",
     "type": "Passive",
     "quote": "Some Floors Are Familiar",
-    "quality": "C",
+    "quality": "B",
     "effect": "New floors have a 50% chance to be mapped out. Does not reveal secret rooms.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -9956,14 +9979,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "New floors have a chance to be mapped out."
+    "ammonomicon_entry": "New floors have a chance to be mapped out.",
+    "id": 112
   },
   {
     "name": "Cat Bullet King Throne",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/63/Cat_Bullet_King_Throne.png",
     "type": "Passive",
     "quote": "A Cat Throne",
-    "quality": "B",
+    "quality": "A",
     "effect": "Grants flight. Dodge rolling shoots miniature bullets in the roll direction.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -10219,14 +10243,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Shoots miniature bullets upon rolling and grants flight."
+    "ammonomicon_entry": "Shoots miniature bullets upon rolling and grants flight.",
+    "id": 817
   },
   {
     "name": "Chaff Grenade",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a0/Chaff_Grenade.png",
     "type": "Active",
     "quote": "Dazed And Confused",
-    "quality": "C",
+    "quality": "B",
     "effect": "Stuns enemies in the room for 10 seconds. Can be used 3 times. Can be used to steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -10384,14 +10409,15 @@
     "sell_price": "21",
     "recharge_time": "500 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Stuns all enemies. This grenade is full of small, shiny particles. Any enemies caught in the blast radius will be completely enthralled for a short time. Popular with special ops units and children's entertainers!"
+    "ammonomicon_entry": "Stuns all enemies. This grenade is full of small, shiny particles. Any enemies caught in the blast radius will be completely enthralled for a short time. Popular with special ops units and children's entertainers!",
+    "id": 460
   },
   {
     "name": "Chance Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fa/Chance_Bullets.png",
     "type": "Passive",
     "quote": "Good RNG",
-    "quality": "B",
+    "quality": "A",
     "effect": "Upon firing, adds a chance to fire projectiles from the player's other guns. Shots fired this way do not consume ammo from the source gun.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -10612,7 +10638,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Upon firing, adds a chance to fire projectiles from the player's other guns."
+    "ammonomicon_entry": "Upon firing, adds a chance to fire projectiles from the player's other guns.",
+    "id": 521
   },
   {
     "name": "Chaos Ammolet",
@@ -11106,7 +11133,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4f/Chaos_Bullets.png",
     "type": "Passive",
     "quote": "Taste The Painbow",
-    "quality": "A",
+    "quality": "S",
     "effect": "Each shot has a 10% chance to gain piercing or bouncing (stacks up to 10), and a 10% chance to inflict a random status effect. Beam guns gain 25% chance per second for status.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -11382,14 +11409,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Bullets have a chance to do... something to foes. These unpredictable bullets change from moment to moment. Always destructive, never boring!"
+    "ammonomicon_entry": "Bullets have a chance to do... something to foes. These unpredictable bullets change from moment to moment. Always destructive, never boring!",
+    "id": 569
   },
   {
     "name": "Charm Horn",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3f/Charm_Horn.png",
     "type": "Active",
     "quote": "The Call Of Duty",
-    "quality": "B",
+    "quality": "A",
     "effect": "Charms enemies around the player for 10 seconds. Can be used to steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -11530,7 +11558,8 @@
     "sell_price": "30",
     "recharge_time": "200 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "When blown, this horn will call those nearby to aid you.\n\nThere are strange inconsistencies in the behavior of the Gundead. Originally thought to be heartless killing machines, they have been known to capture certain invaders for unknown purposes. Furthermore, evidence of a crude religion has been discovered. Perhaps, one day, they could be reasoned with?"
+    "ammonomicon_entry": "When blown, this horn will call those nearby to aid you.\n\nThere are strange inconsistencies in the behavior of the Gundead. Originally thought to be heartless killing machines, they have been known to capture certain invaders for unknown purposes. Furthermore, evidence of a crude religion has been discovered. Perhaps, one day, they could be reasoned with?",
+    "id": 206
   },
   {
     "name": "Charming Rounds",
@@ -11662,7 +11691,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/80/Chest_Teleporter.png",
     "type": "Active",
     "quote": "Zap",
-    "quality": "A",
+    "quality": "S",
     "effect": "Teleports a chest to the next floor's starting or boss room. Chance to upgrade chest quality.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -11945,7 +11974,8 @@
     "sell_price": "41",
     "recharge_time": "500 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Teleports a chest to the next floor, with a chance to upgrade its quality."
+    "ammonomicon_entry": "Teleports a chest to the next floor, with a chance to upgrade its quality.",
+    "id": 573
   },
   {
     "name": "Chicken Flute",
@@ -13334,14 +13364,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Upon death, the player is revived in the starting room of the first floor, retaining all items and guns."
+    "ammonomicon_entry": "Upon death, the player is revived in the starting room of the first floor, retaining all items and guns.",
+    "id": 311
   },
   {
     "name": "Cloranthy Ring",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/75/Cloranthy_Ring.png",
     "type": "Passive",
     "quote": "Dodge Power Up",
-    "quality": "C",
+    "quality": "B",
     "effect": "Increases dodge roll speed by 15.8% and extends invulnerability time during dodge rolls.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -13442,7 +13473,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Improves dodging. This ancient ring spins slowly about its axis, even when worn. It is of unknown origin."
+    "ammonomicon_entry": "Improves dodging. This ancient ring spins slowly about its axis, even when worn. It is of unknown origin.",
+    "id": 309
   },
   {
     "name": "Clown Mask",
@@ -13761,7 +13793,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/67/Cluster_Mine.png",
     "type": "Active",
     "quote": "Area Hazard",
-    "quality": "C",
+    "quality": "B",
     "effect": "Places 5 small mines that explode when an enemy comes into contact, dealing 60 damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -13867,14 +13899,15 @@
     "sell_price": "21",
     "recharge_time": "400 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Places 5 small mines that explode when an enemy comes into contact with them."
+    "ammonomicon_entry": "Places 5 small mines that explode when an enemy comes into contact with them.",
+    "id": 308
   },
   {
     "name": "Cog of Battle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b9/Cog_of_Battle.png",
     "type": "Passive",
     "quote": "Active Reload",
-    "quality": "C",
+    "quality": "B",
     "effect": "Active reload: pressing reload at the right mark instantly reloads and grants +75% damage and increased accuracy to next magazine.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -14095,7 +14128,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Enables active reload."
+    "ammonomicon_entry": "Enables active reload.",
+    "id": 135
   },
   {
     "name": "Coin Crown",
@@ -14701,7 +14735,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/49/Crisis_Stone.png",
     "type": "Passive",
     "quote": "Reload. Reload. Reload.",
-    "quality": "A",
+    "quality": "S",
     "effect": "Grants invulnerability while reloading an empty magazine.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -14895,14 +14929,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Provides invulnerability when reloading an empty clip. This stone resonates strongly throughout the fourth dimension, allowing the bearer to step out of the frame of reality. Strangely, only functions under certain circumstances."
+    "ammonomicon_entry": "Provides invulnerability when reloading an empty clip. This stone resonates strongly throughout the fourth dimension, allowing the bearer to step out of the frame of reality. Strangely, only functions under certain circumstances.",
+    "id": 634
   },
   {
     "name": "Crutch",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/41/Crutch.png",
     "type": "Passive",
     "quote": "You Need It",
-    "quality": "B",
+    "quality": "A",
     "effect": "All bullets fired by the player slightly home in towards enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -15000,14 +15035,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds aim assist, of a sort. Everybody needs a little help, sometimes. With this crutch, every bullet fired will try really hard to hit a target, even if aimed incorrectly."
+    "ammonomicon_entry": "Adds aim assist, of a sort. Everybody needs a little help, sometimes. With this crutch, every bullet fired will try really hard to hit a target, even if aimed incorrectly.",
+    "id": 240
   },
   {
     "name": "Cursed Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/79/Cursed_Bullets.png",
     "type": "Passive",
     "quote": "Too Spooky",
-    "quality": "C",
+    "quality": "B",
     "effect": "Increases damage by 10% per curse point, max +100% at 10 curse. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
@@ -15106,7 +15142,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Curse increases damage.\n\nBullets straight from HELLLLL!"
+    "ammonomicon_entry": "Curse increases damage.\n\nBullets straight from HELLLLL!",
+    "id": 571
   },
   {
     "name": "Daruma",
@@ -15272,7 +15309,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/bb/Decoy.png",
     "type": "Active",
     "quote": "Get Him!",
-    "quality": "D",
+    "quality": "B",
     "effect": "Places a decoy that enemies target. Destroyed after taking enough damage. Can steal from shops while placed.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -15463,7 +15500,8 @@
     "chest_color": "blue",
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Distracts enemies.\n\nMost inhabitants of the Gungeon are not the most intelligent of creatures, and will fire upon anything that they do not recognize. This crude fascimile of a Gungeoneer will hold their attention for a time.\n\nMany Gundead seem content to lock trespassers up in cells, despite their trigger-happy natures. Somewhere deep in the Gungeon, there is probably a prison full of Decoys."
+    "ammonomicon_entry": "Distracts enemies.\n\nMost inhabitants of the Gungeon are not the most intelligent of creatures, and will fire upon anything that they do not recognize. This crude fascimile of a Gungeoneer will hold their attention for a time.\n\nMany Gundead seem content to lock trespassers up in cells, despite their trigger-happy natures. Somewhere deep in the Gungeon, there is probably a prison full of Decoys.",
+    "id": 438
   },
   {
     "name": "Devolver Rounds",
@@ -15812,7 +15850,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/35/Dog.png",
     "type": "Passive",
     "quote": "Junior II",
-    "quality": "D",
+    "quality": "A",
     "effect": "Follows the player, digs up pickups on room clear, and barks at mimic chests. The Hunter starts with this.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -16110,14 +16148,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A faithful companion. Finds items on room clear. Keeps the Hunter company. He has a good nose for treasure, but all attempts to train him in combat have failed."
+    "ammonomicon_entry": "A faithful companion. Finds items on room clear. Keeps the Hunter company. He has a good nose for treasure, but all attempts to train him in combat have failed.",
+    "id": 492
   },
   {
     "name": "Double Vision",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/58/Double_Vision.png",
     "type": "Active",
     "quote": "One For Each Of You",
-    "quality": "D",
+    "quality": "C",
     "effect": "While active for 10 seconds, doubles all bullets fired by the player, but reduces accuracy.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -16338,7 +16377,8 @@
     "recharge_time": "200 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Temporarily doubles gun output. The favored brew of Two-Shot Erias. During her time in the Gungeon, she claimed that drinking before a gunfight would double her effectiveness in combat, but for obvious reasons was not taken too seriously. Perhaps there was some truth to her tales."
+    "ammonomicon_entry": "Temporarily doubles gun output. The favored brew of Two-Shot Erias. During her time in the Gungeon, she claimed that drinking before a gunfight would double her effectiveness in combat, but for obvious reasons was not taken too seriously. Perhaps there was some truth to her tales.",
+    "id": 168
   },
   {
     "name": "Drill",
@@ -16723,7 +16763,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/72/Drum_Clip.png",
     "type": "Passive",
     "quote": "One Size Fits All",
-    "quality": "B",
+    "quality": "A",
     "effect": "Increases the magazine size of all weapons by 50%. Does not affect single-round magazines.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -16804,14 +16844,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increased magazine capacity for all guns."
+    "ammonomicon_entry": "Increased magazine capacity for all guns.",
+    "id": 280
   },
   {
     "name": "Duct Tape",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4e/Duct_Tape.png",
     "type": "Active",
     "quote": "Friend Of Gunsmiths",
-    "quality": "A",
+    "quality": "S",
     "effect": "Single use. Combines two guns: first gun's projectiles fire alongside second gun. Ammo capacities combine.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -17849,14 +17890,15 @@
     },
     "sell_price": "41",
     "recharge_time": "Single-Use",
-    "ammonomicon_entry": "Combines the currently equipped gun with the next carried gun.\n\nIt isn't pretty, but sometimes wondrous things can be accomplished with a roll of tape. Just look at the Bundle of Wands, or the Magitek Hybrid!"
+    "ammonomicon_entry": "Combines the currently equipped gun with the next carried gun.\n\nIt isn't pretty, but sometimes wondrous things can be accomplished with a roll of tape. Just look at the Bundle of Wands, or the Magitek Hybrid!",
+    "id": 239
   },
   {
     "name": "Easy Reload Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/2e/Easy_Reload_Bullets.png",
     "type": "Passive",
     "quote": "Rolling Reload",
-    "quality": "C",
+    "quality": "B",
     "effect": "Dodge rolling reloads one bullet.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -17935,7 +17977,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "These handcrafted shells are extremely easy to handle. So easy, in fact, that a single shell can be reloaded during a standard dodge roll.\n\nReversable bullets crafted by Edwin. In his old age, he grew tired of squinting to see which end of the bullet was up."
+    "ammonomicon_entry": "These handcrafted shells are extremely easy to handle. So easy, in fact, that a single shell can be reloaded during a standard dodge roll.\n\nReversable bullets crafted by Edwin. In his old age, he grew tired of squinting to see which end of the bullet was up.",
+    "id": 375
   },
   {
     "name": "Elder Blank",
@@ -18203,7 +18246,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e2/Escape_Rope.png",
     "type": "Active",
     "quote": "Works Anywhere!",
-    "quality": "D",
+    "quality": "C",
     "effect": "Teleports the player to the shop of the current floor. Resets current room if in combat.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -18489,7 +18532,8 @@
     "sell_price": "16",
     "recharge_time": "1000 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Use to escape from a sealed room. Another standard adventurer's tool rendered less useful by the Gungeon's mysterious topology. Instead of returning to the surface, this rope will only provide an escape from a single room. Sometimes, though, that's all you need."
+    "ammonomicon_entry": "Use to escape from a sealed room. Another standard adventurer's tool rendered less useful by the Gungeon's mysterious topology. Instead of returning to the surface, this rope will only provide an escape from a single room. Sometimes, though, that's all you need.",
+    "id": 306
   },
   {
     "name": "Explosive Decoy",
@@ -19065,7 +19109,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b7/Eyepatch.png",
     "type": "Passive",
     "quote": "Hit Harder Less Often",
-    "quality": "A",
+    "quality": "S",
     "effect": "Increases damage by 35% but increases shot spread by 65%, decreasing accuracy.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -19182,14 +19226,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases damage at the cost of accuracy.\n\nThe runes carved into the leather of this eyepatch represent a bargain with Kaliber, a revered gun Goddess. In exchange for depth perception, she will bless each bullet fired."
+    "ammonomicon_entry": "Increases damage at the cost of accuracy.\n\nThe runes carved into the leather of this eyepatch represent a bargain with Kaliber, a revered gun Goddess. In exchange for depth perception, she will bless each bullet fired.",
+    "id": 118
   },
   {
     "name": "Fat Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/41/Fat_Bullets.png",
     "type": "Passive",
     "quote": "Fatter = Stronger",
-    "quality": "A",
+    "quality": "S",
     "effect": "Doubles bullet size and knockback, increases damage by 30%, decreases maximum ammo by 10%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -19499,7 +19544,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Doubles bullet size and knockback, increases damage by 30%, and decreases maximum ammo by 10%."
+    "ammonomicon_entry": "Doubles bullet size and knockback, increases damage by 30%, and decreases maximum ammo by 10%.",
+    "id": 277
   },
   {
     "name": "Flak Bullets",
@@ -19793,7 +19839,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9a/Fortune%27s_Favor.png",
     "type": "Active",
     "quote": "Use For Luck",
-    "quality": "B",
+    "quality": "A",
     "effect": "While active for 8 seconds, enemy bullets are repulsed from the player, curving around them.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -19884,7 +19930,8 @@
     "recharge_time": "600 dmg",
     "duration": "8 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "While active, bullets will curve around the player."
+    "ammonomicon_entry": "While active, bullets will curve around the player.",
+    "id": 105
   },
   {
     "name": "Friendship Cookie",
@@ -20423,7 +20470,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/de/Full_Metal_Jacket.png",
     "type": "Passive",
     "quote": "Automated Defenses",
-    "quality": "B",
+    "quality": "A",
     "effect": "Automatically uses a blank when about to take damage, preventing it. Can negate contact damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -20787,7 +20834,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Automatically triggers available Blanks when in danger.\n\nAn original Gungeon item. This protective garment, laser cut whole from a massive Blank, can detect when its bearer is threatened."
+    "ammonomicon_entry": "Automatically triggers available Blanks when in danger.\n\nAn original Gungeon item. This protective garment, laser cut whole from a massive Blank, can detect when its bearer is threatened.",
+    "id": 564
   },
   {
     "name": "Galactic Medal of Valor",
@@ -21002,7 +21050,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/2e/Gas_Mask.png",
     "type": "Passive",
     "quote": "Breathe Deep",
-    "quality": "D",
+    "quality": "A",
     "effect": "Grants immunity to poison.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -21057,14 +21105,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants immunity to poison."
+    "ammonomicon_entry": "Grants immunity to poison.",
+    "id": 454
   },
   {
     "name": "Ghost Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f9/Ghost_Bullets.png",
     "type": "Passive",
     "quote": "Shoot Through",
-    "quality": "C",
+    "quality": "B",
     "effect": "Bullets pierce through one enemy and pass through obstacles. Pierced bullets deal half damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -21173,14 +21222,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants all bullets piercing."
+    "ammonomicon_entry": "Grants all bullets piercing.",
+    "id": 172
   },
   {
     "name": "Gilded Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/8c/Gilded_Bullets.png",
     "type": "Passive",
     "quote": "The Gun Percent",
-    "quality": "B",
+    "quality": "A",
     "effect": "Increases damage based on money held, up to 100% at 500 shells.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -21394,7 +21444,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Wealth increases damage. Bullets forged from the throne of an opulent ruler whose reign predates the Gungeon."
+    "ammonomicon_entry": "Wealth increases damage. Bullets forged from the throne of an opulent ruler whose reign predates the Gungeon.",
+    "id": 532
   },
   {
     "name": "Glass Guon Stone",
@@ -22003,7 +22054,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3d/Grappling_Hook.png",
     "type": "Active",
     "quote": "Rapid Transit",
-    "quality": "D",
+    "quality": "C",
     "effect": "Hook onto walls to pull yourself. Hitting enemies deals 10 damage and stuns. Unlimited range. Can steal from shops.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -22246,7 +22297,8 @@
     "sell_price": "16",
     "recharge_time": "5 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A quick way to get around, or to bring an item to you. Can briefly stun some enemies! This is a kind of grappling hook that can be shot. Known to some as the Shoothook."
+    "ammonomicon_entry": "A quick way to get around, or to bring an item to you. Can briefly stun some enemies! This is a kind of grappling hook that can be shot. Known to some as the Shoothook.",
+    "id": 250
   },
   {
     "name": "Green Guon Stone",
@@ -22367,7 +22419,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9a/Gun_Soul.png",
     "type": "Passive",
     "quote": "YOU DEFEATED",
-    "quality": "A",
+    "quality": "S",
     "effect": "Adds a heart container. On death, respawn at floor start with 1 heart. Reclaim your soul at death location to restore hearts.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -22818,14 +22870,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a heart container. Upon death, the player respawns at the start of the current floor with one heart container, while retaining all of their items and guns. All enemies previously killed will respawn, and if the player reaches the location where they died, they will return to normal."
+    "ammonomicon_entry": "Adds a heart container. Upon death, the player respawns at the start of the current floor with one heart container, while retaining all of their items and guns. All enemies previously killed will respawn, and if the player reaches the location where they died, they will return to normal.",
+    "id": 489
   },
   {
     "name": "Gunboots",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9f/Gunboots.png",
     "type": "Passive",
     "quote": "They Go Down Well",
-    "quality": "C",
+    "quality": "B",
     "effect": "Dodge rolling fires 5 bullets backwards dealing 8 damage each. Increases movement speed by 1.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -23095,7 +23148,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Improves dodge roll by adding bullets.\n\nA hero from the distant past used these gunboots to descend a mysterious abyss. After many years, like all gun artifacts, they made their way to the Gungeon."
+    "ammonomicon_entry": "Improves dodge roll by adding bullets.\n\nA hero from the distant past used these gunboots to descend a mysterious abyss. After many years, like all gun artifacts, they made their way to the Gungeon.",
+    "id": 315
   },
   {
     "name": "Gundromeda Strain",
@@ -23348,7 +23402,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ed/Gungeon_Pepper.png",
     "type": "Passive",
     "quote": "The Heat Is On!",
-    "quality": "C",
+    "quality": "B",
     "effect": "Continuously deals 5 damage per second to nearby enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -23486,14 +23540,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Deals damage to nearby enemies."
+    "ammonomicon_entry": "Deals damage to nearby enemies.",
+    "id": 253
   },
   {
     "name": "Gunknight Armor",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b1/Gunknight_Armor.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
-    "quality": "B",
+    "quality": "A",
     "effect": "Grants 1 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -23608,14 +23663,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The breastplate of the Aimless Knight, Cormorant.\n\nAble to dispatch the Gundead with ease, the Knight grew overconfident in his abilities. Deep in the Hollow, his concentration had weakened, and he sustained a grievous wound."
+    "ammonomicon_entry": "The breastplate of the Aimless Knight, Cormorant.\n\nAble to dispatch the Gundead with ease, the Knight grew overconfident in his abilities. Deep in the Hollow, his concentration had weakened, and he sustained a grievous wound.",
+    "id": 163
   },
   {
     "name": "Gunknight Gauntlet",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/52/Gunknight_Gauntlet.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
-    "quality": "C",
+    "quality": "B",
     "effect": "Grants 1 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -23702,14 +23758,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants a piece of armor upon pickup and another piece of armor every floor."
+    "ammonomicon_entry": "Grants a piece of armor upon pickup and another piece of armor every floor.",
+    "id": 162
   },
   {
     "name": "Gunknight Greaves",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/16/Gunknight_Greaves.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
-    "quality": "C",
+    "quality": "B",
     "effect": "Grants 1 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -23854,14 +23911,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The greaves of the Aimless Knight, Cormorant. The Aimless Knight approached the Gungeon as a challenge borne more out of curiosity than regret. Despite his skill, this rendered his failure inevitable."
+    "ammonomicon_entry": "The greaves of the Aimless Knight, Cormorant. The Aimless Knight approached the Gungeon as a challenge borne more out of curiosity than regret. Despite his skill, this rendered his failure inevitable.",
+    "id": 161
   },
   {
     "name": "Gunknight Helmet",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d5/Gunknight_Helmet.png",
     "type": "Passive",
     "quote": "Armor Every Floor",
-    "quality": "A",
+    "quality": "S",
     "effect": "Grants 2 armor on pickup and 1 armor on each new floor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -23942,7 +24000,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants two pieces of armor upon pickup and one piece of armor every floor."
+    "ammonomicon_entry": "Grants two pieces of armor upon pickup and one piece of armor every floor.",
+    "id": 160
   },
   {
     "name": "Hazmat Suit",
@@ -24107,7 +24166,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/db/Heart_Holster.png",
     "type": "Passive",
     "quote": "On Your Sleeve",
-    "quality": "C",
+    "quality": "A",
     "effect": "Grants a heart container.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -24272,7 +24331,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants a heart container."
+    "ammonomicon_entry": "Grants a heart container.",
+    "id": 425
   },
   {
     "name": "Heart Locket",
@@ -24575,7 +24635,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/24/Heart_of_Ice.png",
     "type": "Passive",
     "quote": "That's Cold",
-    "quality": "C",
+    "quality": "S",
     "effect": "Grants a heart container. Taking damage releases 8-12 bouncing ice bullets that freeze enemies. Increases coolness by 2.",
     "curse": 0.0,
     "coolness": 2.0,
@@ -24941,7 +25001,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Fires ice projectiles on taking damage. This icy heart was torn from a mighty frost giant, a common target for talented monster hunters."
+    "ammonomicon_entry": "Fires ice projectiles on taking damage. This icy heart was torn from a mighty frost giant, a common target for talented monster hunters.",
+    "id": 364
   },
   {
     "name": "Heart Purse",
@@ -25054,7 +25115,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/01/Heart_Synthesizer.png",
     "type": "Passive",
     "quote": "Play Well, Get Hearts",
-    "quality": "A",
+    "quality": "S",
     "effect": "If not at full health, 20% chance to gain a half heart upon completing a room without taking damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -25136,14 +25197,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance to get hearts upon completing a room."
+    "ammonomicon_entry": "Adds a chance to get hearts upon completing a room.",
+    "id": 164
   },
   {
     "name": "Heavy Boots",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/51/Heavy_Boots.png",
     "type": "Passive",
     "quote": "Low Center Of Mass",
-    "quality": "D",
+    "quality": "C",
     "effect": "Prevents knockback from enemies, gun recoil, and conveyor belts.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -25236,14 +25298,15 @@
     "recharge_time": "",
     "sell_price": "16",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Allows a Gungeoneer to keep their footing, even when great force is applied to them."
+    "ammonomicon_entry": "Allows a Gungeoneer to keep their footing, even when great force is applied to them.",
+    "id": 256
   },
   {
     "name": "Heavy Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/71/Heavy_Bullets.png",
     "type": "Passive",
     "quote": "Thunk!",
-    "quality": "C",
+    "quality": "B",
     "effect": "Increases damage by 25%, doubles knockback, increases bullet size by 25%, but halves bullet speed.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -25425,14 +25488,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases damage by 25% and doubles knockback, but halves bullet speed."
+    "ammonomicon_entry": "Increases damage by 25% and doubles knockback, but halves bullet speed.",
+    "id": 111
   },
   {
     "name": "Helix Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f7/Helix_Bullets.png",
     "type": "Passive",
     "quote": "Praise Be",
-    "quality": "B",
+    "quality": "A",
     "effect": "Doubles bullets and makes them travel in a helix pattern. Each bullet deals 66% damage (net +32%).",
     "curse": 0.0,
     "coolness": 0.0,
@@ -26068,7 +26132,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Causes guns to fire an additional shot. Bullets to move in a helical pattern, and apply marginally less damage. Fossilized bullets containing the DNA of some forgotten Gungeon creature."
+    "ammonomicon_entry": "Causes guns to fire an additional shot. Bullets to move in a helical pattern, and apply marginally less damage. Fossilized bullets containing the DNA of some forgotten Gungeon creature.",
+    "id": 568
   },
   {
     "name": "Hidden Compartment",
@@ -26279,7 +26344,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b0/Hip_Holster.png",
     "type": "Passive",
     "quote": "Quickdraw",
-    "quality": "B",
+    "quality": "A",
     "effect": "Reloading fires a single perfectly accurate bullet for free. Multi-bullet guns fire only one bullet.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -26542,7 +26607,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reloading a weapon fires it once for free."
+    "ammonomicon_entry": "Reloading a weapon fires it once for free.",
+    "id": 500
   },
   {
     "name": "Holey Grail",
@@ -26816,7 +26882,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3d/Homing_Bullets.png",
     "type": "Passive",
     "quote": "Fire And Forget",
-    "quality": "B",
+    "quality": "A",
     "effect": "Bullets have a 20% chance to home in on enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -26901,14 +26967,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Bullets have a chance to home in on enemies."
+    "ammonomicon_entry": "Bullets have a chance to home in on enemies.",
+    "id": 284
   },
   {
     "name": "Honeycomb",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/7c/Honeycomb.png",
     "type": "Passive",
     "quote": "Bee Prepared",
-    "quality": "C",
+    "quality": "B",
     "effect": "Taking damage spawns 12-20 homing bees that deal 3 damage on impact plus 1 damage per second for 2 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -27066,7 +27133,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This honeycomb bonds with the user, releasing bees to protect their hive when damaged."
+    "ammonomicon_entry": "This honeycomb bonds with the user, releasing bees to protect their hive when damaged.",
+    "id": 138
   },
   {
     "name": "Hot Lead",
@@ -27592,7 +27660,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/cb/IBomb_Companion_App.png",
     "type": "Active",
     "quote": "One For That",
-    "quality": "C",
+    "quality": "B",
     "effect": "Detonates all explosives, explosive enemies, and exploding enemy bullets in the room.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -27836,14 +27904,15 @@
     "sell_price": "21",
     "recharge_time": "1 second",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Detonates all explosives and explosive enemies in the room."
+    "ammonomicon_entry": "Detonates all explosives and explosive enemies in the room.",
+    "id": 234
   },
   {
     "name": "Ice Bomb",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/de/Ice_Bomb.png",
     "type": "Active",
     "quote": "Cool It!",
-    "quality": "D",
+    "quality": "C",
     "effect": "Throws a bomb that deals 8 damage and freezes enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -28007,14 +28076,15 @@
     "sell_price": "16",
     "recharge_time": "200 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Throws a bomb that freezes enemies."
+    "ammonomicon_entry": "Throws a bomb that freezes enemies.",
+    "id": 109
   },
   {
     "name": "Ice Cube",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f9/Ice_Cube.png",
     "type": "Passive",
     "quote": "Items Recharge While Active",
-    "quality": "B",
+    "quality": "A",
     "effect": "Allows active items to recharge while active. Increases coolness by 3.",
     "curse": 0.0,
     "coolness": 3.0,
@@ -28147,7 +28217,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Reduces the cooldown timer of active items. Increases coolness by 3."
+    "ammonomicon_entry": "Reduces the cooldown timer of active items. Increases coolness by 3.",
+    "id": 170
   },
   {
     "name": "Infuriating Note",
@@ -28302,7 +28373,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3c/Iron_Coin.png",
     "type": "Active",
     "quote": "Valar Morgunis",
-    "quality": "C",
+    "quality": "B",
     "effect": "3 uses. Kills all enemies in a random unexplored room. Increases coolness by 2 and grants 20% shop discount. Increases curse by 1.",
     "curse": 0.0,
     "coolness": 2.0,
@@ -28598,7 +28669,8 @@
     "sell_price": "21",
     "recharge_time": "3 Uses",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A payment for services rendered. This mysterious coin vanishes when tossed into the air."
+    "ammonomicon_entry": "A payment for services rendered. This mysterious coin vanishes when tossed into the air.",
+    "id": 272
   },
   {
     "name": "Irradiated Lead",
@@ -28816,7 +28888,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/07/Jetpack.png",
     "type": "Active",
     "quote": "To Fly",
-    "quality": "C",
+    "quality": "B",
     "effect": "Toggle for flight and +movement speed. Cannot dodge roll while active. Passing over oil sets it on fire.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -28989,7 +29061,8 @@
     "sell_price": "21",
     "recharge_time": "Toggled",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Can be toggled. While active, the player has increased movement speed and flight, but cannot dodge roll. Passing over puddles of oil will set them on fire."
+    "ammonomicon_entry": "Can be toggled. While active, the player has increased movement speed and flight, but cannot dodge roll. Passing over puddles of oil will set them on fire.",
+    "id": 106
   },
   {
     "name": "Junk",
@@ -29199,7 +29272,8 @@
     "sell_price": "3",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Just some junk."
+    "ammonomicon_entry": "Just some junk.",
+    "id": 641
   },
   {
     "name": "Katana Bullets",
@@ -29641,7 +29715,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/8a/Knife_Shield.png",
     "type": "Active",
     "quote": "Use Again To Launch!",
-    "quality": "D",
+    "quality": "C",
     "effect": "Creates a ring of knives that damage enemies and block bullets. Use again to launch them forward. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
@@ -29762,7 +29836,8 @@
     "sell_price": "16",
     "recharge_time": "300 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The Knife Shield is a shield made of blasphemous knives.\n\nBe wary of using it, as it is believed to bring upon the anger of the Jammed."
+    "ammonomicon_entry": "The Knife Shield is a shield made of blasphemous knives.\n\nBe wary of using it, as it is believed to bring upon the anger of the Jammed.",
+    "id": 65
   },
   {
     "name": "Lament Configurum",
@@ -30160,7 +30235,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9e/Laser_Sight.png",
     "type": "Passive",
     "quote": "King Of The Dot",
-    "quality": "C",
+    "quality": "B",
     "effect": "Decreases bullet spread by 50% and adds a red laser sight to the player's weapons.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -30406,7 +30481,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Decreases bullet spread by 50% and adds a red laser sight to the player's weapons."
+    "ammonomicon_entry": "Decreases bullet spread by 50% and adds a red laser sight to the player's weapons.",
+    "id": 273
   },
   {
     "name": "Lich's Eye Bullets",
@@ -30771,14 +30847,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Makes all guns act as if they have all their synergies."
+    "ammonomicon_entry": "Makes all guns act as if they have all their synergies.",
+    "id": 815
   },
   {
     "name": "Lichy Trigger Finger",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1c/Lichy_Trigger_Finger.png",
     "type": "Passive",
     "quote": "Rate of Fire Up",
-    "quality": "D",
+    "quality": "C",
     "effect": "Increases rate of fire by 25%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -30892,7 +30969,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases rate of fire by 25%."
+    "ammonomicon_entry": "Increases rate of fire by 25%.",
+    "id": 213
   },
   {
     "name": "Lies",
@@ -31037,7 +31115,8 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "No effect."
+    "ammonomicon_entry": "No effect.",
+    "id": 148
   },
   {
     "name": "Liquid Valkyrie",
@@ -31946,7 +32025,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9a/Macho_Brace.png",
     "type": "Passive",
     "quote": "Value For Effort",
-    "quality": "C",
+    "quality": "B",
     "effect": "Shots fired immediately after a dodge roll deal double damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -32215,14 +32294,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Shots are more powerful when coming out of a dodge roll."
+    "ammonomicon_entry": "Shots are more powerful when coming out of a dodge roll.",
+    "id": 665
   },
   {
     "name": "Magazine Rack",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1b/Magazine_Rack.png",
     "type": "Active",
     "quote": "Instant Mail Order",
-    "quality": "C",
+    "quality": "B",
     "effect": "Creates a zone of infinite ammo for 10 seconds. Guns must have at least 1 ammo to fire.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -32398,14 +32478,15 @@
     "recharge_time": "450 dmg",
     "duration": "10 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Place to create a zone of infinite ammo."
+    "ammonomicon_entry": "Place to create a zone of infinite ammo.",
+    "id": 814
   },
   {
     "name": "Magic Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/aa/Magic_Bullets.png",
     "type": "Passive",
     "quote": "Sufficiently Advanced",
-    "quality": "B",
+    "quality": "A",
     "effect": "Every bullet has a 4% chance to transmogrify enemies into harmless chickens. Chance is multiplied by the gun's effect chance scalar.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -32564,14 +32645,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants all bullets a small chance to transmogrify. Each of these rounds has been enchanted by a sorceress of great power, though they seem incredibly old."
+    "ammonomicon_entry": "Grants all bullets a small chance to transmogrify. Each of these rounds has been enchanted by a sorceress of great power, though they seem incredibly old.",
+    "id": 533
   },
   {
     "name": "Magic Sweet",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e9/Magic_Sweet.png",
     "type": "Passive",
     "quote": "Free Stats",
-    "quality": "A",
+    "quality": "S",
     "effect": "Grants a heart container, +15% damage, +1.5 movement speed, and +1 coolness.",
     "curse": 0.0,
     "coolness": 1.0,
@@ -32707,14 +32789,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants a heart container, increases damage by 15%, increases movement speed, and increases coolness by 1."
+    "ammonomicon_entry": "Grants a heart container, increases damage by 15%, increases movement speed, and increases coolness by 1.",
+    "id": 110
   },
   {
     "name": "Map",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/43/Map.png",
     "type": "Passive",
     "quote": "Floor Revealed",
-    "quality": "D",
+    "quality": "C",
     "effect": "Reveals the entire map for the current floor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -32830,14 +32913,15 @@
     "recharge_time": "",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A map of the current layout of one floor of the Gungeon.\n\nBecomes obsolete quickly."
+    "ammonomicon_entry": "A map of the current layout of one floor of the Gungeon.\n\nBecomes obsolete quickly.",
+    "id": 137
   },
   {
     "name": "Master of Unlocking",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/37/Master_of_Unlocking.png",
     "type": "Passive",
     "quote": "Play Well, Get Keys",
-    "quality": "B",
+    "quality": "A",
     "effect": "20% chance to give a free key upon clearing a room if no damage was taken.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -32945,7 +33029,8 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Adds a chance to get keys upon completing a room."
+    "ammonomicon_entry": "Adds a chance to get keys upon completing a room.",
+    "id": 140
   },
   {
     "name": "Master Round I",
@@ -34732,7 +34817,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e3/Meatbun.png/revision/latest?cb=20160310052415",
     "type": "Active",
     "quote": "On A Roll",
-    "quality": "D",
+    "quality": "C",
     "effect": "Single use. Heals 1 heart. Grants double damage until the player takes damage. Stacks with multiple uses.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -34822,14 +34907,15 @@
     "sell_price": "16",
     "recharge_time": "Single-Use",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Heals for a small amount. Increases damage dealt until injured.\n\nA delicious, freshly baked roll! Sometimes, things just work out."
+    "ammonomicon_entry": "Heals for a small amount. Increases damage dealt until injured.\n\nA delicious, freshly baked roll! Sometimes, things just work out.",
+    "id": 291
   },
   {
     "name": "Medkit",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/0f/Medkit.png",
     "type": "Active",
     "quote": "Heals",
-    "quality": "C",
+    "quality": "B",
     "effect": "Single use. Heals the player for 4 hearts.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -34901,14 +34987,15 @@
     "recharge_time": "Single-Use",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Medkits provides substantial healing when used. Contains a small piece of fairy.\n\nSeeking a place that would provide a near constant flow of the desperate and injured, Médecins Sans Diplôme recognized the Gungeon as the perfect place to found their practice."
+    "ammonomicon_entry": "Medkits provides substantial healing when used. Contains a small piece of fairy.\n\nSeeking a place that would provide a near constant flow of the desperate and injured, Médecins Sans Diplôme recognized the Gungeon as the perfect place to found their practice.",
+    "id": 412
   },
   {
     "name": "Melted Rock",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a6/Melted_Rock.png",
     "type": "Active",
     "quote": "Corpses Explode",
-    "quality": "C",
+    "quality": "B",
     "effect": "Causes enemy corpses to explode on use, dealing 15 damage to nearby enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -35116,14 +35203,15 @@
     "sell_price": "21",
     "recharge_time": "2 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Resonates with Gundead corpses, causing them to explode. This rock is a testament to one poor soul, whose agony was so great that it still echoes in the bodies of the freshly deceased."
+    "ammonomicon_entry": "Resonates with Gundead corpses, causing them to explode. This rock is a testament to one poor soul, whose agony was so great that it still echoes in the bodies of the freshly deceased.",
+    "id": 403
   },
   {
     "name": "Metronome",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1c/Metronome.png",
     "type": "Passive",
     "quote": "Better And Better",
-    "quality": "B",
+    "quality": "A",
     "effect": "Grants +2% damage per kill, maxing at +150% (75 kills). Reset on taking damage or changing guns.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -35452,14 +35540,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Improves equipped gun on each sequential kill. Taking damage or changing guns will reduce the bonus back to zero."
+    "ammonomicon_entry": "Improves equipped gun on each sequential kill. Taking damage or changing guns will reduce the bonus back to zero.",
+    "id": 119
   },
   {
     "name": "Military Training",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d7/Military_Training.png",
     "type": "Passive",
     "quote": "Hold Facing Enemy",
-    "quality": "C",
+    "quality": "A",
     "effect": "Decreases reload times by 20%. Reduces weapon spread by 17%. Decreases charge times for charged guns by 16.7%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -35564,14 +35653,15 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Memories of your years in training. Better Reload speeds and weapon accuracy."
+    "ammonomicon_entry": "Memories of your years in training. Better Reload speeds and weapon accuracy.",
+    "id": 494
   },
   {
     "name": "Mimic Tooth Necklace",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/5f/Mimic_Tooth_Necklace.png",
     "type": "Passive",
     "quote": "Chomp",
-    "quality": "A",
+    "quality": "S",
     "effect": "Every chest is guaranteed to be a Mimic.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -35945,7 +36035,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Unlocks all chests!\n\nA necklace made from the tooth of a Mimic. Feels lucky!"
+    "ammonomicon_entry": "Unlocks all chests!\n\nA necklace made from the tooth of a Mimic. Feels lucky!",
+    "id": 293
   },
   {
     "name": "Molotov",
@@ -36091,7 +36182,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f4/Monster_Blood.png",
     "type": "Passive",
     "quote": "Twist To Open",
-    "quality": "C",
+    "quality": "B",
     "effect": "Taking damage spawns poison creep. Grants immunity to poison and a heart container.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -36223,7 +36314,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Emits deadly ooze when damaged.\n\nThis canister contains a poisonous sample of dangerous monster blood, collected by Médecins Sans Diplôme for study."
+    "ammonomicon_entry": "Emits deadly ooze when damaged.\n\nThis canister contains a poisonous sample of dangerous monster blood, collected by Médecins Sans Diplôme for study.",
+    "id": 313
   },
   {
     "name": "Muscle Relaxant",
@@ -36275,7 +36367,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/49/Mustache.png",
     "type": "Passive",
     "quote": "A Familiar Face",
-    "quality": "C",
+    "quality": "B",
     "effect": "Grants a chance to heal half a heart upon purchasing an item. Makes Bello's shop items 15% cheaper.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -36570,14 +36662,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Heals the player half a heart upon purchasing an item."
+    "ammonomicon_entry": "Heals the player half a heart upon purchasing an item.",
+    "id": 435
   },
   {
     "name": "Nanomachines",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/de/Nanomachines.png",
     "type": "Passive",
     "quote": "Son",
-    "quality": "B",
+    "quality": "A",
     "effect": "Grants 2 armor on pickup. Grants 1 armor every 4 times damage is taken.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -36858,14 +36951,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Gain armor when damaged several times. These self-replicating Nanomachines transform lead that enters the body into armor."
+    "ammonomicon_entry": "Gain armor when damaged several times. These self-replicating Nanomachines transform lead that enters the body into armor.",
+    "id": 314
   },
   {
     "name": "Napalm Strike",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/19/Napalm_Strike.png",
     "type": "Active",
     "quote": "Smells Great!",
-    "quality": "C",
+    "quality": "B",
     "effect": "Sets a large rectangular area on fire, igniting and damaging enemies.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -36963,14 +37057,15 @@
     "sell_price": "21",
     "recharge_time": "600 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The pinnacle of Gungeon air support."
+    "ammonomicon_entry": "The pinnacle of Gungeon air support.",
+    "id": 242
   },
   {
     "name": "Number 2",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a1/Number_2.png",
     "type": "Passive",
     "quote": "Sidekick No More",
-    "quality": "A",
+    "quality": "S",
     "effect": "Increases movement speed by 2 and damage by 41% when co-op partner is dead (always active in singleplayer). Cannot be dropped.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -37180,7 +37275,8 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Boosts stats when alone. Only available in co-op, where The Cultist starts with this item."
+    "ammonomicon_entry": "Boosts stats when alone. Only available in co-op, where The Cultist starts with this item.",
+    "id": 326
   },
   {
     "name": "Obsidian Shell Casing",
@@ -37694,7 +37790,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b7/Old_Knight%27s_Helm.png",
     "type": "Passive",
     "quote": "Protects Knowledge",
-    "quality": "N",
+    "quality": "C",
     "effect": "Grants two pieces of armor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -37907,14 +38003,15 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A sturdy, if modest, helmet. Once worn by a knight with an unusually large head."
+    "ammonomicon_entry": "A sturdy, if modest, helmet. Once worn by a knight with an unusually large head.",
+    "id": 222
   },
   {
     "name": "Old Knight's Shield",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fc/Old_Knight%27s_Shield.png",
     "type": "Passive",
     "quote": "Heavy With Experience",
-    "quality": "N",
+    "quality": "C",
     "effect": "Grants two pieces of armor.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -38109,14 +38206,15 @@
     },
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The shield of Ser Manuel, emblazoned with his House sigil, the Cup of Knowledge. There is a diagram on the back illustrating how to strap on a shield and examples of when to raise it. Remarkably free of wear."
+    "ammonomicon_entry": "The shield of Ser Manuel, emblazoned with his House sigil, the Cup of Knowledge. There is a diagram on the back illustrating how to strap on a shield and examples of when to raise it. Remarkably free of wear.",
+    "id": 219
   },
   {
     "name": "Omega Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4c/Omega_Bullets.png",
     "type": "Passive",
     "quote": "Last!",
-    "quality": "A",
+    "quality": "S",
     "effect": "The final two shots of each magazine deal double damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -38245,14 +38343,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "The final shot of each magazine deals double damage."
+    "ammonomicon_entry": "The final shot of each magazine deals double damage.",
+    "id": 374
   },
   {
     "name": "Orange",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/43/Orange.png",
     "type": "Active",
     "quote": "You're Not Alexander",
-    "quality": "B",
+    "quality": "A",
     "effect": "Single use. Fully heals the player, grants a heart container, and increases coolness by 2.",
     "curse": 0.0,
     "coolness": 2.0,
@@ -38605,7 +38704,8 @@
       ]
     },
     "neckbear_approved": true,
-    "ammonomicon_entry": "Single use. Fully heals the player, grants a heart container, and increases coolness by 2."
+    "ammonomicon_entry": "Single use. Fully heals the player, grants a heart container, and increases coolness by 2.",
+    "id": 485
   },
   {
     "name": "Orange Guon Stone",
@@ -38740,7 +38840,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/19/Orbital_Bullets.png",
     "type": "Passive",
     "quote": "Deadly Revolution",
-    "quality": "A",
+    "quality": "S",
     "effect": "Missed shots that hit a wall orbit the player. When the max is reached, next shots bounce instead.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -39584,7 +39684,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Missed shots orbit. Development of these bullets began immediately after the field tests of the Mr. Accretion Jr."
+    "ammonomicon_entry": "Missed shots orbit. Development of these bullets began immediately after the field tests of the Mr. Accretion Jr.",
+    "id": 661
   },
   {
     "name": "Owl",
@@ -40079,7 +40180,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/30/Pig.png",
     "type": "Passive",
     "quote": "Shifty",
-    "quality": "A",
+    "quality": "S",
     "effect": "If the player dies, the pig sacrifices itself to spare the player, fully healing them and removing the item from the inventory.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -40364,7 +40465,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Upon death, instantly revives the player with full health."
+    "ammonomicon_entry": "Upon death, instantly revives the player with full health.",
+    "id": 451
   },
   {
     "name": "Pink Guon Stone",
@@ -40758,14 +40860,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases damage and fire rate with every bullet that hits an enemy."
+    "ammonomicon_entry": "Increases damage and fire rate with every bullet that hits an enemy.",
+    "id": 627
   },
   {
     "name": "Poison Vial",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/49/Poison_Vial.png",
     "type": "Active",
     "quote": "For External Use Only",
-    "quality": "D",
+    "quality": "B",
     "effect": "Throws a vial that breaks to create a puddle of poison goop. Does not work in the Gorgun's arena.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -40812,7 +40915,8 @@
     "sell_price": "16",
     "recharge_time": "300 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Creates a pool of poisonous goop. Stolen from the Witches' storehouse, this jar contains Essence of Poisbulon. Toxic to Gundead and Gungeoneer alike!"
+    "ammonomicon_entry": "Creates a pool of poisonous goop. Stolen from the Witches' storehouse, this jar contains Essence of Poisbulon. Toxic to Gundead and Gungeoneer alike!",
+    "id": 432
   },
   {
     "name": "Portable Table Device",
@@ -40992,7 +41096,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a6/Portable_Turret.png",
     "type": "Active",
     "quote": "Some Assembly Required",
-    "quality": "B",
+    "quality": "A",
     "effect": "Places a stationary turret that shoots at enemies and blocks bullets. Disappears after room clear.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -41142,14 +41246,15 @@
     "sell_price": "30",
     "recharge_time": "325 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Places a stationary turret that shoots at enemies. The turret will be destroyed if it takes enough damage."
+    "ammonomicon_entry": "Places a stationary turret that shoots at enemies. The turret will be destroyed if it takes enough damage.",
+    "id": 201
   },
   {
     "name": "Potion of Gun Friendship",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/37/Potion_of_Gun_Friendship.png",
     "type": "Active",
     "quote": "Temporary +1 To Gun",
-    "quality": "D",
+    "quality": "C",
     "effect": "While active, increases damage by 30%, doubles fire rate, decreases reload times by 70%, and multiplies knockback by 10.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -41308,7 +41413,8 @@
     "duration": "10 seconds",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Temporarily increases combat ability.\n\nAnother of Goopton's inventions. The Potion of Gun Friendship will temporarily strengthen one's bond with their weapon, increasing combat prowess significantly."
+    "ammonomicon_entry": "Temporarily increases combat ability.\n\nAnother of Goopton's inventions. The Potion of Gun Friendship will temporarily strengthen one's bond with their weapon, increasing combat prowess significantly.",
+    "id": 174
   },
   {
     "name": "Potion of Lead Skin",
@@ -41610,7 +41716,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/33/Proximity_Mine.png",
     "type": "Active",
     "quote": "Use To Place",
-    "quality": "D",
+    "quality": "C",
     "effect": "Places a mine that explodes when an enemy comes near it, dealing 60 damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -41666,7 +41772,8 @@
     "recharge_time": "300 dmg",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This mine activates when an enemy gets close."
+    "ammonomicon_entry": "This mine activates when an enemy gets close.",
+    "id": 66
   },
   {
     "name": "R2G2",
@@ -41874,14 +41981,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Companion. Fires upon foes. This robot originally served beverages to the Gundead as they wandered the chambers."
+    "ammonomicon_entry": "Companion. Fires upon foes. This robot originally served beverages to the Gundead as they wandered the chambers.",
+    "id": 318
   },
   {
     "name": "Rat Boots",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/40/Rat_Boots.png",
     "type": "Passive",
     "quote": "Hover Craft",
-    "quality": "C",
+    "quality": "B",
     "effect": "Grants temporary invulnerability and flight for ~1 second when stepping over a pit. Increases movement speed by 1.5.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -42030,14 +42138,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants temporary invulnerability and flight when the player steps over a pit."
+    "ammonomicon_entry": "Grants temporary invulnerability and flight when the player steps over a pit.",
+    "id": 667
   },
   {
     "name": "Ration",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/18/Ration.png",
     "type": "Active",
     "quote": "Calories, Mate",
-    "quality": "C",
+    "quality": "B",
     "effect": "Single use. Heals 2 hearts. Automatically used if the player runs out of health.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -42170,7 +42279,8 @@
     "recharge_time": "Single-Use",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Provides healing on use. If equipped, will be used automatically on death.\n\nThis MRE comes in the form of a dry and dense cookie. It doesn't taste great, but it delivers the calories the body needs."
+    "ammonomicon_entry": "Provides healing on use. If equipped, will be used automatically on death.\n\nThis MRE comes in the form of a dry and dense cookie. It doesn't taste great, but it delivers the calories the body needs.",
+    "id": 104
   },
   {
     "name": "Red Guon Stone",
@@ -42405,14 +42515,15 @@
     "recharge_time": "500 dmg",
     "duration": "6 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Halves reload times. While active, the player absorbs enemy bullets and regains ammo."
+    "ammonomicon_entry": "Halves reload times. While active, the player absorbs enemy bullets and regains ammo.",
+    "id": 536
   },
   {
     "name": "Remote Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/37/Remote_Bullets.png",
     "type": "Passive",
     "quote": "The Unseen Hand",
-    "quality": "C",
+    "quality": "B",
     "effect": "Fired bullets curve towards the player's crosshair. Increases damage by 10%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -42695,7 +42806,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "All projectiles can be guided after they are fired.\n\nThese tiny engines can be controlled remotely, allowing the wielder to change trajectories at will."
+    "ammonomicon_entry": "All projectiles can be guided after they are fired.\n\nThese tiny engines can be controlled remotely, allowing the wielder to change trajectories at will.",
+    "id": 530
   },
   {
     "name": "Resourceful Sack",
@@ -42884,7 +42996,8 @@
     "sell_price": "41",
     "recharge_time": "3 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Rolling through bullets collects them in the sack. Using the sack empties the sack and fires a piece of explosive cheese for every bullet collected. Grants 3 extra active item slots."
+    "ammonomicon_entry": "Rolling through bullets collects them in the sack. Using the sack empties the sack and fires a piece of explosive cheese for every bullet collected. Grants 3 extra active item slots.",
+    "id": 316
   },
   {
     "name": "Riddle of Lead",
@@ -43036,7 +43149,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/91/Ring_of_Chest_Friendship.png",
     "type": "Passive",
     "quote": "Chest Friends Forever",
-    "quality": "B",
+    "quality": "A",
     "effect": "Increases the chance of finding a chest on room clear by 50%. Halves D-tier chest chance, redistributing to C and B tier.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -43142,14 +43255,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases the chance of finding chests.\n\nThis ring was first given to Winchester, largely due to a naming mix-up. With little use for treasure, Winchester eventually gave it away as a prize in one of his strange games."
+    "ammonomicon_entry": "Increases the chance of finding chests.\n\nThis ring was first given to Winchester, largely due to a naming mix-up. With little use for treasure, Winchester eventually gave it away as a prize in one of his strange games.",
+    "id": 254
   },
   {
     "name": "Ring of Chest Vampirism",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d3/Ring_of_Chest_Vampirism.png",
     "type": "Passive",
     "quote": "Blood From Wood",
-    "quality": "C",
+    "quality": "B",
     "effect": "Breaking chests and killing Mimics heals the player for half a heart.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -43222,7 +43336,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Heals upon breaking a chest open.\n\nThis ring, crafted from the frame of a powerful mimic, still yearns to devour chests."
+    "ammonomicon_entry": "Heals upon breaking a chest open.\n\nThis ring, crafted from the frame of a powerful mimic, still yearns to devour chests.",
+    "id": 488
   },
   {
     "name": "Ring of Ethereal Form",
@@ -43498,7 +43613,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/cf/Ring_of_Fire_Resistance.png",
     "type": "Passive",
     "quote": "No Burns",
-    "quality": "C",
+    "quality": "B",
     "effect": "Grants immunity to fire.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -43653,14 +43768,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Prevents damage from fire. A ring originally worn by the legendary gunsmith himself. Later in life, Edwin no longer needed it, but the ring proved indispensable during his early years in the Forge. It eventually passed to his eldest daughter."
+    "ammonomicon_entry": "Prevents damage from fire. A ring originally worn by the legendary gunsmith himself. Later in life, Edwin no longer needed it, but the ring proved indispensable during his early years in the Forge. It eventually passed to his eldest daughter.",
+    "id": 191
   },
   {
     "name": "Ring of Mimic Friendship",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/8b/Ring_of_Mimic_Friendship.png",
     "type": "Passive",
     "quote": "Unlikely Allies",
-    "quality": "D",
+    "quality": "C",
     "effect": "Chests will not turn into Mimics.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -43818,14 +43934,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Makes chests safer.\n\nNot actually a ring, but rather a small creature pretending to be a ring. Emits a strange psychic tone only recognizable to mimics, preventing them from attacking."
+    "ammonomicon_entry": "Makes chests safer.\n\nNot actually a ring, but rather a small creature pretending to be a ring. Emits a strange psychic tone only recognizable to mimics, preventing them from attacking.",
+    "id": 294
   },
   {
     "name": "Ring of Miserly Protection",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6b/Ring_of_Miserly_Protection.png",
     "type": "Passive",
     "quote": "Aids The Fiscally Responsible",
-    "quality": "C",
+    "quality": "B",
     "effect": "Grants 2 heart containers. Disappears upon purchasing anything from any shop.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -44094,7 +44211,8 @@
     "recharge_time": "",
     "neckbear_approved": true,
     "sell_price": "N/A",
-    "ammonomicon_entry": "Grants two heart containers. Disappears upon spending money."
+    "ammonomicon_entry": "Grants two heart containers. Disappears upon spending money.",
+    "id": 132
   },
   {
     "name": "Ring of the Resourceful Rat",
@@ -44584,7 +44702,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/03/Rocket-Powered_Bullets.png",
     "type": "Passive",
     "quote": "Faster Bullets",
-    "quality": "B",
+    "quality": "A",
     "effect": "Increases bullet speed by 50%, damage by 10%, and rate of fire by 10%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -44665,14 +44783,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases the player's bullet speed by 50%, increases damage by 10%, and increases rate of fire by 10%."
+    "ammonomicon_entry": "Increases the player's bullet speed by 50%, increases damage by 10%, and increases rate of fire by 10%.",
+    "id": 113
   },
   {
     "name": "Roll Bomb",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/50/Roll_Bomb.png",
     "type": "Passive",
     "quote": "Power Charge",
-    "quality": "C",
+    "quality": "B",
     "effect": "Dodge rolling leaves behind a bomb dealing 5 contact damage and 20 explosion damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -45192,14 +45311,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Produces a bomb when dodge rolling. This strange mechanism dispenses explosives when spun."
+    "ammonomicon_entry": "Produces a bomb when dodge rolling. This strange mechanism dispenses explosives when spun.",
+    "id": 567
   },
   {
     "name": "Rolling Eye",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b2/Rolling_Eye.png",
     "type": "Passive",
     "quote": "Back At You",
-    "quality": "C",
+    "quality": "B",
     "effect": "Rolling through bullets reflects them at enemies. Reflected bullets deal 10 damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -45527,14 +45647,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Rolling through bullets rebounds them toward their owners.\n\nDespite his many failings, Ser Manuel is one of the finest dodge rollers ever to enter the Gungeon's halls. This eye is almost purely composed of Dodgicite, a rare material that reacts strangely near bullets."
+    "ammonomicon_entry": "Rolling through bullets rebounds them toward their owners.\n\nDespite his many failings, Ser Manuel is one of the finest dodge rollers ever to enter the Gungeon's halls. This eye is almost purely composed of Dodgicite, a rare material that reacts strangely near bullets.",
+    "id": 190
   },
   {
     "name": "Ruby Bracelet",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f4/Ruby_Bracelet.png",
     "type": "Passive",
     "quote": "Thrown Guns Explode",
-    "quality": "D",
+    "quality": "C",
     "effect": "Thrown guns will explode, dealing 30 damage to nearby enemies without destroying them.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -45750,14 +45871,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Any guns thrown while wearing this bracelet will explode!\nKeep moving without dodge rolling or being hit to generate a kinetic aura which can be unleashed by dodge rolling into enemies. In a bygone era of the Gungeon, misguided scarcity created situations where throwing a firearm as a last-resort weapon seemed viable. In modern, sensible, times, denizens of the Gungeon have come to understand that throwing a gun is awkward and pointless. So useless was the Ruby Bracelet in its previous form that the Gunsmith melted it down and reforged it."
+    "ammonomicon_entry": "Any guns thrown while wearing this bracelet will explode!\nKeep moving without dodge rolling or being hit to generate a kinetic aura which can be unleashed by dodge rolling into enemies. In a bygone era of the Gungeon, misguided scarcity created situations where throwing a firearm as a last-resort weapon seemed viable. In modern, sensible, times, denizens of the Gungeon have come to understand that throwing a gun is awkward and pointless. So useless was the Ruby Bracelet in its previous form that the Gunsmith melted it down and reforged it.",
+    "id": 440
   },
   {
     "name": "Scattershot",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6f/Scattershot.png",
     "type": "Passive",
     "quote": "Quantity Over Quality",
-    "quality": "B",
+    "quality": "A",
     "effect": "Guns fire triple the projectiles, each dealing 55% of original damage. If all hit, effective +65% damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -46046,14 +46168,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Guns fire a spread of tripled bullets which deal less damage."
+    "ammonomicon_entry": "Guns fire a spread of tripled bullets which deal less damage.",
+    "id": 241
   },
   {
     "name": "Scope",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/74/Scope.png",
     "type": "Passive",
     "quote": "Steady Aim",
-    "quality": "D",
+    "quality": "C",
     "effect": "Decreases bullet spread by 60%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -46296,14 +46419,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Decreases bullet spread by 60%."
+    "ammonomicon_entry": "Decreases bullet spread by 60%.",
+    "id": 102
   },
   {
     "name": "Scouter",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fb/Scouter.png",
     "type": "Passive",
     "quote": "Quality Assured",
-    "quality": "C",
+    "quality": "B",
     "effect": "Shows enemy health and damage. Increases damage by 10%, decreases spread by 10%. Increases curse by 1.",
     "curse": 1.0,
     "coolness": 0.0,
@@ -46479,14 +46603,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Shows combat data. Increases accuracy and damage by a small amount. This scouter, worn with use, provides detailed data on enemies encountered within the Gungeon. The name \"Ritvik\" is inscribed on the rim."
+    "ammonomicon_entry": "Shows combat data. Increases accuracy and damage by a small amount. This scouter, worn with use, provides detailed data on enemies encountered within the Gungeon. The name \"Ritvik\" is inscribed on the rim.",
+    "id": 821
   },
   {
     "name": "Sense of Direction",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3a/Sense_of_Direction.png",
     "type": "Active",
     "quote": "Surprisingly Rare.",
-    "quality": "D",
+    "quality": "C",
     "effect": "Upon use, an arrow appears pointing toward the floor's exit.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -46605,7 +46730,8 @@
     "sell_price": "16",
     "recharge_time": "3 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Strangely, the needle in this compass always points toward the next descending elevator. The words \"Woban, J.S.C.\" are engraved upon the back."
+    "ammonomicon_entry": "Strangely, the needle in this compass always points toward the next descending elevator. The words \"Woban, J.S.C.\" are engraved upon the back.",
+    "id": 209
   },
   {
     "name": "Ser Junkan 1",
@@ -47064,7 +47190,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Several times rarer than a four-leaf clover, this seven-leafed charm bestows incredible luck upon its bearer."
+    "ammonomicon_entry": "Several times rarer than a four-leaf clover, this seven-leafed charm bestows incredible luck upon its bearer.",
+    "id": 289
   },
   {
     "name": "Shadow Bullets",
@@ -47783,7 +47910,8 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Opens any lock. Never consumed.\n\nThe ultimate tool in the Gungeon Acquisitions' Department's arsenal."
+    "ammonomicon_entry": "Opens any lock. Never consumed.\n\nThe ultimate tool in the Gungeon Acquisitions' Department's arsenal.",
+    "id": 166
   },
   {
     "name": "Shield of the Maiden",
@@ -48495,7 +48623,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ea/Shotga_Cola.png",
     "type": "Passive",
     "quote": "Speed Up",
-    "quality": "C",
+    "quality": "B",
     "effect": "Increases movement speed by 1.5.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -48629,14 +48757,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Highly caffeinated, save the cap."
+    "ammonomicon_entry": "Highly caffeinated, save the cap.",
+    "id": 426
   },
   {
     "name": "Shotgun Coffee",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/02/Shotgun_Coffee.png",
     "type": "Passive",
     "quote": "Speed Up",
-    "quality": "C",
+    "quality": "B",
     "effect": "Increases movement speed by 1.2.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -48673,14 +48802,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases movement speed."
+    "ammonomicon_entry": "Increases movement speed.",
+    "id": 427
   },
   {
     "name": "Silver Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c3/Silver_Bullets.png",
     "type": "Passive",
     "quote": "Blessed Metal",
-    "quality": "C",
+    "quality": "B",
     "effect": "Increases damage to jammed enemies by 225% (total x3.25) and to bosses by 25%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -48838,14 +48968,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Massively increased damage to the Jammed. Also somewhat effective against bosses.\n\nThese bullets have been individually blessed to strike down the accursed."
+    "ammonomicon_entry": "Massively increased damage to the Jammed. Also somewhat effective against bosses.\n\nThese bullets have been individually blessed to strike down the accursed.",
+    "id": 538
   },
   {
     "name": "Singularity",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/d0/Singularity.png",
     "type": "Active",
     "quote": "Sucks",
-    "quality": "C",
+    "quality": "B",
     "effect": "Spawns a black hole that sucks enemies, bullets, and items into it for 8 seconds. Enemies take damage; bullets are destroyed.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -48951,7 +49082,8 @@
     "recharge_time": "750 dmg",
     "sell_price": "21",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Creates a small black hole, damaging any enemies and destroying any projectiles caught in its gravitational pull. First pioneered by the Hegemony of Man during the Ten Days' War, the Portable Star Crusher was deemed too dangerous for broad deployment."
+    "ammonomicon_entry": "Creates a small black hole, damaging any enemies and destroying any projectiles caught in its gravitational pull. First pioneered by the Hegemony of Man during the Ten Days' War, the Portable Star Crusher was deemed too dangerous for broad deployment.",
+    "id": 155
   },
   {
     "name": "Sixth Chamber",
@@ -49396,7 +49528,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e8/Snowballets.png",
     "type": "Passive",
     "quote": "Powder Power",
-    "quality": "A",
+    "quality": "S",
     "effect": "Bullets increase in size and damage the further they travel.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -49529,14 +49661,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Bullets grow in size and damage as they travel. These bullets draw ambient bullet particles from the Gungeon's atmosphere, steadily increasing in size. Bullet Kin have been seen stacking them for fun. Arguments frequently break out over the sole scarf in the Gungeon."
+    "ammonomicon_entry": "Bullets grow in size and damage as they travel. These bullets draw ambient bullet particles from the Gungeon's atmosphere, steadily increasing in size. Bullet Kin have been seen stacking them for fun. Arguments frequently break out over the sole scarf in the Gungeon.",
+    "id": 636
   },
   {
     "name": "Space Friend",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/06/Space_Friend.png",
     "type": "Passive",
     "quote": "A Friend From The Space",
-    "quality": "B",
+    "quality": "A",
     "effect": "Follows the player, firing lasers that deal 5 damage. Blocks enemy bullets.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -49746,14 +49879,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Companion. Fires upon foes. This tiny ship is captained by a heroic, tiny spacefarer. Perhaps he or she has a tiny past full of tiny regrets?"
+    "ammonomicon_entry": "Companion. Fires upon foes. This tiny ship is captained by a heroic, tiny spacefarer. Perhaps he or she has a tiny past full of tiny regrets?",
+    "id": 249
   },
   {
     "name": "Spice",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/97/Spice.png",
     "type": "Active",
     "quote": "A tantalizing cube of power.",
-    "quality": "A",
+    "quality": "S",
     "effect": "Single use. Stats increase per use: 1st (+1 heart, +20% speed, -25% spread), 2nd (+1 heart, -10% enemy bullets, +20% fire rate), 3rd (-1 heart, +20% dmg), 4th+ (-1 heart, +15% dmg).",
     "curse": 0.0,
     "coolness": 0.0,
@@ -50377,7 +50511,8 @@
     "sell_price": "41",
     "recharge_time": "Single-Use",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases combat prowess, with absolutely no downside!\n\nA potent gun-enhancing drug from the far reaches of the galaxy. It is known to be extremely addictive, and extremely expensive."
+    "ammonomicon_entry": "Increases combat prowess, with absolutely no downside!\n\nA potent gun-enhancing drug from the far reaches of the galaxy. It is known to be extremely addictive, and extremely expensive.",
+    "id": 276
   },
   {
     "name": "Sponge",
@@ -50737,7 +50872,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/5a/Sprun.png",
     "type": "Passive",
     "quote": "The Way of Guns",
-    "quality": "A",
+    "quality": "S",
     "effect": "Summons a sprite that grants Windgunner for ~10 seconds when a random trigger is met. Trigger is chosen on pickup and remains fixed.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -51308,14 +51443,15 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Transforms into a powerful weapon under mysterious circumstances.\n\nThis Bullet Sprite will transform into an enormously powerful radiant energy weapon under certain circumstances. Traditionally, this means showing proficiency in bridge delivery and maintenance. If no bridge is available, however, it will take less important things like courage or determination into consideration."
+    "ammonomicon_entry": "Transforms into a powerful weapon under mysterious circumstances.\n\nThis Bullet Sprite will transform into an enormously powerful radiant energy weapon under certain circumstances. Traditionally, this means showing proficiency in bridge delivery and maintenance. If no bridge is available, however, it will take less important things like courage or determination into consideration.",
+    "id": 578
   },
   {
     "name": "Stout Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/68/Stout_Bullets.png",
     "type": "Passive",
     "quote": "Up Close and Personal",
-    "quality": "B",
+    "quality": "A",
     "effect": "At close range, bullets are 50% larger and deal 12.5%-75% more damage. After 7 tiles, damage is halved. Decreases bullet speed by 30%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -51490,14 +51626,15 @@
     "sell_price": "30",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Increases damage at close range. These bullets were taken from Frifle's private collection, but lost to the labyrinth during his first attempt at the Gungeon."
+    "ammonomicon_entry": "Increases damage at close range. These bullets were taken from Frifle's private collection, but lost to the labyrinth during his first attempt at the Gungeon.",
+    "id": 523
   },
   {
     "name": "Stuffed Star",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f7/Stuffed_Star.png",
     "type": "Active",
     "quote": "Protective Plush",
-    "quality": "B",
+    "quality": "A",
     "effect": "While active, the player is invincible to most forms of damage for 9 seconds. Pits and flame traps can still harm the player.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -51634,14 +51771,15 @@
     "recharge_time": "600 dmg",
     "duration": "9 seconds",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Provides temporary invulnerability.\n\nThis is a shooting star which has been embalmed and stuffed with soft fuzz. Tape several to your body and be safe from harm."
+    "ammonomicon_entry": "Provides temporary invulnerability.\n\nThis is a shooting star which has been embalmed and stuffed with soft fuzz. Tape several to your body and be safe from harm.",
+    "id": 433
   },
   {
     "name": "Sunglasses",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/92/Sunglasses.png",
     "type": "Passive",
     "quote": "Bright Future",
-    "quality": "C",
+    "quality": "B",
     "effect": "Slows time by 55% and increases dodge roll distance/speed by 25% for 2 seconds after an explosion. 10s cooldown. Increases coolness by 2.",
     "curse": 0.0,
     "coolness": 2.0,
@@ -51834,7 +51972,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Slows down time during explosions. Increases dodge power during explosions.\n\nThese sunglasses belonged to an extremely cool Gungeoneer. He put them on very slowly. Some say he is still putting them on."
+    "ammonomicon_entry": "Slows down time during explosions. Increases dodge power during explosions.\n\nThese sunglasses belonged to an extremely cool Gungeoneer. He put them on very slowly. Some say he is still putting them on.",
+    "id": 290
   },
   {
     "name": "Super Hot Watch",
@@ -52577,7 +52716,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/af/Supply_Drop.png",
     "type": "Active",
     "quote": "I Need Mags!",
-    "quality": "D",
+    "quality": "C",
     "effect": "Single use. Calls in an ammo crate at the player's position. Cannot be used at full ammo.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -52704,14 +52843,15 @@
     "recharge_time": "Single-Use",
     "chest_color": "blue",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Calls in an ammo drop."
+    "ammonomicon_entry": "Calls in an ammo drop.",
+    "id": 77
   },
   {
     "name": "Table Tech Blanks",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/35/Table_Tech_Blanks.png",
     "type": "Passive",
     "quote": "Flip Clarity",
-    "quality": "C",
+    "quality": "B",
     "effect": "Flipping a table activates a free blank.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -52865,7 +53005,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Flipping a table activates a free blank."
+    "ammonomicon_entry": "Flipping a table activates a free blank.",
+    "id": 400
   },
   {
     "name": "Table Tech Heat",
@@ -53022,7 +53163,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/88/Table_Tech_Money.png",
     "type": "Passive",
     "quote": "Flip Prosperity",
-    "quality": "D",
+    "quality": "C",
     "effect": "Flipping a table flips all other tables in the room. Each table flipped has a 40% chance to drop 1-4 coins.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -53139,14 +53280,15 @@
     "sell_price": "23",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Flipping a table flips all other tables in the room, and flipping a table has a chance to spawn money."
+    "ammonomicon_entry": "Flipping a table flips all other tables in the room, and flipping a table has a chance to spawn money.",
+    "id": 397
   },
   {
     "name": "Table Tech Rage",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/bc/Table_Tech_Rage.png",
     "type": "Passive",
     "quote": "Flips Of Fury",
-    "quality": "D",
+    "quality": "C",
     "effect": "Flipping a table briefly doubles the player's damage for 3 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -53286,14 +53428,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Flipping a table briefly doubles the player's damage."
+    "ammonomicon_entry": "Flipping a table briefly doubles the player's damage.",
+    "id": 399
   },
   {
     "name": "Table Tech Rocket",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/06/Table_Tech_Rocket.png",
     "type": "Passive",
     "quote": "End Table",
-    "quality": "C",
+    "quality": "B",
     "effect": "Flipping a table launches it forward, dealing 30 damage on impact and 30 explosion damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -53483,14 +53626,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Flipping a table causes it to launch forward and explode."
+    "ammonomicon_entry": "Flipping a table causes it to launch forward and explode.",
+    "id": 398
   },
   {
     "name": "Table Tech Shotgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/11/Table_Tech_Shotgun.png",
     "type": "Passive",
     "quote": "Flip Out",
-    "quality": "D",
+    "quality": "C",
     "effect": "Flipping a table releases 10 homing bullets dealing 6 damage each, bouncing up to 4 times.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -53687,14 +53831,15 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Tables release a homing shotgun blast of bullets when flipped."
+    "ammonomicon_entry": "Tables release a homing shotgun blast of bullets when flipped.",
+    "id": 666
   },
   {
     "name": "Table Tech Sight",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/3c/Table_Tech_Sight.png",
     "type": "Passive",
     "quote": "Flip Multiplier",
-    "quality": "D",
+    "quality": "C",
     "effect": "Flipping a table briefly slows down time and triples the number of bullets fired for 3 seconds.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -53813,7 +53958,8 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "This ancient technique briefly increases gun output whenever a table is flipped.\n\nChapter three of the \"Tabla Sutra.\" And in flipping the table, we are bettered. He who knows the table knows himself."
+    "ammonomicon_entry": "This ancient technique briefly increases gun output whenever a table is flipped.\n\nChapter three of the \"Tabla Sutra.\" And in flipping the table, we are bettered. He who knows the table knows himself.",
+    "id": 396
   },
   {
     "name": "Table Tech Stun",
@@ -53936,7 +54082,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/ac/Teleporter_Prototype.png",
     "type": "Active",
     "quote": "Teleport?!",
-    "quality": "B",
+    "quality": "A",
     "effect": "Teleports the player to a random room. Small chance for secret room, next floor, or eyeball room.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -54308,7 +54454,8 @@
     "sell_price": "30",
     "recharge_time": "450 dmg",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Teleports the user.\n\nA Gungeoneer who became annoyed with the Gungeon's inconvenient rules on teleportation developed this prototype. While it can be used at any time, its aim is unpredictable."
+    "ammonomicon_entry": "Teleports the user.\n\nA Gungeoneer who became annoyed with the Gungeon's inconvenient rules on teleportation developed this prototype. While it can be used at any time, its aim is unpredictable.",
+    "id": 449
   },
   {
     "name": "Ticket",
@@ -54703,7 +54850,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b3/Turkey.png",
     "type": "Passive",
     "quote": "Triple Tap",
-    "quality": "C",
+    "quality": "A",
     "effect": "Recovers 1 ammo after landing three sequential hits with the same gun.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -54967,14 +55114,15 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Recovers a small amount of ammo on landing three sequential shots. According to historical records, birds such as this were frequently given out for killing groups of creatures named 'pins' with large, rudimentary projectiles."
+    "ammonomicon_entry": "Recovers a small amount of ammo on landing three sequential shots. According to historical records, birds such as this were frequently given out for killing groups of creatures named 'pins' with large, rudimentary projectiles.",
+    "id": 664
   },
   {
     "name": "Turtle Problem",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e7/Turtle_Problem.png",
     "type": "Passive",
     "quote": "Is This Normal?",
-    "quality": "C",
+    "quality": "B",
     "effect": "Clearing a room spawns a turtle companion that blocks bullets and deals contact damage.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -55162,7 +55310,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Attracts normal turtles. You've just inherited a big problem."
+    "ammonomicon_entry": "Attracts normal turtles. You've just inherited a big problem.",
+    "id": 645
   },
   {
     "name": "Unity",
@@ -55550,7 +55699,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/bd/Utility_Belt.png",
     "type": "Passive",
     "quote": "All Capacity Up!",
-    "quality": "C",
+    "quality": "B",
     "effect": "Grants an extra active item slot and increases maximum ammo by 20%.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -55824,7 +55973,8 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Grants an extra active item slot and increases maximum ammo by 20%."
+    "ammonomicon_entry": "Grants an extra active item slot and increases maximum ammo by 20%.",
+    "id": 131
   },
   {
     "name": "Vorpal Bullets",
@@ -56698,7 +56848,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/09/Wingman.png",
     "type": "Passive",
     "quote": "Got Your Back",
-    "quality": "A",
+    "quality": "S",
     "effect": "Orbits the player, firing homing 20-damage rockets at enemies every 5 seconds. Blocks bullets.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -56874,7 +57024,8 @@
     "sell_price": "41",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Through thick and thin, this guy has always had your back.\n\nNow, he can say the same about you."
+    "ammonomicon_entry": "Through thick and thin, this guy has always had your back.\n\nNow, he can say the same about you.",
+    "id": 491
   },
   {
     "name": "Wolf",
@@ -57529,14 +57680,15 @@
     "sell_price": "54",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Etched into its chambers is a single worn glyph.\n\nAllows the Kin to see, as you might."
+    "ammonomicon_entry": "Etched into its chambers is a single worn glyph.\n\nAllows the Kin to see, as you might.",
+    "id": 570
   },
   {
     "name": "Zombie Bullets",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/67/Zombie_Bullets.png",
     "type": "Passive",
     "quote": "Unfinished Business",
-    "quality": "C",
+    "quality": "B",
     "effect": "33% chance for missed shots to refund 1 ammo to the source gun. Has no effect on beam weapons.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -57741,6 +57893,7 @@
     "sell_price": "21",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Occasionally refunds ammo when bullets miss. Missed shots sometimes return from the dead, mindlessly seeking the closure they never found in life."
+    "ammonomicon_entry": "Occasionally refunds ammo when bullets miss. Missed shots sometimes return from the dead, mindlessly seeking the closure they never found in life.",
+    "id": 528
   }
 ]

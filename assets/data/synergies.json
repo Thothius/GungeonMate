@@ -266,6 +266,10 @@
         "t": "text",
         "v": " fires two parallel columns of notes, shoots a guitar pick with a chance to stun upon reloading, and changes appearance to that of a Dean Z Blue Burst guitar."
       }
+    ],
+    "game_name_key": "#ALTERNATIVE_ROCK",
+    "game_ids": [
+      149
     ]
   },
   {
@@ -368,6 +372,10 @@
         "t": "text",
         "v": " turns into an apiary and automatically regenerates ammo over time."
       }
+    ],
+    "game_name_key": "#APIARY",
+    "game_ids": [
+      14
     ]
   },
   {
@@ -383,6 +391,11 @@
         "t": "text",
         "v": "The guns are dual-wielded."
       }
+    ],
+    "game_name_key": "#ASSAULTANDBATTERY",
+    "game_ids": [
+      96,
+      153
     ]
   },
   {
@@ -403,6 +416,10 @@
         "t": "text",
         "v": "A.W.P.'s color changes to orange and white, its shots freeze enemies, and it deals 62.5% more damage."
       }
+    ],
+    "game_name_key": "#ARCTIC_WARFARE",
+    "game_ids": [
+      5
     ]
   },
   {
@@ -418,6 +435,11 @@
         "t": "text",
         "v": "Both guns gain increased shot speed and deal 25% more damage."
       }
+    ],
+    "game_name_key": "#ARMOREDCORE",
+    "game_ids": [
+      377,
+      578
     ]
   },
   {
@@ -528,6 +550,10 @@
         "t": "text",
         "v": " slowly regenerates ammo over time."
       }
+    ],
+    "game_name_key": "#BATTERY_POWERED",
+    "game_ids": [
+      153
     ]
   },
   {
@@ -546,6 +572,10 @@
         "t": "text",
         "v": "Bombs periodically spawn and orbit the player, exploding and dealing 40 damage upon touching an enemy."
       }
+    ],
+    "game_name_key": "#BATTLEMODE",
+    "game_ids": [
+      661
     ]
   },
   {
@@ -607,6 +637,10 @@
         "t": "text",
         "v": "'s rate of fire by 34%."
       }
+    ],
+    "game_name_key": "#BEES",
+    "game_ids": [
+      14
     ]
   },
   {
@@ -655,6 +689,11 @@
         "t": "text",
         "v": "'s beam grows larger and deals more damage."
       }
+    ],
+    "game_name_key": "#BETARAY",
+    "game_ids": [
+      87,
+      204
     ]
   },
   {
@@ -704,6 +743,11 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#BIGSHOTGUNGUN",
+    "game_ids": [
+      21,
+      601
     ]
   },
   {
@@ -737,6 +781,11 @@
         "t": "text",
         "v": " alternates between its laser and a wide-angle shot similar to the Shelleton enemy."
       }
+    ],
+    "game_name_key": "#BIRTHRIGHT",
+    "game_ids": [
+      464,
+      818
     ]
   },
   {
@@ -769,6 +818,10 @@
         "t": "text",
         "v": " shot will periodically fire two bouncing cannonballs perpendicular to itself as it travels."
       }
+    ],
+    "game_name_key": "#BLACKFLAG",
+    "game_ids": [
+      327
     ]
   },
   {
@@ -792,6 +845,10 @@
         "t": "text",
         "v": "'s damage is increased by 20%, enemies hit will visually bleed, and jammed enemies will revert to normal on hit."
       }
+    ],
+    "game_name_key": "#BLADE",
+    "game_ids": [
+      656
     ]
   },
   {
@@ -807,6 +864,11 @@
         "t": "text",
         "v": "Increases the magazine size of both weapons by 50%."
       }
+    ],
+    "game_name_key": "#BLADESRUNNER",
+    "game_ids": [
+      81,
+      477
     ]
   },
   {
@@ -846,6 +908,11 @@
         "t": "text",
         "v": "'s blank duration ends."
       }
+    ],
+    "game_name_key": "#BLANKGENERATION",
+    "game_ids": [
+      461,
+      499
     ]
   },
   {
@@ -866,6 +933,11 @@
         "t": "text",
         "v": " has a chance to fire explosives."
       }
+    ],
+    "game_name_key": "#BLASTCROWN",
+    "game_ids": [
+      312,
+      551
     ]
   },
   {
@@ -958,6 +1030,11 @@
         "t": "text",
         "v": " gains 50% increased shot speed and 25% larger bullets along with a shorter charge time."
       }
+    ],
+    "game_name_key": "#BLUNDERBRACE",
+    "game_ids": [
+      122,
+      665
     ]
   },
   {
@@ -1029,6 +1106,10 @@
         "t": "text",
         "v": ", increases fire rate by 60%, and increases damage by 50%. Increases magazine size to 27, and all but the last 10 shots of each magazine will be stronger piercing lasers."
       }
+    ],
+    "game_name_key": "#BREAKFASTCLUB",
+    "game_ids": [
+      334
     ]
   },
   {
@@ -1062,6 +1143,11 @@
         "t": "text",
         "v": " spread oil instead of poison, and the player is immune to fire."
       }
+    ],
+    "game_name_key": "#BUGGINGOUT",
+    "game_ids": [
+      176,
+      193
     ]
   },
   {
@@ -1125,6 +1211,10 @@
         "t": "text",
         "v": ", and then collecting them again."
       }
+    ],
+    "game_name_key": "#BULLETKILN",
+    "game_ids": [
+      499
     ]
   },
   {
@@ -1227,6 +1317,11 @@
         "t": "text",
         "v": " fires 3 or 4 projectiles in a cone when reloaded."
       }
+    ],
+    "game_name_key": "#BUSTERGUN",
+    "game_ids": [
+      39,
+      377
     ]
   },
   {
@@ -1250,6 +1345,10 @@
         "t": "text",
         "v": " has a chance to shoot out a prickly pear that bounces off walls and shoots needles all around."
       }
+    ],
+    "game_name_key": "#CACTUS_FLOWER",
+    "game_ids": [
+      124
     ]
   },
   {
@@ -1299,6 +1398,11 @@
         "t": "text",
         "v": "'s damage bonus."
       }
+    ],
+    "game_name_key": "#CAPTAINPLANTIT",
+    "game_ids": [
+      201,
+      495
     ]
   },
   {
@@ -1394,6 +1498,10 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#CASTIRON",
+    "game_ids": [
+      157
     ]
   },
   {
@@ -1448,6 +1556,10 @@
         "t": "text",
         "v": " fires 2 drills per shot instead of the usual 1."
       }
+    ],
+    "game_name_key": "#CEREBRAL_BROS",
+    "game_ids": [
+      362
     ]
   },
   {
@@ -1492,6 +1604,11 @@
         "t": "text",
         "v": " shots have a chance to slow enemies."
       }
+    ],
+    "game_name_key": "#CHANCEONHIT",
+    "game_ids": [
+      538,
+      732
     ]
   },
   {
@@ -1642,6 +1759,11 @@
         "t": "text",
         "v": "The guns are dual-wielded."
       }
+    ],
+    "game_name_key": "#CIRCLEOFBRICKS",
+    "game_ids": [
+      376,
+      483
     ]
   },
   {
@@ -1657,6 +1779,11 @@
         "t": "text",
         "v": "The player releases a spiral of bullets whenever they take damage."
       }
+    ],
+    "game_name_key": "#CLAWNTLET",
+    "game_ids": [
+      162,
+      357
     ]
   },
   {
@@ -1706,6 +1833,11 @@
         "t": "text",
         "v": "Significantly increases the chance of firing ice bullets."
       }
+    ],
+    "game_name_key": "#COLDONES",
+    "game_ids": [
+      278,
+      344
     ]
   },
   {
@@ -1726,6 +1858,11 @@
         "t": "text",
         "v": " gains double magazine size and changes appearance."
       }
+    ],
+    "game_name_key": "#COMAMMO_BELT",
+    "game_ids": [
+      129,
+      134
     ]
   },
   {
@@ -1782,6 +1919,10 @@
         "t": "text",
         "v": " also grants flight while held."
       }
+    ],
+    "game_name_key": "#CONTRAIL",
+    "game_ids": [
+      177
     ]
   },
   {
@@ -1838,6 +1979,11 @@
         "t": "text",
         "v": "Black holes fire three tentacles while active."
       }
+    ],
+    "game_name_key": "#COSMICHORROR",
+    "game_ids": [
+      169,
+      474
     ]
   },
   {
@@ -1867,6 +2013,11 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#CRAVEGLAIVE",
+    "game_ids": [
+      448,
+      656
     ]
   },
   {
@@ -1891,6 +2042,11 @@
         "t": "text",
         "v": " deals 50% more damage if the player dies and has not yet retrieved their soul."
       }
+    ],
+    "game_name_key": "#CRESTFALLENSOUL",
+    "game_ids": [
+      178,
+      489
     ]
   },
   {
@@ -1924,6 +2080,11 @@
         "t": "text",
         "v": " shot is guaranteed to be a critical shot."
       }
+    ],
+    "game_name_key": "#CRITICALIBER",
+    "game_ids": [
+      434,
+      537
     ]
   },
   {
@@ -2058,6 +2219,11 @@
         "t": "text",
         "v": "'s damage by 25%."
       }
+    ],
+    "game_name_key": "#DEADSPACE",
+    "game_ids": [
+      394,
+      403
     ]
   },
   {
@@ -2096,6 +2262,11 @@
         "t": "text",
         "v": " fires a wide spread of 4 bullets alongside its normal shots."
       }
+    ],
+    "game_name_key": "#DEADPREZ",
+    "game_ids": [
+      9,
+      378
     ]
   },
   {
@@ -2207,6 +2378,10 @@
         "t": "text",
         "v": "The decoy will turn into a charmed enemy."
       }
+    ],
+    "game_name_key": "#DECOYOCTOROK",
+    "game_ids": [
+      474
     ]
   },
   {
@@ -2305,6 +2480,10 @@
         "t": "text",
         "v": "Increases the damage of the guns by 50%."
       }
+    ],
+    "game_name_key": "#DIAZEPAM",
+    "game_ids": [
+      437
     ]
   },
   {
@@ -2451,6 +2630,11 @@
         "t": "text",
         "v": " ammo replenishes slowly."
       }
+    ],
+    "game_name_key": "#DRWORM",
+    "game_ids": [
+      17,
+      280
     ]
   },
   {
@@ -2471,6 +2655,11 @@
         "t": "text",
         "v": " shoots a blue fireball that has a chance to burn and/or freeze enemies."
       }
+    ],
+    "game_name_key": "#DRAGUNICE",
+    "game_ids": [
+      146,
+      364
     ]
   },
   {
@@ -2491,6 +2680,11 @@
         "t": "text",
         "v": " changes appearance and its shots seek enemies."
       }
+    ],
+    "game_name_key": "#DUALINGPISTOL",
+    "game_ids": [
+      9,
+      568
     ]
   },
   {
@@ -2515,6 +2709,11 @@
         "t": "text",
         "v": " become larger and deal 50% more damage."
       }
+    ],
+    "game_name_key": "#DUMBSMARTBULLETS",
+    "game_ids": [
+      241,
+      284
     ]
   },
   {
@@ -2593,6 +2792,11 @@
         "t": "text",
         "v": "'s blank effect reflects bullets instead of deleting them."
       }
+    ],
+    "game_name_key": "#ELDERBLANKBULLETS",
+    "game_ids": [
+      499,
+      579
     ]
   },
   {
@@ -2668,6 +2872,11 @@
         "t": "text",
         "v": " is held, random enemies will periodically have explosions erupt around them, damaging them and hurting other enemies around them."
       }
+    ],
+    "game_name_key": "#EMERGENCYHELP",
+    "game_ids": [
+      63,
+      275
     ]
   },
   {
@@ -2692,6 +2901,11 @@
         "t": "text",
         "v": " is empty, it fills with a purple flame that deals 100 damage to all enemies in the room upon use."
       }
+    ],
+    "game_name_key": "#EMPTYVESSELS",
+    "game_ids": [
+      558,
+      631
     ]
   },
   {
@@ -2851,6 +3065,11 @@
         "t": "text",
         "v": " makes the spawned knives reflect bullets before getting destroyed. Knives spawned this way are tinted green."
       }
+    ],
+    "game_name_key": "#LIGHTKNIVES",
+    "game_ids": [
+      65,
+      345
     ]
   },
   {
@@ -2875,6 +3094,11 @@
         "t": "text",
         "v": " is held, an orbital appears that blocks enemy shots."
       }
+    ],
+    "game_name_key": "#FIGHTSABRETRAINING",
+    "game_ids": [
+      312,
+      345
     ]
   },
   {
@@ -3057,6 +3281,10 @@
         "t": "text",
         "v": " becomes round, turns enemies round instead of rectangular, and gains increased damage and reload time."
       }
+    ],
+    "game_name_key": "#FULLCIRCLE",
+    "game_ids": [
+      175
     ]
   },
   {
@@ -3106,6 +3334,11 @@
         "t": "text",
         "v": " causes it and its bullets to briefly freeze."
       }
+    ],
+    "game_name_key": "#GARBAGECOLLECTION",
+    "game_ids": [
+      154,
+      495
     ]
   },
   {
@@ -3409,6 +3642,11 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#GILDEDTABLES",
+    "game_ids": [
+      397,
+      532
     ]
   },
   {
@@ -3448,6 +3686,11 @@
         "t": "text",
         "v": "This synergy does nothing."
       }
+    ],
+    "game_name_key": "#GREENTHUMB",
+    "game_ids": [
+      197,
+      550
     ]
   },
   {
@@ -3709,6 +3952,11 @@
         "t": "text",
         "v": "'s charge attack also sends out anvils in all directions."
       }
+    ],
+    "game_name_key": "#HAMMERANDANVIL",
+    "game_ids": [
+      390,
+      393
     ]
   },
   {
@@ -3742,6 +3990,11 @@
         "t": "text",
         "v": " gets 5 hammer shots at the end of every magazine."
       }
+    ],
+    "game_name_key": "#HAMMERANDNAIL",
+    "game_ids": [
+      26,
+      91
     ]
   },
   {
@@ -3796,6 +4049,10 @@
         "t": "text",
         "v": " fires four explosive shots at a time."
       }
+    ],
+    "game_name_key": "#HARDWOOD",
+    "game_ids": [
+      339
     ]
   },
   {
@@ -3816,6 +4073,11 @@
         "t": "text",
         "v": " fires homing skulls."
       }
+    ],
+    "game_name_key": "#HEADSUP",
+    "game_ids": [
+      598,
+      602
     ]
   },
   {
@@ -3836,6 +4098,11 @@
         "t": "text",
         "v": " heals the player instead of dealing damage."
       }
+    ],
+    "game_name_key": "#HEARTSHAPEDBOX",
+    "game_ids": [
+      422,
+      525
     ]
   },
   {
@@ -3871,6 +4138,11 @@
         "t": "text",
         "v": " changes appearance, gains increased knockback and increased accuracy."
       }
+    ],
+    "game_name_key": "#HEAVYJOLTER",
+    "game_ids": [
+      47,
+      111
     ]
   },
   {
@@ -3898,6 +4170,10 @@
         "t": "text",
         "v": "'s shot speed by 25% and increases damage by 20%."
       }
+    ],
+    "game_name_key": "#HEAVYMETAL",
+    "game_ids": [
+      393
     ]
   },
   {
@@ -3946,6 +4222,10 @@
         "t": "text",
         "v": " spawns a hell portal that sucks enemies in and deals high damage."
       }
+    ],
+    "game_name_key": "#HELLHOLE",
+    "game_ids": [
+      155
     ]
   },
   {
@@ -4031,6 +4311,11 @@
         "t": "text",
         "v": " is held."
       }
+    ],
+    "game_name_key": "#HIDDENTECHSHOTGUN",
+    "game_ids": [
+      601,
+      633
     ]
   },
   {
@@ -4046,6 +4331,11 @@
         "t": "text",
         "v": "Flipping tables ignite enemies in higher damage green fire. Range is also greatly increased"
       }
+    ],
+    "game_name_key": "#HIDDENTECHFLARE",
+    "game_ids": [
+      295,
+      666
     ]
   },
   {
@@ -4088,6 +4378,11 @@
         "t": "text",
         "v": " creates a large circular area that slows time."
       }
+    ],
+    "game_name_key": "#HOLYBELL",
+    "game_ids": [
+      237,
+      444
     ]
   },
   {
@@ -4117,6 +4412,11 @@
         "t": "text",
         "v": " fires a banana at each enemy it charms."
       }
+    ],
+    "game_name_key": "#HORNUCOPIA",
+    "game_ids": [
+      206,
+      478
     ]
   },
   {
@@ -4152,6 +4452,11 @@
         "t": "text",
         "v": "Significantly increases the chance of firing fire bullets."
       }
+    ],
+    "game_name_key": "#HOTONES",
+    "game_ids": [
+      295,
+      343
     ]
   },
   {
@@ -4287,6 +4592,11 @@
         "t": "text",
         "v": "'s stream."
       }
+    ],
+    "game_name_key": "#HYDROPUMP",
+    "game_ids": [
+      10,
+      306
     ]
   },
   {
@@ -4353,6 +4663,10 @@
         "t": "text",
         "v": "'s fire rate is decreased, damage and reload time are increased, and its bullets will inflict slow and stun."
       }
+    ],
+    "game_name_key": "#NEEDSCISSORS",
+    "game_ids": [
+      42
     ]
   },
   {
@@ -4368,6 +4682,11 @@
         "t": "text",
         "v": "The guns are dual-wielded."
       }
+    ],
+    "game_name_key": "#STUDIEDBLADE",
+    "game_ids": [
+      341,
+      479
     ]
   },
   {
@@ -4469,6 +4788,10 @@
         "t": "text",
         "v": " projectile that splits and bounces."
       }
+    ],
+    "game_name_key": "#ICETOMEETYOU",
+    "game_ids": [
+      364
     ]
   },
   {
@@ -4498,6 +4821,11 @@
         "t": "text",
         "v": "'s stream is increased."
       }
+    ],
+    "game_name_key": "#ICEWATER",
+    "game_ids": [
+      10,
+      402
     ]
   },
   {
@@ -4553,6 +4881,11 @@
         "t": "text",
         "v": "A creature appears at entrances to secret rooms, revealing their location."
       }
+    ],
+    "game_name_key": "#INSIGHT",
+    "game_ids": [
+      346,
+      363
     ]
   },
   {
@@ -4722,6 +5055,11 @@
         "t": "text",
         "v": "Reloading chills and freezes nearby enemies. Thrown guns deal 180% more damage."
       }
+    ],
+    "game_name_key": "#JOTUNTIME",
+    "game_ids": [
+      364,
+      387
     ]
   },
   {
@@ -4780,6 +5118,11 @@
         "t": "text",
         "v": " is active."
       }
+    ],
+    "game_name_key": "#JUNKMAIL",
+    "game_ids": [
+      28,
+      814
     ]
   },
   {
@@ -4800,6 +5143,11 @@
         "t": "text",
         "v": " becomes a capital letter R and transforms into a one shot rocket launcher. It fires the word ROCKET with cloud sprites when shot, and creates a cartoony BOOM cloud when it hits something."
       }
+    ],
+    "game_name_key": "#JUSTINCASE",
+    "game_ids": [
+      108,
+      340
     ]
   },
   {
@@ -4863,6 +5211,11 @@
         "t": "text",
         "v": " is held."
       }
+    ],
+    "game_name_key": "#JUSTSHOOTME",
+    "game_ids": [
+      481,
+      814
     ]
   },
   {
@@ -4887,6 +5240,11 @@
         "t": "text",
         "v": " spawns a shadow clone of the player that mirrors their movements and fires towards the crosshair whenever the player fires."
       }
+    ],
+    "game_name_key": "#KAGEBUNSHIN",
+    "game_ids": [
+      71,
+      352
     ]
   },
   {
@@ -4930,6 +5288,10 @@
         "t": "text",
         "v": " grabs two enemies at a time."
       }
+    ],
+    "game_name_key": "#KALIBERSGRIP",
+    "game_ids": [
+      474
     ]
   },
   {
@@ -4953,6 +5315,10 @@
         "t": "text",
         "v": " turns grey and has an increased rate of fire."
       }
+    ],
+    "game_name_key": "#KALIBREATH",
+    "game_ids": [
+      146
     ]
   },
   {
@@ -5011,6 +5377,11 @@
         "t": "text",
         "v": "'s icon color goes from red to purple to grey instead of ending at red."
       }
+    ],
+    "game_name_key": "#KEEPINGTHEBEAT",
+    "game_ids": [
+      119,
+      280
     ]
   },
   {
@@ -5035,6 +5406,11 @@
         "t": "text",
         "v": " shot whenever the player fires a gun."
       }
+    ],
+    "game_name_key": "#KEYWITNESS",
+    "game_ids": [
+      140,
+      166
     ]
   },
   {
@@ -5050,6 +5426,11 @@
         "t": "text",
         "v": "The guns are dual-wielded."
       }
+    ],
+    "game_name_key": "#KILLINGJOKE",
+    "game_ids": [
+      15,
+      510
     ]
   },
   {
@@ -5074,6 +5455,10 @@
         "t": "text",
         "v": "'s bombs become gold and spawn every time they hit an enemy."
       }
+    ],
+    "game_name_key": "#KING_BOMBER",
+    "game_ids": [
+      332
     ]
   },
   {
@@ -5094,6 +5479,11 @@
         "t": "text",
         "v": " spawns three clones."
       }
+    ],
+    "game_name_key": "#KINJUTSU",
+    "game_ids": [
+      71,
+      820
     ]
   },
   {
@@ -5180,6 +5570,11 @@
         "t": "text",
         "v": " has a chance to send out three planets, which damage enemies and start orbiting the player if they fail to hit an enemy."
       }
+    ],
+    "game_name_key": "#LANDAMONGTHESTARS",
+    "game_ids": [
+      20,
+      52
     ]
   },
   {
@@ -5200,6 +5595,10 @@
         "t": "text",
         "v": " becomes blue and gold, and fires 3 sets of 3 shots in a spread per trigger pull. Each shot bounces once."
       }
+    ],
+    "game_name_key": "#LASERLIGHTSHOW",
+    "game_ids": [
+      54
     ]
   },
   {
@@ -5215,6 +5614,11 @@
         "t": "text",
         "v": "Grants a large attack speed increase for a short duration after an enemy is killed."
       }
+    ],
+    "game_name_key": "#LICHESSTITCHES",
+    "game_ids": [
+      213,
+      271
     ]
   },
   {
@@ -5277,6 +5681,10 @@
         "t": "text",
         "v": " gains the appearance of a flower. Its magazine size increases to 32, its maximum ammo increases to 250, its fire rate greatly increases, and it deals half damage."
       }
+    ],
+    "game_name_key": "#LOTUS_BLOOM",
+    "game_ids": [
+      156
     ]
   },
   {
@@ -5292,6 +5700,11 @@
         "t": "text",
         "v": "The guns are dual-wielded."
       }
+    ],
+    "game_name_key": "#LOVEHATE",
+    "game_ids": [
+      143,
+      379
     ]
   },
   {
@@ -5351,6 +5764,11 @@
         "t": "text",
         "v": " home in on enemies."
       }
+    ],
+    "game_name_key": "#MADCATS",
+    "game_ids": [
+      511,
+      817
     ]
   },
   {
@@ -5371,6 +5789,11 @@
         "t": "text",
         "v": "'s radius doubles."
       }
+    ],
+    "game_name_key": "#MAGAZINECLIPS",
+    "game_ids": [
+      280,
+      814
     ]
   },
   {
@@ -5407,6 +5830,10 @@
         "t": "text",
         "v": ", it occasionally fires a homing bullet at an enemy for free."
       }
+    ],
+    "game_name_key": "#MAKPAK",
+    "game_ids": [
+      79
     ]
   },
   {
@@ -5440,6 +5867,11 @@
         "t": "text",
         "v": " lasers is fired."
       }
+    ],
+    "game_name_key": "#MASSCUTTER",
+    "game_ids": [
+      365,
+      394
     ]
   },
   {
@@ -5468,6 +5900,10 @@
         "t": "text",
         "v": "'s shots."
       }
+    ],
+    "game_name_key": "#MASSIVEEFFECT",
+    "game_ids": [
+      365
     ]
   },
   {
@@ -5498,6 +5934,10 @@
         "t": "text",
         "v": ". Reloading the gun with a full magazine cycles through the unlocked modes."
       }
+    ],
+    "game_name_key": "#MASTERCHAMBERS",
+    "game_ids": [
+      647
     ]
   },
   {
@@ -5559,6 +5999,11 @@
         "t": "text",
         "v": " retains its ammo."
       }
+    ],
+    "game_name_key": "#MAXPANE",
+    "game_ids": [
+      540,
+      565
     ]
   },
   {
@@ -5597,6 +6042,11 @@
         "t": "text",
         "v": " ammo."
       }
+    ],
+    "game_name_key": "#MELTDOWN",
+    "game_ids": [
+      87,
+      443
     ]
   },
   {
@@ -5650,6 +6100,11 @@
         "t": "text",
         "v": " reflects enemy bullets while active."
       }
+    ],
+    "game_name_key": "#MIRRORSHIELD",
+    "game_ids": [
+      190,
+      447
     ]
   },
   {
@@ -5729,6 +6184,11 @@
         "t": "text",
         "v": "A moon orbits the player that blocks enemy shots."
       }
+    ],
+    "game_name_key": "#MOONPLANET",
+    "game_ids": [
+      20,
+      597
     ]
   },
   {
@@ -5767,6 +6227,11 @@
         "t": "text",
         "v": " fires as its last shot."
       }
+    ],
+    "game_name_key": "#MRSHADOW",
+    "game_ids": [
+      6,
+      352
     ]
   },
   {
@@ -5787,6 +6252,11 @@
         "t": "text",
         "v": " reloads faster and its bullets gain homing."
       }
+    ],
+    "game_name_key": "#MONSTERGRUB",
+    "game_ids": [
+      313,
+      347
     ]
   },
   {
@@ -5829,6 +6299,11 @@
         "t": "text",
         "v": "'s water spreads fire instead of extinguishing it."
       }
+    ],
+    "game_name_key": "#NAPALMB",
+    "game_ids": [
+      10,
+      242
     ]
   },
   {
@@ -5853,6 +6328,10 @@
         "t": "text",
         "v": " evolves after every 3 unique enemy types killed instead of 5."
       }
+    ],
+    "game_name_key": "#NATURALSELECTION",
+    "game_ids": [
+      755
     ]
   },
   {
@@ -6002,6 +6481,10 @@
         "t": "text",
         "v": " and its shots turn grey, and the lasers deal 25% more damage."
       }
+    ],
+    "game_name_key": "#NOXIN_CANNON",
+    "game_ids": [
+      199
     ]
   },
   {
@@ -6026,6 +6509,11 @@
         "t": "text",
         "v": " fires a normal blue fish and a red fish that sets enemies on fire."
       }
+    ],
+    "game_name_key": "#ONEFISHTWOFISH",
+    "game_ids": [
+      7,
+      568
     ]
   },
   {
@@ -6065,6 +6553,11 @@
         "t": "text",
         "v": "Planets fired by Mr. Accretion Jr. have smaller bullets orbiting them like moons; these bullets persist when the missed shots start orbiting the player."
       }
+    ],
+    "game_name_key": "#ORRERY",
+    "game_ids": [
+      597,
+      661
     ]
   },
   {
@@ -6089,6 +6582,11 @@
         "t": "text",
         "v": "'s black hole causes it to explode and deal 100 damage to all enemies in the room."
       }
+    ],
+    "game_name_key": "#OUTERLIMITS",
+    "game_ids": [
+      155,
+      597
     ]
   },
   {
@@ -6138,6 +6636,10 @@
         "t": "text",
         "v": " fires three planes."
       }
+    ],
+    "game_name_key": "#PAPERWORK",
+    "game_ids": [
+      477
     ]
   },
   {
@@ -6153,6 +6655,11 @@
         "t": "text",
         "v": "While holding either gun in a room with enemies, paper lanterns periodically spawn, which drift towards enemies and deal damage."
       }
+    ],
+    "game_name_key": "#PAPERLANTERNS",
+    "game_ids": [
+      477,
+      520
     ]
   },
   {
@@ -6201,6 +6708,11 @@
         "t": "text",
         "v": " shot fires two maps."
       }
+    ],
+    "game_name_key": "#PARCHMENTAL",
+    "game_ids": [
+      137,
+      477
     ]
   },
   {
@@ -6216,6 +6728,11 @@
         "t": "text",
         "v": "Whenever a smaller bullet hits an enemy, a laser is automatically fired in its direction."
       }
+    ],
+    "game_name_key": "#PARTICLEACCELERATOR",
+    "game_ids": [
+      228,
+      273
     ]
   },
   {
@@ -6262,6 +6779,10 @@
         "t": "text",
         "v": " shots become larger, deal more damage, and explode."
       }
+    ],
+    "game_name_key": "#PEACANNON",
+    "game_ids": [
+      197
     ]
   },
   {
@@ -6426,6 +6947,10 @@
         "t": "text",
         "v": " fires green fireballs, setting enemies permanently aflame."
       }
+    ],
+    "game_name_key": "#PITCHPERFECT",
+    "game_ids": [
+      336
     ]
   },
   {
@@ -6446,6 +6971,10 @@
         "t": "text",
         "v": " reaches its laser beam phase earlier."
       }
+    ],
+    "game_name_key": "#PLANTPOWER",
+    "game_ids": [
+      516
     ]
   },
   {
@@ -6654,6 +7183,11 @@
         "t": "text",
         "v": " orbits the player and fires whenever the player fires."
       }
+    ],
+    "game_name_key": "#PULPGUNGEON",
+    "game_ids": [
+      30,
+      485
     ]
   },
   {
@@ -6669,6 +7203,11 @@
         "t": "text",
         "v": "When at full health, picking up hearts will turn them to coins."
       }
+    ],
+    "game_name_key": "#QUEENOFHEARTS",
+    "game_ids": [
+      214,
+      425
     ]
   },
   {
@@ -6717,6 +7256,11 @@
         "t": "text",
         "v": "'s max ammo capacity by 25%. Pairs of bullets are fired alongside the laser. Massively reduces ammo consumption."
       }
+    ],
+    "game_name_key": "#RAIDEN",
+    "game_ids": [
+      107,
+      232
     ]
   },
   {
@@ -6761,6 +7305,11 @@
         "t": "text",
         "v": " becomes a recycling bin with higher damage and a larger magazine size, and no longer creates poison projectiles."
       }
+    ],
+    "game_name_key": "#RECYCLING",
+    "game_ids": [
+      154,
+      507
     ]
   },
   {
@@ -6851,6 +7400,11 @@
         "t": "text",
         "v": "Quadruples the guns' rate of fire but decreases their damage by 25%."
       }
+    ],
+    "game_name_key": "#REGULARGUNS",
+    "game_ids": [
+      15,
+      51
     ]
   },
   {
@@ -6903,6 +7457,10 @@
         "t": "text",
         "v": "'s effect ends, the bullets that were absorbed are shot out of the player dealing damage to enemies."
       }
+    ],
+    "game_name_key": "#RELODESTAR",
+    "game_ids": [
+      536
     ]
   },
   {
@@ -6944,6 +7502,11 @@
         "t": "text",
         "v": " by 25%, and allows its bullets to bounce five times instead of twice."
       }
+    ],
+    "game_name_key": "#REVOLUTIONARY",
+    "game_ids": [
+      9,
+      115
     ]
   },
   {
@@ -6992,6 +7555,10 @@
         "t": "text",
         "v": " shots light enemies on fire and bounce."
       }
+    ],
+    "game_name_key": "#RUBY_CARBINE",
+    "game_ids": [
+      229
     ]
   },
   {
@@ -7204,6 +7771,11 @@
         "t": "text",
         "v": " spells out COWABUNGA, BOOYAKASHA, THANK YOU, THANKS, HASTA LA VISTA, TOODLES, GOODBYE, FAREWELL and GAME OVER."
       }
+    ],
+    "game_name_key": "#REPLETE",
+    "game_ids": [
+      340,
+      762
     ]
   },
   {
@@ -7321,6 +7893,11 @@
         "t": "text",
         "v": " heals five hearts."
       }
+    ],
+    "game_name_key": "#SAUSAGEANDPEPPERS",
+    "game_ids": [
+      253,
+      291
     ]
   },
   {
@@ -7448,6 +8025,11 @@
         "t": "text",
         "v": " spawns two friendly Gatling Gulls instead of one."
       }
+    ],
+    "game_name_key": "#SECRETTWIN",
+    "game_ids": [
+      84,
+      320
     ]
   },
   {
@@ -7514,6 +8096,11 @@
         "t": "text",
         "v": " fires at nearby enemies. Reduces the guns' spread by 60%, increasing their accuracy."
       }
+    ],
+    "game_name_key": "#SHADOWWARRIOR",
+    "game_ids": [
+      16,
+      329
     ]
   },
   {
@@ -7534,6 +8121,11 @@
         "t": "text",
         "v": " moves and shoots much faster."
       }
+    ],
+    "game_name_key": "#SHELLATON",
+    "game_ids": [
+      166,
+      818
     ]
   },
   {
@@ -7567,6 +8159,11 @@
         "t": "text",
         "v": " ."
       }
+    ],
+    "game_name_key": "#SHIELDNIGHT",
+    "game_ids": [
+      447,
+      550
     ]
   },
   {
@@ -7705,6 +8302,11 @@
         "t": "text",
         "v": " can be charged longer to fire a special arrow that deals 50 damage."
       }
+    ],
+    "game_name_key": "#SLINGSANDARROWS",
+    "game_ids": [
+      8,
+      382
     ]
   },
   {
@@ -7807,6 +8409,10 @@
         "t": "text",
         "v": "Reduces reload times of the guns by 30%. Standing still for a short time (around 1–2 seconds) causes the player to glow yellow, increasing the damage of the guns by 50%. This effect persists until the player switches weapons or moves. Sniper Shells and Professionals are permanently charmed."
       }
+    ],
+    "game_name_key": "#SNIPERWOLF",
+    "game_ids": [
+      492
     ]
   },
   {
@@ -7827,6 +8433,11 @@
         "t": "text",
         "v": " fires multiple snowballs at once in a shotgun spread with lowered rate of fire."
       }
+    ],
+    "game_name_key": "#SNOWBALLSHOTGUN",
+    "game_ids": [
+      402,
+      636
     ]
   },
   {
@@ -8278,7 +8889,9 @@
         "t": "text",
         "v": "Increases the magazine size of the guns by 50%, increases the size of their projectiles, and allows them to bounce once."
       }
-    ]
+    ],
+    "game_name_key": "#SUPERSERUM",
+    "game_ids": []
   },
   {
     "name": "Super Space Turtle DX",
@@ -8318,6 +8931,11 @@
         "t": "text",
         "v": " gains triple shot. Each shot deals 25% of the normal damage, but the genie deals full damage."
       }
+    ],
+    "game_name_key": "#SWEETNESSANDLIGHT",
+    "game_ids": [
+      279,
+      562
     ]
   },
   {
@@ -8387,6 +9005,10 @@
         "t": "text",
         "v": ", a red aura appears around companions. Every enemy in this aura will be ignited."
       }
+    ],
+    "game_name_key": "#TEAFORTWO",
+    "game_ids": [
+      596
     ]
   },
   {
@@ -8407,6 +9029,11 @@
         "t": "text",
         "v": "'s tears turn red and inflict slow ."
       }
+    ],
+    "game_name_key": "#TEARSOFBLOOD",
+    "game_ids": [
+      33,
+      167
     ]
   },
   {
@@ -8599,6 +9226,11 @@
         "t": "text",
         "v": " fires two lasers instead of one."
       }
+    ],
+    "game_name_key": "#THERMALIMAGING",
+    "game_ids": [
+      290,
+      543
     ]
   },
   {
@@ -8638,6 +9270,11 @@
         "t": "text",
         "v": "'s spread is drastically decreased."
       }
+    ],
+    "game_name_key": "#THREEPARTHARMONY",
+    "game_ids": [
+      119,
+      506
     ]
   },
   {
@@ -8735,6 +9372,10 @@
         "t": "text",
         "v": ", each Guon Stone has a chance to shoot a Tetromino corresponding to the type of Guon Stone."
       }
+    ],
+    "game_name_key": "#TILEMATCH",
+    "game_ids": [
+      483
     ]
   },
   {
@@ -8771,6 +9412,11 @@
         "t": "text",
         "v": "The guns are dual-wielded. All guns have double ammo capacity and 50% larger magazine size."
       }
+    ],
+    "game_name_key": "#TRIGGERTWINS",
+    "game_ids": [
+      22,
+      35
     ]
   },
   {
@@ -8786,6 +9432,11 @@
         "t": "text",
         "v": "Grants three consecutive dodge rolls."
       }
+    ],
+    "game_name_key": "#TRIPLEJUMP",
+    "game_ids": [
+      212,
+      526
     ]
   },
   {
@@ -8815,6 +9466,11 @@
         "t": "text",
         "v": "'s triple shot explodes upon hitting an enemy."
       }
+    ],
+    "game_name_key": "#TRIPLESTICKY",
+    "game_ids": [
+      4,
+      381
     ]
   },
   {
@@ -8859,6 +9515,11 @@
         "t": "text",
         "v": ", up to a maximum of 4."
       }
+    ],
+    "game_name_key": "#TURTLESOLUTIONS",
+    "game_ids": [
+      301,
+      645
     ]
   },
   {
@@ -8874,6 +9535,11 @@
         "t": "text",
         "v": "A shield orbits the player, blocking enemy bullets."
       }
+    ],
+    "game_name_key": "#TUTORIALIZED",
+    "game_ids": [
+      219,
+      222
     ]
   },
   {
@@ -8903,6 +9569,11 @@
         "t": "text",
         "v": " fires homing shots."
       }
+    ],
+    "game_name_key": "#TWINSNAKES",
+    "game_ids": [
+      360,
+      406
     ]
   },
   {
@@ -8971,6 +9642,11 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#TWOKINDSOFPEOPLE",
+    "game_ids": [
+      62,
+      550
     ]
   },
   {
@@ -9056,6 +9732,11 @@
         "t": "text",
         "v": " fires full-sized bullets instead of mini-bullets."
       }
+    ],
+    "game_name_key": "#USURPER",
+    "game_ids": [
+      551,
+      817
     ]
   },
   {
@@ -9074,6 +9755,10 @@
         "t": "text",
         "v": "Shots from the guns deal triple damage, are doubled in size, pierce enemies, and bounce off of obstacles."
       }
+    ],
+    "game_name_key": "#VEGETABLES",
+    "game_ids": [
+      258
     ]
   },
   {
@@ -9134,6 +9819,11 @@
         "t": "text",
         "v": "Increases knockback by 50%."
       }
+    ],
+    "game_name_key": "#VULCANRAVEN",
+    "game_ids": [
+      84,
+      307
     ]
   },
   {
@@ -9215,6 +9905,11 @@
         "t": "text",
         "v": "Both guns fire explosive wardrobes at the end of their magazines."
       }
+    ],
+    "game_name_key": "#WELLDRESSED",
+    "game_ids": [
+      150,
+      513
     ]
   },
   {
@@ -9239,6 +9934,11 @@
         "t": "text",
         "v": " is equipped when the player takes damage."
       }
+    ],
+    "game_name_key": "#WHALETIME",
+    "game_ids": [
+      133,
+      602
     ]
   },
   {
@@ -9263,6 +9963,10 @@
         "t": "text",
         "v": " has a chance to transmogrify enemies into snakes."
       }
+    ],
+    "game_name_key": "#WHATATHRILL",
+    "game_ids": [
+      98
     ]
   },
   {
@@ -9367,6 +10071,10 @@
         "t": "text",
         "v": "."
       }
+    ],
+    "game_name_key": "#WICKEDSISTER",
+    "game_ids": [
+      38
     ]
   },
   {
@@ -9411,6 +10119,11 @@
         "t": "text",
         "v": " will occasionally fire Mr. Accretion Jr. shots."
       }
+    ],
+    "game_name_key": "#WORLDSOFGUNCRAFT",
+    "game_ids": [
+      597,
+      732
     ]
   },
   {
@@ -9435,6 +10148,11 @@
         "t": "text",
         "v": " never decreases. Increases damage and bullet size by 25%."
       }
+    ],
+    "game_name_key": "#WOUNDUP",
+    "game_ids": [
+      165,
+      334
     ]
   },
   {
