@@ -352,6 +352,11 @@
         "t": "text",
         "v": " alternates between firing red and blue shots that become very slow and large after traveling a short distance. If any red and blue shots touch, the blank effect is activated."
       }
+    ],
+    "game_name_key": "#ANTIMATTERBODY",
+    "game_ids": [
+      259,
+      274
     ]
   },
   {
@@ -2195,6 +2200,11 @@
         "t": "text",
         "v": "'s charge time and increases its damage to bosses by 30%."
       }
+    ],
+    "game_name_key": "#FORTUNESFAVOR",
+    "game_ids": [
+      105,
+      358
     ]
   },
   {
@@ -2926,6 +2936,11 @@
         "t": "text",
         "v": " fires oranges at enemies, dealing 7 damage."
       }
+    ],
+    "game_name_key": "#FRUITGUON",
+    "game_ids": [
+      263,
+      485
     ]
   },
   {
@@ -4511,6 +4526,11 @@
         "t": "text",
         "v": "'s damage."
       }
+    ],
+    "game_name_key": "#MERCHMASTER",
+    "game_ids": [
+      435,
+      476
     ]
   },
   {
@@ -6169,6 +6189,11 @@
         "t": "text",
         "v": "'s reload effect."
       }
+    ],
+    "game_name_key": "#MONOCLES",
+    "game_ids": [
+      435,
+      596
     ]
   },
   {
@@ -7627,6 +7652,11 @@
         "t": "text",
         "v": " spells out LOSER, DORK, CHUMP, NOODLE, and TAFFER."
       }
+    ],
+    "game_name_key": "#ALPHABETANGRY",
+    "game_ids": [
+      323,
+      340
     ]
   },
   {
@@ -7647,6 +7677,11 @@
         "t": "text",
         "v": " spells out SILVER, BLESSED, and WEREWOLF."
       }
+    ],
+    "game_name_key": "#ALPHABETSILVER",
+    "game_ids": [
+      340,
+      538
     ]
   },
   {
@@ -7667,6 +7702,11 @@
         "t": "text",
         "v": " spells out HANDSOME, CHARM, and CUTE."
       }
+    ],
+    "game_name_key": "#ALPHABETCHARM",
+    "game_ids": [
+      340,
+      527
     ]
   },
   {
@@ -7687,6 +7727,11 @@
         "t": "text",
         "v": " spells ROCKET, BOOM, KABOOM, and POW when fired and rounds explode."
       }
+    ],
+    "game_name_key": "#ALPHABETEXPLOSIVE",
+    "game_ids": [
+      304,
+      340
     ]
   },
   {
@@ -7707,6 +7752,11 @@
         "t": "text",
         "v": " spells out SPOOKY, GHOST, and BOO."
       }
+    ],
+    "game_name_key": "#ALPHABETGHOST",
+    "game_ids": [
+      172,
+      340
     ]
   },
   {
@@ -7727,6 +7777,11 @@
         "t": "text",
         "v": " spells out BULLET+1."
       }
+    ],
+    "game_name_key": "#ALPHABETPLUSONE",
+    "game_ids": [
+      286,
+      340
     ]
   },
   {
@@ -7751,6 +7806,11 @@
         "t": "text",
         "v": ", adds an omega letter after each BULLET."
       }
+    ],
+    "game_name_key": "#ALPHABETOMEGA",
+    "game_ids": [
+      340,
+      374
     ]
   },
   {
@@ -7796,6 +7856,11 @@
         "t": "text",
         "v": " spells out CHEST and MIMIC. Can be used to open locked chests."
       }
+    ],
+    "game_name_key": "#ALPHABETANATOMY",
+    "game_ids": [
+      340,
+      487
     ]
   },
   {
@@ -7816,6 +7881,11 @@
         "t": "text",
         "v": " spells out CASH, COINS, SHELLS, and GOLD."
       }
+    ],
+    "game_name_key": "#ALPHABETGOLD",
+    "game_ids": [
+      340,
+      532
     ]
   },
   {
@@ -7840,6 +7910,11 @@
         "t": "text",
         "v": ", adds an alpha letter before each BULLET."
       }
+    ],
+    "game_name_key": "#ALPHABETALPHA",
+    "game_ids": [
+      340,
+      373
     ]
   },
   {
@@ -7860,6 +7935,11 @@
         "t": "text",
         "v": " spells out ABRA and KADABRA."
       }
+    ],
+    "game_name_key": "#ALPHABETMAGIC",
+    "game_ids": [
+      340,
+      533
     ]
   },
   {
