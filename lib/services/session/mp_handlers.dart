@@ -219,8 +219,9 @@ mixin _MpSessionHandlers on ChangeNotifier {
   void _onChatReceived(MpChat msg) {
     logEvent(MpEvent.chat(from: msg.from, text: msg.text, mine: false));
     chatMessages.add(msg);
-    if (chatMessages.length > MpSession._maxChatHistory)
+    if (chatMessages.length > MpSession._maxChatHistory) {
       chatMessages.removeAt(0);
+    }
     unreadChat.value++;
     onChatMessage?.call(msg, false);
     notifyListeners();
