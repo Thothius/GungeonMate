@@ -42897,7 +42897,7 @@
   {
     "name": "Resourceful Sack",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/df/Resourceful_Sack.png",
-    "type": "Active",
+    "type": "Passive",
     "quote": "Pack Rat's Rat Pack",
     "quality": "A",
     "effect": "Rolling through bullets collects them (max 30). Use to fire explosive cheese per bullet. Grants 3 extra active slots.",
