@@ -142,6 +142,93 @@ flutter:
     - family: PatrickHand
       fonts:
         - asset: assets/fonts/PatrickHand.ttf
+    - family: GoogleFonts.Anton
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Anton.ttf
+    - family: GoogleFonts.ArchivoBlack
+      fonts:
+        - asset: assets/fonts/GoogleFonts.ArchivoBlack.ttf
+    - family: GoogleFonts.Audiowide
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Audiowide.ttf
+    - family: GoogleFonts.BebasNeue
+      fonts:
+        - asset: assets/fonts/GoogleFonts.BebasNeue.ttf
+    - family: GoogleFonts.BlackOpsOne
+      fonts:
+        - asset: assets/fonts/GoogleFonts.BlackOpsOne.ttf
+    - family: GoogleFonts.CarterOne
+      fonts:
+        - asset: assets/fonts/GoogleFonts.CarterOne.ttf
+    - family: GoogleFonts.Cinzel
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Cinzel.ttf
+    - family: GoogleFonts.CinzelDecorative
+      fonts:
+        - asset: assets/fonts/GoogleFonts.CinzelDecorative.ttf
+    - family: GoogleFonts.DMSans
+      fonts:
+        - asset: assets/fonts/GoogleFonts.DMSans.ttf
+    - family: GoogleFonts.FasterOne
+      fonts:
+        - asset: assets/fonts/GoogleFonts.FasterOne.ttf
+    - family: GoogleFonts.Fredoka
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Fredoka.ttf
+    - family: GoogleFonts.JetBrainsMono
+      fonts:
+        - asset: assets/fonts/GoogleFonts.JetBrainsMono.ttf
+    - family: GoogleFonts.MedievalSharp
+      fonts:
+        - asset: assets/fonts/GoogleFonts.MedievalSharp.ttf
+    - family: GoogleFonts.Megrim
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Megrim.ttf
+    - family: GoogleFonts.Merriweather
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Merriweather.ttf
+    - family: GoogleFonts.Montserrat
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Montserrat.ttf
+    - family: GoogleFonts.Orbitron
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Orbitron.ttf
+    - family: GoogleFonts.PixelifySans
+      fonts:
+        - asset: assets/fonts/GoogleFonts.PixelifySans.ttf
+    - family: GoogleFonts.PlayfairDisplay
+      fonts:
+        - asset: assets/fonts/GoogleFonts.PlayfairDisplay.ttf
+    - family: GoogleFonts.PressStart2P
+      fonts:
+        - asset: assets/fonts/GoogleFonts.PressStart2P.ttf
+    - family: GoogleFonts.Rajdhani
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Rajdhani.ttf
+    - family: GoogleFonts.Righteous
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Righteous.ttf
+    - family: GoogleFonts.Rowdies
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Rowdies.ttf
+    - family: GoogleFonts.RussoOne
+      fonts:
+        - asset: assets/fonts/GoogleFonts.RussoOne.ttf
+    - family: GoogleFonts.ShareTechMono
+      fonts:
+        - asset: assets/fonts/GoogleFonts.ShareTechMono.ttf
+    - family: GoogleFonts.Silkscreen
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Silkscreen.ttf
+    - family: GoogleFonts.SpecialElite
+      fonts:
+        - asset: assets/fonts/GoogleFonts.SpecialElite.ttf
+    - family: GoogleFonts.Syncopate
+      fonts:
+        - asset: assets/fonts/GoogleFonts.Syncopate.ttf
+    - family: GoogleFonts.VT323
+      fonts:
+        - asset: assets/fonts/GoogleFonts.VT323.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

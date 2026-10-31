@@ -399,6 +399,27 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                         ),
                       ),
                     ),
+
+                  // 5. Foreground dust — the same particle system at very
+                  //    low opacity ABOVE content. Dense screens (active
+                  //    run = wall-to-wall opaque panels) hide the
+                  //    backdrop field entirely; this keeps the user's
+                  //    particle identity visible without covering UI.
+                  if (!menuVisible && !skeuo)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: Opacity(
+                          opacity: 0.18,
+                          child:
+                              buildBackdropParticleField(
+                                mode,
+                                prefs,
+                                reduceMotion: reduceMotion,
+                              ) ??
+                              const SizedBox.shrink(),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             );

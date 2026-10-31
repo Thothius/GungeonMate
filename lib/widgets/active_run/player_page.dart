@@ -23,6 +23,7 @@ import 'run_effects_block.dart';
 import '../dashboards/dashboard_swiper.dart';
 
 import 'stat_sheets.dart';
+import '../../utils/format.dart';
 import 'sort_picker.dart';
 import 'starter_hint.dart';
 import '../../screens/item_detail_screen.dart';
@@ -61,6 +62,10 @@ class PlayerPageState extends State<PlayerPage> {
   /// Per-slot inventory view mode. Defaults to `grid` (the historical
   /// look). Hydrated alongside the sort prefs and persisted on toggle.
   InvView _invView = InvView.grid;
+
+  /// Which cool/curse stepper is open inside the top panel —
+  /// 'cool', 'curse', or null (closed). Tapping the capsule toggles it.
+  String? _editStat;
 
   /// True once the user has explicitly picked a sort *or* the prefs
   /// hydration has resolved — whichever came first. Prevents a slow
@@ -164,7 +169,6 @@ class PlayerPageState extends State<PlayerPage> {
                     .reduce((a, b) => effectiveDps(a) > effectiveDps(b) ? a : b)
                     .name;
 
-
         // Synergy glow: map of lowercased name → Color for every item/gun
         // that is part of a currently-active synergy (combined inventories).
         final glowColors = p.activeSynergyGlowColors;
@@ -204,11 +208,17 @@ class PlayerPageState extends State<PlayerPage> {
                           curse: state.totalCurse,
                           robotDamageBoost: robotDmgBoost,
                           onTapCoolness:
-                              () =>
-                                  _showCoolCurseSheet(context, isCool: true),
+                              () => setState(
+                                () =>
+                                    _editStat =
+                                        _editStat == 'cool' ? null : 'cool',
+                              ),
                           onTapCurse:
-                              () =>
-                                  _showCoolCurseSheet(context, isCool: false),
+                              () => setState(
+                                () =>
+                                    _editStat =
+                                        _editStat == 'curse' ? null : 'curse',
+                              ),
                           onLongPressCoolness:
                               () => _showStatAdjuster(context, isCool: true),
                           onLongPressCurse:
@@ -224,13 +234,36 @@ class PlayerPageState extends State<PlayerPage> {
                             items: player.items,
                           ),
                           shrinesUsed: state.shrinesUsed,
+                          // Everything below the capsule row lives INSIDE
+                          // the panel: cool/curse stepper (slides out)
+                          // then the special-item tracker pills.
+                          footer: Column(
+                            children: [
+                              AnimatedSize(
+                                duration: const Duration(milliseconds: 220),
+                                curve: Curves.easeOutCubic,
+                                child:
+                                    _editStat == null
+                                        ? const SizedBox.shrink()
+                                        : _InlineStatStepper(
+                                          key: ValueKey(_editStat),
+                                          isCool: _editStat == 'cool',
+                                        ),
+                              ),
+                              if (VisualPrefs.notifier.value.showDashboards)
+                                DashboardSwiperCard(slot: _slot),
+                            ],
+                          ),
                         ),
               ),
             ),
             ListenableBuilder(
               listenable: VisualPrefs.notifier,
               builder: (context, _) {
-                if (!VisualPrefs.notifier.value.showDashboards) {
+                // Solo embeds the trackers inside the header panel —
+                // only the MP path keeps this separate sliver card.
+                if (!VisualPrefs.notifier.value.showDashboards ||
+                    !context.read<MpSession>().isActive) {
                   return const SliverToBoxAdapter(child: SizedBox.shrink());
                 }
                 return DashboardSwiper(slot: _slot);
@@ -444,21 +477,6 @@ class PlayerPageState extends State<PlayerPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
       builder: (ctx) => StatAdjusterSheet(isCool: isCool),
-    );
-  }
-
-  /// Compact cool/curse card — number, ±(1/0.5) steppers, and live
-  /// effects stacked on one card. Opened by tapping the capsule.
-  void _showCoolCurseSheet(BuildContext c, {required bool isCool}) {
-    Haptics.selection();
-    showModalBottomSheet<void>(
-      context: c,
-      backgroundColor: AppTheme.flair.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
-      isScrollControlled: true,
-      builder: (ctx) => CoolCurseSheet(isCool: isCool),
     );
   }
 
@@ -711,3 +729,100 @@ class PlayerPageState extends State<PlayerPage> {
 /// effect text, and big item pills with graphics. Owned items are full-color
 /// with a glow; unowned items are greyed but still visible.
 // ignore: unused_element
+
+/// Inline cool/curse stepper — slides out inside the header panel when
+/// a capsule is tapped. Centered live number + ±1/±0.5 buttons, nothing
+/// else (per user request — no bloat). Replaces the bottom sheet.
+class _InlineStatStepper extends StatelessWidget {
+  final bool isCool;
+  const _InlineStatStepper({super.key, required this.isCool});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<RunProvider>();
+    final value = isCool ? p.runState.coolness : p.runState.curse;
+    final accent = isCool ? const Color(0xFF4DD0E1) : const Color(0xFFBA68C8);
+
+    void apply(double delta) {
+      if (isCool) {
+        p.adjustCoolness(delta);
+      } else {
+        p.adjustCurse(delta);
+      }
+      Haptics.light();
+    }
+
+    Widget step(double delta) {
+      final positive = delta > 0;
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 3),
+          child: GestureDetector(
+            onTap: () => apply(delta),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 9),
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: positive ? 0.14 : 0.06),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: accent.withValues(alpha: positive ? 0.5 : 0.25),
+                ),
+              ),
+              child: Center(
+                child: GoopText(
+                  '${positive ? '+' : '−'}${delta.abs() == 1.0 ? '1' : '0.5'}',
+                  style: TextStyle(
+                    fontSize: FontSizes.bodyMedium,
+                    fontWeight: FontWeight.w900,
+                    color:
+                        positive ? accent : Colors.white.withValues(alpha: 0.6),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+      child: Column(
+        children: [
+          Container(
+            height: 1,
+            color: Colors.white.withValues(alpha: 0.06),
+            margin: const EdgeInsets.only(bottom: 8),
+          ),
+          Row(
+            children: [
+              step(-1),
+              step(-0.5),
+              // Centered number — the single focus of the control.
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 150),
+                    child: GoopText(
+                      key: ValueKey(value),
+                      formatStat(value),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                        color: accent,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              step(0.5),
+              step(1),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

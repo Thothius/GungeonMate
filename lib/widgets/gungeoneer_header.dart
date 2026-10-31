@@ -28,6 +28,11 @@ class GungeoneerHeader extends StatefulWidget {
   /// Takes precedence over [onEndRun].
   final Widget? trailing;
 
+  /// Extra panel content rendered inside the header card, below the
+  /// effects strip — used by the run screen to embed tracker pills and
+  /// the inline cool/curse stepper (slide-out-from-panel UX).
+  final Widget? footer;
+
   /// When false, hides the synergies chip (used for the co-op player page).
   final bool showSynergies;
 
@@ -74,6 +79,7 @@ class GungeoneerHeader extends StatefulWidget {
     required this.activeSynergies,
     this.onEndRun,
     this.trailing,
+    this.footer,
     this.showSynergies = true,
     this.coolness = 0,
     this.curse = 0,

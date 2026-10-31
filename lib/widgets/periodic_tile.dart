@@ -619,9 +619,24 @@ class _PeriodicTileState extends State<PeriodicTile>
                                 style: TextStyle(
                                   fontSize: FontSizes.labelSmall * sf,
                                   fontWeight: FontWeight.w800,
-                                  color: const Color(
-                                    0xFFFFD54F,
-                                  ).withValues(alpha: 0.6),
+                                  // Top-DPS gun: solid gold + soft glow so
+                                  // the best damage weapon reads at a
+                                  // glance. Others stay dimmed.
+                                  color:
+                                      widget.isTopDps
+                                          ? const Color(0xFFFFD700)
+                                          : const Color(
+                                            0xFFFFD54F,
+                                          ).withValues(alpha: 0.6),
+                                  shadows:
+                                      widget.isTopDps
+                                          ? const [
+                                            Shadow(
+                                              color: Color(0xAAFFD700),
+                                              blurRadius: 7,
+                                            ),
+                                          ]
+                                          : null,
                                   height: 1.1,
                                 ),
                               ),

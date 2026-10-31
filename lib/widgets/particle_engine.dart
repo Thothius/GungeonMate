@@ -390,13 +390,17 @@ class _ParticleFieldState extends State<ParticleField>
                 painter: _ParticlePainter(
                   t: t,
                   particles: _particles,
+                  // Same resolution as _ensureParticles — widget.config
+                  // (typed path) wins; without this the painter drew
+                  // preset.config (always circles) while physics ran typed.
                   config:
-                      widget.colorsOverride != null
+                      widget.config ??
+                      (widget.colorsOverride != null
                           ? _withColors(
                             widget.preset.config,
                             widget.colorsOverride!,
                           )
-                          : widget.preset.config,
+                          : widget.preset.config),
                   sizeScale: widget.sizeScale,
                   opacity: widget.opacity,
                   glowEffect:
