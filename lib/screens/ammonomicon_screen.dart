@@ -858,7 +858,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(2, 14, 0, 6),
                         child: GoopText(
-                          g.tab.label.toUpperCase(),
+                          '${g.tab.label.toUpperCase()} · ${g.entries.length}',
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
@@ -1205,6 +1205,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                             entries: _entriesFor(_selected),
                             section: _sectionFor(_selected),
                             onEntryTap: _openEntry,
+                            query: _searchCtrl.text,
                           ),
                         ),
                       ],

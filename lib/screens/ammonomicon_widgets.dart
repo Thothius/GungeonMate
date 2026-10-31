@@ -3,29 +3,37 @@ part of 'ammonomicon_screen.dart';
 class _AmmonomiconList extends StatelessWidget {
   final List<AmmonomiconEntry> entries;
   final AmmonomiconSection section;
-  final void Function(AmmonomiconEntry entry, AmmonomiconSection section) onEntryTap;
+  final void Function(AmmonomiconEntry entry, AmmonomiconSection section)
+  onEntryTap;
+  final String query;
 
-  const _AmmonomiconList(
-      {required this.entries,
-      required this.section,
-      required this.onEntryTap});
+  const _AmmonomiconList({
+    required this.entries,
+    required this.section,
+    required this.onEntryTap,
+    this.query = '',
+  });
 
   @override
   Widget build(BuildContext context) {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     if (entries.isEmpty) {
+      final searching = query.isNotEmpty;
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.search_off,
+              searching ? Icons.search_off : Icons.inventory_2_outlined,
               size: 48,
               color: onSurface.withValues(alpha: 0.3),
             ),
             const SizedBox(height: 12),
             GoopText(
-              'No results found',
+              searching
+                  ? 'No results for "$query"'
+                  : 'No entries in this category',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: onSurface.withValues(alpha: 0.4),
                 fontSize: FontSizes.bodyMedium,
@@ -320,8 +328,11 @@ class _SearchGroup {
   final AmmonomiconTab tab;
   final List<AmmonomiconEntry> entries;
   final AmmonomiconSection section;
-  const _SearchGroup(
-      {required this.tab, required this.entries, required this.section});
+  const _SearchGroup({
+    required this.tab,
+    required this.entries,
+    required this.section,
+  });
 }
 
 /// Category-grid index → section mapping. Public (non-private) so the
