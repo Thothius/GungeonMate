@@ -615,6 +615,7 @@ mixin _GunStatsSections on StatelessWidget {
                           ),
                         ),
                       GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           p.setEvolverKills((spec.id - 1) * 5);
                         },
@@ -696,6 +697,7 @@ mixin _GunStatsSections on StatelessWidget {
               final isThresholdNode = killNum % 5 == 0;
 
               return GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   if (isChecked) {
                     p.setEvolverKills(killNum - 1);

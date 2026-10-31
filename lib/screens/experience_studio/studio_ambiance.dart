@@ -122,6 +122,7 @@ class _GlowStyleRow extends StatelessWidget {
         for (var i = -1; i < GlowStyle.values.length; i++)
           Expanded(
             child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Haptics.selection();
                 VisualPrefs.setGlowStyleIndex(i);
@@ -175,6 +176,7 @@ class _GlowPickRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () async {
         final c = await _PaletteColorSheet.show(context, color);
         if (c == null || !context.mounted) return;
@@ -251,6 +253,7 @@ class _GlowQuickRow extends StatelessWidget {
           final c = VisualPrefs.glowColors[i];
           final isSelected = i == currentIndex;
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Haptics.selection();
               VisualPrefs.setGlowColorIndex(i);

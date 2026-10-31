@@ -98,6 +98,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   setState(() => _sheetTab = i);
                   Haptics.selection();
@@ -175,6 +176,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
       children: [
         for (var i = 0; i < AppTheme.skeuoFonts.length; i++)
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               AppTheme.setSkeuoFont(i);
               setState(() {});
@@ -654,6 +656,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
 
   Widget _skeuoCheck(bool on, VoidCallback onTap) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         width: 22,
@@ -670,6 +673,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
 
   Widget _skeuoRadio(bool on, VoidCallback onTap) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         width: 22,
@@ -697,6 +701,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
 
   Widget _skeuoSwitch(bool on, VoidCallback onTap) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         width: 44,
@@ -869,6 +874,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
     double radius = 8,
   }) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
@@ -894,6 +900,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
 
   Widget _skeuoPageDot(String label, bool on, VoidCallback onTap) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         width: 26,

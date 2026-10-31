@@ -552,6 +552,7 @@ class _QuizSessionScreenState extends State<QuizSessionScreen> {
                         ),
                         if (revealed)
                           GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: () => _openAmmonomicon(q),
                             child: Padding(
                               padding: const EdgeInsets.only(top: 6),

@@ -281,6 +281,7 @@ class _MeterPanel extends StatelessWidget {
           ),
           SizedBox(height: 10 * sf),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               onReset();
               Haptics.medium();
@@ -312,6 +313,7 @@ class _DeltaBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14 * sf, vertical: 6 * sf),

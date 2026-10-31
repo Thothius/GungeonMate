@@ -365,6 +365,7 @@ class DashboardTabChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = tab.color;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),

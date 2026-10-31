@@ -181,6 +181,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
         Row(
           children: [
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => setState(() => _custom = false),
               child: Icon(
                 Icons.arrow_back_rounded,
@@ -209,6 +210,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 3 * sf),
                   child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       Haptics.light();
                       setState(() => _fx = fx);

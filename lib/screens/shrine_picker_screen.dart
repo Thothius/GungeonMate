@@ -181,6 +181,7 @@ class _ShrineTile extends StatelessWidget {
             : Skeuo.inkIf(Colors.amber);
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(

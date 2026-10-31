@@ -87,7 +87,6 @@ class MpStore {
     } catch (_) {}
   }
 
-
   // ── Run state (throttled) ──────────────────────────────────────
 
   static int _lastRunSaveMs = 0;

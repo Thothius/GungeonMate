@@ -24,7 +24,6 @@ class MpLink implements MpTransport {
   /// Service ID for the classic lobby-based MP flow.
   static const String serviceIdClassic = 'com.saare.gungeon_mate.mp.v2';
 
-
   /// Legacy accessor kept for any call-site still reading the constant.
   static String get serviceId => serviceIdClassic;
 

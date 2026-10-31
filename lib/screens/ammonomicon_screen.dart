@@ -632,6 +632,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       return Padding(
         padding: const EdgeInsets.fromLTRB(14, 8, 14, 4),
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
             Haptics.selection();
             setState(() => _matchedOnly = !on);
@@ -674,6 +675,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       child: Row(
         children: [
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Haptics.selection();
               setState(
@@ -702,6 +704,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
             Padding(
               padding: const EdgeInsets.only(right: 6),
               child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Haptics.selection();
                   setState(() {
@@ -862,6 +865,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () {
                       Haptics.selection();
                       setState(() {

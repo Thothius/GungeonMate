@@ -374,6 +374,7 @@ class _PersistentBanner extends StatelessWidget {
                 ),
               ),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: onCancel,
                 child: Padding(
                   padding: EdgeInsets.symmetric(

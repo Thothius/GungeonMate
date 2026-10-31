@@ -252,12 +252,12 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
       final isSelected = _tabCtrl.index == index;
       return Expanded(
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () {
             Haptics.selection();
             _tabCtrl.animateTo(index);
             setState(() {});
           },
-          behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             margin: const EdgeInsets.symmetric(horizontal: 3),
@@ -758,6 +758,7 @@ class _LoadoutTile extends StatelessWidget {
     final fallback = gun != null ? Icons.gps_fixed : Icons.inventory_2_outlined;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap:
           exists
               ? () {

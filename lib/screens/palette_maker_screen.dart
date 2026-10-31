@@ -210,6 +210,7 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
                         final slug = _splashes[i];
                         final sel = slug == _splashSlug;
                         return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () {
                             setState(() => _splashSlug = slug);
                             Haptics.selection();
@@ -340,6 +341,7 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => _pickColor(label, color, onPick),
         child: Container(
           height: 44,
@@ -420,6 +422,7 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
                   children: [
                     for (final c in _swatches)
                       GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () => Navigator.of(context).pop(c),
                         child: Container(
                           width: 38,

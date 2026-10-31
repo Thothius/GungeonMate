@@ -144,9 +144,7 @@ class Gun {
       icon: gameIcon.isNotEmpty ? gameIcon : localGunIcon(name),
       notes: json['notes'] ?? '',
       quote: json['quote'] ?? '',
-      ammonomiconEntry: json['ammonomicon_entry'] ??
-          json['ammonomicon'] ??
-          '',
+      ammonomiconEntry: json['ammonomicon_entry'] ?? json['ammonomicon'] ?? '',
       quality: json['quality'] ?? '',
       type: json['type'] ?? '',
       dps: json['dps'] ?? '',

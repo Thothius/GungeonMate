@@ -107,6 +107,7 @@ class _AmmonomiconCard extends StatelessWidget {
     final imgPath = idleGif.isNotEmpty ? idleGif : assetPath;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -235,6 +236,7 @@ class _GungeoneersAmmonomiconPage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate((context, index) {
               final g = gungeoneers[index];
               return GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Haptics.selection();
                   Navigator.push(
@@ -391,6 +393,7 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
               final sel = i == _page;
               final e = widget.entries[i];
               return GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => _jump(i),
                 child: Center(
                   child: AnimatedContainer(
@@ -468,6 +471,7 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
           const SizedBox(height: 14),
           // Big sprite
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               Haptics.selection();
               widget.onEntryTap(e, widget.section);

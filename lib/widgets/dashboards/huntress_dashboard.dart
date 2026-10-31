@@ -70,6 +70,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                   const SizedBox(width: 8),
                   // Health toggle button
                   GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () => setState(() => _healthMode = !_healthMode),
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),

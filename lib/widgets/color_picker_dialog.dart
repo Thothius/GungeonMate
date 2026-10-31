@@ -125,6 +125,7 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
                               constraints.maxWidth,
                             );
                             return GestureDetector(
+                              behavior: HitTestBehavior.opaque,
                               onPanDown:
                                   (d) => _handleSV(d.localPosition, size),
                               onPanUpdate:
@@ -157,6 +158,7 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
                     width: 28,
                     height: 240,
                     child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onPanDown:
                           (d) =>
                               _handleHue(d.localPosition, const Size(28, 240)),

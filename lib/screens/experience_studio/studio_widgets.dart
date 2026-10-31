@@ -156,6 +156,7 @@ class _SchemaChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),

@@ -339,6 +339,9 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                     Row(
                                                       children: [
                                                         GestureDetector(
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
                                                           onTap:
                                                               junkCount > 0 &&
                                                                       junkItem !=
@@ -353,9 +356,6 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(
@@ -395,6 +395,9 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                           ),
                                                         ),
                                                         GestureDetector(
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
                                                           onTap:
                                                               junkItem != null
                                                                   ? () {
@@ -407,9 +410,6 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(

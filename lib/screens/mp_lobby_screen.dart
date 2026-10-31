@@ -311,6 +311,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     Row(
       children: [
         GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: _pickAvatar,
           child: Container(
             decoration: BoxDecoration(
@@ -458,6 +459,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     // Sidekick is always The Cultist — no character picker.
     // Main can tap to pick a different character.
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: isMain ? () => _pickCharacter() : null,
       child: Container(
         padding: EdgeInsets.all(20 * sf),

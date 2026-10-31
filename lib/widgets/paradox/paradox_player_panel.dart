@@ -67,6 +67,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
         children: [
           // Avatar — tap to open SurpriseSheet
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap:
                 () => showModalBottomSheet<void>(
                   context: context,
@@ -449,6 +450,7 @@ class _PanelStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 2 * sf),

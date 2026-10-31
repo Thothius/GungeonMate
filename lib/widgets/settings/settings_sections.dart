@@ -136,6 +136,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
   /// Jammed sprite and red-accent danger styling.
   Widget _buildEndRunButton(BuildContext context, RunProvider p) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => _confirmEndRun(context, p),
       child: Container(
         height: 64,
@@ -198,6 +199,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
   /// Full-width Reset All Data button with deep-orange danger styling.
   Widget _buildResetDataButton(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => _confirmResetAppData(context),
       child: Container(
         height: 56,

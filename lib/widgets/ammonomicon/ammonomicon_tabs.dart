@@ -94,11 +94,11 @@ class AmmonomiconTabStrip extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(top: topPadding),
           child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Haptics.selection();
                   onToggleCollapse?.call();
                 },
-                behavior: HitTestBehavior.opaque,
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeOutCubic,
@@ -152,11 +152,11 @@ class AmmonomiconTabStrip extends StatelessWidget {
             // Collapse toggle button
             if (onToggleCollapse != null)
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   Haptics.selection();
                   onToggleCollapse!.call();
                 },
-                behavior: HitTestBehavior.opaque,
                 child: Container(
                   width: 56,
                   height: 28,

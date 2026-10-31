@@ -79,6 +79,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
         Row(
           children: [
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => setState(() => _frameStage = false),
               child: Row(
                 children: [
@@ -134,6 +135,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
           children: [
             for (final f in styles)
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => _pickFrame(f.id),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -280,6 +282,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                     final id = kAvatarIds[idx];
                     final isSel = id == avatarBaseId(_picked);
                     return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () {
                         Haptics.selection();
                         final frame = avatarFrameId(_picked);

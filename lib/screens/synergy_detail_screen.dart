@@ -183,6 +183,7 @@ class _ItemChip extends StatelessWidget {
     final isOwned = owned.contains(name.toLowerCase());
     final c = isOwned ? Skeuo.inkIf(Colors.lightGreenAccent) : Colors.white;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Haptics.selection();
         final p = context.read<RunProvider>();

@@ -339,6 +339,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           Haptics.selection();
           FocusManager.instance.primaryFocus?.unfocus();
@@ -910,6 +911,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
           ),
           if (missing.isNotEmpty)
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 // Add missing required pieces; for any_of synergies add
                 // only ONE missing option (that's all the synergy needs).
@@ -1028,6 +1030,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     );
     if (owned || (g == null && it == null)) return box;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
         if (g != null) {
@@ -1181,6 +1184,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           Haptics.selection();
           setState(() => _kind = k);
@@ -1240,6 +1244,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           Haptics.selection();
           setState(() => _synOwner = o);

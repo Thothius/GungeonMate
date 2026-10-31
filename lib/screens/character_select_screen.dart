@@ -304,6 +304,7 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
               Insets.md,
             ),
             child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 Haptics.selection();
                 widget.onPick(context, sel);

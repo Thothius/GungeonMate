@@ -79,6 +79,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                           // Clean, flat Avatar (Tappable — cycles through
                           // static icon → in-game GIF → animated card art).
                           GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: _onAvatarTapped,
                             child: SizedBox(
                               width: 48,

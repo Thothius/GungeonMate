@@ -365,6 +365,7 @@ class _WeightRow extends StatelessWidget {
         final isActive = options[i] == current;
         return Expanded(
           child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               VisualPrefs.setFontWeightBias(options[i]);
               Haptics.selection();
@@ -421,6 +422,7 @@ class _LetterRow extends StatelessWidget {
         final isActive = options[i] == current;
         return Expanded(
           child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () {
               VisualPrefs.setFontLetterSpacing(options[i]);
               Haptics.selection();

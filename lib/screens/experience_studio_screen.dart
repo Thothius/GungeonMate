@@ -337,6 +337,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           final active = _hubTab == i;
           return Expanded(
             child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 setState(() => _hubTab = i);
                 Haptics.selection();
@@ -861,6 +862,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () async {
           final c = await _PaletteColorSheet.show(context, color);
           if (c == null || !mounted) return;
@@ -934,6 +936,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         children: [
           for (final p in UnicornPalette.values)
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () async {
                 Haptics.selection();
                 await AppTheme.setUnicornPalette(p);
@@ -1092,6 +1095,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                           final slug = mode.splashSlug;
                           final isSelected = slug == selectedSplash;
                           return GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: () {
                               Haptics.selection();
                               setDialogState(() => selectedSplash = slug);
@@ -1439,6 +1443,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                 for (var i = 0; i < _tabs.length; i++)
                   Expanded(
                     child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () => setState(() => _tab = i),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 140),
@@ -1498,6 +1503,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
   Widget _swatch(Color c) {
     final selected = c.toARGB32() == widget.current.toARGB32();
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Haptics.selection();
         Navigator.of(context).pop(c);

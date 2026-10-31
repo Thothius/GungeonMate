@@ -214,6 +214,7 @@ class _SpecialGridTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final accent = QualityBadge.colorFor(entry.quality);
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),

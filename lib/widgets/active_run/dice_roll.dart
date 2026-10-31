@@ -279,9 +279,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
         key: const ValueKey('challenging'),
         children: [
           const SizedBox(height: 10),
-          CircularProgressIndicator(
-            color: Skeuo.inkIf(Colors.amberAccent),
-          ),
+          CircularProgressIndicator(color: Skeuo.inkIf(Colors.amberAccent)),
           const SizedBox(height: 16),
           const GoopText(
             'Waiting for partner to accept...',

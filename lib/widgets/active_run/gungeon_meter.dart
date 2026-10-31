@@ -136,6 +136,7 @@ class _GungeonMeterState extends State<GungeonMeter>
           builder: (context, constraints) {
             final barWidth = constraints.maxWidth;
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onPanDown: (d) => _handleTap(d.localPosition, barWidth),
               onPanUpdate: (d) => _handleTap(d.localPosition, barWidth),
               child: SizedBox(

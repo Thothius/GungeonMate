@@ -763,6 +763,7 @@ class _InlineStatStepper extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 3),
           child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => apply(delta),
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 9),

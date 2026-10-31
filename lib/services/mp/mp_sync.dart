@@ -377,7 +377,6 @@ class MpSync {
     }
   }
 
-
   /// Apply a direct peer inventory edit (co-op trust model).
   /// The receiver mutates its OWN slot — the sender already saw the
   /// change on their screen. After applying we rebroadcast a snapshot

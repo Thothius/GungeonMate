@@ -255,6 +255,9 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                     Row(
                                                       children: [
                                                         GestureDetector(
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
                                                           onTap:
                                                               lvl > 1
                                                                   ? () {
@@ -264,9 +267,6 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(
@@ -306,6 +306,9 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                           ),
                                                         ),
                                                         GestureDetector(
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
                                                           onTap:
                                                               lvl < 60
                                                                   ? () {
@@ -315,9 +318,6 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(
@@ -614,6 +614,9 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                     Row(
                                                       children: [
                                                         GestureDetector(
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
                                                           onTap:
                                                               activeStage > 1
                                                                   ? () {
@@ -624,9 +627,6 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(
@@ -667,6 +667,9 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                           ),
                                                         ),
                                                         GestureDetector(
+                                                          behavior:
+                                                              HitTestBehavior
+                                                                  .opaque,
                                                           onTap:
                                                               activeStage < 6
                                                                   ? () {
@@ -677,9 +680,6 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                                     );
                                                                   }
                                                                   : null,
-                                                          behavior:
-                                                              HitTestBehavior
-                                                                  .opaque,
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets.symmetric(
