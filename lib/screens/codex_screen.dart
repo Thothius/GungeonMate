@@ -575,11 +575,20 @@ class _CodexScreenState extends State<CodexScreen> {
         bottom: false,
         child: groups.isEmpty
             ? Center(
-                child: GoopText(
-                  'Nothing found for "${_searchCtrl.text}"',
-                  style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.5),
-                      fontStyle: FontStyle.italic),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.search_off,
+                        size: 40,
+                        color: Colors.white.withValues(alpha: 0.25)),
+                    const SizedBox(height: 10),
+                    GoopText(
+                      'Nothing found for "${_searchCtrl.text}"',
+                      style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.5),
+                          fontStyle: FontStyle.italic),
+                    ),
+                  ],
                 ),
               )
             : ListView(
@@ -602,7 +611,19 @@ class _CodexScreenState extends State<CodexScreen> {
                         dense: true,
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 8),
-                        leading: _searchIcon(e, g.section),
+                        leading: Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: g.tab.color.withValues(alpha: 0.10),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                                color: g.tab.color
+                                    .withValues(alpha: 0.35)),
+                          ),
+                          child: Center(
+                              child: _searchIcon(e, g.section)),
+                        ),
                         title: GoopText(e.name,
                             style: const TextStyle(
                                 fontSize: 14,
