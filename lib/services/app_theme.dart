@@ -461,7 +461,11 @@ class AppTheme {
       fontFamilyName = 'PatrickHand';
     } else {
       try {
-        fontFamilyName = GoogleFonts.getFont(selectedFont.label).fontFamily;
+        // Bundled assets are declared as `GoogleFonts.<Name>` in
+        // pubspec — request that exact family. getFont().fontFamily
+        // returns 'Anton' (no prefix) which never matched the declared
+        // 'GoogleFonts.Anton' — fonts silently fell back offline.
+        fontFamilyName = 'GoogleFonts.${selectedFont.label}';
       } catch (_) {
         fontFamilyName = 'EnterTheGungeonBig';
       }
@@ -474,9 +478,7 @@ class AppTheme {
     // get the style from textTheme — if those styles have fontFamily: null,
     // Flutter uses the platform default (Roboto), NOT ThemeData.fontFamily.
     // Applying here ensures every text style carries the picked font.
-    if (fontFamilyName != null) {
-      textTheme = textTheme.apply(fontFamily: fontFamilyName);
-    }
+    textTheme = textTheme.apply(fontFamily: fontFamilyName);
 
     return ThemeData(
       colorScheme: scheme,

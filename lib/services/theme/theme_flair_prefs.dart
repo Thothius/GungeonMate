@@ -639,7 +639,10 @@ class VisualPrefs {
           0,
           ParticleType.values.length - 1,
         ),
-        particleSchemaIndex: (p.getInt(_kParticleSchemaIdx) ?? 0).clamp(0, 2),
+        particleSchemaIndex: (p.getInt(_kParticleSchemaIdx) ?? 0).clamp(
+          0,
+          kGlobalParticlePalettes.length - 1,
+        ),
         particleChaos: p.getBool(_kParticleChaos) ?? false,
         particleTouch: p.getBool(_kParticleTouch) ?? true,
         shaderEnabled: shaderEnabled,
