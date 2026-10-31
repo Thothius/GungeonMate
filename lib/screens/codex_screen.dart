@@ -59,6 +59,9 @@ class _CodexScreenState extends State<CodexScreen> {
   /// Chapters/Game Modes tiles expand to show member pickers.
   int _expanded = -1;
 
+  /// Synergies tab: show only synergies completable by owned items.
+  bool _matchedOnly = false;
+
   // Currently selected category index (0-based). 0-5 are special pages,
   // 6-10 are data categories.
   int _selected = -1; // -1 = category picker grid (level 1)
@@ -318,9 +321,20 @@ class _CodexScreenState extends State<CodexScreen> {
                 description: i.ammonomiconEntry))
             .toList());
       case 8:
-        return _filter(context
-            .read<RunProvider>()
-            .allSynergies
+        var syns = context.read<RunProvider>().allSynergies;
+        if (_matchedOnly) {
+          final p = context.read<RunProvider>();
+          final owned = {
+            ...p.runState.main.allItemNames
+                .map((n) => n.toLowerCase()),
+            if (p.runState.coop != null)
+              ...p.runState.coop!.allItemNames
+                  .map((n) => n.toLowerCase()),
+          };
+          syns =
+              syns.where((s) => s.matchesOwnedSet(owned)).toList();
+        }
+        return _filter(syns
             .map((s) {
 
             // Derive icon + folder from the first required item —
@@ -480,6 +494,8 @@ class _CodexScreenState extends State<CodexScreen> {
     return Image.asset(path,
         width: 26,
         height: 26,
+        cacheWidth: 52,
+        cacheHeight: 52,
         fit: BoxFit.contain,
         errorBuilder: (_, _, _) =>
             const Icon(Icons.help_outline, size: 20));
@@ -515,6 +531,44 @@ class _CodexScreenState extends State<CodexScreen> {
   }
 
   Widget _buildQualityChips(ThemeFlair flair) {
+    if (_selected == 8) {
+      final on = _matchedOnly;
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 4),
+        child: GestureDetector(
+          onTap: () {
+            Haptics.selection();
+            setState(() => _matchedOnly = !on);
+          },
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: on
+                  ? const Color(0xFFB388FF).withValues(alpha: 0.25)
+                  : Colors.white.withValues(alpha: 0.08),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
+                  color: on
+                      ? const Color(0xFFB388FF)
+                      : Colors.white.withValues(alpha: 0.2)),
+            ),
+            child: GoopText(
+              'MATCHED',
+              style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  color: on
+                      ? const Color(0xFFB388FF)
+                      : Colors.white.withValues(alpha: 0.6)),
+            ),
+          ),
+        ),
+      );
+    }
+    if (_selected != 6 && _selected != 7) {
+      return const SizedBox.shrink();
+    }
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
       child: Row(
@@ -989,12 +1043,15 @@ class _CodexScreenState extends State<CodexScreen> {
                     ? _specialPage(_selected)
                     : Column(
                       children: [
-                        if (_selected == 6 || _selected == 7)
+                        if (_selected == 6 ||
+                            _selected == 7 ||
+                            _selected == 8)
                           _buildQualityChips(flair),
                         Expanded(
                           child: _CodexList(
                             entries: _entriesFor(_selected),
                             section: _sectionFor(_selected),
+                            onEntryTap: _openEntry,
                           ),
                         ),
                       ],
@@ -1022,8 +1079,12 @@ class _CodexScreenState extends State<CodexScreen> {
 class _CodexList extends StatelessWidget {
   final List<CodexEntry> entries;
   final CodexSection section;
+  final void Function(CodexEntry entry, CodexSection section) onEntryTap;
 
-  const _CodexList({required this.entries, required this.section});
+  const _CodexList(
+      {required this.entries,
+      required this.section,
+      required this.onEntryTap});
 
   @override
   Widget build(BuildContext context) {
@@ -1070,29 +1131,7 @@ class _CodexList extends StatelessWidget {
                   section: section,
                   onTap: () {
                     Haptics.selection();
-                    // Ammonomicon wiki entries route to their native
-                    // detail screens; regular codex entries unchanged.
-                    final p = context.read<RunProvider>();
-                    final dest = switch (entry.game) {
-                      'gun' => p.allGuns
-                              .where((g) => g.name == entry.name)
-                              .firstOrNull !=
-                          null
-                          ? ItemDetailScreen(
-                              gun: p.allGuns.firstWhere(
-                                  (g) => g.name == entry.name))
-                          : CodexDetailScreen(
-                              entry: entry, section: section),
-                      'item' => ItemDetailScreen(
-                          item: p.allItems
-                              .firstWhere((i) => i.name == entry.name)),
-                      'synergy' => SynergyDetailScreen(
-                          synergy: p.allSynergies.firstWhere(
-                              (s) => s.name == entry.name)),
-                      _ => CodexDetailScreen(
-                          entry: entry, section: section),
-                    };
-                    Navigator.push(context, fastRoute(dest));
+                    onEntryTap(entry, section);
                   },
                 );
               }, childCount: entries.length),
