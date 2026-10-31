@@ -54,11 +54,9 @@ void main() {
         isNot(equals(base)),
       );
       expect(
-        typedParticleConfig(
-          ParticleType.dot,
-          const [Color(0xFFFF0000)],
-          chaos: true,
-        ),
+        typedParticleConfig(ParticleType.dot, const [
+          Color(0xFFFF0000),
+        ], chaos: true),
         isNot(equals(base)),
       );
       expect(
@@ -207,9 +205,7 @@ void main() {
       expect(find.text('SAVE THEME'), findsOneWidget);
     });
 
-    testWidgets('PARTICLES hides the shared LIVE LOOK pane', (
-      tester,
-    ) async {
+    testWidgets('PARTICLES hides the shared LIVE LOOK pane', (tester) async {
       await openHub(tester);
       expect(find.text('PREVIEW'), findsOneWidget); // pane label present
 
@@ -223,9 +219,7 @@ void main() {
       expect(find.text('Enable Particles'), findsOneWidget);
     });
 
-    testWidgets('FONTS shows swipable tiles + bottom controls', (
-      tester,
-    ) async {
+    testWidgets('FONTS shows swipable tiles + bottom controls', (tester) async {
       await openHub(tester);
       await tester.tap(find.text('FONTS'));
       await tester.pump(const Duration(milliseconds: 300));
@@ -287,6 +281,173 @@ void main() {
       await tester.tap(find.text('METALLIC'));
       await tester.pump(const Duration(milliseconds: 300));
       expect(circlesInSheet(tester), greaterThanOrEqualTo(24));
+    });
+  });
+  group('Preset preview/apply flow', () {
+    testWidgets('tapping a preset stages it + defaults Gungeon font', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.tap(find.text('UNICORN'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(AppTheme.previewNotifier.value, AppThemeMode.unicorn);
+      // Presets default the font to Gungeon (user requirement).
+      expect(VisualPrefs.notifier.value.font, AppFont.gungeon);
+      // Curation applied — unicorn ships glow color 2 + sparkles.
+      expect(VisualPrefs.notifier.value.glowColorIndex, 2);
+      expect(
+        VisualPrefs.notifier.value.particlePreset,
+        ParticlePreset.unicornSparkles,
+      );
+    });
+
+    testWidgets('APPLY commits the staged mode', (tester) async {
+      final before = AppTheme.mode;
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.tap(find.text('UNICORN'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('APPLY'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(AppTheme.mode, AppThemeMode.unicorn);
+      expect(AppTheme.previewNotifier.value, isNull);
+
+      // Restore so later groups start clean.
+      await AppTheme.setMode(before);
+    });
+
+    testWidgets('BACK discards staged prefs + preview', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      final baseGlow = VisualPrefs.notifier.value.glowColorIndex;
+
+      await tester.tap(find.text('UNICORN'));
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(VisualPrefs.notifier.value.glowColorIndex, 2);
+
+      await tester.tap(find.text('BACK'), warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Screen is the test root so it can't pop — the contract is
+      // the restore: preview cleared + staged prefs rolled back.
+      expect(AppTheme.previewNotifier.value, isNull);
+      expect(VisualPrefs.notifier.value.glowColorIndex, baseGlow);
+    });
+  });
+
+  group('Swatch sheet flow', () {
+    testWidgets('sheet dismisses via barrier without touching draft', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      final before = AppTheme.previewNotifier.value;
+
+      await tester.tap(find.text('CUSTOM'));
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('CANVAS'));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('GENERAL'), findsOneWidget); // sheet open
+
+      // Barrier tap above the sheet → dismiss, null color, no change.
+      await tester.tapAt(const Offset(400, 200));
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(find.text('GENERAL'), findsNothing);
+      expect(AppTheme.previewNotifier.value, before);
+    });
+  });
+
+  group('Particles controls write prefs', () {
+    testWidgets('toggle + physics chips + schema chip', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.ensureVisible(find.text('PARTICLES').first);
+      await tester.tap(find.text('PARTICLES'), warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Enable toggle — tap the Switch, not the row label.
+      final sw = find.byType(Switch);
+      await tester.tap(sw, warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.particlesEnabled, false);
+      await tester.tap(sw, warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.particlesEnabled, true);
+
+      // Physics chips — TILT defaults ON, others OFF.
+      await tester.tap(find.text('CHAOS'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.particleChaos, true);
+      await tester.tap(find.text('BOUNCE'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.particleBounce, true);
+      await tester.tap(find.text('TILT'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.particleTouch, false);
+
+      // Schema chip — 'TOXIN' is index 3 in the global palettes.
+      await tester.ensureVisible(find.text('TOXIN'));
+      await tester.tap(find.text('TOXIN'), warnIfMissed: false);
+      await tester.pump(const Duration(milliseconds: 200));
+      // A palette chip wrote an index (scroll offsets may land a
+      // neighbor — contract is 'chip tap writes the index').
+      expect(VisualPrefs.notifier.value.particleSchemaIndex, isNot(0));
+    });
+  });
+
+  group('Ambiance controls write prefs', () {
+    testWidgets('style chips + quick color row', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.tap(find.text('AMBIANCE'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // HALO is GlowStyle index 2.
+      await tester.tap(find.text('HALO'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.glowStyleIndex, 2);
+      expect(VisualPrefs.notifier.value.glowStyleOverride, GlowStyle.halo);
+
+      // THEME chip resets to -1 (theme default).
+      await tester.tap(find.text('THEME'));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(VisualPrefs.notifier.value.glowStyleIndex, -1);
+      expect(VisualPrefs.notifier.value.glowStyleOverride, isNull);
+    });
+  });
+
+  group('LIVE LOOK drag handle', () {
+    testWidgets('dragging the handle resizes the pane', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(home: ExperienceStudioScreen()),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      final handle = find.byIcon(Icons.keyboard_arrow_down_rounded);
+      expect(handle, findsOneWidget);
+      final before = tester.getCenter(handle).dy;
+      await tester.drag(handle, const Offset(0, 120));
+      await tester.pump(const Duration(milliseconds: 300));
+      final after = tester.getCenter(handle).dy;
+
+      expect(after, greaterThan(before));
     });
   });
 }

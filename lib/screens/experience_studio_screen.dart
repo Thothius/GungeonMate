@@ -417,7 +417,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                     onVerticalDragUpdate:
                         (d) => setState(
                           () =>
-                              _liveLookH = (_liveLookH - d.delta.dy / sh).clamp(
+                              // Drag DOWN = pane grows (pull-down to
+                              // reveal) — sign was inverted before.
+                              _liveLookH = (_liveLookH + d.delta.dy / sh).clamp(
                                 0.15,
                                 0.75,
                               ),
