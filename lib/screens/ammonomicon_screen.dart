@@ -186,68 +186,79 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
 
   Future<void> _loadData() async {
     final bundle = DefaultAssetBundle.of(context);
-    final results = await Future.wait([
-      bundle.loadString('assets/data/objects.json'),
-      bundle.loadString('assets/data/pickups.json'),
-      bundle.loadString('assets/data/npcs.json'),
-      bundle.loadString('assets/data/enemies.json'),
-      bundle.loadString('assets/data/bosses.json'),
-      bundle.loadString('assets/data/shrines.json'),
-      bundle.loadString('assets/data/chapters.json'),
-      bundle.loadString('assets/data/game_modes.json'),
-    ]);
-    if (!mounted) return;
-    // Parse each JSON file in an isolate to avoid jank on the ammonomicon screen.
-    final parsed = await Future.wait([
-      compute(_parseAmmonomiconEntries, results[0]),
-      compute(_parseAmmonomiconEntries, results[1]),
-      compute(_parseAmmonomiconEntries, results[2]),
-      compute(_parseAmmonomiconEntries, results[3]),
-      compute(_parseAmmonomiconEntries, results[4]),
-      compute(_parseAmmonomiconEntries, results[6]),
-      compute(_parseAmmonomiconEntries, results[7]),
-    ]);
-    if (!mounted) return;
-    // Shrines: custom parse — JSON icon fields are wiki URLs; the local
-    // assets live in assets/images/shrines/<slug>.webp.
-    final shrineList = (json.decode(results[5]) as List<dynamic>)
-        .map((e) {
-          final j = e as Map<String, dynamic>;
-          final slug = (j['name'] as String)
-              .toLowerCase()
-              .replaceAll(' ', '_')
-              .replaceAll('.', '');
-          // 'fallen angel' ships as Angel_Shrine.webp — all other
-          // shrine icons are lowercase-name webps.
-          final iconFile = slug == 'fallen_angel'
-              ? 'Angel_Shrine.webp'
-              : '$slug.webp';
-          final eff = (j['effect'] as String? ?? '').trim();
-          return AmmonomiconEntry(
-              name: j['name'] ?? '',
-              category: 'Shrines',
-              icon: 'shrines/$iconFile',
-              description: j['description'] ?? '',
-              tips: [
-                if (eff.isNotEmpty) eff,
-                if ((j['curse'] ?? 0) > 0) 'Costs ${j['curse']} curse',
-                if ((j['coolness'] ?? 0) > 0) 'Costs ${j['coolness']} coolness',
-              ],
-              wikiUrl:
-                  'https://enterthegungeon.wiki.gg/wiki/${(j['name'] as String).replaceAll(' ', '_')}_Shrine');
-        })
-        .toList();
-    setState(() {
-      _objects = parsed[0];
-      _pickups = parsed[1];
-      _npcs = parsed[2];
-      _enemies = parsed[3];
-      _bosses = parsed[4];
-      _shrines = shrineList;
-      _chapters = parsed[5];
-      _gameModes = parsed[6];
-      _loaded = true;
-    });
+    // Per-file fallback: one missing/corrupt asset degrades to an empty
+    // category instead of leaving the whole screen on skeletons forever.
+    Future<String> loadOr(String path) =>
+        bundle.loadString(path).then((s) => s, onError: (_) => '[]');
+    try {
+      final results = await Future.wait([
+        loadOr('assets/data/objects.json'),
+        loadOr('assets/data/pickups.json'),
+        loadOr('assets/data/npcs.json'),
+        loadOr('assets/data/enemies.json'),
+        loadOr('assets/data/bosses.json'),
+        loadOr('assets/data/shrines.json'),
+        loadOr('assets/data/chapters.json'),
+        loadOr('assets/data/game_modes.json'),
+      ]);
+      if (!mounted) return;
+      // Parse each JSON file in an isolate to avoid jank on the ammonomicon screen.
+      final parsed = await Future.wait([
+        compute(_parseAmmonomiconEntries, results[0]),
+        compute(_parseAmmonomiconEntries, results[1]),
+        compute(_parseAmmonomiconEntries, results[2]),
+        compute(_parseAmmonomiconEntries, results[3]),
+        compute(_parseAmmonomiconEntries, results[4]),
+        compute(_parseAmmonomiconEntries, results[6]),
+        compute(_parseAmmonomiconEntries, results[7]),
+      ]);
+      if (!mounted) return;
+      // Shrines: custom parse — JSON icon fields are wiki URLs; the local
+      // assets live in assets/images/shrines/<slug>.webp.
+      final shrineList = (json.decode(results[5]) as List<dynamic>)
+          .map((e) {
+            final j = e as Map<String, dynamic>;
+            final slug = (j['name'] as String)
+                .toLowerCase()
+                .replaceAll(' ', '_')
+                .replaceAll('.', '');
+            // 'fallen angel' ships as Angel_Shrine.webp — all other
+            // shrine icons are lowercase-name webps.
+            final iconFile = slug == 'fallen_angel'
+                ? 'Angel_Shrine.webp'
+                : '$slug.webp';
+            final eff = (j['effect'] as String? ?? '').trim();
+            return AmmonomiconEntry(
+                name: j['name'] ?? '',
+                category: 'Shrines',
+                icon: 'shrines/$iconFile',
+                description: j['description'] ?? '',
+                tips: [
+                  if (eff.isNotEmpty) eff,
+                  if ((j['curse'] ?? 0) > 0) 'Costs ${j['curse']} curse',
+                  if ((j['coolness'] ?? 0) > 0)
+                    'Costs ${j['coolness']} coolness',
+                ],
+                wikiUrl:
+                    'https://enterthegungeon.wiki.gg/wiki/${(j['name'] as String).replaceAll(' ', '_')}_Shrine');
+          })
+          .toList();
+      setState(() {
+        _objects = parsed[0];
+        _pickups = parsed[1];
+        _npcs = parsed[2];
+        _enemies = parsed[3];
+        _bosses = parsed[4];
+        _shrines = shrineList;
+        _chapters = parsed[5];
+        _gameModes = parsed[6];
+        _loaded = true;
+      });
+    } catch (e) {
+      // Still surface the grid — categories that failed stay empty.
+      debugPrint('Ammonomicon data load failed: $e');
+      if (mounted) setState(() => _loaded = true);
+    }
   }
 
   @override

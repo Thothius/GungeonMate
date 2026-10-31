@@ -104,6 +104,8 @@ flutter:
     - assets/data/bosses.json
     - assets/data/chests.json
     - assets/data/floors.json
+    - assets/data/chapters.json
+    - assets/data/game_modes.json
     - assets/images/guns/
     - assets/images/items/
     - assets/images/shrines/

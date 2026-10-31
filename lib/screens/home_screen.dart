@@ -126,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // browsing the wiki or tweaking favourites.
     final canPop = _selectedIndex == 0;
     return MpReconnectBanner(
+      runBarVisible: _selectedIndex == 0,
       child: MpRequestListener(
         child: PopScope(
           canPop: canPop,

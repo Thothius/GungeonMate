@@ -13,9 +13,12 @@ import '../utils/responsive.dart';
 /// Dismissable reconnect dialog + persistent banner.
 ///
 /// When the peer drops ([MpSession.reconnectNotifier] fires):
-/// - Shows a dismissable modal dialog: "Connection lost — reconnecting…"
-/// - DISMISS → closes dialog, user keeps using the app. A small
-///   persistent banner stays at the top: "Reconnecting… (tap to cancel)".
+/// - If the ParadoxBar is on screen (Inventory tab, current route) it
+///   shows reconnect status inline and the modal stays suppressed —
+///   one signal, no "two bars".
+/// - Otherwise a dismissable modal fires: "Connection lost —
+///   reconnecting…". DISMISS → closes dialog; a small persistent
+///   banner stays at the top: "Reconnecting… (tap to cancel)".
 /// - CANCEL RUN → tears down the session.
 /// - Auto-closes when [MpSession.reconnectSuccessNotifier] fires.
 ///
@@ -23,7 +26,16 @@ import '../utils/responsive.dart';
 /// "peer seems gone" warnings. Either it reconnects or the user cancels.
 class MpReconnectBanner extends StatefulWidget {
   final Widget child;
-  const MpReconnectBanner({super.key, required this.child});
+
+  /// True while the Inventory tab is selected — the ParadoxBar lives
+  /// there during MP and owns inline reconnect status.
+  final bool runBarVisible;
+
+  const MpReconnectBanner({
+    super.key,
+    required this.child,
+    required this.runBarVisible,
+  });
 
   @override
   State<MpReconnectBanner> createState() => _MpReconnectBannerState();
@@ -32,7 +44,11 @@ class MpReconnectBanner extends StatefulWidget {
 class _MpReconnectBannerState extends State<MpReconnectBanner> {
   bool _dialogShowing = false;
   BuildContext? _dialogCtx;
-  bool _dismissed = false;
+
+  /// The ParadoxBar is the single status surface only while it's
+  /// actually on screen — Inventory tab selected AND this route on top.
+  bool get _barOnScreen =>
+      widget.runBarVisible && (ModalRoute.of(context)?.isCurrent ?? false);
 
   @override
   void initState() {
@@ -61,8 +77,9 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
     if (!session.reconnectNotifier.value) return;
     // Auto-reset the notifier.
     session.reconnectNotifier.value = false;
-    // Paradox Mode shows reconnect status inline in the ParadoxBar —
-    // no modal dialog, no double banner (the old "two bars" bug).
+    // ParadoxBar shows reconnect status inline — while it's on screen,
+    // the modal must not fire (the old "two bars" bug).
+    if (_barOnScreen) return;
     if (_dialogShowing) return;
     _showReconnectDialog();
   }
@@ -114,7 +131,6 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
     }
     _dialogShowing = false;
     _dialogCtx = null;
-    _dismissed = false;
   }
 
   void _showReconnectDialog() {
@@ -136,14 +152,11 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
             // Skip if cancelling (cancel handles its own state).
             if (cancelling) return;
             _dialogShowing = false;
-            _dismissed = true;
-            setState(() {}); // Rebuild to show persistent banner
           },
           onCancelRun: () {
             cancelling = true;
             Navigator.pop(dialogCtx);
             _dialogShowing = false;
-            _dismissed = false;
             context.read<MpSession>().cancel();
           },
         );
@@ -155,15 +168,17 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
   }
 
   void _reopenDialog() {
-    _dismissed = false;
-    setState(() {});
-    _showReconnectDialog();
+    if (!_dialogShowing) _showReconnectDialog();
   }
 
   @override
   Widget build(BuildContext context) {
     final session = context.watch<MpSession>();
-    final showBanner = _dismissed && session.phase == MpPhase.disconnected;
+    // While the ParadoxBar is on screen it owns the reconnect signal —
+    // the persistent banner only fills the gap on other surfaces
+    // (Browse/Ammonomicon tabs, pushed routes).
+    final showBanner =
+        !_barOnScreen && session.phase == MpPhase.disconnected;
 
     return Column(
       children: [
@@ -173,10 +188,7 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
             child: _PersistentBanner(
               elapsedSec: session.disconnectElapsedSec,
               onTap: _reopenDialog,
-              onCancel: () {
-                session.cancel();
-                setState(() => _dismissed = false);
-              },
+              onCancel: () => session.cancel(),
             ),
           ),
         Expanded(child: widget.child),

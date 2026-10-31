@@ -79,9 +79,12 @@ String themeSplashPath(String slug) {
 }
 
 /// Paradox Mode avatar registry — cosmetic player avatars exchanged
-/// between peers by id over the wire. Append-only: never reorder or
-/// remove entries, since peers resolve ids positionally by string
-/// equality and an unknown id falls back to the character map icon.
+/// between peers by id over the wire. Peers resolve ids by string
+/// (never by index), so entries may be removed safely — an unknown or
+/// file-less id falls back to the person-icon placeholder. The hard
+/// requirement is the reverse: every id listed here MUST have a
+/// matching `assets/images/avatars/<id>.webp`, or the picker shows a
+/// grey tile. (v3.3.1: 38 dead ids pruned — files culled in `170e70b`.)
 const List<String> kAvatarIds = <String>[
   'the_paradox',
   'the_cultist',
@@ -97,7 +100,6 @@ const List<String> kAvatarIds = <String>[
   'uni_2',
   'uni_3',
   'uni_4',
-  'uni_5',
   'uni_6',
   'uni_7',
   'uni_8',
@@ -125,11 +127,6 @@ const List<String> kAvatarIds = <String>[
   'g3_2',
   'g3_3',
   'g3_4',
-  'g3_5',
-  'g3_6',
-  'g3_7',
-  'g3_8',
-  'g3_9',
   'g4_1',
   'g4_2',
   'g4_3',
@@ -153,64 +150,32 @@ const List<String> kAvatarIds = <String>[
   'g6_3',
   'g6_4',
   'g6_5',
-  'g6_6',
-  'g6_7',
   'g6_8',
-  'g6_9',
-  'g7_1',
   'g7_2',
   'g7_3',
-  'g7_4',
-  'g7_5',
-  'g7_6',
-  'g7_7',
   'g7_8',
-  'g7_9',
   'g8_1',
   'g8_2',
   'g8_3',
-  'g8_4',
   'g8_5',
-  'g8_6',
-  'g8_7',
   'g8_8',
-  'g8_9',
-  'g9_1',
   'g9_2',
   'g9_3',
   'g9_4',
-  'g9_5',
   'g9_6',
-  'g9_7',
   'g9_8',
-  'g9_9',
-  'g10_1',
   'g10_2',
   'g10_3',
-  'g10_4',
-  'g10_5',
   'g10_6',
-  'g10_7',
   'g10_8',
-  'g10_9',
-  'g11_1',
-  'g11_2',
   'g11_3',
   'g11_4',
-  'g11_5',
   'g11_6',
-  'g11_7',
   'g11_8',
-  'g11_9',
   'g12_1',
-  'g12_2',
   'g12_3',
-  'g12_4',
-  'g12_5',
-  'g12_6',
   'g12_7',
   'g12_8',
-  'g12_9',
 ];
 
 /// Asset path for a Paradox avatar id ('' if unknown). Empty or
