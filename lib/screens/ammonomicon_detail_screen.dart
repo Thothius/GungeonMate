@@ -194,6 +194,17 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                                 accent: flair.primary,
                                 icon: Icons.tune,
                               ),
+                            if (entry.music != null && entry.music!.isNotEmpty)
+                              _badge(
+                                flair,
+                                entry.music!
+                                    .replaceAll(RegExp('^Play_MUS_'), '')
+                                    .replaceAll(RegExp(r'_\d+$'), '')
+                                    .replaceAll('_', ' ')
+                                    .toUpperCase(),
+                                accent: AmmonomiconColors.location,
+                                icon: Icons.music_note_outlined,
+                              ),
                           ],
                         ),
                       ),
@@ -294,6 +305,29 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                     ),
                   ],
 
+                  // Modifier list — Challenge Mode game_classes,
+                  // prettified (suffix stripped, camelCase split).
+                  if (entry.gameClasses.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    _sectionLabel(flair, 'MODIFIERS', icon: Icons.tune),
+                    const SizedBox(height: 6),
+                    _infoCard(
+                      flair,
+                      child: Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: [
+                          for (final cls in entry.gameClasses)
+                            _badge(
+                              flair,
+                              _prettifyModifier(cls),
+                              accent: flair.secondary,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+
                   const SizedBox(height: 14),
 
                   // Wiki link — functional, launches external browser
@@ -353,6 +387,17 @@ class AmmonomiconDetailScreen extends StatelessWidget {
   }
 
   // ── Themed section helpers ──────────────────────────────────────
+
+  /// `BlobulinAmmoChallengeModifier` → `Blobulin Ammo`; strips the
+  /// `Modifier`/`ChallengeModifier` suffix and splits camelCase.
+  static String _prettifyModifier(String cls) {
+    var s = cls.replaceAll(RegExp('(Challenge)?Modifier\$'), '');
+    s = s.replaceAllMapped(
+      RegExp('([a-z0-9])([A-Z])'),
+      (m) => '${m[1]} ${m[2]}',
+    );
+    return s.trim();
+  }
 
   Widget _badge(
     ThemeFlair flair,
