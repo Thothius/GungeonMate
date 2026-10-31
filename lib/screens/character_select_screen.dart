@@ -271,7 +271,20 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
           child: PageView.builder(
             controller: _pages,
             itemCount: gs.length,
-            onPageChanged: (i) => setState(() => _index = i),
+            onPageChanged: (i) {
+              setState(() => _index = i);
+              if (_tabs.hasClients) {
+                const cell = 74.0; // 66 width + 8 horizontal margin
+                _tabs.animateTo(
+                  (i * cell - 40).clamp(
+                    0.0,
+                    _tabs.position.maxScrollExtent,
+                  ),
+                  duration: Motion.fast,
+                  curve: Curves.easeOutCubic,
+                );
+              }
+            },
             itemBuilder:
                 (c, i) => _GungeoneerPage(
                   g: gs[i],
@@ -310,7 +323,9 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
                   ],
                 ),
                 alignment: Alignment.center,
-                child: GoopText(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: GoopText(
                   'PICK ${sel.name.toUpperCase()}',
                   style: TextStyle(
                     fontSize: FontSizes.titleSmall,
@@ -320,6 +335,7 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
                         flair.primary.computeLuminance() > 0.5
                             ? const Color(0xFF1C1C1E)
                             : Colors.white,
+                  ),
                   ),
                 ),
               ),
@@ -388,11 +404,16 @@ class _GungeoneerPage extends StatelessWidget {
                       size: 30,
                     ),
                     const SizedBox(width: 6),
-                    GoopText(
-                      n,
-                      style: const TextStyle(
-                        fontSize: FontSizes.labelMedium,
-                        fontWeight: FontWeight.w700,
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 180),
+                      child: GoopText(
+                        n,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: FontSizes.labelMedium,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
