@@ -364,7 +364,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
             child: _CompactActionTile(
               data: _TileData(
                 icon: Icons.palette_rounded,
-                label: 'Themes & Customization',
+                label: 'Customization',
                 color: Colors.pinkAccent,
                 onTap:
                     () => Navigator.push(

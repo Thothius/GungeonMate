@@ -175,87 +175,95 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                       children: [
                                         // Local Run — solid hero button.
                                         _menuButton(
-                                          icon: Icons.play_arrow_rounded,
-                                          label: 'Local Run',
-                                          solid: true,
-                                          sf: sf,
-                                          onTap: () {
-                                            Haptics.selection();
-                                            Navigator.push(
-                                              context,
-                                              fastRoute(
-                                                const CharacterSelectScreen(),
-                                              ),
-                                            );
-                                          },
-                                        ).animate(delay: 80.ms).fadeIn(
-                                          duration: 350.ms).slideY(
-                                          begin: 0.15,
-                                          duration: 350.ms,
-                                          curve: Curves.easeOut,
-                                        ),
+                                              icon: Icons.play_arrow_rounded,
+                                              label: 'Local Run',
+                                              solid: true,
+                                              sf: sf,
+                                              onTap: () {
+                                                Haptics.selection();
+                                                Navigator.push(
+                                                  context,
+                                                  fastRoute(
+                                                    const CharacterSelectScreen(),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                            .animate(delay: 80.ms)
+                                            .fadeIn(duration: 350.ms)
+                                            .slideY(
+                                              begin: 0.15,
+                                              duration: 350.ms,
+                                              curve: Curves.easeOut,
+                                            ),
                                         const SizedBox(height: 10),
                                         _menuButton(
-                                          icon: Icons.bluetooth_searching,
-                                          label: 'Multiplayer',
-                                          sf: sf,
-                                          onTap: () {
-                                            Haptics.selection();
-                                            Navigator.push(
-                                              context,
-                                              fastRoute(
-                                                const MpLobbyScreen(),
-                                              ),
-                                            );
-                                          },
-                                        ).animate(delay: 160.ms).fadeIn(
-                                          duration: 350.ms).slideY(
-                                          begin: 0.15,
-                                          duration: 350.ms,
-                                          curve: Curves.easeOut,
-                                        ),
+                                              icon: Icons.bluetooth_searching,
+                                              label: 'Multiplayer',
+                                              sf: sf,
+                                              onTap: () {
+                                                Haptics.selection();
+                                                Navigator.push(
+                                                  context,
+                                                  fastRoute(
+                                                    const MpLobbyScreen(),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                            .animate(delay: 160.ms)
+                                            .fadeIn(duration: 350.ms)
+                                            .slideY(
+                                              begin: 0.15,
+                                              duration: 350.ms,
+                                              curve: Curves.easeOut,
+                                            ),
                                         const SizedBox(height: 14),
                                         _menuButton(
-                                          icon: Icons.palette_rounded,
-                                          label: 'Theme',
-                                          sf: sf,
-                                          onTap: () {
-                                            Haptics.selection();
-                                            Navigator.push(
-                                              context,
-                                              fastRoute(
-                                                const ExperienceStudioScreen(),
-                                              ),
-                                            );
-                                          },
-                                        ).animate(delay: 240.ms).fadeIn(
-                                          duration: 350.ms).slideY(
-                                          begin: 0.15,
-                                          duration: 350.ms,
-                                          curve: Curves.easeOut,
-                                        ),
+                                              icon: Icons.palette_rounded,
+                                              label: 'Customization',
+                                              sf: sf,
+                                              onTap: () {
+                                                Haptics.selection();
+                                                Navigator.push(
+                                                  context,
+                                                  fastRoute(
+                                                    const ExperienceStudioScreen(),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                            .animate(delay: 240.ms)
+                                            .fadeIn(duration: 350.ms)
+                                            .slideY(
+                                              begin: 0.15,
+                                              duration: 350.ms,
+                                              curve: Curves.easeOut,
+                                            ),
                                         const SizedBox(height: 10),
                                         _menuButton(
-                                          icon: Icons.menu_book_rounded,
-                                          label: 'Ammonomicon',
-                                          sf: sf,
-                                          onTap: () {
-                                            Haptics.selection();
-                                            Navigator.push(
-                                              context,
-                                              fastRoute(
-                                                const AmmonomiconScreen(
-                                                  showBackButton: true,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ).animate(delay: 320.ms).fadeIn(
-                                          duration: 350.ms).slideY(
-                                          begin: 0.15,
-                                          duration: 350.ms,
-                                          curve: Curves.easeOut,
-                                        ),
+                                              icon: Icons.menu_book_rounded,
+                                              label: 'Ammonomicon',
+                                              sf: sf,
+                                              onTap: () {
+                                                Haptics.selection();
+                                                Navigator.push(
+                                                  context,
+                                                  fastRoute(
+                                                    const AmmonomiconScreen(
+                                                      showBackButton: true,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                            .animate(delay: 320.ms)
+                                            .fadeIn(duration: 350.ms)
+                                            .slideY(
+                                              begin: 0.15,
+                                              duration: 350.ms,
+                                              curve: Curves.easeOut,
+                                            ),
                                       ],
                                     ),
                                   ),
