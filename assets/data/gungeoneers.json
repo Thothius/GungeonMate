@@ -1,8 +1,13 @@
 [
   {
     "name": "The Marine",
-    "starting_guns": ["Marine Sidearm"],
-    "starting_items": ["Supply Drop", "Military Training"],
+    "starting_guns": [
+      "Marine Sidearm"
+    ],
+    "starting_items": [
+      "Military Training",
+      "Supply Drop"
+    ],
     "starting_armor": 1,
     "icon": "",
     "short_desc": "A reliable soldier who starts with extra armor and accurate weaponry.",
@@ -13,7 +18,11 @@
       "Supply Drop provides emergency ammo — save it for boss fights",
       "The extra armor absorbs one hit — play slightly more aggressively early"
     ],
-    "nicknames": ["Tough Guy", "Soldier", "Meathead"],
+    "nicknames": [
+      "Tough Guy",
+      "Soldier",
+      "Meathead"
+    ],
     "voice": "manly",
     "hegemony_cost": 0,
     "unlock_method": "Available from the start",
@@ -27,12 +36,27 @@
     "alt_costume_name": "Knight",
     "alt_costume_unlock": "Kill The Marine's past",
     "alt_weapon_skin_unlock": "Kill The Marine's past with alternate costume equipped",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Marine"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Marine",
+    "starting_gun_ids": [
+      86
+    ],
+    "starting_item_ids": [
+      354,
+      77
+    ],
+    "max_guns": 8,
+    "max_items": 1
   },
   {
     "name": "The Pilot",
-    "starting_guns": ["Rogue Special"],
-    "starting_items": ["Trusty Lockpicks", "Disarming Personality", "Hidden Compartment"],
+    "starting_guns": [
+      "Rogue Special"
+    ],
+    "starting_items": [
+      "Disarming Personality",
+      "Hidden Compartment",
+      "Trusty Lockpicks"
+    ],
     "starting_armor": 0,
     "icon": "",
     "short_desc": "A roguish smuggler who trades safety for utility — lockpicks, discounts, and extra active item slots.",
@@ -44,7 +68,12 @@
       "Hidden Compartment gives extra active item slots and ammo capacity — carry two actives",
       "Rogue Special is weak early — find a better gun quickly"
     ],
-    "nicknames": ["Flyboy", "Rogue", "Taffer", "Scoundrel"],
+    "nicknames": [
+      "Flyboy",
+      "Rogue",
+      "Taffer",
+      "Scoundrel"
+    ],
     "voice": "spacerogue",
     "hegemony_cost": 0,
     "unlock_method": "Available from the start",
@@ -58,12 +87,28 @@
     "alt_costume_name": "Alternate",
     "alt_costume_unlock": "Kill The Pilot's past",
     "alt_weapon_skin_unlock": "Kill The Pilot's past with alternate costume equipped",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Pilot"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Pilot",
+    "max_guns": 8,
+    "max_items": 1,
+    "starting_gun_ids": [
+      89
+    ],
+    "starting_item_ids": [
+      187,
+      473,
+      356
+    ]
   },
   {
     "name": "The Convict",
-    "starting_guns": ["Budget Revolver", "Sawed-Off"],
-    "starting_items": ["Molotov", "Enraging Photo"],
+    "starting_guns": [
+      "Budget Revolver",
+      "Sawed-Off"
+    ],
+    "starting_items": [
+      "Enraging Photo",
+      "Molotov"
+    ],
     "starting_armor": 0,
     "icon": "",
     "short_desc": "A fierce close-range fighter who rewards aggressive play with damage and reload boosts.",
@@ -75,7 +120,11 @@
       "Molotov is great for crowd control and damaging groups",
       "Budget Revolver is your fallback for ranged encounters"
     ],
-    "nicknames": ["Jumpsuit", "Jailbird", "Lawbreaker"],
+    "nicknames": [
+      "Jumpsuit",
+      "Jailbird",
+      "Lawbreaker"
+    ],
     "voice": "convict",
     "hegemony_cost": 0,
     "unlock_method": "Available from the start",
@@ -89,12 +138,27 @@
     "alt_costume_name": "Alternate",
     "alt_costume_unlock": "Kill The Convict's past",
     "alt_weapon_skin_unlock": "Kill The Convict's past with alternate costume equipped",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Convict"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Convict",
+    "starting_gun_ids": [
+      80,
+      202
+    ],
+    "starting_item_ids": [
+      353,
+      366
+    ],
+    "max_guns": 8,
+    "max_items": 1
   },
   {
     "name": "The Hunter",
-    "starting_guns": ["Rusty Sidearm", "Crossbow"],
-    "starting_items": ["Dog"],
+    "starting_guns": [
+      "Rusty Sidearm",
+      "Crossbow"
+    ],
+    "starting_items": [
+      "Dog"
+    ],
     "starting_armor": 0,
     "icon": "",
     "short_desc": "A ranged specialist with a loyal dog companion who finds items and spots mimics.",
@@ -106,7 +170,12 @@
       "Dog barks at mimics — if your dog barks at a chest, it's a mimic",
       "Save Crossbow bolts for high-value targets — ammo is limited"
     ],
-    "nicknames": ["Pilgrim", "Prof", "Lady", "Ma'am"],
+    "nicknames": [
+      "Pilgrim",
+      "Prof",
+      "Lady",
+      "Ma'am"
+    ],
     "voice": "convict",
     "hegemony_cost": 0,
     "unlock_method": "Available from the start",
@@ -120,12 +189,25 @@
     "alt_costume_name": "Alternate",
     "alt_costume_unlock": "Kill The Hunter's past",
     "alt_weapon_skin_unlock": "Kill The Hunter's past with alternate costume equipped",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Hunter"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Hunter",
+    "starting_gun_ids": [
+      99,
+      12
+    ],
+    "starting_item_ids": [
+      300
+    ],
+    "max_guns": 8,
+    "max_items": 1
   },
   {
     "name": "The Bullet",
-    "starting_guns": ["Blasphemy"],
-    "starting_items": ["Live Ammo"],
+    "starting_guns": [
+      "Blasphemy"
+    ],
+    "starting_items": [
+      "Live Ammo"
+    ],
     "starting_armor": 0,
     "icon": "",
     "short_desc": "A bullet-shaped hero who cleaves bullets with a sword and is immune to contact damage.",
@@ -138,7 +220,14 @@
       "Losing even 1 heart piece halves your damage and removes ranged attack — top off health",
       "Swinging causes a slight forward lunge — don't swing near pits"
     ],
-    "nicknames": ["Slug", "Ammo", "Round", "Shell", "Little guy", "Betrayer"],
+    "nicknames": [
+      "Slug",
+      "Ammo",
+      "Round",
+      "Shell",
+      "Little guy",
+      "Betrayer"
+    ],
     "voice": "",
     "hegemony_cost": 0,
     "unlock_method": "Spare five Red-Caped Bullet Kin — let them teleport away instead of killing them. After sparing five, The Bullet unlocks.",
@@ -152,12 +241,25 @@
     "alt_costume_name": "Alternate",
     "alt_costume_unlock": "Kill The Bullet's past",
     "alt_weapon_skin_unlock": "Kill The Bullet's past with alternate costume equipped",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Bullet"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Bullet",
+    "starting_gun_ids": [
+      417
+    ],
+    "starting_item_ids": [
+      414
+    ],
+    "max_guns": 8,
+    "max_items": 1
   },
   {
     "name": "The Robot",
-    "starting_guns": ["Robot's Right Hand"],
-    "starting_items": ["Battery Bullets", "Coolant Leak"],
+    "starting_guns": [
+      "Robot's Right Hand"
+    ],
+    "starting_items": [
+      "Battery Bullets",
+      "Coolant Leak"
+    ],
     "starting_armor": 6,
     "icon": "",
     "short_desc": "A mechanical gungeoneer with 6 armor instead of hearts. Junk boosts damage permanently. Immune to electricity.",
@@ -171,7 +273,17 @@
       "Master Rounds give 1 armor (not heart) — collect them to extend your survival",
       "Heart-container items give shells instead — don't waste them"
     ],
-    "nicknames": ["Machine", "Automaton", "Android", "Mechano-man", "Can-opener", "Robert", "Number 4", "Toaster", "Metal Head"],
+    "nicknames": [
+      "Machine",
+      "Automaton",
+      "Android",
+      "Mechano-man",
+      "Can-opener",
+      "Robert",
+      "Number 4",
+      "Toaster",
+      "Metal Head"
+    ],
     "voice": "computer",
     "hegemony_cost": 0,
     "unlock_method": "Reach the Forge and deliver the Bullet That Can Kill The Past to the Blacksmith. Then defeat the High Dragun with The Robot.",
@@ -185,12 +297,26 @@
     "alt_costume_name": "Alternate",
     "alt_costume_unlock": "Kill The Robot's past",
     "alt_weapon_skin_unlock": "Kill The Robot's past with alternate costume equipped (bullets become bones)",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Robot"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Robot",
+    "starting_gun_ids": [
+      88
+    ],
+    "starting_item_ids": [
+      410,
+      411
+    ],
+    "max_guns": 8,
+    "max_items": 1
   },
   {
     "name": "The Cultist",
-    "starting_guns": ["Dart Gun"],
-    "starting_items": ["Friendship Cookie", "Number 2"],
+    "starting_guns": [
+      "Dart Gun"
+    ],
+    "starting_items": [
+      "Number 2",
+      "Friendship Cookie"
+    ],
     "starting_armor": 0,
     "icon": "",
     "short_desc": "A co-op-only companion character. Plays as Player 2 in multiplayer runs.",
@@ -202,7 +328,13 @@
       "Coordinate with Player 1 — you're the support player",
       "Your past is a PvP duel against Player 1 using Magnums"
     ],
-    "nicknames": ["Somebody", "Some guy", "Rando", "Extra", "Guy next to the protagonist"],
+    "nicknames": [
+      "Somebody",
+      "Some guy",
+      "Rando",
+      "Extra",
+      "Guy next to the protagonist"
+    ],
     "voice": "coop",
     "hegemony_cost": 0,
     "unlock_method": "Available from the start (co-op only)",
@@ -216,12 +348,25 @@
     "alt_costume_name": "Alternate",
     "alt_costume_unlock": "Complete the Cultist's past duel (win or lose)",
     "alt_weapon_skin_unlock": "N/A — Cultist has no weapon skin",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Cultist"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Cultist",
+    "starting_gun_ids": [
+      24
+    ],
+    "starting_item_ids": [
+      326,
+      412
+    ],
+    "max_guns": 8,
+    "max_items": 1
   },
   {
     "name": "The Paradox",
-    "starting_guns": ["Random"],
-    "starting_items": ["Random"],
+    "starting_guns": [
+      "Random"
+    ],
+    "starting_items": [
+      "Random"
+    ],
     "starting_armor": 0,
     "icon": "",
     "short_desc": "A temporal anomaly with a random loadout. Costs 5 Hegemony Credits to play. No traditional past.",
@@ -235,7 +380,13 @@
       "Killing the Lich without Gunslinger unlocked does NOT count — no Ammonomicon entry",
       "The Blacksmith won't give you the Bullet That Can Kill The Past"
     ],
-    "nicknames": ["Whatever you are", "Time blob", "Glitch", "Temporal horror", "Purple ghost"],
+    "nicknames": [
+      "Whatever you are",
+      "Time blob",
+      "Glitch",
+      "Temporal horror",
+      "Purple ghost"
+    ],
     "voice": "manly",
     "hegemony_cost": 5,
     "unlock_method": "Defeat the Lich at least once with any character. The Paradox then appears in The Breach.",
@@ -253,8 +404,12 @@
   },
   {
     "name": "The Gunslinger",
-    "starting_guns": ["Slinger"],
-    "starting_items": ["Lich's Eye Bullets"],
+    "starting_guns": [
+      "Slinger"
+    ],
+    "starting_items": [
+      "Lich's Eye Bullets"
+    ],
     "starting_armor": 0,
     "icon": "",
     "short_desc": "The legendary hero who created the Gungeon. Lich's Eye Bullets grant all synergies. Costs 7 Hegemony Credits.",
@@ -268,7 +423,9 @@
       "Both Liches use only their first phase, but the Paradox Lich fires jammed bullets",
       "Considered the easiest gungeoneer — great for new players after unlock"
     ],
-    "nicknames": ["Slinger"],
+    "nicknames": [
+      "Slinger"
+    ],
     "voice": "manly",
     "hegemony_cost": 7,
     "unlock_method": "Defeat the Lich as The Paradox. This transitions to The Gunslinger's past. Defeat both Liches to unlock The Gunslinger permanently.",
@@ -282,6 +439,14 @@
     "alt_costume_name": "N/A",
     "alt_costume_unlock": "N/A — Gunslinger has no alternate costume",
     "alt_weapon_skin_unlock": "N/A — Gunslinger has no weapon skin",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Gunslinger"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Gunslinger",
+    "starting_gun_ids": [
+      604
+    ],
+    "starting_item_ids": [
+      815
+    ],
+    "max_guns": 8,
+    "max_items": 1
   }
 ]
