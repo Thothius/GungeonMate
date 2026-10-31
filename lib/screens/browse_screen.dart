@@ -894,13 +894,39 @@ class _BrowseScreenState extends State<BrowseScreen> {
               ],
             ),
           ),
-          for (final n in pieces)
-            _pieceIcon(c, p, n, combined.contains(n.toLowerCase())),
+          Flexible(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (final n in pieces)
+                    _pieceIcon(c, p, n, combined.contains(n.toLowerCase())),
+                ],
+              ),
+            ),
+          ),
           if (missing.isNotEmpty)
             GestureDetector(
               onTap: () {
+                // Add missing required pieces; for any_of synergies add
+                // only ONE missing option (that's all the synergy needs).
                 var added = 0;
-                for (final n in missing) {
+                final needed = [
+                  ...missing.where(
+                    (n) => !synObj.anyOf.contains(n),
+                  ),
+                  if (synObj.anyOf.isNotEmpty &&
+                      !synObj.anyOf.any(
+                        (n) => combined.contains(n.toLowerCase()),
+                      ))
+                    missing.firstWhere(
+                      (n) => synObj.anyOf.contains(n),
+                      orElse: () => '',
+                    ),
+                ];
+                for (final n in needed) {
+                  if (n.isEmpty) continue;
                   final g = p.allGuns
                       .where((x) => x.name == n)
                       .firstOrNull;
