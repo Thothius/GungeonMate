@@ -154,7 +154,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               subtitle: subtitle,
                               quality: quality,
                               quote: quote,
-                              effect: gun?.notes ?? '',
+                              // Guns show notes; items show their mechanical
+                              // effect line (was empty — all 270 items have
+                              // one and it was parsed but never rendered).
+                              effect: gun?.notes ?? item?.effect ?? '',
                               isGun: gun != null,
                               isActive: item?.isActive ?? false,
                               iconPath: gun?.icon ?? item?.icon ?? '',
