@@ -109,9 +109,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-  // ── Simple picker (initialTab == 0) ───────────────────────────
-  // Tall palette panels + a back/preview/apply bar. Nothing else —
-  // the screen itself is the preview.
+  // ── Theme staging ──────────────────────────────────────────
+  // Taps set the preview mode + curated prefs; APPLY commits.
 
   /// Tap-to-preview: session skin + notifier + curated preset
   /// application — same path the studio grid uses.

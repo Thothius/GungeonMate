@@ -120,7 +120,8 @@ class ThemeCuration {
   });
 }
 
-/// Curated settings for each of the 8 premade picker themes.
+/// Curated settings for the premade modes — applied to VisualPrefs so
+/// each preset ships a complete, polished identity out of the box.
 /// When a user selects a premade, these are applied to VisualPrefs
 /// so the theme has a complete, polished identity out of the box.
 const Map<AppThemeMode, ThemeCuration> kThemeCuration =
@@ -623,147 +624,6 @@ const kThemeRemixes = <AppThemeMode, List<ThemeRemix>>{
         headerUnderlineColor: Color(0x44757575),
         pageFrame: true,
       ),
-    ),
-  ],
-};
-
-const Map<AppThemeMode, List<({String name, List<Color> colors})>>
-kThemeParticleSchemas = {
-  AppThemeMode.unicorn: [
-    (
-      name: 'RAINBOW',
-      colors: [
-        Color(0xFFFF5252),
-        Color(0xFFFFB300),
-        Color(0xFF69F0AE),
-        Color(0xFF40C4FF),
-        Color(0xFFB388FF),
-      ],
-    ),
-    (
-      name: 'PASTEL',
-      colors: [
-        Color(0xFFF8BBD0),
-        Color(0xFFB3E5FC),
-        Color(0xFFD1C4E9),
-        Color(0xFFC8E6C9),
-      ],
-    ),
-    (
-      name: 'GOLD',
-      colors: [Color(0xFFFFD700), Color(0xFFFFB300), Color(0xFFFFF8DC)],
-    ),
-  ],
-  AppThemeMode.forgeMaster: [
-    (
-      name: 'EMBER',
-      colors: [Color(0xFFFF5722), Color(0xFFFF8A65), Color(0xFFD84315)],
-    ),
-    (
-      name: 'AMBER',
-      colors: [Color(0xFFFFB300), Color(0xFFFFD54F), Color(0xFFFF6F00)],
-    ),
-    (
-      name: 'STEEL',
-      colors: [Color(0xFFB0BEC5), Color(0xFF78909C), Color(0xFFECEFF1)],
-    ),
-  ],
-  AppThemeMode.candyRush: [
-    (
-      name: 'BUBBLEGUM',
-      colors: [Color(0xFFF8BBD0), Color(0xFFF48FB1), Color(0xFFFCE4EC)],
-    ),
-    (
-      name: 'COTTON',
-      colors: [Color(0xFFB3E5FC), Color(0xFFE1BEE7), Color(0xFFF8BBD0)],
-    ),
-    (
-      name: 'SUGAR',
-      colors: [Color(0xFFFFF0F5), Color(0xFFF8BBD0), Color(0xFFEC407A)],
-    ),
-  ],
-  AppThemeMode.neonPrism: [
-    (
-      name: 'PRISM',
-      colors: [Color(0xFFE040FB), Color(0xFF00E5FF), Color(0xFFFFD740)],
-    ),
-    (
-      name: 'VOLT',
-      colors: [Color(0xFF00E5FF), Color(0xFF76FF03), Color(0xFFE040FB)],
-    ),
-    (
-      name: 'RAIN',
-      colors: [Color(0xFF7C4DFF), Color(0xFF18FFFF), Color(0xFFFF4081)],
-    ),
-  ],
-  AppThemeMode.blacksmithsFire: [
-    (
-      name: 'RUST',
-      colors: [Color(0xFFD84315), Color(0xFF8D6E63), Color(0xFFFF8A65)],
-    ),
-    (
-      name: 'COAL',
-      colors: [Color(0xFF3E2723), Color(0xFFD84315), Color(0xFFFFB74D)],
-    ),
-    (
-      name: 'FORGE',
-      colors: [Color(0xFFFF8A65), Color(0xFFD84315), Color(0xFFFFCC80)],
-    ),
-  ],
-  AppThemeMode.moltenSteel: [
-    (
-      name: 'MOLTEN',
-      colors: [Color(0xFFFF6E40), Color(0xFFFF8A65), Color(0xFFDD2C00)],
-    ),
-    (
-      name: 'STEEL',
-      colors: [Color(0xFFB0BEC5), Color(0xFF78909C), Color(0xFFECEFF1)],
-    ),
-    (
-      name: 'IRON',
-      colors: [Color(0xFF546E7A), Color(0xFF90A4AE), Color(0xFFFF6E40)],
-    ),
-  ],
-  AppThemeMode.paperInk: [
-    (
-      name: 'INK',
-      colors: [Color(0xFF90A4AE), Color(0xFF546E7A), Color(0xFF263238)],
-    ),
-    (
-      name: 'PAPER',
-      colors: [Color(0xFFECEFF1), Color(0xFFCFD8DC), Color(0xFFB0BEC5)],
-    ),
-    (
-      name: 'SKETCH',
-      colors: [Color(0xFF78909C), Color(0xFFB0BEC5), Color(0xFF90A4AE)],
-    ),
-  ],
-  AppThemeMode.voidWhite: [
-    (
-      name: 'VOID',
-      colors: [Color(0xFFFFFFFF), Color(0xFF9E9E9E), Color(0xFF424242)],
-    ),
-    (
-      name: 'STARK',
-      colors: [Color(0xFFFAFAFA), Color(0xFF616161), Color(0xFFBDBDBD)],
-    ),
-    (
-      name: 'INVERT',
-      colors: [Color(0xFF212121), Color(0xFF616161), Color(0xFF9E9E9E)],
-    ),
-  ],
-  AppThemeMode.moonlitChamber: [
-    (
-      name: 'MONO',
-      colors: [Color(0xFFECEFF1), Color(0xFFB0BEC5), Color(0xFF90A4AE)],
-    ),
-    (
-      name: 'WHITE',
-      colors: [Color(0xFFFFFFFF), Color(0xFFFAFAFA), Color(0xFFE0E0E0)],
-    ),
-    (
-      name: 'ONYX',
-      colors: [Color(0xFF616161), Color(0xFF424242), Color(0xFF9E9E9E)],
     ),
   ],
 };

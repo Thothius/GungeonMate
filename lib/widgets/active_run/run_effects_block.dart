@@ -48,27 +48,34 @@ class RunEffectsBlock extends StatelessWidget {
   // Single-line label+value — the strip stays ~50% shorter than the
   // old two-line column per user request.
   Widget _stat(String label, String value, Color col, double sf) {
+    // FittedBox — the pair scales down on narrow viewports instead of
+    // overflowing its Expanded slice (320px overflow fix).
     return Expanded(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GoopText(
-            '$label ',
-            style: TextStyle(
-              fontSize: 7.5 * sf,
-              letterSpacing: 0.8,
-              color: Colors.white.withValues(alpha: 0.4),
-            ),
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GoopText(
+                '$label ',
+                style: TextStyle(
+                  fontSize: 7.5 * sf,
+                  letterSpacing: 0.8,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+              ),
+              GoopText(
+                value,
+                style: TextStyle(
+                  fontSize: 10.5 * sf,
+                  fontWeight: FontWeight.w900,
+                  color: col,
+                ),
+              ),
+            ],
           ),
-          GoopText(
-            value,
-            style: TextStyle(
-              fontSize: 10.5 * sf,
-              fontWeight: FontWeight.w900,
-              color: col,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

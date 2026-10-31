@@ -52,7 +52,7 @@ void main() {
 
     expect(find.text('Local Run'), findsOneWidget);
     expect(find.text('Multiplayer'), findsOneWidget);
-    expect(find.text('Theme'), findsOneWidget);
+    expect(find.text('Customization'), findsOneWidget);
     expect(find.text('Ammonomicon'), findsOneWidget);
     expect(find.text('Quiz'), findsNothing);
   });
