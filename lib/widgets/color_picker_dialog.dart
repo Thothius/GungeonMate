@@ -129,15 +129,17 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
                                   (d) => _handleSV(d.localPosition, size),
                               onPanUpdate:
                                   (d) => _handleSV(d.localPosition, size),
-                              child: CustomPaint(
-                                painter: _SVPainter(_hsv),
-                                size: size,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radii.sm),
-                                    border: Border.all(
-                                      color: flair.onSurface.withValues(
-                                        alpha: 0.1,
+                              child: RepaintBoundary(
+                                child: CustomPaint(
+                                  painter: _SVPainter(_hsv),
+                                  size: size,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radii.sm),
+                                      border: Border.all(
+                                        color: flair.onSurface.withValues(
+                                          alpha: 0.1,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -161,14 +163,16 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
                       onPanUpdate:
                           (d) =>
                               _handleHue(d.localPosition, const Size(28, 240)),
-                      child: CustomPaint(
-                        painter: _HuePainter(_hsv.hue),
-                        size: const Size(28, 240),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radii.sm),
-                            border: Border.all(
-                              color: flair.onSurface.withValues(alpha: 0.1),
+                      child: RepaintBoundary(
+                        child: CustomPaint(
+                          painter: _HuePainter(_hsv.hue),
+                          size: const Size(28, 240),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radii.sm),
+                              border: Border.all(
+                                color: flair.onSurface.withValues(alpha: 0.1),
+                              ),
                             ),
                           ),
                         ),
