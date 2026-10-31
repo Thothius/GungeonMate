@@ -81,7 +81,10 @@ void main() {
       final rp = _LoadedRunProvider();
 
       await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
-      await tester.pumpAndSettle();
+      // Use pump() not pumpAndSettle() — MainMenuScreen's ember
+      // backdrop animates perpetually and would never settle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
 
       // MainMenuScreen should be shown
       expect(find.byType(MainMenuScreen), findsOneWidget);
@@ -93,7 +96,8 @@ void main() {
       final rp = _LoadedRunProvider();
 
       await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
 
       expect(find.byType(NavigationBar), findsNothing);
     });

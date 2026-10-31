@@ -237,7 +237,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
               chaos: prefs.particleChaos,
             );
             final particleBackdropBg =
-                !particlesOn
+                !particlesOn || isHomeScreen
                     ? null
                     : ParticleField(
                       preset: effectivePreset,
@@ -272,7 +272,16 @@ class _ThemeOverlayState extends State<ThemeOverlay>
               child: Stack(
                 children: [
                   // 0. Absolute Base Solid Background Color (since scaffolds are transparent)
-                  Positioned.fill(child: Container(color: f.scaffold)),
+                  // The home menu is theme-locked — its own backdrop
+                  // (MainMenuBackdrop) owns the whole look, so we use
+                  // its fixed base color and skip all theme layers below.
+                  Positioned.fill(
+                    child: Container(
+                      color: isHomeScreen
+                          ? const Color(0xFF0A0710)
+                          : f.scaffold,
+                    ),
+                  ),
 
                   // Home screen vortex animation removed — default to
                   // Minimalist. ThemeOverlay provides only the base color
@@ -281,7 +290,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
                   // rain or dark neon fog. Sits behind particles but above the
                   // base background + video wallpaper. Opt-in via VisualPrefs.
-                  if (!reduceMotion && prefs.shaderEnabled)
+                  if (!reduceMotion && !isHomeScreen && prefs.shaderEnabled)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: AmbientShaderLayer(
@@ -294,14 +303,14 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                     ),
 
                   // 1b. Particles / Theme Backdrops (Background Layer)
-                  if (particleBackdropBg != null)
+                  if (!isHomeScreen && particleBackdropBg != null)
                     Positioned.fill(
                       child: IgnorePointer(child: particleBackdropBg),
                     ),
 
                   // 1c. Ambient Glow — behind content so it glows behind panels,
                   //     not covering layered content on top.
-                  if (showGlow)
+                  if (showGlow && !isHomeScreen)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: AmbientGlow(
@@ -318,7 +327,8 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   content,
 
                   // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
-                  Positioned.fill(
+                  if (!isHomeScreen)
+                    Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
                         decoration: BoxDecoration(
@@ -338,37 +348,13 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                     ),
                   ),
 
-                  // 3.6. Enhanced Readability Scrim — when the Galaxy bg is
-                  // active on the Home screen, lay down a semi-opaque dark veil
-                  // so foreground cards, text, and panels stay crisp.
-                  if (isHomeScreen)
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.black.withValues(alpha: 0.22),
-                                Colors.black.withValues(alpha: 0.08),
-                                Colors.black.withValues(alpha: 0.14),
-                                Colors.black.withValues(alpha: 0.28),
-                              ],
-                              stops: const [0.0, 0.3, 0.6, 1.0],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                  if (f.pageFrame)
+                  if (!isHomeScreen && f.pageFrame)
                     const Positioned.fill(
                       child: IgnorePointer(child: PageFrame()),
                     ),
 
                   // 4. Special Top-Edge Drip Overlay (Curseblaster / Oubliette themes)
-                  if (mode == AppThemeMode.lordJammed)
+                  if (!isHomeScreen && mode == AppThemeMode.lordJammed)
                     const Positioned(
                       top: 0,
                       left: 0,

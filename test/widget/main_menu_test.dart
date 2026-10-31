@@ -9,15 +9,12 @@ import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
 
 /// Widget tests for MainMenuScreen — the opening screen with the app
 /// title, subtitle, and primary action buttons (Local Run, Multiplayer,
-/// Customization, Ammonomicon).
+/// Theme, Ammonomicon).
 ///
-/// "How to Use" was removed in the 10-item rework (2026-08-25).
-///
-/// MainMenuScreen uses ScaleButton (spring-scale on press, not
-/// perpetual) and flutter_animate one-shot entrance animations, so
-/// pumpAndSettle is safe for the main screen. However, navigating to
-/// AmmonomiconScreen triggers SkeletonLoader (perpetual animation), so we
-/// use pump() after that navigation.
+/// The menu is theme-locked and its backdrop runs a perpetual ember
+/// animation, so `pumpAndSettle` would never finish — all pumps here
+/// use fixed durations instead (same pattern as the Ammonomicon nav
+/// test, which pumps past SkeletonLoader's perpetual shimmer).
 void main() {
   Widget wrap(Widget child) {
     return MultiProvider(
@@ -29,34 +26,38 @@ void main() {
     );
   }
 
+  /// Pump the widget tree plus enough frames for the one-shot entrance
+  /// animations to complete.
+  Future<void> pumpMenu(WidgetTester tester, Widget child) async {
+    await tester.pumpWidget(wrap(child));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 600));
+  }
+
   testWidgets('Renders app title GUNGEON MATE', (tester) async {
-    await tester.pumpWidget(wrap(const MainMenuScreen()));
-    await tester.pumpAndSettle();
+    await pumpMenu(tester, const MainMenuScreen());
 
     expect(find.text('GUNGEON MATE'), findsWidgets);
   });
 
   testWidgets('Renders subtitle YOUR COMPANION IN THE GUNGEON', (tester) async {
-    await tester.pumpWidget(wrap(const MainMenuScreen()));
-    await tester.pumpAndSettle();
+    await pumpMenu(tester, const MainMenuScreen());
 
     expect(find.text('YOUR COMPANION IN THE GUNGEON'), findsOneWidget);
   });
 
   testWidgets('Renders all four primary action buttons', (tester) async {
-    await tester.pumpWidget(wrap(const MainMenuScreen()));
-    await tester.pumpAndSettle();
+    await pumpMenu(tester, const MainMenuScreen());
 
     expect(find.text('Local Run'), findsOneWidget);
     expect(find.text('Multiplayer'), findsOneWidget);
-    expect(find.text('Quiz'), findsOneWidget);
     expect(find.text('Theme'), findsOneWidget);
     expect(find.text('Ammonomicon'), findsOneWidget);
+    expect(find.text('Quiz'), findsNothing);
   });
 
   testWidgets('Renders version label', (tester) async {
-    await tester.pumpWidget(wrap(const MainMenuScreen()));
-    await tester.pumpAndSettle();
+    await pumpMenu(tester, const MainMenuScreen());
 
     // Version label is "v" + kAppVersion (e.g. "v2.0.3")
     expect(find.textContaining('v'), findsWidgets);
@@ -65,24 +66,23 @@ void main() {
   testWidgets('Tapping Local Run navigates to CharacterSelectScreen', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const MainMenuScreen()));
-    await tester.pumpAndSettle();
+    await pumpMenu(tester, const MainMenuScreen());
 
     await tester.tap(find.text('Local Run'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.byType(CharacterSelectScreen), findsOneWidget);
   });
 
-  testWidgets('Tapping Ammonomicon navigates to AmmonomiconScreen', (tester) async {
-    await tester.pumpWidget(wrap(const MainMenuScreen()));
-    await tester.pumpAndSettle();
+  testWidgets('Tapping Ammonomicon navigates to AmmonomiconScreen', (
+    tester,
+  ) async {
+    await pumpMenu(tester, const MainMenuScreen());
 
     await tester.ensureVisible(find.text('Ammonomicon'));
-    await tester.pumpAndSettle();
+    await tester.pump();
     await tester.tap(find.text('Ammonomicon'));
-    // Use pump() not pumpAndSettle() — AmmonomiconScreen shows SkeletonLoader
-    // which has a perpetual shimmer animation that would time out.
     await tester.pump(); // Process the tap callback
     await tester.pump(
       const Duration(milliseconds: 500),
