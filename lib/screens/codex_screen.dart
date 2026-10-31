@@ -50,6 +50,11 @@ class _CodexScreenState extends State<CodexScreen> {
   final TextEditingController _searchCtrl = TextEditingController();
   String _query = '';
 
+  /// Quality-letter filter for the Ammonomicon Guns/Items tabs.
+  /// Empty = show all.
+  final Set<String> _qualityFilter = {};
+  static const _qualities = ['D', 'C', 'B', 'A', 'S'];
+
   // Currently selected category index (0-based). 0-5 are special pages,
   // 6-10 are data categories.
   int _selected = -1; // -1 = category picker grid (level 1)
@@ -242,6 +247,8 @@ class _CodexScreenState extends State<CodexScreen> {
         return _filter(context
             .read<RunProvider>()
             .allGuns
+            .where((g) =>
+                _qualityFilter.isEmpty || _qualityFilter.contains(g.quality))
             .map((g) => CodexEntry(
                 name: g.name,
                 category: 'Guns',
@@ -253,6 +260,8 @@ class _CodexScreenState extends State<CodexScreen> {
         return _filter(context
             .read<RunProvider>()
             .allItems
+            .where((i) =>
+                _qualityFilter.isEmpty || _qualityFilter.contains(i.quality))
             .map((i) => CodexEntry(
                 name: i.name,
                 category: 'Items',
@@ -291,6 +300,55 @@ class _CodexScreenState extends State<CodexScreen> {
       default:
         return [];
     }
+  }
+
+  Widget _buildQualityChips(ThemeFlair flair) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+      child: Row(
+        children: [
+          for (final q in _qualities)
+            Padding(
+              padding: const EdgeInsets.only(right: 6),
+              child: GestureDetector(
+                onTap: () {
+                  Haptics.selection();
+                  setState(() {
+                    _qualityFilter.contains(q)
+                        ? _qualityFilter.remove(q)
+                        : _qualityFilter.add(q);
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _qualityFilter.contains(q)
+                        ? flair.primary.withValues(alpha: 0.25)
+                        : Colors.white.withValues(alpha: 0.06),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: _qualityFilter.contains(q)
+                          ? flair.primary.withValues(alpha: 0.8)
+                          : Colors.white.withValues(alpha: 0.15),
+                    ),
+                  ),
+                  child: GoopText(
+                    q,
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      color: _qualityFilter.contains(q)
+                          ? flair.primary
+                          : Colors.white.withValues(alpha: 0.55),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   CodexSection _sectionFor(int index) {
@@ -620,9 +678,17 @@ class _CodexScreenState extends State<CodexScreen> {
             child:
                 cat.isSpecial
                     ? _specialPage(_selected)
-                    : _CodexList(
-                      entries: _entriesFor(_selected),
-                      section: _sectionFor(_selected),
+                    : Column(
+                      children: [
+                        if (_selected == 9 || _selected == 10)
+                          _buildQualityChips(flair),
+                        Expanded(
+                          child: _CodexList(
+                            entries: _entriesFor(_selected),
+                            section: _sectionFor(_selected),
+                          ),
+                        ),
+                      ],
                     ),
           ),
         ],
