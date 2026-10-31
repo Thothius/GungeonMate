@@ -1,4 +1,5 @@
 import '../theme/tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../widgets/avatar_aura.dart';
+import '../widgets/particles/ambient_glow.dart';
 
 /// Clean connecting / connected view.
 ///
@@ -78,44 +80,138 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     }
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: flair.scaffold.withValues(alpha: 0.3),
       bottomNavigationBar: BottomBackBar(
         onPressed: () {
           if (session.isActive) session.cancel();
           Navigator.of(context).pop();
         },
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Top bar
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16 * sf,
-                vertical: 12 * sf,
-              ),
-              child: Row(
-                children: [
-                  const SizedBox(width: 48),
-                  Expanded(
-                    child: GoopText(
-                      _titleForSession(session),
-                      style: TextStyle(
-                        fontSize: FontSizes.titleSmall * sf,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  SizedBox(width: 48 * sf),
-                ],
+      body: Stack(
+        children: [
+          // Atmospheric glow — same backdrop as the lobby.
+          Positioned.fill(
+            child: IgnorePointer(
+              child: AmbientGlow(
+                primary: flair.primary.withValues(alpha: 0.06),
+                secondary: flair.secondary.withValues(alpha: 0.04),
               ),
             ),
-            Expanded(child: _buildContent(session, rp, sf, flair)),
-          ],
+          ),
+          SafeArea(
+            child: Column(
+              children: [
+                // Top bar
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16 * sf,
+                    vertical: 12 * sf,
+                  ),
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 48),
+                      Expanded(
+                        child: GoopText(
+                          _titleForSession(session),
+                          style: TextStyle(
+                            fontSize: FontSizes.titleSmall * sf,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      SizedBox(width: 48 * sf),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 240),
+                    child: KeyedSubtree(
+                      key: ValueKey(session.phase),
+                      child: _buildContent(session, rp, sf, flair),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Themed card shell shared by every phase — same border+glow
+  /// language as the lobby's stage cards.
+  Widget _cardShell({
+    required List<Widget> children,
+    required Color accent,
+    required double sf,
+    required ThemeFlair flair,
+  }) {
+    return Center(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24 * sf),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 420),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 24 * sf,
+                vertical: 34 * sf,
+              ),
+              decoration: BoxDecoration(
+                color: flair.card.withValues(alpha: 0.85),
+                borderRadius: BorderRadius.all(Radii.lg),
+                border: Border.all(
+                  color: accent.withValues(alpha: 0.4),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: accent.withValues(alpha: 0.12),
+                    blurRadius: 28,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: children,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Small run-title chip — shown once the title is known (host sets
+  /// it in the lobby; the Sidekick gets it via session meta).
+  Widget _runTitleChip(String title, double sf, ThemeFlair flair) {
+    return Center(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 18 * sf),
+        padding: EdgeInsets.symmetric(horizontal: 12 * sf, vertical: 5 * sf),
+        decoration: BoxDecoration(
+          color: flair.secondary.withValues(alpha: 0.10),
+          borderRadius: BorderRadius.all(Radii.sm),
+          border: Border.all(color: flair.secondary.withValues(alpha: 0.4)),
+        ),
+        child: GoopText(
+          title.toUpperCase(),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: FontSizes.labelSmall * sf,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.2,
+            color: flair.secondary,
+          ),
         ),
       ),
     );
@@ -150,109 +246,112 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     final myChar = rp.gungeoneerByName(session.myCharacterName);
     final message = _connectingMessage(session);
 
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32 * sf),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Portrait pair — wrapped in RepaintBoundary to isolate
-            // the continuous pulse animation from the rest of the screen.
-            RepaintBoundary(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _Portrait(
-                    character: myChar,
-                    label: session.myNickname,
-                    isMe: true,
-                    pulse: _pulseCtrl,
-                    sf: sf,
-                    flair: flair,
-                  ),
-                  SizedBox(width: 20 * sf),
-                  // Pulsing link icon with animated glow ring
-                  RepaintBoundary(
-                    child: AnimatedBuilder(
-                      animation: _pulseCtrl,
-                      builder: (context, child) {
-                        final t = _pulseCtrl.value;
-                        return Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: flair.primary.withValues(
-                                  alpha: 0.15 + t * 0.2,
-                                ),
-                                blurRadius: 12 + t * 8,
-                                spreadRadius: 2 + t * 2,
-                              ),
-                            ],
-                          ),
-                          child: FadeTransition(
-                            opacity: _pulseCtrl,
-                            child: Icon(
-                              Icons.link_rounded,
-                              size: 28 * sf,
-                              color: flair.primary.withValues(alpha: 0.7),
+    return _cardShell(
+      accent: flair.primary,
+      sf: sf,
+      flair: flair,
+      children: [
+        if (session.runTitle.isNotEmpty)
+          _runTitleChip(session.runTitle, sf, flair),
+        // Portrait pair — wrapped in RepaintBoundary to isolate
+        // the continuous pulse animation from the rest of the screen.
+        RepaintBoundary(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _Portrait(
+                character: myChar,
+                label: session.myNickname,
+                isMe: true,
+                pulse: _pulseCtrl,
+                sf: sf,
+                flair: flair,
+              ),
+              SizedBox(width: 20 * sf),
+              // Pulsing link icon with animated glow ring
+              RepaintBoundary(
+                child: AnimatedBuilder(
+                  animation: _pulseCtrl,
+                  builder: (context, child) {
+                    final t = _pulseCtrl.value;
+                    return Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: flair.primary.withValues(
+                              alpha: 0.15 + t * 0.2,
                             ),
+                            blurRadius: 12 + t * 8,
+                            spreadRadius: 2 + t * 2,
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 20 * sf),
-                  _Portrait(
-                    character: null,
-                    label: session.peerNickname ?? 'Partner',
-                    isMe: false,
-                    pulse: _pulseCtrl,
-                    sf: sf,
-                    flair: flair,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 36 * sf),
-            // Status message
-            GoopText(
-              message,
-              style: TextStyle(
-                fontSize: 15 * sf,
-                fontWeight: FontWeight.w600,
-                color: Colors.white.withValues(alpha: 0.7),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20 * sf),
-            SizedBox(
-              width: 26 * sf,
-              height: 26 * sf,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.5,
-                color: flair.primary.withValues(alpha: 0.7),
-              ),
-            ),
-            SizedBox(height: 36 * sf),
-            TextButton(
-              onPressed: () {
-                session.cancel();
-                Navigator.of(context).pop();
-              },
-              child: GoopText(
-                'CANCEL',
-                style: TextStyle(
-                  fontSize: FontSizes.labelMedium * sf,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: 0.5,
-                  color: Colors.white.withValues(alpha: 0.4),
+                        ],
+                      ),
+                      child: FadeTransition(
+                        opacity: _pulseCtrl,
+                        child: Icon(
+                          Icons.link_rounded,
+                          size: 28 * sf,
+                          color: flair.primary.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
-            ),
-          ],
+              SizedBox(width: 20 * sf),
+              _Portrait(
+                character: null,
+                label: session.peerNickname ?? 'Partner',
+                isMe: false,
+                pulse: _pulseCtrl,
+                sf: sf,
+                flair: flair,
+              ),
+            ],
+          ),
         ),
-      ),
+        SizedBox(height: 36 * sf),
+        // Status message
+        GoopText(
+          message,
+          style: TextStyle(
+            fontSize: 15 * sf,
+            fontWeight: FontWeight.w600,
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 20 * sf),
+        Center(
+          child: SizedBox(
+            width: 26 * sf,
+            height: 26 * sf,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.5,
+              color: flair.primary.withValues(alpha: 0.7),
+            ),
+          ),
+        ),
+        SizedBox(height: 28 * sf),
+        Center(
+          child: TextButton(
+            onPressed: () {
+              session.cancel();
+              Navigator.of(context).pop();
+            },
+            child: GoopText(
+              'CANCEL',
+              style: TextStyle(
+                fontSize: FontSizes.labelMedium * sf,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.5,
+                color: Colors.white.withValues(alpha: 0.4),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -292,268 +391,251 @@ class _MpConnectScreenState extends State<MpConnectScreen>
     final myChar = rp.gungeoneerByName(session.myCharacterName);
     final peerChar = rp.gungeoneerByName(session.peerCharacterName ?? '');
 
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32 * sf),
-        child: Column(
+    return _cardShell(
+      accent: MpColors.connected,
+      sf: sf,
+      flair: flair,
+      children: [
+        if (session.runTitle.isNotEmpty)
+          _runTitleChip(session.runTitle, sf, flair),
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _Portrait(
-                  character: myChar,
-                  label: session.myNickname,
-                  isMe: true,
-                  pulse: null,
-                  sf: sf,
-                  flair: flair,
-                ),
-                SizedBox(width: 20 * sf),
-                Icon(
-                  Icons.link_rounded,
-                  size: 28 * sf,
-                  color: MpColors.connected,
-                ),
-                SizedBox(width: 20 * sf),
-                _Portrait(
-                  character: peerChar,
-                  label: session.peerNickname ?? 'Partner',
-                  isMe: false,
-                  pulse: null,
-                  sf: sf,
-                  flair: flair,
-                ),
-              ],
+            _Portrait(
+              character: myChar,
+              label: session.myNickname,
+              isMe: true,
+              pulse: null,
+              sf: sf,
+              flair: flair,
             ),
-            SizedBox(height: 32 * sf),
-            // Checkmark pops in with a spring-like scale animation.
-            ScaleTransition(
-              scale: Tween<double>(begin: 0.0, end: 1.0).animate(
-                CurvedAnimation(
-                  parent: _checkPopCtrl,
-                  curve: Curves.elasticOut,
-                ),
-              ),
-              child: Icon(
-                Icons.check_circle_rounded,
-                size: 48 * sf,
-                color: MpColors.connected,
-              ),
-            ),
-            SizedBox(height: 12 * sf),
-            GoopText(
-              'Connected!',
-              style: TextStyle(
-                fontSize: FontSizes.titleLarge * sf,
-                fontWeight: FontWeight.w900,
-                color: MpColors.connected,
-              ),
-            ),
-            SizedBox(height: 8 * sf),
-            GoopText(
-              '${session.myNickname} & ${session.peerNickname ?? "Partner"}',
-              style: TextStyle(
-                fontSize: 13 * sf,
-                color: Colors.white.withValues(alpha: 0.6),
-              ),
-            ),
-            SizedBox(height: 24 * sf),
-            GoopText(
-              'Entering the Gungeon…',
-              style: TextStyle(
-                fontSize: FontSizes.labelMedium * sf,
-                color: Colors.white.withValues(alpha: 0.4),
-              ),
+            SizedBox(width: 20 * sf),
+            Icon(Icons.link_rounded, size: 28 * sf, color: MpColors.connected),
+            SizedBox(width: 20 * sf),
+            _Portrait(
+              character: peerChar,
+              label: session.peerNickname ?? 'Partner',
+              isMe: false,
+              pulse: null,
+              sf: sf,
+              flair: flair,
             ),
           ],
         ),
-      ),
+        SizedBox(height: 32 * sf),
+        // Checkmark pops in with a spring-like scale animation.
+        ScaleTransition(
+          scale: Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(parent: _checkPopCtrl, curve: Curves.elasticOut),
+          ),
+          child: Icon(
+            Icons.check_circle_rounded,
+            size: 48 * sf,
+            color: MpColors.connected,
+          ),
+        ),
+        SizedBox(height: 12 * sf),
+        GoopText(
+          'Connected!',
+          style: TextStyle(
+            fontSize: FontSizes.titleLarge * sf,
+            fontWeight: FontWeight.w900,
+            color: MpColors.connected,
+          ),
+        ),
+        SizedBox(height: 8 * sf),
+        GoopText(
+          '${session.myNickname} & ${session.peerNickname ?? "Partner"}',
+          style: TextStyle(
+            fontSize: 13 * sf,
+            color: Colors.white.withValues(alpha: 0.6),
+          ),
+        ),
+        SizedBox(height: 24 * sf),
+        GoopText(
+          'Entering the Gungeon…',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: FontSizes.labelMedium * sf,
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
+        ),
+      ],
     );
   }
 
   // ── Error ──────────────────────────────────────────────────────
 
   Widget _buildError(MpSession session, double sf, ThemeFlair flair) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32 * sf),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.wifi_off_rounded,
-              size: 48 * sf,
-              color: Colors.redAccent,
-            ),
-            SizedBox(height: 16 * sf),
-            GoopText(
-              'Connection failed',
-              style: TextStyle(
-                fontSize: FontSizes.titleMedium * sf,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            SizedBox(height: 8 * sf),
-            GoopText(
-              session.error ?? 'Something went wrong. Try again.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13 * sf,
-                color: Colors.white.withValues(alpha: 0.6),
-                height: 1.5,
-              ),
-            ),
-            SizedBox(height: 12 * sf),
-            GoopText(
-              'Tip: Make sure both devices have Bluetooth and Wi-Fi on, '
-              'and are within range.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11 * sf,
-                color: Colors.white.withValues(alpha: 0.35),
-                height: 1.4,
-              ),
-            ),
-            SizedBox(height: 24 * sf),
-            FilledButton.icon(
-              style: FilledButton.styleFrom(
-                backgroundColor: flair.primary,
-                foregroundColor: Colors.white,
-                minimumSize: Size.fromHeight(44 * sf),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              icon: Icon(Icons.refresh_rounded, size: 20 * sf),
-              label: GoopText(
-                'RETRY',
-                style: TextStyle(
-                  fontSize: 13 * sf,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              onPressed: () => session.reconnect(),
-            ),
-            SizedBox(height: 12 * sf),
-            TextButton(
-              onPressed: () {
-                session.cancel();
-                Navigator.of(context).pop();
-              },
-              child: GoopText(
-                'CANCEL',
-                style: TextStyle(
-                  fontSize: FontSizes.labelMedium * sf,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white.withValues(alpha: 0.4),
-                ),
-              ),
-            ),
-          ],
+    return _cardShell(
+      accent: Colors.redAccent,
+      sf: sf,
+      flair: flair,
+      children: [
+        Icon(Icons.wifi_off_rounded, size: 48 * sf, color: Colors.redAccent),
+        SizedBox(height: 16 * sf),
+        GoopText(
+          'Connection failed',
+          style: TextStyle(
+            fontSize: FontSizes.titleMedium * sf,
+            fontWeight: FontWeight.w900,
+          ),
         ),
-      ),
+        SizedBox(height: 8 * sf),
+        GoopText(
+          session.error ?? 'Something went wrong. Try again.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 13 * sf,
+            color: Colors.white.withValues(alpha: 0.6),
+            height: 1.5,
+          ),
+        ),
+        SizedBox(height: 12 * sf),
+        GoopText(
+          'Tip: Make sure both devices have Bluetooth and Wi-Fi on, '
+          'and are within range.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 11 * sf,
+            color: Colors.white.withValues(alpha: 0.35),
+            height: 1.4,
+          ),
+        ),
+        SizedBox(height: 24 * sf),
+        FilledButton.icon(
+          style: FilledButton.styleFrom(
+            backgroundColor: flair.primary,
+            foregroundColor: Colors.white,
+            minimumSize: Size.fromHeight(44 * sf),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+          ),
+          icon: Icon(Icons.refresh_rounded, size: 20 * sf),
+          label: GoopText(
+            'RETRY',
+            style: TextStyle(
+              fontSize: 13 * sf,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+          onPressed: () => session.reconnect(),
+        ),
+        SizedBox(height: 12 * sf),
+        TextButton(
+          onPressed: () {
+            session.cancel();
+            Navigator.of(context).pop();
+          },
+          child: GoopText(
+            'CANCEL',
+            style: TextStyle(
+              fontSize: FontSizes.labelMedium * sf,
+              fontWeight: FontWeight.w800,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   // ── Permission denied ──────────────────────────────────────────
 
   Widget _buildPermissionDenied(double sf, ThemeFlair flair) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32 * sf),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.bluetooth_disabled_rounded,
-              size: 48 * sf,
-              color: Colors.amberAccent,
-            ),
-            SizedBox(height: 16 * sf),
-            GoopText(
-              'Permissions needed',
-              style: TextStyle(
-                fontSize: FontSizes.titleMedium * sf,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            SizedBox(height: 8 * sf),
-            GoopText(
-              'GungeonMate needs Bluetooth and Wi-Fi permissions to connect devices.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13 * sf,
-                color: Colors.white.withValues(alpha: 0.6),
-                height: 1.5,
-              ),
-            ),
-            SizedBox(height: 24 * sf),
-            FilledButton.icon(
-              style: FilledButton.styleFrom(
-                backgroundColor: flair.primary,
-                foregroundColor: Colors.white,
-                minimumSize: Size.fromHeight(44 * sf),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-              ),
-              icon: Icon(Icons.refresh_rounded, size: 20 * sf),
-              label: GoopText(
-                'RETRY',
-                style: TextStyle(
-                  fontSize: 13 * sf,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              onPressed: () {
-                // Re-request permissions and resume the connection
-                // flow if granted. This handles the case where the
-                // user granted permissions in OS settings and came
-                // back — no need to go back to the lobby.
-                final session = context.read<MpSession>();
-                session.recheckPermissionsAndResume();
-              },
-            ),
-            SizedBox(height: 12 * sf),
-            TextButton.icon(
-              onPressed: () {
-                openAppSettings();
-              },
-              icon: Icon(
-                Icons.settings_rounded,
-                size: 18 * sf,
-                color: Colors.white.withValues(alpha: 0.5),
-              ),
-              label: GoopText(
-                'OPEN DEVICE SETTINGS',
-                style: TextStyle(
-                  fontSize: FontSizes.labelMedium * sf,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white.withValues(alpha: 0.5),
-                ),
-              ),
-            ),
-            SizedBox(height: 12 * sf),
-            TextButton(
-              onPressed: () {
-                context.read<MpSession>().cancel();
-                Navigator.of(context).pop();
-              },
-              child: GoopText(
-                'CANCEL',
-                style: TextStyle(
-                  fontSize: FontSizes.labelMedium * sf,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white.withValues(alpha: 0.4),
-                ),
-              ),
-            ),
-          ],
+    return _cardShell(
+      accent: Colors.amberAccent,
+      sf: sf,
+      flair: flair,
+      children: [
+        Icon(
+          Icons.bluetooth_disabled_rounded,
+          size: 48 * sf,
+          color: Colors.amberAccent,
         ),
-      ),
+        SizedBox(height: 16 * sf),
+        GoopText(
+          'Permissions needed',
+          style: TextStyle(
+            fontSize: FontSizes.titleMedium * sf,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+        SizedBox(height: 8 * sf),
+        GoopText(
+          'GungeonMate needs Bluetooth and Wi-Fi permissions to connect devices.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 13 * sf,
+            color: Colors.white.withValues(alpha: 0.6),
+            height: 1.5,
+          ),
+        ),
+        SizedBox(height: 24 * sf),
+        FilledButton.icon(
+          style: FilledButton.styleFrom(
+            backgroundColor: flair.primary,
+            foregroundColor: Colors.white,
+            minimumSize: Size.fromHeight(44 * sf),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+          ),
+          icon: Icon(Icons.refresh_rounded, size: 20 * sf),
+          label: GoopText(
+            'RETRY',
+            style: TextStyle(
+              fontSize: 13 * sf,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+          onPressed: () {
+            // Re-request permissions and resume the connection
+            // flow if granted. This handles the case where the
+            // user granted permissions in OS settings and came
+            // back — no need to go back to the lobby.
+            final session = context.read<MpSession>();
+            session.recheckPermissionsAndResume();
+          },
+        ),
+        SizedBox(height: 12 * sf),
+        TextButton.icon(
+          onPressed: () {
+            openAppSettings();
+          },
+          icon: Icon(
+            Icons.settings_rounded,
+            size: 18 * sf,
+            color: Colors.white.withValues(alpha: 0.5),
+          ),
+          label: GoopText(
+            'OPEN DEVICE SETTINGS',
+            style: TextStyle(
+              fontSize: FontSizes.labelMedium * sf,
+              fontWeight: FontWeight.w800,
+              color: Colors.white.withValues(alpha: 0.5),
+            ),
+          ),
+        ),
+        SizedBox(height: 12 * sf),
+        TextButton(
+          onPressed: () {
+            context.read<MpSession>().cancel();
+            Navigator.of(context).pop();
+          },
+          child: GoopText(
+            'CANCEL',
+            style: TextStyle(
+              fontSize: FontSizes.labelMedium * sf,
+              fontWeight: FontWeight.w800,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

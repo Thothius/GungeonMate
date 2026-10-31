@@ -71,121 +71,135 @@ class _ParadoxBarState extends State<ParadoxBar> {
     // compact mode (short labels, tighter padding, no health chip).
     final compact = MediaQuery.sizeOf(context).width < 460;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(12 * sf, 6 * sf, 4 * sf, 6 * sf),
-      decoration: BoxDecoration(
-        color: const Color(0xFF12081F),
-        border: Border(
-          bottom: BorderSide(
-            color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: GoopText(
-                        session.runTitle.isNotEmpty
-                            ? session.runTitle.toUpperCase()
-                            : (session.isParadoxRun ? 'PARADOX' : 'CO-OP'),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11 * sf,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.2,
-                          color: const Color(0xFFB388FF),
-                        ),
-                      ),
-                    ),
-                    if (ParadoxBar.showTimer.value) ...[
-                      SizedBox(width: 8 * sf),
-                      Icon(
-                        Icons.timer_outlined,
-                        size: 12 * sf,
-                        color: Colors.white.withValues(alpha: 0.4),
-                      ),
-                      SizedBox(width: 3 * sf),
-                      GoopText(
-                        _fmtElapsed(session.runElapsedMs),
-                        style: TextStyle(
-                          fontSize: 11.5 * sf,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.55),
-                        ),
-                      ),
-                    ],
-                  ],
+    // Rebuild when the ⋮ DISPLAY toggles flip — the 1s ticker would
+    // pick it up eventually, but a listener makes it instant.
+    return ListenableBuilder(
+      listenable: Listenable.merge([
+        ParadoxBar.showTimer,
+        ParadoxBar.showHealth,
+      ]),
+      builder:
+          (context, _) => Container(
+            padding: EdgeInsets.fromLTRB(12 * sf, 6 * sf, 4 * sf, 6 * sf),
+            decoration: BoxDecoration(
+              color: const Color(0xFF12081F),
+              border: Border(
+                bottom: BorderSide(
+                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
                 ),
-                if (reconnecting)
-                  ValueListenableBuilder<int>(
-                    valueListenable: session.disconnectElapsedSec,
-                    builder: (context, sec, _) {
-                      final label =
-                          session.isPaused
-                              ? 'paused'
-                              : sec >= 120
-                              ? 'reconnecting… partner may have left'
-                              : 'reconnecting…';
-                      return GoopText(
-                        label,
-                        style: TextStyle(
-                          fontSize: 10.5 * sf,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.orangeAccent.withValues(alpha: 0.8),
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: GoopText(
+                              session.runTitle.isNotEmpty
+                                  ? session.runTitle.toUpperCase()
+                                  : (session.isParadoxRun
+                                      ? 'PARADOX'
+                                      : 'CO-OP'),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11 * sf,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 1.2,
+                                color: const Color(0xFFB388FF),
+                              ),
+                            ),
+                          ),
+                          if (ParadoxBar.showTimer.value) ...[
+                            SizedBox(width: 8 * sf),
+                            Icon(
+                              Icons.timer_outlined,
+                              size: 12 * sf,
+                              color: Colors.white.withValues(alpha: 0.4),
+                            ),
+                            SizedBox(width: 3 * sf),
+                            GoopText(
+                              _fmtElapsed(session.runElapsedMs),
+                              style: TextStyle(
+                                fontSize: 11.5 * sf,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white.withValues(alpha: 0.55),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                      if (reconnecting)
+                        ValueListenableBuilder<int>(
+                          valueListenable: session.disconnectElapsedSec,
+                          builder: (context, sec, _) {
+                            final label =
+                                session.isPaused
+                                    ? 'paused'
+                                    : sec >= 120
+                                    ? 'reconnecting… partner may have left'
+                                    : 'reconnecting…';
+                            return GoopText(
+                              label,
+                              style: TextStyle(
+                                fontSize: 10.5 * sf,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.orangeAccent.withValues(
+                                  alpha: 0.8,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                    ],
                   ),
+                ),
+                // Narrow-width collapse (~460px and below): the trailing
+                // cluster (2 tab dots + chat + gear) overflowed the bar by
+                // ~15px. Health chip hides and the dots compress to slot
+                // labels only — tapping still flips pages.
+                if (ParadoxBar.showHealth.value && !compact)
+                  Padding(
+                    padding: EdgeInsets.only(right: 4 * sf),
+                    child: ValueListenableBuilder<int>(
+                      valueListenable: session.healthListenable,
+                      builder:
+                          (_, health, _) => _HealthChip(health: health, sf: sf),
+                    ),
+                  ),
+                // Player tabs
+                _TabDot(
+                  label:
+                      compact
+                          ? (session.myRole == MpRole.main ? 'YOU' : 'P1')
+                          : (session.myRole == MpRole.main
+                              ? 'YOU'
+                              : session.peerNickname ?? 'P1'),
+                  active: widget.currentPage == 0,
+                  onTap: () => widget.onPick(0),
+                  sf: sf,
+                  compact: compact,
+                ),
+                _TabDot(
+                  label:
+                      compact
+                          ? (session.myRole == MpRole.main ? 'P2' : 'YOU')
+                          : (session.myRole == MpRole.main
+                              ? session.peerNickname ?? 'P2'
+                              : 'YOU'),
+                  active: widget.currentPage == 1,
+                  onTap: () => widget.onPick(1),
+                  sf: sf,
+                  compact: compact,
+                ),
               ],
             ),
           ),
-          // Narrow-width collapse (~460px and below): the trailing
-          // cluster (2 tab dots + chat + gear) overflowed the bar by
-          // ~15px. Health chip hides and the dots compress to slot
-          // labels only — tapping still flips pages.
-          if (ParadoxBar.showHealth.value && !compact)
-            Padding(
-              padding: EdgeInsets.only(right: 4 * sf),
-              child: ValueListenableBuilder<int>(
-                valueListenable: session.healthListenable,
-                builder: (_, health, _) => _HealthChip(health: health, sf: sf),
-              ),
-            ),
-          // Player tabs
-          _TabDot(
-            label:
-                compact
-                    ? (session.myRole == MpRole.main ? 'YOU' : 'P1')
-                    : (session.myRole == MpRole.main
-                        ? 'YOU'
-                        : session.peerNickname ?? 'P1'),
-            active: widget.currentPage == 0,
-            onTap: () => widget.onPick(0),
-            sf: sf,
-            compact: compact,
-          ),
-          _TabDot(
-            label:
-                compact
-                    ? (session.myRole == MpRole.main ? 'P2' : 'YOU')
-                    : (session.myRole == MpRole.main
-                        ? session.peerNickname ?? 'P2'
-                        : 'YOU'),
-            active: widget.currentPage == 1,
-            onTap: () => widget.onPick(1),
-            sf: sf,
-            compact: compact,
-          ),
-        ],
-      ),
     );
   }
 }

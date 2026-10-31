@@ -1,4 +1,5 @@
 import '../theme/tokens.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +40,7 @@ enum _LobbyRole { main, sidekick }
 
 class _MpLobbyScreenState extends State<MpLobbyScreen> {
   final _nickCtrl = TextEditingController();
+  final _titleCtrl = TextEditingController();
   Gungeoneer? _selectedChar;
   String _avatarId = kAvatarIds.first;
   _LobbyRole _role = _LobbyRole.main;
@@ -60,6 +62,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
   @override
   void dispose() {
     _nickCtrl.dispose();
+    _titleCtrl.dispose();
     super.dispose();
   }
 
@@ -88,11 +91,9 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     // First non-Cultist gungeoneer for Main.
     return rp.allGungeoneers.firstWhere(
       (g) => g.name != 'The Cultist',
-      orElse:
-          () =>
-              rp.allGungeoneers.isNotEmpty
-                  ? rp.allGungeoneers.first
-                  : Gungeoneer(name: 'The Marine'),
+      orElse: () => rp.allGungeoneers.isNotEmpty
+          ? rp.allGungeoneers.first
+          : Gungeoneer(name: 'The Marine'),
     );
   }
 
@@ -175,17 +176,16 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             // still scrollable when it can't fit (keyboard, small screens).
             Expanded(
               child: LayoutBuilder(
-                builder:
-                    (context, c) => SingleChildScrollView(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(minHeight: c.maxHeight),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: widgets,
-                        ),
-                      ),
+                builder: (context, c) => SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: c.maxHeight),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: widgets,
                     ),
+                  ),
+                ),
               ),
             ),
           ],
@@ -209,10 +209,9 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                 height: 7,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color:
-                      i <= _stage
-                          ? AppTheme.flair.primary
-                          : Colors.white.withValues(alpha: 0.18),
+                  color: i <= _stage
+                      ? AppTheme.flair.primary
+                      : Colors.white.withValues(alpha: 0.18),
                 ),
               ),
             ),
@@ -264,10 +263,10 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       },
     ),
     SizedBox(height: 22 * sf),
+
     // Subtle paradox entry — alt co-op mode with avatars/surprises,
     // demoted to a text link since the main menu paradox button
     // was removed.
-
   ];
 
   List<Widget> _gungeoneerStage(double sf, ThemeFlair flair) => [
@@ -316,6 +315,12 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
         Expanded(child: _buildNicknameField(sf, flair)),
       ],
     ),
+    // Run title is Main-only — the host names the run, the Sidekick
+    // receives it via the session-meta handshake.
+    if (_role == _LobbyRole.main) ...[
+      SizedBox(height: 14 * sf),
+      _buildRunTitleField(sf, flair),
+    ],
     SizedBox(height: 24 * sf),
     _buildActionButton(sf, flair),
     SizedBox(height: 24 * sf),
@@ -493,36 +498,33 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     return SizedBox(
       width: 96 * sf,
       height: 96 * sf,
-      child:
-          animPath.isNotEmpty
-              ? Image.asset(
-                animPath,
-                fit: BoxFit.contain,
-                cacheWidth: 192,
-                cacheHeight: 192,
-                errorBuilder:
-                    (_, _, _) =>
-                        gifPath.isNotEmpty
-                            ? Image.asset(
-                              gifPath,
-                              fit: BoxFit.contain,
-                              cacheWidth: 192,
-                              cacheHeight: 192,
-                            )
-                            : Icon(
-                              Icons.person_rounded,
-                              size: 40 * sf,
-                              color: flair.primary,
-                            ),
-              )
-              : gifPath.isNotEmpty
-              ? Image.asset(
-                gifPath,
-                fit: BoxFit.contain,
-                cacheWidth: 192,
-                cacheHeight: 192,
-              )
-              : Icon(Icons.person_rounded, size: 40 * sf, color: flair.primary),
+      child: animPath.isNotEmpty
+          ? Image.asset(
+              animPath,
+              fit: BoxFit.contain,
+              cacheWidth: 192,
+              cacheHeight: 192,
+              errorBuilder: (_, _, _) => gifPath.isNotEmpty
+                  ? Image.asset(
+                      gifPath,
+                      fit: BoxFit.contain,
+                      cacheWidth: 192,
+                      cacheHeight: 192,
+                    )
+                  : Icon(
+                      Icons.person_rounded,
+                      size: 40 * sf,
+                      color: flair.primary,
+                    ),
+            )
+          : gifPath.isNotEmpty
+          ? Image.asset(
+              gifPath,
+              fit: BoxFit.contain,
+              cacheWidth: 192,
+              cacheHeight: 192,
+            )
+          : Icon(Icons.person_rounded, size: 40 * sf, color: flair.primary),
     );
   }
 
@@ -530,10 +532,9 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     Haptics.selection();
     final rp = context.read<RunProvider>();
     // Main player can't pick The Cultist — filter it out.
-    final available =
-        _role == _LobbyRole.main
-            ? rp.allGungeoneers.where((g) => g.name != 'The Cultist').toList()
-            : rp.allGungeoneers;
+    final available = _role == _LobbyRole.main
+        ? rp.allGungeoneers.where((g) => g.name != 'The Cultist').toList()
+        : rp.allGungeoneers;
     final Gungeoneer? picked = await Navigator.push<Gungeoneer>(
       context,
       fastRoute(
@@ -584,6 +585,39 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       onChanged: (value) async {
         await PairedPartnersStore.saveNickname(value);
       },
+    );
+  }
+
+  Widget _buildRunTitleField(double sf, ThemeFlair flair) {
+    return TextField(
+      controller: _titleCtrl,
+      maxLength: 40,
+      style: TextStyle(fontSize: 16 * sf, fontWeight: FontWeight.w700),
+      decoration: InputDecoration(
+        labelText: 'RUN TITLE (OPTIONAL)',
+        labelStyle: TextStyle(
+          fontSize: FontSizes.labelSmall * sf,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 2,
+          color: flair.primary.withValues(alpha: 0.7),
+        ),
+        hintText: 'Name this run',
+        hintStyle: TextStyle(
+          fontSize: 16 * sf,
+          fontWeight: FontWeight.w600,
+          color: Colors.white.withValues(alpha: 0.3),
+        ),
+        prefixIcon: Icon(Icons.flag_outlined, size: 22 * sf),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 18 * sf,
+          vertical: 14 * sf,
+        ),
+        counterStyle: TextStyle(
+          fontSize: 10 * sf,
+          color: Colors.white.withValues(alpha: 0.3),
+        ),
+      ),
     );
   }
 
@@ -655,6 +689,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       nickname: nick,
       character: char,
       avatarId: _avatarId,
+      runTitle: _titleCtrl.text.trim(),
     );
     if (!mounted) return;
     await Navigator.pushReplacement(
@@ -731,8 +766,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
               SizedBox(height: 6 * sf),
               _HowToStep(
                 num: '2',
-                text:
-                    'One player picks MAIN and taps HOST GAME, then picks a character.',
+                text: 'One player picks MAIN and taps HOST GAME, then picks a character.',
                 sf: sf,
               ),
               SizedBox(height: 6 * sf),
@@ -763,45 +797,44 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     final sf = Responsive.factor(context);
     await showDialog<void>(
       context: context,
-      builder:
-          (ctx) => AlertDialog(
-            backgroundColor: flair.card,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radii.lg),
-              side: BorderSide(
-                color: flair.primary.withValues(alpha: 0.3),
-                width: 1.5,
-              ),
-            ),
-            icon: Icon(Icons.bluetooth_rounded, size: 36, color: flair.primary),
-            title: const GoopText(
-              'Bluetooth + Wi-Fi',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: FontSizes.titleMedium,
-              ),
-            ),
-            content: GoopText(
-              'GungeonMate uses Bluetooth and Wi-Fi to connect devices. '
-              'You\'ll be asked to grant permissions — please allow them.',
-              style: TextStyle(
-                fontSize: 13 * sf,
-                color: Colors.white.withValues(alpha: 0.7),
-                height: 1.5,
-              ),
-            ),
-            actions: [
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: flair.primary,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () => Navigator.pop(ctx),
-                child: const GoopText('GOT IT'),
-              ),
-            ],
+      builder: (ctx) => AlertDialog(
+        backgroundColor: flair.card,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radii.lg),
+          side: BorderSide(
+            color: flair.primary.withValues(alpha: 0.3),
+            width: 1.5,
           ),
+        ),
+        icon: Icon(Icons.bluetooth_rounded, size: 36, color: flair.primary),
+        title: const GoopText(
+          'Bluetooth + Wi-Fi',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: FontSizes.titleMedium,
+          ),
+        ),
+        content: GoopText(
+          'GungeonMate uses Bluetooth and Wi-Fi to connect devices. '
+          'You\'ll be asked to grant permissions — please allow them.',
+          style: TextStyle(
+            fontSize: 13 * sf,
+            color: Colors.white.withValues(alpha: 0.7),
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: flair.primary,
+              foregroundColor: Colors.white,
+            ),
+            onPressed: () => Navigator.pop(ctx),
+            child: const GoopText('GOT IT'),
+          ),
+        ],
+      ),
     );
   }
 

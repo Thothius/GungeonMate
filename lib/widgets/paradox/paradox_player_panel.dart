@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'surprise_sheet.dart';
 
 import '../../models/multiplayer_messages.dart';
@@ -21,6 +22,7 @@ import '../../screens/all_synergies_screen.dart';
 
 import '../active_run/dice_roll.dart';
 import 'avatar_frame.dart';
+import 'paradox_bar.dart';
 
 /// Paradox per-page player panel — the compact info strip replacing
 /// [GungeoneerHeader] in Paradox sessions:
@@ -64,18 +66,15 @@ class ParadoxPlayerPanel extends StatelessWidget {
         children: [
           // Avatar — tap to open SurpriseSheet
           GestureDetector(
-            onTap:
-                () => showModalBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: const Color(0xFF140B22),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(18),
-                    ),
-                  ),
-                  builder: (_) => const SurpriseSheet(),
-                ),
+            onTap: () => showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: const Color(0xFF140B22),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+              ),
+              builder: (_) => const SurpriseSheet(),
+            ),
             child: Container(
               width: 42 * sf,
               height: 42 * sf,
@@ -108,11 +107,10 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     value: p.runState.totalCoolness.toStringAsFixed(0),
                     color: const Color(0xFF4DD0E1),
                     sf: sf,
-                    onTap:
-                        () => Navigator.push(
-                          context,
-                          fastRoute(const CoolCurseScreen()),
-                        ),
+                    onTap: () => Navigator.push(
+                      context,
+                      fastRoute(const CoolCurseScreen()),
+                    ),
                   ),
                   // CURSE
                   _PanelStat(
@@ -120,11 +118,10 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     value: p.runState.totalCurse.toStringAsFixed(0),
                     color: const Color(0xFFBA68C8),
                     sf: sf,
-                    onTap:
-                        () => Navigator.push(
-                          context,
-                          fastRoute(const CoolCurseScreen()),
-                        ),
+                    onTap: () => Navigator.push(
+                      context,
+                      fastRoute(const CoolCurseScreen()),
+                    ),
                   ),
                   // SYN — active synergy count (combined)
                   _PanelStat(
@@ -132,11 +129,10 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     value: p.activeSynergyGlowColors.length.toString(),
                     color: const Color(0xFFB388FF),
                     sf: sf,
-                    onTap:
-                        () => Navigator.push(
-                          context,
-                          fastRoute(const AllSynergiesScreen()),
-                        ),
+                    onTap: () => Navigator.push(
+                      context,
+                      fastRoute(const AllSynergiesScreen()),
+                    ),
                   ),
                 ],
               ),
@@ -153,92 +149,97 @@ class ParadoxPlayerPanel extends StatelessWidget {
             ),
             color: const Color(0xFF1E122E),
             onSelected: (v) => _onMenu(context, v, session),
-            itemBuilder:
-                (_) => [
-                  _header('INFO'),
-                  _item(
-                    'shrines',
-                    Icons.temple_buddhist_rounded,
-                    'Shrines',
-                    Colors.amberAccent,
-                  ),
-                  _item(
-                    'ammonomicon',
-                    Icons.menu_book_rounded,
-                    'Ammonomicon',
-                    const Color(0xFF4DD0E1),
-                  ),
-                  const PopupMenuDivider(),
-                  _header('GAME'),
-                  _item(
-                    'reset_p1',
-                    Icons.restart_alt_rounded,
-                    'Reset P1 Items',
-                    Colors.cyanAccent,
-                  ),
-                  _item(
-                    'reset_p2',
-                    Icons.restart_alt_rounded,
-                    'Reset P2 Items',
-                    Colors.pinkAccent,
-                  ),
-                  _item(
-                    'dice',
-                    Icons.casino_rounded,
-                    'Diceroller',
-                    const Color(0xFFFFD54F),
-                  ),
-                  _item(
-                    'surprise',
-                    Icons.auto_awesome_rounded,
-                    'Surprise',
-                    Colors.amberAccent,
-                  ),
-                  _item(
-                    'pause',
-                    session.isPaused
-                        ? Icons.play_arrow_rounded
-                        : Icons.pause_rounded,
-                    session.isPaused ? 'Resume Run' : 'Pause Run',
-                    Colors.orangeAccent,
-                  ),
-                  const PopupMenuDivider(),
-                  _header('DISPLAY'),
-                  _toggle(
-                    'effects',
-                    Icons.auto_awesome_rounded,
-                    'Effects',
-                    VisualPrefs.notifier.value.showEffectsPanel,
-                  ),
-                  _toggle(
-                    'panels',
-                    Icons.view_agenda_rounded,
-                    'Panels',
-                    VisualPrefs.notifier.value.showDashboards,
-                  ),
-                  const PopupMenuDivider(),
-                  _header('SETTINGS'),
-                  _item(
-                    'themes',
-                    Icons.palette_rounded,
-                    'Themes',
-                    Colors.pinkAccent,
-                  ),
-                  _item(
-                    'settings',
-                    Icons.settings_rounded,
-                    'Settings',
-                    Colors.cyanAccent,
-                  ),
-                  const PopupMenuDivider(),
-                  if (session.myRole == MpRole.sidekick)
-                    _item(
-                      'leave',
-                      Icons.bluetooth_disabled,
-                      'Leave Multiplayer',
-                      Colors.lightBlueAccent,
-                    ),
-                ],
+            itemBuilder: (_) => [
+              _header('INFO'),
+              _item(
+                'shrines',
+                Icons.temple_buddhist_rounded,
+                'Shrines',
+                Colors.amberAccent,
+              ),
+              _item(
+                'ammonomicon',
+                Icons.menu_book_rounded,
+                'Ammonomicon',
+                const Color(0xFF4DD0E1),
+              ),
+              const PopupMenuDivider(),
+              _header('GAME'),
+              _item(
+                'reset_p1',
+                Icons.restart_alt_rounded,
+                'Reset P1 Items',
+                Colors.cyanAccent,
+              ),
+              _item(
+                'reset_p2',
+                Icons.restart_alt_rounded,
+                'Reset P2 Items',
+                Colors.pinkAccent,
+              ),
+              _item(
+                'dice',
+                Icons.casino_rounded,
+                'Diceroller',
+                const Color(0xFFFFD54F),
+              ),
+              _item(
+                'surprise',
+                Icons.auto_awesome_rounded,
+                'Surprise',
+                Colors.amberAccent,
+              ),
+              _item(
+                'pause',
+                session.isPaused
+                    ? Icons.play_arrow_rounded
+                    : Icons.pause_rounded,
+                session.isPaused ? 'Resume Run' : 'Pause Run',
+                Colors.orangeAccent,
+              ),
+              const PopupMenuDivider(),
+              _header('DISPLAY'),
+              _toggle(
+                'timer',
+                Icons.timer_outlined,
+                'Timer',
+                ParadoxBar.showTimer.value,
+              ),
+              _toggle(
+                'signal',
+                Icons.signal_cellular_alt_rounded,
+                'Signal',
+                ParadoxBar.showHealth.value,
+              ),
+              _toggle(
+                'panels',
+                Icons.view_agenda_rounded,
+                'Panels',
+                VisualPrefs.notifier.value.showDashboards,
+              ),
+              const PopupMenuDivider(),
+              _header('SETTINGS'),
+              _item(
+                'themes',
+                Icons.palette_rounded,
+                'Themes',
+                Colors.pinkAccent,
+              ),
+              _item(
+                'settings',
+                Icons.settings_rounded,
+                'Settings',
+                Colors.cyanAccent,
+              ),
+              const PopupMenuDivider(),
+              if (session.myRole == MpRole.sidekick)
+                _item(
+                  'leave',
+                  Icons.bluetooth_disabled,
+                  'Leave Multiplayer',
+                  Colors.lightBlueAccent,
+                ),
+            ],
           ),
         ],
       ),
@@ -248,30 +249,29 @@ class ParadoxPlayerPanel extends StatelessWidget {
   void _confirmLeave(BuildContext context, MpSession session) {
     showDialog<void>(
       context: context,
-      builder:
-          (dctx) => AlertDialog(
-            backgroundColor: const Color(0xFF1E122E),
-            title: const GoopText('Leave multiplayer?'),
-            content: const GoopText(
-              'You disconnect; your partner keeps their run.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dctx).pop(),
-                child: const GoopText('CANCEL'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(dctx).pop();
-                  session.cancel();
-                },
-                child: const GoopText(
-                  'LEAVE',
-                  style: TextStyle(color: Colors.lightBlueAccent),
-                ),
-              ),
-            ],
+      builder: (dctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1E122E),
+        title: const GoopText('Leave multiplayer?'),
+        content: const GoopText(
+          'You disconnect; your partner keeps their run.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dctx).pop(),
+            child: const GoopText('CANCEL'),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dctx).pop();
+              session.cancel();
+            },
+            child: const GoopText(
+              'LEAVE',
+              style: TextStyle(color: Colors.lightBlueAccent),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -369,10 +369,10 @@ class ParadoxPlayerPanel extends StatelessWidget {
           ),
           builder: (_) => const SurpriseSheet(),
         );
-      case 'effects':
-        VisualPrefs.setShowEffectsPanel(
-          !VisualPrefs.notifier.value.showEffectsPanel,
-        );
+      case 'timer':
+        ParadoxBar.showTimer.value = !ParadoxBar.showTimer.value;
+      case 'signal':
+        ParadoxBar.showHealth.value = !ParadoxBar.showHealth.value;
       case 'panels':
         VisualPrefs.setShowDashboards(
           !VisualPrefs.notifier.value.showDashboards,
@@ -389,39 +389,35 @@ class ParadoxPlayerPanel extends StatelessWidget {
     final isMyPage = (session.myRole == MpRole.main) == isMainSlot;
     showDialog<void>(
       context: context,
-      builder:
-          (dctx) => AlertDialog(
-            backgroundColor: const Color(0xFF1E122E),
-            title: GoopText(
-              isMyPage ? 'Reset your items?' : 'Reset partner items?',
-            ),
-            content: const GoopText(
-              'Clears all guns and items for this player.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dctx).pop(),
-                child: const GoopText('CANCEL'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(dctx).pop();
-                  if (isMyPage) {
-                    context.read<RunProvider>().clearInventory(slot: target);
-                  } else {
-                    session.sendPeerClear();
-                  }
-                },
-                child: const GoopText(
-                  'RESET',
-                  style: TextStyle(color: Colors.orangeAccent),
-                ),
-              ),
-            ],
+      builder: (dctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1E122E),
+        title: GoopText(
+          isMyPage ? 'Reset your items?' : 'Reset partner items?',
+        ),
+        content: const GoopText('Clears all guns and items for this player.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dctx).pop(),
+            child: const GoopText('CANCEL'),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(dctx).pop();
+              if (isMyPage) {
+                context.read<RunProvider>().clearInventory(slot: target);
+              } else {
+                session.sendPeerClear();
+              }
+            },
+            child: const GoopText(
+              'RESET',
+              style: TextStyle(color: Colors.orangeAccent),
+            ),
+          ),
+        ],
+      ),
     );
   }
-
 }
 
 class _PanelStat extends StatelessWidget {
