@@ -215,8 +215,8 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       if (!mounted) return;
       // Shrines: custom parse — JSON icon fields are wiki URLs; the local
       // assets live in assets/images/shrines/<slug>.webp.
-      final shrineList = (json.decode(results[5]) as List<dynamic>)
-          .map((e) {
+      final shrineList =
+          (json.decode(results[5]) as List<dynamic>).map((e) {
             final j = e as Map<String, dynamic>;
             final slug = (j['name'] as String)
                 .toLowerCase()
@@ -224,25 +224,23 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                 .replaceAll('.', '');
             // 'fallen angel' ships as Angel_Shrine.webp — all other
             // shrine icons are lowercase-name webps.
-            final iconFile = slug == 'fallen_angel'
-                ? 'Angel_Shrine.webp'
-                : '$slug.webp';
+            final iconFile =
+                slug == 'fallen_angel' ? 'Angel_Shrine.webp' : '$slug.webp';
             final eff = (j['effect'] as String? ?? '').trim();
             return AmmonomiconEntry(
-                name: j['name'] ?? '',
-                category: 'Shrines',
-                icon: 'shrines/$iconFile',
-                description: j['description'] ?? '',
-                tips: [
-                  if (eff.isNotEmpty) eff,
-                  if ((j['curse'] ?? 0) > 0) 'Costs ${j['curse']} curse',
-                  if ((j['coolness'] ?? 0) > 0)
-                    'Costs ${j['coolness']} coolness',
-                ],
-                wikiUrl:
-                    'https://enterthegungeon.wiki.gg/wiki/${(j['name'] as String).replaceAll(' ', '_')}_Shrine');
-          })
-          .toList();
+              name: j['name'] ?? '',
+              category: 'Shrines',
+              icon: 'shrines/$iconFile',
+              description: j['description'] ?? '',
+              tips: [
+                if (eff.isNotEmpty) eff,
+                if ((j['curse'] ?? 0) > 0) 'Costs ${j['curse']} curse',
+                if ((j['coolness'] ?? 0) > 0) 'Costs ${j['coolness']} coolness',
+              ],
+              wikiUrl:
+                  'https://enterthegungeon.wiki.gg/wiki/${(j['name'] as String).replaceAll(' ', '_')}_Shrine',
+            );
+          }).toList();
       setState(() {
         _objects = parsed[0];
         _pickups = parsed[1];
@@ -302,83 +300,104 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
       case 6:
         var guns = context.read<RunProvider>().allGuns.toList();
         if (_sortMode == 'quality') {
-          guns.sort((a, b) =>
-              (_qualityRank[a.quality] ?? 9)
-                  .compareTo(_qualityRank[b.quality] ?? 9));
+          guns.sort(
+            (a, b) => (_qualityRank[a.quality] ?? 9).compareTo(
+              _qualityRank[b.quality] ?? 9,
+            ),
+          );
         }
-        return _filter(guns
-            .where((g) =>
-                _qualityFilter.isEmpty || _qualityFilter.contains(g.quality))
-            .map((g) => AmmonomiconEntry(
-                name: g.name,
-                category: 'Guns',
-                icon: g.icon,
-                game: 'gun',
-                description: g.notes))
-            .toList());
+        return _filter(
+          guns
+              .where(
+                (g) =>
+                    _qualityFilter.isEmpty ||
+                    _qualityFilter.contains(g.quality),
+              )
+              .map(
+                (g) => AmmonomiconEntry(
+                  name: g.name,
+                  category: 'Guns',
+                  icon: g.icon,
+                  game: 'gun',
+                  description: g.notes,
+                ),
+              )
+              .toList(),
+        );
       case 7:
         var items = context.read<RunProvider>().allItems.toList();
         if (_sortMode == 'quality') {
-          items.sort((a, b) =>
-              (_qualityRank[a.quality] ?? 9)
-                  .compareTo(_qualityRank[b.quality] ?? 9));
+          items.sort(
+            (a, b) => (_qualityRank[a.quality] ?? 9).compareTo(
+              _qualityRank[b.quality] ?? 9,
+            ),
+          );
         }
-        return _filter(items
-            .where((i) =>
-                _qualityFilter.isEmpty || _qualityFilter.contains(i.quality))
-            .map((i) => AmmonomiconEntry(
-                name: i.name,
-                category: 'Items',
-                icon: i.icon,
-                game: 'item',
-                description: i.ammonomiconEntry))
-            .toList());
+        return _filter(
+          items
+              .where(
+                (i) =>
+                    _qualityFilter.isEmpty ||
+                    _qualityFilter.contains(i.quality),
+              )
+              .map(
+                (i) => AmmonomiconEntry(
+                  name: i.name,
+                  category: 'Items',
+                  icon: i.icon,
+                  game: 'item',
+                  description: i.ammonomiconEntry,
+                ),
+              )
+              .toList(),
+        );
       case 8:
         var syns = context.read<RunProvider>().allSynergies;
         if (_matchedOnly) {
           final p = context.read<RunProvider>();
           final owned = {
-            ...p.runState.main.allItemNames
-                .map((n) => n.toLowerCase()),
+            ...p.runState.main.allItemNames.map((n) => n.toLowerCase()),
             if (p.runState.coop != null)
-              ...p.runState.coop!.allItemNames
-                  .map((n) => n.toLowerCase()),
+              ...p.runState.coop!.allItemNames.map((n) => n.toLowerCase()),
           };
-          syns =
-              syns.where((s) => s.matchesOwnedSet(owned)).toList();
+          syns = syns.where((s) => s.matchesOwnedSet(owned)).toList();
         }
-        return _filter(syns
-            .map((s) {
-
+        return _filter(
+          syns.map((s) {
             // Derive icon + folder from the first required item —
             // most synergies have no own sprite; showing the anchor
             // item's icon is the closest visual.
             final p = context.read<RunProvider>();
             final anchor = s.items.isNotEmpty ? s.items.first : '';
-            final gun = p.allGuns
-                .where((g) => g.name.toLowerCase() == anchor.toLowerCase())
-                .firstOrNull;
-            final item = p.allItems
-                .where((i) => i.name.toLowerCase() == anchor.toLowerCase())
-                .firstOrNull;
+            final gun =
+                p.allGuns
+                    .where((g) => g.name.toLowerCase() == anchor.toLowerCase())
+                    .firstOrNull;
+            final item =
+                p.allItems
+                    .where((i) => i.name.toLowerCase() == anchor.toLowerCase())
+                    .firstOrNull;
             String anchorIcon(String? p, String folder) =>
                 p == null || p.isEmpty
                     ? ''
                     : p.startsWith('assets/')
-                        ? p
-                        : '$folder/$p';
+                    ? p
+                    : '$folder/$p';
             return AmmonomiconEntry(
-                name: s.name,
-                category: 'Synergies',
-                icon: gun != null
-                    ? anchorIcon(gun.icon, 'guns')
-                    : item != null
-                        ? anchorIcon(item.icon, 'items')
-                        : '',
-                game: 'synergy',
-                description: s.effect,
-                ammonomicon: [...s.items, ...s.anyOf].join(' · '));
-          }).toList());
+              name: s.name,
+              category: 'Synergies',
+              icon:
+                  gun != null
+                      ? anchorIcon(gun.icon, 'guns')
+                      : item != null
+                      ? anchorIcon(item.icon, 'items')
+                      : '',
+              game: 'synergy',
+              description: s.effect,
+              ammonomicon: [...s.items, ...s.anyOf].join(' · '),
+            );
+          }).toList(),
+        );
       case 9:
         return _filter(_shrines);
       case 10:
@@ -420,10 +439,11 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                 GoopText(
                   c.label.toUpperCase(),
                   style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.4,
-                      color: c.color),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.4,
+                    color: c.color,
+                  ),
                 ),
               ],
             ),
@@ -434,11 +454,10 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
               itemCount: members.length,
               itemBuilder: (_, i) {
                 final e = members[i];
-                final subtitle = (e.tips.isNotEmpty)
-                    ? e.tips.first
-                    : (e.description.isNotEmpty
-                        ? e.description
-                        : '');
+                final subtitle =
+                    (e.tips.isNotEmpty)
+                        ? e.tips.first
+                        : (e.description.isNotEmpty ? e.description : '');
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Material(
@@ -453,11 +472,14 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                              color: c.color.withValues(alpha: 0.3)),
+                            color: c.color.withValues(alpha: 0.3),
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -465,31 +487,35 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  GoopText(e.name,
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight:
-                                              FontWeight.w700)),
+                                  GoopText(
+                                    e.name,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                                   if (subtitle.isNotEmpty)
-                                    GoopText(subtitle,
-                                        maxLines: 1,
-                                        overflow:
-                                            TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 11,
-                                            color: Colors.white
-                                                .withValues(
-                                                    alpha: 0.55))),
+                                    GoopText(
+                                      subtitle,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.white.withValues(
+                                          alpha: 0.55,
+                                        ),
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),
-                            Icon(Icons.chevron_right,
-                                size: 18,
-                                color:
-                                    c.color.withValues(alpha: 0.6)),
+                            Icon(
+                              Icons.chevron_right,
+                              size: 18,
+                              color: c.color.withValues(alpha: 0.6),
+                            ),
                           ],
                         ),
                       ),
@@ -510,42 +536,41 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
     if (path.isEmpty) {
       return const Icon(Icons.help_outline, size: 20);
     }
-    return Image.asset(path,
-        width: 26,
-        height: 26,
-        cacheWidth: 52,
-        cacheHeight: 52,
-        fit: BoxFit.contain,
-        errorBuilder: (_, _, _) =>
-            const Icon(Icons.help_outline, size: 20));
+    return Image.asset(
+      path,
+      width: 26,
+      height: 26,
+      cacheWidth: 52,
+      cacheHeight: 52,
+      fit: BoxFit.contain,
+      errorBuilder: (_, _, _) => const Icon(Icons.help_outline, size: 20),
+    );
   }
 
   /// Shared tap routing — guns/items go to their detail screens,
   /// synergies to the synergy graph, everything else to ammonomicon detail.
   void _openEntry(AmmonomiconEntry entry, AmmonomiconSection section) {
     final p = context.read<RunProvider>();
-    final gun = entry.game == 'gun'
-        ? p.allGuns
-            .where((g) => g.name == entry.name)
-            .firstOrNull
-        : null;
-    final item = entry.game == 'item'
-        ? p.allItems
-            .where((i) => i.name == entry.name)
-            .firstOrNull
-        : null;
-    final syn = entry.game == 'synergy'
-        ? p.allSynergies
-            .where((s) => s.name == entry.name)
-            .firstOrNull
-        : null;
-    final dest = gun != null
-        ? ItemDetailScreen(gun: gun)
-        : item != null
+    final gun =
+        entry.game == 'gun'
+            ? p.allGuns.where((g) => g.name == entry.name).firstOrNull
+            : null;
+    final item =
+        entry.game == 'item'
+            ? p.allItems.where((i) => i.name == entry.name).firstOrNull
+            : null;
+    final syn =
+        entry.game == 'synergy'
+            ? p.allSynergies.where((s) => s.name == entry.name).firstOrNull
+            : null;
+    final dest =
+        gun != null
+            ? ItemDetailScreen(gun: gun)
+            : item != null
             ? ItemDetailScreen(item: item)
             : syn != null
-                ? SynergyDetailScreen(synergy: syn)
-                : AmmonomiconDetailScreen(entry: entry, section: section);
+            ? SynergyDetailScreen(synergy: syn)
+            : AmmonomiconDetailScreen(entry: entry, section: section);
     Navigator.push(context, fastRoute(dest));
   }
 
@@ -560,26 +585,30 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
             setState(() => _matchedOnly = !on);
           },
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: on
-                  ? const Color(0xFFB388FF).withValues(alpha: 0.25)
-                  : Colors.white.withValues(alpha: 0.08),
+              color:
+                  on
+                      ? const Color(0xFFB388FF).withValues(alpha: 0.25)
+                      : Colors.white.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
-                  color: on
-                      ? const Color(0xFFB388FF)
-                      : Colors.white.withValues(alpha: 0.2)),
+                color:
+                    on
+                        ? const Color(0xFFB388FF)
+                        : Colors.white.withValues(alpha: 0.2),
+              ),
             ),
             child: GoopText(
               'MATCHED',
               style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w800,
-                  color: on
-                      ? const Color(0xFFB388FF)
-                      : Colors.white.withValues(alpha: 0.6)),
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                color:
+                    on
+                        ? const Color(0xFFB388FF)
+                        : Colors.white.withValues(alpha: 0.6),
+              ),
             ),
           ),
         ),
@@ -595,25 +624,25 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
           GestureDetector(
             onTap: () {
               Haptics.selection();
-              setState(() =>
-                  _sortMode = _sortMode == 'name' ? 'quality' : 'name');
+              setState(
+                () => _sortMode = _sortMode == 'name' ? 'quality' : 'name',
+              );
             },
             child: Container(
               margin: const EdgeInsets.only(right: 10),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.2)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
               child: GoopText(
                 _sortMode == 'name' ? 'A-Z' : 'S-D',
                 style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white.withValues(alpha: 0.7)),
+                  fontSize: 10,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white.withValues(alpha: 0.7),
+                ),
               ),
             ),
           ),
@@ -631,16 +660,20 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: _qualityFilter.contains(q)
-                        ? flair.primary.withValues(alpha: 0.25)
-                        : Colors.white.withValues(alpha: 0.06),
+                    color:
+                        _qualityFilter.contains(q)
+                            ? flair.primary.withValues(alpha: 0.25)
+                            : Colors.white.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: _qualityFilter.contains(q)
-                          ? flair.primary.withValues(alpha: 0.8)
-                          : Colors.white.withValues(alpha: 0.15),
+                      color:
+                          _qualityFilter.contains(q)
+                              ? flair.primary.withValues(alpha: 0.8)
+                              : Colors.white.withValues(alpha: 0.15),
                     ),
                   ),
                   child: GoopText(
@@ -648,9 +681,10 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
-                      color: _qualityFilter.contains(q)
-                          ? flair.primary
-                          : Colors.white.withValues(alpha: 0.55),
+                      color:
+                          _qualityFilter.contains(q)
+                              ? flair.primary
+                              : Colors.white.withValues(alpha: 0.55),
                     ),
                   ),
                 ),
@@ -735,76 +769,85 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
         if (c.isSpecial) continue;
         final ent = _entriesFor(i);
         if (ent.isNotEmpty) {
-          groups.add(_SearchGroup(
-              tab: c, entries: ent, section: _sectionFor(i)));
+          groups.add(
+            _SearchGroup(tab: c, entries: ent, section: _sectionFor(i)),
+          );
         }
       }
       return SafeArea(
         top: !widget.showBackButton,
         bottom: false,
-        child: groups.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.search_off,
+        child:
+            groups.isEmpty
+                ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.search_off,
                         size: 40,
-                        color: Colors.white.withValues(alpha: 0.25)),
-                    const SizedBox(height: 10),
-                    GoopText(
-                      'Nothing found for "${_searchCtrl.text}"',
-                      style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.5),
-                          fontStyle: FontStyle.italic),
-                    ),
-                  ],
-                ),
-              )
-            : ListView(
-                padding: const EdgeInsets.fromLTRB(14, 8, 14, 24),
-                children: [
-                  for (final g in groups) ...[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(2, 14, 0, 6),
-                      child: GoopText(
-                        g.tab.label.toUpperCase(),
+                        color: Colors.white.withValues(alpha: 0.25),
+                      ),
+                      const SizedBox(height: 10),
+                      GoopText(
+                        'Nothing found for "${_searchCtrl.text}"',
                         style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.5),
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+                : ListView(
+                  padding: const EdgeInsets.fromLTRB(14, 8, 14, 24),
+                  children: [
+                    for (final g in groups) ...[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(2, 14, 0, 6),
+                        child: GoopText(
+                          g.tab.label.toUpperCase(),
+                          style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.2,
-                            color: g.tab.color),
-                      ),
-                    ),
-                    for (final e in g.entries)
-                      ListTile(
-                        dense: true,
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 8),
-                        leading: Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: g.tab.color.withValues(alpha: 0.10),
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(
-                                color: g.tab.color
-                                    .withValues(alpha: 0.35)),
+                            color: g.tab.color,
                           ),
-                          child: Center(
-                              child: _searchIcon(e, g.section)),
                         ),
-                        title: GoopText(e.name,
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700)),
-                        onTap: () {
-                          Haptics.selection();
-                          _openEntry(e, g.section);
-                        },
                       ),
+                      for (final e in g.entries)
+                        ListTile(
+                          dense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                          ),
+                          leading: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: g.tab.color.withValues(alpha: 0.10),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: g.tab.color.withValues(alpha: 0.35),
+                              ),
+                            ),
+                            child: Center(child: _searchIcon(e, g.section)),
+                          ),
+                          title: GoopText(
+                            e.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          onTap: () {
+                            Haptics.selection();
+                            _openEntry(e, g.section);
+                          },
+                        ),
+                    ],
                   ],
-                ],
-              ),
+                ),
       );
     }
     // Expanded member picker — Chapters/Game Modes tiles swap the
@@ -846,42 +889,83 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
               highlightColor: c.color.withValues(alpha: 0.10),
               child: Container(
                 decoration: BoxDecoration(
-                  color: c.color.withValues(alpha: 0.10),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      c.color.withValues(alpha: 0.22),
+                      c.color.withValues(alpha: 0.06),
+                    ],
+                  ),
                   borderRadius: BorderRadius.all(Radii.md),
                   border: Border.all(
-                    color: c.color.withValues(alpha: 0.5),
-                    width: 1.2,
+                    color: c.color.withValues(alpha: 0.55),
+                    width: 1.4,
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: c.color.withValues(alpha: 0.12),
+                      blurRadius: 12,
+                    ),
+                  ],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (c.assetIcon != null)
-                      Image.asset(
-                        AmmonomiconTabStrip.tabAssetPath(c.assetIcon!),
-                        width: 34,
-                        height: 34,
-                        fit: BoxFit.contain,
-                        filterQuality: FilterQuality.none,
-                        errorBuilder:
-                            (_, _, _) => Icon(
-                              c.icon ?? Icons.bookmark,
-                              size: 30,
-                              color: c.color,
-                            ),
-                      )
-                    else
-                      Icon(c.icon ?? Icons.bookmark, size: 30, color: c.color),
-                    const SizedBox(height: 8),
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: c.color.withValues(alpha: 0.15),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: c.color.withValues(alpha: 0.6),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: c.color.withValues(alpha: 0.3),
+                            blurRadius: 10,
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child:
+                            c.assetIcon != null
+                                ? Image.asset(
+                                  AmmonomiconTabStrip.tabAssetPath(
+                                    c.assetIcon!,
+                                  ),
+                                  width: 28,
+                                  height: 28,
+                                  fit: BoxFit.contain,
+                                  filterQuality: FilterQuality.none,
+                                  errorBuilder:
+                                      (_, _, _) => Icon(
+                                        c.icon ?? Icons.bookmark,
+                                        size: 24,
+                                        color: c.color,
+                                      ),
+                                )
+                                : Icon(
+                                  c.icon ?? Icons.bookmark,
+                                  size: 24,
+                                  color: c.color,
+                                ),
+                      ),
+                    ),
+                    const SizedBox(height: 9),
                     GoopText(
                       c.label.toUpperCase(),
                       textAlign: TextAlign.center,
                       maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w900,
-                        letterSpacing: 0.6,
+                        letterSpacing: 0.8,
                         color: c.color,
+                        height: 1.15,
                       ),
                     ),
                   ],
@@ -1062,9 +1146,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                     ? _specialPage(_selected)
                     : Column(
                       children: [
-                        if (_selected == 6 ||
-                            _selected == 7 ||
-                            _selected == 8)
+                        if (_selected == 6 || _selected == 7 || _selected == 8)
                           _buildQualityChips(flair),
                         Expanded(
                           child: _AmmonomiconList(
