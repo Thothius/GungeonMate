@@ -697,6 +697,10 @@ class MpSession extends ChangeNotifier
   Future<void> cancel() async {
     if (_tearingDown) return;
     _tearingDown = true;
+    // Reset reconnect-elapsed state so a later session can't inherit
+    // a stale "partner may have left" reading.
+    disconnectElapsedSec.value = 0;
+    _peerGoneHinted = false;
     try {
       // Notify peer before tearing down the transport.
       if (_link.isConnected) {

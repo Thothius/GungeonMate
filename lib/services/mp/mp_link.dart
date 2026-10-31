@@ -563,6 +563,11 @@ class MpLink implements MpTransport {
       return;
     }
     _initiatedIds.add(id);
+    // Handshake-stall guard — if no result ever arrives for this
+    // endpoint, evict it after 20s so the accept gate un-wedges.
+    Timer(const Duration(seconds: 20), () {
+      if (_endpointId != id) _initiatedIds.remove(id);
+    });
     // Auto-accept — both users already chose to play.
     unawaited(
       _nearby

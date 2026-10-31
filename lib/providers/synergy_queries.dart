@@ -96,7 +96,7 @@ mixin _SynergyQueries on ChangeNotifier {
   /// re-scans every synergy (~440 × matchesItems).
   List<Synergy> getActiveSynergiesCombined() {
     final names = _runState.allItemNames; // main + coop
-    final sig = names.join(' ');
+    final sig = names.join('\n');
     if (sig != _activeCombinedSig) {
       _activeCombinedSig = sig;
       _activeCombinedCache =

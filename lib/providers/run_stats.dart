@@ -175,7 +175,7 @@ mixin _RunStats on ChangeNotifier {
     final guns = _allGunsInRun;
     final items = _allItemsInRun;
     final sig =
-        '${guns.length}.${items.length}|${guns.map((g) => g.name).join(' ')}|${items.map((i) => i.name).join(' ')}';
+        '${guns.length}.${items.length}|${guns.map((g) => g.name).join('\n')}|${items.map((i) => i.name).join('\n')}';
     if (sig != _statsSig) {
       _statsSig = sig;
       _statsOwned = {
