@@ -45,6 +45,10 @@ class MainMenuBackdrop extends StatelessWidget {
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return Positioned.fill(
       child: Stack(
+        // expand: non-positioned children (gradients, particles,
+        // drift layer) must fill the whole screen — default loose
+        // fit would size them to zero.
+        fit: StackFit.expand,
         children: [
           // Base gradient — deep violet dungeon darkness.
           const DecoratedBox(
@@ -169,7 +173,7 @@ class _SpriteDriftState extends State<_SpriteDrift>
                   left: (seed.dx + dx) * c.maxWidth,
                   bottom: p * (c.maxHeight + 80) - 40,
                   child: Opacity(
-                    opacity: 0.10,
+                    opacity: 0.14,
                     child: Transform.scale(
                       scale: scale,
                       child: Image.asset(
