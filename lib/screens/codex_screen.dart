@@ -216,11 +216,16 @@ class _CodexScreenState extends State<CodexScreen> {
               .toLowerCase()
               .replaceAll(' ', '_')
               .replaceAll('.', '');
+          // 'fallen angel' ships as Angel_Shrine.webp — all other
+          // shrine icons are lowercase-name webps.
+          final iconFile = slug == 'fallen_angel'
+              ? 'Angel_Shrine.webp'
+              : '$slug.webp';
           final eff = (j['effect'] as String? ?? '').trim();
           return CodexEntry(
               name: j['name'] ?? '',
               category: 'Shrines',
-              icon: 'shrines/${slug == 'y_v' ? 'y_v' : slug}.webp',
+              icon: 'shrines/$iconFile',
               description: j['description'] ?? '',
               tips: [
                 if (eff.isNotEmpty) eff,
@@ -368,16 +373,28 @@ class _CodexScreenState extends State<CodexScreen> {
   /// synergies to the synergy graph, everything else to codex detail.
   void _openEntry(CodexEntry entry, CodexSection section) {
     final p = context.read<RunProvider>();
-    final dest = switch (entry.game) {
-      'gun' => ItemDetailScreen(
-          gun: p.allGuns.firstWhere((g) => g.name == entry.name)),
-      'item' => ItemDetailScreen(
-          item: p.allItems.firstWhere((i) => i.name == entry.name)),
-      'synergy' => SynergyDetailScreen(
-          synergy: p.allSynergies
-              .firstWhere((s) => s.name == entry.name)),
-      _ => CodexDetailScreen(entry: entry, section: section),
-    };
+    final gun = entry.game == 'gun'
+        ? p.allGuns
+            .where((g) => g.name == entry.name)
+            .firstOrNull
+        : null;
+    final item = entry.game == 'item'
+        ? p.allItems
+            .where((i) => i.name == entry.name)
+            .firstOrNull
+        : null;
+    final syn = entry.game == 'synergy'
+        ? p.allSynergies
+            .where((s) => s.name == entry.name)
+            .firstOrNull
+        : null;
+    final dest = gun != null
+        ? ItemDetailScreen(gun: gun)
+        : item != null
+            ? ItemDetailScreen(item: item)
+            : syn != null
+                ? SynergyDetailScreen(synergy: syn)
+                : CodexDetailScreen(entry: entry, section: section);
     Navigator.push(context, fastRoute(dest));
   }
 
