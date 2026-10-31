@@ -9,6 +9,7 @@ import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
 import '../utils/responsive.dart';
 import '../widgets/game_icon.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 
 enum CharSelectMode { solo, coop, multiplayerPick }
 
@@ -332,8 +333,8 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
                       letterSpacing: 1.2,
                       color:
                           flair.primary.computeLuminance() > 0.5
-                              ? const Color(0xFF1C1C1E)
-                              : Colors.white,
+                              ? Skeuo.collapse(Color(0xFF1C1C1E))
+                              : Skeuo.collapse(Colors.white),
                     ),
                   ),
                 ),
@@ -437,64 +438,65 @@ class _GungeoneerPage extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 420),
           child: Column(
             children: [
-              // Sprite LEFT, info RIGHT — portrait and metadata read
-              // side-by-side instead of stacked.
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 96,
-                    height: 110,
-                    child: Center(child: sprite),
-                  ),
-                  const SizedBox(width: Insets.lg),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GoopText(
-                          g.name.toUpperCase(),
-                          style: TextStyle(
-                            fontSize: FontSizes.titleLarge,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.2,
-                            color: flair.headlineStat,
+              // Info LEFT, sprite RIGHT — graphic centers against the
+              // metadata block's full height (IntrinsicHeight matches
+              // the row to the taller child).
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          GoopText(
+                            g.name.toUpperCase(),
+                            style: TextStyle(
+                              fontSize: FontSizes.titleLarge,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                              color: flair.headlineStat,
+                            ),
                           ),
-                        ),
-                        if (g.startingArmor > 0)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Insets.sm,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(Radii.sm),
-                                border: Border.all(
-                                  color: flair.primary.withValues(alpha: 0.3),
+                          if (g.startingArmor > 0)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: Insets.sm,
+                                  vertical: 3,
                                 ),
-                              ),
-                              child: GoopText(
-                                '${g.startingArmor} ARMOR',
-                                style: const TextStyle(
-                                  fontSize: FontSizes.labelSmall,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                    Radii.sm,
+                                  ),
+                                  border: Border.all(
+                                    color: flair.primary.withValues(alpha: 0.3),
+                                  ),
+                                ),
+                                child: GoopText(
+                                  '${g.startingArmor} ARMOR',
+                                  style: const TextStyle(
+                                    fontSize: FontSizes.labelSmall,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.5,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        const SizedBox(height: Insets.md),
-                        _loadout('GUNS', g.startingGuns, true),
-                        if (g.startingGuns.isNotEmpty &&
-                            g.startingItems.isNotEmpty)
-                          const SizedBox(height: Insets.sm),
-                        _loadout('ITEMS', g.startingItems, false),
-                      ],
+                          const SizedBox(height: Insets.md),
+                          _loadout('GUNS', g.startingGuns, true),
+                          if (g.startingGuns.isNotEmpty &&
+                              g.startingItems.isNotEmpty)
+                            const SizedBox(height: Insets.sm),
+                          _loadout('ITEMS', g.startingItems, false),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: Insets.lg),
+                    SizedBox(width: 96, child: Center(child: sprite)),
+                  ],
+                ),
               ),
               const SizedBox(height: Insets.lg),
               Divider(
