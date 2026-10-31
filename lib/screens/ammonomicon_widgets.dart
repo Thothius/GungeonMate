@@ -437,6 +437,7 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
         // ── Swipeable shrine pages ──
         Expanded(
           child: PageView.builder(
+            key: const PageStorageKey('ammonomicon_shrines'),
             controller: _pageCtrl,
             onPageChanged: _onPage,
             itemCount: widget.entries.length,
