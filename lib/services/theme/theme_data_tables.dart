@@ -10,6 +10,11 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
   AppThemeMode.unicorn,
   AppThemeMode.moltenSteel,
   AppThemeMode.custom,
+  // Neo-Skeuo is visible (so a persisted session survives init
+  // migration) but deliberately absent from kPickerThemes — it is
+  // toggle-only via the home-screen chip / run-tools row, never a
+  // picker preset, and Customization is locked while it's active.
+  AppThemeMode.neoSkeuo,
 ];
 
 /// The curated themes shown in the theme picker — cut to three for

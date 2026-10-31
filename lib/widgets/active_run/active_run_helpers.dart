@@ -250,6 +250,7 @@ class EffectsTileState extends State<EffectsTile> {
     );
   }
 }
+
 class HeaderMenu extends StatelessWidget {
   const HeaderMenu({super.key});
 
@@ -447,11 +448,8 @@ class _RunToolsSheet extends StatelessWidget {
               label: hasCoop ? 'Reset P1 Items' : 'Reset Items',
               iconColor: Colors.cyanAccent,
               onTap:
-                  () => confirmClearInventoryDialog(
-                    sheetCtx,
-                    p,
-                    PlayerSlot.main,
-                  ),
+                  () =>
+                      confirmClearInventoryDialog(sheetCtx, p, PlayerSlot.main),
             ),
             if (hasCoop)
               _action(
@@ -475,16 +473,40 @@ class _RunToolsSheet extends StatelessWidget {
             ),
             _action(
               sheetCtx,
-              icon: Icons.palette_rounded,
-              label: 'Customize',
-              iconColor: const Color(0xFFB388FF),
+              icon: Icons.draw_rounded,
+              label: 'Neo-Skeuo ${AppTheme.isSkeuo ? '· ON' : '· OFF'}',
+              iconColor:
+                  AppTheme.isSkeuo
+                      ? const Color(0xFF1F1B16)
+                      : const Color(0xFF8D6E63),
               onTap: () {
-                if (sheetCtx.mounted) {
-                  Navigator.push(
-                    sheetCtx,
-                    fastRoute(const ExperienceStudioScreen()),
-                  );
+                if (AppTheme.isSkeuo) {
+                  AppTheme.exitSkeuo();
+                } else {
+                  AppTheme.enterSkeuo();
                 }
+              },
+            ),
+            _action(
+              sheetCtx,
+              icon:
+                  AppTheme.isSkeuo
+                      ? Icons.lock_outline_rounded
+                      : Icons.palette_rounded,
+              label:
+                  AppTheme.isSkeuo
+                      ? 'Customize (locked in Neo-Skeuo)'
+                      : 'Customize',
+              iconColor:
+                  AppTheme.isSkeuo
+                      ? flair.primary.withValues(alpha: 0.35)
+                      : const Color(0xFFB388FF),
+              onTap: () {
+                if (AppTheme.isSkeuo || !sheetCtx.mounted) return;
+                Navigator.push(
+                  sheetCtx,
+                  fastRoute(const ExperienceStudioScreen()),
+                );
               },
             ),
             _action(
@@ -508,10 +530,7 @@ class _RunToolsSheet extends StatelessWidget {
               iconColor: flair.primary.withValues(alpha: 0.6),
               onTap: () {
                 if (sheetCtx.mounted) {
-                  Navigator.push(
-                    sheetCtx,
-                    fastRoute(const SettingsScreen()),
-                  );
+                  Navigator.push(sheetCtx, fastRoute(const SettingsScreen()));
                 }
               },
             ),

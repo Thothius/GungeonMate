@@ -18,9 +18,9 @@ class Contrast {
   static const double largeMin = 3.0;
 
   /// Compute the WCAG relative luminance of a colour.
+  /// `Color.r/g/b` are already normalized 0.0–1.0 — no /255 needed.
   static double luminance(Color c) {
     double channel(double v) {
-      v /= 255.0;
       return v <= 0.03928
           ? v / 12.92
           : math.pow((v + 0.055) / 1.055, 2.4).toDouble();
@@ -94,11 +94,17 @@ List<ContrastResult> auditThemeContrast({
   required Color secondary,
   required Color headlineStat,
   required String themeLabel,
+  bool lightSurface = false,
 }) {
   // Heuristic text colours: most text in the app is white or near-white
   // on dark surfaces, with accent colours for headlines and labels.
-  const bodyText = Color(0xFFFFFFFF);
-  const subtleText = Color(0xB3FFFFFF); // 70% white — common secondary text
+  // Light-surface themes (Neo-Skeuo) render dark text instead.
+  final bodyText =
+      lightSurface ? const Color(0xFF1E1E22) : const Color(0xFFFFFFFF);
+  final subtleText =
+      lightSurface
+          ? const Color(0xB31E1E22) // 70% ink
+          : const Color(0xB3FFFFFF); // 70% white — common secondary text
 
   final pairs = <(String, Color, Color)>[
     ('Body text on scaffold', bodyText, scaffold),

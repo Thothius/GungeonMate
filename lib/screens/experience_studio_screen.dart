@@ -73,6 +73,86 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
     final cleanTheme = Theme.of(context).copyWith(textTheme: cleanTextTheme);
 
+    // Neo-Skeuo locks Customization — the skin ships as a fixed
+    // hand-drawn identity with nothing to tune. Deep links land on a
+    // locked page instead of the hub.
+    if (AppTheme.isSkeuo) {
+      return Theme(
+        data: cleanTheme,
+        child: Scaffold(
+          backgroundColor: const Color(0xFFF0E9D8),
+          body: SafeArea(
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(Insets.xl),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.lock_outline_rounded,
+                      size: 44,
+                      color: Color(0xFF1F1B16),
+                    ),
+                    const SizedBox(height: Insets.lg),
+                    const GoopText(
+                      'CUSTOMIZATION IS LOCKED',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.4,
+                        color: Color(0xFF1F1B16),
+                      ),
+                    ),
+                    const SizedBox(height: Insets.sm),
+                    const GoopText(
+                      'Neo-Skeuo is a fixed hand-drawn identity — nothing to tune here.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 13, color: Color(0xFF5C5548)),
+                    ),
+                    const SizedBox(height: Insets.xl),
+                    TextButton(
+                      onPressed: () {
+                        Haptics.selection();
+                        AppTheme.exitSkeuo();
+                      },
+                      child: const GoopText(
+                        'EXIT NEO-SKEUO',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: Color(0xFF1F1B16),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: Insets.sm),
+                    TextButton(
+                      onPressed: () {
+                        Haptics.selection();
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const GoopText(
+                        'BACK',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.2,
+                          color: Color(0xFF5C5548),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Theme(
       data: cleanTheme,
       child: Scaffold(
@@ -832,10 +912,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               ),
               GoopText(
                 '#${color.toARGB32().toRadixString(16).toUpperCase()}',
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: Color(0x80FFFFFF),
-                ),
+                style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
               ),
             ],
           ),

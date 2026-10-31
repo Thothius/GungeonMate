@@ -1751,6 +1751,48 @@ enum AppThemeMode {
       pageFrame: true,
       font: AppFont.dmSans,
     ),
+  ),
+  // ── Alternate UI skin (toggle-only, never in the picker). Cream
+  // paper + black ink "hand-drawn kit" look; ambiance layers are
+  // suppressed per-mode in ThemeOverlay so user prefs stay untouched.
+  // font stays null: the skeuo font is resolved in themeFor so the
+  // user's font pref is never overwritten by entering this mode.
+  neoSkeuo(
+    label: 'Neo-Skeuo',
+    vibe: 'SKETCH',
+    diff: 'NORMAL',
+    elem: 'PAPER',
+    whimsicalDescription:
+        'A field-manual page torn from the Gungeon. Cream paper, confident ink strokes, and hatched shadows drawn by a very careful Gungeoneer.',
+    staticFlair: ThemeFlair(
+      scaffold: Color(0xFFF0E9D8), // warm paper
+      card: Color(0xFFFAF5E8), // raised card paper
+      primary: Color(0xFF1F1B16), // ink
+      secondary: Color(0xFF5C5548), // pencil gray
+      headlineStat: Color(0xFF1F1B16),
+      bulletColor: Color(0xFF1F1B16),
+      bulletGlyph: '•',
+      tabularFigures: true,
+      numberSizeScale: 1.0,
+      numberWeight: FontWeight.w700,
+      chipRadius: 8,
+      cardRadius: 8,
+      cardBorderColor: Color(0xE61F1B16),
+      cardBorderWidth: 2.0,
+      chipFilled: false,
+      dividerColor: Color(0x591F1B16),
+      dividerThickness: 1.0,
+      glowPrimary: Color(0x00000000),
+      glowSecondary: Color(0x00000000),
+      auraStyle: AvatarAuraStyle.none,
+      headerGlyph: '✎',
+      headerAllCaps: true,
+      headerUnderlineColor: Color(0x661F1B16),
+      statGroupCombat: Color(0xFF8C3B2E), // red pencil
+      statGroupHandling: Color(0xFF3E5C6E), // blue pencil
+      statGroupMeta: Color(0xFF8A6D2F), // ochre pencil
+      font: null,
+    ),
   );
 
   final String label;
@@ -2006,6 +2048,8 @@ enum AppFont {
   merriweather,
   specialElite,
   playfairDisplay,
+  // ── Hand-lettered (Neo-Skeuo signature, bundled asset) ──
+  shantellSans,
 }
 
 extension AppFontLabel on AppFont {
@@ -2039,6 +2083,7 @@ extension AppFontLabel on AppFont {
     AppFont.specialElite: 'Special Elite',
     AppFont.playfairDisplay: 'Playfair Display',
     AppFont.megrim: 'Megrim',
+    AppFont.shantellSans: 'Shantell Sans',
   };
 
   static const Map<AppFont, String> _googleFontDescriptions = {
@@ -2071,6 +2116,7 @@ extension AppFontLabel on AppFont {
     AppFont.specialElite: 'Grungy ink-splattered vintage typewriter',
     AppFont.playfairDisplay: 'Luxurious high-contrast theatrical display',
     AppFont.megrim: 'Ultra-stylized thin wire outline vector',
+    AppFont.shantellSans: 'Hand-lettered print sketchbook ink',
   };
 
   String get label {
@@ -2087,6 +2133,9 @@ extension AppFontLabel on AppFont {
     if (this == AppFont.gungeon) {
       return const TextStyle(fontFamily: 'EnterTheGungeonBig');
     }
+    if (this == AppFont.shantellSans) {
+      return const TextStyle(fontFamily: 'ShantellSans');
+    }
     try {
       return GoogleFonts.getFont(label);
     } catch (_) {
@@ -2098,6 +2147,9 @@ extension AppFontLabel on AppFont {
     final base = ThemeData.dark().textTheme;
     if (this == AppFont.gungeon) {
       return base.apply(fontFamily: 'EnterTheGungeonBig');
+    }
+    if (this == AppFont.shantellSans) {
+      return base.apply(fontFamily: 'ShantellSans');
     }
     try {
       return GoogleFonts.getTextTheme(label, base);
@@ -2268,6 +2320,8 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'R&G Department';
       case AppThemeMode.minimalist:
         return 'Minimalist';
+      case AppThemeMode.neoSkeuo:
+        return 'Neo-Skeuo';
       case AppThemeMode.custom:
         return AppTheme._customThemeName;
     }
@@ -2375,6 +2429,8 @@ extension AppThemeModeLabel on AppThemeMode {
         return 'Bureaucratic — neon green, paper white, office grey';
       case AppThemeMode.minimalist:
         return 'Stripped Back — pure black, clean white, cold grey';
+      case AppThemeMode.neoSkeuo:
+        return 'Hand-drawn: cream paper, black ink, sketch chrome';
       case AppThemeMode.custom:
         return 'Custom — your personal palette';
     }

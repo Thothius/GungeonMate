@@ -7,7 +7,7 @@
 > Sources of truth: `lib/theme/tokens.dart`, `lib/utils/responsive.dart`,
 > `lib/services/theme/theme_flair_prefs.dart`,
 > `lib/services/theme/app_theme_modes.dart`.
-> Interactive reference: `design-lab/` (HTML mirror — see §9).
+> Interactive reference: `design-lab/` (HTML mirror — see §10).
 
 **Design read:** companion app for *Enter the Gungeon* players,
 Android-first, expressive register (design is part of the product), dark
@@ -166,7 +166,43 @@ sheet/dialog/container enter **400ms** (decelerate), exit **250ms**
 `Curves.linear` on UI. Respect `ReduceMotion.isEnabled(context)` —
 always check before animating.
 
-## 9. Design lab (HTML iteration)
+## 9. Neo-Skeuo (alternate skin)
+
+`AppThemeMode.neoSkeuo` — a hand-drawn "field manual" skin, toggled
+from the home-screen pencil chip or the run-tools row. Toggle-only:
+in `kVisibleThemes` (persistable) but never `kPickerThemes`.
+
+| Token | Value | Use |
+|---|---|---|
+| `Skeuo.paper` | `#F0E9D8` | Page scaffold |
+| `Skeuo.card` | `#FAF5E8` | Raised fills |
+| `Skeuo.insetPaper` | `#E6DCC4` | Inset wells, pressed |
+| `Skeuo.ink` | `#1F1B16` | All strokes, fills, text |
+| `Skeuo.pencil` | `#5C5548` | Captions, disabled, hints |
+| `Skeuo.accent` | `#8C3B2E` | Red-pencil annotation (errors) |
+| `Skeuo.ochre` / `bluePencil` | `#8A6D2F` / `#3E5C6E` | Annotation accents |
+| Border weights | 1 / 2 / 4 px | Kit rule |
+| Radius scale | 0 / 4 / 8 / 12 | Kit rule |
+| Shadow offsets | 3 / 5 / 8 px | Kit elevation L1/L2/L3 |
+| Font | `ShantellSans` (bundled) | Everything — no Montserrat chrome |
+
+Rules:
+- Skeuo components live in `lib/widgets/skeuo/` (tokens, surface,
+  backdrop). Chrome built on `SkeuoSurface` (ink border + hatched or
+  solid offset shadow, base/raised/high/inset/pressed).
+- While active, all ambiance layers are suppressed by mode in
+  `ThemeOverlay` — particles, glow, shader, page frame off; the skin's
+  only texture is `SkeuoGrainPainter` + a fixed pencil vignette. User
+  VisualPrefs are never mutated; they return on exit.
+- `enterSkeuo()`/`exitSkeuo()` persist + restore previous mode and
+  font. `flair.font` stays null; `themeFor` resolves `ShantellSans`
+  directly so the user's font pref is untouched.
+- Light surfaces: `themeFor` picks `ColorScheme.light` when
+  `Contrast.luminance(f.card) > 0.5` so M3 chrome stays coherent.
+- Customization is locked while active (menu button, run-tools row,
+  settings tile, studio guard) — the skin is a fixed identity.
+
+## 10. Design lab (HTML iteration)
 
 `design-lab/` is a static HTML/CSS mirror for iterating on visuals
 without an APK build. Serve from the app root:
@@ -185,9 +221,12 @@ SERVE_LAB.bat   →   http://localhost:8619/design-lab/
   `ThemeFlair` field → done. Structural tweaks port to the widget file
   listed in each view's header comment.
 
-## 10. Decisions log
+## 11. Decisions log
 
 - 2026-10-31 — Contract created. Baseline = Minimalist. Lab mirrors
   menu, settings, codex (grid/category/detail), browse, item detail.
 - Codex/MP category colors are fixed game identity (`CodexColors`),
   immune to theme changes by design.
+- 2026-10-31 — Neo-Skeuo added (§9): alternate skin toggle on home,
+  spec-sheet demo at `neo_skeuo_lab_screen.dart`, customization locked
+  while active, ambiance suppressed per-mode.

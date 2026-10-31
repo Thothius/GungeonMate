@@ -363,14 +363,22 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
             flair: flair,
             child: _CompactActionTile(
               data: _TileData(
-                icon: Icons.palette_rounded,
-                label: 'Customization',
-                color: Colors.pinkAccent,
-                onTap:
-                    () => Navigator.push(
-                      context,
-                      fastRoute(const ExperienceStudioScreen()),
-                    ),
+                icon:
+                    AppTheme.isSkeuo
+                        ? Icons.lock_outline_rounded
+                        : Icons.palette_rounded,
+                label:
+                    AppTheme.isSkeuo
+                        ? 'Customization (locked in Neo-Skeuo)'
+                        : 'Customization',
+                color: AppTheme.isSkeuo ? Colors.grey : Colors.pinkAccent,
+                onTap: () {
+                  if (AppTheme.isSkeuo) return;
+                  Navigator.push(
+                    context,
+                    fastRoute(const ExperienceStudioScreen()),
+                  );
+                },
               ),
             ),
           ),
