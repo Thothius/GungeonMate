@@ -1333,7 +1333,11 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 14),
-        child: Center(
+        // Align + heightFactor — Center without it grows the bottomNav
+        // to fill the screen (documented blank-body landmine).
+        child: Align(
+          alignment: Alignment.topCenter,
+          heightFactor: 1.0,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 420),
             child: SkeuoButton(

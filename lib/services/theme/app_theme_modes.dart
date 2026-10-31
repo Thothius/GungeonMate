@@ -1765,7 +1765,7 @@ enum AppThemeMode {
     whimsicalDescription:
         'A field-manual page torn from the Gungeon. Cream paper, confident ink strokes, and hatched shadows drawn by a very careful Gungeoneer.',
     staticFlair: ThemeFlair(
-      scaffold: Color(0xFFF0E9D8), // warm paper
+      scaffold: Color(0xFFF2E9D3), // warm paper
       card: Color(0xFFFAF5E8), // raised card paper
       primary: Color(0xFF1F1B16), // ink
       secondary: Color(0xFF5C5548), // pencil gray

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 abstract final class Skeuo {
   // ── Palette ──────────────────────────────────────────────────
   /// Warm paper page — scaffold.
-  static const Color paper = Color(0xFFF0E9D8);
+  static const Color paper = Color(0xFFF2E9D3);
 
   /// Slightly lighter raised paper — cards, buttons, fills.
   static const Color card = Color(0xFFFAF5E8);
@@ -44,10 +44,10 @@ abstract final class Skeuo {
   static const double rLg = 12;
 
   // ── Elevation → offset-shadow distance (kit levels 1/2/3) ────
-  static const double shadowLow = 3;
+  static const double shadowLow = 5;
   static const double shadowMed = 5;
   static const double shadowHigh = 8;
 
   /// Diagonal hatch-line spacing inside the offset shadow.
-  static const double hatchGap = 5;
+  static const double hatchGap = 4.5;
 }

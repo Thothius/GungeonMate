@@ -413,7 +413,7 @@ class _SkeuoButtonState extends State<SkeuoButton> {
             painter: _SkeuoSurfacePainter(
               fill: fill,
               radius: widget.radius,
-              borderWidth: _isDisabled ? Skeuo.borderThin : Skeuo.borderMed + t,
+              borderWidth: _isDisabled ? Skeuo.borderThin : 2.5 + t,
               maxShadow: _isDisabled ? 0 : Skeuo.shadowLow,
               shadowOffset: offset,
               shadowStyle:
