@@ -53,13 +53,13 @@ void main() {
     final synergy = p.allSynergies.firstWhere(
       (s) =>
           s.items.length == 2 &&
-          p.allItems.any((i) => i.name == s.items[0]) &&
-          p.allItems.any((i) => i.name == s.items[1]) ||
+              p.allItems.any((i) => i.name == s.items[0]) &&
+              p.allItems.any((i) => i.name == s.items[1]) ||
           s.items.length == 2 &&
-          (p.allItems.any((i) => i.name == s.items[0]) ||
-              p.allGuns.any((g) => g.name == s.items[0])) &&
-          (p.allItems.any((i) => i.name == s.items[1]) ||
-              p.allGuns.any((g) => g.name == s.items[1])),
+              (p.allItems.any((i) => i.name == s.items[0]) ||
+                  p.allGuns.any((g) => g.name == s.items[0])) &&
+              (p.allItems.any((i) => i.name == s.items[1]) ||
+                  p.allGuns.any((g) => g.name == s.items[1])),
       orElse: () => throw StateError('no 2-piece synergy in catalog'),
     );
 
@@ -82,6 +82,49 @@ void main() {
     // Rows are synergy-centric now — the synergy title is the main
     // element; candidate pieces render as outline icons (no text).
     expect(find.text(synergy.name), findsWidgets);
+  });
+
+  testWidgets('rows with two-line meta do not overflow at 500px', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(500, 900);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    // Seed one piece of an all-item 2-piece synergy. Candidate rows
+    // then carry a COMPLETES pill that wraps their meta Wrap to a
+    // second line at ≤500px — while the list's first row stays
+    // one-line. prototypeItem pins every row to the first row's
+    // height, so any taller row overflows vertically (~15px — the
+    // bug tracked in OPTIMIZATION_PLAN).
+    final synergy = p.allSynergies.firstWhere(
+      (s) =>
+          s.items.length == 2 &&
+          p.allItems.any((i) => i.name == s.items[0]) &&
+          p.allItems.any((i) => i.name == s.items[1]),
+      orElse: () => throw StateError('no all-item 2-piece synergy'),
+    );
+    p.addItem(
+      p.allItems.firstWhere((i) => i.name == synergy.items[0]),
+      slot: PlayerSlot.main,
+    );
+    final candidate = synergy.items[1];
+
+    await tester.pumpWidget(wrapBrowse());
+    await pumpFew(tester);
+
+    // Scroll the combined list until the candidate row is built.
+    await tester.scrollUntilVisible(
+      find.text(candidate),
+      120,
+      scrollable: find.byType(Scrollable).last,
+      maxScrolls: 400,
+    );
+    await pumpFew(tester);
+
+    // Any layout overflow (RenderFlex overflow error) surfaces here.
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('TIERS mode filters to selected tiers only', (tester) async {

@@ -451,8 +451,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 style: TextStyle(
                   fontSize: 13 * sf,
                   fontWeight: FontWeight.w900,
-                  color:
-                      sel ? accent : accent.withValues(alpha: 0.45),
+                  color: sel ? accent : accent.withValues(alpha: 0.45),
                 ),
               ),
             ),
@@ -516,14 +515,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
     }
 
     if (entries.isEmpty) return _emptyState();
+    // No prototypeItem — row heights vary (meta pills wrap to a second
+    // line on narrow screens or when a COMPLETES pill is present), so
+    // pinning every row to the first row's height overflows vertically.
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemCount: entries.length,
-      prototypeItem:
-          entries.first.gun != null
-              ? _gunRow(context, p, entries.first.gun!)
-              : _itemRow(context, p, entries.first.item!),
       itemBuilder: (c, i) {
         final e = entries[i];
         return e.gun != null ? _gunRow(c, p, e.gun!) : _itemRow(c, p, e.item!);
@@ -607,8 +605,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
 
   // Memoized candidate scan for _synergyCandidatesList — see sig check.
   String? _candSig;
-  List<(AnyEntry, List<({String name, String owners})>)> _candHits =
-      const [];
+  List<(AnyEntry, List<({String name, String owners})>)> _candHits = const [];
   List<({String name, String owners})> _candCompleted = const [];
 
   /// The O(guns+items × synergies) candidate scan. Runs only when the
@@ -833,13 +830,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
           );
         }
         final hi = i - headCount;
-        return _compactSynRow(
-          c,
-          p,
-          synRows[hi],
-          combined,
-          coop != null,
-        );
+        return _compactSynRow(c, p, synRows[hi], combined, coop != null);
       },
     );
   }
@@ -854,9 +845,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     Set<String> combined,
     bool isCoop,
   ) {
-    final synObj = p.allSynergies
-        .where((s) => s.name == syn.name)
-        .firstOrNull;
+    final synObj = p.allSynergies.where((s) => s.name == syn.name).firstOrNull;
     if (synObj == null) return const SizedBox.shrink();
     final pieces = <String>{...synObj.items, ...synObj.anyOf}.toList();
     final missing =
@@ -913,9 +902,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 // only ONE missing option (that's all the synergy needs).
                 var added = 0;
                 final needed = [
-                  ...missing.where(
-                    (n) => !synObj.anyOf.contains(n),
-                  ),
+                  ...missing.where((n) => !synObj.anyOf.contains(n)),
                   if (synObj.anyOf.isNotEmpty &&
                       !synObj.anyOf.any(
                         (n) => combined.contains(n.toLowerCase()),
@@ -927,12 +914,8 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 ];
                 for (final n in needed) {
                   if (n.isEmpty) continue;
-                  final g = p.allGuns
-                      .where((x) => x.name == n)
-                      .firstOrNull;
-                  final it = p.allItems
-                      .where((x) => x.name == n)
-                      .firstOrNull;
+                  final g = p.allGuns.where((x) => x.name == n).firstOrNull;
+                  final it = p.allItems.where((x) => x.name == n).firstOrNull;
                   if (g != null) {
                     p.addGun(g, slot: widget.targetSlot);
                     added++;
@@ -1011,11 +994,12 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     height: 20,
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.none,
-                    errorBuilder: (_, _, _) => Icon(
-                      Icons.help_outline,
-                      size: 14,
-                      color: Colors.white.withValues(alpha: 0.4),
-                    ),
+                    errorBuilder:
+                        (_, _, _) => Icon(
+                          Icons.help_outline,
+                          size: 14,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
                   ),
                 )
                 : Icon(

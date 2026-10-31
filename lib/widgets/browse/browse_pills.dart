@@ -21,14 +21,21 @@ Widget metaPill(String text, Color color, {IconData? icon}) {
           Icon(icon, size: 12, color: color),
           const SizedBox(width: 3),
         ],
-        GoopText(
-          text,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: color,
-            letterSpacing: 0.3,
-            height: 1.1,
+        // Flexible + ellipsis: a pill wider than the Wrap's run width
+        // (COMPLETES with an owner label, long class names) ellipsizes
+        // instead of overflowing the row horizontally.
+        Flexible(
+          child: GoopText(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: color,
+              letterSpacing: 0.3,
+              height: 1.1,
+            ),
           ),
         ),
       ],
