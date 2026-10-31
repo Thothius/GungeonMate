@@ -350,118 +350,32 @@ class GunStats extends StatelessWidget with _GunStatsSections {
     }();
 
     // Hero row — the four stats that matter most (per redesign):
-    // DPS panel + RANGE/SPREAD/FORCE uniform cards.
-    final heroStats =
-        <_StatSpec>[
-          _StatSpec(
-            label: 'Range',
-            value: gun.range,
-            icon: Icons.linear_scale,
-            category: _StatCategory.handling,
-          ),
-          _StatSpec(
-            label: 'Spread',
-            value: gun.spread,
-            icon: Icons.scatter_plot,
-            category: _StatCategory.handling,
-          ),
-          _StatSpec(
-            label: 'Force',
-            value: gun.force,
-            icon: Icons.waves,
-            category: _StatCategory.handling,
-          ),
-        ].where((s) => s.value.isNotEmpty).toList();
-
-    // Secondary grid — everything else, compact.
-    final secondaryStats =
-        <_StatSpec>[
-          _StatSpec(
-            label: 'Damage',
-            value: gun.damage,
-            icon: Icons.bolt,
-            category: _StatCategory.combat,
-          ),
-          _StatSpec(
-            label: 'Fire Rate',
-            value: gun.fireRate,
-            icon: Icons.speed,
-            category: _StatCategory.combat,
-          ),
-          _StatSpec(
-            label: 'Reload',
-            value: gun.reloadTime,
-            icon: Icons.refresh,
-            category: _StatCategory.combat,
-          ),
-          _StatSpec(
-            label: 'Shot Speed',
-            value: gun.shotSpeed,
-            icon: Icons.fast_forward,
-            category: _StatCategory.handling,
-          ),
-          _StatSpec(
-            label: 'Magazine',
-            value: gun.magazineSize,
-            icon: Icons.inventory_2_outlined,
-            category: _StatCategory.combat,
-          ),
-          _StatSpec(
-            label: 'Max Ammo',
-            value: gun.ammoCapacity,
-            icon: Icons.all_inclusive_outlined,
-            category: _StatCategory.combat,
-          ),
-          _StatSpec(
-            label: 'Class',
-            value: gun.gunClass,
-            icon: Icons.category_outlined,
-            category: _StatCategory.meta,
-          ),
-          _StatSpec(
-            label: 'Chest',
-            value: gun.chestColorDisplay,
-            icon: Icons.inventory_2_outlined,
-            category: _StatCategory.meta,
-          ),
-          if (gun.curse > 0)
-            _StatSpec(
-              label: 'Curse',
-              value: '+${gun.curse}',
-              icon: Icons.mood_bad_outlined,
-              category: _StatCategory.meta,
-            ),
-          if (gun.coolness > 0)
-            _StatSpec(
-              label: 'Cool',
-              value: '+${gun.coolness}',
-              icon: Icons.ac_unit,
-              category: _StatCategory.meta,
-            ),
-        ].where((s) => s.value.isNotEmpty).toList();
+    // Unified stat grid — one borderless label-over-number table for
+    // every stat. DPS leads; all cells identical size; no icons.
+    final gridSpecs = <(String, String)>[
+      ('DPS', dpsValue.replaceAll(RegExp(r'\s*DPS\s*$', caseSensitive: false), '')),
+      if (gun.damage.isNotEmpty) ('DAMAGE', gun.damage),
+      if (gun.fireRate.isNotEmpty) ('FIRE RATE', gun.fireRate),
+      if (gun.reloadTime.isNotEmpty) ('RELOAD', gun.reloadTime),
+      if (gun.shotSpeed.isNotEmpty) ('SHOT SPEED', gun.shotSpeed),
+      if (gun.range.isNotEmpty) ('RANGE', gun.range),
+      if (gun.force.isNotEmpty) ('FORCE', gun.force),
+      if (gun.spread.isNotEmpty) ('SPREAD', gun.spread),
+      if (gun.magazineSize.isNotEmpty) ('MAGAZINE', gun.magazineSize),
+      if (gun.ammoCapacity.isNotEmpty) ('MAX AMMO', gun.ammoCapacity),
+      if (gun.gunClass.isNotEmpty) ('CLASS', gun.gunClass),
+      if (gun.chestColorDisplay.isNotEmpty)
+        ('CHEST', gun.chestColorDisplay),
+      if (gun.curse > 0) ('CURSE', '+${gun.curse}'),
+      if (gun.coolness > 0) ('COOL', '+${gun.coolness}'),
+    ];
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Hero row: DPS panel + RANGE/SPREAD/FORCE cards ──
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(child: _buildDpsPanel(dpsValue)),
-                const SizedBox(width: 8),
-                for (final s in heroStats)
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: _PrimaryStatCard(spec: s),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          _StatGrid(specs: gridSpecs),
           const SizedBox(height: 14),
           // ── Special gun info panels (unchanged) ──
           if (gunderfuryInfo != null) ...[
@@ -483,16 +397,6 @@ class GunStats extends StatelessWidget with _GunStatsSections {
           ],
           if (caseyInfo != null) ...[caseyInfo, const SizedBox(height: 14)],
 
-          // ── Row 3: secondary stats — compact responsive wrap ──
-          if (secondaryStats.isNotEmpty)
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children:
-                  secondaryStats
-                      .map((s) => _SecondaryStatChip(spec: s))
-                      .toList(),
-            ),
         ],
       ),
     );

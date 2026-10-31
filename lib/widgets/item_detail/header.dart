@@ -120,6 +120,15 @@ class ItemDetailHeader extends StatelessWidget {
                       const SizedBox(width: 8),
                       _SellBadge(price: sellPrice),
                     ],
+                    // Element tag beside tier+sell — always top-left.
+                    if (elements.isNotEmpty) ...[
+                      const SizedBox(width: 8),
+                      for (final e in elements)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 4),
+                          child: _ElementDot(kind: e),
+                        ),
+                    ],
                   ],
                 ),
                 IconButton(
@@ -177,8 +186,6 @@ class ItemDetailHeader extends StatelessWidget {
               showRing: false,
             ),
             const SizedBox(height: 12),
-            const _AccentDivider(),
-            const SizedBox(height: 10),
             // Main effect — replaces the flavor-quote slot.
             if (effect.isNotEmpty)
               GoopText(
@@ -190,19 +197,6 @@ class ItemDetailHeader extends StatelessWidget {
                   height: 1.35,
                 ),
               ),
-            if (elements.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (final e in elements)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: _ElementDot(kind: e),
-                    ),
-                ],
-              ),
-            ],
           ],
         ),
       );
@@ -217,10 +211,29 @@ class ItemDetailHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (quality.isNotEmpty)
-                QualityBadge(quality: quality, size: 32)
-              else
-                const SizedBox(width: 32),
+              Row(
+                children: [
+                  if (quality.isNotEmpty)
+                    QualityBadge(quality: quality, size: 32)
+                  else
+                    const SizedBox(width: 32),
+                  if (sellPrice.isNotEmpty) ...[
+                    const SizedBox(width: 8),
+                    _SellBadge(price: sellPrice),
+                  ],
+                  const SizedBox(width: 8),
+                  // Active vs passive — always top-left for items.
+                  _TagChip(
+                    icon: isActive
+                        ? Icons.flash_on
+                        : Icons.inventory_2_outlined,
+                    label: isActive ? 'ACTIVE' : 'PASSIVE',
+                    color: isActive
+                        ? Colors.lightBlueAccent
+                        : Colors.lightGreenAccent,
+                  ),
+                ],
+              ),
               IconButton(
                 icon: Icon(
                   isFav
@@ -328,7 +341,9 @@ class _SellBadge extends StatelessWidget {
   }
 }
 
-/// Elemental status dot — icon-only tinted circle (fire/electric/etc).
+
+
+/// Elemental status dot â€” icon-only tinted circle (fire/electric/etc).
 class _ElementDot extends StatelessWidget {
   final ElementKind kind;
   const _ElementDot({required this.kind});
@@ -354,6 +369,7 @@ class _ElementDot extends StatelessWidget {
   }
 }
 
+/// Elemental status dot â€” icon-only tinted circle (fire/electric/etc).
 class _TagChip extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -389,64 +405,6 @@ class _TagChip extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _AccentDivider extends StatelessWidget {
-  const _AccentDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            height: 1,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [
-                  Colors.transparent,
-                  Colors.white.withValues(alpha: 0.25),
-                  Colors.white.withValues(alpha: 0.25),
-                  Colors.transparent,
-                ],
-                stops: const [0.0, 0.3, 0.7, 1.0],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Container(
-          width: 6,
-          height: 6,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white.withValues(alpha: 0.3),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Container(
-            height: 1,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-                colors: [
-                  Colors.transparent,
-                  Colors.white.withValues(alpha: 0.25),
-                  Colors.white.withValues(alpha: 0.25),
-                  Colors.transparent,
-                ],
-                stops: const [0.0, 0.3, 0.7, 1.0],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

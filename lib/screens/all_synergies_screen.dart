@@ -325,7 +325,7 @@ class _SynergyGrid extends StatelessWidget {
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
-          childAspectRatio: 1.05,
+          childAspectRatio: 0.85,
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),

@@ -94,13 +94,16 @@ class ItemBody extends StatelessWidget with _ItemBodySections {
           ],
           if (stats.isNotEmpty) ...[
             const SizedBox(height: 12),
-            Wrap(
-              spacing: 10,
-              runSpacing: 8,
-              children:
-                  stats
-                      .map((e) => StatPill(label: e.key, value: e.value))
-                      .toList(),
+            // 50/50 pills — Charge left, Duration right.
+            Row(
+              children: [
+                for (var i = 0; i < stats.length; i++) ...[
+                  Expanded(
+                      child: StatPill(
+                          label: stats[i].key, value: stats[i].value)),
+                  if (i < stats.length - 1) const SizedBox(width: 10),
+                ],
+              ],
             ),
           ],
         ],
