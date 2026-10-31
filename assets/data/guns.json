@@ -19781,8 +19781,7 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "This brightly colored gun changes shape at regular intervals, making it a little hard to hold onto. That said, you're sure to have a whale of a time firing it!",
-    "game_icon": "assets/images/game/guns/gunner.png"
+    "ammonomicon": "This brightly colored gun changes shape at regular intervals, making it a little hard to hold onto. That said, you're sure to have a whale of a time firing it!"
   },
   {
     "name": "Gunslinger's Ashes",

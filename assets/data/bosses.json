@@ -23,8 +23,7 @@
         "resistType": 1,
         "resistAmount": 1.0
       }
-    ],
-    "game_icon": "assets/images/game/bosses/bullet_king.png"
+    ]
   },
   {
     "name": "Gatling Gull",
@@ -225,8 +224,7 @@
     ],
     "icon": "Kill_Pillars.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kill_Pillars",
-    "game_enc_key": "BOSSSTATUES",
-    "game_icon": "assets/images/game/bosses/kill_pillars.png"
+    "game_enc_key": "BOSSSTATUES"
   },
   {
     "name": "Wallmonger",
@@ -294,8 +292,7 @@
     "game_enc_key": "BOSSDOORMIMIC",
     "game_guid": "9189f46c47564ed588b9108965f975c9",
     "collision_damage": 1.0,
-    "ammonomicon_pos": 24,
-    "game_icon": "assets/images/game/bosses/door_lord.png"
+    "ammonomicon_pos": 24
   },
   {
     "name": "Blobulord",
@@ -342,8 +339,7 @@
         "resistType": 1,
         "resistAmount": 1.0
       }
-    ],
-    "game_icon": "assets/images/game/bosses/old_king.png"
+    ]
   },
   {
     "name": "Resourceful Rat",
@@ -400,8 +396,7 @@
     "game_enc_key": "BOSSFINALCONVICT",
     "game_guid": "8b913eea3d174184be1af362d441910d",
     "collision_damage": 1.0,
-    "ammonomicon_pos": 17,
-    "game_icon": "assets/images/game/bosses/black_stache.png"
+    "ammonomicon_pos": 17
   },
   {
     "name": "Dr. Wolf's Monster",
@@ -421,8 +416,7 @@
     "game_enc_key": "BOSSFINALGUIDE",
     "game_guid": "8d441ad4e9924d91b6070d5b3438d066",
     "collision_damage": 0.5,
-    "ammonomicon_pos": 19,
-    "game_icon": "assets/images/game/bosses/dr_wolf_s_monster.png"
+    "ammonomicon_pos": 19
   },
   {
     "name": "HS Absolution",
@@ -442,8 +436,7 @@
     "game_enc_key": "BOSSFINALROGUE",
     "game_guid": "b98b10fca77d469e80fb45f3c5badec5",
     "collision_damage": 0.5,
-    "ammonomicon_pos": 16,
-    "game_icon": "assets/images/game/bosses/hs_absolution.png"
+    "ammonomicon_pos": 16
   },
   {
     "name": "Interdimensional Horror",
@@ -462,8 +455,7 @@
     "game_enc_key": "BOSSFINALMARINE",
     "game_guid": "dc3cd41623d447aeba77c77c99598426",
     "collision_damage": 0.5,
-    "ammonomicon_pos": 18,
-    "game_icon": "assets/images/game/bosses/interdimensional_horror.png"
+    "ammonomicon_pos": 18
   },
   {
     "name": "Cannon",

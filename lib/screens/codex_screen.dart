@@ -350,13 +350,19 @@ class _CodexScreenState extends State<CodexScreen> {
             final item = p.allItems
                 .where((i) => i.name.toLowerCase() == anchor.toLowerCase())
                 .firstOrNull;
+            String anchorIcon(String? p, String folder) =>
+                p == null || p.isEmpty
+                    ? ''
+                    : p.startsWith('assets/')
+                        ? p
+                        : '$folder/$p';
             return CodexEntry(
                 name: s.name,
                 category: 'Synergies',
                 icon: gun != null
-                    ? 'guns/${gun.icon}'
+                    ? anchorIcon(gun.icon, 'guns')
                     : item != null
-                        ? 'items/${item.icon}'
+                        ? anchorIcon(item.icon, 'items')
                         : '',
                 game: 'synergy',
                 description: s.effect,
