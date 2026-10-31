@@ -696,42 +696,42 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
     final activeStage = context.select<RunProvider, int>((p) => p.evolverForm);
 
     final stages = const [
-      EvolverStageSpec(
+      _EvolverStageSpec(
         id: 1,
         name: 'Amoeba',
         dps: '13.5 DPS',
         bullet: 'Base round shots',
         color: Colors.tealAccent,
       ),
-      EvolverStageSpec(
+      _EvolverStageSpec(
         id: 2,
         name: 'Sponge',
         dps: '19.1 DPS',
         bullet: 'Soaks up shots',
         color: Colors.greenAccent,
       ),
-      EvolverStageSpec(
+      _EvolverStageSpec(
         id: 3,
         name: 'Flatworm',
         dps: '25.8 DPS',
         bullet: 'Wide flattened shots',
         color: Colors.limeAccent,
       ),
-      EvolverStageSpec(
+      _EvolverStageSpec(
         id: 4,
         name: 'Snail',
         dps: '34.5 DPS',
         bullet: '3-spiked shell spread',
         color: Colors.amberAccent,
       ),
-      EvolverStageSpec(
+      _EvolverStageSpec(
         id: 5,
         name: 'Frog',
         dps: '23.0 DPS/sec',
         bullet: 'Tracking tongue',
         color: Colors.orangeAccent,
       ),
-      EvolverStageSpec(
+      _EvolverStageSpec(
         id: 6,
         name: 'Dragon',
         dps: '93.8 DPS',
@@ -1039,13 +1039,13 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
   }
 }
 
-class EvolverStageSpec {
+class _EvolverStageSpec {
   final int id;
   final String name;
   final String dps;
   final String bullet;
   final Color color;
-  const EvolverStageSpec({
+  const _EvolverStageSpec({
     required this.id,
     required this.name,
     required this.dps,
