@@ -160,12 +160,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       child: Row(
         children: [
           _ghostBarButton('BACK', Icons.arrow_back_ios_new_rounded, _onBack),
-          const SizedBox(width: 10),
-          _ghostBarButton(
-            'PREVIEW',
-            Icons.visibility_rounded,
-            _showPreviewModal,
-          ),
+
           const SizedBox(width: 10),
           Expanded(
             child: ScaleButton(
@@ -484,6 +479,67 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
+  /// PRESETS — picker themes + saved customs as compact palette panels.
+  Widget _buildPaletteList() {
+    final activeMode = AppTheme.mode;
+    return ValueListenableBuilder<List<SavedCustomTheme>>(
+      valueListenable: CustomThemeStore.notifier,
+      builder: (context, saved, _) {
+        return GridView.count(
+          padding: const EdgeInsets.fromLTRB(
+            Insets.lg,
+            Insets.sm,
+            Insets.lg,
+            Insets.sm,
+          ),
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1.3,
+          children: [
+            for (final m in kPickerThemes)
+              () {
+                final f = AppTheme.flairFor(m);
+                return _PalettePanel(
+                  name: m.label,
+                  subtitle: '${m.vibe} · ${m.elem}',
+                  colors: [
+                    f.scaffold,
+                    f.card,
+                    f.primary,
+                    f.secondary,
+                    f.headlineStat,
+                  ],
+                  nameColor: f.primary,
+                  isActive: m == activeMode,
+                  isPreview: m == _previewMode,
+                  onTap: () => _previewTheme(m),
+                );
+              }(),
+            for (final t in saved) _buildSavedPanel(t),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Saved user palette — tap applies it via the custom theme path.
+  Widget _buildSavedPanel(SavedCustomTheme t) {
+    final d = t.customData ?? CustomThemeData.defaultTheme;
+    return _PalettePanel(
+      name: t.name,
+      subtitle: 'SAVED PALETTE',
+      colors: [d.scaffold, d.card, d.primary, d.secondary, d.headlineStat],
+      nameColor: d.primary,
+      isActive: false,
+      isPreview: _previewMode == AppThemeMode.custom,
+      onTap: () {
+        AppTheme.saveCustomThemeData(d);
+        _previewTheme(AppThemeMode.custom);
+      },
+    );
+  }
+
   Widget _buildHubContent() {
     switch (_hubTab) {
       case 0:
@@ -510,20 +566,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     await AppTheme.setMode(_originalMode);
     if (!mounted) return;
     if (Navigator.of(context).canPop()) Navigator.of(context).pop();
-  }
-
-  /// PREVIEW — fullscreen modal with the themed preview card.
-  void _showPreviewModal() {
-    Haptics.selection();
-    showDialog<void>(
-      context: context,
-      builder:
-          (_) => Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.all(Insets.lg),
-            child: _buildPreviewPane(),
-          ),
-    );
   }
 
   // ── CUSTOM tab — per-role color rows → color picker, Unicorn
@@ -734,199 +776,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             ),
         ],
       ),
-    );
-  }
-
-  /// '+ MAKE YOUR PALETTE' — jumps to the CUSTOM tab (palette making
-  /// lives there now — no separate screen).
-  Widget _buildMakePanel() {
-    final f = AppTheme.flairFor(_previewMode);
-    return GestureDetector(
-      onTap: () {
-        Haptics.selection();
-        setState(() => _hubTab = 1);
-      },
-      child: Container(
-        height: 64,
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.04),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: f.primary.withValues(alpha: 0.4),
-            width: 1.5,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.add_rounded, size: 22, color: f.primary),
-            const SizedBox(width: 8),
-            GoopText(
-              'MAKE YOUR PALETTE',
-              style: TextStyle(
-                fontSize: FontSizes.labelMedium,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.2,
-                color: f.primary,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// PREVIEW — themed card chrome with the working palette.
-  Widget _buildPreviewPane() {
-    final flair = AppTheme.flairFor(_previewMode);
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.all(Insets.lg),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: flair.card,
-          borderRadius: BorderRadius.circular(flair.cardRadius),
-          border: Border.all(
-            color:
-                flair.cardBorderColor ?? flair.primary.withValues(alpha: 0.3),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: flair.glowPrimary.withValues(alpha: 0.4),
-              blurRadius: 14,
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GoopText(
-              _previewMode.label.toUpperCase(),
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.5,
-                color: flair.headlineStat,
-              ),
-            ),
-            const SizedBox(height: 8),
-            GoopText(
-              _previewMode.vibe,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 10,
-                fontStyle: FontStyle.italic,
-                color: flair.secondary,
-              ),
-            ),
-            const SizedBox(height: 14),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (final c in [
-                  flair.scaffold,
-                  flair.card,
-                  flair.primary,
-                  flair.secondary,
-                  flair.headlineStat,
-                ])
-                  Container(
-                    width: 22,
-                    height: 22,
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
-                    decoration: BoxDecoration(
-                      color: c,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.2),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaletteList() {
-    final activeMode = AppTheme.mode;
-    return ValueListenableBuilder<List<SavedCustomTheme>>(
-      valueListenable: CustomThemeStore.notifier,
-      builder: (context, saved, _) {
-        return CustomScrollView(
-          slivers: [
-            // Palettes in a 2-column grid — picker + saved.
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                Insets.lg,
-                Insets.sm,
-                Insets.lg,
-                Insets.sm,
-              ),
-              sliver: SliverGrid.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 1.15,
-                children: [
-                  for (final m in kPickerThemes)
-                    () {
-                      final f = AppTheme.flairFor(m);
-                      return _PalettePanel(
-                        name: m.label,
-                        subtitle: '${m.vibe} · ${m.elem}',
-                        colors: [
-                          f.scaffold,
-                          f.card,
-                          f.primary,
-                          f.secondary,
-                          f.headlineStat,
-                        ],
-                        nameColor: f.primary,
-                        isActive: m == activeMode,
-                        isPreview: m == _previewMode,
-                        onTap: () => _previewTheme(m),
-                      );
-                    }(),
-                  for (final t in saved) _buildSavedPanel(t),
-                ],
-              ),
-            ),
-            // Full-width rows below the grid — make + advanced.
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  Insets.lg,
-                  0,
-                  Insets.lg,
-                  Insets.sm,
-                ),
-                child: Column(children: [_buildMakePanel()]),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  /// Saved user palette — tap applies it via the custom theme path.
-  Widget _buildSavedPanel(SavedCustomTheme t) {
-    final d = t.customData ?? CustomThemeData.defaultTheme;
-    return _PalettePanel(
-      name: t.name,
-      subtitle: 'SAVED PALETTE',
-      colors: [d.scaffold, d.card, d.primary, d.secondary, d.headlineStat],
-      nameColor: d.primary,
-      isActive: false,
-      isPreview: _previewMode == AppThemeMode.custom,
-      onTap: () {
-        AppTheme.saveCustomThemeData(d);
-        _previewTheme(AppThemeMode.custom);
-      },
     );
   }
 
