@@ -1,5 +1,26 @@
 [
   {
+    "version": "Unreleased",
+    "date": "2026-11",
+    "sections": {
+      "Polish": [
+        "Tracker controls enlarged to 30px across all special-item dashboards (Junkan, Evolver, Gunderfury, Gunther, item + gun counters, Robot, Huntress)",
+        "Item detail now shows the mechanical effect line for all 270 items",
+        "Shrine picker reworked into a 2-column altar grid",
+        "First-open drag demo on LIVE LOOK pull handle",
+        "Special-item pills moved inside the top run panel; inline cool/curse stepper"
+      ],
+      "Removed": [
+        "Mode-switcher trackers cut (Shellegun, Chamber Gun, Polaris, Triple Gun) per usability review"
+      ],
+      "Fixes": [
+        "Browse row meta overflow at ≤500px",
+        "Particle TYPE picker ignored (all types drew circles)",
+        "29 fonts bundled — offline font switching now works"
+      ]
+    }
+  },
+  {
     "version": "3.3.0",
     "build": 162,
     "date": "2026-10-30",
@@ -13,7 +34,6 @@
       "Leaner codebase — ~350 dead assets removed, every oversized file reorganized, 482 tests keeping the contracts pinned"
     ]
   },
-
   {
     "version": "3.2.1",
     "build": 161,
