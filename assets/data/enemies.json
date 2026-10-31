@@ -12,7 +12,8 @@
       "Basic enemy, low health — one or two shots from most guns."
     ],
     "game_enc_key": "BULLETGUNDEADBANDANA",
-    "ammonomicon": "Aggressive Bullet Kin that fearlessly charge their targets, spraying bullets from their machine pistols with reckless abandon."
+    "ammonomicon": "Aggressive Bullet Kin that fearlessly charge their targets, spraying bullets from their machine pistols with reckless abandon.",
+    "game_health": 15.0
   },
   {
     "name": "Veteran Bullet Kin",
@@ -27,7 +28,8 @@
       "Fires in quick succession — wait for the full volley before repositioning."
     ],
     "game_enc_key": "BULLETGUNDEADEYEPATCH",
-    "ammonomicon": "More experienced than their standard Bullet Kin brethren, Veterans have a better understanding of gunplay. "
+    "ammonomicon": "More experienced than their standard Bullet Kin brethren, Veterans have a better understanding of gunplay. ",
+    "game_health": 15.0
   },
   {
     "name": "Tanker",
@@ -42,7 +44,8 @@
       "Moderate health (18.8) — use sustained fire."
     ],
     "game_enc_key": "BULLETMANTANK",
-    "ammonomicon": "Tanker Bullet Kin are highly-disciplined hard-casings. "
+    "ammonomicon": "Tanker Bullet Kin are highly-disciplined hard-casings. ",
+    "game_health": 18.799999237060547
   },
   {
     "name": "Minelet",
@@ -70,7 +73,8 @@
       "The homing bullets persist — don't stop moving after they're fired."
     ],
     "game_enc_key": "BULLETCARDINAL",
-    "ammonomicon": "A high-ranking member in the Order of the True Gun."
+    "ammonomicon": "A high-ranking member in the Order of the True Gun.",
+    "game_health": 22.5
   },
   {
     "name": "Shroomer",
@@ -85,7 +89,8 @@
       "Moderate health (30) — slightly tankier than basic Bullet Kin."
     ],
     "game_enc_key": "BULLETMANSHROOMED",
-    "ammonomicon": "Shroomers are malformed Bullet Kin, prematurely fired, but somehow still functional. Prone to paranoia."
+    "ammonomicon": "Shroomers are malformed Bullet Kin, prematurely fired, but somehow still functional. Prone to paranoia.",
+    "game_health": 30.0
   },
   {
     "name": "Ashen Bullet Kin",
@@ -100,7 +105,8 @@
       "Disguise breaks after 2-6 seconds or when the breakable is shot."
     ],
     "game_enc_key": "ASHBULLETGUNDEAD",
-    "ammonomicon": "Charred into ash by some great flame, these Bullet Kin can remain dormant for decades unless disturbed."
+    "ammonomicon": "Charred into ash by some great flame, these Bullet Kin can remain dormant for decades unless disturbed.",
+    "game_health": 15.0
   },
   {
     "name": "Mutant Bullet Kin",
@@ -115,7 +121,8 @@
       "The poison creep lingers — don't dodge roll through it."
     ],
     "game_enc_key": "BULLETMANMUTANT",
-    "ammonomicon": "Living sealed in the filthy depths of the Gungeon's Oubliette has caused these Gundead to mutate."
+    "ammonomicon": "Living sealed in the filthy depths of the Gungeon's Oubliette has caused these Gundead to mutate.",
+    "game_health": 20.0
   },
   {
     "name": "Fallen Bullet Kin",
@@ -130,7 +137,8 @@
       "Fire spreads — clear the area before finishing it off."
     ],
     "game_enc_key": "BULLETDEVIL",
-    "ammonomicon": "These denizens of the Sixth Chamber delight in torment, pain, and costume parties."
+    "ammonomicon": "These denizens of the Sixth Chamber delight in torment, pain, and costume parties.",
+    "game_health": 20.0
   },
   {
     "name": "Office Bullet",
@@ -304,7 +312,8 @@
       "Drops a random pickup (hearts, keys, blanks, ammo) upon death."
     ],
     "game_enc_key": "CHANCEBULLETKIN",
-    "ammonomicon": "A relative of the Keybullet Kin, the Chance Kin can hide a variety of useful goods within their boxy heads. "
+    "ammonomicon": "A relative of the Keybullet Kin, the Chance Kin can hide a variety of useful goods within their boxy heads. ",
+    "game_health": 15.0
   },
   {
     "name": "Keybullet Kin",
@@ -318,7 +327,8 @@
       "Runs away — kill quickly or it disappears.",
       "Always drops a key — prioritize over regular enemies."
     ],
-    "game_enc_key": "KEYBULLETKIN"
+    "game_enc_key": "KEYBULLETKIN",
+    "game_health": 15.0
   },
   {
     "name": "Confirmed",
@@ -333,7 +343,8 @@
       "High health (45) — focus fire to take it down quickly."
     ],
     "game_enc_key": "HOODEDBULLET",
-    "ammonomicon": "These robed Bullet Kin have taken steps to hide their transformation as they shamble madly through the gungeon."
+    "ammonomicon": "These robed Bullet Kin have taken steps to hide their transformation as they shamble madly through the gungeon.",
+    "game_health": 15.0
   },
   {
     "name": "Red Shotgun Kin",
@@ -348,7 +359,8 @@
       "Chance of 6-bullet death burst — maintain distance."
     ],
     "game_enc_key": "SHOTGUNMAN",
-    "ammonomicon": "Shells of the Red Kin are the beefiest and most durable of the Shotgundead."
+    "ammonomicon": "Shells of the Red Kin are the beefiest and most durable of the Shotgundead.",
+    "game_health": 30.0
   },
   {
     "name": "Blue Shotgun Kin",
@@ -363,7 +375,8 @@
       "Chance of 6-bullet death burst — maintain distance."
     ],
     "game_enc_key": "SHOTGUNMANBLUE",
-    "ammonomicon": "Shells of the Blue Kin fire more rapidly than their Red brethren, though they are similar in most other respects."
+    "ammonomicon": "Shells of the Blue Kin fire more rapidly than their Red brethren, though they are similar in most other respects.",
+    "game_health": 40.0
   },
   {
     "name": "Veteran Shotgun Kin",
@@ -378,7 +391,8 @@
       "Death burst fires at varying speeds — the slow bullets can surprise you."
     ],
     "game_enc_key": "SHOTGUNSAWEDOFF",
-    "ammonomicon": "These mighty soldiers combine a sharpshooter's prediction with the area denial of a shotgun. Can be confused by erratic movements."
+    "ammonomicon": "These mighty soldiers combine a sharpshooter's prediction with the area denial of a shotgun. Can be confused by erratic movements.",
+    "game_health": 33.79999923706055
   },
   {
     "name": "Mutant Shotgun Kin",
@@ -393,7 +407,8 @@
       "Fast-moving tight spreads — use cover or dodge between bullets."
     ],
     "game_enc_key": "BULLETSHOTGUNMUTANT",
-    "ammonomicon": "Like their mutant brethren, these malformed Shotgun Kin have been changed by the depths."
+    "ammonomicon": "Like their mutant brethren, these malformed Shotgun Kin have been changed by the depths.",
+    "game_health": 32.0
   },
   {
     "name": "Executioner",
@@ -408,7 +423,8 @@
       "Death burst of 6 bullets plus a chain — finish it from range."
     ],
     "game_enc_key": "SHOTGUNCUTIONER",
-    "ammonomicon": "Unlike other Shotgun Kin, these hooded shells have been granted minor Ammomantic power."
+    "ammonomicon": "Unlike other Shotgun Kin, these hooded shells have been granted minor Ammomantic power.",
+    "game_health": 30.0
   },
   {
     "name": "Ashen Shotgun Kin",
@@ -423,7 +439,8 @@
       "Same disguise mechanic as Ashen Bullet Kin but with shotgun spreads."
     ],
     "game_enc_key": "ASHSHOTGUNMAN",
-    "ammonomicon": "Charred to ash by a great flame, these Shotgun Kin are animated by some external will."
+    "ammonomicon": "Charred to ash by a great flame, these Shotgun Kin are animated by some external will.",
+    "game_health": 20.0
   },
   {
     "name": "Shotgrub",
@@ -438,7 +455,8 @@
       "Don't hide behind cover — the splits will reach you."
     ],
     "game_enc_key": "SHOTGRUBMAN",
-    "ammonomicon": "Nightmarish versions of Shotgun Kin formed in the Sixth Chamber."
+    "ammonomicon": "Nightmarish versions of Shotgun Kin formed in the Sixth Chamber.",
+    "game_health": 20.0
   },
   {
     "name": "Pirate Shotgun Kin",
@@ -479,7 +497,8 @@
       "The bullet is high-speed — react to the laser, not the bullet."
     ],
     "game_enc_key": "BULLETRIFLEMAN",
-    "ammonomicon": "The sharp-eyed Sniper Shells are easy to deal with on their own, but can pose quite a threat when providing backup to other Gundead."
+    "ammonomicon": "The sharp-eyed Sniper Shells are easy to deal with on their own, but can pose quite a threat when providing backup to other Gundead.",
+    "game_health": 18.799999237060547
   },
   {
     "name": "Professional",
@@ -494,7 +513,8 @@
       "The explosion releases bullets in all directions — keep distance."
     ],
     "game_enc_key": "BULLETRIFLEPROFESSIONAL",
-    "ammonomicon": "Only the most talented Sniper Shells are called Professionals."
+    "ammonomicon": "Only the most talented Sniper Shells are called Professionals.",
+    "game_health": 21.0
   },
   {
     "name": "Gummy",
@@ -509,7 +529,8 @@
       "Jammed Spent shoots bullet spreads — clear them after the Gummy."
     ],
     "game_enc_key": "MUMMY",
-    "ammonomicon": "Beware their dark incantations, which guide living bullets to their prey."
+    "ammonomicon": "Beware their dark incantations, which guide living bullets to their prey.",
+    "game_health": 4.199999809265137
   },
   {
     "name": "Skullet",
@@ -524,7 +545,8 @@
       "Low health — quick to kill if focused."
     ],
     "game_enc_key": "BULLETSKELETON",
-    "ammonomicon": "Skullets are Gundead that have been reloaded through dark Ammomancy. "
+    "ammonomicon": "Skullets are Gundead that have been reloaded through dark Ammomancy. ",
+    "game_health": 15.800000190734863
   },
   {
     "name": "Skullmet",
@@ -539,7 +561,8 @@
       "Tougher variant found on later floors."
     ],
     "game_enc_key": "BULLETSKELETONHELMET",
-    "ammonomicon": "Skullmets are armored Skullets, and are consequently more threatening."
+    "ammonomicon": "Skullmets are armored Skullets, and are consequently more threatening.",
+    "game_health": 21.100000381469727
   },
   {
     "name": "Spent",
@@ -555,7 +578,8 @@
       "They lunge when close — keep your distance."
     ],
     "game_enc_key": "ZOMBULLET",
-    "ammonomicon": "The Spent are soulless Gundead, reloaded with no spirit inside."
+    "ammonomicon": "The Spent are soulless Gundead, reloaded with no spirit inside.",
+    "game_health": 4.199999809265137
   },
   {
     "name": "Zombullet",
@@ -569,7 +593,8 @@
       "Always jammed — deals full heart damage.",
       "Lunges at close range or fires radial burst at long range — keep mid-distance.",
       "Only spawned by Gummies — kill the Gummy to stop the spawn."
-    ]
+    ],
+    "game_health": 4.199999809265137
   },
   {
     "name": "Bomb Bot",
@@ -596,7 +621,8 @@
       "Spawns in huge groups — use AoE or rapid fire.",
       "Very low health (1) — any hit kills them.",
       "Slows down as it gets close — easy to pick off at range."
-    ]
+    ],
+    "game_health": 4.199999809265137
   },
   {
     "name": "Creech",
@@ -611,7 +637,8 @@
       "Bounces off walls — stay in the open to track them."
     ],
     "game_enc_key": "SHOTGUNCREECHER",
-    "ammonomicon": "The Creech is a demonic parody of the Shotgun Kin. Its false casing conceals a mass of pulsing eyes. "
+    "ammonomicon": "The Creech is a demonic parody of the Shotgun Kin. Its false casing conceals a mass of pulsing eyes. ",
+    "game_health": 20.0
   },
   {
     "name": "Hollowpoint",
@@ -626,7 +653,8 @@
       "Fires rapidly after teleporting — be ready to dodge."
     ],
     "game_enc_key": "GHOST",
-    "ammonomicon": "Able to dematerialize and rematerialize at will, these spirits still cling to the combat they knew in life."
+    "ammonomicon": "Able to dematerialize and rematerialize at will, these spirits still cling to the combat they knew in life.",
+    "game_health": 25.0
   },
   {
     "name": "Bombshee",
@@ -642,7 +670,8 @@
       "The shriek is short-ranged — snipe from afar."
     ],
     "game_enc_key": "BOMBSHEE",
-    "ammonomicon": "Forever seeking revenge, these creatures emit shrieks that match the frequency of Blanks- negating Gungeoneer projectiles."
+    "ammonomicon": "Forever seeking revenge, these creatures emit shrieks that match the frequency of Blanks- negating Gungeoneer projectiles.",
+    "game_health": 15.0
   },
   {
     "name": "High Priest Candle Man",
@@ -656,7 +685,8 @@
       "Dies on contact with the player — don't touch it.",
       "Creates permanent napalm goop on death — avoid the pool.",
       "Only in Challenge Mode High Priest fight — plan your movement."
-    ]
+    ],
+    "game_health": 15.0
   },
   {
     "name": "Candle Guy",
@@ -698,7 +728,8 @@
       "Don't let it push you into pits or other enemies."
     ],
     "game_enc_key": "RUBBERBULLET",
-    "ammonomicon": "Rubber Kin will attempt to knock their targets around, though they have no ability to deal direct damage."
+    "ammonomicon": "Rubber Kin will attempt to knock their targets around, though they have no ability to deal direct damage.",
+    "game_health": 18.0
   },
   {
     "name": "Tazie",
@@ -713,7 +744,8 @@
       "Low health (12) — kill before it reaches you."
     ],
     "game_enc_key": "TASERBULLET",
-    "ammonomicon": "Tired of being pushed around, Tazies are Rubber Gundead that have developed offensive capability."
+    "ammonomicon": "Tired of being pushed around, Tazies are Rubber Gundead that have developed offensive capability.",
+    "game_health": 18.0
   },
   {
     "name": "Musket Ball Guy",
@@ -741,7 +773,8 @@
       "Spawns 3-4 Bullats and Shotgats on death — clear the spawns."
     ],
     "game_enc_key": "GIANTBULLAT",
-    "ammonomicon": "The largest known species of Bullat."
+    "ammonomicon": "The largest known species of Bullat.",
+    "game_health": 26.0
   },
   {
     "name": "Bullat Gargoyle",
@@ -754,7 +787,8 @@
     "tips": [
       "Fires diamond-shaped bullet patterns — stand in the gaps.",
       "High health (45) — use stronger weapons."
-    ]
+    ],
+    "game_health": 30.0
   },
   {
     "name": "Pinhead",
@@ -769,7 +803,8 @@
       "Leaps at you when nearby — dodge roll away from the leap."
     ],
     "game_enc_key": "GRENADEGUY",
-    "ammonomicon": "Pinheads live for the moment before their own brilliant combustion. Beware their leap!"
+    "ammonomicon": "Pinheads live for the moment before their own brilliant combustion. Beware their leap!",
+    "game_health": 13.0
   },
   {
     "name": "Nitra",
@@ -784,7 +819,8 @@
       "Detonates early if you get close — keep your distance."
     ],
     "game_enc_key": "DYNAMITEGUY",
-    "ammonomicon": "These tubular menaces signal airstrikes with the light of their lit fuses."
+    "ammonomicon": "These tubular menaces signal airstrikes with the light of their lit fuses.",
+    "game_health": 13.0
   },
   {
     "name": "Claymore",
@@ -825,7 +861,8 @@
     "tips": [
       "Wanders aimlessly — low threat but don't ignore it.",
       "Releases a bullet ring on death — finish it from range."
-    ]
+    ],
+    "game_health": 18.0
   },
   {
     "name": "Arrowkin",
@@ -840,7 +877,8 @@
       "Arrows are charged — dodge roll when you see the release."
     ],
     "game_enc_key": "ARROWHEAD",
-    "ammonomicon": "The Arrowkin are primitive Bullet Kin from ancient days. Paintings found on cave walls have led credibility to the theory that ancient Gungeoneers were bison-like in appearance."
+    "ammonomicon": "The Arrowkin are primitive Bullet Kin from ancient days. Paintings found on cave walls have led credibility to the theory that ancient Gungeoneers were bison-like in appearance.",
+    "game_health": 15.0
   },
   {
     "name": "Blobulin",
@@ -855,7 +893,8 @@
       "Any hit kills it — use rapid fire or AoE to clear groups."
     ],
     "game_enc_key": "BLOBULIN",
-    "ammonomicon": "Blobulins form the lowest ranks of the Blobulonian Army. "
+    "ammonomicon": "Blobulins form the lowest ranks of the Blobulonian Army. ",
+    "game_health": 1.0
   },
   {
     "name": "Blobuloid",
@@ -870,7 +909,8 @@
       "Chain: Blobuloid -> 2 Blobulins. Plan your ammo accordingly."
     ],
     "game_enc_key": "BLOBULOID",
-    "ammonomicon": "When a Blobulon dies, it immediately spawns two vengeful Blobuloids."
+    "ammonomicon": "When a Blobulon dies, it immediately spawns two vengeful Blobuloids.",
+    "game_health": 10.0
   },
   {
     "name": "Blobulon",
@@ -885,7 +925,8 @@
       "Chain: Blobulon → 2 Blobuloids → 4 Blobulins. Plan your ammo."
     ],
     "game_enc_key": "BLOBULON",
-    "ammonomicon": "An assault trooper in the Blobulonian Army, 3rd Division. Capable of subdividing upon death, and overwhelming their foes with numbers."
+    "ammonomicon": "An assault trooper in the Blobulonian Army, 3rd Division. Capable of subdividing upon death, and overwhelming their foes with numbers.",
+    "game_health": 20.0
   },
   {
     "name": "Blobulord Death Crawler",
@@ -914,7 +955,8 @@
       "Very low health (1) — any hit kills it."
     ],
     "game_enc_key": "POISBULIN",
-    "ammonomicon": "Poisbulins, finally free of the excrutiating experience of being a Poisbuloid, march to the song of freedom and attack with abandon."
+    "ammonomicon": "Poisbulins, finally free of the excrutiating experience of being a Poisbuloid, march to the song of freedom and attack with abandon.",
+    "game_health": 1.0
   },
   {
     "name": "Poisbuloid",
@@ -929,7 +971,8 @@
       "Leaves poison creep — avoid the trail."
     ],
     "game_enc_key": "POISBULOID",
-    "ammonomicon": "The genetic process by which Poisbulons are created introduced a flaw in their replication."
+    "ammonomicon": "The genetic process by which Poisbulons are created introduced a flaw in their replication.",
+    "game_health": 10.800000190734863
   },
   {
     "name": "Poisbulon",
@@ -944,7 +987,8 @@
       "Leaves poison creep — avoid the trail."
     ],
     "game_enc_key": "POISBULON",
-    "ammonomicon": "Poisbulons represent a terrifying advancement in Blobulonian warfare, leaving a toxic trail in their wake."
+    "ammonomicon": "Poisbulons represent a terrifying advancement in Blobulonian warfare, leaving a toxic trail in their wake.",
+    "game_health": 19.200000762939453
   },
   {
     "name": "Blizzbulon",
@@ -959,7 +1003,8 @@
       "Dodge the radial burst first, then the aimed spreads."
     ],
     "game_enc_key": "BLIZZBULON",
-    "ammonomicon": "Beware the Blizzbulon's circular spray, for it always precedes several targeted assaults."
+    "ammonomicon": "Beware the Blizzbulon's circular spray, for it always precedes several targeted assaults.",
+    "game_health": 21.100000381469727
   },
   {
     "name": "Leadbulon",
@@ -975,7 +1020,8 @@
       "Don't get close when it's enraged — fire trail damage."
     ],
     "game_enc_key": "TBULON",
-    "ammonomicon": "Leadbulons form the heavy infantry of the Blobulonian Army."
+    "ammonomicon": "Leadbulons form the heavy infantry of the Blobulonian Army.",
+    "game_health": 22.700000762939453
   },
   {
     "name": "Poopulon",
@@ -990,7 +1036,8 @@
       "The spiral rotates — keep moving to stay in the gaps."
     ],
     "game_enc_key": "POOPULON",
-    "ammonomicon": "A disgusting glob of waste. A Blobulon corrupted by decades spent in Bullet Hell."
+    "ammonomicon": "A disgusting glob of waste. A Blobulon corrupted by decades spent in Bullet Hell.",
+    "game_health": 20.0
   },
   {
     "name": "Bloodbulon",
@@ -1005,7 +1052,8 @@
       "Large death burst — maintain distance when finishing."
     ],
     "game_enc_key": "BLOODBULON",
-    "ammonomicon": "An elite knight of the Blobulonian Army, 1st Division. Feasts upon combat."
+    "ammonomicon": "An elite knight of the Blobulonian Army, 1st Division. Feasts upon combat.",
+    "game_health": 30.0
   },
   {
     "name": "Skusket",
@@ -1020,7 +1068,8 @@
       "Homing skulls split into 6 bullets when destroyed — shoot them early."
     ],
     "game_enc_key": "POWDERSKULL",
-    "ammonomicon": "Skulls of forgotten adventurers packed with black powder from the Gungeon's Mines. "
+    "ammonomicon": "Skulls of forgotten adventurers packed with black powder from the Gungeon's Mines. ",
+    "game_health": 13.0
   },
   {
     "name": "Bookllet",
@@ -1035,7 +1084,8 @@
       "The patterns are predictable — find the safe spots in each shape."
     ],
     "game_enc_key": "ANGRYBOOKRED",
-    "ammonomicon": "These fiery tomes are required reading for initiate Gunjurors. "
+    "ammonomicon": "These fiery tomes are required reading for initiate Gunjurors. ",
+    "game_health": 25.0
   },
   {
     "name": "Blue Bookllet",
@@ -1050,7 +1100,8 @@
       "Time your dodge for when the ring is at its thinnest."
     ],
     "game_enc_key": "ANGRYBOOKBLUE",
-    "ammonomicon": "These watery tomes are required reading for Ammomancy 201."
+    "ammonomicon": "These watery tomes are required reading for Ammomancy 201.",
+    "game_health": 15.0
   },
   {
     "name": "Green Bookllet",
@@ -1065,7 +1116,8 @@
       "Find the gaps in the clover and position there."
     ],
     "game_enc_key": "ANGRYBOOKGREEN",
-    "ammonomicon": "These tomes are only studied by students of Advanced Gunjuration."
+    "ammonomicon": "These tomes are only studied by students of Advanced Gunjuration.",
+    "game_health": 15.0
   },
   {
     "name": "Angry Tablet",
@@ -1107,7 +1159,8 @@
       "Flies towards you — keep distance and focus fire."
     ],
     "game_enc_key": "BIRD",
-    "ammonomicon": "Gigi are a strange species of bird that lays eggs filled with bullets. "
+    "ammonomicon": "Gigi are a strange species of bird that lays eggs filled with bullets. ",
+    "game_health": 12.0
   },
   {
     "name": "Parrot",
@@ -1136,7 +1189,8 @@
       "Leaves fire on death — don't stand on its death spot."
     ],
     "game_enc_key": "SUNBURST",
-    "ammonomicon": "When the largest of guns are fired, the brilliant muzzle flash calls these Wisps into existence."
+    "ammonomicon": "When the largest of guns are fired, the brilliant muzzle flash calls these Wisps into existence.",
+    "game_health": 19.0
   },
   {
     "name": "Muzzle Flare",
@@ -1151,7 +1205,8 @@
       "Sets you on fire on contact — avoid touching it."
     ],
     "game_enc_key": "SUNBURSTBLUE",
-    "ammonomicon": "These luminous orbs are not to be underestimated. Burning hotter than other Wisps, few who witness their glorious incandescence survive."
+    "ammonomicon": "These luminous orbs are not to be underestimated. Burning hotter than other Wisps, few who witness their glorious incandescence survive.",
+    "game_health": 15.899999618530273
   },
   {
     "name": "Cubulon",
@@ -1166,7 +1221,8 @@
       "The diamond rotates — adjust your position as it turns."
     ],
     "game_enc_key": "CUBULON",
-    "ammonomicon": "Ascendant Blobulons who have achieved flight. The force of their slam attack violently expels ammunition they store in their gelatinous body."
+    "ammonomicon": "Ascendant Blobulons who have achieved flight. The force of their slam attack violently expels ammunition they store in their gelatinous body.",
+    "game_health": 30.0
   },
   {
     "name": "Chancebulon",
@@ -1182,7 +1238,8 @@
       "High health (50) — be patient and react to each random attack."
     ],
     "game_enc_key": "CHANCEBULON",
-    "ammonomicon": "Chancebulons are the berserker class of the Blobulonian imperial shock troops. "
+    "ammonomicon": "Chancebulons are the berserker class of the Blobulonian imperial shock troops. ",
+    "game_health": 30.0
   },
   {
     "name": "Cubulead",
@@ -1197,7 +1254,8 @@
       "The recall phase is the dangerous part — keep moving after the initial fire."
     ],
     "game_enc_key": "CUBULEAD",
-    "ammonomicon": "Immune to damage when hardened."
+    "ammonomicon": "Immune to damage when hardened.",
+    "game_health": 18.200000762939453
   },
   {
     "name": "Apprentice Gunjurer",
@@ -1212,7 +1270,8 @@
       "Predictive aim only applies beyond 4.5 tiles — get close to avoid leading."
     ],
     "game_enc_key": "WIZARD_YELLOW",
-    "ammonomicon": "Less experienced than their fellow Ammomancers, Apprentice Gunjurers must hone their craft by ordering bullets into a variety of simple shapes."
+    "ammonomicon": "Less experienced than their fellow Ammomancers, Apprentice Gunjurers must hone their craft by ordering bullets into a variety of simple shapes.",
+    "game_health": 18.799999237060547
   },
   {
     "name": "Gunjurer",
@@ -1227,7 +1286,8 @@
       "Fires absorbed bullets back at you — the more you shot, the more return."
     ],
     "game_enc_key": "WIZARD_RED",
-    "ammonomicon": "The School of Gunjuration teaches a mysterious form of Ammomancy, the art of producing bullets from beyond the Curtain."
+    "ammonomicon": "The School of Gunjuration teaches a mysterious form of Ammomancy, the art of producing bullets from beyond the Curtain.",
+    "game_health": 15.800000190734863
   },
   {
     "name": "High Gunjurer",
@@ -1242,7 +1302,8 @@
       "Teleports away — track its position after each teleport."
     ],
     "game_enc_key": "WIZARD_BLUE",
-    "ammonomicon": "The High Gunjurers know exactly one more type of magic than their Red-robed siblings, and never let them forget it."
+    "ammonomicon": "The High Gunjurers know exactly one more type of magic than their Red-robed siblings, and never let them forget it.",
+    "game_health": 24.0
   },
   {
     "name": "Lore Gunjurer",
@@ -1258,7 +1319,8 @@
       "Kill the familiars or the Gunjurer to stop the summons."
     ],
     "game_enc_key": "WIZARDPURPLE",
-    "ammonomicon": "Unlike their active brethren, the Lore Gunjurers prefer to study ancient texts over practicing Ammomancy."
+    "ammonomicon": "Unlike their active brethren, the Lore Gunjurers prefer to study ancient texts over practicing Ammomancy.",
+    "game_health": 30.0
   },
   {
     "name": "Gunsinger",
@@ -1273,7 +1335,8 @@
       "Runs away when approached or damaged — chase it down quickly."
     ],
     "game_enc_key": "LEADWIZARD",
-    "ammonomicon": "An applicant to the School of Gunjuration, these neophyte mages crave the favor of their superiors. "
+    "ammonomicon": "An applicant to the School of Gunjuration, these neophyte mages crave the favor of their superiors. ",
+    "game_health": 15.0
   },
   {
     "name": "Aged Gunsinger",
@@ -1288,7 +1351,8 @@
       "Cancel the spell by dealing damage or getting close."
     ],
     "game_enc_key": "LEADWIZARDBLUE",
-    "ammonomicon": "Gunsingers are capable of inspiring greatness from even the most pitiful of Gundead."
+    "ammonomicon": "Gunsingers are capable of inspiring greatness from even the most pitiful of Gundead.",
+    "game_health": 17.5
   },
   {
     "name": "Ammomancer",
@@ -1303,7 +1367,8 @@
       "Interrupt the summoning by getting close or dealing damage."
     ],
     "game_enc_key": "NECROMANCER",
-    "ammonomicon": "Ammomancers are dark Gunjurers who have been banished from the upper levels of the Gungeon."
+    "ammonomicon": "Ammomancers are dark Gunjurers who have been banished from the upper levels of the Gungeon.",
+    "game_health": 20.0
   },
   {
     "name": "Jammomancer",
@@ -1318,7 +1383,8 @@
       "Kill the Jammomancer to stop the jamming — it runs when approached."
     ],
     "game_enc_key": "JAMROMANCER",
-    "ammonomicon": "A practitioner of a forbidden branch of Ammomancy, these accursed priests can convert a normal denizen of the Gungeon into one of the horrific Jammed."
+    "ammonomicon": "A practitioner of a forbidden branch of Ammomancy, these accursed priests can convert a normal denizen of the Gungeon into one of the horrific Jammed.",
+    "game_health": 15.0
   },
   {
     "name": "Jamerlengo",
@@ -1333,7 +1399,8 @@
       "Runs away when approached — corner it or use rapid-fire weapons."
     ],
     "game_enc_key": "JAMERLENGO",
-    "ammonomicon": "The Jamerlengo is the grotesque pinnacle of Gunsinger magic. These bloated toadies can jam all Gundead in a room-shaped radius."
+    "ammonomicon": "The Jamerlengo is the grotesque pinnacle of Gunsinger magic. These bloated toadies can jam all Gundead in a room-shaped radius.",
+    "game_health": 15.0
   },
   {
     "name": "Wizbang",
@@ -1348,7 +1415,8 @@
       "Teleports around — track its position to avoid projections."
     ],
     "game_enc_key": "BULLETMANMAGIC",
-    "ammonomicon": "Wizbangs are known for their astral projections, deadly bullets that can traverse the ethereal planes."
+    "ammonomicon": "Wizbangs are known for their astral projections, deadly bullets that can traverse the ethereal planes.",
+    "game_health": 25.0
   },
   {
     "name": "Mimic",
@@ -1364,7 +1432,8 @@
       "Shoot chests from a distance to reveal mimics safely."
     ],
     "game_enc_key": "MIMICWOOD",
-    "ammonomicon": "Mimics are very dangerous, as many Gungeoneers foolishly drop their guard around treasure chests."
+    "ammonomicon": "Mimics are very dangerous, as many Gungeoneers foolishly drop their guard around treasure chests.",
+    "game_health": 25.0
   },
   {
     "name": "Gun Fairy",
@@ -1380,7 +1449,8 @@
       "Can be captured with the Bottle for later healing."
     ],
     "game_enc_key": "GUNFAIRY",
-    "ammonomicon": "This malevolent spirit lives inside pots found in the Gungeon."
+    "ammonomicon": "This malevolent spirit lives inside pots found in the Gungeon.",
+    "game_health": 15.0
   },
   {
     "name": "Bullat",
@@ -1395,7 +1465,8 @@
       "Very low health (1) — dies on contact with anything."
     ],
     "game_enc_key": "BULLAT",
-    "ammonomicon": "The bats that once nested here have been transformed by the great Bullet. "
+    "ammonomicon": "The bats that once nested here have been transformed by the great Bullet. ",
+    "game_health": 1.0
   },
   {
     "name": "Shotgat",
@@ -1410,7 +1481,8 @@
       "Very low health (2) — minimal threat individually."
     ],
     "game_enc_key": "BULLATSHOTGUN",
-    "ammonomicon": "Shotgats split themselves in two, firing in a V shape. Their aim can be foiled by remaining still."
+    "ammonomicon": "Shotgats split themselves in two, firing in a V shape. Their aim can be foiled by remaining still.",
+    "game_health": 2.0
   },
   {
     "name": "Grenat",
@@ -1425,7 +1497,8 @@
       "The explosion is the only threat — avoid the impact zone."
     ],
     "game_enc_key": "BULLATGRENADE",
-    "ammonomicon": "Grenats explode on impact."
+    "ammonomicon": "Grenats explode on impact.",
+    "game_health": 3.0
   },
   {
     "name": "Spirat",
@@ -1440,7 +1513,8 @@
       "Launches itself at you — dodge roll perpendicular to its charge."
     ],
     "game_enc_key": "BULLATGHOST",
-    "ammonomicon": "The ghosts of Bullats who died valiantly, returned from beyond the Curtain."
+    "ammonomicon": "The ghosts of Bullats who died valiantly, returned from beyond the Curtain.",
+    "game_health": 5.0
   },
   {
     "name": "Coaler",
@@ -1455,7 +1529,8 @@
       "Kill it quickly before it sets the room on fire."
     ],
     "game_enc_key": "COALGUY",
-    "ammonomicon": "The Coaler is an unrefined piece of coal that has taken up arms, though it is unclear that they are as purposeful as the Gundead."
+    "ammonomicon": "The Coaler is an unrefined piece of coal that has taken up arms, though it is unclear that they are as purposeful as the Gundead.",
+    "game_health": 19.200000762939453
   },
   {
     "name": "Gat",
@@ -1470,7 +1545,8 @@
       "Bounces around the room — track its movement to avoid contact."
     ],
     "game_enc_key": "MET",
-    "ammonomicon": "Gats are mechanized sentries, built by some savvy adventurer in years past."
+    "ammonomicon": "Gats are mechanized sentries, built by some savvy adventurer in years past.",
+    "game_health": 12.0
   },
   {
     "name": "Det",
@@ -1485,7 +1561,8 @@
       "Explodes on death — maintain distance when finishing it."
     ],
     "game_enc_key": "DETONATORPLUS",
-    "ammonomicon": "Fires lasers in four directions and explodes on death."
+    "ammonomicon": "Fires lasers in four directions and explodes on death.",
+    "game_health": 18.0
   },
   {
     "name": "Gunzookie",
@@ -1500,7 +1577,8 @@
       "Pop the bubbles before they fire — shoot them from range."
     ],
     "game_enc_key": "BUBBLELIZARD",
-    "ammonomicon": "The immature spawn of some great beast. "
+    "ammonomicon": "The immature spawn of some great beast. ",
+    "game_health": 15.0
   },
   {
     "name": "Gunzockie",
@@ -1515,7 +1593,8 @@
       "Pop bubbles quickly — they fire predicting bullets."
     ],
     "game_enc_key": "BUBBLELIZARDRED",
-    "ammonomicon": "The immature spawn of some great beast."
+    "ammonomicon": "The immature spawn of some great beast.",
+    "game_health": 15.0
   },
   {
     "name": "Bullet Shark",
@@ -1530,7 +1609,8 @@
       "Moderate threat — appears in Black Powder Mine and Hollow."
     ],
     "game_enc_key": "BULLETSHARK",
-    "ammonomicon": "Leaves a wake of bullets."
+    "ammonomicon": "Leaves a wake of bullets.",
+    "game_health": 25.0
   },
   {
     "name": "Great Bullet Shark",
@@ -1545,7 +1625,8 @@
       "Tougher than Bullet Shark — appears on later floors."
     ],
     "game_enc_key": "HAMMERHEADSHARK",
-    "ammonomicon": "A bullet shark that has grown larger and faster."
+    "ammonomicon": "A bullet shark that has grown larger and faster.",
+    "game_health": 18.200000762939453
   },
   {
     "name": "Tombstoner",
@@ -1560,7 +1641,8 @@
       "The cross has 4 lines — dodge roll through one line."
     ],
     "game_enc_key": "TOMBSTONER",
-    "ammonomicon": "These marbled minions of the Lich serve as his personal guard, and stand vigilantly to protect him, tombstone to a grave."
+    "ammonomicon": "These marbled minions of the Lich serve as his personal guard, and stand vigilantly to protect him, tombstone to a grave.",
+    "game_health": 20.0
   },
   {
     "name": "KBullet",
@@ -1601,7 +1683,8 @@
       "Erratic movement and wild shooting — unpredictable, keep distance."
     ],
     "game_enc_key": "CULTIST",
-    "ammonomicon": "Forgoing the desire to leave or change the past, these fanatical worshippers of the Gun are erratic and unpredictable. "
+    "ammonomicon": "Forgoing the desire to leave or change the past, these fanatical worshippers of the Gun are erratic and unpredictable. ",
+    "game_health": 22.700000762939453
   },
   {
     "name": "Beadie",
@@ -1616,7 +1699,8 @@
       "The death explosion can catch you off guard — maintain distance."
     ],
     "game_enc_key": "FLOATINGEYE",
-    "ammonomicon": "A thrall to the will of the Beholster."
+    "ammonomicon": "A thrall to the will of the Beholster.",
+    "game_health": 26.299999237060547
   },
   {
     "name": "Snake Guy",
@@ -1629,7 +1713,8 @@
     "tips": [
       "Fires V-shaped spreads with predictive aim — dodge perpendicular.",
       "Fast-moving bullets — react quickly to the spread."
-    ]
+    ],
+    "game_health": 30.0
   },
   {
     "name": "Ammoconda Ball",
@@ -1656,7 +1741,8 @@
     "tips": [
       "Drifts towards you firing triangle spreads — semi-random patterns.",
       "The spreads are unpredictable — keep mobile."
-    ]
+    ],
+    "game_health": 15.0
   },
   {
     "name": "Red Cylinder",
@@ -1685,7 +1771,8 @@
       "High health (100) — use high-DPS weapons."
     ],
     "game_enc_key": "GUNNUT",
-    "ammonomicon": "The Gun Nut commands lesser Gundead with the authority of the Bullet King, and patrols the halls of the Gungeon with a mighty blade forged from pure bullets."
+    "ammonomicon": "The Gun Nut commands lesser Gundead with the authority of the Bullet King, and patrols the halls of the Gungeon with a mighty blade forged from pure bullets.",
+    "game_health": 18.0
   },
   {
     "name": "Spectral Gun Nut",
@@ -1700,7 +1787,8 @@
       "The jammed bullet deals full heart damage — prioritize dodging it."
     ],
     "game_enc_key": "GUNNUTSPECTRE",
-    "ammonomicon": "High-ranking Gun Nuts who continue to serve, though their armor has fallen to disrepair."
+    "ammonomicon": "High-ranking Gun Nuts who continue to serve, though their armor has fallen to disrepair.",
+    "game_health": 54.0
   },
   {
     "name": "Chain Gunner",
@@ -1715,7 +1803,8 @@
       "Launches the chain when alone — dodge roll when its eyes glow red."
     ],
     "game_enc_key": "CHAINGUNNER",
-    "ammonomicon": "The Chain Gunners are the remnant of a lost legion of Gun Nuts, famous for their unique weaponry."
+    "ammonomicon": "The Chain Gunners are the remnant of a lost legion of Gun Nuts, famous for their unique weaponry.",
+    "game_health": 90.0
   },
   {
     "name": "Fungun",
@@ -1730,7 +1819,8 @@
       "Leaves poison creep on death — avoid its death spot."
     ],
     "game_enc_key": "MUSHROOMGUYSMALL",
-    "ammonomicon": "The mushroom child. These myconids have adapted to the Gungeon, launching a deadly cloud of bullets in place of spores."
+    "ammonomicon": "The mushroom child. These myconids have adapted to the Gungeon, launching a deadly cloud of bullets in place of spores.",
+    "game_health": 15.0
   },
   {
     "name": "Spogre",
@@ -1746,7 +1836,8 @@
       "High health (60) — use strong weapons."
     ],
     "game_enc_key": "MUSHROOMGUYGIANT",
-    "ammonomicon": "The mushroom parent. Spogres tower over their Fungun children, and their bullet clouds are correspondingly large."
+    "ammonomicon": "The mushroom parent. Spogres tower over their Fungun children, and their bullet clouds are correspondingly large.",
+    "game_health": 60.0
   },
   {
     "name": "Mountain Cube",
@@ -1762,7 +1853,8 @@
       "The freeze blast doesn't damage you — safe to trigger."
     ],
     "game_enc_key": "ICECUBEGUY",
-    "ammonomicon": "These stout defenders assault intruders in any direction that can be described as horizontal or vertical."
+    "ammonomicon": "These stout defenders assault intruders in any direction that can be described as horizontal or vertical.",
+    "game_health": 21.100000381469727
   },
   {
     "name": "Lead Cube",
@@ -1777,7 +1869,8 @@
       "Slides along rows/columns — stay off its axes."
     ],
     "game_enc_key": "METALCUBEGUY",
-    "ammonomicon": "These great Lead Cubes cannot be killed or halted. Only when the sounds of gunplay have ceased will they go dormant."
+    "ammonomicon": "These great Lead Cubes cannot be killed or halted. Only when the sounds of gunplay have ceased will they go dormant.",
+    "game_health": 20.0
   },
   {
     "name": "Flesh Cube",
@@ -1793,7 +1886,8 @@
       "Releases bullets on wall collisions — don't corner yourself."
     ],
     "game_enc_key": "FLESHCUBEGUY",
-    "ammonomicon": "These infernal machines appear to be covered in the flesh of once living creatures."
+    "ammonomicon": "These infernal machines appear to be covered in the flesh of once living creatures.",
+    "game_health": 20.0
   },
   {
     "name": "Dead Blow",
@@ -1825,7 +1919,8 @@
       "Explodes on death — don't stand next to it when finishing it."
     ],
     "game_enc_key": "LEADMAIDEN",
-    "ammonomicon": "Impenetrable when closed. "
+    "ammonomicon": "Impenetrable when closed. ",
+    "game_health": 15.0
   },
   {
     "name": "Fridge Maiden",
@@ -1853,7 +1948,8 @@
       "Creates projections that attack with bullet whips — track the real one."
     ],
     "game_enc_key": "DISPLACERBEAST",
-    "ammonomicon": "Misfire Beasts are invisible predators who use deadly bullet whips to attack their prey. "
+    "ammonomicon": "Misfire Beasts are invisible predators who use deadly bullet whips to attack their prey. ",
+    "game_health": 18.799999237060547
   },
   {
     "name": "Phaser Spider",
@@ -1869,7 +1965,8 @@
       "Burrows and reappears — track its emergence point."
     ],
     "game_enc_key": "PHASESPIDER",
-    "ammonomicon": "The phaser spider combines two worrying features: the ability to fire bullets, and being a spider."
+    "ammonomicon": "The phaser spider combines two worrying features: the ability to fire bullets, and being a spider.",
+    "game_health": 18.799999237060547
   },
   {
     "name": "Killithid",
@@ -1885,7 +1982,8 @@
       "Illusions disappear when hit — shoot all three to find the real one."
     ],
     "game_enc_key": "KILLITHID",
-    "ammonomicon": "The Killithid exist in a dimension of psychic gunplay, where the need for a physical gun is superfluous. They detest sunlight, and inhabit only the deepest chambers of the Gungeon. Killithid predate the Gungeon, and their magic is some of the first to be documented in the universe."
+    "ammonomicon": "The Killithid exist in a dimension of psychic gunplay, where the need for a physical gun is superfluous. They detest sunlight, and inhabit only the deepest chambers of the Gungeon. Killithid predate the Gungeon, and their magic is some of the first to be documented in the universe.",
+    "game_health": 15.0
   },
   {
     "name": "Gripmaster",
@@ -1901,7 +1999,8 @@
       "The grabbed room resets all enemies — avoid getting grabbed at all costs."
     ],
     "game_enc_key": "WALLMASTER",
-    "ammonomicon": "This strange creature possesses a small fraction of the Gungeon's mysterious time manipulation abilities."
+    "ammonomicon": "This strange creature possesses a small fraction of the Gungeon's mysterious time manipulation abilities.",
+    "game_health": 18.799999237060547
   },
   {
     "name": "Dragun Knifeguy",
@@ -1944,7 +2043,8 @@
       "Deals contact damage plus the ammo drain — very disruptive."
     ],
     "game_enc_key": "LIKELIKE",
-    "ammonomicon": "Half-holster, half-monster, the Tarnisher subsists on an diet largely consisting of guns. Strangely, this makes it both a bottom-feeder and an apex predator within the Gungeon."
+    "ammonomicon": "Half-holster, half-monster, the Tarnisher subsists on an diet largely consisting of guns. Strangely, this makes it both a bottom-feeder and an apex predator within the Gungeon.",
+    "game_health": 18.799999237060547
   },
   {
     "name": "Shambling Round",
@@ -1960,7 +2060,8 @@
       "Death cap explodes after a delay — don't stand on it."
     ],
     "game_enc_key": "TOTEMPOLE",
-    "ammonomicon": "A totemic offering to the seven armed Goddess of Bullets."
+    "ammonomicon": "A totemic offering to the seven armed Goddess of Bullets.",
+    "game_health": 72.0
   },
   {
     "name": "Shelleton",
@@ -1976,7 +2077,8 @@
       "High health (78) — use high-DPS weapons."
     ],
     "game_enc_key": "SHELLETON",
-    "ammonomicon": "Shelletons are hellish servants to the dark power that was banished to the 6th Chamber. "
+    "ammonomicon": "Shelletons are hellish servants to the dark power that was banished to the 6th Chamber. ",
+    "game_health": 78.0
   },
   {
     "name": "Agonizer",
@@ -1991,7 +2093,8 @@
       "Moderate health (50) — manageable with sustained fire."
     ],
     "game_enc_key": "HELLFACE",
-    "ammonomicon": "The suffering of those lost to Bullet Hell given form."
+    "ammonomicon": "The suffering of those lost to Bullet Hell given form.",
+    "game_health": 32.5
   },
   {
     "name": "Revolvenant",
@@ -2007,7 +2110,8 @@
       "High health (90) — prioritize or use cover."
     ],
     "game_enc_key": "REVOLVENANT",
-    "ammonomicon": "Dread sorcerer knights who studied Ammomancy under the creator of the Gungeon himself."
+    "ammonomicon": "Dread sorcerer knights who studied Ammomancy under the creator of the Gungeon himself.",
+    "game_health": 90.0
   },
   {
     "name": "Bullet Mech",
@@ -2036,7 +2140,8 @@
       "Focus on clearing other enemies to make it vanish."
     ],
     "game_enc_key": "REAPER",
-    "ammonomicon": "Death waits for us all."
+    "ammonomicon": "Death waits for us all.",
+    "game_health": 60.0
   },
   {
     "name": "Lord of the Jammed",
@@ -2092,7 +2197,8 @@
     "tips": [
       "Miniboss (80 HP) — same attacks as Bullet Kin Titan Boss.",
       "Slightly lower health — but still a significant threat."
-    ]
+    ],
+    "game_health": 20.0
   },
   {
     "name": "Fuselier",
@@ -2108,7 +2214,8 @@
       "Summons Bomb Bots — clear them before they reach you."
     ],
     "game_enc_key": "FUSEBOMB",
-    "ammonomicon": "A terrible fusion of wick and bomb, this floating creature makes its home inside of a giant bomb."
+    "ammonomicon": "A terrible fusion of wick and bomb, this floating creature makes its home inside of a giant bomb.",
+    "game_health": 1000.0
   },
   {
     "name": "Blockner",
@@ -2124,7 +2231,8 @@
       "Appears as a ghost in later runs after the initial quest kill."
     ],
     "game_enc_key": "MANFREDSRIVAL",
-    "ammonomicon": "Formerly Ser Blockner, this traitorous rat betrayed his friend and sought glory alone in the Gungeon."
+    "ammonomicon": "Formerly Ser Blockner, this traitorous rat betrayed his friend and sought glory alone in the Gungeon.",
+    "game_health": 1000.0
   },
   {
     "name": "Shadow Magician",
@@ -2140,6 +2248,7 @@
       "Found in the Hollow — appears as a random miniboss."
     ],
     "game_enc_key": "SHADOW_AGUNIM",
-    "ammonomicon": "Seemingly controlled by an unseen master, this mysterious form recently began stalking the Chambers of the Gungeon."
+    "ammonomicon": "Seemingly controlled by an unseen master, this mysterious form recently began stalking the Chambers of the Gungeon.",
+    "game_health": 1000.0
   }
 ]
