@@ -1,4 +1,6 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/tokens.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -1530,14 +1532,45 @@ class _PullHandle extends StatefulWidget {
 }
 
 class _PullHandleState extends State<_PullHandle>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _c = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1800),
   )..repeat(reverse: true);
 
+  // One-shot first-open demo — 3 big bounces (~2.4s) so users discover
+  // the drag affordance without a manual, then falls back to the bob.
+  AnimationController? _demo;
+  bool _demoing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      if (!mounted || prefs.getBool('experienceStudioDragDemoSeen') == true) {
+        return;
+      }
+      prefs.setBool('experienceStudioDragDemoSeen', true);
+      setState(() {
+        _demoing = true;
+        _demo =
+            AnimationController(
+                vsync: this,
+                duration: const Duration(milliseconds: 2400),
+              )
+              ..addStatusListener((st) {
+                if (st == AnimationStatus.completed) {
+                  setState(() => _demoing = false);
+                }
+              })
+              ..forward();
+      });
+    });
+  }
+
   @override
   void dispose() {
+    _demo?.dispose();
     _c.dispose();
     super.dispose();
   }
@@ -1548,7 +1581,12 @@ class _PullHandleState extends State<_PullHandle>
       animation: _c,
       builder:
           (_, _) => Transform.translate(
-            offset: Offset(0, -2.5 * _c.value),
+            offset: Offset(
+              0,
+              _demoing
+                  ? -9 * math.sin(_demo!.value * math.pi * 3)
+                  : -2.5 * _c.value,
+            ),
             child: Opacity(
               opacity: 0.55 + 0.35 * _c.value,
               child: Column(
