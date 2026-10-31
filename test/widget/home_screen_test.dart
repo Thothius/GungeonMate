@@ -163,7 +163,7 @@ void main() {
       await tester.pump();
 
       final navBar = tester.widget<NavigationBar>(find.byType(NavigationBar));
-      expect(navBar.selectedIndex, 3);
+      expect(navBar.selectedIndex, 4);
     });
 
     testWidgets('Tapping Codex tab switches selectedIndex', (tester) async {
