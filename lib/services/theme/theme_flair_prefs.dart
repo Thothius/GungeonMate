@@ -506,7 +506,7 @@ class VisualPrefs {
   static const _kShaderEnabled = 'vp.shader_enabled_v1';
   static const _kShaderPreset = 'vp.shader_preset_v1';
 
-  static final ValueNotifier<VisualPrefs> notifier = ValueNotifier(
+  static ValueNotifier<VisualPrefs> notifier = ValueNotifier(
     const VisualPrefs(),
   );
 
@@ -817,7 +817,9 @@ class VisualPrefs {
   }
 
   static Future<void> setParticleSchemaIndex(int v) async {
-    notifier.value = notifier.value._with(particleSchemaIndex: v.clamp(0, 2));
+    notifier.value = notifier.value._with(
+      particleSchemaIndex: v.clamp(0, kGlobalParticlePalettes.length - 1),
+    );
     _persist();
   }
 

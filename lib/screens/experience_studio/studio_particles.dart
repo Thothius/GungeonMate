@@ -136,6 +136,19 @@ class _ParticlesStep extends StatelessWidget {
                           },
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _PhysicsToggle(
+                          label: 'LINKS',
+                          on: prefs.particleLineLinks,
+                          onTap: () {
+                            VisualPrefs.setParticleLineLinks(
+                              !prefs.particleLineLinks,
+                            );
+                            Haptics.selection();
+                          },
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
