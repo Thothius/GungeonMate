@@ -88,6 +88,59 @@ class PresetConfig {
   /// Whether this config uses the lifetime system (vs legacy wrap).
   bool get hasLifetime => lifetimeMax > 0.0;
 
+  // Value equality — typedParticleConfig() returns a NEW instance every
+  // call, so identity comparison in ParticleField.didUpdateWidget cleared
+  // + respawned all particles on ANY parent rebuild (taps, route pushes).
+  bool _colorsEq(List<Color> a, List<Color> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      other is PresetConfig &&
+      _colorsEq(colors, other.colors) &&
+      shape == other.shape &&
+      sizeMin == other.sizeMin &&
+      sizeMax == other.sizeMax &&
+      speedMin == other.speedMin &&
+      speedMax == other.speedMax &&
+      glowEffect == other.glowEffect &&
+      lineLinks == other.lineLinks &&
+      drift == other.drift &&
+      wobble == other.wobble &&
+      rotate == other.rotate &&
+      trailLength == other.trailLength &&
+      turbulence == other.turbulence &&
+      hueDriftSpeed == other.hueDriftSpeed &&
+      shimmer == other.shimmer &&
+      lifetimeMin == other.lifetimeMin &&
+      lifetimeMax == other.lifetimeMax;
+
+  @override
+  int get hashCode => Object.hash(
+    Object.hashAll(colors),
+    shape,
+    sizeMin,
+    sizeMax,
+    speedMin,
+    speedMax,
+    glowEffect,
+    lineLinks,
+    drift,
+    wobble,
+    rotate,
+    trailLength,
+    turbulence,
+    hueDriftSpeed,
+    shimmer,
+    lifetimeMin,
+    lifetimeMax,
+  );
+
   PresetConfig copyWith({
     List<Color>? colors,
     ParticleShape? shape,

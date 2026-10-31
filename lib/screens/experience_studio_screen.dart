@@ -9,6 +9,7 @@ import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
 import 'palette_maker_screen.dart';
 import '../widgets/theme_overlay.dart';
+import '../widgets/particles/ambient_glow.dart';
 import '../utils/fast_route.dart';
 part 'experience_studio/studio_palette.dart';
 part 'experience_studio/studio_particles.dart';
@@ -120,6 +121,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     AppTheme.previewNotifier.value = m;
     final curation = kThemeCuration[m];
     if (curation != null) VisualPrefs.applyCuration(curation);
+    // Presets default to the Gungeon font — the typeface is part of
+    // the preset identity (user can still override in FONTS).
+    if (m != AppThemeMode.custom) VisualPrefs.setFont(AppFont.gungeon);
   }
 
   // ── Unified Customization hub ──────────────────────────────
@@ -138,7 +142,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       children: [
         _buildActionBar(),
         _buildTabStrip(),
-        _buildLiveLook(),
+        // Particles tab gets its own live preview (bigger, on top) —
+        // the shared LIVE LOOK pane hides there so the field is the star.
+        if (_hubTab != 3) _buildLiveLook(),
         Expanded(child: _buildHubContent()),
       ],
     );
@@ -334,6 +340,76 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   ),
                 ),
               ),
+              // Ambient glow layer — same resolution as the app overlay so
+              // the AMBIANCE tab's style/color/intensity visibly changes.
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: ValueListenableBuilder<VisualPrefs>(
+                    valueListenable: VisualPrefs.notifier,
+                    builder: (_, prefs, _) {
+                      final f = AppTheme.flairFor(_previewMode);
+                      final eff = (prefs.glowIntensity * 1.8).clamp(0.0, 1.8);
+                      if (eff <= 0.001) return const SizedBox.shrink();
+                      Color scaled(Color c) =>
+                          c.withValues(alpha: (c.a * eff).clamp(0.0, 1.0));
+                      return AmbientGlow(
+                        primary: scaled(
+                          Color.lerp(f.glowPrimary, prefs.glowColor, 0.5) ??
+                              f.glowPrimary,
+                        ),
+                        secondary: scaled(
+                          Color.lerp(f.glowSecondary, prefs.glowColor, 0.5) ??
+                              f.glowSecondary,
+                        ),
+                        tertiary: f.headlineStat.withValues(alpha: 0.3),
+                        style: prefs.glowStyleOverride ?? f.glowStyle,
+                      );
+                    },
+                  ),
+                ),
+              ),
+              // Vignette + grain layers — AMBIANCE sliders preview here.
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: ValueListenableBuilder<VisualPrefs>(
+                    valueListenable: VisualPrefs.notifier,
+                    builder:
+                        (_, prefs, _) => Stack(
+                          children: [
+                            if (prefs.vignetteIntensity > 0.01)
+                              Positioned.fill(
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    gradient: RadialGradient(
+                                      center: Alignment.center,
+                                      radius: 1.25,
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.black.withValues(
+                                          alpha: 0.2 * prefs.vignetteIntensity,
+                                        ),
+                                        Colors.black.withValues(
+                                          alpha: 0.45 * prefs.vignetteIntensity,
+                                        ),
+                                      ],
+                                      stops: const [0.0, 0.6, 1.0],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            if (prefs.grainIntensity > 0.005)
+                              Positioned.fill(
+                                child: CustomPaint(
+                                  painter: GrainPainter(
+                                    opacity: prefs.grainIntensity * 0.35,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                  ),
+                ),
+              ),
               Column(
                 children: [
                   Expanded(child: _buildLiveLookMock()),
@@ -347,19 +423,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                                 0.75,
                               ),
                         ),
-                    child: SizedBox(
+                    child: const SizedBox(
                       width: double.infinity,
-                      height: 20,
-                      child: Center(
-                        child: Container(
-                          width: 44,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ),
+                      height: 22,
+                      child: Center(child: _PullHandle()),
                     ),
                   ),
                 ],
@@ -385,6 +452,16 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              GoopText(
+                'PREVIEW',
+                style: TextStyle(
+                  fontSize: 8,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.6,
+                  color: flair.primary.withValues(alpha: 0.55),
+                ),
+              ),
+              const SizedBox(height: 3),
               Row(
                 children: [
                   Expanded(
@@ -470,6 +547,42 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                       ),
                     ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              // Mini stat chips — a second layer of real UI so the
+              // preview reads as an app, not a text card.
+              Row(
+                children: [
+                  for (final c in [
+                    ('COOL', '★', flair.secondary),
+                    ('CURSE', '☠', flair.primary),
+                    ('DPS', '42', flair.headlineStat),
+                  ])
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 6),
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: c.$3.withValues(alpha: 0.35),
+                          ),
+                        ),
+                        child: Center(
+                          child: GoopText(
+                            '${c.$2} ${c.$1}',
+                            style: TextStyle(
+                              fontSize: 8,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.8,
+                              color: c.$3,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ],
@@ -1171,13 +1284,38 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
   /// 6x10 curated — gunmetal, silver, gold, copper, colored metals,
   /// forged darks.
   static const _metallic = [
-    0xFF1F2937, 0xFF374151, 0xFF4B5563, 0xFF6B7280, 0xFF9CA3AF,
-    0xFFD1D5DB, 0xFF23272E, 0xFF2E3440, 0xFF3B4252, 0xFF4C566A,
-    0xFF5A5F66, 0xFF787D84, 0xFF969BA2, 0xFFB4B9C0, 0xFFD2D7DE,
-    0xFFE8ECF0, 0xFF43484D, 0xFF64696E, 0xFF8A8F94, 0xFFB0B5BA,
-    0xFF78350F, 0xFF92400E, 0xFFB45309, 0xFFD97706, 0xFFF59E0B,
-    0xFFFCD34D, 0xFF713F12, 0xFF854D0E, 0xFFA16207, 0xFFCA8A04,
-    0xFFCD7F32, 0xFF8C3B1B,
+    0xFF1F2937,
+    0xFF374151,
+    0xFF4B5563,
+    0xFF6B7280,
+    0xFF9CA3AF,
+    0xFFD1D5DB,
+    0xFF23272E,
+    0xFF2E3440,
+    0xFF3B4252,
+    0xFF4C566A,
+    0xFF5A5F66,
+    0xFF787D84,
+    0xFF969BA2,
+    0xFFB4B9C0,
+    0xFFD2D7DE,
+    0xFFE8ECF0,
+    0xFF43484D,
+    0xFF64696E,
+    0xFF8A8F94,
+    0xFFB0B5BA,
+    0xFF78350F,
+    0xFF92400E,
+    0xFFB45309,
+    0xFFD97706,
+    0xFFF59E0B,
+    0xFFFCD34D,
+    0xFF713F12,
+    0xFF854D0E,
+    0xFFA16207,
+    0xFFCA8A04,
+    0xFFCD7F32,
+    0xFF8C3B1B,
   ];
 
   @override
@@ -1288,6 +1426,62 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                   : null,
         ),
       ),
+    );
+  }
+}
+
+/// Drag handle for the LIVE LOOK pane — a gentle bob + chevron that
+/// keeps hinting the pane is pullable (was: a static pill users
+/// couldn't discover).
+class _PullHandle extends StatefulWidget {
+  const _PullHandle();
+
+  @override
+  State<_PullHandle> createState() => _PullHandleState();
+}
+
+class _PullHandleState extends State<_PullHandle>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1800),
+  )..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _c,
+      builder:
+          (_, _) => Transform.translate(
+            offset: Offset(0, -2.5 * _c.value),
+            child: Opacity(
+              opacity: 0.55 + 0.35 * _c.value,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    size: 12,
+                    color: Colors.white.withValues(alpha: 0.5),
+                  ),
+                  Container(
+                    width: 44,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
     );
   }
 }

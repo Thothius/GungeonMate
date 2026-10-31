@@ -393,14 +393,17 @@ void main() {
   });
 
   group('Theme list integrity', () {
-    test('kPickerThemes is the trimmed trio', () {
-      // Picker was cut to 3 presets — unicorn/moltenSteel/paperInk.
+    test('kPickerThemes is the six presets', () {
+      // 3 core + 3 added presets (cool/warm/dark variety, all curated).
       expect(
         kPickerThemes,
         equals([
           AppThemeMode.unicorn,
           AppThemeMode.moltenSteel,
           AppThemeMode.paperInk,
+          AppThemeMode.moonlitChamber,
+          AppThemeMode.dragunfire,
+          AppThemeMode.lichsDomain,
         ]),
       );
     });

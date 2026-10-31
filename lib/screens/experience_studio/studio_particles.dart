@@ -141,35 +141,28 @@ class _ParticlesStep extends StatelessWidget {
                   const SizedBox(height: 16),
                   _StepLabel('COLOR'),
                   const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      for (
-                        var i = 0;
-                        i <
-                            (kThemeParticleSchemas[AppTheme.notifier.value] ??
-                                    kThemeParticleSchemas[AppThemeMode
-                                        .paperInk]!)
-                                .length;
-                        i++
-                      ) ...[
-                        Expanded(
+                  // 12 global palettes — horizontal scroller so every
+                  // theme gets the full set (was ~3 per-theme schemas).
+                  SizedBox(
+                    height: 52,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: kGlobalParticlePalettes.length,
+                      separatorBuilder: (_, _) => const SizedBox(width: 8),
+                      itemBuilder: (context, i) {
+                        return SizedBox(
+                          width: 76,
                           child: _SchemaChip(
-                            schema:
-                                (kThemeParticleSchemas[AppTheme
-                                        .notifier
-                                        .value] ??
-                                    kThemeParticleSchemas[AppThemeMode
-                                        .paperInk]!)[i],
+                            schema: kGlobalParticlePalettes[i],
                             active: i == prefs.particleSchemaIndex,
                             onTap: () {
                               VisualPrefs.setParticleSchemaIndex(i);
                               Haptics.selection();
                             },
                           ),
-                        ),
-                        if (i < 2) const SizedBox(width: 8),
-                      ],
-                    ],
+                        );
+                      },
+                    ),
                   ),
                 ]),
               ),
@@ -251,7 +244,7 @@ class _ParticlePreview extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radii.md),
       child: Container(
-        height: 240,
+        height: 280,
         decoration: BoxDecoration(
           color: flair.scaffold.withValues(alpha: 0.6),
           border: Border.all(

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
+import 'dart:ui' show PointMode;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -286,8 +287,9 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // 2. Middle Layer: Core App Content (wrapped in visual physics controllers)
                   content,
 
-                  // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
-                  if (!menuVisible)
+                  // 3.5. Chamber Vignette — user-tweakable depth shadow
+                  // (prefs.vignetteIntensity scales edge darkness).
+                  if (!menuVisible && prefs.vignetteIntensity > 0.01)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: Container(
@@ -297,11 +299,32 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                               radius: 1.25,
                               colors: [
                                 Colors.transparent,
-                                Colors.black.withValues(alpha: 0.05),
-                                Colors.black.withValues(alpha: 0.25),
-                                Colors.black.withValues(alpha: 0.48),
+                                Colors.black.withValues(
+                                  alpha: 0.05 * prefs.vignetteIntensity,
+                                ),
+                                Colors.black.withValues(
+                                  alpha: 0.25 * prefs.vignetteIntensity,
+                                ),
+                                Colors.black.withValues(
+                                  alpha: 0.48 * prefs.vignetteIntensity,
+                                ),
                               ],
                               stops: const [0.0, 0.45, 0.82, 1.0],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+
+                  // 3.6. Film grain — static speckle at prefs.grainIntensity
+                  // opacity; RepaintBoundary so it paints once per resize.
+                  if (!menuVisible && prefs.grainIntensity > 0.005)
+                    Positioned.fill(
+                      child: IgnorePointer(
+                        child: RepaintBoundary(
+                          child: CustomPaint(
+                            painter: GrainPainter(
+                              opacity: prefs.grainIntensity * 0.35,
                             ),
                           ),
                         ),
@@ -414,4 +437,39 @@ Widget? buildBackdropParticleField(
     bounce: prefs.particleBounce,
     speedMultiplier: prefs.particleSpeed.multiplier,
   );
+}
+
+/// Static film-grain speckle — deterministic seeded dots painted once
+/// (inside a RepaintBoundary). Cheap: ~600 dots, no animation.
+class GrainPainter extends CustomPainter {
+  final double opacity;
+  const GrainPainter({required this.opacity});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (opacity <= 0 || size.width <= 0 || size.height <= 0) return;
+    // Deterministic pseudo-random from a fixed seed — stable across
+    // repaints so the grain doesn't shimmer.
+    final rnd = math.Random(77);
+    final paint =
+        Paint()
+          ..color = Colors.white.withValues(alpha: opacity)
+          ..strokeWidth = 1.0
+          ..strokeCap = StrokeCap.round;
+    final pts = <Offset>[
+      for (var i = 0; i < 600; i++)
+        Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
+    ];
+    canvas.drawPoints(PointMode.points, pts, paint);
+    // Dark counter-specks give the grain real "film" texture.
+    paint.color = Colors.black.withValues(alpha: opacity * 0.9);
+    final dark = <Offset>[
+      for (var i = 0; i < 600; i++)
+        Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
+    ];
+    canvas.drawPoints(PointMode.points, dark, paint);
+  }
+
+  @override
+  bool shouldRepaint(GrainPainter old) => old.opacity != opacity;
 }

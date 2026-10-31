@@ -22,6 +22,9 @@ const List<AppThemeMode> kPickerThemes = <AppThemeMode>[
   AppThemeMode.unicorn,
   AppThemeMode.moltenSteel,
   AppThemeMode.paperInk,
+  AppThemeMode.moonlitChamber,
+  AppThemeMode.dragunfire,
+  AppThemeMode.lichsDomain,
 ];
 
 /// Per-theme default particle preset. When a theme is active and the user
@@ -765,10 +768,125 @@ kThemeParticleSchemas = {
   ],
 };
 
-/// Schema colors for the current mode + pref index (clamped).
+/// Global particle palettes — 12 curated named color sets available on
+/// every theme (replaces the per-theme 3-schema list, which left most
+/// themes with only a couple of options).
+const kGlobalParticlePalettes = <({String name, List<Color> colors})>[
+  (
+    name: 'NEON',
+    colors: [
+      Color(0xFF00E5FF),
+      Color(0xFFFF2BD6),
+      Color(0xFF7CFF00),
+      Color(0xFFFFFF00),
+    ],
+  ),
+  (
+    name: 'EMBER',
+    colors: [
+      Color(0xFFFF3D00),
+      Color(0xFFFF6E40),
+      Color(0xFFFFAB40),
+      Color(0xFFFFD180),
+    ],
+  ),
+  (
+    name: 'FROST',
+    colors: [
+      Color(0xFF80D8FF),
+      Color(0xFFB3E5FC),
+      Color(0xFFE1F5FE),
+      Color(0xFF40C4FF),
+    ],
+  ),
+  (
+    name: 'TOXIN',
+    colors: [
+      Color(0xFF76FF03),
+      Color(0xFF64DD17),
+      Color(0xFFAEEA00),
+      Color(0xFF00E676),
+    ],
+  ),
+  (
+    name: 'ROYAL',
+    colors: [
+      Color(0xFF7C4DFF),
+      Color(0xFF651FFF),
+      Color(0xFFB388FF),
+      Color(0xFFD500F9),
+    ],
+  ),
+  (
+    name: 'GOLD',
+    colors: [
+      Color(0xFFFFD740),
+      Color(0xFFFFC400),
+      Color(0xFFFFAB00),
+      Color(0xFFFFE57F),
+    ],
+  ),
+  (
+    name: 'BLOOD',
+    colors: [
+      Color(0xFFFF1744),
+      Color(0xFFD50000),
+      Color(0xFFFF5252),
+      Color(0xFFFF8A80),
+    ],
+  ),
+  (
+    name: 'VOID',
+    colors: [
+      Color(0xFF6200EA),
+      Color(0xFF304FFE),
+      Color(0xFFAA00FF),
+      Color(0xFF7C4DFF),
+    ],
+  ),
+  (
+    name: 'PRISM',
+    colors: [
+      Color(0xFFFF5252),
+      Color(0xFFFFB300),
+      Color(0xFF69F0AE),
+      Color(0xFF40C4FF),
+      Color(0xFFB388FF),
+    ],
+  ),
+  (
+    name: 'STEEL',
+    colors: [
+      Color(0xFFB0BEC5),
+      Color(0xFF78909C),
+      Color(0xFF546E7A),
+      Color(0xFFECEFF1),
+    ],
+  ),
+  (
+    name: 'ABYSS',
+    colors: [
+      Color(0xFF0091EA),
+      Color(0xFF00B0FF),
+      Color(0xFF1DE9B6),
+      Color(0xFF00B8D4),
+    ],
+  ),
+  (
+    name: 'ETHER',
+    colors: [
+      Color(0xFFF8BBD0),
+      Color(0xFFE1BEE7),
+      Color(0xFFD1C4E9),
+      Color(0xFFB2EBF2),
+    ],
+  ),
+];
+
+/// Schema colors for the pref index (clamped to the global palette
+/// list). `mode` is kept for signature compatibility — palettes are
+/// global now.
 List<Color> particleSchemaColors(AppThemeMode mode, int schemaIdx) {
-  final list =
-      kThemeParticleSchemas[mode] ??
-      kThemeParticleSchemas[AppThemeMode.paperInk]!;
+  final list = kGlobalParticlePalettes;
   return list[schemaIdx.clamp(0, list.length - 1)].colors;
 }

@@ -283,6 +283,12 @@ class VisualPrefs {
   /// Font size for inventory tiles specifically. Let users scale it independently.
   final double inventoryFontSize;
 
+  /// Edge-shadow depth multiplier (0=off, 1=default look, 1.5=max).
+  final double vignetteIntensity;
+
+  /// Film-grain speckle opacity (0=off).
+  final double grainIntensity;
+
   /// Global display mode for inventory screens (grid variations).
   final InventoryDisplayMode inventoryDisplayMode;
 
@@ -436,6 +442,8 @@ class VisualPrefs {
     this.font = AppFont.gungeon,
     this.fontSize = 12.0,
     this.inventoryFontSize = 12.0,
+    this.vignetteIntensity = 1.0,
+    this.grainIntensity = 0.0,
     this.inventoryDisplayMode = InventoryDisplayMode.classicPeriodic,
     this.customDiceType = CustomDiceType.themeDefault,
     this.particleSizeScale = 1.0,
@@ -465,6 +473,8 @@ class VisualPrefs {
   static const _kFont = 'vp.font_v1';
   static const _kFontSize = 'vp.font_size_v1';
   static const _kInventoryFontSize = 'vp.inventory_font_size_v1';
+  static const _kVignetteIntensity = 'vp.vignette_intensity_v1';
+  static const _kGrainIntensity = 'vp.grain_intensity_v1';
   static const _kInventoryDisplayMode = 'vp.inventory_display_mode_v1';
   static const _kScaleLegacy = 'vp.scale_v1'; // migrated to _kFontSize
 
@@ -559,6 +569,8 @@ class VisualPrefs {
           )];
 
       final inventoryFontSize = p.getDouble(_kInventoryFontSize) ?? 12.0;
+      final vignetteIntensity = p.getDouble(_kVignetteIntensity) ?? 1.0;
+      final grainIntensity = p.getDouble(_kGrainIntensity) ?? 0.0;
       final displayModeIdx = p.getInt(_kInventoryDisplayMode) ?? 0;
       final inventoryDisplayMode =
           InventoryDisplayMode.values[displayModeIdx.clamp(
@@ -607,6 +619,8 @@ class VisualPrefs {
         font: font,
         fontSize: fontSize,
         inventoryFontSize: inventoryFontSize,
+        vignetteIntensity: vignetteIntensity,
+        grainIntensity: grainIntensity,
         inventoryDisplayMode: inventoryDisplayMode,
         customDiceType: customDiceType,
         particleSizeScale: p.getDouble(_kParticleSizeScale) ?? 1.0,
@@ -669,6 +683,16 @@ class VisualPrefs {
   static Future<void> setInventoryFontSize(double v) async {
     final clamped = v.clamp(10.0, 18.0);
     notifier.value = notifier.value._with(inventoryFontSize: clamped);
+    _persist();
+  }
+
+  static Future<void> setVignetteIntensity(double v) async {
+    notifier.value = notifier.value._with(vignetteIntensity: v.clamp(0.0, 1.5));
+    _persist();
+  }
+
+  static Future<void> setGrainIntensity(double v) async {
+    notifier.value = notifier.value._with(grainIntensity: v.clamp(0.0, 1.0));
     _persist();
   }
 
@@ -859,6 +883,8 @@ class VisualPrefs {
       await p.setInt(_kFont, v.font.index);
       await p.setDouble(_kFontSize, v.fontSize);
       await p.setDouble(_kInventoryFontSize, v.inventoryFontSize);
+      await p.setDouble(_kVignetteIntensity, v.vignetteIntensity);
+      await p.setDouble(_kGrainIntensity, v.grainIntensity);
       await p.setInt(_kInventoryDisplayMode, v.inventoryDisplayMode.index);
 
       await p.setInt(_kParticlePreset, v.particlePreset.index);
@@ -900,6 +926,8 @@ class VisualPrefs {
     AppFont? font,
     double? fontSize,
     double? inventoryFontSize,
+    double? vignetteIntensity,
+    double? grainIntensity,
     InventoryDisplayMode? inventoryDisplayMode,
     ParticlePreset? particlePreset,
     GlowEffect? particleGlowEffect,
@@ -935,6 +963,8 @@ class VisualPrefs {
     font: font ?? this.font,
     fontSize: fontSize ?? this.fontSize,
     inventoryFontSize: inventoryFontSize ?? this.inventoryFontSize,
+    vignetteIntensity: vignetteIntensity ?? this.vignetteIntensity,
+    grainIntensity: grainIntensity ?? this.grainIntensity,
     inventoryDisplayMode: inventoryDisplayMode ?? this.inventoryDisplayMode,
     particlePreset: particlePreset ?? this.particlePreset,
     particleGlowEffect: particleGlowEffect ?? this.particleGlowEffect,
@@ -972,6 +1002,8 @@ class VisualPrefs {
     'font': font.index,
     'fontSize': fontSize,
     'inventoryFontSize': inventoryFontSize,
+    'vignetteIntensity': vignetteIntensity,
+    'grainIntensity': grainIntensity,
     'inventoryDisplayMode': inventoryDisplayMode.index,
     'particlePreset': particlePreset.index,
     'particleGlowEffect': particleGlowEffect.index,
@@ -1006,6 +1038,8 @@ class VisualPrefs {
       font: AppFont.values[(j['font'] as int?) ?? 0],
       fontSize: (j['fontSize'] as num?)?.toDouble() ?? 12.0,
       inventoryFontSize: (j['inventoryFontSize'] as num?)?.toDouble() ?? 11.0,
+      vignetteIntensity: (j['vignetteIntensity'] as num?)?.toDouble() ?? 1.0,
+      grainIntensity: (j['grainIntensity'] as num?)?.toDouble() ?? 0.0,
       inventoryDisplayMode:
           InventoryDisplayMode.values[(j['inventoryDisplayMode'] as int?) ?? 0],
       particlePreset: ParticlePreset.values[(j['particlePreset'] as int?) ?? 0],

@@ -3,76 +3,40 @@ part of '../experience_studio_screen.dart';
 class _TypographyStep extends StatelessWidget {
   const _TypographyStep();
 
-  /// All 29 fonts, grouped by the AppFont enum's own categories.
-  static const _fontGroups = <String, List<AppFont>>{
-    'FEATURED': [AppFont.gungeon, AppFont.megrim],
-    'PIXEL & RETRO': [
-      AppFont.pressStart2p,
-      AppFont.silkscreen,
-      AppFont.vt323,
-      AppFont.pixelifySans,
-    ],
-    'SCI-FI & TECH': [
-      AppFont.blackOpsOne,
-      AppFont.orbitron,
-      AppFont.shareTechMono,
-      AppFont.syncopate,
-      AppFont.rajdhani,
-      AppFont.audiowide,
-      AppFont.russoOne,
-      AppFont.fasterOne,
-      AppFont.jetBrainsMono,
-    ],
-    'DISPLAY & IMPACT': [
-      AppFont.archivoBlack,
-      AppFont.anton,
-      AppFont.rowdies,
-      AppFont.righteous,
-      AppFont.bebasNeue,
-    ],
-    'CASUAL & FUN': [AppFont.fredoka, AppFont.carterOne],
-    'CLEAN & MODERN': [AppFont.dmSans, AppFont.montserrat],
-    'GOTHIC & FANTASY': [
-      AppFont.medievalSharp,
-      AppFont.cinzelDecorative,
-      AppFont.cinzel,
-    ],
-    'SERIF & EDITORIAL': [
-      AppFont.merriweather,
-      AppFont.specialElite,
-      AppFont.playfairDisplay,
-    ],
-  };
-
-  /// 2-col uniform tile grid — the font's name rendered in its own face.
-  Widget _fontGrid(List<AppFont> fonts, AppFont active) {
-    return Column(
-      children: [
-        for (var r = 0; r * 2 < fonts.length; r++)
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: (r + 1) * 2 < fonts.length ? 8 : 0,
-            ),
-            child: Row(
-              children: [
-                for (var c = 0; c < 2; c++) ...[
-                  Expanded(
-                    child:
-                        r * 2 + c < fonts.length
-                            ? _FontTile(
-                              font: fonts[r * 2 + c],
-                              selected: fonts[r * 2 + c] == active,
-                            )
-                            : const SizedBox(),
-                  ),
-                  if (c < 1) const SizedBox(width: 8),
-                ],
-              ],
-            ),
-          ),
-      ],
-    );
-  }
+  /// All 29 fonts in enum order — FEATURED first, then the category
+  /// groups flat (no group labels per user feedback).
+  static const _fonts = [
+    AppFont.gungeon,
+    AppFont.megrim,
+    AppFont.pressStart2p,
+    AppFont.silkscreen,
+    AppFont.vt323,
+    AppFont.pixelifySans,
+    AppFont.blackOpsOne,
+    AppFont.orbitron,
+    AppFont.shareTechMono,
+    AppFont.syncopate,
+    AppFont.rajdhani,
+    AppFont.audiowide,
+    AppFont.russoOne,
+    AppFont.fasterOne,
+    AppFont.jetBrainsMono,
+    AppFont.archivoBlack,
+    AppFont.anton,
+    AppFont.rowdies,
+    AppFont.righteous,
+    AppFont.bebasNeue,
+    AppFont.fredoka,
+    AppFont.carterOne,
+    AppFont.dmSans,
+    AppFont.montserrat,
+    AppFont.medievalSharp,
+    AppFont.cinzelDecorative,
+    AppFont.cinzel,
+    AppFont.merriweather,
+    AppFont.specialElite,
+    AppFont.playfairDisplay,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -95,13 +59,10 @@ class _TypographyStep extends StatelessWidget {
               ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  for (final g in _fontGroups.entries) ...[
-                    _StepLabel(g.key),
-                    const SizedBox(height: 8),
-                    _fontGrid(g.value, prefs.font),
-                    const SizedBox(height: 14),
-                  ],
-                  const SizedBox(height: 4),
+                  // 2x4 swipable font pages — no group labels; swipe to
+                  // browse all 29 fonts, controls sit below.
+                  _FontPager(fonts: _fonts, active: prefs.font),
+                  const SizedBox(height: 18),
                   _StepLabel('BASE FONT SIZE'),
                   const SizedBox(height: 10),
                   _FontSizeSlider(
@@ -497,6 +458,91 @@ class _LetterRow extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+}
+
+/// 2x4 swipable font browser — PageView pages of 8 uniform tiles,
+/// with a dot indicator so users know to swipe for all 29 fonts.
+class _FontPager extends StatefulWidget {
+  final List<AppFont> fonts;
+  final AppFont active;
+  const _FontPager({required this.fonts, required this.active});
+
+  @override
+  State<_FontPager> createState() => _FontPagerState();
+}
+
+class _FontPagerState extends State<_FontPager> {
+  int _page = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    const perPage = 8;
+    final pages = (widget.fonts.length / perPage).ceil();
+    final flair = AppTheme.flair;
+    return Column(
+      children: [
+        SizedBox(
+          height: 4 * 48 + 3 * 8, // 4 rows of 48px tiles + gaps
+          child: PageView.builder(
+            itemCount: pages,
+            onPageChanged: (i) => setState(() => _page = i),
+            itemBuilder: (context, p) {
+              final start = p * perPage;
+              final slice = widget.fonts.sublist(
+                start,
+                (start + perPage).clamp(0, widget.fonts.length),
+              );
+              return Column(
+                children: [
+                  for (var r = 0; r < 4; r++)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: r < 3 ? 8 : 0),
+                      child: Row(
+                        children: [
+                          for (var c = 0; c < 2; c++) ...[
+                            Expanded(
+                              child:
+                                  r * 2 + c < slice.length
+                                      ? _FontTile(
+                                        font: slice[r * 2 + c],
+                                        selected:
+                                            slice[r * 2 + c] == widget.active,
+                                      )
+                                      : const SizedBox(),
+                            ),
+                            if (c < 1) const SizedBox(width: 8),
+                          ],
+                        ],
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (var i = 0; i < pages; i++)
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 160),
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: i == _page ? 16 : 5,
+                height: 5,
+                decoration: BoxDecoration(
+                  color:
+                      i == _page
+                          ? flair.primary
+                          : Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
