@@ -300,7 +300,6 @@ class VisualPrefs {
   final bool spongeActive;
 
   /// Whether the Effects panel accordion is shown on the active-run dashboard.
-  final bool showEffectsPanel;
 
   /// Whether the Shrine tracker panel is shown on the active-run dashboard.
   final bool showShrinePanel;
@@ -446,7 +445,6 @@ class VisualPrefs {
     this.dialogueTextSpeedMs = 30,
     this.isGoopianLanguage = false,
     this.spongeActive = false,
-    this.showEffectsPanel = false,
     this.showShrinePanel = false,
     this.showDashboards = true,
     this.periodicGridColumnCount = 0,
@@ -486,7 +484,6 @@ class VisualPrefs {
   static const _kDialogueTextSpeed = 'vp.dialogue_text_speed_v1';
   static const _kGoopianLanguage = 'vp.goopian_language_v1';
   static const _kSpongeActive = 'vp.sponge_active_v1';
-  static const _kShowEffectsPanel = 'vp.show_effects_panel_v1';
   static const _kShowShrinePanel = 'vp.show_shrine_panel_v1';
   static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
@@ -571,7 +568,6 @@ class VisualPrefs {
 
       final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
       final spongeActive = p.getBool(_kSpongeActive) ?? false;
-      final showEffectsPanel = p.getBool(_kShowEffectsPanel) ?? false;
       final showShrinePanel = p.getBool(_kShowShrinePanel) ?? false;
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
@@ -620,7 +616,6 @@ class VisualPrefs {
         dialogueTextSpeedMs: p.getInt(_kDialogueTextSpeed) ?? 30,
         isGoopianLanguage: isGoopian,
         spongeActive: spongeActive,
-        showEffectsPanel: showEffectsPanel,
         showShrinePanel: showShrinePanel,
         showDashboards: showDashboards,
         periodicGridColumnCount: periodicGridColumnCount,
@@ -765,11 +760,6 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setShowEffectsPanel(bool v) async {
-    notifier.value = notifier.value._with(showEffectsPanel: v);
-    _persist();
-  }
-
   static Future<void> setShowShrinePanel(bool v) async {
     notifier.value = notifier.value._with(showShrinePanel: v);
     _persist();
@@ -886,7 +876,6 @@ class VisualPrefs {
       await p.setInt(_kDialogueTextSpeed, v.dialogueTextSpeedMs);
       await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
       await p.setBool(_kSpongeActive, v.spongeActive);
-      await p.setBool(_kShowEffectsPanel, v.showEffectsPanel);
       await p.setBool(_kShowShrinePanel, v.showShrinePanel);
       await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
@@ -927,7 +916,6 @@ class VisualPrefs {
     int? dialogueTextSpeedMs,
     bool? isGoopianLanguage,
     bool? spongeActive,
-    bool? showEffectsPanel,
     bool? showShrinePanel,
     bool? showDashboards,
     int? periodicGridColumnCount,
@@ -962,7 +950,6 @@ class VisualPrefs {
     dialogueTextSpeedMs: dialogueTextSpeedMs ?? this.dialogueTextSpeedMs,
     isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
     spongeActive: spongeActive ?? this.spongeActive,
-    showEffectsPanel: showEffectsPanel ?? this.showEffectsPanel,
     showShrinePanel: showShrinePanel ?? this.showShrinePanel,
     showDashboards: showDashboards ?? this.showDashboards,
     periodicGridColumnCount:
@@ -1001,7 +988,6 @@ class VisualPrefs {
     'dialogueTextSpeedMs': dialogueTextSpeedMs,
     'isGoopianLanguage': isGoopianLanguage,
     'spongeActive': spongeActive,
-    'showEffectsPanel': showEffectsPanel,
     'showShrinePanel': showShrinePanel,
     'showDashboards': showDashboards,
     'periodicGridColumnCount': periodicGridColumnCount,
@@ -1038,7 +1024,6 @@ class VisualPrefs {
       dialogueTextSpeedMs: j['dialogueTextSpeedMs'] as int? ?? 30,
       isGoopianLanguage: j['isGoopianLanguage'] as bool? ?? false,
       spongeActive: j['spongeActive'] as bool? ?? false,
-      showEffectsPanel: j['showEffectsPanel'] as bool? ?? true,
       showShrinePanel: j['showShrinePanel'] as bool? ?? true,
       showDashboards: j['showDashboards'] as bool? ?? true,
       periodicGridColumnCount: j['periodicGridColumnCount'] as int? ?? 0,
