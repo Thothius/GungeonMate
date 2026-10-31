@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gungeon_mate/services/app_theme.dart';
 
-/// v3.0 theme cut migration — users persisted on a removed picker theme
-/// (or a custom theme) must land on Moonlit Chamber at load. Supported
-/// themes and the Minimalist default are untouched.
+/// Theme cut migration — users persisted on a theme removed from
+/// kVisibleThemes land on the visible default (paperInk) at load.
+/// Visible themes (unicorn/moltenSteel/paperInk/custom) are untouched.
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -15,31 +15,32 @@ void main() {
     await AppTheme.init();
   }
 
-  test('removed picker themes migrate to Moonlit Chamber', () async {
-    // gunpowder was cut from kPickerThemes in v3.0.
+  test('removed themes migrate to paperInk', () async {
+    // gunpowder was cut from kVisibleThemes in v3.0.
     await initWith(AppThemeMode.gunpowder.index);
-    expect(AppTheme.mode, AppThemeMode.moonlitChamber);
+    expect(AppTheme.mode, AppThemeMode.paperInk);
 
     // lichsDomain likewise.
     await initWith(AppThemeMode.lichsDomain.index);
-    expect(AppTheme.mode, AppThemeMode.moonlitChamber);
+    expect(AppTheme.mode, AppThemeMode.paperInk);
+
+    // forgeMaster and minimalist were also cut.
+    await initWith(AppThemeMode.forgeMaster.index);
+    expect(AppTheme.mode, AppThemeMode.paperInk);
+    await initWith(AppThemeMode.minimalist.index);
+    expect(AppTheme.mode, AppThemeMode.paperInk);
   });
 
-  test('custom theme migrates to Moonlit Chamber', () async {
+  test('custom theme is kept (still visible)', () async {
     await initWith(AppThemeMode.custom.index);
-    expect(AppTheme.mode, AppThemeMode.moonlitChamber);
+    expect(AppTheme.mode, AppThemeMode.custom);
   });
 
-  test('supported themes survive', () async {
+  test('visible themes survive', () async {
     await initWith(AppThemeMode.unicorn.index);
     expect(AppTheme.mode, AppThemeMode.unicorn);
 
-    await initWith(AppThemeMode.forgeMaster.index);
-    expect(AppTheme.mode, AppThemeMode.forgeMaster);
-  });
-
-  test('minimalist default is not touched by the cut', () async {
-    await initWith(AppThemeMode.minimalist.index);
-    expect(AppTheme.mode, AppThemeMode.minimalist);
+    await initWith(AppThemeMode.moltenSteel.index);
+    expect(AppTheme.mode, AppThemeMode.moltenSteel);
   });
 }

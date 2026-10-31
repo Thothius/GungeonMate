@@ -393,29 +393,25 @@ void main() {
   });
 
   group('Theme list integrity', () {
-    test('kPickerThemes has 9 entries (3 families × 3)', () {
-      expect(kPickerThemes.length, 9);
-      // Variants render band/fallback tiles — splash assets exist
-      // only for the three family parents.
-      for (final parent in [
-        AppThemeMode.unicorn,
-        AppThemeMode.forgeMaster,
-        AppThemeMode.moonlitChamber,
-      ]) {
-        expect(kPickerThemes, contains(parent));
-        expect(parent.splashSlug, isNotEmpty);
-      }
+    test('kPickerThemes is the trimmed trio', () {
+      // Picker was cut to 3 presets — unicorn/moltenSteel/paperInk.
+      expect(
+        kPickerThemes,
+        equals([
+          AppThemeMode.unicorn,
+          AppThemeMode.moltenSteel,
+          AppThemeMode.paperInk,
+        ]),
+      );
     });
 
     test('kVisibleThemes includes custom', () {
       expect(kVisibleThemes, contains(AppThemeMode.custom));
     });
 
-    test('kPickerThemes includes the Minimalist family', () {
-      // moonlitChamber is the Minimalist enum (re-skin, index-stable).
-      expect(kPickerThemes, contains(AppThemeMode.moonlitChamber));
-      expect(kPickerThemes, contains(AppThemeMode.paperInk));
-      expect(kPickerThemes, contains(AppThemeMode.voidWhite));
+    test('kVisibleThemes defaults to paperInk', () {
+      // paperInk is the visible default — removed themes migrate here.
+      expect(kVisibleThemes.first, AppThemeMode.paperInk);
     });
 
     test('kPickerThemes does not include custom (has its own tile)', () {
