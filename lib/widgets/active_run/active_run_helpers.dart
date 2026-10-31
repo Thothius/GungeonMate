@@ -7,17 +7,15 @@ import '../../theme/tokens.dart';
 import '../../services/haptics.dart';
 import '../../services/effect_tagger.dart';
 import '../../services/mp_session.dart';
-import '../../models/multiplayer_messages.dart';
 import '../../utils/fast_route.dart';
 import '../../screens/ammonomicon_screen.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/effects_summary_screen.dart';
-import '../../screens/settings_screen.dart';
-import '../../screens/experience_studio_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
 import 'sort_picker.dart';
 import 'dice_roll.dart';
 import '../paradox/surprise_sheet.dart';
+import '../../services/run_lifecycle.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -249,331 +247,83 @@ class EffectsTileState extends State<EffectsTile> {
     );
   }
 }
-
 class HeaderMenu extends StatelessWidget {
   const HeaderMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final p = context.read<RunProvider>();
-    final mpSession = context.watch<MpSession>();
-    final mpActive = mpSession.isActive;
-    return PopupMenuButton<String>(
-      tooltip: 'Run tools',
-      // Bigger gear icon — 44×44 hit target, 24px icon.
-      padding: EdgeInsets.zero,
-      offset: const Offset(0, 48),
-      child: Container(
-        width: 44,
-        height: 44,
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.06),
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
-        ),
-        child: const Icon(Icons.tune_rounded, size: 24, color: Colors.white70),
+    return Container(
+      width: 44,
+      height: 44,
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.06),
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
       ),
-      onSelected: (v) {
-        switch (v) {
-          case 'themes':
-            Navigator.push(context, fastRoute(const ExperienceStudioScreen()));
-            break;
-          case 'settings':
-            Navigator.push(context, fastRoute(const SettingsScreen()));
-            break;
-          case 'leave_mp':
-            _confirmLeaveMp(context, mpSession);
-            break;
-          case 'reset_items_p1':
-            confirmClearInventoryDialog(context, p, PlayerSlot.main);
-            break;
-          case 'reset_items_p2':
-            confirmClearInventoryDialog(context, p, PlayerSlot.coop);
-            break;
-          case 'shrine':
-            Navigator.push(context, fastRoute(const ShrinePickerScreen()));
-            break;
-          case 'dice':
-            showDiceRollDialog(context);
-            break;
-          case 'messages':
-            SurpriseSheet.open(context);
-            break;
-          case 'surprise':
-            showModalBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: const Color(0xFF140B22),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-              ),
-              builder: (_) => const SurpriseSheet(),
-            );
-            break;
-          case 'ammonomicon':
-            Navigator.push(context, fastRoute(const AmmonomiconScreen()));
-            break;
-        }
-      },
-      itemBuilder:
-          (ctx) => [
-            // ── PANELS ──
-            _menuLabel('PANELS'),
-            _panelToggleItem(
-              ctx,
-              icon: Icons.view_agenda_rounded,
-              label: 'Panels',
-              isOn: VisualPrefs.notifier.value.showDashboards,
-              onToggle:
-                  () => VisualPrefs.setShowDashboards(
-                    !VisualPrefs.notifier.value.showDashboards,
-                  ),
-            ),
-
-            // ── SHRINES ──
-            const PopupMenuItem(
-              value: 'shrine',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.temple_buddhist,
-                    size: 18,
-                    color: Colors.amberAccent,
-                  ),
-                  SizedBox(width: 10),
-                  GoopText('Shrines'),
-                ],
-              ),
-            ),
-
-            // ── CODEX ──
-            const PopupMenuItem(
-              value: 'ammonomicon',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.menu_book_rounded,
-                    size: 18,
-                    color: Color(0xFF4DD0E1),
-                  ),
-                  SizedBox(width: 10),
-                  GoopText('Ammonomicon'),
-                ],
-              ),
-            ),
-
-            // ── DICE ──
-            const PopupMenuItem(
-              value: 'dice',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.casino_rounded,
-                    size: 18,
-                    color: Color(0xFFFFD54F),
-                  ),
-                  SizedBox(width: 10),
-                  GoopText('Dice Roll'),
-                ],
-              ),
-            ),
-
-            // ── SURPRISE (MP only) ──
-            if (mpActive)
-              const PopupMenuItem(
-                value: 'surprise',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.auto_awesome_rounded,
-                      size: 18,
-                      color: Colors.amberAccent,
-                    ),
-                    SizedBox(width: 10),
-                    GoopText('Surprise'),
-                  ],
-                ),
-              ),
-
-            // ── MESSAGES (MP only) ──
-            if (mpActive)
-              const PopupMenuItem(
-                value: 'messages',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.chat_bubble_rounded,
-                      size: 18,
-                      color: Color(0xFFB388FF),
-                    ),
-                    SizedBox(width: 10),
-                    GoopText('Messages'),
-                  ],
-                ),
-              ),
-
-            // ── RESET ──
-            _menuLabel('RESET'),
-            const PopupMenuItem(
-              value: 'reset_items_p1',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.restart_alt_rounded,
-                    size: 18,
-                    color: Colors.cyanAccent,
-                  ),
-                  SizedBox(width: 10),
-                  GoopText('Reset P1 Items'),
-                ],
-              ),
-            ),
-            if (p.runState.hasCoop)
-              const PopupMenuItem(
-                value: 'reset_items_p2',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.restart_alt_rounded,
-                      size: 18,
-                      color: Colors.pinkAccent,
-                    ),
-                    SizedBox(width: 10),
-                    GoopText('Reset P2 Items'),
-                  ],
-                ),
-              ),
-
-            // ── SESSION ──
-            if (mpActive && mpSession.myRole == MpRole.sidekick) ...[
-              _menuLabel('SESSION'),
-              const PopupMenuItem(
-                value: 'leave_mp',
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.bluetooth_disabled,
-                      size: 18,
-                      color: Colors.lightBlueAccent,
-                    ),
-                    SizedBox(width: 10),
-                    GoopText('Leave Multiplayer'),
-                  ],
-                ),
-              ),
-            ],
-
-            // ── SETTINGS ──
-            _menuLabel('SETTINGS'),
-            const PopupMenuItem(
-              value: 'themes',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.palette_rounded,
-                    size: 18,
-                    color: Colors.pinkAccent,
-                  ),
-                  SizedBox(width: 10),
-                  GoopText('Themes'),
-                ],
-              ),
-            ),
-            const PopupMenuItem(
-              value: 'settings',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.settings_rounded,
-                    size: 18,
-                    color: Colors.cyanAccent,
-                  ),
-                  SizedBox(width: 10),
-                  GoopText('Settings'),
-                ],
-              ),
-            ),
-          ],
-    );
-  }
-
-  /// Toggleable panel item for the popup menu.
-  /// Uses `enabled: false` so tapping the Switch doesn't close the menu.
-  /// ON = filled circle (amber), OFF = empty circle (white38).
-  PopupMenuItem<String> _panelToggleItem(
-    BuildContext ctx, {
-    required IconData icon,
-    required String label,
-    required bool isOn,
-    required VoidCallback onToggle,
-  }) {
-    return PopupMenuItem<String>(
-      enabled: false,
-      value: '__panel_${label.toLowerCase()}',
-      child: ListenableBuilder(
-        listenable: VisualPrefs.notifier,
-        builder: (_, _) {
-          final current = VisualPrefs.notifier.value.showDashboards;
-          return Row(
-            children: [
-              Icon(
-                icon,
-                size: 18,
-                color: current ? Colors.amberAccent : Colors.white38,
-              ),
-              const SizedBox(width: 10),
-              Expanded(child: GoopText(label)),
-              // Wrap in a larger hit area (44×44 minimum touch target).
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  Haptics.selection();
-                  onToggle();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 8,
-                  ),
-                  child: Icon(
-                    current
-                        ? Icons.radio_button_checked
-                        : Icons.radio_button_unchecked,
-                    size: 20,
-                    color: current ? Colors.amberAccent : Colors.white38,
-                  ),
-                ),
-              ),
-            ],
+      child: IconButton(
+        tooltip: 'Run tools',
+        padding: EdgeInsets.zero,
+        icon: const Icon(Icons.tune_rounded, size: 24, color: Colors.white70),
+        onPressed: () {
+          Haptics.selection();
+          showModalBottomSheet<void>(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder: (ctx) => _RunToolsSheet(parentContext: context),
           );
         },
       ),
     );
   }
+}
 
-  /// Non-interactive section label for the popup menu.
-  /// Renders as a small uppercase header with accent color and a divider,
-  /// so the menu is scannable at a glance instead of a flat list.
-  PopupMenuItem<String> _menuLabel(String label) {
-    return PopupMenuItem<String>(
-      enabled: false,
-      value: '__label__',
+/// Themed run-tools sheet — the gear menu. Fixed action set per design:
+/// Ammonomicon, Shrines, Dice Roll, Surprise (MP only), Reset items,
+/// End run. Groups: tools → reset → danger.
+class _RunToolsSheet extends StatelessWidget {
+  /// Context from ABOVE the sheet route — sheet ctx is dead after pop.
+  final BuildContext parentContext;
+  const _RunToolsSheet({required this.parentContext});
+
+  Widget _action(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Color iconColor,
+    required VoidCallback onTap,
+  }) {
+    final flair = AppTheme.flair;
+    return InkWell(
+      borderRadius: BorderRadius.all(Radii.sm),
+      onTap: () {
+        Haptics.selection();
+        Navigator.pop(context);
+        onTap();
+      },
       child: Padding(
-        padding: const EdgeInsets.only(top: 6, bottom: 2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.symmetric(
+          horizontal: Insets.md,
+          vertical: 13,
+        ),
+        child: Row(
           children: [
-            const Divider(color: Colors.white12, height: 1, thickness: 0.5),
-            const SizedBox(height: 6),
-            GoopText(
-              label,
-              style: TextStyle(
-                fontSize: FontSizes.labelSmall,
-                fontWeight: FontWeight.w900,
-                color: AppTheme.flair.primary.withValues(alpha: 0.8),
-                letterSpacing: 1.2,
+            Icon(icon, size: 20, color: iconColor),
+            const SizedBox(width: 12),
+            Expanded(
+              child: GoopText(
+                label,
+                style: const TextStyle(
+                  fontSize: FontSizes.bodyMedium,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 18,
+              color: flair.primary.withValues(alpha: 0.3),
             ),
           ],
         ),
@@ -581,42 +331,156 @@ class HeaderMenu extends StatelessWidget {
     );
   }
 
-  void _confirmLeaveMp(BuildContext context, MpSession session) {
-    final isSidekick = session.myRole == MpRole.sidekick;
-    showDialog(
-      context: context,
-      builder:
-          (c) => AlertDialog(
-            icon: const Icon(
-              Icons.bluetooth_disabled,
-              color: Colors.lightBlueAccent,
-            ),
-            title: const GoopText('Leave Multiplayer?'),
-            content: GoopText(
-              isSidekick
-                  ? 'Disconnects from the host. Your pre-multiplayer solo '
-                      'run (if any) will be restored. Items the host gave '
-                      'you during this session are not kept.'
-                  : 'Disconnects from the sidekick. Your run continues '
-                      'locally with whatever you currently have.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(c),
-                child: const GoopText('Stay'),
+  Widget _label(String text, ThemeFlair flair) => Padding(
+    padding: const EdgeInsets.fromLTRB(Insets.lg, Insets.md, Insets.lg, 4),
+    child: GoopText(
+      text,
+      style: TextStyle(
+        fontSize: FontSizes.labelMedium,
+        fontWeight: FontWeight.w800,
+        letterSpacing: 1.5,
+        color: flair.primary.withValues(alpha: 0.5),
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    final mpSession = context.watch<MpSession>();
+    final p = context.read<RunProvider>();
+    final hasCoop = p.runState.hasCoop;
+    final sheetCtx = parentContext;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: flair.card,
+        borderRadius: Radii.sheet,
+        border: Border(
+          top: BorderSide(color: flair.primary.withValues(alpha: 0.2)),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Grab handle.
+            Container(
+              width: 36,
+              height: 4,
+              margin: const EdgeInsets.only(top: Insets.sm),
+              decoration: BoxDecoration(
+                color: flair.primary.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
               ),
-              FilledButton.tonal(
-                style: FilledButton.styleFrom(
-                  backgroundColor: Colors.red.shade900,
-                ),
-                onPressed: () async {
-                  Navigator.pop(c);
-                  await session.cancel();
-                },
-                child: const GoopText('Leave'),
+            ),
+            _label('RUN TOOLS', flair),
+            _action(
+              sheetCtx,
+              icon: Icons.menu_book_rounded,
+              label: 'Ammonomicon',
+              iconColor: const Color(0xFF4DD0E1),
+              onTap: () {
+                if (sheetCtx.mounted) {
+                  Navigator.push(
+                    sheetCtx,
+                    fastRoute(const AmmonomiconScreen()),
+                  );
+                }
+              },
+            ),
+            _action(
+              sheetCtx,
+              icon: Icons.temple_buddhist,
+              label: 'Shrines',
+              iconColor: Colors.amberAccent,
+              onTap: () {
+                if (sheetCtx.mounted) {
+                  Navigator.push(
+                    sheetCtx,
+                    fastRoute(const ShrinePickerScreen()),
+                  );
+                }
+              },
+            ),
+            _action(
+              sheetCtx,
+              icon: Icons.casino_rounded,
+              label: 'Dice Roller',
+              iconColor: const Color(0xFFFFD54F),
+              onTap: () => showDiceRollDialog(sheetCtx),
+            ),
+            if (mpSession.isActive)
+              _action(
+                sheetCtx,
+                icon: Icons.auto_awesome_rounded,
+                label: 'Surprise',
+                iconColor: Colors.amberAccent,
+                onTap:
+                    () => showModalBottomSheet<void>(
+                      context: sheetCtx,
+                      isScrollControlled: true,
+                      backgroundColor: const Color(0xFF140B22),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(18),
+                        ),
+                      ),
+                      builder: (_) => const SurpriseSheet(),
+                    ),
               ),
-            ],
-          ),
+            Divider(
+              height: 1,
+              thickness: 0.5,
+              indent: Insets.lg,
+              endIndent: Insets.lg,
+              color: flair.primary.withValues(alpha: 0.1),
+            ),
+            _label('RESET', flair),
+            _action(
+              sheetCtx,
+              icon: Icons.restart_alt_rounded,
+              label: hasCoop ? 'Reset P1 Items' : 'Reset Items',
+              iconColor: Colors.cyanAccent,
+              onTap:
+                  () => confirmClearInventoryDialog(
+                    sheetCtx,
+                    p,
+                    PlayerSlot.main,
+                  ),
+            ),
+            if (hasCoop)
+              _action(
+                sheetCtx,
+                icon: Icons.restart_alt_rounded,
+                label: 'Reset P2 Items',
+                iconColor: Colors.cyanAccent,
+                onTap:
+                    () => confirmClearInventoryDialog(
+                      sheetCtx,
+                      p,
+                      PlayerSlot.coop,
+                    ),
+              ),
+            Divider(
+              height: 1,
+              thickness: 0.5,
+              indent: Insets.lg,
+              endIndent: Insets.lg,
+              color: flair.primary.withValues(alpha: 0.1),
+            ),
+            _action(
+              sheetCtx,
+              icon: Icons.flag_rounded,
+              label: 'End Run',
+              iconColor: Colors.redAccent,
+              onTap: () => RunLifecycle.confirmEndRun(sheetCtx),
+            ),
+            const SizedBox(height: Insets.sm),
+          ],
+        ),
+      ),
     );
   }
 }
