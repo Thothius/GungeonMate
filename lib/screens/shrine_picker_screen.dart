@@ -186,13 +186,13 @@ class _ShrineTile extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               used > 0
-                  ? Colors.white.withValues(alpha: 0.02)
+                  ? Skeuo.collapse(Colors.white).withValues(alpha: 0.02)
                   : AppTheme.flair.card,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
             color:
                 used > 0
-                    ? Colors.white.withValues(alpha: 0.08)
+                    ? Skeuo.collapse(Colors.white).withValues(alpha: 0.08)
                     : costColor.withValues(alpha: 0.3),
             width: 1.0,
           ),
@@ -223,6 +223,18 @@ class _ShrineTile extends StatelessWidget {
                               color: costColor,
                             ),
                       )
+                      : iconAsset.startsWith('http')
+                      ? Image.network(
+                        iconAsset,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.none,
+                        errorBuilder:
+                            (_, _, _) => Icon(
+                              Icons.temple_buddhist_outlined,
+                              size: 30,
+                              color: costColor,
+                            ),
+                      )
                       : Icon(
                         Icons.temple_buddhist_outlined,
                         size: 30,
@@ -237,10 +249,10 @@ class _ShrineTile extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: FontSizes.titleSmall,
                   fontWeight: FontWeight.w900,
-                  color: Colors.white,
+                  color: Skeuo.collapse(Colors.white),
                 ),
               ),
             ),
@@ -285,7 +297,7 @@ class _ShrineTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 10.5,
                   height: 1.3,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
                 ),
               ),
             ),
@@ -484,9 +496,9 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
                                     style: TextStyle(
                                       fontSize: 12.5,
                                       height: 1.35,
-                                      color: Colors.white.withValues(
-                                        alpha: 0.75,
-                                      ),
+                                      color: Skeuo.collapse(
+                                        Colors.white,
+                                      ).withValues(alpha: 0.75),
                                     ),
                                   ),
                               ],
