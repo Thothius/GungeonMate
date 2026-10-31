@@ -147,7 +147,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                                   icon: const Icon(
                                     Icons.remove_circle_outline,
                                     color: Colors.purpleAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Decrease platinum bullets',
                                   constraints: const BoxConstraints(
@@ -173,7 +173,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                                   icon: const Icon(
                                     Icons.add_circle_outline,
                                     color: Colors.purpleAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Increase platinum bullets',
                                   constraints: const BoxConstraints(
@@ -402,7 +402,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                                   icon: const Icon(
                                     Icons.add_circle_outline,
                                     color: Colors.amber,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Increase iron coin uses',
                                   constraints: const BoxConstraints(
@@ -421,7 +421,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                                   icon: const Icon(
                                     Icons.remove_circle_outline,
                                     color: Colors.amber,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Decrease iron coin uses',
                                   constraints: const BoxConstraints(
@@ -593,7 +593,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                   icon: const Icon(
                                     Icons.remove_circle_outline,
                                     color: Colors.redAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Decrease spice uses',
                                   constraints: const BoxConstraints(
@@ -617,7 +617,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                   icon: const Icon(
                                     Icons.add_circle_outline,
                                     color: Colors.redAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Increase spice uses',
                                   constraints: const BoxConstraints(
@@ -814,7 +814,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                   icon: const Icon(
                                     Icons.remove_circle_outline,
                                     color: Colors.tealAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Decrease metronome kills',
                                   constraints: const BoxConstraints(
@@ -841,7 +841,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                   icon: const Icon(
                                     Icons.add_circle_outline,
                                     color: Colors.tealAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Increase metronome kills',
                                   constraints: const BoxConstraints(
