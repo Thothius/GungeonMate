@@ -94,7 +94,7 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white70),
+          icon: Icon(Icons.arrow_back, color: Skeuo.collapse(Colors.white70)),
           tooltip: 'Back',
           onPressed: () => Navigator.pop(context),
         ),
@@ -221,13 +221,13 @@ class _SpecialGridTile extends StatelessWidget {
           color:
               entry.owned
                   ? accent.withValues(alpha: 0.08)
-                  : Colors.white.withValues(alpha: 0.02),
+                  : Skeuo.collapse(Colors.white).withValues(alpha: 0.02),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color:
                 entry.owned
                     ? accent.withValues(alpha: 0.6)
-                    : Colors.white.withValues(alpha: 0.08),
+                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.08),
             width: entry.owned ? 1.5 : 1,
           ),
         ),
@@ -240,7 +240,7 @@ class _SpecialGridTile extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: Colors.black26,
+                    color: Skeuo.collapse(Colors.black26),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.all(4),
@@ -252,7 +252,7 @@ class _SpecialGridTile extends StatelessWidget {
                     errorBuilder:
                         (_, _, _) => Icon(
                           entry.isGun ? Icons.gps_fixed : Icons.star,
-                          color: Colors.white24,
+                          color: Skeuo.collapse(Colors.white24),
                           size: 20,
                         ),
                   ),
@@ -267,16 +267,16 @@ class _SpecialGridTile extends StatelessWidget {
                         color: accent,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.check,
                         size: 10,
-                        color: Colors.white,
+                        color: Skeuo.collapse(Colors.white),
                       ),
                     ),
                   ),
               ],
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             GoopText(
               entry.name,
               textAlign: TextAlign.center,
@@ -286,7 +286,9 @@ class _SpecialGridTile extends StatelessWidget {
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w700,
                 color:
-                    entry.owned ? accent : Colors.white.withValues(alpha: 0.5),
+                    entry.owned
+                        ? accent
+                        : Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
                 height: 1.1,
               ),
             ),

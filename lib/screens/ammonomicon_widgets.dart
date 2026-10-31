@@ -115,7 +115,8 @@ class _AmmonomiconCard extends StatelessWidget {
             end: Alignment.bottomCenter,
             colors: [
               flair.card,
-              Color.lerp(flair.card, Colors.black, 0.15) ?? flair.card,
+              Color.lerp(flair.card, Skeuo.collapse(Colors.black), 0.15) ??
+                  flair.card,
             ],
           ),
           borderRadius: const BorderRadius.all(Radii.sm),
@@ -267,10 +268,10 @@ class _GungeoneersAmmonomiconPage extends StatelessWidget {
                           maxLines: 2,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: FontSizes.labelSmall,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                            color: Skeuo.collapse(Colors.white),
                             height: 1.1,
                           ),
                         ),
@@ -340,7 +341,9 @@ class _ShrineSwipePage extends StatefulWidget {
 }
 
 class _ShrineSwipePageState extends State<_ShrineSwipePage> {
-  static const _accent = Color(0xFFFFB74D); // AmmonomiconColors.shrines
+  static final _accent = Skeuo.collapse(
+    Color(0xFFFFB74D),
+  ); // AmmonomiconColors.shrines
   final _pageCtrl = PageController();
   final _stripCtrl = ScrollController();
   int _page = 0;
@@ -512,7 +515,7 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           // Effects / costs card — tips carry effect + curse/coolness lines
           Container(
             width: double.infinity,
@@ -538,17 +541,19 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
                           size: 14,
                           color:
                               tip.startsWith('Costs')
-                                  ? const Color(0xFFB388FF)
+                                  ? Skeuo.collapse(Color(0xFFB388FF))
                                   : _accent,
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Expanded(
                           child: GoopText(
                             tip,
                             style: TextStyle(
                               fontSize: 13,
                               height: 1.35,
-                              color: Colors.white.withValues(alpha: 0.85),
+                              color: Skeuo.collapse(
+                                Colors.white,
+                              ).withValues(alpha: 0.85),
                             ),
                           ),
                         ),
@@ -564,25 +569,31 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
                         fontSize: 12,
                         height: 1.4,
                         fontStyle: FontStyle.italic,
-                        color: Colors.white.withValues(alpha: 0.55),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.55),
                       ),
                     ),
                   ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       Icons.touch_app_outlined,
                       size: 12,
-                      color: Colors.white.withValues(alpha: 0.35),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.35),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5),
                     GoopText(
                       'Tap sprite for full entry',
                       style: TextStyle(
                         fontSize: 10,
-                        color: Colors.white.withValues(alpha: 0.35),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.35),
                       ),
                     ),
                   ],

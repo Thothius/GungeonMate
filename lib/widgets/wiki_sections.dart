@@ -143,24 +143,28 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                       size: 16,
                       color: Skeuo.inkIf(Colors.lightBlueAccent),
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6),
                     GoopText(
                       'REFERENCED BY',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2,
-                        color: Colors.white.withValues(alpha: 0.7),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.7),
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 6,
                         vertical: 1,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -168,18 +172,22 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.5),
                         ),
                       ),
                     ),
-                    const Spacer(),
+                    Spacer(),
                     AnimatedRotation(
                       turns: _sectionCollapsed ? 0 : 0.5,
                       duration: const Duration(milliseconds: 180),
                       child: Icon(
                         Icons.expand_more_rounded,
                         size: 18,
-                        color: Colors.white.withValues(alpha: 0.4),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.4),
                       ),
                     ),
                   ],
@@ -218,7 +226,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                 fontSize: 10.5,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1.2,
-                color: Colors.white.withValues(alpha: 0.65),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
               ),
             ),
           ),
@@ -287,7 +295,7 @@ class _ShowMoreChip extends StatelessWidget {
                   Colors.lightBlueAccent,
                 ).withValues(alpha: 0.85),
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               GoopText(
                 label,
                 style: TextStyle(
@@ -348,9 +356,11 @@ class BackRefChip extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(4, 3, 10, 3),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.05),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+            border: Border.all(
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.12),
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

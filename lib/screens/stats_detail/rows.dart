@@ -12,7 +12,7 @@ class _SectionTitle extends StatelessWidget {
         fontSize: 11,
         fontWeight: FontWeight.bold,
         letterSpacing: 1.4,
-        color: Colors.white.withValues(alpha: 0.65),
+        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
       ),
     ),
   );
@@ -41,7 +41,7 @@ class _EffectRow extends StatelessWidget {
         child: Row(
           children: [
             Icon(icon, color: color, size: 20),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,9 @@ class _EffectRow extends StatelessWidget {
                     subtitle,
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
-                      color: Colors.white.withValues(alpha: 0.65),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.65),
                     ),
                   ),
                 ],
@@ -89,14 +91,18 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.white.withValues(alpha: 0.7)),
-          const SizedBox(width: 8),
+          Icon(
+            icon,
+            size: 16,
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+          ),
+          SizedBox(width: 8),
           Expanded(
             child: GoopText(
               text,
               style: TextStyle(
                 fontSize: 13,
-                color: Colors.white.withValues(alpha: 0.8),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.8),
                 height: 1.3,
               ),
             ),
@@ -171,7 +177,7 @@ class _QuickActions extends StatelessWidget {
             'Things the app can\'t auto-detect — tap to log them.',
             style: TextStyle(
               fontSize: 10.5,
-              color: Colors.white.withValues(alpha: 0.5),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
               fontStyle: FontStyle.italic,
             ),
           ),

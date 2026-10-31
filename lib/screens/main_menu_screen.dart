@@ -33,7 +33,7 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
-  Route<dynamic>? _route;
+  final Route<dynamic>? _route;
 
   @override
   void initState() {
@@ -68,8 +68,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
   void didPopNext() => ThemeOverlay.menuOnTop.value = true;
 
   // Fixed home palette — never theme-driven.
-  static const Color _panel = Color(0xB31A1526); // charcoal glass
-  static const Color _inkOnSolid = Color(0xFF1C1C1E);
+  static final Color _panel = Skeuo.collapse(
+    Color(0xB31A1526),
+  ); // charcoal glass
+  static final Color _inkOnSolid = Skeuo.collapse(Color(0xFF1C1C1E));
   static const Color _amber = MainMenuBackdrop.ember;
   static const Color _gold = MainMenuBackdrop.emberGold;
 
@@ -166,13 +168,12 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                                                   PaintingStyle
                                                                       .stroke
                                                               ..strokeWidth = 7
-                                                              ..color =
-                                                                  const Color(
-                                                                    0xFFC62828,
-                                                                  ),
+                                                              ..color = Color(
+                                                                0xFFC62828,
+                                                              ),
                                                       ),
                                                     ),
-                                                    const GoopText(
+                                                    GoopText(
                                                       'GUNGEON MATE',
                                                       style: TextStyle(
                                                         fontSize: 48,
@@ -188,7 +189,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                                             ),
                                                             blurRadius: 4,
                                                             color:
-                                                                Colors.black54,
+                                                                Skeuo.collapse(
+                                                                  Colors
+                                                                      .black54,
+                                                                ),
                                                           ),
                                                           Shadow(
                                                             offset: Offset(
@@ -380,7 +384,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                                   ],
                                                 ),
                                       ),
-                                      const SizedBox(height: 16),
+                                      SizedBox(height: 16),
                                       GoopText(
                                         'v$kAppVersion',
                                         style: TextStyle(
@@ -389,9 +393,9 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                                           color:
                                               skeuo
                                                   ? Skeuo.pencil
-                                                  : Colors.white.withValues(
-                                                    alpha: 0.4,
-                                                  ),
+                                                  : Skeuo.collapse(
+                                                    Colors.white,
+                                                  ).withValues(alpha: 0.4),
                                           letterSpacing: 1.0,
                                         ),
                                       ),
@@ -413,7 +417,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(Insets.md),
-                    child: _skeuoToggleChip(skeuo),
+                    child:
+                        AppTheme.kNeoSkeuoEnabled
+                            ? _skeuoToggleChip(skeuo)
+                            : const SizedBox.shrink(),
                   ),
                 ),
               ),
@@ -532,7 +539,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
     required double sf,
     bool solid = false,
   }) {
-    final fg = solid ? _inkOnSolid : Colors.white;
+    final fg = solid ? _inkOnSolid : Skeuo.collapse(Colors.white);
     final border =
         solid ? _amber.withValues(alpha: 0.9) : _amber.withValues(alpha: 0.5);
     return ScaleButton(
@@ -543,15 +550,15 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
         decoration: BoxDecoration(
           gradient:
               solid
-                  ? const LinearGradient(
+                  ? LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Color(0xFFFFC966), _amber],
+                    colors: [Skeuo.collapse(Color(0xFFFFC966)), _amber],
                   )
-                  : const LinearGradient(
+                  : LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [_panel, Color(0x991A1526)],
+                    colors: [_panel, Skeuo.collapse(Color(0x991A1526))],
                   ),
           borderRadius: const BorderRadius.all(Radii.lg),
           border: Border.all(color: border, width: 1.6),
@@ -560,7 +567,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
               color:
                   solid
                       ? _amber.withValues(alpha: 0.35)
-                      : Colors.black.withValues(alpha: 0.35),
+                      : Skeuo.collapse(Colors.black).withValues(alpha: 0.35),
               blurRadius: solid ? 18 : 10,
               offset: const Offset(0, 3),
             ),

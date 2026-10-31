@@ -62,7 +62,7 @@ class _PeekSheet extends StatelessWidget {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.18),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -79,7 +79,7 @@ class _PeekSheet extends StatelessWidget {
                   quality: quality,
                   size: 56,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,19 +91,21 @@ class _PeekSheet extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2),
                       Row(
                         children: [
                           if (quality.isNotEmpty) ...[
                             QualityBadge(quality: quality, size: 14),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6),
                           ],
                           Flexible(
                             child: GoopText(
                               subtitle,
                               style: TextStyle(
                                 fontSize: 12.5,
-                                color: Colors.white.withValues(alpha: 0.7),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.7),
                               ),
                             ),
                           ),
@@ -115,12 +117,12 @@ class _PeekSheet extends StatelessWidget {
               ],
             ),
             if (quote.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               GoopText(
                 '"$quote"',
                 style: TextStyle(
                   fontSize: 12.5,
-                  color: Colors.white.withValues(alpha: 0.65),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -177,7 +179,7 @@ class _CharacterPeekSheet extends StatelessWidget {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.18),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -190,7 +192,7 @@ class _CharacterPeekSheet extends StatelessWidget {
                   fallback: Icons.person,
                   size: 56,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,12 +204,14 @@ class _CharacterPeekSheet extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2),
                       GoopText(
                         'Gungeoneer',
                         style: TextStyle(
                           fontSize: 12.5,
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.7),
                           letterSpacing: 0.6,
                         ),
                       ),
@@ -254,8 +258,12 @@ class _PeekLoadoutRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 16, color: Colors.white.withValues(alpha: 0.7)),
-        const SizedBox(width: 8),
+        Icon(
+          icon,
+          size: 16,
+          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+        ),
+        SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +274,7 @@ class _PeekLoadoutRow extends StatelessWidget {
                   fontSize: 10.5,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.2,
-                  color: Colors.white.withValues(alpha: 0.65),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
                 ),
               ),
               const SizedBox(height: 2),
@@ -306,7 +314,7 @@ class _ShrinePeekSheet extends StatelessWidget {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.18),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -319,7 +327,7 @@ class _ShrinePeekSheet extends StatelessWidget {
                   fallback: Icons.temple_buddhist,
                   size: 56,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,12 +339,14 @@ class _ShrinePeekSheet extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: 2),
                       GoopText(
                         'Shrine',
                         style: TextStyle(
                           fontSize: 12.5,
-                          color: Colors.white.withValues(alpha: 0.7),
+                          color: Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.7),
                           letterSpacing: 0.6,
                         ),
                       ),
@@ -346,40 +356,40 @@ class _ShrinePeekSheet extends StatelessWidget {
               ],
             ),
             if (shrine.description.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               GoopText(
                 shrine.description,
                 style: const TextStyle(fontSize: 13.5, height: 1.35),
               ),
             ],
             if (shrine.effect.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               GoopText(
                 shrine.effect,
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.3,
-                  color: Colors.white.withValues(alpha: 0.78),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.78),
                 ),
               ),
             ],
             if (hasDelta) ...[
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
               Row(
                 children: [
                   if (shrine.curse != 0)
                     _ShrineDeltaChip(
                       label: 'Curse',
                       value: shrine.curse,
-                      color: const Color(0xFFD32F2F),
+                      color: Skeuo.collapse(Color(0xFFD32F2F)),
                     ),
                   if (shrine.curse != 0 && shrine.coolness != 0)
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                   if (shrine.coolness != 0)
                     _ShrineDeltaChip(
                       label: 'Coolness',
                       value: shrine.coolness,
-                      color: const Color(0xFF29B6F6),
+                      color: Skeuo.collapse(Color(0xFF29B6F6)),
                     ),
                 ],
               ),
@@ -424,7 +434,7 @@ class _ShrineDeltaChip extends StatelessWidget {
               fontSize: 11.5,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.75),
             ),
           ),
           GoopText(

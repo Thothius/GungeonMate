@@ -6,6 +6,7 @@ import '../../services/haptics.dart';
 import '../../services/mp_session.dart';
 import '../../services/run_lifecycle.dart';
 import '../../utils/responsive.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// Wraps the entire app body during a Paradox pause — desaturates the
 /// screen to monochrome, dims it, and shows a giant pause icon +
@@ -56,7 +57,7 @@ class _PausedLayer extends StatelessWidget {
 
     return Positioned.fill(
       child: Material(
-        color: Colors.black.withValues(alpha: 0.82),
+        color: Skeuo.collapse(Colors.black).withValues(alpha: 0.82),
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -67,12 +68,14 @@ class _PausedLayer extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.85),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.85),
                     width: 4,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.white.withValues(alpha: 0.18),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.18),
                       blurRadius: 48,
                       spreadRadius: 6,
                     ),
@@ -81,7 +84,7 @@ class _PausedLayer extends StatelessWidget {
                 child: Icon(
                   Icons.pause_rounded,
                   size: 92 * sf,
-                  color: Colors.white,
+                  color: Skeuo.collapse(Colors.white),
                 ),
               ),
               SizedBox(height: 32 * sf),
@@ -91,7 +94,7 @@ class _PausedLayer extends StatelessWidget {
                   fontSize: 34 * sf,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 4,
-                  color: Colors.white.withValues(alpha: 0.95),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.95),
                 ),
               ),
               SizedBox(height: 12 * sf),
@@ -102,15 +105,15 @@ class _PausedLayer extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 15 * sf,
-                  color: Colors.white.withValues(alpha: 0.55),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.55),
                   fontStyle: FontStyle.italic,
                 ),
               ),
               SizedBox(height: 42 * sf),
               FilledButton.icon(
                 style: FilledButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
+                  backgroundColor: Skeuo.collapse(Colors.white),
+                  foregroundColor: Skeuo.collapse(Colors.black),
                   padding: EdgeInsets.symmetric(
                     horizontal: 42 * sf,
                     vertical: 20 * sf,
@@ -142,7 +145,7 @@ class _PausedLayer extends StatelessWidget {
                     fontSize: 14 * sf,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.6,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
                   ),
                 ),
               ),

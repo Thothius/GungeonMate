@@ -161,7 +161,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                     : Skeuo.inkIf(Colors.tealAccent),
                             size: 20,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           GoopText(
                             hasGoldJunk
                                 ? 'MECHA JUNKAN HUD'
@@ -208,11 +208,11 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6),
                           Icon(
                             _collapsed ? Icons.expand_more : Icons.expand_less,
                             size: 16,
-                            color: Colors.white54,
+                            color: Skeuo.collapse(Colors.white54),
                           ),
                         ],
                       ),
@@ -229,7 +229,10 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Divider(color: Colors.white12, height: 1),
+                            Divider(
+                              color: Skeuo.collapse(Colors.white12),
+                              height: 1,
+                            ),
                             Padding(
                               padding: const EdgeInsets.all(14),
                               child: Row(
@@ -239,7 +242,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                     width: 72,
                                     height: 72,
                                     decoration: BoxDecoration(
-                                      color: Colors.black26,
+                                      color: Skeuo.collapse(Colors.black26),
                                       borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(
                                         color:
@@ -259,14 +262,16 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                       cacheWidth: 144,
                                       cacheHeight: 144,
                                       errorBuilder:
-                                          (_, _, _) => const Icon(
+                                          (_, _, _) => Icon(
                                             Icons.broken_image_outlined,
-                                            color: Colors.white24,
+                                            color: Skeuo.collapse(
+                                              Colors.white24,
+                                            ),
                                             size: 30,
                                           ),
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -274,13 +279,15 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                       children: [
                                         GoopText(
                                           description,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 10.5,
-                                            color: Colors.white70,
+                                            color: Skeuo.collapse(
+                                              Colors.white70,
+                                            ),
                                             height: 1.3,
                                           ),
                                         ),
-                                        const SizedBox(height: 6),
+                                        SizedBox(height: 6),
                                         GoopText(
                                           stats,
                                           style: TextStyle(
@@ -296,28 +303,27 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: 10),
                                         Row(
                                           children: [
                                             Expanded(
                                               child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: Insets.sm,
-                                                      vertical: Insets.xs,
-                                                    ),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: Insets.sm,
+                                                  vertical: Insets.xs,
+                                                ),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white
-                                                      .withValues(alpha: 0.02),
+                                                  color: Skeuo.collapse(
+                                                    Colors.white,
+                                                  ).withValues(alpha: 0.02),
                                                   borderRadius:
                                                       BorderRadius.all(
                                                         Radii.sm,
                                                       ),
                                                   border: Border.all(
-                                                    color: Colors.white
-                                                        .withValues(
-                                                          alpha: 0.04,
-                                                        ),
+                                                    color: Skeuo.collapse(
+                                                      Colors.white,
+                                                    ).withValues(alpha: 0.04),
                                                   ),
                                                 ),
                                                 child: Row(
@@ -325,7 +331,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    const GoopText(
+                                                    GoopText(
                                                       'JUNK',
                                                       style: TextStyle(
                                                         fontSize:
@@ -333,7 +339,9 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                                 .labelSmall,
                                                         fontWeight:
                                                             FontWeight.w900,
-                                                        color: Colors.white60,
+                                                        color: Skeuo.collapse(
+                                                          Colors.white60,
+                                                        ),
                                                       ),
                                                     ),
                                                     Row(
@@ -358,7 +366,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                                   .opaque,
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets.symmetric(
+                                                                EdgeInsets.symmetric(
                                                                   horizontal: 8,
                                                                   vertical: 6,
                                                                 ),
@@ -377,12 +385,12 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                         ),
                                                         Padding(
                                                           padding:
-                                                              const EdgeInsets.symmetric(
+                                                              EdgeInsets.symmetric(
                                                                 horizontal: 10,
                                                               ),
                                                           child: Text(
                                                             '$junkCount',
-                                                            style: const TextStyle(
+                                                            style: TextStyle(
                                                               fontSize:
                                                                   FontSizes
                                                                       .bodyMedium,
@@ -390,7 +398,10 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                                   FontWeight
                                                                       .bold,
                                                               color:
-                                                                  Colors.white,
+                                                                  Skeuo.collapse(
+                                                                    Colors
+                                                                        .white,
+                                                                  ),
                                                             ),
                                                           ),
                                                         ),
@@ -454,11 +465,10 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                   Radii.sm,
                                                 ),
                                                 child: Container(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                        vertical: 5,
-                                                        horizontal: 8,
-                                                      ),
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 5,
+                                                    horizontal: 8,
+                                                  ),
                                                   decoration: BoxDecoration(
                                                     color:
                                                         hasGoldJunk
@@ -467,10 +477,11 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                             ).withValues(
                                                               alpha: 0.12,
                                                             )
-                                                            : Colors.white
-                                                                .withValues(
-                                                                  alpha: 0.02,
-                                                                ),
+                                                            : Skeuo.collapse(
+                                                              Colors.white,
+                                                            ).withValues(
+                                                              alpha: 0.02,
+                                                            ),
                                                     borderRadius:
                                                         BorderRadius.all(
                                                           Radii.sm,
@@ -483,10 +494,11 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                               ).withValues(
                                                                 alpha: 0.4,
                                                               )
-                                                              : Colors.white
-                                                                  .withValues(
-                                                                    alpha: 0.04,
-                                                                  ),
+                                                              : Skeuo.collapse(
+                                                                Colors.white,
+                                                              ).withValues(
+                                                                alpha: 0.04,
+                                                              ),
                                                     ),
                                                   ),
                                                   child: Row(

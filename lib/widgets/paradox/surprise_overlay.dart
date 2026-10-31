@@ -81,21 +81,41 @@ class _SurpriseCard extends StatelessWidget {
 
   /// Curated 6 — each has a fullscreen effect (fx).
   /// fx: hearts · shake · flash · jumpscare · pulse · scatter
-  static const _presetContent = <String, (String, IconData, Color, String)>{
-    'love': ('I LOVE YOU', Icons.favorite_rounded, Color(0xFFFF6B81), 'hearts'),
-    'slap': ('*SLAP*', Icons.back_hand_rounded, Color(0xFFFF7043), 'shake'),
-    'blank': ('BLANK!', Icons.brightness_7_rounded, Color(0xFFFFFFFF), 'flash'),
+  static final _presetContent = <String, (String, IconData, Color, String)>{
+    'love': (
+      'I LOVE YOU',
+      Icons.favorite_rounded,
+      Skeuo.collapse(Color(0xFFFF6B81)),
+      'hearts',
+    ),
+    'slap': (
+      '*SLAP*',
+      Icons.back_hand_rounded,
+      Skeuo.collapse(Color(0xFFFF7043)),
+      'shake',
+    ),
+    'blank': (
+      'BLANK!',
+      Icons.brightness_7_rounded,
+      Skeuo.collapse(Color(0xFFFFFFFF)),
+      'flash',
+    ),
     'mimic': (
       'MIMIC!',
       Icons.warning_amber_rounded,
-      Color(0xFF8D6E63),
+      Skeuo.collapse(Color(0xFF8D6E63)),
       'jumpscare',
     ),
-    'heal': ('GET WELL', Icons.healing_rounded, Color(0xFF66BB6A), 'pulse'),
+    'heal': (
+      'GET WELL',
+      Icons.healing_rounded,
+      Skeuo.collapse(Color(0xFF66BB6A)),
+      'pulse',
+    ),
     'gungeon': (
       'GUNGEON!',
       Icons.gps_fixed_rounded,
-      Color(0xFFB388FF),
+      Skeuo.collapse(Color(0xFFB388FF)),
       'scatter',
     ),
   };
@@ -137,7 +157,9 @@ class _SurpriseCard extends StatelessWidget {
                   vertical: 22 * sf,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF140B22).withValues(alpha: 0.94),
+                  color: Skeuo.collapse(
+                    Color(0xFF140B22),
+                  ).withValues(alpha: 0.94),
                   borderRadius: BorderRadius.circular(22),
                   border: Border.all(
                     color: color.withValues(alpha: 0.7),
@@ -179,7 +201,9 @@ class _SurpriseCard extends StatelessWidget {
                       'from ${context.read<MpSession>().peerNickname ?? 'partner'}',
                       style: TextStyle(
                         fontSize: 10.5 * sf,
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.5),
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -217,7 +241,7 @@ class _SurpriseFxState extends State<_SurpriseFx>
     duration: const Duration(milliseconds: 3200),
   )..repeat();
   final _rng = math.Random();
-  late final List<Offset> _seeds = List.generate(
+  late List<Offset> _seeds = List.generate(
     24,
     (_) => Offset(_rng.nextDouble(), _rng.nextDouble()),
   );
@@ -249,9 +273,9 @@ class _SurpriseFxState extends State<_SurpriseFx>
                 Positioned.fill(
                   child: IgnorePointer(
                     child: Container(
-                      color: Colors.white.withValues(
-                        alpha: (1 - _ctrl.value) * 0.55,
-                      ),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: (1 - _ctrl.value) * 0.55),
                     ),
                   ),
                 ),
@@ -366,7 +390,9 @@ class _FxPainter extends CustomPainter {
       // Explosion — expanding ring + white flash core + debris.
       final c = size.center(Offset.zero);
       final r = t * size.shortestSide * 0.9;
-      paint.color = Colors.white.withValues(alpha: (1 - t) * 0.5);
+      paint.color = Skeuo.collapse(
+        Colors.white,
+      ).withValues(alpha: (1 - t) * 0.5);
       canvas.drawCircle(c, r * 0.35, paint);
       paint.color = color.withValues(alpha: (1 - t) * 0.7);
       paint.style = PaintingStyle.stroke;

@@ -24,7 +24,6 @@ class MpLink implements MpTransport {
   /// Service ID for the classic lobby-based MP flow.
   static const String serviceIdClassic = 'com.saare.gungeon_mate.mp.v2';
 
-
   /// Legacy accessor kept for any call-site still reading the constant.
   static String get serviceId => serviceIdClassic;
 
@@ -69,7 +68,7 @@ class MpLink implements MpTransport {
   /// Track endpoint IDs we've already sent a connection request for.
   /// Nearby Connections throws if requestConnection is called twice on
   /// the same endpoint while a request is pending.
-  final Set<String> _connectionRequestIds = {};
+  final Set<String> _connectionRequestIds= {};
 
   /// True when a connection request is in-flight. The discovery loop
   /// must NOT pause/stop discovery while this is true — doing so can
@@ -81,10 +80,10 @@ class MpLink implements MpTransport {
   /// first CONNECTED result would be natively accepted, then dropped
   /// by the _endpointId guard in _onConnectionResult — leaving a
   /// phantom pairing on the peer's side.
-  final Set<String> _initiatedIds = {};
+  final Set<String> _initiatedIds= {};
 
   /// Discovered endpoints (live list for Sidekick UI).
-  final Map<String, MpEndpoint> _endpoints = {};
+  final Map<String, MpEndpoint> _endpoints= {};
   @override
   List<MpEndpoint> get discoveredEndpoints =>
       _endpoints.values.toList()
@@ -104,9 +103,9 @@ class MpLink implements MpTransport {
   static const int _heartbeatTimeoutSec = 25;
 
   // ── Connection health (RTT-based, 0–100) ──────────────────────
-  final ValueNotifier<int> _health = ValueNotifier<int>(0);
+  final ValueNotifier<int> _health= ValueNotifier<int>(0);
   @override
-  ValueListenable<int> get healthListenable => _health;
+  final ValueListenable<int> get healthListenable => _health;
   double _healthEwma = 0;
   bool _healthPrimed = false;
 

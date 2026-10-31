@@ -171,7 +171,7 @@ class SynergyBadge extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: const Color(0xFF4FC3F7), width: 1.2),
       ),
-      child: const Icon(
+      child: Icon(
         Icons.keyboard_double_arrow_up_rounded,
         size: 11,
         color: Color(0xFF4FC3F7),

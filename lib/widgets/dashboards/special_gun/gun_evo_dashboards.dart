@@ -98,7 +98,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                             color: Skeuo.inkIf(Colors.purpleAccent.shade100),
                             size: 20,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           GoopText(
                             'GUNDERFURY HUD - LVL $lvl',
                             style: TextStyle(
@@ -134,11 +134,11 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6),
                           Icon(
                             _collapsed ? Icons.expand_more : Icons.expand_less,
                             size: 16,
-                            color: Colors.white54,
+                            color: Skeuo.collapse(Colors.white54),
                           ),
                         ],
                       ),
@@ -155,7 +155,10 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Divider(color: Colors.white12, height: 1),
+                            Divider(
+                              color: Skeuo.collapse(Colors.white12),
+                              height: 1,
+                            ),
                             Padding(
                               padding: const EdgeInsets.all(14),
                               child: Row(
@@ -165,7 +168,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                     width: 72,
                                     height: 72,
                                     decoration: BoxDecoration(
-                                      color: Colors.black26,
+                                      color: Skeuo.collapse(Colors.black26),
                                       borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(
                                         color: Skeuo.inkIf(
@@ -180,14 +183,16 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                       cacheWidth: 144,
                                       cacheHeight: 144,
                                       errorBuilder:
-                                          (_, _, _) => const Icon(
+                                          (_, _, _) => Icon(
                                             Icons.broken_image_outlined,
-                                            color: Colors.white24,
+                                            color: Skeuo.collapse(
+                                              Colors.white24,
+                                            ),
                                             size: 30,
                                           ),
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -195,13 +200,15 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                       children: [
                                         GoopText(
                                           description,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 10.5,
-                                            color: Colors.white70,
+                                            color: Skeuo.collapse(
+                                              Colors.white70,
+                                            ),
                                             height: 1.3,
                                           ),
                                         ),
-                                        const SizedBox(height: 6),
+                                        SizedBox(height: 6),
                                         GoopText(
                                           statsDesc,
                                           style: TextStyle(
@@ -212,28 +219,27 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: 10),
                                         Row(
                                           children: [
                                             Expanded(
                                               child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: Insets.sm,
-                                                      vertical: Insets.xs,
-                                                    ),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: Insets.sm,
+                                                  vertical: Insets.xs,
+                                                ),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white
-                                                      .withValues(alpha: 0.02),
+                                                  color: Skeuo.collapse(
+                                                    Colors.white,
+                                                  ).withValues(alpha: 0.02),
                                                   borderRadius:
                                                       BorderRadius.all(
                                                         Radii.sm,
                                                       ),
                                                   border: Border.all(
-                                                    color: Colors.white
-                                                        .withValues(
-                                                          alpha: 0.04,
-                                                        ),
+                                                    color: Skeuo.collapse(
+                                                      Colors.white,
+                                                    ).withValues(alpha: 0.04),
                                                   ),
                                                 ),
                                                 child: Row(
@@ -241,7 +247,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    const GoopText(
+                                                    GoopText(
                                                       'GUNDER LEVEL',
                                                       style: TextStyle(
                                                         fontSize:
@@ -249,7 +255,9 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                                 .labelSmall,
                                                         fontWeight:
                                                             FontWeight.w900,
-                                                        color: Colors.white60,
+                                                        color: Skeuo.collapse(
+                                                          Colors.white60,
+                                                        ),
                                                       ),
                                                     ),
                                                     Row(
@@ -269,7 +277,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                                   .opaque,
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets.symmetric(
+                                                                EdgeInsets.symmetric(
                                                                   horizontal: 8,
                                                                   vertical: 6,
                                                                 ),
@@ -288,12 +296,12 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                         ),
                                                         Padding(
                                                           padding:
-                                                              const EdgeInsets.symmetric(
+                                                              EdgeInsets.symmetric(
                                                                 horizontal: 10,
                                                               ),
                                                           child: Text(
                                                             '$lvl',
-                                                            style: const TextStyle(
+                                                            style: TextStyle(
                                                               fontSize:
                                                                   FontSizes
                                                                       .bodyMedium,
@@ -301,7 +309,10 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                                   FontWeight
                                                                       .bold,
                                                               color:
-                                                                  Colors.white,
+                                                                  Skeuo.collapse(
+                                                                    Colors
+                                                                        .white,
+                                                                  ),
                                                             ),
                                                           ),
                                                         ),
@@ -461,7 +472,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                             color: Skeuo.inkIf(Colors.greenAccent.shade100),
                             size: 20,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           GoopText(
                             'EVOLVER HUD',
                             style: TextStyle(
@@ -495,11 +506,11 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 6),
+                          SizedBox(width: 6),
                           Icon(
                             _collapsed ? Icons.expand_more : Icons.expand_less,
                             size: 16,
-                            color: Colors.white54,
+                            color: Skeuo.collapse(Colors.white54),
                           ),
                         ],
                       ),
@@ -516,7 +527,10 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Divider(color: Colors.white12, height: 1),
+                            Divider(
+                              color: Skeuo.collapse(Colors.white12),
+                              height: 1,
+                            ),
                             Padding(
                               padding: const EdgeInsets.all(14),
                               child: Row(
@@ -526,7 +540,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                     width: 72,
                                     height: 72,
                                     decoration: BoxDecoration(
-                                      color: Colors.black26,
+                                      color: Skeuo.collapse(Colors.black26),
                                       borderRadius: BorderRadius.all(Radii.sm),
                                       border: Border.all(
                                         color: currentSpec.color.withValues(
@@ -541,14 +555,16 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                       cacheWidth: 144,
                                       cacheHeight: 144,
                                       errorBuilder:
-                                          (_, _, _) => const Icon(
+                                          (_, _, _) => Icon(
                                             Icons.broken_image_outlined,
-                                            color: Colors.white24,
+                                            color: Skeuo.collapse(
+                                              Colors.white24,
+                                            ),
                                             size: 30,
                                           ),
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
+                                  SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
@@ -562,37 +578,38 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                             color: currentSpec.color,
                                           ),
                                         ),
-                                        const SizedBox(height: 4),
+                                        SizedBox(height: 4),
                                         GoopText(
                                           'Form Bullet: ${currentSpec.bullet}',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: FontSizes.labelSmall,
-                                            color: Colors.white70,
+                                            color: Skeuo.collapse(
+                                              Colors.white70,
+                                            ),
                                             height: 1.3,
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        SizedBox(height: 10),
                                         Row(
                                           children: [
                                             Expanded(
                                               child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: Insets.sm,
-                                                      vertical: Insets.xs,
-                                                    ),
+                                                padding: EdgeInsets.symmetric(
+                                                  horizontal: Insets.sm,
+                                                  vertical: Insets.xs,
+                                                ),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white
-                                                      .withValues(alpha: 0.02),
+                                                  color: Skeuo.collapse(
+                                                    Colors.white,
+                                                  ).withValues(alpha: 0.02),
                                                   borderRadius:
                                                       BorderRadius.all(
                                                         Radii.sm,
                                                       ),
                                                   border: Border.all(
-                                                    color: Colors.white
-                                                        .withValues(
-                                                          alpha: 0.04,
-                                                        ),
+                                                    color: Skeuo.collapse(
+                                                      Colors.white,
+                                                    ).withValues(alpha: 0.04),
                                                   ),
                                                 ),
                                                 child: Row(
@@ -600,7 +617,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    const GoopText(
+                                                    GoopText(
                                                       'EVOLUTION STAGE',
                                                       style: TextStyle(
                                                         fontSize:
@@ -608,7 +625,9 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                                 .labelSmall,
                                                         fontWeight:
                                                             FontWeight.w900,
-                                                        color: Colors.white60,
+                                                        color: Skeuo.collapse(
+                                                          Colors.white60,
+                                                        ),
                                                       ),
                                                     ),
                                                     Row(
@@ -629,7 +648,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                                   .opaque,
                                                           child: Padding(
                                                             padding:
-                                                                const EdgeInsets.symmetric(
+                                                                EdgeInsets.symmetric(
                                                                   horizontal: 8,
                                                                   vertical: 6,
                                                                 ),
@@ -649,12 +668,12 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                         ),
                                                         Padding(
                                                           padding:
-                                                              const EdgeInsets.symmetric(
+                                                              EdgeInsets.symmetric(
                                                                 horizontal: 10,
                                                               ),
                                                           child: Text(
                                                             '$activeStage',
-                                                            style: const TextStyle(
+                                                            style: TextStyle(
                                                               fontSize:
                                                                   FontSizes
                                                                       .bodyMedium,
@@ -662,7 +681,10 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                                   FontWeight
                                                                       .bold,
                                                               color:
-                                                                  Colors.white,
+                                                                  Skeuo.collapse(
+                                                                    Colors
+                                                                        .white,
+                                                                  ),
                                                             ),
                                                           ),
                                                         ),

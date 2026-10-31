@@ -105,7 +105,7 @@ enum ParticleColorSchema {
 /// turbulence (organic swirl); bounce + touch are widget-level flags.
 PresetConfig typedParticleConfig(
   ParticleType t,
-  List<Color> colors, {
+  final List<Color> colors, {
   bool chaos = false,
 }) {
   final turb = chaos ? 0.9 : 0.0;
@@ -257,37 +257,37 @@ extension ParticleColorSchemaX on ParticleColorSchema {
     ParticleColorSchema.presetDefault => null,
     ParticleColorSchema.themeMatch =>
       null, // handled by caller — uses theme flair
-    ParticleColorSchema.inferno => const [
+    ParticleColorSchema.inferno => [
       Color(0xFFFF1744),
       Color(0xFFFF6D00),
       Color(0xFFFFAB00),
       Color(0xFFFFD600),
     ],
-    ParticleColorSchema.glacier => const [
+    ParticleColorSchema.glacier => [
       Color(0xFF00E5FF),
       Color(0xFF4FC3F7),
       Color(0xFFB3E5FC),
       Color(0xFFFFFFFF),
     ],
-    ParticleColorSchema.toxic => const [
+    ParticleColorSchema.toxic => [
       Color(0xFF76FF03),
       Color(0xFF64DD17),
       Color(0xFFAEEA00),
       Color(0xFFCCFF00),
     ],
-    ParticleColorSchema.voidStorm => const [
+    ParticleColorSchema.voidStorm => [
       Color(0xFF7B1FA2),
       Color(0xFF512DA8),
       Color(0xFF4527A0),
       Color(0xFFAB47BC),
     ],
-    ParticleColorSchema.gilded => const [
+    ParticleColorSchema.gilded => [
       Color(0xFFFFD700),
       Color(0xFFFFC107),
       Color(0xFFFFB300),
       Color(0xFFFFE082),
     ],
-    ParticleColorSchema.rainbow => const [
+    ParticleColorSchema.rainbow => [
       Color(0xFFFF1744),
       Color(0xFFFF9100),
       Color(0xFFFFEA00),
@@ -295,49 +295,49 @@ extension ParticleColorSchemaX on ParticleColorSchema {
       Color(0xFF00B0FF),
       Color(0xFFD500F9),
     ],
-    ParticleColorSchema.monochrome => const [
+    ParticleColorSchema.monochrome => [
       Color(0xFFFFFFFF),
       Color(0xFFE0E0E0),
       Color(0xFFBDBDBD),
       Color(0xFF9E9E9E),
     ],
-    ParticleColorSchema.bloodMoon => const [
+    ParticleColorSchema.bloodMoon => [
       Color(0xFFB71C1C),
       Color(0xFFD32F2F),
       Color(0xFFE53935),
       Color(0xFF880E4F),
     ],
-    ParticleColorSchema.synthwave => const [
+    ParticleColorSchema.synthwave => [
       Color(0xFFD500F9),
       Color(0xFF00E5FF),
       Color(0xFF304FFE),
       Color(0xFFFF4081),
     ],
-    ParticleColorSchema.forest => const [
+    ParticleColorSchema.forest => [
       Color(0xFF2E7D32),
       Color(0xFF4CAF50),
       Color(0xFF81C784),
       Color(0xFFA1887F),
     ],
-    ParticleColorSchema.candy => const [
+    ParticleColorSchema.candy => [
       Color(0xFFFF69B4),
       Color(0xFFFFB6C1),
       Color(0xFFE1BEE7),
       Color(0xFFB39DDB),
     ],
-    ParticleColorSchema.steel => const [
+    ParticleColorSchema.steel => [
       Color(0xFFB0BEC5),
       Color(0xFF90A4AE),
       Color(0xFF78909C),
       Color(0xFFECEFF1),
     ],
-    ParticleColorSchema.sunset => const [
+    ParticleColorSchema.sunset => [
       Color(0xFFFF6E40),
       Color(0xFFFFAB40),
       Color(0xFFFF80AB),
       Color(0xFFCE93D8),
     ],
-    ParticleColorSchema.abyss => const [
+    ParticleColorSchema.abyss => [
       Color(0xFF0D47A1),
       Color(0xFF1565C0),
       Color(0xFF006064),

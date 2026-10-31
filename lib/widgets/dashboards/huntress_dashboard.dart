@@ -39,7 +39,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: const Color(0xFF101408),
+            color: Skeuo.collapse(Color(0xFF101408)),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: Skeuo.inkIf(Colors.lightGreen).withValues(alpha: 0.35),
@@ -57,7 +57,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                     color: Skeuo.inkIf(Colors.lightGreenAccent),
                     size: 24,
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   GoopText(
                     'HUNTRESS & DOG',
                     style: TextStyle(
@@ -67,7 +67,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                       letterSpacing: 0.8,
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   // Health toggle button
                   GestureDetector(
                     onTap: () => setState(() => _healthMode = !_healthMode),
@@ -83,13 +83,15 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                                 ? Skeuo.inkIf(
                                   Colors.redAccent,
                                 ).withValues(alpha: 0.2)
-                                : Colors.white.withValues(alpha: 0.05),
+                                : Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(5),
                         border: Border.all(
                           color:
                               _healthMode
                                   ? Skeuo.inkIf(Colors.redAccent)
-                                  : Colors.white24,
+                                  : Skeuo.collapse(Colors.white24),
                           width: _healthMode ? 1.0 : 0.6,
                         ),
                       ),
@@ -104,9 +106,9 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                             color:
                                 _healthMode
                                     ? Skeuo.inkIf(Colors.redAccent)
-                                    : Colors.white38,
+                                    : Skeuo.collapse(Colors.white38),
                           ),
-                          const SizedBox(width: 3),
+                          SizedBox(width: 3),
                           Text(
                             _healthMode ? 'HP' : 'ALL',
                             style: TextStyle(
@@ -115,7 +117,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                               color:
                                   _healthMode
                                       ? Skeuo.inkIf(Colors.redAccent)
-                                      : Colors.white38,
+                                      : Skeuo.collapse(Colors.white38),
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -123,7 +125,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                       ),
                     ),
                   ),
-                  const Spacer(),
+                  Spacer(),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 6,
@@ -162,7 +164,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                 ],
               ),
               if (hasBabyGoodMimic) ...[
-                const SizedBox(height: 6),
+                SizedBox(height: 6),
                 GoopText(
                   'Baby Good Mimic active — dig rate doubled',
                   style: TextStyle(
@@ -172,7 +174,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                   ),
                 ),
               ],
-              const SizedBox(height: 10),
+              SizedBox(height: 10),
               // Content: either full weights or health-focused stats
               if (_healthMode)
                 _buildHealthStats(
@@ -213,7 +215,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
               '${effectivePerRoom.toStringAsFixed(2)}%',
               Skeuo.inkIf(Colors.redAccent),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             _buildHealthStat(
               'LOST W/O DOG',
               '${lostPerRoom.toStringAsFixed(2)}%',
@@ -221,11 +223,11 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Row(
           children: [
             _buildHealthStat('❤ WEIGHT', '45%', Skeuo.inkIf(Colors.redAccent)),
-            const SizedBox(width: 12),
+            SizedBox(width: 12),
             _buildHealthStat(
               'ROOMS/❤',
               (100 / effectivePerRoom).toStringAsFixed(1),

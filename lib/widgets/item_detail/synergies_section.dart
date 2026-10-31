@@ -48,17 +48,19 @@ class _SynergiesSectionState extends State<SynergiesSection> {
               child: Row(
                 children: [
                   Icon(Icons.hub, size: 16, color: Skeuo.inkIf(Colors.amber)),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6),
                   GoopText(
                     'SYNERGIES',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.7),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   if (widget.statuses.isNotEmpty)
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -66,7 +68,9 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                         vertical: 1,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -74,12 +78,14 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.5),
+                          color: Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.5),
                         ),
                       ),
                     ),
                   if (activeCount > 0) ...[
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 6,
@@ -101,7 +107,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                       ),
                     ),
                   ],
-                  const Spacer(),
+                  Spacer(),
                   if (widget.statuses.isNotEmpty)
                     AnimatedRotation(
                       turns: _collapsed ? 0 : 0.5,
@@ -109,7 +115,9 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                       child: Icon(
                         Icons.expand_more_rounded,
                         size: 18,
-                        color: Colors.white.withValues(alpha: 0.4),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.4),
                       ),
                     ),
                 ],
@@ -122,7 +130,9 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                 padding: const EdgeInsets.all(16),
                 child: GoopText(
                   'No known synergies.',
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.6)),
+                  style: TextStyle(
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+                  ),
                 ),
               ),
             )
@@ -151,7 +161,7 @@ class SynergyCard extends StatelessWidget {
     final color =
         status.active
             ? Skeuo.inkIf(Colors.amber)
-            : Colors.white.withValues(alpha: 0.25);
+            : Skeuo.collapse(Colors.white).withValues(alpha: 0.25);
 
     final currentLower = currentName.toLowerCase();
     final currentIsAnyOf = s.anyOf.any((i) => i.toLowerCase() == currentLower);
@@ -177,9 +187,9 @@ class SynergyCard extends StatelessWidget {
                   color:
                       status.active
                           ? Skeuo.inkIf(Colors.amber)
-                          : Colors.white38,
+                          : Skeuo.collapse(Colors.white38),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10),
                 Expanded(
                   child: Row(
                     children: [
@@ -193,7 +203,7 @@ class SynergyCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         Icons.verified,
                         size: 14,
@@ -204,7 +214,7 @@ class SynergyCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 6,
@@ -220,7 +230,7 @@ class SynergyCard extends StatelessWidget {
                       .toList(),
             ),
             if (s.anyOf.isNotEmpty) ...[
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               if (currentIsAnyOf)
                 Row(
                   children: [
@@ -229,7 +239,7 @@ class SynergyCard extends StatelessWidget {
                       size: 13,
                       color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.80),
                     ),
-                    const SizedBox(width: 5),
+                    SizedBox(width: 5),
                     GoopText(
                       'Alternative components matched',
                       style: TextStyle(
@@ -250,7 +260,7 @@ class SynergyCard extends StatelessWidget {
                       size: 13,
                       color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.75),
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: 4),
                     GoopText(
                       'Alternative Partners:',
                       style: TextStyle(
@@ -312,7 +322,7 @@ class SynergyChip extends StatelessWidget {
     final iconPath = gun?.icon ?? item?.icon ?? '';
     final pillColor =
         missing
-            ? Colors.white.withValues(alpha: 0.08)
+            ? Skeuo.collapse(Colors.white).withValues(alpha: 0.08)
             : Skeuo.inkIf(Colors.amber).withValues(alpha: 0.4);
 
     final body = Opacity(
@@ -347,7 +357,7 @@ class SynergyChip extends StatelessWidget {
                 child: _buildImage(iconPath, resolvable),
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: 6),
             GoopText(
               name,
               maxLines: 1,
@@ -355,7 +365,10 @@ class SynergyChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w700,
-                color: missing ? Colors.white30 : Colors.white70,
+                color:
+                    missing
+                        ? Skeuo.collapse(Colors.white30)
+                        : Skeuo.collapse(Colors.white70),
               ),
             ),
           ],
@@ -410,10 +423,10 @@ class SynergyChip extends StatelessWidget {
       child: Center(
         child: GoopText(
           name.isNotEmpty ? name[0].toUpperCase() : '?',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: Colors.white38,
+            color: Skeuo.collapse(Colors.white38),
           ),
         ),
       ),

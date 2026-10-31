@@ -338,9 +338,9 @@ class PlayerPageState extends State<PlayerPage> {
                             ).withValues(alpha: 0.8),
                             borderRadius: BorderRadius.all(Radii.sm),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.delete_sweep_rounded,
-                            color: Colors.white,
+                            color: Skeuo.collapse(Colors.white),
                             size: 24,
                           ),
                         ),
@@ -434,9 +434,9 @@ class PlayerPageState extends State<PlayerPage> {
                             ).withValues(alpha: 0.8),
                             borderRadius: BorderRadius.all(Radii.sm),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.delete_sweep_rounded,
-                            color: Colors.white,
+                            color: Skeuo.collapse(Colors.white),
                             size: 24,
                           ),
                         ),
@@ -605,7 +605,7 @@ class PlayerPageState extends State<PlayerPage> {
     showDialog<void>(
       context: c,
       barrierDismissible: true,
-      barrierColor: Colors.black.withValues(alpha: 0.35),
+      barrierColor: Skeuo.collapse(Colors.black).withValues(alpha: 0.35),
       builder: (dlgCtx) {
         return Center(
           child: Container(
@@ -619,7 +619,7 @@ class PlayerPageState extends State<PlayerPage> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.45),
+                  color: Skeuo.collapse(Colors.black).withValues(alpha: 0.45),
                   blurRadius: 16,
                 ),
               ],
@@ -746,7 +746,10 @@ class _InlineStatStepper extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final value = isCool ? p.runState.coolness : p.runState.curse;
-    final accent = isCool ? const Color(0xFF4DD0E1) : const Color(0xFFBA68C8);
+    final accent =
+        isCool
+            ? Skeuo.inkIf(Skeuo.collapse(Color(0xFF4DD0E1)))
+            : Skeuo.inkIf(Skeuo.collapse(Color(0xFFBA68C8)));
 
     void apply(double delta) {
       if (isCool) {
@@ -780,7 +783,11 @@ class _InlineStatStepper extends StatelessWidget {
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.w900,
                     color:
-                        positive ? accent : Colors.white.withValues(alpha: 0.6),
+                        positive
+                            ? accent
+                            : Skeuo.collapse(
+                              Colors.white,
+                            ).withValues(alpha: 0.6),
                   ),
                 ),
               ),
@@ -796,7 +803,7 @@ class _InlineStatStepper extends StatelessWidget {
         children: [
           Container(
             height: 1,
-            color: Colors.white.withValues(alpha: 0.06),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.06),
             margin: const EdgeInsets.only(bottom: 8),
           ),
           Row(

@@ -44,16 +44,16 @@ class SynergyDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   GoopText(
                     synergy.name,
                     style: TextStyle(
                       fontSize: 22 * sf,
                       fontWeight: FontWeight.w900,
-                      color: Colors.white,
+                      color: Skeuo.collapse(Colors.white),
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
@@ -103,11 +103,11 @@ class SynergyDetailScreen extends StatelessWidget {
                           ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                   ],
                   if (synergy.anyOf.isNotEmpty) ...[
                     _sectionLabel('ANY OF', sf),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
@@ -121,11 +121,11 @@ class SynergyDetailScreen extends StatelessWidget {
                           ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                   ],
 
                   _sectionLabel('EFFECT', sf),
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   GoopText(
                     synergy.prettyEffect.isNotEmpty
                         ? synergy.prettyEffect
@@ -133,16 +133,20 @@ class SynergyDetailScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14 * sf,
                       height: 1.45,
-                      color: Colors.white.withValues(alpha: 0.85),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.85),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: 16),
                   GoopText(
                     'Tap an item to open its Ammonomicon entry.',
                     style: TextStyle(
                       fontSize: 11 * sf,
                       fontStyle: FontStyle.italic,
-                      color: Colors.white.withValues(alpha: 0.35),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.35),
                     ),
                   ),
                 ],
@@ -160,7 +164,7 @@ class SynergyDetailScreen extends StatelessWidget {
       fontSize: 11 * sf,
       fontWeight: FontWeight.w900,
       letterSpacing: 1.2,
-      color: Colors.white.withValues(alpha: 0.5),
+      color: Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
     ),
   );
 }
@@ -181,7 +185,10 @@ class _ItemChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isOwned = owned.contains(name.toLowerCase());
-    final c = isOwned ? Skeuo.inkIf(Colors.lightGreenAccent) : Colors.white;
+    final c =
+        isOwned
+            ? Skeuo.inkIf(Colors.lightGreenAccent)
+            : Skeuo.collapse(Colors.white);
     return GestureDetector(
       onTap: () {
         Haptics.selection();
@@ -205,7 +212,9 @@ class _ItemChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         decoration: BoxDecoration(
-          color: (isOwned ? Skeuo.inkIf(Colors.lightGreenAccent) : Colors.white)
+          color: (isOwned
+                  ? Skeuo.inkIf(Colors.lightGreenAccent)
+                  : Skeuo.collapse(Colors.white))
               .withValues(alpha: isOwned ? 0.14 : 0.06),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
@@ -215,8 +224,8 @@ class _ItemChip extends StatelessWidget {
                       Colors.lightGreenAccent,
                     ).withValues(alpha: 0.55)
                     : (required
-                        ? Colors.white.withValues(alpha: 0.25)
-                        : Colors.white.withValues(alpha: 0.15)),
+                        ? Skeuo.collapse(Colors.white).withValues(alpha: 0.25)
+                        : Skeuo.collapse(Colors.white).withValues(alpha: 0.15)),
             width: isOwned ? 1.4 : 1.0,
           ),
         ),

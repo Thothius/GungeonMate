@@ -19,7 +19,7 @@ class SurpriseSheet extends StatefulWidget {
     Haptics.selection();
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: const Color(0xFF1E122E),
+      backgroundColor: Skeuo.collapse(Color(0xFF1E122E)),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
@@ -77,9 +77,9 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
             Container(
               width: 38,
               height: 4,
-              margin: const EdgeInsets.only(bottom: 12),
+              margin: EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.18),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.18),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -142,7 +142,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: const Color(0xFFB388FF).withValues(alpha: 0.5),
+                color: Skeuo.collapse(Color(0xFFB388FF)).withValues(alpha: 0.5),
               ),
             ),
             child: Row(
@@ -151,16 +151,16 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
                 Icon(
                   Icons.edit_rounded,
                   size: 15,
-                  color: const Color(0xFFB388FF),
+                  color: Skeuo.collapse(Color(0xFFB388FF)),
                 ),
                 SizedBox(width: 6 * sf),
-                const GoopText(
+                GoopText(
                   'CUSTOM…',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.2,
-                    color: Color(0xFFB388FF),
+                    color: Skeuo.collapse(Color(0xFFB388FF)),
                   ),
                 ),
               ],
@@ -172,7 +172,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
   }
 
   Widget _customStep(MpSession session, double sf) {
-    const accent = Color(0xFFB388FF);
+    final accent = Skeuo.collapse(Color(0xFFB388FF));
     return Column(
       key: const ValueKey('custom'),
       mainAxisSize: MainAxisSize.min,
@@ -185,11 +185,11 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
               child: Icon(
                 Icons.arrow_back_rounded,
                 size: 18,
-                color: Colors.white.withValues(alpha: 0.6),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
               ),
             ),
             SizedBox(width: 10 * sf),
-            const GoopText(
+            GoopText(
               'CUSTOM SURPRISE',
               style: TextStyle(
                 fontSize: 11,
@@ -214,19 +214,23 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
                       setState(() => _fx = fx);
                     },
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
+                      duration: Duration(milliseconds: 150),
                       padding: EdgeInsets.symmetric(vertical: 10 * sf),
                       decoration: BoxDecoration(
                         color:
                             _fx == fx
                                 ? accent.withValues(alpha: 0.15)
-                                : Colors.white.withValues(alpha: 0.04),
+                                : Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.04),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color:
                               _fx == fx
                                   ? accent.withValues(alpha: 0.8)
-                                  : Colors.white.withValues(alpha: 0.12),
+                                  : Skeuo.collapse(
+                                    Colors.white,
+                                  ).withValues(alpha: 0.12),
                           width: _fx == fx ? 1.6 : 1,
                         ),
                       ),
@@ -238,7 +242,9 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
                             color:
                                 _fx == fx
                                     ? accent
-                                    : Colors.white.withValues(alpha: 0.4),
+                                    : Skeuo.collapse(
+                                      Colors.white,
+                                    ).withValues(alpha: 0.4),
                           ),
                           SizedBox(height: 4 * sf),
                           GoopText(
@@ -250,7 +256,9 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
                               color:
                                   _fx == fx
                                       ? accent
-                                      : Colors.white.withValues(alpha: 0.4),
+                                      : Skeuo.collapse(
+                                        Colors.white,
+                                      ).withValues(alpha: 0.4),
                             ),
                           ),
                         ],
@@ -265,29 +273,29 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
         TextField(
           controller: _textCtrl,
           maxLength: 30,
-          style: const TextStyle(color: Colors.white, fontSize: 13),
+          style: TextStyle(color: Skeuo.collapse(Colors.white), fontSize: 13),
           decoration: InputDecoration(
             hintText: 'Optional message (≤30 chars)',
             hintStyle: TextStyle(
-              color: Colors.white.withValues(alpha: 0.35),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
               fontSize: 12,
             ),
             counterStyle: TextStyle(
-              color: Colors.white.withValues(alpha: 0.3),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
               fontSize: 10,
             ),
             filled: true,
-            fillColor: Colors.white.withValues(alpha: 0.05),
+            fillColor: Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.12),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.12),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.12),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.12),
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -312,7 +320,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: accent.withValues(alpha: 0.6)),
             ),
-            child: const Center(
+            child: Center(
               child: GoopText(
                 'SEND',
                 style: TextStyle(

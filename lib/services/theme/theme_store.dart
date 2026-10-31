@@ -54,7 +54,7 @@ class SavedCustomTheme {
 /// in SharedPreferences. Unlimited count.
 class CustomThemeStore {
   static const _key = 'custom.themes.v1';
-  static final ValueNotifier<List<SavedCustomTheme>> notifier =
+  static ValueNotifier<List<SavedCustomTheme>> notifier =
       ValueNotifier<List<SavedCustomTheme>>([]);
 
   static List<SavedCustomTheme> get themes => notifier.value;

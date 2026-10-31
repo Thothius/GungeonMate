@@ -259,7 +259,7 @@ class _EffectChip extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(chip.tag.icon, color: color, size: 12.5),
-            const SizedBox(width: 3),
+            SizedBox(width: 3),
             GoopText(
               chip.tag.label,
               style: TextStyle(
@@ -270,24 +270,24 @@ class _EffectChip extends StatelessWidget {
               ),
             ),
             if (value != null) ...[
-              const SizedBox(width: 3),
+              SizedBox(width: 3),
               GoopText(
                 value,
                 style: TextStyle(
                   fontSize: 11.5 * Responsive.factor(context),
                   fontWeight: FontWeight.w800,
-                  color: Colors.white,
+                  color: Skeuo.collapse(Colors.white),
                 ),
               ),
             ],
             if (chip.sourceCount > 1) ...[
-              const SizedBox(width: 3),
+              SizedBox(width: 3),
               GoopText(
                 '×${chip.sourceCount}',
                 style: TextStyle(
                   fontSize: 10.5 * Responsive.factor(context),
                   fontWeight: FontWeight.w700,
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
                 ),
               ),
             ],
@@ -341,7 +341,7 @@ class _RobotDmgBadge extends StatelessWidget {
               height: 1.0,
             ),
           ),
-          const SizedBox(height: 1),
+          SizedBox(height: 1),
           // Big cyber number
           GoopText(
             '+$pct%',

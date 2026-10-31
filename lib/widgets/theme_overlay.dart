@@ -29,15 +29,15 @@ class ThemeOverlay extends StatefulWidget {
   /// screens pushed above it (Studio, Ammonomicon, character select…)
   /// keep their themed backdrop. Set by MainMenuScreen's RouteAware
   /// callbacks; defaults true (covers the pre-menu loading state).
-  static final ValueNotifier<bool> menuOnTop = ValueNotifier(true);
+  static ValueNotifier<bool> menuOnTop = ValueNotifier(true);
 
   /// Static global notifier for the current physical device tilt (x, y).
   /// x is tilt left/right (-10 to 10), y is tilt up/down (-10 to 10).
-  static final ValueNotifier<Offset> tiltNotifier = ValueNotifier(Offset.zero);
+  static ValueNotifier<Offset> tiltNotifier = ValueNotifier(Offset.zero);
 
   /// Static global notifier for the current screen index (0=Home, 1=Browse, 2=Settings).
   /// Used to force the Galaxy animated background on the Home screen only.
-  static final ValueNotifier<int> currentScreenIndex = ValueNotifier(0);
+  static ValueNotifier<int> currentScreenIndex = ValueNotifier(0);
 
   /// The animated wallpaper asset that always plays on the Home screen.
   /// This is the orbiting purple vortex from gungeonmate-animation-02.mp4.
@@ -314,7 +314,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                               radius: skeuo ? 1.3 : 1.25,
                               colors:
                                   skeuo
-                                      ? const [
+                                      ? [
                                         Colors.transparent,
                                         Color(0x0A1F1B16),
                                         Color(0x241F1B16),

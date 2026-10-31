@@ -154,7 +154,7 @@ mixin _PeerSnapshots on ChangeNotifier {
   void applySharedStateFromPeer({
     double? coolness,
     double? curse,
-    List<String>? shrinesUsed,
+    final List<String>? shrinesUsed,
   }) {
     _runState = _runState.copyWith(
       coolness: coolness ?? _runState.coolness,

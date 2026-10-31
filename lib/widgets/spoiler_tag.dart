@@ -67,7 +67,7 @@ class _SpoilerTagState extends State<SpoilerTag>
                       size: 18,
                       color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.85),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     Expanded(
                       child: GoopText(
                         widget.label,

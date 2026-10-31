@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/responsive.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// Super-compact cool/curse effects strip — 5 derived stats in one
 /// aligned row (FUSE / COOLDOWN / REWARD / JAMMED / BOSS JAM). The
@@ -28,8 +29,8 @@ class RunEffectsBlock extends StatelessWidget {
     final jam = curse >= 10 ? 100.0 : curse * 4;
     final bossJam = curse >= 10 ? 100.0 : curse * 2;
 
-    const coolCol = Color(0xFF4DD0E1);
-    const curseCol = Color(0xFFBA68C8);
+    final coolCol = Skeuo.collapse(Color(0xFF4DD0E1));
+    final curseCol = Skeuo.collapse(Color(0xFFBA68C8));
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 1 * sf),
@@ -62,7 +63,7 @@ class RunEffectsBlock extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 7.5 * sf,
                   letterSpacing: 0.8,
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
                 ),
               ),
               GoopText(

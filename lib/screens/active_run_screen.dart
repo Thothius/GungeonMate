@@ -277,7 +277,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                       height: 4,
                       margin: const EdgeInsets.only(bottom: 14),
                       decoration: BoxDecoration(
-                        color: Colors.white24,
+                        color: Skeuo.collapse(Colors.white24),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -287,15 +287,15 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                     // title + "ADVANCED LIBRARY" link are gone (v3 cleanup).
                     Row(
                       children: [
-                        const SizedBox(width: 40),
-                        const Expanded(
+                        SizedBox(width: 40),
+                        Expanded(
                           child: Center(
                             child: GoopText(
                               'Tap to add',
                               style: TextStyle(
                                 fontSize: FontSizes.labelMedium,
                                 fontWeight: FontWeight.w700,
-                                color: Colors.white54,
+                                color: Skeuo.collapse(Colors.white54),
                                 fontStyle: FontStyle.italic,
                                 letterSpacing: 0.5,
                               ),
@@ -303,9 +303,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close,
-                            color: Colors.white54,
+                            color: Skeuo.collapse(Colors.white54),
                             size: 25,
                           ),
                           tooltip: 'Close',
@@ -329,7 +329,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                       child: Stack(
                         children: [
                           if (results.isEmpty)
-                            const Center(
+                            Center(
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                   vertical: Insets.xxl,
@@ -337,7 +337,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                                 child: GoopText(
                                   'No matching guns or items found.',
                                   style: TextStyle(
-                                    color: Colors.white60,
+                                    color: Skeuo.collapse(Colors.white60),
                                     fontSize: FontSizes.labelMedium,
                                   ),
                                 ),
@@ -348,7 +348,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                               itemCount: results.length,
                               separatorBuilder:
                                   (_, _) => Divider(
-                                    color: Colors.white.withValues(alpha: 0.05),
+                                    color: Skeuo.collapse(
+                                      Colors.white,
+                                    ).withValues(alpha: 0.05),
                                     height: 1,
                                   ),
                               itemBuilder: (lContext, index) {
@@ -464,21 +466,23 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                                                       : Icons.extension,
                                               quality: quality,
                                             ),
-                                            const SizedBox(width: 10),
+                                            SizedBox(width: 10),
                                             Expanded(
                                               child: GoopText(
                                                 name,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                style: TextStyle(
+                                                  color: Skeuo.collapse(
+                                                    Colors.white,
+                                                  ),
                                                   fontWeight: FontWeight.w800,
                                                   fontSize:
                                                       FontSizes.titleSmall,
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(width: 8),
+                                            SizedBox(width: 8),
                                             GoopText(
                                               kindTag,
                                               style: TextStyle(
@@ -491,7 +495,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                                               ),
                                             ),
                                             if (isOwned) ...[
-                                              const SizedBox(width: 6),
+                                              SizedBox(width: 6),
                                               GoopText(
                                                 'OWNED',
                                                 style: TextStyle(
@@ -536,7 +540,7 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                                     child: GoopText(
                                       msg,
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: Skeuo.collapse(Colors.white),
                                         fontSize:
                                             11 * Responsive.factor(context),
                                         fontWeight: FontWeight.bold,
@@ -550,34 +554,34 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     // Search field — at the bottom, above keyboard
                     TextField(
                       controller: quickAddController,
                       autofocus: true,
                       focusNode: focusNode,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Skeuo.collapse(Colors.white),
                         fontSize: FontSizes.labelMedium,
                       ),
                       cursorColor: Skeuo.inkIf(Colors.amberAccent),
                       decoration: InputDecoration(
                         hintText: 'Search items, guns...',
                         hintStyle: TextStyle(
-                          color: Colors.white30,
+                          color: Skeuo.collapse(Colors.white30),
                           fontSize: FontSizes.labelMedium,
                         ),
-                        prefixIcon: const Icon(
+                        prefixIcon: Icon(
                           Icons.search,
-                          color: Colors.white30,
+                          color: Skeuo.collapse(Colors.white30),
                           size: 20,
                         ),
                         suffixIcon:
                             query.isNotEmpty
                                 ? IconButton(
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.close,
-                                    color: Colors.white54,
+                                    color: Skeuo.collapse(Colors.white54),
                                     size: 18,
                                   ),
                                   tooltip: 'Clear search',
@@ -603,7 +607,9 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radii.sm),
-                          borderSide: const BorderSide(color: Colors.white10),
+                          borderSide: BorderSide(
+                            color: Skeuo.collapse(Colors.white10),
+                          ),
                         ),
                       ),
                       onChanged: (val) {
@@ -636,32 +642,32 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
         horizontal: Insets.lg,
         vertical: Insets.sm,
       ),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Color(0xFF006064), // deep cyan
-            Color(0xFF00E5FF), // neon cyan
-            Color(0xFF006064), // deep cyan
+            Skeuo.collapse(Color(0xFF006064)), // deep cyan
+            Skeuo.collapse(Color(0xFF00E5FF)), // neon cyan
+            Skeuo.collapse(Color(0xFF006064)), // deep cyan
           ],
         ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.flash_on, color: Colors.white, size: 16),
-          const SizedBox(width: 8),
+          Icon(Icons.flash_on, color: Skeuo.collapse(Colors.white), size: 16),
+          SizedBox(width: 8),
           Expanded(
             child: GoopText(
               'WINDGUNNER STATE COMPASS ACTIVE (${p.windgunnerCountdown}s of Infinite Power)',
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
-                color: Colors.white,
+                color: Skeuo.collapse(Colors.white),
                 letterSpacing: 0.8,
                 shadows: [
                   Shadow(
-                    color: Colors.black54,
+                    color: Skeuo.collapse(Colors.black54),
                     offset: Offset(0, 1.5),
                     blurRadius: 3,
                   ),
@@ -669,8 +675,8 @@ class _ActiveRunScreenState extends State<ActiveRunScreen>
               ),
             ),
           ),
-          const SizedBox(width: 8),
-          const Icon(Icons.flash_on, color: Colors.white, size: 16),
+          SizedBox(width: 8),
+          Icon(Icons.flash_on, color: Skeuo.collapse(Colors.white), size: 16),
         ],
       ),
     );

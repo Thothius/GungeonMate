@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/reduce_motion.dart';
+import 'skeuo/skeuo_tokens.dart';
 
 /// Role a [ThemedNumber] is playing in the UI. The widget adjusts its
 /// colour (and for Curseblaster, its glow strength) based on the role
@@ -102,7 +103,9 @@ class ThemedNumber extends StatelessWidget {
                   color: Colors.transparent,
                   shadows: [
                     Shadow(
-                      color: const Color(0xFFFF4757).withValues(alpha: t),
+                      color: Skeuo.collapse(
+                        Color(0xFFFF4757),
+                      ).withValues(alpha: t),
                       blurRadius: 12 + (t * 10),
                     ),
                   ],
@@ -131,7 +134,7 @@ class ThemedNumber extends StatelessWidget {
 
   List<Shadow>? _shadowsFor(ThemeFlair f) {
     if (!f.embossNumbers) return null;
-    return const [
+    return [
       // Dark bottom edge + light top edge = engraved metal look.
       Shadow(offset: Offset(0, 1), blurRadius: 0, color: Color(0x99000000)),
       Shadow(

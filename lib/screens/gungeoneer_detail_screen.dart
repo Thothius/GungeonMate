@@ -175,14 +175,19 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Color(0xFFFFD54F), Color(0xFFFFB300)],
+                        colors: [
+                          Skeuo.collapse(Color(0xFFFFD54F)),
+                          Skeuo.collapse(Color(0xFFFFB300)),
+                        ],
                       ),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: const Color(0xFFFFE082).withValues(alpha: 0.8),
+                        color: Skeuo.collapse(
+                          Color(0xFFFFE082),
+                        ).withValues(alpha: 0.8),
                         width: 1.5,
                       ),
                       boxShadow: [
@@ -198,19 +203,19 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.play_arrow_rounded,
                           size: 24,
-                          color: Color(0xFF3E2723),
+                          color: Skeuo.collapse(Color(0xFF3E2723)),
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: 10),
                         GoopText(
                           'PLAY AS ${g.name.toUpperCase()}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.2,
-                            color: Color(0xFF3E2723),
+                            color: Skeuo.collapse(Color(0xFF3E2723)),
                           ),
                         ),
                       ],
@@ -285,9 +290,9 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
                   color:
                       isSelected
                           ? flair.primary
-                          : Colors.white.withValues(alpha: 0.4),
+                          : Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
                 ),
-                const SizedBox(height: 3),
+                SizedBox(height: 3),
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   child: GoopText(
@@ -300,7 +305,9 @@ class _GungeoneerDetailScreenState extends State<GungeoneerDetailScreen>
                       color:
                           isSelected
                               ? flair.primary
-                              : Colors.white.withValues(alpha: 0.4),
+                              : Skeuo.collapse(
+                                Colors.white,
+                              ).withValues(alpha: 0.4),
                     ),
                   ),
                 ),
@@ -382,11 +389,14 @@ class _HeroSection extends StatelessWidget {
         cacheWidth: 240,
         cacheHeight: 240,
         errorBuilder:
-            (_, _, _) =>
-                const Icon(Icons.person, size: 80, color: Colors.white54),
+            (_, _, _) => Icon(
+              Icons.person,
+              size: 80,
+              color: Skeuo.collapse(Colors.white54),
+            ),
       );
     }
-    return const Icon(Icons.person, size: 80, color: Colors.white54);
+    return Icon(Icons.person, size: 80, color: Skeuo.collapse(Colors.white54));
   }
 }
 
@@ -414,13 +424,13 @@ class _LorePage extends StatelessWidget {
                   fontSize: 13.5,
                   height: 1.6,
                   fontStyle: FontStyle.italic,
-                  color: Colors.white.withValues(alpha: 0.85),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.85),
                 ),
               ),
             ),
           // Nicknames trivia
           if (g.nicknames.isNotEmpty || g.voice.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             _ContentCard(
               color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.5),
               child: Column(
@@ -431,16 +441,20 @@ class _LorePage extends StatelessWidget {
                       'Also called: ${g.nicknames.join(', ')}',
                       style: TextStyle(
                         fontSize: FontSizes.labelMedium,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.6),
                       ),
                     ),
                   if (g.voice.isNotEmpty) ...[
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     GoopText(
                       'Voice: ${g.voice}',
                       style: TextStyle(
                         fontSize: FontSizes.labelMedium,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.6),
                       ),
                     ),
                   ],
@@ -518,7 +532,7 @@ class _PlaystylePage extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.5,
             height: 1.6,
-            color: Colors.white.withValues(alpha: 0.85),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.85),
           ),
         ),
       ),
@@ -557,14 +571,16 @@ class _TipsPage extends StatelessWidget {
                               Colors.amberAccent,
                             ).withValues(alpha: 0.7),
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Expanded(
                             child: GoopText(
                               t,
                               style: TextStyle(
                                 fontSize: 13,
                                 height: 1.5,
-                                color: Colors.white.withValues(alpha: 0.8),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.8),
                               ),
                             ),
                           ),
@@ -613,7 +629,7 @@ class _SpoilersPage extends StatelessWidget {
                   size: 18,
                   color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.7),
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: GoopText(
                     'SPOILER WARNING — Story, past kills, and unlock details below.',
@@ -736,7 +752,7 @@ class _LoadoutTile extends StatelessWidget {
               size: 16,
               color: Skeuo.inkIf(Colors.purpleAccent).withValues(alpha: 0.7),
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             GoopText(
               name,
               style: TextStyle(
@@ -781,22 +797,22 @@ class _LoadoutTile extends StatelessWidget {
               showRing: false,
               semanticLabel: name,
             ),
-            const SizedBox(width: 6),
+            SizedBox(width: 6),
             GoopText(
               name,
               style: TextStyle(
                 fontSize: FontSizes.labelMedium,
                 fontWeight: FontWeight.w700,
-                color: Colors.white.withValues(alpha: 0.85),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.85),
                 decoration: exists ? null : TextDecoration.lineThrough,
               ),
             ),
             if (exists) ...[
-              const SizedBox(width: 4),
+              SizedBox(width: 4),
               Icon(
                 Icons.chevron_right,
                 size: 14,
-                color: Colors.white.withValues(alpha: 0.4),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
               ),
             ],
           ],
@@ -849,13 +865,13 @@ class _ArmorTile extends StatelessWidget {
             size: 16,
             color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.7),
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           GoopText(
             '$armor Armor',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w700,
-              color: Colors.white.withValues(alpha: 0.85),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.85),
             ),
           ),
         ],
@@ -885,24 +901,24 @@ class _SpoilerContent extends StatelessWidget {
               color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.9),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
         ],
         GoopText(
           body,
           style: TextStyle(
             fontSize: 12.5,
             height: 1.5,
-            color: Colors.white.withValues(alpha: 0.8),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.8),
           ),
         ),
         if (extra != null && extra!.isNotEmpty) ...[
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           GoopText(
             extra!,
             style: TextStyle(
               fontSize: 11.5,
               height: 1.4,
-              color: Colors.white.withValues(alpha: 0.6),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
               fontStyle: FontStyle.italic,
             ),
           ),

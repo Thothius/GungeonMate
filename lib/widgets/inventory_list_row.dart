@@ -101,14 +101,16 @@ class _InventoryListRowState extends State<InventoryListRow>
     if (_isGun) {
       final v = widget.gun!.dpsValue;
       if (v <= 0) {
-        return (value: '—', unit: null, color: Colors.white38);
+        return (value: '—', unit: null, color: Skeuo.collapse(Colors.white38));
       }
       final str = v >= 100 ? v.toStringAsFixed(0) : v.toStringAsFixed(1);
       return (
         value: str,
         unit: 'DPS',
         color:
-            widget.isTopDps ? const Color(0xFFFFD700) : const Color(0xFFFFB74D),
+            widget.isTopDps
+                ? Skeuo.collapse(Color(0xFFFFD700))
+                : Skeuo.collapse(Color(0xFFFFB74D)),
       );
     }
     final it = widget.item!;
@@ -116,7 +118,7 @@ class _InventoryListRowState extends State<InventoryListRow>
       return (
         value: it.rechargeTime,
         unit: 's',
-        color: const Color(0xFF81D4FA),
+        color: Skeuo.collapse(Color(0xFF81D4FA)),
       );
     }
     return (value: '', unit: null, color: Colors.transparent);
@@ -138,12 +140,12 @@ class _InventoryListRowState extends State<InventoryListRow>
   }
 
   Color get _typeColor {
-    if (_isGun) return const Color(0xFFB0BEC5);
+    if (_isGun) return Skeuo.collapse(Color(0xFFB0BEC5));
     final it = widget.item!;
     if (it.isCompanion) return Skeuo.inkIf(Colors.purpleAccent);
     if (it.isActive) return Skeuo.inkIf(Colors.lightBlueAccent);
     if (it.isPassive) return Skeuo.inkIf(Colors.lightGreenAccent);
-    return Colors.white54;
+    return Skeuo.collapse(Colors.white54);
   }
 
   Set<ElementKind> get _elements =>
@@ -177,7 +179,7 @@ class _InventoryListRowState extends State<InventoryListRow>
                 size: 38,
                 showRing: false,
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,10 +189,10 @@ class _InventoryListRowState extends State<InventoryListRow>
                       _name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: Skeuo.collapse(Colors.white),
                         height: 1.15,
                       ),
                     ),
@@ -277,7 +279,9 @@ class _InventoryListRowState extends State<InventoryListRow>
                       .shimmer(
                         delay: 1500.ms,
                         duration: 1200.ms,
-                        color: Colors.white.withValues(alpha: 0.55),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.55),
                       );
                 }
                 return dpsRow;
@@ -290,8 +294,10 @@ class _InventoryListRowState extends State<InventoryListRow>
 
     final isS = _quality.toUpperCase() == 'S';
     final rawQColor =
-        _quality.isEmpty ? Colors.white24 : QualityBadge.colorFor(_quality);
-    final qColor = isS ? const Color(0xFFFFD700) : rawQColor;
+        _quality.isEmpty
+            ? Skeuo.collapse(Colors.white24)
+            : QualityBadge.colorFor(_quality);
+    final qColor = isS ? Skeuo.collapse(Color(0xFFFFD700)) : rawQColor;
     final isHighTier = isS || _quality.toUpperCase() == 'A';
 
     // Wrap in animated synergy glow overlay when active.
@@ -302,13 +308,13 @@ class _InventoryListRowState extends State<InventoryListRow>
           decoration: BoxDecoration(
             color:
                 isS
-                    ? const Color(0xFF14120E)
-                    : Colors.white.withValues(alpha: 0.03),
+                    ? Skeuo.collapse(Color(0xFF14120E))
+                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.03),
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
               color:
                   isS
-                      ? const Color(0xFFFFD700)
+                      ? Skeuo.collapse(Color(0xFFFFD700))
                       : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
               width: isS ? 1.6 : (isHighTier ? 1.1 : 0.7),
             ),
@@ -334,12 +340,13 @@ class _InventoryListRowState extends State<InventoryListRow>
         children: [
           DecoratedBox(
             decoration: BoxDecoration(
-              color: isS ? const Color(0xFF14120E) : Colors.transparent,
+              color:
+                  isS ? Skeuo.collapse(Color(0xFF14120E)) : Colors.transparent,
               borderRadius: BorderRadius.all(Radii.md),
               border: Border.all(
                 color:
                     isS
-                        ? const Color(0xFFFFD700)
+                        ? Skeuo.collapse(Color(0xFFFFD700))
                         : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
                 width: isS ? 1.6 : (isHighTier ? 1.1 : 0.7),
               ),

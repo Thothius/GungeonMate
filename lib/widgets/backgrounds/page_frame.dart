@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 class PageFrame extends StatelessWidget {
   const PageFrame({super.key});
@@ -10,7 +11,7 @@ class PageFrame extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(
-            color: const Color(0xFFE8E4D9).withValues(alpha: 0.18),
+            color: Skeuo.collapse(Color(0xFFE8E4D9)).withValues(alpha: 0.18),
             width: 1,
           ),
         ),

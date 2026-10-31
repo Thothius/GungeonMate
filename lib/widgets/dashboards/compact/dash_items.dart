@@ -63,7 +63,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                         color: Skeuo.inkIf(Colors.purpleAccent),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'PLATINUM BULLETS',
                         style: TextStyle(
@@ -73,7 +73,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       GoopText(
                         '${seconds}s fired',
                         style: TextStyle(
@@ -82,11 +82,11 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                           color: Skeuo.inkIf(Colors.purpleAccent),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -101,7 +101,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             // Damage multiplier row
                             _buildMultRow(
                               'DMG',
@@ -111,7 +111,7 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                               Skeuo.inkIf(Colors.redAccent),
                               tierLabel(dmgMult),
                             ),
-                            const SizedBox(height: Insets.sm),
+                            SizedBox(height: Insets.sm),
                             // Fire rate multiplier row
                             _buildMultRow(
                               'RATE',
@@ -121,12 +121,14 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                               Skeuo.inkIf(Colors.orangeAccent),
                               tierLabel(fireRateMult),
                             ),
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             GoopText(
                               'Damage & fire rate scale with firing time. Max 3x each. Tap +30s after each fight.',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.6),
                                 height: 1.3,
                               ),
                             ),
@@ -157,10 +159,10 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
                                 ),
                                 GoopText(
                                   '${seconds}s',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: FontSizes.titleSmall,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color: Skeuo.collapse(Colors.white),
                                   ),
                                 ),
                                 IconButton(
@@ -235,7 +237,9 @@ class PlatinumBulletsDashboardState extends State<PlatinumBulletsDashboard>
             child: LinearProgressIndicator(
               value: progress,
               minHeight: 6,
-              backgroundColor: Colors.white.withValues(alpha: 0.08),
+              backgroundColor: Skeuo.collapse(
+                Colors.white,
+              ).withValues(alpha: 0.08),
               valueColor: AlwaysStoppedAnimation(color.withValues(alpha: 0.8)),
             ),
           ),
@@ -322,7 +326,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                         color: Skeuo.inkIf(Colors.amber),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'IRON COIN',
                         style: TextStyle(
@@ -332,7 +336,7 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       GoopText(
                         '$uses/3 uses',
                         style: TextStyle(
@@ -341,14 +345,14 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                           color:
                               uses > 0
                                   ? Skeuo.inkIf(Colors.amber)
-                                  : Colors.white30,
+                                  : Skeuo.collapse(Colors.white30),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -375,18 +379,20 @@ class IronCoinDashboardState extends State<IronCoinDashboard>
                                     color:
                                         i < uses
                                             ? Skeuo.inkIf(Colors.amber)
-                                            : Colors.white.withValues(
-                                              alpha: 0.1,
-                                            ),
+                                            : Skeuo.collapse(
+                                              Colors.white,
+                                            ).withValues(alpha: 0.1),
                                   ),
                               ],
                             ),
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             GoopText(
                               "Flip to reveal/destroy a chest's contents. 3 uses per run. Use wisely on high-tier chests.",
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.6),
                                 height: 1.3,
                               ),
                             ),
@@ -510,7 +516,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                         color: Skeuo.inkIf(Colors.redAccent),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'SPICE',
                         style: TextStyle(
@@ -520,7 +526,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       GoopText(
                         '+$damageBonus% DMG',
                         style: TextStyle(
@@ -529,11 +535,11 @@ class SpiceDashboardState extends State<SpiceDashboard>
                           color: Skeuo.inkIf(Colors.redAccent),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -548,7 +554,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -568,7 +574,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                 _statChip('Dmg', '+$damageBonus%'),
                               ],
                             ),
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             GoopText(
                               count == 0
                                   ? 'No Spice used. 1st use: +1 Heart, +20% Speed, -25% Spread, +0.5 Curse.'
@@ -581,7 +587,9 @@ class SpiceDashboardState extends State<SpiceDashboard>
                                   : 'Diminishing returns: +15% Dmg, +1.0 Curse per additional use.',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.6),
                                 height: 1.3,
                               ),
                             ),
@@ -651,7 +659,7 @@ class SpiceDashboardState extends State<SpiceDashboard>
           label,
           style: TextStyle(
             fontSize: FontSizes.labelSmall,
-            color: Colors.white.withValues(alpha: 0.4),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
           ),
         ),
         GoopText(
@@ -720,7 +728,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                         color: Skeuo.inkIf(Colors.tealAccent),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'METRONOME',
                         style: TextStyle(
@@ -730,7 +738,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       GoopText(
                         '+$damageBonus% DMG',
                         style: TextStyle(
@@ -739,11 +747,11 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                           color: Skeuo.inkIf(Colors.tealAccent),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -758,16 +766,16 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             // Progress bar
                             ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
                                 value: progress,
                                 minHeight: 8,
-                                backgroundColor: Colors.white.withValues(
-                                  alpha: 0.08,
-                                ),
+                                backgroundColor: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.08),
                                 valueColor: AlwaysStoppedAnimation(
                                   Skeuo.inkIf(
                                     Colors.tealAccent,
@@ -775,7 +783,7 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            SizedBox(height: 6),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -783,7 +791,9 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                   '$kills / 75 kills',
                                   style: TextStyle(
                                     fontSize: FontSizes.labelSmall,
-                                    color: Colors.white.withValues(alpha: 0.5),
+                                    color: Skeuo.collapse(
+                                      Colors.white,
+                                    ).withValues(alpha: 0.5),
                                   ),
                                 ),
                                 GoopText(
@@ -799,12 +809,14 @@ class MetronomeDashboardState extends State<MetronomeDashboard>
                                 ),
                               ],
                             ),
-                            const SizedBox(height: Insets.sm),
+                            SizedBox(height: Insets.sm),
                             GoopText(
                               '+2% damage per kill. Resets if you take damage or swap guns. Max +150% at 75 kills.',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Colors.white.withValues(alpha: 0.5),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.5),
                                 height: 1.3,
                               ),
                             ),

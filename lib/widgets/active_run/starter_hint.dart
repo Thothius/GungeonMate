@@ -79,7 +79,9 @@ class StarterHint extends StatelessWidget {
                     ? 'No guns yet — hit ADD to bring in your first.'
                     : 'No items yet — pick some up!',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
+                style: TextStyle(
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+                ),
               ),
             ),
           ),
@@ -101,16 +103,18 @@ class StarterHint extends StatelessWidget {
                 Icon(
                   Icons.auto_awesome,
                   size: 14,
-                  color: Colors.white.withValues(alpha: 0.6),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 Expanded(
                   child: GoopText(
                     headline,
                     style: TextStyle(
                       fontSize: 11.5,
                       letterSpacing: 0.6,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.7),
                     ),
                   ),
                 ),
@@ -182,10 +186,10 @@ class StarterHint extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.add,
                           size: 13,
-                          color: Colors.black,
+                          color: Skeuo.collapse(Colors.black),
                         ),
                       ),
                     ),
@@ -201,7 +205,7 @@ class StarterHint extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11.5,
                 fontStyle: FontStyle.italic,
-                color: Colors.white.withValues(alpha: 0.6),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
               ),
             ),
           ),

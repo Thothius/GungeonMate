@@ -60,7 +60,7 @@ class SprunDashboardState extends State<SprunDashboard>
                         color: Skeuo.inkIf(Colors.cyanAccent.shade200),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'SPRUN',
                         style: TextStyle(
@@ -70,7 +70,7 @@ class SprunDashboardState extends State<SprunDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       if (isWindgunnerActive)
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -108,11 +108,11 @@ class SprunDashboardState extends State<SprunDashboard>
                             ).withValues(alpha: 0.6),
                           ),
                         ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -127,7 +127,7 @@ class SprunDashboardState extends State<SprunDashboard>
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             if (idx >= 0)
                               Container(
                                 padding: const EdgeInsets.all(10),
@@ -149,7 +149,7 @@ class SprunDashboardState extends State<SprunDashboard>
                                       color: Skeuo.inkIf(Colors.cyanAccent),
                                       size: 16,
                                     ),
-                                    const SizedBox(width: Insets.sm),
+                                    SizedBox(width: Insets.sm),
                                     Expanded(
                                       child: GoopText(
                                         _triggers[idx],
@@ -168,7 +168,9 @@ class SprunDashboardState extends State<SprunDashboard>
                                 'Trigger unknown. Tap "Reveal" to discover this run\'s Windgunner activation condition.',
                                 style: TextStyle(
                                   fontSize: FontSizes.labelSmall,
-                                  color: Colors.white.withValues(alpha: 0.5),
+                                  color: Skeuo.collapse(
+                                    Colors.white,
+                                  ).withValues(alpha: 0.5),
                                   height: 1.3,
                                 ),
                               ),
@@ -199,11 +201,11 @@ class SprunDashboardState extends State<SprunDashboard>
                                       Haptics.light();
                                       p.setSprunTriggerIndex(-1);
                                     },
-                                    child: const GoopText(
+                                    child: GoopText(
                                       'Hide',
                                       style: TextStyle(
                                         fontSize: 11,
-                                        color: Colors.white38,
+                                        color: Skeuo.collapse(Colors.white38),
                                       ),
                                     ),
                                   ),
@@ -272,7 +274,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                         color: Skeuo.inkIf(Colors.orangeAccent),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'BOXING GLOVE',
                         style: TextStyle(
@@ -282,7 +284,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       GoopText(
                         stars == 3 ? 'SUPER PUNCH READY' : '$stars/3 stars',
                         style: TextStyle(
@@ -291,14 +293,16 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                           color:
                               stars == 3
                                   ? Skeuo.inkIf(Colors.orangeAccent)
-                                  : Colors.white.withValues(alpha: 0.5),
+                                  : Skeuo.collapse(
+                                    Colors.white,
+                                  ).withValues(alpha: 0.5),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -325,20 +329,22 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                     color:
                                         i < stars
                                             ? Skeuo.inkIf(Colors.orangeAccent)
-                                            : Colors.white.withValues(
-                                              alpha: 0.1,
-                                            ),
+                                            : Skeuo.collapse(
+                                              Colors.white,
+                                            ).withValues(alpha: 0.1),
                                   ),
                               ],
                             ),
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             GoopText(
                               stars == 3
                                   ? '3 stars! Charge the gun to consume stars and fire a high-damage super punch.'
                                   : 'Gains a star per kill (up to 3). Chance to stun on hit. Increases curse by 1.',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.6),
                                 height: 1.3,
                               ),
                             ),
@@ -456,7 +462,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                         color: Skeuo.inkIf(Colors.blueGrey),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'CIGARETTES',
                         style: TextStyle(
@@ -466,7 +472,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       GoopText(
                         '+$uses Cool',
                         style: TextStyle(
@@ -475,11 +481,11 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                           color: Skeuo.inkIf(Colors.blueGrey),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -494,7 +500,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -503,12 +509,14 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                                 _statChip('Cost', '-$uses half-hearts'),
                               ],
                             ),
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             GoopText(
                               'Each use: -half a heart, +1 Coolness. Coolness decreases active item cooldowns and increases luck.',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.6),
                                 height: 1.3,
                               ),
                             ),
@@ -578,7 +586,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
           label,
           style: TextStyle(
             fontSize: FontSizes.labelSmall,
-            color: Colors.white.withValues(alpha: 0.4),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
           ),
         ),
         GoopText(
@@ -651,7 +659,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                                 : Skeuo.inkIf(Colors.deepOrangeAccent),
                         size: 18,
                       ),
-                      const SizedBox(width: Insets.sm),
+                      SizedBox(width: Insets.sm),
                       GoopText(
                         'GUN SOUL',
                         style: TextStyle(
@@ -661,7 +669,7 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: Insets.sm,
@@ -700,11 +708,11 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Colors.white54,
+                        color: Skeuo.collapse(Colors.white54),
                       ),
                     ],
                   ),
@@ -719,14 +727,16 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             GoopText(
                               activated
                                   ? 'You died and respawned at floor start. Gun Soul is removed from your inventory. Reach the location of your death and interact with your soul to reclaim it — dying now will end the run.'
                                   : 'Grants +1 heart container. Upon death, respawns you at the start of the current floor with all items and guns retained. Enemies respawn.',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Colors.white.withValues(alpha: 0.6),
+                                color: Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.6),
                                 height: 1.3,
                               ),
                             ),

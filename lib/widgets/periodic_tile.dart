@@ -66,7 +66,9 @@ class _PeriodicTileState extends State<PeriodicTile>
   /// the same palette as [QualityBadge] so the badge and tile read as
   /// the same visual language.
   Color get _qualityColor =>
-      _quality.isEmpty ? Colors.white24 : QualityBadge.colorFor(_quality);
+      _quality.isEmpty
+          ? Skeuo.collapse(Colors.white24)
+          : QualityBadge.colorFor(_quality);
 
   Color _typeColor() {
     if (widget.gun != null) {
@@ -96,11 +98,11 @@ class _PeriodicTileState extends State<PeriodicTile>
       }
     }
     final it = widget.item;
-    if (it == null) return Colors.white54;
+    if (it == null) return Skeuo.collapse(Colors.white54);
     if (it.isCompanion) return Skeuo.inkIf(Colors.purpleAccent);
     if (it.isActive) return Skeuo.inkIf(Colors.lightBlueAccent);
     if (it.isPassive) return Skeuo.inkIf(Colors.lightGreenAccent);
-    return Colors.white54;
+    return Skeuo.collapse(Colors.white54);
   }
 
   @override
@@ -212,7 +214,9 @@ class _PeriodicTileState extends State<PeriodicTile>
     final rawQColor = _qualityColor;
     final isS = _quality.toUpperCase() == 'S';
     final qColor =
-        isS ? const Color(0xFFFFD700) : rawQColor; // Gold/yellow for S
+        isS
+            ? Skeuo.collapse(Color(0xFFFFD700))
+            : rawQColor; // Gold/yellow for S
     final isHighTier = isS || _quality.toUpperCase() == 'A';
 
     final cardShape = RoundedRectangleBorder(
@@ -220,14 +224,15 @@ class _PeriodicTileState extends State<PeriodicTile>
       side: BorderSide(
         color:
             isS
-                ? const Color(0xFFFFD700) // Gold border
+                ? Skeuo.collapse(Color(0xFFFFD700)) // Gold border
                 : qColor.withValues(alpha: isHighTier ? 0.85 : 0.35),
         width:
             isS ? 1.9 : (isHighTier ? 1.4 : 0.8), // Fatter border frame for S
       ),
     );
 
-    final cardBgColor = isS ? const Color(0xFF14120E) : null;
+    final cardBgColor =
+        isS ? Skeuo.collapse(Skeuo.collapse(Color(0xFF14120E))) : null;
 
     // Helper: Strikethrough for single-use active items
     Widget maybeStrikethrough(Widget child) {
@@ -269,9 +274,9 @@ class _PeriodicTileState extends State<PeriodicTile>
           child: Container(
             width: 9,
             height: 9,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0xFF66E07A),
+              color: Skeuo.collapse(Color(0xFF66E07A)),
             ),
           ),
         );
@@ -293,7 +298,9 @@ class _PeriodicTileState extends State<PeriodicTile>
                 ).withValues(alpha: 0.55 + 0.45 * t),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF66E07A).withValues(alpha: 0.55 * t),
+                    color: Skeuo.collapse(
+                      Color(0xFF66E07A),
+                    ).withValues(alpha: 0.55 * t),
                     blurRadius: 4 + 2 * t,
                   ),
                 ],
@@ -317,7 +324,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                 margin: const EdgeInsets.only(bottom: 2),
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.55),
+                  color: Skeuo.collapse(Colors.black).withValues(alpha: 0.55),
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
                     color: e.color.withValues(alpha: 0.65),
@@ -344,7 +351,8 @@ class _PeriodicTileState extends State<PeriodicTile>
         return Card(
           clipBehavior: Clip.antiAlias,
           margin: const EdgeInsets.all(3),
-          color: cardBgColor ?? const Color(0xFF17150F),
+          color:
+              cardBgColor ?? Skeuo.collapse(Skeuo.collapse(Color(0xFF17150F))),
           shape: cardShape,
           elevation: isHighTier ? 4 : 1,
           child: InkWell(
@@ -368,7 +376,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                           showRing: false,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Expanded(
                         child: GoopText(
                           _name.toUpperCase(),
@@ -377,16 +385,16 @@ class _PeriodicTileState extends State<PeriodicTile>
                           style: TextStyle(
                             fontSize: statsFontSize + 1,
                             fontWeight: FontWeight.w900,
-                            color: Colors.white,
+                            color: Skeuo.collapse(Colors.white),
                             letterSpacing: 0.5,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6),
                       maybeQualityBadge(size: 18),
                     ],
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   // Type badge + indicators row
                   Row(
                     children: [
@@ -414,7 +422,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                           ),
                         ),
                       ),
-                      const Spacer(),
+                      Spacer(),
                       if (widget.isTopDps)
                         Icon(
                           Icons.local_fire_department_rounded,
@@ -423,13 +431,13 @@ class _PeriodicTileState extends State<PeriodicTile>
                         ),
                     ],
                   ),
-                  const SizedBox(height: 6),
-                  const Divider(
+                  SizedBox(height: 6),
+                  Divider(
                     height: 1,
                     thickness: 0.5,
-                    color: Colors.white10,
+                    color: Skeuo.collapse(Colors.white10),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   // 2×3 stat grid — all stats visible
                   Expanded(
                     child:
@@ -492,7 +500,11 @@ class _PeriodicTileState extends State<PeriodicTile>
                                   _cleanStat(widget.item!.duration),
                                   Skeuo.inkIf(Colors.pinkAccent),
                                 ),
-                                ('CLASS', widget.item!.type, Colors.white60),
+                                (
+                                  'CLASS',
+                                  widget.item!.type,
+                                  Skeuo.collapse(Colors.white60),
+                                ),
                                 (
                                   'PRICE',
                                   _cleanStat(widget.item!.sellPrice),
@@ -575,7 +587,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(4, 3, 4, 5),
-                  color: Colors.white.withValues(alpha: 0.03),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.03),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -595,7 +607,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                       // tag (RANGE hidden per the declutter pass).
                       if (_typeTag.isNotEmpty ||
                           (isGun && _corner.isNotEmpty)) ...[
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -615,7 +627,7 @@ class _PeriodicTileState extends State<PeriodicTile>
                                 ),
                               ),
                             if (isGun && _corner.isNotEmpty) ...[
-                              const SizedBox(width: 4),
+                              SizedBox(width: 4),
                               GoopText(
                                 _corner,
                                 maxLines: 1,
@@ -627,15 +639,17 @@ class _PeriodicTileState extends State<PeriodicTile>
                                   // glance. Others stay dimmed.
                                   color:
                                       widget.isTopDps
-                                          ? const Color(0xFFFFD700)
+                                          ? Skeuo.collapse(Color(0xFFFFD700))
                                           : const Color(
                                             0xFFFFD54F,
                                           ).withValues(alpha: 0.6),
                                   shadows:
                                       widget.isTopDps
-                                          ? const [
+                                          ? [
                                             Shadow(
-                                              color: Color(0xAAFFD700),
+                                              color: Skeuo.collapse(
+                                                Color(0xAAFFD700),
+                                              ),
                                               blurRadius: 7,
                                             ),
                                           ]

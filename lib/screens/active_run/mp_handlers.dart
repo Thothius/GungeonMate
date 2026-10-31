@@ -26,11 +26,11 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
       builder:
           (ctx) => AlertDialog(
             backgroundColor: AppTheme.flair.card,
-            title: const GoopText(
+            title: GoopText(
               '\u{1F3B2} Gunfortuna Challenge! \u{1F3B2}',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
-                color: Color(0xFFFFD54F),
+                color: Skeuo.collapse(Color(0xFFFFD54F)),
                 letterSpacing: 1.0,
               ),
             ),
@@ -44,9 +44,9 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
                   Navigator.pop(ctx);
                   _mpSession?.sendDiceDecline();
                 },
-                child: const GoopText(
+                child: GoopText(
                   'DECLINE',
-                  style: TextStyle(color: Colors.white38),
+                  style: TextStyle(color: Skeuo.collapse(Colors.white38)),
                 ),
               ),
               FilledButton(
@@ -57,8 +57,8 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
                   showDiceRollDialog(context, isChallenged: true);
                 },
                 style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFFFFD54F),
-                  foregroundColor: Colors.black,
+                  backgroundColor: Skeuo.collapse(Color(0xFFFFD54F)),
+                  foregroundColor: Skeuo.collapse(Colors.black),
                 ),
                 child: const GoopText(
                   'ACCEPT',
@@ -133,11 +133,11 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
                   width: 36,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16),
                 GoopText(
                   'Send to $peerName',
                   style: TextStyle(
@@ -148,7 +148,7 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
                     ).colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -174,8 +174,10 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
-                Divider(color: Colors.white.withValues(alpha: 0.06)),
+                SizedBox(height: 16),
+                Divider(
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.06),
+                ),
                 const SizedBox(height: 8),
                 // Quick session teardown
                 TextButton.icon(
@@ -230,7 +232,7 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
               'This will disconnect from your partner. Your run data is preserved.',
               style: TextStyle(
                 fontSize: 12.5 * Responsive.factor(context),
-                color: Colors.white70,
+                color: Skeuo.collapse(Colors.white70),
                 height: 1.4,
               ),
             ),
@@ -245,7 +247,7 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
               FilledButton(
                 style: FilledButton.styleFrom(
                   backgroundColor: MpColors.danger,
-                  foregroundColor: Colors.white,
+                  foregroundColor: Skeuo.collapse(Colors.white),
                 ),
                 onPressed: () {
                   Navigator.pop(ctx);

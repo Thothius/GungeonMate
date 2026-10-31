@@ -89,24 +89,26 @@ class _KissAnimationState extends State<KissAnimation>
                       color: Skeuo.inkIf(Colors.pinkAccent),
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.6),
+                      color: Skeuo.collapse(
+                        Colors.black,
+                      ).withValues(alpha: 0.6),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: GoopText(
                       'A kiss from $name',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: Skeuo.collapse(Colors.white),
                       ),
                     ),
                   ),
@@ -237,14 +239,16 @@ class _SlapAnimationState extends State<SlapAnimation>
                                       : Skeuo.inkIf(Colors.red.shade700),
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 12),
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.7),
+                              color: Skeuo.collapse(
+                                Colors.black,
+                              ).withValues(alpha: 0.7),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: Skeuo.inkIf(

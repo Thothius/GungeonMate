@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// The six-option answer panel (A–F) for a quiz question.
 ///
@@ -114,21 +115,21 @@ class _AnswerTile extends StatelessWidget {
 
     final borderColor =
         isCorrect
-            ? const Color(0xFF4CAF50)
+            ? Skeuo.collapse(Color(0xFF4CAF50))
             : isWrong
-            ? const Color(0xFFE53935)
+            ? Skeuo.collapse(Color(0xFFE53935))
             : accent.withValues(alpha: dimmed ? 0.15 : 0.5);
     final fillTop =
         isCorrect
-            ? const Color(0xFF4CAF50).withValues(alpha: 0.25)
+            ? Skeuo.collapse(Color(0xFF4CAF50)).withValues(alpha: 0.25)
             : isWrong
-            ? const Color(0xFFE53935).withValues(alpha: 0.22)
+            ? Skeuo.collapse(Color(0xFFE53935)).withValues(alpha: 0.22)
             : accent.withValues(alpha: dimmed ? 0.03 : 0.10);
     final fillBottom =
         isCorrect
-            ? const Color(0xFF4CAF50).withValues(alpha: 0.10)
+            ? Skeuo.collapse(Color(0xFF4CAF50)).withValues(alpha: 0.10)
             : isWrong
-            ? const Color(0xFFE53935).withValues(alpha: 0.08)
+            ? Skeuo.collapse(Color(0xFFE53935)).withValues(alpha: 0.08)
             : accent.withValues(alpha: dimmed ? 0.01 : 0.03);
 
     return AnimatedOpacity(
@@ -165,7 +166,7 @@ class _AnswerTile extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const SizedBox(width: Insets.sm + 2),
+                SizedBox(width: Insets.sm + 2),
                 Container(
                   width: 30,
                   height: 30,
@@ -174,9 +175,9 @@ class _AnswerTile extends StatelessWidget {
                     shape: BoxShape.circle,
                     color:
                         isCorrect
-                            ? const Color(0xFF4CAF50)
+                            ? Skeuo.collapse(Color(0xFF4CAF50))
                             : isWrong
-                            ? const Color(0xFFE53935)
+                            ? Skeuo.collapse(Color(0xFFE53935))
                             : accent.withValues(alpha: 0.22),
                     border: Border.all(color: borderColor, width: 1.2),
                   ),
@@ -185,11 +186,14 @@ class _AnswerTile extends StatelessWidget {
                     style: TextStyle(
                       fontSize: FontSizes.bodyMedium,
                       fontWeight: FontWeight.w900,
-                      color: isCorrect || isWrong ? Colors.white : accent,
+                      color:
+                          isCorrect || isWrong
+                              ? Skeuo.collapse(Colors.white)
+                              : accent,
                     ),
                   ),
                 ),
-                const SizedBox(width: Insets.sm),
+                SizedBox(width: Insets.sm),
                 Expanded(
                   child: GoopText(
                     label,
@@ -199,27 +203,27 @@ class _AnswerTile extends StatelessWidget {
                       fontSize: fontSize,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.4,
-                      color: Colors.white.withValues(
-                        alpha: dimmed ? 0.6 : 0.95,
-                      ),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: dimmed ? 0.6 : 0.95),
                     ),
                   ),
                 ),
                 if (isCorrect)
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(right: Insets.sm),
                     child: Icon(
                       Icons.check_rounded,
-                      color: Color(0xFF4CAF50),
+                      color: Skeuo.collapse(Color(0xFF4CAF50)),
                       size: 20,
                     ),
                   ),
                 if (isWrong)
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(right: Insets.sm),
                     child: Icon(
                       Icons.close_rounded,
-                      color: Color(0xFFE53935),
+                      color: Skeuo.collapse(Color(0xFFE53935)),
                       size: 20,
                     ),
                   ),

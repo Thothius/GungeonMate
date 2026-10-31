@@ -289,13 +289,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       ),
                       if (widget.showBackButton &&
                           Navigator.canPop(context)) ...[
-                        const SizedBox(width: 6),
+                        SizedBox(width: 6),
                         IconButton(
                           tooltip: 'Close Browse',
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close_rounded,
                             size: 22,
-                            color: Colors.white70,
+                            color: Skeuo.collapse(Colors.white70),
                           ),
                           onPressed: () {
                             FocusManager.instance.primaryFocus?.unfocus();
@@ -355,7 +355,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
               color:
                   active
                       ? primary.withValues(alpha: 0.7)
-                      : Colors.white.withValues(alpha: 0.12),
+                      : Skeuo.collapse(Colors.white).withValues(alpha: 0.12),
               width: 1.2,
             ),
           ),
@@ -365,7 +365,10 @@ class _BrowseScreenState extends State<BrowseScreen> {
               Icon(
                 icon,
                 size: 17 * sf,
-                color: active ? primary : Colors.white.withValues(alpha: 0.45),
+                color:
+                    active
+                        ? primary
+                        : Skeuo.collapse(Colors.white).withValues(alpha: 0.45),
               ),
               SizedBox(width: 5 * sf),
               Flexible(
@@ -378,7 +381,11 @@ class _BrowseScreenState extends State<BrowseScreen> {
                     fontWeight: active ? FontWeight.w800 : FontWeight.w600,
                     letterSpacing: 0.6,
                     color:
-                        active ? primary : Colors.white.withValues(alpha: 0.5),
+                        active
+                            ? primary
+                            : Skeuo.collapse(
+                              Colors.white,
+                            ).withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -397,16 +404,16 @@ class _BrowseScreenState extends State<BrowseScreen> {
     // Real chest colors — D brown, C blue, B green, A red, S gold.
     final accent =
         tier == 'S'
-            ? const Color(0xFFFFD700)
+            ? Skeuo.collapse(Color(0xFFFFD700))
             : tier == 'A'
-            ? const Color(0xFFE53935)
+            ? Skeuo.collapse(Color(0xFFE53935))
             : tier == 'B'
-            ? const Color(0xFF43A047)
+            ? Skeuo.collapse(Color(0xFF43A047))
             : tier == 'C'
-            ? const Color(0xFF1E88E5)
+            ? Skeuo.collapse(Color(0xFF1E88E5))
             : tier == 'D'
-            ? const Color(0xFF8D6E63)
-            : Colors.white54;
+            ? Skeuo.collapse(Color(0xFF8D6E63))
+            : Skeuo.collapse(Colors.white54);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 3),
@@ -574,9 +581,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
   /// Synergies already fully satisfied by [owned] — the 'already hits'
   /// section on top of the synergies list.
   List<({String name, String owners})> _completedSynergies(
-    Set<String> owned,
-    Set<String> mainNames,
-    Set<String> coopNames,
+    final Set<String> owned,
+    final Set<String> mainNames,
+    final Set<String> coopNames,
     Player? coop,
     RunProvider p,
   ) {
@@ -612,9 +619,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
   /// The O(guns+items × synergies) candidate scan. Runs only when the
   /// inventory+query signature changes (see _synergyCandidatesList).
   List<(AnyEntry, List<({String name, String owners})>)> _computeHits(
-    Set<String> combined,
-    Set<String> mainNames,
-    Set<String> coopNames,
+    final Set<String> combined,
+    final Set<String> mainNames,
+    final Set<String> coopNames,
     Player? coop,
     RunProvider p,
   ) {
@@ -752,7 +759,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   size: 13,
                   color: Skeuo.inkIf(Colors.greenAccent),
                 ),
-                const SizedBox(width: 6),
+                SizedBox(width: 6),
                 GoopText(
                   'COMPLETE',
                   style: TextStyle(
@@ -792,14 +799,16 @@ class _BrowseScreenState extends State<BrowseScreen> {
                       Colors.greenAccent,
                     ).withValues(alpha: 0.5),
                   ),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6),
                   Expanded(
                     child: GoopText(
                       cs.name,
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white.withValues(alpha: 0.75),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.75),
                       ),
                     ),
                   ),
@@ -835,7 +844,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
         }
         if (completed.isNotEmpty && i == completed.length + 1) {
           return Divider(
-            color: Colors.white.withValues(alpha: 0.10),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.10),
             height: 16,
             thickness: 1,
           );
@@ -853,7 +862,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     BuildContext c,
     RunProvider p,
     ({String name, String owners}) syn,
-    Set<String> combined,
+    final Set<String> combined,
     bool isCoop,
   ) {
     final synObj = p.allSynergies.where((s) => s.name == syn.name).firstOrNull;
@@ -867,7 +876,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
       decoration: BoxDecoration(
         color: AppTheme.flair.card.withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+        border: Border.all(
+          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.10),
+        ),
       ),
       child: Row(
         children: [
@@ -880,7 +891,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   style: TextStyle(
                     fontSize: FontSizes.bodyMedium,
                     fontWeight: FontWeight.w900,
-                    color: Colors.white.withValues(alpha: 0.92),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.92),
                   ),
                 ),
                 if (isCoop)
@@ -996,7 +1007,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
           color:
               owned
                   ? Skeuo.inkIf(Colors.greenAccent).withValues(alpha: 0.8)
-                  : Colors.white.withValues(alpha: 0.25),
+                  : Skeuo.collapse(Colors.white).withValues(alpha: 0.25),
           width: owned ? 1.6 : 1,
         ),
       ),
@@ -1015,14 +1026,16 @@ class _BrowseScreenState extends State<BrowseScreen> {
                         (_, _, _) => Icon(
                           Icons.help_outline,
                           size: 14,
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.4),
                         ),
                   ),
                 )
                 : Icon(
                   Icons.help_outline,
                   size: 14,
-                  color: Colors.white.withValues(alpha: 0.4),
+                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
                 ),
       ),
     );
@@ -1045,7 +1058,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     BuildContext c,
     RunProvider p,
     Gun g, {
-    List<String>? completes,
+    final List<String>? completes,
     String? ownerLabel,
   }) {
     final syn = p.synergyCountFor(g.name);
@@ -1099,7 +1112,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
     BuildContext c,
     RunProvider p,
     Item it, {
-    List<String>? completes,
+    final List<String>? completes,
     String? ownerLabel,
   }) {
     final syn = p.synergyCountFor(it.name);
@@ -1193,13 +1206,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
             color:
                 active
                     ? AppTheme.flair.primary.withValues(alpha: 0.16)
-                    : Colors.white.withValues(alpha: 0.04),
+                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.04),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color:
                   active
                       ? AppTheme.flair.primary
-                      : Colors.white.withValues(alpha: 0.15),
+                      : Skeuo.collapse(Colors.white).withValues(alpha: 0.15),
               width: active ? 1.6 : 1.0,
             ),
           ),
@@ -1212,7 +1225,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 color:
                     active
                         ? AppTheme.flair.primary
-                        : Colors.white.withValues(alpha: 0.5),
+                        : Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
               ),
               SizedBox(width: 5 * sf),
               GoopText(
@@ -1224,7 +1237,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   color:
                       active
                           ? AppTheme.flair.primary
-                          : Colors.white.withValues(alpha: 0.5),
+                          : Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -1252,13 +1265,13 @@ class _BrowseScreenState extends State<BrowseScreen> {
             color:
                 active
                     ? AppTheme.flair.primary.withValues(alpha: 0.16)
-                    : Colors.white.withValues(alpha: 0.04),
+                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.04),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color:
                   active
                       ? AppTheme.flair.primary
-                      : Colors.white.withValues(alpha: 0.15),
+                      : Skeuo.collapse(Colors.white).withValues(alpha: 0.15),
               width: active ? 1.6 : 1.0,
             ),
           ),
@@ -1274,7 +1287,7 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   color:
                       active
                           ? AppTheme.flair.primary
-                          : Colors.white.withValues(alpha: 0.5),
+                          : Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
                 ),
               ),
               SizedBox(width: 5 * sf),
@@ -1290,7 +1303,9 @@ class _BrowseScreenState extends State<BrowseScreen> {
                   color:
                       active
                           ? AppTheme.flair.primary
-                          : Colors.white.withValues(alpha: 0.35),
+                          : Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.35),
                 ),
               ),
             ],

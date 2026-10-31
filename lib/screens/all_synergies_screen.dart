@@ -51,7 +51,7 @@ class AllSynergiesScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.close, color: Colors.white70),
+            icon: Icon(Icons.close, color: Skeuo.collapse(Colors.white70)),
             tooltip: 'Close',
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -71,14 +71,18 @@ class AllSynergiesScreen extends StatelessWidget {
                     active.length,
                     Skeuo.inkIf(Colors.greenAccent),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   _summaryChip(
                     'PARTIAL',
                     partial.length,
                     Skeuo.inkIf(Colors.amberAccent),
                   ),
-                  const SizedBox(width: 8),
-                  _summaryChip('LOCKED', locked.length, Colors.white38),
+                  SizedBox(width: 8),
+                  _summaryChip(
+                    'LOCKED',
+                    locked.length,
+                    Skeuo.collapse(Colors.white38),
+                  ),
                 ],
               ),
             ),
@@ -129,22 +133,22 @@ class AllSynergiesScreen extends StatelessWidget {
                                   columns: gridCols,
                                 ),
                               ],
-                              const SliverToBoxAdapter(
-                                child: SizedBox(height: 80),
-                              ),
+                              SliverToBoxAdapter(child: SizedBox(height: 80)),
                             ],
                           ),
                         ),
                         Container(
                           width: 1,
-                          color: Colors.white.withValues(alpha: 0.06),
+                          color: Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.06),
                         ),
                         Expanded(
                           child: CustomScrollView(
                             slivers: [
                               _columnHeader(
                                 'NOT ACQUIRED',
-                                Colors.white38,
+                                Skeuo.collapse(Colors.white38),
                                 locked.length,
                               ),
                               _SynergyGrid(
@@ -197,12 +201,15 @@ class AllSynergiesScreen extends StatelessWidget {
                           columns: 2,
                         ),
                       ],
-                      const SliverToBoxAdapter(
-                        child: Divider(color: Colors.white12, height: 24),
+                      SliverToBoxAdapter(
+                        child: Divider(
+                          color: Skeuo.collapse(Colors.white12),
+                          height: 24,
+                        ),
                       ),
                       _columnHeader(
                         'NOT ACQUIRED',
-                        Colors.white38,
+                        Skeuo.collapse(Colors.white38),
                         locked.length,
                       ),
                       _SynergyGrid(
@@ -365,7 +372,9 @@ class _SynergyCard extends StatelessWidget {
     final cardColor =
         isActive
             ? Skeuo.inkIf(Colors.greenAccent)
-            : (hasAny ? Skeuo.inkIf(Colors.amberAccent) : Colors.white38);
+            : (hasAny
+                ? Skeuo.inkIf(Colors.amberAccent)
+                : Skeuo.collapse(Colors.white38));
 
     // Compact row: synergy icon + name + required pieces share the top
     // line; the effect desc sits on the line below (per user request —
@@ -433,7 +442,7 @@ class _SynergyCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 10.5,
-                    color: Colors.white.withValues(alpha: 0.55),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.55),
                     height: 1.25,
                   ),
                 ),
@@ -459,13 +468,13 @@ class _MiniChip extends StatelessWidget {
             ? (isAnyOf
                 ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.2)
                 : Skeuo.inkIf(Colors.green).withValues(alpha: 0.15))
-            : Colors.white.withValues(alpha: 0.08);
+            : Skeuo.collapse(Colors.white).withValues(alpha: 0.08);
     final fg =
         owned
             ? (isAnyOf
                 ? Skeuo.inkIf(Colors.amber.shade100)
                 : Skeuo.inkIf(Colors.greenAccent.shade200))
-            : Colors.white54;
+            : Skeuo.collapse(Colors.white54);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: BoxDecoration(

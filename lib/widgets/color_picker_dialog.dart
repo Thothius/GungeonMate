@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/tokens.dart';
 import '../services/haptics.dart';
+import 'skeuo/skeuo_tokens.dart';
 
 /// A compact HSV color picker dialog for custom theme palette editing.
 ///
@@ -272,8 +273,8 @@ class _ColorPickerDialogState extends State<_ColorPickerDialog> {
             backgroundColor: flair.primary,
             foregroundColor:
                 flair.primary.computeLuminance() > 0.5
-                    ? Colors.black87
-                    : Colors.white,
+                    ? Skeuo.collapse(Colors.black87)
+                    : Skeuo.collapse(Colors.white),
           ),
           onPressed: () {
             Haptics.selection();
@@ -312,7 +313,7 @@ class _SVPainter extends CustomPainter {
           ..shader = LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
-            colors: [Colors.white, hueColor],
+            colors: [Skeuo.collapse(Colors.white), hueColor],
           ).createShader(rect);
     canvas.drawRect(rect, satPaint);
 
@@ -322,7 +323,7 @@ class _SVPainter extends CustomPainter {
           ..shader = LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.transparent, Colors.black],
+            colors: [Colors.transparent, Skeuo.collapse(Colors.black)],
           ).createShader(rect);
     canvas.drawRect(rect, valPaint);
 
@@ -331,7 +332,7 @@ class _SVPainter extends CustomPainter {
     final cy = (1.0 - hsv.value) * size.height;
     final cursorPaint =
         Paint()
-          ..color = Colors.white
+          ..color = Skeuo.collapse(Colors.white)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 2.5;
     canvas.drawCircle(Offset(cx, cy), 10, cursorPaint);
@@ -376,7 +377,7 @@ class _HuePainter extends CustomPainter {
     final cy = (hue / 360.0) * size.height;
     final cursorPaint =
         Paint()
-          ..color = Colors.white
+          ..color = Skeuo.collapse(Colors.white)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 3;
     canvas.drawRRect(

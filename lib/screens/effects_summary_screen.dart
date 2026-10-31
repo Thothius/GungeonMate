@@ -106,7 +106,7 @@ class _Summary extends StatelessWidget {
               color: Skeuo.inkIf(Colors.amber),
               size: 22,
             ),
-            const SizedBox(width: 10),
+            SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +122,9 @@ class _Summary extends StatelessWidget {
                     '$totalSources sources · $groupCount categories',
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -149,14 +151,16 @@ class _Empty extends StatelessWidget {
             Icon(
               Icons.auto_awesome_outlined,
               size: 48,
-              color: Colors.white.withValues(alpha: 0.3),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             GoopText(
               loadoutEmpty
                   ? 'No loadout yet — pick up some stuff'
                   : 'Nothing detected in current effects text',
-              style: TextStyle(color: Colors.white.withValues(alpha: 0.65)),
+              style: TextStyle(
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
+              ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -257,7 +261,7 @@ class _EffectRow extends StatelessWidget {
                 ? null
                 : Border(
                   bottom: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.05),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
                   ),
                 ),
       ),
@@ -275,7 +279,7 @@ class _EffectRow extends StatelessWidget {
             ),
             child: Icon(tag.icon, size: 16, color: catColor),
           ),
-          const SizedBox(width: 10),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,7 +301,9 @@ class _EffectRow extends StatelessWidget {
                         vertical: 1,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.05),
                         borderRadius: BorderRadius.all(Radii.sm),
                       ),
                       child: GoopText(
@@ -314,12 +320,14 @@ class _EffectRow extends StatelessWidget {
                 // per-source excerpts — saves a line of vertical space
                 // per row and the excerpts are strictly more useful.
                 if (!hasAnyExcerpt) ...[
-                  const SizedBox(height: 1),
+                  SizedBox(height: 1),
                   GoopText(
                     tag.blurb,
                     style: TextStyle(
                       fontSize: 11.5,
-                      color: Colors.white.withValues(alpha: 0.7),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.7),
                       height: 1.25,
                     ),
                   ),
@@ -361,7 +369,7 @@ class _SourceLine extends StatelessWidget {
             size: 11,
             color: c,
           ),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Expanded(
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -379,14 +387,18 @@ class _SourceLine extends StatelessWidget {
                     '  —  ',
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
-                      color: Colors.white.withValues(alpha: 0.78),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.78),
                     ),
                   ),
                   GoopText(
                     occurrence.excerpt,
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
-                      color: Colors.white.withValues(alpha: 0.78),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.78),
                       fontWeight: FontWeight.w500,
                     ),
                   ),

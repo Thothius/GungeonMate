@@ -64,7 +64,7 @@ class _BulletLine extends StatelessWidget {
             : Icon(
               Icons.fiber_manual_record,
               size: 5,
-              color: Colors.white.withValues(alpha: 0.6),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
             );
     return Padding(
       padding: EdgeInsets.only(left: depth * 18.0, top: depth == 0 ? 6 : 4),
@@ -97,7 +97,7 @@ class _BulletLine extends StatelessWidget {
               padding: const EdgeInsets.only(left: 22, top: 6),
               child: Container(
                 height: 0.5,
-                color: Colors.white.withValues(alpha: 0.06),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.06),
               ),
             ),
           ...List.generate(bullet.sub.length, (i) {
@@ -216,7 +216,7 @@ class _WikiSectionState extends State<WikiSection> {
                             ? Icon(
                               _expanded ? Icons.expand_less : Icons.expand_more,
                               size: 22,
-                              color: Colors.white54,
+                              color: Skeuo.collapse(Colors.white54),
                             )
                             : null,
                   ),

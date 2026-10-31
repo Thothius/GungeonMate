@@ -9,6 +9,7 @@ import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../services/mp_session.dart';
 import '../utils/responsive.dart';
+import 'skeuo/skeuo_tokens.dart';
 
 /// Dismissable reconnect dialog + persistent banner.
 ///
@@ -290,7 +291,7 @@ class _ReconnectDialog extends StatelessWidget {
           FilledButton.icon(
             style: FilledButton.styleFrom(
               backgroundColor: MpColors.reconnecting,
-              foregroundColor: const Color(0xFF1E1E22),
+              foregroundColor: Skeuo.collapse(Color(0xFF1E1E22)),
               padding: EdgeInsets.symmetric(
                 horizontal: 14 * sf,
                 vertical: 10 * sf,

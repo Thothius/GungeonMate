@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quality_badge.dart';
+import 'skeuo/skeuo_tokens.dart';
 
 /// Renders a pixel-art sprite inside a quality-colored ring.
 /// If [assetPath] is empty or fails to load, falls back to a Material [fallback]
@@ -29,12 +30,14 @@ class GameIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final rawColor =
-        quality.isEmpty ? Colors.white24 : QualityBadge.colorFor(quality);
+        quality.isEmpty
+            ? Skeuo.collapse(Colors.white24)
+            : QualityBadge.colorFor(quality);
     // S-tier uses near-black for the filled badge, but near-black ring
     // chrome is invisible on dark panels. Use gold for the ring so S-tier
     // items/guns are clearly framed on any background.
     final isS = quality.toUpperCase() == 'S';
-    final ringColor = isS ? const Color(0xFFFFD700) : rawColor;
+    final ringColor = isS ? Skeuo.collapse(Color(0xFFFFD700)) : rawColor;
 
     final imgScale = showRing ? 0.72 : 0.83;
     final iconScale = showRing ? 0.58 : 0.67;
@@ -53,7 +56,7 @@ class GameIcon extends StatelessWidget {
                   (_, _, _) => Icon(
                     fallback,
                     size: size * iconScale,
-                    color: Colors.white,
+                    color: Skeuo.collapse(Colors.white),
                   ),
             )
             : (assetPath.isNotEmpty && assetPath.startsWith('http'))
@@ -67,10 +70,14 @@ class GameIcon extends StatelessWidget {
                   (_, _, _) => Icon(
                     fallback,
                     size: size * iconScale,
-                    color: Colors.white,
+                    color: Skeuo.collapse(Colors.white),
                   ),
             )
-            : Icon(fallback, size: size * iconScale, color: Colors.white);
+            : Icon(
+              fallback,
+              size: size * iconScale,
+              color: Skeuo.collapse(Colors.white),
+            );
 
     // Wrap with Semantics: if a label is provided, announce it; otherwise
     // exclude the decorative icon from the accessibility tree.

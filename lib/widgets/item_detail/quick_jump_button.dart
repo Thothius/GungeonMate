@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/goop_talk_engine.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 class QuickJumpButton extends StatelessWidget {
   final String label;
@@ -23,11 +24,14 @@ class QuickJumpButton extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               active
-                  ? Colors.white.withValues(alpha: 0.15)
-                  : Colors.white.withValues(alpha: 0.03),
+                  ? Skeuo.collapse(Colors.white).withValues(alpha: 0.15)
+                  : Skeuo.collapse(Colors.white).withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: active ? Colors.white54 : Colors.white12,
+            color:
+                active
+                    ? Skeuo.collapse(Colors.white54)
+                    : Skeuo.collapse(Colors.white12),
             width: 1,
           ),
         ),
@@ -36,7 +40,10 @@ class QuickJumpButton extends StatelessWidget {
           style: TextStyle(
             fontSize: 11,
             fontWeight: active ? FontWeight.bold : FontWeight.normal,
-            color: active ? Colors.white : Colors.white60,
+            color:
+                active
+                    ? Skeuo.collapse(Colors.white)
+                    : Skeuo.collapse(Colors.white60),
           ),
         ),
       ),

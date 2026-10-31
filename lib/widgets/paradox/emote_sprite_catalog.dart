@@ -28,7 +28,7 @@ class EmoteSpriteCatalog {
   EmoteSpriteCatalog._();
 
   static List<EmoteSprite> _all = [];
-  static final Map<String, EmoteSprite> _byKey = {};
+  static Map<String, EmoteSprite> _byKey = {};
   static bool _loaded = false;
 
   static List<EmoteSprite> get all => _all;

@@ -116,8 +116,8 @@ class EffectsTileState extends State<EffectsTile> {
                       color: Skeuo.inkIf(Colors.amber),
                       size: 18,
                     ),
-                    const SizedBox(width: 8),
-                    const GoopText(
+                    SizedBox(width: 8),
+                    GoopText(
                       'Effects',
                       style: TextStyle(
                         fontSize: 13,
@@ -125,7 +125,7 @@ class EffectsTileState extends State<EffectsTile> {
                         letterSpacing: 0.4,
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 7,
@@ -134,7 +134,9 @@ class EffectsTileState extends State<EffectsTile> {
                       decoration: BoxDecoration(
                         color:
                             totalTags == 0
-                                ? Colors.white.withValues(alpha: 0.05)
+                                ? Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.05)
                                 : Skeuo.inkIf(
                                   Colors.amber,
                                 ).withValues(alpha: 0.18),
@@ -147,19 +149,21 @@ class EffectsTileState extends State<EffectsTile> {
                           fontWeight: FontWeight.w800,
                           color:
                               totalTags == 0
-                                  ? Colors.white.withValues(alpha: 0.6)
+                                  ? Skeuo.collapse(
+                                    Colors.white,
+                                  ).withValues(alpha: 0.6)
                                   : Skeuo.inkIf(Colors.amber),
                         ),
                       ),
                     ),
-                    const Spacer(),
+                    Spacer(),
                     if (totalTags > 0)
                       IconButton(
                         tooltip: 'Open detailed breakdown',
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.open_in_new,
                           size: 16,
-                          color: Colors.white54,
+                          color: Skeuo.collapse(Colors.white54),
                         ),
                         onPressed:
                             () => Navigator.push(
@@ -173,9 +177,9 @@ class EffectsTileState extends State<EffectsTile> {
                       AnimatedRotation(
                         turns: _expanded ? 0.5 : 0,
                         duration: const Duration(milliseconds: 180),
-                        child: const Icon(
+                        child: Icon(
                           Icons.expand_more,
-                          color: Colors.white54,
+                          color: Skeuo.collapse(Colors.white54),
                         ),
                       )
                     else
@@ -185,7 +189,9 @@ class EffectsTileState extends State<EffectsTile> {
                           'none',
                           style: TextStyle(
                             fontSize: 11,
-                            color: Colors.white.withValues(alpha: 0.4),
+                            color: Skeuo.collapse(
+                              Colors.white,
+                            ).withValues(alpha: 0.4),
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -267,14 +273,20 @@ class HeaderMenu extends StatelessWidget {
       height: 44,
       margin: const EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.06),
+        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.06),
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+        border: Border.all(
+          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.12),
+        ),
       ),
       child: IconButton(
         tooltip: 'Run tools',
         padding: EdgeInsets.zero,
-        icon: const Icon(Icons.tune_rounded, size: 24, color: Colors.white70),
+        icon: Icon(
+          Icons.tune_rounded,
+          size: 24,
+          color: Skeuo.collapse(Colors.white70),
+        ),
         onPressed: () {
           Haptics.selection();
           showModalBottomSheet<void>(
@@ -305,6 +317,10 @@ class _RunToolsSheet extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final flair = AppTheme.flair;
+    // Parked feature — hide the Neo-Skeuo row until Phase B ships.
+    if (label.startsWith('Neo-Skeuo') && !AppTheme.kNeoSkeuoEnabled) {
+      return const SizedBox.shrink();
+    }
     return InkWell(
       borderRadius: BorderRadius.all(Radii.sm),
       onTap: () {
@@ -390,7 +406,7 @@ class _RunToolsSheet extends StatelessWidget {
               sheetCtx,
               icon: Icons.menu_book_rounded,
               label: 'Ammonomicon',
-              iconColor: const Color(0xFF4DD0E1),
+              iconColor: Skeuo.collapse(Color(0xFF4DD0E1)),
               onTap: () {
                 if (sheetCtx.mounted) {
                   Navigator.push(
@@ -418,7 +434,7 @@ class _RunToolsSheet extends StatelessWidget {
               sheetCtx,
               icon: Icons.casino_rounded,
               label: 'Dice Roller',
-              iconColor: const Color(0xFFFFD54F),
+              iconColor: Skeuo.collapse(Color(0xFFFFD54F)),
               onTap: () => showDiceRollDialog(sheetCtx),
             ),
             if (mpSession.isActive)
@@ -431,7 +447,7 @@ class _RunToolsSheet extends StatelessWidget {
                     () => showModalBottomSheet<void>(
                       context: sheetCtx,
                       isScrollControlled: true,
-                      backgroundColor: const Color(0xFF140B22),
+                      backgroundColor: Skeuo.collapse(Color(0xFF140B22)),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(18),
@@ -483,8 +499,8 @@ class _RunToolsSheet extends StatelessWidget {
               label: 'Neo-Skeuo ${AppTheme.isSkeuo ? '· ON' : '· OFF'}',
               iconColor:
                   AppTheme.isSkeuo
-                      ? const Color(0xFF1F1B16)
-                      : const Color(0xFF8D6E63),
+                      ? Skeuo.collapse(Color(0xFF1F1B16))
+                      : Skeuo.collapse(Color(0xFF8D6E63)),
               onTap: () {
                 if (AppTheme.isSkeuo) {
                   AppTheme.exitSkeuo();
@@ -506,7 +522,7 @@ class _RunToolsSheet extends StatelessWidget {
               iconColor:
                   AppTheme.isSkeuo
                       ? flair.primary.withValues(alpha: 0.35)
-                      : const Color(0xFFB388FF),
+                      : Skeuo.collapse(Color(0xFFB388FF)),
               onTap: () {
                 if (AppTheme.isSkeuo || !sheetCtx.mounted) return;
                 Navigator.push(
@@ -519,7 +535,7 @@ class _RunToolsSheet extends StatelessWidget {
               sheetCtx,
               icon: Icons.quiz_rounded,
               label: 'Quiz',
-              iconColor: const Color(0xFF66BB6A),
+              iconColor: Skeuo.collapse(Color(0xFF66BB6A)),
               onTap: () {
                 if (sheetCtx.mounted) {
                   Navigator.push(
@@ -612,8 +628,8 @@ class SectionHeaderSliver extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
         child: Row(
           children: [
-            Icon(icon, size: 18, color: Colors.white70),
-            const SizedBox(width: 6),
+            Icon(icon, size: 18, color: Skeuo.collapse(Colors.white70)),
+            SizedBox(width: 6),
             GoopText(
               '$title  ',
               style: const TextStyle(
@@ -625,7 +641,7 @@ class SectionHeaderSliver extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.08),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -636,7 +652,7 @@ class SectionHeaderSliver extends StatelessWidget {
                 ),
               ),
             ),
-            const Spacer(),
+            Spacer(),
             if (sortLabel != null && onTapSort != null && count > 1)
               Material(
                 color: Colors.transparent,
@@ -646,10 +662,14 @@ class SectionHeaderSliver extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(8, 4, 6, 4),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
+                      color: Skeuo.collapse(
+                        Colors.white,
+                      ).withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.14),
+                        color: Skeuo.collapse(
+                          Colors.white,
+                        ).withValues(alpha: 0.14),
                       ),
                     ),
                     child: Row(
@@ -657,34 +677,38 @@ class SectionHeaderSliver extends StatelessWidget {
                       children: [
                         GoopText(
                           sortLabel!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white70,
+                            color: Skeuo.collapse(Colors.white70),
                             letterSpacing: 0.3,
                           ),
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.sort, size: 13, color: Colors.white54),
+                        SizedBox(width: 4),
+                        Icon(
+                          Icons.sort,
+                          size: 13,
+                          color: Skeuo.collapse(Colors.white54),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
             if (showLayoutSelector && onLayoutChanged != null) ...[
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               PopupMenuButton<Object>(
                 tooltip: 'Select layout style',
                 icon: Icon(
                   getActiveLayoutIcon(),
                   size: 18,
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                 ),
                 offset: const Offset(0, 36),
-                color: const Color(0xFF232326),
+                color: Skeuo.collapse(Color(0xFF232326)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
-                  side: const BorderSide(color: Colors.white10),
+                  side: BorderSide(color: Skeuo.collapse(Colors.white10)),
                 ),
                 onSelected: onLayoutChanged,
                 itemBuilder:
@@ -699,9 +723,9 @@ class SectionHeaderSliver extends StatelessWidget {
                               color:
                                   currentInvView == InvView.list
                                       ? Skeuo.inkIf(Colors.amberAccent)
-                                      : Colors.white60,
+                                      : Skeuo.collapse(Colors.white60),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             GoopText(
                               'List View',
                               style: TextStyle(
@@ -709,13 +733,13 @@ class SectionHeaderSliver extends StatelessWidget {
                                 color:
                                     currentInvView == InvView.list
                                         ? Skeuo.inkIf(Colors.amberAccent)
-                                        : Colors.white,
+                                        : Skeuo.collapse(Colors.white),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const PopupMenuDivider(height: 1),
+                      PopupMenuDivider(height: 1),
                       PopupMenuItem(
                         value: InventoryDisplayMode.classicPeriodic,
                         child: Row(
@@ -729,9 +753,9 @@ class SectionHeaderSliver extends StatelessWidget {
                                               InventoryDisplayMode
                                                   .classicPeriodic)
                                       ? Skeuo.inkIf(Colors.amberAccent)
-                                      : Colors.white60,
+                                      : Skeuo.collapse(Colors.white60),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             GoopText(
                               'Periodic Grid',
                               style: TextStyle(
@@ -742,7 +766,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                                 InventoryDisplayMode
                                                     .classicPeriodic)
                                         ? Skeuo.inkIf(Colors.amberAccent)
-                                        : Colors.white,
+                                        : Skeuo.collapse(Colors.white),
                               ),
                             ),
                           ],
@@ -761,9 +785,9 @@ class SectionHeaderSliver extends StatelessWidget {
                                               InventoryDisplayMode
                                                   .tacticalStats)
                                       ? Skeuo.inkIf(Colors.amberAccent)
-                                      : Colors.white60,
+                                      : Skeuo.collapse(Colors.white60),
                             ),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             GoopText(
                               'Tactical Stats',
                               style: TextStyle(
@@ -774,7 +798,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                                 InventoryDisplayMode
                                                     .tacticalStats)
                                         ? Skeuo.inkIf(Colors.amberAccent)
-                                        : Colors.white,
+                                        : Skeuo.collapse(Colors.white),
                               ),
                             ),
                           ],

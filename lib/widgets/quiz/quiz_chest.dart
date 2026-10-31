@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../../utils/reduce_motion.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// The tappable loot chest for the Gungeonmaster Quiz.
 ///
@@ -222,7 +223,7 @@ class _SplitChest extends StatelessWidget {
           (_, _, _) => Icon(
             Icons.inventory_2_rounded,
             size: size * 0.7,
-            color: Colors.white54,
+            color: Skeuo.collapse(Colors.white54),
           ),
     );
 
@@ -305,16 +306,15 @@ class _PoofPainter extends CustomPainter {
       final dist = ease * size.shortestSide * (0.45 + jitter * 0.5);
       final r = (1 - t) * (3.5 + jitter * 5);
       final pos = center + Offset(cos(angle) * dist, sin(angle) * dist);
-      paint.color = (i.isEven ? Colors.white : accent).withValues(
-        alpha: (1 - t) * 0.9,
-      );
+      paint.color = (i.isEven ? Skeuo.collapse(Colors.white) : accent)
+          .withValues(alpha: (1 - t) * 0.9);
       canvas.drawCircle(pos, r.clamp(0.5, 10.0), paint);
     }
     // Central flash ring that expands and fades with the burst.
     paint
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3 * (1 - t)
-      ..color = Colors.white.withValues(alpha: (1 - t) * 0.7);
+      ..color = Skeuo.collapse(Colors.white).withValues(alpha: (1 - t) * 0.7);
     canvas.drawCircle(center, ease * size.shortestSide * 0.55, paint);
   }
 

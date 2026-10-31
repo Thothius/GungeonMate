@@ -66,7 +66,7 @@ class _StatGrid extends StatelessWidget {
               style: TextStyle(
                 fontSize: labelSize,
                 fontWeight: FontWeight.bold,
-                color: Colors.white60,
+                color: Skeuo.collapse(Colors.white60),
                 letterSpacing: 0.3,
               ),
             ),

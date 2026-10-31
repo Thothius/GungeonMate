@@ -5,6 +5,7 @@ import '../../utils/asset_paths.dart';
 import '../../utils/responsive.dart';
 import '../scale_button.dart';
 import 'avatar_frame.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 Future<String?> showAvatarPicker(BuildContext context, String selected) {
   return showDialog<String>(
@@ -56,10 +57,12 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
   Widget build(BuildContext context) {
     final sf = Responsive.factor(context);
     return Dialog(
-      backgroundColor: const Color(0xFF12081F),
+      backgroundColor: Skeuo.collapse(Color(0xFF12081F)),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(color: const Color(0xFF7C4DFF).withValues(alpha: 0.4)),
+        side: BorderSide(
+          color: Skeuo.collapse(Color(0xFF7C4DFF)).withValues(alpha: 0.4),
+        ),
       ),
       child: Padding(
         padding: EdgeInsets.all(16 * sf),
@@ -85,7 +88,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                   Icon(
                     Icons.arrow_back_rounded,
                     size: 16 * sf,
-                    color: const Color(0xFFB388FF),
+                    color: Skeuo.collapse(Color(0xFFB388FF)),
                   ),
                   SizedBox(width: 4 * sf),
                   GoopText(
@@ -94,20 +97,20 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                       fontSize: 12 * sf,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
-                      color: const Color(0xFFB388FF),
+                      color: Skeuo.collapse(Color(0xFFB388FF)),
                     ),
                   ),
                 ],
               ),
             ),
-            const Spacer(),
+            Spacer(),
             GoopText(
               'PICK A FRAME',
               style: TextStyle(
                 fontSize: 13 * sf,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.4,
-                color: const Color(0xFFB388FF),
+                color: Skeuo.collapse(Color(0xFFB388FF)),
               ),
             ),
           ],
@@ -121,7 +124,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
             fontSize: 12 * sf,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.2,
-            color: Colors.white.withValues(alpha: 0.6),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
           ),
         ),
         SizedBox(height: 14 * sf),
@@ -156,22 +159,22 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color: Colors.white,
+                                color: Skeuo.collapse(Colors.white),
                                 width: 2.5,
                               ),
                             ),
                             child: Align(
                               alignment: Alignment.bottomRight,
                               child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFB388FF),
+                                decoration: BoxDecoration(
+                                  color: Skeuo.collapse(Color(0xFFB388FF)),
                                   shape: BoxShape.circle,
                                 ),
                                 padding: const EdgeInsets.all(2),
                                 child: Icon(
                                   Icons.check,
                                   size: 12 * sf,
-                                  color: Colors.black,
+                                  color: Skeuo.collapse(Colors.black),
                                 ),
                               ),
                             ),
@@ -187,8 +190,10 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                         letterSpacing: 0.8,
                         color:
                             frame == f.id
-                                ? const Color(0xFFB388FF)
-                                : Colors.white.withValues(alpha: 0.45),
+                                ? Skeuo.collapse(Color(0xFFB388FF))
+                                : Skeuo.collapse(
+                                  Colors.white,
+                                ).withValues(alpha: 0.45),
                       ),
                     ),
                   ],
@@ -209,10 +214,10 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 12 * sf),
         decoration: BoxDecoration(
-          color: const Color(0xFF7C4DFF).withValues(alpha: 0.25),
+          color: Skeuo.collapse(Color(0xFF7C4DFF)).withValues(alpha: 0.25),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: const Color(0xFFB388FF).withValues(alpha: 0.6),
+            color: Skeuo.collapse(Color(0xFFB388FF)).withValues(alpha: 0.6),
           ),
         ),
         child: Center(
@@ -222,7 +227,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
               fontSize: 14 * sf,
               fontWeight: FontWeight.w900,
               letterSpacing: 1.4,
-              color: const Color(0xFFB388FF),
+              color: Skeuo.collapse(Color(0xFFB388FF)),
             ),
           ),
         ),
@@ -244,7 +249,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                 fontSize: 13 * sf,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.4,
-                color: const Color(0xFFB388FF),
+                color: Skeuo.collapse(Color(0xFFB388FF)),
               ),
             ),
             // Live preview of the composite pick.
@@ -272,7 +277,9 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                       return Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.05),
+                            color: Skeuo.collapse(
+                              Colors.white,
+                            ).withValues(alpha: 0.05),
                           ),
                         ),
                       );
@@ -295,8 +302,10 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                           border: Border.all(
                             color:
                                 isSel
-                                    ? const Color(0xFFB388FF)
-                                    : Colors.white.withValues(alpha: 0.15),
+                                    ? Skeuo.collapse(Color(0xFFB388FF))
+                                    : Skeuo.collapse(
+                                      Colors.white,
+                                    ).withValues(alpha: 0.15),
                             width: isSel ? 2.5 : 1.2,
                           ),
                           boxShadow:
@@ -322,10 +331,10 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.none,
                               errorBuilder:
-                                  (_, _, _) => const Icon(
+                                  (_, _, _) => Icon(
                                     Icons.person,
                                     size: 36,
-                                    color: Colors.white38,
+                                    color: Skeuo.collapse(Colors.white38),
                                   ),
                             ),
                           ),
@@ -341,7 +350,7 @@ class _AvatarPickerDialogState extends State<_AvatarPickerDialog> {
           'swipe sheets · tap a portrait for frames',
           style: TextStyle(
             fontSize: 11 * sf,
-            color: Colors.white.withValues(alpha: 0.35),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
           ),
         ),
         SizedBox(height: 10 * sf),

@@ -38,8 +38,8 @@ class RunState {
     bool clearCoop = false,
     double? coolness,
     double? curse,
-    List<String>? shrinesUsed,
-    List<RunLogEntry>? log,
+    final List<String>? shrinesUsed,
+    final List<RunLogEntry>? log,
   }) {
     return RunState(
       main: main ?? this.main,

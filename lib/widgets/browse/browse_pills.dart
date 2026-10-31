@@ -52,7 +52,7 @@ Widget qualityPill(String quality) {
   // S-tier uses near-black for the filled badge circle (white text on black),
   // but near-black chrome (border/text/bg tint) is invisible on dark panels.
   // Use gold as the pill accent for S-tier so it reads on any background.
-  final accent = isS ? const Color(0xFFFFD700) : rawColor;
+  final accent = isS ? Skeuo.collapse(Color(0xFFFFD700)) : rawColor;
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
     decoration: BoxDecoration(
@@ -72,15 +72,18 @@ Widget qualityPill(String quality) {
             shape: BoxShape.circle,
             border:
                 isS
-                    ? Border.all(color: const Color(0xFFE0E0E0), width: 1.0)
+                    ? Border.all(
+                      color: Skeuo.collapse(Color(0xFFE0E0E0)),
+                      width: 1.0,
+                    )
                     : null,
           ),
           child: GoopText(
             letter,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
-              color: Colors.white,
+              color: Skeuo.collapse(Colors.white),
               height: 1,
             ),
           ),
@@ -108,10 +111,10 @@ Widget coinPill(String price) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
     decoration: BoxDecoration(
-      color: const Color(0xFFFFC857).withValues(alpha: 0.12),
+      color: Skeuo.collapse(Color(0xFFFFC857)).withValues(alpha: 0.12),
       borderRadius: BorderRadius.circular(6),
       border: Border.all(
-        color: const Color(0xFFE5A823).withValues(alpha: 0.65),
+        color: Skeuo.collapse(Color(0xFFE5A823)).withValues(alpha: 0.65),
         width: 0.8,
       ),
     ),
@@ -123,34 +126,41 @@ Widget coinPill(String price) {
           height: 15,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: const RadialGradient(
+            gradient: RadialGradient(
               center: Alignment(-0.3, -0.3),
               radius: 0.9,
-              colors: [Color(0xFFFFE082), Color(0xFFFFC107), Color(0xFFB8860B)],
+              colors: [
+                Skeuo.collapse(Color(0xFFFFE082)),
+                Skeuo.collapse(Color(0xFFFFC107)),
+                Skeuo.collapse(Color(0xFFB8860B)),
+              ],
               stops: [0.0, 0.55, 1.0],
             ),
-            border: Border.all(color: const Color(0xFF8B6508), width: 0.6),
+            border: Border.all(
+              color: Skeuo.collapse(Color(0xFF8B6508)),
+              width: 0.6,
+            ),
           ),
           alignment: Alignment.center,
-          child: const GoopText(
+          child: GoopText(
             '\$',
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.w900,
-              color: Color(0xFF7A4E00),
+              color: Skeuo.collapse(Color(0xFF7A4E00)),
               height: 1,
             ),
           ),
         ),
-        const SizedBox(width: 4),
+        SizedBox(width: 4),
         Padding(
           padding: const EdgeInsets.only(right: 4),
           child: GoopText(
             price,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w800,
-              color: Color(0xFFFFD166),
+              color: Skeuo.collapse(Color(0xFFFFD166)),
               letterSpacing: 0.3,
               height: 1.1,
             ),
@@ -166,14 +176,14 @@ Widget synergyPill(int count) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
+        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(6),
       ),
       child: GoopText(
         'no synergy',
         style: TextStyle(
           fontSize: FontSizes.labelSmall,
-          color: Colors.white.withValues(alpha: 0.35),
+          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
           fontStyle: FontStyle.italic,
           height: 1.1,
         ),
@@ -201,7 +211,7 @@ Widget completesPill(List<String> synergyNames, {String? ownerLabel}) {
       synergyNames.length == 1
           ? 'COMPLETES: $short$owner'
           : 'COMPLETES ${synergyNames.length}$owner';
-  return metaPill(label, const Color(0xFFFFD700), icon: Icons.link);
+  return metaPill(label, Skeuo.collapse(Color(0xFFFFD700)), icon: Icons.link);
 }
 
 class GunMeta extends StatelessWidget {

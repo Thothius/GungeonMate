@@ -144,7 +144,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Skeuo.inkIf(Colors.amber.shade300),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   'SER JUNKAN LEVEL TRACKER',
@@ -158,15 +158,15 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Row(
+              Row(
                 children: [
                   Icon(
                     Icons.inventory_2_outlined,
-                    color: Colors.white54,
+                    color: Skeuo.collapse(Colors.white54),
                     size: 16,
                   ),
                   SizedBox(width: 6),
@@ -181,10 +181,10 @@ mixin _ItemBodySections on StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Remove Junk',
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.remove_circle_outline,
                       size: 22,
-                      color: Colors.white70,
+                      color: Skeuo.collapse(Colors.white70),
                     ),
                     onPressed:
                         junkCount > 0 && junkItem != null
@@ -197,7 +197,7 @@ mixin _ItemBodySections on StatelessWidget {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black26,
+                      color: Skeuo.collapse(Colors.black26),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -212,10 +212,10 @@ mixin _ItemBodySections on StatelessWidget {
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     tooltip: 'Add Junk',
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.add_circle_outline,
                       size: 22,
-                      color: Colors.white70,
+                      color: Skeuo.collapse(Colors.white70),
                     ),
                     onPressed:
                         junkItem != null
@@ -226,7 +226,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -237,8 +237,8 @@ mixin _ItemBodySections on StatelessWidget {
                     color: Skeuo.inkIf(Colors.amber.shade200),
                     size: 16,
                   ),
-                  const SizedBox(width: 6),
-                  const GoopText(
+                  SizedBox(width: 6),
+                  GoopText(
                     'Has Gold Junk (Mech Suit):',
                     style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                   ),
@@ -258,7 +258,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const Divider(color: Colors.white12, height: 16),
+          Divider(color: Skeuo.collapse(Colors.white12), height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -267,7 +267,7 @@ mixin _ItemBodySections on StatelessWidget {
                 height: 72,
                 padding: const EdgeInsets.all(Insets.xs),
                 decoration: BoxDecoration(
-                  color: Colors.black38,
+                  color: Skeuo.collapse(Colors.black38),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.35),
@@ -291,7 +291,7 @@ mixin _ItemBodySections on StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,13 +305,13 @@ mixin _ItemBodySections on StatelessWidget {
                         letterSpacing: 0.5,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     GoopText(
                       stats,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: Skeuo.collapse(Colors.white),
                         height: 1.25,
                       ),
                     ),
@@ -320,12 +320,12 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           GoopText(
             description,
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.75),
               height: 1.35,
             ),
           ),
@@ -393,7 +393,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Skeuo.inkIf(Colors.redAccent.shade100),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   'Spice Addiction Tracker',
@@ -407,10 +407,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Remove armor',
-                icon: const Icon(
+                icon: Icon(
                   Icons.remove_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                 ),
                 onPressed:
                     count > 0
@@ -437,10 +437,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Add armor',
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                 ),
                 onPressed: () {
                   final double curseToAdd = (count == 0) ? 0.5 : 1.0;
@@ -454,25 +454,25 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           GoopText(
             'CURRENT: $currentEffects',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w600,
-              color: Colors.white.withValues(alpha: 0.9),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.9),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           GoopText(
             'NEXT: $nextEffects',
             style: TextStyle(
               fontSize: 11.5,
-              color: Colors.white.withValues(alpha: 0.65),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
               height: 1.3,
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           GoopText(
             'Note: Adjusting Spice count automatically syncs Curse to your active run (+0.5 for 1st use, +1.0 for each additional use).',
             style: TextStyle(
@@ -526,7 +526,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Skeuo.inkIf(Colors.cyanAccent.shade200),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   'SPRUN: ORB OBSERVATION DETECTOR',
@@ -540,12 +540,12 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           if (triggerIdx == -1) ...[
             Container(
               padding: const EdgeInsets.all(Insets.md),
               decoration: BoxDecoration(
-                color: Colors.black26,
+                color: Skeuo.collapse(Colors.black26),
                 borderRadius: BorderRadius.all(Radii.sm),
                 border: Border.all(
                   color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.15),
@@ -558,34 +558,34 @@ mixin _ItemBodySections on StatelessWidget {
                     size: 36,
                     color: Skeuo.inkIf(Colors.cyanAccent),
                   ),
-                  const SizedBox(height: 8),
-                  const GoopText(
+                  SizedBox(height: 8),
+                  GoopText(
                     '🔮 ACTIVE SEED SYNERGY HIDDEN',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white70,
+                      color: Skeuo.collapse(Colors.white70),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const GoopText(
+                  SizedBox(height: 4),
+                  GoopText(
                     'Each run pre-determines a randomized trigger to transform Sprun into the infinite-ammo Windgunner. Tap below to run active seed analysis.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
-                      color: Colors.white54,
+                      color: Skeuo.collapse(Colors.white54),
                       height: 1.3,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   SizedBox(
                     width: double.infinity,
                     height: 38,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Skeuo.inkIf(Colors.cyan.shade900),
-                        foregroundColor: Colors.white,
+                        foregroundColor: Skeuo.collapse(Colors.white),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radii.sm),
                         ),
@@ -634,7 +634,7 @@ mixin _ItemBodySections on StatelessWidget {
                     color:
                         isMatch
                             ? Skeuo.inkIf(Colors.cyan).withValues(alpha: 0.18)
-                            : Colors.black12,
+                            : Skeuo.collapse(Colors.black12),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color:
@@ -642,7 +642,9 @@ mixin _ItemBodySections on StatelessWidget {
                               ? Skeuo.inkIf(
                                 Skeuo.inkIf(Colors.cyanAccent),
                               ).withValues(alpha: 0.5)
-                              : Colors.white.withValues(alpha: 0.04),
+                              : Skeuo.collapse(
+                                Colors.white,
+                              ).withValues(alpha: 0.04),
                     ),
                   ),
                   child: Row(
@@ -653,9 +655,9 @@ mixin _ItemBodySections on StatelessWidget {
                         color:
                             isMatch
                                 ? Skeuo.inkIf(Colors.cyanAccent)
-                                : Colors.white24,
+                                : Skeuo.collapse(Colors.white24),
                       ),
-                      const SizedBox(width: 8),
+                      SizedBox(width: 8),
                       Expanded(
                         child: GoopText(
                           possibleTriggers[idx],
@@ -663,7 +665,10 @@ mixin _ItemBodySections on StatelessWidget {
                             fontSize: 11,
                             fontWeight:
                                 isMatch ? FontWeight.bold : FontWeight.normal,
-                            color: isMatch ? Colors.white : Colors.white30,
+                            color:
+                                isMatch
+                                    ? Skeuo.collapse(Colors.white)
+                                    : Skeuo.collapse(Colors.white30),
                             decoration:
                                 isMatch ? null : TextDecoration.lineThrough,
                           ),
@@ -674,7 +679,7 @@ mixin _ItemBodySections on StatelessWidget {
                 );
               }),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -708,14 +713,14 @@ mixin _ItemBodySections on StatelessWidget {
               ],
             ),
           ],
-          const Divider(color: Colors.white12, height: 16),
+          Divider(color: Skeuo.collapse(Colors.white12), height: 16),
           Container(
             padding: const EdgeInsets.all(Insets.sm),
             decoration: BoxDecoration(
               color:
                   isWindgunnerActive
                       ? Skeuo.inkIf(Colors.cyan).withValues(alpha: 0.12)
-                      : Colors.black12,
+                      : Skeuo.collapse(Colors.black12),
               borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
                 color:
@@ -740,11 +745,11 @@ mixin _ItemBodySections on StatelessWidget {
                           color:
                               isWindgunnerActive
                                   ? Skeuo.inkIf(Colors.cyanAccent)
-                                  : Colors.white54,
+                                  : Skeuo.collapse(Colors.white54),
                           letterSpacing: 0.3,
                         ),
                       ),
-                      const SizedBox(height: 1.5),
+                      SizedBox(height: 1.5),
                       GoopText(
                         isWindgunnerActive
                             ? 'Infinite Ammo, Flight, God-tier Burst! Count: ${windgunnerCountdown}s'
@@ -753,8 +758,8 @@ mixin _ItemBodySections on StatelessWidget {
                           fontSize: FontSizes.labelSmall,
                           color:
                               isWindgunnerActive
-                                  ? Colors.white70
-                                  : Colors.white38,
+                                  ? Skeuo.collapse(Colors.white70)
+                                  : Skeuo.collapse(Colors.white38),
                         ),
                       ),
                     ],
@@ -835,7 +840,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Skeuo.inkIf(Colors.blueAccent.shade100),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -853,7 +858,7 @@ mixin _ItemBodySections on StatelessWidget {
                       'Heister Count Exponential Matrix',
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
-                        color: Colors.white38,
+                        color: Skeuo.collapse(Colors.white38),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -866,7 +871,7 @@ mixin _ItemBodySections on StatelessWidget {
                   vertical: 3,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.black45,
+                  color: Skeuo.collapse(Colors.black45),
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
                     color: Skeuo.inkIf(
@@ -886,7 +891,7 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Row(
             children: [
               _buildHeisterSlot(
@@ -898,7 +903,7 @@ mixin _ItemBodySections on StatelessWidget {
                 avatar: Icons.face_retouching_natural_outlined,
                 onTap: heisterToggle('Clown Mask', hasMask),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _buildHeisterSlot(
                 name: 'Wolf',
                 item: 'Drill',
@@ -908,7 +913,7 @@ mixin _ItemBodySections on StatelessWidget {
                 avatar: Icons.build_outlined,
                 onTap: heisterToggle('Drill', hasDrill),
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _buildHeisterSlot(
                 name: 'Chains',
                 item: 'Loot Bag',
@@ -920,12 +925,12 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(Insets.sm),
             decoration: BoxDecoration(
-              color: Colors.black38,
+              color: Skeuo.collapse(Colors.black38),
               borderRadius: BorderRadius.all(Radii.sm),
               border: Border.all(
                 color: Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.15),
@@ -943,22 +948,22 @@ mixin _ItemBodySections on StatelessWidget {
                     letterSpacing: 0.5,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 if (itemsCount == 0)
-                  const GoopText(
+                  GoopText(
                     'No heisters active. Hold Dallas (Clown Mask), Wolf (Drill), or Chains (Loot Bag) to activate.',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Colors.white38,
+                      color: Skeuo.collapse(Colors.white38),
                       height: 1.2,
                     ),
                   )
                 else if (itemsCount == 1)
-                  const GoopText(
+                  GoopText(
                     'Dallas Active: Melee charge stuns enemies.',
                     style: TextStyle(
                       fontSize: 10.5,
-                      color: Colors.white70,
+                      color: Skeuo.collapse(Colors.white70),
                       fontWeight: FontWeight.bold,
                       height: 1.2,
                     ),
@@ -1019,13 +1024,15 @@ mixin _ItemBodySections on StatelessWidget {
                 color:
                     active
                         ? Skeuo.inkIf(Colors.blueAccent).withValues(alpha: 0.18)
-                        : Colors.black26,
+                        : Skeuo.collapse(Colors.black26),
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color:
                       active
                           ? Skeuo.inkIf(Colors.blueAccent)
-                          : Colors.white.withValues(alpha: 0.05),
+                          : Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.05),
                   width: active ? 1.5 : 1.0,
                 ),
               ),
@@ -1038,9 +1045,9 @@ mixin _ItemBodySections on StatelessWidget {
                     color:
                         active
                             ? Skeuo.inkIf(Colors.blueAccent.shade100)
-                            : Colors.white24,
+                            : Skeuo.collapse(Colors.white24),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4),
                   GoopText(
                     name.toUpperCase(),
                     maxLines: 1,
@@ -1048,7 +1055,10 @@ mixin _ItemBodySections on StatelessWidget {
                     style: TextStyle(
                       fontSize: FontSizes.labelSmall,
                       fontWeight: FontWeight.w900,
-                      color: active ? Colors.white : Colors.white24,
+                      color:
+                          active
+                              ? Skeuo.collapse(Colors.white)
+                              : Skeuo.collapse(Colors.white24),
                     ),
                   ),
                   GoopText(
@@ -1061,7 +1071,7 @@ mixin _ItemBodySections on StatelessWidget {
                       color:
                           active
                               ? Skeuo.inkIf(Colors.greenAccent)
-                              : Colors.white24,
+                              : Skeuo.collapse(Colors.white24),
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -1101,7 +1111,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Skeuo.inkIf(Colors.indigoAccent.shade100),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   'Platinum Bullets — Firing Time',
@@ -1115,10 +1125,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Decrease Platinum Bullets time',
-                icon: const Icon(
+                icon: Icon(
                   Icons.remove_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                 ),
                 onPressed:
                     seconds > 0
@@ -1137,10 +1147,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Increase Platinum Bullets time',
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                 ),
                 onPressed:
                     () => p.setPlatinumBulletsSeconds(
@@ -1149,21 +1159,21 @@ mixin _ItemBodySections on StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           GoopText(
             '${dmgMult.toStringAsFixed(1)}x Damage  •  ${fireRateMult.toStringAsFixed(1)}x Fire Rate',
             style: TextStyle(
               fontSize: 12.5,
               fontWeight: FontWeight.bold,
-              color: Colors.white.withValues(alpha: 0.9),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.9),
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           GoopText(
             'Damage & fire rate scale with firing time. Damage maxes at 3x after 750s, fire rate at 3x after 375s. Starts partially powered on later floors.',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.75),
               height: 1.3,
             ),
           ),
@@ -1195,7 +1205,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Skeuo.inkIf(Colors.amberAccent.shade100),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   'Iron Coin — Charges',
@@ -1209,10 +1219,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Decrease Iron Coin uses',
-                icon: const Icon(
+                icon: Icon(
                   Icons.remove_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                 ),
                 onPressed: uses > 0 ? () => p.setIronCoinUses(uses - 1) : null,
               ),
@@ -1226,10 +1236,10 @@ mixin _ItemBodySections on StatelessWidget {
               IconButton(
                 visualDensity: VisualDensity.compact,
                 tooltip: 'Increase Iron Coin uses',
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_circle_outline,
                   size: 22,
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                 ),
                 onPressed: uses < 3 ? () => p.setIronCoinUses(uses + 1) : null,
               ),
@@ -1245,17 +1255,19 @@ mixin _ItemBodySections on StatelessWidget {
                   spent ? Icons.radio_button_unchecked : Icons.check_circle,
                   size: 18,
                   color:
-                      spent ? Colors.white24 : Skeuo.inkIf(Colors.amberAccent),
+                      spent
+                          ? Skeuo.collapse(Colors.white24)
+                          : Skeuo.inkIf(Colors.amberAccent),
                 ),
               );
             }),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           GoopText(
             'Kills all enemies in a random room on the current floor. 3 uses per run. Also grants a 10% discount at shops while held.',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.75),
               height: 1.3,
             ),
           ),
@@ -1295,7 +1307,7 @@ mixin _ItemBodySections on StatelessWidget {
                 color: Skeuo.inkIf(Colors.purpleAccent.shade100),
                 size: 20,
               ),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   'Bullet to Kill the Past — $ownedCount/4',
@@ -1324,9 +1336,9 @@ mixin _ItemBodySections on StatelessWidget {
                         color:
                             has
                                 ? Skeuo.inkIf(Colors.purpleAccent)
-                                : Colors.white24,
+                                : Skeuo.collapse(Colors.white24),
                       ),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       GoopText(
                         name
                             .split(' ')
@@ -1338,19 +1350,19 @@ mixin _ItemBodySections on StatelessWidget {
                           color:
                               has
                                   ? Skeuo.inkIf(Colors.purpleAccent)
-                                  : Colors.white38,
+                                  : Skeuo.collapse(Colors.white38),
                         ),
                       ),
                     ],
                   );
                 }).toList(),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           GoopText(
             'Collect all 4 ingredients and take them to the Blacksmith to forge the Bullet that can Kill the Past.',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.75),
               height: 1.3,
             ),
           ),

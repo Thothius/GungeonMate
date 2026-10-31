@@ -60,10 +60,10 @@ class AppTheme {
   // returning users don't get parked on an invalid index.
   static const String _legacyKey = 'theme.mode';
 
-  static final RefreshableValueNotifier<AppThemeMode> notifier =
+  static RefreshableValueNotifier<AppThemeMode> notifier =
       RefreshableValueNotifier<AppThemeMode>(AppThemeMode.paperInk);
 
-  static final ValueNotifier<AppThemeMode?> previewNotifier =
+  static ValueNotifier<AppThemeMode?> previewNotifier =
       ValueNotifier<AppThemeMode?>(null);
 
   static AppThemeMode get mode => notifier.value;
@@ -76,7 +76,7 @@ class AppTheme {
   /// Active palette for the Unicorn megapack. Persisted across sessions.
   static UnicornPalette _unicornPalette = UnicornPalette.cottonCandy;
   static UnicornPalette get unicornPalette => _unicornPalette;
-  static final ValueNotifier<UnicornPalette> unicornPaletteNotifier =
+  static ValueNotifier<UnicornPalette> unicornPaletteNotifier =
       ValueNotifier<UnicornPalette>(UnicornPalette.cottonCandy);
 
   static Future<void> setUnicornPalette(UnicornPalette p) async {
@@ -92,8 +92,8 @@ class AppTheme {
   }
 
   /// Per-theme remix index (0 = original). Persisted.
-  static final Map<AppThemeMode, int> _remixIndex = {};
-  static final ValueNotifier<int> remixNotifier = ValueNotifier(0);
+  static Map<AppThemeMode, int> _remixIndex = {};
+  static ValueNotifier<int> remixNotifier = ValueNotifier(0);
 
   static int remixFor(AppThemeMode m) => _remixIndex[m] ?? 0;
 
@@ -331,6 +331,7 @@ class AppTheme {
   /// skeuo's `flair.font` is null and it has no `kThemeCuration` entry,
   /// so entering never mutates VisualPrefs — everything returns intact.
   static Future<void> enterSkeuo() async {
+    if (!kNeoSkeuoEnabled) return;
     if (isSkeuo) return;
     final prevMode = notifier.value;
     final prevFont = VisualPrefs.notifier.value.font;

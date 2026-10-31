@@ -320,7 +320,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
     final rechargeBadge = Container(
       padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.55),
+        color: Skeuo.collapse(Colors.black).withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
@@ -335,7 +335,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
               height: 1.1,
             ),
           ),
-          const SizedBox(width: 1),
+          SizedBox(width: 1),
           Icon(
             Icons.battery_charging_full_rounded,
             size: 8 * sf,
@@ -351,7 +351,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
             : Container(
               padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
               decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.55),
+                color: Skeuo.collapse(Colors.black).withValues(alpha: 0.55),
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Row(
@@ -366,7 +366,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
                       height: 1.1,
                     ),
                   ),
-                  const SizedBox(width: 1),
+                  SizedBox(width: 1),
                   Icon(
                     Icons.schedule_rounded,
                     size: 8 * sf,
@@ -407,12 +407,12 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
       decoration: BoxDecoration(
         color:
             widget.isTopDps
-                ? const Color(0xFFFFD700).withValues(alpha: 0.25)
-                : Colors.black.withValues(alpha: 0.55),
+                ? Skeuo.collapse(Color(0xFFFFD700)).withValues(alpha: 0.25)
+                : Skeuo.collapse(Colors.black).withValues(alpha: 0.55),
         borderRadius: BorderRadius.circular(4),
         border:
             widget.isTopDps
-                ? Border.all(color: const Color(0xFFFFD700), width: 1)
+                ? Border.all(color: Skeuo.collapse(Color(0xFFFFD700)), width: 1)
                 : null,
       ),
       child: GoopText(
@@ -420,7 +420,10 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
         style: TextStyle(
           fontSize: 10.5 * sf,
           fontWeight: FontWeight.w900,
-          color: widget.isTopDps ? const Color(0xFFFFD700) : Colors.white,
+          color:
+              widget.isTopDps
+                  ? Skeuo.collapse(Color(0xFFFFD700))
+                  : Skeuo.collapse(Colors.white),
           height: 1.1,
         ),
       ),
@@ -432,7 +435,7 @@ mixin _PeriodicTileLogic on TickerProviderStateMixin<PeriodicTile> {
           .shimmer(
             delay: 1500.ms,
             duration: 1200.ms,
-            color: Colors.white.withValues(alpha: 0.5),
+            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
           );
     }
     return badge;

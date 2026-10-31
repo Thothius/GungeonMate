@@ -103,7 +103,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                               color: f.primary,
                               size: 26,
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10),
                             GoopText(
                               'GUNFORTUNA\'S DUEL',
                               style: TextStyle(
@@ -117,9 +117,9 @@ class DiceRollDialogState extends State<DiceRollDialog>
                         ),
                         IconButton(
                           tooltip: 'Close',
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close,
-                            color: Colors.white38,
+                            color: Skeuo.collapse(Colors.white38),
                             size: 20,
                           ),
                           onPressed: () {
@@ -137,25 +137,29 @@ class DiceRollDialogState extends State<DiceRollDialog>
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14),
 
                     // Flavour text (Only show in idle state!)
                     if (_status == DiceStatus.idle) ...[
                       Container(
                         padding: const EdgeInsets.all(Insets.md),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.03),
+                          color: Skeuo.collapse(
+                            Colors.white,
+                          ).withValues(alpha: 0.03),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.06),
+                            color: Skeuo.collapse(
+                              Colors.white,
+                            ).withValues(alpha: 0.06),
                           ),
                         ),
-                        child: const GoopText(
+                        child: GoopText(
                           '“Gunfortuna, the celestial bullet-goddess of chance, spins the cylinders of fate. When co-op partners clash over loot, let her dice decide who walks away with the prize.”',
                           style: TextStyle(
                             fontSize: 11,
                             fontStyle: FontStyle.italic,
-                            color: Colors.white54,
+                            color: Skeuo.collapse(Colors.white54),
                             height: 1.4,
                           ),
                           textAlign: TextAlign.center,
@@ -211,16 +215,16 @@ class DiceRollDialogState extends State<DiceRollDialog>
         key: const ValueKey('idle_connected'),
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const GoopText(
+          GoopText(
             'Challenge your sidekick or main partner to a high-stakes dice duel! 3x dice will decide who gets Gunfortuna\'s favor!',
             style: TextStyle(
               fontSize: 12.5,
-              color: Colors.white70,
+              color: Skeuo.collapse(Colors.white70),
               height: 1.4,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           ScaleButton(
             onTap: _sendChallenge,
             child: IgnorePointer(
@@ -238,7 +242,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: f.primary,
-                    foregroundColor: Colors.black,
+                    foregroundColor: Skeuo.collapse(Colors.black),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radii.sm),
@@ -248,7 +252,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           Center(
             child: ScaleButton(
               onTap: _startRolling,
@@ -256,7 +260,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 child: TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                    foregroundColor: Colors.white54,
+                    foregroundColor: Skeuo.collapse(Colors.white54),
                     padding: const EdgeInsets.symmetric(vertical: Insets.sm),
                   ),
                   child: const GoopText(
@@ -278,22 +282,22 @@ class DiceRollDialogState extends State<DiceRollDialog>
       return Column(
         key: const ValueKey('challenging'),
         children: [
-          const SizedBox(height: 10),
-          CircularProgressIndicator(
-            color: Skeuo.inkIf(Colors.amberAccent),
-          ),
-          const SizedBox(height: 16),
-          const GoopText(
+          SizedBox(height: 10),
+          CircularProgressIndicator(color: Skeuo.inkIf(Colors.amberAccent)),
+          SizedBox(height: 16),
+          GoopText(
             'Waiting for partner to accept...',
             style: TextStyle(
               fontWeight: FontWeight.w800,
-              color: Colors.white70,
+              color: Skeuo.collapse(Colors.white70),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           TextButton(
             onPressed: _cancelChallenge,
-            style: TextButton.styleFrom(foregroundColor: Colors.white38),
+            style: TextButton.styleFrom(
+              foregroundColor: Skeuo.collapse(Colors.white38),
+            ),
             child: const GoopText(
               'CANCEL CHALLENGE',
               style: TextStyle(fontWeight: FontWeight.w700, letterSpacing: 0.5),
@@ -307,16 +311,16 @@ class DiceRollDialogState extends State<DiceRollDialog>
       return Column(
         key: const ValueKey('rolling_active'),
         children: [
-          const GoopText(
+          GoopText(
             'THE CYLINDERS ARE SPINNING!',
             style: TextStyle(
               fontSize: FontSizes.labelMedium,
               fontWeight: FontWeight.w900,
-              color: Colors.white54,
+              color: Skeuo.collapse(Colors.white54),
               letterSpacing: 1.0,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: 4),
           GoopText(
             'Tap each die individually to stop its spin!',
             style: TextStyle(
@@ -347,13 +351,13 @@ class DiceRollDialogState extends State<DiceRollDialog>
               }),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
           GoopText(
             'Current Sum: $_myScore',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: FontSizes.titleSmall,
               fontWeight: FontWeight.w900,
-              color: Colors.white,
+              color: Skeuo.collapse(Colors.white),
             ),
           ),
         ],
@@ -381,25 +385,25 @@ class DiceRollDialogState extends State<DiceRollDialog>
               }),
             ),
           ),
-          const SizedBox(height: 24),
-          const GoopText(
+          SizedBox(height: 24),
+          GoopText(
             'ROLLED!',
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w900,
-              color: Color(0xFF66E07A),
+              color: Skeuo.collapse(Color(0xFF66E07A)),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           GoopText(
             'Your Score: $_myScore',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: FontSizes.bodyMedium,
               fontWeight: FontWeight.w900,
-              color: Colors.white,
+              color: Skeuo.collapse(Colors.white),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           if (_peerScore == null)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -434,9 +438,9 @@ class DiceRollDialogState extends State<DiceRollDialog>
 
       final Color bannerColor =
           isSolo
-              ? const Color(0xFFFFD54F) // Majestic Gold for Solo fate
+              ? Skeuo.collapse(Color(0xFFFFD54F)) // Majestic Gold for Solo fate
               : (isDraw
-                  ? Colors.white54
+                  ? Skeuo.collapse(Colors.white54)
                   : (isMyVictory
                       ? Skeuo.inkIf(Colors.greenAccent)
                       : Skeuo.inkIf(Colors.redAccent)));
@@ -468,13 +472,15 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
                 color:
-                    bannerColor == Colors.white54 ? Colors.white : bannerColor,
+                    bannerColor == Skeuo.collapse(Colors.white54)
+                        ? Skeuo.collapse(Colors.white)
+                        : bannerColor,
                 letterSpacing: 1.0,
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20),
 
           // Side-by-side comparison with character details
           Row(
@@ -489,50 +495,50 @@ class DiceRollDialogState extends State<DiceRollDialog>
                       color: Skeuo.inkIf(Colors.cyanAccent),
                       size: 24,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     GoopText(
                       _mp.myNickname.toUpperCase(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white70,
+                        color: Skeuo.collapse(Colors.white70),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
                         '$_myScore',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 38,
                           fontWeight: FontWeight.w900,
-                          color: Colors.white,
+                          color: Skeuo.collapse(Colors.white),
                           height: 1.0,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4),
                     GoopText(
                       '(${_myDice.join("-")})',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
-                        color: Colors.white38,
+                        color: Skeuo.collapse(Colors.white38),
                       ),
                     ),
                   ],
                 ),
               ),
               if (_peerScore != null) ...[
-                const GoopText(
+                GoopText(
                   'VS',
                   style: TextStyle(
                     fontSize: FontSizes.titleSmall,
                     fontWeight: FontWeight.w900,
-                    color: Colors.white24,
+                    color: Skeuo.collapse(Colors.white24),
                   ),
                 ),
                 // Player 2 (Peer)
@@ -544,38 +550,38 @@ class DiceRollDialogState extends State<DiceRollDialog>
                         color: Skeuo.inkIf(Colors.pinkAccent),
                         size: 24,
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       GoopText(
                         (_mp.peerNickname ?? 'Partner').toUpperCase(),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white70,
+                          color: Skeuo.collapse(Colors.white70),
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: 8),
                       FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
                           '$_peerScore',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 38,
                             fontWeight: FontWeight.w900,
-                            color: Colors.white,
+                            color: Skeuo.collapse(Colors.white),
                             height: 1.0,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: 4),
                       GoopText(
                         '(${_peerDice?.join("-") ?? ""})',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white38,
+                          color: Skeuo.collapse(Colors.white38),
                         ),
                       ),
                     ],
@@ -584,7 +590,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               ],
             ],
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
 
           // Action buttons
           if (!connected)
@@ -592,7 +598,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               onPressed: _resetSolo,
               style: FilledButton.styleFrom(
                 backgroundColor: f.primary,
-                foregroundColor: Colors.black,
+                foregroundColor: Skeuo.collapse(Colors.black),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 40,
                   vertical: 12,
@@ -626,7 +632,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
               ),
               style: FilledButton.styleFrom(
                 backgroundColor: f.primary,
-                foregroundColor: Colors.black,
+                foregroundColor: Skeuo.collapse(Colors.black),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
                   vertical: 12,
@@ -636,7 +642,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             OutlinedButton(
               onPressed: () => Navigator.pop(context),
               style: OutlinedButton.styleFrom(
@@ -644,15 +650,15 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   horizontal: 40,
                   vertical: 12,
                 ),
-                side: const BorderSide(color: Colors.white24),
+                side: BorderSide(color: Skeuo.collapse(Colors.white24)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radii.sm),
                 ),
               ),
-              child: const GoopText(
+              child: GoopText(
                 'CLOSE',
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: Skeuo.collapse(Colors.white70),
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -667,12 +673,16 @@ class DiceRollDialogState extends State<DiceRollDialog>
       key: const ValueKey('solo_initial'),
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const GoopText(
+        GoopText(
           'Throw Gunfortuna\'s sacred dice to determine your fortune in Gungeon! Spin 3x dice for a rating from 3 to 18.',
-          style: TextStyle(fontSize: 12.5, color: Colors.white70, height: 1.45),
+          style: TextStyle(
+            fontSize: 12.5,
+            color: Skeuo.collapse(Colors.white70),
+            height: 1.45,
+          ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: 20),
         ScaleButton(
           onTap: _startRolling,
           child: IgnorePointer(
@@ -691,7 +701,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: f.primary,
-                  foregroundColor: Colors.black,
+                  foregroundColor: Skeuo.collapse(Colors.black),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radii.sm),
@@ -709,50 +719,50 @@ class DiceRollDialogState extends State<DiceRollDialog>
 DiceStyle _getDiceStyle(CustomDiceType type, ThemeFlair flair) {
   switch (type) {
     case CustomDiceType.classicWhite:
-      return const DiceStyle(
-        bg: Color(0xFFFAFAFA),
-        border: Color(0xFF90A4AE),
-        text: Color(0xFF263238),
-        glow: Colors.white24,
+      return DiceStyle(
+        bg: Skeuo.collapse(Color(0xFFFAFAFA)),
+        border: Skeuo.collapse(Color(0xFF90A4AE)),
+        text: Skeuo.collapse(Color(0xFF263238)),
+        glow: Skeuo.collapse(Colors.white24),
       );
     case CustomDiceType.goldGlimmer:
-      return const DiceStyle(
-        bg: Color(0xFF2C2210),
-        border: Color(0xFFFFD54F),
-        text: Color(0xFFFFD54F),
-        glow: Color(0x33FFD54F),
+      return DiceStyle(
+        bg: Skeuo.collapse(Color(0xFF2C2210)),
+        border: Skeuo.collapse(Color(0xFFFFD54F)),
+        text: Skeuo.collapse(Color(0xFFFFD54F)),
+        glow: Skeuo.collapse(Color(0x33FFD54F)),
       );
     case CustomDiceType.frostShard:
-      return const DiceStyle(
-        bg: Color(0xFF101C2C),
-        border: Color(0xFF00E5FF),
-        text: Color(0xFF00E5FF),
-        glow: Color(0x3300E5FF),
+      return DiceStyle(
+        bg: Skeuo.collapse(Color(0xFF101C2C)),
+        border: Skeuo.collapse(Color(0xFF00E5FF)),
+        text: Skeuo.collapse(Color(0xFF00E5FF)),
+        glow: Skeuo.collapse(Color(0x3300E5FF)),
       );
     case CustomDiceType.moltenAmber:
-      return const DiceStyle(
-        bg: Color(0xFF2C1010),
-        border: Color(0xFFFF3D00),
-        text: Color(0xFFFF3D00),
-        glow: Color(0x33FF3D00),
+      return DiceStyle(
+        bg: Skeuo.collapse(Color(0xFF2C1010)),
+        border: Skeuo.collapse(Color(0xFFFF3D00)),
+        text: Skeuo.collapse(Color(0xFFFF3D00)),
+        glow: Skeuo.collapse(Color(0x33FF3D00)),
       );
     case CustomDiceType.voidPurple:
-      return const DiceStyle(
-        bg: Color(0xFF1F102C),
-        border: Color(0xFFD500F9),
-        text: Color(0xFFD500F9),
-        glow: Color(0x33D500F9),
+      return DiceStyle(
+        bg: Skeuo.collapse(Color(0xFF1F102C)),
+        border: Skeuo.collapse(Color(0xFFD500F9)),
+        text: Skeuo.collapse(Color(0xFFD500F9)),
+        glow: Skeuo.collapse(Color(0x33D500F9)),
       );
     case CustomDiceType.toxicOoze:
-      return const DiceStyle(
-        bg: Color(0xFF102C13),
-        border: Color(0xFF00E676),
-        text: Color(0xFF00E676),
-        glow: Color(0x3300E676),
+      return DiceStyle(
+        bg: Skeuo.collapse(Color(0xFF102C13)),
+        border: Skeuo.collapse(Color(0xFF00E676)),
+        text: Skeuo.collapse(Color(0xFF00E676)),
+        glow: Skeuo.collapse(Color(0x3300E676)),
       );
     case CustomDiceType.themeDefault:
       return DiceStyle(
-        bg: const Color(0xFF161413),
+        bg: Skeuo.collapse(Color(0xFF161413)),
         border: flair.primary,
         text: flair.primary,
         glow: flair.primary.withValues(alpha: 0.3),

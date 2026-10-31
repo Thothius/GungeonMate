@@ -49,7 +49,7 @@ class _AmbientShaderLayerState extends State<AmbientShaderLayer>
   bool _loadFailed = false;
 
   // Cache loaded programs so switching shaders doesn't reload from disk.
-  static final Map<String, ui.FragmentProgram> _programCache = {};
+  static Map<String, ui.FragmentProgram> _programCache = {};
 
   @override
   void initState() {

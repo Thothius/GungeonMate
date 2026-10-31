@@ -59,7 +59,7 @@ class _CoolnessEffectsState extends State<_CoolnessEffects> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionTitle('Live effects at current coolness'),
+        _SectionTitle('Live effects at current coolness'),
         _EffectRow(
           icon: Icons.flash_on,
           color: Skeuo.inkIf(Colors.lightBlueAccent),
@@ -98,17 +98,17 @@ class _CoolnessEffectsState extends State<_CoolnessEffects> {
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.4,
-                    color: Colors.white.withValues(alpha: 0.65),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 AnimatedRotation(
                   turns: _alsoExpanded ? 0.5 : 0,
                   duration: const Duration(milliseconds: 180),
                   child: Icon(
                     Icons.expand_more_rounded,
                     size: 16,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
                   ),
                 ),
               ],
@@ -153,7 +153,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionTitle('Live effects at current curse'),
+        _SectionTitle('Live effects at current curse'),
         _EffectRow(
           icon: Icons.local_fire_department,
           color: Skeuo.inkIf(Colors.deepOrangeAccent),
@@ -245,17 +245,17 @@ class _CurseEffectsState extends State<_CurseEffects> {
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.4,
-                    color: Colors.white.withValues(alpha: 0.65),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
                   ),
                 ),
-                const Spacer(),
+                Spacer(),
                 AnimatedRotation(
                   turns: _tableExpanded ? 0.5 : 0,
                   duration: const Duration(milliseconds: 180),
                   child: Icon(
                     Icons.expand_more_rounded,
                     size: 16,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
                   ),
                 ),
               ],
@@ -263,9 +263,9 @@ class _CurseEffectsState extends State<_CurseEffects> {
           ),
         ),
         if (_tableExpanded) ...[
-          const SizedBox(height: 6),
+          SizedBox(height: 6),
           _CurseTable(highlightIdx: currentIdx),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: Insets.xs),
             child: GoopText(
@@ -276,7 +276,7 @@ class _CurseEffectsState extends State<_CurseEffects> {
               style: TextStyle(
                 fontSize: 11,
                 height: 1.4,
-                color: Colors.white.withValues(alpha: 0.7),
+                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -298,7 +298,7 @@ class _CurseTable extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: DataTable(
           headingRowColor: WidgetStatePropertyAll(
-            Colors.white.withValues(alpha: 0.05),
+            Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
           ),
           dataRowMinHeight: 32,
           dataRowMaxHeight: 36,
