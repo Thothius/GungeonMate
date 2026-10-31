@@ -8,8 +8,6 @@ import 'dart:math' as math;
 
 import '../providers/run_provider.dart';
 import '../models/shrine.dart';
-import '../services/haptics.dart';
-import 'package:url_launcher/url_launcher.dart';
 part 'shrine_picker/shrine_sheet.dart';
 
 /// Resolves the correct shrine icon asset, applying bundled art overrides
@@ -56,7 +54,6 @@ class ShrinePickerScreen extends StatelessWidget {
     for (final s in provider.runState.shrinesUsed) {
       used[s] = (used[s] ?? 0) + 1;
     }
-    final double currentCurse = provider.runState.totalCurse;
     final List<Shrine> shrines = List.from(rawShrines)..sort((a, b) {
       // Cleanse shrine floats to top (most commonly needed).
       final aCleanse = a.name.toLowerCase().contains('cleanse');
@@ -122,24 +119,22 @@ class ShrinePickerScreen extends StatelessWidget {
       body:
           shrines.isEmpty
               ? const Center(child: GoopText('No shrine data'))
-              : ListView.builder(
+              : GridView.builder(
                 padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.78,
+                ),
                 itemCount: shrines.length,
                 itemBuilder: (c, i) {
                   final s = shrines[i];
-                  return _ShrineListTile(
+                  return _ShrineTile(
                     shrine: s,
-                    usageCount: used[s.name] ?? 0,
+                    used: used[s.name] ?? 0,
                     onTap: () => _openActivationSheet(context, s),
-                    onUse:
-                        s.name.toLowerCase() == 'hero' && currentCurse >= 9
-                            ? null
-                            : () {
-                              Haptics.selection();
-                              final result = provider.applyShrine(s);
-                              _showShrineResult(context, result);
-                            },
-                  ).animate().fadeIn(duration: 200.ms, delay: (i * 30).ms);
+                  ).animate().fadeIn(duration: 200.ms, delay: (i * 25).ms);
                 },
               ),
     );
@@ -156,17 +151,14 @@ class ShrinePickerScreen extends StatelessWidget {
   }
 }
 
-class _ShrineListTile extends StatelessWidget {
+class _ShrineTile extends StatelessWidget {
   final Shrine shrine;
-  final int usageCount;
+  final int used;
   final VoidCallback onTap;
-  final VoidCallback? onUse;
-
-  const _ShrineListTile({
+  const _ShrineTile({
     required this.shrine,
-    required this.usageCount,
+    required this.used,
     required this.onTap,
-    this.onUse,
   });
 
   @override
@@ -179,212 +171,146 @@ class _ShrineListTile extends StatelessWidget {
         name.contains('angel') ||
         name.contains('blood') ||
         name.contains('companion');
+    final iconAsset = resolveShrineIcon(shrine.name, shrine.icon);
+    final costColor =
+        hasCleanse
+            ? Colors.lightGreenAccent
+            : hasCurse
+            ? Colors.deepOrangeAccent
+            : Colors.amber;
 
-    final String iconAsset = resolveShrineIcon(shrine.name, shrine.icon);
-
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.only(bottom: 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: Colors.amber.withValues(alpha: 0.15),
-          width: 1.0,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color:
+              used > 0
+                  ? Colors.white.withValues(alpha: 0.02)
+                  : AppTheme.flair.card,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color:
+                used > 0
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : costColor.withValues(alpha: 0.3),
+            width: 1.0,
+          ),
         ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Shrine Icon
-              Hero(
-                tag: 'shrine_${shrine.name}',
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.all(Radii.md),
-                    border: Border.all(
-                      color: Colors.amber.withValues(alpha: 0.08),
-                      width: 1.0,
-                    ),
-                  ),
-                  child: SizedBox(
-                    height: 64,
-                    width: 64,
-                    child:
-                        iconAsset.startsWith('assets/')
-                            ? Image.asset(
-                              iconAsset,
-                              fit: BoxFit.contain,
-                              filterQuality: FilterQuality.none,
-                              cacheWidth: 184,
-                              cacheHeight: 184,
-                              errorBuilder:
-                                  (_, _, _) => const Icon(
-                                    Icons.temple_buddhist_outlined,
-                                    size: 40,
-                                    color: Colors.amber,
-                                  ),
-                            )
-                            : iconAsset.startsWith('http')
-                            ? Image.network(
-                              iconAsset,
-                              fit: BoxFit.contain,
-                              filterQuality: FilterQuality.none,
-                              errorBuilder:
-                                  (_, _, _) => const Icon(
-                                    Icons.temple_buddhist_outlined,
-                                    size: 40,
-                                    color: Colors.amber,
-                                  ),
-                            )
-                            : const Icon(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Icon — the altar centerpiece.
+            Container(
+              width: 58,
+              height: 58,
+              decoration: BoxDecoration(
+                color: costColor.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: costColor.withValues(alpha: 0.35)),
+              ),
+              padding: const EdgeInsets.all(7),
+              child:
+                  iconAsset.startsWith('assets/')
+                      ? Image.asset(
+                        iconAsset,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.none,
+                        errorBuilder:
+                            (_, _, _) => Icon(
                               Icons.temple_buddhist_outlined,
-                              size: 40,
-                              color: Colors.amber,
+                              size: 30,
+                              color: costColor,
                             ),
-                  ),
+                      )
+                      : Icon(
+                        Icons.temple_buddhist_outlined,
+                        size: 30,
+                        color: costColor,
+                      ),
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: GoopText(
+                shrine.name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: FontSizes.titleSmall,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
                 ),
               ),
-              const SizedBox(width: 14),
-
-              // Info column
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Name
-                    GoopText(
-                      shrine.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: FontSizes.titleSmall,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-
-                    // Effect summary (3 lines max)
-                    GoopText(
-                      _shortEffect(shrine),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        height: 1.3,
-                        color: Colors.white.withValues(alpha: 0.8),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                    // Badges row
-                    Wrap(
-                      spacing: 6,
-                      runSpacing: 4,
-                      children: [
-                        if (hasCurse && !hasCleanse && name != 'hero')
-                          _shrineBadge(
-                            'CURSE ${shrine.curse > 0 ? '+' : ''}${shrine.curse.toStringAsFixed(1)}',
-                            Colors.deepOrangeAccent,
-                          ),
-                        if (hasCool)
-                          _shrineBadge(
-                            'COOL ${shrine.coolness > 0 ? '+' : ''}${shrine.coolness.toStringAsFixed(1)}',
-                            Colors.lightBlueAccent,
-                          ),
-                        if (hasCleanse)
-                          _shrineBadge('CLEANSE', Colors.lightGreenAccent),
-                        if (name == 'hero')
-                          _shrineBadge('SETS CURSE 9', Colors.deepOrangeAccent),
-                        if (hasHeartCost)
-                          _shrineBadge('HEART -1', Colors.redAccent),
-                        if (usageCount > 0)
-                          _shrineBadge('USED ${usageCount}X', Colors.amber),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
-              // Use button — chunky pill, real 48px touch target.
-              Column(
+            ),
+            const SizedBox(height: 4),
+            // Cost / benefit chips — what this shrine takes and gives.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 4,
+                runSpacing: 4,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: FilledButton.icon(
-                      onPressed: onUse,
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Colors.amber,
-                        foregroundColor: Colors.black,
-                        disabledBackgroundColor: Colors.white12,
-                        disabledForegroundColor: Colors.white38,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 0,
-                        ),
-                        minimumSize: const Size(0, 40),
-                      ),
-                      icon: const Icon(Icons.bolt, size: 18),
-                      label: const GoopText(
-                        'USE',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 0.6,
-                        ),
-                      ),
+                  if (hasCurse && !hasCleanse && name != 'hero')
+                    _chip(
+                      'CURSE ${shrine.curse > 0 ? '+' : ''}${shrine.curse.toStringAsFixed(1)}',
+                      Colors.deepOrangeAccent,
                     ),
-                  ),
-                  IconButton(
-                    tooltip: 'Open ${shrine.name} on the Gungeon wiki',
-                    visualDensity: VisualDensity.compact,
-                    icon: Icon(
-                      Icons.open_in_browser_rounded,
-                      size: 18,
-                      color: Colors.white.withValues(alpha: 0.45),
+                  if (hasCool)
+                    _chip(
+                      'COOL ${shrine.coolness > 0 ? '+' : ''}${shrine.coolness.toStringAsFixed(1)}',
+                      Colors.lightBlueAccent,
                     ),
-                    onPressed: () => _openShrineWiki(shrine.name),
-                  ),
+                  if (hasCleanse) _chip('CLEANSE', Colors.lightGreenAccent),
+                  if (name == 'hero') _chip('CURSE 9', Colors.deepOrangeAccent),
+                  if (hasHeartCost) _chip('HEART -1', Colors.redAccent),
+                  if (used > 0) _chip('USED ${used}X', Colors.amber),
                 ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 6),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: GoopText(
+                _shortEffect(shrine),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 10.5,
+                  height: 1.3,
+                  color: Colors.white.withValues(alpha: 0.6),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _shrineBadge(String text, Color color) {
+  Widget _chip(String label, Color col) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: color.withValues(alpha: 0.35), width: 0.6),
+        color: col.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(5),
+        border: Border.all(color: col.withValues(alpha: 0.4), width: 0.7),
       ),
       child: GoopText(
-        text,
+        label,
         style: TextStyle(
-          fontSize: FontSizes.labelSmall,
-          fontWeight: FontWeight.bold,
-          color: color,
+          fontSize: 8.5,
+          fontWeight: FontWeight.w900,
+          color: col,
+          letterSpacing: 0.4,
         ),
       ),
     );
   }
 }
 
-// ---------------------------------------------------------------------------
-
-// Top-level shrine UX helpers
 void _showShrineResult(BuildContext c, ShrineApplyResult r) {
   final lines = <String>[];
   if (r.applied.isNotEmpty) lines.add(r.applied.join(' · '));
@@ -573,14 +499,3 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
 
 /// Opens the shrine's wiki.gg page in the external browser — same
 /// URL pattern as the item detail screen's wiki button.
-Future<void> _openShrineWiki(String shrineName) async {
-  try {
-    final slug = Uri.encodeComponent(shrineName.replaceAll(' ', '_'));
-    await launchUrl(
-      Uri.parse('https://enterthegungeon.wiki.gg/wiki/$slug'),
-      mode: LaunchMode.externalApplication,
-    );
-  } catch (e) {
-    debugPrint('[ShrinePicker] wiki launch error: $e');
-  }
-}
