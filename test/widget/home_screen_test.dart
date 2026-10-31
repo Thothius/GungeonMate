@@ -104,7 +104,7 @@ void main() {
   });
 
   group('Active run state (bottom nav)', () {
-    testWidgets('Shows bottom nav with 4 tabs when run is active', (
+    testWidgets('Shows bottom nav with 3 tabs when run is active', (
       tester,
     ) async {
       final rp = _LoadedRunProvider();
@@ -120,7 +120,7 @@ void main() {
       expect(find.text('Inventory'), findsOneWidget);
       expect(find.text('Browse'), findsOneWidget);
       expect(find.text('Ammonomicon'), findsOneWidget);
-      expect(find.text('Quiz'), findsOneWidget);
+      
     });
 
     testWidgets('Inventory is the default selected tab', (tester) async {
@@ -155,18 +155,18 @@ void main() {
       expect(navBar.selectedIndex, 1);
     });
 
-    testWidgets('Tapping Quiz tab switches selectedIndex', (tester) async {
+    testWidgets('Tapping Ammonomicon tab switches selectedIndex (first)', (tester) async {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
       await tester.pumpWidget(wrap(const HomeScreen(), rp: rp));
       await tester.pump();
 
-      await tester.tap(find.text('Quiz'));
+      await tester.tap(find.text('Ammonomicon'));
       await tester.pump();
 
       final navBar = tester.widget<NavigationBar>(find.byType(NavigationBar));
-      expect(navBar.selectedIndex, 3);
+      expect(navBar.selectedIndex, 2);
     });
 
     testWidgets('Tapping Ammonomicon tab switches selectedIndex', (tester) async {
@@ -183,7 +183,7 @@ void main() {
       expect(navBar.selectedIndex, 2);
     });
 
-    testWidgets('Navigation has 4 destinations', (tester) async {
+    testWidgets('Navigation has 3 destinations', (tester) async {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 
@@ -191,7 +191,7 @@ void main() {
       await tester.pump();
 
       final navBar = tester.widget<NavigationBar>(find.byType(NavigationBar));
-      expect(navBar.destinations.length, 4);
+      expect(navBar.destinations.length, 3);
     });
   });
 }

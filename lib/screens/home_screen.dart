@@ -12,7 +12,6 @@ import 'main_menu_screen.dart';
 import 'active_run_screen.dart';
 import 'browse_screen.dart';
 import 'ammonomicon_screen.dart';
-import 'quiz/quiz_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -118,11 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _visitedTabs.contains(2)
           ? AmmonomiconScreen(showBackButton: false)
           : const SizedBox.shrink(),
-      // Quiz: deferred until first visit — builds its engine from
-      // RunProvider data on first open.
-      _visitedTabs.contains(3)
-          ? const QuizHomeScreen()
-          : const SizedBox.shrink(),
     ];
 
     // Back-button policy: only the Inventory tab pops the route (which
@@ -171,11 +165,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.menu_book_outlined),
                   selectedIcon: Icon(Icons.menu_book),
                   label: 'Ammonomicon',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.quiz_outlined),
-                  selectedIcon: Icon(Icons.quiz),
-                  label: 'Quiz',
                 ),
               ],
             ),
