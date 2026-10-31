@@ -1867,7 +1867,8 @@
     "ammonomicon_entry": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master.",
     "id": 351,
     "ammonomicon": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master.",
-    "game_icon": "assets/images/game/items/arcane_gunpowder.png"
+    "game_icon": "assets/images/game/items/arcane_gunpowder.png",
+    "ammonomicon_pos": 6
   },
   {
     "name": "Armor of Thorns",
@@ -4579,7 +4580,15 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Electrifies all bullets fired. Increases accuracy. The shock troops of the Hegemony of Man consist entirely of heartless machines, shielded from voltage attacks. Their victims however, have learned to fear the inevitable sting of their electrified shells.",
-    "game_icon": "assets/images/game/items/battery_bullets.png"
+    "game_icon": "assets/images/game/items/battery_bullets.png",
+    "stat_modifiers": [
+      {
+        "stat": "Accuracy",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.5
+      }
+    ],
+    "ammonomicon_pos": 89
   },
   {
     "name": "Battle Standard",
@@ -7921,7 +7930,8 @@
       "Shop"
     ],
     "ammonomicon": "Improves the contents of broken chests. The collected learnings of generations of treasure hunters. This handy book details the mysterious inner mechanisms of the dungeon chests.",
-    "game_icon": "assets/images/game/items/book_of_chest_anatomy.png"
+    "game_icon": "assets/images/game/items/book_of_chest_anatomy.png",
+    "ammonomicon_pos": 237
   },
   {
     "name": "Boomerang",
@@ -15125,7 +15135,8 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Sprays an area with liquid coolant. Useful for putting out fires or electrifying areas!",
-    "game_icon": "assets/images/game/items/coolant_leak.png"
+    "game_icon": "assets/images/game/items/coolant_leak.png",
+    "ammonomicon_pos": 227
   },
   {
     "name": "Copper Ammolet",
@@ -16545,7 +16556,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/35/Dog.png",
     "type": "Passive",
     "quote": "Junior II",
-    "quality": "A",
+    "quality": "D",
     "effect": "Follows the player, digs up pickups on room clear, and barks at mimic chests. The Hunter starts with this.",
     "curse": 0.0,
     "coolness": 0.0,
@@ -16843,7 +16854,9 @@
     "sell_price": "16",
     "recharge_time": "",
     "neckbear_approved": true,
-    "ammonomicon_entry": "A faithful companion. Finds items on room clear. Keeps the Hunter company. He has a good nose for treasure, but all attempts to train him in combat have failed."
+    "ammonomicon_entry": "A faithful companion. Finds items on room clear. Keeps the Hunter company. He has a good nose for treasure, but all attempts to train him in combat have failed.",
+    "id": 300,
+    "ammonomicon_pos": 244
   },
   {
     "name": "Double Vision",
@@ -18993,7 +19006,8 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "A photo that the Convict brought with her to the Gungeon. Deal extra damage for a short time after getting hit. On the journey to the Breach, the Pilot once asked her why she always stared at this photo. Later, she was released from the brig.",
-    "game_icon": "assets/images/game/items/enraging_photo.png"
+    "game_icon": "assets/images/game/items/enraging_photo.png",
+    "ammonomicon_pos": 123
   },
   {
     "name": "Escape Rope",
@@ -33050,7 +33064,15 @@
     "ammonomicon_entry": "Who needs bullets when you ARE a bullet? Provides immunity to contact damage, and rolling into enemies deals increased damage.",
     "id": 414,
     "ammonomicon": "Who needs bullets when you ARE a bullet? Provides immunity to contact damage, and rolling into enemies deals increased damage.",
-    "game_icon": "assets/images/game/items/live_ammo.png"
+    "game_icon": "assets/images/game/items/live_ammo.png",
+    "stat_modifiers": [
+      {
+        "stat": "DodgeRollDamage",
+        "op": "MULTIPLICATIVE",
+        "amount": 5.0
+      }
+    ],
+    "ammonomicon_pos": 125
   },
   {
     "name": "Lodestone Ammolet",
@@ -37798,7 +37820,8 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Molotov cocktails aren't guns, and so they are frowned upon by long-dwelling Gungeoneers. They get the job done regardless. Knowing the Hegemony wouldn't let her bring her own weaponry to the Gungeon, the Convict smuggled these few bottles in with the transport's cargo.",
-    "game_icon": "assets/images/game/items/molotov.png"
+    "game_icon": "assets/images/game/items/molotov.png",
+    "ammonomicon_pos": 23
   },
   {
     "name": "Monster Blood",
@@ -39078,7 +39101,8 @@
     "ammonomicon_entry": "Bullet Component. Carved from a fang of a High Dragun, this casing is the only material strong enough to jacket Planar Lead.",
     "id": 350,
     "ammonomicon": "Bullet Component. Carved from a fang of a High Dragun, this casing is the only material strong enough to jacket Planar Lead.",
-    "game_icon": "assets/images/game/items/obsidian_shell_casing.png"
+    "game_icon": "assets/images/game/items/obsidian_shell_casing.png",
+    "ammonomicon_pos": 8
   },
   {
     "name": "Oiled Cylinder",
@@ -57303,7 +57327,8 @@
       "Shop"
     ],
     "ammonomicon": "Chance to pick locks. Can only be used once per lock. These lockpicks have never let the Pilot down, except for the many times they did.",
-    "game_icon": "assets/images/game/items/trusty_lockpicks.png"
+    "game_icon": "assets/images/game/items/trusty_lockpicks.png",
+    "ammonomicon_pos": 52
   },
   {
     "name": "Turkey",

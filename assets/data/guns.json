@@ -772,7 +772,8 @@
       "Shop"
     ],
     "ammonomicon": "A horrifying tentacle, cloven from some abyssal fiend. It moves in very disquieting ways.",
-    "game_icon": "assets/images/game/guns/abyssal_tentacle.png"
+    "game_icon": "assets/images/game/guns/abyssal_tentacle.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "AC-15",
@@ -4750,7 +4751,7 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Betrayer!",
-    "id": 574,
+    "id": 417,
     "infinite_ammo": true,
     "ammonomicon_pos": 6,
     "ammonomicon": "Betrayer!",
@@ -6640,7 +6641,7 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "This Budget Revolver was brought to the Gungeon by an infamous fugitive. Provided by the Hegemony Regional Magistrate. The Convict won their plea to face the Gungeon in lieu of life imprisonment; undo their crimes, or face an eternity in the Gungeon. With no cost to the state, it was an acceptable arrangement.\n\nCheaply made and prone to jams, the Budget Revolver is used by only the most desperate Gungeoneers.",
-    "id": 652,
+    "id": 80,
     "infinite_ammo": true,
     "content_source": "CONTENT_UPDATE_03",
     "ammonomicon_pos": 3,
@@ -13154,7 +13155,8 @@
       "Truth chest"
     ],
     "ammonomicon": "Fires a superheated beam that can ignite enemies. The Order of the True Gun tells three tales of the demons that dwell beneath the Gungeon. All end in fire.",
-    "game_icon": "assets/images/game/guns/demon_head.png"
+    "game_icon": "assets/images/game/guns/demon_head.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Derringer",
@@ -13882,7 +13884,8 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Fires a beam that decoheres matter into its constituent particles. This disintegration ray is outlawed on almost every planet with some form of government, and feared by all beings made primarily of matter. It can be fired legally in only two places: the Gungeon, and the waste disposal facilities of Popolon V.",
-    "game_icon": "assets/images/game/guns/disintegrator.png"
+    "game_icon": "assets/images/game/guns/disintegrator.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Dragunfire",
@@ -16582,14 +16585,14 @@
     "quality": "D",
     "type": "Semiautomatic",
     "dps": "23.1",
-    "magazine_size": "10",
+    "magazine_size": "8",
     "ammo_capacity": "350",
     "damage": "10",
     "fire_rate": "0.20",
-    "reload_time": "1.5",
-    "shot_speed": "15",
+    "reload_time": "1.2",
+    "shot_speed": "600",
     "range": "1000",
-    "force": "11",
+    "force": "4",
     "spread": "10°",
     "class": "PISTOL",
     "curse": 0.0,
@@ -16803,9 +16806,9 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "The trusty sidearm of a spacefaring hero.\n\nFeaturing a stylish design and solid performance, this blaster is almost always worth keeping around.",
-    "id": 657,
+    "id": 383,
     "content_source": "CONTENT_UPDATE_03",
-    "ammonomicon_pos": 88,
+    "ammonomicon_pos": 120,
     "ammonomicon": "The trusty sidearm of a spacefaring hero. Featuring a stylish design and solid performance, this blaster is almost always worth keeping around.",
     "game_icon": "assets/images/game/guns/flash_ray.png"
   },
@@ -17001,7 +17004,8 @@
       "Shop"
     ],
     "ammonomicon": "Reloading this skull produces a gout of flame that can ignite oil. This is a spectacularly preserved specimen of a gun that went extinct during the Ballistac era.",
-    "game_icon": "assets/images/game/guns/fossilized_gun.png"
+    "game_icon": "assets/images/game/guns/fossilized_gun.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Freeze Ray",
@@ -17072,12 +17076,14 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Freezes enemies in their tracks.",
-    "id": 710,
+    "id": 40,
     "game_type": "Beam",
     "content_source": "CONTENT_UPDATE_02",
-    "ammonomicon_pos": 161,
+    "ammonomicon_pos": 177,
     "ammonomicon": "Freezes enemies in their tracks.",
-    "game_icon": "assets/images/game/guns/freeze_ray.png"
+    "game_icon": "assets/images/game/guns/freeze_ray.png",
+    "game_damage": "20",
+    "game_game_type": "Beam"
   },
   {
     "name": "Frost Giant",
@@ -17468,7 +17474,8 @@
       "Wooden chests"
     ],
     "ammonomicon": "This archaic laser has been studied for centuries. Gungeonologists can only conclude that it was used by primitive people to poison each other with radiation.",
-    "game_icon": "assets/images/game/guns/gamma_ray.png"
+    "game_icon": "assets/images/game/guns/gamma_ray.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Gilded Hydra",
@@ -18932,7 +18939,8 @@
       "Shop"
     ],
     "ammonomicon": "Blessed Gun of the Gunseeker. This gun gains experience with every kill, and is strangely resistant to the Gungeon's temporal rifts. Any accrued experience will persist throughout time. A gun spoken of in legend. Once wielded by Gunderaan, Prince of Guns, this weapon ultimately found its way to the Gungeon after being mishandled by millions of idiots for countless hours.",
-    "game_icon": "assets/images/game/guns/gunderfury.png"
+    "game_icon": "assets/images/game/guns/gunderfury.png",
+    "game_game_type": "Automatic"
   },
   {
     "name": "Gungeon Ant",
@@ -24428,7 +24436,8 @@
       "Shop"
     ],
     "ammonomicon": "Drains will from foes. An item to be held by a Gungeoneer. Can be used to weaponize stolen will against the holder's enemies.",
-    "game_icon": "assets/images/game/guns/life_orb.png"
+    "game_icon": "assets/images/game/guns/life_orb.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Light Gun",
@@ -26742,10 +26751,10 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "This gun is unusually filthy for a handgun in the Gungeon. The Gundead spend much of their time polishing and greasing guns, though they conspicuously leave the Magnum alone.",
-    "id": 751,
+    "id": 38,
     "game_fire_rate": "0.15",
     "content_source": "CONTENT_UPDATE_03",
-    "ammonomicon_pos": 19,
+    "ammonomicon_pos": 20,
     "ammonomicon": "This gun is unusually filthy for a handgun in the Gungeon. The Gundead spend much of their time polishing and greasing guns, though they conspicuously leave the Magnum alone.",
     "game_icon": "assets/images/game/guns/magnum.png"
   },
@@ -28069,7 +28078,8 @@
       "Truth chest"
     ],
     "ammonomicon": "A water gun might seem to be a poor weapon for Gungeoneering, and in most cases that is true. But a well-placed blast of water can douse a raging inferno; a soaked enemy can be electrified; a dazed foe can be pushed into the abyss. In the Gungeon, creativity is key to victory.",
-    "game_icon": "assets/images/game/guns/mega_douser.png"
+    "game_icon": "assets/images/game/guns/mega_douser.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Megahand",
@@ -28515,7 +28525,7 @@
     "notes": "Shoots various figurines, books, and gems at the cost of 1 coin per shot.",
     "quote": "Pay To Win",
     "quality": "A",
-    "type": "Semiautomatic",
+    "type": "Automatic",
     "dps": "44.38 (Average)",
     "magazine_size": "Equal to coins held",
     "ammo_capacity": "Equal to coins held",
@@ -28675,7 +28685,16 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Everyone involved in the production of this gun thought it was a bad idea, but the higher-ups made them build it anyway. Later, management shut down that gun factory for making a gun no one liked.",
-    "game_icon": "assets/images/game/guns/microtransaction_gun.png"
+    "game_icon": "assets/images/game/guns/microtransaction_gun.png",
+    "game_magazine_size": "30",
+    "game_spread": "8°",
+    "game_damage": "15",
+    "game_shot_speed": "18",
+    "game_range": "1000",
+    "game_force": "15",
+    "game_reload_time": "0.3",
+    "game_ammo_capacity": "400",
+    "ammonomicon_pos": 223
   },
   {
     "name": "Mine Cutter",
@@ -29335,7 +29354,8 @@
       "Truth chest"
     ],
     "ammonomicon": "This powerful laser was designed to carve moon rock at high speed during terraforming projects.",
-    "game_icon": "assets/images/game/guns/moonscraper.png"
+    "game_icon": "assets/images/game/guns/moonscraper.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Mourning Star",
@@ -29598,7 +29618,8 @@
       "Truck shop"
     ],
     "ammonomicon": "Fires a tracking beam which, when held on an enemy target, calls down an orbital strike. Persists while the trigger is held. Can be guided.",
-    "game_icon": "assets/images/game/guns/mourning_star.png"
+    "game_icon": "assets/images/game/guns/mourning_star.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Mr. Accretion Jr.",
@@ -29994,7 +30015,8 @@
       "Shop"
     ],
     "ammonomicon": "A horrific consequence of radiation exposure. At least the arm is still somewhat useful.",
-    "game_icon": "assets/images/game/guns/mutation.png"
+    "game_icon": "assets/images/game/guns/mutation.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Nail Gun",
@@ -31787,7 +31809,8 @@
       "Shop"
     ],
     "ammonomicon": "Fires a stream of toxic goop. Ammo can be reused. The Syringe Gun was ordered for the Gungeon by the Médecins Sans Diplôme to perform complete blood transfusions all at once. When that proved dangerous, a crafty Gungeoneer filled the giant Syringe with a live Poisbulon.",
-    "game_icon": "assets/images/game/guns/plunger.png"
+    "game_icon": "assets/images/game/guns/plunger.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Polaris",
@@ -32488,7 +32511,8 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Deals extra damage to ghosts and spectres. Originally brought to the Gungeon by a team of investigators who suspected that something strange was going on.",
-    "game_icon": "assets/images/game/guns/proton_backpack.png"
+    "game_icon": "assets/images/game/guns/proton_backpack.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Prototype Railgun",
@@ -33426,12 +33450,15 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Damages all enemies on screen, no matter what.\nThis cannon was built for mounting on Supersonic Attack Fighters, but has been retrofitted to be carried by infantry. An inscription on the barrel reads, \"Know thy own position, and all others inevitably fall.\"",
-    "id": 712,
+    "id": 107,
     "game_reload_time": "0",
     "content_source": "CONTENT_UPDATE_02",
-    "ammonomicon_pos": 167,
+    "ammonomicon_pos": 183,
     "ammonomicon": "Damages all enemies on screen, no matter what. This cannon was built for mounting on Supersonic Attack Fighters, but has been retrofitted to be carried by infantry. An inscription on the barrel reads, \"Know thy own position, and all others inevitably fall.\"",
-    "game_icon": "assets/images/game/guns/raiden_coil.png"
+    "game_icon": "assets/images/game/guns/raiden_coil.png",
+    "game_damage": "17.5",
+    "game_shot_speed": "-1",
+    "game_type": "Beam"
   },
   {
     "name": "Railgun",
@@ -35004,7 +35031,7 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "The Rogue Special, given to the Pilot by his partner. It's never let him down.\n\nThis hip shooter has been known to fire half-cocked and often gets itself into more trouble than it can handle.",
-    "id": 651,
+    "id": 89,
     "infinite_ammo": true,
     "content_source": "CONTENT_UPDATE_03",
     "ammonomicon_pos": 2,
@@ -36064,15 +36091,15 @@
     "quality": "D",
     "type": "Semiautomatic",
     "dps": "25.9",
-    "magazine_size": "6",
+    "magazine_size": "8",
     "ammo_capacity": "150",
     "damage": "4x4 (16)",
     "fire_rate": "0.50",
     "reload_time": "1.2s",
     "shot_speed": "23",
     "range": "8",
-    "force": "30",
-    "spread": "15°",
+    "force": "12",
+    "spread": "13°",
     "class": "SHOTGUN",
     "curse": 0.0,
     "coolness": 0.0,
@@ -36195,7 +36222,9 @@
       "Wooden chests"
     ],
     "ammonomicon": "A shotgun modified for easy concealment. The shorter barrel widens the spread, but up-close, it's just as deadly as its full-barreled cousin.",
-    "game_icon": "assets/images/game/guns/sawed_off.png"
+    "game_icon": "assets/images/game/guns/sawed_off.png",
+    "game_damage": "4",
+    "ammonomicon_pos": 43
   },
   {
     "name": "Science Cannon",
@@ -36288,7 +36317,11 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "This immense beam cannon was developed as part of a bid to win the Hegemony's military contracts. The steady stream of intense science energy it fires is a true testament to what physics and engineering can accomplish.",
-    "game_icon": "assets/images/game/guns/science_cannon.png"
+    "game_icon": "assets/images/game/guns/science_cannon.png",
+    "game_damage": "26",
+    "game_reload_time": "0",
+    "game_type": "Beam",
+    "ammonomicon_pos": 178
   },
   {
     "name": "Screecher",
@@ -39882,8 +39915,8 @@
     "magazine_size": "6",
     "ammo_capacity": "100",
     "damage": "5 (Arrow) 15 (Explosion)",
-    "fire_rate": "0.50",
-    "reload_time": "1.5s",
+    "fire_rate": "0.4",
+    "reload_time": "0.7",
     "shot_speed": "25",
     "range": "∞",
     "force": "8",
@@ -39998,7 +40031,10 @@
       "Gungeon loot pool"
     ],
     "ammonomicon": "Darts explode on reload. A favorite of the adventurer Frifle, who appreciates traditional weaponry but isn't opposed to a few combustible upgrades.",
-    "game_icon": "assets/images/game/guns/sticky_crossbow.png"
+    "game_icon": "assets/images/game/guns/sticky_crossbow.png",
+    "game_damage": "5",
+    "game_range": "1000",
+    "ammonomicon_pos": 66
   },
   {
     "name": "Stinger",
@@ -46053,7 +46089,8 @@
       "Truth chest"
     ],
     "ammonomicon": "This magic horn is proof that at least one unicorn existed, and now is either dead or hornless.",
-    "game_icon": "assets/images/game/guns/unicorn_horn.png"
+    "game_icon": "assets/images/game/guns/unicorn_horn.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "VertebraeK-47",
@@ -48070,7 +48107,8 @@
       "Truck shop"
     ],
     "ammonomicon": "A wooden beam, often used in construction. Not technically a gun, but you could probably smack some Bullet Kin around with it.",
-    "game_icon": "assets/images/game/guns/wood_beam.png"
+    "game_icon": "assets/images/game/guns/wood_beam.png",
+    "game_game_type": "Beam"
   },
   {
     "name": "Yari Launcher",
@@ -48248,7 +48286,8 @@
       "Truth chest"
     ],
     "ammonomicon": "Chain-fires homing rockets. A legendary weapon manufactured by Zilla Industries. This one was created bespoke for a powerful warrior, whose name has been lost to shadow.",
-    "game_icon": "assets/images/game/guns/yari_launcher.png"
+    "game_icon": "assets/images/game/guns/yari_launcher.png",
+    "ammonomicon_pos": 145
   },
   {
     "name": "Zilla Shotgun",
