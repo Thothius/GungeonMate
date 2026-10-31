@@ -1,0 +1,40 @@
+[
+  {
+    "name": "Challenge Mode",
+    "category": "Game Mode",
+    "description": "Special runs with stacked modifiers — hard mode for veterans seeking greater rewards.",
+    "tips": [
+      "Unlock via shrine",
+      "Stacked modifiers",
+      "Greater rewards"
+    ]
+  },
+  {
+    "name": "Co-op",
+    "category": "Game Mode",
+    "description": "Two-player local co-op — one Gungeoneer + one Cultist companion share the gungeon.",
+    "tips": [
+      "2 players",
+      "Shared resources",
+      "Revive mechanic"
+    ]
+  },
+  {
+    "name": "Turbo Mode",
+    "category": "Game Mode",
+    "description": "Faster enemy AI and projectile speed — for players who want maximum challenge.",
+    "tips": [
+      "Increased speed",
+      "Harder dodging"
+    ]
+  },
+  {
+    "name": "Blessed Mode",
+    "category": "Game Mode",
+    "description": "Random run modifiers each floor — every chamber surprises.",
+    "tips": [
+      "Random effects per floor",
+      "High variance"
+    ]
+  }
+]

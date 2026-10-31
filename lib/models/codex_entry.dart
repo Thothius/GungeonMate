@@ -76,7 +76,7 @@ class CodexEntry {
 }
 
 /// Which codex section a list belongs to.
-enum CodexSection { objects, pickups, npcs, enemies, bosses, guns, items, synergies, shrines }
+enum CodexSection { objects, pickups, npcs, enemies, bosses, guns, items, synergies, shrines, chapters, gameModes }
 
 /// Helper to resolve the image folder for a codex section.
 String codexImageFolder(CodexSection section) {
@@ -99,6 +99,9 @@ String codexImageFolder(CodexSection section) {
       return 'codex';
     case CodexSection.shrines:
       return 'shrines';
+    case CodexSection.chapters:
+    case CodexSection.gameModes:
+      return 'codex';
   }
 }
 

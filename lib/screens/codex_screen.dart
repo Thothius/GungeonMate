@@ -69,6 +69,8 @@ class _CodexScreenState extends State<CodexScreen> {
   // Loaded data
   List<CodexEntry> _objects = [];
   List<CodexEntry> _shrines = [];
+  List<CodexEntry> _chapters = [];
+  List<CodexEntry> _gameModes = [];
   List<CodexEntry> _pickups = [];
   List<CodexEntry> _npcs = [];
   List<CodexEntry> _enemies = [];
@@ -172,6 +174,18 @@ class _CodexScreenState extends State<CodexScreen> {
       color: Color(0xFFFFB74D),
       isSpecial: false,
     ),
+    AmmonomiconTab(
+      label: 'Chapters',
+      icon: Icons.layers,
+      color: Color(0xFF4FC3F7),
+      isSpecial: false,
+    ),
+    AmmonomiconTab(
+      label: 'Game Modes',
+      icon: Icons.sports_esports,
+      color: Color(0xFFAED581),
+      isSpecial: false,
+    ),
   ];
 
   @override
@@ -196,6 +210,8 @@ class _CodexScreenState extends State<CodexScreen> {
       bundle.loadString('assets/data/enemies.json'),
       bundle.loadString('assets/data/bosses.json'),
       bundle.loadString('assets/data/shrines.json'),
+      bundle.loadString('assets/data/chapters.json'),
+      bundle.loadString('assets/data/game_modes.json'),
     ]);
     if (!mounted) return;
     // Parse each JSON file in an isolate to avoid jank on the codex screen.
@@ -205,6 +221,8 @@ class _CodexScreenState extends State<CodexScreen> {
       compute(_parseCodexEntries, results[2]),
       compute(_parseCodexEntries, results[3]),
       compute(_parseCodexEntries, results[4]),
+      compute(_parseCodexEntries, results[6]),
+      compute(_parseCodexEntries, results[7]),
     ]);
     if (!mounted) return;
     // Shrines: custom parse — JSON icon fields are wiki URLs; the local
@@ -243,6 +261,8 @@ class _CodexScreenState extends State<CodexScreen> {
       _enemies = parsed[3];
       _bosses = parsed[4];
       _shrines = shrineList;
+      _chapters = parsed[5];
+      _gameModes = parsed[6];
       _loaded = true;
     });
   }
@@ -350,6 +370,10 @@ class _CodexScreenState extends State<CodexScreen> {
           }).toList());
       case 12:
         return _filter(_shrines);
+      case 13:
+        return _filter(_chapters);
+      case 14:
+        return _filter(_gameModes);
       default:
         return [];
     }
@@ -490,6 +514,10 @@ class _CodexScreenState extends State<CodexScreen> {
         return CodexSection.synergies;
       case 12:
         return CodexSection.shrines;
+      case 13:
+        return CodexSection.chapters;
+      case 14:
+        return CodexSection.gameModes;
       default:
         return CodexSection.objects;
     }
