@@ -172,4 +172,17 @@ void main() {
     expect(find.byType(TextField), findsOneWidget);
     expect(find.text('HOST PIN (JOIN ONLY)'), findsNothing);
   });
+
+  testWidgets('HOST identity stage shows optional run-title field', (
+    tester,
+  ) async {
+    await tester.pumpWidget(wrap(const MpLobbyScreen()));
+    await tester.pump();
+    await toIdentityViaHost(tester);
+
+    // Nickname + run title — the title is host-only (Sidekick gets it
+    // via session meta).
+    expect(find.byType(TextField), findsNWidgets(2));
+    expect(find.text('RUN TITLE (OPTIONAL)'), findsOneWidget);
+  });
 }
