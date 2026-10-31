@@ -299,16 +299,10 @@ class VisualPrefs {
   final int particleCount;
 
   /// Dialogue Settings
-  final bool dialogueHapticsEnabled;
-  final int dialogueTextSpeedMs;
-
-  final bool isGoopianLanguage;
-  final bool spongeActive;
 
   /// Whether the Effects panel accordion is shown on the active-run dashboard.
 
   /// Whether the Shrine tracker panel is shown on the active-run dashboard.
-  final bool showShrinePanel;
 
   /// Whether special-item/gun dashboards are shown on the active-run screen.
   final bool showDashboards;
@@ -449,11 +443,6 @@ class VisualPrefs {
     this.particleSizeScale = 1.0,
     this.particleOpacity = 0.55,
     this.particleCount = 32,
-    this.dialogueHapticsEnabled = true,
-    this.dialogueTextSpeedMs = 30,
-    this.isGoopianLanguage = false,
-    this.spongeActive = false,
-    this.showShrinePanel = false,
     this.showDashboards = true,
     this.periodicGridColumnCount = 0,
     this.particleColorSchema = ParticleColorSchema.presetDefault,
@@ -490,11 +479,6 @@ class VisualPrefs {
   static const _kParticleOpacity = 'vp.particle_opacity_v1';
   static const _kParticleCount = 'vp.particle_count_v1';
 
-  static const _kDialogueHaptics = 'vp.dialogue_haptics_v1';
-  static const _kDialogueTextSpeed = 'vp.dialogue_text_speed_v1';
-  static const _kGoopianLanguage = 'vp.goopian_language_v1';
-  static const _kSpongeActive = 'vp.sponge_active_v1';
-  static const _kShowShrinePanel = 'vp.show_shrine_panel_v1';
   static const _kShowDashboards = 'vp.show_dashboards_v1';
   static const _kPeriodicGridColumnCount = 'vp.periodic_grid_column_count_v1';
   static const _kParticleColorSchema = 'vp.particle_color_schema_v1';
@@ -578,9 +562,6 @@ class VisualPrefs {
             InventoryDisplayMode.values.length - 1,
           )];
 
-      final isGoopian = p.getBool(_kGoopianLanguage) ?? false;
-      final spongeActive = p.getBool(_kSpongeActive) ?? false;
-      final showShrinePanel = p.getBool(_kShowShrinePanel) ?? false;
       final showDashboards = p.getBool(_kShowDashboards) ?? true;
       final periodicGridColumnCount = p.getInt(_kPeriodicGridColumnCount) ?? 0;
       final particleColorSchemaIdx = p.getInt(_kParticleColorSchema) ?? 0;
@@ -626,11 +607,6 @@ class VisualPrefs {
         particleSizeScale: p.getDouble(_kParticleSizeScale) ?? 1.0,
         particleOpacity: p.getDouble(_kParticleOpacity) ?? 0.55,
         particleCount: p.getInt(_kParticleCount) ?? 32,
-        dialogueHapticsEnabled: p.getBool(_kDialogueHaptics) ?? true,
-        dialogueTextSpeedMs: p.getInt(_kDialogueTextSpeed) ?? 30,
-        isGoopianLanguage: isGoopian,
-        spongeActive: spongeActive,
-        showShrinePanel: showShrinePanel,
         showDashboards: showDashboards,
         periodicGridColumnCount: periodicGridColumnCount,
         particleColorSchema: particleColorSchema,
@@ -767,31 +743,6 @@ class VisualPrefs {
     _persist();
   }
 
-  static Future<void> setDialogueHapticsEnabled(bool v) async {
-    notifier.value = notifier.value._with(dialogueHapticsEnabled: v);
-    _persist();
-  }
-
-  static Future<void> setDialogueTextSpeedMs(int v) async {
-    notifier.value = notifier.value._with(dialogueTextSpeedMs: v);
-    _persist();
-  }
-
-  static Future<void> setIsGoopianLanguage(bool v) async {
-    notifier.value = notifier.value._with(isGoopianLanguage: v);
-    _persist();
-  }
-
-  static Future<void> setSpongeActive(bool v) async {
-    notifier.value = notifier.value._with(spongeActive: v);
-    _persist();
-  }
-
-  static Future<void> setShowShrinePanel(bool v) async {
-    notifier.value = notifier.value._with(showShrinePanel: v);
-    _persist();
-  }
-
   static Future<void> setShowDashboards(bool v) async {
     notifier.value = notifier.value._with(showDashboards: v);
     _persist();
@@ -903,11 +854,6 @@ class VisualPrefs {
       await p.setDouble(_kParticleSizeScale, v.particleSizeScale);
       await p.setDouble(_kParticleOpacity, v.particleOpacity);
       await p.setInt(_kParticleCount, v.particleCount);
-      await p.setBool(_kDialogueHaptics, v.dialogueHapticsEnabled);
-      await p.setInt(_kDialogueTextSpeed, v.dialogueTextSpeedMs);
-      await p.setBool(_kGoopianLanguage, v.isGoopianLanguage);
-      await p.setBool(_kSpongeActive, v.spongeActive);
-      await p.setBool(_kShowShrinePanel, v.showShrinePanel);
       await p.setBool(_kShowDashboards, v.showDashboards);
       await p.setInt(_kPeriodicGridColumnCount, v.periodicGridColumnCount);
       await p.setInt(_kParticleColorSchema, v.particleColorSchema.index);
@@ -945,11 +891,6 @@ class VisualPrefs {
     double? particleSizeScale,
     double? particleOpacity,
     int? particleCount,
-    bool? dialogueHapticsEnabled,
-    int? dialogueTextSpeedMs,
-    bool? isGoopianLanguage,
-    bool? spongeActive,
-    bool? showShrinePanel,
     bool? showDashboards,
     int? periodicGridColumnCount,
     ParticleColorSchema? particleColorSchema,
@@ -982,12 +923,6 @@ class VisualPrefs {
     particleSizeScale: particleSizeScale ?? this.particleSizeScale,
     particleOpacity: particleOpacity ?? this.particleOpacity,
     particleCount: particleCount ?? this.particleCount,
-    dialogueHapticsEnabled:
-        dialogueHapticsEnabled ?? this.dialogueHapticsEnabled,
-    dialogueTextSpeedMs: dialogueTextSpeedMs ?? this.dialogueTextSpeedMs,
-    isGoopianLanguage: isGoopianLanguage ?? this.isGoopianLanguage,
-    spongeActive: spongeActive ?? this.spongeActive,
-    showShrinePanel: showShrinePanel ?? this.showShrinePanel,
     showDashboards: showDashboards ?? this.showDashboards,
     periodicGridColumnCount:
         periodicGridColumnCount ?? this.periodicGridColumnCount,
@@ -1023,11 +958,6 @@ class VisualPrefs {
     'particleSizeScale': particleSizeScale,
     'particleOpacity': particleOpacity,
     'particleCount': particleCount,
-    'dialogueHapticsEnabled': dialogueHapticsEnabled,
-    'dialogueTextSpeedMs': dialogueTextSpeedMs,
-    'isGoopianLanguage': isGoopianLanguage,
-    'spongeActive': spongeActive,
-    'showShrinePanel': showShrinePanel,
     'showDashboards': showDashboards,
     'periodicGridColumnCount': periodicGridColumnCount,
     'particleColorSchema': particleColorSchema.index,
@@ -1061,11 +991,6 @@ class VisualPrefs {
       particleSizeScale: (j['particleSizeScale'] as num?)?.toDouble() ?? 1.0,
       particleOpacity: (j['particleOpacity'] as num?)?.toDouble() ?? 0.8,
       particleCount: j['particleCount'] as int? ?? 16,
-      dialogueHapticsEnabled: j['dialogueHapticsEnabled'] as bool? ?? true,
-      dialogueTextSpeedMs: j['dialogueTextSpeedMs'] as int? ?? 30,
-      isGoopianLanguage: j['isGoopianLanguage'] as bool? ?? false,
-      spongeActive: j['spongeActive'] as bool? ?? false,
-      showShrinePanel: j['showShrinePanel'] as bool? ?? true,
       showDashboards: j['showDashboards'] as bool? ?? true,
       periodicGridColumnCount: j['periodicGridColumnCount'] as int? ?? 0,
       particleColorSchema:
