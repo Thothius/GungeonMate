@@ -140,7 +140,7 @@ enum AppThemeMode {
     ),
   ),
   ammonomicon(
-    label: 'Codex',
+    label: 'Ammonomicon',
     vibe: 'ARCHIVAL',
     diff: 'NORMAL',
     elem: 'KNOWLEDGE',
@@ -2177,7 +2177,7 @@ extension AppThemeModeLabel on AppThemeMode {
       case AppThemeMode.unicornIV:
         return 'Unicorn Sunset';
       case AppThemeMode.ammonomicon:
-        return 'The Codex';
+        return 'The Ammonomicon';
       case AppThemeMode.forgeMaster:
         return 'Forge Master';
       case AppThemeMode.hollowChill:

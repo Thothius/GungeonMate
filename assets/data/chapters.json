@@ -105,9 +105,9 @@
     "music": "Play_MUS_Dungeon_Rat_Theme_01",
     "description": "Secret floor — the Rat's lair, a gauntlet of trap-filled rooms.",
     "tips": [
-      "Secret floor",
-      "Trap gauntlet",
-      "The Rat boss"
+      "Secret floor — punch-out fight",
+      "3 phases: Rat → Mech → Punch-Out!!",
+      "Maze of trap rooms before the boss"
     ]
   },
   {
@@ -131,11 +131,14 @@
     "bundle": "base_bullethell",
     "secret": false,
     "music": "Play_MUS_BulletHell_theme_01",
-    "description": "The deepest floor. Pure bullet hell — only the strongest reach the Lich.",
+    "description": "The deepest floor — pure bullet hell. No shops or chests; drops are your only resources.",
     "tips": [
-      "Floor 6",
-      "Lich boss",
-      "Endgame difficulty"
+      "Floor 6 — Lich boss",
+      "No shops/chests — resource starvation",
+      "High Jammed enemy rate",
+      "Flesh Cubes & Shotgrubs",
+      "Boss door rule: bring what you need",
+      "Environmental traps everywhere"
     ]
   },
   {

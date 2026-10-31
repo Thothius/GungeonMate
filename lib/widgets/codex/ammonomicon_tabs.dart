@@ -18,12 +18,17 @@ class AmmonomiconTab {
   final Color color;
   final bool isSpecial;
 
+  /// Grid-tile categories: tapping expands a member picker instead
+  /// of navigating to the drill-down list (Chapters, Game Modes).
+  final bool expandable;
+
   const AmmonomiconTab({
     required this.label,
     this.icon,
     this.assetIcon,
     required this.color,
     required this.isSpecial,
+    this.expandable = false,
   }) : assert(
          icon != null || assetIcon != null,
          'either icon or assetIcon must be provided',

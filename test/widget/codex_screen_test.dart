@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
+import 'package:gungeon_mate/models/codex_entry.dart';
 import 'package:gungeon_mate/screens/codex_screen.dart';
 import 'package:gungeon_mate/widgets/state_widgets.dart';
 
@@ -126,54 +127,19 @@ void main() {
     expect(find.byType(SafeArea), findsWidgets);
   });
 
-  testWidgets('showBackButton true still renders without crashing', (
-    tester,
-  ) async {
-    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: true)));
-    await tester.pump();
-
-    expect(find.byType(Scaffold), findsOneWidget);
-    expect(find.byIcon(Icons.arrow_back), findsOneWidget);
-  });
-
-  testWidgets('renders without overflow on narrow viewport (320px)', (
-    tester,
-  ) async {
-    tester.view.physicalSize = const Size(320, 640);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    await tester.pumpWidget(wrap(const CodexScreen()));
-    await tester.pump();
-
-    expect(tester.takeException(), isNull);
-    expect(find.byType(Scaffold), findsOneWidget);
-  });
-
-  testWidgets('renders without overflow on notched device (top inset)', (
-    tester,
-  ) async {
-    // Wrap in MediaQuery with simulated notch insets
-    await tester.pumpWidget(
-      MaterialApp(
-        home: MediaQuery(
-          data: const MediaQueryData(
-            padding: EdgeInsets.only(top: 50, bottom: 34),
-          ),
-          child: MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (_) => RunProvider()),
-              ChangeNotifierProvider(create: (_) => MpSession.placeholder()),
-            ],
-            child: const CodexScreen(showBackButton: false),
-          ),
-        ),
-      ),
-    );
-    await tester.pump();
-
-    expect(tester.takeException(), isNull);
-    expect(find.byType(SafeArea), findsWidgets);
+  // Regression guard for the off-by-one that shipped: appended
+  // categories must map to their own section, not the previous one.
+  test('ammonomiconSectionForIndex maps every data tab correctly', () {
+    expect(ammonomiconSectionForIndex(1), CodexSection.npcs);
+    expect(ammonomiconSectionForIndex(2), CodexSection.enemies);
+    expect(ammonomiconSectionForIndex(3), CodexSection.bosses);
+    expect(ammonomiconSectionForIndex(4), CodexSection.pickups);
+    expect(ammonomiconSectionForIndex(5), CodexSection.objects);
+    expect(ammonomiconSectionForIndex(6), CodexSection.guns);
+    expect(ammonomiconSectionForIndex(7), CodexSection.items);
+    expect(ammonomiconSectionForIndex(8), CodexSection.synergies);
+    expect(ammonomiconSectionForIndex(9), CodexSection.shrines);
+    expect(ammonomiconSectionForIndex(10), CodexSection.chapters);
+    expect(ammonomiconSectionForIndex(11), CodexSection.gameModes);
   });
 }

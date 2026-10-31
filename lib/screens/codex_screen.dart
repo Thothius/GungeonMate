@@ -11,10 +11,6 @@ import '../theme/tokens.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../widgets/codex/ammonomicon_tabs.dart';
 import '../widgets/state_widgets.dart';
-import 'bullet_hell_codex_screen.dart';
-import 'challenge_mode_codex_screen.dart';
-import 'drake_codex_screen.dart';
-import 'rat_codex_screen.dart';
 import 'codex_detail_screen.dart';
 import 'gungeoneer_detail_screen.dart';
 import 'item_detail_screen.dart';
@@ -58,6 +54,10 @@ class _CodexScreenState extends State<CodexScreen> {
 
   /// Sort mode for Guns/Items tabs: 'name' (A-Z) or 'quality' (S→D).
   String _sortMode = 'name';
+
+  /// Index of the grid category currently expanded inline (-1 = none).
+  /// Chapters/Game Modes tiles expand to show member pickers.
+  int _expanded = -1;
 
   // Currently selected category index (0-based). 0-5 are special pages,
   // 6-10 are data categories.
@@ -123,30 +123,6 @@ class _CodexScreenState extends State<CodexScreen> {
       color: CodexColors.objects,
       isSpecial: false,
     ),
-    AmmonomiconTab(
-      label: 'Rat',
-      icon: Icons.pest_control,
-      color: CodexColors.rat,
-      isSpecial: true,
-    ),
-    AmmonomiconTab(
-      label: 'Dragun',
-      icon: Icons.pets,
-      color: CodexColors.dragun,
-      isSpecial: true,
-    ),
-    AmmonomiconTab(
-      label: 'Bullet Hell',
-      icon: Icons.local_fire_department,
-      color: CodexColors.bulletHell,
-      isSpecial: true,
-    ),
-    AmmonomiconTab(
-      label: 'Challenge',
-      icon: Icons.shuffle,
-      color: CodexColors.challenge,
-      isSpecial: true,
-    ),
     // ── Ammonomicon wiki cats (fabricated from provider data) ──
     AmmonomiconTab(
       label: 'Guns',
@@ -179,12 +155,14 @@ class _CodexScreenState extends State<CodexScreen> {
       icon: Icons.layers,
       color: Color(0xFF4FC3F7),
       isSpecial: false,
+      expandable: true,
     ),
     AmmonomiconTab(
       label: 'Game Modes',
       icon: Icons.sports_esports,
       color: Color(0xFFAED581),
       isSpecial: false,
+      expandable: true,
     ),
   ];
 
@@ -305,7 +283,7 @@ class _CodexScreenState extends State<CodexScreen> {
         return _filter(_objects);
       // Ammonomicon wiki cats — fabricated from provider models on
       // demand (already loaded; no extra JSON parse).
-      case 9:
+      case 6:
         var guns = context.read<RunProvider>().allGuns.toList();
         if (_sortMode == 'quality') {
           guns.sort((a, b) =>
@@ -322,7 +300,7 @@ class _CodexScreenState extends State<CodexScreen> {
                 game: 'gun',
                 description: g.notes))
             .toList());
-      case 10:
+      case 7:
         var items = context.read<RunProvider>().allItems.toList();
         if (_sortMode == 'quality') {
           items.sort((a, b) =>
@@ -339,7 +317,7 @@ class _CodexScreenState extends State<CodexScreen> {
                 game: 'item',
                 description: i.ammonomiconEntry))
             .toList());
-      case 11:
+      case 8:
         return _filter(context
             .read<RunProvider>()
             .allSynergies
@@ -368,15 +346,129 @@ class _CodexScreenState extends State<CodexScreen> {
                 description: s.effect,
                 ammonomicon: [...s.items, ...s.anyOf].join(' · '));
           }).toList());
-      case 12:
+      case 9:
         return _filter(_shrines);
-      case 13:
+      case 10:
         return _filter(_chapters);
-      case 14:
+      case 11:
         return _filter(_gameModes);
       default:
         return [];
     }
+  }
+
+  /// Expanded member picker — a themed card list shown in place of the
+  /// category grid when a Chapters/Game Modes tile is tapped.
+  Widget _buildExpandedPanel(ThemeFlair flair) {
+    final c = _categories[_expanded];
+    final members = _entriesFor(_expanded);
+    final section = _sectionFor(_expanded);
+    return SafeArea(
+      top: !widget.showBackButton,
+      bottom: false,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header — back to grid + category label
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 16, 4),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.arrow_back, color: c.color, size: 20),
+                  onPressed: () {
+                    Haptics.selection();
+                    setState(() => _expanded = -1);
+                  },
+                  tooltip: 'Back',
+                ),
+                Icon(c.icon ?? Icons.list, color: c.color, size: 18),
+                const SizedBox(width: 8),
+                GoopText(
+                  c.label.toUpperCase(),
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.4,
+                      color: c.color),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.fromLTRB(14, 4, 14, 24),
+              itemCount: members.length,
+              itemBuilder: (_, i) {
+                final e = members[i];
+                final subtitle = (e.tips.isNotEmpty)
+                    ? e.tips.first
+                    : (e.description.isNotEmpty
+                        ? e.description
+                        : '');
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Material(
+                    color: c.color.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(10),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(10),
+                      splashColor: c.color.withValues(alpha: 0.2),
+                      onTap: () {
+                        Haptics.selection();
+                        _openEntry(e, section);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                              color: c.color.withValues(alpha: 0.3)),
+                        ),
+                        child: Row(
+                          children: [
+                            _searchIcon(e, section),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  GoopText(e.name,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight:
+                                              FontWeight.w700)),
+                                  if (subtitle.isNotEmpty)
+                                    GoopText(subtitle,
+                                        maxLines: 1,
+                                        overflow:
+                                            TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 11,
+                                            color: Colors.white
+                                                .withValues(
+                                                    alpha: 0.55))),
+                                ],
+                              ),
+                            ),
+                            Icon(Icons.chevron_right,
+                                size: 18,
+                                color:
+                                    c.color.withValues(alpha: 0.6)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   /// Grouped search result container for the global-search view.
@@ -496,32 +588,8 @@ class _CodexScreenState extends State<CodexScreen> {
     );
   }
 
-  CodexSection _sectionFor(int index) {
-    switch (index) {
-      case 1:
-        return CodexSection.npcs;
-      case 2:
-        return CodexSection.enemies;
-      case 3:
-        return CodexSection.bosses;
-      case 4:
-        return CodexSection.pickups;
-      case 9:
-        return CodexSection.guns;
-      case 10:
-        return CodexSection.items;
-      case 11:
-        return CodexSection.synergies;
-      case 12:
-        return CodexSection.shrines;
-      case 13:
-        return CodexSection.chapters;
-      case 14:
-        return CodexSection.gameModes;
-      default:
-        return CodexSection.objects;
-    }
-  }
+  CodexSection _sectionFor(int index) =>
+      ammonomiconSectionForIndex(index);
 
   @override
   Widget build(BuildContext context) {
@@ -666,6 +734,11 @@ class _CodexScreenState extends State<CodexScreen> {
               ),
       );
     }
+    // Expanded member picker — Chapters/Game Modes tiles swap the
+    // grid for a themed card list of their entries.
+    if (_expanded >= 0) {
+      return _buildExpandedPanel(flair);
+    }
     return SafeArea(
       top: !widget.showBackButton,
       bottom: false,
@@ -686,9 +759,13 @@ class _CodexScreenState extends State<CodexScreen> {
               onTap: () {
                 Haptics.selection();
                 setState(() {
-                  _selected = i;
                   _searchCtrl.clear();
                   _query = '';
+                  if (c.expandable) {
+                    _expanded = i;
+                  } else {
+                    _selected = i;
+                  }
                 });
               },
               borderRadius: BorderRadius.all(Radii.md),
@@ -912,7 +989,7 @@ class _CodexScreenState extends State<CodexScreen> {
                     ? _specialPage(_selected)
                     : Column(
                       children: [
-                        if (_selected == 9 || _selected == 10)
+                        if (_selected == 6 || _selected == 7)
                           _buildQualityChips(flair),
                         Expanded(
                           child: _CodexList(
@@ -932,14 +1009,6 @@ class _CodexScreenState extends State<CodexScreen> {
     switch (index) {
       case 0:
         return const _GungeoneersCodexPage();
-      case 6:
-        return const RatCodexScreen();
-      case 7:
-        return const DrakeCodexScreen();
-      case 8:
-        return const BulletHellCodexScreen();
-      case 9:
-        return const ChallengeModeCodexScreen();
       default:
         return const SizedBox.shrink();
     }
@@ -1290,4 +1359,35 @@ class _SearchGroup {
   final CodexSection section;
   const _SearchGroup(
       {required this.tab, required this.entries, required this.section});
+}
+
+/// Category-grid index → section mapping. Public (non-private) so the
+/// tab-to-section alignment can be unit-tested — an earlier refactor
+/// shipped an off-by-one here that made every appended tab show the
+/// previous category's content.
+CodexSection ammonomiconSectionForIndex(int index) {
+  switch (index) {
+    case 1:
+      return CodexSection.npcs;
+    case 2:
+      return CodexSection.enemies;
+    case 3:
+      return CodexSection.bosses;
+    case 4:
+      return CodexSection.pickups;
+    case 6:
+      return CodexSection.guns;
+    case 7:
+      return CodexSection.items;
+    case 8:
+      return CodexSection.synergies;
+    case 9:
+      return CodexSection.shrines;
+    case 10:
+      return CodexSection.chapters;
+    case 11:
+      return CodexSection.gameModes;
+    default:
+      return CodexSection.objects;
+  }
 }
