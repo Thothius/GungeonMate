@@ -119,11 +119,7 @@ class _GlowPickRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        final c = await showColorPickerDialog(
-          context,
-          initialColor: color,
-          title: 'GLOW COLOR',
-        );
+        final c = await _PaletteColorSheet.show(context, color);
         if (c == null || !context.mounted) return;
         Haptics.selection();
         await VisualPrefs.setGlowColor(c);

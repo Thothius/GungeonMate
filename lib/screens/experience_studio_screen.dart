@@ -8,7 +8,6 @@ import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
 import 'palette_maker_screen.dart';
-import '../widgets/color_picker_dialog.dart';
 import '../widgets/theme_overlay.dart';
 import '../utils/fast_route.dart';
 part 'experience_studio/studio_palette.dart';
@@ -39,7 +38,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   late final VisualPrefs _originalPrefs;
   late CustomThemeData _draft;
   int _hubTab = 0;
-  double _liveLookH = 0.30;
+  double _liveLookH = 0.22;
 
   @override
   void initState() {
@@ -531,20 +530,52 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   // variant switcher, glow swatch row, SAVE THEME ──────────────────
 
   Widget _buildCustomTab() {
-    final roles = <(String, Color, CustomThemeData Function(Color))>[
-      ('CANVAS', _draft.scaffold, (c) => _draft.copyWith(scaffold: c)),
-      ('PANEL', _draft.card, (c) => _draft.copyWith(card: c)),
-      ('PRIME', _draft.primary, (c) => _draft.copyWith(primary: c)),
-      ('SECOND', _draft.secondary, (c) => _draft.copyWith(secondary: c)),
-      ('STAT', _draft.headlineStat, (c) => _draft.copyWith(headlineStat: c)),
-      ('BULLETS', _draft.bulletColor, (c) => _draft.copyWith(bulletColor: c)),
+    // (label, plain-English description, current color, updater) —
+    // the desc makes the role obvious without dev knowledge.
+    final roles = <(String, String, Color, CustomThemeData Function(Color))>[
+      (
+        'CANVAS',
+        'app background',
+        _draft.scaffold,
+        (c) => _draft.copyWith(scaffold: c),
+      ),
+      (
+        'PANEL',
+        'cards & containers',
+        _draft.card,
+        (c) => _draft.copyWith(card: c),
+      ),
+      (
+        'PRIME',
+        'accents, borders & links',
+        _draft.primary,
+        (c) => _draft.copyWith(primary: c),
+      ),
+      (
+        'SECOND',
+        'secondary text & hints',
+        _draft.secondary,
+        (c) => _draft.copyWith(secondary: c),
+      ),
+      (
+        'STAT',
+        'numbers & metrics',
+        _draft.headlineStat,
+        (c) => _draft.copyWith(headlineStat: c),
+      ),
+      (
+        'BULLETS',
+        'bullet & special icons',
+        _draft.bulletColor,
+        (c) => _draft.copyWith(bulletColor: c),
+      ),
     ];
     return ListView(
       padding: const EdgeInsets.fromLTRB(Insets.lg, 0, Insets.lg, Insets.lg),
       children: [
         if (_previewMode == AppThemeMode.unicorn) _buildUnicornStrip(),
-        for (final (label, color, update) in roles)
-          _colorRoleRow(label, color, update),
+        for (final (label, desc, color, update) in roles)
+          _colorRoleRow(label, desc, color, update),
         const SizedBox(height: 14),
         ScaleButton(
           onTap: _showSaveThemeDialog,
@@ -575,9 +606,11 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     );
   }
 
-  /// One color role: name + hex + swatch → tap opens the color picker.
+  /// One color role: name + plain-English desc + hex + swatch — tap
+  /// slides in the curated 6×10 swatch sheet (GENERAL / METALLIC).
   Widget _colorRoleRow(
     String label,
+    String desc,
     Color color,
     CustomThemeData Function(Color) update,
   ) {
@@ -585,11 +618,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       padding: const EdgeInsets.only(bottom: 6),
       child: GestureDetector(
         onTap: () async {
-          final c = await showColorPickerDialog(
-            context,
-            initialColor: color,
-            title: label,
-          );
+          final c = await _PaletteColorSheet.show(context, color);
           if (c == null || !mounted) return;
           setState(() => _draft = update(c));
           await AppTheme.saveCustomThemeData(_draft);
@@ -618,14 +647,26 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: GoopText(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 1.2,
-                    color: Colors.white70,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      label,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.2,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    GoopText(
+                      desc,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.white.withValues(alpha: 0.35),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               GoopText(
@@ -1190,3 +1231,267 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
 // =============================================================================
 // TAB 4 — AMBIANCE (glow + dialogue haptics + text speed)
 // =============================================================================
+
+/// Sliding color-swatch sheet for the CUSTOM tab — replaces the system
+/// color picker with a curated 6x10 grid (GENERAL + METALLIC tabs).
+class _PaletteColorSheet extends StatefulWidget {
+  const _PaletteColorSheet({required this.current});
+  final Color current;
+
+  static Future<Color?> show(BuildContext context, Color current) {
+    return showModalBottomSheet<Color>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) => _PaletteColorSheet(current: current),
+    );
+  }
+
+  @override
+  State<_PaletteColorSheet> createState() => _PaletteColorSheetState();
+}
+
+class _PaletteColorSheetState extends State<_PaletteColorSheet> {
+  int _tab = 0;
+  static const _tabs = ['GENERAL', 'METALLIC'];
+
+  /// 6x10 curated — darks, then hue families red→purple.
+  static const _general = [
+    0xFF0D0D10,
+    0xFF14141A,
+    0xFF1A1A22,
+    0xFF1E1E28,
+    0xFF22222E,
+    0xFF26262F,
+    0xFF2A2A35,
+    0xFF101018,
+    0xFF0A0A0E,
+    0xFF1C1C26,
+    0xFF7F1D1D,
+    0xFF991B1B,
+    0xFFB91C1C,
+    0xFFDC2626,
+    0xFFEF4444,
+    0xFFF87171,
+    0xFF8B0000,
+    0xFFDC143C,
+    0xFFB22222,
+    0xFFFF6B6B,
+    0xFF7C2D12,
+    0xFF9A3412,
+    0xFFC2410C,
+    0xFFEA580C,
+    0xFFF97316,
+    0xFFFB923C,
+    0xFFB45309,
+    0xFFD97706,
+    0xFFF59E0B,
+    0xFFFBBF24,
+    0xFF14532D,
+    0xFF166534,
+    0xFF15803D,
+    0xFF16A34A,
+    0xFF22C55E,
+    0xFF4ADE80,
+    0xFF065F46,
+    0xFF047857,
+    0xFF10B981,
+    0xFF34D399,
+    0xFF0C4A6E,
+    0xFF075985,
+    0xFF0369A1,
+    0xFF0284C7,
+    0xFF0EA5E9,
+    0xFF38BDF8,
+    0xFF164E63,
+    0xFF0E7490,
+    0xFF0891B2,
+    0xFF22D3EE,
+    0xFF3B0764,
+    0xFF581C87,
+    0xFF6B21A8,
+    0xFF7E22CE,
+    0xFFA855F7,
+    0xFF831843,
+    0xFF9D174D,
+    0xFFBE185D,
+    0xFFEC4899,
+    0xFFF472B6,
+  ];
+
+  /// 6x10 curated — gunmetal, silver, gold, copper, colored metals,
+  /// forged darks.
+  static const _metallic = [
+    0xFF1F2937,
+    0xFF374151,
+    0xFF4B5563,
+    0xFF6B7280,
+    0xFF9CA3AF,
+    0xFFD1D5DB,
+    0xFF23272E,
+    0xFF2E3440,
+    0xFF3B4252,
+    0xFF4C566A,
+    0xFF5A5F66,
+    0xFF787D84,
+    0xFF969BA2,
+    0xFFB4B9C0,
+    0xFFD2D7DE,
+    0xFFE8ECF0,
+    0xFF43484D,
+    0xFF64696E,
+    0xFF8A8F94,
+    0xFFB0B5BA,
+    0xFF78350F,
+    0xFF92400E,
+    0xFFB45309,
+    0xFFD97706,
+    0xFFF59E0B,
+    0xFFFCD34D,
+    0xFF713F12,
+    0xFF854D0E,
+    0xFFA16207,
+    0xFFCA8A04,
+    0xFF8C3B1B,
+    0xFF9C4A22,
+    0xFFAE5E30,
+    0xFFC27A4A,
+    0xFFB86B3E,
+    0xFFCD7F32,
+    0xFF9E5B33,
+    0xFF8B5A2B,
+    0xFFA97142,
+    0xFFBE8C5A,
+    0xFF4A3C8C,
+    0xFF5B4FA0,
+    0xFF6E63B8,
+    0xFF3F5F7F,
+    0xFF4E7194,
+    0xFF6085AB,
+    0xFF7F4A68,
+    0xFF96597F,
+    0xFFAD6A96,
+    0xFF5C8374,
+    0xFF14161A,
+    0xFF1D2126,
+    0xFF262B31,
+    0xFF31373D,
+    0xFF3D454D,
+    0xFF49525B,
+    0xFF2A2118,
+    0xFF3A2E20,
+    0xFF4B3B28,
+    0xFF5C4830,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = _tab == 0 ? _general : _metallic;
+    return Container(
+      height: 360,
+      decoration: BoxDecoration(
+        color: const Color(0xFF16161C),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 8, bottom: 6),
+            child: Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Row(
+              children: [
+                for (var i = 0; i < _tabs.length; i++)
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _tab = i),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 140),
+                        margin: EdgeInsets.only(right: i == 0 ? 6 : 0),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color:
+                              _tab == i
+                                  ? Colors.white.withValues(alpha: 0.12)
+                                  : Colors.white.withValues(alpha: 0.04),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color:
+                                _tab == i
+                                    ? Colors.white.withValues(alpha: 0.35)
+                                    : Colors.white.withValues(alpha: 0.08),
+                          ),
+                        ),
+                        child: Center(
+                          child: GoopText(
+                            _tabs[i],
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.0,
+                              color:
+                                  _tab == i
+                                      ? Colors.white
+                                      : Colors.white.withValues(alpha: 0.4),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+              child: GridView.count(
+                crossAxisCount: 10,
+                mainAxisSpacing: 9,
+                crossAxisSpacing: 9,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [for (final c in colors) _swatch(Color(c))],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _swatch(Color c) {
+    final selected = c.toARGB32() == widget.current.toARGB32();
+    return GestureDetector(
+      onTap: () {
+        Haptics.selection();
+        Navigator.of(context).pop(c);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: c,
+          shape: BoxShape.circle,
+          border: Border.all(
+            color:
+                selected ? Colors.white : Colors.white.withValues(alpha: 0.2),
+            width: selected ? 2.2 : 0.8,
+          ),
+          boxShadow:
+              selected
+                  ? [BoxShadow(color: c.withValues(alpha: 0.7), blurRadius: 8)]
+                  : null,
+        ),
+      ),
+    );
+  }
+}
