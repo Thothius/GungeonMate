@@ -388,24 +388,23 @@ class _BrowseScreenState extends State<BrowseScreen> {
     );
   }
 
-  /// One tier filter chip — multi-select, toggling off everything
-  /// returns to "show all".
+  /// One tier filter chip — single-select: tapping a tier selects only
+  /// it; tapping the selected tier clears back to "show all".
+  /// Chest colors are muted when idle, bright when selected.
   Widget _tierChip(String tier, double sf) {
     final sel = _tiers.contains(tier);
-    // Real chest colors — D brown, C blue, B green, A red, S black.
+    // Real chest colors — D brown, C blue, B green, A red, S gold.
     final accent =
         tier == 'S'
-            ? const Color(
-              0xFFFFD700,
-            ) // gold trim — EtG black chests are gold-ringed
+            ? const Color(0xFFFFD700)
             : tier == 'A'
-            ? const Color(0xFFE53935) // red chest
+            ? const Color(0xFFE53935)
             : tier == 'B'
-            ? const Color(0xFF43A047) // green chest
+            ? const Color(0xFF43A047)
             : tier == 'C'
-            ? const Color(0xFF1E88E5) // blue chest
+            ? const Color(0xFF1E88E5)
             : tier == 'D'
-            ? const Color(0xFF8D6E63) // brown chest
+            ? const Color(0xFF8D6E63)
             : Colors.white54;
     return Expanded(
       child: Padding(
@@ -415,11 +414,8 @@ class _BrowseScreenState extends State<BrowseScreen> {
           onTap: () {
             Haptics.selection();
             setState(() {
-              if (sel) {
-                _tiers.remove(tier);
-              } else {
-                _tiers.add(tier);
-              }
+              _tiers.clear();
+              if (!sel) _tiers.add(tier);
             });
           },
           child: AnimatedContainer(
@@ -427,15 +423,27 @@ class _BrowseScreenState extends State<BrowseScreen> {
             width: double.infinity,
             height: 46 * sf,
             decoration: BoxDecoration(
-              color: sel ? accent.withValues(alpha: 0.2) : Colors.transparent,
+              color:
+                  sel
+                      ? accent.withValues(alpha: 0.28)
+                      : accent.withValues(alpha: 0.07),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
                 color:
                     sel
-                        ? accent.withValues(alpha: 0.8)
-                        : Colors.white.withValues(alpha: 0.15),
-                width: sel ? 1.5 : 1,
+                        ? accent.withValues(alpha: 0.9)
+                        : accent.withValues(alpha: 0.30),
+                width: sel ? 1.8 : 1,
               ),
+              boxShadow:
+                  sel
+                      ? [
+                        BoxShadow(
+                          color: accent.withValues(alpha: 0.25),
+                          blurRadius: 8,
+                        ),
+                      ]
+                      : null,
             ),
             child: Center(
               child: GoopText(
@@ -443,7 +451,8 @@ class _BrowseScreenState extends State<BrowseScreen> {
                 style: TextStyle(
                   fontSize: 13 * sf,
                   fontWeight: FontWeight.w900,
-                  color: sel ? accent : Colors.white.withValues(alpha: 0.4),
+                  color:
+                      sel ? accent : accent.withValues(alpha: 0.45),
                 ),
               ),
             ),
@@ -722,10 +731,18 @@ class _BrowseScreenState extends State<BrowseScreen> {
     }
 
     final headCount = completed.isEmpty ? 0 : completed.length + 2;
+    // Dedupe synergies from all candidate hits — rows are synergy-
+    // centric now (title + piece icons), not item-centric.
+    final seen = <String>{};
+    final synRows = <({String name, String owners})>[
+      for (final h in hits)
+        for (final s in h.$2)
+          if (seen.add(s.name)) s,
+    ];
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      itemCount: headCount + hits.length,
+      itemCount: headCount + synRows.length,
       itemBuilder: (c, i) {
         if (completed.isNotEmpty && i == 0) {
           return Padding(
@@ -816,20 +833,183 @@ class _BrowseScreenState extends State<BrowseScreen> {
           );
         }
         final hi = i - headCount;
-        final e = hits[hi].$1;
-        final done = hits[hi].$2;
-        final names = done.map((s) => s.name).toList();
-        // Owner summary for the pill — identical owners collapse to
-        // that label, mixed pieces across players show 'P1+P2'.
-        String? owner;
-        if (coop != null) {
-          final set = done.map((s) => s.owners).toSet();
-          owner = set.length == 1 ? set.first : 'P1+P2';
-        }
-        return e.gun != null
-            ? _gunRow(c, p, e.gun!, completes: names, ownerLabel: owner)
-            : _itemRow(c, p, e.item!, completes: names, ownerLabel: owner);
+        return _compactSynRow(
+          c,
+          p,
+          synRows[hi],
+          combined,
+          coop != null,
+        );
       },
+    );
+  }
+
+  /// Compact synergy-centric row — title + piece icons (owned pieces
+  /// highlighted, missing ones outlined + tappable to detail) + a
+  /// quick-add button that grants all missing pieces.
+  Widget _compactSynRow(
+    BuildContext c,
+    RunProvider p,
+    ({String name, String owners}) syn,
+    Set<String> combined,
+    bool isCoop,
+  ) {
+    final synObj = p.allSynergies
+        .where((s) => s.name == syn.name)
+        .firstOrNull;
+    if (synObj == null) return const SizedBox.shrink();
+    final pieces = <String>{...synObj.items, ...synObj.anyOf}.toList();
+    final missing =
+        pieces.where((n) => !combined.contains(n.toLowerCase())).toList();
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: AppTheme.flair.card.withValues(alpha: 0.55),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.10)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(
+                  syn.name,
+                  style: TextStyle(
+                    fontSize: FontSizes.bodyMedium,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white.withValues(alpha: 0.92),
+                  ),
+                ),
+                if (isCoop)
+                  GoopText(
+                    syn.owners,
+                    style: TextStyle(
+                      fontSize: FontSizes.labelSmall,
+                      color: Colors.greenAccent.withValues(alpha: 0.8),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          for (final n in pieces)
+            _pieceIcon(c, p, n, combined.contains(n.toLowerCase())),
+          if (missing.isNotEmpty)
+            GestureDetector(
+              onTap: () {
+                var added = 0;
+                for (final n in missing) {
+                  final g = p.allGuns
+                      .where((x) => x.name == n)
+                      .firstOrNull;
+                  final it = p.allItems
+                      .where((x) => x.name == n)
+                      .firstOrNull;
+                  if (g != null) {
+                    p.addGun(g, slot: widget.targetSlot);
+                    added++;
+                  } else if (it != null) {
+                    p.addItem(it, slot: widget.targetSlot);
+                    added++;
+                  }
+                }
+                if (added > 0) {
+                  Haptics.light();
+                  ScaffoldMessenger.of(c).showSnackBar(
+                    SnackBar(
+                      content: GoopText(
+                        '$added item${added > 1 ? 's' : ''} added for ${syn.name}',
+                      ),
+                      duration: const Duration(seconds: 1),
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 6),
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: Colors.greenAccent.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.greenAccent.withValues(alpha: 0.6),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.add,
+                  size: 18,
+                  color: Colors.greenAccent,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  /// One piece icon — highlighted when owned, outline when missing.
+  /// Missing pieces tap through to that item's detail screen.
+  Widget _pieceIcon(BuildContext c, RunProvider p, String name, bool owned) {
+    final g = p.allGuns.where((x) => x.name == name).firstOrNull;
+    final it = p.allItems.where((x) => x.name == name).firstOrNull;
+    final icon = g?.icon ?? it?.icon ?? '';
+    final box = Container(
+      margin: const EdgeInsets.only(left: 4),
+      width: 30,
+      height: 30,
+      decoration: BoxDecoration(
+        color:
+            owned
+                ? Colors.greenAccent.withValues(alpha: 0.18)
+                : Colors.transparent,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color:
+              owned
+                  ? Colors.greenAccent.withValues(alpha: 0.8)
+                  : Colors.white.withValues(alpha: 0.25),
+          width: owned ? 1.6 : 1,
+        ),
+      ),
+      child: Center(
+        child:
+            icon.isNotEmpty
+                ? Opacity(
+                  opacity: owned ? 1.0 : 0.45,
+                  child: Image.asset(
+                    icon.startsWith('assets/') ? icon : 'assets/images/$icon',
+                    width: 20,
+                    height: 20,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.none,
+                    errorBuilder: (_, _, _) => Icon(
+                      Icons.help_outline,
+                      size: 14,
+                      color: Colors.white.withValues(alpha: 0.4),
+                    ),
+                  ),
+                )
+                : Icon(
+                  Icons.help_outline,
+                  size: 14,
+                  color: Colors.white.withValues(alpha: 0.4),
+                ),
+      ),
+    );
+    if (owned || (g == null && it == null)) return box;
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+        if (g != null) {
+          Navigator.push(c, fastRoute(ItemDetailScreen(gun: g)));
+        } else {
+          Navigator.push(c, fastRoute(ItemDetailScreen(item: it)));
+        }
+      },
+      child: box,
     );
   }
 

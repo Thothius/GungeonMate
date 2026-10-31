@@ -59,7 +59,6 @@ void main() {
     );
 
     final ownedName = synergy.items[0];
-    final candidateName = synergy.items[1];
     final ownedItem = p.allItems.where((i) => i.name == ownedName).firstOrNull;
     final ownedGun = p.allGuns.where((g) => g.name == ownedName).firstOrNull;
     if (ownedItem != null) {
@@ -75,8 +74,9 @@ void main() {
     await tester.tap(find.text('SYNERGIES'));
     await pumpFew(tester);
 
-    expect(find.text(candidateName), findsWidgets);
-    expect(find.textContaining('COMPLETES'), findsWidgets);
+    // Rows are synergy-centric now — the synergy title is the main
+    // element; candidate pieces render as outline icons (no text).
+    expect(find.text(synergy.name), findsWidgets);
   });
 
   testWidgets('TIERS mode filters to selected tiers only', (tester) async {
