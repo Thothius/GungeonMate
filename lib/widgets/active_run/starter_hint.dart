@@ -7,6 +7,7 @@ import '../../models/item.dart';
 import '../../models/player.dart';
 import '../periodic_tile.dart';
 import '../../services/goop_talk_engine.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 enum StarterKind { guns, items }
 
@@ -170,11 +171,13 @@ class StarterHint extends StatelessWidget {
                         height: 18,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: Colors.amber,
+                          color: Skeuo.inkIf(Colors.amber),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.amber.withValues(alpha: 0.5),
+                              color: Skeuo.inkIf(
+                                Colors.amber,
+                              ).withValues(alpha: 0.5),
                               blurRadius: 4,
                             ),
                           ],

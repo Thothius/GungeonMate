@@ -177,8 +177,7 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
     // While the ParadoxBar is on screen it owns the reconnect signal —
     // the persistent banner only fills the gap on other surfaces
     // (Browse/Ammonomicon tabs, pushed routes).
-    final showBanner =
-        !_barOnScreen && session.phase == MpPhase.disconnected;
+    final showBanner = !_barOnScreen && session.phase == MpPhase.disconnected;
 
     return Column(
       children: [

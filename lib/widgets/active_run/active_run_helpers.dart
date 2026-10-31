@@ -19,6 +19,7 @@ import '../../services/run_lifecycle.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/experience_studio_screen.dart';
 import '../../screens/quiz/quiz_home_screen.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -35,7 +36,10 @@ void confirmClearInventoryDialog(
     context: context,
     builder:
         (c) => AlertDialog(
-          icon: const Icon(Icons.delete_sweep_rounded, color: Colors.redAccent),
+          icon: Icon(
+            Icons.delete_sweep_rounded,
+            color: Skeuo.inkIf(Colors.redAccent),
+          ),
           title: GoopText("Clear $name's inventory?"),
           content: const GoopText(
             'Removes all guns and items except their starter loadout. '
@@ -48,7 +52,7 @@ void confirmClearInventoryDialog(
             ),
             FilledButton.tonal(
               style: FilledButton.styleFrom(
-                backgroundColor: Colors.red.shade900,
+                backgroundColor: Skeuo.inkIf(Colors.red.shade900),
               ),
               onPressed: () {
                 p.clearInventory(slot: slot);
@@ -107,9 +111,9 @@ class EffectsTileState extends State<EffectsTile> {
                 padding: const EdgeInsets.fromLTRB(12, 10, 6, 10),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.auto_awesome,
-                      color: Colors.amber,
+                      color: Skeuo.inkIf(Colors.amber),
                       size: 18,
                     ),
                     const SizedBox(width: 8),
@@ -131,7 +135,9 @@ class EffectsTileState extends State<EffectsTile> {
                         color:
                             totalTags == 0
                                 ? Colors.white.withValues(alpha: 0.05)
-                                : Colors.amber.withValues(alpha: 0.18),
+                                : Skeuo.inkIf(
+                                  Colors.amber,
+                                ).withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
@@ -142,7 +148,7 @@ class EffectsTileState extends State<EffectsTile> {
                           color:
                               totalTags == 0
                                   ? Colors.white.withValues(alpha: 0.6)
-                                  : Colors.amber,
+                                  : Skeuo.inkIf(Colors.amber),
                         ),
                       ),
                     ),
@@ -398,7 +404,7 @@ class _RunToolsSheet extends StatelessWidget {
               sheetCtx,
               icon: Icons.temple_buddhist,
               label: 'Shrines',
-              iconColor: Colors.amberAccent,
+              iconColor: Skeuo.inkIf(Colors.amberAccent),
               onTap: () {
                 if (sheetCtx.mounted) {
                   Navigator.push(
@@ -420,7 +426,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.auto_awesome_rounded,
                 label: 'Surprise',
-                iconColor: Colors.amberAccent,
+                iconColor: Skeuo.inkIf(Colors.amberAccent),
                 onTap:
                     () => showModalBottomSheet<void>(
                       context: sheetCtx,
@@ -446,7 +452,7 @@ class _RunToolsSheet extends StatelessWidget {
               sheetCtx,
               icon: Icons.restart_alt_rounded,
               label: hasCoop ? 'Reset P1 Items' : 'Reset Items',
-              iconColor: Colors.cyanAccent,
+              iconColor: Skeuo.inkIf(Colors.cyanAccent),
               onTap:
                   () =>
                       confirmClearInventoryDialog(sheetCtx, p, PlayerSlot.main),
@@ -456,7 +462,7 @@ class _RunToolsSheet extends StatelessWidget {
                 sheetCtx,
                 icon: Icons.restart_alt_rounded,
                 label: 'Reset P2 Items',
-                iconColor: Colors.cyanAccent,
+                iconColor: Skeuo.inkIf(Colors.cyanAccent),
                 onTap:
                     () => confirmClearInventoryDialog(
                       sheetCtx,
@@ -545,7 +551,7 @@ class _RunToolsSheet extends StatelessWidget {
               sheetCtx,
               icon: Icons.flag_rounded,
               label: 'End Run',
-              iconColor: Colors.redAccent,
+              iconColor: Skeuo.inkIf(Colors.redAccent),
               onTap: () => RunLifecycle.confirmEndRun(sheetCtx),
             ),
             const SizedBox(height: Insets.sm),
@@ -692,7 +698,7 @@ class SectionHeaderSliver extends StatelessWidget {
                               size: 15,
                               color:
                                   currentInvView == InvView.list
-                                      ? Colors.amberAccent
+                                      ? Skeuo.inkIf(Colors.amberAccent)
                                       : Colors.white60,
                             ),
                             const SizedBox(width: 8),
@@ -702,7 +708,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                 fontSize: 12,
                                 color:
                                     currentInvView == InvView.list
-                                        ? Colors.amberAccent
+                                        ? Skeuo.inkIf(Colors.amberAccent)
                                         : Colors.white,
                               ),
                             ),
@@ -722,7 +728,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                           currentDisplayMode ==
                                               InventoryDisplayMode
                                                   .classicPeriodic)
-                                      ? Colors.amberAccent
+                                      ? Skeuo.inkIf(Colors.amberAccent)
                                       : Colors.white60,
                             ),
                             const SizedBox(width: 8),
@@ -735,7 +741,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                             currentDisplayMode ==
                                                 InventoryDisplayMode
                                                     .classicPeriodic)
-                                        ? Colors.amberAccent
+                                        ? Skeuo.inkIf(Colors.amberAccent)
                                         : Colors.white,
                               ),
                             ),
@@ -754,7 +760,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                           currentDisplayMode ==
                                               InventoryDisplayMode
                                                   .tacticalStats)
-                                      ? Colors.amberAccent
+                                      ? Skeuo.inkIf(Colors.amberAccent)
                                       : Colors.white60,
                             ),
                             const SizedBox(width: 8),
@@ -767,7 +773,7 @@ class SectionHeaderSliver extends StatelessWidget {
                                             currentDisplayMode ==
                                                 InventoryDisplayMode
                                                     .tacticalStats)
-                                        ? Colors.amberAccent
+                                        ? Skeuo.inkIf(Colors.amberAccent)
                                         : Colors.white,
                               ),
                             ),

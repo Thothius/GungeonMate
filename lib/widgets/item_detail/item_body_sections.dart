@@ -479,7 +479,7 @@ mixin _ItemBodySections on StatelessWidget {
               fontSize: FontSizes.labelSmall,
               fontStyle: FontStyle.italic,
               color: Skeuo.inkIf(
-                Colors.redAccent.shade100,
+                Skeuo.inkIf(Colors.redAccent.shade100),
               ).withValues(alpha: 0.8),
             ),
           ),
@@ -640,7 +640,7 @@ mixin _ItemBodySections on StatelessWidget {
                       color:
                           isMatch
                               ? Skeuo.inkIf(
-                                Colors.cyanAccent,
+                                Skeuo.inkIf(Colors.cyanAccent),
                               ).withValues(alpha: 0.5)
                               : Colors.white.withValues(alpha: 0.04),
                     ),
@@ -683,7 +683,7 @@ mixin _ItemBodySections on StatelessWidget {
                   style: TextStyle(
                     fontSize: FontSizes.labelSmall,
                     color: Skeuo.inkIf(
-                      Colors.cyanAccent,
+                      Skeuo.inkIf(Colors.cyanAccent),
                     ).withValues(alpha: 0.5),
                   ),
                 ),
@@ -870,7 +870,7 @@ mixin _ItemBodySections on StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
                     color: Skeuo.inkIf(
-                      Colors.blueAccent,
+                      Skeuo.inkIf(Colors.blueAccent),
                     ).withValues(alpha: 0.3),
                   ),
                 ),

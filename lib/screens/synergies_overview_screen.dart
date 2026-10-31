@@ -7,6 +7,7 @@ import '../providers/run_provider.dart';
 import '../widgets/game_icon.dart';
 import 'item_detail_screen.dart';
 import '../utils/fast_route.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 
 class SynergiesOverviewScreen extends StatefulWidget {
   const SynergiesOverviewScreen({super.key});
@@ -70,10 +71,10 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-            color: Colors.amber.withValues(alpha: 0.08),
+            color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.08),
             child: Row(
               children: [
-                const Icon(Icons.hub, color: Colors.amber),
+                Icon(Icons.hub, color: Skeuo.inkIf(Colors.amber)),
                 const SizedBox(width: 10),
                 Expanded(
                   child: GoopText(
@@ -142,7 +143,7 @@ class _ItemGroupCard extends StatelessWidget {
           style: TextStyle(
             color:
                 activeCount > 0
-                    ? Colors.amber
+                    ? Skeuo.inkIf(Colors.amber)
                     : Colors.white.withValues(alpha: 0.6),
             fontSize: FontSizes.labelMedium,
           ),
@@ -166,13 +167,13 @@ class _SynergyRow extends StatelessWidget {
       decoration: BoxDecoration(
         color:
             status.active
-                ? Colors.amber.withValues(alpha: 0.08)
+                ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.08)
                 : Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
           color:
               status.active
-                  ? Colors.amber.withValues(alpha: 0.5)
+                  ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.5)
                   : Colors.white.withValues(alpha: 0.08),
           width: 1.2,
         ),
@@ -187,7 +188,8 @@ class _SynergyRow extends StatelessWidget {
                     ? Icons.check_circle
                     : Icons.radio_button_unchecked,
                 size: 16,
-                color: status.active ? Colors.amber : Colors.white54,
+                color:
+                    status.active ? Skeuo.inkIf(Colors.amber) : Colors.white54,
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -248,7 +250,7 @@ class _SynergyRow extends StatelessWidget {
                 Icon(
                   Icons.alt_route,
                   size: 13,
-                  color: Colors.amber.withValues(alpha: 0.75),
+                  color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.75),
                 ),
                 const SizedBox(width: 4),
                 GoopText(
@@ -257,7 +259,7 @@ class _SynergyRow extends StatelessWidget {
                     fontSize: 11.5,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.5,
-                    color: Colors.amber.withValues(alpha: 0.9),
+                    color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.9),
                   ),
                 ),
               ],
@@ -309,13 +311,13 @@ class _AnyOfChips extends StatelessWidget {
               decoration: BoxDecoration(
                 color:
                     isOwned
-                        ? Colors.amber.withValues(alpha: 0.15)
+                        ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.15)
                         : Colors.white.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.all(Radii.md),
                 border: Border.all(
                   color:
                       isOwned
-                          ? Colors.amber.withValues(alpha: 0.5)
+                          ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.5)
                           : Colors.white.withValues(alpha: 0.15),
                 ),
               ),
@@ -350,7 +352,8 @@ class _AnyOfChips extends StatelessWidget {
                     Icon(
                       Icons.chevron_right,
                       size: 13,
-                      color: isOwned ? Colors.amber : Colors.white38,
+                      color:
+                          isOwned ? Skeuo.inkIf(Colors.amber) : Colors.white38,
                     ),
                   ],
                 ],

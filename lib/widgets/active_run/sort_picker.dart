@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/gun.dart';
 import '../../models/item.dart';
 import '../../services/goop_talk_engine.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 enum GunSort { pickup, quality, name, dps }
 
@@ -196,7 +197,7 @@ class SortPickerSheet<T> extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
               child: Row(
                 children: [
-                  Icon(titleIcon, size: 18, color: Colors.amber),
+                  Icon(titleIcon, size: 18, color: Skeuo.inkIf(Colors.amber)),
                   const SizedBox(width: 8),
                   GoopText(
                     'Sort $title by',
@@ -214,7 +215,10 @@ class SortPickerSheet<T> extends StatelessWidget {
                 dense: true,
                 leading: Icon(
                   iconOf(opt),
-                  color: opt == current ? Colors.amber : Colors.white70,
+                  color:
+                      opt == current
+                          ? Skeuo.inkIf(Colors.amber)
+                          : Colors.white70,
                   size: 20,
                 ),
                 title: GoopText(
@@ -222,12 +226,19 @@ class SortPickerSheet<T> extends StatelessWidget {
                   style: TextStyle(
                     fontWeight:
                         opt == current ? FontWeight.w700 : FontWeight.w500,
-                    color: opt == current ? Colors.amber : Colors.white,
+                    color:
+                        opt == current
+                            ? Skeuo.inkIf(Colors.amber)
+                            : Colors.white,
                   ),
                 ),
                 trailing:
                     opt == current
-                        ? const Icon(Icons.check, color: Colors.amber, size: 18)
+                        ? Icon(
+                          Icons.check,
+                          color: Skeuo.inkIf(Colors.amber),
+                          size: 18,
+                        )
                         : null,
                 onTap: () {
                   onPick(opt);

@@ -155,7 +155,7 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
                     _EmoteButton(
                       icon: Icons.favorite,
                       label: 'Kiss',
-                      color: Colors.pinkAccent,
+                      color: Skeuo.inkIf(Colors.pinkAccent),
                       onTap: () {
                         Navigator.pop(ctx);
                         session.sendEmote('kiss');
@@ -165,7 +165,7 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
                     _EmoteButton(
                       icon: Icons.sentiment_very_dissatisfied,
                       label: 'Slap',
-                      color: Colors.orangeAccent,
+                      color: Skeuo.inkIf(Colors.orangeAccent),
                       onTap: () {
                         Navigator.pop(ctx);
                         session.sendEmote('slap');
@@ -351,9 +351,9 @@ mixin _ActiveRunMpHandlers on State<ActiveRunScreen> {
       barrierDismissible: true,
       builder:
           (context) => AlertDialog(
-            title: const Row(
+            title: Row(
               children: [
-                Icon(Icons.error_outline, color: Colors.redAccent),
+                Icon(Icons.error_outline, color: Skeuo.inkIf(Colors.redAccent)),
                 SizedBox(width: 12),
                 GoopText('Connection Error'),
               ],

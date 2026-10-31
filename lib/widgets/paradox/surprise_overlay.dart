@@ -11,6 +11,7 @@ import '../../theme/tokens.dart';
 import '../../utils/responsive.dart';
 import 'emote_sprite_catalog.dart';
 import 'dart:math' as math;
+import '../skeuo/skeuo_tokens.dart';
 
 /// Receiving side of the Surprise interaction — a floating card that
 /// springs in over whatever screen is open, holds ~3s, then drifts
@@ -108,7 +109,7 @@ class _SurpriseCard extends StatelessWidget {
             ? surprise.text
             : (preset?.$1 ?? surprise.text);
     final icon = preset?.$2 ?? Icons.auto_awesome_rounded;
-    final color = preset?.$3 ?? Colors.amberAccent;
+    final color = preset?.$3 ?? Skeuo.inkIf(Colors.amberAccent);
     final fx = surprise.fx.isNotEmpty ? surprise.fx : (preset?.$4 ?? 'pulse');
     final sprite =
         surprise.spriteKey.isNotEmpty

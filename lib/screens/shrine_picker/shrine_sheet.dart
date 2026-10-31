@@ -57,7 +57,9 @@ class ShrineActivationSheet extends StatelessWidget {
                               color: Colors.black.withValues(alpha: 0.25),
                               borderRadius: BorderRadius.all(Radii.lg),
                               border: Border.all(
-                                color: Colors.amber.withValues(alpha: 0.1),
+                                color: Skeuo.inkIf(
+                                  Colors.amber,
+                                ).withValues(alpha: 0.1),
                                 width: 1.2,
                               ),
                               boxShadow: [
@@ -87,10 +89,10 @@ class ShrineActivationSheet extends StatelessWidget {
                                         cacheWidth: 320,
                                         cacheHeight: 320,
                                         errorBuilder:
-                                            (_, _, _) => const Icon(
+                                            (_, _, _) => Icon(
                                               Icons.temple_buddhist_outlined,
                                               size: 64,
-                                              color: Colors.amber,
+                                              color: Skeuo.inkIf(Colors.amber),
                                             ),
                                       )
                                       : resolveShrineIcon(
@@ -105,16 +107,16 @@ class ShrineActivationSheet extends StatelessWidget {
                                         fit: BoxFit.contain,
                                         filterQuality: FilterQuality.none,
                                         errorBuilder:
-                                            (_, _, _) => const Icon(
+                                            (_, _, _) => Icon(
                                               Icons.temple_buddhist_outlined,
                                               size: 64,
-                                              color: Colors.amber,
+                                              color: Skeuo.inkIf(Colors.amber),
                                             ),
                                       )
-                                      : const Icon(
+                                      : Icon(
                                         Icons.temple_buddhist_outlined,
                                         size: 64,
-                                        color: Colors.amber,
+                                        color: Skeuo.inkIf(Colors.amber),
                                       ),
                             ),
                           ),
@@ -161,24 +163,30 @@ class ShrineActivationSheet extends StatelessWidget {
                             vertical: 10,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.red.withValues(alpha: 0.12),
+                            color: Skeuo.inkIf(
+                              Colors.red,
+                            ).withValues(alpha: 0.12),
                             borderRadius: BorderRadius.all(Radii.sm),
                             border: Border.all(
-                              color: Colors.redAccent.withValues(alpha: 0.35),
+                              color: Skeuo.inkIf(
+                                Colors.redAccent,
+                              ).withValues(alpha: 0.35),
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.red.withValues(alpha: 0.05),
+                                color: Skeuo.inkIf(
+                                  Colors.red,
+                                ).withValues(alpha: 0.05),
                                 blurRadius: 8,
                               ),
                             ],
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.heart_broken_rounded,
-                                color: Colors.redAccent,
+                                color: Skeuo.inkIf(Colors.redAccent),
                                 size: 16,
                               ),
                               SizedBox(width: 8),
@@ -187,7 +195,7 @@ class ShrineActivationSheet extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 10.5,
                                   fontWeight: FontWeight.w900,
-                                  color: Colors.redAccent,
+                                  color: Skeuo.inkIf(Colors.redAccent),
                                   letterSpacing: 0.5,
                                 ),
                               ),
@@ -248,7 +256,7 @@ class ShrineActivationSheet extends StatelessWidget {
                           style: FilledButton.styleFrom(
                             minimumSize: const Size.fromHeight(52),
                             padding: const EdgeInsets.symmetric(vertical: 16),
-                            backgroundColor: Colors.amber,
+                            backgroundColor: Skeuo.inkIf(Colors.amber),
                             foregroundColor: Colors.black,
                           ),
                           icon: const Icon(Icons.bolt, size: 20),
@@ -281,15 +289,15 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, size: 14, color: Colors.amber),
+        Icon(icon, size: 14, color: Skeuo.inkIf(Colors.amber)),
         const SizedBox(width: 6),
         GoopText(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.2,
-            color: Colors.amber,
+            color: Skeuo.inkIf(Colors.amber),
           ),
         ),
       ],
@@ -310,14 +318,14 @@ class _WillApplyCard extends StatelessWidget {
     if (name == 'cleanse') {
       auto.add((
         label: 'Curse → 0   (Δ ${(-currentCurse).toStringAsFixed(1)})',
-        color: Colors.lightGreenAccent,
+        color: Skeuo.inkIf(Colors.lightGreenAccent),
         icon: Icons.water_drop,
       ));
     } else if (name == 'hero') {
       if (currentCurse < 9) {
         auto.add((
           label: 'Curse → 9   (Δ +${(9 - currentCurse).toStringAsFixed(1)})',
-          color: Colors.deepOrangeAccent,
+          color: Skeuo.inkIf(Colors.deepOrangeAccent),
           icon: Icons.warning_amber,
         ));
       }
@@ -326,7 +334,7 @@ class _WillApplyCard extends StatelessWidget {
         auto.add((
           label:
               'Curse ${shrine.curse > 0 ? '+' : ''}${shrine.curse.toStringAsFixed(1)}',
-          color: Colors.deepOrangeAccent,
+          color: Skeuo.inkIf(Colors.deepOrangeAccent),
           icon: Icons.warning_amber,
         ));
       }
@@ -334,18 +342,20 @@ class _WillApplyCard extends StatelessWidget {
         auto.add((
           label:
               'Coolness ${shrine.coolness > 0 ? '+' : ''}${shrine.coolness.toStringAsFixed(1)}',
-          color: Colors.lightBlueAccent,
+          color: Skeuo.inkIf(Colors.lightBlueAccent),
           icon: Icons.ac_unit,
         ));
       }
     }
 
     return Card(
-      color: Colors.amber.withValues(alpha: 0.06),
+      color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.06),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-        side: BorderSide(color: Colors.amber.withValues(alpha: 0.25)),
+        side: BorderSide(
+          color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.25),
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
@@ -412,13 +422,15 @@ class _BlockedNotice extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(Insets.md),
       decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.08),
+        color: Skeuo.inkIf(Colors.red).withValues(alpha: 0.08),
         borderRadius: BorderRadius.all(Radii.sm),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.35)),
+        border: Border.all(
+          color: Skeuo.inkIf(Colors.red).withValues(alpha: 0.35),
+        ),
       ),
       child: Row(
         children: [
-          const Icon(Icons.block, color: Colors.redAccent, size: 18),
+          Icon(Icons.block, color: Skeuo.inkIf(Colors.redAccent), size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: GoopText(
@@ -467,9 +479,11 @@ Widget _genericEffectBody({required String effect}) {
         width: double.infinity,
         padding: const EdgeInsets.all(Insets.md),
         decoration: BoxDecoration(
-          color: Colors.amber.withValues(alpha: 0.1),
+          color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+          border: Border.all(
+            color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.3),
+          ),
         ),
         child: GoopText(
           main,
@@ -491,7 +505,7 @@ Widget _genericEffectBody({required String effect}) {
               Text(
                 '•  ',
                 style: TextStyle(
-                  color: Colors.amber,
+                  color: Skeuo.inkIf(Colors.amber),
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                 ),
@@ -587,7 +601,7 @@ Widget _diceEffectBody({required String effect}) {
                 Text(
                   '•  ',
                   style: TextStyle(
-                    color: Colors.amber,
+                    color: Skeuo.inkIf(Colors.amber),
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
                   ),
@@ -618,7 +632,10 @@ class _DiceEffectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isGood ? Colors.lightGreenAccent : Colors.redAccent;
+    final color =
+        isGood
+            ? Skeuo.inkIf(Colors.lightGreenAccent)
+            : Skeuo.inkIf(Colors.redAccent);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),

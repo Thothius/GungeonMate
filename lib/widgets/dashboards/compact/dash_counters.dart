@@ -38,7 +38,7 @@ class SprunDashboardState extends State<SprunDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Colors.cyanAccent.withValues(alpha: 0.35),
+              color: Skeuo.inkIf(Colors.cyanAccent).withValues(alpha: 0.35),
               width: 1.2,
             ),
           ),
@@ -57,16 +57,16 @@ class SprunDashboardState extends State<SprunDashboard>
                     children: [
                       Icon(
                         Icons.radar,
-                        color: Colors.cyanAccent.shade200,
+                        color: Skeuo.inkIf(Colors.cyanAccent.shade200),
                         size: 18,
                       ),
                       const SizedBox(width: Insets.sm),
-                      const GoopText(
+                      GoopText(
                         'SPRUN',
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Colors.cyanAccent,
+                          color: Skeuo.inkIf(Colors.cyanAccent),
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -78,18 +78,22 @@ class SprunDashboardState extends State<SprunDashboard>
                             vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.cyan.withValues(alpha: 0.2),
+                            color: Skeuo.inkIf(
+                              Colors.cyan,
+                            ).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(
-                              color: Colors.cyanAccent.withValues(alpha: 0.5),
+                              color: Skeuo.inkIf(
+                                Colors.cyanAccent,
+                              ).withValues(alpha: 0.5),
                             ),
                           ),
                           child: GoopText(
                             'WINDGUNNER ${p.windgunnerCountdown}s',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: FontSizes.labelSmall,
                               fontWeight: FontWeight.bold,
-                              color: Colors.cyanAccent,
+                              color: Skeuo.inkIf(Colors.cyanAccent),
                             ),
                           ),
                         )
@@ -99,7 +103,9 @@ class SprunDashboardState extends State<SprunDashboard>
                           style: TextStyle(
                             fontSize: FontSizes.labelSmall,
                             fontWeight: FontWeight.w900,
-                            color: Colors.cyanAccent.withValues(alpha: 0.6),
+                            color: Skeuo.inkIf(
+                              Colors.cyanAccent,
+                            ).withValues(alpha: 0.6),
                           ),
                         ),
                       const SizedBox(width: 6),
@@ -126,27 +132,31 @@ class SprunDashboardState extends State<SprunDashboard>
                               Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: Colors.cyan.withValues(alpha: 0.08),
+                                  color: Skeuo.inkIf(
+                                    Colors.cyan,
+                                  ).withValues(alpha: 0.08),
                                   borderRadius: BorderRadius.all(Radii.sm),
                                   border: Border.all(
-                                    color: Colors.cyan.withValues(alpha: 0.2),
+                                    color: Skeuo.inkIf(
+                                      Colors.cyan,
+                                    ).withValues(alpha: 0.2),
                                   ),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.flash_on,
-                                      color: Colors.cyanAccent,
+                                      color: Skeuo.inkIf(Colors.cyanAccent),
                                       size: 16,
                                     ),
                                     const SizedBox(width: Insets.sm),
                                     Expanded(
                                       child: GoopText(
                                         _triggers[idx],
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
-                                          color: Colors.cyanAccent,
+                                          color: Skeuo.inkIf(Colors.cyanAccent),
                                         ),
                                       ),
                                     ),
@@ -174,11 +184,11 @@ class SprunDashboardState extends State<SprunDashboard>
                                         _triggers.length;
                                     p.setSprunTriggerIndex(randomIdx);
                                   },
-                                  child: const GoopText(
+                                  child: GoopText(
                                     'Reveal Trigger',
                                     style: TextStyle(
                                       fontSize: 11,
-                                      color: Colors.cyanAccent,
+                                      color: Skeuo.inkIf(Colors.cyanAccent),
                                     ),
                                   ),
                                 ),
@@ -240,7 +250,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Colors.orangeAccent.withValues(alpha: 0.35),
+              color: Skeuo.inkIf(Colors.orangeAccent).withValues(alpha: 0.35),
               width: 1.2,
             ),
           ),
@@ -257,18 +267,18 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                   padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.sports_mma_rounded,
-                        color: Colors.orangeAccent,
+                        color: Skeuo.inkIf(Colors.orangeAccent),
                         size: 18,
                       ),
                       const SizedBox(width: Insets.sm),
-                      const GoopText(
+                      GoopText(
                         'BOXING GLOVE',
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Colors.orangeAccent,
+                          color: Skeuo.inkIf(Colors.orangeAccent),
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -280,7 +290,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                           fontWeight: FontWeight.w900,
                           color:
                               stars == 3
-                                  ? Colors.orangeAccent
+                                  ? Skeuo.inkIf(Colors.orangeAccent)
                                   : Colors.white.withValues(alpha: 0.5),
                         ),
                       ),
@@ -314,7 +324,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                     size: 36,
                                     color:
                                         i < stars
-                                            ? Colors.orangeAccent
+                                            ? Skeuo.inkIf(Colors.orangeAccent)
                                             : Colors.white.withValues(
                                               alpha: 0.1,
                                             ),
@@ -344,9 +354,9 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                             p.setBoxingGloveStars(stars - 1);
                                           }
                                           : null,
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.remove_circle_outline,
-                                    color: Colors.orangeAccent,
+                                    color: Skeuo.inkIf(Colors.orangeAccent),
                                     size: 24,
                                   ),
                                   tooltip: 'Decrease boxing glove stars',
@@ -357,10 +367,10 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                 ),
                                 Text(
                                   '$stars',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: FontSizes.titleSmall,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.orangeAccent,
+                                    color: Skeuo.inkIf(Colors.orangeAccent),
                                   ),
                                 ),
                                 IconButton(
@@ -371,9 +381,9 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                             p.setBoxingGloveStars(stars + 1);
                                           }
                                           : null,
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.add_circle_outline,
-                                    color: Colors.orangeAccent,
+                                    color: Skeuo.inkIf(Colors.orangeAccent),
                                     size: 24,
                                   ),
                                   tooltip: 'Increase boxing glove stars',
@@ -424,7 +434,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
             color: AppTheme.flair.card,
             borderRadius: BorderRadius.all(Radii.md),
             border: Border.all(
-              color: Colors.blueGrey.withValues(alpha: 0.4),
+              color: Skeuo.inkIf(Colors.blueGrey).withValues(alpha: 0.4),
               width: 1.2,
             ),
           ),
@@ -441,28 +451,28 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                   padding: const EdgeInsets.symmetric(vertical: Insets.md),
                   child: Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.smoking_rooms,
-                        color: Colors.blueGrey,
+                        color: Skeuo.inkIf(Colors.blueGrey),
                         size: 18,
                       ),
                       const SizedBox(width: Insets.sm),
-                      const GoopText(
+                      GoopText(
                         'CIGARETTES',
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Colors.blueGrey,
+                          color: Skeuo.inkIf(Colors.blueGrey),
                           letterSpacing: 0.8,
                         ),
                       ),
                       const Spacer(),
                       GoopText(
                         '+$uses Cool',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w900,
-                          color: Colors.blueGrey,
+                          color: Skeuo.inkIf(Colors.blueGrey),
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -514,9 +524,9 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                                             p.setCigarettesUses(uses - 1);
                                           }
                                           : null,
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.remove_circle_outline,
-                                    color: Colors.blueGrey,
+                                    color: Skeuo.inkIf(Colors.blueGrey),
                                     size: 24,
                                   ),
                                   tooltip: 'Decrease cigarette uses',
@@ -527,10 +537,10 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                                 ),
                                 Text(
                                   '$uses',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: FontSizes.titleSmall,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blueGrey,
+                                    color: Skeuo.inkIf(Colors.blueGrey),
                                   ),
                                 ),
                                 IconButton(
@@ -538,9 +548,9 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                                     Haptics.light();
                                     p.setCigarettesUses(uses + 1);
                                   },
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.add_circle_outline,
-                                    color: Colors.blueGrey,
+                                    color: Skeuo.inkIf(Colors.blueGrey),
                                     size: 24,
                                   ),
                                   tooltip: 'Increase cigarette uses',
@@ -573,10 +583,10 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
         ),
         GoopText(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: FontSizes.labelMedium,
             fontWeight: FontWeight.bold,
-            color: Colors.blueGrey,
+            color: Skeuo.inkIf(Colors.blueGrey),
           ),
         ),
       ],
@@ -615,8 +625,8 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
             border: Border.all(
               color:
                   activated
-                      ? Colors.orange.withValues(alpha: 0.5)
-                      : Colors.deepOrange.withValues(alpha: 0.3),
+                      ? Skeuo.inkIf(Colors.orange).withValues(alpha: 0.5)
+                      : Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.3),
               width: 1.2,
             ),
           ),
@@ -637,17 +647,17 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                         activated ? Icons.local_fire_department : Icons.shield,
                         color:
                             activated
-                                ? Colors.orangeAccent
-                                : Colors.deepOrangeAccent,
+                                ? Skeuo.inkIf(Colors.orangeAccent)
+                                : Skeuo.inkIf(Colors.deepOrangeAccent),
                         size: 18,
                       ),
                       const SizedBox(width: Insets.sm),
-                      const GoopText(
+                      GoopText(
                         'GUN SOUL',
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w900,
-                          color: Colors.deepOrangeAccent,
+                          color: Skeuo.inkIf(Colors.deepOrangeAccent),
                           letterSpacing: 0.8,
                         ),
                       ),
@@ -660,14 +670,22 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                         decoration: BoxDecoration(
                           color:
                               activated
-                                  ? Colors.orange.withValues(alpha: 0.2)
-                                  : Colors.green.withValues(alpha: 0.12),
+                                  ? Skeuo.inkIf(
+                                    Colors.orange,
+                                  ).withValues(alpha: 0.2)
+                                  : Skeuo.inkIf(
+                                    Colors.green,
+                                  ).withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(
                             color:
                                 activated
-                                    ? Colors.orange.withValues(alpha: 0.5)
-                                    : Colors.green.withValues(alpha: 0.3),
+                                    ? Skeuo.inkIf(
+                                      Colors.orange,
+                                    ).withValues(alpha: 0.5)
+                                    : Skeuo.inkIf(
+                                      Colors.green,
+                                    ).withValues(alpha: 0.3),
                           ),
                         ),
                         child: GoopText(
@@ -677,8 +695,8 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                             fontWeight: FontWeight.w900,
                             color:
                                 activated
-                                    ? Colors.orangeAccent
-                                    : Colors.greenAccent,
+                                    ? Skeuo.inkIf(Colors.orangeAccent)
+                                    : Skeuo.inkIf(Colors.greenAccent),
                           ),
                         ),
                       ),
@@ -728,8 +746,8 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                                     size: 16,
                                     color:
                                         activated
-                                            ? Colors.greenAccent
-                                            : Colors.orangeAccent,
+                                            ? Skeuo.inkIf(Colors.greenAccent)
+                                            : Skeuo.inkIf(Colors.orangeAccent),
                                   ),
                                   label: GoopText(
                                     activated
@@ -740,8 +758,10 @@ class GunSoulDashboardState extends State<GunSoulDashboard>
                                       fontWeight: FontWeight.bold,
                                       color:
                                           activated
-                                              ? Colors.greenAccent
-                                              : Colors.orangeAccent,
+                                              ? Skeuo.inkIf(Colors.greenAccent)
+                                              : Skeuo.inkIf(
+                                                Colors.orangeAccent,
+                                              ),
                                     ),
                                   ),
                                 ),

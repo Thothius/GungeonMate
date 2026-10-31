@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
+import 'skeuo/skeuo_tokens.dart';
 
 /// A collapsible section that hides spoiler content behind a warning
 /// banner. Tapping the banner expands or collapses the content with a
@@ -34,10 +35,12 @@ class _SpoilerTagState extends State<SpoilerTag>
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-        color: Colors.amber.withValues(alpha: 0.06),
+        color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: Colors.amber.withValues(alpha: _expanded ? 0.5 : 0.25),
+          color: Skeuo.inkIf(
+            Colors.amber,
+          ).withValues(alpha: _expanded ? 0.5 : 0.25),
           width: 1.0,
         ),
       ),
@@ -62,7 +65,7 @@ class _SpoilerTagState extends State<SpoilerTag>
                     Icon(
                       widget.icon,
                       size: 18,
-                      color: Colors.amber.withValues(alpha: 0.85),
+                      color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.85),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -71,7 +74,9 @@ class _SpoilerTagState extends State<SpoilerTag>
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w800,
-                          color: Colors.amber.withValues(alpha: 0.9),
+                          color: Skeuo.inkIf(
+                            Colors.amber,
+                          ).withValues(alpha: 0.9),
                           letterSpacing: 0.6,
                         ),
                       ),
@@ -81,7 +86,7 @@ class _SpoilerTagState extends State<SpoilerTag>
                           ? Icons.keyboard_arrow_up_rounded
                           : Icons.keyboard_arrow_down_rounded,
                       size: 20,
-                      color: Colors.amber.withValues(alpha: 0.7),
+                      color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.7),
                     ),
                   ],
                 ),

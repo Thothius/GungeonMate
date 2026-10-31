@@ -16,6 +16,7 @@ import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../widgets/avatar_aura.dart';
 import '../widgets/particles/ambient_glow.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// Clean connecting / connected view.
 ///
@@ -468,11 +469,15 @@ class _MpConnectScreenState extends State<MpConnectScreen>
 
   Widget _buildError(MpSession session, double sf, ThemeFlair flair) {
     return _cardShell(
-      accent: Colors.redAccent,
+      accent: Skeuo.inkIf(Colors.redAccent),
       sf: sf,
       flair: flair,
       children: [
-        Icon(Icons.wifi_off_rounded, size: 48 * sf, color: Colors.redAccent),
+        Icon(
+          Icons.wifi_off_rounded,
+          size: 48 * sf,
+          color: Skeuo.inkIf(Colors.redAccent),
+        ),
         SizedBox(height: 16 * sf),
         GoopText(
           'Connection failed',
@@ -546,14 +551,14 @@ class _MpConnectScreenState extends State<MpConnectScreen>
 
   Widget _buildPermissionDenied(double sf, ThemeFlair flair) {
     return _cardShell(
-      accent: Colors.amberAccent,
+      accent: Skeuo.inkIf(Colors.amberAccent),
       sf: sf,
       flair: flair,
       children: [
         Icon(
           Icons.bluetooth_disabled_rounded,
           size: 48 * sf,
-          color: Colors.amberAccent,
+          color: Skeuo.inkIf(Colors.amberAccent),
         ),
         SizedBox(height: 16 * sf),
         GoopText(

@@ -6,6 +6,7 @@ import '../models/run_log_entry.dart';
 import '../services/haptics.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/gungeon_meter.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 part 'stats_detail/effects.dart';
 part 'stats_detail/log.dart';
 part 'stats_detail/rows.dart';
@@ -248,8 +249,18 @@ class _ValueCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _btn('-1.0', () => onDelta(-1), Colors.redAccent, isCool),
-                _btn('-0.5', () => onDelta(-0.5), Colors.redAccent, isCool),
+                _btn(
+                  '-1.0',
+                  () => onDelta(-1),
+                  Skeuo.inkIf(Colors.redAccent),
+                  isCool,
+                ),
+                _btn(
+                  '-0.5',
+                  () => onDelta(-0.5),
+                  Skeuo.inkIf(Colors.redAccent),
+                  isCool,
+                ),
                 _btn('+0.5', () => onDelta(0.5), color, isCool),
                 _btn('+1.0', () => onDelta(1), color, isCool),
               ],
@@ -284,7 +295,8 @@ class _ValueCard extends StatelessWidget {
     final isMinus = label.startsWith('-');
     final showWarningColor =
         !isCoolMode && !isMinus; // Curse addition highlights orange-red
-    final activeColor = showWarningColor ? Colors.deepOrange : btnColor;
+    final activeColor =
+        showWarningColor ? Skeuo.inkIf(Colors.deepOrange) : btnColor;
 
     return Expanded(
       child: Padding(
@@ -295,16 +307,17 @@ class _ValueCard extends StatelessWidget {
             style: FilledButton.styleFrom(
               backgroundColor:
                   isMinus
-                      ? Colors.red.withValues(alpha: 0.12)
+                      ? Skeuo.inkIf(Colors.red).withValues(alpha: 0.12)
                       : activeColor.withValues(alpha: 0.12),
-              foregroundColor: isMinus ? Colors.redAccent : activeColor,
+              foregroundColor:
+                  isMinus ? Skeuo.inkIf(Colors.redAccent) : activeColor,
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radii.sm),
                 side: BorderSide(
                   color:
                       isMinus
-                          ? Colors.red.withValues(alpha: 0.15)
+                          ? Skeuo.inkIf(Colors.red).withValues(alpha: 0.15)
                           : activeColor.withValues(alpha: 0.15),
                   width: 0.8,
                 ),

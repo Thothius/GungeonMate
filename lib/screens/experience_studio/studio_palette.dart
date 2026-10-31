@@ -31,7 +31,7 @@ class _PalettePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final borderColor =
         isActive
-            ? Colors.green
+            ? Skeuo.inkIf(Colors.green)
             : isPreview
             ? nameColor
             : Colors.white.withValues(alpha: 0.08);
@@ -98,10 +98,10 @@ class _PalettePanel extends StatelessWidget {
                       vertical: 3,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.green.withValues(alpha: 0.15),
+                      color: Skeuo.inkIf(Colors.green).withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
-                        color: Colors.green.withValues(alpha: 0.6),
+                        color: Skeuo.inkIf(Colors.green).withValues(alpha: 0.6),
                       ),
                     ),
                     child: GoopText(
@@ -110,7 +110,7 @@ class _PalettePanel extends StatelessWidget {
                         fontSize: 8,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1,
-                        color: Colors.green,
+                        color: Skeuo.inkIf(Colors.green),
                       ),
                     ),
                   ),
@@ -344,7 +344,7 @@ class _ThemeStepState extends State<_ThemeStep> {
           border: Border.all(
             color:
                 isActive
-                    ? Colors.green
+                    ? Skeuo.inkIf(Colors.green)
                     : (isPreview
                         ? f.primary
                         : Colors.white.withValues(alpha: 0.08)),
@@ -472,7 +472,7 @@ class _ThemeStepState extends State<_ThemeStep> {
                 child: Container(
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: Skeuo.inkIf(Colors.green),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

@@ -5,6 +5,7 @@ import '../../models/item.dart';
 import '../quality_badge.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 Widget metaPill(String text, Color color, {IconData? icon}) {
   return Container(
@@ -181,7 +182,7 @@ Widget synergyPill(int count) {
   }
   return metaPill(
     '$count ${count == 1 ? 'synergy' : 'synergies'}',
-    Colors.blueAccent,
+    Skeuo.inkIf(Colors.blueAccent),
     icon: Icons.hub,
   );
 }
@@ -224,11 +225,11 @@ class GunMeta extends StatelessWidget {
     // (the SYNERGIES browse view).
     final bits = <Widget>[
       if (gun.gunClass.isNotEmpty && gun.gunClass.toUpperCase() != 'NONE')
-        metaPill(_titleCase(gun.gunClass), Colors.orangeAccent),
+        metaPill(_titleCase(gun.gunClass), Skeuo.inkIf(Colors.orangeAccent)),
       if (gun.dps.isNotEmpty)
         metaPill(
           'DPS ${gun.dpsValue.toStringAsFixed(0)}',
-          Colors.deepOrangeAccent,
+          Skeuo.inkIf(Colors.deepOrangeAccent),
           icon: Icons.flash_on,
         ),
       if (gun.sellPrice.isNotEmpty && gun.sellPrice != 'N/A')
@@ -264,11 +265,11 @@ class ItemMeta extends StatelessWidget {
     // Slim row meta (v3): quality + role tag + price only.
     final bits = <Widget>[];
     if (item.isCompanion) {
-      bits.add(metaPill('Companion', Colors.purpleAccent));
+      bits.add(metaPill('Companion', Skeuo.inkIf(Colors.purpleAccent)));
     } else if (item.isActive) {
-      bits.add(metaPill('Active', Colors.lightBlueAccent));
+      bits.add(metaPill('Active', Skeuo.inkIf(Colors.lightBlueAccent)));
     } else if (item.isPassive) {
-      bits.add(metaPill('Passive', Colors.lightGreenAccent));
+      bits.add(metaPill('Passive', Skeuo.inkIf(Colors.lightGreenAccent)));
     }
     if (item.sellPrice.isNotEmpty && item.sellPrice != 'N/A') {
       bits.add(coinPill(item.sellPrice));

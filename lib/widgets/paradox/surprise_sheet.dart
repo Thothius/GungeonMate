@@ -7,6 +7,7 @@ import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/responsive.dart';
 import '../scale_button.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// MP surprise composer — opened by tapping your or the peer's avatar.
 /// Preset grid for one-tap sends plus a custom step: pick an animation
@@ -85,9 +86,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 180),
               child:
-                  _custom
-                      ? _customStep(session, sf)
-                      : _presetStep(session, sf),
+                  _custom ? _customStep(session, sf) : _presetStep(session, sf),
             ),
           ],
         ),
@@ -106,7 +105,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
             fontSize: 11 * sf,
             fontWeight: FontWeight.w900,
             letterSpacing: 2,
-            color: Colors.amberAccent.withValues(alpha: 0.9),
+            color: Skeuo.inkIf(Colors.amberAccent).withValues(alpha: 0.9),
           ),
         ),
         SizedBox(height: 14 * sf),
@@ -136,7 +135,10 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
         ScaleButton(
           onTap: () => setState(() => _custom = true),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16 * sf, vertical: 10 * sf),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16 * sf,
+              vertical: 10 * sf,
+            ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
@@ -300,11 +302,7 @@ class _SurpriseSheetState extends State<SurpriseSheet> {
             final text = _textCtrl.text.trim();
             if (_fx.isEmpty && text.isEmpty) return;
             Haptics.medium();
-            session.sendSurprise(
-              preset: 'custom',
-              text: text,
-              fx: _fx,
-            );
+            session.sendSurprise(preset: 'custom', text: text, fx: _fx);
             Navigator.of(context).pop();
           },
           child: Container(
@@ -353,14 +351,16 @@ class _PresetTile extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14 * sf, vertical: 12 * sf),
         decoration: BoxDecoration(
-          color: Colors.amberAccent.withValues(alpha: 0.08),
+          color: Skeuo.inkIf(Colors.amberAccent).withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.45)),
+          border: Border.all(
+            color: Skeuo.inkIf(Colors.amberAccent).withValues(alpha: 0.45),
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: Colors.amberAccent, size: 26 * sf),
+            Icon(icon, color: Skeuo.inkIf(Colors.amberAccent), size: 26 * sf),
             SizedBox(height: 4 * sf),
             GoopText(
               label,
@@ -368,7 +368,7 @@ class _PresetTile extends StatelessWidget {
                 fontSize: 10 * sf,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1,
-                color: Colors.amberAccent.withValues(alpha: 0.9),
+                color: Skeuo.inkIf(Colors.amberAccent).withValues(alpha: 0.9),
               ),
             ),
           ],

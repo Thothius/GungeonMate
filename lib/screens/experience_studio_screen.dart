@@ -11,6 +11,7 @@ import 'palette_maker_screen.dart';
 import '../widgets/theme_overlay.dart';
 import '../widgets/particles/ambient_glow.dart';
 import '../utils/fast_route.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 part 'experience_studio/studio_palette.dart';
 part 'experience_studio/studio_particles.dart';
 part 'experience_studio/studio_typography.dart';
@@ -947,13 +948,15 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                       decoration: BoxDecoration(
                         color:
                             p == active
-                                ? Colors.pinkAccent.withValues(alpha: 0.2)
+                                ? Skeuo.inkIf(
+                                  Colors.pinkAccent,
+                                ).withValues(alpha: 0.2)
                                 : Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
                           color:
                               p == active
-                                  ? Colors.pinkAccent
+                                  ? Skeuo.inkIf(Colors.pinkAccent)
                                   : Colors.white.withValues(alpha: 0.12),
                           width: p == active ? 1.5 : 1.0,
                         ),
@@ -966,7 +969,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                           letterSpacing: 0.8,
                           color:
                               p == active
-                                  ? Colors.pinkAccent
+                                  ? Skeuo.inkIf(Colors.pinkAccent)
                                   : Colors.white.withValues(alpha: 0.5),
                         ),
                       ),

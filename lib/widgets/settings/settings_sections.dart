@@ -140,15 +140,15 @@ mixin _SettingsTabSections on State<SettingsTab> {
       child: Container(
         height: 64,
         decoration: BoxDecoration(
-          color: Colors.red.shade900.withValues(alpha: 0.25),
+          color: Skeuo.inkIf(Colors.red.shade900).withValues(alpha: 0.25),
           borderRadius: BorderRadius.all(Radii.md),
           border: Border.all(
-            color: Colors.redAccent.withValues(alpha: 0.4),
+            color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.4),
             width: 1.4,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.redAccent.withValues(alpha: 0.1),
+              color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.1),
               blurRadius: 8,
               spreadRadius: 0,
             ),
@@ -166,27 +166,27 @@ mixin _SettingsTabSections on State<SettingsTab> {
               cacheWidth: 72,
               cacheHeight: 72,
               errorBuilder:
-                  (_, _, _) => const Icon(
+                  (_, _, _) => Icon(
                     Icons.cancel_presentation_rounded,
                     size: 28,
-                    color: Colors.redAccent,
+                    color: Skeuo.inkIf(Colors.redAccent),
                   ),
             ),
             const SizedBox(width: 12),
-            const GoopText(
+            GoopText(
               'END RUN',
               style: TextStyle(
                 fontSize: FontSizes.titleSmall,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
-                color: Colors.redAccent,
+                color: Skeuo.inkIf(Colors.redAccent),
               ),
             ),
             const Spacer(),
-            const Icon(
+            Icon(
               Icons.chevron_right_rounded,
               size: 22,
-              color: Colors.redAccent,
+              color: Skeuo.inkIf(Colors.redAccent),
             ),
             const SizedBox(width: 10),
           ],
@@ -202,15 +202,15 @@ mixin _SettingsTabSections on State<SettingsTab> {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          color: Colors.deepOrange.withValues(alpha: 0.18),
+          color: Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.18),
           borderRadius: const BorderRadius.all(Radii.md),
           border: Border.all(
-            color: Colors.deepOrange.withValues(alpha: 0.45),
+            color: Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.45),
             width: 1.4,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.deepOrange.withValues(alpha: 0.08),
+              color: Skeuo.inkIf(Colors.deepOrange).withValues(alpha: 0.08),
               blurRadius: 6,
               spreadRadius: 0,
             ),
@@ -219,22 +219,26 @@ mixin _SettingsTabSections on State<SettingsTab> {
         child: Row(
           children: [
             const SizedBox(width: 14),
-            const Icon(Icons.restart_alt, size: 28, color: Colors.deepOrange),
+            Icon(
+              Icons.restart_alt,
+              size: 28,
+              color: Skeuo.inkIf(Colors.deepOrange),
+            ),
             const SizedBox(width: 12),
-            const GoopText(
+            GoopText(
               'RESET DATA',
               style: TextStyle(
                 fontSize: FontSizes.titleSmall,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
-                color: Colors.deepOrange,
+                color: Skeuo.inkIf(Colors.deepOrange),
               ),
             ),
             const Spacer(),
-            const Icon(
+            Icon(
               Icons.chevron_right_rounded,
               size: 22,
-              color: Colors.deepOrange,
+              color: Skeuo.inkIf(Colors.deepOrange),
             ),
             const SizedBox(width: 10),
           ],
@@ -252,9 +256,9 @@ mixin _SettingsTabSections on State<SettingsTab> {
   ) {
     final iconColor =
         mpActive
-            ? Colors.greenAccent
+            ? Skeuo.inkIf(Colors.greenAccent)
             : (hasCoop
-                ? Colors.pinkAccent
+                ? Skeuo.inkIf(Colors.pinkAccent)
                 : Theme.of(
                   context,
                 ).colorScheme.onSurface.withValues(alpha: 0.5));

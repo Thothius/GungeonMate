@@ -23,6 +23,7 @@ import '../../screens/all_synergies_screen.dart';
 import '../active_run/dice_roll.dart';
 import 'avatar_frame.dart';
 import 'paradox_bar.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// Paradox per-page player panel — the compact info strip replacing
 /// [GungeoneerHeader] in Paradox sessions:
@@ -162,7 +163,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'shrines',
                     Icons.temple_buddhist_rounded,
                     'Shrines',
-                    Colors.amberAccent,
+                    Skeuo.inkIf(Colors.amberAccent),
                   ),
                   _item(
                     'ammonomicon',
@@ -176,13 +177,13 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'reset_p1',
                     Icons.restart_alt_rounded,
                     'Reset P1 Items',
-                    Colors.cyanAccent,
+                    Skeuo.inkIf(Colors.cyanAccent),
                   ),
                   _item(
                     'reset_p2',
                     Icons.restart_alt_rounded,
                     'Reset P2 Items',
-                    Colors.pinkAccent,
+                    Skeuo.inkIf(Colors.pinkAccent),
                   ),
                   _item(
                     'dice',
@@ -194,7 +195,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'surprise',
                     Icons.auto_awesome_rounded,
                     'Surprise',
-                    Colors.amberAccent,
+                    Skeuo.inkIf(Colors.amberAccent),
                   ),
                   _item(
                     'pause',
@@ -202,7 +203,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                         ? Icons.play_arrow_rounded
                         : Icons.pause_rounded,
                     session.isPaused ? 'Resume Run' : 'Pause Run',
-                    Colors.orangeAccent,
+                    Skeuo.inkIf(Colors.orangeAccent),
                   ),
                   const PopupMenuDivider(),
                   _header('DISPLAY'),
@@ -230,13 +231,13 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'themes',
                     Icons.palette_rounded,
                     'Customization',
-                    Colors.pinkAccent,
+                    Skeuo.inkIf(Colors.pinkAccent),
                   ),
                   _item(
                     'settings',
                     Icons.settings_rounded,
                     'Settings',
-                    Colors.cyanAccent,
+                    Skeuo.inkIf(Colors.cyanAccent),
                   ),
                   const PopupMenuDivider(),
                   if (session.myRole == MpRole.sidekick)
@@ -244,7 +245,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                       'leave',
                       Icons.bluetooth_disabled,
                       'Leave Multiplayer',
-                      Colors.lightBlueAccent,
+                      Skeuo.inkIf(Colors.lightBlueAccent),
                     ),
                 ],
           ),
@@ -273,9 +274,9 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   Navigator.of(dctx).pop();
                   session.cancel();
                 },
-                child: const GoopText(
+                child: GoopText(
                   'LEAVE',
-                  style: TextStyle(color: Colors.lightBlueAccent),
+                  style: TextStyle(color: Skeuo.inkIf(Colors.lightBlueAccent)),
                 ),
               ),
             ],
@@ -420,9 +421,9 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     session.sendPeerClear();
                   }
                 },
-                child: const GoopText(
+                child: GoopText(
                   'RESET',
-                  style: TextStyle(color: Colors.orangeAccent),
+                  style: TextStyle(color: Skeuo.inkIf(Colors.orangeAccent)),
                 ),
               ),
             ],

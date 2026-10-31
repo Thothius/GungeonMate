@@ -8,6 +8,7 @@ import '../../services/haptics.dart';
 import '../../services/app_theme.dart';
 import '../../services/mp_session.dart';
 import '../../services/goop_talk_engine.dart';
+import '../skeuo/skeuo_tokens.dart';
 part 'dice_roll/dice_roll_logic.dart';
 part 'dice_roll/dice_roll_parts.dart';
 
@@ -278,7 +279,9 @@ class DiceRollDialogState extends State<DiceRollDialog>
         key: const ValueKey('challenging'),
         children: [
           const SizedBox(height: 10),
-          const CircularProgressIndicator(color: Colors.amberAccent),
+          CircularProgressIndicator(
+            color: Skeuo.inkIf(Colors.amberAccent),
+          ),
           const SizedBox(height: 16),
           const GoopText(
             'Waiting for partner to accept...',
@@ -314,11 +317,11 @@ class DiceRollDialogState extends State<DiceRollDialog>
             ),
           ),
           const SizedBox(height: 4),
-          const GoopText(
+          GoopText(
             'Tap each die individually to stop its spin!',
             style: TextStyle(
               fontSize: FontSizes.labelSmall,
-              color: Colors.amberAccent,
+              color: Skeuo.inkIf(Colors.amberAccent),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -398,7 +401,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
           ),
           const SizedBox(height: 8),
           if (_peerScore == null)
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
@@ -406,7 +409,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   height: 14,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: Colors.cyanAccent,
+                    color: Skeuo.inkIf(Colors.cyanAccent),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -415,7 +418,7 @@ class DiceRollDialogState extends State<DiceRollDialog>
                   style: TextStyle(
                     fontSize: 11,
                     fontStyle: FontStyle.italic,
-                    color: Colors.cyanAccent,
+                    color: Skeuo.inkIf(Colors.cyanAccent),
                   ),
                 ),
               ],
@@ -434,7 +437,9 @@ class DiceRollDialogState extends State<DiceRollDialog>
               ? const Color(0xFFFFD54F) // Majestic Gold for Solo fate
               : (isDraw
                   ? Colors.white54
-                  : (isMyVictory ? Colors.greenAccent : Colors.redAccent));
+                  : (isMyVictory
+                      ? Skeuo.inkIf(Colors.greenAccent)
+                      : Skeuo.inkIf(Colors.redAccent)));
 
       return Column(
         key: const ValueKey('finished_results'),
@@ -479,9 +484,9 @@ class DiceRollDialogState extends State<DiceRollDialog>
               Expanded(
                 child: Column(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.person,
-                      color: Colors.cyanAccent,
+                      color: Skeuo.inkIf(Colors.cyanAccent),
                       size: 24,
                     ),
                     const SizedBox(height: 4),
@@ -534,9 +539,9 @@ class DiceRollDialogState extends State<DiceRollDialog>
                 Expanded(
                   child: Column(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.person_outline,
-                        color: Colors.pinkAccent,
+                        color: Skeuo.inkIf(Colors.pinkAccent),
                         size: 24,
                       ),
                       const SizedBox(height: 4),

@@ -7,6 +7,7 @@ import '../../theme/tokens.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/asset_paths.dart';
 import '../quality_badge.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 // =============================================================================
 // Special Items Grid — 4-column picker with add/remove + Add All
@@ -136,14 +137,14 @@ class SpecialItemsGridScreenState extends State<SpecialItemsGridScreen> {
             icon: Icon(
               allOwned ? Icons.remove_circle : Icons.add_circle,
               size: 18,
-              color: Colors.greenAccent,
+              color: Skeuo.inkIf(Colors.greenAccent),
             ),
             label: GoopText(
               allOwned ? 'Remove All' : 'Add All',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: Colors.greenAccent,
+                color: Skeuo.inkIf(Colors.greenAccent),
               ),
             ),
           ),

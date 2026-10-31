@@ -131,7 +131,7 @@ class _LogTile extends StatelessWidget {
     final delta = isCool ? entry.coolnessDelta : entry.curseDelta;
     final hasDelta = (isCool ? entry.affectsCoolness : entry.affectsCurse);
     final isPositive = delta > 0;
-    final deltaColor = isPositive ? catColor : Colors.redAccent;
+    final deltaColor = isPositive ? catColor : Skeuo.inkIf(Colors.redAccent);
 
     final timeStr =
         '${entry.timestamp.hour.toString().padLeft(2, '0')}:'

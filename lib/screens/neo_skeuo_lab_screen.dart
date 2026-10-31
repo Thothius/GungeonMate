@@ -214,7 +214,9 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
             childAspectRatio: 0.72,
-            children: [for (final g in guns) PeriodicTile(gun: g, onTap: () {})],
+            children: [
+              for (final g in guns) PeriodicTile(gun: g, onTap: () {}),
+            ],
           ),
           _subLabel('ITEM TILES · 4-COL DEMO'),
           GridView.count(

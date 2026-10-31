@@ -88,9 +88,7 @@ class MainMenuBackdrop extends StatelessWidget {
               ),
             ),
             // Drifting gun silhouettes — slow, faint, pixel-crisp.
-            const IgnorePointer(
-              child: RepaintBoundary(child: _SpriteDrift()),
-            ),
+            const IgnorePointer(child: RepaintBoundary(child: _SpriteDrift())),
           ],
           // Fixed vignette — closes the frame like a dungeon door.
           const DecoratedBox(

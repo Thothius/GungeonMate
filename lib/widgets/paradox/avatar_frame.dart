@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../utils/asset_paths.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// An avatar frame style — a border/decoration painted around the
 /// portrait. Regular frames are static; specials animate.
@@ -204,15 +205,15 @@ class _SpecialFramePainter extends CustomPainter {
         canvas.drawRRect(r, p);
       case 'rainbow':
         p.shader = SweepGradient(
-          colors: const [
-            Colors.red,
-            Colors.orange,
-            Colors.yellow,
-            Colors.green,
-            Colors.cyan,
-            Colors.blue,
-            Colors.purple,
-            Colors.red,
+          colors: [
+            Skeuo.inkIf(Colors.red),
+            Skeuo.inkIf(Colors.orange),
+            Skeuo.inkIf(Colors.yellow),
+            Skeuo.inkIf(Colors.green),
+            Skeuo.inkIf(Colors.cyan),
+            Skeuo.inkIf(Colors.blue),
+            Skeuo.inkIf(Colors.purple),
+            Skeuo.inkIf(Colors.red),
           ],
           transform: GradientRotation(t * math.pi * 2),
         ).createShader(Offset.zero & size);

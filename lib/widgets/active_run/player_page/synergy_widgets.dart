@@ -1,7 +1,5 @@
 part of '../player_page.dart';
 
-
-
 /// Circular quick-action button for the floating tile-actions pill.
 class _QuickActionBtn extends StatelessWidget {
   final IconData icon;

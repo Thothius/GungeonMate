@@ -87,7 +87,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                       ),
                       decoration: BoxDecoration(
                         color: Skeuo.inkIf(
-                          Colors.amber,
+                          Skeuo.inkIf(Colors.amber),
                         ).withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -236,7 +236,7 @@ class SynergyCard extends StatelessWidget {
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Skeuo.inkIf(
-                          Colors.amber,
+                          Skeuo.inkIf(Colors.amber),
                         ).withValues(alpha: 0.78),
                       ),
                     ),

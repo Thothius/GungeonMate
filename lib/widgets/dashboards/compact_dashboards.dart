@@ -6,6 +6,7 @@ import '../../services/app_theme.dart';
 import '../../services/haptics.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
+import '../skeuo/skeuo_tokens.dart';
 part 'compact/dash_forms.dart';
 part 'compact/dash_items.dart';
 part 'compact/dash_counters.dart';

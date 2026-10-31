@@ -19,6 +19,7 @@ import 'debug_tab.dart';
 import '../active_run/active_run_helpers.dart';
 import '../active_run/dice_roll.dart';
 import 'swipe_picker.dart';
+import '../skeuo/skeuo_tokens.dart';
 part 'settings_sections.dart';
 part 'settings_widgets.dart';
 
@@ -48,9 +49,9 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
       context: context,
       builder:
           (c) => AlertDialog(
-            icon: const Icon(
+            icon: Icon(
               Icons.bluetooth_disabled,
-              color: Colors.lightBlueAccent,
+              color: Skeuo.inkIf(Colors.lightBlueAccent),
             ),
             title: const GoopText('Leave Multiplayer?'),
             content: GoopText(
@@ -65,10 +66,10 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               ),
               FilledButton.tonal(
                 style: FilledButton.styleFrom(
-                  backgroundColor: Colors.lightBlueAccent.withValues(
-                    alpha: 0.15,
-                  ),
-                  foregroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Skeuo.inkIf(
+                    Colors.lightBlueAccent,
+                  ).withValues(alpha: 0.15),
+                  foregroundColor: Skeuo.inkIf(Colors.lightBlueAccent),
                 ),
                 onPressed: () {
                   session.cancel();
@@ -87,9 +88,9 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
         context: context,
         builder:
             (c) => AlertDialog(
-              icon: const Icon(
+              icon: Icon(
                 Icons.remove_circle_outline,
-                color: Colors.redAccent,
+                color: Skeuo.inkIf(Colors.redAccent),
               ),
               title: const GoopText('Remove Co-op Player?'),
               content: GoopText(
@@ -102,7 +103,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                 ),
                 FilledButton.tonal(
                   style: FilledButton.styleFrom(
-                    backgroundColor: Colors.red.shade900,
+                    backgroundColor: Skeuo.inkIf(Colors.red.shade900),
                   ),
                   onPressed: () {
                     p.endCoopPlayer();
@@ -132,9 +133,9 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
       context: context,
       builder:
           (c) => AlertDialog(
-            icon: const Icon(
+            icon: Icon(
               Icons.restart_alt,
-              color: Colors.deepOrange,
+              color: Skeuo.inkIf(Colors.deepOrange),
               size: 32,
             ),
             title: const GoopText('Reset All App Data?'),
@@ -154,7 +155,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               ),
               FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor: Colors.deepOrange,
+                  backgroundColor: Skeuo.inkIf(Colors.deepOrange),
                 ),
                 onPressed: () => Navigator.pop(c, true),
                 child: const GoopText('RESET EVERYTHING'),
@@ -210,7 +211,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                 _TileData(
                   icon: Icons.temple_buddhist,
                   label: 'Shrine Picker',
-                  color: Colors.amber,
+                  color: Skeuo.inkIf(Colors.amber),
                   onTap:
                       () => Navigator.push(
                         context,
@@ -224,13 +225,15 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                           : Icons.person_add_alt_1,
                   label: p.runState.hasCoop ? 'Remove Co-op' : 'Add Co-op',
                   color:
-                      p.runState.hasCoop ? Colors.redAccent : Colors.pinkAccent,
+                      p.runState.hasCoop
+                          ? Skeuo.inkIf(Colors.redAccent)
+                          : Skeuo.inkIf(Colors.pinkAccent),
                   onTap: () => _handleAddCoop(context, p),
                 ),
                 _TileData(
                   icon: Icons.save_outlined,
                   label: 'Save Run',
-                  color: Colors.greenAccent,
+                  color: Skeuo.inkIf(Colors.greenAccent),
                   onTap: () {
                     unawaited(
                       p
@@ -314,7 +317,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                           _TileData(
                             icon: Icons.bluetooth_disabled,
                             label: 'Leave MP',
-                            color: Colors.lightBlueAccent,
+                            color: Skeuo.inkIf(Colors.lightBlueAccent),
                             onTap: () => _confirmLeaveMp(context, mpSession),
                           ),
                       ]),
@@ -335,7 +338,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                 _TileData(
                   icon: Icons.restart_alt_rounded,
                   label: 'Reset $player1Name',
-                  color: Colors.cyanAccent,
+                  color: Skeuo.inkIf(Colors.cyanAccent),
                   onTap:
                       () => confirmClearInventoryDialog(
                         context,
@@ -347,7 +350,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                   _TileData(
                     icon: Icons.restart_alt_rounded,
                     label: 'Reset $player2Name',
-                    color: Colors.pinkAccent,
+                    color: Skeuo.inkIf(Colors.pinkAccent),
                     onTap:
                         () => confirmClearInventoryDialog(
                           context,
@@ -371,7 +374,10 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                     AppTheme.isSkeuo
                         ? 'Customization (locked in Neo-Skeuo)'
                         : 'Customization',
-                color: AppTheme.isSkeuo ? Colors.grey : Colors.pinkAccent,
+                color:
+                    AppTheme.isSkeuo
+                        ? Skeuo.inkIf(Colors.grey)
+                        : Skeuo.inkIf(Colors.pinkAccent),
                 onTap: () {
                   if (AppTheme.isSkeuo) return;
                   Navigator.push(
@@ -433,7 +439,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                   _TileData(
                     icon: Icons.grid_view_rounded,
                     label: 'Dev Tools',
-                    color: Colors.amber,
+                    color: Skeuo.inkIf(Colors.amber),
                     onTap: () {
                       if (p.runState.main.character != null) {
                         Haptics.selection();

@@ -440,38 +440,40 @@ class _SkeuoButtonState extends State<SkeuoButton> {
             scale: 1 - 0.02 * t,
             child: CustomPaint(
               painter: _SkeuoSurfacePainter(
-              fill: fill,
-              radius: widget.radius,
-              borderWidth: _isDisabled ? Skeuo.borderThin : 2.5 + t,
-              maxShadow: _isDisabled ? 0 : Skeuo.shadowLow,
-              shadowOffset: offset,
-              shadowStyle:
-                  _isPrimary ? SkeuoShadowStyle.solid : SkeuoShadowStyle.hatch,
-              innerStroke: false,
-              pressT: t,
-              interiorHatch: false,
-              sketchy: !_isPrimary,
-            ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: pad.left + shift,
-                top: pad.top + shift,
-                right: pad.right + Skeuo.shadowLow - shift,
-                bottom: pad.bottom + Skeuo.shadowLow - shift,
+                fill: fill,
+                radius: widget.radius,
+                borderWidth: _isDisabled ? Skeuo.borderThin : 2.5 + t,
+                maxShadow: _isDisabled ? 0 : Skeuo.shadowLow,
+                shadowOffset: offset,
+                shadowStyle:
+                    _isPrimary
+                        ? SkeuoShadowStyle.solid
+                        : SkeuoShadowStyle.hatch,
+                innerStroke: false,
+                pressT: t,
+                interiorHatch: false,
+                sketchy: !_isPrimary,
               ),
-              child:
-                  widget.compact
-                      ? content
-                      : SizedBox(
-                        // Bare Center here would swallow the whole
-                        // bottomNav slot (landmine) — concrete height.
-                        height: widget.height ?? 52,
-                        child: Center(child: content),
-                      ),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: pad.left + shift,
+                  top: pad.top + shift,
+                  right: pad.right + Skeuo.shadowLow - shift,
+                  bottom: pad.bottom + Skeuo.shadowLow - shift,
+                ),
+                child:
+                    widget.compact
+                        ? content
+                        : SizedBox(
+                          // Bare Center here would swallow the whole
+                          // bottomNav slot (landmine) — concrete height.
+                          height: widget.height ?? 52,
+                          child: Center(child: content),
+                        ),
+              ),
             ),
           ),
-        ),
-      );
+        );
       },
     );
   }

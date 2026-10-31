@@ -30,6 +30,7 @@ import '../../screens/item_detail_screen.dart';
 import '../../screens/all_synergies_screen.dart';
 import '../scale_button.dart';
 import '../../models/multiplayer_messages.dart';
+import '../skeuo/skeuo_tokens.dart';
 part 'player_page/synergy_widgets.dart';
 
 /// A single player's loadout view. Re-usable for main + coop.
@@ -332,7 +333,9 @@ class PlayerPageState extends State<PlayerPage> {
                           padding: const EdgeInsets.only(right: 16),
                           alignment: Alignment.centerRight,
                           decoration: BoxDecoration(
-                            color: Colors.redAccent.withValues(alpha: 0.8),
+                            color: Skeuo.inkIf(
+                              Colors.redAccent,
+                            ).withValues(alpha: 0.8),
                             borderRadius: BorderRadius.all(Radii.sm),
                           ),
                           child: const Icon(
@@ -426,7 +429,9 @@ class PlayerPageState extends State<PlayerPage> {
                           padding: const EdgeInsets.only(right: 16),
                           alignment: Alignment.centerRight,
                           decoration: BoxDecoration(
-                            color: Colors.redAccent.withValues(alpha: 0.8),
+                            color: Skeuo.inkIf(
+                              Colors.redAccent,
+                            ).withValues(alpha: 0.8),
                             borderRadius: BorderRadius.all(Radii.sm),
                           ),
                           child: const Icon(
@@ -633,7 +638,7 @@ class PlayerPageState extends State<PlayerPage> {
                                 : Icons.swap_horiz_rounded,
                         color:
                             armed
-                                ? Colors.orangeAccent
+                                ? Skeuo.inkIf(Colors.orangeAccent)
                                 : AppTheme.flair.primary,
                         onTap: () {
                           if (!armed) {
@@ -647,7 +652,7 @@ class PlayerPageState extends State<PlayerPage> {
                     if (canTransfer) const SizedBox(width: 14),
                     _QuickActionBtn(
                       icon: Icons.delete_outline_rounded,
-                      color: Colors.redAccent,
+                      color: Skeuo.inkIf(Colors.redAccent),
                       onTap: () {
                         Navigator.pop(dlgCtx);
                         if (gun != null) {

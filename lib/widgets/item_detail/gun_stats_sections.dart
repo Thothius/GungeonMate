@@ -144,11 +144,11 @@ mixin _GunStatsSections on StatelessWidget {
             data: SliderThemeData(
               activeTrackColor: Skeuo.inkIf(Colors.purpleAccent),
               inactiveTrackColor: Skeuo.inkIf(
-                Colors.purple,
+                Skeuo.inkIf(Colors.purple),
               ).withValues(alpha: 0.2),
               thumbColor: Skeuo.inkIf(Colors.purpleAccent),
               overlayColor: Skeuo.inkIf(
-                Colors.purpleAccent,
+                Skeuo.inkIf(Colors.purpleAccent),
               ).withValues(alpha: 0.2),
               valueIndicatorColor: Skeuo.inkIf(Colors.purple),
               trackHeight: 4,
@@ -203,7 +203,7 @@ mixin _GunStatsSections on StatelessWidget {
               value: xpProgress,
               minHeight: 6,
               backgroundColor: Skeuo.inkIf(
-                Colors.purple,
+                Skeuo.inkIf(Colors.purple),
               ).withValues(alpha: 0.15),
               valueColor: AlwaysStoppedAnimation<Color>(
                 lvl == 60
@@ -262,7 +262,7 @@ mixin _GunStatsSections on StatelessWidget {
                   borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(
                     color: Skeuo.inkIf(
-                      Colors.purpleAccent,
+                      Skeuo.inkIf(Colors.purpleAccent),
                     ).withValues(alpha: 0.3),
                     width: 1.2,
                   ),
@@ -513,7 +513,7 @@ mixin _GunStatsSections on StatelessWidget {
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         color: Skeuo.inkIf(
-                          Colors.greenAccent,
+                          Skeuo.inkIf(Colors.greenAccent),
                         ).withValues(alpha: 0.6),
                         fontWeight: FontWeight.bold,
                       ),
@@ -527,7 +527,7 @@ mixin _GunStatsSections on StatelessWidget {
                   borderRadius: BorderRadius.all(Radii.sm),
                   border: Border.all(
                     color: Skeuo.inkIf(
-                      Colors.greenAccent,
+                      Skeuo.inkIf(Colors.greenAccent),
                     ).withValues(alpha: 0.25),
                   ),
                 ),
@@ -609,7 +609,7 @@ mixin _GunStatsSections on StatelessWidget {
                             color:
                                 isUnlocked && activeStage > spec.id
                                     ? Skeuo.inkIf(
-                                      Colors.green,
+                                      Skeuo.inkIf(Colors.green),
                                     ).withValues(alpha: 0.5)
                                     : Colors.white10,
                           ),
@@ -712,7 +712,7 @@ mixin _GunStatsSections on StatelessWidget {
                             ? (isThresholdNode
                                 ? Skeuo.inkIf(Colors.green.shade800)
                                 : Skeuo.inkIf(
-                                  Colors.green,
+                                  Skeuo.inkIf(Colors.green),
                                 ).withValues(alpha: 0.35))
                             : Colors.black38,
                     borderRadius: BorderRadius.circular(6),
@@ -722,7 +722,7 @@ mixin _GunStatsSections on StatelessWidget {
                               ? Skeuo.inkIf(Colors.greenAccent)
                               : (isThresholdNode
                                   ? Skeuo.inkIf(
-                                    Colors.greenAccent,
+                                    Skeuo.inkIf(Colors.greenAccent),
                                   ).withValues(alpha: 0.3)
                                   : Colors.white12),
                       width: isThresholdNode ? 1.5 : 1.0,
@@ -744,7 +744,7 @@ mixin _GunStatsSections on StatelessWidget {
                                 color:
                                     isThresholdNode
                                         ? Skeuo.inkIf(
-                                          Colors.greenAccent,
+                                          Skeuo.inkIf(Colors.greenAccent),
                                         ).withValues(alpha: 0.4)
                                         : Colors.white54,
                               ),

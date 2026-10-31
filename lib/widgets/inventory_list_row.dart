@@ -8,6 +8,7 @@ import 'game_icon.dart';
 import 'quality_badge.dart';
 import 'synergy_glow.dart';
 import '../services/goop_talk_engine.dart';
+import 'skeuo/skeuo_tokens.dart';
 
 /// Compact one-per-row representation of a gun or item for the
 /// inventory *list* view mode. Pairs a pixel-art portrait with the
@@ -139,9 +140,9 @@ class _InventoryListRowState extends State<InventoryListRow>
   Color get _typeColor {
     if (_isGun) return const Color(0xFFB0BEC5);
     final it = widget.item!;
-    if (it.isCompanion) return Colors.purpleAccent;
-    if (it.isActive) return Colors.lightBlueAccent;
-    if (it.isPassive) return Colors.lightGreenAccent;
+    if (it.isCompanion) return Skeuo.inkIf(Colors.purpleAccent);
+    if (it.isActive) return Skeuo.inkIf(Colors.lightBlueAccent);
+    if (it.isPassive) return Skeuo.inkIf(Colors.lightGreenAccent);
     return Colors.white54;
   }
 

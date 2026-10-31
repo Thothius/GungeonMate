@@ -12,6 +12,7 @@ import 'huntress_dashboard.dart';
 import 'compact_dashboards.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../utils/responsive.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 // Special Dashboard Tab System — swipeable panels with tappable tab chips
 // =============================================================================
@@ -125,7 +126,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Robot',
         iconPath: localGungeoneerIcon('The Robot'),
-        color: Colors.greenAccent,
+        color: Skeuo.inkIf(Colors.greenAccent),
         widget: const RobotDashboardSliver(),
       ),
     );
@@ -135,7 +136,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Huntress',
         iconPath: localGungeoneerIcon('The Hunter'),
-        color: Colors.amberAccent,
+        color: Skeuo.inkIf(Colors.amberAccent),
         widget: const HuntressDashboardSliver(),
       ),
     );
@@ -145,7 +146,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Junkan',
         iconPath: localItemIcon('Ser Junkan 1'),
-        color: Colors.tealAccent,
+        color: Skeuo.inkIf(Colors.tealAccent),
         widget: JunkanDashboardSliver(slot: slot),
       ),
     );
@@ -155,7 +156,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Gunderfury',
         iconPath: localGunIcon('Gunderfury'),
-        color: Colors.purpleAccent,
+        color: Skeuo.inkIf(Colors.purpleAccent),
         widget: GunderfuryDashboardSliver(slot: slot),
       ),
     );
@@ -165,7 +166,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Evolver',
         iconPath: localGunIcon('Evolver'),
-        color: Colors.greenAccent,
+        color: Skeuo.inkIf(Colors.greenAccent),
         widget: EvolverDashboardSliver(slot: slot),
       ),
     );
@@ -185,7 +186,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Iron Coin',
         iconPath: localItemIcon('Iron Coin'),
-        color: Colors.amber,
+        color: Skeuo.inkIf(Colors.amber),
         widget: IronCoinDashboard(slot: slot),
       ),
     );
@@ -195,7 +196,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Spice',
         iconPath: localItemIcon('Spice'),
-        color: Colors.redAccent,
+        color: Skeuo.inkIf(Colors.redAccent),
         widget: SpiceDashboard(slot: slot),
       ),
     );
@@ -205,7 +206,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Metronome',
         iconPath: localItemIcon('Metronome'),
-        color: Colors.purpleAccent,
+        color: Skeuo.inkIf(Colors.purpleAccent),
         widget: MetronomeDashboard(slot: slot),
       ),
     );
@@ -215,7 +216,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Sprun',
         iconPath: localItemIcon('Sprun'),
-        color: Colors.cyanAccent,
+        color: Skeuo.inkIf(Colors.cyanAccent),
         widget: SprunDashboard(slot: slot),
       ),
     );
@@ -225,7 +226,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Boxing Glove',
         iconPath: localGunIcon('Boxing Glove'),
-        color: Colors.redAccent,
+        color: Skeuo.inkIf(Colors.redAccent),
         widget: BoxingGloveDashboard(slot: slot),
       ),
     );
@@ -235,7 +236,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Cigarettes',
         iconPath: localItemIcon('Cigarettes'),
-        color: Colors.orangeAccent,
+        color: Skeuo.inkIf(Colors.orangeAccent),
         widget: CigarettesDashboard(slot: slot),
       ),
     );
@@ -245,7 +246,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Gunther',
         iconPath: localGunIcon('Gunther'),
-        color: Colors.purpleAccent,
+        color: Skeuo.inkIf(Colors.purpleAccent),
         widget: GuntherDashboard(slot: slot),
       ),
     );
@@ -255,7 +256,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Gun Soul',
         iconPath: localItemIcon('Gun Soul'),
-        color: Colors.greenAccent,
+        color: Skeuo.inkIf(Colors.greenAccent),
         widget: GunSoulDashboard(slot: slot),
       ),
     );

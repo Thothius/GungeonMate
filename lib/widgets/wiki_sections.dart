@@ -9,6 +9,7 @@ import '../utils/fast_route.dart';
 import 'game_icon.dart';
 import 'rich_link_text.dart';
 import '../services/goop_talk_engine.dart';
+import 'skeuo/skeuo_tokens.dart';
 
 // =============================================================================
 // Wiki-content slivers — Effects / Item Interactions / Notes / Tips / Trivia
@@ -34,7 +35,7 @@ List<Widget> buildWikiSlivers(WikiContent wiki) {
       WikiSection(
         title: 'Effects',
         icon: Icons.auto_awesome,
-        iconColor: Colors.lightGreenAccent,
+        iconColor: Skeuo.inkIf(Colors.lightGreenAccent),
         bullets: wiki.effects,
         collapseThreshold: 0,
       ),
@@ -42,7 +43,7 @@ List<Widget> buildWikiSlivers(WikiContent wiki) {
       WikiSection(
         title: 'Item Interactions',
         icon: Icons.compare_arrows,
-        iconColor: Colors.cyanAccent,
+        iconColor: Skeuo.inkIf(Colors.cyanAccent),
         bullets: wiki.interactions,
         collapseThreshold: 0,
       ),
@@ -50,14 +51,14 @@ List<Widget> buildWikiSlivers(WikiContent wiki) {
       WikiSection(
         title: 'Notes',
         icon: Icons.sticky_note_2_outlined,
-        iconColor: Colors.amberAccent,
+        iconColor: Skeuo.inkIf(Colors.amberAccent),
         bullets: wiki.notes,
       ),
     if (wiki.tips.isNotEmpty)
       WikiSection(
         title: 'Tips',
         icon: Icons.tips_and_updates_outlined,
-        iconColor: Colors.lightBlueAccent,
+        iconColor: Skeuo.inkIf(Colors.lightBlueAccent),
         bullets: wiki.tips,
       ),
   ];
@@ -140,7 +141,7 @@ class _ReferencedBySectionState extends State<ReferencedBySection> {
                     Icon(
                       Icons.share_outlined,
                       size: 16,
-                      color: Colors.lightBlueAccent,
+                      color: Skeuo.inkIf(Colors.lightBlueAccent),
                     ),
                     const SizedBox(width: 6),
                     GoopText(
@@ -270,7 +271,9 @@ class _ShowMoreChip extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: Colors.lightBlueAccent.withValues(alpha: 0.45),
+              color: Skeuo.inkIf(
+                Colors.lightBlueAccent,
+              ).withValues(alpha: 0.45),
               style: BorderStyle.solid,
             ),
           ),
@@ -280,7 +283,9 @@ class _ShowMoreChip extends StatelessWidget {
               Icon(
                 collapse ? Icons.expand_less : Icons.expand_more,
                 size: 14,
-                color: Colors.lightBlueAccent.withValues(alpha: 0.85),
+                color: Skeuo.inkIf(
+                  Colors.lightBlueAccent,
+                ).withValues(alpha: 0.85),
               ),
               const SizedBox(width: 4),
               GoopText(
@@ -288,7 +293,9 @@ class _ShowMoreChip extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w600,
-                  color: Colors.lightBlueAccent.withValues(alpha: 0.95),
+                  color: Skeuo.inkIf(
+                    Colors.lightBlueAccent,
+                  ).withValues(alpha: 0.95),
                 ),
               ),
             ],

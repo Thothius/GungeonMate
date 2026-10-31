@@ -9,6 +9,7 @@ import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import 'item_detail_screen.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// Synergy detail page — the "synergy graph" surface of the
 /// Ammonomicon. Every required/optional item is a tappable chip that
@@ -47,33 +48,41 @@ class SynergyDetailScreen extends StatelessWidget {
                   GoopText(
                     synergy.name,
                     style: TextStyle(
-                        fontSize: 22 * sf,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white),
+                      fontSize: 22 * sf,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 6),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
-                      color: (complete ? Colors.lightGreenAccent : Colors.amber)
+                      color: (complete
+                              ? Skeuo.inkIf(Colors.lightGreenAccent)
+                              : Skeuo.inkIf(Colors.amber))
                           .withValues(alpha: 0.14),
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
-                          color: (complete
-                                  ? Colors.lightGreenAccent
-                                  : Colors.amber)
-                              .withValues(alpha: 0.5)),
+                        color: (complete
+                                ? Skeuo.inkIf(Colors.lightGreenAccent)
+                                : Skeuo.inkIf(Colors.amber))
+                            .withValues(alpha: 0.5),
+                      ),
                     ),
                     child: GoopText(
                       complete ? 'ACTIVE IN LOADOUT' : 'NOT COMPLETE',
                       style: TextStyle(
-                          fontSize: 10 * sf,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.8,
-                          color: complete
-                              ? Colors.lightGreenAccent
-                              : Colors.amber),
+                        fontSize: 10 * sf,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.8,
+                        color:
+                            complete
+                                ? Skeuo.inkIf(Colors.lightGreenAccent)
+                                : Skeuo.inkIf(Colors.amber),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -86,7 +95,12 @@ class SynergyDetailScreen extends StatelessWidget {
                       runSpacing: 8,
                       children: [
                         for (final n in synergy.items)
-                          _ItemChip(name: n, owned: owned, required: true, sf: sf),
+                          _ItemChip(
+                            name: n,
+                            owned: owned,
+                            required: true,
+                            sf: sf,
+                          ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -100,7 +114,11 @@ class SynergyDetailScreen extends StatelessWidget {
                       children: [
                         for (final n in synergy.anyOf)
                           _ItemChip(
-                              name: n, owned: owned, required: false, sf: sf),
+                            name: n,
+                            owned: owned,
+                            required: false,
+                            sf: sf,
+                          ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -113,17 +131,19 @@ class SynergyDetailScreen extends StatelessWidget {
                         ? synergy.prettyEffect
                         : '—',
                     style: TextStyle(
-                        fontSize: 14 * sf,
-                        height: 1.45,
-                        color: Colors.white.withValues(alpha: 0.85)),
+                      fontSize: 14 * sf,
+                      height: 1.45,
+                      color: Colors.white.withValues(alpha: 0.85),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   GoopText(
                     'Tap an item to open its Ammonomicon entry.',
                     style: TextStyle(
-                        fontSize: 11 * sf,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.white.withValues(alpha: 0.35)),
+                      fontSize: 11 * sf,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.white.withValues(alpha: 0.35),
+                    ),
                   ),
                 ],
               ),
@@ -135,13 +155,14 @@ class SynergyDetailScreen extends StatelessWidget {
   }
 
   Widget _sectionLabel(String t, double sf) => GoopText(
-        t,
-        style: TextStyle(
-            fontSize: 11 * sf,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.2,
-            color: Colors.white.withValues(alpha: 0.5)),
-      );
+    t,
+    style: TextStyle(
+      fontSize: 11 * sf,
+      fontWeight: FontWeight.w900,
+      letterSpacing: 1.2,
+      color: Colors.white.withValues(alpha: 0.5),
+    ),
+  );
 }
 
 /// A required/optional item chip — owned items glow green.
@@ -150,29 +171,33 @@ class _ItemChip extends StatelessWidget {
   final Set<String> owned;
   final bool required;
   final double sf;
-  const _ItemChip(
-      {required this.name,
-      required this.owned,
-      required this.required,
-      required this.sf});
+  const _ItemChip({
+    required this.name,
+    required this.owned,
+    required this.required,
+    required this.sf,
+  });
 
   @override
   Widget build(BuildContext context) {
     final isOwned = owned.contains(name.toLowerCase());
-    final c = isOwned ? Colors.lightGreenAccent : Colors.white;
+    final c = isOwned ? Skeuo.inkIf(Colors.lightGreenAccent) : Colors.white;
     return GestureDetector(
       onTap: () {
         Haptics.selection();
         final p = context.read<RunProvider>();
-        final gun = p.allGuns
-            .where((g) => g.name.toLowerCase() == name.toLowerCase())
-            .firstOrNull;
-        final item = p.allItems
-            .where((i) => i.name.toLowerCase() == name.toLowerCase())
-            .firstOrNull;
-        final dest = gun != null
-            ? ItemDetailScreen(gun: gun)
-            : item != null
+        final gun =
+            p.allGuns
+                .where((g) => g.name.toLowerCase() == name.toLowerCase())
+                .firstOrNull;
+        final item =
+            p.allItems
+                .where((i) => i.name.toLowerCase() == name.toLowerCase())
+                .firstOrNull;
+        final dest =
+            gun != null
+                ? ItemDetailScreen(gun: gun)
+                : item != null
                 ? ItemDetailScreen(item: item)
                 : null;
         if (dest != null) Navigator.push(context, fastRoute(dest));
@@ -180,30 +205,38 @@ class _ItemChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         decoration: BoxDecoration(
-          color: (isOwned ? Colors.lightGreenAccent : Colors.white)
+          color: (isOwned ? Skeuo.inkIf(Colors.lightGreenAccent) : Colors.white)
               .withValues(alpha: isOwned ? 0.14 : 0.06),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-              color: isOwned
-                  ? Colors.lightGreenAccent.withValues(alpha: 0.55)
-                  : (required
-                      ? Colors.white.withValues(alpha: 0.25)
-                      : Colors.white.withValues(alpha: 0.15)),
-              width: isOwned ? 1.4 : 1.0),
+            color:
+                isOwned
+                    ? Skeuo.inkIf(
+                      Colors.lightGreenAccent,
+                    ).withValues(alpha: 0.55)
+                    : (required
+                        ? Colors.white.withValues(alpha: 0.25)
+                        : Colors.white.withValues(alpha: 0.15)),
+            width: isOwned ? 1.4 : 1.0,
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (isOwned)
-              const Icon(Icons.check_circle_rounded,
-                  size: 13, color: Colors.lightGreenAccent),
+              Icon(
+                Icons.check_circle_rounded,
+                size: 13,
+                color: Skeuo.inkIf(Colors.lightGreenAccent),
+              ),
             if (isOwned) const SizedBox(width: 5),
             GoopText(
               name,
               style: TextStyle(
-                  fontSize: 12 * sf,
-                  fontWeight: FontWeight.w700,
-                  color: c.withValues(alpha: isOwned ? 1.0 : 0.8)),
+                fontSize: 12 * sf,
+                fontWeight: FontWeight.w700,
+                color: c.withValues(alpha: isOwned ? 1.0 : 0.8),
+              ),
             ),
           ],
         ),

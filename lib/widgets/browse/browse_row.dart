@@ -4,6 +4,7 @@ import '../game_icon.dart';
 import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 class BrowseRow extends StatelessWidget {
   final String name;
@@ -63,17 +64,26 @@ class BrowseRow extends StatelessWidget {
           nameLower.contains('blasphemy');
 
       if (isGod) {
-        borderSide = const BorderSide(color: Colors.greenAccent, width: 1.5);
+        borderSide = BorderSide(
+          color: Skeuo.inkIf(Colors.greenAccent),
+          width: 1.5,
+        );
         robotTag = 'GOD TIER ⚡';
-        robotTagColor = Colors.greenAccent;
+        robotTagColor = Skeuo.inkIf(Colors.greenAccent);
       } else if (isConverter) {
-        borderSide = const BorderSide(color: Colors.blueAccent, width: 1.5);
+        borderSide = BorderSide(
+          color: Skeuo.inkIf(Colors.blueAccent),
+          width: 1.5,
+        );
         robotTag = 'CONVERTS TO ARMOR 🛡️';
-        robotTagColor = Colors.blueAccent;
+        robotTagColor = Skeuo.inkIf(Colors.blueAccent);
       } else if (isDeadWeight) {
-        borderSide = const BorderSide(color: Colors.redAccent, width: 1.5);
+        borderSide = BorderSide(
+          color: Skeuo.inkIf(Colors.redAccent),
+          width: 1.5,
+        );
         robotTag = 'DEAD WEIGHT ⚠️';
-        robotTagColor = Colors.redAccent;
+        robotTagColor = Skeuo.inkIf(Colors.redAccent);
       }
     }
 
@@ -162,7 +172,9 @@ class BrowseRow extends StatelessWidget {
                       decoration: BoxDecoration(
                         color:
                             inRun
-                                ? Colors.green.withValues(alpha: 0.15)
+                                ? Skeuo.inkIf(
+                                  Colors.green,
+                                ).withValues(alpha: 0.15)
                                 : AppTheme.flair.primary.withValues(
                                   alpha: 0.12,
                                 ),
@@ -170,7 +182,9 @@ class BrowseRow extends StatelessWidget {
                         border: Border.all(
                           color:
                               inRun
-                                  ? Colors.green.withValues(alpha: 0.5)
+                                  ? Skeuo.inkIf(
+                                    Colors.green,
+                                  ).withValues(alpha: 0.5)
                                   : AppTheme.flair.primary.withValues(
                                     alpha: 0.4,
                                   ),
@@ -180,7 +194,9 @@ class BrowseRow extends StatelessWidget {
                       child: Icon(
                         inRun ? Icons.check_rounded : Icons.add_rounded,
                         color:
-                            inRun ? Colors.greenAccent : AppTheme.flair.primary,
+                            inRun
+                                ? Skeuo.inkIf(Colors.greenAccent)
+                                : AppTheme.flair.primary,
                         size: 22,
                       ),
                     ),
