@@ -14,7 +14,6 @@ class _PalettePanel extends StatelessWidget {
   final bool isActive;
   final bool isPreview;
   final VoidCallback onTap;
-  final String splashSlug;
 
   const _PalettePanel({
     required this.name,
@@ -24,7 +23,6 @@ class _PalettePanel extends StatelessWidget {
     required this.isActive,
     required this.isPreview,
     required this.onTap,
-    this.splashSlug = '',
   });
 
   static const _chipLabels = ['CANVAS', 'PANEL', 'PRIME', 'SECOND', 'STAT'];
@@ -59,113 +57,75 @@ class _PalettePanel extends StatelessWidget {
                   ]
                   : null,
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(13),
-          child: Stack(
-            children: [
-              // Splash art — right-edge strip fading into the card, so
-              // presets read as *characters*, not just color swatches.
-              if (splashSlug.isNotEmpty)
-                Positioned(
-                  top: 0,
-                  bottom: 0,
-                  right: 0,
-                  width: 96,
-                  child: Opacity(
-                    opacity: 0.55,
-                    child: ShaderMask(
-                      blendMode: BlendMode.dstIn,
-                      shaderCallback:
-                          (r) => const LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [Colors.transparent, Colors.white],
-                          ).createShader(r),
-                      child: Image.asset(
-                        themeSplashPath(splashSlug),
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => const SizedBox.shrink(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GoopText(
+                        name.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1,
+                          color: nameColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      GoopText(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          letterSpacing: 0.8,
+                          color: Colors.white.withValues(alpha: 0.4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (isActive)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green.withValues(alpha: 0.15),
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: Colors.green.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    child: GoopText(
+                      'ACTIVE',
+                      style: TextStyle(
+                        fontSize: 8,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1,
+                        color: Colors.green,
                       ),
                     ),
                   ),
-                ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GoopText(
-                                name.toUpperCase(),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1,
-                                  color: nameColor,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              GoopText(
-                                subtitle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 9.5,
-                                  letterSpacing: 0.8,
-                                  color: Colors.white.withValues(alpha: 0.4),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        if (isActive)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.green.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                color: Colors.green.withValues(alpha: 0.6),
-                              ),
-                            ),
-                            child: GoopText(
-                              'ACTIVE',
-                              style: TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 1,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        for (var i = 0; i < colors.length && i < 5; i++) ...[
-                          Expanded(
-                            child: _colorChip(colors[i], _chipLabels[i]),
-                          ),
-                          if (i < 4) const SizedBox(width: 6),
-                        ],
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            const Spacer(),
+            Row(
+              children: [
+                for (var i = 0; i < colors.length && i < 5; i++) ...[
+                  Expanded(child: _colorChip(colors[i], _chipLabels[i])),
+                  if (i < 4) const SizedBox(width: 6),
+                ],
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -183,13 +143,18 @@ class _PalettePanel extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 3),
-        GoopText(
-          label,
-          style: TextStyle(
-            fontSize: 7,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.5,
-            color: Colors.white.withValues(alpha: 0.4),
+        // Labels shrink to fit — 'CANVAS'/'SECOND' wrapped at 320dp
+        // without this.
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: GoopText(
+            label,
+            style: TextStyle(
+              fontSize: 7,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.5,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
           ),
         ),
       ],
