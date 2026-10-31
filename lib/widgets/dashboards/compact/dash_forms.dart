@@ -210,7 +210,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                   icon: const Icon(
                                     Icons.remove_circle_outline,
                                     color: Colors.purpleAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Decrease Gunther friendship',
                                   constraints: const BoxConstraints(
@@ -234,7 +234,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                   icon: const Icon(
                                     Icons.add_circle_outline,
                                     color: Colors.purpleAccent,
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Increase Gunther friendship',
                                   constraints: const BoxConstraints(

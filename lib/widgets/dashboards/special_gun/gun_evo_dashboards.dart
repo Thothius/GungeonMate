@@ -179,7 +179,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                           (_, _, _) => const Icon(
                                             Icons.broken_image_outlined,
                                             color: Colors.white24,
-                                            size: 24,
+                                            size: 30,
                                           ),
                                     ),
                                   ),
@@ -277,7 +277,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                                           .purpleAccent
                                                                       : Colors
                                                                           .white24,
-                                                              size: 24,
+                                                              size: 30,
                                                             ),
                                                           ),
                                                         ),
@@ -325,7 +325,7 @@ class GunderfuryDashboardSliverState extends State<GunderfuryDashboardSliver> {
                                                               color:
                                                                   Colors
                                                                       .purpleAccent,
-                                                              size: 24,
+                                                              size: 30,
                                                             ),
                                                           ),
                                                         ),
@@ -537,7 +537,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                           (_, _, _) => const Icon(
                                             Icons.broken_image_outlined,
                                             color: Colors.white24,
-                                            size: 24,
+                                            size: 30,
                                           ),
                                     ),
                                   ),
@@ -636,7 +636,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                                           .greenAccent
                                                                       : Colors
                                                                           .white24,
-                                                              size: 24,
+                                                              size: 30,
                                                             ),
                                                           ),
                                                         ),
@@ -685,7 +685,7 @@ class EvolverDashboardSliverState extends State<EvolverDashboardSliver> {
                                                               color:
                                                                   Colors
                                                                       .greenAccent,
-                                                              size: 24,
+                                                              size: 30,
                                                             ),
                                                           ),
                                                         ),
