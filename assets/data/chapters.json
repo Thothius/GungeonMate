@@ -2,7 +2,10 @@
   {
     "name": "Gungeon Proper",
     "category": "Chapter",
-    "description": "The first floor of the Gungeon. Teaches the basics — modest enemies, generous loot.",
+    "floor": 1,
+    "bundle": "base_gungeon",
+    "secret": false,
+    "description": "First floor. Teaches the basics â€” modest enemies, generous loot.",
     "tips": [
       "Floor 1",
       "No curse floor",
@@ -10,9 +13,13 @@
     ]
   },
   {
-    "name": "Gungeon Proper (Lower)",
+    "name": "Keep of the Lead Lord",
     "category": "Chapter",
-    "description": "Second floor. Tougher enemies, first real threat — Bullet King roams here.",
+    "floor": 2,
+    "bundle": "base_castle",
+    "secret": false,
+    "music": "Play_MUS_Castle_Theme_01",
+    "description": "Second floor. The Bullet King's castle â€” tougher enemies, first real threat.",
     "tips": [
       "Floor 2",
       "Bullet King boss pool",
@@ -22,7 +29,11 @@
   {
     "name": "Oubliette",
     "category": "Chapter",
-    "description": "Secret floor. Sewer depths below the Gungeon's first floors — poison pits and the Blobulord.",
+    "floor": null,
+    "bundle": "base_sewer",
+    "secret": true,
+    "music": "Play_MUS_sewer_theme_01",
+    "description": "Secret floor. Sewer depths â€” poison pits and the Blobulord.",
     "tips": [
       "Secret floor",
       "Accessed via trapdoor",
@@ -32,7 +43,11 @@
   {
     "name": "Abbey of the True Gun",
     "category": "Chapter",
-    "description": "Secret floor — a hidden monastery. The Old King's ghost guards ancient secrets.",
+    "floor": null,
+    "bundle": "base_cathedral",
+    "secret": true,
+    "music": "Play_MUS_cathedral_theme_01",
+    "description": "Secret floor â€” a hidden monastery. The Old King's ghost guards ancient secrets.",
     "tips": [
       "Secret floor",
       "Requires Old Crest",
@@ -42,7 +57,11 @@
   {
     "name": "Black Powder Mine",
     "category": "Chapter",
-    "description": "Third floor. A collapsing mine overrun with explosives and the Cannonballer's crew.",
+    "floor": 3,
+    "bundle": "base_mines",
+    "secret": false,
+    "music": "Play_MUS_mines_theme_01",
+    "description": "Third floor. A collapsing mine overrun with explosives.",
     "tips": [
       "Floor 3",
       "Minecarts + explosions",
@@ -52,7 +71,11 @@
   {
     "name": "Hollow",
     "category": "Chapter",
-    "description": "Fourth floor. A frozen void filled with the Gungeon's undead inhabitants.",
+    "floor": 4,
+    "bundle": "base_catacombs",
+    "secret": false,
+    "music": "Play_MUS_Catacombs_Theme_01",
+    "description": "Fourth floor. A frozen void filled with the Gungeon's undead.",
     "tips": [
       "Floor 4",
       "Undead enemies",
@@ -62,17 +85,39 @@
   {
     "name": "R&G Dept.",
     "category": "Chapter",
-    "description": "Secret floor. The Gungeon's research wing — experimental tech and the Rat King himself.",
+    "floor": null,
+    "bundle": "base_nakatomi",
+    "secret": true,
+    "music": "Play_MUS_Office_Theme_01",
+    "description": "Secret floor. The Gungeon's research wing â€” experimental tech.",
     "tips": [
       "Secret floor",
       "High-tech enemies",
+      "Nakatomi-themed"
+    ]
+  },
+  {
+    "name": "Resourceful Rat's Lair",
+    "category": "Chapter",
+    "floor": null,
+    "bundle": "base_resourcefulrat",
+    "secret": true,
+    "music": "Play_MUS_Dungeon_Rat_Theme_01",
+    "description": "Secret floor â€” the Rat's lair, a gauntlet of trap-filled rooms.",
+    "tips": [
+      "Secret floor",
+      "Trap gauntlet",
       "The Rat boss"
     ]
   },
   {
     "name": "Forge",
     "category": "Chapter",
-    "description": "Fifth floor. The final forge where the Gungeon's power is made — lava, elite foes, the High Dragun.",
+    "floor": 5,
+    "bundle": "base_forge",
+    "secret": false,
+    "music": "Play_MUS_Forge_theme_01",
+    "description": "Fifth floor. The final forge â€” lava, elite foes, the High Dragun.",
     "tips": [
       "Floor 5",
       "High Dragun boss",
@@ -82,11 +127,42 @@
   {
     "name": "Bullet Hell",
     "category": "Chapter",
-    "description": "The deepest floor. Pure bullet hell — only the strongest survive to the Lich.",
+    "floor": 6,
+    "bundle": "base_bullethell",
+    "secret": false,
+    "music": "Play_MUS_BulletHell_theme_01",
+    "description": "The deepest floor. Pure bullet hell â€” only the strongest reach the Lich.",
     "tips": [
       "Floor 6",
       "Lich boss",
       "Endgame difficulty"
+    ]
+  },
+  {
+    "name": "Breach",
+    "category": "Chapter",
+    "floor": null,
+    "bundle": "base_foyer",
+    "secret": false,
+    "music": "Play_MUS_Foyer_Theme_01",
+    "description": "The hub above the Gungeon â€” NPCs, shops, character select.",
+    "tips": [
+      "Hub area",
+      "No combat",
+      "NPC services"
+    ]
+  },
+  {
+    "name": "Halls of Knowledge",
+    "category": "Chapter",
+    "floor": null,
+    "bundle": "base_tutorial",
+    "secret": false,
+    "music": "",
+    "description": "Ser Manuel's tutorial halls â€” where new Gungeoneers learn to dodge.",
+    "tips": [
+      "Tutorial area",
+      "Ser Manuel guide"
     ]
   }
 ]

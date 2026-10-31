@@ -2,17 +2,39 @@
   {
     "name": "Challenge Mode",
     "category": "Game Mode",
-    "description": "Special runs with stacked modifiers — hard mode for veterans seeking greater rewards.",
+    "description": "Special runs with stacked modifiers â€” hard mode for veterans seeking greater rewards.",
+    "game_classes": [
+      "ChallengeManager",
+      "BestForLastChallengeModifier",
+      "BlobulinAmmoChallengeModifier",
+      "BooRoomChallengeModifier",
+      "BossStatuesChallengeModifier",
+      "BreakableProjectileChallengeModifier",
+      "CircleBurstChallengeModifier",
+      "CursePotChallengeModifier",
+      "DarknessChallengeModifier",
+      "DemonWallChallengeModifier",
+      "DodgeRollGameSpeedChallengeModifier",
+      "DragunRageChallengeModifier",
+      "EnemyDeathBurstChallengeModifier",
+      "ExplodingEnemiesChallengeModifier",
+      "FlameTrapChallengeModifier",
+      "FloorShockwaveChallengeModifier",
+      "FriendlyFireChallengeModifier",
+      "GunOverheatChallengeModifier",
+      "GunQueueChallengeModifier",
+      "HammerTimeChallengeModifier"
+    ],
     "tips": [
       "Unlock via shrine",
-      "Stacked modifiers",
+      "26 stacked modifiers in game code",
       "Greater rewards"
     ]
   },
   {
     "name": "Co-op",
     "category": "Game Mode",
-    "description": "Two-player local co-op — one Gungeoneer + one Cultist companion share the gungeon.",
+    "description": "Two-player local co-op â€” one Gungeoneer + one Cultist companion share the gungeon.",
     "tips": [
       "2 players",
       "Shared resources",
@@ -22,7 +44,7 @@
   {
     "name": "Turbo Mode",
     "category": "Game Mode",
-    "description": "Faster enemy AI and projectile speed — for players who want maximum challenge.",
+    "description": "Faster enemy AI and projectile speed â€” for players who want maximum challenge.",
     "tips": [
       "Increased speed",
       "Harder dodging"
@@ -31,10 +53,20 @@
   {
     "name": "Blessed Mode",
     "category": "Game Mode",
-    "description": "Random run modifiers each floor — every chamber surprises.",
+    "description": "Random gun each floor â€” every chamber surprises.",
     "tips": [
-      "Random effects per floor",
+      "Random gun per floor",
       "High variance"
+    ]
+  },
+  {
+    "name": "Gungeoneer Pasts",
+    "category": "Game Mode",
+    "description": "Six character-specific final scenarios â€” each Gungeoneer's personal past to confront.",
+    "tips": [
+      "finalscenario_* bundles in game data",
+      "6 character pasts",
+      "Unlock after 5th floor"
     ]
   }
 ]
