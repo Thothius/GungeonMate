@@ -430,12 +430,14 @@ class _SkeuoButtonState extends State<SkeuoButton> {
                 bottom: pad.bottom + Skeuo.shadowLow - shift,
               ),
               child:
-                  widget.height != null
-                      ? SizedBox(
-                        height: widget.height,
+                  widget.compact
+                      ? content
+                      : SizedBox(
+                        // Bare Center here would swallow the whole
+                        // bottomNav slot (landmine) — concrete height.
+                        height: widget.height ?? 52,
                         child: Center(child: content),
-                      )
-                      : (widget.compact ? content : Center(child: content)),
+                      ),
             ),
           ),
         );
