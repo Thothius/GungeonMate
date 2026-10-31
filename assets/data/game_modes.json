@@ -70,5 +70,24 @@
       "6 character pasts",
       "Unlock after 5th floor"
     ]
+  },
+  {
+    "name": "Boss Rush",
+    "category": "Game Mode",
+    "description": "Back-to-back boss gauntlet — fight every floor's bosses in sequence.",
+    "game_classes": [
+      "Bossrush_01_Castle",
+      "Bossrush_02_Gungeon",
+      "Bossrush_03_Mines",
+      "Bossrush_04_Catacombs",
+      "Bossrush_05_Forge",
+      "Bossrush_06_BulletHell",
+      "Secret_DoubleBeholster_Flow"
+    ],
+    "tips": [
+      "All floors incl. secret bosses",
+      "Double Beholster secret fight",
+      "flow data confirmed in game files"
+    ]
   }
 ]

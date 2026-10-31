@@ -2,26 +2,26 @@
   {
     "name": "Gungeon Proper",
     "category": "Chapter",
-    "floor": 1,
+    "floor": 2,
     "bundle": "base_gungeon",
     "secret": false,
-    "description": "First floor. Teaches the basics — modest enemies, generous loot.",
+    "description": "Second floor. The Gungeon's main halls — tougher enemies, first real threat.",
     "tips": [
-      "Floor 1",
-      "No curse floor",
+      "Floor 2",
+      "Bullet King boss pool",
       "Shop + chests guaranteed"
     ]
   },
   {
     "name": "Keep of the Lead Lord",
     "category": "Chapter",
-    "floor": 2,
+    "floor": 1,
     "bundle": "base_castle",
     "secret": false,
     "music": "Play_MUS_Castle_Theme_01",
-    "description": "Second floor. The Bullet King's castle — tougher enemies, first real threat.",
+    "description": "First floor. The Bullet King's castle — teaches the basics, generous loot.",
     "tips": [
-      "Floor 2",
+      "Floor 1",
       "Bullet King boss pool",
       "More elite variants"
     ]
