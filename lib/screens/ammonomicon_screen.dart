@@ -476,14 +476,31 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                           vertical: 10,
                         ),
                         decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              c.color.withValues(alpha: 0.16),
+                              c.color.withValues(alpha: 0.05),
+                            ],
+                          ),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
-                            color: c.color.withValues(alpha: 0.3),
+                            color: c.color.withValues(alpha: 0.45),
                           ),
                         ),
                         child: Row(
                           children: [
-                            _searchIcon(e, section),
+                            Container(
+                              width: 34,
+                              height: 34,
+                              decoration: BoxDecoration(
+                                color: c.color.withValues(alpha: 0.14),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: c.color.withValues(alpha: 0.5),
+                                ),
+                              ),
+                              child: Center(child: _searchIcon(e, section)),
+                            ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Column(
@@ -504,7 +521,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: Colors.white.withValues(
-                                          alpha: 0.55,
+                                          alpha: 0.6,
                                         ),
                                       ),
                                     ),
