@@ -88,7 +88,7 @@
   Iron Coin, Spice, Metronome, Sprun, Boxing Glove, Cigarettes, Huntress,
   Gun Soul, Ser Junkan, Triple Gun). Autosaves via `_scheduleSave()`.
 - `lib/services/mp_session.dart` — session facade. Bridges MpSync ↔ UI
-  callbacks (`onSurpriseReceived`, `onStartRun`, chat/emote/dice), event log.
+  callbacks (`onSurpriseReceived`, `onStartRun`, emote/dice), event log.
 - `lib/services/mp/mp_link.dart` — Nearby Connections transport (BT/WiFi-Direct).
 - `lib/services/mp/mp_sync.dart` — protocol routing: snapshot broadcast
   (debounced), hello-retry, request/gift state, dedup sets, Main-authoritative
@@ -96,15 +96,17 @@
 - `lib/models/multiplayer_messages.dart` — sealed `MpMessage` wire protocol.
   `encode()` injects `'type'`; subclasses' `toJson()` must NOT include it.
   Name-only gun/item refs; peers re-resolve against local asset JSON.
-  Two modes via different Nearby serviceIds: classic ↔ paradox cannot pair.
+  Unified co-op: ONE Nearby serviceId (`mp.v2`) — Paradox is a character
+  pick with blank-start inventory, not a separate protocol mode.
 - `lib/services/app_theme.dart` (~4.7k lines) — palettes (9 + Palette Maker),
   fonts, particles, glows. `displayedMode` lets studio preview re-skin the
   whole app live.
 - `lib/screens/` — home, active_run, browse, codex (+6 special codex pages),
-  settings, experience_studio, quiz/, paradox/paradox_flow, mp_connect/lobby.
+  settings, experience_studio, quiz/, mp_connect/mp_lobby (sole MP flow).
 - `lib/widgets/` — active_run/ (player_page, dashboards, dice_roll,
-  stat_sheets…), paradox/ (chat_sheet incl. `SurpriseSheet`, surprise_overlay,
-  avatar_frame, paradox_bar, pause_overlay), dashboards/, item_detail/.
+  stat_sheets…), paradox/ (`SurpriseSheet` + surprise_overlay, avatar_frame
+  + avatar_picker, paradox_bar, pause_overlay — named 'paradox' but serves
+  all MP), dashboards/, item_detail/.
 
 ## Key conventions
 - Provider + ChangeNotifier throughout; no codegen, no freezed.
@@ -142,7 +144,7 @@ Files: `multiplayer_messages.dart`, `mp_session.dart`, `surprise_overlay.dart`.
 3. `fx` has **no sender yet** — nothing calls `sendSurprise(fx: …)`.
 4. Custom surprise hint says "optional `:icon:`" but text is never parsed
    into `spriteKey` — token renders literally in the card. Chat DOES parse
-   `:key:` (chat_sheet `_buildContent`), surprise card does not.
+   `:key:` tokens — nothing parses them now that chat is gone.
 5. Preset fx map lives in `_SurpriseCard._presetContent` (surprise_overlay);
    sender sheet presets are a separate tuple list in `SurpriseSheet`
-   (chat_sheet) — keep in sync if presets change.
+   (`surprise_sheet.dart`) — keep in sync if presets change.
