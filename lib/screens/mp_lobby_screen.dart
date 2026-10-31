@@ -91,9 +91,11 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     // First non-Cultist gungeoneer for Main.
     return rp.allGungeoneers.firstWhere(
       (g) => g.name != 'The Cultist',
-      orElse: () => rp.allGungeoneers.isNotEmpty
-          ? rp.allGungeoneers.first
-          : Gungeoneer(name: 'The Marine'),
+      orElse:
+          () =>
+              rp.allGungeoneers.isNotEmpty
+                  ? rp.allGungeoneers.first
+                  : Gungeoneer(name: 'The Marine'),
     );
   }
 
@@ -176,16 +178,17 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             // still scrollable when it can't fit (keyboard, small screens).
             Expanded(
               child: LayoutBuilder(
-                builder: (context, c) => SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: c.maxHeight),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: widgets,
+                builder:
+                    (context, c) => SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: c.maxHeight),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: widgets,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
             ),
           ],
@@ -195,37 +198,18 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
   }
 
   List<Widget> _stageHeader(String title, double sf) {
-    // Progress dots — 3 steps; sidekick's identity stage still shows
-    // dot 3 (it logically skipped step 2, that's honest feedback).
     return [
       SizedBox(height: 12 * sf),
-      Row(
-        children: [
-          for (var i = 0; i < 3; i++)
-            Padding(
-              padding: const EdgeInsets.only(right: 6),
-              child: Container(
-                width: 7,
-                height: 7,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: i <= _stage
-                      ? AppTheme.flair.primary
-                      : Colors.white.withValues(alpha: 0.18),
-                ),
-              ),
-            ),
-          const SizedBox(width: 8),
-          GoopText(
-            title,
-            style: TextStyle(
-              fontSize: FontSizes.titleSmall,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 2,
-              color: Colors.white.withValues(alpha: 0.7),
-            ),
+      Center(
+        child: GoopText(
+          title,
+          style: TextStyle(
+            fontSize: FontSizes.titleSmall,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2.5,
+            color: Colors.white.withValues(alpha: 0.55),
           ),
-        ],
+        ),
       ),
       SizedBox(height: 18 * sf),
     ];
@@ -351,42 +335,81 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     required double sf,
   }) {
     return Material(
-      color: color.withValues(alpha: 0.10),
+      color: Colors.transparent,
       borderRadius: BorderRadius.circular(18),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(18),
+        splashColor: color.withValues(alpha: 0.2),
+        highlightColor: color.withValues(alpha: 0.08),
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 30 * sf, horizontal: 14),
+          padding: EdgeInsets.symmetric(vertical: 22 * sf, horizontal: 18),
           decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                color.withValues(alpha: 0.16),
+                color.withValues(alpha: 0.05),
+              ],
+            ),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: color.withValues(alpha: 0.5), width: 1.8),
+            border: Border.all(color: color.withValues(alpha: 0.5), width: 1.4),
             boxShadow: [
-              BoxShadow(color: color.withValues(alpha: 0.15), blurRadius: 24),
+              BoxShadow(color: color.withValues(alpha: 0.12), blurRadius: 20),
             ],
           ),
-          child: Column(
+          child: Row(
             children: [
-              Icon(icon, size: 44 * sf, color: color),
-              SizedBox(height: 12 * sf),
-              GoopText(
-                title,
-                style: TextStyle(
-                  fontSize: FontSizes.titleMedium * sf,
-                  fontWeight: FontWeight.w900,
-                  color: color,
-                  letterSpacing: 1.5,
+              Container(
+                width: 60 * sf,
+                height: 60 * sf,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.16),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: color.withValues(alpha: 0.65),
+                    width: 1.6,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.3),
+                      blurRadius: 12,
+                    ),
+                  ],
+                ),
+                child: Icon(icon, size: 30 * sf, color: color),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GoopText(
+                      title,
+                      style: TextStyle(
+                        fontSize: FontSizes.titleMedium * sf,
+                        fontWeight: FontWeight.w900,
+                        color: color,
+                        letterSpacing: 1.8,
+                      ),
+                    ),
+                    SizedBox(height: 5 * sf),
+                    GoopText(
+                      subtitle.replaceAll('\n', ' · '),
+                      style: TextStyle(
+                        fontSize: 12 * sf,
+                        color: Colors.white.withValues(alpha: 0.6),
+                        height: 1.35,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 8 * sf),
-              GoopText(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12 * sf,
-                  color: Colors.white.withValues(alpha: 0.6),
-                  height: 1.4,
-                ),
+              Icon(
+                Icons.chevron_right_rounded,
+                size: 26,
+                color: color.withValues(alpha: 0.7),
               ),
             ],
           ),
@@ -498,33 +521,36 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     return SizedBox(
       width: 96 * sf,
       height: 96 * sf,
-      child: animPath.isNotEmpty
-          ? Image.asset(
-              animPath,
-              fit: BoxFit.contain,
-              cacheWidth: 192,
-              cacheHeight: 192,
-              errorBuilder: (_, _, _) => gifPath.isNotEmpty
-                  ? Image.asset(
-                      gifPath,
-                      fit: BoxFit.contain,
-                      cacheWidth: 192,
-                      cacheHeight: 192,
-                    )
-                  : Icon(
-                      Icons.person_rounded,
-                      size: 40 * sf,
-                      color: flair.primary,
-                    ),
-            )
-          : gifPath.isNotEmpty
-          ? Image.asset(
-              gifPath,
-              fit: BoxFit.contain,
-              cacheWidth: 192,
-              cacheHeight: 192,
-            )
-          : Icon(Icons.person_rounded, size: 40 * sf, color: flair.primary),
+      child:
+          animPath.isNotEmpty
+              ? Image.asset(
+                animPath,
+                fit: BoxFit.contain,
+                cacheWidth: 192,
+                cacheHeight: 192,
+                errorBuilder:
+                    (_, _, _) =>
+                        gifPath.isNotEmpty
+                            ? Image.asset(
+                              gifPath,
+                              fit: BoxFit.contain,
+                              cacheWidth: 192,
+                              cacheHeight: 192,
+                            )
+                            : Icon(
+                              Icons.person_rounded,
+                              size: 40 * sf,
+                              color: flair.primary,
+                            ),
+              )
+              : gifPath.isNotEmpty
+              ? Image.asset(
+                gifPath,
+                fit: BoxFit.contain,
+                cacheWidth: 192,
+                cacheHeight: 192,
+              )
+              : Icon(Icons.person_rounded, size: 40 * sf, color: flair.primary),
     );
   }
 
@@ -532,9 +558,10 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     Haptics.selection();
     final rp = context.read<RunProvider>();
     // Main player can't pick The Cultist — filter it out.
-    final available = _role == _LobbyRole.main
-        ? rp.allGungeoneers.where((g) => g.name != 'The Cultist').toList()
-        : rp.allGungeoneers;
+    final available =
+        _role == _LobbyRole.main
+            ? rp.allGungeoneers.where((g) => g.name != 'The Cultist').toList()
+            : rp.allGungeoneers;
     final Gungeoneer? picked = await Navigator.push<Gungeoneer>(
       context,
       fastRoute(
@@ -766,7 +793,8 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
               SizedBox(height: 6 * sf),
               _HowToStep(
                 num: '2',
-                text: 'One player picks MAIN and taps HOST GAME, then picks a character.',
+                text:
+                    'One player picks MAIN and taps HOST GAME, then picks a character.',
                 sf: sf,
               ),
               SizedBox(height: 6 * sf),
@@ -797,44 +825,45 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     final sf = Responsive.factor(context);
     await showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: flair.card,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radii.lg),
-          side: BorderSide(
-            color: flair.primary.withValues(alpha: 0.3),
-            width: 1.5,
-          ),
-        ),
-        icon: Icon(Icons.bluetooth_rounded, size: 36, color: flair.primary),
-        title: const GoopText(
-          'Bluetooth + Wi-Fi',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-            fontSize: FontSizes.titleMedium,
-          ),
-        ),
-        content: GoopText(
-          'GungeonMate uses Bluetooth and Wi-Fi to connect devices. '
-          'You\'ll be asked to grant permissions — please allow them.',
-          style: TextStyle(
-            fontSize: 13 * sf,
-            color: Colors.white.withValues(alpha: 0.7),
-            height: 1.5,
-          ),
-        ),
-        actions: [
-          FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: flair.primary,
-              foregroundColor: Colors.white,
+      builder:
+          (ctx) => AlertDialog(
+            backgroundColor: flair.card,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radii.lg),
+              side: BorderSide(
+                color: flair.primary.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
             ),
-            onPressed: () => Navigator.pop(ctx),
-            child: const GoopText('GOT IT'),
+            icon: Icon(Icons.bluetooth_rounded, size: 36, color: flair.primary),
+            title: const GoopText(
+              'Bluetooth + Wi-Fi',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                fontSize: FontSizes.titleMedium,
+              ),
+            ),
+            content: GoopText(
+              'GungeonMate uses Bluetooth and Wi-Fi to connect devices. '
+              'You\'ll be asked to grant permissions — please allow them.',
+              style: TextStyle(
+                fontSize: 13 * sf,
+                color: Colors.white.withValues(alpha: 0.7),
+                height: 1.5,
+              ),
+            ),
+            actions: [
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: flair.primary,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () => Navigator.pop(ctx),
+                child: const GoopText('GOT IT'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
