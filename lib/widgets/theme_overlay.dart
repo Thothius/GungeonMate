@@ -13,9 +13,21 @@ import 'particles/ambient_glow.dart';
 import 'backgrounds/page_frame.dart';
 import 'backgrounds/ambient_shader.dart';
 
+/// Shared RouteObserver — MainMenuScreen subscribes (RouteAware) to
+/// learn when a route is pushed above it or popped back to it.
+final RouteObserver<ModalRoute<dynamic>> menuRouteObserver =
+    RouteObserver<ModalRoute<dynamic>>();
+
 class ThemeOverlay extends StatefulWidget {
   final Widget child;
   const ThemeOverlay({super.key, required this.child});
+
+  /// Whether the main menu is the topmost route. Theme layers are
+  /// suppressed only while the locked home menu is actually visible —
+  /// screens pushed above it (Studio, Ammonomicon, character select…)
+  /// keep their themed backdrop. Set by MainMenuScreen's RouteAware
+  /// callbacks; defaults true (covers the pre-menu loading state).
+  static final ValueNotifier<bool> menuOnTop = ValueNotifier(true);
 
   /// Static global notifier for the current physical device tilt (x, y).
   /// x is tilt left/right (-10 to 10), y is tilt up/down (-10 to 10).
@@ -130,6 +142,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
         AppTheme.previewNotifier,
         AppTheme.unicornPaletteNotifier,
         AppTheme.remixNotifier,
+        ThemeOverlay.menuOnTop,
       ]),
       builder: (_, _) {
         final mode = AppTheme.displayedMode;
@@ -150,6 +163,9 @@ class _ThemeOverlayState extends State<ThemeOverlay>
             final isHomeScreen =
                 runProvider.isLoading ||
                 runProvider.runState.selectedCharacter == null;
+            // The theme lock applies only while the main menu is the
+            // topmost route — pushed screens keep themed layers.
+            final menuVisible = isHomeScreen && ThemeOverlay.menuOnTop.value;
             // Keep the static notifier in sync for the touch-sparkle
             // guard below (which runs outside the build path).
             final desiredIndex = isHomeScreen ? 0 : -1;
@@ -237,7 +253,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
               chaos: prefs.particleChaos,
             );
             final particleBackdropBg =
-                !particlesOn || isHomeScreen
+                !particlesOn || menuVisible
                     ? null
                     : ParticleField(
                       preset: effectivePreset,
@@ -255,7 +271,9 @@ class _ThemeOverlayState extends State<ThemeOverlay>
             Widget content = widget.child;
 
             // Apply visual customizer wrappers based on active Theme Mode!
-            if (!reduceMotion && mode == AppThemeMode.bulletHell) {
+            // Locked on home — the menu must look identical on every theme.
+            if (!reduceMotion && !menuVisible &&
+                mode == AppThemeMode.bulletHell) {
               content = ElasticWobbleContainer(
                 intensity: 0.05,
                 speed: 0.6,
@@ -277,7 +295,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // its fixed base color and skip all theme layers below.
                   Positioned.fill(
                     child: Container(
-                      color: isHomeScreen
+                      color: menuVisible
                           ? const Color(0xFF0A0710)
                           : f.scaffold,
                     ),
@@ -290,7 +308,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // 0.5. Ambient Fragment Shader (Q3) — GPU-composited digital
                   // rain or dark neon fog. Sits behind particles but above the
                   // base background + video wallpaper. Opt-in via VisualPrefs.
-                  if (!reduceMotion && !isHomeScreen && prefs.shaderEnabled)
+                  if (!reduceMotion && !menuVisible && prefs.shaderEnabled)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: AmbientShaderLayer(
@@ -303,14 +321,14 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                     ),
 
                   // 1b. Particles / Theme Backdrops (Background Layer)
-                  if (!isHomeScreen && particleBackdropBg != null)
+                  if (!menuVisible && particleBackdropBg != null)
                     Positioned.fill(
                       child: IgnorePointer(child: particleBackdropBg),
                     ),
 
                   // 1c. Ambient Glow — behind content so it glows behind panels,
                   //     not covering layered content on top.
-                  if (showGlow && !isHomeScreen)
+                  if (showGlow && !menuVisible)
                     Positioned.fill(
                       child: IgnorePointer(
                         child: AmbientGlow(
@@ -327,7 +345,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   content,
 
                   // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
-                  if (!isHomeScreen)
+                  if (!menuVisible)
                     Positioned.fill(
                     child: IgnorePointer(
                       child: Container(
@@ -348,13 +366,13 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                     ),
                   ),
 
-                  if (!isHomeScreen && f.pageFrame)
+                  if (!menuVisible && f.pageFrame)
                     const Positioned.fill(
                       child: IgnorePointer(child: PageFrame()),
                     ),
 
                   // 4. Special Top-Edge Drip Overlay (Curseblaster / Oubliette themes)
-                  if (!isHomeScreen && mode == AppThemeMode.lordJammed)
+                  if (!menuVisible && mode == AppThemeMode.lordJammed)
                     const Positioned(
                       top: 0,
                       left: 0,

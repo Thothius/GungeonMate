@@ -116,6 +116,7 @@ class _GungeonMateAppState extends State<GungeonMateApp>
                               (context, prefs, _) => MaterialApp(
                                 title: 'Gungeon Mate',
                                 debugShowCheckedModeBanner: false,
+                                navigatorObservers: [menuRouteObserver],
                                 theme: AppTheme.themeFor(
                                   AppTheme.displayedMode,
                                 ),

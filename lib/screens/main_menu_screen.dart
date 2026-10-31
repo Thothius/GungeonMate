@@ -12,6 +12,7 @@ import '../utils/fast_route.dart';
 import '../utils/responsive.dart';
 import '../utils/asset_paths.dart' show kAppVersion;
 import '../widgets/home/home_backdrop.dart';
+import '../widgets/theme_overlay.dart';
 
 /// Opening screen. App title, subtitle, and primary action buttons.
 ///
@@ -26,7 +27,41 @@ class MainMenuScreen extends StatefulWidget {
   State<MainMenuScreen> createState() => _MainMenuScreenState();
 }
 
-class _MainMenuScreenState extends State<MainMenuScreen> {
+class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
+  Route<dynamic>? _route;
+
+  @override
+  void initState() {
+    super.initState();
+    // Menu mounted = on top (it only exists as the no-run home state).
+    ThemeOverlay.menuOnTop.value = true;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != _route) {
+      if (_route != null) menuRouteObserver.unsubscribe(this);
+      _route = route;
+      if (route != null) menuRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (_route != null) menuRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  // A route was pushed above the menu → unlock theme layers there.
+  @override
+  void didPushNext() => ThemeOverlay.menuOnTop.value = false;
+
+  // The route above the menu popped → menu is topmost again → re-lock.
+  @override
+  void didPopNext() => ThemeOverlay.menuOnTop.value = true;
+
   // Fixed home palette — never theme-driven.
   static const Color _panel = Color(0xB31A1526); // charcoal glass
   static const Color _inkOnSolid = Color(0xFF1C1C1E);
