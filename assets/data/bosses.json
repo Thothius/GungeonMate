@@ -13,7 +13,8 @@
       "Leave the Chancellor unprovoked — he becomes harmless at the end of the fight."
     ],
     "icon": "Bullet_King.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_King"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_King",
+    "game_enc_key": "BULLETKING"
   },
   {
     "name": "Gatling Gull",
@@ -29,7 +30,8 @@
       "Use the large arena's pillars to break line of sight and gain distance."
     ],
     "icon": "Gatling_Gull.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gatling_Gull"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gatling_Gull",
+    "game_enc_key": "GATLINGGULL"
   },
   {
     "name": "Trigger Twins",
@@ -60,7 +62,8 @@
       "Bring high-DPS weapons — its random patterns and self-healing make it a tough fight."
     ],
     "icon": "Ammoconda.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda",
+    "game_enc_key": "BASHELLISK"
   },
   {
     "name": "Beholster",
@@ -108,7 +111,8 @@
       "Can be damaged by bombs and Blasphemy during its teleporting attack."
     ],
     "icon": "Cannonbalrog.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannonbalrog"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannonbalrog",
+    "game_enc_key": "GIANTPOWDERSKULL"
   },
   {
     "name": "Mine Flayer",
@@ -124,7 +128,8 @@
       "Don't drop Devolver Rounds — they affect the bells and spawn persistent Arrowkin."
     ],
     "icon": "Mine_Flayer.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer",
+    "game_enc_key": "MINEFLAYER"
   },
   {
     "name": "Treadnaught",
@@ -140,7 +145,8 @@
       "The tank's explosions can destroy pillars in the arena, reducing your cover over time."
     ],
     "icon": "Treadnaught.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Treadnaught"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Treadnaught",
+    "game_enc_key": "TANKTREADER"
   },
   {
     "name": "High Priest",
@@ -156,7 +162,8 @@
       "Potion of Lead Skin is extremely effective during the rotating bullet stream attack."
     ],
     "icon": "High_Priest.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest",
+    "game_enc_key": "HIGHPRIEST"
   },
   {
     "name": "Kill Pillars",
@@ -172,7 +179,8 @@
       "Explosive weapons can clear the spinning bullet volley."
     ],
     "icon": "Kill_Pillars.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kill_Pillars"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kill_Pillars",
+    "game_enc_key": "BOSSSTATUES"
   },
   {
     "name": "Wallmonger",
@@ -219,7 +227,8 @@
       "His shield-shaped attack has gaps — weave through them rather than dodge rolling."
     ],
     "icon": "Blockner.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner",
+    "game_enc_key": "MANFREDSRIVAL"
   },
   {
     "name": "Door Lord",
@@ -235,7 +244,8 @@
       "Can be cheesed by hiding behind the smaller door at the entrance with long-reach weapons."
     ],
     "icon": "Door_Lord.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Door_Lord"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Door_Lord",
+    "game_enc_key": "BOSSDOORMIMIC"
   },
   {
     "name": "Blobulord",
@@ -251,7 +261,8 @@
       "Bring high-DPS weapons to burn it down between split phases."
     ],
     "icon": "Blobulord.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord",
+    "game_enc_key": "BLOBULORD"
   },
   {
     "name": "Old King",
@@ -267,7 +278,8 @@
       "Bring high-DPS weapons — he has more health than the normal High Dragun."
     ],
     "icon": "Old_King.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_King"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_King",
+    "game_enc_key": "OLDBULLETKING"
   },
   {
     "name": "Resourceful Rat",
@@ -299,7 +311,8 @@
       "The boss foyer has a unique interactable ladder instead of a corridor."
     ],
     "icon": "Heligunim.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agunim"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agunim",
+    "game_enc_key": "AGUNIM"
   },
   {
     "name": "Black Stache",
@@ -314,7 +327,8 @@
       "Use cover in the nightclub to avoid crossfire from multiple enemies."
     ],
     "icon": "Black_Stache.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Black_Stache"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Black_Stache",
+    "game_enc_key": "BOSSFINALCONVICT"
   },
   {
     "name": "Dr. Wolf's Monster",
@@ -330,7 +344,8 @@
       "The Wolf item accompanies you in this past fight."
     ],
     "icon": "Dr._Wolf%27s_Monster.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dr._Wolf%27s_Monster"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dr._Wolf%27s_Monster",
+    "game_enc_key": "BOSSFINALGUIDE"
   },
   {
     "name": "HS Absolution",
@@ -346,7 +361,8 @@
       "Your heart containers, armor, blanks, keys, and casings are reset for this fight."
     ],
     "icon": "HS_Absolution.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/HM_Absolution"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/HM_Absolution",
+    "game_enc_key": "BOSSFINALROGUE"
   },
   {
     "name": "Interdimensional Horror",
@@ -361,7 +377,8 @@
       "Keep your distance and circle the arena to avoid overlapping attacks."
     ],
     "icon": "Interdimensional_Horror.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Interdimensional_Horror"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Interdimensional_Horror",
+    "game_enc_key": "BOSSFINALMARINE"
   },
   {
     "name": "Cannon",
@@ -376,7 +393,8 @@
       "Defeat Agunim first — Cannon is the second phase of the Bullet's past boss fight."
     ],
     "icon": "Cannon.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannon"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannon",
+    "game_enc_key": "CANNONDORF"
   },
   {
     "name": "The Last Human",
@@ -392,7 +410,8 @@
       "Armor is reset to 6 for this past fight."
     ],
     "icon": "The_Last_Human.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Last_Human"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Last_Human",
+    "game_enc_key": "LASTHUMAN"
   },
   {
     "name": "Lich",
@@ -409,6 +428,7 @@
       "Save blanks for Phase 3 AoE attacks that limit your movement."
     ],
     "icon": "Lich.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lich"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lich",
+    "game_enc_key": "LICH"
   }
 ]

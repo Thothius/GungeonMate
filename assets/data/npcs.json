@@ -101,7 +101,8 @@
       "The reward chest can be a mimic, but Mimic Tooth Necklace doesn't affect it."
     ],
     "icon": "npc_winchester.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Winchester_(NPC)"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Winchester_(NPC)",
+    "game_enc_key": "WINCHESTERSHOTGUN"
   },
   {
     "name": "Gunsling King and Manservantes",
@@ -131,7 +132,8 @@
       "He's the tutorial boss with only 100 HP — an easy fight to practice mechanics."
     ],
     "icon": "ser_manuel.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ser_Manuel"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ser_Manuel",
+    "game_enc_key": "MANFRED"
   },
   {
     "name": "Blockner",
@@ -146,7 +148,8 @@
       "After slaying Blockner, return to Ser Manuel to unlock items and enable Monster Manuel encounters."
     ],
     "icon": "npc_blockner.png",
-    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner"
+    "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner",
+    "game_enc_key": "MANFREDSRIVAL"
   },
   {
     "name": "Sell Creep",
