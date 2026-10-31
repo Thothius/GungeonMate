@@ -92,6 +92,7 @@ class SkeuoSurface extends StatelessWidget {
         shadowStyle: shadowStyle,
         innerStroke: inner,
         pressT: pressT,
+        interiorHatch: elevation == SkeuoElevation.pressed,
         sketchy: sketchy,
       ),
       child: Padding(
@@ -118,6 +119,7 @@ class _SkeuoSurfacePainter extends CustomPainter {
   final SkeuoShadowStyle shadowStyle;
   final bool innerStroke;
   final double pressT;
+  final bool interiorHatch;
   final bool sketchy;
 
   const _SkeuoSurfacePainter({
@@ -129,6 +131,7 @@ class _SkeuoSurfacePainter extends CustomPainter {
     required this.shadowStyle,
     required this.innerStroke,
     required this.pressT,
+    required this.interiorHatch,
     required this.sketchy,
   });
 
@@ -188,6 +191,30 @@ class _SkeuoSurfacePainter extends CustomPainter {
         ..color = fill
         ..isAntiAlias = true,
     );
+
+    // 2.5. Pressed interior hatch — faint 45° strokes inside the card
+    //    so sunken surfaces read shaded, not just flat + thick-bordered.
+    if (interiorHatch) {
+      canvas.save();
+      canvas.clipRRect(cardRRect);
+      final shade =
+          Paint()
+            ..color = Skeuo.ink.withValues(alpha: 0.07)
+            ..strokeWidth = 1.0
+            ..isAntiAlias = true;
+      for (
+        var x = card.left - card.height;
+        x < card.right;
+        x += Skeuo.hatchGap * 2
+      ) {
+        canvas.drawLine(
+          Offset(x, card.top),
+          Offset(x + card.height, card.bottom),
+          shade,
+        );
+      }
+      canvas.restore();
+    }
 
     // 3. Border — main stroke + a faint shifted second stroke for the
     //    hand-drawn double-line feel (deterministic, no per-frame jitter).
@@ -420,6 +447,7 @@ class _SkeuoButtonState extends State<SkeuoButton> {
                   _isPrimary ? SkeuoShadowStyle.solid : SkeuoShadowStyle.hatch,
               innerStroke: false,
               pressT: t,
+              interiorHatch: false,
               sketchy: !_isPrimary,
             ),
             child: Padding(
