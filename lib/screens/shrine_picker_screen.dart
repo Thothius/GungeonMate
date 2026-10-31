@@ -196,9 +196,9 @@ class _ShrineListTile extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(Insets.md),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Shrine Icon
               Hero(
@@ -214,8 +214,8 @@ class _ShrineListTile extends StatelessWidget {
                     ),
                   ),
                   child: SizedBox(
-                    height: 92,
-                    width: 92,
+                    height: 64,
+                    width: 64,
                     child:
                         iconAsset.startsWith('assets/')
                             ? Image.asset(
@@ -270,22 +270,7 @@ class _ShrineListTile extends StatelessWidget {
                         letterSpacing: 0.5,
                       ),
                     ),
-                    const SizedBox(height: 3),
-
-                    // Description (italic, 1 line)
-                    if (shrine.description.isNotEmpty)
-                      GoopText(
-                        shrine.description,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11.5,
-                          color: Colors.white.withValues(alpha: 0.45),
-                          fontStyle: FontStyle.italic,
-                          height: 1.2,
-                        ),
-                      ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 4),
 
                     // Effect summary (3 lines max)
                     GoopText(
@@ -345,7 +330,7 @@ class _ShrineListTile extends StatelessWidget {
                           horizontal: 16,
                           vertical: 0,
                         ),
-                        minimumSize: const Size(0, 48),
+                        minimumSize: const Size(0, 40),
                       ),
                       icon: const Icon(Icons.bolt, size: 18),
                       label: const GoopText(
