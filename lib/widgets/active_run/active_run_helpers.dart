@@ -17,7 +17,7 @@ import '../../screens/experience_studio_screen.dart';
 import '../../screens/shrine_picker_screen.dart';
 import 'sort_picker.dart';
 import 'dice_roll.dart';
-import '../paradox/chat_sheet.dart';
+import '../paradox/surprise_sheet.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -298,7 +298,7 @@ class HeaderMenu extends StatelessWidget {
             showDiceRollDialog(context);
             break;
           case 'messages':
-            showParadoxChatSheet(context);
+            SurpriseSheet.open(context);
             break;
           case 'surprise':
             showModalBottomSheet<void>(

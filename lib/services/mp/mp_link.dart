@@ -24,19 +24,6 @@ class MpLink implements MpTransport {
   /// Service ID for the classic lobby-based MP flow.
   static const String serviceIdClassic = 'com.saare.gungeon_mate.mp.v2';
 
-  /// Service ID for Paradox Mode. A dedicated id means a Paradox
-  /// "Enter the Void" seeker can never discover a classic-MP
-  /// advertiser — cross-mode pairing is impossible at the radio level.
-  static const String serviceIdParadox = 'com.saare.gungeon_mate.paradox.v1';
-
-  /// Active service ID — set via [setServiceId] before starting.
-  /// Must be identical on both peers or discovery silently filters.
-  String _serviceId = serviceIdClassic;
-
-  @override
-  void setServiceId(String id) {
-    _serviceId = id;
-  }
 
   /// Legacy accessor kept for any call-site still reading the constant.
   static String get serviceId => serviceIdClassic;
@@ -205,7 +192,7 @@ class MpLink implements MpTransport {
       final ok = await _nearby.startAdvertising(
         nickname,
         _strategy,
-        serviceId: _serviceId,
+        serviceId: serviceIdClassic,
         onConnectionInitiated: _onConnectionInitiated,
         onConnectionResult: _onConnectionResult,
         onDisconnected: _onDisconnected,
@@ -245,7 +232,7 @@ class MpLink implements MpTransport {
       final ok = await _nearby.startDiscovery(
         nickname,
         _strategy,
-        serviceId: _serviceId,
+        serviceId: serviceIdClassic,
         onEndpointFound: _onEndpointFound,
         onEndpointLost: _onEndpointLost,
       );
@@ -323,7 +310,7 @@ class MpLink implements MpTransport {
       final ok = await _nearby.startDiscovery(
         _nickname,
         _strategy,
-        serviceId: _serviceId,
+        serviceId: serviceIdClassic,
         onEndpointFound: _onEndpointFound,
         onEndpointLost: _onEndpointLost,
       );

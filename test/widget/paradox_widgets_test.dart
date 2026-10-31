@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:gungeon_mate/models/multiplayer_messages.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
+import 'package:gungeon_mate/models/gungeoneer.dart';
 import 'package:gungeon_mate/widgets/paradox/paradox_bar.dart';
 import 'package:gungeon_mate/widgets/paradox/pause_overlay.dart';
 import '../helpers/fake_mp_link.dart';
@@ -37,12 +37,11 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
 
     final (session, rp) = makeSession();
-    await session.startParadox(
-      role: MpRole.main,
+    await session.startAsMain(
       nickname: 'T',
+      character: rp.gungeoneerByName('The Paradox') ?? Gungeoneer(name: 'The Paradox'),
       avatarId: 'the_paradox',
       runTitle: 'Cursed Hunter of the Deep',
-      sessionNumber: 2,
     );
 
     await tester.pumpWidget(
@@ -51,8 +50,7 @@ void main() {
     await tester.pump();
 
     expect(find.textContaining('CURSED HUNTER'), findsWidgets);
-    expect(find.textContaining('#2'), findsWidgets);
-    // ParadoxBar simplified: title+#N, timer/health toggles, 2 tab dots.
+    // ParadoxBar: title, timer/health toggles, 2 tab dots.
     // Chat + settings moved to ParadoxPlayerPanel (MSG stat + ⋮ menu).
     expect(find.byIcon(Icons.settings_rounded), findsNothing);
     expect(find.byIcon(Icons.forum_rounded), findsNothing);
@@ -62,12 +60,11 @@ void main() {
     tester,
   ) async {
     final (session, rp) = makeSession();
-    await session.startParadox(
-      role: MpRole.main,
+    await session.startAsMain(
       nickname: 'T',
+      character: rp.gungeoneerByName('The Paradox') ?? Gungeoneer(name: 'The Paradox'),
       avatarId: 'the_paradox',
       runTitle: 'Test Run',
-      sessionNumber: 0,
     );
 
     await tester.pumpWidget(

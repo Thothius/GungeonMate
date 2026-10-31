@@ -66,54 +66,6 @@ void main() {
     });
   });
 
-  group('sendChatMessage', () {
-    test('empty and whitespace-only text is ignored', () async {
-      await session.sendChatMessage('');
-      await session.sendChatMessage('   ');
-      await session.sendChatMessage('\n\t ');
-      expect(session.chatMessages, isEmpty);
-      expect(session.sessionEvents, isEmpty);
-    });
-
-    test('valid message appends to chatMessages + logs event', () async {
-      await session.sendChatMessage(' gg noob ');
-      expect(session.chatMessages.length, 1);
-      expect(session.chatMessages.first.text, ' gg noob '.trim());
-      expect(session.sessionEvents.length, 1);
-      expect(session.sessionEvents.first.kind, 'chat');
-      expect(session.sessionEvents.first.mine, true);
-    });
-
-    test('onChatMessage callback fires with mine=true', () async {
-      MpChat? received;
-      bool? wasMine;
-      session.onChatMessage = (msg, mine) {
-        received = msg;
-        wasMine = mine;
-      };
-      await session.sendChatMessage('hello peer');
-      expect(received, isNotNull);
-      expect(wasMine, true);
-      expect(received!.text, 'hello peer');
-    });
-
-    test('disconnected send queues instead of dropping', () async {
-      // No transport — isConnected is false. The message must be
-      // queued for reconnect flush, not silently dropped: it lands
-      // in chatMessages and is logged as a sent event.
-      await session.sendChatMessage('queued line');
-      expect(session.chatMessages.single.text, 'queued line');
-      expect(session.sessionEvents.single.text, 'queued line');
-    });
-
-    test('chatMessages caps at 200 entries', () async {
-      for (var i = 0; i < 210; i++) {
-        await session.sendChatMessage('line $i');
-      }
-      expect(session.chatMessages.length, 200);
-      expect(session.chatMessages.first.text, 'line 10');
-    });
-  });
 
   group('sendEmote / sendSurprise event logging', () {
     test('sendEmote logs an emote event even disconnected', () async {
@@ -177,18 +129,12 @@ void main() {
       session.addListener(() => notified++);
       session.enableDemo();
       expect(session.demoMode, true);
-      expect(session.mode, MpMode.paradox);
+      expect(session.isParadoxRun, true);
       expect(session.myRole, MpRole.main);
       expect(session.phase, MpPhase.connected);
       expect(notified, greaterThan(0));
     });
 
-    test('demo session accepts chat (events + messages append)', () async {
-      session.enableDemo();
-      await session.sendChatMessage('demo chat');
-      expect(session.chatMessages.single.text, 'demo chat');
-      expect(session.sessionEvents.single.kind, 'chat');
-    });
 
     test('pause/resume works in demo mode', () async {
       session.enableDemo();

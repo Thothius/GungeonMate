@@ -94,25 +94,15 @@ class _ParadoxBarState extends State<ParadoxBar> {
                       child: GoopText(
                         session.runTitle.isNotEmpty
                             ? session.runTitle.toUpperCase()
-                            : (session.isParadox ? 'PARADOX' : 'CO-OP'),
+                            : (session.isParadoxRun ? 'PARADOX' : 'CO-OP'),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 13.5 * sf,
+                          fontSize: 11 * sf,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
                           color: const Color(0xFFB388FF),
                         ),
-                      ),
-                    ),
-                    SizedBox(width: 6 * sf),
-                    GoopText(
-                      '#${session.sessionNumber}',
-                      style: TextStyle(
-                        fontSize: 12 * sf,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 1,
-                        color: Colors.white.withValues(alpha: 0.45),
                       ),
                     ),
                     if (ParadoxBar.showTimer.value) ...[

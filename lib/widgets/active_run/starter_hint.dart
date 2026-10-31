@@ -63,7 +63,10 @@ class StarterHint extends StatelessWidget {
 
     final hasStarters = (isGuns ? starterGuns : starterItems).isNotEmpty;
 
-    if (isParadox || !hasStarters) {
+    // The Paradox renders a literal blank — no hint card, no
+    // placeholder text. The fantasy is an empty inventory.
+    if (isParadox) return const SizedBox.shrink();
+    if (!hasStarters) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Card(
@@ -71,10 +74,7 @@ class StarterHint extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Center(
               child: GoopText(
-                isParadox
-                    ? 'The Paradox starts with a random loadout — '
-                        'add ${isGuns ? "guns" : "items"} as you pick them up.'
-                    : isGuns
+                isGuns
                     ? 'No guns yet — hit ADD to bring in your first.'
                     : 'No items yet — pick some up!',
                 textAlign: TextAlign.center,

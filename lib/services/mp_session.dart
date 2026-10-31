@@ -68,10 +68,9 @@ class MpSession extends ChangeNotifier
   /// transport is started; nothing is sent. For visual/demo use.
   void enableDemo() {
     _demoMode = true;
-    _mode = MpMode.paradox;
     _myRole = MpRole.main;
     _myCharacterName = 'The Paradox';
-    _connectReason = MpConnectReason.seeking;
+    _connectReason = MpConnectReason.hosting;
     // Seed identity + a fake peer so the Paradox chrome (panel
     // avatars, chat header, lobby portraits) has something to render.
     if (_avatarId.isEmpty) _avatarId = kAvatarIds.first;
@@ -81,7 +80,7 @@ class MpSession extends ChangeNotifier
     if (_runTitle.isEmpty) _runTitle = 'DEMO RUN';
     _phase = MpPhase.connected;
 
-    // Initialize run state — same shape as startParadox: back up the
+    // Initialize run state — same shape as a classic MP start: back up the
     // solo run first so cancel() can restore it, then start a Paradox
     // main plus an empty coop slot (the Paradox-sidekick fantasy).
     if (_runProvider.runState.main.character != null) {
@@ -123,7 +122,6 @@ class MpSession extends ChangeNotifier
             required String nickname,
             required String character,
             RunState? preSidekickRun,
-            MpMode mode = MpMode.classic,
             bool paused = false,
             String avatarId = '',
             String runTitle = '',
@@ -177,11 +175,11 @@ class MpSession extends ChangeNotifier
   String? _peerCharacterName;
   String? get peerCharacterName => _peerCharacterName;
 
-  // ── Paradox session state (v3) ─────────────────────────────────
-  @override
-  MpMode _mode = MpMode.classic;
-  MpMode get mode => _mode;
-  bool get isParadox => _mode == MpMode.paradox;
+  // ── Session identity ────────────────────────────────────────────
+  /// Paradox fantasy flag — true when either player runs The Paradox
+  /// (drives 'PARADOX' branding in the session bar).
+  bool get isParadoxRun =>
+      _myCharacterName == 'The Paradox' || _peerCharacterName == 'The Paradox';
 
   @override
   String _avatarId = '';
@@ -204,11 +202,7 @@ class MpSession extends ChangeNotifier
   /// Connection health 0–100 (RTT-based), straight from the transport.
   ValueListenable<int> get healthListenable => _link.healthListenable;
 
-  // ── Chat state (Paradox, in-memory) ────────────────────────────
-  @override
-  final List<MpChat> chatMessages = [];
-
-  /// Unified activity log — chat, surprises, emotes, transfers, and
+  /// Unified activity log — surprises, emotes, transfers, and
   /// connect/disconnect notes all land here for the messages panel.
   final List<MpEvent> sessionEvents = [];
   @override
@@ -223,21 +217,14 @@ class MpSession extends ChangeNotifier
   /// [RunLifecycle.endRun] so the activity log is always cleared when
   /// the run ends, not just the chat array.
   void wipeSessionActivity() {
-    chatMessages.clear();
-    _queuedChat.clear();
     sessionEvents.clear();
-    unreadChat.value = 0;
   }
 
   @override
-  final ValueNotifier<int> unreadChat = ValueNotifier(0);
   @override
-  final List<MpChat> _queuedChat = [];
-  static const int _maxChatHistory = 200;
 
   /// UI callbacks — set by the run screen / paradox widgets.
   @override
-  void Function(MpChat chat, bool mine)? onChatMessage;
   @override
   void Function(MpSurprise surprise)? onSurpriseReceived;
   @override
@@ -342,11 +329,13 @@ class MpSession extends ChangeNotifier
     required String nickname,
     required Gungeoneer character,
     String avatarId = '',
+    String runTitle = '',
   }) async {
     _myRole = MpRole.main;
     _myNickname = nickname;
     _myCharacterName = character.name;
     _avatarId = avatarId;
+    _runTitle = runTitle;
     _error = null;
     _connectReason = MpConnectReason.hosting;
 
@@ -356,9 +345,8 @@ class MpSession extends ChangeNotifier
       character: character.name,
     );
     _sync.setSessionMeta(
-      mode: MpMode.classic,
       avatarId: avatarId,
-      runTitle: '',
+      runTitle: runTitle,
       sessionNumber: 0,
     );
     _recovery.setSessionInfo(role: MpRole.main, nickname: nickname);
@@ -425,9 +413,8 @@ class MpSession extends ChangeNotifier
       character: _myCharacterName,
     );
     _sync.setSessionMeta(
-      mode: MpMode.classic,
       avatarId: avatarId,
-      runTitle: '',
+      runTitle: runTitle,
       sessionNumber: 0,
     );
     _recovery.setSessionInfo(role: MpRole.sidekick, nickname: nickname);
@@ -446,89 +433,13 @@ class MpSession extends ChangeNotifier
     );
   }
 
-  // ── Paradox Mode (v3) ──────────────────────────────────────────
-
-  /// Paradox setup — both players "Enter the Void". Roles are fixed:
-  /// MAIN plays The Paradox, SIDEKICK plays The Cultist. The avatar is
-  /// cosmetic identity only. Uses the dedicated Paradox serviceId so
-  /// classic-MP devices can never be discovered. **Never times out** —
-  /// seeking continues until cancelled or connected.
-  Future<void> startParadox({
-    required MpRole role,
-    required String nickname,
-    required String avatarId,
-    required String runTitle,
-    required int sessionNumber,
-  }) async {
-    _mode = MpMode.paradox;
-    _avatarId = avatarId;
-    _myRole = role;
-    _myNickname = nickname;
-    _runTitle = runTitle;
-    _sessionNumber = sessionNumber;
-    pausedNotifier.value = false;
-    _myCharacterName = role == MpRole.main ? 'The Paradox' : 'The Cultist';
-    _error = null;
-    _connectReason = MpConnectReason.seeking;
-
-    // Stop any stale radios before switching the service ID — a
-    // lingering advertiser/discovery loop under the classic ID would
-    // fight the Paradox seek.
-    await _link.stopAll();
-    _link.setServiceId(MpLink.serviceIdParadox);
-    _sync.setIdentity(
-      role: role,
-      nickname: nickname,
-      character: _myCharacterName,
-    );
-    _sync.setSessionMeta(
-      mode: MpMode.paradox,
-      avatarId: avatarId,
-      runTitle: runTitle,
-      sessionNumber: sessionNumber,
-    );
-    _recovery.setSessionInfo(role: role, nickname: nickname);
-
-    // Initialize run state — same shape as classic MP (main + coop).
-    final charName = _myCharacterName;
-    final g = _runProvider.gungeoneerByName(charName);
-    if (role == MpRole.sidekick) {
-      _preSidekickRun = _runProvider.runState;
-      unawaited(MpStore.savePreSidekickRun(_preSidekickRun!));
-    } else if (_runProvider.runState.main.character != null) {
-      unawaited(MpStore.saveSoloRunBackup(_runProvider.runState));
-    }
-    if (g != null) {
-      _runProvider.startNewRun(g);
-      if (_runProvider.runState.coop == null) {
-        _runProvider.startCoopPlayer(g);
-      }
-    }
-
-    final granted = await _link.requestPermissions();
-    if (!granted) {
-      _setPhase(MpPhase.permissionDenied);
-      return;
-    }
-
-    _setPhase(MpPhase.connecting);
-    if (role == MpRole.main) {
-      await _link.startAdvertising(nickname);
-    } else {
-      await _link.startDiscovery(
-        nickname,
-        autoConnect: const AutoConnectModeAny(),
-      );
-    }
-  }
-
   /// Pause the session — both sides see the overlay. Either player
   /// may pause or resume. Radios keep polling at pause cadence so a
   /// break (phones out of range) re-heals silently.
   Future<void> pause() async => _applyPaused(true, notifyPeer: true);
 
   /// Resume — sends MpResume when connected; if the link is down the
-  /// caller shows "Connecting…" and [startParadox]/recovery keeps
+  /// caller shows "Connecting…" and start/recovery keeps
   /// seeking; the resume is flushed in [_onSyncPeerConnected].
   Future<void> resume() async => _applyPaused(false, notifyPeer: true);
 
@@ -569,7 +480,7 @@ class MpSession extends ChangeNotifier
         unawaited(_sync.sendResume());
       }
       // Main rebroadcasts meta so late joiners land correctly.
-      if (_myRole == MpRole.main && _mode == MpMode.paradox) {
+      if (_myRole == MpRole.main) {
         unawaited(_sync.sendSessionMeta(paused: paused));
       }
     }
@@ -596,29 +507,7 @@ class MpSession extends ChangeNotifier
     }
   }
 
-  // ── Chat / surprise API ────────────────────────────────────────
-
-  static int _chatSeq = 0;
-  String _newChatId() =>
-      '${DateTime.now().millisecondsSinceEpoch}_${_chatSeq++}';
-
-  /// Send a chat line. When disconnected the message is queued and
-  /// flushed on reconnect — nothing is silently dropped.
-  Future<void> sendChatMessage(String text) async {
-    final trimmed = text.trim();
-    if (trimmed.isEmpty) return;
-    final msg = MpChat(id: _newChatId(), from: _myNickname, text: trimmed);
-    logEvent(MpEvent.chat(from: _myNickname, text: trimmed, mine: true));
-    chatMessages.add(msg);
-    if (chatMessages.length > _maxChatHistory) chatMessages.removeAt(0);
-    onChatMessage?.call(msg, true);
-    if (_link.isConnected) {
-      await _sync.sendChat(msg);
-    } else {
-      _queuedChat.add(msg);
-    }
-    notifyListeners();
-  }
+  // ── Surprise API ───────────────────────────────────────────────
 
   Future<void> sendSurprise({
     required String preset,
@@ -638,10 +527,6 @@ class MpSession extends ChangeNotifier
     await _sync.sendSurprise(
       MpSurprise(preset: preset, text: text, spriteKey: spriteKey, fx: fx),
     );
-  }
-
-  void markChatRead() {
-    if (unreadChat.value != 0) unreadChat.value = 0;
   }
 
   // ── Peer inventory editing (co-op trust) ───────────────────────
@@ -741,11 +626,8 @@ class MpSession extends ChangeNotifier
     }
   }
 
-  /// Clear all Paradox-scoped state on teardown — returns the
-  /// transport to the classic service id so a subsequent classic
-  /// session works normally.
+  /// Clear all session-scoped state on teardown.
   void _resetParadoxState() {
-    _mode = MpMode.classic;
     _avatarId = '';
     _peerAvatarId = '';
     _runTitle = '';
@@ -754,9 +636,7 @@ class MpSession extends ChangeNotifier
     _runStartMs = 0;
     _runAccumMs = 0;
     wipeSessionActivity();
-    _link.setServiceId(MpLink.serviceIdClassic);
     _sync.setSessionMeta(
-      mode: MpMode.classic,
       avatarId: '',
       runTitle: '',
       sessionNumber: 0,
@@ -906,7 +786,6 @@ class MpSession extends ChangeNotifier
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
     _sync.onStartRun = () => onStartRun?.call();
-    _sync.onChat = _onChatReceived;
     _sync.onSurprise = (s) {
       logEvent(
         MpEvent.event(
@@ -919,7 +798,6 @@ class MpSession extends ChangeNotifier
       onSurpriseReceived?.call(s);
     };
     _sync.setSessionMeta(
-      mode: _mode,
       avatarId: _avatarId,
       runTitle: _runTitle,
       sessionNumber: _sessionNumber,
@@ -1014,7 +892,6 @@ class MpSession extends ChangeNotifier
       role: _myRole ?? MpRole.main,
       nickname: _myNickname,
       character: _myCharacterName,
-      mode: _mode,
       avatarId: _avatarId,
       runTitle: _runTitle,
       sessionNumber: _sessionNumber,

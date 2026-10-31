@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'chat_sheet.dart';
+import 'surprise_sheet.dart';
 
 import '../../models/multiplayer_messages.dart';
 import '../../models/player.dart' show PlayerSlot;
@@ -101,18 +101,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  // MSG — messages entry; value shows the unread count.
-                  ValueListenableBuilder<int>(
-                    valueListenable: session.unreadChat,
-                    builder:
-                        (_, unread, _) => _PanelStat(
-                          label: 'MSG',
-                          value: unread > 0 ? '$unread' : '—',
-                          color: const Color(0xFF00E676),
-                          sf: sf,
-                          onTap: onTapMsg,
-                        ),
-                  ),
+                  // Avatar tap opens the surprise composer (chat removed).
                   // COOL
                   _PanelStat(
                     label: 'COOL',

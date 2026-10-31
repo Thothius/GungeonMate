@@ -63,7 +63,6 @@ class _MpReconnectBannerState extends State<MpReconnectBanner> {
     session.reconnectNotifier.value = false;
     // Paradox Mode shows reconnect status inline in the ParadoxBar —
     // no modal dialog, no double banner (the old "two bars" bug).
-    if (session.isParadox) return;
     if (_dialogShowing) return;
     _showReconnectDialog();
   }

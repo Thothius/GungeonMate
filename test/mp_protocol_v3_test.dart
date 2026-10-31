@@ -15,13 +15,11 @@ void main() {
         character: 'The Paradox',
         userLabel: 'Gun',
         appVersion: '3.0.0',
-        mode: MpMode.paradox,
         avatarId: 'the_paradox',
         runTitle: 'Cursed Bullet of the Forge',
         sessionNumber: 3,
       );
       final d = roundTrip(h) as MpHello;
-      expect(d.mode, MpMode.paradox);
       expect(d.avatarId, 'the_paradox');
       expect(d.runTitle, 'Cursed Bullet of the Forge');
       expect(d.sessionNumber, 3);
@@ -40,7 +38,6 @@ void main() {
       expect(json.containsKey('mode'), isFalse);
       expect(json.containsKey('avatarId'), isFalse);
       final d = roundTrip(h) as MpHello;
-      expect(d.mode, MpMode.classic);
       expect(d.sessionNumber, 0);
     });
   });
@@ -73,17 +70,6 @@ void main() {
   });
 
   group('Protocol v3 — chat, surprise, peer edit', () {
-    test('MpChat round-trip preserves sprite tokens in text', () {
-      const m = MpChat(
-        id: 'abc123',
-        from: 'Gun',
-        text: 'nice :gun_big_iron: run',
-      );
-      final d = roundTrip(m) as MpChat;
-      expect(d.id, 'abc123');
-      expect(d.from, 'Gun');
-      expect(d.text, 'nice :gun_big_iron: run');
-    });
 
     test('MpSurprise preset + custom payload round-trip', () {
       const m = MpSurprise(

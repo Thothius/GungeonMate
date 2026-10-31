@@ -14,7 +14,7 @@ import '../../theme/tokens.dart';
 import '../../services/effect_tagger.dart';
 import '../../services/mp_session.dart';
 import '../paradox/paradox_player_panel.dart';
-import '../paradox/chat_sheet.dart';
+import '../paradox/surprise_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/fast_route.dart';
 import '../../services/goop_talk_engine.dart';
@@ -185,7 +185,7 @@ class PlayerPageState extends State<PlayerPage> {
                           children: [
                             ParadoxPlayerPanel(
                               slot: _slot,
-                              onTapMsg: () => showParadoxChatSheet(context),
+                              onTapMsg: () => SurpriseSheet.open(context),
                             ),
                             // Effects strip is always on — cool/curse
                             // are constant game factors, not a panel

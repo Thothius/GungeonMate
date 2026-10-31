@@ -34,8 +34,6 @@ abstract class MpTransport {
   /// Switch the Nearby Connections service id used for advertising and
   /// discovery. Must be called before startAdvertising/startDiscovery —
   /// each MP mode (classic, paradox) uses its own id so cross-mode
-  /// devices can never discover each other.
-  void setServiceId(String id);
 
   // ── Lifecycle ───────────────────────────────────────────────────
   Future<bool> requestPermissions();

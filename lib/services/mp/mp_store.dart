@@ -56,7 +56,6 @@ class MpStore {
     required MpRole role,
     required String nickname,
     required String character,
-    MpMode mode = MpMode.classic,
     String avatarId = '',
     String runTitle = '',
     int sessionNumber = 0,
@@ -67,7 +66,6 @@ class MpStore {
       await prefs.setString(_kRole, role.name);
       await prefs.setString(_kNickname, nickname);
       await prefs.setString(_kCharacter, character);
-      await prefs.setString(_kMode, mode.name);
       await prefs.setString(_kAvatarId, avatarId);
       await prefs.setString(_kRunTitle, runTitle);
       await prefs.setInt(_kSessionNumber, sessionNumber);
@@ -89,17 +87,6 @@ class MpStore {
     } catch (_) {}
   }
 
-  /// Paradox session counter — starts at 0, incremented per new run.
-  static Future<int> nextParadoxSessionNumber() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final n = prefs.getInt('paradox.session_counter') ?? 0;
-      await prefs.setInt('paradox.session_counter', n + 1);
-      return n;
-    } catch (_) {
-      return 0;
-    }
-  }
 
   // ── Run state (throttled) ──────────────────────────────────────
 
@@ -172,7 +159,6 @@ class MpStore {
         } catch (_) {}
       }
 
-      final modeName = prefs.getString(_kMode);
       return MpSavedSession(
         role: role,
         nickname: nickname,
@@ -180,10 +166,6 @@ class MpStore {
         runState: runState,
         preSidekickRun: preSidekickRun,
         soloRunBackup: soloRunBackup,
-        mode: MpMode.values.firstWhere(
-          (m) => m.name == modeName,
-          orElse: () => MpMode.classic,
-        ),
         paused: prefs.getBool(_kPaused) ?? false,
         avatarId: prefs.getString(_kAvatarId) ?? '',
         runTitle: prefs.getString(_kRunTitle) ?? '',
@@ -236,7 +218,6 @@ class MpSavedSession {
   final RunState? runState;
   final RunState? preSidekickRun;
   final RunState? soloRunBackup;
-  final MpMode mode;
   final bool paused;
   final String avatarId;
   final String runTitle;
@@ -251,7 +232,6 @@ class MpSavedSession {
     this.runState,
     this.preSidekickRun,
     this.soloRunBackup,
-    this.mode = MpMode.classic,
     this.paused = false,
     this.avatarId = '',
     this.runTitle = '',

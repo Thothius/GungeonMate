@@ -46,7 +46,6 @@ enum MpRole { main, sidekick }
 /// lobby flow; Paradox = the v3.0 avatar/lobby/pause flow. Cross-mode
 /// pairing is impossible because each mode uses a different Nearby
 /// Connections serviceId — this field is belt-and-suspenders.
-enum MpMode { classic, paradox }
 
 extension MpRoleWire on MpRole {
   String get wire => switch (this) {
@@ -58,18 +57,6 @@ extension MpRoleWire on MpRole {
     'main' => MpRole.main,
     'sidekick' => MpRole.sidekick,
     _ => throw FormatException('Unknown MpRole: $s'),
-  };
-}
-
-extension MpModeWire on MpMode {
-  String get wire => switch (this) {
-    MpMode.classic => 'classic',
-    MpMode.paradox => 'paradox',
-  };
-
-  static MpMode parse(String? s) => switch (s) {
-    'paradox' => MpMode.paradox,
-    _ => MpMode.classic,
   };
 }
 
@@ -122,7 +109,6 @@ sealed class MpMessage {
       'startRun' => const MpStartRun(),
       'pause' => const MpPause(),
       'resume' => const MpResume(),
-      'chat' => MpChat.fromJson(map),
       'surprise' => MpSurprise.fromJson(map),
       'peerEdit' => MpPeerEdit.fromJson(map),
       'sessionMeta' => MpSessionMeta.fromJson(map),
@@ -140,7 +126,6 @@ final class MpHello extends MpMessage {
   final String userLabel; // free-form nickname shown in UI
   final String appVersion; // for compat diagnostics
   final int protocolVersion;
-  final MpMode mode; // classic | paradox
   final String avatarId; // cosmetic avatar id ('' = none)
   final String runTitle; // Paradox RNG run name ('' = not generated)
   final int sessionNumber; // Paradox session counter (0-based)
@@ -151,7 +136,6 @@ final class MpHello extends MpMessage {
     required this.userLabel,
     required this.appVersion,
     this.protocolVersion = 3,
-    this.mode = MpMode.classic,
     this.avatarId = '',
     this.runTitle = '',
     this.sessionNumber = 0,
@@ -169,7 +153,6 @@ final class MpHello extends MpMessage {
     'userLabel': userLabel,
     'appVersion': appVersion,
     'protocolVersion': protocolVersion,
-    if (mode != MpMode.classic) 'mode': mode.wire,
     if (avatarId.isNotEmpty) 'avatarId': avatarId,
     if (runTitle.isNotEmpty) 'runTitle': runTitle,
     if (sessionNumber != 0) 'sessionNumber': sessionNumber,
@@ -181,7 +164,6 @@ final class MpHello extends MpMessage {
     userLabel: j['userLabel'] as String? ?? 'Player',
     appVersion: j['appVersion'] as String? ?? '',
     protocolVersion: j['protocolVersion'] as int? ?? 3,
-    mode: MpModeWire.parse(j['mode'] as String?),
     avatarId: j['avatarId'] as String? ?? '',
     runTitle: j['runTitle'] as String? ?? '',
     sessionNumber: (j['sessionNumber'] as num?)?.toInt() ?? 0,
@@ -532,25 +514,6 @@ final class MpSessionMeta extends MpMessage {
 /// Peer-to-peer chat line. `text` may embed `:sprite_key:` tokens —
 /// resolved against the local emote sprite catalog at render time, so
 /// the wire payload stays pure text. `id` dedupes replays.
-final class MpChat extends MpMessage {
-  final String id;
-  final String from;
-  final String text;
-
-  const MpChat({required this.id, required this.from, required this.text});
-
-  @override
-  String get type => 'chat';
-
-  @override
-  Map<String, dynamic> toJson() => {'id': id, 'from': from, 'text': text};
-
-  factory MpChat.fromJson(Map<String, dynamic> j) => MpChat(
-    id: j['id'] as String? ?? '',
-    from: j['from'] as String? ?? 'Player',
-    text: j['text'] as String? ?? '',
-  );
-}
 
 /// A "Surprise" — a big floating card shown on the peer's screen.
 /// `preset` names a built-in surprise ('love' | 'goodjob' | 'meow' |

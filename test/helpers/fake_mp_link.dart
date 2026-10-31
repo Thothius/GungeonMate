@@ -70,10 +70,6 @@ class FakeMpLink implements MpTransport {
   final ValueNotifier<int> healthListenable = ValueNotifier<int>(100);
 
   String? serviceIdUsed;
-  @override
-  void setServiceId(String id) {
-    serviceIdUsed = id;
-  }
 
   String _nickname = 'Player';
   AutoConnectMode _autoConnect = const AutoConnectModeNone();

@@ -23,7 +23,6 @@ void main() {
       'userLabel',
       'appVersion',
       'protocolVersion',
-      'mode',
       'avatarId',
       'runTitle',
       'sessionNumber',
@@ -46,7 +45,6 @@ void main() {
     MpPause: <String>{},
     MpResume: <String>{},
     MpSessionMeta: {'runTitle', 'sessionNumber', 'paused'},
-    MpChat: {'id', 'from', 'text'},
     MpSurprise: {'preset', 'text', 'spriteKey', 'fx'},
     MpPeerEdit: {'op', 'kind', 'name'},
   };
@@ -59,7 +57,6 @@ void main() {
       userLabel: 'host',
       appVersion: '3.2.1',
       protocolVersion: 3,
-      mode: MpMode.paradox,
       avatarId: 'g2_4:gold',
       runTitle: 'Run of the Gun',
       sessionNumber: 2,
@@ -93,7 +90,6 @@ void main() {
     const MpPause(),
     const MpResume(),
     const MpSessionMeta(runTitle: 'T', sessionNumber: 4, paused: true),
-    const MpChat(id: 'c1', from: 'p1', text: 'hello :gun:'),
     const MpSurprise(preset: 'meow', text: 'hi', spriteKey: 'cat', fx: 'bulletrain'),
     const MpPeerEdit(op: 'add', kind: 'gun', name: 'Casey'),
   ];

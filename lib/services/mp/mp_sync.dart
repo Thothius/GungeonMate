@@ -143,14 +143,12 @@ class MpSync {
   void Function(MpSessionMeta meta)? onSessionMeta;
   void Function(bool paused)? onPauseChanged;
   void Function()? onStartRun;
-  void Function(MpChat chat)? onChat;
   void Function(MpSurprise surprise)? onSurprise;
 
   // ── Role (set by MpSession on start) ───────────────────────────
   MpRole? _myRole;
   String _myNickname = 'Player';
   String _myCharacterName = '';
-  MpMode _mode = MpMode.classic;
   String _avatarId = '';
   String _runTitle = '';
   int _sessionNumber = 0;
@@ -167,12 +165,10 @@ class MpSync {
 
   /// Paradox session identity — carried in the hello handshake.
   void setSessionMeta({
-    MpMode? mode,
     String? avatarId,
     String? runTitle,
     int? sessionNumber,
   }) {
-    if (mode != null) _mode = mode;
     if (avatarId != null) _avatarId = avatarId;
     if (runTitle != null) _runTitle = runTitle;
     if (sessionNumber != null) _sessionNumber = sessionNumber;
@@ -291,7 +287,6 @@ class MpSync {
         case MpStartRun():
         case MpPause():
         case MpResume():
-        case MpChat():
         case MpSurprise():
           break; // informational UI events
         case MpGift():
@@ -373,14 +368,6 @@ class MpSync {
         onPauseChanged?.call(true);
       case MpResume():
         onPauseChanged?.call(false);
-      case MpChat():
-        if (msg.id.isNotEmpty && !_seenChatIds.contains(msg.id)) {
-          _seenChatIds.add(msg.id);
-          while (_seenChatIds.length > _maxSeenChatIds) {
-            _seenChatIds.remove(_seenChatIds.first);
-          }
-          onChat?.call(msg);
-        }
       case MpSurprise():
         onSurprise?.call(msg);
       case MpPeerEdit():
@@ -390,8 +377,6 @@ class MpSync {
     }
   }
 
-  final Set<String> _seenChatIds = {};
-  static const int _maxSeenChatIds = 100;
 
   /// Apply a direct peer inventory edit (co-op trust model).
   /// The receiver mutates its OWN slot — the sender already saw the
@@ -726,7 +711,6 @@ class MpSync {
           character: _myCharacterName,
           userLabel: _myNickname,
           appVersion: MpSync.appVersionString,
-          mode: _mode,
           avatarId: _avatarId,
           runTitle: _runTitle,
           sessionNumber: _sessionNumber,
@@ -949,10 +933,6 @@ class MpSync {
         paused: paused ?? false,
       ),
     );
-  }
-
-  Future<void> sendChat(MpChat chat) async {
-    if (_link.isConnected) await _link.sendMessage(chat);
   }
 
   Future<void> sendSurprise(MpSurprise surprise) async {

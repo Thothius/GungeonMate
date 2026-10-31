@@ -17,7 +17,7 @@ class MpForegroundService {
     FlutterForegroundTask.init(
       androidNotificationOptions: AndroidNotificationOptions(
         channelId: 'gm_paradox_session',
-        channelName: 'Paradox Session',
+        channelName: 'Co-op Session',
         channelDescription:
             'Keeps your multiplayer session alive in the background',
         channelImportance: NotificationChannelImportance.LOW,
@@ -44,7 +44,7 @@ class MpForegroundService {
         return;
       }
       await FlutterForegroundTask.startService(
-        notificationTitle: 'Paradox session active',
+        notificationTitle: 'Co-op session active',
         notificationText:
             runTitle.isEmpty ? 'Staying connected to your partner' : runTitle,
       );

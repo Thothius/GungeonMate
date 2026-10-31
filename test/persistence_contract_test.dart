@@ -135,7 +135,6 @@ void main() {
         role: MpRole.main,
         nickname: 'tester',
         character: 'The Pilot',
-        mode: MpMode.classic,
         avatarId: 'g1_1',
         runTitle: 'Contract Run',
         sessionNumber: 3,

@@ -51,7 +51,6 @@ void main() {
         required String nickname,
         required String character,
         RunState? preSidekickRun,
-        MpMode mode = MpMode.classic,
         bool paused = false,
         String avatarId = '',
         String runTitle = '',

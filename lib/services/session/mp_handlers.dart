@@ -20,8 +20,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
   set _peerNickname(String? v);
   set _peerCharacterName(String? v);
   set _peerAvatarId(String v);
-  MpMode get _mode;
-  set _mode(MpMode v);
   set _avatarId(String v);
   String get _runTitle;
   set _runTitle(String v);
@@ -31,16 +29,12 @@ mixin _MpSessionHandlers on ChangeNotifier {
   set _runStartMs(int v);
   bool get _tearingDown;
   set _preSidekickRun(RunState? v);
-  List<MpChat> get _queuedChat;
-  List<MpChat> get chatMessages;
   ValueNotifier<bool> get pausedNotifier;
-  ValueNotifier<int> get unreadChat;
   ValueNotifier<bool> get reconnectNotifier;
   ValueNotifier<bool> get reconnectSuccessNotifier;
   ValueNotifier<int> get disconnectElapsedSec;
   bool get _peerGoneHinted;
   set _peerGoneHinted(bool v);
-  void Function(MpChat, bool)? get onChatMessage;
   void Function()? get onStartRun;
   void Function(MpSurprise)? get onSurpriseReceived;
   void _setPhase(MpPhase p);
@@ -65,7 +59,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
     _sync.onSessionMeta = _onSessionMeta;
     _sync.onPauseChanged = _onPeerPauseChanged;
     _sync.onStartRun = () => onStartRun?.call();
-    _sync.onChat = _onChatReceived;
     _sync.onSurprise = (s) {
       logEvent(
         MpEvent.event(
@@ -180,14 +173,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
     // Keep the process alive so minimizing/screen-off doesn't drop
     // the session — stopped on teardown.
     unawaited(MpForegroundService.start(_runTitle));
-    // Flush queued chat — messages typed while disconnected are
-    // delivered now rather than silently dropped.
-    if (_queuedChat.isNotEmpty) {
-      for (final m in _queuedChat) {
-        unawaited(_sync.sendChat(m));
-      }
-      _queuedChat.clear();
-    }
     // If we were paused and the user tapped resume while offline,
     // push the resume now that the link is live.
     if (!pausedNotifier.value) {
@@ -214,7 +199,7 @@ mixin _MpSessionHandlers on ChangeNotifier {
     // Main: rebroadcast authoritative meta right after handshake so the
     // peer lands on the correct title/number/paused state even if it
     // missed an earlier edge message (e.g. reconnect during pause).
-    if (_myRole == MpRole.main && _mode == MpMode.paradox) {
+    if (_myRole == MpRole.main) {
       unawaited(
         _sync.sendSessionMeta(
           runTitle: _runTitle,
@@ -241,17 +226,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
     _applyPaused(paused, notifyPeer: false);
   }
 
-  void _onChatReceived(MpChat msg) {
-    logEvent(MpEvent.chat(from: msg.from, text: msg.text, mine: false));
-    chatMessages.add(msg);
-    if (chatMessages.length > MpSession._maxChatHistory) {
-      chatMessages.removeAt(0);
-    }
-    unreadChat.value++;
-    onChatMessage?.call(msg, false);
-    notifyListeners();
-  }
-
   void _onSyncError(String error) {
     _error = error;
     _setPhase(MpPhase.error);
@@ -264,7 +238,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
     required String nickname,
     required String character,
     RunState? preSidekickRun,
-    MpMode mode = MpMode.classic,
     bool paused = false,
     String avatarId = '',
     String runTitle = '',
@@ -275,7 +248,6 @@ mixin _MpSessionHandlers on ChangeNotifier {
     _myRole = role;
     _myNickname = nickname;
     _myCharacterName = character;
-    _mode = mode;
     _avatarId = avatarId;
     _runTitle = runTitle;
     _sessionNumber = sessionNumber;
@@ -283,20 +255,12 @@ mixin _MpSessionHandlers on ChangeNotifier {
     _runStartMs = runStartMs;
     _runAccumMs = runAccumMs;
     _connectReason = MpConnectReason.restoring;
-    if (mode == MpMode.paradox) {
-      // Kill any radios still running under the previous service ID —
-      // switching IDs while advertising/discovering leaves a stale
-      // broadcaster the peer can't find (and vice versa).
-      unawaited(_link.stopAll());
-      _link.setServiceId(MpLink.serviceIdParadox);
-    }
     if (role == MpRole.sidekick) {
       _preSidekickRun = preSidekickRun;
     }
 
     _sync.setIdentity(role: role, nickname: nickname, character: character);
     _sync.setSessionMeta(
-      mode: mode,
       avatarId: avatarId,
       runTitle: runTitle,
       sessionNumber: sessionNumber,
