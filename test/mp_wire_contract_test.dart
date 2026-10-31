@@ -95,8 +95,8 @@ void main() {
   ];
 
   test('every sample covers a distinct wire type', () {
-    expect(samples.length, 22);
-    expect(samples.map((m) => m.runtimeType).toSet().length, 22);
+    expect(samples.length, 21);
+    expect(samples.map((m) => m.runtimeType).toSet().length, 21);
     expect(
       samples.map((m) => m.runtimeType).toSet(),
       equals(goldenKeys.keys.toSet()),

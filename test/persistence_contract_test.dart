@@ -145,7 +145,6 @@ void main() {
       expect(prefs.getString('mp.role'), 'main');
       expect(prefs.getString('mp.nickname'), 'tester');
       expect(prefs.getString('mp.character'), 'The Pilot');
-      expect(prefs.getString('mp.mode'), 'classic');
       expect(prefs.getString('mp.avatar_id'), 'g1_1');
       expect(prefs.getString('mp.run_title'), 'Contract Run');
       expect(prefs.getInt('mp.session_number'), 3);

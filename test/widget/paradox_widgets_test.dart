@@ -28,7 +28,7 @@ void main() {
     );
   }
 
-  testWidgets('ParadoxBar shows run title + session number', (tester) async {
+  testWidgets('ParadoxBar shows run title', (tester) async {
     // NOTE: ParadoxBar overflows ~15px horizontally at ≤500px width
     // (title cluster + tab dots + icons) — a real narrow-device bug.
     tester.view.physicalSize = const Size(700, 900);
@@ -54,6 +54,9 @@ void main() {
     // Chat + settings moved to ParadoxPlayerPanel (MSG stat + ⋮ menu).
     expect(find.byIcon(Icons.settings_rounded), findsNothing);
     expect(find.byIcon(Icons.forum_rounded), findsNothing);
+
+    // Flush RunProvider's autosave debounce so no Timer outlives the tree.
+    await tester.pump(const Duration(seconds: 3));
   });
 
   testWidgets('PauseOverlay renders GAME PAUSED when session paused', (
@@ -84,5 +87,7 @@ void main() {
     session.resume();
     await tester.pump();
     expect(find.text('GAME PAUSED'), findsNothing);
+
+    await tester.pump(const Duration(seconds: 3));
   });
 }
