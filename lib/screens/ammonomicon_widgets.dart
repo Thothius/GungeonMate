@@ -68,12 +68,7 @@ class _AmmonomiconList extends StatelessWidget {
                 );
               }, childCount: entries.length),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:
-                    MediaQuery.of(context).size.width < 360
-                        ? 3
-                        : MediaQuery.of(context).size.width < 500
-                        ? 4
-                        : 6,
+                crossAxisCount: MediaQuery.of(context).size.width < 360 ? 3 : 4,
                 mainAxisSpacing: Insets.xs,
                 crossAxisSpacing: Insets.xs,
                 childAspectRatio: 0.82,
@@ -598,17 +593,6 @@ class _ShrineSwipePageState extends State<_ShrineSwipePage> {
       ),
     );
   }
-}
-
-class _SearchGroup {
-  final AmmonomiconTab tab;
-  final List<AmmonomiconEntry> entries;
-  final AmmonomiconSection section;
-  const _SearchGroup({
-    required this.tab,
-    required this.entries,
-    required this.section,
-  });
 }
 
 /// Category-grid index → section mapping. Public (non-private) so the

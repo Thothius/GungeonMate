@@ -66,7 +66,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
 
   // Currently selected category index (0-based). 0-5 are special pages,
   // 6-10 are data categories.
-  int _selected = -1; // -1 = category picker grid (level 1)
+  int _selected = 0; // tab index — top strip IS the nav (no picker grid)
 
   // Whether the bookmark tab strip is collapsed (hidden) to give the
   // content area the full screen width.
@@ -769,7 +769,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GoopText(
-                      'CODEX',
+                      'AMMONOMICON',
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.2,
@@ -804,238 +804,9 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                   ],
                 ),
               )
-              : _selected < 0
-              ? _buildCategoryGrid(flair)
+              : _expanded >= 0
+              ? _buildExpandedPanel(flair)
               : _buildPickedCategory(flair),
-    );
-  }
-
-  // ── Level 1: 4-col category picker grid ─────────────────────────────
-  Widget _buildCategoryGrid(ThemeFlair flair) {
-    // Global search: query active on the picker level → grouped
-    // results across ALL non-special categories (browse-style).
-    if (_query.isNotEmpty) {
-      final groups = <_SearchGroup>[];
-      for (var i = 0; i < _categories.length; i++) {
-        final c = _categories[i];
-        if (c.isSpecial) continue;
-        final ent = _entriesFor(i);
-        if (ent.isNotEmpty) {
-          groups.add(
-            _SearchGroup(tab: c, entries: ent, section: _sectionFor(i)),
-          );
-        }
-      }
-      return SafeArea(
-        top: !widget.showBackButton,
-        bottom: false,
-        child:
-            groups.isEmpty
-                ? Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.search_off,
-                        size: 40,
-                        color: Colors.white.withValues(alpha: 0.25),
-                      ),
-                      const SizedBox(height: 10),
-                      GoopText(
-                        'Nothing found for "${_searchCtrl.text}"',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.5),
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-                : ListView(
-                  padding: const EdgeInsets.fromLTRB(14, 8, 14, 24),
-                  children: [
-                    for (final g in groups) ...[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(2, 14, 0, 6),
-                        child: GoopText(
-                          '${g.tab.label.toUpperCase()} · ${g.entries.length}',
-                          style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.2,
-                            color: g.tab.color,
-                          ),
-                        ),
-                      ),
-                      for (final e in g.entries)
-                        ListTile(
-                          dense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                          ),
-                          leading: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: g.tab.color.withValues(alpha: 0.10),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(
-                                color: g.tab.color.withValues(alpha: 0.35),
-                              ),
-                            ),
-                            child: Center(child: _searchIcon(e, g.section)),
-                          ),
-                          title: GoopText(
-                            e.name,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          onTap: () {
-                            Haptics.selection();
-                            _openEntry(e, g.section);
-                          },
-                        ),
-                    ],
-                  ],
-                ),
-      );
-    }
-    // Expanded member picker — Chapters/Game Modes tiles swap the
-    // grid for a themed card list of their entries.
-    if (_expanded >= 0) {
-      return _buildExpandedPanel(flair);
-    }
-    return SafeArea(
-      top: !widget.showBackButton,
-      bottom: false,
-      child: GridView.builder(
-        padding: const EdgeInsets.all(Insets.md),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 0.85,
-        ),
-        itemCount: _categories.length,
-        itemBuilder: (_, i) {
-          final c = _categories[i];
-          return Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                Haptics.selection();
-                setState(() {
-                  _searchCtrl.clear();
-                  _query = '';
-                  if (c.expandable) {
-                    _expanded = i;
-                  } else {
-                    _selected = i;
-                  }
-                });
-              },
-              borderRadius: BorderRadius.all(Radii.md),
-              splashColor: c.color.withValues(alpha: 0.25),
-              highlightColor: c.color.withValues(alpha: 0.10),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      c.color.withValues(alpha: 0.22),
-                      c.color.withValues(alpha: 0.06),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.all(Radii.md),
-                  border: Border.all(
-                    color: c.color.withValues(alpha: 0.55),
-                    width: 1.4,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: c.color.withValues(alpha: 0.12),
-                      blurRadius: 12,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: c.color.withValues(alpha: 0.15),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: c.color.withValues(alpha: 0.6),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: c.color.withValues(alpha: 0.3),
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child:
-                            c.assetIcon != null
-                                ? Image.asset(
-                                  AmmonomiconTabStrip.tabAssetPath(
-                                    c.assetIcon!,
-                                  ),
-                                  width: 28,
-                                  height: 28,
-                                  fit: BoxFit.contain,
-                                  filterQuality: FilterQuality.none,
-                                  errorBuilder:
-                                      (_, _, _) => Icon(
-                                        c.icon ?? Icons.bookmark,
-                                        size: 24,
-                                        color: c.color,
-                                      ),
-                                )
-                                : Icon(
-                                  c.icon ?? Icons.bookmark,
-                                  size: 24,
-                                  color: c.color,
-                                ),
-                      ),
-                    ),
-                    const SizedBox(height: 9),
-                    GoopText(
-                      c.label.toUpperCase(),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.8,
-                        color: c.color,
-                        height: 1.15,
-                      ),
-                    ),
-                    if (!c.isSpecial && _entriesFor(i).isNotEmpty)
-                      GoopText(
-                        '${_entriesFor(i).length}',
-                        style: TextStyle(
-                          fontSize: FontSizes.labelSmall,
-                          fontWeight: FontWeight.w600,
-                          color: c.color.withValues(alpha: 0.65),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 
@@ -1053,12 +824,12 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
             child: Row(
               children: [
                 IconButton(
-                  tooltip: 'Back to categories',
+                  tooltip: 'Back',
                   icon: const Icon(Icons.arrow_back, size: 22),
                   color: cat.color,
                   onPressed: () {
                     Haptics.selection();
-                    setState(() => _selected = -1);
+                    Navigator.maybePop(context);
                   },
                 ),
                 Icon(cat.icon ?? Icons.bookmark, size: 20, color: cat.color),
@@ -1087,29 +858,34 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
             child: Row(
               children: List.generate(_categories.length, (i) {
                 final c = _categories[i];
-                final isSelected = i == _selected;
+                final isSelected = i == _selected || i == _expanded;
                 return Padding(
-                  padding: const EdgeInsets.only(right: 6),
+                  padding: const EdgeInsets.only(right: 8),
                   child: GestureDetector(
                     onTap: () {
                       Haptics.selection();
                       setState(() {
-                        _selected = i;
                         _searchCtrl.clear();
                         _query = '';
+                        if (c.expandable) {
+                          _expanded = i;
+                        } else {
+                          _expanded = -1;
+                          _selected = i;
+                        }
                       });
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
+                        horizontal: 16,
+                        vertical: 10,
                       ),
                       decoration: BoxDecoration(
                         color:
                             isSelected
                                 ? c.color.withValues(alpha: 0.25)
                                 : c.color.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color:
                               isSelected
@@ -1124,8 +900,8 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                           if (c.assetIcon != null)
                             Image.asset(
                               AmmonomiconTabStrip.tabAssetPath(c.assetIcon!),
-                              width: 16,
-                              height: 16,
+                              width: 20,
+                              height: 20,
                               fit: BoxFit.contain,
                               filterQuality: FilterQuality.none,
                               errorBuilder:
@@ -1138,7 +914,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                           else
                             Icon(
                               c.icon ?? Icons.bookmark,
-                              size: 14,
+                              size: 18,
                               color: c.color,
                             ),
                           const SizedBox(width: 6),

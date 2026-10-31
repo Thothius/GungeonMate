@@ -55,7 +55,7 @@ void main() {
     expect(find.byType(TextField), findsNothing);
   });
 
-  testWidgets('showBackButton true renders back button and CODEX title', (
+  testWidgets('showBackButton true renders back button and AMMONOMICON title', (
     tester,
   ) async {
     await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: true)));
@@ -63,7 +63,7 @@ void main() {
 
     // The AppBar uses IconButton with Icons.arrow_back, not BackButton
     expect(find.byIcon(Icons.arrow_back), findsOneWidget);
-    expect(find.text('CODEX'), findsOneWidget);
+    expect(find.text('AMMONOMICON'), findsOneWidget);
     expect(find.text('Encyclopedia of the Gungeon'), findsOneWidget);
   });
 
