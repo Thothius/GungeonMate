@@ -18,6 +18,7 @@ import '../paradox/surprise_sheet.dart';
 import '../../services/run_lifecycle.dart';
 import '../../screens/settings_screen.dart';
 import '../../screens/experience_studio_screen.dart';
+import '../../screens/quiz/quiz_home_screen.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -482,6 +483,20 @@ class _RunToolsSheet extends StatelessWidget {
                   Navigator.push(
                     sheetCtx,
                     fastRoute(const ExperienceStudioScreen()),
+                  );
+                }
+              },
+            ),
+            _action(
+              sheetCtx,
+              icon: Icons.quiz_rounded,
+              label: 'Quiz',
+              iconColor: const Color(0xFF66BB6A),
+              onTap: () {
+                if (sheetCtx.mounted) {
+                  Navigator.push(
+                    sheetCtx,
+                    fastRoute(const QuizHomeScreen(showBackButton: true)),
                   );
                 }
               },
