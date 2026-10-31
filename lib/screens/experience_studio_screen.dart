@@ -10,6 +10,8 @@ import '../widgets/particle_engine.dart';
 import 'palette_maker_screen.dart';
 import '../widgets/color_picker_dialog.dart';
 import '../widgets/theme_overlay.dart';
+import '../utils/asset_paths.dart';
+import '../widgets/game_icon.dart';
 import '../utils/fast_route.dart';
 part 'experience_studio/studio_palette.dart';
 part 'experience_studio/studio_particles.dart';
@@ -393,6 +395,15 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             children: [
               Row(
                 children: [
+                  // A real sprite — the pane previews real asset art,
+                  // not just colors and text.
+                  GameIcon(
+                    assetPath: avatarPath('the_paradox'),
+                    fallback: Icons.person_rounded,
+                    quality: 'S',
+                    size: 34,
+                  ),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: GoopText(
                       _previewMode.label.toUpperCase(),
@@ -837,6 +848,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                       return _PalettePanel(
                         name: m.label,
                         subtitle: '${m.vibe} · ${m.elem}',
+                        splashSlug: m.splashSlug,
                         colors: [
                           f.scaffold,
                           f.card,
@@ -878,6 +890,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
     return _PalettePanel(
       name: t.name,
       subtitle: 'SAVED PALETTE',
+      splashSlug: t.splashSlug,
       colors: [d.scaffold, d.card, d.primary, d.secondary, d.headlineStat],
       nameColor: d.primary,
       isActive: false,
