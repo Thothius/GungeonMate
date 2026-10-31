@@ -448,143 +448,148 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         final glow = prefs.glowColor;
         return Padding(
           padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GoopText(
-                'PREVIEW',
-                style: TextStyle(
-                  fontSize: 8,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.6,
-                  color: flair.primary.withValues(alpha: 0.55),
+          // Non-scrolling scroll view — the mock clips at small pane
+          // heights instead of overflowing its bounds.
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GoopText(
+                  'PREVIEW',
+                  style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.6,
+                    color: flair.primary.withValues(alpha: 0.55),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 3),
-              Row(
-                children: [
-                  Expanded(
-                    child: GoopText(
-                      _previewMode.label.toUpperCase(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.2,
-                        color: flair.primary,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 16,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      color: glow,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: glow.withValues(alpha: 0.6),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              GoopText(
-                'The Gungeon awaits. Body text in your font.',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: flair.secondary.withValues(alpha: 0.85),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  GoopText(
-                    '42',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                      color: flair.headlineStat,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  GoopText(
-                    'STAT',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1.0,
-                      color: flair.secondary.withValues(alpha: 0.6),
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: flair.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: GoopText(
-                      'BUTTON',
-                      style: TextStyle(
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.0,
-                        color:
-                            flair.primary.computeLuminance() > 0.5
-                                ? Colors.black87
-                                : Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              // Mini stat chips — a second layer of real UI so the
-              // preview reads as an app, not a text card.
-              Row(
-                children: [
-                  for (final c in [
-                    ('COOL', '★', flair.secondary),
-                    ('CURSE', '☠', flair.primary),
-                    ('DPS', '42', flair.headlineStat),
-                  ])
+                const SizedBox(height: 3),
+                Row(
+                  children: [
                     Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 6),
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: c.$3.withValues(alpha: 0.35),
-                          ),
+                      child: GoopText(
+                        _previewMode.label.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.2,
+                          color: flair.primary,
                         ),
-                        child: Center(
-                          child: GoopText(
-                            '${c.$2} ${c.$1}',
-                            style: TextStyle(
-                              fontSize: 8,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0.8,
-                              color: c.$3,
+                      ),
+                    ),
+                    Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: glow,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: glow.withValues(alpha: 0.6),
+                            blurRadius: 8,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                GoopText(
+                  'The Gungeon awaits. Body text in your font.',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: flair.secondary.withValues(alpha: 0.85),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    GoopText(
+                      '42',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: flair.headlineStat,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    GoopText(
+                      'STAT',
+                      style: TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.0,
+                        color: flair.secondary.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: flair.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: GoopText(
+                        'BUTTON',
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 1.0,
+                          color:
+                              flair.primary.computeLuminance() > 0.5
+                                  ? Colors.black87
+                                  : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // Mini stat chips — a second layer of real UI so the
+                // preview reads as an app, not a text card.
+                Row(
+                  children: [
+                    for (final c in [
+                      ('COOL', '★', flair.secondary),
+                      ('CURSE', '☠', flair.primary),
+                      ('DPS', '42', flair.headlineStat),
+                    ])
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 6),
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: c.$3.withValues(alpha: 0.35),
+                            ),
+                          ),
+                          child: Center(
+                            child: GoopText(
+                              '${c.$2} ${c.$1}',
+                              style: TextStyle(
+                                fontSize: 8,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.8,
+                                color: c.$3,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

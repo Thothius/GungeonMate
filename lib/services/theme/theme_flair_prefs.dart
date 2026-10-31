@@ -971,6 +971,8 @@ class VisualPrefs {
     particleLineLinks: particleLineLinks ?? this.particleLineLinks,
     particleBounce: particleBounce ?? this.particleBounce,
     glowColorIndex: glowColorIndex ?? this.glowColorIndex,
+    glowCustomColor: glowCustomColor ?? this.glowCustomColor,
+    glowStyleIndex: glowStyleIndex ?? this.glowStyleIndex,
     customDiceType: customDiceType ?? this.customDiceType,
     particleSizeScale: particleSizeScale ?? this.particleSizeScale,
     particleOpacity: particleOpacity ?? this.particleOpacity,

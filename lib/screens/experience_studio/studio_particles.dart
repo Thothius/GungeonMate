@@ -144,7 +144,7 @@ class _ParticlesStep extends StatelessWidget {
                   // 12 global palettes — horizontal scroller so every
                   // theme gets the full set (was ~3 per-theme schemas).
                   SizedBox(
-                    height: 52,
+                    height: 62,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: kGlobalParticlePalettes.length,
