@@ -36,7 +36,7 @@ class GunNotesTab extends StatelessWidget {
                       '•',
                       style: TextStyle(
                         fontSize: 13.5,
-                        color: Colors.white.withValues(alpha: 0.5),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(width: 7),
@@ -46,7 +46,9 @@ class GunNotesTab extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13,
                           height: 1.4,
-                          color: Colors.white.withValues(alpha: 0.85),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.9),
                         ),
                       ),
                     ),
@@ -80,7 +82,7 @@ class _BlockLabel extends StatelessWidget {
         fontSize: FontSizes.labelSmall,
         fontWeight: FontWeight.w900,
         letterSpacing: 1.6,
-        color: Colors.white.withValues(alpha: 0.5),
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
   }

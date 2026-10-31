@@ -46,7 +46,9 @@ class BottomBackBar extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radii.lg),
                   ),
                   side: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.25),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.5),
                     width: 1.5,
                   ),
                 ),

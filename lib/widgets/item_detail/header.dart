@@ -45,7 +45,8 @@ class ItemDetailHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isFav = context.select<RunProvider, bool>((p) => p.isFavourite(name));
-    final favColor = isFav ? Colors.pinkAccent : Colors.white38;
+    final favColor =
+        isFav ? Colors.pinkAccent : Theme.of(context).colorScheme.outline;
     final sf = Responsive.factor(context);
 
     // Build all tag chips in one list for a single inline Wrap
@@ -193,7 +194,9 @@ class ItemDetailHeader extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13.5,
-                  color: Colors.white.withValues(alpha: 0.85),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.9),
                   height: 1.35,
                 ),
               ),
@@ -224,13 +227,13 @@ class ItemDetailHeader extends StatelessWidget {
                   const SizedBox(width: 8),
                   // Active vs passive — always top-left for items.
                   _TagChip(
-                    icon: isActive
-                        ? Icons.flash_on
-                        : Icons.inventory_2_outlined,
+                    icon:
+                        isActive ? Icons.flash_on : Icons.inventory_2_outlined,
                     label: isActive ? 'ACTIVE' : 'PASSIVE',
-                    color: isActive
-                        ? Colors.lightBlueAccent
-                        : Colors.lightGreenAccent,
+                    color:
+                        isActive
+                            ? Colors.lightBlueAccent
+                            : Colors.lightGreenAccent,
                   ),
                 ],
               ),
@@ -341,8 +344,6 @@ class _SellBadge extends StatelessWidget {
   }
 }
 
-
-
 /// Elemental status dot â€” icon-only tinted circle (fire/electric/etc).
 class _ElementDot extends StatelessWidget {
   final ElementKind kind;
@@ -448,10 +449,10 @@ class MetadataChip extends StatelessWidget {
           ],
           GoopText(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12.5,
               fontWeight: FontWeight.w800,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ],
@@ -553,7 +554,7 @@ class _ChestChip extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12.5,
                 fontWeight: FontWeight.w800,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],
