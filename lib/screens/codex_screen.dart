@@ -54,6 +54,10 @@ class _CodexScreenState extends State<CodexScreen> {
   /// Empty = show all.
   final Set<String> _qualityFilter = {};
   static const _qualities = ['D', 'C', 'B', 'A', 'S'];
+  static const _qualityRank = {'S': 0, 'A': 1, 'B': 2, 'C': 3, 'D': 4};
+
+  /// Sort mode for Guns/Items tabs: 'name' (A-Z) or 'quality' (S→D).
+  String _sortMode = 'name';
 
   // Currently selected category index (0-based). 0-5 are special pages,
   // 6-10 are data categories.
@@ -223,7 +227,8 @@ class _CodexScreenState extends State<CodexScreen> {
                 if ((j['curse'] ?? 0) > 0) 'Costs ${j['curse']} curse',
                 if ((j['coolness'] ?? 0) > 0) 'Costs ${j['coolness']} coolness',
               ],
-              wikiUrl: j['wiki_url'] ?? '');
+              wikiUrl:
+                  'https://enterthegungeon.wiki.gg/wiki/${(j['name'] as String).replaceAll(' ', '_')}_Shrine');
         })
         .toList();
     setState(() {
@@ -276,9 +281,13 @@ class _CodexScreenState extends State<CodexScreen> {
       // Ammonomicon wiki cats — fabricated from provider models on
       // demand (already loaded; no extra JSON parse).
       case 9:
-        return _filter(context
-            .read<RunProvider>()
-            .allGuns
+        var guns = context.read<RunProvider>().allGuns.toList();
+        if (_sortMode == 'quality') {
+          guns.sort((a, b) =>
+              (_qualityRank[a.quality] ?? 9)
+                  .compareTo(_qualityRank[b.quality] ?? 9));
+        }
+        return _filter(guns
             .where((g) =>
                 _qualityFilter.isEmpty || _qualityFilter.contains(g.quality))
             .map((g) => CodexEntry(
@@ -289,9 +298,13 @@ class _CodexScreenState extends State<CodexScreen> {
                 description: g.notes))
             .toList());
       case 10:
-        return _filter(context
-            .read<RunProvider>()
-            .allItems
+        var items = context.read<RunProvider>().allItems.toList();
+        if (_sortMode == 'quality') {
+          items.sort((a, b) =>
+              (_qualityRank[a.quality] ?? 9)
+                  .compareTo(_qualityRank[b.quality] ?? 9));
+        }
+        return _filter(items
             .where((i) =>
                 _qualityFilter.isEmpty || _qualityFilter.contains(i.quality))
             .map((i) => CodexEntry(
@@ -337,11 +350,67 @@ class _CodexScreenState extends State<CodexScreen> {
     }
   }
 
+  /// Grouped search result container for the global-search view.
+  Widget _searchIcon(CodexEntry entry, CodexSection section) {
+    final path = codexAssetPath(section, entry.icon);
+    if (path.isEmpty) {
+      return const Icon(Icons.help_outline, size: 20);
+    }
+    return Image.asset(path,
+        width: 26,
+        height: 26,
+        fit: BoxFit.contain,
+        errorBuilder: (_, _, _) =>
+            const Icon(Icons.help_outline, size: 20));
+  }
+
+  /// Shared tap routing — guns/items go to their detail screens,
+  /// synergies to the synergy graph, everything else to codex detail.
+  void _openEntry(CodexEntry entry, CodexSection section) {
+    final p = context.read<RunProvider>();
+    final dest = switch (entry.game) {
+      'gun' => ItemDetailScreen(
+          gun: p.allGuns.firstWhere((g) => g.name == entry.name)),
+      'item' => ItemDetailScreen(
+          item: p.allItems.firstWhere((i) => i.name == entry.name)),
+      'synergy' => SynergyDetailScreen(
+          synergy: p.allSynergies
+              .firstWhere((s) => s.name == entry.name)),
+      _ => CodexDetailScreen(entry: entry, section: section),
+    };
+    Navigator.push(context, fastRoute(dest));
+  }
+
   Widget _buildQualityChips(ThemeFlair flair) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 0, 14, 8),
       child: Row(
         children: [
+          GestureDetector(
+            onTap: () {
+              Haptics.selection();
+              setState(() =>
+                  _sortMode = _sortMode == 'name' ? 'quality' : 'name');
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.2)),
+              ),
+              child: GoopText(
+                _sortMode == 'name' ? 'A-Z' : 'S-D',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white.withValues(alpha: 0.7)),
+              ),
+            ),
+          ),
           for (final q in _qualities)
             Padding(
               padding: const EdgeInsets.only(right: 6),
@@ -471,6 +540,66 @@ class _CodexScreenState extends State<CodexScreen> {
 
   // ── Level 1: 4-col category picker grid ─────────────────────────────
   Widget _buildCategoryGrid(ThemeFlair flair) {
+    // Global search: query active on the picker level → grouped
+    // results across ALL non-special categories (browse-style).
+    if (_query.isNotEmpty) {
+      final groups = <_SearchGroup>[];
+      for (var i = 0; i < _categories.length; i++) {
+        final c = _categories[i];
+        if (c.isSpecial) continue;
+        final ent = _entriesFor(i);
+        if (ent.isNotEmpty) {
+          groups.add(_SearchGroup(
+              tab: c, entries: ent, section: _sectionFor(i)));
+        }
+      }
+      return SafeArea(
+        top: !widget.showBackButton,
+        bottom: false,
+        child: groups.isEmpty
+            ? Center(
+                child: GoopText(
+                  'Nothing found for "${_searchCtrl.text}"',
+                  style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      fontStyle: FontStyle.italic),
+                ),
+              )
+            : ListView(
+                padding: const EdgeInsets.fromLTRB(14, 8, 14, 24),
+                children: [
+                  for (final g in groups) ...[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(2, 14, 0, 6),
+                      child: GoopText(
+                        g.tab.label.toUpperCase(),
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                            color: g.tab.color),
+                      ),
+                    ),
+                    for (final e in g.entries)
+                      ListTile(
+                        dense: true,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 8),
+                        leading: _searchIcon(e, g.section),
+                        title: GoopText(e.name,
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700)),
+                        onTap: () {
+                          Haptics.selection();
+                          _openEntry(e, g.section);
+                        },
+                      ),
+                  ],
+                ],
+              ),
+      );
+    }
     return SafeArea(
       top: !widget.showBackButton,
       bottom: false,
@@ -1085,4 +1214,14 @@ class _GungeoneersCodexPage extends StatelessWidget {
       color: AppTheme.flair.primary.withValues(alpha: 0.5),
     );
   }
+}
+
+/// One section of the global-search results view (category + its
+/// filtered entries + icon-folder resolver).
+class _SearchGroup {
+  final AmmonomiconTab tab;
+  final List<CodexEntry> entries;
+  final CodexSection section;
+  const _SearchGroup(
+      {required this.tab, required this.entries, required this.section});
 }
