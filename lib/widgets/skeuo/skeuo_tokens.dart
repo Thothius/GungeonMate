@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../services/app_theme.dart';
+import '../../utils/contrast.dart';
+
 /// Design tokens for the Neo-Skeuo "hand-drawn kit" skin.
 ///
 /// Mirrors the reference kit's rules: cream paper, black ink strokes,
@@ -50,4 +53,17 @@ abstract final class Skeuo {
 
   /// Diagonal hatch-line spacing inside the offset shadow.
   static const double hatchGap = 4.5;
+
+  /// Skeuo-aware color collapse — while the skin is active, any light
+  /// or chromatic color folds to ink so legacy chrome (cyan cards,
+  /// amber tints, neon icons) prints as pencil shading instead of neon
+  /// on paper. Dark colors (ink, accent red, near-black) pass through.
+  /// Used by Phase-B site sweeps; new skeuo widgets use tokens directly.
+  static Color inkIf(Color color) {
+    if (!AppTheme.isSkeuo) return color;
+    if (color == paper || color == card || color == insetPaper) {
+      return color;
+    }
+    return Contrast.luminance(color) > 0.3 ? ink : color;
+  }
 }

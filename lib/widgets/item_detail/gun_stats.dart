@@ -7,6 +7,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
 import '../../widgets/themed_number.dart';
 import 'quick_jump_button.dart';
+import '../skeuo/skeuo_tokens.dart';
 part 'gun_stats_parts.dart';
 part 'gun_stats_sections.dart';
 
@@ -152,13 +153,13 @@ class StatPill extends StatelessWidget {
     this.groupColor,
   });
 
-  static const Map<String, Color> _chestColors = {
+  static final Map<String, Color> _chestColors = {
     'red': Color(0xFFE53935),
     'blue': Color(0xFF1E88E5),
     'green': Color(0xFF43A047),
     'black': Color(0xFF222222),
     'brown': Color(0xFF8D6E63),
-    'rainbow': Colors.pinkAccent,
+    'rainbow': Skeuo.inkIf(Colors.pinkAccent),
   };
 
   static const Map<String, String> _chestRanks = {
@@ -182,9 +183,9 @@ class StatPill extends StatelessWidget {
     final filled = flair.chipFilled;
     final accentColor =
         isCharge
-            ? Colors.lightBlueAccent
+            ? Skeuo.inkIf(Colors.lightBlueAccent)
             : isDuration
-            ? Colors.greenAccent.shade200
+            ? Skeuo.inkIf(Colors.greenAccent.shade200)
             : null;
     return Container(
       padding: EdgeInsets.symmetric(
@@ -217,14 +218,18 @@ class StatPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (isCharge) ...[
-            Icon(Icons.electric_bolt, size: 12, color: Colors.lightBlueAccent),
+            Icon(
+              Icons.electric_bolt,
+              size: 12,
+              color: Skeuo.inkIf(Colors.lightBlueAccent),
+            ),
             const SizedBox(width: 3),
           ],
           if (isDuration) ...[
             Icon(
               Icons.timer_outlined,
               size: 12,
-              color: Colors.greenAccent.shade200,
+              color: Skeuo.inkIf(Colors.greenAccent.shade200),
             ),
             const SizedBox(width: 3),
           ],
@@ -353,7 +358,10 @@ class GunStats extends StatelessWidget with _GunStatsSections {
     // Unified stat grid — one borderless label-over-number table for
     // every stat. DPS leads; all cells identical size; no icons.
     final gridSpecs = <(String, String)>[
-      ('DPS', dpsValue.replaceAll(RegExp(r'\s*DPS\s*$', caseSensitive: false), '')),
+      (
+        'DPS',
+        dpsValue.replaceAll(RegExp(r'\s*DPS\s*$', caseSensitive: false), ''),
+      ),
       if (gun.damage.isNotEmpty) ('DAMAGE', gun.damage),
       if (gun.fireRate.isNotEmpty) ('FIRE RATE', gun.fireRate),
       if (gun.reloadTime.isNotEmpty) ('RELOAD', gun.reloadTime),
@@ -364,8 +372,7 @@ class GunStats extends StatelessWidget with _GunStatsSections {
       if (gun.magazineSize.isNotEmpty) ('MAGAZINE', gun.magazineSize),
       if (gun.ammoCapacity.isNotEmpty) ('MAX AMMO', gun.ammoCapacity),
       if (gun.gunClass.isNotEmpty) ('CLASS', gun.gunClass),
-      if (gun.chestColorDisplay.isNotEmpty)
-        ('CHEST', gun.chestColorDisplay),
+      if (gun.chestColorDisplay.isNotEmpty) ('CHEST', gun.chestColorDisplay),
       if (gun.curse > 0) ('CURSE', '+${gun.curse}'),
       if (gun.coolness > 0) ('COOL', '+${gun.coolness}'),
     ];
@@ -396,7 +403,6 @@ class GunStats extends StatelessWidget with _GunStatsSections {
             const SizedBox(height: 14),
           ],
           if (caseyInfo != null) ...[caseyInfo, const SizedBox(height: 14)],
-
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/goop_talk_engine.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 class DestroyBanner extends StatelessWidget {
   final VoidCallback onDestroy;
@@ -11,10 +12,10 @@ class DestroyBanner extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
       child: Card(
         elevation: 0,
-        color: Colors.red.withValues(alpha: 0.06),
+        color: Skeuo.inkIf(Colors.red).withValues(alpha: 0.06),
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            color: Colors.redAccent.withValues(alpha: 0.5),
+            color: Skeuo.inkIf(Colors.redAccent).withValues(alpha: 0.5),
             width: 1,
           ),
           borderRadius: BorderRadius.circular(14),
@@ -26,19 +27,19 @@ class DestroyBanner extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.local_fire_department,
-                    color: Colors.redAccent,
+                    color: Skeuo.inkIf(Colors.redAccent),
                     size: 18,
                   ),
                   const SizedBox(width: 6),
-                  const GoopText(
+                  GoopText(
                     'DESTROYED ON USE',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 1.2,
-                      color: Colors.redAccent,
+                      color: Skeuo.inkIf(Colors.redAccent),
                     ),
                   ),
                 ],
@@ -68,7 +69,7 @@ class DestroyBanner extends StatelessWidget {
                     ),
                   ),
                   style: FilledButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
+                    backgroundColor: Skeuo.inkIf(Colors.redAccent),
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

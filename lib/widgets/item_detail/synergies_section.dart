@@ -8,6 +8,7 @@ import '../../services/haptics.dart';
 import '../../utils/fast_route.dart';
 import '../rich_link_text.dart';
 import '../../screens/item_detail_screen.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 class SynergiesSection extends StatefulWidget {
   final List<SynergyStatus> statuses;
@@ -46,7 +47,7 @@ class _SynergiesSectionState extends State<SynergiesSection> {
               padding: const EdgeInsets.only(bottom: 6),
               child: Row(
                 children: [
-                  Icon(Icons.hub, size: 16, color: Colors.amber),
+                  Icon(Icons.hub, size: 16, color: Skeuo.inkIf(Colors.amber)),
                   const SizedBox(width: 6),
                   GoopText(
                     'SYNERGIES',
@@ -85,15 +86,17 @@ class _SynergiesSectionState extends State<SynergiesSection> {
                         vertical: 1,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.amber.withValues(alpha: 0.15),
+                        color: Skeuo.inkIf(
+                          Colors.amber,
+                        ).withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: GoopText(
                         '$activeCount active',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
-                          color: Colors.amber,
+                          color: Skeuo.inkIf(Colors.amber),
                         ),
                       ),
                     ),
@@ -146,7 +149,9 @@ class SynergyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = status.synergy;
     final color =
-        status.active ? Colors.amber : Colors.white.withValues(alpha: 0.25);
+        status.active
+            ? Skeuo.inkIf(Colors.amber)
+            : Colors.white.withValues(alpha: 0.25);
 
     final currentLower = currentName.toLowerCase();
     final currentIsAnyOf = s.anyOf.any((i) => i.toLowerCase() == currentLower);
@@ -169,7 +174,10 @@ class SynergyCard extends StatelessWidget {
                 Icon(
                   status.active ? Icons.link : Icons.link_off_outlined,
                   size: 18,
-                  color: status.active ? Colors.amber : Colors.white38,
+                  color:
+                      status.active
+                          ? Skeuo.inkIf(Colors.amber)
+                          : Colors.white38,
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -186,7 +194,11 @@ class SynergyCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const Icon(Icons.verified, size: 14, color: Colors.cyan),
+                      Icon(
+                        Icons.verified,
+                        size: 14,
+                        color: Skeuo.inkIf(Colors.cyan),
+                      ),
                     ],
                   ),
                 ),
@@ -215,7 +227,7 @@ class SynergyCard extends StatelessWidget {
                     Icon(
                       Icons.check_circle_outline_rounded,
                       size: 13,
-                      color: Colors.amber.withValues(alpha: 0.80),
+                      color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.80),
                     ),
                     const SizedBox(width: 5),
                     GoopText(
@@ -223,7 +235,9 @@ class SynergyCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: Colors.amber.withValues(alpha: 0.78),
+                        color: Skeuo.inkIf(
+                          Colors.amber,
+                        ).withValues(alpha: 0.78),
                       ),
                     ),
                   ],
@@ -234,7 +248,7 @@ class SynergyCard extends StatelessWidget {
                     Icon(
                       Icons.alt_route,
                       size: 13,
-                      color: Colors.amber.withValues(alpha: 0.75),
+                      color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.75),
                     ),
                     const SizedBox(width: 4),
                     GoopText(
@@ -243,7 +257,7 @@ class SynergyCard extends StatelessWidget {
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5,
-                        color: Colors.amber.withValues(alpha: 0.9),
+                        color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.9),
                       ),
                     ),
                   ],
@@ -299,7 +313,7 @@ class SynergyChip extends StatelessWidget {
     final pillColor =
         missing
             ? Colors.white.withValues(alpha: 0.08)
-            : Colors.amber.withValues(alpha: 0.4);
+            : Skeuo.inkIf(Colors.amber).withValues(alpha: 0.4);
 
     final body = Opacity(
       opacity: missing ? 0.4 : 1.0,
@@ -310,14 +324,14 @@ class SynergyChip extends StatelessWidget {
           color:
               missing
                   ? AppTheme.flair.scaffold
-                  : Colors.amber.withValues(alpha: 0.08),
+                  : Skeuo.inkIf(Colors.amber).withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: pillColor, width: 1.8),
           boxShadow:
               !missing
                   ? [
                     BoxShadow(
-                      color: Colors.amber.withValues(alpha: 0.12),
+                      color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.12),
                       blurRadius: 6,
                     ),
                   ]

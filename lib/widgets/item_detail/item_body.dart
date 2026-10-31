@@ -8,6 +8,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import 'description_blocks.dart';
 import 'gun_stats.dart';
+import '../skeuo/skeuo_tokens.dart';
 part 'item_body_sections.dart';
 
 class ItemBody extends StatelessWidget with _ItemBodySections {
@@ -41,7 +42,7 @@ class ItemBody extends StatelessWidget with _ItemBodySections {
         item.name.toLowerCase() == 'spice' ? _buildSpiceInfo(context) : null;
     final sprunInfo =
         item.name.toLowerCase() == 'sprun' ? _buildSprunInfo(context) : null;
-    final isPaydayItem = const [
+    final isPaydayItem = [
       'clown mask',
       'drill',
       'loot bag',
@@ -99,8 +100,8 @@ class ItemBody extends StatelessWidget with _ItemBodySections {
               children: [
                 for (var i = 0; i < stats.length; i++) ...[
                   Expanded(
-                      child: StatPill(
-                          label: stats[i].key, value: stats[i].value)),
+                    child: StatPill(label: stats[i].key, value: stats[i].value),
+                  ),
                   if (i < stats.length - 1) const SizedBox(width: 10),
                 ],
               ],

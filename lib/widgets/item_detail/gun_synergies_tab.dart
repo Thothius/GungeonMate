@@ -5,6 +5,7 @@ import '../../services/goop_talk_engine.dart';
 import '../../theme/tokens.dart';
 import '../game_icon.dart';
 import '../state_widgets.dart';
+import '../skeuo/skeuo_tokens.dart';
 
 /// SYNERGIES tab for gun detail — grouped COMPLETE (all pieces owned)
 /// then PARTIAL (≥1 owned, ≥1 missing). Each row shows the missing
@@ -78,7 +79,7 @@ class GunSynergiesTab extends StatelessWidget {
           if (complete.isNotEmpty) ...[
             _GroupHeader(
               label: 'COMPLETE',
-              color: Colors.greenAccent,
+              color: Skeuo.inkIf(Colors.greenAccent),
               icon: Icons.check_circle_rounded,
             ),
             const SizedBox(height: 6),
@@ -94,7 +95,7 @@ class GunSynergiesTab extends StatelessWidget {
             const SizedBox(height: 14),
             _GroupHeader(
               label: 'PARTIAL',
-              color: Colors.amberAccent,
+              color: Skeuo.inkIf(Colors.amberAccent),
               icon: Icons.pie_chart_outline_rounded,
             ),
             const SizedBox(height: 6),
@@ -203,7 +204,10 @@ class _SynergyRow extends StatelessWidget {
       iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
     }
 
-    final accent = status.active ? Colors.greenAccent : Colors.amberAccent;
+    final accent =
+        status.active
+            ? Skeuo.inkIf(Colors.greenAccent)
+            : Skeuo.inkIf(Colors.amberAccent);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -276,10 +280,10 @@ class _OwnerPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final color =
         label.contains('+')
-            ? Colors.cyanAccent
+            ? Skeuo.inkIf(Colors.cyanAccent)
             : label == 'P2'
-            ? Colors.orangeAccent
-            : Colors.lightGreenAccent;
+            ? Skeuo.inkIf(Colors.orangeAccent)
+            : Skeuo.inkIf(Colors.lightGreenAccent);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
