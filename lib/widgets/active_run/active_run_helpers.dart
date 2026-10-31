@@ -305,6 +305,10 @@ class _RunToolsSheet extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     final flair = AppTheme.flair;
+    // Parked feature — hide the Neo-Skeuo row until Phase B ships.
+    if (label.startsWith('Neo-Skeuo') && !AppTheme.kNeoSkeuoEnabled) {
+      return const SizedBox.shrink();
+    }
     return InkWell(
       borderRadius: BorderRadius.all(Radii.sm),
       onTap: () {

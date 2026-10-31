@@ -66,4 +66,25 @@ abstract final class Skeuo {
     }
     return Contrast.luminance(color) > 0.3 ? ink : color;
   }
+
+  /// Three-way collapse: dark opaque fills -> paper, light/mid -> ink,
+  /// tints keep their alpha as pencil washes. No-op outside skeuo.
+  static Color collapse(Color c) {
+    if (!AppTheme.isSkeuo) return c;
+    if (c == paper ||
+        c == card ||
+        c == insetPaper ||
+        c == pencil ||
+        c == ink ||
+        c == accent) {
+      return c;
+    }
+    final l = Contrast.luminance(c);
+    if (c.a < 0.7) {
+      return l > 0.5 ? ink.withValues(alpha: c.a) : c;
+    }
+    if (l > 0.55) return ink;
+    if (l < 0.3) return card;
+    return ink;
+  }
 }

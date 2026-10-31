@@ -46,6 +46,9 @@ part 'theme/theme_flair_prefs.dart';
 part 'theme/theme_store.dart';
 
 class AppTheme {
+  /// Neo-Skeuo is parked — the toggle stays hidden until the
+  /// Phase-B skin pass is ready to ship. Flip to true to restore.
+  static const bool kNeoSkeuoEnabled = false;
   const AppTheme._();
 
   static const String _prefsKey = 'theme.mode.v2';
@@ -331,6 +334,7 @@ class AppTheme {
   /// skeuo's `flair.font` is null and it has no `kThemeCuration` entry,
   /// so entering never mutates VisualPrefs — everything returns intact.
   static Future<void> enterSkeuo() async {
+    if (!kNeoSkeuoEnabled) return;
     if (isSkeuo) return;
     final prevMode = notifier.value;
     final prevFont = VisualPrefs.notifier.value.font;

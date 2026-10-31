@@ -413,7 +413,10 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
                 child: SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(Insets.md),
-                    child: _skeuoToggleChip(skeuo),
+                    child:
+                        AppTheme.kNeoSkeuoEnabled
+                            ? _skeuoToggleChip(skeuo)
+                            : const SizedBox.shrink(),
                   ),
                 ),
               ),
