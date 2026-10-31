@@ -277,18 +277,12 @@ class _ParticlePreview extends StatelessWidget {
                 ),
               ),
             ),
-            // The live particle field.
+            // The live particle field — same resolution as the app-wide
+            // overlay so every option visibly changes the preview.
             Positioned.fill(
-              child: ParticleField(
-                preset: prefs.particlePreset,
-                count: prefs.particleCount,
-                sizeScale: prefs.particleSizeScale,
-                opacity: prefs.particleOpacity,
-                glowOverride: prefs.particleGlowEffect,
-                lineLinksOverride: prefs.particleLineLinks,
-                bounce: prefs.particleBounce,
-                speedMultiplier: prefs.particleSpeed.multiplier,
-              ),
+              child:
+                  buildBackdropParticleField(AppTheme.displayedMode, prefs) ??
+                  const SizedBox.shrink(),
             ),
             // Label overlay.
             Positioned(

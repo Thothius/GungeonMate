@@ -9,6 +9,7 @@ import '../widgets/scale_button.dart';
 import '../widgets/particle_engine.dart';
 import 'palette_maker_screen.dart';
 import '../widgets/color_picker_dialog.dart';
+import '../widgets/theme_overlay.dart';
 import '../utils/fast_route.dart';
 part 'experience_studio/studio_palette.dart';
 part 'experience_studio/studio_particles.dart';
@@ -317,35 +318,60 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             width: 1.2,
           ),
         ),
-        child: Column(
-          children: [
-            Expanded(child: _buildLiveLookMock()),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onVerticalDragUpdate:
-                  (d) => setState(
-                    () =>
-                        _liveLookH = (_liveLookH - d.delta.dy / sh).clamp(
-                          0.15,
-                          0.75,
-                        ),
-                  ),
-              child: SizedBox(
-                width: double.infinity,
-                height: 20,
-                child: Center(
-                  child: Container(
-                    width: 44,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.25),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(13),
+          child: Stack(
+            children: [
+              // Real particles inside the pane — every particle option
+              // visibly changes the LIVE LOOK (was: wrote prefs but
+              // nothing rendered → "options don't do anything").
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: ValueListenableBuilder<VisualPrefs>(
+                    valueListenable: VisualPrefs.notifier,
+                    builder:
+                        (_, prefs, _) =>
+                            buildBackdropParticleField(
+                              _previewMode,
+                              prefs,
+                              opacityScale: 0.7,
+                            ) ??
+                            const SizedBox.shrink(),
                   ),
                 ),
               ),
-            ),
-          ],
+              Column(
+                children: [
+                  Expanded(child: _buildLiveLookMock()),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onVerticalDragUpdate:
+                        (d) => setState(
+                          () =>
+                              _liveLookH = (_liveLookH - d.delta.dy / sh).clamp(
+                                0.15,
+                                0.75,
+                              ),
+                        ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 20,
+                      child: Center(
+                        child: Container(
+                          width: 44,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.25),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -359,11 +385,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       valueListenable: VisualPrefs.notifier,
       builder: (context, prefs, _) {
         final flair = AppTheme.flairFor(_previewMode);
-        final glow =
-            VisualPrefs.glowColors[prefs.glowColorIndex.clamp(
-              0,
-              VisualPrefs.glowColors.length - 1,
-            )];
+        final glow = prefs.glowColor;
         return Padding(
           padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
           child: Column(
@@ -523,7 +545,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         if (_previewMode == AppThemeMode.unicorn) _buildUnicornStrip(),
         for (final (label, color, update) in roles)
           _colorRoleRow(label, color, update),
-        _buildGlowStrip(),
         const SizedBox(height: 14),
         ScaleButton(
           onTap: _showSaveThemeDialog,
@@ -672,57 +693,6 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
             ),
         ],
       ),
-    );
-  }
-
-  /// Glow color strip — the 12-color glow palette as swatch dots.
-  Widget _buildGlowStrip() {
-    return ValueListenableBuilder<VisualPrefs>(
-      valueListenable: VisualPrefs.notifier,
-      builder: (context, prefs, _) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 8, bottom: 6),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (var i = 0; i < VisualPrefs.glowColors.length; i++)
-                GestureDetector(
-                  onTap: () async {
-                    Haptics.selection();
-                    await VisualPrefs.setGlowColorIndex(i);
-                  },
-                  child: Container(
-                    width: 24,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: VisualPrefs.glowColors[i],
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color:
-                            i == prefs.glowColorIndex
-                                ? Colors.white
-                                : Colors.white.withValues(alpha: 0.15),
-                        width: i == prefs.glowColorIndex ? 2 : 1,
-                      ),
-                      boxShadow:
-                          i == prefs.glowColorIndex
-                              ? [
-                                BoxShadow(
-                                  color: VisualPrefs.glowColors[i].withValues(
-                                    alpha: 0.7,
-                                  ),
-                                  blurRadius: 8,
-                                ),
-                              ]
-                              : null,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        );
-      },
     );
   }
 

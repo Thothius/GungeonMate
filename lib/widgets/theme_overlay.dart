@@ -185,7 +185,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                     ? prefs.glowIntensity
                     : autoGlowIntensity;
             final showGlow = !reduceMotion && effectiveUserGlow > 0.001;
-            final userGlowColor = VisualPrefs.glowColors[prefs.glowColorIndex];
+            final userGlowColor = prefs.glowColor;
             // 3x boost: user requested glow be more significant at 100%.
             // Cap at 1.8 to prevent total washout while making max clearly visible.
             final effectiveGlow = (effectiveUserGlow * 1.8).clamp(0.0, 1.8);
@@ -205,74 +205,18 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                       effectiveGlow,
                     )
                     : const Color(0x00000000);
-            // ponytail: auto-bind particles to the active theme. Every visible
-            //           theme has a default preset in kThemeParticleDefaults. When
-            //           the user hasn't explicitly chosen a preset (still on
-            //           gungeonDust), the theme's default is used. Particles are
-            //           also auto-enabled for any theme with a non-dust default so
-            //           each theme shows its identity out of the box. An explicit
-            //           user preset choice is always respected.
-            final themeDefault =
-                kThemeParticleDefaults[mode] ?? ParticlePreset.gungeonDust;
-            final userOnDefault =
-                prefs.particlePreset == ParticlePreset.gungeonDust;
-            final effectivePreset =
-                userOnDefault ? themeDefault : prefs.particlePreset;
-            final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
-            final particlesOn =
-                !reduceMotion && (prefs.particlesEnabled || themeAutoOn);
-            // ponytail: color schema priority — explicit user schema > unicorn
-            // palette > preset default. themeMatch uses the active flair's
-            // primary/secondary/glow colors so particles always harmonize.
-            List<Color>? colorOverride;
-            if (prefs.particleColorSchema !=
-                ParticleColorSchema.presetDefault) {
-              if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
-                colorOverride = [
-                  f.primary,
-                  f.secondary,
-                  f.glowPrimary,
-                  f.headlineStat,
-                ];
-              } else {
-                colorOverride = prefs.particleColorSchema.colors;
-              }
-            } else if (mode == AppThemeMode.unicorn) {
-              colorOverride = AppTheme.unicornPalette.particleColors;
-            }
-            // Typed particle system — the user-facing type + per-theme
-            // flavored schema + chaos/tilt physics flags replace the old
-            // 37-preset × 16-schema layer entirely.
-            final schemaColors = particleSchemaColors(
+            final particleBackdropBg = buildBackdropParticleField(
               mode,
-              prefs.particleSchemaIndex,
+              prefs,
+              menuVisible: menuVisible,
+              reduceMotion: reduceMotion,
             );
-            final typedCfg = typedParticleConfig(
-              ParticleType.values[prefs.particleTypeIndex],
-              schemaColors,
-              chaos: prefs.particleChaos,
-            );
-            final particleBackdropBg =
-                !particlesOn || menuVisible
-                    ? null
-                    : ParticleField(
-                      preset: effectivePreset,
-                      config: typedCfg,
-                      tiltEnabled: prefs.particleTouch,
-                      count: prefs.particleCount,
-                      sizeScale: prefs.particleSizeScale,
-                      opacity: prefs.particleOpacity,
-                      glowOverride: prefs.particleGlowEffect,
-                      lineLinksOverride: prefs.particleLineLinks ? true : null,
-                      colorsOverride: colorOverride,
-                      bounce: prefs.particleBounce,
-                      speedMultiplier: prefs.particleSpeed.multiplier,
-                    );
             Widget content = widget.child;
 
             // Apply visual customizer wrappers based on active Theme Mode!
             // Locked on home — the menu must look identical on every theme.
-            if (!reduceMotion && !menuVisible &&
+            if (!reduceMotion &&
+                !menuVisible &&
                 mode == AppThemeMode.bulletHell) {
               content = ElasticWobbleContainer(
                 intensity: 0.05,
@@ -295,9 +239,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // its fixed base color and skip all theme layers below.
                   Positioned.fill(
                     child: Container(
-                      color: menuVisible
-                          ? const Color(0xFF0A0710)
-                          : f.scaffold,
+                      color: menuVisible ? const Color(0xFF0A0710) : f.scaffold,
                     ),
                   ),
 
@@ -335,7 +277,7 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                           key: ValueKey('ambient_glow_${mode.index}'),
                           primary: gP,
                           secondary: gS,
-                          style: f.glowStyle,
+                          style: prefs.glowStyleOverride ?? f.glowStyle,
                           tertiary: f.headlineStat.withValues(alpha: 0.3),
                         ),
                       ),
@@ -347,24 +289,24 @@ class _ThemeOverlayState extends State<ThemeOverlay>
                   // 3.5. Chamber Vignette Shadow Overlay (Depth effect with shadows!)
                   if (!menuVisible)
                     Positioned.fill(
-                    child: IgnorePointer(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: RadialGradient(
-                            center: Alignment.center,
-                            radius: 1.25,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withValues(alpha: 0.05),
-                              Colors.black.withValues(alpha: 0.25),
-                              Colors.black.withValues(alpha: 0.48),
-                            ],
-                            stops: const [0.0, 0.45, 0.82, 1.0],
+                      child: IgnorePointer(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: RadialGradient(
+                              center: Alignment.center,
+                              radius: 1.25,
+                              colors: [
+                                Colors.transparent,
+                                Colors.black.withValues(alpha: 0.05),
+                                Colors.black.withValues(alpha: 0.25),
+                                Colors.black.withValues(alpha: 0.48),
+                              ],
+                              stops: const [0.0, 0.45, 0.82, 1.0],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
 
                   if (!menuVisible && f.pageFrame)
                     const Positioned.fill(
@@ -413,4 +355,63 @@ class _ThemeOverlayState extends State<ThemeOverlay>
       },
     );
   }
+}
+
+/// Shared backdrop particle resolution — the exact preset/colors/config the
+/// app-wide [ThemeOverlay] uses, so the studio's own preview and the LIVE
+/// LOOK pane show what the app actually renders. Returns null when particles
+/// are off so callers can skip a layer entirely.
+Widget? buildBackdropParticleField(
+  AppThemeMode mode,
+  VisualPrefs prefs, {
+  bool menuVisible = false,
+  bool reduceMotion = false,
+  double opacityScale = 1.0,
+}) {
+  final f = AppTheme.flairFor(mode);
+  // auto-bind particles to the active theme. Every visible theme has a
+  // default preset in kThemeParticleDefaults; an explicit user preset
+  // choice always wins.
+  final themeDefault =
+      kThemeParticleDefaults[mode] ?? ParticlePreset.gungeonDust;
+  final effectivePreset =
+      prefs.particlePreset == ParticlePreset.gungeonDust
+          ? themeDefault
+          : prefs.particlePreset;
+  final themeAutoOn = themeDefault != ParticlePreset.gungeonDust;
+  final particlesOn = !reduceMotion && (prefs.particlesEnabled || themeAutoOn);
+  if (!particlesOn || menuVisible) return null;
+  // color schema priority — explicit user schema > unicorn palette >
+  // preset default. themeMatch uses the active flair's colors.
+  List<Color>? colorOverride;
+  if (prefs.particleColorSchema != ParticleColorSchema.presetDefault) {
+    if (prefs.particleColorSchema == ParticleColorSchema.themeMatch) {
+      colorOverride = [f.primary, f.secondary, f.glowPrimary, f.headlineStat];
+    } else {
+      colorOverride = prefs.particleColorSchema.colors;
+    }
+  } else if (mode == AppThemeMode.unicorn) {
+    colorOverride = AppTheme.unicornPalette.particleColors;
+  }
+  // Typed particle system — user-facing type + per-theme flavored schema +
+  // chaos/tilt physics flags.
+  final schemaColors = particleSchemaColors(mode, prefs.particleSchemaIndex);
+  final typedCfg = typedParticleConfig(
+    ParticleType.values[prefs.particleTypeIndex],
+    schemaColors,
+    chaos: prefs.particleChaos,
+  );
+  return ParticleField(
+    preset: effectivePreset,
+    config: typedCfg,
+    tiltEnabled: prefs.particleTouch,
+    count: prefs.particleCount,
+    sizeScale: prefs.particleSizeScale,
+    opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),
+    glowOverride: prefs.particleGlowEffect,
+    lineLinksOverride: prefs.particleLineLinks ? true : null,
+    colorsOverride: colorOverride,
+    bounce: prefs.particleBounce,
+    speedMultiplier: prefs.particleSpeed.multiplier,
+  );
 }

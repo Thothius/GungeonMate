@@ -261,6 +261,12 @@ class VisualPrefs {
   /// User-selected glow color for the ambient screen glow (12-color palette).
   final int glowColorIndex;
 
+  /// Custom glow color as ARGB int; 0 = use the curated [glowColors] palette.
+  final int glowCustomColor;
+
+  /// User glow-style override: -1 = theme default, else [GlowStyle] index.
+  final int glowStyleIndex;
+
   /// Font-weight bias applied globally on top of the active theme.
   /// Adjusted in increments of 100 (e.g. -400 to +500). Stored as an integer.
   final int fontWeightBias;
@@ -402,6 +408,19 @@ class VisualPrefs {
     Color(0xFFAD1457), // Deep Rose
   ];
 
+  /// Resolved ambient glow color — custom picker color wins over the
+  /// curated palette entry. Used by the ambient glow overlay.
+  Color get glowColor =>
+      glowCustomColor != 0
+          ? Color(glowCustomColor)
+          : glowColors[glowColorIndex.clamp(0, glowColors.length - 1)];
+
+  /// User glow-style override; null means follow the theme's flair style.
+  GlowStyle? get glowStyleOverride =>
+      glowStyleIndex < 0 || glowStyleIndex >= GlowStyle.values.length
+          ? null
+          : GlowStyle.values[glowStyleIndex];
+
   const VisualPrefs({
     this.glowIntensity = 0.0,
     this.particlesEnabled = true,
@@ -410,6 +429,8 @@ class VisualPrefs {
     this.particleLineLinks = false,
     this.particleBounce = false,
     this.glowColorIndex = 0,
+    this.glowCustomColor = 0,
+    this.glowStyleIndex = -1,
     this.fontWeightBias = 0,
     this.fontLetterSpacing = 0,
     this.font = AppFont.gungeon,
@@ -453,6 +474,8 @@ class VisualPrefs {
   static const _kParticleLineLinks = 'vp.particle_line_links_v1';
   static const _kParticleBounce = 'vp.particle_bounce_v1';
   static const _kGlowColorIndex = 'vp.glow_color_index_v1';
+  static const _kGlowCustom = 'vp.glow_custom_v1';
+  static const _kGlowStyleIndex = 'vp.glow_style_index_v1';
   static const _kCustomDiceType = 'vp.custom_dice_type_v1';
   static const _kParticleSizeScale = 'vp.particle_size_scale_v2';
   static const _kParticleOpacity = 'vp.particle_opacity_v1';
@@ -527,6 +550,8 @@ class VisualPrefs {
       final particleLineLinks = p.getBool(_kParticleLineLinks) ?? false;
       final particleBounce = p.getBool(_kParticleBounce) ?? false;
       final glowColorIndex = p.getInt(_kGlowColorIndex) ?? 0;
+      final glowCustomColor = p.getInt(_kGlowCustom) ?? 0;
+      final glowStyleIndex = p.getInt(_kGlowStyleIndex) ?? -1;
 
       final customDiceTypeIdx = p.getInt(_kCustomDiceType) ?? 0;
       final customDiceType =
@@ -578,6 +603,8 @@ class VisualPrefs {
         particleLineLinks: particleLineLinks,
         particleBounce: particleBounce,
         glowColorIndex: glowColorIndex,
+        glowCustomColor: glowCustomColor,
+        glowStyleIndex: glowStyleIndex,
         fontWeightBias: p.getInt(_kWeight) ?? 0,
         fontLetterSpacing: p.getInt(_kSpacing) ?? 0,
         font: font,
@@ -677,6 +704,22 @@ class VisualPrefs {
   static Future<void> setGlowColorIndex(int v) async {
     notifier.value = notifier.value._with(
       glowColorIndex: v.clamp(0, glowColors.length - 1),
+      glowCustomColor: 0,
+    );
+    _persist();
+  }
+
+  /// Set a custom glow color straight from the color picker — bypasses
+  /// the curated palette. Resolved by [VisualPrefs.glowColor].
+  static Future<void> setGlowColor(Color c) async {
+    notifier.value = notifier.value._with(glowCustomColor: c.toARGB32());
+    _persist();
+  }
+
+  /// User glow-style override: -1 follows the theme's flair style.
+  static Future<void> setGlowStyleIndex(int v) async {
+    notifier.value = notifier.value._with(
+      glowStyleIndex: v.clamp(-1, GlowStyle.values.length - 1),
     );
     _persist();
   }
@@ -832,6 +875,8 @@ class VisualPrefs {
       await p.setBool(_kParticleLineLinks, v.particleLineLinks);
       await p.setBool(_kParticleBounce, v.particleBounce);
       await p.setInt(_kGlowColorIndex, v.glowColorIndex);
+      await p.setInt(_kGlowCustom, v.glowCustomColor);
+      await p.setInt(_kGlowStyleIndex, v.glowStyleIndex);
       await p.setInt(_kCustomDiceType, v.customDiceType.index);
       await p.setDouble(_kParticleSizeScale, v.particleSizeScale);
       await p.setDouble(_kParticleOpacity, v.particleOpacity);
@@ -871,6 +916,8 @@ class VisualPrefs {
     bool? particleLineLinks,
     bool? particleBounce,
     int? glowColorIndex,
+    int? glowCustomColor,
+    int? glowStyleIndex,
     CustomDiceType? customDiceType,
     double? particleSizeScale,
     double? particleOpacity,
@@ -943,6 +990,8 @@ class VisualPrefs {
     'particleLineLinks': particleLineLinks,
     'particleBounce': particleBounce,
     'glowColorIndex': glowColorIndex,
+    'glowCustomColor': glowCustomColor,
+    'glowStyleIndex': glowStyleIndex,
     'customDiceType': customDiceType.index,
     'particleSizeScale': particleSizeScale,
     'particleOpacity': particleOpacity,
@@ -978,6 +1027,8 @@ class VisualPrefs {
       particleLineLinks: j['particleLineLinks'] as bool? ?? false,
       particleBounce: j['particleBounce'] as bool? ?? false,
       glowColorIndex: j['glowColorIndex'] as int? ?? 0,
+      glowCustomColor: j['glowCustomColor'] as int? ?? 0,
+      glowStyleIndex: j['glowStyleIndex'] as int? ?? -1,
       customDiceType: CustomDiceType.values[(j['customDiceType'] as int?) ?? 0],
       particleSizeScale: (j['particleSizeScale'] as num?)?.toDouble() ?? 1.0,
       particleOpacity: (j['particleOpacity'] as num?)?.toDouble() ?? 0.8,

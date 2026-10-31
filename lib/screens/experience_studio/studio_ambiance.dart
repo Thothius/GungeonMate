@@ -32,9 +32,15 @@ class _AmbianceStep extends StatelessWidget {
                 (v) => VisualPrefs.setGlow(v),
               ),
               const SizedBox(height: 14),
+              _StepLabel('GLOW STYLE'),
+              const SizedBox(height: 8),
+              _GlowStyleRow(currentIndex: prefs.glowStyleIndex),
+              const SizedBox(height: 14),
               _StepLabel('GLOW COLOR'),
               const SizedBox(height: 8),
-              _GlowColorPaged(currentIndex: prefs.glowColorIndex),
+              _GlowPickRow(color: prefs.glowColor),
+              const SizedBox(height: 10),
+              _GlowQuickRow(currentIndex: prefs.glowColorIndex),
             ],
           ),
         );
@@ -43,55 +49,186 @@ class _AmbianceStep extends StatelessWidget {
   }
 }
 
-/// 5x2 paged swipable glow color grid. Each page shows 10 colors
-/// (5 columns x 2 rows). Swipe horizontally to see more pages.
-class _GlowColorPaged extends StatelessWidget {
-  const _GlowColorPaged({required this.currentIndex});
+/// Animated glow styles — THEME follows the active theme's flair; the
+/// rest override it. AmbientGlow renders these live.
+class _GlowStyleRow extends StatelessWidget {
+  const _GlowStyleRow({required this.currentIndex});
   final int currentIndex;
-  static const _spacing = 6.0;
+
+  static const _labels = ['THEME', 'ORBIT', 'EMBER', 'HALO', 'DRIP'];
 
   @override
   Widget build(BuildContext context) {
-    final colors = VisualPrefs.glowColors;
-    return GridView.count(
-      crossAxisCount: 4,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: _spacing,
-      crossAxisSpacing: _spacing,
-      children: List.generate(colors.length, (i) {
-        final c = colors[i];
-        final isSelected = i == currentIndex;
-        return GestureDetector(
-          onTap: () {
-            VisualPrefs.setGlowColorIndex(i);
-            Haptics.selection();
-          },
-          behavior: HitTestBehavior.opaque,
-          child: Container(
-            decoration: BoxDecoration(
-              color: c,
-              borderRadius: BorderRadius.all(Radii.sm),
-              border: Border.all(
-                color:
-                    isSelected
-                        ? Colors.white
-                        : Colors.white.withValues(alpha: 0.12),
-                width: isSelected ? 2.5 : 0.8,
+    final flair = AppTheme.flair;
+    return Row(
+      children: [
+        for (var i = -1; i < GlowStyle.values.length; i++)
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Haptics.selection();
+                VisualPrefs.setGlowStyleIndex(i);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 140),
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color:
+                      i == currentIndex
+                          ? flair.primary.withValues(alpha: 0.18)
+                          : Colors.white.withValues(alpha: 0.04),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color:
+                        i == currentIndex
+                            ? flair.primary.withValues(alpha: 0.7)
+                            : Colors.white.withValues(alpha: 0.1),
+                    width: i == currentIndex ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Center(
+                  child: GoopText(
+                    _labels[i + 1],
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.6,
+                      color:
+                          i == currentIndex
+                              ? flair.primary
+                              : Colors.white.withValues(alpha: 0.45),
+                    ),
+                  ),
+                ),
               ),
-              boxShadow:
-                  isSelected
-                      ? [
-                        BoxShadow(
-                          color: c.withValues(alpha: 0.6),
-                          blurRadius: 10,
-                        ),
-                      ]
-                      : null,
             ),
           ),
+      ],
+    );
+  }
+}
+
+/// Custom-color picker row — the resolved glow swatch opens the full
+/// color picker (custom color wins over the curated palette).
+class _GlowPickRow extends StatelessWidget {
+  const _GlowPickRow({required this.color});
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        final c = await showColorPickerDialog(
+          context,
+          initialColor: color,
+          title: 'GLOW COLOR',
         );
-      }),
+        if (c == null || !context.mounted) return;
+        Haptics.selection();
+        await VisualPrefs.setGlowColor(c);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 26,
+              height: 26,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.3),
+                  width: 1.2,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.6),
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: GoopText(
+                'CUSTOM COLOR',
+                style: TextStyle(
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 1.1,
+                  color: Colors.white.withValues(alpha: 0.8),
+                ),
+              ),
+            ),
+            Icon(
+              Icons.colorize_rounded,
+              size: 14,
+              color: Colors.white.withValues(alpha: 0.4),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Compact single-row quick picks — the 12 original curated colors.
+/// Tapping one clears any custom color.
+class _GlowQuickRow extends StatelessWidget {
+  const _GlowQuickRow({required this.currentIndex});
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    const shown = 12;
+    return SizedBox(
+      height: 26,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: shown.clamp(0, VisualPrefs.glowColors.length),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (context, i) {
+          final c = VisualPrefs.glowColors[i];
+          final isSelected = i == currentIndex;
+          return GestureDetector(
+            onTap: () {
+              Haptics.selection();
+              VisualPrefs.setGlowColorIndex(i);
+            },
+            child: Container(
+              width: 26,
+              height: 26,
+              decoration: BoxDecoration(
+                color: c,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color:
+                      isSelected
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.15),
+                  width: isSelected ? 2 : 1,
+                ),
+                boxShadow:
+                    isSelected
+                        ? [
+                          BoxShadow(
+                            color: c.withValues(alpha: 0.7),
+                            blurRadius: 8,
+                          ),
+                        ]
+                        : null,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
