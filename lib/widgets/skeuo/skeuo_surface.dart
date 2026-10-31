@@ -55,6 +55,9 @@ class SkeuoSurface extends StatelessWidget {
   /// Draw-in: the ink border strokes itself around the card on mount.
   final bool animate;
 
+  /// Stagger delay before the draw-in starts (menu cascades).
+  final Duration drawDelay;
+
   const SkeuoSurface({
     super.key,
     required this.child,
@@ -67,6 +70,7 @@ class SkeuoSurface extends StatelessWidget {
     this.pressT = 0,
     this.sketchy = true,
     this.animate = true,
+    this.drawDelay = Duration.zero,
   });
 
   double get _maxShadow => switch (elevation) {
@@ -86,10 +90,17 @@ class SkeuoSurface extends StatelessWidget {
     final inner = elevation == SkeuoElevation.inset;
     final thick = elevation == SkeuoElevation.pressed;
 
+    const drawMs = 520;
+    final noMotion = MediaQuery.of(context).disableAnimations;
+    final totalMs = drawMs + drawDelay.inMilliseconds;
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: animate ? 0 : 1, end: 1),
-      duration: const Duration(milliseconds: 520),
-      curve: Curves.easeOutCubic,
+      tween: Tween(begin: animate && !noMotion ? 0 : 1, end: 1),
+      duration: Duration(milliseconds: totalMs),
+      curve: Interval(
+        totalMs == 0 ? 0 : drawDelay.inMilliseconds / totalMs,
+        1,
+        curve: Curves.easeOutCubic,
+      ),
       builder:
           (context, drawT, _) => CustomPaint(
             painter: _SkeuoSurfacePainter(
@@ -360,6 +371,9 @@ class SkeuoButton extends StatefulWidget {
   /// Hug the content instead of expanding to the widest constraint.
   final bool compact;
 
+  /// Stagger delay before the draw-in starts (menu cascades).
+  final Duration drawDelay;
+
   const SkeuoButton({
     super.key,
     this.label,
@@ -372,6 +386,7 @@ class SkeuoButton extends StatefulWidget {
     this.radius = Skeuo.rMd,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.compact = false,
+    this.drawDelay = Duration.zero,
   }) : assert(label != null || child != null, 'needs a label or child');
 
   /// Filled ink hero button — the reference's Primary.
@@ -386,6 +401,7 @@ class SkeuoButton extends StatefulWidget {
     this.radius = Skeuo.rMd,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.compact = false,
+    this.drawDelay = Duration.zero,
   }) : style = SkeuoButtonStyle.primary,
        assert(label != null || child != null, 'needs a label or child');
 
@@ -399,6 +415,7 @@ class SkeuoButton extends StatefulWidget {
     this.radius = Skeuo.rMd,
     this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
     this.compact = false,
+    this.drawDelay = Duration.zero,
   }) : onTap = null,
        loading = false,
        style = SkeuoButtonStyle.disabled,
@@ -475,10 +492,17 @@ class _SkeuoButtonState extends State<SkeuoButton> {
     //     mount + shadow hatches in — the signature "sketched live" feel.
     //   t (middle, Motion.fast) — press physics: shadow collapse + squish.
     //   h (inner, 140ms) — hover lift: shadow deepens + tiny scale-up.
+    const drawMs = 480;
+    final noMotion = MediaQuery.of(context).disableAnimations;
+    final totalMs = drawMs + widget.drawDelay.inMilliseconds;
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 480),
-      curve: Curves.easeOutCubic,
+      tween: Tween(begin: noMotion ? 1 : 0, end: 1),
+      duration: Duration(milliseconds: totalMs),
+      curve: Interval(
+        totalMs == 0 ? 0 : widget.drawDelay.inMilliseconds / totalMs,
+        1,
+        curve: Curves.easeOutCubic,
+      ),
       builder:
           (context, drawT, _) => TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: _pressed ? 1 : 0),

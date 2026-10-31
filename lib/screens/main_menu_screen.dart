@@ -432,6 +432,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
         SkeuoButton.primary(
           label: 'Local Run',
           icon: Icons.play_arrow_rounded,
+          drawDelay: const Duration(milliseconds: 60),
           onTap: () {
             Navigator.push(context, fastRoute(const CharacterSelectScreen()));
           },
@@ -440,6 +441,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
         SkeuoButton(
           label: 'Multiplayer',
           icon: Icons.bluetooth_searching,
+          drawDelay: const Duration(milliseconds: 150),
           onTap: () {
             Navigator.push(context, fastRoute(const MpLobbyScreen()));
           },
@@ -448,6 +450,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
         SkeuoButton(
           label: 'Style Demo',
           icon: Icons.auto_stories_rounded,
+          drawDelay: const Duration(milliseconds: 240),
           onTap: () {
             Navigator.push(context, fastRoute(const NeoSkeuoLabScreen()));
           },
@@ -458,12 +461,14 @@ class _MainMenuScreenState extends State<MainMenuScreen> with RouteAware {
           child: SkeuoButton.disabled(
             label: 'Customization',
             icon: Icons.lock_outline_rounded,
+            drawDelay: Duration(milliseconds: 330),
           ),
         ),
         const SizedBox(height: 10),
         SkeuoButton(
           label: 'Ammonomicon',
           icon: Icons.menu_book_rounded,
+          drawDelay: const Duration(milliseconds: 420),
           onTap: () {
             Navigator.push(
               context,
