@@ -16,10 +16,6 @@ part 'gungeoneer_header/effect_chips.dart';
 /// Banner for the Inventory: portrait + name + quick-glance stats row.
 class GungeoneerHeader extends StatefulWidget {
   final Gungeoneer character;
-  final double topDps;
-
-  /// Tap handler for the DPS capsule — opens the damage calculator sheet.
-  final VoidCallback? onTapDPS;
   final int gunCount;
   final int itemCount;
   final int activeSynergies;
@@ -72,8 +68,7 @@ class GungeoneerHeader extends StatefulWidget {
   const GungeoneerHeader({
     super.key,
     required this.character,
-    required this.topDps,
-    this.onTapDPS,
+
     required this.gunCount,
     required this.itemCount,
     required this.activeSynergies,

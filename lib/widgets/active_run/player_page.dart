@@ -21,7 +21,7 @@ import '../../services/goop_talk_engine.dart';
 import 'active_run_helpers.dart';
 import 'run_effects_block.dart';
 import '../dashboards/dashboard_swiper.dart';
-import '../sheets/damage_calc_sheet.dart';
+
 import 'stat_sheets.dart';
 import 'sort_picker.dart';
 import 'starter_hint.dart';
@@ -163,10 +163,7 @@ class PlayerPageState extends State<PlayerPage> {
                 : player.guns
                     .reduce((a, b) => effectiveDps(a) > effectiveDps(b) ? a : b)
                     .name;
-        final topDps =
-            player.guns.isEmpty
-                ? 0.0
-                : player.guns.map(effectiveDps).reduce((a, b) => a > b ? a : b);
+
 
         // Synergy glow: map of lowercased name → Color for every item/gun
         // that is part of a currently-active synergy (combined inventories).
@@ -200,8 +197,6 @@ class PlayerPageState extends State<PlayerPage> {
                         )
                         : GungeoneerHeader(
                           character: player.character!,
-                          topDps: topDps,
-                          onTapDPS: () => _showDamageCalcSheet(context, _slot),
                           gunCount: player.guns.length,
                           itemCount: player.items.length,
                           activeSynergies: activeSynergies,
@@ -210,8 +205,12 @@ class PlayerPageState extends State<PlayerPage> {
                           coolness: state.totalCoolness,
                           curse: state.totalCurse,
                           robotDamageBoost: robotDmgBoost,
-                          onTapCoolness: () => _showCoolnessSheet(context),
-                          onTapCurse: () => _showCurseSheet(context),
+                          onTapCoolness:
+                              () =>
+                                  _showCoolCurseSheet(context, isCool: true),
+                          onTapCurse:
+                              () =>
+                                  _showCoolCurseSheet(context, isCool: false),
                           onLongPressCoolness:
                               () => _showStatAdjuster(context, isCool: true),
                           onLongPressCurse:
@@ -435,18 +434,6 @@ class PlayerPageState extends State<PlayerPage> {
     );
   }
 
-  void _showDamageCalcSheet(BuildContext c, PlayerSlot slot) {
-    showModalBottomSheet<void>(
-      context: c,
-      backgroundColor: AppTheme.flair.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
-      isScrollControlled: true,
-      builder: (ctx) => DamageCalcSheet(slot: slot),
-    );
-  }
-
   /// Inline +/- bottom sheet for a quick coolness/curse tweak — opened
   /// by long-pressing either bubble in the [GungeoneerHeader]. Live-rebinds
   /// to the latest provider state so the displayed number updates after
@@ -462,9 +449,9 @@ class PlayerPageState extends State<PlayerPage> {
     );
   }
 
-  /// Coolness hub — mirrors the curse sheet: live effects, stat adjuster,
-  /// quick actions, and a link to the full stats breakdown.
-  void _showCoolnessSheet(BuildContext c) {
+  /// Compact cool/curse card — number, ±(1/0.5) steppers, and live
+  /// effects stacked on one card. Opened by tapping the capsule.
+  void _showCoolCurseSheet(BuildContext c, {required bool isCool}) {
     Haptics.selection();
     showModalBottomSheet<void>(
       context: c,
@@ -473,23 +460,7 @@ class PlayerPageState extends State<PlayerPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
       isScrollControlled: true,
-      builder: (ctx) => const CoolnessSheet(),
-    );
-  }
-
-  /// Curse hub — combines stat adjuster, curse-raising actions, and a
-  /// link to the full curse stats breakdown. Opened by tapping the curse
-  /// capsule on the dashboard.
-  void _showCurseSheet(BuildContext c) {
-    Haptics.selection();
-    showModalBottomSheet<void>(
-      context: c,
-      backgroundColor: AppTheme.flair.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
-      isScrollControlled: true,
-      builder: (ctx) => const CurseSheet(),
+      builder: (ctx) => CoolCurseSheet(isCool: isCool),
     );
   }
 

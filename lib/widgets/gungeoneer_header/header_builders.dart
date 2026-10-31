@@ -68,7 +68,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Single row: Avatar + COOL + CURSE + SYN + DPS + Gear menu
+                // Single row: Avatar + COOL + CURSE + SYN + Gear menu
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                   child: Stack(
@@ -128,22 +128,6 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                               label: 'SYN',
                               onTap: widget.onTapSynergies,
                               isActive: widget.activeSynergies > 0,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: _buildFlatCapsule(
-                              color:
-                                  widget.topDps > 0
-                                      ? const Color(0xFFFF9100)
-                                      : Colors.white38,
-                              value:
-                                  widget.topDps > 0
-                                      ? widget.topDps.toStringAsFixed(0)
-                                      : '0',
-                              label: 'DPS',
-                              onTap: widget.onTapDPS,
-                              isActive: widget.topDps > 0,
                             ),
                           ),
                           if (trailingWidget != null) ...[
