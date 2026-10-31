@@ -16,6 +16,8 @@ import 'sort_picker.dart';
 import 'dice_roll.dart';
 import '../paradox/surprise_sheet.dart';
 import '../../services/run_lifecycle.dart';
+import '../../screens/settings_screen.dart';
+import '../../screens/experience_studio_screen.dart';
 
 /// Shared confirm dialog for clearing a player's inventory.
 /// Used by both the active-run HeaderMenu and the Settings Run tab.
@@ -463,6 +465,41 @@ class _RunToolsSheet extends StatelessWidget {
                       PlayerSlot.coop,
                     ),
               ),
+            Divider(
+              height: 1,
+              thickness: 0.5,
+              indent: Insets.lg,
+              endIndent: Insets.lg,
+              color: flair.primary.withValues(alpha: 0.1),
+            ),
+            _action(
+              sheetCtx,
+              icon: Icons.palette_rounded,
+              label: 'Customize',
+              iconColor: const Color(0xFFB388FF),
+              onTap: () {
+                if (sheetCtx.mounted) {
+                  Navigator.push(
+                    sheetCtx,
+                    fastRoute(const ExperienceStudioScreen()),
+                  );
+                }
+              },
+            ),
+            _action(
+              sheetCtx,
+              icon: Icons.settings_outlined,
+              label: 'Preferences',
+              iconColor: flair.primary.withValues(alpha: 0.6),
+              onTap: () {
+                if (sheetCtx.mounted) {
+                  Navigator.push(
+                    sheetCtx,
+                    fastRoute(const SettingsScreen()),
+                  );
+                }
+              },
+            ),
             Divider(
               height: 1,
               thickness: 0.5,

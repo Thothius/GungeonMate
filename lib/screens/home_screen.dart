@@ -12,7 +12,6 @@ import 'main_menu_screen.dart';
 import 'active_run_screen.dart';
 import 'browse_screen.dart';
 import 'ammonomicon_screen.dart';
-import 'settings_screen.dart';
 import 'quiz/quiz_home_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -124,10 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
       _visitedTabs.contains(3)
           ? const QuizHomeScreen()
           : const SizedBox.shrink(),
-      // Settings — respects the user's picked font
-      _visitedTabs.contains(4)
-          ? const SettingsScreen()
-          : const SizedBox.shrink(),
     ];
 
     // Back-button policy: only the Inventory tab pops the route (which
@@ -181,11 +176,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(Icons.quiz_outlined),
                   selectedIcon: Icon(Icons.quiz),
                   label: 'Quiz',
-                ),
-                NavigationDestination(
-                  icon: Icon(Icons.settings_outlined),
-                  selectedIcon: Icon(Icons.settings),
-                  label: 'Settings',
                 ),
               ],
             ),
