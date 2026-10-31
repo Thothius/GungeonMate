@@ -268,7 +268,8 @@ class VisualPrefs {
   final int glowStyleIndex;
 
   /// Font-weight bias applied globally on top of the active theme.
-  /// Adjusted in increments of 100 (e.g. -400 to +500). Stored as an integer.
+  /// Stored as FontWeight index steps (-2..+2 → thin..bold); consumed
+  /// by GoopText as `weight.index + bias`.
   final int fontWeightBias;
   final int fontLetterSpacing; // ±steps ×0.5pt applied in GoopText
 

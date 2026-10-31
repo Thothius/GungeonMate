@@ -3,15 +3,76 @@ part of '../experience_studio_screen.dart';
 class _TypographyStep extends StatelessWidget {
   const _TypographyStep();
 
-  /// The curated six — one flat 2-col grid, no sub-categories.
-  static const _fonts = [
-    AppFont.gungeon,
-    AppFont.megrim,
-    AppFont.russoOne,
-    AppFont.fredoka,
-    AppFont.dmSans,
-    AppFont.jetBrainsMono,
-  ];
+  /// All 29 fonts, grouped by the AppFont enum's own categories.
+  static const _fontGroups = <String, List<AppFont>>{
+    'FEATURED': [AppFont.gungeon, AppFont.megrim],
+    'PIXEL & RETRO': [
+      AppFont.pressStart2p,
+      AppFont.silkscreen,
+      AppFont.vt323,
+      AppFont.pixelifySans,
+    ],
+    'SCI-FI & TECH': [
+      AppFont.blackOpsOne,
+      AppFont.orbitron,
+      AppFont.shareTechMono,
+      AppFont.syncopate,
+      AppFont.rajdhani,
+      AppFont.audiowide,
+      AppFont.russoOne,
+      AppFont.fasterOne,
+      AppFont.jetBrainsMono,
+    ],
+    'DISPLAY & IMPACT': [
+      AppFont.archivoBlack,
+      AppFont.anton,
+      AppFont.rowdies,
+      AppFont.righteous,
+      AppFont.bebasNeue,
+    ],
+    'CASUAL & FUN': [AppFont.fredoka, AppFont.carterOne],
+    'CLEAN & MODERN': [AppFont.dmSans, AppFont.montserrat],
+    'GOTHIC & FANTASY': [
+      AppFont.medievalSharp,
+      AppFont.cinzelDecorative,
+      AppFont.cinzel,
+    ],
+    'SERIF & EDITORIAL': [
+      AppFont.merriweather,
+      AppFont.specialElite,
+      AppFont.playfairDisplay,
+    ],
+  };
+
+  /// 2-col uniform tile grid — the font's name rendered in its own face.
+  Widget _fontGrid(List<AppFont> fonts, AppFont active) {
+    return Column(
+      children: [
+        for (var r = 0; r * 2 < fonts.length; r++)
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: (r + 1) * 2 < fonts.length ? 8 : 0,
+            ),
+            child: Row(
+              children: [
+                for (var c = 0; c < 2; c++) ...[
+                  Expanded(
+                    child:
+                        r * 2 + c < fonts.length
+                            ? _FontTile(
+                              font: fonts[r * 2 + c],
+                              selected: fonts[r * 2 + c] == active,
+                            )
+                            : const SizedBox(),
+                  ),
+                  if (c < 1) const SizedBox(width: 8),
+                ],
+              ],
+            ),
+          ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,38 +95,31 @@ class _TypographyStep extends StatelessWidget {
               ),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
-                  _StepLabel('FONT FAMILY'),
-                  const SizedBox(height: 8),
-                  // 2-col uniform tiles — font name rendered in its font.
-                  for (var r = 0; r * 2 < _fonts.length; r++)
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: (r + 1) * 2 < _fonts.length ? 8 : 0,
-                      ),
-                      child: Row(
-                        children: [
-                          for (var c = 0; c < 2; c++) ...[
-                            Expanded(
-                              child:
-                                  r * 2 + c < _fonts.length
-                                      ? _FontTile(
-                                        font: _fonts[r * 2 + c],
-                                        selected:
-                                            _fonts[r * 2 + c] == prefs.font,
-                                      )
-                                      : const SizedBox(),
-                            ),
-                            if (c < 1) const SizedBox(width: 8),
-                          ],
-                        ],
-                      ),
-                    ),
-                  const SizedBox(height: 18),
+                  for (final g in _fontGroups.entries) ...[
+                    _StepLabel(g.key),
+                    const SizedBox(height: 8),
+                    _fontGrid(g.value, prefs.font),
+                    const SizedBox(height: 14),
+                  ],
+                  const SizedBox(height: 4),
                   _StepLabel('BASE FONT SIZE'),
                   const SizedBox(height: 10),
                   _FontSizeSlider(
                     current: prefs.fontSize,
                     onChanged: (v) => VisualPrefs.setFontSize(v),
+                  ),
+                  const SizedBox(height: 18),
+                  _StepLabel('DASHBOARD TEXT'),
+                  const SizedBox(height: 10),
+                  _StudioSlider(
+                    'Stat & Inventory Size',
+                    '${prefs.inventoryFontSize.toStringAsFixed(0)}pt',
+                    prefs.inventoryFontSize,
+                    10.0,
+                    18.0,
+                    16,
+                    AppTheme.flair.headlineStat,
+                    (v) => VisualPrefs.setInventoryFontSize(v),
                   ),
                   const SizedBox(height: 18),
                   _StepLabel('WEIGHT BIAS'),
