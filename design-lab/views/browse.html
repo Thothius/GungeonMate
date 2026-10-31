@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!-- Browse · source: lib/screens/browse_screen.dart + lib/widgets/browse/browse_row.dart -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Browse — Design Lab</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  /* AppBar bottom: mode bar + sub-filter, padding 8/4/8/6 */
+  .browse-head { padding: 4px 8px 6px; }
+  .mode-bar { display: flex; gap: 6px; }
+  .mode-btn {
+    flex: 1;
+    height: 46px;              /* 46 * sf */
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--flair-card-border);
+    color: var(--flair-secondary);
+    font-size: var(--fs-label-md);
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: var(--flair-card);
+    cursor: pointer;
+  }
+  .mode-btn.on {
+    color: var(--flair-headline-stat);
+    border-color: rgba(255,255,255,.55);
+    background: rgba(255,255,255,.08);
+  }
+  .kind-bar { display: flex; gap: 6px; margin-top: 8px; }
+  .kind-chip {
+    flex: 1; height: 40px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--flair-card-border);
+    color: var(--flair-secondary);
+    font-size: var(--fs-label-md);
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .kind-chip.on { color: var(--flair-headline-stat); border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.08); }
+
+  /* Search row — padding 12/12/12/8, capped 680 */
+  .search-row { padding: 12px 12px 8px; }
+  .search-box {
+    display: flex; align-items: center; gap: 10px;
+    height: 42px;
+    padding: 0 var(--inset-md);
+    border: 1px solid var(--flair-card-border);
+    border-radius: var(--radius-md);
+    color: var(--flair-secondary);
+    font-size: var(--fs-body-md);
+    background: var(--flair-card);
+  }
+  .search-box .hint { flex: 1; }
+  .search-box .key {
+    font-size: 10px; padding: 2px 6px;
+    border: 1px solid var(--flair-divider); border-radius: 4px;
+  }
+
+  .browse-list { padding: 0 12px 24px; }
+</style>
+</head>
+<body>
+<div class="lab-stage">
+  <div class="phone-frame">
+    <div class="frame-tag"></div>
+    <div class="screen">
+      <div class="appbar">
+        <span class="back">&#8592;</span>
+        <span class="title">Browse</span>
+        <span class="spacer"></span>
+      </div>
+
+      <div class="browse-head">
+        <div class="mode-bar">
+          <button class="mode-btn on">&#9638; ALL</button>
+          <button class="mode-btn">&#9733; TIERS</button>
+          <button class="mode-btn">&#9095; SYNERGIES</button>
+        </div>
+        <div class="kind-bar">
+          <span class="kind-chip on">&#9638; ALL</span>
+          <span class="kind-chip">&#9876; GUNS</span>
+          <span class="kind-chip">&#8902; ITEMS</span>
+          <span class="kind-chip">&#9829; FAVS</span>
+        </div>
+      </div>
+
+      <div class="search-row">
+        <div class="search-box">
+          <span>&#9906;</span>
+          <span class="hint">Search guns &amp; items…</span>
+          <span class="key">ESC</span>
+        </div>
+      </div>
+
+      <div class="browse-list">
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/guns/ak_47.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">AK-47</div>
+            <div class="row-meta">
+              <span class="type-pill">Automatic</span>
+              <span class="meta-pill">5.5 DMG</span>
+              <span class="meta-pill">&#9851; 3</span>
+            </div>
+          </div>
+          <span class="qb d">D</span>
+        </div>
+
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/guns/a_w_p.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">AWP</div>
+            <div class="row-meta">
+              <span class="type-pill">Semiautomatic</span>
+              <span class="meta-pill">40 DMG</span>
+              <span class="meta-pill">&#9851; 2</span>
+            </div>
+          </div>
+          <span class="qb b">B</span>
+        </div>
+
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/guns/alien_engine.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">Alien Engine</div>
+            <div class="row-meta">
+              <span class="type-pill">Automatic</span>
+              <span class="meta-pill">12 DMG</span>
+              <span class="meta-pill">&#9851; 1</span>
+            </div>
+          </div>
+          <span class="qb a">A</span>
+        </div>
+
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/guns/ac_15.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">AC-15</div>
+            <div class="row-meta">
+              <span class="type-pill">Automatic</span>
+              <span class="meta-pill">8.5 DMG</span>
+              <span class="meta-pill">&#9851; 4</span>
+            </div>
+          </div>
+          <span class="qb c">C</span>
+        </div>
+
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/items/alpha_bullet.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">Alpha Bullet</div>
+            <div class="row-meta">
+              <span class="type-pill">Passive</span>
+              <span class="meta-pill">+DMG</span>
+              <span class="meta-pill">&#9851; 5</span>
+            </div>
+          </div>
+          <span class="qb a">A</span>
+        </div>
+
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/items/ammo_belt.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">Ammo Belt</div>
+            <div class="row-meta">
+              <span class="type-pill">Passive</span>
+              <span class="meta-pill">+Capacity</span>
+              <span class="meta-pill">&#9851; 0</span>
+            </div>
+          </div>
+          <span class="qb d">D</span>
+        </div>
+
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/items/amulet_of_the_pit_lord.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">Amulet of the Pit Lord</div>
+            <div class="row-meta">
+              <span class="type-pill">Passive</span>
+              <span class="meta-pill">Pit save</span>
+              <span class="meta-pill">&#9851; 2</span>
+            </div>
+          </div>
+          <span class="qb s">S</span>
+        </div>
+
+        <div class="list-row">
+          <div class="icon-box"><img src="../../assets/images/guns/abyssal_tentacle.webp" alt=""></div>
+          <div class="row-main">
+            <div class="row-name">Abyssal Tentacle</div>
+            <div class="row-meta">
+              <span class="type-pill">Beam</span>
+              <span class="meta-pill">22 DMG/s</span>
+              <span class="meta-pill">&#9851; 1</span>
+            </div>
+          </div>
+          <span class="qb a">A</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../lab.js"></script>
+</body>
+</html>

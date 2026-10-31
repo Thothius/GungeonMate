@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GungeonMate — Design Lab</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  .hub { max-width: 900px; margin: 0 auto; padding: 72px 20px 60px; }
+  .hub h1 {
+    font-size: 30px; font-weight: 900; letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .hub .sub { color: #888; font-size: 14px; margin-bottom: 34px; }
+  .hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+  }
+  .hub-card {
+    display: block;
+    background: #121216;
+    border: 1px solid #26262e;
+    border-radius: 10px;
+    padding: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s, transform .15s;
+  }
+  .hub-card:hover { border-color: #5a5a6a; transform: translateY(-1px); }
+  .hub-card .hc-title { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
+  .hub-card .hc-src { font-size: 11px; color: #666; font-family: 'Courier New', monospace; }
+  .hub-note {
+    margin-top: 28px;
+    padding: 14px 16px;
+    border: 1px solid #2e2e38;
+    border-left: 3px solid #ffb300;
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: #aaa;
+    line-height: 1.6;
+  }
+  .hub-note code { color: #ddd; background: #1a1a20; padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="lab-toolbar"><a href="index.html">&larr; LAB</a><span class="sep"></span><a href="tokens.html">tokens</a></div>
+
+<div class="hub">
+  <h1>GungeonMate Design Lab</h1>
+  <p class="sub">Static HTML mirrors of the app's views — Minimalist theme (default). Edit CSS, refresh, iterate. No APK required.</p>
+
+  <div class="hub-grid">
+    <a class="hub-card" href="tokens.html">
+      <div class="hc-title">Token Reference</div>
+      <div class="hc-src">tokens.dart → tokens.css</div>
+    </a>
+    <a class="hub-card" href="views/main-menu.html">
+      <div class="hc-title">Main Menu</div>
+      <div class="hc-src">screens/main_menu_screen.dart</div>
+    </a>
+    <a class="hub-card" href="views/browse.html">
+      <div class="hc-title">Browse</div>
+      <div class="hc-src">screens/browse_screen.dart + widgets/browse/</div>
+    </a>
+    <a class="hub-card" href="views/item-detail.html">
+      <div class="hc-title">Item Detail</div>
+      <div class="hc-src">screens/item_detail_screen.dart + widgets/item_detail/</div>
+    </a>
+    <a class="hub-card" href="views/codex-grid.html">
+      <div class="hc-title">Codex — Category Grid</div>
+      <div class="hc-src">screens/codex_screen.dart</div>
+    </a>
+    <a class="hub-card" href="views/codex-category.html">
+      <div class="hc-title">Codex — Category List</div>
+      <div class="hc-src">screens/codex_screen.dart (_CodexCard)</div>
+    </a>
+    <a class="hub-card" href="views/codex-detail.html">
+      <div class="hc-title">Codex — Detail</div>
+      <div class="hc-src">screens/codex_detail_screen.dart</div>
+    </a>
+    <a class="hub-card" href="views/settings.html">
+      <div class="hc-title">Settings</div>
+      <div class="hc-src">widgets/settings/settings_tab.dart</div>
+    </a>
+  </div>
+
+  <div class="hub-note">
+    <b>How to use:</b> run <code>SERVE_LAB.bat</code> (serves <code>gungeon_mate/</code>
+    on port 8619), then open a view. The toolbar switches phone width
+    (320–768dp, matching <code>ScreenProfile</code> breakpoints) and text scale
+    (1.0/1.3&times; accessibility check). CSS vars in <code>tokens.css</code> are named
+    after Dart tokens — a tweak ports back 1:1 (<code>--inset-md</code> →
+    <code>Insets.md</code>). Rules of the system live in <code>../DESIGN.md</code>.
+    This lab is a design sandbox — verify final values in the real app.
+  </div>
+</div>
+</body>
+</html>

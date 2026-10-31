@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!-- Codex detail · source: lib/screens/codex_detail_screen.dart (760 cap, BottomBackBar) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Codex Detail — Design Lab</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  .detail-col {
+    max-width: 760px;           /* ConstrainedBox(maxWidth: 760) */
+    margin: 0 auto;
+    padding: 4px 16px 20px;
+  }
+  .hero-row { display: flex; gap: 14px; align-items: flex-start; }
+  .hero-icon {
+    width: 80px; height: 80px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--flair-card);
+    border: 1.2px solid rgba(224,224,224,.3);
+    border-radius: 10px;
+    box-shadow: 0 0 12px 1px rgba(224,224,224,.08);
+    overflow: hidden;
+  }
+  .hero-icon img { max-width: 92%; max-height: 92%; object-fit: contain; image-rendering: pixelated; }
+  .hero-badges { display: flex; flex-direction: column; gap: 6px; padding-top: 2px; }
+  .id-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px;
+    border-radius: var(--radius-chip);
+    border: 1px solid var(--flair-divider);
+    font-size: var(--fs-label-sm);
+    font-weight: 700;
+    width: max-content;
+  }
+  .id-badge .d { width: 7px; height: 7px; border-radius: 50%; }
+  .id-badge.game   .d { background: var(--codex-gungeoneers); }
+  .id-badge.health .d { background: var(--codex-health); }
+  .id-badge.loc    .d { background: var(--codex-location); }
+
+  .desc-block { margin-top: var(--inset-lg); }
+  .desc-block .section-title { margin-bottom: 10px; }
+  .desc-block p { font-size: var(--fs-body-md); line-height: 1.55; margin-bottom: 10px; }
+
+  .stat-card { margin-top: var(--inset-md); }
+  .stat-card .stat-line { padding: 4px 0; border-bottom: var(--flair-divider-w) solid var(--flair-divider); }
+  .stat-card .stat-line:last-child { border-bottom: none; }
+
+  /* BottomBackBar */
+  .bottom-back {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: center;
+    height: 52px;
+    background: var(--flair-card);
+    border-top: var(--flair-divider-w) solid var(--flair-divider);
+    color: var(--flair-primary);
+    font-size: var(--fs-label-md);
+    font-weight: 800;
+    letter-spacing: 1px;
+    gap: 8px;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+<div class="lab-stage">
+  <div class="phone-frame">
+    <div class="frame-tag"></div>
+    <div class="screen">
+      <div class="appbar">
+        <span class="back">&#8592;</span>
+        <span class="title" style="font-size:.9375em;font-weight:900;letter-spacing:1px">AMMOMANCER</span>
+        <span class="spacer"></span>
+      </div>
+
+      <div class="detail-col">
+        <div class="hero-row">
+          <div class="hero-icon"><img src="../../assets/images/enemies/Ammomancer.png" alt="Ammomancer"></div>
+          <div class="hero-badges">
+            <span class="id-badge game"><span class="d"></span>ENEMIES</span>
+            <span class="id-badge health"><span class="d"></span>24 HP</span>
+            <span class="id-badge loc"><span class="d"></span>HOLLOW · BLACK POWDER MINE</span>
+          </div>
+        </div>
+
+        <div class="desc-block">
+          <div class="section-title">Ammonomicon Entry</div>
+          <p>A robed gundead who raises the fallen shells of his kin. If left unchecked, a single Ammomancer can resurrect an entire room.</p>
+          <p>Priority target — silence the summoner before the horde wakes.</p>
+        </div>
+
+        <div class="card card-pad stat-card">
+          <div class="section-title">Stats</div>
+          <div class="stat-line"><span>Health</span><span class="v">24</span></div>
+          <div class="stat-line"><span>Contact damage</span><span class="v">0.5</span></div>
+          <div class="stat-line"><span>Movement</span><span class="v">Slow drift</span></div>
+          <div class="stat-line"><span>Special</span><span class="v">Resurrect (5s channel)</span></div>
+        </div>
+      </div>
+
+      <div class="bottom-back">&#8592; BACK TO CODEX</div>
+    </div>
+  </div>
+</div>
+<script src="../lab.js"></script>
+</body>
+</html>

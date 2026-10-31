@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- Main Menu · source: lib/screens/main_menu_screen.dart -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Main Menu — Design Lab</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  /* Radial depth tint over scaffold (Stack layer 1) */
+  .menu-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 20%, rgba(224,224,224,0.10), transparent 55%);
+    z-index: 0;
+  }
+  .menu-scroll { position: absolute; inset: 0; overflow-y: auto; display: flex; align-items: center; justify-content: center; }
+  .menu-col {
+    width: 100%;
+    max-width: 420px;          /* ConstrainedBox(maxWidth: 420) */
+    padding: var(--inset-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Logo — stroke layer under fill layer (Stack) + drop shadow.
+     SVG viewBox scales like FittedBox(scaleDown) at any frame width. */
+  .logo-svg { display: block; width: 100%; max-width: 356px; filter: drop-shadow(0 3px 4px rgba(0,0,0,.54)); }
+  .logo-txt {
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    fill: var(--logo-fill);
+    stroke: var(--logo-stroke);
+    stroke-width: 7px;
+    paint-order: stroke fill;
+  }
+
+  .sublabel {
+    margin-top: var(--inset-sm);
+    padding: 5px 16px;
+    border-radius: 6px;
+    background: rgba(224,224,224,0.12);
+    border: 1.4px solid rgba(224,224,224,0.55);
+    color: var(--flair-headline-stat);
+    font-size: var(--fs-label-md);
+    font-weight: 900;
+    letter-spacing: 1.5px;
+  }
+
+  .btn-stack {
+    margin-top: 28px;
+    width: 100%;
+    padding: 0 6%;            /* sideInset = width * 0.06 */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-stack .gap-lg { height: 4px; }  /* 14px gap before Theme */
+  .btn-row { display: flex; gap: 10px; }
+  .btn-row .menu-btn { flex: 1; }
+
+  .version {
+    margin-top: var(--inset-lg);
+    font-size: 0.6875em;       /* 11px */
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,.4);
+  }
+</style>
+</head>
+<body>
+<div class="lab-stage">
+  <div class="phone-frame">
+    <div class="frame-tag"></div>
+    <div class="screen">
+      <div class="menu-bg"></div>
+      <div class="menu-scroll">
+        <div class="menu-col">
+          <svg class="logo-svg" viewBox="0 0 440 58" role="img" aria-label="GUNGEON MATE">
+            <text class="logo-txt" x="50%" y="82%" text-anchor="middle">GUNGEON MATE</text>
+          </svg>
+          <div class="sublabel">YOUR COMPANION IN THE GUNGEON</div>
+
+          <div class="btn-stack">
+            <button class="menu-btn solid"><span class="ico">&#9654;</span>Local Run</button>
+            <button class="menu-btn"><span class="ico">&#8767;</span>Multiplayer</button>
+            <div class="gap-lg"></div>
+            <button class="menu-btn"><span class="ico">&#9684;</span>Theme</button>
+            <div class="btn-row">
+              <button class="menu-btn"><span class="ico">?</span>Quiz</button>
+              <button class="menu-btn"><span class="ico">&#9776;</span>Ammonomicon</button>
+            </div>
+          </div>
+
+          <div class="version">v3.3.0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../lab.js"></script>
+</body>
+</html>

@@ -76,6 +76,10 @@
 - `pubspec.yaml` version field is the single version source
   (`version_lockstep_test` enforces sync with `kAppVersion` in
   `lib/utils/asset_paths.dart` + VERSION_HISTORY).
+- `DESIGN.md` — design contract (tokens, palette, responsive rules,
+  component patterns). `design-lab/` — static HTML mirror of key views
+  for design iteration without APK builds (`SERVE_LAB.bat` →
+  `http://localhost:8619/design-lab/`).
 
 ## Architecture map
 - `lib/providers/run_provider.dart` (~2k lines) — central `ChangeNotifier`.
