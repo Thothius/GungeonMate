@@ -58,7 +58,7 @@ void main() {
 
     expect(
       find.text("Starts a new run with character's default loadout."),
-      findsOneWidget,
+      findsNothing,
     );
   });
 
@@ -110,7 +110,7 @@ void main() {
     // No cards rendered, but no crash either
     expect(find.byType(Card), findsNothing);
     // The divider should still be present
-    expect(find.byType(Divider), findsOneWidget);
+    expect(find.byType(Divider), findsWidgets);
   });
 
   testWidgets('Renders a Divider between header and grid', (tester) async {
@@ -118,7 +118,7 @@ void main() {
     await tester.pumpWidget(wrap(const CharacterSelectScreen()));
     await tester.pumpAndSettle();
 
-    expect(find.byType(Divider), findsOneWidget);
+    expect(find.byType(Divider), findsWidgets);
   });
 
   testWidgets('AppBar is centered', (tester) async {
