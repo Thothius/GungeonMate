@@ -48,8 +48,13 @@ void main() {
     // Find a 2-piece synergy whose pieces both resolve in the catalog —
     // seed one piece into the player's inventory; the other should then
     // appear as a "completes" candidate.
+    // Prefer an all-item synergy — game-corrected lists can point at
+    // guns, and gun ownership doesn't seed the candidate row.
     final synergy = p.allSynergies.firstWhere(
       (s) =>
+          s.items.length == 2 &&
+          p.allItems.any((i) => i.name == s.items[0]) &&
+          p.allItems.any((i) => i.name == s.items[1]) ||
           s.items.length == 2 &&
           (p.allItems.any((i) => i.name == s.items[0]) ||
               p.allGuns.any((g) => g.name == s.items[0])) &&

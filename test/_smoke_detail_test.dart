@@ -63,13 +63,14 @@ void main() {
     await t.pumpWidget(wrap(ItemDetailScreen(gun: gun)));
     await t.pump();
     expect(t.takeException(), isNull);
-    // Hero row — DPS panel + Range/Spread/Force cards.
+    // Stat grid — uniform label-over-number cells (DPS leads).
     final heroFound = [
-      'Range',
-      'Spread',
-      'Force',
-      'Damage / sec',
-    ].any((l) => find.textContaining(l).evaluate().isNotEmpty);
+      'DPS',
+      'RANGE',
+      'SPREAD',
+      'FORCE',
+      'DAMAGE',
+    ].any((l) => find.text(l).evaluate().isNotEmpty);
     expect(heroFound, true);
   });
 
