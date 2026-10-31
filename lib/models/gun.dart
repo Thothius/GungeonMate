@@ -136,13 +136,17 @@ class Gun {
 
   factory Gun.fromJson(Map<String, dynamic> json) {
     final name = json['name'] as String? ?? '';
+    final gameIcon = json['game_icon'] as String? ?? '';
     return Gun(
       name: name,
-      // Ignore the JSON's wiki URL — bundled local sprite by name slug.
-      icon: localGunIcon(name),
+      // Prefer the extracted in-game sprite; fall back to the
+      // name-slugged bundled webp, then the (ignored) wiki URL.
+      icon: gameIcon.isNotEmpty ? gameIcon : localGunIcon(name),
       notes: json['notes'] ?? '',
       quote: json['quote'] ?? '',
-      ammonomiconEntry: json['ammonomicon_entry'] ?? '',
+      ammonomiconEntry: json['ammonomicon_entry'] ??
+          json['ammonomicon'] ??
+          '',
       quality: json['quality'] ?? '',
       type: json['type'] ?? '',
       dps: json['dps'] ?? '',

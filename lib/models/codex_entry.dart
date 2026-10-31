@@ -31,7 +31,7 @@ class CodexEntry {
       name: j['name'] as String? ?? '',
       category: j['category'] as String? ?? '',
       description: j['description'] as String? ?? '',
-      icon: j['icon'] as String? ?? '',
+      icon: (j['game_icon'] as String? ?? j['icon'] as String? ?? ''),
       wikiUrl: j['wiki_url'] as String? ?? '',
       location: j['location'] as String?,
       game: j['game'] as String?,
@@ -49,6 +49,7 @@ class CodexEntry {
   /// prefix the appropriate folder.
   String get assetPath {
     if (icon.isEmpty) return '';
+    if (icon.startsWith('assets/')) return icon;
     // Determine folder from category or game field.
     final folder = _folderForCategory(category);
     return 'assets/images/$folder/$icon';
@@ -111,6 +112,7 @@ String codexImageFolder(CodexSection section) {
 /// as-is rather than resolved under the section folder.
 String codexAssetPath(CodexSection section, String icon) {
   if (icon.isEmpty) return '';
+  if (icon.startsWith('assets/')) return icon;
   if (icon.contains('/')) return 'assets/images/$icon';
   return 'assets/images/${codexImageFolder(section)}/$icon';
 }

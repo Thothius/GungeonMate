@@ -47,13 +47,16 @@ class Item {
 
   factory Item.fromJson(Map<String, dynamic> json) {
     final name = json['name'] as String? ?? '';
+    final gameIcon = json['game_icon'] as String? ?? '';
     return Item(
       name: name,
-      icon: localItemIcon(name),
+      icon: gameIcon.isNotEmpty ? gameIcon : localItemIcon(name),
       type: json['type'] ?? '',
       effect: json['effect'] ?? '',
       quote: json['quote'] ?? '',
-      ammonomiconEntry: json['ammonomicon_entry'] ?? '',
+      ammonomiconEntry: json['ammonomicon_entry'] ??
+          json['ammonomicon'] ??
+          '',
       quality: json['quality'] ?? '',
       sellPrice: json['sell_price']?.toString() ?? '',
       chestColor: json['chest_color'] ?? '',
