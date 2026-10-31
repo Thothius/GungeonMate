@@ -64,6 +64,7 @@ class _CodexScreenState extends State<CodexScreen> {
 
   // Loaded data
   List<CodexEntry> _objects = [];
+  List<CodexEntry> _shrines = [];
   List<CodexEntry> _pickups = [];
   List<CodexEntry> _npcs = [];
   List<CodexEntry> _enemies = [];
@@ -161,6 +162,12 @@ class _CodexScreenState extends State<CodexScreen> {
       color: Color(0xFFB388FF),
       isSpecial: false,
     ),
+    AmmonomiconTab(
+      label: 'Shrines',
+      icon: Icons.church,
+      color: Color(0xFFFFB74D),
+      isSpecial: false,
+    ),
   ];
 
   @override
@@ -184,6 +191,7 @@ class _CodexScreenState extends State<CodexScreen> {
       bundle.loadString('assets/data/npcs.json'),
       bundle.loadString('assets/data/enemies.json'),
       bundle.loadString('assets/data/bosses.json'),
+      bundle.loadString('assets/data/shrines.json'),
     ]);
     if (!mounted) return;
     // Parse each JSON file in an isolate to avoid jank on the codex screen.
@@ -195,12 +203,36 @@ class _CodexScreenState extends State<CodexScreen> {
       compute(_parseCodexEntries, results[4]),
     ]);
     if (!mounted) return;
+    // Shrines: custom parse — JSON icon fields are wiki URLs; the local
+    // assets live in assets/images/shrines/<slug>.webp.
+    final shrineList = (json.decode(results[5]) as List<dynamic>)
+        .map((e) {
+          final j = e as Map<String, dynamic>;
+          final slug = (j['name'] as String)
+              .toLowerCase()
+              .replaceAll(' ', '_')
+              .replaceAll('.', '');
+          final eff = (j['effect'] as String? ?? '').trim();
+          return CodexEntry(
+              name: j['name'] ?? '',
+              category: 'Shrines',
+              icon: 'shrines/${slug == 'y_v' ? 'y_v' : slug}.webp',
+              description: j['description'] ?? '',
+              tips: [
+                if (eff.isNotEmpty) eff,
+                if ((j['curse'] ?? 0) > 0) 'Costs ${j['curse']} curse',
+                if ((j['coolness'] ?? 0) > 0) 'Costs ${j['coolness']} coolness',
+              ],
+              wikiUrl: j['wiki_url'] ?? '');
+        })
+        .toList();
     setState(() {
       _objects = parsed[0];
       _pickups = parsed[1];
       _npcs = parsed[2];
       _enemies = parsed[3];
       _bosses = parsed[4];
+      _shrines = shrineList;
       _loaded = true;
     });
   }
@@ -274,6 +306,7 @@ class _CodexScreenState extends State<CodexScreen> {
             .read<RunProvider>()
             .allSynergies
             .map((s) {
+
             // Derive icon + folder from the first required item —
             // most synergies have no own sprite; showing the anchor
             // item's icon is the closest visual.
@@ -297,6 +330,8 @@ class _CodexScreenState extends State<CodexScreen> {
                 description: s.effect,
                 ammonomicon: [...s.items, ...s.anyOf].join(' · '));
           }).toList());
+      case 12:
+        return _filter(_shrines);
       default:
         return [];
     }
@@ -367,6 +402,8 @@ class _CodexScreenState extends State<CodexScreen> {
         return CodexSection.items;
       case 11:
         return CodexSection.synergies;
+      case 12:
+        return CodexSection.shrines;
       default:
         return CodexSection.objects;
     }
