@@ -16,9 +16,9 @@ import '../../services/app_theme.dart';
 import '../../services/mp_session.dart';
 import '../../utils/fast_route.dart';
 import '../../utils/responsive.dart';
-import '../../models/gun.dart';
+
 import '../../screens/all_synergies_screen.dart';
-import '../sheets/damage_calc_sheet.dart';
+
 import '../active_run/dice_roll.dart';
 import 'avatar_frame.dart';
 
@@ -136,14 +136,6 @@ class ParadoxPlayerPanel extends StatelessWidget {
                           context,
                           fastRoute(const CoolCurseScreen()),
                         ),
-                  ),
-                  // DPS — top gun DPS for this slot
-                  _PanelStat(
-                    label: 'DPS',
-                    value: _slotTopDps(p, slot).toStringAsFixed(1),
-                    color: const Color(0xFFFFD54F),
-                    sf: sf,
-                    onTap: () => _showDamageCalcSheet(context, slot),
                   ),
                   // SYN — active synergy count (combined)
                   _PanelStat(
@@ -441,30 +433,6 @@ class ParadoxPlayerPanel extends StatelessWidget {
     );
   }
 
-  /// Returns the highest DPS among this slot's guns — same
-  /// effective-dps rule as the classic header (Gunderfury scales
-  /// with its tracked level).
-  double _slotTopDps(RunProvider p, PlayerSlot slot) {
-    final player = slot == PlayerSlot.main ? p.runState.main : p.runState.coop;
-    if (player == null || player.guns.isEmpty) return 0.0;
-    double effectiveDps(Gun g) =>
-        g.name.toLowerCase() == 'gunderfury'
-            ? g.getDynamicDps(gunderLevel: p.gunderfuryLevel)
-            : g.dpsValue;
-    return player.guns.map(effectiveDps).reduce((a, b) => a > b ? a : b);
-  }
-
-  void _showDamageCalcSheet(BuildContext context, PlayerSlot slot) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppTheme.flair.card,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
-      ),
-      builder: (_) => DamageCalcSheet(slot: slot),
-    );
-  }
 }
 
 class _PanelStat extends StatelessWidget {

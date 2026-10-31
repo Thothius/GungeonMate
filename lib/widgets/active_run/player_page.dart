@@ -187,12 +187,10 @@ class PlayerPageState extends State<PlayerPage> {
                               slot: _slot,
                               onTapMsg: () => showParadoxChatSheet(context),
                             ),
-                            // Paradox kept its own compact panel, which meant
-                            // the shared effects block (inside GungeoneerHeader
-                            // for classic) never mounted — the DISPLAY→Effects
-                            // menu toggle was a no-op. Same gate, same block.
-                            if (VisualPrefs.notifier.value.showEffectsPanel)
-                              const RunEffectsBlock(),
+                            // Effects strip is always on — cool/curse
+                            // are constant game factors, not a panel
+                            // the user toggles.
+                            const RunEffectsBlock(),
                           ],
                         )
                         : GungeoneerHeader(

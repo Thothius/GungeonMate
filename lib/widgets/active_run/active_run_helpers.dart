@@ -322,16 +322,6 @@ class HeaderMenu extends StatelessWidget {
             _menuLabel('PANELS'),
             _panelToggleItem(
               ctx,
-              icon: Icons.auto_awesome,
-              label: 'Effects',
-              isOn: VisualPrefs.notifier.value.showEffectsPanel,
-              onToggle:
-                  () => VisualPrefs.setShowEffectsPanel(
-                    !VisualPrefs.notifier.value.showEffectsPanel,
-                  ),
-            ),
-            _panelToggleItem(
-              ctx,
               icon: Icons.view_agenda_rounded,
               label: 'Panels',
               isOn: VisualPrefs.notifier.value.showDashboards,
@@ -524,10 +514,7 @@ class HeaderMenu extends StatelessWidget {
       child: ListenableBuilder(
         listenable: VisualPrefs.notifier,
         builder: (_, _) {
-          final current =
-              label == 'Effects'
-                  ? VisualPrefs.notifier.value.showEffectsPanel
-                  : VisualPrefs.notifier.value.showDashboards;
+          final current = VisualPrefs.notifier.value.showDashboards;
           return Row(
             children: [
               Icon(

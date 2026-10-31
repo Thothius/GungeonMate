@@ -189,45 +189,35 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                   color: Colors.white.withValues(alpha: 0.05),
                 ),
 
-                // EFFECTS PANEL — compact cool/curse stats + pull-down
-                // controls only (passive tags removed). Toggled by the
-                // effects button via VisualPrefs.showEffectsPanel.
-                ...[
-                  ListenableBuilder(
-                    listenable: VisualPrefs.notifier,
-                    builder: (context, _) {
-                      if (!VisualPrefs.notifier.value.showEffectsPanel) {
-                        return const SizedBox.shrink();
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: f.primary.withValues(alpha: 0.12),
-                              width: 1.0,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.3),
-                                blurRadius: 6,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: const RunEffectsBlock(),
+                // EFFECTS PANEL — always visible. Cool/curse are
+                // constant game factors, so the derived stat strip
+                // (FUSE/CD/REWARD/JAM/BOSS) shows permanently now.
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.25),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: f.primary.withValues(alpha: 0.12),
+                        width: 1.0,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: 6,
+                          offset: const Offset(0, 3),
                         ),
-                      );
-                    },
+                      ],
+                    ),
+                    child: const RunEffectsBlock(),
                   ),
-                ],
+                ),
               ],
             ),
           ),
