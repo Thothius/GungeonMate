@@ -205,7 +205,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Masterwork bullets. Peer-reviewed studies have shown that these bullets are precisely 1 better than normal bullets."
+    "ammonomicon": "Masterwork bullets. Peer-reviewed studies have shown that these bullets are precisely 1 better than normal bullets.",
+    "game_icon": "assets/images/game/items/1_bullets.png"
   },
   {
     "name": "Aged Bell",
@@ -409,7 +410,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Briefly stops time. This bell appears to be made of different materials at different times. The mournful tones it emits echo forwards and backwards. Some claim that they can hear it before it rings."
+    "ammonomicon": "Briefly stops time. This bell appears to be made of different materials at different times. The mournful tones it emits echo forwards and backwards. Some claim that they can hear it before it rings.",
+    "game_icon": "assets/images/game/items/aged_bell.png"
   },
   {
     "name": "Air Strike",
@@ -495,7 +497,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Triggers a chain of missile strikes. Only the most daring pilots will fly low enough to enter the Gungeon."
+    "ammonomicon": "Triggers a chain of missile strikes. Only the most daring pilots will fly low enough to enter the Gungeon.",
+    "game_icon": "assets/images/game/items/air_strike.png"
   },
   {
     "name": "Alpha Bullet",
@@ -619,7 +622,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Increases the damage dealt by the first bullet in a clip. One of a pair of artifact bullets forged by Edwin's daughter as part of her journeyman's trial."
+    "ammonomicon": "Increases the damage dealt by the first bullet in a clip. One of a pair of artifact bullets forged by Edwin's daughter as part of her journeyman's trial.",
+    "game_icon": "assets/images/game/items/alpha_bullet.png"
   },
   {
     "name": "Ammo Belt",
@@ -856,7 +860,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Ammo capacity increased."
+    "ammonomicon": "Ammo capacity increased.",
+    "game_icon": "assets/images/game/items/ammo_belt.png"
   },
   {
     "name": "Ammo Synthesizer",
@@ -942,7 +947,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Repurposes spent ammo from fallen Gundead."
+    "ammonomicon": "Repurposes spent ammo from fallen Gundead.",
+    "game_icon": "assets/images/game/items/ammo_synthesizer.png"
   },
   {
     "name": "Amulet of the Pit Lord",
@@ -1010,7 +1016,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Prevents all fall damage. No matter how skilled, every adventurer makes mistakes. Falling into a pit is perhaps the most irritating example. This amulet represents a bargain with the Pit Lord, avatar of the depths."
+    "ammonomicon": "Prevents all fall damage. No matter how skilled, every adventurer makes mistakes. Falling into a pit is perhaps the most irritating example. This amulet represents a bargain with the Pit Lord, avatar of the depths.",
+    "game_icon": "assets/images/game/items/amulet_of_the_pit_lord.png"
   },
   {
     "name": "Ancient Hero's Bandana",
@@ -1423,7 +1430,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Greatly increased ammo capacity. This simple bandana, which once covered the brow of an ancient hero, still remembers the old ways. Its powers have weakened over the years, but should still suffice to provide you with near-infinite ammunition."
+    "ammonomicon": "Greatly increased ammo capacity. This simple bandana, which once covered the brow of an ancient hero, still remembers the old ways. Its powers have weakened over the years, but should still suffice to provide you with near-infinite ammunition.",
+    "game_icon": "assets/images/game/items/ancient_hero_s_bandana.png"
   },
   {
     "name": "Angry Bullets",
@@ -1596,7 +1604,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Hitting an enemy has a chance to refire the projectile at a nearby enemy. These bullets are imbued with the white-hot rage of Kaliber herself."
+    "ammonomicon": "Hitting an enemy has a chance to refire the projectile at a nearby enemy. These bullets are imbued with the white-hot rage of Kaliber herself.",
+    "game_icon": "assets/images/game/items/angry_bullets.png"
   },
   {
     "name": "Antibody",
@@ -1668,7 +1677,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Chance to improve healing received. An experimental treatment administered by the Gungeon's medical unit."
+    "ammonomicon": "Chance to improve healing received. An experimental treatment administered by the Gungeon's medical unit.",
+    "game_icon": "assets/images/game/items/antibody.png"
   },
   {
     "name": "Arcane Gunpowder",
@@ -1856,7 +1866,8 @@
     "neckbear_approved": true,
     "ammonomicon_entry": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master.",
     "id": 351,
-    "ammonomicon": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master."
+    "ammonomicon": "Bullet Component. Before the great Bullet fell, the Gungeon's original master used this powder in his experiments. The Bullet Kin still mine it from the depths, awaiting the return of their master.",
+    "game_icon": "assets/images/game/items/arcane_gunpowder.png"
   },
   {
     "name": "Armor of Thorns",
@@ -2188,7 +2199,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Greatly increases dodge roll damage. The barbs on this suit of armor are sure to ruin anyone's day, as long as that \"anyone\" is within a few inches of you."
+    "ammonomicon": "Greatly increases dodge roll damage. The barbs on this suit of armor are sure to ruin anyone's day, as long as that \"anyone\" is within a few inches of you.",
+    "game_icon": "assets/images/game/items/armor_of_thorns.png"
   },
   {
     "name": "Armor Synthesizer",
@@ -2275,7 +2287,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Occasionally produces armor. Less effective if rattled."
+    "ammonomicon": "Occasionally produces armor. Less effective if rattled.",
+    "game_icon": "assets/images/game/items/armor_synthesizer.png"
   },
   {
     "name": "Baby Good Mimic",
@@ -2874,7 +2887,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "This abandoned baby mimic misses its siblings, and imprints on the first follower it sees."
+    "ammonomicon": "This abandoned baby mimic misses its siblings, and imprints on the first follower it sees.",
+    "game_icon": "assets/images/game/items/baby_good_mimic.png"
   },
   {
     "name": "Baby Good Shelleton",
@@ -3034,7 +3048,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This hellish servant was lost, and hid in a chest. He's yours now. Formed from several dozen discarded shell casings, this Gundead familiar wields moderate power."
+    "ammonomicon": "This hellish servant was lost, and hid in a chest. He's yours now. Formed from several dozen discarded shell casings, this Gundead familiar wields moderate power.",
+    "game_icon": "assets/images/game/items/baby_good_shelleton.png"
   },
   {
     "name": "Backpack",
@@ -3239,7 +3254,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The Backpack grants you the use of another Active Item. Useful, but cumbersome."
+    "ammonomicon": "The Backpack grants you the use of another Active Item. Useful, but cumbersome.",
+    "game_icon": "assets/images/game/items/backpack.png"
   },
   {
     "name": "Backup Gun",
@@ -3746,7 +3762,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires backward. Another incredible use of tape in the Gungeon, this backward-facing gun has been charmed to fire in solidarity with any equipped gun."
+    "ammonomicon": "Fires backward. Another incredible use of tape in the Gungeon, this backward-facing gun has been charmed to fire in solidarity with any equipped gun.",
+    "game_icon": "assets/images/game/items/backup_gun.png"
   },
   {
     "name": "Badge",
@@ -4093,7 +4110,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "A policeman's badge. It belongs to the officer on duty in the Gungeon's precinct. It seems to be well worn. Whoever owns this badge is probably close to retirement."
+    "ammonomicon": "A policeman's badge. It belongs to the officer on duty in the Gungeon's precinct. It seems to be well worn. Whoever owns this badge is probably close to retirement.",
+    "game_icon": "assets/images/game/items/badge.png"
   },
   {
     "name": "Ballistic Boots",
@@ -4205,7 +4223,8 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Movement speed increased. In an attempt to make a pair of boots that fired bullets, the wizard Alben Smallbore accidentally created these. Each step feels like being shot out of a cannon!"
+    "ammonomicon": "Movement speed increased. In an attempt to make a pair of boots that fired bullets, the wizard Alben Smallbore accidentally created these. Each step feels like being shot out of a cannon!",
+    "game_icon": "assets/images/game/items/ballistic_boots.png"
   },
   {
     "name": "Ballot",
@@ -4310,7 +4329,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "This ballot is proof of participation in the democratic process. PSA: Voting is cool, no matter what anyone says!"
+    "ammonomicon": "This ballot is proof of participation in the democratic process. PSA: Voting is cool, no matter what anyone says!",
+    "game_icon": "assets/images/game/items/ballot.png"
   },
   {
     "name": "Battery Bullets",
@@ -4558,7 +4578,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Electrifies all bullets fired. Increases accuracy. The shock troops of the Hegemony of Man consist entirely of heartless machines, shielded from voltage attacks. Their victims however, have learned to fear the inevitable sting of their electrified shells."
+    "ammonomicon": "Electrifies all bullets fired. Increases accuracy. The shock troops of the Hegemony of Man consist entirely of heartless machines, shielded from voltage attacks. Their victims however, have learned to fear the inevitable sting of their electrified shells.",
+    "game_icon": "assets/images/game/items/battery_bullets.png"
   },
   {
     "name": "Battle Standard",
@@ -4920,7 +4941,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Improves the effectiveness of companions and charmed enemies. Before the advancement of Gundead society, belligerent bands of Bullet Kin would dance around these banners before raids upon the upper chambers."
+    "ammonomicon": "Improves the effectiveness of companions and charmed enemies. Before the advancement of Gundead society, belligerent bands of Bullet Kin would dance around these banners before raids upon the upper chambers.",
+    "game_icon": "assets/images/game/items/battle_standard.png"
   },
   {
     "name": "Big Boy",
@@ -5291,7 +5313,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Nuclear arms were forbidden by the Third Interstellar Armistice, but as large sections of the Gungeon existed before that accord was signed, it is a bit of a grey area legally."
+    "ammonomicon": "Nuclear arms were forbidden by the Third Interstellar Armistice, but as large sections of the Gungeon existed before that accord was signed, it is a bit of a grey area legally.",
+    "game_icon": "assets/images/game/items/big_boy.png"
   },
   {
     "name": "Bionic Leg",
@@ -5445,7 +5468,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Movement speed increased."
+    "ammonomicon": "Movement speed increased.",
+    "game_icon": "assets/images/game/items/bionic_leg.png"
   },
   {
     "name": "Blank Bullets",
@@ -5857,7 +5881,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Projectile impacts can trigger a short range Blank. Not content to have guns that shoot bullets to kill Bullets that shoot guns which fire bullets, these bullets were devised to kill the bullets fired from Bullet's guns. Bullet."
+    "ammonomicon": "Projectile impacts can trigger a short range Blank. Not content to have guns that shoot bullets to kill Bullets that shoot guns which fire bullets, these bullets were devised to kill the bullets fired from Bullet's guns. Bullet.",
+    "game_icon": "assets/images/game/items/blank_bullets.png"
   },
   {
     "name": "Blank Companion's Ring",
@@ -5982,7 +6007,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Triggers a blank on active item use. Raised in the Gungeon and bored of gunfire, he gets excited whenever an item is used."
+    "ammonomicon": "Triggers a blank on active item use. Raised in the Gungeon and bored of gunfire, he gets excited whenever an item is used.",
+    "game_icon": "assets/images/game/items/blank_companion_s_ring.png"
   },
   {
     "name": "Blast Helmet",
@@ -6289,7 +6315,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Reduces hazard radius of explosions. This hardy helmet provides protection when too close to an explosion. Be wary though, it only works at a distance."
+    "ammonomicon": "Reduces hazard radius of explosions. This hardy helmet provides protection when too close to an explosion. Be wary though, it only works at a distance.",
+    "game_icon": "assets/images/game/items/blast_helmet.png"
   },
   {
     "name": "Blood Brooch",
@@ -6492,7 +6519,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "This sinister brooch was once worn by an unlucky inhabitant of the Gungeon, who used it to draw health from wounded enemies. There is a curse upon it, however, and the cost may not be worth the benefit."
+    "ammonomicon": "This sinister brooch was once worn by an unlucky inhabitant of the Gungeon, who used it to draw health from wounded enemies. There is a curse upon it, however, and the cost may not be worth the benefit.",
+    "game_icon": "assets/images/game/items/blood_brooch.png"
   },
   {
     "name": "Bloodied Scarf",
@@ -7024,7 +7052,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Dodge roll is replaced with a blink. This simple scarf was once worn by a skilled assassin. Betrayed by his brothers and assumed dead..."
+    "ammonomicon": "Dodge roll is replaced with a blink. This simple scarf was once worn by a skilled assassin. Betrayed by his brothers and assumed dead...",
+    "game_icon": "assets/images/game/items/bloodied_scarf.png"
   },
   {
     "name": "Bloody 9mm",
@@ -7126,7 +7155,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Rare chance for a projectile to go berserk. Say one thing for these bullets, say they are coated with the blood of vanquished enemies."
+    "ammonomicon": "Rare chance for a projectile to go berserk. Say one thing for these bullets, say they are coated with the blood of vanquished enemies.",
+    "game_icon": "assets/images/game/items/bloody_9mm.png"
   },
   {
     "name": "Bloody Eye",
@@ -7308,7 +7338,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Slows enemy projectiles. This intoxicating substance grants the user vision that slows down enemy bullet speeds. Gun Cultists use it in their dark rituals, hoping to gain the favor of the Order of the True Gun."
+    "ammonomicon": "Slows enemy projectiles. This intoxicating substance grants the user vision that slows down enemy bullet speeds. Gun Cultists use it in their dark rituals, hoping to gain the favor of the Order of the True Gun.",
+    "game_icon": "assets/images/game/items/bloody_eye.png"
   },
   {
     "name": "Blue Guon Stone",
@@ -7410,7 +7441,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Slows time upon receiving damage. The Blue Guon Stone, or the Stone of Critical Perception, increases its bearers reaction times in dangerous situations."
+    "ammonomicon": "Slows time upon receiving damage. The Blue Guon Stone, or the Stone of Critical Perception, increases its bearers reaction times in dangerous situations.",
+    "game_icon": "assets/images/game/items/blue_guon_stone.png"
   },
   {
     "name": "Bomb",
@@ -7550,7 +7582,8 @@
       "Gungeon loot pool",
       "Wooden chests"
     ],
-    "ammonomicon": "Explodes after a short delay. Countless experienced adventurers have brought Bombs to the Gungeon seeking secret doors, only to be foiled by the existence of Blanks. Still, explosives have their place."
+    "ammonomicon": "Explodes after a short delay. Countless experienced adventurers have brought Bombs to the Gungeon seeking secret doors, only to be foiled by the existence of Blanks. Still, explosives have their place.",
+    "game_icon": "assets/images/game/items/bomb.png"
   },
   {
     "name": "Book of Chest Anatomy",
@@ -7887,7 +7920,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Improves the contents of broken chests. The collected learnings of generations of treasure hunters. This handy book details the mysterious inner mechanisms of the dungeon chests."
+    "ammonomicon": "Improves the contents of broken chests. The collected learnings of generations of treasure hunters. This handy book details the mysterious inner mechanisms of the dungeon chests.",
+    "game_icon": "assets/images/game/items/book_of_chest_anatomy.png"
   },
   {
     "name": "Boomerang",
@@ -8007,7 +8041,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Boomerangs predate Gun technology, but can still be useful in a pinch. A good throw is quite stunning!"
+    "ammonomicon": "Boomerangs predate Gun technology, but can still be useful in a pinch. A good throw is quite stunning!",
+    "game_icon": "assets/images/game/items/boomerang.png"
   },
   {
     "name": "Bottle",
@@ -8205,7 +8240,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Can hold hearts, ammo or other pickups for use later. Use once to collect something, and use again to drop!"
+    "ammonomicon": "Can hold hearts, ammo or other pickups for use later. Use once to collect something, and use again to drop!",
+    "game_icon": "assets/images/game/items/bottle.png"
   },
   {
     "name": "Bouncy Bullets",
@@ -8387,7 +8423,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "All bullets gain ricochet. A talented gunslinger can bounce bullets with certain guns, but this special ammunition makes it easy to do with any weapon."
+    "ammonomicon": "All bullets gain ricochet. A talented gunslinger can bounce bullets with certain guns, but this special ammunition makes it easy to do with any weapon.",
+    "game_icon": "assets/images/game/items/bouncy_bullets.png"
   },
   {
     "name": "Box",
@@ -8630,7 +8667,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The ultimate in stealth technology. Surprise attacks deal additional damage. No one is perceptive enough to see through such an elaborate ruse."
+    "ammonomicon": "The ultimate in stealth technology. Surprise attacks deal additional damage. No one is perceptive enough to see through such an elaborate ruse.",
+    "game_icon": "assets/images/game/items/box.png"
   },
   {
     "name": "Bracket Key",
@@ -8844,7 +8882,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Deals a large amount of damage to all enemies in a room. A remnant from when the Gungeon was being built. Gungeon architects would use these artifacts to quickly make their way through Gundead infested chambers. Though this one has lost a portion of its power to the ages, it is still a potent weapon."
+    "ammonomicon": "Deals a large amount of damage to all enemies in a room. A remnant from when the Gungeon was being built. Gungeon architects would use these artifacts to quickly make their way through Gundead infested chambers. Though this one has lost a portion of its power to the ages, it is still a potent weapon.",
+    "game_icon": "assets/images/game/items/bracket_key.png"
   },
   {
     "name": "Brick of Cash",
@@ -8958,7 +8997,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Reveals secret doors. This can be used to pay off unscrupulous Snitch Bricks, who are willing to betray their mortared brethren for cold, hard cash. Not legal tender."
+    "ammonomicon": "Reveals secret doors. This can be used to pay off unscrupulous Snitch Bricks, who are willing to betray their mortared brethren for cold, hard cash. Not legal tender.",
+    "game_icon": "assets/images/game/items/brick_of_cash.png"
   },
   {
     "name": "Briefcase of Cash",
@@ -9165,7 +9205,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "All the pain and suffering, the personal sacrifice... all the lies, the anger, the betrayal, and the revenge; was it worth it? Yes."
+    "ammonomicon": "All the pain and suffering, the personal sacrifice... all the lies, the anger, the betrayal, and the revenge; was it worth it? Yes.",
+    "game_icon": "assets/images/game/items/briefcase_of_cash.png"
   },
   {
     "name": "Broccoli",
@@ -9314,7 +9355,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Broccoli is an edible green plant in the cabbage family whose large flowerhead is eaten as a vegetable."
+    "ammonomicon": "Broccoli is an edible green plant in the cabbage family whose large flowerhead is eaten as a vegetable.",
+    "game_icon": "assets/images/game/items/broccoli.png"
   },
   {
     "name": "Bug Boots",
@@ -9437,7 +9479,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Creates poison on dodge roll, also grants immunity to poison."
+    "ammonomicon": "Creates poison on dodge roll, also grants immunity to poison.",
+    "game_icon": "assets/images/game/items/bug_boots.png"
   },
   {
     "name": "Bullet Idol",
@@ -9590,7 +9633,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Deals damage to enemies when bearer is wounded. Whosoever wields this idol will have swift vengeance visited upon any who trespass against them."
+    "ammonomicon": "Deals damage to enemies when bearer is wounded. Whosoever wields this idol will have swift vengeance visited upon any who trespass against them.",
+    "game_icon": "assets/images/game/items/bullet_idol.png"
   },
   {
     "name": "Bullet Time",
@@ -9711,7 +9755,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This clock holds mystical properties that enable the activator to slow down time."
+    "ammonomicon": "This clock holds mystical properties that enable the activator to slow down time.",
+    "game_icon": "assets/images/game/items/bullet_time.png"
   },
   {
     "name": "Bumbullets",
@@ -9959,7 +10004,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Some of these bullets contain bees. These shells contain tiny beehives. Guns and bees provide a textbook example of the concept of \"symbiosis.\" Look it up!"
+    "ammonomicon": "Some of these bullets contain bees. These shells contain tiny beehives. Guns and bees provide a textbook example of the concept of \"symbiosis.\" Look it up!",
+    "game_icon": "assets/images/game/items/bumbullets.png"
   },
   {
     "name": "Busted Television",
@@ -10248,7 +10294,8 @@
     "ammonomicon_entry": "Upon use, the television is thrown in the direction of the cursor. Dropped upon dodge rolling.",
     "id": 409,
     "ammonomicon_pos": 226,
-    "ammonomicon": "Use to toss. Cannot be carried through a dodge roll. This television is extremely heavy. It is also extremely broken. These are not useful qualities for traversing a timeless, bullet-filled dungeon."
+    "ammonomicon": "Use to toss. Cannot be carried through a dodge roll. This television is extremely heavy. It is also extremely broken. These are not useful qualities for traversing a timeless, bullet-filled dungeon.",
+    "game_icon": "assets/images/game/items/busted_television.png"
   },
   {
     "name": "C4 (Item)",
@@ -10397,7 +10444,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Sometimes reveals the floor. The Gungeon is unmappable, but it was not always so. It is said that in his youth, the great cartographer Woban has created four great maps, one for each floor of the Gungeon. While working on the fifth and final map, the walls suddenly began to shift strangely; they continue to do so to this day."
+    "ammonomicon": "Sometimes reveals the floor. The Gungeon is unmappable, but it was not always so. It is said that in his youth, the great cartographer Woban has created four great maps, one for each floor of the Gungeon. While working on the fifth and final map, the walls suddenly began to shift strangely; they continue to do so to this day.",
+    "game_icon": "assets/images/game/items/cartographer_s_ring.png"
   },
   {
     "name": "Cat Bullet King Throne",
@@ -10666,7 +10714,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Shoots miniature bullets on Dodge Roll. This throne was originally intended to be included with the physical edition. Due to a manufacturing defect, the scale is way off, and only suitable for a cat. It was eventually tossed into the Gungeon."
+    "ammonomicon": "Shoots miniature bullets on Dodge Roll. This throne was originally intended to be included with the physical edition. Due to a manufacturing defect, the scale is way off, and only suitable for a cat. It was eventually tossed into the Gungeon.",
+    "game_icon": "assets/images/game/items/cat_bullet_king_throne.png"
   },
   {
     "name": "Chaff Grenade",
@@ -10839,7 +10888,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Stuns all enemies. This grenade is full of small, shiny particles. Any enemies caught in the blast radius will be completely enthralled for a short time. Popular with special ops units and children's entertainers!"
+    "ammonomicon": "Stuns all enemies. This grenade is full of small, shiny particles. Any enemies caught in the blast radius will be completely enthralled for a short time. Popular with special ops units and children's entertainers!",
+    "game_icon": "assets/images/game/items/chaff_grenade.png"
   },
   {
     "name": "Chance Bullets",
@@ -11073,7 +11123,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Sometimes fires bullets from other carried guns. These projectiles create tiny spacetime rifts inside each of the weilder's carried guns, occasionally teleporting bullets from one to another."
+    "ammonomicon": "Sometimes fires bullets from other carried guns. These projectiles create tiny spacetime rifts inside each of the weilder's carried guns, occasionally teleporting bullets from one to another.",
+    "game_icon": "assets/images/game/items/chance_bullets.png"
   },
   {
     "name": "Chaos Ammolet",
@@ -11575,7 +11626,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Blanks have a chance to poison, freeze, and ignite enemies. This enchanted amulet is made of the most valuable metal of all, lead. There is an artificer's engravure on the bottom, but time has rendered it illegible."
+    "ammonomicon": "Blanks have a chance to poison, freeze, and ignite enemies. This enchanted amulet is made of the most valuable metal of all, lead. There is an artificer's engravure on the bottom, but time has rendered it illegible.",
+    "game_icon": "assets/images/game/items/chaos_ammolet.png"
   },
   {
     "name": "Chaos Bullets",
@@ -11864,7 +11916,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Bullets have a chance to do... something to foes. These unpredictable bullets change from moment to moment. Always destructive, never boring!"
+    "ammonomicon": "Bullets have a chance to do... something to foes. These unpredictable bullets change from moment to moment. Always destructive, never boring!",
+    "game_icon": "assets/images/game/items/chaos_bullets.png"
   },
   {
     "name": "Charm Horn",
@@ -12020,7 +12073,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "When blown, this horn will call those nearby to aid you. There are strange inconsistencies in the behavior of the Gundead. Originally thought to be heartless killing machines, they have been known to capture certain invaders for unknown purposes. Furthermore, evidence of a crude religion has been discovered. Perhaps, one day, they could be reasoned with?"
+    "ammonomicon": "When blown, this horn will call those nearby to aid you. There are strange inconsistencies in the behavior of the Gundead. Originally thought to be heartless killing machines, they have been known to capture certain invaders for unknown purposes. Furthermore, evidence of a crude religion has been discovered. Perhaps, one day, they could be reasoned with?",
+    "game_icon": "assets/images/game/items/charm_horn.png"
   },
   {
     "name": "Charming Rounds",
@@ -12153,7 +12207,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "A new type of ammunition developed after careful study of the Shotgun Full of Love. During the forging process, each round is quenched in the tears of young and unnoticed Bullet Kin."
+    "ammonomicon": "A new type of ammunition developed after careful study of the Shotgun Full of Love. During the forging process, each round is quenched in the tears of young and unnoticed Bullet Kin.",
+    "game_icon": "assets/images/game/items/charming_rounds.png"
   },
   {
     "name": "Chest Teleporter",
@@ -12451,7 +12506,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Moves a chest to the next floor. This unusual adventuring tool moves a chest forward in the timestream, causing it to age and possibly level up!"
+    "ammonomicon": "Moves a chest to the next floor. This unusual adventuring tool moves a chest forward in the timestream, causing it to age and possibly level up!",
+    "game_icon": "assets/images/game/items/chest_teleporter.png"
   },
   {
     "name": "Chicken Flute",
@@ -12805,7 +12861,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The sounds from this strange instrument seem to have summoned a chicken. How useful!"
+    "ammonomicon": "The sounds from this strange instrument seem to have summoned a chicken. How useful!",
+    "game_icon": "assets/images/game/items/chicken_flute.png"
   },
   {
     "name": "Cigarettes",
@@ -13267,7 +13324,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Can result in serious health problems and even death. They do have a certain appeal though."
+    "ammonomicon": "Can result in serious health problems and even death. They do have a certain appeal though.",
+    "game_icon": "assets/images/game/items/cigarettes.png"
   },
   {
     "name": "Clear Guon Stone",
@@ -13380,7 +13438,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Negates poison damage. The Clear Guon stone continuously cleanses the blood of its bearer of all impurities."
+    "ammonomicon": "Negates poison damage. The Clear Guon stone continuously cleanses the blood of its bearer of all impurities.",
+    "game_icon": "assets/images/game/items/clear_guon_stone.png"
   },
   {
     "name": "Clone",
@@ -13869,7 +13928,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Extra Life. An uncomfortable answer to an uncomfortable truth. This clone can replace a single Gungeoneer upon their death, with almost no lapse in memory."
+    "ammonomicon": "Extra Life. An uncomfortable answer to an uncomfortable truth. This clone can replace a single Gungeoneer upon their death, with almost no lapse in memory.",
+    "game_icon": "assets/images/game/items/clone.png"
   },
   {
     "name": "Cloranthy Ring",
@@ -13985,7 +14045,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Improves dodging. This ancient ring spins slowly about its axis, even when worn. It is of unknown origin."
+    "ammonomicon": "Improves dodging. This ancient ring spins slowly about its axis, even when worn. It is of unknown origin.",
+    "game_icon": "assets/images/game/items/cloranthy_ring.png"
   },
   {
     "name": "Clown Mask",
@@ -14303,7 +14364,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Grants anonymity, friendship. Masks of this design were used to explore primitive Gungeon-like structures filled with money, now referred to as \"Mungeons\". Anonymity was important to Mungeoneers of this time. The friendly clown design is thought to have helped Mungeoneers make peace with the native inhabitants."
+    "ammonomicon": "Grants anonymity, friendship. Masks of this design were used to explore primitive Gungeon-like structures filled with money, now referred to as \"Mungeons\". Anonymity was important to Mungeoneers of this time. The friendly clown design is thought to have helped Mungeoneers make peace with the native inhabitants.",
+    "game_icon": "assets/images/game/items/clown_mask.png"
   },
   {
     "name": "Cluster Mine",
@@ -14424,7 +14486,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Creates a cluster of proximity mines."
+    "ammonomicon": "Creates a cluster of proximity mines.",
+    "game_icon": "assets/images/game/items/cluster_mine.png"
   },
   {
     "name": "Cog of Battle",
@@ -14661,7 +14724,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Enables active reload."
+    "ammonomicon": "Enables active reload.",
+    "game_icon": "assets/images/game/items/cog_of_battle.png"
   },
   {
     "name": "Coin Crown",
@@ -14903,7 +14967,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A pre-Gungeon relic."
+    "ammonomicon": "A pre-Gungeon relic.",
+    "game_icon": "assets/images/game/items/coin_crown.png"
   },
   {
     "name": "Coolant Leak",
@@ -15059,7 +15124,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Sprays an area with liquid coolant. Useful for putting out fires or electrifying areas!"
+    "ammonomicon": "Sprays an area with liquid coolant. Useful for putting out fires or electrifying areas!",
+    "game_icon": "assets/images/game/items/coolant_leak.png"
   },
   {
     "name": "Copper Ammolet",
@@ -15287,7 +15353,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Blanks have a chance to ignite enemies. This enchanted copper amulet was forged deep in the Forge. Warm to the touch."
+    "ammonomicon": "Blanks have a chance to ignite enemies. This enchanted copper amulet was forged deep in the Forge. Warm to the touch.",
+    "game_icon": "assets/images/game/items/copper_ammolet.png"
   },
   {
     "name": "Crisis Stone",
@@ -15494,7 +15561,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Provides invulnerability when reloading an empty clip. This stone resonates strongly throughout the fourth dimension, allowing the bearer to step out of the frame of reality. Strangely, only functions under certain circumstances."
+    "ammonomicon": "Provides invulnerability when reloading an empty clip. This stone resonates strongly throughout the fourth dimension, allowing the bearer to step out of the frame of reality. Strangely, only functions under certain circumstances.",
+    "game_icon": "assets/images/game/items/crisis_stone.png"
   },
   {
     "name": "Crutch",
@@ -15605,7 +15673,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Adds aim assist, of a sort. Everybody needs a little help, sometimes. With this crutch, every bullet fired will try really hard to hit a target, even if aimed incorrectly."
+    "ammonomicon": "Adds aim assist, of a sort. Everybody needs a little help, sometimes. With this crutch, every bullet fired will try really hard to hit a target, even if aimed incorrectly.",
+    "game_icon": "assets/images/game/items/crutch.png"
   },
   {
     "name": "Cursed Bullets",
@@ -15726,7 +15795,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Curse increases damage. Bullets straight from HELLLLL!"
+    "ammonomicon": "Curse increases damage. Bullets straight from HELLLLL!",
+    "game_icon": "assets/images/game/items/cursed_bullets.png"
   },
   {
     "name": "Daruma",
@@ -15893,7 +15963,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Only usable for a brief period of time after successfully dodging a bullet. Use to counter with a Blank. This small idol is a focus for one's fighting spirit. Brings luck in the heat of battle."
+    "ammonomicon": "Only usable for a brief period of time after successfully dodging a bullet. Use to counter with a Blank. This small idol is a focus for one's fighting spirit. Brings luck in the heat of battle.",
+    "game_icon": "assets/images/game/items/daruma.png"
   },
   {
     "name": "Decoy",
@@ -16100,7 +16171,8 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "Distracts enemies. Most inhabitants of the Gungeon are not the most intelligent of creatures, and will fire upon anything that they do not recognize. This crude fascimile of a Gungeoneer will hold their attention for a time. Many Gundead seem content to lock trespassers up in cells, despite their trigger-happy natures. Somewhere deep in the Gungeon, there is probably a prison full of Decoys."
+    "ammonomicon": "Distracts enemies. Most inhabitants of the Gungeon are not the most intelligent of creatures, and will fire upon anything that they do not recognize. This crude fascimile of a Gungeoneer will hold their attention for a time. Many Gundead seem content to lock trespassers up in cells, despite their trigger-happy natures. Somewhere deep in the Gungeon, there is probably a prison full of Decoys.",
+    "game_icon": "assets/images/game/items/decoy.png"
   },
   {
     "name": "Devolver Rounds",
@@ -16346,7 +16418,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Grants all bullets a small chance to devolve enemies. Each bullet is subject to a standard bullet-gun contract. Each bullet is recoupable."
+    "ammonomicon": "Grants all bullets a small chance to devolve enemies. Each bullet is subject to a standard bullet-gun contract. Each bullet is recoupable.",
+    "game_icon": "assets/images/game/items/devolver_rounds.png"
   },
   {
     "name": "Disarming Personality",
@@ -16464,7 +16537,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Reduces prices at shops. The Pilot is able to talk his way into almost anything, usually gunfights."
+    "ammonomicon": "Reduces prices at shops. The Pilot is able to talk his way into almost anything, usually gunfights.",
+    "game_icon": "assets/images/game/items/disarming_personality.png"
   },
   {
     "name": "Dog",
@@ -17006,7 +17080,8 @@
       "Truck shop",
       "Truth chest"
     ],
-    "ammonomicon": "Temporarily doubles gun output. The favored brew of Two-Shot Erias. During her time in the Gungeon, she claimed that drinking before a gunfight would double her effectiveness in combat, but for obvious reasons was not taken too seriously. Perhaps there was some truth in her tales."
+    "ammonomicon": "Temporarily doubles gun output. The favored brew of Two-Shot Erias. During her time in the Gungeon, she claimed that drinking before a gunfight would double her effectiveness in combat, but for obvious reasons was not taken too seriously. Perhaps there was some truth in her tales.",
+    "game_icon": "assets/images/game/items/double_vision.png"
   },
   {
     "name": "Drill",
@@ -17390,7 +17465,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Opens locked chests. Loud. A device once used to access the innermost chambers of ancient currency reliquaries. Cheaply constructed and prone to breaking. In ancient texts, the word \"drill\" is commonly preceeded or followed by expletives."
+    "ammonomicon": "Opens locked chests. Loud. A device once used to access the innermost chambers of ancient currency reliquaries. Cheaply constructed and prone to breaking. In ancient texts, the word \"drill\" is commonly preceeded or followed by expletives.",
+    "game_icon": "assets/images/game/items/drill.png"
   },
   {
     "name": "Drum Clip",
@@ -17493,7 +17569,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Increased magazine capacity for all guns."
+    "ammonomicon": "Increased magazine capacity for all guns.",
+    "game_icon": "assets/images/game/items/drum_clip.png"
   },
   {
     "name": "Duct Tape",
@@ -18546,7 +18623,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Combines the currently equipped gun with the next carried gun. It isn't pretty, but sometimes wondrous things can be accomplished with a roll of tape. Just look at the Bundle of Wands, or the Magitek Hybrid!"
+    "ammonomicon": "Combines the currently equipped gun with the next carried gun. It isn't pretty, but sometimes wondrous things can be accomplished with a roll of tape. Just look at the Bundle of Wands, or the Magitek Hybrid!",
+    "game_icon": "assets/images/game/items/duct_tape.png"
   },
   {
     "name": "Easy Reload Bullets",
@@ -18638,7 +18716,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "These handcrafted shells are extremely easy to handle. So easy, in fact, that a single shell can be reloaded during a standard dodge roll. Reversable bullets crafted by Edwin. In his old age, he grew tired of squinting to see which end of the bullet was up."
+    "ammonomicon": "These handcrafted shells are extremely easy to handle. So easy, in fact, that a single shell can be reloaded during a standard dodge roll. Reversable bullets crafted by Edwin. In his old age, he grew tired of squinting to see which end of the bullet was up.",
+    "game_icon": "assets/images/game/items/easy_reload_bullets.png"
   },
   {
     "name": "Elder Blank",
@@ -18768,7 +18847,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Unlike normal blanks, the Elder Blank may be reused. Feared strongly by the Order of the True Gun. Anathema to all Gunkind."
+    "ammonomicon": "Unlike normal blanks, the Elder Blank may be reused. Feared strongly by the Order of the True Gun. Anathema to all Gunkind.",
+    "game_icon": "assets/images/game/items/elder_blank.png"
   },
   {
     "name": "Enraging Photo",
@@ -18912,7 +18992,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A photo that the Convict brought with her to the Gungeon. Deal extra damage for a short time after getting hit. On the journey to the Breach, the Pilot once asked her why she always stared at this photo. Later, she was released from the brig."
+    "ammonomicon": "A photo that the Convict brought with her to the Gungeon. Deal extra damage for a short time after getting hit. On the journey to the Breach, the Pilot once asked her why she always stared at this photo. Later, she was released from the brig.",
+    "game_icon": "assets/images/game/items/enraging_photo.png"
   },
   {
     "name": "Escape Rope",
@@ -19211,7 +19292,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Use to escape from a sealed room. Another standard adventurer's tool rendered less useful by the Gungeon's mysterious topology. Instead of returning to the surface, this rope will only provide an escape from a single room. Sometimes, though, that's all you need."
+    "ammonomicon": "Use to escape from a sealed room. Another standard adventurer's tool rendered less useful by the Gungeon's mysterious topology. Instead of returning to the surface, this rope will only provide an escape from a single room. Sometimes, though, that's all you need.",
+    "game_icon": "assets/images/game/items/escape_rope.png"
   },
   {
     "name": "Explosive Decoy",
@@ -19405,7 +19487,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Distracts enemies, then explodes. Invented by Winchester but eventually discarded in frustration after he spent hours trying to coax someone into playing his game, only to find it was his own decoy."
+    "ammonomicon": "Distracts enemies, then explodes. Invented by Winchester but eventually discarded in frustration after he spent hours trying to coax someone into playing his game, only to find it was his own decoy.",
+    "game_icon": "assets/images/game/items/explosive_decoy.png"
   },
   {
     "name": "Explosive Rounds",
@@ -19791,7 +19874,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Adds small explosive charges to some shots fired. Originally developed by the Gundead Miners found deep in the Black Powder Mines, these small explosive charges work wonders when clearing a room. A favorite of the Gunsling King, who enjoys the sound they make."
+    "ammonomicon": "Adds small explosive charges to some shots fired. Originally developed by the Gundead Miners found deep in the Black Powder Mines, these small explosive charges work wonders when clearing a room. A favorite of the Gunsling King, who enjoys the sound they make.",
+    "game_icon": "assets/images/game/items/explosive_rounds.png"
   },
   {
     "name": "Eyepatch",
@@ -19936,7 +20020,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Increases damage at the cost of accuracy. The runes carved into the leather of this eyepatch represent a bargain with Kaliber, a revered gun Goddess. In exchange for depth perception, she will bless each bullet fired."
+    "ammonomicon": "Increases damage at the cost of accuracy. The runes carved into the leather of this eyepatch represent a bargain with Kaliber, a revered gun Goddess. In exchange for depth perception, she will bless each bullet fired.",
+    "game_icon": "assets/images/game/items/eyepatch.png"
   },
   {
     "name": "Fat Bullets",
@@ -20284,7 +20369,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Makes bullets larger and more effective. The effectiveness of a bullet is directly related to its size with zero exceptions."
+    "ammonomicon": "Makes bullets larger and more effective. The effectiveness of a bullet is directly related to its size with zero exceptions.",
+    "game_icon": "assets/images/game/items/fat_bullets.png"
   },
   {
     "name": "Flak Bullets",
@@ -20579,7 +20665,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Projectiles fired explode into smaller bullets on impact. Though technically not how flak works, the Gungeon has always operated more on the naive assumption of how guns work than how they actually do."
+    "ammonomicon": "Projectiles fired explode into smaller bullets on impact. Though technically not how flak works, the Gungeon has always operated more on the naive assumption of how guns work than how they actually do.",
+    "game_icon": "assets/images/game/items/flak_bullets.png"
   },
   {
     "name": "Fortune's Favor",
@@ -20683,7 +20770,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Enemy bullets go wide. An experimental device worn by a particularly lucky Gungeoneer. In the end, it wasn't enough to save her life, but it certainly extended it."
+    "ammonomicon": "Enemy bullets go wide. An experimental device worn by a particularly lucky Gungeoneer. In the end, it wasn't enough to save her life, but it certainly extended it.",
+    "game_icon": "assets/images/game/items/fortune_s_favor.png"
   },
   {
     "name": "Friendship Cookie",
@@ -20744,7 +20832,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Revives a friend once. Baked fresh every morning by Mom! It's to die for! Or, just maybe, to live for."
+    "ammonomicon": "Revives a friend once. Baked fresh every morning by Mom! It's to die for! Or, just maybe, to live for.",
+    "game_icon": "assets/images/game/items/friendship_cookie.png"
   },
   {
     "name": "Frost Ammolet",
@@ -20965,7 +21054,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Blanks have a chance to freeze enemies. Cold to the touch."
+    "ammonomicon": "Blanks have a chance to freeze enemies. Cold to the touch.",
+    "game_icon": "assets/images/game/items/frost_ammolet.png"
   },
   {
     "name": "Frost Bullets",
@@ -21246,7 +21336,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "All bullets can freeze enemies. This bullet upgrade attaches small condensers to each bullet fired, lowering their temperature substantially. Accidentally invented by the Gungeon Acquisitions team when Cadence told Ox to \"Cool it with all the bullets.\""
+    "ammonomicon": "All bullets can freeze enemies. This bullet upgrade attaches small condensers to each bullet fired, lowering their temperature substantially. Accidentally invented by the Gungeon Acquisitions team when Cadence told Ox to \"Cool it with all the bullets.\"",
+    "game_icon": "assets/images/game/items/frost_bullets.png"
   },
   {
     "name": "Full Metal Jacket",
@@ -21626,7 +21717,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Automatically triggers available Blanks when in danger. An original Gungeon item. This protective garment, laser cut whole from a massive Blank, can detect when its bearer is threatened."
+    "ammonomicon": "Automatically triggers available Blanks when in danger. An original Gungeon item. This protective garment, laser cut whole from a massive Blank, can detect when its bearer is threatened.",
+    "game_icon": "assets/images/game/items/full_metal_jacket.png"
   },
   {
     "name": "Galactic Medal of Valor",
@@ -21857,7 +21949,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Significantly increases damage dealt to powerful foes. Medal awarded for bravery in the face of certain doom. But most importantly, you didn't let down the unit. Good work, Marine."
+    "ammonomicon": "Significantly increases damage dealt to powerful foes. Medal awarded for bravery in the face of certain doom. But most importantly, you didn't let down the unit. Good work, Marine.",
+    "game_icon": "assets/images/game/items/galactic_medal_of_valor.png"
   },
   {
     "name": "Gas Mask",
@@ -21928,7 +22021,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Prevents poison damage. A useful, if terrifying, piece of equipment. One size fits all!"
+    "ammonomicon": "Prevents poison damage. A useful, if terrifying, piece of equipment. One size fits all!",
+    "game_icon": "assets/images/game/items/gas_mask.png"
   },
   {
     "name": "Ghost Bullets",
@@ -22059,7 +22153,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Grants all bullets piercing."
+    "ammonomicon": "Grants all bullets piercing.",
+    "game_icon": "assets/images/game/items/ghost_bullets.png"
   },
   {
     "name": "Gilded Bullets",
@@ -22286,7 +22381,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Wealth increases damage. Bullets forged from the throne of an opulent ruler whose reign predates the Gungeon."
+    "ammonomicon": "Wealth increases damage. Bullets forged from the throne of an opulent ruler whose reign predates the Gungeon.",
+    "game_icon": "assets/images/game/items/gilded_bullets.png"
   },
   {
     "name": "Glass Guon Stone",
@@ -22512,7 +22608,8 @@
       "Pickups",
       "Room-clear rewards"
     ],
-    "ammonomicon": "Blocks projectiles, but shatters if its owner is wounded. A gift from the Lady of Pane. Gungeoneers who say a prayer to this silly goddess recieve her blessing of three Glass Guon Stones."
+    "ammonomicon": "Blocks projectiles, but shatters if its owner is wounded. A gift from the Lady of Pane. Gungeoneers who say a prayer to this silly goddess recieve her blessing of three Glass Guon Stones.",
+    "game_icon": "assets/images/game/items/glass_guon_stone.png"
   },
   {
     "name": "Gold Ammolet",
@@ -22720,7 +22817,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Blanks will deal increased damage to enemies. This enchanted amulet is not actually made of gold, but brass from melted bullet casings. Even now, it yearns to shoot at something."
+    "ammonomicon": "Blanks will deal increased damage to enemies. This enchanted amulet is not actually made of gold, but brass from melted bullet casings. Even now, it yearns to shoot at something.",
+    "game_icon": "assets/images/game/items/gold_ammolet.png"
   },
   {
     "name": "Gold Junk",
@@ -22916,7 +23014,8 @@
     "ammonomicon_entry": "Grants 500 on pickup.",
     "id": 641,
     "ammonomicon_pos": 248,
-    "ammonomicon": "Worth it's weight. A nearly-perfect replica of a sack of junk, lovingly rendered in pure gold."
+    "ammonomicon": "Worth it's weight. A nearly-perfect replica of a sack of junk, lovingly rendered in pure gold.",
+    "game_icon": "assets/images/game/items/gold_junk.png"
   },
   {
     "name": "Grappling Hook",
@@ -23172,7 +23271,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A quick way to get around, or to bring an item to you. Can briefly stun some enemies! This is a kind of grappling hook that can be shot. Known to some as the Shoothook."
+    "ammonomicon": "A quick way to get around, or to bring an item to you. Can briefly stun some enemies! This is a kind of grappling hook that can be shot. Known to some as the Shoothook.",
+    "game_icon": "assets/images/game/items/grappling_hook.png"
   },
   {
     "name": "Green Guon Stone",
@@ -23292,7 +23392,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Chance to heal upon taking damage. The Green Guon stone abhors pain, and has a small chance to heal its bearer upon being wounded. It seems to grow more desperate as the risk of death rises."
+    "ammonomicon": "Chance to heal upon taking damage. The Green Guon stone abhors pain, and has a small chance to heal its bearer upon being wounded. It seems to grow more desperate as the risk of death rises.",
+    "game_icon": "assets/images/game/items/green_guon_stone.png"
   },
   {
     "name": "Gun Soul",
@@ -23765,7 +23866,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Grants a second chance upon death. A piece of a legendary Gungeoneer's soul. Though they may have failed in their quest, an encouraging aura emanates from the spirit."
+    "ammonomicon": "Grants a second chance upon death. A piece of a legendary Gungeoneer's soul. Though they may have failed in their quest, an encouraging aura emanates from the spirit.",
+    "game_icon": "assets/images/game/items/gun_soul.png"
   },
   {
     "name": "Gunboots",
@@ -24058,7 +24160,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Improves dodge roll by adding bullets. A hero from the distant past used these gunboots to descend a mysterious abyss. After many years, like all gun artifacts, they made their way to the Gungeon."
+    "ammonomicon": "Improves dodge roll by adding bullets. A hero from the distant past used these gunboots to descend a mysterious abyss. After many years, like all gun artifacts, they made their way to the Gungeon.",
+    "game_icon": "assets/images/game/items/gunboots.png"
   },
   {
     "name": "Gundromeda Strain",
@@ -24231,7 +24334,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Reduces enemy health. Disease spreads quickly among the Gundead, as they sleep tightly packed together in magazines."
+    "ammonomicon": "Reduces enemy health. Disease spreads quickly among the Gundead, as they sleep tightly packed together in magazines.",
+    "game_icon": "assets/images/game/items/gundromeda_strain.png"
   },
   {
     "name": "Gungeon Blueprint",
@@ -24317,7 +24421,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Reveals every room on every floor. The greatest and final work by the great cartographer Woban. Infuriated by the Gungeon's adaptation to his previous work, Woban dedicated his life to the art of cartography. Nearing his death, he returned to the Gungeon to create a final artifact: the Gungeon blueprint."
+    "ammonomicon": "Reveals every room on every floor. The greatest and final work by the great cartographer Woban. Infuriated by the Gungeon's adaptation to his previous work, Woban dedicated his life to the art of cartography. Nearing his death, he returned to the Gungeon to create a final artifact: the Gungeon blueprint.",
+    "game_icon": "assets/images/game/items/gungeon_blueprint.png"
   },
   {
     "name": "Gungeon Pepper",
@@ -24468,7 +24573,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Deals damage to nearby enemies. This pepper is hot enough to damage unassuming bystanders."
+    "ammonomicon": "Deals damage to nearby enemies. This pepper is hot enough to damage unassuming bystanders.",
+    "game_icon": "assets/images/game/items/gungeon_pepper.png"
   },
   {
     "name": "Gunknight Armor",
@@ -24598,7 +24704,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "The breastplate of the Aimless Knight, Cormorant. Able to dispatch the Gundead with ease, the Knight grew overconfident in his abilities. Deep in the Hollow, his concentration had weakened, and he sustained a grievous wound."
+    "ammonomicon": "The breastplate of the Aimless Knight, Cormorant. Able to dispatch the Gundead with ease, the Knight grew overconfident in his abilities. Deep in the Hollow, his concentration had weakened, and he sustained a grievous wound.",
+    "game_icon": "assets/images/game/items/gunknight_armor.png"
   },
   {
     "name": "Gunknight Gauntlet",
@@ -24700,7 +24807,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "The gauntlets of the Aimless Knight, Cormorant. Though the Aimless Knight never needed to reload, even his prodigious skill was not enough to best the beast that lies at the base of the Gungeon."
+    "ammonomicon": "The gauntlets of the Aimless Knight, Cormorant. Though the Aimless Knight never needed to reload, even his prodigious skill was not enough to best the beast that lies at the base of the Gungeon.",
+    "game_icon": "assets/images/game/items/gunknight_gauntlet.png"
   },
   {
     "name": "Gunknight Greaves",
@@ -24860,7 +24968,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "The greaves of the Aimless Knight, Cormorant. The Aimless Knight approached the Gungeon as a challenge borne more out of curiosity than regret. Despite his skill, this rendered his failure inevitable."
+    "ammonomicon": "The greaves of the Aimless Knight, Cormorant. The Aimless Knight approached the Gungeon as a challenge borne more out of curiosity than regret. Despite his skill, this rendered his failure inevitable.",
+    "game_icon": "assets/images/game/items/gunknight_greaves.png"
   },
   {
     "name": "Gunknight Helmet",
@@ -24956,7 +25065,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "The helmet of the Aimless Knight, Cormorant. Cormorant, upon reaching the great Forge, removed his helmet and set it upon the floor. When he realized his mistake and returned for the helm, it was gone, with only a note left in its place."
+    "ammonomicon": "The helmet of the Aimless Knight, Cormorant. Cormorant, upon reaching the great Forge, removed his helmet and set it upon the floor. When he realized his mistake and returned for the helm, it was gone, with only a note left in its place.",
+    "game_icon": "assets/images/game/items/gunknight_helmet.png"
   },
   {
     "name": "Hazmat Suit",
@@ -25021,7 +25131,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Immunity to fire, poison, and electricity. Nothing gets through this thing, with the notable exception of bullets."
+    "ammonomicon": "Immunity to fire, poison, and electricity. Nothing gets through this thing, with the notable exception of bullets.",
+    "game_icon": "assets/images/game/items/hazmat_suit.png"
   },
   {
     "name": "Heart Bottle",
@@ -25138,7 +25249,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This handy carrying device adds one heart container. It also opens on both sides for easy cleaning."
+    "ammonomicon": "This handy carrying device adds one heart container. It also opens on both sides for easy cleaning.",
+    "game_icon": "assets/images/game/items/heart_bottle.png"
   },
   {
     "name": "Heart Holster",
@@ -25323,7 +25435,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Adds one heart container."
+    "ammonomicon": "Adds one heart container.",
+    "game_icon": "assets/images/game/items/heart_holster.png"
   },
   {
     "name": "Heart Locket",
@@ -25505,7 +25618,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Adds one heart container. This heart-shaped locket contains a faded photo of two lovers embracing. Perhaps it once reminded a Gungeoneer of a past they hoped to change."
+    "ammonomicon": "Adds one heart container. This heart-shaped locket contains a faded photo of two lovers embracing. Perhaps it once reminded a Gungeoneer of a past they hoped to change.",
+    "game_icon": "assets/images/game/items/heart_locket.png"
   },
   {
     "name": "Heart Lunchbox",
@@ -25648,7 +25762,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Adds one heart container. The miners who originally dug out the Black Powder Mines carried their meals in boxes like these."
+    "ammonomicon": "Adds one heart container. The miners who originally dug out the Black Powder Mines carried their meals in boxes like these.",
+    "game_icon": "assets/images/game/items/heart_lunchbox.png"
   },
   {
     "name": "Heart of Ice",
@@ -26039,7 +26154,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires ice projectiles on taking damage. This icy heart was torn from a mighty frost giant, a common target for talented monster hunters."
+    "ammonomicon": "Fires ice projectiles on taking damage. This icy heart was torn from a mighty frost giant, a common target for talented monster hunters.",
+    "game_icon": "assets/images/game/items/heart_of_ice.png"
   },
   {
     "name": "Heart Purse",
@@ -26160,7 +26276,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "A bag carried by a stylish Gungeoneer. Adds one heart container."
+    "ammonomicon": "A bag carried by a stylish Gungeoneer. Adds one heart container.",
+    "game_icon": "assets/images/game/items/heart_purse.png"
   },
   {
     "name": "Heart Synthesizer",
@@ -26257,7 +26374,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Extra chance for hearts on room clear."
+    "ammonomicon": "Extra chance for hearts on room clear.",
+    "game_icon": "assets/images/game/items/heart_synthesizer.png"
   },
   {
     "name": "Heavy Boots",
@@ -26365,7 +26483,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Allows a Gungeoneer to keep their footing, even when great force is applied to them."
+    "ammonomicon": "Allows a Gungeoneer to keep their footing, even when great force is applied to them.",
+    "game_icon": "assets/images/game/items/heavy_boots.png"
   },
   {
     "name": "Heavy Bullets",
@@ -26584,7 +26703,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Increases damage at the cost of bullet velocity. These faceted bullets glitter with colors unseen in the depths of the Gungeon."
+    "ammonomicon": "Increases damage at the cost of bullet velocity. These faceted bullets glitter with colors unseen in the depths of the Gungeon.",
+    "game_icon": "assets/images/game/items/heavy_bullets.png"
   },
   {
     "name": "Helix Bullets",
@@ -27247,7 +27367,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Causes guns to fire an additional shot. Bullets to move in a helical pattern, and apply marginally less damage. Fossilized bullets containing the DNA of some forgotten Gungeon creature."
+    "ammonomicon": "Causes guns to fire an additional shot. Bullets to move in a helical pattern, and apply marginally less damage. Fossilized bullets containing the DNA of some forgotten Gungeon creature.",
+    "game_icon": "assets/images/game/items/helix_bullets.png"
   },
   {
     "name": "Hidden Compartment",
@@ -27456,7 +27577,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Increases active item capacity and maximum ammo counts. Ever since the Hegemony caught him with a few questionably legal goods, the Pilot has turned to more clandestine storage methods."
+    "ammonomicon": "Increases active item capacity and maximum ammo counts. Ever since the Hegemony caught him with a few questionably legal goods, the Pilot has turned to more clandestine storage methods.",
+    "game_icon": "assets/images/game/items/hidden_compartment.png"
   },
   {
     "name": "Hip Holster",
@@ -27732,7 +27854,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires a bullet upon reloading."
+    "ammonomicon": "Fires a bullet upon reloading.",
+    "game_icon": "assets/images/game/items/hip_holster.png"
   },
   {
     "name": "Holey Grail",
@@ -28015,7 +28138,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Triggers Blank effect upon taking damage, refills ammo. This artifact of Kaliber was lost to time until the coming of the Mine Flayers and their interdimensional kin."
+    "ammonomicon": "Triggers Blank effect upon taking damage, refills ammo. This artifact of Kaliber was lost to time until the coming of the Mine Flayers and their interdimensional kin.",
+    "game_icon": "assets/images/game/items/holey_grail.png"
   },
   {
     "name": "Homing Bullets",
@@ -28113,7 +28237,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "First invented by the Grey Mauser to cheat at one of Winchester's games. Though Winchester eventually caught on and rebuilt his targets to appear friendly, these bullets are still exceptionally useful."
+    "ammonomicon": "First invented by the Grey Mauser to cheat at one of Winchester's games. Though Winchester eventually caught on and rebuilt his targets to appear friendly, these bullets are still exceptionally useful.",
+    "game_icon": "assets/images/game/items/homing_bullets.png"
   },
   {
     "name": "Honeycomb",
@@ -28287,7 +28412,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "This honeycomb bonds with the user, releasing bees to protect their hive when damaged."
+    "ammonomicon": "This honeycomb bonds with the user, releasing bees to protect their hive when damaged.",
+    "game_icon": "assets/images/game/items/honeycomb.png"
   },
   {
     "name": "Hot Lead",
@@ -28594,7 +28720,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "All bullets have a chance to ignite foes. Freshly formed shells, straight from the Gungeon's Forge. The metal slug at the center of each round is still molten."
+    "ammonomicon": "All bullets have a chance to ignite foes. Freshly formed shells, straight from the Gungeon's Forge. The metal slug at the center of each round is still molten.",
+    "game_icon": "assets/images/game/items/hot_lead.png"
   },
   {
     "name": "Hungry Bullets",
@@ -28820,7 +28947,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Some bullets gain the ability to cannibalize. The magic of the Gungeon brings sentience to these just-fired bullets, and they resort to their most basic instinct: to feed."
+    "ammonomicon": "Some bullets gain the ability to cannibalize. The magic of the Gungeon brings sentience to these just-fired bullets, and they resort to their most basic instinct: to feed.",
+    "game_icon": "assets/images/game/items/hungry_bullets.png"
   },
   {
     "name": "iBomb Companion App",
@@ -29077,7 +29205,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Detonates explosive objects in the current room. Kids these days can detonate explosives from their phones. In the early days of the Gungeon, some form of shooting was required."
+    "ammonomicon": "Detonates explosive objects in the current room. Kids these days can detonate explosives from their phones. In the early days of the Gungeon, some form of shooting was required.",
+    "game_icon": "assets/images/game/items/ibomb_companion_app.png"
   },
   {
     "name": "Ice Bomb",
@@ -29254,7 +29383,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Freezes enemies."
+    "ammonomicon": "Freezes enemies.",
+    "game_icon": "assets/images/game/items/ice_bomb.png"
   },
   {
     "name": "Ice Cube",
@@ -29407,7 +29537,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Active items begin their cooldown period sooner and cool down faster. Most items in the Gungeon overheat for a brief time when used. This ice cube is perfect for cooling them off!"
+    "ammonomicon": "Active items begin their cooldown period sooner and cool down faster. Most items in the Gungeon overheat for a brief time when used. This ice cube is perfect for cooling them off!",
+    "game_icon": "assets/images/game/items/ice_cube.png"
   },
   {
     "name": "Infuriating Note",
@@ -29558,7 +29689,8 @@
     "ammonomicon_entry": "I've taken your stuff, but you keep pushing through; I'll have to try harder, so rats off to you! -R.R.\nSome chests are red, but more of them blue; no matter what's in 'em, I'll steal it from you! Thanks for the stuff, [random insult]! -R.R.\nWhat I wouldn't give to see the look on your face. You wished for an item, and found this note in its place! Thanks for your continued patronage. Fufufufufu... -R.R.\nI should just kill you, but that'd be no fun; so just for a laugh, I've stolen your gun! Good luck, [random insult]! -R.R.\nIf you were to find me, I'd make you bow on your knees. You're just a rodent, and I'm the Big Cheese! -R.R.\nSome say I'm a joker, but I'm bottling rage; it's tough getting a Mimic to gobble this page! Mimic bars. -R.R.",
     "id": 243,
     "ammonomicon_pos": 271,
-    "ammonomicon": "I've taken your stuff, but you keep pushing through; I'll have to try harder, so rats off to you! -R.R."
+    "ammonomicon": "I've taken your stuff, but you keep pushing through; I'll have to try harder, so rats off to you! -R.R.",
+    "game_icon": "assets/images/game/items/infuriating_note.png"
   },
   {
     "name": "Iron Coin",
@@ -29879,7 +30011,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A payment for services rendered. This mysterious coin vanishes when tossed into the air."
+    "ammonomicon": "A payment for services rendered. This mysterious coin vanishes when tossed into the air.",
+    "game_icon": "assets/images/game/items/iron_coin.png"
   },
   {
     "name": "Irradiated Lead",
@@ -30034,7 +30167,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "These irradiated slugs have a chance to poison any target they touch. A favorite of the Resourceful Rat."
+    "ammonomicon": "These irradiated slugs have a chance to poison any target they touch. A favorite of the Resourceful Rat.",
+    "game_icon": "assets/images/game/items/irradiated_lead.png"
   },
   {
     "name": "Jar of Bees",
@@ -30102,7 +30236,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "These bees have been carefully trained to hunt down enemy munitions... and destroy them."
+    "ammonomicon": "These bees have been carefully trained to hunt down enemy munitions... and destroy them.",
+    "game_icon": "assets/images/game/items/jar_of_bees.png"
   },
   {
     "name": "Jetpack",
@@ -30290,7 +30425,8 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Grants flight, but restricts the dodge roll. Only a Gungeoneer with a deathwish would give up their dodge roll. Luckily, this jetpack can easily be toggled on or off."
+    "ammonomicon": "Grants flight, but restricts the dodge roll. Only a Gungeoneer with a deathwish would give up their dodge roll. Luckily, this jetpack can easily be toggled on or off.",
+    "game_icon": "assets/images/game/items/jetpack.png"
   },
   {
     "name": "Junk",
@@ -30507,7 +30643,8 @@
       "Broken chests",
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Strange, sentient junk. It appears eager to join you on your quest."
+    "ammonomicon": "Strange, sentient junk. It appears eager to join you on your quest.",
+    "game_icon": "assets/images/game/items/junk.png"
   },
   {
     "name": "Katana Bullets",
@@ -30947,7 +31084,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "These bullets Zero in on their target and continue slashing. Legend tells of a katana bullet so quick and skilled that it once sliced through a bullet molecule in mid air."
+    "ammonomicon": "These bullets Zero in on their target and continue slashing. Legend tells of a katana bullet so quick and skilled that it once sliced through a bullet molecule in mid air.",
+    "game_icon": "assets/images/game/items/katana_bullets.png"
   },
   {
     "name": "Knife Shield",
@@ -31092,7 +31230,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "The Knife Shield is a shield made of blasphemous knives. Be wary of using it, as it is believed to bring upon the anger of the Jammed."
+    "ammonomicon": "The Knife Shield is a shield made of blasphemous knives. Be wary of using it, as it is believed to bring upon the anger of the Jammed.",
+    "game_icon": "assets/images/game/items/knife_shield.png"
   },
   {
     "name": "Lament Configurum",
@@ -31500,7 +31639,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "This puzzle box plays beautiful, melodic tones as it is solved. Who knows what mysterious wonders it contains?"
+    "ammonomicon": "This puzzle box plays beautiful, melodic tones as it is solved. Who knows what mysterious wonders it contains?",
+    "game_icon": "assets/images/game/items/lament_configurum.png"
   },
   {
     "name": "Laser Sight",
@@ -31768,7 +31908,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Increases accuracy. Laser sights work extremely well in the Gungeon, where stealth is rarely a concern."
+    "ammonomicon": "Increases accuracy. Laser sights work extremely well in the Gungeon, where stealth is rarely a concern.",
+    "game_icon": "assets/images/game/items/laser_sight.png"
   },
   {
     "name": "Lich's Eye Bullets",
@@ -32139,7 +32280,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Used once by the lord of the Sixth Chamber as prosthetic eyes, though that may have been only for show. This pair of rounds radiates unfathomable magical power."
+    "ammonomicon": "Used once by the lord of the Sixth Chamber as prosthetic eyes, though that may have been only for show. This pair of rounds radiates unfathomable magical power.",
+    "game_icon": "assets/images/game/items/lich_s_eye_bullets.png"
   },
   {
     "name": "Lichy Trigger Finger",
@@ -32273,7 +32415,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "The fingerbone of an ancient lich who was skilled in the art of gunplay. Unfortunately, this fingerbone is not the lich's phylactery."
+    "ammonomicon": "The fingerbone of an ancient lich who was skilled in the art of gunplay. Unfortunately, this fingerbone is not the lich's phylactery.",
+    "game_icon": "assets/images/game/items/lichy_trigger_finger.png"
   },
   {
     "name": "Lies",
@@ -32421,7 +32564,8 @@
     "ammonomicon_entry": "No effect.",
     "id": 148,
     "ammonomicon_pos": 249,
-    "ammonomicon": "Just some junk. You feel bad about this junk, though."
+    "ammonomicon": "Just some junk. You feel bad about this junk, though.",
+    "game_icon": "assets/images/game/items/lies.png"
   },
   {
     "name": "Liquid Valkyrie",
@@ -32538,7 +32682,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Slows enemy projectiles. Greatly increases reaction times, with few side effects. Commonly used by rebel forces before raids on Hegemony outposts."
+    "ammonomicon": "Slows enemy projectiles. Greatly increases reaction times, with few side effects. Commonly used by rebel forces before raids on Hegemony outposts.",
+    "game_icon": "assets/images/game/items/liquid_valkyrie.png"
   },
   {
     "name": "Live Ammo",
@@ -32904,7 +33049,8 @@
     "neckbear_approved": true,
     "ammonomicon_entry": "Who needs bullets when you ARE a bullet? Provides immunity to contact damage, and rolling into enemies deals increased damage.",
     "id": 414,
-    "ammonomicon": "Who needs bullets when you ARE a bullet? Provides immunity to contact damage, and rolling into enemies deals increased damage."
+    "ammonomicon": "Who needs bullets when you ARE a bullet? Provides immunity to contact damage, and rolling into enemies deals increased damage.",
+    "game_icon": "assets/images/game/items/live_ammo.png"
   },
   {
     "name": "Lodestone Ammolet",
@@ -33001,7 +33147,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Blanks send enemies flying. This enchanted amulet is strangely polarized, repelling most objects that draw near. It hums softly in the presence of Blanks."
+    "ammonomicon": "Blanks send enemies flying. This enchanted amulet is strangely polarized, repelling most objects that draw near. It hums softly in the presence of Blanks.",
+    "game_icon": "assets/images/game/items/lodestone_ammolet.png"
   },
   {
     "name": "Loot Bag",
@@ -33359,7 +33506,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Grants wealth, prone to tearing. Perfectly proportioned for light travel or a trip to the gym, this classic duffle features a timeless aesthetic and a padded removable shoulder strap. Not bulletproof."
+    "ammonomicon": "Grants wealth, prone to tearing. Perfectly proportioned for light travel or a trip to the gym, this classic duffle features a timeless aesthetic and a padded removable shoulder strap. Not bulletproof.",
+    "game_icon": "assets/images/game/items/loot_bag.png"
   },
   {
     "name": "Macho Brace",
@@ -33643,7 +33791,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "This training device promotes growth in bullets. Shots are more powerful when coming out of a Dodge Roll. Does not affect speed. Training to be the very best takes commitment, and hard work."
+    "ammonomicon": "This training device promotes growth in bullets. Shots are more powerful when coming out of a Dodge Roll. Does not affect speed. Training to be the very best takes commitment, and hard work.",
+    "game_icon": "assets/images/game/items/macho_brace.png"
   },
   {
     "name": "Magazine Rack",
@@ -33833,7 +33982,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Place to create a zone of infinite ammo. Often found in Gungeon doctors' offices, this rack displays magazines of all sorts. The clips contained within should prove useful, and plentiful, for even the most inaccurate of Gungeoneers."
+    "ammonomicon": "Place to create a zone of infinite ammo. Often found in Gungeon doctors' offices, this rack displays magazines of all sorts. The clips contained within should prove useful, and plentiful, for even the most inaccurate of Gungeoneers.",
+    "game_icon": "assets/images/game/items/magazine_rack.png"
   },
   {
     "name": "Magic Bullets",
@@ -34007,7 +34157,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Grants all bullets a small chance to transmogrify. Each of these rounds has been enchanted by a sorceress of great power. They appear to be extremely old."
+    "ammonomicon": "Grants all bullets a small chance to transmogrify. Each of these rounds has been enchanted by a sorceress of great power. They appear to be extremely old.",
+    "game_icon": "assets/images/game/items/magic_bullets.png"
   },
   {
     "name": "Magic Sweet",
@@ -34180,7 +34331,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Improves health, movement speed, and damage. This treat was originally created as a reward for Winchester's games of skill."
+    "ammonomicon": "Improves health, movement speed, and damage. This treat was originally created as a reward for Winchester's games of skill.",
+    "game_icon": "assets/images/game/items/magic_sweet.png"
   },
   {
     "name": "Map",
@@ -34312,7 +34464,8 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "A map of the current layout of one floor of the Gungeon. Becomes obsolete quickly."
+    "ammonomicon": "A map of the current layout of one floor of the Gungeon. Becomes obsolete quickly.",
+    "game_icon": "assets/images/game/items/map.png"
   },
   {
     "name": "Master of Unlocking",
@@ -34435,7 +34588,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Increases the chance of gaining a key upon clearing a room."
+    "ammonomicon": "Increases the chance of gaining a key upon clearing a room.",
+    "game_icon": "assets/images/game/items/master_of_unlocking.png"
   },
   {
     "name": "Master Round I",
@@ -36318,7 +36472,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Heals for a small amount. Increases damage dealt until injured. A delicious, freshly baked roll! Sometimes, things just work out."
+    "ammonomicon": "Heals for a small amount. Increases damage dealt until injured. A delicious, freshly baked roll! Sometimes, things just work out.",
+    "game_icon": "assets/images/game/items/meatbun.png"
   },
   {
     "name": "Medkit",
@@ -36404,7 +36559,8 @@
       "Gungeon loot pool",
       "Wooden chests"
     ],
-    "ammonomicon": "Medkits provides substantial healing when used. Contains a small piece of fairy. Seeking a place that would provide a near constant flow of the desperate and injured, Médecins Sans Diplôme recognized the Gungeon as the perfect place to found their practice."
+    "ammonomicon": "Medkits provides substantial healing when used. Contains a small piece of fairy. Seeking a place that would provide a near constant flow of the desperate and injured, Médecins Sans Diplôme recognized the Gungeon as the perfect place to found their practice.",
+    "game_icon": "assets/images/game/items/medkit.png"
   },
   {
     "name": "Melted Rock",
@@ -36625,7 +36781,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Resonates with Gundead corpses, causing them to explode. This rock is a testament to one poor soul, whose agony was so great that it still echoes in the bodies of the freshly deceased."
+    "ammonomicon": "Resonates with Gundead corpses, causing them to explode. This rock is a testament to one poor soul, whose agony was so great that it still echoes in the bodies of the freshly deceased.",
+    "game_icon": "assets/images/game/items/melted_rock.png"
   },
   {
     "name": "Metronome",
@@ -36969,7 +37126,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Improves equipped gun on each sequential kill. Taking damage or changing guns will reduce the bonus back to zero."
+    "ammonomicon": "Improves equipped gun on each sequential kill. Taking damage or changing guns will reduce the bonus back to zero.",
+    "game_icon": "assets/images/game/items/metronome.png"
   },
   {
     "name": "Military Training",
@@ -37104,7 +37262,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Memories of your years in training. Better Reload speeds and weapon accuracy."
+    "ammonomicon": "Memories of your years in training. Better Reload speeds and weapon accuracy.",
+    "game_icon": "assets/images/game/items/military_training.png"
   },
   {
     "name": "Mimic Tooth Necklace",
@@ -37493,7 +37652,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Unlocks all chests! A necklace made from the tooth of a Mimic. Feels lucky!"
+    "ammonomicon": "Unlocks all chests! A necklace made from the tooth of a Mimic. Feels lucky!",
+    "game_icon": "assets/images/game/items/mimic_tooth_necklace.png"
   },
   {
     "name": "Molotov",
@@ -37637,7 +37797,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Molotov cocktails aren't guns, and so they are frowned upon by long-dwelling Gungeoneers. They get the job done regardless. Knowing the Hegemony wouldn't let her bring her own weaponry to the Gungeon, the Convict smuggled these few bottles in with the transport's cargo."
+    "ammonomicon": "Molotov cocktails aren't guns, and so they are frowned upon by long-dwelling Gungeoneers. They get the job done regardless. Knowing the Hegemony wouldn't let her bring her own weaponry to the Gungeon, the Convict smuggled these few bottles in with the transport's cargo.",
+    "game_icon": "assets/images/game/items/molotov.png"
   },
   {
     "name": "Monster Blood",
@@ -37795,7 +37956,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Emits deadly ooze when damaged. This canister contains a sample of dangerous monster blood, collected by Médecins Sans Diplôme for study."
+    "ammonomicon": "Emits deadly ooze when damaged. This canister contains a sample of dangerous monster blood, collected by Médecins Sans Diplôme for study.",
+    "game_icon": "assets/images/game/items/monster_blood.png"
   },
   {
     "name": "Muscle Relaxant",
@@ -37853,7 +38015,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Greatly increases accuracy. These anxiolytic drugs are favored by long-distance snipers, especially in the cold. They won't get rid of shaking hands entirely, but are more effective than holding your breath."
+    "ammonomicon": "Greatly increases accuracy. These anxiolytic drugs are favored by long-distance snipers, especially in the cold. They won't get rid of shaking hands entirely, but are more effective than holding your breath.",
+    "game_icon": "assets/images/game/items/muscle_relaxant.png"
   },
   {
     "name": "Mustache",
@@ -38161,7 +38324,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Spending money soothes the soul. The power of commerce fills your veins... and your follicles! This mustache vertically integrates your purchasing synergies, giving you a chance to be healed on every transaction."
+    "ammonomicon": "Spending money soothes the soul. The power of commerce fills your veins... and your follicles! This mustache vertically integrates your purchasing synergies, giving you a chance to be healed on every transaction.",
+    "game_icon": "assets/images/game/items/mustache.png"
   },
   {
     "name": "Nanomachines",
@@ -38455,7 +38619,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Gain armor when damaged several times. These self-replicating Nanomachines transform lead that enters the body into armor."
+    "ammonomicon": "Gain armor when damaged several times. These self-replicating Nanomachines transform lead that enters the body into armor.",
+    "game_icon": "assets/images/game/items/nanomachines.png"
   },
   {
     "name": "Napalm Strike",
@@ -38568,7 +38733,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "The pinnacle of Gungeon air support."
+    "ammonomicon": "The pinnacle of Gungeon air support.",
+    "game_icon": "assets/images/game/items/napalm_strike.png"
   },
   {
     "name": "Number 2",
@@ -38803,7 +38969,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Boosts stats when alone. Now that the protagonist is dead, it's time to shine!"
+    "ammonomicon": "Boosts stats when alone. Now that the protagonist is dead, it's time to shine!",
+    "game_icon": "assets/images/game/items/number_2.png"
   },
   {
     "name": "Obsidian Shell Casing",
@@ -38910,7 +39077,8 @@
     "neckbear_approved": true,
     "ammonomicon_entry": "Bullet Component. Carved from a fang of a High Dragun, this casing is the only material strong enough to jacket Planar Lead.",
     "id": 350,
-    "ammonomicon": "Bullet Component. Carved from a fang of a High Dragun, this casing is the only material strong enough to jacket Planar Lead."
+    "ammonomicon": "Bullet Component. Carved from a fang of a High Dragun, this casing is the only material strong enough to jacket Planar Lead.",
+    "game_icon": "assets/images/game/items/obsidian_shell_casing.png"
   },
   {
     "name": "Oiled Cylinder",
@@ -38959,7 +39127,8 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "Increases the speed at which guns can be reloaded."
+    "ammonomicon": "Increases the speed at which guns can be reloaded.",
+    "game_icon": "assets/images/game/items/oiled_cylinder.png"
   },
   {
     "name": "Old Crest",
@@ -39129,7 +39298,8 @@
     "ammonomicon_entry": "Grants a piece of armor. Consumed upon taking any damage.",
     "id": 305,
     "ammonomicon_pos": 153,
-    "ammonomicon": "A peculiar piece of armor. The crest of a strange religion. The edges are scuffed and worn, as if it has been slid into a frame several times. The crest depicts a great bullet falling from the sky, surrounded by prostrate Gundead figures."
+    "ammonomicon": "A peculiar piece of armor. The crest of a strange religion. The edges are scuffed and worn, as if it has been slid into a frame several times. The crest depicts a great bullet falling from the sky, surrounded by prostrate Gundead figures.",
+    "game_icon": "assets/images/game/items/old_crest.png"
   },
   {
     "name": "Old Knight's Flask",
@@ -39335,7 +39505,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Provides healing, and replenishes on each floor. Once carried by powerful Gunknights, these flasks have dimmed with age. Some say they are linked directly to the power of the Gun."
+    "ammonomicon": "Provides healing, and replenishes on each floor. Once carried by powerful Gunknights, these flasks have dimmed with age. Some say they are linked directly to the power of the Gun.",
+    "game_icon": "assets/images/game/items/old_knight_s_flask.png"
   },
   {
     "name": "Old Knight's Helm",
@@ -39558,7 +39729,8 @@
     "ammonomicon_entry": "A sturdy, if modest, helmet. Once worn by a knight with an unusually large head.",
     "id": 222,
     "ammonomicon_pos": 151,
-    "ammonomicon": "A sturdy, if modest, helmet. Once worn by a knight with an unusually large head."
+    "ammonomicon": "A sturdy, if modest, helmet. Once worn by a knight with an unusually large head.",
+    "game_icon": "assets/images/game/items/old_knight_s_helm.png"
   },
   {
     "name": "Old Knight's Shield",
@@ -39763,7 +39935,8 @@
     "ammonomicon_entry": "The shield of Ser Manuel, emblazoned with his House sigil, the Cup of Knowledge. There is a diagram on the back illustrating how to strap on a shield and examples of when to raise it. Remarkably free of wear.",
     "id": 219,
     "ammonomicon_pos": 150,
-    "ammonomicon": "The shield of Ser Manuel, emblazoned with his House sigil, the Cup of Knowledge. There is a diagram on the back illustrating how to strap on a shield and examples of when to raise it. Remarkably free of wear."
+    "ammonomicon": "The shield of Ser Manuel, emblazoned with his House sigil, the Cup of Knowledge. There is a diagram on the back illustrating how to strap on a shield and examples of when to raise it. Remarkably free of wear.",
+    "game_icon": "assets/images/game/items/old_knight_s_shield.png"
   },
   {
     "name": "Omega Bullets",
@@ -39905,7 +40078,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Increases the damage dealt by the last bullet in a clip. One of a pair of artifact bullets forged by Edwin's daughter as part of her journeyman's trial."
+    "ammonomicon": "Increases the damage dealt by the last bullet in a clip. One of a pair of artifact bullets forged by Edwin's daughter as part of her journeyman's trial.",
+    "game_icon": "assets/images/game/items/omega_bullets.png"
   },
   {
     "name": "Orange",
@@ -40278,7 +40452,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "With this orange, your style... it's impetuous. Your defense, impregnable."
+    "ammonomicon": "With this orange, your style... it's impetuous. Your defense, impregnable.",
+    "game_icon": "assets/images/game/items/orange.png"
   },
   {
     "name": "Orange Guon Stone",
@@ -40412,7 +40587,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Attacks enemies. In years past, the Orange Guon stone boosted its bearer's damage, but the Belligerite at the core of the stone has grown so enraged that the stone itself now lashes out at foes."
+    "ammonomicon": "Attacks enemies. In years past, the Orange Guon stone boosted its bearer's damage, but the Belligerite at the core of the stone has grown so enraged that the stone itself now lashes out at foes.",
+    "game_icon": "assets/images/game/items/orange_guon_stone.png"
   },
   {
     "name": "Orbital Bullets",
@@ -41271,7 +41447,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Missed shots orbit. Development of these bullets began immediately after the successful field tests of the Mr. Accretion Jr."
+    "ammonomicon": "Missed shots orbit. Development of these bullets began immediately after the successful field tests of the Mr. Accretion Jr.",
+    "game_icon": "assets/images/game/items/orbital_bullets.png"
   },
   {
     "name": "Owl",
@@ -41553,7 +41730,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Companion. Occasionally blanks enemy bullets. This fearless owl follows you, clutching a wad of Blanks in its talons."
+    "ammonomicon": "Companion. Occasionally blanks enemy bullets. This fearless owl follows you, clutching a wad of Blanks in its talons.",
+    "game_icon": "assets/images/game/items/owl.png"
   },
   {
     "name": "Partially-Eaten Cheese",
@@ -41773,7 +41951,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Temporarily changes what game you're playing. Aged in an old arcade cabinet for decades, this cheese has become something of a delicacy, but only to those with refined palates."
+    "ammonomicon": "Temporarily changes what game you're playing. Aged in an old arcade cabinet for decades, this cheese has become something of a delicacy, but only to those with refined palates.",
+    "game_icon": "assets/images/game/items/partially_eaten_cheese.png"
   },
   {
     "name": "Pig",
@@ -42071,7 +42250,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A strange pig. This pig... there's nothing obviously wrong with him. His shifty glances and uncanny stares make you wonder about his motivations. Maybe not the greatest pig to have around."
+    "ammonomicon": "A strange pig. This pig... there's nothing obviously wrong with him. His shifty glances and uncanny stares make you wonder about his motivations. Maybe not the greatest pig to have around.",
+    "game_icon": "assets/images/game/items/pig.png"
   },
   {
     "name": "Pink Guon Stone",
@@ -42216,7 +42396,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Health increased. The Pink Guon stone is actually a White Guon stone that has been used as a component in blood rituals, infusing it with the hearts of fallen Gungeoneers."
+    "ammonomicon": "Health increased. The Pink Guon stone is actually a White Guon stone that has been used as a component in blood rituals, infusing it with the hearts of fallen Gungeoneers.",
+    "game_icon": "assets/images/game/items/pink_guon_stone.png"
   },
   {
     "name": "Planar Lead",
@@ -42307,7 +42488,8 @@
     "ammonomicon_entry": "Bullet Component. This extraplanar lead was once part of the great Bullet that fell from the sky, the origin of all Gundead. It shimmers softly, shifting between the material and ethereal sides of the Curtain. Grows hot in the presence of enemies.",
     "id": 349,
     "ammonomicon_pos": 7,
-    "ammonomicon": "Bullet Component. This extraplanar lead was once part of the great Bullet that fell from the sky, the origin of all Gundead. It shimmers softly, shifting between the material and ethereal sides of the Curtain. Grows hot in the presence of enemies."
+    "ammonomicon": "Bullet Component. This extraplanar lead was once part of the great Bullet that fell from the sky, the origin of all Gundead. It shimmers softly, shifting between the material and ethereal sides of the Curtain. Grows hot in the presence of enemies.",
+    "game_icon": "assets/images/game/items/planar_lead.png"
   },
   {
     "name": "Platinum Bullets",
@@ -42487,7 +42669,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "With each one served, they only grow more powerful. These shining shells have been forged and reforged hundreds of thousands of times- at least ten hundred."
+    "ammonomicon": "With each one served, they only grow more powerful. These shining shells have been forged and reforged hundreds of thousands of times- at least ten hundred.",
+    "game_icon": "assets/images/game/items/platinum_bullets.png"
   },
   {
     "name": "Poison Vial",
@@ -42549,7 +42732,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Creates a pool of poisonous goop. Stolen from the Witches' storehouse, this jar contains Essence of Poisbulon. Toxic to Gundead and Gungeoneer alike!"
+    "ammonomicon": "Creates a pool of poisonous goop. Stolen from the Witches' storehouse, this jar contains Essence of Poisbulon. Toxic to Gundead and Gungeoneer alike!",
+    "game_icon": "assets/images/game/items/poison_vial.png"
   },
   {
     "name": "Portable Table Device",
@@ -42730,7 +42914,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Advanced polymers reinforce this state-of-the-art handheld dining surface."
+    "ammonomicon": "Advanced polymers reinforce this state-of-the-art handheld dining surface.",
+    "game_icon": "assets/images/game/items/portable_table_device.png"
   },
   {
     "name": "Portable Turret",
@@ -42894,7 +43079,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Shoots at enemies for a short time. This portable turret is actually a doll commonly given to young Gundead. It shoots at anything nearby, and is thought to encourage good habits."
+    "ammonomicon": "Shoots at enemies for a short time. This portable turret is actually a doll commonly given to young Gundead. It shoots at anything nearby, and is thought to encourage good habits.",
+    "game_icon": "assets/images/game/items/portable_turret.png"
   },
   {
     "name": "Potion of Gun Friendship",
@@ -43092,7 +43278,8 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "Temporarily increases combat ability. Another of Goopton's inventions. The Potion of Gun Friendship will temporarily strengthen one's bond with their weapon, increasing combat prowess significantly."
+    "ammonomicon": "Temporarily increases combat ability. Another of Goopton's inventions. The Potion of Gun Friendship will temporarily strengthen one's bond with their weapon, increasing combat prowess significantly.",
+    "game_icon": "assets/images/game/items/potion_of_gun_friendship.png"
   },
   {
     "name": "Potion of Lead Skin",
@@ -43201,7 +43388,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Temporary invulnerability. A product of Professor Goopton's rigorous research."
+    "ammonomicon": "Temporary invulnerability. A product of Professor Goopton's rigorous research.",
+    "game_icon": "assets/images/game/items/potion_of_lead_skin.png"
   },
   {
     "name": "Prime Primer",
@@ -43399,7 +43587,8 @@
     "id": 348,
     "shop_price": 110,
     "ammonomicon_pos": 5,
-    "ammonomicon": "Bullet Component. The primer of one of the first Gundead to ever walk the Gungeon. It still trembles with the energies released when the Bullet struck."
+    "ammonomicon": "Bullet Component. The primer of one of the first Gundead to ever walk the Gungeon. It still trembles with the energies released when the Bullet struck.",
+    "game_icon": "assets/images/game/items/prime_primer.png"
   },
   {
     "name": "Proximity Mine",
@@ -43469,7 +43658,8 @@
       "Gungeon loot pool",
       "Wooden chests"
     ],
-    "ammonomicon": "This mine activates when an enemy gets close."
+    "ammonomicon": "This mine activates when an enemy gets close.",
+    "game_icon": "assets/images/game/items/proximity_mine.png"
   },
   {
     "name": "R2G2",
@@ -43683,7 +43873,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Companion. Fires upon foes. This robot originally served beverages to the Gundead as they wandered the chambers."
+    "ammonomicon": "Companion. Fires upon foes. This robot originally served beverages to the Gundead as they wandered the chambers.",
+    "game_icon": "assets/images/game/items/r2g2.png"
   },
   {
     "name": "Rat Boots",
@@ -43852,7 +44043,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Grants temporary invulnerability and flight when the wearer walks out over a pit. The Resourceful Rat's prolific thievery is legendary - and these boots helped him do it. Stolen off a hapless pointy-eared adventurer."
+    "ammonomicon": "Grants temporary invulnerability and flight when the wearer walks out over a pit. The Resourceful Rat's prolific thievery is legendary - and these boots helped him do it. Stolen off a hapless pointy-eared adventurer.",
+    "game_icon": "assets/images/game/items/rat_boots.png"
   },
   {
     "name": "Ration",
@@ -44002,7 +44194,8 @@
       "Truth chest",
       "Wooden chests"
     ],
-    "ammonomicon": "Provides healing on use. If equipped, will be used automatically on death. This MRE comes in the form of a dry and dense cookie. It doesn't taste great, but it delivers the calories the body needs."
+    "ammonomicon": "Provides healing on use. If equipped, will be used automatically on death. This MRE comes in the form of a dry and dense cookie. It doesn't taste great, but it delivers the calories the body needs.",
+    "game_icon": "assets/images/game/items/ration.png"
   },
   {
     "name": "Red Guon Stone",
@@ -44070,7 +44263,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Improves dodging. The Red Guon Stone is 40% Dodgicite, greatly improving dodge roll speed and distance."
+    "ammonomicon": "Improves dodging. The Red Guon Stone is 40% Dodgicite, greatly improving dodge roll speed and distance.",
+    "game_icon": "assets/images/game/items/red_guon_stone.png"
   },
   {
     "name": "Relodestone",
@@ -44258,7 +44452,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Briefly absorbs enemy bullets and converts them to ammo. The molecules in this rare piece of stone are naturally aligned such that all of their bullets face the same direction."
+    "ammonomicon": "Briefly absorbs enemy bullets and converts them to ammo. The molecules in this rare piece of stone are naturally aligned such that all of their bullets face the same direction.",
+    "game_icon": "assets/images/game/items/relodestone.png"
   },
   {
     "name": "Remote Bullets",
@@ -44563,7 +44758,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "All projectiles can be guided after they are fired. These tiny engines can be controlled remotely, allowing the wielder to change trajectories at will."
+    "ammonomicon": "All projectiles can be guided after they are fired. These tiny engines can be controlled remotely, allowing the wielder to change trajectories at will.",
+    "game_icon": "assets/images/game/items/remote_bullets.png"
   },
   {
     "name": "Resourceful Sack",
@@ -44765,7 +44961,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Allows the theft of enemy projectiles out of the air. Use to fire stolen bullets. An otherwise normal sack, used by the Right People for acts of thievery. It has thirteen patches of various materials."
+    "ammonomicon": "Allows the theft of enemy projectiles out of the air. Use to fire stolen bullets. An otherwise normal sack, used by the Right People for acts of thievery. It has thirteen patches of various materials.",
+    "game_icon": "assets/images/game/items/resourceful_sack.png"
   },
   {
     "name": "Riddle of Lead",
@@ -44928,7 +45125,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A relic of the first hero to master the Gungeon, whose skill attracted the envy of Kaliber herself. Bestows unreasonable courage in the face of danger, and the luck to survive it."
+    "ammonomicon": "A relic of the first hero to master the Gungeon, whose skill attracted the envy of Kaliber herself. Bestows unreasonable courage in the face of danger, and the luck to survive it.",
+    "game_icon": "assets/images/game/items/riddle_of_lead.png"
   },
   {
     "name": "Ring of Chest Friendship",
@@ -45049,7 +45247,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Increases the chance of finding chests. This ring was first given to Winchester, largely due to a naming mix-up. With little use for treasure, Winchester eventually gave it away as a prize in one of his strange games."
+    "ammonomicon": "Increases the chance of finding chests. This ring was first given to Winchester, largely due to a naming mix-up. With little use for treasure, Winchester eventually gave it away as a prize in one of his strange games.",
+    "game_icon": "assets/images/game/items/ring_of_chest_friendship.png"
   },
   {
     "name": "Ring of Chest Vampirism",
@@ -45137,7 +45336,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Heals upon breaking a chest open. This ring, crafted from the frame of a powerful mimic, still yearns to devour chests."
+    "ammonomicon": "Heals upon breaking a chest open. This ring, crafted from the frame of a powerful mimic, still yearns to devour chests.",
+    "game_icon": "assets/images/game/items/ring_of_chest_vampirism.png"
   },
   {
     "name": "Ring of Ethereal Form",
@@ -45412,7 +45612,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Temporary incorporeality. This mysterious ring briefly allows one to traverse the etheral planes. In addition to incorporeality, this bestows flight. Take care not to fall upon return!"
+    "ammonomicon": "Temporary incorporeality. This mysterious ring briefly allows one to traverse the etheral planes. In addition to incorporeality, this bestows flight. Take care not to fall upon return!",
+    "game_icon": "assets/images/game/items/ring_of_ethereal_form.png"
   },
   {
     "name": "Ring of Fire Resistance",
@@ -45583,7 +45784,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Prevents damage from fire. A ring originally worn by the legendary gunsmith himself. Later in life, Edwin no longer needed it, but the ring proved indispensable during his early years in the Forge. It eventually passed to his eldest daughter."
+    "ammonomicon": "Prevents damage from fire. A ring originally worn by the legendary gunsmith himself. Later in life, Edwin no longer needed it, but the ring proved indispensable during his early years in the Forge. It eventually passed to his eldest daughter.",
+    "game_icon": "assets/images/game/items/ring_of_fire_resistance.png"
   },
   {
     "name": "Ring of Mimic Friendship",
@@ -45756,7 +45958,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Makes chests safer. Not actually a ring, but rather a small creature pretending to be a ring. Emits a strange psychic tone only recognizable to mimics, preventing them from attacking."
+    "ammonomicon": "Makes chests safer. Not actually a ring, but rather a small creature pretending to be a ring. Emits a strange psychic tone only recognizable to mimics, preventing them from attacking.",
+    "game_icon": "assets/images/game/items/ring_of_mimic_friendship.png"
   },
   {
     "name": "Ring of Miserly Protection",
@@ -46045,7 +46248,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Increases health substantially. Any purchases will shatter the ring. Before the Shopkeep opened his shop, he was an avaricious and miserly man. He remains careful about any expenditures, but through capitalism he has purged himself of negative emotion."
+    "ammonomicon": "Increases health substantially. Any purchases will shatter the ring. Before the Shopkeep opened his shop, he was an avaricious and miserly man. He remains careful about any expenditures, but through capitalism he has purged himself of negative emotion.",
+    "game_icon": "assets/images/game/items/ring_of_miserly_protection.png"
   },
   {
     "name": "Ring of the Resourceful Rat",
@@ -46296,7 +46500,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "A ring once worn by the Resourceful Rat. Represents a tenuous kinship with a one-time foe."
+    "ammonomicon": "A ring once worn by the Resourceful Rat. Represents a tenuous kinship with a one-time foe.",
+    "game_icon": "assets/images/game/items/ring_of_the_resourceful_rat.png"
   },
   {
     "name": "Ring of Triggers",
@@ -46540,7 +46745,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Summons bullets on active item use. This ring bestows upon its bearer the now obvious knowledge that within the walls of the Gungeon all items are actually guns in strange, distorted form. An artifact of the Order's belief in transgunstantiation."
+    "ammonomicon": "Summons bullets on active item use. This ring bestows upon its bearer the now obvious knowledge that within the walls of the Gungeon all items are actually guns in strange, distorted form. An artifact of the Order's belief in transgunstantiation.",
+    "game_icon": "assets/images/game/items/ring_of_triggers.png"
   },
   {
     "name": "Rocket-Powered Bullets",
@@ -46653,7 +46859,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Increased bullet speed and power. Known for her impatience, Cadence grew tired of waiting for her bullets to reach their target. She developed these tiny rockets to give each shot extra speed."
+    "ammonomicon": "Increased bullet speed and power. Known for her impatience, Cadence grew tired of waiting for her bullets to reach their target. She developed these tiny rockets to give each shot extra speed.",
+    "game_icon": "assets/images/game/items/rocket_powered_bullets.png"
   },
   {
     "name": "Roll Bomb",
@@ -47188,7 +47395,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Produces a bomb when dodge rolling. This strange mechanism dispenses explosives when spun."
+    "ammonomicon": "Produces a bomb when dodge rolling. This strange mechanism dispenses explosives when spun.",
+    "game_icon": "assets/images/game/items/roll_bomb.png"
   },
   {
     "name": "Rolling Eye",
@@ -47529,7 +47737,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Rolling through bullets rebounds them toward their owners. Despite his many failings, Ser Manuel is one of the finest dodge rollers ever to enter the Gungeon's halls. This eye is almost purely composed of Dodgicite, a rare material that reacts strangely near bullets."
+    "ammonomicon": "Rolling through bullets rebounds them toward their owners. Despite his many failings, Ser Manuel is one of the finest dodge rollers ever to enter the Gungeon's halls. This eye is almost purely composed of Dodgicite, a rare material that reacts strangely near bullets.",
+    "game_icon": "assets/images/game/items/rolling_eye.png"
   },
   {
     "name": "Ruby Bracelet",
@@ -47758,7 +47967,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Any guns thrown while wearing this bracelet will explode!"
+    "ammonomicon": "Any guns thrown while wearing this bracelet will explode!",
+    "game_icon": "assets/images/game/items/ruby_bracelet.png"
   },
   {
     "name": "Scattershot",
@@ -48067,7 +48277,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "More bullets, less damage."
+    "ammonomicon": "More bullets, less damage.",
+    "game_icon": "assets/images/game/items/scattershot.png"
   },
   {
     "name": "Scope",
@@ -48331,7 +48542,8 @@
       "Gungeon loot pool",
       "Truth chest"
     ],
-    "ammonomicon": "A standard scope. Increases accuracy!"
+    "ammonomicon": "A standard scope. Increases accuracy!",
+    "game_icon": "assets/images/game/items/scope.png"
   },
   {
     "name": "Scouter",
@@ -48539,7 +48751,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Shows combat data. Increases accuracy and damage by a small amount. This scouter, worn with use, provides detailed data on enemies encountered within the Gungeon. The name \"Ritvik\" is inscribed on the rim."
+    "ammonomicon": "Shows combat data. Increases accuracy and damage by a small amount. This scouter, worn with use, provides detailed data on enemies encountered within the Gungeon. The name \"Ritvik\" is inscribed on the rim.",
+    "game_icon": "assets/images/game/items/scouter.png"
   },
   {
     "name": "Sense of Direction",
@@ -48671,7 +48884,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Strangely, the needle in this compass always points toward the next descending elevator. The words \"Woban, J.S.C.\" are engraved upon the back."
+    "ammonomicon": "Strangely, the needle in this compass always points toward the next descending elevator. The words \"Woban, J.S.C.\" are engraved upon the back.",
+    "game_icon": "assets/images/game/items/sense_of_direction.png"
   },
   {
     "name": "Ser Junkan 1",
@@ -49136,7 +49350,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Several times rarer than a four-leaf clover, this seven-leafed charm bestows incredible luck upon its bearer."
+    "ammonomicon": "Several times rarer than a four-leaf clover, this seven-leafed charm bestows incredible luck upon its bearer.",
+    "game_icon": "assets/images/game/items/seven_leaf_clover.png"
   },
   {
     "name": "Shadow Bullets",
@@ -49414,7 +49629,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Fires additional projectiles. These umbral bullets hide in the shadows of other bullets, waiting for the right time to strike."
+    "ammonomicon": "Fires additional projectiles. These umbral bullets hide in the shadows of other bullets, waiting for the right time to strike.",
+    "game_icon": "assets/images/game/items/shadow_bullets.png"
   },
   {
     "name": "Shadow Clone",
@@ -49653,7 +49869,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Creates a temporary second you. Though the quality of this clone is debatable, Believe It! or not, this clone has seen extensive use in the Gungeon. Not to be confused with the Clone. While the Clone provides a second chance at life, the Shadow Clone will merely laugh at you upon your demise."
+    "ammonomicon": "Creates a temporary second you. Though the quality of this clone is debatable, Believe It! or not, this clone has seen extensive use in the Gungeon. Not to be confused with the Clone. While the Clone provides a second chance at life, the Shadow Clone will merely laugh at you upon your demise.",
+    "game_icon": "assets/images/game/items/shadow_clone.png"
   },
   {
     "name": "Shelleton Key",
@@ -49881,7 +50098,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Opens any lock. Never consumed. The ultimate tool in the Gungeon Acquisitions' Department's arsenal."
+    "ammonomicon": "Opens any lock. Never consumed. The ultimate tool in the Gungeon Acquisitions' Department's arsenal.",
+    "game_icon": "assets/images/game/items/shelleton_key.png"
   },
   {
     "name": "Shield of the Maiden",
@@ -50112,7 +50330,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Use to block bullets. This old and battered shield has seen better days, but it still gets the job done. A useful addition to any Gungoneer's arsenal when used in moderation. Shields are nice, but not if they engender passivity."
+    "ammonomicon": "Use to block bullets. This old and battered shield has seen better days, but it still gets the job done. A useful addition to any Gungoneer's arsenal when used in moderation. Shields are nice, but not if they engender passivity.",
+    "game_icon": "assets/images/game/items/shield_of_the_maiden.png"
   },
   {
     "name": "Shock Rounds",
@@ -50597,7 +50816,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Links bullets together with chain lightning. The signature weapon of Alistair, the Thunderbolt. Upon his second descent into the Gungeon, the Thunderbolt famously remarked, \"Lightning won't strike here again.\" He wasn't wrong."
+    "ammonomicon": "Links bullets together with chain lightning. The signature weapon of Alistair, the Thunderbolt. Upon his second descent into the Gungeon, the Thunderbolt famously remarked, \"Lightning won't strike here again.\" He wasn't wrong.",
+    "game_icon": "assets/images/game/items/shock_rounds.png"
   },
   {
     "name": "Shotga Cola",
@@ -50751,7 +50971,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Highly caffeinated, save the cap."
+    "ammonomicon": "Highly caffeinated, save the cap.",
+    "game_icon": "assets/images/game/items/shotga_cola.png"
   },
   {
     "name": "Shotgun Coffee",
@@ -50808,7 +51029,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Highly caffeinated, with just a hint of gunpowder. Don't drink more than 99 cups."
+    "ammonomicon": "Highly caffeinated, with just a hint of gunpowder. Don't drink more than 99 cups.",
+    "game_icon": "assets/images/game/items/shotgun_coffee.png"
   },
   {
     "name": "Silver Bullets",
@@ -50988,7 +51210,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Massively increased damage to the Jammed. Also somewhat effective against bosses. These bullets have been individually blessed to strike down the accursed."
+    "ammonomicon": "Massively increased damage to the Jammed. Also somewhat effective against bosses. These bullets have been individually blessed to strike down the accursed.",
+    "game_icon": "assets/images/game/items/silver_bullets.png"
   },
   {
     "name": "Singularity",
@@ -51109,7 +51332,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Creates a small black hole, damaging any enemies and destroying any projectiles caught in its gravitational pull. First pioneered by the Hegemony of Man during the Ten Days' War, the Portable Star Crusher was deemed too dangerous for broad deployment."
+    "ammonomicon": "Creates a small black hole, damaging any enemies and destroying any projectiles caught in its gravitational pull. First pioneered by the Hegemony of Man during the Ten Days' War, the Portable Star Crusher was deemed too dangerous for broad deployment.",
+    "game_icon": "assets/images/game/items/singularity.png"
   },
   {
     "name": "Sixth Chamber",
@@ -51412,7 +51636,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Feeds upon curse. One of three artifacts that led to the creation of the Jammed. As their curses grow louder, Kaliber smiles upon the bearer of this portentious omen."
+    "ammonomicon": "Feeds upon curse. One of three artifacts that led to the creation of the Jammed. As their curses grow louder, Kaliber smiles upon the bearer of this portentious omen.",
+    "game_icon": "assets/images/game/items/sixth_chamber.png"
   },
   {
     "name": "Smoke Bomb",
@@ -51568,7 +51793,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Temporary invisibility."
+    "ammonomicon": "Temporary invisibility.",
+    "game_icon": "assets/images/game/items/smoke_bomb.png"
   },
   {
     "name": "Snowballets",
@@ -51716,7 +51942,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Bullets grow in size and damage as they travel. These bullets draw ambient bullet particles from the Gungeon's atmosphere, steadily increasing in size. Bullet Kin have been seen stacking them for fun. Arguments frequently break out over the sole scarf in the Gungeon."
+    "ammonomicon": "Bullets grow in size and damage as they travel. These bullets draw ambient bullet particles from the Gungeon's atmosphere, steadily increasing in size. Bullet Kin have been seen stacking them for fun. Arguments frequently break out over the sole scarf in the Gungeon.",
+    "game_icon": "assets/images/game/items/snowballets.png"
   },
   {
     "name": "Space Friend",
@@ -51939,7 +52166,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Companion. Fires upon foes. This tiny ship is captained by a heroic, tiny spacefarer. Perhaps he or she has a tiny past full of tiny regrets?"
+    "ammonomicon": "Companion. Fires upon foes. This tiny ship is captained by a heroic, tiny spacefarer. Perhaps he or she has a tiny past full of tiny regrets?",
+    "game_icon": "assets/images/game/items/space_friend.png"
   },
   {
     "name": "Spice",
@@ -52578,7 +52806,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Increases combat prowess, with absolutely no downside! A potent gun-enhancing drug from the far reaches of the galaxy. It is known to be extremely addictive, and extremely expensive."
+    "ammonomicon": "Increases combat prowess, with absolutely no downside! A potent gun-enhancing drug from the far reaches of the galaxy. It is known to be extremely addictive, and extremely expensive.",
+    "game_icon": "assets/images/game/items/spice.png"
   },
   {
     "name": "Sponge",
@@ -52771,7 +53000,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Removes all goop in a small radius continuously. A normal sponge, useful for cleaning up messes. Holding it, you hear the whispers of an alien tongue."
+    "ammonomicon": "Removes all goop in a small radius continuously. A normal sponge, useful for cleaning up messes. Holding it, you hear the whispers of an alien tongue.",
+    "game_icon": "assets/images/game/items/sponge.png"
   },
   {
     "name": "Springheel Boots",
@@ -52948,7 +53178,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Allows a second dodge while rolling. Originally worn by a legendary thief to scale impossible heights, the peculiar properties of these boots allow a Gungeoneer to extend their dodge roll - and are therefore a tremendously powerful item."
+    "ammonomicon": "Allows a second dodge while rolling. Originally worn by a legendary thief to scale impossible heights, the peculiar properties of these boots allow a Gungeoneer to extend their dodge roll - and are therefore a tremendously powerful item.",
+    "game_icon": "assets/images/game/items/springheel_boots.png"
   },
   {
     "name": "Sprun",
@@ -53532,7 +53763,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Transforms into a powerful weapon under mysterious circumstances. This Bullet Sprite will transform into an enormously powerful radiant energy weapon under certain circumstances. Traditionally, this means showing proficiency in bridge delivery and maintenance. If no bridge is available, however, it will take less important things like courage or determination into consideration."
+    "ammonomicon": "Transforms into a powerful weapon under mysterious circumstances. This Bullet Sprite will transform into an enormously powerful radiant energy weapon under certain circumstances. Traditionally, this means showing proficiency in bridge delivery and maintenance. If no bridge is available, however, it will take less important things like courage or determination into consideration.",
+    "game_icon": "assets/images/game/items/sprun.png"
   },
   {
     "name": "Stout Bullets",
@@ -53735,7 +53967,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Increases damage at close range. These bullets were taken from Frifle's private collection, but lost to the labyrinth during his first attempt at the Gungeon."
+    "ammonomicon": "Increases damage at close range. These bullets were taken from Frifle's private collection, but lost to the labyrinth during his first attempt at the Gungeon.",
+    "game_icon": "assets/images/game/items/stout_bullets.png"
   },
   {
     "name": "Stuffed Star",
@@ -53887,7 +54120,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Provides temporary invulnerability. This is a shooting star which has been embalmed and stuffed with soft fuzz. Tape several to your body and be safe from harm."
+    "ammonomicon": "Provides temporary invulnerability. This is a shooting star which has been embalmed and stuffed with soft fuzz. Tape several to your body and be safe from harm.",
+    "game_icon": "assets/images/game/items/stuffed_star.png"
   },
   {
     "name": "Sunglasses",
@@ -54100,7 +54334,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Slows down time during explosions. Increases dodge power during explosions. These sunglasses belonged to an extremely cool Gungeoneer. He put them on very slowly. Some say he is still putting them on."
+    "ammonomicon": "Slows down time during explosions. Increases dodge power during explosions. These sunglasses belonged to an extremely cool Gungeoneer. He put them on very slowly. Some say he is still putting them on.",
+    "game_icon": "assets/images/game/items/sunglasses.png"
   },
   {
     "name": "Super Hot Watch",
@@ -54431,7 +54666,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Time moves as you do. This watch is extremely hot to the touch."
+    "ammonomicon": "Time moves as you do. This watch is extremely hot to the touch.",
+    "game_icon": "assets/images/game/items/super_hot_watch.png"
   },
   {
     "name": "Super Space Turtle",
@@ -54848,7 +55084,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This miniscule weapon was wielded by the famous Super Space Turtle, a hero from beyond the stars. It is difficult for a normal human hand to wield, but can still function as a normal gun. It is best used in the hands of the Super Space Turtle, wherever they may be."
+    "ammonomicon": "This miniscule weapon was wielded by the famous Super Space Turtle, a hero from beyond the stars. It is difficult for a normal human hand to wield, but can still function as a normal gun. It is best used in the hands of the Super Space Turtle, wherever they may be.",
+    "game_icon": "assets/images/game/items/super_space_turtle.png"
   },
   {
     "name": "Supply Drop",
@@ -54990,7 +55227,8 @@
       "Room-clear rewards",
       "Wooden chests"
     ],
-    "ammonomicon": "Calls in an ammo drop."
+    "ammonomicon": "Calls in an ammo drop.",
+    "game_icon": "assets/images/game/items/supply_drop.png"
   },
   {
     "name": "Table Tech Blanks",
@@ -55159,7 +55397,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "This ancient technique will trigger a Blank when a table is flipped. Chapter four of the \"Tabla Sutra.\" A clear table leads to a clear mind."
+    "ammonomicon": "This ancient technique will trigger a Blank when a table is flipped. Chapter four of the \"Tabla Sutra.\" A clear table leads to a clear mind.",
+    "game_icon": "assets/images/game/items/table_tech_blanks.png"
   },
   {
     "name": "Table Tech Heat",
@@ -55315,7 +55554,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This new age table technique will create heat and flame upon the flipping of a table. Appendix E of the \"Tabla Sutra.\" Time is the fire in which we burn. Tables are but the embers of the past."
+    "ammonomicon": "This new age table technique will create heat and flame upon the flipping of a table. Appendix E of the \"Tabla Sutra.\" Time is the fire in which we burn. Tables are but the embers of the past.",
+    "game_icon": "assets/images/game/items/table_tech_heat.png"
   },
   {
     "name": "Table Tech Money",
@@ -55446,7 +55686,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This ancient technique produces money whenever a table is flipped, and flips all unflipped tables in a room. Chapter five of the \"Tabla Sutra.\" A poor man sells tables. A rich man buys tables. The wise man flips tables, and cares not for mundane possessions of the physical world. In this way, he becomes truly wealthy."
+    "ammonomicon": "This ancient technique produces money whenever a table is flipped, and flips all unflipped tables in a room. Chapter five of the \"Tabla Sutra.\" A poor man sells tables. A rich man buys tables. The wise man flips tables, and cares not for mundane possessions of the physical world. In this way, he becomes truly wealthy.",
+    "game_icon": "assets/images/game/items/table_tech_money.png"
   },
   {
     "name": "Table Tech Rage",
@@ -55599,7 +55840,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This ancient technique briefly increases damage whenever a table is flipped. Chapter two of the \"Tabla Sutra.\" When a table is flipped, does it not feel anger? Does it not feel rage? Understand that feeling, and when you flip the table, be yourself flipped. Made famous in a duel between the third Flipjutsu Master and a nameless table flipper."
+    "ammonomicon": "This ancient technique briefly increases damage whenever a table is flipped. Chapter two of the \"Tabla Sutra.\" When a table is flipped, does it not feel anger? Does it not feel rage? Understand that feeling, and when you flip the table, be yourself flipped. Made famous in a duel between the third Flipjutsu Master and a nameless table flipper.",
+    "game_icon": "assets/images/game/items/table_tech_rage.png"
   },
   {
     "name": "Table Tech Rocket",
@@ -55802,7 +56044,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This ancient technique causes tables to fire off like rockets when flipped. The final chapter of the \"Tabla Sutra.\" The pages are badly scorched, and barely legible."
+    "ammonomicon": "This ancient technique causes tables to fire off like rockets when flipped. The final chapter of the \"Tabla Sutra.\" The pages are badly scorched, and barely legible.",
+    "game_icon": "assets/images/game/items/table_tech_rocket.png"
   },
   {
     "name": "Table Tech Shotgun",
@@ -56012,7 +56255,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This ancient technique will fire a vicious shotgun blast when a table is flipped. Chapter six of the \"Tabla Sutra.\" In flipping, there is both a momentary creation and a permanent destruction. Both should be cherished."
+    "ammonomicon": "This ancient technique will fire a vicious shotgun blast when a table is flipped. Chapter six of the \"Tabla Sutra.\" In flipping, there is both a momentary creation and a permanent destruction. Both should be cherished.",
+    "game_icon": "assets/images/game/items/table_tech_shotgun.png"
   },
   {
     "name": "Table Tech Sight",
@@ -56144,7 +56388,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This ancient technique briefly increases gun output whenever a table is flipped. Chapter three of the \"Tabla Sutra.\" And in flipping the table, we are bettered. He who knows the table knows himself."
+    "ammonomicon": "This ancient technique briefly increases gun output whenever a table is flipped. Chapter three of the \"Tabla Sutra.\" And in flipping the table, we are bettered. He who knows the table knows himself.",
+    "game_icon": "assets/images/game/items/table_tech_sight.png"
   },
   {
     "name": "Table Tech Stun",
@@ -56266,7 +56511,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "This ancient technique briefly stuns enemies whenever a table is flipped. Chapter one of the \"Tabla Sutra.\" And when a table is masterfully flipped, what a most magnificent sight! Surely all who witness the flip of a true master can only stand transfixed, agog."
+    "ammonomicon": "This ancient technique briefly stuns enemies whenever a table is flipped. Chapter one of the \"Tabla Sutra.\" And when a table is masterfully flipped, what a most magnificent sight! Surely all who witness the flip of a true master can only stand transfixed, agog.",
+    "game_icon": "assets/images/game/items/table_tech_stun.png"
   },
   {
     "name": "Teleporter Prototype",
@@ -56653,7 +56899,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Teleports the user. A Gungeoneer who became annoyed with the Gungeon's inconvenient rules on teleportation developed this prototype. While it can be used at any time, its aim is unpredictable."
+    "ammonomicon": "Teleports the user. A Gungeoneer who became annoyed with the Gungeon's inconvenient rules on teleportation developed this prototype. While it can be used at any time, its aim is unpredictable.",
+    "game_icon": "assets/images/game/items/teleporter_prototype.png"
   },
   {
     "name": "Ticket",
@@ -56879,7 +57126,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Summons Gatling Gull as an ally. Gatling Gull respects martial prowess in Gungeoneers. Spend this ticket to bring in the big guns."
+    "ammonomicon": "Summons Gatling Gull as an ally. Gatling Gull respects martial prowess in Gungeoneers. Spend this ticket to bring in the big guns.",
+    "game_icon": "assets/images/game/items/ticket.png"
   },
   {
     "name": "Trusty Lockpicks",
@@ -57054,7 +57302,8 @@
       "Key shop",
       "Shop"
     ],
-    "ammonomicon": "Chance to pick locks. Can only be used once per lock. These lockpicks have never let the Pilot down, except for the many times they did."
+    "ammonomicon": "Chance to pick locks. Can only be used once per lock. These lockpicks have never let the Pilot down, except for the many times they did.",
+    "game_icon": "assets/images/game/items/trusty_lockpicks.png"
   },
   {
     "name": "Turkey",
@@ -57333,7 +57582,8 @@
       "Shop",
       "Truck shop"
     ],
-    "ammonomicon": "Recovers a small amount of ammo on landing three sequential shots. According to historical records, birds such as this were frequently given out for killing groups of creatures named 'pins' with large, rudimentary projectiles."
+    "ammonomicon": "Recovers a small amount of ammo on landing three sequential shots. According to historical records, birds such as this were frequently given out for killing groups of creatures named 'pins' with large, rudimentary projectiles.",
+    "game_icon": "assets/images/game/items/turkey.png"
   },
   {
     "name": "Turtle Problem",
@@ -57534,7 +57784,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Attracts normal turtles. You've just inherited a big problem."
+    "ammonomicon": "Attracts normal turtles. You've just inherited a big problem.",
+    "game_icon": "assets/images/game/items/turtle_problem.png"
   },
   {
     "name": "Unity",
@@ -57831,7 +58082,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Increased combat effectiveness per gun. This ring takes a small amount of power from each gun carried and adds it to the currently equipped gun."
+    "ammonomicon": "Increased combat effectiveness per gun. This ring takes a small amount of power from each gun carried and adds it to the currently equipped gun.",
+    "game_icon": "assets/images/game/items/unity.png"
   },
   {
     "name": "Uranium Ammolet",
@@ -57937,7 +58189,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Blanks have a chance to poison enemies. This enchanted amulet was created by a great gunsmith. Her research with irradiated metals ultimately cost her life, but many of today's guns owe their existence to her work."
+    "ammonomicon": "Blanks have a chance to poison enemies. This enchanted amulet was created by a great gunsmith. Her research with irradiated metals ultimately cost her life, but many of today's guns owe their existence to her work.",
+    "game_icon": "assets/images/game/items/uranium_ammolet.png"
   },
   {
     "name": "Utility Belt",
@@ -58244,7 +58497,8 @@
       "Shop",
       "Truth chest"
     ],
-    "ammonomicon": "Carry an additional item and more ammunition."
+    "ammonomicon": "Carry an additional item and more ammunition.",
+    "game_icon": "assets/images/game/items/utility_belt.png"
   },
   {
     "name": "Vorpal Bullets",
@@ -58591,7 +58845,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Occasionally fires a special round that deals massive damage. These hip bullets are fickle by nature and only fire when they feel like it, and probably never when you really need it."
+    "ammonomicon": "Occasionally fires a special round that deals massive damage. These hip bullets are fickle by nature and only fire when they feel like it, and probably never when you really need it.",
+    "game_icon": "assets/images/game/items/vorpal_bullets.png"
   },
   {
     "name": "Wax Wings",
@@ -58762,7 +59017,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Grants flight while retaining maneuverability. A pair of finely-crafted wax wings."
+    "ammonomicon": "Grants flight while retaining maneuverability. A pair of finely-crafted wax wings.",
+    "game_icon": "assets/images/game/items/wax_wings.png"
   },
   {
     "name": "Weird Egg",
@@ -58994,7 +59250,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Gestates over time. Use to acquire... something. A strange egg found in the Gungeon. High in protein."
+    "ammonomicon": "Gestates over time. Use to acquire... something. A strange egg found in the Gungeon. High in protein.",
+    "game_icon": "assets/images/game/items/weird_egg.png"
   },
   {
     "name": "White Guon Stone",
@@ -59147,7 +59404,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Increased Blank regeneration. The White Guon stone grants its bearer an additional Blank on every floor."
+    "ammonomicon": "Increased Blank regeneration. The White Guon stone grants its bearer an additional Blank on every floor.",
+    "game_icon": "assets/images/game/items/white_guon_stone.png"
   },
   {
     "name": "Wingman",
@@ -59336,7 +59594,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Through thick and thin, this guy has always had your back. Now, he can say the same about you."
+    "ammonomicon": "Through thick and thin, this guy has always had your back. Now, he can say the same about you.",
+    "game_icon": "assets/images/game/items/wingman.png"
   },
   {
     "name": "Wolf",
@@ -59586,7 +59845,8 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Faithful companion. Waited years for his master's return. Kept the Hunter company, long ago. Reunited with his master through the fractured timestream."
+    "ammonomicon": "Faithful companion. Waited years for his master's return. Kept the Hunter company, long ago. Reunited with his master through the fractured timestream.",
+    "game_icon": "assets/images/game/items/wolf.png"
   },
   {
     "name": "Yellow Chamber",
@@ -60027,7 +60287,8 @@
       "Gungeon loot pool",
       "Shop"
     ],
-    "ammonomicon": "Etched into its chambers is a single worn glyph. Allows the Kin to see, as you might."
+    "ammonomicon": "Etched into its chambers is a single worn glyph. Allows the Kin to see, as you might.",
+    "game_icon": "assets/images/game/items/yellow_chamber.png"
   },
   {
     "name": "Zombie Bullets",
@@ -60245,6 +60506,7 @@
     "sources": [
       "Gungeon loot pool"
     ],
-    "ammonomicon": "Occasionally refunds ammo when bullets miss. Missed shots sometimes return from the dead, mindlessly seeking the closure they never found in life."
+    "ammonomicon": "Occasionally refunds ammo when bullets miss. Missed shots sometimes return from the dead, mindlessly seeking the closure they never found in life.",
+    "game_icon": "assets/images/game/items/zombie_bullets.png"
   }
 ]

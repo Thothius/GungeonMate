@@ -1,0 +1,120 @@
+[
+  {
+    "prefab": "Chest_Synergy",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "D_Chance": 1.0,
+      "C_Chance": 1.0,
+      "B_Chance": 1.0
+    },
+    "completesSynergy": true,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "Chest_Green",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "B_Chance": 1.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "Chest_Black",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "S_Chance": 1.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "Chest_Rat",
+    "bundle": "shared_auto_001",
+    "identifier": 1,
+    "difficulty": 0,
+    "chances": {
+      "A_Chance": 1.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "TruthChest",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "D_Chance": 4.0,
+      "C_Chance": 4.0,
+      "B_Chance": 4.0,
+      "A_Chance": 0.5,
+      "Common_Chance": 4.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "Chest_Rainbow",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "B_Chance": 0.5,
+      "A_Chance": 0.699999988079071,
+      "S_Chance": 0.20000000298023224
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": false
+  },
+  {
+    "prefab": "Chest_Red",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "A_Chance": 1.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "Chest_Wood_Two_Items",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "D_Chance": 1.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "Chest_Silver",
+    "bundle": "shared_auto_001",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "C_Chance": 1.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  },
+  {
+    "prefab": "HighDragunfire_Chest_Red",
+    "bundle": "shared_auto_002",
+    "identifier": 0,
+    "difficulty": 0,
+    "chances": {
+      "A_Chance": 1.0
+    },
+    "completesSynergy": false,
+    "onlyOneGunCanDrop": true
+  }
+]

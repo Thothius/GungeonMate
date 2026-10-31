@@ -102,6 +102,8 @@ flutter:
     - assets/data/npcs.json
     - assets/data/enemies.json
     - assets/data/bosses.json
+    - assets/data/chests.json
+    - assets/data/floors.json
     - assets/images/guns/
     - assets/images/items/
     - assets/images/shrines/
@@ -123,6 +125,10 @@ flutter:
     - assets/animations/
     - assets/images/wallpapers/animated/
     - assets/images/themes/splash/
+    - assets/images/game/guns/
+    - assets/images/game/items/
+    - assets/images/game/enemies/
+    - assets/images/game/bosses/
 
   fonts:
     - family: EnterTheGungeonBig

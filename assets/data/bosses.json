@@ -14,7 +14,17 @@
     ],
     "icon": "Bullet_King.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Bullet_King",
-    "game_enc_key": "BULLETKING"
+    "game_enc_key": "BULLETKING",
+    "game_guid": "ffca09398635467da3b1f4a54bcfda80",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 3,
+    "effect_resistances": [
+      {
+        "resistType": 1,
+        "resistAmount": 1.0
+      }
+    ],
+    "game_icon": "assets/images/game/bosses/bullet_king.png"
   },
   {
     "name": "Gatling Gull",
@@ -31,7 +41,16 @@
     ],
     "icon": "Gatling_Gull.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Gatling_Gull",
-    "game_enc_key": "GATLINGGULL"
+    "game_enc_key": "GATLINGGULL",
+    "game_guid": "ec6b674e0acd4553b47ee94493d66422",
+    "collision_damage": 1.0,
+    "effect_resistances": [
+      {
+        "resistType": 2,
+        "resistAmount": 0.75
+      }
+    ],
+    "game_icon": "assets/images/game/bosses/gatling_gull.png"
   },
   {
     "name": "Trigger Twins",
@@ -63,7 +82,11 @@
     ],
     "icon": "Ammoconda.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Ammoconda",
-    "game_enc_key": "BASHELLISK"
+    "game_enc_key": "BASHELLISK",
+    "game_guid": "da797878d215453abba824ff902e21b4",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 7,
+    "game_icon": "assets/images/game/bosses/ammoconda.png"
   },
   {
     "name": "Beholster",
@@ -112,7 +135,11 @@
     ],
     "icon": "Cannonbalrog.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannonbalrog",
-    "game_enc_key": "GIANTPOWDERSKULL"
+    "game_enc_key": "GIANTPOWDERSKULL",
+    "game_guid": "5e0af7f7d9de4755a68d2fd3bbc15df4",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 10,
+    "game_icon": "assets/images/game/bosses/cannonbalrog.png"
   },
   {
     "name": "Mine Flayer",
@@ -129,7 +156,11 @@
     ],
     "icon": "Mine_Flayer.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Mine_Flayer",
-    "game_enc_key": "MINEFLAYER"
+    "game_enc_key": "MINEFLAYER",
+    "game_guid": "8b0dd96e2fe74ec7bebc1bc689c0008a",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 11,
+    "game_icon": "assets/images/game/bosses/mine_flayer.png"
   },
   {
     "name": "Treadnaught",
@@ -146,7 +177,17 @@
     ],
     "icon": "Treadnaught.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Treadnaught",
-    "game_enc_key": "TANKTREADER"
+    "game_enc_key": "TANKTREADER",
+    "game_guid": "fa76c8cfdf1c4a88b55173666b4bc7fb",
+    "collision_damage": 0.5,
+    "ammonomicon_pos": 9,
+    "effect_resistances": [
+      {
+        "resistType": 2,
+        "resistAmount": 1.0
+      }
+    ],
+    "game_icon": "assets/images/game/bosses/treadnaught.png"
   },
   {
     "name": "High Priest",
@@ -163,7 +204,11 @@
     ],
     "icon": "High_Priest.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Priest",
-    "game_enc_key": "HIGHPRIEST"
+    "game_enc_key": "HIGHPRIEST",
+    "game_guid": "6c43fddfd401456c916089fdd1c99b1c",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 13,
+    "game_icon": "assets/images/game/bosses/high_priest.png"
   },
   {
     "name": "Kill Pillars",
@@ -180,7 +225,8 @@
     ],
     "icon": "Kill_Pillars.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Kill_Pillars",
-    "game_enc_key": "BOSSSTATUES"
+    "game_enc_key": "BOSSSTATUES",
+    "game_icon": "assets/images/game/bosses/kill_pillars.png"
   },
   {
     "name": "Wallmonger",
@@ -206,10 +252,9 @@
     "description": "The sole boss of the Forge. A giant shelldrake with two phases. Phase 1 features fire breath, dual pistols, uzis, rockets, bouncing bullets, homing skulls, fire bullets, and thrown knives. Phase 2 fills the room with moving bullets and exposes its heart between waves. Can transform into the Advanced Dragun if the player holds the Serpent.",
     "ammonomicon": "Ancient and Venerable — Until disturbed, Draguns prefer to sit atop mountains of ammo, jealously guarding their hoard. All Draguns descend from Gunrax, the first Shelldrake. Though once thought to be invincible, it has been confirmed that the terrible creatures can be slain.",
     "tips": [
-      "Stay near the back of the arena in Phase 1 for easier dodging.",
-      "Kill thrown knives quickly — their attacks overlap with the Dragun's.",
-      "Use explosive weapons in Phase 2 to clear bullets for easier dodging.",
-      "Blasphemy can thin the fire breath and enlarge safe zones in Phase 2."
+      "Final floor boss — Forge",
+      "Baby Dragun egg: full heal / loot break / hatch serpent",
+      "Creature of fire — the Gun's guardian"
     ],
     "icon": "High_Dragun.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/High_Dragun"
@@ -228,7 +273,8 @@
     ],
     "icon": "Blockner.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blockner",
-    "game_enc_key": "MANFREDSRIVAL"
+    "game_enc_key": "MANFREDSRIVAL",
+    "game_icon": "assets/images/game/bosses/blockner.png"
   },
   {
     "name": "Door Lord",
@@ -245,7 +291,11 @@
     ],
     "icon": "Door_Lord.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Door_Lord",
-    "game_enc_key": "BOSSDOORMIMIC"
+    "game_enc_key": "BOSSDOORMIMIC",
+    "game_guid": "9189f46c47564ed588b9108965f975c9",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 24,
+    "game_icon": "assets/images/game/bosses/door_lord.png"
   },
   {
     "name": "Blobulord",
@@ -262,7 +312,11 @@
     ],
     "icon": "Blobulord.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Blobulord",
-    "game_enc_key": "BLOBULORD"
+    "game_enc_key": "BLOBULORD",
+    "game_guid": "1b5810fafbec445d89921a4efb4e42b7",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 4,
+    "game_icon": "assets/images/game/bosses/blobulord.png"
   },
   {
     "name": "Old King",
@@ -279,7 +333,17 @@
     ],
     "icon": "Old_King.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Old_King",
-    "game_enc_key": "OLDBULLETKING"
+    "game_enc_key": "OLDBULLETKING",
+    "game_guid": "5729c8b5ffa7415bb3d01205663a33ef",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 8,
+    "effect_resistances": [
+      {
+        "resistType": 1,
+        "resistAmount": 1.0
+      }
+    ],
+    "game_icon": "assets/images/game/bosses/old_king.png"
   },
   {
     "name": "Resourceful Rat",
@@ -289,10 +353,11 @@
     "description": "A three-phase secret boss in the Resourceful Rat's Lair. Phase 1 is a chase battle. Phase 2 pits the player against a mech made of stolen items with destroyable shoulder weapons. Phase 3 is a Punch-Out!! style boxing match where the Rat drops loot when hit. Defeating him stops him from stealing items in future runs.",
     "ammonomicon": "Say cheese and die! — The Resourceful Rat is an exceptionally difficult boss consisting of three different phases, with phase two being a mech he created out of all the items and guns he has stolen.",
     "tips": [
-      "Destroy the mech's shoulder weapons in Phase 2 to exchange hard attacks for easier ones.",
-      "In Phase 3, learn the punch-out patterns — each sub-phase has different attacks.",
-      "Rat Keys dropped in Phase 3 open Rat Chests containing unique items (Elimentaler, Partially-Eaten Cheese, Resourceful Sack, Rat Boots).",
-      "Nudge hearts from the maze into the boss foyer before Phase 2 — it's the only way to heal between phases."
+      "High King of the Gungeon",
+      "Steals loot left on floors (armor/ammo/items/guns)",
+      "Safe from theft: hearts, blanks, keys",
+      "Runs shortcut elevator shops",
+      "3 phases: Rat → Mech → Punch-Out!!"
     ],
     "icon": "Boss_Resourceful_Rat.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Resourceful_Rat_(Boss)"
@@ -312,7 +377,11 @@
     ],
     "icon": "Heligunim.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Agunim",
-    "game_enc_key": "AGUNIM"
+    "game_enc_key": "AGUNIM",
+    "game_guid": "41ee1c8538e8474a82a74c4aff99c712",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 100,
+    "game_icon": "assets/images/game/bosses/agunim.png"
   },
   {
     "name": "Black Stache",
@@ -328,7 +397,11 @@
     ],
     "icon": "Black_Stache.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Black_Stache",
-    "game_enc_key": "BOSSFINALCONVICT"
+    "game_enc_key": "BOSSFINALCONVICT",
+    "game_guid": "8b913eea3d174184be1af362d441910d",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 17,
+    "game_icon": "assets/images/game/bosses/black_stache.png"
   },
   {
     "name": "Dr. Wolf's Monster",
@@ -345,7 +418,11 @@
     ],
     "icon": "Dr._Wolf%27s_Monster.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Dr._Wolf%27s_Monster",
-    "game_enc_key": "BOSSFINALGUIDE"
+    "game_enc_key": "BOSSFINALGUIDE",
+    "game_guid": "8d441ad4e9924d91b6070d5b3438d066",
+    "collision_damage": 0.5,
+    "ammonomicon_pos": 19,
+    "game_icon": "assets/images/game/bosses/dr_wolf_s_monster.png"
   },
   {
     "name": "HS Absolution",
@@ -362,7 +439,11 @@
     ],
     "icon": "HS_Absolution.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/HM_Absolution",
-    "game_enc_key": "BOSSFINALROGUE"
+    "game_enc_key": "BOSSFINALROGUE",
+    "game_guid": "b98b10fca77d469e80fb45f3c5badec5",
+    "collision_damage": 0.5,
+    "ammonomicon_pos": 16,
+    "game_icon": "assets/images/game/bosses/hs_absolution.png"
   },
   {
     "name": "Interdimensional Horror",
@@ -378,7 +459,11 @@
     ],
     "icon": "Interdimensional_Horror.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Interdimensional_Horror",
-    "game_enc_key": "BOSSFINALMARINE"
+    "game_enc_key": "BOSSFINALMARINE",
+    "game_guid": "dc3cd41623d447aeba77c77c99598426",
+    "collision_damage": 0.5,
+    "ammonomicon_pos": 18,
+    "game_icon": "assets/images/game/bosses/interdimensional_horror.png"
   },
   {
     "name": "Cannon",
@@ -394,7 +479,11 @@
     ],
     "icon": "Cannon.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Cannon",
-    "game_enc_key": "CANNONDORF"
+    "game_enc_key": "CANNONDORF",
+    "game_guid": "39dca963ae2b4688b016089d926308ab",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 22,
+    "game_icon": "assets/images/game/bosses/cannon.png"
   },
   {
     "name": "The Last Human",
@@ -411,7 +500,11 @@
     ],
     "icon": "The_Last_Human.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/The_Last_Human",
-    "game_enc_key": "LASTHUMAN"
+    "game_enc_key": "LASTHUMAN",
+    "game_guid": "880bbe4ce1014740ba6b4e2ea521e49d",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 20,
+    "game_icon": "assets/images/game/bosses/the_last_human.png"
   },
   {
     "name": "Lich",
@@ -429,6 +522,20 @@
     ],
     "icon": "Lich.png",
     "wiki_url": "https://enterthegungeon.wiki.gg/wiki/Lich",
-    "game_enc_key": "LICH"
+    "game_enc_key": "LICH",
+    "game_guid": "68a238ed6a82467ea85474c595c49c6e",
+    "collision_damage": 1.0,
+    "ammonomicon_pos": 21,
+    "effect_resistances": [
+      {
+        "resistType": 1,
+        "resistAmount": 1.0
+      },
+      {
+        "resistType": 3,
+        "resistAmount": 1.0
+      }
+    ],
+    "game_icon": "assets/images/game/bosses/lich.png"
   }
 ]

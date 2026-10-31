@@ -1,0 +1,128 @@
+[
+  {
+    "class": "GenericRoomTable",
+    "name": "Test Room Table",
+    "keys": [
+      "includedRooms",
+      "includedRoomTables"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_04_Catacombs",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_06_BulletHell",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_02a_Cathedral",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "GenericRoomTable",
+    "name": "Test Phantom Rooms",
+    "keys": [
+      "includedRooms",
+      "includedRoomTables"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_02_Gungeon",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Secret_DoubleBeholster_Flow",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_01a_Sewer",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_05_Forge",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_03_Mines",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "Bossrush_01_Castle",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  },
+  {
+    "class": "DungeonFlow",
+    "name": "NPCParadise",
+    "keys": [
+      "fallbackRoomTable",
+      "phantomRoomTable",
+      "subtypeRestrictions",
+      "flowInjectionData",
+      "sharedInjectionData"
+    ]
+  }
+]
