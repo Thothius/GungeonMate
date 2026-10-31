@@ -255,7 +255,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                           (_, _, _) => const Icon(
                                             Icons.broken_image_outlined,
                                             color: Colors.white24,
-                                            size: 24,
+                                            size: 30,
                                           ),
                                     ),
                                   ),
@@ -362,7 +362,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                                           .tealAccent
                                                                       : Colors
                                                                           .white24,
-                                                              size: 24,
+                                                              size: 30,
                                                             ),
                                                           ),
                                                         ),
@@ -413,7 +413,7 @@ class JunkanDashboardSliverState extends State<JunkanDashboardSliver> {
                                                               color:
                                                                   Colors
                                                                       .tealAccent,
-                                                              size: 24,
+                                                              size: 30,
                                                             ),
                                                           ),
                                                         ),
