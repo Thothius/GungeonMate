@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/goop_talk_engine.dart';
 import '../utils/reduce_motion.dart';
-import 'skeuo/skeuo_tokens.dart';
 
 /// Rank-tier badge. Colors match the in-game chest tiers:
 ///   S → black pill, white label, golden glow (animated)
@@ -27,17 +26,17 @@ class QualityBadge extends StatefulWidget {
           0xFF1A1A1A,
         ); // Near-black pill — golden glow animates around it
       case 'A':
-        return Skeuo.collapse(Color(0xFFE53935)); // red
+        return const Color(0xFFE53935); // red
       case 'B':
-        return Skeuo.collapse(Color(0xFF43A047)); // green
+        return const Color(0xFF43A047); // green
       case 'C':
-        return Skeuo.collapse(Color(0xFF1E88E5)); // blue
+        return const Color(0xFF1E88E5); // blue
       case 'D':
-        return Skeuo.collapse(Color(0xFF757575)); // grey
+        return const Color(0xFF757575); // grey
       case 'N':
-        return Skeuo.collapse(Color(0xFF5E35B1)); // purple (starter)
+        return const Color(0xFF5E35B1); // purple (starter)
       default:
-        return Skeuo.collapse(Color(0xFF9E9E9E));
+        return const Color(0xFF9E9E9E);
     }
   }
 
@@ -99,7 +98,7 @@ class _QualityBadgeState extends State<QualityBadge>
         border:
             isS
                 ? Border.all(
-                  color: Skeuo.collapse(Color(0xFFE0E0E0)),
+                  color: const Color(0xFFE0E0E0),
                   width: 1.6,
                 ) // Silver/white fatter frame
                 : null,
@@ -107,7 +106,7 @@ class _QualityBadgeState extends State<QualityBadge>
       child: GoopText(
         letter,
         style: TextStyle(
-          color: Skeuo.collapse(Colors.white),
+          color: Colors.white,
           fontSize: s * 0.55,
           fontWeight: FontWeight.bold,
           height: 1,
@@ -120,14 +119,10 @@ class _QualityBadgeState extends State<QualityBadge>
     // Reduced-motion: render a static golden glow (no pulsing).
     if (ReduceMotion.of(context)) {
       return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
           boxShadow: [
-            BoxShadow(
-              color: Skeuo.collapse(Color(0x66FFD700)),
-              blurRadius: 8,
-              spreadRadius: 1,
-            ),
+            BoxShadow(color: Color(0x66FFD700), blurRadius: 8, spreadRadius: 1),
           ],
         ),
         child: badge,

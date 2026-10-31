@@ -75,7 +75,7 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
             child: Row(
               children: [
                 Icon(Icons.hub, color: Skeuo.inkIf(Colors.amber)),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: GoopText(
                     '$activeCount active synergies across your run',
@@ -92,9 +92,7 @@ class _SynergiesOverviewScreenState extends State<SynergiesOverviewScreen> {
                       child: GoopText(
                         'No synergies for current inventory.',
                         style: TextStyle(
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.6),
+                          color: Colors.white.withValues(alpha: 0.6),
                         ),
                       ),
                     )
@@ -133,7 +131,7 @@ class _ItemGroupCard extends StatelessWidget {
         childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
         leading: Icon(
           group.isGun ? Icons.gps_fixed : Icons.inventory_2_outlined,
-          color: Skeuo.collapse(Colors.white70),
+          color: Colors.white70,
         ),
         title: GoopText(
           group.itemName,
@@ -146,7 +144,7 @@ class _ItemGroupCard extends StatelessWidget {
             color:
                 activeCount > 0
                     ? Skeuo.inkIf(Colors.amber)
-                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+                    : Colors.white.withValues(alpha: 0.6),
             fontSize: FontSizes.labelMedium,
           ),
         ),
@@ -170,13 +168,13 @@ class _SynergyRow extends StatelessWidget {
         color:
             status.active
                 ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.08)
-                : Skeuo.collapse(Colors.white).withValues(alpha: 0.03),
+                : Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.all(Radii.md),
         border: Border.all(
           color:
               status.active
                   ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.5)
-                  : Skeuo.collapse(Colors.white).withValues(alpha: 0.08),
+                  : Colors.white.withValues(alpha: 0.08),
           width: 1.2,
         ),
       ),
@@ -191,11 +189,9 @@ class _SynergyRow extends StatelessWidget {
                     : Icons.radio_button_unchecked,
                 size: 16,
                 color:
-                    status.active
-                        ? Skeuo.inkIf(Colors.amber)
-                        : Skeuo.collapse(Colors.white54),
+                    status.active ? Skeuo.inkIf(Colors.amber) : Colors.white54,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: GoopText(
                   s.name,
@@ -210,13 +206,13 @@ class _SynergyRow extends StatelessWidget {
                   'needs ${status.missing.length}',
                   style: TextStyle(
                     fontSize: 11,
-                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
+                    color: Colors.white.withValues(alpha: 0.65),
                   ),
                 ),
             ],
           ),
           if (status.missing.isNotEmpty) ...[
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 6,
@@ -229,21 +225,17 @@ class _SynergyRow extends StatelessWidget {
                             vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.04),
+                            color: Colors.white.withValues(alpha: 0.04),
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: Skeuo.collapse(
-                                Colors.white,
-                              ).withValues(alpha: 0.15),
+                              color: Colors.white.withValues(alpha: 0.15),
                             ),
                           ),
                           child: GoopText(
                             m,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 11,
-                              color: Skeuo.collapse(Colors.white70),
+                              color: Colors.white70,
                             ),
                           ),
                         ),
@@ -252,7 +244,7 @@ class _SynergyRow extends StatelessWidget {
             ),
           ],
           if (s.anyOf.isNotEmpty) ...[
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Icon(
@@ -260,7 +252,7 @@ class _SynergyRow extends StatelessWidget {
                   size: 13,
                   color: Skeuo.inkIf(Colors.amber).withValues(alpha: 0.75),
                 ),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 GoopText(
                   'Alternative Partners:',
                   style: TextStyle(
@@ -320,15 +312,13 @@ class _AnyOfChips extends StatelessWidget {
                 color:
                     isOwned
                         ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.15)
-                        : Skeuo.collapse(Colors.white).withValues(alpha: 0.04),
+                        : Colors.white.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.all(Radii.md),
                 border: Border.all(
                   color:
                       isOwned
                           ? Skeuo.inkIf(Colors.amber).withValues(alpha: 0.5)
-                          : Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.15),
+                          : Colors.white.withValues(alpha: 0.15),
                 ),
               ),
               child: Row(
@@ -348,27 +338,22 @@ class _AnyOfChips extends StatelessWidget {
                         showRing: false,
                       ),
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                   ],
                   GoopText(
                     n,
                     style: TextStyle(
                       fontSize: FontSizes.labelMedium,
-                      color:
-                          isOwned
-                              ? Skeuo.collapse(Colors.white)
-                              : Skeuo.collapse(Colors.white70),
+                      color: isOwned ? Colors.white : Colors.white70,
                     ),
                   ),
                   if (resolvable) ...[
-                    SizedBox(width: 2),
+                    const SizedBox(width: 2),
                     Icon(
                       Icons.chevron_right,
                       size: 13,
                       color:
-                          isOwned
-                              ? Skeuo.inkIf(Colors.amber)
-                              : Skeuo.collapse(Colors.white38),
+                          isOwned ? Skeuo.inkIf(Colors.amber) : Colors.white38,
                     ),
                   ],
                 ],

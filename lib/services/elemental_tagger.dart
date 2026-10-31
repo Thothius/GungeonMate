@@ -109,7 +109,7 @@ class ElementalTagger {
   /// Rules are intentionally conservative: we prefer false negatives
   /// over false positives because a misfiring indicator is much more
   /// irritating than a missing one.
-  static Map<ElementKind, _Rule> _rules = {
+  static final Map<ElementKind, _Rule> _rules = {
     ElementKind.fire: _Rule(
       gunClasses: {'FIRE'},
       // Patterns intentionally exclude the bare word `fire` — too

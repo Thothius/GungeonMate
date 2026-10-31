@@ -39,10 +39,10 @@ class _EventLogState extends State<_EventLog> {
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.4,
-                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.65),
+                    color: Colors.white.withValues(alpha: 0.65),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 if (entries.isNotEmpty)
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -50,9 +50,7 @@ class _EventLogState extends State<_EventLog> {
                       vertical: 1,
                     ),
                     decoration: BoxDecoration(
-                      color: Skeuo.collapse(
-                        Colors.white,
-                      ).withValues(alpha: 0.08),
+                      color: Colors.white.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.all(Radii.sm),
                     ),
                     child: Text(
@@ -60,13 +58,11 @@ class _EventLogState extends State<_EventLog> {
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w700,
-                        color: Skeuo.collapse(
-                          Colors.white,
-                        ).withValues(alpha: 0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
                     ),
                   ),
-                Spacer(),
+                const Spacer(),
                 if (entries.isNotEmpty)
                   AnimatedRotation(
                     turns: _collapsed ? 0 : 0.5,
@@ -74,9 +70,7 @@ class _EventLogState extends State<_EventLog> {
                     child: Icon(
                       Icons.expand_more_rounded,
                       size: 16,
-                      color: Skeuo.collapse(
-                        Colors.white,
-                      ).withValues(alpha: 0.4),
+                      color: Colors.white.withValues(alpha: 0.4),
                     ),
                   ),
               ],
@@ -96,7 +90,7 @@ class _EventLogState extends State<_EventLog> {
                           .map(
                             (e) => _LogTile(entry: e, isCool: widget.isCool),
                           ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       _LogLegend(entries: entries),
                     ],
                   )
@@ -107,17 +101,15 @@ class _EventLogState extends State<_EventLog> {
             width: double.infinity,
             padding: const EdgeInsets.all(Insets.lg),
             decoration: BoxDecoration(
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.03),
+              color: Colors.white.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.06),
-              ),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
             ),
             child: GoopText(
               'No events yet. Pick up items or use quick actions above to start tracking.',
               style: TextStyle(
                 fontSize: FontSizes.labelMedium,
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+                color: Colors.white.withValues(alpha: 0.4),
                 fontStyle: FontStyle.italic,
               ),
               textAlign: TextAlign.center,
@@ -152,7 +144,7 @@ class _LogTile extends StatelessWidget {
           color: catColor.withValues(alpha: 0.04),
           borderRadius: BorderRadius.all(Radii.sm),
           border: Border.all(
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
+            color: Colors.white.withValues(alpha: 0.05),
             width: 1,
           ),
         ),
@@ -165,7 +157,7 @@ class _LogTile extends StatelessWidget {
                 size: 18,
                 color: catColor,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,16 +172,14 @@ class _LogTile extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
                         GoopText(
                           timeStr,
                           style: TextStyle(
                             fontSize: FontSizes.labelSmall,
-                            color: Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.4),
+                            color: Colors.white.withValues(alpha: 0.4),
                           ),
                         ),
                         if (entry.playerName != null) ...[
@@ -260,11 +250,9 @@ class _LogLegend extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.02),
+        color: Colors.white.withValues(alpha: 0.02),
         borderRadius: BorderRadius.all(Radii.sm),
-        border: Border.all(
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -275,7 +263,7 @@ class _LogLegend extends StatelessWidget {
               fontSize: FontSizes.labelSmall,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+              color: Colors.white.withValues(alpha: 0.4),
             ),
           ),
           const SizedBox(height: 6),
@@ -302,14 +290,12 @@ class _LogLegend extends StatelessWidget {
                           ],
                         ),
                       ),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       GoopText(
                         runLogCategoryLabel(c),
                         style: TextStyle(
                           fontSize: 10.5,
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           fontWeight: FontWeight.w600,
                         ),
                       ),

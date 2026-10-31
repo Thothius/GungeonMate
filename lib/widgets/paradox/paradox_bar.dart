@@ -83,12 +83,10 @@ class _ParadoxBarState extends State<ParadoxBar> {
           (context, _) => Container(
             padding: EdgeInsets.fromLTRB(12 * sf, 6 * sf, 4 * sf, 6 * sf),
             decoration: BoxDecoration(
-              color: Skeuo.collapse(Color(0xFF12081F)),
+              color: const Color(0xFF12081F),
               border: Border(
                 bottom: BorderSide(
-                  color: Skeuo.collapse(
-                    Color(0xFF7C4DFF),
-                  ).withValues(alpha: 0.4),
+                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
                 ),
               ),
             ),
@@ -114,7 +112,7 @@ class _ParadoxBarState extends State<ParadoxBar> {
                                 fontSize: 11 * sf,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 1.2,
-                                color: Skeuo.collapse(Color(0xFFB388FF)),
+                                color: const Color(0xFFB388FF),
                               ),
                             ),
                           ),
@@ -123,9 +121,7 @@ class _ParadoxBarState extends State<ParadoxBar> {
                             Icon(
                               Icons.timer_outlined,
                               size: 12 * sf,
-                              color: Skeuo.collapse(
-                                Colors.white,
-                              ).withValues(alpha: 0.4),
+                              color: Colors.white.withValues(alpha: 0.4),
                             ),
                             SizedBox(width: 3 * sf),
                             GoopText(
@@ -133,9 +129,7 @@ class _ParadoxBarState extends State<ParadoxBar> {
                               style: TextStyle(
                                 fontSize: 11.5 * sf,
                                 fontWeight: FontWeight.w700,
-                                color: Skeuo.collapse(
-                                  Colors.white,
-                                ).withValues(alpha: 0.55),
+                                color: Colors.white.withValues(alpha: 0.55),
                               ),
                             ),
                           ],
@@ -239,14 +233,14 @@ class _TabDot extends StatelessWidget {
         decoration: BoxDecoration(
           color:
               active
-                  ? Skeuo.collapse(Color(0xFF7C4DFF)).withValues(alpha: 0.25)
+                  ? const Color(0xFF7C4DFF).withValues(alpha: 0.25)
                   : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
             color:
                 active
-                    ? Skeuo.collapse(Color(0xFFB388FF))
-                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.15),
+                    ? const Color(0xFFB388FF)
+                    : Colors.white.withValues(alpha: 0.15),
           ),
         ),
         child: GoopText(
@@ -257,8 +251,8 @@ class _TabDot extends StatelessWidget {
             letterSpacing: 0.8,
             color:
                 active
-                    ? Skeuo.collapse(Color(0xFFB388FF))
-                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
+                    ? const Color(0xFFB388FF)
+                    : Colors.white.withValues(alpha: 0.5),
           ),
         ),
       ),
@@ -275,7 +269,7 @@ class _HealthChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final c =
         health >= 70
-            ? Skeuo.collapse(Color(0xFF00E676))
+            ? const Color(0xFF00E676)
             : health >= 35
             ? Skeuo.inkIf(Colors.orangeAccent)
             : Skeuo.inkIf(Colors.redAccent);

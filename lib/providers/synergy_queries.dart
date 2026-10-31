@@ -106,9 +106,9 @@ mixin _SynergyQueries on ChangeNotifier {
   }
 
   String? _activeCombinedSig;
-  final List<Synergy>? _activeCombinedCache;
+  List<Synergy>? _activeCombinedCache;
 
-  final Map<String, int>? _synergyCountCache;
+  Map<String, int>? _synergyCountCache;
 
   int synergyCountFor(String itemName) {
     _synergyCountCache ??= _buildSynergyCountCache();
@@ -156,7 +156,7 @@ mixin _SynergyQueries on ChangeNotifier {
 
   String? _completesSig;
 
-  final Set<String>? _completesOwnedLower;
+  Set<String>? _completesOwnedLower;
 
   final Map<String, List<String>> _completesCache = {};
 

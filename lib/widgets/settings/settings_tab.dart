@@ -311,7 +311,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                       mpActive,
                     ),
                     if (mpActive) ...[
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       _buildGrid([
                         if (mpSession.myRole == MpRole.sidekick)
                           _TileData(
@@ -422,12 +422,12 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               ],
 
               // APP / DANGER ZONE — always full-width
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               _sectionLabel('APP', flair),
               _buildEndRunButton(context, p),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildResetDataButton(context),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // DEV TOOLS — full-width
               _CollapsibleCard(

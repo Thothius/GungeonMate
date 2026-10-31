@@ -22,7 +22,8 @@ PageRoute<T> fastRoute<T>(Widget child) => PageRouteBuilder<T>(
     return ValueListenableBuilder<AppThemeMode>(
       valueListenable: AppTheme.notifier,
       builder:
-          (_, _, _) => ColoredBox(color: AppTheme.flair.scaffold, child: child),
+          (_, _, _) =>
+              ColoredBox(color: AppTheme.flair.scaffold, child: child),
     );
   },
   transitionsBuilder: (_, anim, _, child) {

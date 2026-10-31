@@ -81,18 +81,18 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
   Widget build(BuildContext context) {
     final isSidekick = widget.isSidekick;
     return Dialog.fullscreen(
-      backgroundColor: Skeuo.collapse(Color(0xFF08060A)),
+      backgroundColor: const Color(0xFF08060A),
       child: SafeArea(
         child: Stack(
           children: [
             // Eerie curse fog drifting behind everything.
-            Positioned.fill(child: IgnorePointer(child: CurseFog())),
+            const Positioned.fill(child: IgnorePointer(child: CurseFog())),
             Column(
               children: [
-                Spacer(flex: 3),
+                const Spacer(flex: 3),
                 // ── Lord of the Jammed centerpiece (floating) ──
                 _buildCenterpiece(),
-                SizedBox(height: 28),
+                const SizedBox(height: 28),
                 // ── Title ──
                 GoopText(
                   isSidekick ? 'END RUN & DISCONNECT?' : 'END RUN?',
@@ -106,7 +106,7 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                     ).withValues(alpha: 0.95),
                   ),
                 ),
-                SizedBox(height: 14),
+                const SizedBox(height: 14),
                 // ── Body ──
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 520),
@@ -120,14 +120,12 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                       style: TextStyle(
                         fontSize: 15,
                         height: 1.5,
-                        color: Skeuo.collapse(
-                          Colors.white,
-                        ).withValues(alpha: 0.6),
+                        color: Colors.white.withValues(alpha: 0.6),
                       ),
                     ),
                   ),
                 ),
-                Spacer(flex: 4),
+                const Spacer(flex: 4),
                 // ── Action buttons — thumb zone ──
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
@@ -136,26 +134,20 @@ class _EndRunConfirmDialogState extends State<EndRunConfirmDialog>
                       Expanded(
                         child: _GungeonActionButton(
                           label: 'Cancel',
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.06),
-                          textColor: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.95),
-                          borderColor: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.45),
+                          color: Colors.white.withValues(alpha: 0.06),
+                          textColor: Colors.white.withValues(alpha: 0.95),
+                          borderColor: Colors.white.withValues(alpha: 0.45),
                           onTap: () => Navigator.pop(context),
                         ),
                       ),
-                      SizedBox(width: 14),
+                      const SizedBox(width: 14),
                       Expanded(
                         child: _GungeonActionButton(
                           label: isSidekick ? 'End & Disconnect' : 'End Run',
                           color: const Color(
                             0xFF8E0000,
                           ).withValues(alpha: 0.85),
-                          textColor: Skeuo.collapse(Colors.white),
+                          textColor: Colors.white,
                           borderColor: Skeuo.inkIf(
                             Colors.redAccent,
                           ).withValues(alpha: 0.7),

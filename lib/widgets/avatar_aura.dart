@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../services/app_theme.dart';
 import '../utils/reduce_motion.dart';
-import 'skeuo/skeuo_tokens.dart';
 
 /// Wraps a fixed-size avatar (typically a square pixel-art portrait)
 /// with a per-theme animated border. Reads [AppTheme.flair.auraStyle]
@@ -316,7 +315,7 @@ class _AuraPainter extends CustomPainter {
     canvas.drawRRect(rrect.inflate(1.5), outer);
     final rim =
         Paint()
-          ..color = Skeuo.collapse(Color(0xFF400308)).withValues(alpha: 0.85)
+          ..color = const Color(0xFF400308).withValues(alpha: 0.85)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.4;
     canvas.drawRRect(rrect, rim);
@@ -380,10 +379,7 @@ class _AuraPainter extends CustomPainter {
     canvas.drawRRect(rrect, mid);
     // Tiny frost sparkle dots at the corners.
     final sparkle =
-        Paint()
-          ..color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: 0.5 + 0.3 * tri);
+        Paint()..color = Colors.white.withValues(alpha: 0.5 + 0.3 * tri);
     final cornerInset = radius + 4;
     for (final corner in [
       Offset(cornerInset, cornerInset),
@@ -429,7 +425,7 @@ class _AuraPainter extends CustomPainter {
     // Dark swamp rim.
     final rim =
         Paint()
-          ..color = Skeuo.collapse(Color(0xFF0A1A0A)).withValues(alpha: 0.85)
+          ..color = const Color(0xFF0A1A0A).withValues(alpha: 0.85)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 1.4;
     canvas.drawRRect(rrect, rim);
@@ -556,7 +552,7 @@ class _AuraPainter extends CustomPainter {
       colors: [
         primary.withValues(alpha: 0.0),
         primary.withValues(alpha: 0.85),
-        Skeuo.collapse(Colors.white).withValues(alpha: 0.55),
+        Colors.white.withValues(alpha: 0.55),
         primary.withValues(alpha: 0.0),
       ],
       stops: const [0.0, 0.45, 0.5, 1.0],
@@ -591,10 +587,7 @@ class _AuraPainter extends CustomPainter {
 
     // Cosmic sparkle stars orbiting the avatar
     final sparkle =
-        Paint()
-          ..color = Skeuo.collapse(
-            Colors.white,
-          ).withValues(alpha: 0.5 + 0.5 * tri);
+        Paint()..color = Colors.white.withValues(alpha: 0.5 + 0.5 * tri);
     final radiusX = size.width / 2;
     final radiusY = size.height / 2;
     for (var i = 0; i < 2; i++) {

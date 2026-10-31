@@ -117,7 +117,7 @@ class MpSync {
   // to detect local shared-state changes and send them as deltas.
   double _cachedCoolness = 0;
   double _cachedCurse = 0;
-  final List<String> _cachedShrines = const [];
+  List<String> _cachedShrines = const [];
 
   // ── Request timeout timers ─────────────────────────────────────
   final Map<String, Timer> _requestTimeoutTimers = {};
@@ -376,6 +376,7 @@ class MpSync {
         if (_peerRole == MpRole.main) onSessionMeta?.call(msg);
     }
   }
+
 
   /// Apply a direct peer inventory edit (co-op trust model).
   /// The receiver mutates its OWN slot — the sender already saw the

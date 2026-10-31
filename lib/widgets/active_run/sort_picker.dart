@@ -188,7 +188,7 @@ class SortPickerSheet<T> extends StatelessWidget {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.18),
+                  color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -198,7 +198,7 @@ class SortPickerSheet<T> extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(titleIcon, size: 18, color: Skeuo.inkIf(Colors.amber)),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   GoopText(
                     'Sort $title by',
                     style: const TextStyle(
@@ -218,7 +218,7 @@ class SortPickerSheet<T> extends StatelessWidget {
                   color:
                       opt == current
                           ? Skeuo.inkIf(Colors.amber)
-                          : Skeuo.collapse(Colors.white70),
+                          : Colors.white70,
                   size: 20,
                 ),
                 title: GoopText(
@@ -229,7 +229,7 @@ class SortPickerSheet<T> extends StatelessWidget {
                     color:
                         opt == current
                             ? Skeuo.inkIf(Colors.amber)
-                            : Skeuo.collapse(Colors.white),
+                            : Colors.white,
                   ),
                 ),
                 trailing:

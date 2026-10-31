@@ -82,7 +82,7 @@ class GunSynergiesTab extends StatelessWidget {
               color: Skeuo.inkIf(Colors.greenAccent),
               icon: Icons.check_circle_rounded,
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             for (final st in complete)
               _SynergyRow(
                 status: st,
@@ -92,7 +92,7 @@ class GunSynergiesTab extends StatelessWidget {
               ),
           ],
           if (partial.isNotEmpty) ...[
-            SizedBox(height: 14),
+            const SizedBox(height: 14),
             _GroupHeader(
               label: 'PARTIAL',
               color: Skeuo.inkIf(Colors.amberAccent),
@@ -116,7 +116,7 @@ class GunSynergiesTab extends StatelessWidget {
   /// synergy (the current gun doesn't count — they have it already).
   static bool _hasAnyPiece(
     SynergyStatus st,
-    final Set<String> owned,
+    Set<String> owned,
     String currentName,
   ) {
     final cur = currentName.toLowerCase();
@@ -130,7 +130,7 @@ class GunSynergiesTab extends StatelessWidget {
   /// First unowned required piece — drives the "missing item" icon.
   static String _firstMissing(
     SynergyStatus st,
-    final Set<String> owned,
+    Set<String> owned,
     String currentName,
   ) {
     final cur = currentName.toLowerCase();
@@ -230,7 +230,7 @@ class _SynergyRow extends StatelessWidget {
               showRing: false,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,10 +242,10 @@ class _SynergyRow extends StatelessWidget {
                         s.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 13.5,
                           fontWeight: FontWeight.w800,
-                          color: Skeuo.collapse(Colors.white),
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -253,15 +253,13 @@ class _SynergyRow extends StatelessWidget {
                   ],
                 ),
                 if (s.effect.isNotEmpty) ...[
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   GoopText(
                     s.effect,
                     style: TextStyle(
                       fontSize: 12,
                       height: 1.35,
-                      color: Skeuo.collapse(
-                        Colors.white,
-                      ).withValues(alpha: 0.65),
+                      color: Colors.white.withValues(alpha: 0.65),
                     ),
                   ),
                 ],

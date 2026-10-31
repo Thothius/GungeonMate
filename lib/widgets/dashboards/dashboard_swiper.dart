@@ -176,7 +176,7 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       DashboardTab(
         label: 'Platinum',
         iconPath: localItemIcon('Platinum Bullets'),
-        color: Skeuo.collapse(Colors.white70),
+        color: Colors.white70,
         widget: PlatinumBulletsDashboard(slot: slot),
       ),
     );

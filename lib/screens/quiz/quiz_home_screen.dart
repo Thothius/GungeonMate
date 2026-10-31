@@ -16,7 +16,6 @@ import '../../utils/reduce_motion.dart';
 import '../../widgets/quality_badge.dart';
 import '../../widgets/scale_button.dart';
 import 'quiz_session_screen.dart';
-import '../../widgets/skeuo/skeuo_tokens.dart';
 
 /// Gungeonmaster Quiz — chest select.
 ///
@@ -91,26 +90,24 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                             fontSize: FontSizes.titleLarge,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.6,
-                            color: Skeuo.collapse(Color(0xFFFFD54F)),
-                            shadows: [
+                            color: const Color(0xFFFFD54F),
+                            shadows: const [
                               Shadow(
                                 offset: Offset(0, 2),
                                 blurRadius: 6,
-                                color: Skeuo.collapse(Colors.black54),
+                                color: Colors.black54,
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         GoopText(
                           'Name the loot. Beat the chest.',
                           style: TextStyle(
                             fontSize: FontSizes.labelMedium,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,
-                            color: Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.45),
+                            color: Colors.white.withValues(alpha: 0.45),
                           ),
                         ),
                       ],
@@ -172,23 +169,19 @@ class _QuizHomeScreenState extends State<QuizHomeScreen> {
                   vertical: Insets.sm,
                 ),
                 decoration: BoxDecoration(
-                  color: Skeuo.collapse(
-                    Color(0xFFFFD54F),
-                  ).withValues(alpha: 0.10),
+                  color: const Color(0xFFFFD54F).withValues(alpha: 0.10),
                   borderRadius: Radii.pill,
                   border: Border.all(
-                    color: Skeuo.collapse(
-                      Color(0xFFFFD54F),
-                    ).withValues(alpha: 0.35),
+                    color: const Color(0xFFFFD54F).withValues(alpha: 0.35),
                   ),
                 ),
                 child: GoopText(
                   '$completedCount/${kQuizChestTiers.length} CHESTS CLEARED',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: FontSizes.labelMedium,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.4,
-                    color: Skeuo.collapse(Color(0xFFFFD54F)),
+                    color: Color(0xFFFFD54F),
                   ),
                 ),
               ),
@@ -280,7 +273,7 @@ class _ChestCard extends StatelessWidget {
             Row(
               children: [
                 _TierBadge(tier: tier),
-                SizedBox(width: Insets.sm),
+                const SizedBox(width: Insets.sm),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,9 +284,7 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.titleSmall,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.95),
+                          color: Colors.white.withValues(alpha: 0.95),
                         ),
                       ),
                       GoopText(
@@ -301,9 +292,7 @@ class _ChestCard extends StatelessWidget {
                         style: TextStyle(
                           fontSize: FontSizes.labelMedium,
                           fontWeight: FontWeight.w600,
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.45),
+                          color: Colors.white.withValues(alpha: 0.45),
                         ),
                       ),
                     ],
@@ -316,26 +305,22 @@ class _ChestCard extends StatelessWidget {
                       Icon(
                         Icons.lock_rounded,
                         size: 14,
-                        color: Skeuo.collapse(
-                          Colors.white,
-                        ).withValues(alpha: 0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       GoopText(
                         unlockHint,
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 0.8,
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.5),
+                          color: Colors.white.withValues(alpha: 0.5),
                         ),
                       ),
                     ],
                   )
                 else if (completed)
-                  _CompletedLabel()
+                  const _CompletedLabel()
                 else
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -346,9 +331,7 @@ class _ChestCard extends StatelessWidget {
                           fontSize: FontSizes.labelSmall,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.2,
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.4),
+                          color: Colors.white.withValues(alpha: 0.4),
                         ),
                       ),
                       GoopText(
@@ -364,7 +347,7 @@ class _ChestCard extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(height: Insets.sm),
+            const SizedBox(height: Insets.sm),
 
             // The chest itself — fixed slot + per-tier scale so every
             // sprite reads the same visual size.
@@ -385,7 +368,7 @@ class _ChestCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: Insets.xs),
+            const SizedBox(height: Insets.xs),
             GoopText(
               locked
                   ? 'LOCKED'
@@ -396,7 +379,7 @@ class _ChestCard extends StatelessWidget {
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.4,
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
+                color: Colors.white.withValues(alpha: 0.35),
               ),
             ),
           ],
@@ -518,14 +501,14 @@ class _CompletedLabelState extends State<_CompletedLabel>
           fontSize: FontSizes.titleMedium,
           fontWeight: FontWeight.w900,
           letterSpacing: 1.4,
-          color: Skeuo.collapse(Color(0xFFFFD700)),
-          shadows: [
+          color: const Color(0xFFFFD700),
+          shadows: const [
             Shadow(
               offset: Offset(0, 2),
               blurRadius: 8,
-              color: Skeuo.collapse(Color(0xAA000000)),
+              color: Color(0xAA000000),
             ),
-            Shadow(blurRadius: 16, color: Skeuo.collapse(Color(0x66FFD700))),
+            Shadow(blurRadius: 16, color: Color(0x66FFD700)),
           ],
         ),
       ),

@@ -46,12 +46,12 @@ class RunProvider
   @override
   RunState _runState = RunState();
 
-  final List<Gun> _allGuns= [];
-  final List<Item> _allItems= [];
+  List<Gun> _allGuns = [];
+  List<Item> _allItems = [];
   @override
-  final List<Synergy> _allSynergies= [];
-  final List<Shrine> _allShrines= [];
-  final List<Gungeoneer> _allGungeoneers= [];
+  List<Synergy> _allSynergies = [];
+  List<Shrine> _allShrines = [];
+  List<Gungeoneer> _allGungeoneers = [];
 
   /// Reverse index of "what entities reference X". Built once at scrape
   /// time, loaded lazily here. Drives the "Referenced by" panel on each
@@ -63,9 +63,9 @@ class RunProvider
   /// `firstWhere` scans that previously ran on every back-ref chip
   /// render (Duct Tape's 33-chip "Referenced by" pane was doing ~17 000
   /// string comparisons per rebuild) and every rich-link tap.
-  final Map<String, Gun> _gunsByLowerName= const {};
-  final Map<String, Item> _itemsByLowerName= const {};
-  final Map<String, Synergy> _synergiesByLowerName= const {};
+  Map<String, Gun> _gunsByLowerName = const {};
+  Map<String, Item> _itemsByLowerName = const {};
+  Map<String, Synergy> _synergiesByLowerName = const {};
 
   // Shellegun mode: 1 = Pistol (manual), 2 = Pistol (auto), 3 = Beam
 
@@ -106,9 +106,9 @@ class RunProvider
   String? _error;
 
   RunState get runState => _runState;
-  final List<Gun> get allGuns => _allGuns;
-  final List<Item> get allItems => _allItems;
-  final List<Synergy> get allSynergies => _allSynergies;
+  List<Gun> get allGuns => _allGuns;
+  List<Item> get allItems => _allItems;
+  List<Synergy> get allSynergies => _allSynergies;
 
   /// Log entries relevant to curse: pickups with curse, steals, shrines,
   /// manual adjustments, plus synergy/transfer context entries.
@@ -135,8 +135,8 @@ class RunProvider
           )
           .toList()
         ..sort((a, b) => b.timestamp.compareTo(a.timestamp));
-  final List<Shrine> get allShrines => _allShrines;
-  final List<Gungeoneer> get allGungeoneers => _allGungeoneers;
+  List<Shrine> get allShrines => _allShrines;
+  List<Gungeoneer> get allGungeoneers => _allGungeoneers;
 
   /// The last played character, or null if no history exists.
   /// Persists across run end and app kill — only updates when a new
@@ -736,7 +736,7 @@ class RunProvider
     );
 
     // Only remove one copy if it's Junk (to allow incremental stacking/unstacking)
-    final List<Item> newItems;
+    List<Item> newItems;
     if (item.name.toLowerCase() == 'junk') {
       newItems = List<Item>.from(p.items);
       final index = newItems.indexWhere((i) => i.name == item.name);

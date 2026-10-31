@@ -33,12 +33,12 @@ class ShrineActivationSheet extends StatelessWidget {
             ),
             child: Column(
               children: [
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Container(
                   width: 38,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Skeuo.collapse(Colors.white24),
+                    color: Colors.white24,
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -54,9 +54,7 @@ class ShrineActivationSheet extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.all(Insets.md),
                             decoration: BoxDecoration(
-                              color: Skeuo.collapse(
-                                Colors.black,
-                              ).withValues(alpha: 0.25),
+                              color: Colors.black.withValues(alpha: 0.25),
                               borderRadius: BorderRadius.all(Radii.lg),
                               border: Border.all(
                                 color: Skeuo.inkIf(
@@ -66,9 +64,7 @@ class ShrineActivationSheet extends StatelessWidget {
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Skeuo.collapse(
-                                    Colors.black,
-                                  ).withValues(alpha: 0.3),
+                                  color: Colors.black.withValues(alpha: 0.3),
                                   blurRadius: 16,
                                   offset: const Offset(0, 4),
                                 ),
@@ -126,7 +122,7 @@ class ShrineActivationSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 14),
+                      const SizedBox(height: 14),
 
                       // Centered Title
                       Center(
@@ -139,7 +135,7 @@ class ShrineActivationSheet extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
 
                       // Lore line under the title (the in-game prayer quote
                       // is dropped — it adds nothing at pick time).
@@ -150,9 +146,7 @@ class ShrineActivationSheet extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12.5,
-                              color: Skeuo.collapse(
-                                Colors.white,
-                              ).withValues(alpha: 0.6),
+                              color: Colors.white.withValues(alpha: 0.6),
                               fontStyle: FontStyle.italic,
                             ),
                           ),
@@ -162,7 +156,7 @@ class ShrineActivationSheet extends StatelessWidget {
                       if (name.contains('angel') ||
                           name.contains('blood') ||
                           name.contains('companion')) ...[
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 14,
@@ -263,7 +257,7 @@ class ShrineActivationSheet extends StatelessWidget {
                             minimumSize: const Size.fromHeight(52),
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             backgroundColor: Skeuo.inkIf(Colors.amber),
-                            foregroundColor: Skeuo.collapse(Colors.black),
+                            foregroundColor: Colors.black,
                           ),
                           icon: const Icon(Icons.bolt, size: 20),
                           label: GoopText(
@@ -296,7 +290,7 @@ class _SectionHeader extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 14, color: Skeuo.inkIf(Colors.amber)),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         GoopText(
           title,
           style: TextStyle(
@@ -368,14 +362,14 @@ class _WillApplyCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SectionHeader(icon: Icons.bolt, title: 'WILL BE APPLIED'),
-            SizedBox(height: 8),
+            const _SectionHeader(icon: Icons.bolt, title: 'WILL BE APPLIED'),
+            const SizedBox(height: 8),
             if (auto.isEmpty)
               GoopText(
                 'No automatic stat changes — marks the shrine as used in your log.',
                 style: TextStyle(
                   fontSize: 13,
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                 ),
               )
             else
@@ -493,15 +487,15 @@ Widget _genericEffectBody({required String effect}) {
         ),
         child: GoopText(
           main,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: FontSizes.bodyMedium,
             fontWeight: FontWeight.w800,
             height: 1.35,
-            color: Skeuo.collapse(Colors.white),
+            color: Colors.white,
           ),
         ),
       ),
-      SizedBox(height: 10),
+      const SizedBox(height: 10),
       for (final s in rest)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: Insets.xs),
@@ -578,12 +572,12 @@ Widget _diceEffectBody({required String effect}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      GoopText(
+      const GoopText(
         'One positive and one negative effect:',
         style: TextStyle(
           fontSize: FontSizes.bodyMedium,
           fontWeight: FontWeight.w800,
-          color: Skeuo.collapse(Colors.white),
+          color: Colors.white,
         ),
       ),
       const SizedBox(height: 10),
@@ -593,11 +587,11 @@ Widget _diceEffectBody({required String effect}) {
           body: matches[i].group(2)!.trim(),
           isGood: i.isEven,
         ),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
       ],
       if (notes.isNotEmpty) ...[
-        _SectionHeader(icon: Icons.info_outline, title: 'NOTES'),
-        SizedBox(height: 6),
+        const _SectionHeader(icon: Icons.info_outline, title: 'NOTES'),
+        const SizedBox(height: 6),
         for (final n in notes)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 3),

@@ -57,10 +57,10 @@ class ParadoxPlayerPanel extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(8 * sf, 4 * sf, 8 * sf, 2 * sf),
       padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 6 * sf),
       decoration: BoxDecoration(
-        color: Skeuo.collapse(Color(0xFF140B22)).withValues(alpha: 0.9),
+        color: const Color(0xFF140B22).withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: Skeuo.collapse(Color(0xFF7C4DFF)).withValues(alpha: 0.35),
+          color: const Color(0xFF7C4DFF).withValues(alpha: 0.35),
         ),
       ),
       child: Row(
@@ -71,7 +71,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                 () => showModalBottomSheet<void>(
                   context: context,
                   isScrollControlled: true,
-                  backgroundColor: Skeuo.collapse(Color(0xFF140B22)),
+                  backgroundColor: const Color(0xFF140B22),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(18),
@@ -85,9 +85,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
-                  color: Skeuo.collapse(
-                    Color(0xFFB388FF),
-                  ).withValues(alpha: 0.55),
+                  color: const Color(0xFFB388FF).withValues(alpha: 0.55),
                   width: 1.5,
                 ),
               ),
@@ -111,7 +109,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   _PanelStat(
                     label: 'COOL',
                     value: p.runState.totalCoolness.toStringAsFixed(0),
-                    color: Skeuo.collapse(Color(0xFF4DD0E1)),
+                    color: const Color(0xFF4DD0E1),
                     sf: sf,
                     onTap:
                         () => Navigator.push(
@@ -123,7 +121,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   _PanelStat(
                     label: 'CURSE',
                     value: p.runState.totalCurse.toStringAsFixed(0),
-                    color: Skeuo.collapse(Color(0xFFBA68C8)),
+                    color: const Color(0xFFBA68C8),
                     sf: sf,
                     onTap:
                         () => Navigator.push(
@@ -135,7 +133,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                   _PanelStat(
                     label: 'SYN',
                     value: p.activeSynergyGlowColors.length.toString(),
-                    color: Skeuo.collapse(Color(0xFFB388FF)),
+                    color: const Color(0xFFB388FF),
                     sf: sf,
                     onTap:
                         () => Navigator.push(
@@ -154,9 +152,9 @@ class ParadoxPlayerPanel extends StatelessWidget {
             icon: Icon(
               Icons.more_vert_rounded,
               size: 20 * sf,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
-            color: Skeuo.collapse(Color(0xFF1E122E)),
+            color: const Color(0xFF1E122E),
             onSelected: (v) => _onMenu(context, v, session),
             itemBuilder:
                 (_) => [
@@ -171,9 +169,9 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'ammonomicon',
                     Icons.menu_book_rounded,
                     'Ammonomicon',
-                    Skeuo.collapse(Color(0xFF4DD0E1)),
+                    const Color(0xFF4DD0E1),
                   ),
-                  PopupMenuDivider(),
+                  const PopupMenuDivider(),
                   _header('GAME'),
                   _item(
                     'reset_p1',
@@ -191,7 +189,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'dice',
                     Icons.casino_rounded,
                     'Diceroller',
-                    Skeuo.collapse(Color(0xFFFFD54F)),
+                    const Color(0xFFFFD54F),
                   ),
                   _item(
                     'surprise',
@@ -207,7 +205,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     session.isPaused ? 'Resume Run' : 'Pause Run',
                     Skeuo.inkIf(Colors.orangeAccent),
                   ),
-                  PopupMenuDivider(),
+                  const PopupMenuDivider(),
                   _header('DISPLAY'),
                   _toggle(
                     'timer',
@@ -227,7 +225,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'Panels',
                     VisualPrefs.notifier.value.showDashboards,
                   ),
-                  PopupMenuDivider(),
+                  const PopupMenuDivider(),
                   _header('SETTINGS'),
                   _item(
                     'themes',
@@ -241,7 +239,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     'Settings',
                     Skeuo.inkIf(Colors.cyanAccent),
                   ),
-                  PopupMenuDivider(),
+                  const PopupMenuDivider(),
                   if (session.myRole == MpRole.sidekick)
                     _item(
                       'leave',
@@ -261,7 +259,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
       context: context,
       builder:
           (dctx) => AlertDialog(
-            backgroundColor: Skeuo.collapse(Color(0xFF1E122E)),
+            backgroundColor: const Color(0xFF1E122E),
             title: const GoopText('Leave multiplayer?'),
             content: const GoopText(
               'You disconnect; your partner keeps their run.',
@@ -295,7 +293,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
         fontSize: 10,
         fontWeight: FontWeight.w900,
         letterSpacing: 1.5,
-        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
+        color: Colors.white.withValues(alpha: 0.35),
       ),
     ),
   );
@@ -312,25 +310,22 @@ class ParadoxPlayerPanel extends StatelessWidget {
         Icon(
           icon,
           size: 18,
-          color: isOn ? AppTheme.flair.primary : Skeuo.collapse(Colors.white38),
+          color: isOn ? AppTheme.flair.primary : Colors.white38,
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: GoopText(
             label,
             style: TextStyle(
               fontSize: 13,
-              color:
-                  isOn
-                      ? Skeuo.collapse(Colors.white)
-                      : Skeuo.collapse(Colors.white54),
+              color: isOn ? Colors.white : Colors.white54,
             ),
           ),
         ),
         Icon(
           isOn ? Icons.toggle_on_rounded : Icons.toggle_off_outlined,
           size: 20,
-          color: isOn ? AppTheme.flair.primary : Skeuo.collapse(Colors.white24),
+          color: isOn ? AppTheme.flair.primary : Colors.white24,
         ),
       ],
     ),
@@ -377,7 +372,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
         showModalBottomSheet<void>(
           context: context,
           isScrollControlled: true,
-          backgroundColor: Skeuo.collapse(Color(0xFF140B22)),
+          backgroundColor: const Color(0xFF140B22),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
           ),
@@ -405,7 +400,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
       context: context,
       builder:
           (dctx) => AlertDialog(
-            backgroundColor: Skeuo.collapse(Color(0xFF1E122E)),
+            backgroundColor: const Color(0xFF1E122E),
             title: GoopText(
               isMyPage ? 'Reset your items?' : 'Reset partner items?',
             ),

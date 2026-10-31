@@ -54,7 +54,9 @@ class Item {
       type: json['type'] ?? '',
       effect: json['effect'] ?? '',
       quote: json['quote'] ?? '',
-      ammonomiconEntry: json['ammonomicon_entry'] ?? json['ammonomicon'] ?? '',
+      ammonomiconEntry: json['ammonomicon_entry'] ??
+          json['ammonomicon'] ??
+          '',
       quality: json['quality'] ?? '',
       sellPrice: json['sell_price']?.toString() ?? '',
       chestColor: json['chest_color'] ?? '',

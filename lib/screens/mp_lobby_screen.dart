@@ -19,7 +19,6 @@ import '../widgets/paradox/avatar_picker.dart' show showAvatarPicker;
 import '../widgets/particles/ambient_glow.dart';
 import 'character_select_screen.dart';
 import 'mp_connect_screen.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// MP Lobby — the breach point where two gungeoneers meet.
 ///
@@ -208,7 +207,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             fontSize: FontSizes.titleSmall,
             fontWeight: FontWeight.w900,
             letterSpacing: 2.5,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.55),
+            color: Colors.white.withValues(alpha: 0.55),
           ),
         ),
       ),
@@ -221,7 +220,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       title: 'HOST',
       subtitle: 'Main player\nLeads the run',
       icon: Icons.military_tech_rounded,
-      color: Skeuo.collapse(Color(0xFF4DD0E1)),
+      color: const Color(0xFF4DD0E1),
       sf: sf,
       onTap: () {
         Haptics.selection();
@@ -237,7 +236,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       subtitle: 'Join as The Cultist\nBackup for the main player',
       icon: Icons.groups_rounded,
       // Cultist violet — reads as its own role, not "disabled host".
-      color: Skeuo.collapse(Color(0xFFB388FF)),
+      color: const Color(0xFFB388FF),
       sf: sf,
       onTap: () {
         Haptics.selection();
@@ -255,27 +254,25 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     Container(
       padding: EdgeInsets.symmetric(horizontal: 14, vertical: 11 * sf),
       decoration: BoxDecoration(
-        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.03),
+        color: Colors.white.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.08),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
       ),
       child: Row(
         children: [
           Icon(
             Icons.bluetooth_searching_rounded,
             size: 16 * sf,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.45),
+            color: Colors.white.withValues(alpha: 0.45),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: GoopText(
               'Pair over Bluetooth or the same Wi-Fi — one hosts, one joins.',
               style: TextStyle(
                 fontSize: 11 * sf,
                 height: 1.35,
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
+                color: Colors.white.withValues(alpha: 0.5),
               ),
             ),
           ),
@@ -290,7 +287,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     FilledButton.icon(
       style: FilledButton.styleFrom(
         backgroundColor: flair.primary,
-        foregroundColor: Skeuo.collapse(Colors.white),
+        foregroundColor: Colors.white,
         minimumSize: Size.fromHeight(56 * sf),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
@@ -326,7 +323,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             child: FramedAvatar(id: _avatarId, size: 52 * sf, radius: 26 * sf),
           ),
         ),
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
         Expanded(child: _buildNicknameField(sf, flair)),
       ],
     ),
@@ -344,13 +341,13 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       icon: Icon(
         Icons.help_outline_rounded,
         size: 18 * sf,
-        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+        color: Colors.white.withValues(alpha: 0.4),
       ),
       label: GoopText(
         'How to Play',
         style: TextStyle(
           fontSize: FontSizes.labelMedium * sf,
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+          color: Colors.white.withValues(alpha: 0.4),
         ),
       ),
     ),
@@ -411,7 +408,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                 ),
                 child: Icon(icon, size: 30 * sf, color: color),
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,9 +427,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                       subtitle.replaceAll('\n', ' · '),
                       style: TextStyle(
                         fontSize: 12 * sf,
-                        color: Skeuo.collapse(
-                          Colors.white,
-                        ).withValues(alpha: 0.6),
+                        color: Colors.white.withValues(alpha: 0.6),
                         height: 1.35,
                       ),
                     ),
@@ -518,9 +513,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                     style: TextStyle(
                       fontSize: FontSizes.titleLarge * sf,
                       fontWeight: FontWeight.w900,
-                      color: Skeuo.collapse(
-                        Colors.white,
-                      ).withValues(alpha: 0.95),
+                      color: Colors.white.withValues(alpha: 0.95),
                     ),
                   ),
                   if (!isMain)
@@ -528,9 +521,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                       'Sidekick always plays The Cultist',
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall * sf,
-                        color: Skeuo.collapse(
-                          Colors.white,
-                        ).withValues(alpha: 0.4),
+                        color: Colors.white.withValues(alpha: 0.4),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -540,7 +531,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
             Icon(
               isMain ? Icons.chevron_right_rounded : Icons.lock_rounded,
               size: 28 * sf,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
+              color: Colors.white.withValues(alpha: 0.3),
             ),
           ],
         ),
@@ -637,7 +628,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
         hintStyle: TextStyle(
           fontSize: 20 * sf,
           fontWeight: FontWeight.w600,
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
+          color: Colors.white.withValues(alpha: 0.3),
         ),
         prefixIcon: Icon(Icons.person_outline, size: 26 * sf),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -669,7 +660,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
         hintStyle: TextStyle(
           fontSize: 16 * sf,
           fontWeight: FontWeight.w600,
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
+          color: Colors.white.withValues(alpha: 0.3),
         ),
         prefixIcon: Icon(Icons.flag_outlined, size: 22 * sf),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
@@ -679,7 +670,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
         ),
         counterStyle: TextStyle(
           fontSize: 10 * sf,
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
+          color: Colors.white.withValues(alpha: 0.3),
         ),
       ),
     );
@@ -692,7 +683,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       return FilledButton.icon(
         style: FilledButton.styleFrom(
           backgroundColor: flair.primary,
-          foregroundColor: Skeuo.collapse(Colors.white),
+          foregroundColor: Colors.white,
           minimumSize: Size.fromHeight(56 * sf),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -713,7 +704,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
     return FilledButton.icon(
       style: FilledButton.styleFrom(
         backgroundColor: flair.secondary,
-        foregroundColor: Skeuo.collapse(Colors.white),
+        foregroundColor: Colors.white,
         minimumSize: Size.fromHeight(56 * sf),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
@@ -808,7 +799,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -873,10 +864,10 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
               ),
             ),
             icon: Icon(Icons.bluetooth_rounded, size: 36, color: flair.primary),
-            title: GoopText(
+            title: const GoopText(
               'Bluetooth + Wi-Fi',
               style: TextStyle(
-                color: Skeuo.collapse(Colors.white),
+                color: Colors.white,
                 fontWeight: FontWeight.w900,
                 fontSize: FontSizes.titleMedium,
               ),
@@ -886,7 +877,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
               'You\'ll be asked to grant permissions — please allow them.',
               style: TextStyle(
                 fontSize: 13 * sf,
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 height: 1.5,
               ),
             ),
@@ -894,7 +885,7 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
               FilledButton(
                 style: FilledButton.styleFrom(
                   backgroundColor: flair.primary,
-                  foregroundColor: Skeuo.collapse(Colors.white),
+                  foregroundColor: Colors.white,
                 ),
                 onPressed: () => Navigator.pop(ctx),
                 child: const GoopText('GOT IT'),
@@ -956,7 +947,7 @@ class _HowToStep extends StatelessWidget {
                 text,
                 style: TextStyle(
                   fontSize: 13 * sf,
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.8),
+                  color: Colors.white.withValues(alpha: 0.8),
                   height: 1.4,
                 ),
               ),

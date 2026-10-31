@@ -4,7 +4,6 @@ import '../../services/app_theme.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../services/haptics.dart';
 import '../../theme/tokens.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Ammonomicon-style bookmark tab definition.
 ///
@@ -275,7 +274,7 @@ class _BookmarkTab extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildIcon(color),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 GoopText(
                   tab.label,
                   maxLines: 1,
@@ -285,10 +284,8 @@ class _BookmarkTab extends StatelessWidget {
                     fontWeight: FontWeight.w800,
                     color:
                         active
-                            ? Skeuo.collapse(Colors.white)
-                            : Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.55),
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.55),
                     letterSpacing: 0.2,
                     height: 1.0,
                   ),

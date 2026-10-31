@@ -78,7 +78,7 @@ class _PalettePanel extends StatelessWidget {
                           color: nameColor,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       GoopText(
                         subtitle,
                         maxLines: 1,

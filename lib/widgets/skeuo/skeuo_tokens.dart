@@ -66,30 +66,4 @@ abstract final class Skeuo {
     }
     return Contrast.luminance(color) > 0.3 ? ink : color;
   }
-
-  /// Full three-way collapse for hex literals the sweeps can't classify:
-  ///  - opaque dark fills (lum < 0.3) become paper — black tiles, dark
-  ///    gradients and night-mode containers print as paper surfaces
-  ///  - light or mid colors fold to ink — white/colored text and chrome
-  ///  - tints (alpha < 0.7) keep their alpha: light washes become pencil
-  ///    shading, dark washes stay as they are
-  /// Paper-family and ink literals pass through untouched.
-  static Color collapse(Color c) {
-    if (!AppTheme.isSkeuo) return c;
-    if (c == paper ||
-        c == card ||
-        c == insetPaper ||
-        c == pencil ||
-        c == ink ||
-        c == accent) {
-      return c;
-    }
-    final l = Contrast.luminance(c);
-    if (c.a < 0.7) {
-      return l > 0.5 ? ink.withValues(alpha: c.a) : c;
-    }
-    if (l > 0.55) return ink;
-    if (l < 0.3) return card;
-    return ink;
-  }
 }

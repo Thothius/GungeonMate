@@ -84,7 +84,7 @@ class HomeCustomization {
     bool? showGungeoneer,
     String? gungeoneerName,
     bool? showJunk,
-    final Map<String, int>? junkCounts,
+    Map<String, int>? junkCounts,
   }) {
     return HomeCustomization(
       showGungeoneer: showGungeoneer ?? this.showGungeoneer,
@@ -99,7 +99,7 @@ class HomeCustomization {
   static const _kShowJunk = 'home.show_junk';
   static const _kJunkCounts = 'home.junk_counts';
 
-  static ValueNotifier<HomeCustomization> notifier = ValueNotifier(
+  static final ValueNotifier<HomeCustomization> notifier = ValueNotifier(
     const HomeCustomization(),
   );
 
@@ -110,7 +110,7 @@ class HomeCustomization {
     final gunName = p.getString(_kGunName) ?? '';
     final showJunk = p.getBool(_kShowJunk) ?? false;
     final countsRaw = p.getString(_kJunkCounts);
-    final Map<String, int> counts = {};
+    Map<String, int> counts = {};
     if (countsRaw != null && countsRaw.isNotEmpty) {
       countsRaw.split(',').forEach((pair) {
         final i = pair.indexOf(':');

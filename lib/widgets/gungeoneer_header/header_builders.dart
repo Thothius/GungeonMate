@@ -19,9 +19,9 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
             ? IconButton(
               tooltip: 'End run',
               onPressed: widget.onEndRun,
-              icon: Icon(
+              icon: const Icon(
                 Icons.exit_to_app,
-                color: Skeuo.collapse(Colors.white70),
+                color: Colors.white70,
                 size: 18,
               ),
               constraints: const BoxConstraints(),
@@ -88,14 +88,14 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                           ),
                           // Robot +DMG cyber overlay — shown when robotDamageBoost > 0.
                           if (widget.robotDamageBoost > 0) ...[
-                            SizedBox(width: 3),
+                            const SizedBox(width: 3),
                             _RobotDmgBadge(boost: widget.robotDamageBoost),
                           ],
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           // 4 stat capsules share the remaining space equally
                           Expanded(
                             child: _buildFlatCapsule(
-                              color: Skeuo.collapse(Color(0xFF00E5FF)),
+                              color: const Color(0xFF00E5FF),
                               value: '+${widget.coolness.toStringAsFixed(1)}',
                               label: 'COOL',
                               onTap: widget.onTapCoolness,
@@ -103,10 +103,10 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                               isCool: true,
                             ),
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Expanded(
                             child: _buildFlatCapsule(
-                              color: Skeuo.collapse(Color(0xFFE040FB)),
+                              color: const Color(0xFFE040FB),
                               value: '+${widget.curse.toStringAsFixed(1)}',
                               label: 'CURSE',
                               onTap: widget.onTapCurse,
@@ -114,13 +114,13 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                               isCurse: true,
                             ),
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Expanded(
                             child: _buildFlatCapsule(
                               color:
                                   widget.activeSynergies > 0
-                                      ? Skeuo.collapse(Color(0xFFFFD740))
-                                      : Skeuo.collapse(Colors.white38),
+                                      ? const Color(0xFFFFD740)
+                                      : Colors.white38,
                               value:
                                   widget.partialSynergies > 0
                                       ? '${widget.activeSynergies}|${widget.partialSynergies}'
@@ -131,7 +131,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                             ),
                           ),
                           if (trailingWidget != null) ...[
-                            SizedBox(width: 6),
+                            const SizedBox(width: 6),
                             trailingWidget,
                           ],
                         ],
@@ -159,9 +159,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Skeuo.collapse(
-                                      Colors.black,
-                                    ).withValues(alpha: 0.5),
+                                    color: Colors.black.withValues(alpha: 0.5),
                                     blurRadius: 8,
                                     offset: const Offset(0, 3),
                                   ),
@@ -188,7 +186,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
                 Container(
                   height: 1.0,
                   width: double.infinity,
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
+                  color: Colors.white.withValues(alpha: 0.05),
                 ),
 
                 // EFFECTS STRIP — slim hairline row inside the panel
@@ -211,11 +209,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
 
   Widget _buildAvatarContent(String iconPath) {
     final char = widget.character;
-    final fallback = Icon(
-      Icons.person,
-      size: 28,
-      color: Skeuo.collapse(Colors.white54),
-    );
+    final fallback = const Icon(Icons.person, size: 28, color: Colors.white54);
 
     if (_avatarMode == 0) {
       // Static icon
@@ -329,10 +323,7 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
       style: TextStyle(
         fontSize: FontSizes.bodyMedium,
         fontWeight: FontWeight.w900,
-        color:
-            isActive
-                ? Skeuo.collapse(Colors.white)
-                : Skeuo.collapse(Colors.white38),
+        color: isActive ? Colors.white : Colors.white38,
         height: 1.1,
       ),
     );
@@ -415,13 +406,13 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
         color:
             isActive
                 ? color.withValues(alpha: 0.16)
-                : Skeuo.collapse(Colors.black).withValues(alpha: 0.28),
+                : Colors.black.withValues(alpha: 0.28),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color:
               isActive
                   ? color.withValues(alpha: 0.45)
-                  : Skeuo.collapse(Colors.white).withValues(alpha: 0.10),
+                  : Colors.white.withValues(alpha: 0.10),
           width: 1.0,
         ),
       ),
@@ -432,13 +423,13 @@ mixin _HeaderBuilders on State<GungeoneerHeader> {
           mainAxisSize: MainAxisSize.min,
           children: [
             valueText,
-            SizedBox(height: 2),
+            const SizedBox(height: 2),
             GoopText(
               label,
               style: TextStyle(
                 fontSize: FontSizes.labelSmall,
                 fontWeight: FontWeight.w900,
-                color: isActive ? color : Skeuo.collapse(Colors.white24),
+                color: isActive ? color : Colors.white24,
                 letterSpacing: 0.4,
                 height: 1.0,
               ),

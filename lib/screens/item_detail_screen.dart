@@ -366,7 +366,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   // Compact action square on the right (trash if in run, + if not)
                   SizedBox(
                     width: actionBtnSize,

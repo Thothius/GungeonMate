@@ -101,10 +101,7 @@ class _ValueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        isCool
-            ? Skeuo.collapse(Color(0xFF00E5FF))
-            : Skeuo.collapse(Color(0xFFFF3D00));
+    final color = isCool ? const Color(0xFF00E5FF) : const Color(0xFFFF3D00);
     final hasBreakdown = base != 0 || fromItems != 0;
 
     // Mathematical calculations for the visual meters
@@ -138,7 +135,7 @@ class _ValueCard extends StatelessWidget {
                   size: 48,
                   color: color,
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 FittedBox(
                   fit: BoxFit.scaleDown,
                   child: GoopText(
@@ -152,7 +149,7 @@ class _ValueCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 if (hasBreakdown) ...[
                   GoopText(
                     isTeam
@@ -161,9 +158,7 @@ class _ValueCard extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w700,
-                      color: Skeuo.collapse(
-                        Colors.white,
-                      ).withValues(alpha: 0.65),
+                      color: Colors.white.withValues(alpha: 0.65),
                       letterSpacing: 0.3,
                     ),
                   ),
@@ -180,14 +175,12 @@ class _ValueCard extends StatelessWidget {
                 SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     activeTrackColor: color,
-                    inactiveTrackColor: Skeuo.collapse(
-                      Colors.white,
-                    ).withValues(alpha: 0.08),
-                    thumbColor: Skeuo.collapse(Colors.white),
+                    inactiveTrackColor: Colors.white.withValues(alpha: 0.08),
+                    thumbColor: Colors.white,
                     overlayColor: color.withValues(alpha: 0.2),
                     valueIndicatorColor: color,
-                    valueIndicatorTextStyle: TextStyle(
-                      color: Skeuo.collapse(Colors.black),
+                    valueIndicatorTextStyle: const TextStyle(
+                      color: Colors.black,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -215,7 +208,7 @@ class _ValueCard extends StatelessWidget {
                         '0.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white54),
+                          color: Colors.white54,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -223,14 +216,14 @@ class _ValueCard extends StatelessWidget {
                         '5.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white30),
+                          color: Colors.white30,
                         ),
                       ),
                       Text(
                         '10.0',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white30),
+                          color: Colors.white30,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -238,7 +231,7 @@ class _ValueCard extends StatelessWidget {
                         '15.0+',
                         style: TextStyle(
                           fontSize: FontSizes.labelSmall,
-                          color: Skeuo.collapse(Colors.white54),
+                          color: Colors.white54,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -248,7 +241,7 @@ class _ValueCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 14),
+          const SizedBox(height: 14),
 
           // Incremental presets (oiled quick buttons in a single spacious mobile-friendly row)
           Padding(
@@ -273,14 +266,14 @@ class _ValueCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Live Interactive Gungeon Meter
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(Insets.md),
             decoration: BoxDecoration(
-              color: Skeuo.collapse(Colors.black).withValues(alpha: 0.15),
+              color: Colors.black.withValues(alpha: 0.15),
               borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(15),
               ),

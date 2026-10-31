@@ -224,12 +224,12 @@ class ItemDetailHeader extends StatelessWidget {
                   if (quality.isNotEmpty)
                     QualityBadge(quality: quality, size: 32)
                   else
-                    SizedBox(width: 32),
+                    const SizedBox(width: 32),
                   if (sellPrice.isNotEmpty) ...[
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     _SellBadge(price: sellPrice),
                   ],
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   // Active vs passive — always top-left for items.
                   _TagChip(
                     icon:
@@ -338,7 +338,7 @@ class _SellBadge extends StatelessWidget {
             size: 13,
             color: Skeuo.inkIf(Colors.yellowAccent),
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           GoopText(
             price,
             style: TextStyle(
@@ -474,12 +474,12 @@ class _ChestChip extends StatelessWidget {
   final String chestColor;
   const _ChestChip({required this.chestColor});
 
-  static Map<String, Color> _colors = {
-    'red': Skeuo.collapse(Color(0xFFE53935)),
-    'blue': Skeuo.collapse(Color(0xFF1E88E5)),
-    'green': Skeuo.collapse(Color(0xFF43A047)),
-    'black': Skeuo.collapse(Color(0xFF222222)),
-    'brown': Skeuo.collapse(Color(0xFF8D6E63)),
+  static final Map<String, Color> _colors = {
+    'red': Color(0xFFE53935),
+    'blue': Color(0xFF1E88E5),
+    'green': Color(0xFF43A047),
+    'black': Color(0xFF222222),
+    'brown': Color(0xFF8D6E63),
     'rainbow': Skeuo.inkIf(Colors.pinkAccent),
   };
 
@@ -495,14 +495,14 @@ class _ChestChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final key = chestColor.toLowerCase();
-    final color = _colors[key] ?? Skeuo.collapse(Colors.white38);
+    final color = _colors[key] ?? Colors.white38;
     final rank = _ranks[key];
 
     final isS = key == 'black';
     // S-tier: gold accent for border/glow so it reads on any background.
     // The chest color swatch stays near-black (the actual chest color),
     // but the chip chrome uses gold to match the QualityBadge S-tier glow.
-    final accent = isS ? Skeuo.collapse(Color(0xFFFFD700)) : color;
+    final accent = isS ? const Color(0xFFFFD700) : color;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -535,7 +535,7 @@ class _ChestChip extends StatelessWidget {
             size: 14,
             color: isS ? accent : color,
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           GoopText(
             'Chest ',
             style: TextStyle(
@@ -551,10 +551,7 @@ class _ChestChip extends StatelessWidget {
               color: color,
               shape: BoxShape.circle,
               border: Border.all(
-                color:
-                    isS
-                        ? accent.withValues(alpha: 0.6)
-                        : Skeuo.collapse(Colors.white24),
+                color: isS ? accent.withValues(alpha: 0.6) : Colors.white24,
                 width: 0.8,
               ),
             ),

@@ -32,7 +32,7 @@ class DestroyBanner extends StatelessWidget {
                     color: Skeuo.inkIf(Colors.redAccent),
                     size: 18,
                   ),
-                  SizedBox(width: 6),
+                  const SizedBox(width: 6),
                   GoopText(
                     'DESTROYED ON USE',
                     style: TextStyle(
@@ -50,10 +50,10 @@ class DestroyBanner extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12.5,
                   height: 1.35,
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                 ),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -70,7 +70,7 @@ class DestroyBanner extends StatelessWidget {
                   ),
                   style: FilledButton.styleFrom(
                     backgroundColor: Skeuo.inkIf(Colors.redAccent),
-                    foregroundColor: Skeuo.collapse(Colors.white),
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

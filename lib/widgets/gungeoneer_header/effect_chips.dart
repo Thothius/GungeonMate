@@ -19,21 +19,21 @@ class _EffectChipsWrapState extends State<_EffectChipsWrap> {
   Color _categoryColor(EffectCategory c) {
     switch (c) {
       case EffectCategory.mobility:
-        return Skeuo.collapse(Color(0xFF80DEEA));
+        return const Color(0xFF80DEEA);
       case EffectCategory.damage:
-        return Skeuo.collapse(Color(0xFFFFAB91));
+        return const Color(0xFFFFAB91);
       case EffectCategory.ammo:
-        return Skeuo.collapse(Color(0xFFFFE082));
+        return const Color(0xFFFFE082);
       case EffectCategory.defense:
-        return Skeuo.collapse(Color(0xFFA5D6A7));
+        return const Color(0xFFA5D6A7);
       case EffectCategory.utility:
-        return Skeuo.collapse(Color(0xFFCE93D8));
+        return const Color(0xFFCE93D8);
       case EffectCategory.economy:
-        return Skeuo.collapse(Color(0xFFFFD54F));
+        return const Color(0xFFFFD54F);
       case EffectCategory.status:
-        return Skeuo.collapse(Color(0xFFFFB74D));
+        return const Color(0xFFFFB74D);
       case EffectCategory.debuff:
-        return Skeuo.collapse(Color(0xFFEF9A9A));
+        return const Color(0xFFEF9A9A);
     }
   }
 

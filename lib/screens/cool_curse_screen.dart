@@ -8,7 +8,6 @@ import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
 import '../theme/tokens.dart';
 import '../utils/responsive.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// Cool & Curse fullscreen — opened by tapping the COOL or CURSE stat
 /// in the Paradox player panel (also usable from classic MP later).
@@ -35,16 +34,16 @@ class CoolCurseScreen extends StatelessWidget {
     final bossJamChance = curse >= 10 ? 100.0 : curse * 2;
 
     return Scaffold(
-      backgroundColor: Skeuo.collapse(Color(0xFF0D0716)),
+      backgroundColor: const Color(0xFF0D0716),
       appBar: AppBar(
-        backgroundColor: Skeuo.collapse(Color(0xFF140B22)),
+        backgroundColor: const Color(0xFF140B22),
         title: GoopText(
           'COOL & CURSE',
           style: TextStyle(
             fontSize: FontSizes.titleSmall * sf,
             fontWeight: FontWeight.w900,
             letterSpacing: 2,
-            color: Skeuo.collapse(Color(0xFFB388FF)),
+            color: const Color(0xFFB388FF),
           ),
         ),
         centerTitle: true,
@@ -60,7 +59,7 @@ class CoolCurseScreen extends StatelessWidget {
                     child: _MeterPanel(
                       title: 'COOLNESS',
                       value: cool,
-                      color: Skeuo.collapse(Color(0xFF4DD0E1)),
+                      color: const Color(0xFF4DD0E1),
                       sf: sf,
                       onDelta: (d) {
                         p.adjustCoolness(d);
@@ -74,7 +73,7 @@ class CoolCurseScreen extends StatelessWidget {
                     child: _MeterPanel(
                       title: 'CURSE',
                       value: curse,
-                      color: Skeuo.collapse(Color(0xFFBA68C8)),
+                      color: const Color(0xFFBA68C8),
                       sf: sf,
                       onDelta: (d) {
                         p.adjustCurse(d);
@@ -98,38 +97,38 @@ class CoolCurseScreen extends StatelessWidget {
                     'Chest fuse auto-defuse',
                     '${fuseSkipPct.toStringAsFixed(1)}%',
                     'Chance a mimicked/unmimicked chest resets its fuse. +2.5% per Cool, caps at 10% (4 Cool).',
-                    Skeuo.collapse(Color(0xFF4DD0E1)),
+                    const Color(0xFF4DD0E1),
                   ),
                   _EffectRow(
                     'Active-item cooldown',
                     '−${chestResetPct.toStringAsFixed(0)}% time',
                     'Coolness shortens recharge on cooldown-based items (Cigarettes etc.). +5% per Cool, caps at 50%.',
-                    Skeuo.collapse(Color(0xFF4DD0E1)),
+                    const Color(0xFF4DD0E1),
                   ),
                   _EffectRow(
                     'Extra room reward',
                     '${rewardPct.toStringAsFixed(1)}% ',
                     'Chance a cleared room drops an extra pickup. +1% per Cool, −1% per Curse.',
-                    Skeuo.collapse(Color(0xFF4DD0E1)),
+                    const Color(0xFF4DD0E1),
                   ),
                   _EffectRow(
                     'Jammed enemy chance',
                     '${jamChance.toStringAsFixed(0)}%',
                     'Curse jamms normal enemies — faster, harder, more damage. ~4% per Curse point.',
-                    Skeuo.collapse(Color(0xFFBA68C8)),
+                    const Color(0xFFBA68C8),
                   ),
                   _EffectRow(
                     'Jammed boss chance',
                     '${bossJamChance.toStringAsFixed(0)}%',
                     'Bosses can also jam (except past bosses). ~2% per Curse point.',
-                    Skeuo.collapse(Color(0xFFBA68C8)),
+                    const Color(0xFFBA68C8),
                   ),
                   if (curse >= 10)
-                    _EffectRow(
+                    const _EffectRow(
                       'LORD OF THE JAMMED',
                       'ACTIVE',
                       'At 10 Curse an unkillable reaper hunts you until the run ends. Stay under 10.',
-                      Skeuo.collapse(Color(0xFFFF5252)),
+                      Color(0xFFFF5252),
                     ),
                 ],
               ),
@@ -144,16 +143,14 @@ class CoolCurseScreen extends StatelessWidget {
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 28 * sf,
-                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
+                    color: Colors.white.withValues(alpha: 0.35),
                   ),
                   GoopText(
                     'scroll for the full picture',
                     style: TextStyle(
                       fontSize: 10.5 * sf,
                       fontStyle: FontStyle.italic,
-                      color: Skeuo.collapse(
-                        Colors.white,
-                      ).withValues(alpha: 0.35),
+                      color: Colors.white.withValues(alpha: 0.35),
                     ),
                   ),
                 ],
@@ -169,7 +166,7 @@ class CoolCurseScreen extends StatelessWidget {
                 children: [
                   _InfoBlock(
                     title: 'COOLNESS',
-                    color: Skeuo.collapse(Color(0xFF4DD0E1)),
+                    color: const Color(0xFF4DD0E1),
                     sf: sf,
                     body:
                         'Coolness is a hidden counter of how "cool" you are — '
@@ -187,7 +184,7 @@ class CoolCurseScreen extends StatelessWidget {
                   SizedBox(height: 14 * sf),
                   _InfoBlock(
                     title: 'CURSE',
-                    color: Skeuo.collapse(Color(0xFFBA68C8)),
+                    color: const Color(0xFFBA68C8),
                     sf: sf,
                     body:
                         'Curse is the dark twin — gained from cursed items '
@@ -291,7 +288,7 @@ class _MeterPanel extends StatelessWidget {
             child: Icon(
               Icons.refresh_rounded,
               size: 16 * sf,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
+              color: Colors.white.withValues(alpha: 0.35),
             ),
           ),
         ],
@@ -353,20 +350,15 @@ class _EffectsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Skeuo.collapse(Colors.white).withValues(alpha: 0.04),
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
           for (var i = 0; i < rows.length; i++) ...[
             if (i > 0)
-              Divider(
-                height: 1,
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.06),
-              ),
+              Divider(height: 1, color: Colors.white.withValues(alpha: 0.06)),
             Padding(
               padding: EdgeInsets.all(12 * sf),
               child: Row(
@@ -381,20 +373,16 @@ class _EffectsCard extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 12.5 * sf,
                             fontWeight: FontWeight.w800,
-                            color: Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.85),
+                            color: Colors.white.withValues(alpha: 0.85),
                           ),
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         GoopText(
                           rows[i].desc,
                           style: TextStyle(
                             fontSize: 10.5 * sf,
                             height: 1.35,
-                            color: Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.45),
+                            color: Colors.white.withValues(alpha: 0.45),
                           ),
                         ),
                       ],
@@ -472,7 +460,7 @@ class _InfoBlock extends StatelessWidget {
             style: TextStyle(
               fontSize: 12 * sf,
               height: 1.5,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+              color: Colors.white.withValues(alpha: 0.7),
             ),
           ),
         ],

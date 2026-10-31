@@ -10,7 +10,7 @@ mixin _RunPersistence on ChangeNotifier {
   /// Names of guns/items the user has favourited. Shared across runs
   /// and both players. Persisted independently of run state so starring
   /// stuff in one run carries over to the next.
-  final Set<String> _favourites = <String>{};
+  Set<String> _favourites = <String>{};
 
   /// Last played character name — persists across run end and app kill.
   /// Used by the home screen fall animation to show the right sprite.

@@ -136,7 +136,7 @@ class EffectTagger {
 
   static RegExp _re(String p) => RegExp(p, caseSensitive: false);
 
-  static List<EffectTag> _all = [
+  static final List<EffectTag> _all = [
     // ======== MOBILITY ========
     EffectTag(
       id: 'flight',
@@ -699,7 +699,7 @@ class EffectTagger {
 
   /// Group a scan() result by category, preserving registration order.
   static Map<EffectCategory, List<EffectTag>> groupByCategory(
-    final Map<EffectTag, List<EffectOccurrence>> scan,
+    Map<EffectTag, List<EffectOccurrence>> scan,
   ) {
     final groups = <EffectCategory, List<EffectTag>>{};
     for (final t in _all) {

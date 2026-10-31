@@ -100,7 +100,7 @@ class ShrinePickerScreen extends StatelessWidget {
                         color: Skeuo.inkIf(Colors.amber),
                         size: 16,
                       ),
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       GoopText(
                         '${provider.runState.shrinesUsed.length} used',
                         style: TextStyle(
@@ -241,7 +241,7 @@ class _ShrineTile extends StatelessWidget {
                         color: costColor,
                       ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: GoopText(
@@ -256,7 +256,7 @@ class _ShrineTile extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             // Cost / benefit chips — what this shrine takes and gives.
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 6),
@@ -286,7 +286,7 @@ class _ShrineTile extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: GoopText(
@@ -489,7 +489,7 @@ void _showUsedShrinesLog(BuildContext c, RunProvider p) {
                                       ),
                                   ],
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 if (s != null)
                                   GoopText(
                                     _shortEffect(s),

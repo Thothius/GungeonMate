@@ -45,11 +45,11 @@ class StatGroup extends StatelessWidget {
     final f = AppTheme.flair;
     switch (label.toLowerCase()) {
       case 'combat':
-        return f.statGroupCombat ?? Skeuo.collapse(Color(0xFFFF5252));
+        return f.statGroupCombat ?? const Color(0xFFFF5252);
       case 'handling':
-        return f.statGroupHandling ?? Skeuo.collapse(Color(0xFF40C4FF));
+        return f.statGroupHandling ?? const Color(0xFF40C4FF);
       case 'meta':
-        return f.statGroupMeta ?? Skeuo.collapse(Color(0xFFFFD54F));
+        return f.statGroupMeta ?? const Color(0xFFFFD54F);
       default:
         return f.primary;
     }
@@ -153,12 +153,12 @@ class StatPill extends StatelessWidget {
     this.groupColor,
   });
 
-  static Map<String, Color> _chestColors = {
-    'red': Skeuo.collapse(Color(0xFFE53935)),
-    'blue': Skeuo.collapse(Color(0xFF1E88E5)),
-    'green': Skeuo.collapse(Color(0xFF43A047)),
-    'black': Skeuo.collapse(Color(0xFF222222)),
-    'brown': Skeuo.collapse(Color(0xFF8D6E63)),
+  static final Map<String, Color> _chestColors = {
+    'red': Color(0xFFE53935),
+    'blue': Color(0xFF1E88E5),
+    'green': Color(0xFF43A047),
+    'black': Color(0xFF222222),
+    'brown': Color(0xFF8D6E63),
     'rainbow': Skeuo.inkIf(Colors.pinkAccent),
   };
 
@@ -196,7 +196,7 @@ class StatPill extends StatelessWidget {
         color:
             filled
                 ? (accentColor?.withValues(alpha: 0.08) ??
-                    Skeuo.collapse(Colors.white).withValues(alpha: 0.06))
+                    Colors.white.withValues(alpha: 0.06))
                 : null,
         borderRadius: BorderRadius.circular(flair.chipRadius),
         border:
@@ -209,7 +209,7 @@ class StatPill extends StatelessWidget {
                     : null)
                 : Border(
                   bottom: BorderSide(
-                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.25),
+                    color: Colors.white.withValues(alpha: 0.25),
                     width: 1,
                   ),
                 ),
@@ -223,7 +223,7 @@ class StatPill extends StatelessWidget {
               size: 12,
               color: Skeuo.inkIf(Colors.lightBlueAccent),
             ),
-            SizedBox(width: 3),
+            const SizedBox(width: 3),
           ],
           if (isDuration) ...[
             Icon(
@@ -231,7 +231,7 @@ class StatPill extends StatelessWidget {
               size: 12,
               color: Skeuo.inkIf(Colors.greenAccent.shade200),
             ),
-            SizedBox(width: 3),
+            const SizedBox(width: 3),
           ],
           GoopText(
             '$label  ',
@@ -240,7 +240,7 @@ class StatPill extends StatelessWidget {
               color:
                   accentColor?.withValues(alpha: 0.85) ??
                   groupColor?.withValues(alpha: 0.75) ??
-                  Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+                  Colors.white.withValues(alpha: 0.6),
             ),
           ),
           if (chestColor != null) ...[
@@ -250,19 +250,16 @@ class StatPill extends StatelessWidget {
               decoration: BoxDecoration(
                 color: chestColor,
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: Skeuo.collapse(Colors.white24),
-                  width: 0.8,
-                ),
+                border: Border.all(color: Colors.white24, width: 0.8),
               ),
             ),
-            SizedBox(width: 5),
+            const SizedBox(width: 5),
           ],
           if (hasDigit)
             ThemedNumber(
               value: value,
               baseSize: 13,
-              colorOverride: Skeuo.collapse(Colors.white),
+              colorOverride: Colors.white,
               role: ThemedNumberRole.headline,
             )
           else
@@ -271,26 +268,24 @@ class StatPill extends StatelessWidget {
               style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             ),
           if (chestRank != null) ...[
-            SizedBox(width: 6),
+            const SizedBox(width: 6),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
               decoration: BoxDecoration(
-                color: (chestColor ?? Skeuo.collapse(Colors.white24))
-                    .withValues(alpha: 0.22),
+                color: (chestColor ?? Colors.white24).withValues(alpha: 0.22),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
-                  color: (chestColor ?? Skeuo.collapse(Colors.white24))
-                      .withValues(alpha: 0.7),
+                  color: (chestColor ?? Colors.white24).withValues(alpha: 0.7),
                   width: 0.7,
                 ),
               ),
               child: GoopText(
                 chestRank,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.4,
-                  color: Skeuo.collapse(Colors.white),
+                  color: Colors.white,
                 ),
               ),
             ),

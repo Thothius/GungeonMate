@@ -83,7 +83,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
       return Theme(
         data: cleanTheme,
         child: Scaffold(
-          backgroundColor: Skeuo.collapse(Color(0xFFF0E9D8)),
+          backgroundColor: const Color(0xFFF0E9D8),
           body: SafeArea(
             child: Center(
               child: Padding(
@@ -91,29 +91,26 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.lock_outline_rounded,
                       size: 44,
-                      color: Skeuo.collapse(Color(0xFF1F1B16)),
+                      color: Color(0xFF1F1B16),
                     ),
-                    SizedBox(height: Insets.lg),
-                    GoopText(
+                    const SizedBox(height: Insets.lg),
+                    const GoopText(
                       'CUSTOMIZATION IS LOCKED',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.4,
-                        color: Skeuo.collapse(Color(0xFF1F1B16)),
+                        color: Color(0xFF1F1B16),
                       ),
                     ),
-                    SizedBox(height: Insets.sm),
-                    GoopText(
+                    const SizedBox(height: Insets.sm),
+                    const GoopText(
                       'Neo-Skeuo is a fixed hand-drawn identity — nothing to tune here.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Skeuo.collapse(Color(0xFF5C5548)),
-                      ),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF5C5548)),
                     ),
                     const SizedBox(height: Insets.xl),
                     TextButton(
@@ -121,13 +118,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                         Haptics.selection();
                         AppTheme.exitSkeuo();
                       },
-                      child: GoopText(
+                      child: const GoopText(
                         'EXIT NEO-SKEUO',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.2,
-                          color: Skeuo.collapse(Color(0xFF1F1B16)),
+                          color: Color(0xFF1F1B16),
                           decoration: TextDecoration.underline,
                         ),
                       ),
@@ -140,13 +137,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                           Navigator.of(context).pop();
                         }
                       },
-                      child: GoopText(
+                      child: const GoopText(
                         'BACK',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.2,
-                          color: Skeuo.collapse(Color(0xFF5C5548)),
+                          color: Color(0xFF5C5548),
                         ),
                       ),
                     ),
@@ -240,9 +237,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
   Widget _buildActionBar() {
     final flair = AppTheme.flairFor(_previewMode);
     final fg =
-        flair.primary.computeLuminance() > 0.5
-            ? Skeuo.collapse(Colors.black87)
-            : Skeuo.collapse(Colors.white);
+        flair.primary.computeLuminance() > 0.5 ? Colors.black87 : Colors.white;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         Insets.lg,
@@ -302,23 +297,23 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         height: 44,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.all(Radii.md),
           border: Border.all(
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.18),
+            color: Colors.white.withValues(alpha: 0.18),
             width: 1.2,
           ),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 14, color: Skeuo.collapse(Colors.white70)),
-            SizedBox(width: 4),
+            Icon(icon, size: 14, color: Colors.white70),
+            const SizedBox(width: 4),
             GoopText(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 10.5,
                 fontWeight: FontWeight.w900,
-                color: Skeuo.collapse(Colors.white70),
+                color: Colors.white70,
                 letterSpacing: 1.0,
               ),
             ),
@@ -354,17 +349,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   color:
                       active
                           ? flair.primary.withValues(alpha: 0.18)
-                          : Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.04),
+                          : Colors.white.withValues(alpha: 0.04),
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
                     color:
                         active
                             ? flair.primary.withValues(alpha: 0.7)
-                            : Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.12),
+                            : Colors.white.withValues(alpha: 0.12),
                     width: active ? 1.5 : 1.0,
                   ),
                 ),
@@ -378,9 +369,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                       color:
                           active
                               ? flair.primary
-                              : Skeuo.collapse(
-                                Colors.white,
-                              ).withValues(alpha: 0.45),
+                              : Colors.white.withValues(alpha: 0.45),
                     ),
                   ),
                 ),
@@ -478,10 +467,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                                       radius: 1.25,
                                       colors: [
                                         Colors.transparent,
-                                        Skeuo.collapse(Colors.black).withValues(
+                                        Colors.black.withValues(
                                           alpha: 0.2 * prefs.vignetteIntensity,
                                         ),
-                                        Skeuo.collapse(Colors.black).withValues(
+                                        Colors.black.withValues(
                                           alpha: 0.45 * prefs.vignetteIntensity,
                                         ),
                                       ],
@@ -602,7 +591,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                     color: flair.secondary.withValues(alpha: 0.85),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     GoopText(
@@ -613,7 +602,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                         color: flair.headlineStat,
                       ),
                     ),
-                    SizedBox(width: 6),
+                    const SizedBox(width: 6),
                     GoopText(
                       'STAT',
                       style: TextStyle(
@@ -623,7 +612,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                         color: flair.secondary.withValues(alpha: 0.6),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 14,
@@ -641,14 +630,14 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                           letterSpacing: 1.0,
                           color:
                               flair.primary.computeLuminance() > 0.5
-                                  ? Skeuo.collapse(Colors.black87)
-                                  : Skeuo.collapse(Colors.white),
+                                  ? Colors.black87
+                                  : Colors.white,
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 // Mini stat chips — a second layer of real UI so the
                 // preview reads as an app, not a text card.
                 Row(
@@ -663,9 +652,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                           margin: const EdgeInsets.only(right: 6),
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           decoration: BoxDecoration(
-                            color: Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.05),
+                            color: Colors.white.withValues(alpha: 0.05),
                             borderRadius: BorderRadius.circular(6),
                             border: Border.all(
                               color: c.$3.withValues(alpha: 0.35),
@@ -884,11 +871,9 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.04),
+            color: Colors.white.withValues(alpha: 0.04),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.1),
-            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
           child: Row(
             children: [
@@ -899,32 +884,30 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                   color: color,
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
+                    color: Colors.white.withValues(alpha: 0.3),
                     width: 1.2,
                   ),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GoopText(
                       label,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.2,
-                        color: Skeuo.collapse(Colors.white70),
+                        color: Colors.white70,
                       ),
                     ),
                     GoopText(
                       desc,
                       style: TextStyle(
                         fontSize: 9,
-                        color: Skeuo.collapse(
-                          Colors.white,
-                        ).withValues(alpha: 0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -932,10 +915,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               ),
               GoopText(
                 '#${color.toARGB32().toRadixString(16).toUpperCase()}',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Skeuo.collapse(Color(0x80FFFFFF)),
-                ),
+                style: const TextStyle(fontSize: 10, color: Color(0x80FFFFFF)),
               ),
             ],
           ),
@@ -973,17 +953,13 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                                 ? Skeuo.inkIf(
                                   Colors.pinkAccent,
                                 ).withValues(alpha: 0.2)
-                                : Skeuo.collapse(
-                                  Colors.white,
-                                ).withValues(alpha: 0.05),
+                                : Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
                           color:
                               p == active
                                   ? Skeuo.inkIf(Colors.pinkAccent)
-                                  : Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.12),
+                                  : Colors.white.withValues(alpha: 0.12),
                           width: p == active ? 1.5 : 1.0,
                         ),
                       ),
@@ -996,9 +972,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                           color:
                               p == active
                                   ? Skeuo.inkIf(Colors.pinkAccent)
-                                  : Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.5),
+                                  : Colors.white.withValues(alpha: 0.5),
                         ),
                       ),
                     ),
@@ -1164,17 +1138,17 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                                           vertical: 2,
                                           horizontal: 4,
                                         ),
-                                        color: Skeuo.collapse(
-                                          Colors.black,
-                                        ).withValues(alpha: 0.6),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.6,
+                                        ),
                                         child: GoopText(
                                           mode.label,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: FontSizes.labelSmall,
                                             fontWeight: FontWeight.w700,
-                                            color: Skeuo.collapse(Colors.white),
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ),
@@ -1271,8 +1245,8 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                         fontWeight: FontWeight.w900,
                         color:
                             flair.primary.computeLuminance() > 0.5
-                                ? Skeuo.collapse(Colors.black87)
-                                : Skeuo.collapse(Colors.white),
+                                ? Colors.black87
+                                : Colors.white,
                       ),
                     ),
                   ),
@@ -1441,11 +1415,9 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
     return Container(
       height: 360,
       decoration: BoxDecoration(
-        color: Skeuo.collapse(Color(0xFF16161C)),
+        color: const Color(0xFF16161C),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-        border: Border.all(
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.1),
-        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
@@ -1455,7 +1427,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -1475,22 +1447,14 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                         decoration: BoxDecoration(
                           color:
                               _tab == i
-                                  ? Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.12)
-                                  : Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.04),
+                                  ? Colors.white.withValues(alpha: 0.12)
+                                  : Colors.white.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color:
                                 _tab == i
-                                    ? Skeuo.collapse(
-                                      Colors.white,
-                                    ).withValues(alpha: 0.35)
-                                    : Skeuo.collapse(
-                                      Colors.white,
-                                    ).withValues(alpha: 0.08),
+                                    ? Colors.white.withValues(alpha: 0.35)
+                                    : Colors.white.withValues(alpha: 0.08),
                           ),
                         ),
                         child: Center(
@@ -1502,10 +1466,8 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                               letterSpacing: 1.0,
                               color:
                                   _tab == i
-                                      ? Skeuo.collapse(Colors.white)
-                                      : Skeuo.collapse(
-                                        Colors.white,
-                                      ).withValues(alpha: 0.4),
+                                      ? Colors.white
+                                      : Colors.white.withValues(alpha: 0.4),
                             ),
                           ),
                         ),
@@ -1546,9 +1508,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
           shape: BoxShape.circle,
           border: Border.all(
             color:
-                selected
-                    ? Skeuo.collapse(Colors.white)
-                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.2),
+                selected ? Colors.white : Colors.white.withValues(alpha: 0.2),
             width: selected ? 2.2 : 0.8,
           ),
           boxShadow:
@@ -1635,15 +1595,13 @@ class _PullHandleState extends State<_PullHandle>
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 12,
-                    color: Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                   ),
                   Container(
                     width: 44,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Skeuo.collapse(
-                        Colors.white,
-                      ).withValues(alpha: 0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),

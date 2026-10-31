@@ -142,7 +142,7 @@ class PresetConfig {
   );
 
   PresetConfig copyWith({
-    final List<Color>? colors,
+    List<Color>? colors,
     ParticleShape? shape,
     double? sizeMin,
     double? sizeMax,
@@ -226,7 +226,7 @@ class _Particle {
     this.rotationAccel = 0.0,
     this.shimmerPhase = 0.0,
     this.turbulencePhase = 0.0,
-    final List<_TrailPoint>? trail,
+    List<_TrailPoint>? trail,
   }) : trail = trail ?? [];
 }
 

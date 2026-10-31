@@ -8,7 +8,6 @@ import '../services/haptics.dart';
 import '../theme/tokens.dart';
 import '../utils/responsive.dart';
 import '../widgets/scale_button.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// PALETTE MAKER — build a custom palette from 6 prime colors.
 /// Top half: live preview painted with the working palette.
@@ -225,9 +224,7 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
                                 color:
                                     sel
                                         ? f.primary
-                                        : Skeuo.collapse(
-                                          Colors.white,
-                                        ).withValues(alpha: 0.15),
+                                        : Colors.white.withValues(alpha: 0.15),
                                 width: sel ? 2.2 : 1,
                               ),
                               boxShadow:
@@ -263,16 +260,14 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   TextField(
                     controller: _nameCtrl,
                     style: TextStyle(fontSize: 14 * sf, color: Colors.white),
                     decoration: InputDecoration(
                       hintText: 'Name your palette…',
                       hintStyle: TextStyle(
-                        color: Skeuo.collapse(
-                          Colors.white,
-                        ).withValues(alpha: 0.3),
+                        color: Colors.white.withValues(alpha: 0.3),
                         fontSize: 13 * sf,
                       ),
                       errorText: _error,
@@ -436,9 +431,7 @@ class _PaletteMakerScreenState extends State<PaletteMakerScreen> {
                               color:
                                   c == current.toARGB32()
                                       ? Colors.white
-                                      : Skeuo.collapse(
-                                        Colors.white,
-                                      ).withValues(alpha: 0.15),
+                                      : Colors.white.withValues(alpha: 0.15),
                               width: c == current.toARGB32() ? 2 : 1,
                             ),
                           ),

@@ -188,9 +188,9 @@ class _GungeonMeterState extends State<GungeonMeter>
                                   scale: 0.85,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Skeuo.collapse(
-                                        Colors.black,
-                                      ).withValues(alpha: 0.6),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.6,
+                                      ),
                                       shape: BoxShape.circle,
                                     ),
                                     padding: const EdgeInsets.all(2),
@@ -218,9 +218,9 @@ class _GungeonMeterState extends State<GungeonMeter>
                                         scale: 0.85 + _pulse.value * 0.15,
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: Skeuo.collapse(
-                                              Colors.black,
-                                            ).withValues(alpha: 0.6),
+                                            color: Colors.black.withValues(
+                                              alpha: 0.6,
+                                            ),
                                             shape: BoxShape.circle,
                                           ),
                                           padding: const EdgeInsets.all(2),
@@ -254,15 +254,11 @@ class _GungeonMeterState extends State<GungeonMeter>
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w900,
-                            color: Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.85),
+                            color: Colors.white.withValues(alpha: 0.85),
                             fontFamily: 'monospace',
                             shadows: [
                               Shadow(
-                                color: Skeuo.collapse(
-                                  Colors.black,
-                                ).withValues(alpha: 0.6),
+                                color: Colors.black.withValues(alpha: 0.6),
                                 blurRadius: 4,
                               ),
                             ],
@@ -293,7 +289,7 @@ class _GungeonMeterState extends State<GungeonMeter>
 
         // Lord of the Jammed alert (curse only, at/above threshold)
         if (!widget.isCool && isOver) ...[
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -343,7 +339,7 @@ class _GungeonMeterState extends State<GungeonMeter>
                 ? (widget.isCool
                     ? Skeuo.inkIf(Colors.amber)
                     : Skeuo.inkIf(Colors.redAccent))
-                : Skeuo.collapse(Colors.white).withValues(alpha: 0.3),
+                : Colors.white.withValues(alpha: 0.3),
         fontFamily: 'monospace',
       ),
     );
@@ -384,14 +380,14 @@ class _MeterPainter extends CustomPainter {
     // --- Background track ---
     final bgPaint =
         Paint()
-          ..color = Skeuo.collapse(Colors.white).withValues(alpha: 0.06)
+          ..color = Colors.white.withValues(alpha: 0.06)
           ..style = PaintingStyle.fill;
     canvas.drawRRect(RRect.fromRectAndRadius(Offset.zero & size, r), bgPaint);
 
     // --- Tick marks at 0, 5, 10, 15 ---
     final tickPaint =
         Paint()
-          ..color = Skeuo.collapse(Colors.white).withValues(alpha: 0.12)
+          ..color = Colors.white.withValues(alpha: 0.12)
           ..strokeWidth = 1;
     for (final tick in [0.0, 5.0 / 15.0, 10.0 / 15.0, 1.0]) {
       final x = tick * width;
@@ -429,7 +425,7 @@ class _MeterPainter extends CustomPainter {
       // Shine highlight on top edge
       final shinePaint =
           Paint()
-            ..color = Skeuo.collapse(Colors.white).withValues(alpha: 0.15)
+            ..color = Colors.white.withValues(alpha: 0.15)
             ..style = PaintingStyle.fill;
       canvas.drawRRect(
         RRect.fromRectAndRadius(

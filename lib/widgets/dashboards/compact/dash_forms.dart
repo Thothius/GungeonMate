@@ -82,7 +82,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                         color: Skeuo.inkIf(Colors.purpleAccent),
                         size: 18,
                       ),
-                      SizedBox(width: Insets.sm),
+                      const SizedBox(width: Insets.sm),
                       GoopText(
                         'GUNTHER',
                         style: TextStyle(
@@ -92,7 +92,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                           letterSpacing: 0.8,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: Insets.sm,
@@ -118,11 +118,11 @@ class GuntherDashboardState extends State<GuntherDashboard>
                           ),
                         ),
                       ),
-                      SizedBox(width: 6),
+                      const SizedBox(width: 6),
                       Icon(
                         _collapsed ? Icons.expand_more : Icons.expand_less,
                         size: 16,
-                        color: Skeuo.collapse(Colors.white54),
+                        color: Colors.white54,
                       ),
                     ],
                   ),
@@ -137,7 +137,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             // Friendship progress
                             if (nextFriendship != null) ...[
                               ClipRRect(
@@ -148,22 +148,20 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                     1.0,
                                   ),
                                   minHeight: 5,
-                                  backgroundColor: Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.08),
+                                  backgroundColor: Colors.white.withValues(
+                                    alpha: 0.08,
+                                  ),
                                   valueColor: AlwaysStoppedAnimation(
                                     Skeuo.inkIf(Colors.purpleAccent),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: Insets.xs),
+                              const SizedBox(height: Insets.xs),
                               GoopText(
                                 '$friendship / $nextFriendship friendship to Stage ${stage + 1}',
                                 style: TextStyle(
                                   fontSize: FontSizes.labelSmall,
-                                  color: Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.5),
+                                  color: Colors.white.withValues(alpha: 0.5),
                                 ),
                               ),
                             ] else
@@ -177,7 +175,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                   ).withValues(alpha: 0.8),
                                 ),
                               ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -186,7 +184,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                 _statChip('Trait', trait),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             GoopText(
                               stage == 3
                                   ? 'L3: 12 dmg, homing bullets. Fully sentient — talks frequently.'
@@ -195,9 +193,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                   : 'L1: 6 dmg, piercing bullets. Clear rooms to gain friendship.',
                               style: TextStyle(
                                 fontSize: FontSizes.labelSmall,
-                                color: Skeuo.collapse(
-                                  Colors.white,
-                                ).withValues(alpha: 0.6),
+                                color: Colors.white.withValues(alpha: 0.6),
                                 height: 1.3,
                               ),
                             ),
@@ -228,10 +224,10 @@ class GuntherDashboardState extends State<GuntherDashboard>
                                 ),
                                 Text(
                                   '$friendship',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: FontSizes.titleSmall,
                                     fontWeight: FontWeight.bold,
-                                    color: Skeuo.collapse(Colors.white),
+                                    color: Colors.white,
                                   ),
                                 ),
                                 IconButton(
@@ -269,7 +265,7 @@ class GuntherDashboardState extends State<GuntherDashboard>
           label,
           style: TextStyle(
             fontSize: FontSizes.labelSmall,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+            color: Colors.white.withValues(alpha: 0.4),
           ),
         ),
         GoopText(

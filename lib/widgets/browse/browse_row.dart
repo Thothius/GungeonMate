@@ -154,7 +154,7 @@ class BrowseRow extends StatelessWidget {
                         ],
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     // Meta is caller-provided and may not shrink — guard
                     // narrow widths (≤500px) with scale-down.
                     FittedBox(

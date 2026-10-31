@@ -167,9 +167,9 @@ mixin _RunStats on ChangeNotifier {
   /// combined inventory changes (self-invalidating memo, same pattern
   /// as the synergy predictor cache).
   String? _statsSig;
-  final Set<String>? _statsOwned;
+  Set<String>? _statsOwned;
   int? _potentialCache;
-  final Map<String, Color>? _glowCache;
+  Map<String, Color>? _glowCache;
 
   Set<String> get _statsOwnedLower {
     final guns = _allGunsInRun;

@@ -17,7 +17,6 @@ import 'quality_badge.dart';
 import 'themed_number.dart';
 import 'themed_section_title.dart';
 import '../services/goop_talk_engine.dart';
-import 'skeuo/skeuo_tokens.dart';
 part 'rich_link/peek_sheets.dart';
 part 'rich_link/list_widgets.dart';
 
@@ -33,21 +32,17 @@ Color _colorForRef(RefKind kind) {
   switch (kind) {
     case RefKind.item:
     case RefKind.gun:
-      return Skeuo.collapse(Color(0xFFFFB74D)); // warm amber
+      return const Color(0xFFFFB74D); // warm amber
     case RefKind.character:
-      return Skeuo.collapse(
-        Color(0xFF80DEEA),
-      ); // cyan, matches gungeoneer accents
+      return const Color(0xFF80DEEA); // cyan, matches gungeoneer accents
     case RefKind.shrine:
-      return Skeuo.collapse(Color(0xFFB39DDB)); // muted purple
+      return const Color(0xFFB39DDB); // muted purple
     case RefKind.stat:
-      return Skeuo.collapse(
-        Color(0xFFFFD54F),
-      ); // bright yellow (coolness/curse)
+      return const Color(0xFFFFD54F); // bright yellow (coolness/curse)
     case RefKind.lore:
-      return Skeuo.collapse(Colors.white70);
+      return Colors.white70;
     case RefKind.unresolved:
-      return Skeuo.collapse(Colors.white);
+      return Colors.white;
   }
 }
 
@@ -75,11 +70,9 @@ class RichLinkText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final base = (baseStyle ??
-            TextStyle(fontSize: FontSizes.bodyMedium, height: 1.4))
+            const TextStyle(fontSize: FontSizes.bodyMedium, height: 1.4))
         .copyWith(
-          color:
-              baseStyle?.color ??
-              Skeuo.collapse(Colors.white).withValues(alpha: 0.92),
+          color: baseStyle?.color ?? Colors.white.withValues(alpha: 0.92),
         );
     final spans = tokens.map((tok) => _buildSpan(context, tok, base)).toList();
     return Text.rich(
@@ -99,9 +92,7 @@ class RichLinkText extends StatelessWidget {
           style = style.copyWith(
             fontFamily: 'monospace',
             fontFamilyFallback: const ['Courier New', 'monospace'],
-            backgroundColor: Skeuo.collapse(
-              Colors.white,
-            ).withValues(alpha: 0.07),
+            backgroundColor: Colors.white.withValues(alpha: 0.07),
             letterSpacing: 0,
           );
           break;
@@ -117,7 +108,7 @@ class RichLinkText extends StatelessWidget {
       return TextSpan(
         text: tok.synergyName,
         style: base.copyWith(
-          color: Skeuo.collapse(Color(0xFF00B3CE)),
+          color: const Color(0xFF00B3CE),
           fontWeight: FontWeight.w600,
         ),
       );
@@ -128,10 +119,10 @@ class RichLinkText extends StatelessWidget {
       return TextSpan(
         text: '${tok.label}\u2009↗',
         style: base.copyWith(
-          color: Skeuo.collapse(Colors.white).withValues(alpha: 0.78),
+          color: Colors.white.withValues(alpha: 0.78),
           decoration: TextDecoration.underline,
           decorationStyle: TextDecorationStyle.dotted,
-          decorationColor: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
+          decorationColor: Colors.white.withValues(alpha: 0.35),
         ),
       );
     }

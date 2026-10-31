@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../particle_engine.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 /// Fixed, theme-independent home-screen backdrop.
 ///
@@ -18,14 +17,19 @@ class MainMenuBackdrop extends StatelessWidget {
   const MainMenuBackdrop({super.key});
 
   // ── Locked home palette (never read from AppTheme) ────────────
-  static final Color baseTop = Skeuo.collapse(Color(0xFF0A0710));
-  static final Color baseBottom = Skeuo.collapse(Color(0xFF141022));
-  static final Color ember = Skeuo.collapse(Color(0xFFFFB84D));
-  static final Color emberHot = Skeuo.collapse(Color(0xFFFF8C2E));
-  static final Color emberGold = Skeuo.collapse(Color(0xFFFFD54F));
-  static final Color emberDeep = Skeuo.collapse(Color(0xFFFF5E3A));
+  static const Color baseTop = Color(0xFF0A0710);
+  static const Color baseBottom = Color(0xFF141022);
+  static const Color ember = Color(0xFFFFB84D);
+  static const Color emberHot = Color(0xFFFF8C2E);
+  static const Color emberGold = Color(0xFFFFD54F);
+  static const Color emberDeep = Color(0xFFFF5E3A);
 
-  static List<Color> emberColors = [ember, emberHot, emberGold, emberDeep];
+  static const List<Color> emberColors = [
+    ember,
+    emberHot,
+    emberGold,
+    emberDeep,
+  ];
 
   /// Gun sprites (real extracted game art) drifting in the back —
   /// a small curated set with iconic silhouettes.
@@ -47,7 +51,7 @@ class MainMenuBackdrop extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           // Base gradient — deep violet dungeon darkness.
-          DecoratedBox(
+          const DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -57,12 +61,12 @@ class MainMenuBackdrop extends StatelessWidget {
             ),
           ),
           // Faint ember glow behind the logo area.
-          DecoratedBox(
+          const DecoratedBox(
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 center: Alignment(0, -0.55),
                 radius: 0.9,
-                colors: [Skeuo.collapse(Color(0x1AFFB84D)), Colors.transparent],
+                colors: [Color(0x1AFFB84D), Colors.transparent],
                 stops: [0.0, 1.0],
               ),
             ),
@@ -84,18 +88,18 @@ class MainMenuBackdrop extends StatelessWidget {
               ),
             ),
             // Drifting gun silhouettes — slow, faint, pixel-crisp.
-            IgnorePointer(child: RepaintBoundary(child: _SpriteDrift())),
+            const IgnorePointer(child: RepaintBoundary(child: _SpriteDrift())),
           ],
           // Fixed vignette — closes the frame like a dungeon door.
-          DecoratedBox(
+          const DecoratedBox(
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 center: Alignment.center,
                 radius: 1.3,
                 colors: [
                   Colors.transparent,
-                  Skeuo.collapse(Color(0x40000000)),
-                  Skeuo.collapse(Color(0xB3000000)),
+                  Color(0x40000000),
+                  Color(0xB3000000),
                 ],
                 stops: [0.0, 0.72, 1.0],
               ),
@@ -126,7 +130,7 @@ class _SpriteDriftState extends State<_SpriteDrift>
     with SingleTickerProviderStateMixin {
   late final AnimationController _ctrl;
   final _rng = math.Random(42); // fixed seed — same layout every run
-  late List<Offset> _seeds;
+  late final List<Offset> _seeds;
 
   /// One full rise cycle — slow enough to read as ambiance, not motion.
   static const _cycle = Duration(seconds: 36);

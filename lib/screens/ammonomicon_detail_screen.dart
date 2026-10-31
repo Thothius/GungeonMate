@@ -9,7 +9,6 @@ import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../utils/asset_paths.dart' show npcIdleGifPath;
 import '../utils/responsive.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// Full-page view for a single Ammonomicon entry — large icon, name, category,
 /// description, and wiki link.
@@ -171,8 +170,8 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                                 entry.secret ? 'SECRET' : 'HUB',
                                 accent:
                                     entry.secret
-                                        ? Skeuo.collapse(Color(0xFFB388FF))
-                                        : Skeuo.collapse(Color(0xFFFFC857)),
+                                        ? const Color(0xFFB388FF)
+                                        : const Color(0xFFFFC857),
                                 icon:
                                     entry.secret
                                         ? Icons.vpn_key_outlined
@@ -212,12 +211,12 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 14),
+                  const SizedBox(height: 14),
 
                   // Description
                   if (entry.description.isNotEmpty) ...[
                     _sectionLabel(flair, 'DESCRIPTION'),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     _infoCard(
                       flair,
                       child: GoopText(
@@ -225,9 +224,7 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 13,
                           height: 1.4,
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.85),
+                          color: Colors.white.withValues(alpha: 0.85),
                         ),
                       ),
                     ),
@@ -236,13 +233,13 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                   // Ammonomicon (bosses only)
                   if (entry.ammonomicon != null &&
                       entry.ammonomicon!.isNotEmpty) ...[
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
                     _sectionLabel(
                       flair,
                       'AMMONOMICON',
                       icon: Icons.menu_book_rounded,
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     _infoCard(
                       flair,
                       accent: flair.secondary,
@@ -252,9 +249,7 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                           fontSize: 13,
                           height: 1.4,
                           fontStyle: FontStyle.italic,
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                         ),
                       ),
                     ),
@@ -289,16 +284,16 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: GoopText(
                                     entry.tips[i],
                                     style: TextStyle(
                                       fontSize: FontSizes.labelMedium,
                                       height: 1.35,
-                                      color: Skeuo.collapse(
-                                        Colors.white,
-                                      ).withValues(alpha: 0.75),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.75,
+                                      ),
                                     ),
                                   ),
                                 ),

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../providers/run_provider.dart';
 import '../../utils/format.dart';
 import '../../services/goop_talk_engine.dart';
-import '../skeuo/skeuo_tokens.dart';
 
 class StatAdjusterSheet extends StatelessWidget {
   final bool isCool;
@@ -14,10 +13,7 @@ class StatAdjusterSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = context.watch<RunProvider>();
     final value = isCool ? p.runState.coolness : p.runState.curse;
-    final accent =
-        isCool
-            ? Skeuo.collapse(Color(0xFF29B6F6))
-            : Skeuo.collapse(Color(0xFFD32F2F));
+    final accent = isCool ? const Color(0xFF29B6F6) : const Color(0xFFD32F2F);
     final label = isCool ? 'Coolness' : 'Curse';
     final icon = isCool ? Icons.ac_unit : Icons.warning_amber_rounded;
 
@@ -39,8 +35,7 @@ class StatAdjusterSheet extends StatelessWidget {
             onPressed: () => apply(delta),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
-              foregroundColor:
-                  positive ? accent : Skeuo.collapse(Colors.white70),
+              foregroundColor: positive ? accent : Colors.white70,
               side: BorderSide(
                 color: accent.withValues(alpha: positive ? 0.7 : 0.25),
               ),
@@ -74,7 +69,7 @@ class StatAdjusterSheet extends StatelessWidget {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.18),
+                  color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -125,11 +120,9 @@ class StatAdjusterSheet extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                           vertical: Insets.lg,
                         ),
-                        foregroundColor: Skeuo.collapse(Colors.white60),
+                        foregroundColor: Colors.white60,
                         side: BorderSide(
-                          color: Skeuo.collapse(
-                            Colors.white,
-                          ).withValues(alpha: 0.12),
+                          color: Colors.white.withValues(alpha: 0.12),
                           width: 1.0,
                         ),
                         shape: RoundedRectangleBorder(

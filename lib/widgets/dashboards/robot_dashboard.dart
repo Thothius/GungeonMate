@@ -135,11 +135,11 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 6),
+                          const SizedBox(width: 6),
                           Icon(
                             _collapsed ? Icons.expand_more : Icons.expand_less,
                             size: 16,
-                            color: Skeuo.collapse(Colors.white54),
+                            color: Colors.white54,
                           ),
                         ],
                       ),
@@ -156,10 +156,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                         : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Divider(
-                              color: Skeuo.collapse(Colors.white12),
-                              height: 16,
-                            ),
+                            const Divider(color: Colors.white12, height: 16),
 
                             // Junk counter — full width, no overflow
                             Container(
@@ -168,14 +165,10 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                 horizontal: 12,
                               ),
                               decoration: BoxDecoration(
-                                color: Skeuo.collapse(
-                                  Colors.white,
-                                ).withValues(alpha: 0.02),
+                                color: Colors.white.withValues(alpha: 0.02),
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.06),
+                                  color: Colors.white.withValues(alpha: 0.06),
                                 ),
                               ),
                               child: Row(
@@ -200,7 +193,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         '+5% DMG each',
                                         style: TextStyle(
                                           fontSize: FontSizes.labelSmall,
-                                          color: Skeuo.collapse(Colors.white38),
+                                          color: Colors.white38,
                                         ),
                                       ),
                                     ],
@@ -234,10 +227,10 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         ),
                                         child: Text(
                                           '$robotJunk',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: FontSizes.headlineMedium,
                                             fontWeight: FontWeight.bold,
-                                            color: Skeuo.collapse(Colors.white),
+                                            color: Colors.white,
                                             height: 1.0,
                                           ),
                                         ),
@@ -265,7 +258,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
                             // Armor counter — Robot starts with 6 armor, gains from HP ups
                             Container(
@@ -274,14 +267,10 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                 horizontal: 12,
                               ),
                               decoration: BoxDecoration(
-                                color: Skeuo.collapse(
-                                  Colors.white,
-                                ).withValues(alpha: 0.02),
+                                color: Colors.white.withValues(alpha: 0.02),
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: Skeuo.collapse(
-                                    Colors.white,
-                                  ).withValues(alpha: 0.06),
+                                  color: Colors.white.withValues(alpha: 0.06),
                                 ),
                               ),
                               child: Row(
@@ -306,7 +295,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         'Hits before HP loss',
                                         style: TextStyle(
                                           fontSize: FontSizes.labelSmall,
-                                          color: Skeuo.collapse(Colors.white38),
+                                          color: Colors.white38,
                                         ),
                                       ),
                                     ],
@@ -342,10 +331,10 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         ),
                                         child: Text(
                                           '$robotArmor',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: FontSizes.headlineMedium,
                                             fontWeight: FontWeight.bold,
-                                            color: Skeuo.collapse(Colors.white),
+                                            color: Colors.white,
                                             height: 1.0,
                                           ),
                                         ),
@@ -373,7 +362,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
                             // Toggle row 1 — Gold Junk + Lies
                             Row(
@@ -389,7 +378,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                     onChanged: p.setRobotGoldJunk,
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: _buildCompactToggle(
                                     label: 'LIES',
@@ -403,7 +392,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
                             // Toggle row 2 — Fireplace + Battery
                             Row(
@@ -417,7 +406,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                     onChanged: p.setFireplaceExtinguished,
                                   ),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Expanded(
                                   child: _buildCompactToggle(
                                     label: 'BATTERY',
@@ -431,7 +420,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
 
                             // Toggle row 3 — Fuse Disarmer (full width)
                             _buildCompactToggle(
@@ -476,13 +465,13 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
           color:
               value
                   ? activeColor.withValues(alpha: 0.15)
-                  : Skeuo.collapse(Colors.white).withValues(alpha: 0.02),
+                  : Colors.white.withValues(alpha: 0.02),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color:
                 value
                     ? activeColor.withValues(alpha: 0.6)
-                    : Skeuo.collapse(Colors.white).withValues(alpha: 0.08),
+                    : Colors.white.withValues(alpha: 0.08),
             width: value ? 1.5 : 1.0,
           ),
         ),
@@ -490,10 +479,10 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
           children: [
             Icon(
               value ? Icons.check_circle_rounded : Icons.radio_button_unchecked,
-              color: value ? activeColor : Skeuo.collapse(Colors.white30),
+              color: value ? activeColor : Colors.white30,
               size: 22,
             ),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -504,8 +493,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w900,
-                      color:
-                          value ? activeColor : Skeuo.collapse(Colors.white60),
+                      color: value ? activeColor : Colors.white60,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -516,7 +504,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                       color:
                           value
                               ? activeColor.withValues(alpha: 0.8)
-                              : Skeuo.collapse(Colors.white30),
+                              : Colors.white30,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

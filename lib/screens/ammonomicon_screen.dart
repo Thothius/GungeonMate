@@ -18,7 +18,6 @@ import 'synergy_detail_screen.dart';
 import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
-import '../widgets/skeuo/skeuo_tokens.dart';
 
 part 'ammonomicon_widgets.dart';
 
@@ -51,7 +50,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
 
   /// Quality-letter filter for the Ammonomicon Guns/Items tabs.
   /// Empty = show all.
-  final Set<String> _qualityFilter= {};
+  final Set<String> _qualityFilter = {};
   static const _qualities = ['D', 'C', 'B', 'A', 'S'];
   static const _qualityRank = {'S': 0, 'A': 1, 'B': 2, 'C': 3, 'D': 4};
 
@@ -73,21 +72,21 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   // content area the full screen width.
 
   // Loaded data
-  final List<AmmonomiconEntry> _objects= [];
-  final List<AmmonomiconEntry> _shrines= [];
-  final List<AmmonomiconEntry> _chapters= [];
-  final List<AmmonomiconEntry> _gameModes= [];
-  final List<AmmonomiconEntry> _pickups= [];
-  final List<AmmonomiconEntry> _npcs= [];
-  final List<AmmonomiconEntry> _enemies= [];
-  final List<AmmonomiconEntry> _bosses= [];
+  List<AmmonomiconEntry> _objects = [];
+  List<AmmonomiconEntry> _shrines = [];
+  List<AmmonomiconEntry> _chapters = [];
+  List<AmmonomiconEntry> _gameModes = [];
+  List<AmmonomiconEntry> _pickups = [];
+  List<AmmonomiconEntry> _npcs = [];
+  List<AmmonomiconEntry> _enemies = [];
+  List<AmmonomiconEntry> _bosses = [];
   bool _loaded = false;
 
   // Category definitions — Ammonomicon bookmark tabs.
   // The 5 ammonomicon tab icons map to: Guns→Objects, Items→Pickups,
   // Enemies, Bosses, Death→NPCs. The 7 special pages use themed Material
   // icons in the same bookmark visual style.
-  static  _categories = [
+  static const _categories = [
     AmmonomiconTab(
       label: 'Gungeoneers',
       icon: Icons.person,
@@ -147,26 +146,26 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
     AmmonomiconTab(
       label: 'Synergies',
       icon: Icons.auto_awesome,
-      color: Skeuo.collapse(Color(0xFFB388FF)),
+      color: Color(0xFFB388FF),
       isSpecial: false,
     ),
     AmmonomiconTab(
       label: 'Shrines',
       icon: Icons.church,
-      color: Skeuo.collapse(Color(0xFFFFB74D)),
+      color: Color(0xFFFFB74D),
       isSpecial: false,
     ),
     AmmonomiconTab(
       label: 'Chapters',
       icon: Icons.layers,
-      color: Skeuo.collapse(Color(0xFF4FC3F7)),
+      color: Color(0xFF4FC3F7),
       isSpecial: false,
       expandable: true,
     ),
     AmmonomiconTab(
       label: 'Game Modes',
       icon: Icons.sports_esports,
-      color: Skeuo.collapse(Color(0xFFAED581)),
+      color: Color(0xFFAED581),
       isSpecial: false,
       expandable: true,
     ),
@@ -525,7 +524,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                               ),
                               child: Center(child: _searchIcon(e, section)),
                             ),
-                            SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -544,9 +543,9 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 11,
-                                        color: Skeuo.collapse(
-                                          Colors.white,
-                                        ).withValues(alpha: 0.6),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.6,
+                                        ),
                                       ),
                                     ),
                                 ],
@@ -557,9 +556,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                                 e.floor != null
                                     ? 'F${e.floor}'
                                     : (e.secret ? 'SECRET' : 'HUB'),
-                                e.secret
-                                    ? Skeuo.collapse(Color(0xFFB388FF))
-                                    : c.color,
+                                e.secret ? const Color(0xFFB388FF) : c.color,
                               ),
                             if (_expanded == 11 && e.gameClasses.isNotEmpty)
                               _metaChip(
@@ -644,16 +641,14 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
             decoration: BoxDecoration(
               color:
                   on
-                      ? Skeuo.collapse(
-                        Color(0xFFB388FF),
-                      ).withValues(alpha: 0.25)
-                      : Skeuo.collapse(Colors.white).withValues(alpha: 0.08),
+                      ? const Color(0xFFB388FF).withValues(alpha: 0.25)
+                      : Colors.white.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
                 color:
                     on
-                        ? Skeuo.collapse(Color(0xFFB388FF))
-                        : Skeuo.collapse(Colors.white).withValues(alpha: 0.2),
+                        ? const Color(0xFFB388FF)
+                        : Colors.white.withValues(alpha: 0.2),
               ),
             ),
             child: GoopText(
@@ -663,8 +658,8 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                 fontWeight: FontWeight.w800,
                 color:
                     on
-                        ? Skeuo.collapse(Color(0xFFB388FF))
-                        : Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+                        ? const Color(0xFFB388FF)
+                        : Colors.white.withValues(alpha: 0.6),
               ),
             ),
           ),
@@ -689,18 +684,16 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
               margin: const EdgeInsets.only(right: 10),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.08),
+                color: Colors.white.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.2),
-                ),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
               ),
               child: GoopText(
                 _sortMode == 'name' ? 'A-Z' : 'S-D',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
-                  color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                 ),
               ),
             ),
@@ -726,17 +719,13 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                     color:
                         _qualityFilter.contains(q)
                             ? flair.primary.withValues(alpha: 0.25)
-                            : Skeuo.collapse(
-                              Colors.white,
-                            ).withValues(alpha: 0.06),
+                            : Colors.white.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
                       color:
                           _qualityFilter.contains(q)
                               ? flair.primary.withValues(alpha: 0.8)
-                              : Skeuo.collapse(
-                                Colors.white,
-                              ).withValues(alpha: 0.15),
+                              : Colors.white.withValues(alpha: 0.15),
                     ),
                   ),
                   child: GoopText(
@@ -747,9 +736,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                       color:
                           _qualityFilter.contains(q)
                               ? flair.primary
-                              : Skeuo.collapse(
-                                Colors.white,
-                              ).withValues(alpha: 0.55),
+                              : Colors.white.withValues(alpha: 0.55),
                     ),
                   ),
                 ),
@@ -777,7 +764,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
         leading: null,
         title:
             widget.showBackButton
-                ? Column(
+                ? const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -793,7 +780,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                       style: TextStyle(
                         fontSize: FontSizes.labelSmall,
                         fontWeight: FontWeight.w500,
-                        color: Skeuo.collapse(Colors.white54),
+                        color: Colors.white54,
                         letterSpacing: 0.3,
                       ),
                     ),

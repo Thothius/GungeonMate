@@ -156,7 +156,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
         ),
         child: Row(
           children: [
-            SizedBox(width: 14),
+            const SizedBox(width: 14),
             Image.asset(
               'assets/images/end_run/Lord_of_the_Jammed.webp',
               width: 36,
@@ -172,7 +172,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
                     color: Skeuo.inkIf(Colors.redAccent),
                   ),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             GoopText(
               'END RUN',
               style: TextStyle(
@@ -182,7 +182,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
                 color: Skeuo.inkIf(Colors.redAccent),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Icon(
               Icons.chevron_right_rounded,
               size: 22,
@@ -218,13 +218,13 @@ mixin _SettingsTabSections on State<SettingsTab> {
         ),
         child: Row(
           children: [
-            SizedBox(width: 14),
+            const SizedBox(width: 14),
             Icon(
               Icons.restart_alt,
               size: 28,
               color: Skeuo.inkIf(Colors.deepOrange),
             ),
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
             GoopText(
               'RESET DATA',
               style: TextStyle(
@@ -234,7 +234,7 @@ mixin _SettingsTabSections on State<SettingsTab> {
                 color: Skeuo.inkIf(Colors.deepOrange),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Icon(
               Icons.chevron_right_rounded,
               size: 22,

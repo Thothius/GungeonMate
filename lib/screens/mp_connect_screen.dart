@@ -319,7 +319,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           style: TextStyle(
             fontSize: 15 * sf,
             fontWeight: FontWeight.w600,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.7),
+            color: Colors.white.withValues(alpha: 0.7),
           ),
           textAlign: TextAlign.center,
         ),
@@ -347,7 +347,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
                 fontSize: FontSizes.labelMedium * sf,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.5,
-                color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+                color: Colors.white.withValues(alpha: 0.4),
               ),
             ),
           ),
@@ -449,7 +449,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           '${session.myNickname} & ${session.peerNickname ?? "Partner"}',
           style: TextStyle(
             fontSize: 13 * sf,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+            color: Colors.white.withValues(alpha: 0.6),
           ),
         ),
         SizedBox(height: 24 * sf),
@@ -458,7 +458,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: FontSizes.labelMedium * sf,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+            color: Colors.white.withValues(alpha: 0.4),
           ),
         ),
       ],
@@ -492,7 +492,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 13 * sf,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+            color: Colors.white.withValues(alpha: 0.6),
             height: 1.5,
           ),
         ),
@@ -503,7 +503,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 11 * sf,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.35),
+            color: Colors.white.withValues(alpha: 0.35),
             height: 1.4,
           ),
         ),
@@ -511,7 +511,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
         FilledButton.icon(
           style: FilledButton.styleFrom(
             backgroundColor: flair.primary,
-            foregroundColor: Skeuo.collapse(Colors.white),
+            foregroundColor: Colors.white,
             minimumSize: Size.fromHeight(44 * sf),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
@@ -539,7 +539,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
             style: TextStyle(
               fontSize: FontSizes.labelMedium * sf,
               fontWeight: FontWeight.w800,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+              color: Colors.white.withValues(alpha: 0.4),
             ),
           ),
         ),
@@ -574,7 +574,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 13 * sf,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.6),
+            color: Colors.white.withValues(alpha: 0.6),
             height: 1.5,
           ),
         ),
@@ -582,7 +582,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
         FilledButton.icon(
           style: FilledButton.styleFrom(
             backgroundColor: flair.primary,
-            foregroundColor: Skeuo.collapse(Colors.white),
+            foregroundColor: Colors.white,
             minimumSize: Size.fromHeight(44 * sf),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
@@ -614,14 +614,14 @@ class _MpConnectScreenState extends State<MpConnectScreen>
           icon: Icon(
             Icons.settings_rounded,
             size: 18 * sf,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
+            color: Colors.white.withValues(alpha: 0.5),
           ),
           label: GoopText(
             'OPEN DEVICE SETTINGS',
             style: TextStyle(
               fontSize: FontSizes.labelMedium * sf,
               fontWeight: FontWeight.w800,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.5),
+              color: Colors.white.withValues(alpha: 0.5),
             ),
           ),
         ),
@@ -636,7 +636,7 @@ class _MpConnectScreenState extends State<MpConnectScreen>
             style: TextStyle(
               fontSize: FontSizes.labelMedium * sf,
               fontWeight: FontWeight.w800,
-              color: Skeuo.collapse(Colors.white).withValues(alpha: 0.4),
+              color: Colors.white.withValues(alpha: 0.4),
             ),
           ),
         ),
@@ -735,7 +735,7 @@ class _Portrait extends StatelessWidget {
           style: TextStyle(
             fontSize: FontSizes.labelMedium * sf,
             fontWeight: FontWeight.w700,
-            color: Skeuo.collapse(Colors.white).withValues(alpha: 0.8),
+            color: Colors.white.withValues(alpha: 0.8),
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
