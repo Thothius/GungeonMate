@@ -460,7 +460,7 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                 Icon(c.icon ?? Icons.list, color: c.color, size: 18),
                 const SizedBox(width: 8),
                 GoopText(
-                  c.label.toUpperCase(),
+                  '${c.label.toUpperCase()} · ${members.length}',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w900,
@@ -478,9 +478,9 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
               itemBuilder: (_, i) {
                 final e = members[i];
                 final subtitle =
-                    (e.tips.isNotEmpty)
-                        ? e.tips.first
-                        : (e.description.isNotEmpty ? e.description : '');
+                    e.description.isNotEmpty
+                        ? e.description
+                        : (e.tips.isNotEmpty ? e.tips.first : '');
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Material(
@@ -1020,6 +1020,15 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                         height: 1.15,
                       ),
                     ),
+                    if (!c.isSpecial && _entriesFor(i).isNotEmpty)
+                      GoopText(
+                        '${_entriesFor(i).length}',
+                        style: TextStyle(
+                          fontSize: FontSizes.labelSmall,
+                          fontWeight: FontWeight.w600,
+                          color: c.color.withValues(alpha: 0.65),
+                        ),
+                      ),
                   ],
                 ),
               ),
