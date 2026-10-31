@@ -322,13 +322,7 @@ class _SynergyGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: Insets.md),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: columns,
-          childAspectRatio: 0.85,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
+      sliver: SliverList(
         delegate: SliverChildBuilderDelegate(
           (c, i) => _SynergyCard(s: list[i], owned: owned, isActive: active),
           childCount: list.length,
@@ -360,72 +354,77 @@ class _SynergyCard extends StatelessWidget {
             ? Colors.greenAccent
             : (hasAny ? Colors.amberAccent : Colors.white38);
 
+    // Compact row: synergy icon + name + required pieces share the top
+    // line; the effect desc sits on the line below (per user request —
+    // replaces the old 2-col card grid which was too big/busy).
     return Container(
+      margin: const EdgeInsets.only(bottom: 6),
       decoration: BoxDecoration(
         color: AppTheme.flair.card,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: cardColor.withValues(alpha: 0.45),
-          width: 1.0,
-        ),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: cardColor.withValues(alpha: 0.4), width: 1.0),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(Insets.md),
+        padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
                 if (s.icon.isNotEmpty)
-                  GameIcon(assetPath: s.icon, size: 22, showRing: false)
+                  GameIcon(assetPath: s.icon, size: 20, showRing: false)
                 else
-                  Icon(Icons.auto_awesome, size: 20, color: cardColor),
+                  Icon(Icons.auto_awesome, size: 18, color: cardColor),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: GoopText(
-                    s.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w900,
-                      color: cardColor,
-                    ),
+                  child: Wrap(
+                    spacing: 5,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      GoopText(
+                        s.name,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          fontWeight: FontWeight.w900,
+                          color: cardColor,
+                        ),
+                      ),
+                      ...s.items.map(
+                        (i) => _MiniChip(
+                          i,
+                          owned: owned.contains(i.toLowerCase()),
+                        ),
+                      ),
+                      if (s.anyOf.isNotEmpty)
+                        ...s.anyOf.map(
+                          (i) => _MiniChip(
+                            i,
+                            owned: owned.contains(i.toLowerCase()),
+                            isAnyOf: true,
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: GoopText(
-                s.prettyEffect.isNotEmpty ? s.prettyEffect : s.effect,
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.white.withValues(alpha: 0.65),
-                  height: 1.25,
+            if ((s.prettyEffect.isNotEmpty ? s.prettyEffect : s.effect)
+                .isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: GoopText(
+                  s.prettyEffect.isNotEmpty ? s.prettyEffect : s.effect,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    color: Colors.white.withValues(alpha: 0.55),
+                    height: 1.25,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 4,
-              runSpacing: 4,
-              children: [
-                ...s.items.map(
-                  (i) => _MiniChip(i, owned: owned.contains(i.toLowerCase())),
-                ),
-                if (s.anyOf.isNotEmpty)
-                  ...s.anyOf.map(
-                    (i) => _MiniChip(
-                      i,
-                      owned: owned.contains(i.toLowerCase()),
-                      isAnyOf: true,
-                    ),
-                  ),
-              ],
-            ),
           ],
         ),
       ),

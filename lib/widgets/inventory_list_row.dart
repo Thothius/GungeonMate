@@ -331,37 +331,31 @@ class _InventoryListRowState extends State<InventoryListRow>
       padding: const EdgeInsets.symmetric(vertical: Insets.xs),
       child: Stack(
         children: [
-          SynergyGlowOverlay(
-            controller: glowCtrl,
-            color: gc,
-            effectIndex: _effectIndex,
-            radius: 12,
-            showBgTint: true,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: isS ? const Color(0xFF14120E) : Colors.transparent,
-                borderRadius: BorderRadius.all(Radii.md),
-                border: Border.all(
-                  color:
-                      isS
-                          ? const Color(0xFFFFD700)
-                          : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
-                  width: isS ? 1.6 : (isHighTier ? 1.1 : 0.7),
-                ),
-                boxShadow:
-                    isHighTier
-                        ? [
-                          BoxShadow(
-                            color: qColor.withValues(alpha: isS ? 0.12 : 0.06),
-                            blurRadius: 8,
-                            spreadRadius: 1,
-                          ),
-                        ]
-                        : null,
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: isS ? const Color(0xFF14120E) : Colors.transparent,
+              borderRadius: BorderRadius.all(Radii.md),
+              border: Border.all(
+                color:
+                    isS
+                        ? const Color(0xFFFFD700)
+                        : qColor.withValues(alpha: isHighTier ? 0.65 : 0.22),
+                width: isS ? 1.6 : (isHighTier ? 1.1 : 0.7),
               ),
-              child: row,
+              boxShadow:
+                  isHighTier
+                      ? [
+                        BoxShadow(
+                          color: qColor.withValues(alpha: isS ? 0.12 : 0.06),
+                          blurRadius: 8,
+                          spreadRadius: 1,
+                        ),
+                      ]
+                      : null,
             ),
+            child: row,
           ),
+          const Positioned(top: 4, right: 4, child: SynergyBadge()),
         ],
       ),
     );

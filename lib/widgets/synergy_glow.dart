@@ -155,3 +155,23 @@ class _SynergyBorderPainter extends CustomPainter {
   bool shouldRepaint(_SynergyBorderPainter old) =>
       old.t != t || old.color != color || old.radius != radius;
 }
+
+/// Uniform blue synergy badge — small bolt in a blue-outlined circle.
+/// Replaces the color-coded animated glow border on inventory tiles
+/// and list rows: one marker meaning "part of a synergy" for all.
+class SynergyBadge extends StatelessWidget {
+  const SynergyBadge({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0E1F30),
+        shape: BoxShape.circle,
+        border: Border.all(color: const Color(0xFF4FC3F7), width: 1.2),
+      ),
+      child: const Icon(Icons.bolt_rounded, size: 10, color: Color(0xFF4FC3F7)),
+    );
+  }
+}

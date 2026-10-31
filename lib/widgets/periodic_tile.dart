@@ -12,7 +12,7 @@ import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import 'game_icon.dart';
 import 'quality_badge.dart';
-import 'synergy_glow.dart';
+import 'synergy_glow.dart' hide SynergyGlowOverlay;
 import '../utils/reduce_motion.dart';
 import '../utils/responsive.dart';
 part 'periodic_tile/tile_logic.dart';
@@ -193,13 +193,13 @@ class _PeriodicTileState extends State<PeriodicTile>
     // Reduced-motion: skip the animated synergy glow overlay — the card
     // still shows its quality border and content, just without the glow.
     if (widget.synergyGlowColor == null || _glow == null) return card;
-    if (ReduceMotion.of(context)) return card;
-    return SynergyGlowOverlay(
-      controller: _glow!,
-      color: widget.synergyGlowColor!,
-      effectIndex: _effectIndex,
-      radius: 8,
-      child: card,
+    // Uniform blue synergy badge — replaces the color-coded animated
+    // glow border; one marker meaning "in a synergy" for all tiles.
+    return Stack(
+      children: [
+        card,
+        const Positioned(top: 4, right: 4, child: SynergyBadge()),
+      ],
     );
   }
 

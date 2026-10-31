@@ -32,7 +32,7 @@ class RunEffectsBlock extends StatelessWidget {
     const curseCol = Color(0xFFBA68C8);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 3 * sf),
+      padding: EdgeInsets.symmetric(horizontal: 8 * sf, vertical: 1 * sf),
       child: Row(
         children: [
           _stat('FUSE', '${fuseSkip.toStringAsFixed(1)}%', coolCol, sf),
@@ -45,25 +45,27 @@ class RunEffectsBlock extends StatelessWidget {
     );
   }
 
+  // Single-line label+value — the strip stays ~50% shorter than the
+  // old two-line column per user request.
   Widget _stat(String label, String value, Color col, double sf) {
     return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           GoopText(
-            value,
+            '$label ',
             style: TextStyle(
-              fontSize: 12 * sf,
-              fontWeight: FontWeight.w900,
-              color: col,
+              fontSize: 7.5 * sf,
+              letterSpacing: 0.8,
+              color: Colors.white.withValues(alpha: 0.4),
             ),
           ),
           GoopText(
-            label,
+            value,
             style: TextStyle(
-              fontSize: 7.5 * sf,
-              letterSpacing: 1,
-              color: Colors.white.withValues(alpha: 0.4),
+              fontSize: 10.5 * sf,
+              fontWeight: FontWeight.w900,
+              color: col,
             ),
           ),
         ],
