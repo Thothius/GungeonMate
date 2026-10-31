@@ -1210,12 +1210,21 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                         if (_selected == 6 || _selected == 7 || _selected == 8)
                           _buildQualityChips(flair),
                         Expanded(
-                          child: _AmmonomiconList(
-                            entries: _entriesFor(_selected),
-                            section: _sectionFor(_selected),
-                            onEntryTap: _openEntry,
-                            query: _searchCtrl.text,
-                          ),
+                          child:
+                              _sectionFor(_selected) ==
+                                          AmmonomiconSection.shrines &&
+                                      _query.isEmpty
+                                  ? _ShrineSwipePage(
+                                    entries: _entriesFor(_selected),
+                                    section: _sectionFor(_selected),
+                                    onEntryTap: _openEntry,
+                                  )
+                                  : _AmmonomiconList(
+                                    entries: _entriesFor(_selected),
+                                    section: _sectionFor(_selected),
+                                    onEntryTap: _openEntry,
+                                    query: _searchCtrl.text,
+                                  ),
                         ),
                       ],
                     ),

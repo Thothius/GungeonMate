@@ -324,6 +324,282 @@ class _GungeoneersAmmonomiconPage extends StatelessWidget {
 
 /// One section of the global-search results view (category + its
 /// filtered entries + icon-folder resolver).
+// =============================================================================
+// Shrine swipe view — top icon tab strip + swipeable PageView. Title on top,
+// big sprite, effects/costs on the card. Reference-only: no action buttons.
+// =============================================================================
+class _ShrineSwipePage extends StatefulWidget {
+  final List<AmmonomiconEntry> entries;
+  final AmmonomiconSection section;
+  final void Function(AmmonomiconEntry entry, AmmonomiconSection section)
+  onEntryTap;
+
+  const _ShrineSwipePage({
+    required this.entries,
+    required this.section,
+    required this.onEntryTap,
+  });
+
+  @override
+  State<_ShrineSwipePage> createState() => _ShrineSwipePageState();
+}
+
+class _ShrineSwipePageState extends State<_ShrineSwipePage> {
+  static const _accent = Color(0xFFFFB74D); // AmmonomiconColors.shrines
+  final _pageCtrl = PageController();
+  final _stripCtrl = ScrollController();
+  int _page = 0;
+
+  @override
+  void dispose() {
+    _pageCtrl.dispose();
+    _stripCtrl.dispose();
+    super.dispose();
+  }
+
+  void _onPage(int i) {
+    setState(() => _page = i);
+    // Keep the selected tab visible in the strip (items are ~64px).
+    if (_stripCtrl.hasClients) {
+      final target = (i * 64.0).clamp(0.0, _stripCtrl.position.maxScrollExtent);
+      _stripCtrl.animateTo(
+        target,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  void _jump(int i) {
+    Haptics.selection();
+    _pageCtrl.animateToPage(
+      i,
+      duration: const Duration(milliseconds: 240),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // ── Icon tab strip ──
+        SizedBox(
+          height: 56,
+          child: ListView.builder(
+            controller: _stripCtrl,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            itemCount: widget.entries.length,
+            itemExtent: 64,
+            itemBuilder: (_, i) {
+              final sel = i == _page;
+              final e = widget.entries[i];
+              return GestureDetector(
+                onTap: () => _jump(i),
+                child: Center(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    width: 46,
+                    height: 46,
+                    decoration: BoxDecoration(
+                      color: _accent.withValues(alpha: sel ? 0.2 : 0.06),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: _accent.withValues(alpha: sel ? 0.85 : 0.25),
+                        width: sel ? 1.6 : 1.0,
+                      ),
+                      boxShadow:
+                          sel
+                              ? [
+                                BoxShadow(
+                                  color: _accent.withValues(alpha: 0.25),
+                                  blurRadius: 8,
+                                ),
+                              ]
+                              : null,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Image.asset(
+                        ammonomiconAssetPath(widget.section, e.icon),
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.none,
+                        errorBuilder:
+                            (_, _, _) => Icon(
+                              Icons.church,
+                              size: 20,
+                              color: _accent.withValues(alpha: sel ? 1 : 0.5),
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        // ── Swipeable shrine pages ──
+        Expanded(
+          child: PageView.builder(
+            controller: _pageCtrl,
+            onPageChanged: _onPage,
+            itemCount: widget.entries.length,
+            itemBuilder: (_, i) => _shrinePage(widget.entries[i]),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _shrinePage(AmmonomiconEntry e) {
+    final flair = AppTheme.flair;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
+      child: Column(
+        children: [
+          // Title on top
+          GoopText(
+            e.name.toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.6,
+              color: _accent,
+            ),
+          ),
+          const SizedBox(height: 14),
+          // Big sprite
+          GestureDetector(
+            onTap: () {
+              Haptics.selection();
+              widget.onEntryTap(e, widget.section);
+            },
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    _accent.withValues(alpha: 0.14),
+                    _accent.withValues(alpha: 0.04),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: _accent.withValues(alpha: 0.45),
+                  width: 1.4,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: _accent.withValues(alpha: 0.12),
+                    blurRadius: 16,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Image.asset(
+                  ammonomiconAssetPath(widget.section, e.icon),
+                  fit: BoxFit.contain,
+                  filterQuality: FilterQuality.none,
+                  errorBuilder:
+                      (_, _, _) => Icon(
+                        Icons.church,
+                        size: 64,
+                        color: _accent.withValues(alpha: 0.6),
+                      ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Effects / costs card — tips carry effect + curse/coolness lines
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: flair.card,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: _accent.withValues(alpha: 0.3)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final tip in e.tips)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          tip.startsWith('Costs')
+                              ? Icons.warning_amber_rounded
+                              : Icons.bolt_rounded,
+                          size: 14,
+                          color:
+                              tip.startsWith('Costs')
+                                  ? const Color(0xFFB388FF)
+                                  : _accent,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: GoopText(
+                            tip,
+                            style: TextStyle(
+                              fontSize: 13,
+                              height: 1.35,
+                              color: Colors.white.withValues(alpha: 0.85),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (e.description.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.only(top: e.tips.isEmpty ? 0 : 6),
+                    child: GoopText(
+                      e.description,
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1.4,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.white.withValues(alpha: 0.55),
+                      ),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.touch_app_outlined,
+                      size: 12,
+                      color: Colors.white.withValues(alpha: 0.35),
+                    ),
+                    const SizedBox(width: 5),
+                    GoopText(
+                      'Tap sprite for full entry',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.white.withValues(alpha: 0.35),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SearchGroup {
   final AmmonomiconTab tab;
   final List<AmmonomiconEntry> entries;
