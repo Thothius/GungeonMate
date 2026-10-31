@@ -741,6 +741,61 @@ const kGlobalParticlePalettes = <({String name, List<Color> colors})>[
       Color(0xFFB2EBF2),
     ],
   ),
+  // 6 more — curated from color-combination cheatsheets, Gungeon-named.
+  (
+    name: 'OUBLIETTE', // midnight magic — deep dungeon blues
+    colors: [
+      Color(0xFF16263B),
+      Color(0xFF1F4E6E),
+      Color(0xFF3E6B8F),
+      Color(0xFF5B4FA0),
+    ],
+  ),
+  (
+    name: 'KILN KEEP', // terracotta dream — forge earth
+    colors: [
+      Color(0xFF8C3B1B),
+      Color(0xFFC0562F),
+      Color(0xFFD97B4A),
+      Color(0xFFE0A96B),
+    ],
+  ),
+  (
+    name: 'MIMIC ZEST', // citrus crush — bright and suspicious
+    colors: [
+      Color(0xFFFF8C2E),
+      Color(0xFFFFB84D),
+      Color(0xFFFFD93B),
+      Color(0xFFA8D95E),
+    ],
+  ),
+  (
+    name: 'GROVE WARDEN', // jade garden — hunter greens
+    colors: [
+      Color(0xFF2E7D5B),
+      Color(0xFF3D8C7A),
+      Color(0xFF5BA88F),
+      Color(0xFF8FD4B0),
+    ],
+  ),
+  (
+    name: 'LICH ROYALE', // plum perfection — undead royal
+    colors: [
+      Color(0xFF5B2D5E),
+      Color(0xFF7A3B6E),
+      Color(0xFF9B5B8C),
+      Color(0xFFBC7FAD),
+    ],
+  ),
+  (
+    name: 'PARADOX DRIFT', // galaxy dust — space-lavender
+    colors: [
+      Color(0xFF2E3A6B),
+      Color(0xFF5B4FA0),
+      Color(0xFF9B8BC4),
+      Color(0xFF8FD4C2),
+    ],
+  ),
 ];
 
 /// Schema colors for the pref index (clamped to the global palette

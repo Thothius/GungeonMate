@@ -67,8 +67,8 @@ void main() {
   });
 
   group('Global particle palettes', () {
-    test('12 curated palettes, all named with colors', () {
-      expect(kGlobalParticlePalettes.length, 12);
+    test('18 curated palettes, all named with colors', () {
+      expect(kGlobalParticlePalettes.length, 18);
       for (final p in kGlobalParticlePalettes) {
         expect(p.name, isNotEmpty);
         expect(p.colors.length, greaterThanOrEqualTo(3));
