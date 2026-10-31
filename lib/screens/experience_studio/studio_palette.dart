@@ -85,7 +85,7 @@ class _PalettePanel extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 9.5,
                           letterSpacing: 0.8,
-                          color: Colors.white.withValues(alpha: 0.4),
+                          color: Colors.white.withValues(alpha: 0.5),
                         ),
                       ),
                     ],
@@ -153,7 +153,7 @@ class _PalettePanel extends StatelessWidget {
               fontSize: 7,
               fontWeight: FontWeight.w700,
               letterSpacing: 0.5,
-              color: Colors.white.withValues(alpha: 0.4),
+              color: Colors.white.withValues(alpha: 0.5),
             ),
           ),
         ),
@@ -233,7 +233,7 @@ class _ThemeStepState extends State<_ThemeStep> {
               'your palette',
               style: TextStyle(
                 fontSize: 9,
-                color: Colors.white.withValues(alpha: 0.4),
+                color: Colors.white.withValues(alpha: 0.5),
               ),
             ),
           ],

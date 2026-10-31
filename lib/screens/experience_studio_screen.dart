@@ -824,7 +824,7 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
                       desc,
                       style: TextStyle(
                         fontSize: 9,
-                        color: Colors.white.withValues(alpha: 0.35),
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
                     ),
                   ],
@@ -832,7 +832,10 @@ class _ExperienceStudioScreenState extends State<ExperienceStudioScreen> {
               ),
               GoopText(
                 '#${color.toARGB32().toRadixString(16).toUpperCase()}',
-                style: const TextStyle(fontSize: 10, color: Colors.white38),
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Color(0x80FFFFFF),
+                ),
               ),
             ],
           ),
