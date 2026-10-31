@@ -220,11 +220,7 @@ class MpSession extends ChangeNotifier
     sessionEvents.clear();
   }
 
-  @override
-  @override
-
   /// UI callbacks — set by the run screen / paradox widgets.
-  @override
   @override
   void Function(MpSurprise surprise)? onSurpriseReceived;
   @override
@@ -309,17 +305,6 @@ class MpSession extends ChangeNotifier
 
   // ── Periodic save timer ────────────────────────────────────────
   Timer? _saveTimer;
-
-  /// Connection timeout — if we're stuck in `connecting` for too long,
-  // ── Wiring ─────────────────────────────────────────────────────
-
-  // ── Message routing ────────────────────────────────────────────
-
-  // ── Link callbacks ─────────────────────────────────────────────
-
-  // ── Sync callbacks ─────────────────────────────────────────────
-
-  // ── Recovery callback ──────────────────────────────────────────
 
   // ── Session start ──────────────────────────────────────────────
 
@@ -636,11 +621,7 @@ class MpSession extends ChangeNotifier
     _runStartMs = 0;
     _runAccumMs = 0;
     wipeSessionActivity();
-    _sync.setSessionMeta(
-      avatarId: '',
-      runTitle: '',
-      sessionNumber: 0,
-    );
+    _sync.setSessionMeta(avatarId: '', runTitle: '', sessionNumber: 0);
   }
 
   /// Peer sent [MpEndRun] — tear down our MP session without
