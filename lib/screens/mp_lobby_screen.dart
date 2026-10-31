@@ -235,7 +235,8 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
       title: 'SIDEKICK',
       subtitle: 'Join as The Cultist\nBackup for the main player',
       icon: Icons.groups_rounded,
-      color: flair.secondary,
+      // Cultist violet — reads as its own role, not "disabled host".
+      color: const Color(0xFFB388FF),
       sf: sf,
       onTap: () {
         Haptics.selection();
@@ -246,11 +247,38 @@ class _MpLobbyScreenState extends State<MpLobbyScreen> {
         });
       },
     ),
-    SizedBox(height: 22 * sf),
+    SizedBox(height: 26 * sf),
 
-    // Subtle paradox entry — alt co-op mode with avatars/surprises,
-    // demoted to a text link since the main menu paradox button
-    // was removed.
+    // How-it-works strip — fills the dead space and teaches the
+    // pairing flow in one glance (Paradox of the Active User).
+    Container(
+      padding: EdgeInsets.symmetric(horizontal: 14, vertical: 11 * sf),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.bluetooth_searching_rounded,
+            size: 16 * sf,
+            color: Colors.white.withValues(alpha: 0.45),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: GoopText(
+              'Pair over Bluetooth or the same Wi-Fi — one hosts, one joins.',
+              style: TextStyle(
+                fontSize: 11 * sf,
+                height: 1.35,
+                color: Colors.white.withValues(alpha: 0.5),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
   ];
 
   List<Widget> _gungeoneerStage(double sf, ThemeFlair flair) => [

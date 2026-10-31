@@ -155,11 +155,7 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
 
   void _jumpTo(int i) {
     Haptics.selection();
-    _pages.animateToPage(
-      i,
-      duration: Motion.base,
-      curve: Curves.easeOutCubic,
-    );
+    _pages.animateToPage(i, duration: Motion.base, curve: Curves.easeOutCubic);
   }
 
   Widget _sprite(Gungeoneer g, double size) {
@@ -206,7 +202,15 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
               final g = gs[i];
               final on = i == _index;
               return GestureDetector(
-                onTap: () => _jumpTo(i),
+                // Tap unselected = jump to it. Tap the already-selected
+                // icon = confirm and go next (no PICK-bar hunt).
+                onTap:
+                    on
+                        ? () {
+                          Haptics.selection();
+                          widget.onPick(context, sel);
+                        }
+                        : () => _jumpTo(i),
                 child: AnimatedContainer(
                   duration: Motion.fast,
                   width: 66,
@@ -216,9 +220,7 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
                   ),
                   decoration: BoxDecoration(
                     color:
-                        on
-                            ? flair.primary.withValues(alpha: 0.14)
-                            : flair.card,
+                        on ? flair.primary.withValues(alpha: 0.14) : flair.card,
                     borderRadius: const BorderRadius.all(Radii.md),
                     border: Border.all(
                       color:
@@ -276,10 +278,7 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
               if (_tabs.hasClients) {
                 const cell = 74.0; // 66 width + 8 horizontal margin
                 _tabs.animateTo(
-                  (i * cell - 40).clamp(
-                    0.0,
-                    _tabs.position.maxScrollExtent,
-                  ),
+                  (i * cell - 40).clamp(0.0, _tabs.position.maxScrollExtent),
                   duration: Motion.fast,
                   curve: Curves.easeOutCubic,
                 );
@@ -326,16 +325,16 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: GoopText(
-                  'PICK ${sel.name.toUpperCase()}',
-                  style: TextStyle(
-                    fontSize: FontSizes.titleSmall,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1.2,
-                    color:
-                        flair.primary.computeLuminance() > 0.5
-                            ? const Color(0xFF1C1C1E)
-                            : Colors.white,
-                  ),
+                    'PICK ${sel.name.toUpperCase()}',
+                    style: TextStyle(
+                      fontSize: FontSizes.titleSmall,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
+                      color:
+                          flair.primary.computeLuminance() > 0.5
+                              ? const Color(0xFF1C1C1E)
+                              : Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -399,8 +398,7 @@ class _GungeoneerPage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     GameIcon(
-                      assetPath:
-                          gun ? localGunIcon(n) : localItemIcon(n),
+                      assetPath: gun ? localGunIcon(n) : localItemIcon(n),
                       size: 30,
                     ),
                     const SizedBox(width: 6),
@@ -439,47 +437,65 @@ class _GungeoneerPage extends StatelessWidget {
           constraints: const BoxConstraints(maxWidth: 420),
           child: Column(
             children: [
-              SizedBox(height: 110, child: Center(child: sprite)),
-              const SizedBox(height: Insets.sm),
-              GoopText(
-                g.name.toUpperCase(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: FontSizes.titleLarge,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
-                  color: flair.headlineStat,
-                ),
-              ),
-              if (g.startingArmor > 0)
-                Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: Insets.sm,
-                      vertical: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radii.sm),
-                      border: Border.all(
-                        color: flair.primary.withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: GoopText(
-                      '${g.startingArmor} ARMOR',
-                      style: const TextStyle(
-                        fontSize: FontSizes.labelSmall,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.5,
-                      ),
+              // Sprite LEFT, info RIGHT — portrait and metadata read
+              // side-by-side instead of stacked.
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 96,
+                    height: 110,
+                    child: Center(child: sprite),
+                  ),
+                  const SizedBox(width: Insets.lg),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GoopText(
+                          g.name.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: FontSizes.titleLarge,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                            color: flair.headlineStat,
+                          ),
+                        ),
+                        if (g.startingArmor > 0)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: Insets.sm,
+                                vertical: 3,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radii.sm),
+                                border: Border.all(
+                                  color: flair.primary.withValues(alpha: 0.3),
+                                ),
+                              ),
+                              child: GoopText(
+                                '${g.startingArmor} ARMOR',
+                                style: const TextStyle(
+                                  fontSize: FontSizes.labelSmall,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: Insets.md),
+                        _loadout('GUNS', g.startingGuns, true),
+                        if (g.startingGuns.isNotEmpty &&
+                            g.startingItems.isNotEmpty)
+                          const SizedBox(height: Insets.sm),
+                        _loadout('ITEMS', g.startingItems, false),
+                      ],
                     ),
                   ),
-                ),
-              const SizedBox(height: Insets.lg),
-              _loadout('GUNS', g.startingGuns, true),
-              if (g.startingGuns.isNotEmpty && g.startingItems.isNotEmpty)
-                const SizedBox(height: Insets.md),
-              _loadout('ITEMS', g.startingItems, false),
+                ],
+              ),
               const SizedBox(height: Insets.lg),
               Divider(
                 height: 1,
