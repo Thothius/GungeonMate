@@ -436,8 +436,10 @@ class _SkeuoButtonState extends State<SkeuoButton> {
                   }
                   : null,
           onTapCancel: _enabled ? () => setState(() => _pressed = false) : null,
-          child: CustomPaint(
-            painter: _SkeuoSurfacePainter(
+          child: Transform.scale(
+            scale: 1 - 0.02 * t,
+            child: CustomPaint(
+              painter: _SkeuoSurfacePainter(
               fill: fill,
               radius: widget.radius,
               borderWidth: _isDisabled ? Skeuo.borderThin : 2.5 + t,
@@ -468,7 +470,8 @@ class _SkeuoButtonState extends State<SkeuoButton> {
                       ),
             ),
           ),
-        );
+        ),
+      );
       },
     );
   }

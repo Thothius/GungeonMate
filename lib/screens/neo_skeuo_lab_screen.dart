@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/player.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
@@ -8,6 +9,7 @@ import '../services/haptics.dart';
 import '../utils/fast_route.dart';
 import '../widgets/browse/browse_pills.dart';
 import '../widgets/browse/browse_row.dart';
+import '../widgets/active_run/player_page.dart';
 import '../widgets/periodic_tile.dart';
 import '../widgets/skeuo/skeuo_backdrop.dart';
 import '../widgets/skeuo/skeuo_surface.dart';
@@ -189,33 +191,39 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
   // ── ACTIVE RUN (real widgets) ──────────────────────────────────
   Widget _activeRunTab() {
     final p = context.watch<RunProvider>();
-    final guns = p.allGuns.take(4).toList();
-    final items = p.allItems.take(4).toList();
+    final guns = p.allGuns.take(8).toList();
+    final items = p.allItems.take(8).toList();
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(40, 16, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _subLabel('GUNS ${guns.length}'),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 0.82,
-            children: [
-              for (final g in guns) PeriodicTile(gun: g, onTap: () {}),
-            ],
+          _subLabel('PLAYER PANEL (REAL)'),
+          // The real run panel — avatar, cool/curse/syn chips, stats
+          // strip, dashboards, inventory — mounted unmodified so every
+          // skeuo defect is visible in place.
+          const SizedBox(
+            height: 640,
+            child: ClipRect(child: PlayerPage(slot: PlayerSlot.main)),
           ),
-          _subLabel('ITEMS ${items.length}'),
+          _subLabel('GUN TILES · 4-COL DEMO'),
           GridView.count(
-            crossAxisCount: 2,
+            crossAxisCount: 4,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 0.82,
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 0.72,
+            children: [for (final g in guns) PeriodicTile(gun: g, onTap: () {})],
+          ),
+          _subLabel('ITEM TILES · 4-COL DEMO'),
+          GridView.count(
+            crossAxisCount: 4,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 8,
+            childAspectRatio: 0.72,
             children: [
               for (final it in items) PeriodicTile(item: it, onTap: () {}),
             ],

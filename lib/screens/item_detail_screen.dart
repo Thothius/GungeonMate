@@ -315,7 +315,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             borderRadius: BorderRadius.all(Radii.lg),
                           ),
                           side: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.25),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.outline.withValues(alpha: 0.6),
                             width: 1.5,
                           ),
                         ),
@@ -412,7 +414,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               child: const Icon(
                                 Icons.delete_outline,
                                 size: 28,
-                                color: Colors.white,
+                                color: Colors.redAccent,
                               ),
                             )
                             : FilledButton(

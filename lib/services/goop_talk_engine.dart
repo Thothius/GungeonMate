@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_theme.dart';
+import '../utils/contrast.dart';
+import '../widgets/skeuo/skeuo_tokens.dart';
 
 /// The goop text-scramble mechanic was removed (v3.1.1 cleanup) — it
 /// randomized real letters into ⏃⎎⎓-style glyphs mid-read, hurting
@@ -54,6 +56,20 @@ class GoopText extends StatelessWidget {
       effective = (effective ?? const TextStyle()).copyWith(
         letterSpacing: ((effective?.letterSpacing ?? 0) + spacing * 0.5),
       );
+    }
+    // Neo-Skeuo is an ink-only text world: any explicitly light or
+    // colored text collapses to ink so nothing renders ghost-on-paper.
+    // Dark colors (ink, red-pencil accent) pass through untouched;
+    // paper/card tones pass through because they're the legit ink-fill
+    // foreground (primary buttons, ink chips).
+    if (AppTheme.isSkeuo) {
+      final c = effective?.color;
+      if (c != null &&
+          c != Skeuo.paper &&
+          c != Skeuo.card &&
+          Contrast.luminance(c) > 0.3) {
+        effective = effective!.copyWith(color: Skeuo.ink);
+      }
     }
     return Text(
       text,
