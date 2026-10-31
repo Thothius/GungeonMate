@@ -481,7 +481,13 @@ Widget? buildBackdropParticleField(
     count: prefs.particleCount,
     sizeScale: prefs.particleSizeScale,
     opacity: (prefs.particleOpacity * opacityScale).clamp(0.0, 1.0),
-    glowOverride: prefs.particleGlowEffect,
+    // none = AUTO (let the typed config's own glow show). Passing the
+    // enum through always forced no-glow on every type — the per-type
+    // glows (pulse/cursed/neon) never rendered.
+    glowOverride:
+        prefs.particleGlowEffect == GlowEffect.none
+            ? null
+            : prefs.particleGlowEffect,
     lineLinksOverride: prefs.particleLineLinks ? true : null,
     colorsOverride: colorOverride,
     bounce: prefs.particleBounce,

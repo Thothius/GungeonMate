@@ -177,12 +177,82 @@ class _ParticlesStep extends StatelessWidget {
                       },
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  _StepLabel('TYPE GLOW'),
+                  const SizedBox(height: 8),
+                  // Was a hidden pref — surface it. AUTO lets each type
+                  // keep its own glow (none = auto since the overlay fix).
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final (label, fx) in [
+                        ('AUTO', GlowEffect.none),
+                        ('SMOKEY', GlowEffect.smokey),
+                        ('PULSE', GlowEffect.pulse),
+                        ('NEON', GlowEffect.neon),
+                        ('CURSED', GlowEffect.cursed),
+                        ('PRISM', GlowEffect.prism),
+                      ])
+                        _GlowFxChip(
+                          label: label,
+                          on: prefs.particleGlowEffect == fx,
+                          onTap: () {
+                            VisualPrefs.setParticleGlowEffect(fx);
+                            Haptics.selection();
+                          },
+                        ),
+                    ],
+                  ),
                 ]),
               ),
             ),
           ],
         );
       },
+    );
+  }
+}
+
+class _GlowFxChip extends StatelessWidget {
+  final String label;
+  final bool on;
+  final VoidCallback onTap;
+  const _GlowFxChip({
+    required this.label,
+    required this.on,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color:
+              on
+                  ? flair.primary.withValues(alpha: 0.16)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: const BorderRadius.all(Radii.sm),
+          border: Border.all(
+            color: on ? flair.primary : Colors.white.withValues(alpha: 0.15),
+            width: on ? 1.4 : 0.8,
+          ),
+        ),
+        child: GoopText(
+          label,
+          style: TextStyle(
+            fontSize: FontSizes.labelSmall,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.0,
+            color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
+          ),
+        ),
+      ),
     );
   }
 }
