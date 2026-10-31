@@ -55,7 +55,7 @@ class _HuntressDashboardSliverState extends State<HuntressDashboardSliver> {
                   Icon(
                     Icons.pets_rounded,
                     color: Skeuo.inkIf(Colors.lightGreenAccent),
-                    size: 18,
+                    size: 24,
                   ),
                   const SizedBox(width: 8),
                   GoopText(

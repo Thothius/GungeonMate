@@ -210,7 +210,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         icon: Icon(
                                           Icons.remove_circle_outline,
                                           color: Skeuo.inkIf(Colors.cyanAccent),
-                                          size: 24,
+                                          size: 30,
                                         ),
                                         tooltip: 'Decrease junk',
                                         onPressed:
@@ -245,7 +245,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         icon: Icon(
                                           Icons.add_circle_outline,
                                           color: Skeuo.inkIf(Colors.cyanAccent),
-                                          size: 24,
+                                          size: 30,
                                         ),
                                         tooltip: 'Increase junk',
                                         onPressed: () {
@@ -312,7 +312,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         icon: Icon(
                                           Icons.remove_circle_outline,
                                           color: Skeuo.inkIf(Colors.cyanAccent),
-                                          size: 24,
+                                          size: 30,
                                         ),
                                         tooltip: 'Decrease armor',
                                         onPressed:
@@ -349,7 +349,7 @@ class RobotDashboardSliverState extends State<RobotDashboardSliver> {
                                         icon: Icon(
                                           Icons.add_circle_outline,
                                           color: Skeuo.inkIf(Colors.cyanAccent),
-                                          size: 24,
+                                          size: 30,
                                         ),
                                         tooltip: 'Increase armor',
                                         onPressed: () {

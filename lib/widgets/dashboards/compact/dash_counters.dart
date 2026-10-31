@@ -357,7 +357,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                   icon: Icon(
                                     Icons.remove_circle_outline,
                                     color: Skeuo.inkIf(Colors.orangeAccent),
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Decrease boxing glove stars',
                                   constraints: const BoxConstraints(
@@ -384,7 +384,7 @@ class BoxingGloveDashboardState extends State<BoxingGloveDashboard>
                                   icon: Icon(
                                     Icons.add_circle_outline,
                                     color: Skeuo.inkIf(Colors.orangeAccent),
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Increase boxing glove stars',
                                   constraints: const BoxConstraints(
@@ -527,7 +527,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                                   icon: Icon(
                                     Icons.remove_circle_outline,
                                     color: Skeuo.inkIf(Colors.blueGrey),
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Decrease cigarette uses',
                                   constraints: const BoxConstraints(
@@ -551,7 +551,7 @@ class CigarettesDashboardState extends State<CigarettesDashboard>
                                   icon: Icon(
                                     Icons.add_circle_outline,
                                     color: Skeuo.inkIf(Colors.blueGrey),
-                                    size: 24,
+                                    size: 30,
                                   ),
                                   tooltip: 'Increase cigarette uses',
                                   constraints: const BoxConstraints(
