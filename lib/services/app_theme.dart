@@ -53,6 +53,9 @@ class AppTheme {
   // Neo-Skeuo toggle: remembers what to restore on exit.
   static const String _skeuoPrevModeKey = 'theme.skeuo.prev_mode.v1';
   static const String _skeuoPrevFontKey = 'theme.skeuo.prev_font.v1';
+  // Neo-Skeuo's own typeface pick — persisted separately so the user's
+  // VisualPrefs.font is never touched by the skin.
+  static const String _skeuoFontKey = 'theme.skeuo.font.v1';
   // Old key from the 4-mode era. Migrated on first run then cleared so
   // returning users don't get parked on an invalid index.
   static const String _legacyKey = 'theme.mode';
@@ -168,6 +171,12 @@ class AppTheme {
       }
 
       // Load custom theme palette data (if previously saved).
+      // Neo-Skeuo typeface pick.
+      _skeuoFontIndex = (prefs.getInt(_skeuoFontKey) ?? 0).clamp(
+        0,
+        skeuoFonts.length - 1,
+      );
+
       final customJson = prefs.getString(CustomThemeData._prefsKey);
       if (customJson != null) {
         try {
@@ -293,6 +302,30 @@ class AppTheme {
   /// Widgets use this to gate skeuo chrome + lock customization.
   static bool get isSkeuo => notifier.value == AppThemeMode.neoSkeuo;
 
+  /// Typefaces the skin can wear — index into this list is persisted
+  /// under [_skeuoFontKey]. Architects Daughter is the default: the
+  /// crispest upright hand print, closest to the reference kit.
+  static const List<AppFont> skeuoFonts = [
+    AppFont.architectsDaughter,
+    AppFont.patrickHand,
+    AppFont.shantellSans,
+  ];
+
+  static int _skeuoFontIndex = 0;
+  static int get skeuoFontIndex => _skeuoFontIndex;
+  static AppFont get skeuoFont =>
+      skeuoFonts[_skeuoFontIndex.clamp(0, skeuoFonts.length - 1)];
+
+  /// Pick the skeuo typeface (index into [skeuoFonts]) + persist.
+  static Future<void> setSkeuoFont(int idx) async {
+    _skeuoFontIndex = idx.clamp(0, skeuoFonts.length - 1);
+    notifier.refresh();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(_skeuoFontKey, _skeuoFontIndex);
+    } catch (_) {}
+  }
+
   /// Enter the Neo-Skeuo skin. Remembers the current mode AND the
   /// user's current font so [exitSkeuo] restores the exact prior look.
   /// skeuo's `flair.font` is null and it has no `kThemeCuration` entry,
@@ -374,7 +407,7 @@ class AppTheme {
     final bias = prefs.fontWeightBias;
     final selectedFont =
         m == AppThemeMode.neoSkeuo
-            ? AppFont.shantellSans
+            ? skeuoFont
             : m == AppThemeMode.custom && _cachedCustomTheme != null
             ? _cachedCustomTheme!.font
             : prefs.font;
@@ -422,6 +455,10 @@ class AppTheme {
     } else if (selectedFont == AppFont.shantellSans) {
       // Bundled asset family (offline-first like EnterTheGungeonBig).
       fontFamilyName = 'ShantellSans';
+    } else if (selectedFont == AppFont.architectsDaughter) {
+      fontFamilyName = 'ArchitectsDaughter';
+    } else if (selectedFont == AppFont.patrickHand) {
+      fontFamilyName = 'PatrickHand';
     } else {
       try {
         fontFamilyName = GoogleFonts.getFont(selectedFont.label).fontFamily;

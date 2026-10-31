@@ -42,7 +42,7 @@ void main() {
     test('themeFor resolves the bundled sketch font + light scheme', () {
       final theme = AppTheme.themeFor(AppThemeMode.neoSkeuo);
       expect(theme.colorScheme.brightness, Brightness.light);
-      expect(theme.textTheme.bodyMedium?.fontFamily, 'ShantellSans');
+      expect(theme.textTheme.bodyMedium?.fontFamily, 'ArchitectsDaughter');
     });
 
     test('ink on paper passes body-text contrast', () {

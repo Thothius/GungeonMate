@@ -17,7 +17,7 @@ class DescriptionBlock extends StatelessWidget {
       style: TextStyle(
         fontSize: FontSizes.bodyMedium,
         height: 1.4,
-        color: Colors.white.withValues(alpha: 0.85),
+        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.9),
       ),
     );
   }
@@ -65,7 +65,7 @@ class AmmonomiconCard extends StatelessWidget {
               fontSize: FontSizes.labelMedium,
               fontStyle: FontStyle.italic,
               height: 1.4,
-              color: Colors.white.withValues(alpha: 0.75),
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
         ],

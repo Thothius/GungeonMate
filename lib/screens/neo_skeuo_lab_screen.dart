@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/run_provider.dart';
+import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../services/haptics.dart';
+import '../utils/fast_route.dart';
+import '../widgets/browse/browse_pills.dart';
+import '../widgets/browse/browse_row.dart';
+import '../widgets/periodic_tile.dart';
 import '../widgets/skeuo/skeuo_backdrop.dart';
 import '../widgets/skeuo/skeuo_surface.dart';
 import '../widgets/skeuo/skeuo_tokens.dart';
+import 'item_detail_screen.dart';
 
 /// Neo-Skeuo component sheet — a replica of the reference kit poster
 /// with every element translated into GungeonMate's skeuo widgets.
@@ -27,6 +35,7 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
   int _page = 2;
   int _step = 2;
   bool _confirmDelete = false;
+  int _sheetTab = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -36,43 +45,245 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
         children: [
           const SkeuoPaperBackdrop(posterChrome: true),
           SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(40, 16, 20, 24),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 720),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+              children: [
+                _sheetTabs(),
+                Expanded(
+                  child: IndexedStack(
+                    index: _sheetTab,
                     children: [
-                      _kitHeader(),
-                      const SizedBox(height: 18),
-                      _section('FOUNDATIONS', _foundations()),
-                      _section('CONTROLS', _controls()),
-                      _section('NAVIGATION', _navigation()),
-                      _section('DATA DISPLAY', _dataDisplay()),
-                      _section('FEEDBACK', _feedback()),
-                      const SizedBox(height: 8),
-                      const Center(
-                        child: GoopText(
-                          'DRAWN WITH CARE IN THE GUNGEON',
-                          style: TextStyle(
-                            fontSize: 10,
-                            letterSpacing: 1.6,
-                            color: Skeuo.pencil,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
+                      _specSheetTab(),
+                      _activeRunTab(),
+                      _browseTab(),
+                      _detailTab(),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
       ),
       bottomNavigationBar: _skeuoBackBar(context),
     );
+  }
+
+  /// Skeuo segmented tab row — SPEC SHEET / ACTIVE RUN / BROWSE / DETAIL.
+  Widget _sheetTabs() {
+    const labels = ['SPEC SHEET', 'ACTIVE RUN', 'BROWSE', 'DETAIL'];
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(40, 12, 20, 8),
+      child: Row(
+        children: [
+          for (var i = 0; i < labels.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() => _sheetTab = i);
+                  Haptics.selection();
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _sheetTab == i ? Skeuo.ink : Skeuo.card,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: Skeuo.ink, width: 1.6),
+                    boxShadow: const [
+                      BoxShadow(color: Skeuo.ink, offset: Offset(2, 2)),
+                    ],
+                  ),
+                  child: GoopText(
+                    labels[i],
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1,
+                      color: _sheetTab == i ? Skeuo.card : Skeuo.ink,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _specSheetTab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(40, 16, 20, 24),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _kitHeader(),
+              const SizedBox(height: 18),
+              _section('TYPEFACE', _fontPicker()),
+              _section('FOUNDATIONS', _foundations()),
+              _section('CONTROLS', _controls()),
+              _section('NAVIGATION', _navigation()),
+              _section('DATA DISPLAY', _dataDisplay()),
+              _section('FEEDBACK', _feedback()),
+              const SizedBox(height: 8),
+              const Center(
+                child: GoopText(
+                  'DRAWN WITH CARE IN THE GUNGEON',
+                  style: TextStyle(
+                    fontSize: 10,
+                    letterSpacing: 1.6,
+                    color: Skeuo.pencil,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── TYPEFACE ───────────────────────────────────────────────────
+  Widget _fontPicker() {
+    return Wrap(
+      spacing: 8,
+      children: [
+        for (var i = 0; i < AppTheme.skeuoFonts.length; i++)
+          GestureDetector(
+            onTap: () {
+              AppTheme.setSkeuoFont(i);
+              setState(() {});
+              Haptics.selection();
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppTheme.skeuoFontIndex == i ? Skeuo.ink : Skeuo.card,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(color: Skeuo.ink, width: 1.6),
+                boxShadow: const [
+                  BoxShadow(color: Skeuo.ink, offset: Offset(2, 2)),
+                ],
+              ),
+              child: GoopText(
+                AppTheme.skeuoFonts[i].label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontFamily: AppTheme.skeuoFonts[i].textStyle.fontFamily,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.skeuoFontIndex == i ? Skeuo.card : Skeuo.ink,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  // ── ACTIVE RUN (real widgets) ──────────────────────────────────
+  Widget _activeRunTab() {
+    final p = context.watch<RunProvider>();
+    final guns = p.allGuns.take(4).toList();
+    final items = p.allItems.take(4).toList();
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(40, 16, 20, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _subLabel('GUNS ${guns.length}'),
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.82,
+            children: [
+              for (final g in guns) PeriodicTile(gun: g, onTap: () {}),
+            ],
+          ),
+          _subLabel('ITEMS ${items.length}'),
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            childAspectRatio: 0.82,
+            children: [
+              for (final it in items) PeriodicTile(item: it, onTap: () {}),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── BROWSE (real rows) ─────────────────────────────────────────
+  Widget _browseTab() {
+    final p = context.watch<RunProvider>();
+    final guns = p.allGuns.take(6).toList();
+    final items = p.allItems.take(4).toList();
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(40, 16, 20, 24),
+      children: [
+        for (final g in guns)
+          BrowseRow(
+            name: g.name,
+            quality: g.quality,
+            iconPath: g.icon,
+            fallback: Icons.gps_fixed,
+            meta: GunMeta(gun: g, synergyCount: p.synergyCountFor(g.name)),
+            inRun: false,
+            isRobot: false,
+            onTap:
+                () => Navigator.push(
+                  context,
+                  fastRoute(ItemDetailScreen(gun: g)),
+                ),
+            onAdd: () {},
+          ),
+        for (final it in items)
+          BrowseRow(
+            name: it.name,
+            quality: it.quality,
+            iconPath: it.icon,
+            fallback: Icons.backpack_outlined,
+            meta: ItemMeta(item: it, synergyCount: p.synergyCountFor(it.name)),
+            inRun: false,
+            isRobot: false,
+            onTap:
+                () => Navigator.push(
+                  context,
+                  fastRoute(ItemDetailScreen(item: it)),
+                ),
+            onAdd: () {},
+          ),
+      ],
+    );
+  }
+
+  // ── DETAIL (real screen, embedded) ─────────────────────────────
+  Widget _detailTab() {
+    final p = context.watch<RunProvider>();
+    final guns = p.allGuns;
+    if (guns.isEmpty) {
+      return const Center(
+        child: GoopText('Loading…', style: TextStyle(color: Skeuo.ink)),
+      );
+    }
+    // A.W.P. if present — the reference detail screen.
+    final gun = guns.firstWhere(
+      (g) => g.name.contains('A.W.P'),
+      orElse: () => guns.first,
+    );
+    return ClipRect(child: ItemDetailScreen(gun: gun));
   }
 
   // ── Header ─────────────────────────────────────────────────────

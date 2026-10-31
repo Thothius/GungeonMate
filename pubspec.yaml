@@ -136,6 +136,12 @@ flutter:
     - family: ShantellSans
       fonts:
         - asset: assets/fonts/ShantellSans.ttf
+    - family: ArchitectsDaughter
+      fonts:
+        - asset: assets/fonts/ArchitectsDaughter.ttf
+    - family: PatrickHand
+      fonts:
+        - asset: assets/fonts/PatrickHand.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

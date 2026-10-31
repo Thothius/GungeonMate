@@ -67,32 +67,44 @@ class SkeuoGrainPainter extends CustomPainter {
     final rnd = math.Random(1907);
     final speck =
         Paint()
-          ..color = Skeuo.ink.withValues(alpha: 0.05)
+          ..color = Skeuo.ink.withValues(alpha: 0.07)
           ..strokeWidth = 1.0
           ..strokeCap = StrokeCap.round;
     final pts = <Offset>[
-      for (var i = 0; i < 420; i++)
+      for (var i = 0; i < 700; i++)
         Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
     ];
     canvas.drawPoints(PointMode.points, pts, speck);
-    // A few slightly darker flecks give the paper real tooth.
+    // Darker flecks give the paper real tooth.
     speck
-      ..color = Skeuo.ink.withValues(alpha: 0.09)
-      ..strokeWidth = 1.6;
+      ..color = Skeuo.ink.withValues(alpha: 0.12)
+      ..strokeWidth = 1.7;
     final flecks = <Offset>[
-      for (var i = 0; i < 90; i++)
+      for (var i = 0; i < 180; i++)
         Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
     ];
     canvas.drawPoints(PointMode.points, flecks, speck);
-    // Faint horizontal "laid paper" fibers.
+    // Faint laid-paper fibers — short horizontal strands.
     speck
-      ..color = Skeuo.ink.withValues(alpha: 0.025)
-      ..strokeWidth = 0.6;
-    for (var i = 0; i < 28; i++) {
+      ..color = Skeuo.ink.withValues(alpha: 0.04)
+      ..strokeWidth = 0.7;
+    for (var i = 0; i < 90; i++) {
       final y = rnd.nextDouble() * size.height;
-      final x = rnd.nextDouble() * size.width * 0.6;
-      final len = 30 + rnd.nextDouble() * 90;
+      final x = rnd.nextDouble() * size.width * 0.7;
+      final len = 25 + rnd.nextDouble() * 110;
       canvas.drawLine(Offset(x, y), Offset(x + len, y + 1), speck);
+    }
+    // Warm fiber splotches — subtle blotches that break the flat tone.
+    final blotch =
+        Paint()
+          ..color = Skeuo.insetPaper.withValues(alpha: 0.5)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 18);
+    for (var i = 0; i < 14; i++) {
+      canvas.drawCircle(
+        Offset(rnd.nextDouble() * size.width, rnd.nextDouble() * size.height),
+        20 + rnd.nextDouble() * 55,
+        blotch,
+      );
     }
   }
 

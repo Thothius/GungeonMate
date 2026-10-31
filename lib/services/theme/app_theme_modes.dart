@@ -2048,8 +2048,10 @@ enum AppFont {
   merriweather,
   specialElite,
   playfairDisplay,
-  // ── Hand-lettered (Neo-Skeuo signature, bundled asset) ──
+  // ── Hand-lettered (Neo-Skeuo signature, bundled assets) ──
   shantellSans,
+  architectsDaughter,
+  patrickHand,
 }
 
 extension AppFontLabel on AppFont {
@@ -2084,6 +2086,8 @@ extension AppFontLabel on AppFont {
     AppFont.playfairDisplay: 'Playfair Display',
     AppFont.megrim: 'Megrim',
     AppFont.shantellSans: 'Shantell Sans',
+    AppFont.architectsDaughter: 'Architects Daughter',
+    AppFont.patrickHand: 'Patrick Hand',
   };
 
   static const Map<AppFont, String> _googleFontDescriptions = {
@@ -2117,6 +2121,8 @@ extension AppFontLabel on AppFont {
     AppFont.playfairDisplay: 'Luxurious high-contrast theatrical display',
     AppFont.megrim: 'Ultra-stylized thin wire outline vector',
     AppFont.shantellSans: 'Hand-lettered print sketchbook ink',
+    AppFont.architectsDaughter: 'Crisp upright architectural hand lettering',
+    AppFont.patrickHand: 'Neat felt-tip print handwriting',
   };
 
   String get label {
@@ -2136,6 +2142,12 @@ extension AppFontLabel on AppFont {
     if (this == AppFont.shantellSans) {
       return const TextStyle(fontFamily: 'ShantellSans');
     }
+    if (this == AppFont.architectsDaughter) {
+      return const TextStyle(fontFamily: 'ArchitectsDaughter');
+    }
+    if (this == AppFont.patrickHand) {
+      return const TextStyle(fontFamily: 'PatrickHand');
+    }
     try {
       return GoogleFonts.getFont(label);
     } catch (_) {
@@ -2150,6 +2162,12 @@ extension AppFontLabel on AppFont {
     }
     if (this == AppFont.shantellSans) {
       return base.apply(fontFamily: 'ShantellSans');
+    }
+    if (this == AppFont.architectsDaughter) {
+      return base.apply(fontFamily: 'ArchitectsDaughter');
+    }
+    if (this == AppFont.patrickHand) {
+      return base.apply(fontFamily: 'PatrickHand');
     }
     try {
       return GoogleFonts.getTextTheme(label, base);
