@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<!-- Settings · source: lib/screens/settings_screen.dart + lib/widgets/settings/settings_tab.dart -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Settings — Design Lab</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  .settings-body { padding: 8px 14px 32px; }
+  .settings-section { margin-bottom: var(--inset-lg); }
+  .settings-section > .ss-label {
+    font-size: var(--fs-label-sm);
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--flair-secondary);
+    text-transform: uppercase;
+    padding-bottom: 6px;
+  }
+
+  /* Toggle row inside a collapsible body */
+  .toggle-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 0;
+    border-bottom: var(--flair-divider-w) solid var(--flair-divider);
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-row .tr-main { flex: 1; min-width: 0; }
+  .toggle-row .tr-title { font-size: var(--fs-body-md); font-weight: 700; }
+  .toggle-row .tr-sub { font-size: var(--fs-body-sm); color: var(--flair-secondary); }
+  .switch {
+    width: 40px; height: 22px; flex: none;
+    border-radius: var(--radius-pill);
+    background: rgba(255,255,255,.12);
+    position: relative;
+  }
+  .switch::after {
+    content: ''; position: absolute;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #888; top: 3px; left: 3px;
+  }
+  .switch.on { background: rgba(224,224,224,.35); }
+  .switch.on::after { left: 21px; background: #fff; }
+
+  .swipe-row { display: flex; gap: 6px; padding: 8px 0; }
+  .swipe-opt {
+    flex: 1; text-align: center;
+    padding: 8px 4px;
+    border: 1px solid var(--flair-card-border);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-label-sm); font-weight: 700;
+    color: var(--flair-secondary);
+  }
+  .swipe-opt.on { color: var(--flair-headline-stat); border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.08); }
+</style>
+</head>
+<body>
+<div class="lab-stage">
+  <div class="phone-frame">
+    <div class="frame-tag"></div>
+    <div class="screen">
+      <div class="appbar">
+        <span class="back">&#8592;</span>
+        <span class="title">Settings</span>
+        <span class="spacer"></span>
+      </div>
+
+      <div class="settings-body">
+        <!-- RUN TOOLS -->
+        <div class="settings-section">
+          <div class="collapsible">
+            <div class="col-head">
+              <span class="ico">&#9881;</span>
+              <span class="col-title">RUN TOOLS</span>
+              <span class="chev">&#8743;</span>
+            </div>
+            <div class="col-body">
+              <div class="toggle-row">
+                <div class="tr-main"><div class="tr-title">Show Effects Panel</div><div class="tr-sub">Effects accordion on the run dashboard</div></div>
+                <span class="switch"></span>
+              </div>
+              <div class="toggle-row">
+                <div class="tr-main"><div class="tr-title">Show Shrine Tracker</div><div class="tr-sub">Shrine panel on the run dashboard</div></div>
+                <span class="switch"></span>
+              </div>
+              <div class="toggle-row">
+                <div class="tr-main"><div class="tr-title">Show Special Dashboards</div><div class="tr-sub">Robot, Junkan, special guns</div></div>
+                <span class="switch on"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DICE -->
+        <div class="settings-section">
+          <div class="collapsible">
+            <div class="col-head">
+              <span class="ico">&#9856;</span>
+              <span class="col-title">DICE</span>
+              <span class="chev">&#8743;</span>
+            </div>
+            <div class="col-body">
+              <div class="ss-label" style="padding:2px 0 6px">Dice style</div>
+              <div class="swipe-row">
+                <span class="swipe-opt on">THEME</span>
+                <span class="swipe-opt">CLASSIC</span>
+                <span class="swipe-opt">D20</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MULTIPLAYER -->
+        <div class="settings-section">
+          <div class="collapsible">
+            <div class="col-head">
+              <span class="ico">&#8767;</span>
+              <span class="col-title">MULTIPLAYER</span>
+              <span class="chev">&#8743;</span>
+            </div>
+            <div class="col-body">
+              <div class="toggle-row">
+                <div class="tr-main"><div class="tr-title">Unpair Device</div><div class="tr-sub">Forget the paired co-op partner</div></div>
+                <span class="ico" style="font-size:18px;color:var(--flair-secondary)">&#8709;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DATA & STORAGE -->
+        <div class="settings-section">
+          <div class="collapsible">
+            <div class="col-head">
+              <span class="ico">&#9635;</span>
+              <span class="col-title">DATA &amp; STORAGE</span>
+              <span class="chev">&#8743;</span>
+            </div>
+            <div class="col-body">
+              <div class="toggle-row">
+                <div class="tr-main"><div class="tr-title">Reset Run Data</div><div class="tr-sub">Clears the saved active run</div></div>
+              </div>
+              <div class="toggle-row">
+                <div class="tr-main"><div class="tr-title">Reset All App Data</div><div class="tr-sub">Full wipe — runs, favourites, prefs</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- THEMES tile -->
+        <div class="settings-section">
+          <div class="action-tile">
+            <span class="ico">&#9684;</span>
+            <span class="at-main">
+              <div class="at-title">Themes &amp; Customization</div>
+              <div class="at-sub">Open the Experience Studio</div>
+            </span>
+            <span class="chev">&#8250;</span>
+          </div>
+        </div>
+
+        <!-- DEV TOOLS -->
+        <div class="settings-section">
+          <div class="collapsible">
+            <div class="col-head">
+              <span class="ico">&#9881;</span>
+              <span class="col-title">DEV TOOLS</span>
+              <span class="chev">&#8743;</span>
+            </div>
+            <div class="col-body">
+              <div class="toggle-row">
+                <div class="tr-main"><div class="tr-title">Grid Inspector</div><div class="tr-sub">Overlay alignment grid on views</div></div>
+                <span class="switch"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-tile danger">
+          <span class="ico">&#9888;</span>
+          <span class="at-main">
+            <div class="at-title">Danger Zone</div>
+            <div class="at-sub">Irreversible actions live here</div>
+          </div>
+          <span class="chev">&#8250;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../lab.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<!-- Codex — picked category · source: lib/screens/codex_screen.dart (_buildPickedCategory, _CodexCard) -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Codex — Enemies — Design Lab</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  .cat-head { padding: 8px 14px 4px; }
+  .filter-row {
+    display: flex; gap: 6px; align-items: center;
+    padding: 8px 14px 4px;
+    overflow-x: auto;
+  }
+  .sort-pill {
+    padding: 4px 8px; border-radius: 6px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.2);
+    font-size: 10px; font-weight: 800;
+    color: rgba(255,255,255,.7);
+    flex: none;
+  }
+  .q-pill {
+    padding: 4px 10px; border-radius: 6px; flex: none;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.15);
+    font-size: 11px; font-weight: 800;
+    color: rgba(255,255,255,.55);
+  }
+  .q-pill.on {
+    background: rgba(224,224,224,.25);
+    border-color: rgba(224,224,224,.8);
+    color: var(--flair-primary);
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));  /* minmax(0) = tracks may shrink below content min-size */
+    gap: 8px;
+    padding: 10px 14px 24px;
+  }
+  .codex-card { min-width: 0; }
+  .codex-card .cc-name { overflow-wrap: break-word; }
+</style>
+</head>
+<body>
+<div class="lab-stage">
+  <div class="phone-frame">
+    <div class="frame-tag"></div>
+    <div class="screen">
+      <div class="appbar">
+        <span class="back">&#8592;</span>
+        <span class="title">Enemies</span>
+        <span class="action">&#9906;</span>
+      </div>
+
+      <div class="filter-row">
+        <span class="sort-pill">A-Z</span>
+        <span class="q-pill">S</span>
+        <span class="q-pill on">A</span>
+        <span class="q-pill">B</span>
+        <span class="q-pill">C</span>
+        <span class="q-pill">D</span>
+      </div>
+
+      <div class="card-grid">
+        <div class="codex-card"><img src="../../assets/images/enemies/Ammomancer.png" alt=""><span class="cc-name">Ammomancer</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Apprentice_Gunjurer.png" alt=""><span class="cc-name">Apprentice Gunjurer</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Aged_Gunsinger.png" alt=""><span class="cc-name">Aged Gunsinger</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Advanced_Dragun_Knifeguy.png" alt=""><span class="cc-name">Dragun Knifeguy</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Angry_Tablet.png" alt=""><span class="cc-name">Angry Tablet</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Angry_Necronomicon.png" alt=""><span class="cc-name">Angry Necronomicon</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Ammoconda_Ball.png" alt=""><span class="cc-name">Ammoconda Ball</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Aged_Gunsinger.png" alt=""><span class="cc-name">Gunsinger</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Ammomancer.png" alt=""><span class="cc-name">Gunjurer</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Apprentice_Gunjurer.png" alt=""><span class="cc-name">Bullet Kin</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Angry_Tablet.png" alt=""><span class="cc-name">Bandana Bullet Kin</span></div>
+        <div class="codex-card"><img src="../../assets/images/enemies/Advanced_Dragun_Knifeguy.png" alt=""><span class="cc-name">Red Shotgun Kin</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../lab.js"></script>
+</body>
+</html>

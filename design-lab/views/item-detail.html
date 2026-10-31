@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- Item Detail · source: lib/screens/item_detail_screen.dart + lib/widgets/item_detail/header.dart -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Item Detail — Design Lab</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../base.css">
+<style>
+  /* Gun header — padding 16/8/16/14, centered column */
+  .detail-head { padding: 8px 16px 14px; text-align: center; }
+  .hd-top { display: flex; justify-content: space-between; align-items: center; }
+  .hd-top .left { display: flex; align-items: center; gap: 8px; }
+  .qb.big { min-width: 32px; height: 32px; font-size: 17px; border-radius: 6px; }
+  .sell-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 8px; border-radius: var(--radius-chip);
+    border: 1px solid var(--flair-divider);
+    font-size: var(--fs-label-md); font-weight: 700;
+    color: var(--flair-secondary);
+  }
+  .fav-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--flair-secondary); }
+
+  .gun-name {
+    margin-top: 10px;
+    font-size: var(--fs-headline-md);
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    color: var(--flair-headline-stat);
+  }
+  .gun-icon { margin-top: 10px; height: 96px; display: flex; align-items: center; justify-content: center; }
+  .gun-icon img { max-height: 96px; max-width: 60%; object-fit: contain; image-rendering: pixelated; }
+
+  /* _AccentDivider — 1px gradient line + center diamond */
+  .accent-divider { display: flex; align-items: center; gap: 12px; margin: 12px 0 0; }
+  .accent-divider::before, .accent-divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.25) 30%, rgba(255,255,255,.25) 70%, transparent);
+  }
+  .accent-divider::after { transform: scaleX(-1); }
+  .accent-divider .diamond {
+    width: 7px; height: 7px; flex: none;
+    background: rgba(255,255,255,.4);
+    transform: rotate(45deg);
+  }
+
+  .effect-line {
+    margin-top: 10px;
+    font-size: 0.84375em;      /* 13.5px */
+    color: rgba(255,255,255,.85);
+    line-height: 1.35;
+  }
+  .elem-row { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+  .elem-dot {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: var(--radius-pill);
+    border: 1px solid var(--flair-divider);
+    font-size: var(--fs-label-sm); font-weight: 700;
+  }
+  .elem-dot .d { width: 8px; height: 8px; border-radius: 50%; }
+  .elem-dot.fire .d { background: #ff7043; }
+  .elem-dot.poison .d { background: #66bb6a; }
+
+  .detail-body { padding: var(--inset-md) 14px 120px; }
+  .detail-body .card { margin-bottom: var(--inset-md); }
+
+  .syn-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0;
+    border-bottom: var(--flair-divider-w) solid var(--flair-divider);
+  }
+  .syn-row:last-child { border-bottom: none; }
+  .syn-row .syn-name { flex: 1; font-size: var(--fs-body-md); font-weight: 700; }
+  .syn-chip { font-size: var(--fs-label-sm); font-weight: 700; padding: 2px 8px; border-radius: var(--radius-chip); }
+  .syn-chip.owned { color: #66bb6a; border: 1px solid rgba(102,187,106,.4); }
+  .syn-chip.missing { color: var(--flair-secondary); border: 1px solid var(--flair-divider); }
+</style>
+</head>
+<body>
+<div class="lab-stage">
+  <div class="phone-frame">
+    <div class="frame-tag"></div>
+    <div class="screen">
+      <div class="appbar">
+        <span class="back">&#8592;</span>
+        <span class="title">Guns</span>
+        <span class="spacer"></span>
+      </div>
+
+      <!-- Gun header -->
+      <div class="detail-head">
+        <div class="hd-top">
+          <div class="left">
+            <span class="qb a big">A</span>
+            <span class="sell-badge">&#9899; 41</span>
+          </div>
+          <span class="fav-btn">&#9825;</span>
+        </div>
+        <div class="gun-name">Alien Engine</div>
+        <div class="gun-icon"><img src="../../assets/images/guns/alien_engine.webp" alt="Alien Engine"></div>
+        <div class="accent-divider"><span class="diamond"></span></div>
+        <div class="effect-line">Fires a dense stream of bolts. Engine hums louder the longer you hold the trigger.</div>
+        <div class="elem-row">
+          <span class="elem-dot fire"><span class="d"></span>FIRE</span>
+          <span class="elem-dot poison"><span class="d"></span>POISON</span>
+        </div>
+      </div>
+
+      <div class="detail-body">
+        <!-- Stat groups -->
+        <div class="card card-pad">
+          <div class="stat-group">
+            <div class="sg-label combat">Combat</div>
+            <div class="stat-line"><span>Damage</span><span class="v">12.0</span></div>
+            <div class="stat-line"><span>DPS</span><span class="v">38.4</span></div>
+            <div class="stat-line"><span>Fire rate</span><span class="v">0.10s</span></div>
+          </div>
+          <div class="stat-group">
+            <div class="sg-label handling">Handling</div>
+            <div class="stat-line"><span>Reload time</span><span class="v">1.2s</span></div>
+            <div class="stat-line"><span>Magazine</span><span class="v">400</span></div>
+            <div class="stat-line"><span>Spread</span><span class="v">6&deg;</span></div>
+          </div>
+          <div class="stat-group">
+            <div class="sg-label meta">Meta</div>
+            <div class="stat-line"><span>Type</span><span class="v">Automatic</span></div>
+            <div class="stat-line"><span>Quality</span><span class="v">A</span></div>
+            <div class="stat-line"><span>Sell price</span><span class="v">41</span></div>
+          </div>
+        </div>
+
+        <!-- Synergies -->
+        <div class="card card-pad">
+          <div class="section-title">Synergies</div>
+          <div class="syn-row">
+            <span class="syn-name">The Pilot</span>
+            <span class="syn-chip owned">OWNED</span>
+          </div>
+          <div class="syn-row">
+            <span class="syn-name">Zorg Industries</span>
+            <span class="syn-chip missing">2/3 OWNED</span>
+          </div>
+          <div class="syn-row">
+            <span class="syn-name">Nuclear Option</span>
+            <span class="syn-chip missing">MISSING</span>
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="card card-pad">
+          <div class="section-title">Notes</div>
+          <ul class="bullets">
+            <li>Pairs well with fire-rate boosts — magazine drains fast.</li>
+            <li>Beam-type shots ignore small obstacles.</li>
+            <li>Found in black and rainbow chests.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../lab.js"></script>
+</body>
+</html>

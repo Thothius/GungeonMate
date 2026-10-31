@@ -1,0 +1,122 @@
+/* ============================================================================
+   GungeonMate design tokens — CSS mirror
+   ----------------------------------------------------------------------------
+   Every var maps 1:1 to a Dart token so a tweak here ports mechanically back:
+
+     --inset-*            lib/theme/tokens.dart  → Insets.*
+     --radius-*           lib/theme/tokens.dart  → Radii.*
+     --motion-*           lib/theme/tokens.dart  → Motion.*
+     --ts-*/--fs-*        lib/theme/tokens.dart  → TypeScale / FontSizes
+     --flair-*            services/theme/theme_flair_prefs.dart → ThemeFlair
+                          (values below = AppThemeMode.minimalist, the default)
+     --q-*                lib/widgets/quality_badge.dart → QualityBadge.colorFor
+     --codex-*            lib/theme/tokens.dart  → CodexColors (fixed identity)
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Gungeon';
+  src: url('../assets/fonts/EnterTheGungeonBig.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  /* ── ThemeFlair · minimalist (app_theme_modes.dart:1719) ────────────── */
+  --flair-scaffold: #0a0a0a;
+  --flair-card: #121212;
+  --flair-primary: #e0e0e0;
+  --flair-secondary: #9e9e9e;
+  --flair-headline-stat: #ffffff;
+  --flair-bullet: #bdbdbd;
+
+  --flair-card-border: rgba(255, 255, 255, 0.2);   /* cardBorderColor */
+  --flair-card-border-w: 1px;                       /* cardBorderWidth */
+  --flair-divider: rgba(255, 255, 255, 0.13);      /* dividerColor */
+  --flair-divider-w: 0.5px;                         /* dividerThickness */
+  --flair-header-underline: rgba(255, 255, 255, 0.27);
+  --flair-glow-primary: rgba(255, 255, 255, 0.07);  /* glowPrimary */
+  --flair-glow-secondary: rgba(255, 255, 255, 0.03);/* glowSecondary */
+  --flair-page-frame: rgba(255, 255, 255, 0.08);    /* pageFrame hairline */
+
+  --radius-card: 6px;   /* flair.cardRadius (minimalist; baseline Radii.card=12) */
+  --radius-chip: 4px;   /* flair.chipRadius  (minimalist) */
+  --chip-filled: 0;     /* minimalist chips are outline-only */
+
+  /* ── Insets (tokens.dart) ───────────────────────────────────────────── */
+  --inset-xs: 4px;
+  --inset-sm: 8px;
+  --inset-md: 12px;
+  --inset-lg: 16px;
+  --inset-xl: 24px;
+  --inset-xxl: 32px;
+  --inset-xxxl: 48px;
+  --inset-huge: 64px;
+
+  /* ── Radii (tokens.dart) ────────────────────────────────────────────── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-sheet: 24px 24px 0 0;
+  --radius-pill: 999px;
+
+  /* ── Motion (tokens.dart) ───────────────────────────────────────────── */
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --motion-enter: 400ms;
+  --motion-exit: 250ms;
+
+  /* ── TypeScale (tokens.dart) — sizes in em so the lab text-scale toggle ──
+     can multiply them like Flutter's MediaQuery textScaler. ───────────── */
+  --fs-display-sm: 2em;      /* 32 */
+  --fs-headline-md: 1.75em;  /* 28 */
+  --fs-headline-sm: 1.5em;   /* 24 */
+  --fs-title-lg: 1.375em;    /* 22 */
+  --fs-title-md: 1.125em;    /* 18 */
+  --fs-title-sm: 1em;        /* 16 */
+  --fs-body-lg: 1em;         /* 16 */
+  --fs-body-md: 0.875em;     /* 14 */
+  --fs-body-sm: 0.75em;      /* 12 */
+  --fs-label-lg: 0.875em;    /* 14 */
+  --fs-label-md: 0.75em;     /* 12 */
+  --fs-label-sm: 0.625em;    /* 10 */
+
+  /* ── QualityBadge.colorFor (quality_badge.dart) ─────────────────────── */
+  --q-s: #ffd700;      /* gold glow on black pill */
+  --q-a: #e53935;
+  --q-b: #43a047;
+  --q-c: #1e88e5;
+  --q-d: #757575;
+  --q-n: #5e35b1;
+  --q-unknown: #9e9e9e;
+
+  /* ── CodexColors (tokens.dart) — fixed category identity ────────────── */
+  --codex-gungeoneers: #42a5f5;
+  --codex-npcs: #ef5350;
+  --codex-enemies: #ff7043;
+  --codex-bosses: #ab47bc;
+  --codex-pickups: #42a5f5;
+  --codex-objects: #66bb6a;
+  --codex-rat: #ffb300;
+  --codex-dragun: #00e676;
+  --codex-bullet-hell: #ff5252;
+  --codex-challenge: #ab47bc;
+  --codex-health: #ef5350;
+  --codex-location: #66bb6a;
+
+  /* ── Stat groups (semantic defaults; flair.statGroup* unset in min.) ── */
+  --stat-combat: #ef5350;
+  --stat-handling: #4dd0e1;
+  --stat-meta: #ffb300;
+
+  /* ── Brand mark (main_menu_screen — intentionally NOT themed) ───────── */
+  --logo-stroke: #c62828;
+  --logo-fill: #ffd54f;
+
+  /* ── Fonts ──────────────────────────────────────────────────────────── */
+  --font-pixel: 'Gungeon', 'Courier New', monospace;   /* game content font */
+  --font-chrome: 'Montserrat', 'Segoe UI', system-ui, sans-serif; /* system chrome */
+  --font-body: 'DM Sans', 'Segoe UI', system-ui, sans-serif;      /* minimalist flair.font */
+
+  /* Text-scale multiplier (lab.js toggle ≈ MediaQuery textScaler) */
+  --text-scale: 1;
+}

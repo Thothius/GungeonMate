@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Token Reference — GungeonMate Design Lab</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
+<style>
+  .doc { max-width: 860px; margin: 0 auto; padding: 64px 20px 60px; }
+  .doc h1 { font-size: 26px; font-weight: 900; margin-bottom: 4px; }
+  .doc .sub { color: #888; font-size: 13px; margin-bottom: 30px; }
+  .doc h2 {
+    font-size: 13px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #999;
+    margin: 34px 0 12px; padding-bottom: 8px;
+    border-bottom: 1px solid #26262e;
+  }
+  .swatch-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .sw {
+    width: 120px; padding: 10px; border-radius: 8px;
+    background: #141418; border: 1px solid #26262e;
+    font-size: 10.5px; color: #aaa;
+  }
+  .sw .box { height: 34px; border-radius: 5px; margin-bottom: 7px; border: 1px solid rgba(255,255,255,.1); }
+  .sw b { display: block; color: #ddd; font-size: 11px; }
+  .gap-row { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+  .gap { background: #1c1c24; border: 1px solid #333; }
+  .gap-lbl { font-size: 10px; color: #888; text-align: center; margin-top: 4px; }
+  .type-row { padding: 4px 0; border-bottom: 1px dashed #222; display: flex; align-items: baseline; gap: 14px; }
+  .type-row .src { font: 10px 'Courier New', monospace; color: #666; width: 130px; flex: none; }
+  .sample-zone {
+    background: var(--flair-scaffold);
+    border: 1px solid #26262e;
+    border-radius: 12px;
+    padding: 20px;
+    color: var(--flair-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+  }
+  .comp-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="lab-toolbar"><a href="index.html">&larr; LAB</a><span class="sep"></span><a href="tokens.html">tokens</a></div>
+
+<div class="doc">
+  <h1>Token Reference</h1>
+  <p class="sub">Minimalist (default theme). Names match Dart tokens 1:1 — see <code>DESIGN.md</code>.</p>
+
+  <h2>Spacing — Insets (4pt scale)</h2>
+  <div class="gap-row">
+    <div><div class="gap" style="width:4px;height:4px"></div><div class="gap-lbl">xs 4</div></div>
+    <div><div class="gap" style="width:8px;height:8px"></div><div class="gap-lbl">sm 8</div></div>
+    <div><div class="gap" style="width:12px;height:12px"></div><div class="gap-lbl">md 12</div></div>
+    <div><div class="gap" style="width:16px;height:16px"></div><div class="gap-lbl">lg 16</div></div>
+    <div><div class="gap" style="width:24px;height:24px"></div><div class="gap-lbl">xl 24</div></div>
+    <div><div class="gap" style="width:32px;height:32px"></div><div class="gap-lbl">xxl 32</div></div>
+    <div><div class="gap" style="width:48px;height:48px"></div><div class="gap-lbl">xxxl 48</div></div>
+    <div><div class="gap" style="width:64px;height:64px"></div><div class="gap-lbl">huge 64</div></div>
+  </div>
+
+  <h2>Palette — ThemeFlair (minimalist)</h2>
+  <div class="swatch-row">
+    <div class="sw"><div class="box" style="background:#0a0a0a"></div><b>scaffold</b>#0A0A0A</div>
+    <div class="sw"><div class="box" style="background:#121212"></div><b>card</b>#121212</div>
+    <div class="sw"><div class="box" style="background:#e0e0e0"></div><b>primary</b>#E0E0E0</div>
+    <div class="sw"><div class="box" style="background:#9e9e9e"></div><b>secondary</b>#9E9E9E</div>
+    <div class="sw"><div class="box" style="background:#fff"></div><b>headlineStat</b>#FFFFFF</div>
+    <div class="sw"><div class="box" style="background:#bdbdbd"></div><b>bulletColor</b>#BDBDBD · glyph —</div>
+    <div class="sw"><div class="box" style="background:rgba(255,255,255,.2)"></div><b>cardBorder</b>white · 20% · 1px</div>
+    <div class="sw"><div class="box" style="background:rgba(255,255,255,.13)"></div><b>divider</b>white · 13% · 0.5px</div>
+  </div>
+
+  <h2>Quality — QualityBadge.colorFor</h2>
+  <div class="swatch-row">
+    <div class="sw"><div class="box" style="background:#000;box-shadow:0 0 10px rgba(255,215,0,.5)"></div><b>S</b>black pill + gold glow</div>
+    <div class="sw"><div class="box" style="background:#e53935"></div><b>A</b>#E53935</div>
+    <div class="sw"><div class="box" style="background:#43a047"></div><b>B</b>#43A047</div>
+    <div class="sw"><div class="box" style="background:#1e88e5"></div><b>C</b>#1E88E5</div>
+    <div class="sw"><div class="box" style="background:#757575"></div><b>D</b>#757575</div>
+    <div class="sw"><div class="box" style="background:#5e35b1"></div><b>N</b>#5E35B1</div>
+  </div>
+
+  <h2>Type scale — TypeScale</h2>
+  <div class="sample-zone">
+    <div class="type-row"><span class="src">displaySmall 32·800</span><span class="t-display">4.8</span></div>
+    <div class="type-row"><span class="src">headlineSmall 24·700</span><span class="t-headline">Effects</span></div>
+    <div class="type-row"><span class="src">titleLarge 22·800</span><span class="t-title-lg">AK-47</span></div>
+    <div class="type-row"><span class="src">titleMedium 18·700</span><span class="t-title">Gungeon Mate</span></div>
+    <div class="type-row"><span class="src">titleSmall 16·700</span><span class="t-title-sm">Ammonomicon</span></div>
+    <div class="type-row"><span class="src">bodyMedium 14·400</span><span class="t-body">A trusty automatic rifle.</span></div>
+    <div class="type-row"><span class="src">bodySmall 12·400</span><span class="t-body-sm">Secondary notes and captions.</span></div>
+    <div class="type-row"><span class="src">labelMedium 12·700</span><span class="t-label">RUN TOOLS</span></div>
+    <div class="type-row"><span class="src">labelSmall 10·700</span><span class="t-label-sm">SEMIAUTOMATIC</span></div>
+  </div>
+
+  <h2>Components</h2>
+  <div class="sample-zone">
+    <div class="section-title"><span class="glyph">—</span>Section Title</div>
+    <div class="comp-row">
+      <span class="chip">Outline chip</span>
+      <span class="chip on">Selected chip</span>
+      <span class="qb s">S</span><span class="qb a">A</span><span class="qb b">B</span>
+      <span class="qb c">C</span><span class="qb d">D</span><span class="qb n">N</span>
+    </div>
+    <div class="comp-row" style="margin-top:14px">
+      <div class="card card-pad" style="flex:1;min-width:200px">
+        <div class="t-title-sm">Card · radius 6 · border 20%</div>
+        <hr class="divider" style="margin:8px 0">
+        <div class="t-body-sm">flair.card #121212 fill, hairline divider inside.</div>
+      </div>
+    </div>
+    <div class="comp-row" style="margin-top:14px">
+      <button class="menu-btn" style="max-width:280px"><span class="ico">&#9654;</span>Ghost button</button>
+      <button class="menu-btn solid" style="max-width:280px"><span class="ico">&#9654;</span>Hero button</button>
+    </div>
+  </div>
+
+  <h2>Radii</h2>
+  <div class="swatch-row">
+    <div class="sw"><div class="box" style="border-radius:8px;background:#1c1c24"></div><b>sm 8</b>inputs, badges</div>
+    <div class="sw"><div class="box" style="border-radius:12px;background:#1c1c24"></div><b>md 12</b>unthemed cards</div>
+    <div class="sw"><div class="box" style="border-radius:16px;background:#1c1c24"></div><b>lg 16</b>menu buttons</div>
+    <div class="sw"><div class="box" style="border-radius:6px;background:#1c1c24"></div><b>card 6</b>minimalist flair</div>
+    <div class="sw"><div class="box" style="border-radius:4px;background:#1c1c24"></div><b>chip 4</b>minimalist flair</div>
+  </div>
+
+  <h2>Motion</h2>
+  <div class="swatch-row">
+    <div class="sw"><b>fast 150ms</b>press / small state</div>
+    <div class="sw"><b>base 250ms</b>in-place transitions</div>
+    <div class="sw"><b>enter 400ms</b>sheet/dialog enter</div>
+    <div class="sw"><b>exit 250ms</b>matching exits</div>
+  </div>
+
+  <h2>Breakpoints — ScreenProfile (M3)</h2>
+  <div class="swatch-row">
+    <div class="sw"><b>compact &lt;600</b>phones portrait · 3 grid cols</div>
+    <div class="sw"><b>medium 600–839</b>tablets, landscape · 4 cols</div>
+    <div class="sw"><b>expanded 840–1199</b>desktop · 5 cols</div>
+    <div class="sw"><b>large ≥1200</b>wide desktop · 6 cols</div>
+  </div>
+  <div class="swatch-row" style="margin-top:10px">
+    <div class="sw"><b>sf = w/400</b>clamped 0.85–1.25</div>
+    <div class="sw"><b>hf = h/800</b>clamped 0.85–1.20</div>
+    <div class="sw"><b>isShort</b>usable height &lt; 700</div>
+    <div class="sw"><b>content caps</b>menu 420 · detail 760</div>
+  </div>
+</div>
+</body>
+</html>
