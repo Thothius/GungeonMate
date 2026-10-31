@@ -564,7 +564,15 @@
     "game_ids": [
       445,
       451
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Banshee Cry",
@@ -618,7 +626,25 @@
     "game_ids": [
       106,
       328
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ChargeAmountMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.3333333730697632
+      },
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Battery Powered",
@@ -737,7 +763,25 @@
     "game_name_key": "#BEES",
     "game_ids": [
       14
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "RateOfFire",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.6600000262260437
+      },
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Behold!",
@@ -1088,7 +1132,20 @@
     "game_ids": [
       376,
       435
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Bluer Guon Stone",
@@ -1153,6 +1210,18 @@
     "game_ids": [
       122,
       665
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
     ]
   },
   {
@@ -1178,6 +1247,18 @@
     "game_ids": [
       108,
       332
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ChargeAmountMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      },
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.6000000238418579
+      }
     ]
   },
   {
@@ -1239,7 +1320,30 @@
     "game_name_key": "#BREAKFASTCLUB",
     "game_ids": [
       334
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.5
+      },
+      {
+        "stat": "RateOfFire",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.600000023841858
+      },
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2999999523162842
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Buggin' Out",
@@ -1364,6 +1468,13 @@
     "game_ids": [
       445,
       572
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -1828,7 +1939,15 @@
     "game_ids": [
       135,
       515
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Chicken Arise",
@@ -1856,6 +1975,18 @@
       385,
       395,
       533
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "MovementSpeed",
+        "op": "ADDITIVE",
+        "amount": 0.0
+      }
     ]
   },
   {
@@ -1971,7 +2102,8 @@
     "game_ids": [
       162,
       357
-    ]
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Clearer Guon Stone",
@@ -2017,6 +2149,13 @@
     "game_ids": [
       62,
       223
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      }
     ]
   },
   {
@@ -2256,6 +2395,13 @@
     "game_ids": [
       178,
       489
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "DodgeRollSpeedMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      }
     ]
   },
   {
@@ -2425,7 +2571,20 @@
     "game_ids": [
       105,
       358
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ChargeAmountMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      },
+      {
+        "stat": "DamageToBosses",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2999999523162842
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Dead Place",
@@ -2454,7 +2613,15 @@
     "game_ids": [
       394,
       403
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Dead Prez",
@@ -2622,6 +2789,13 @@
     "game_name_key": "#DECOYOCTOROK",
     "game_ids": [
       474
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.0
+      }
     ]
   },
   {
@@ -2734,7 +2908,15 @@
     "game_name_key": "#DIAZEPAM",
     "game_ids": [
       437
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Don't Hoot the Messenger",
@@ -2786,7 +2968,8 @@
       342,
       343,
       344
-    ]
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Double Down",
@@ -2840,6 +3023,18 @@
     "game_ids": [
       230,
       568
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -3040,6 +3235,13 @@
       93,
       231,
       532
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
     ]
   },
   {
@@ -3181,6 +3383,18 @@
     "game_ids": [
       63,
       275
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.3330000042915344
+      },
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -3302,7 +3516,15 @@
     "game_ids": [
       8,
       108
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "DamageToBosses",
+        "op": "ADDITIVE",
+        "amount": 0.20000000298023224
+      }
+    ],
+    "activation": "INACTIVE"
   },
   {
     "name": "Finger on the Pulse",
@@ -3367,7 +3589,20 @@
       190,
       285,
       363
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.6666666865348816
+      },
+      {
+        "stat": "RateOfFire",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Fightknives",
@@ -3537,7 +3772,20 @@
     "game_ids": [
       28,
       216
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.5
+      },
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.6666666865348816
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Friend to Gun and Bullet",
@@ -4049,6 +4297,18 @@
       172,
       198,
       458
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.800000011920929
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -4177,7 +4437,8 @@
       197,
       286,
       466
-    ]
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Grouch",
@@ -4309,7 +4570,15 @@
     "game_ids": [
       131,
       448
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ThrownGunDamage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Guns and Deviltry",
@@ -4397,6 +4666,18 @@
     "game_ids": [
       16,
       165
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      }
     ]
   },
   {
@@ -4464,6 +4745,13 @@
     "game_ids": [
       26,
       91
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AmmoCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -4617,6 +4905,13 @@
     "game_ids": [
       47,
       111
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "KnockbackMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2999999523162842
+      }
     ]
   },
   {
@@ -4648,7 +4943,20 @@
     "game_name_key": "#HEAVYMETAL",
     "game_ids": [
       393
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      },
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.75
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Hegemony Special Forces",
@@ -5020,6 +5328,13 @@
     "game_ids": [
       435,
       476
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      }
     ]
   },
   {
@@ -5111,6 +5426,28 @@
     "game_ids": [
       10,
       306
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.5
+      },
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 3.0
+      },
+      {
+        "stat": "KnockbackMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 3.0
+      }
     ]
   },
   {
@@ -5362,6 +5699,18 @@
     "game_ids": [
       10,
       402
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2999999523162842
+      }
     ]
   },
   {
@@ -5384,7 +5733,20 @@
       13,
       21,
       542
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "MovementSpeed",
+        "op": "ADDITIVE",
+        "amount": 1.0
+      },
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Inconsistent Scale",
@@ -5518,7 +5880,25 @@
       118,
       190,
       203
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.6666666865348816
+      },
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "KnockbackMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "It's Your Destiny",
@@ -5567,7 +5947,15 @@
     "game_ids": [
       373,
       374
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.6666666865348816
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Jolly Roger",
@@ -5630,6 +6018,13 @@
     "game_ids": [
       364,
       387
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ThrownGunDamage",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.799999952316284
+      }
     ]
   },
   {
@@ -6327,7 +6722,15 @@
     "game_ids": [
       339,
       346
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "M1 Multi-Tool",
@@ -6357,6 +6760,18 @@
       133,
       134,
       280
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "MovementSpeed",
+        "op": "ADDITIVE",
+        "amount": 2.0
+      },
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.800000011920929
+      }
     ]
   },
   {
@@ -6451,6 +6866,13 @@
     "game_name_key": "#MAKPAK",
     "game_ids": [
       79
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AmmoCapacityMultiplier",
+        "op": "ADDITIVE",
+        "amount": 0.30000001192092896
+      }
     ]
   },
   {
@@ -6670,6 +7092,13 @@
     "game_ids": [
       87,
       443
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -6784,7 +7213,30 @@
       25,
       30,
       96
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "RateOfFire",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "AmmoCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "Accuracy",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Monsters and Monocles",
@@ -7299,7 +7751,15 @@
     "game_ids": [
       111,
       484
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      }
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Paperwork",
@@ -7383,6 +7843,13 @@
       204,
       207,
       313
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
     ]
   },
   {
@@ -7607,7 +8074,8 @@
       200,
       260,
       286
-    ]
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Pistol Machine",
@@ -7837,6 +8305,13 @@
     "game_ids": [
       267,
       489
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "DodgeRollSpeedMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      }
     ]
   },
   {
@@ -7867,7 +8342,20 @@
       216,
       314,
       500
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Accuracy",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "Coolness",
+        "op": "ADDITIVE",
+        "amount": 2.0
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Primitive Shapes",
@@ -8193,6 +8681,18 @@
     "game_ids": [
       15,
       51
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "RateOfFire",
+        "op": "MULTIPLICATIVE",
+        "amount": 4.0
+      },
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.75
+      }
     ]
   },
   {
@@ -8227,6 +8727,13 @@
       62,
       79,
       375
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "DodgeRollDistanceMultiplier",
+        "op": "ADDITIVE",
+        "amount": 0.20000000298023224
+      }
     ]
   },
   {
@@ -8284,7 +8791,9 @@
       662,
       663,
       667
-    ]
+    ],
+    "activation": "ACTIVE_UNBOOSTED",
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Revolution",
@@ -8313,7 +8822,20 @@
     "game_ids": [
       9,
       115
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "AdditionalShotBounces",
+        "op": "ADDITIVE",
+        "amount": 4.0
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Rubenstein's Monster",
@@ -8850,6 +9372,13 @@
     "game_ids": [
       383,
       481
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AdditionalShotBounces",
+        "op": "ADDITIVE",
+        "amount": 1.0
+      }
     ]
   },
   {
@@ -8993,6 +9522,13 @@
     "game_ids": [
       16,
       329
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Accuracy",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.4000000059604645
+      }
     ]
   },
   {
@@ -9151,7 +9687,15 @@
       119,
       149,
       482
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Accuracy",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Siren Sidearm",
@@ -9335,6 +9879,13 @@
     "game_name_key": "#SNIPERWOLF",
     "game_ids": [
       492
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.699999988079071
+      }
     ]
   },
   {
@@ -9566,7 +10117,15 @@
       249,
       385,
       395
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AdditionalShotBounces",
+        "op": "ADDITIVE",
+        "amount": 1.0
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Special Reserve",
@@ -9650,6 +10209,13 @@
     "game_ids": [
       290,
       542
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Coolness",
+        "op": "ADDITIVE",
+        "amount": 2.0
+      }
     ]
   },
   {
@@ -9679,7 +10245,20 @@
     "game_ids": [
       175,
       452
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "KnockbackMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "RangeMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Square Brace",
@@ -9712,6 +10291,13 @@
       97,
       114,
       439
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      }
     ]
   },
   {
@@ -9849,6 +10435,18 @@
     "game_ids": [
       109,
       332
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ChargeAmountMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      },
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.800000011920929
+      }
     ]
   },
   {
@@ -9869,7 +10467,29 @@
       }
     ],
     "game_name_key": "#SUPERSERUM",
-    "game_ids": []
+    "game_ids": [],
+    "stat_modifiers": [
+      {
+        "stat": "Accuracy",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "AdditionalShotBounces",
+        "op": "ADDITIVE",
+        "amount": 1.0
+      }
+    ]
   },
   {
     "name": "Super Space Turtle DX",
@@ -9914,6 +10534,13 @@
     "game_ids": [
       279,
       562
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.25
+      }
     ]
   },
   {
@@ -9943,6 +10570,23 @@
     "game_ids": [
       209,
       327
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "ChargeAmountMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      },
+      {
+        "stat": "ReloadSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.800000011920929
+      }
     ]
   },
   {
@@ -10059,6 +10703,13 @@
     "game_ids": [
       449,
       573
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AdditionalItemCapacity",
+        "op": "ADDITIVE",
+        "amount": 1.0
+      }
     ]
   },
   {
@@ -10189,7 +10840,8 @@
       451,
       480,
       513
-    ]
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "There Is Only War",
@@ -10316,6 +10968,23 @@
     "game_ids": [
       327,
       520
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "ADDITIVE",
+        "amount": 1.0
+      },
+      {
+        "stat": "ProjectileSpeed",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.2000000476837158
+      },
+      {
+        "stat": "MovementSpeed",
+        "op": "ADDITIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -10439,7 +11108,9 @@
       365,
       442,
       564
-    ]
+    ],
+    "activation": "ACTIVE_UNBOOSTED",
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Trigger Twins",
@@ -10459,6 +11130,18 @@
     "game_ids": [
       22,
       35
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "AmmoCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      },
+      {
+        "stat": "AdditionalClipCapacityMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
     ]
   },
   {
@@ -10828,7 +11511,30 @@
     "game_name_key": "#VEGETABLES",
     "game_ids": [
       258
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 3.0
+      },
+      {
+        "stat": "AdditionalShotPiercing",
+        "op": "ADDITIVE",
+        "amount": 2.0
+      },
+      {
+        "stat": "AdditionalShotBounces",
+        "op": "ADDITIVE",
+        "amount": 1.0
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 2.0
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Venom Veins",
@@ -10907,7 +11613,15 @@
     "game_ids": [
       84,
       307
-    ]
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "KnockbackMultiplier",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.5
+      }
+    ],
+    "activation": "ACTIVE_UNBOOSTED"
   },
   {
     "name": "Wave Beam",
@@ -11032,7 +11746,8 @@
     "game_ids": [
       133,
       602
-    ]
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "What A Thrill",
@@ -11085,6 +11800,13 @@
     "game_ids": [
       401,
       495
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "RateOfFire",
+        "op": "MULTIPLICATIVE",
+        "amount": 0.20000000298023224
+      }
     ]
   },
   {
@@ -11129,7 +11851,8 @@
       262,
       286,
       383
-    ]
+    ],
+    "active_when_gun_unequipped": true
   },
   {
     "name": "Why's Bullet Crying?",
@@ -11268,6 +11991,18 @@
     "game_ids": [
       165,
       334
+    ],
+    "stat_modifiers": [
+      {
+        "stat": "Damage",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      },
+      {
+        "stat": "PlayerBulletScale",
+        "op": "MULTIPLICATIVE",
+        "amount": 1.25
+      }
     ]
   },
   {

@@ -4,11 +4,11 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e9/38_Special.png/revision/latest?cb=20160310050218",
     "notes": "Fires faster right after a dodge roll.",
     "quote": "For The Inquisitive",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "26.5",
     "magazine_size": "6",
-    "ammo_capacity": "600",
+    "ammo_capacity": "350",
     "damage": "5",
     "fire_rate": "0.07",
     "reload_time": "0.78",
@@ -147,7 +147,8 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "The sidearm of choice for investigative efforts.",
-    "id": 681
+    "id": 56,
+    "ammonomicon_pos": 9
   },
   {
     "name": "3rd Party Controller",
@@ -310,14 +311,16 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Allows for direct control of foes.\n\nPurchased as a gift for a child of the Gungeon, upon their first successful trip to the mines. Due to an unfortunate combination of exceptional clumsiness and a living space full of pits, the controller was soon lost to the depths of the Gungeon.\n\nOne of the sticks is extremely wiggly.",
-    "id": 511
+    "id": 511,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 231
   },
   {
     "name": "A.W.P.",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/85/A.W.P..png",
     "notes": "Fires a high-velocity bullet that can pierce through one enemy.",
     "quote": "Noob Cannon",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "30.5",
     "magazine_size": "8",
@@ -328,7 +331,7 @@
     "shot_speed": "100",
     "range": "1000",
     "force": "25",
-    "spread": "5°",
+    "spread": "0°",
     "class": "RIFLE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -532,7 +535,8 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "An extremely powerful rifle. Banned in some sectors, its ease of use caused it to be the weapon of choice for thousands of unskilled marksmen. Only handicapped by its long chambering time. Some say that it will fire faster if you put it in your backpack after every shot...",
-    "id": 716
+    "id": 5,
+    "ammonomicon_pos": 97
   },
   {
     "name": "Abyssal Tentacle",
@@ -545,7 +549,7 @@
     "magazine_size": "500",
     "ammo_capacity": "500",
     "damage": "22.5/s",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "N/A",
     "shot_speed": "∞",
     "range": "30",
@@ -731,7 +735,12 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "A horrifying tentacle, cloven from some abyssal fiend.\n\nIt moves in very disquieting ways.",
-    "id": 474
+    "id": 474,
+    "game_damage": "22.5",
+    "game_shot_speed": "-1",
+    "game_reload_time": "0",
+    "game_type": "Beam",
+    "ammonomicon_pos": 215
   },
   {
     "name": "AC-15",
@@ -1066,14 +1075,22 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Becomes more powerful while its bearer is armored. The engineers behind this gun originally tried to devise a system to see if any specific bullet would hit its target, but the math was so unintuitive that they gave up entirely. A few no longer speak to each other!",
-    "id": 545
+    "id": 545,
+    "game_fire_rate": "0.5",
+    "game_spread": "1°",
+    "game_damage": "15",
+    "game_shot_speed": "50",
+    "game_range": "25",
+    "game_force": "50",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 90
   },
   {
     "name": "AK-47",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f8/AK-47.png",
     "notes": "Standard automatic rifle. Reliable and affordable, with a large magazine and moderate spread.",
     "quote": "Accept No Substitutes",
-    "quality": "A",
+    "quality": "B",
     "type": "Automatic",
     "dps": "44.7",
     "magazine_size": "30",
@@ -1239,7 +1256,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The AK-47 is in many ways the gun against which all other guns are judged. This affordable and reliable piece of hardware has proven itself in nearly any terrain or situation. Desert, jungle, snow, and dungeon were all accounted for in its timeless design. It can even fire underwater.",
-    "id": 15
+    "id": 15,
+    "ammonomicon_pos": 74
   },
   {
     "name": "AKEY-47",
@@ -1254,9 +1272,9 @@
     "damage": "10",
     "fire_rate": "0.11",
     "reload_time": "0.6",
-    "shot_speed": "15",
+    "shot_speed": "23",
     "range": "1000",
-    "force": "11",
+    "force": "9",
     "spread": "4°",
     "class": "SILLY",
     "curse": 0.0,
@@ -1443,20 +1461,21 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Can unlock chests.\n\nThe AKEY-47 is a masterpiece of Gungeoncraft, perfectly combining the masterful gunplay of an AK-47 with the incredibly useful ability to open locks. An inscription along the frame reads, \"EX ARCHA, LIBERTAS.\"",
-    "id": 726
+    "id": 95,
+    "ammonomicon_pos": 76
   },
   {
     "name": "Alien Engine",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/2e/Alien_Engine.png",
     "notes": "Rapid-firing weapon with very close range and massive recoil. Chances to set targets on fire.",
     "quote": "The Dangerzone",
-    "quality": "A",
+    "quality": "B",
     "type": "Automatic",
     "dps": "160.4",
     "magazine_size": "400",
     "ammo_capacity": "1000",
     "damage": "10",
-    "fire_rate": "0.06",
+    "fire_rate": "0.02",
     "reload_time": "0.9",
     "shot_speed": "30",
     "range": "3",
@@ -1830,18 +1849,20 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The engine of a crashed starship that has been converted into an energy weapon.",
-    "id": 742
+    "id": 177,
+    "charge_stages": 1,
+    "ammonomicon_pos": 222
   },
   {
     "name": "Alien Sidearm",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c6/Alien_Sidearm.png",
     "notes": "Tap fires small, weak projectiles. Charge to fire larger, more powerful blasts.",
     "quote": "Shield Breaker",
-    "quality": "C",
+    "quality": "D",
     "type": "Charged",
     "dps": "19.6",
     "magazine_size": "10",
-    "ammo_capacity": "500",
+    "ammo_capacity": "350",
     "damage": "5",
     "fire_rate": "0.15",
     "reload_time": "1.2",
@@ -1951,7 +1972,9 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Hegemony of Man has fought, and won, three major wars with alien races. Hundreds of these pistols were salvaged after the second of these wars.",
-    "id": 696
+    "id": 57,
+    "charge_stages": 2,
+    "ammonomicon_pos": 107
   },
   {
     "name": "Anvillain",
@@ -2032,7 +2055,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires anvils! A hometown favorite! The Anvillain has been shown to be the safest and most effective means of dispatching foes with an anvil.",
-    "id": 393
+    "id": 393,
+    "charge_stages": 1,
+    "ammonomicon_pos": 174
   },
   {
     "name": "AU Gun",
@@ -2226,7 +2251,8 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Legends tell of a gun that can kill anything with a single shot.\n\nThis gun doesn't live up to the legends, but it comes close.",
-    "id": 53
+    "id": 53,
+    "ammonomicon_pos": 32
   },
   {
     "name": "Bait Launcher",
@@ -2237,7 +2263,7 @@
     "type": "Charged",
     "dps": "40.0",
     "magazine_size": "1",
-    "ammo_capacity": "50",
+    "ammo_capacity": "60",
     "damage": "10 (Steak) + 50 (Tiger)",
     "fire_rate": "0.50",
     "reload_time": "1.0s",
@@ -2447,20 +2473,24 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Launches meat that attracts carnivores.\nThis esoteric weapon was devised by Emmitt Calx during one of his famous big game expeditions. The steak thrown by this small catapult will almost certainly draw the attention of any nearby predators.",
-    "id": 369
+    "id": 369,
+    "game_damage": "10",
+    "game_range": "1000",
+    "charge_stages": 1,
+    "ammonomicon_pos": 206
   },
   {
     "name": "Balloon Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/69/Balloon_Gun.png",
     "notes": "Fires small homing tornadoes. While held, grants flight but loses all ammo on taking damage.",
     "quote": "Hot Air",
-    "quality": "B",
-    "type": "Semiautomatic",
+    "quality": "C",
+    "type": "Automatic",
     "dps": "44.12",
     "magazine_size": "10",
     "ammo_capacity": "250",
     "damage": "12",
-    "fire_rate": "0.25",
+    "fire_rate": "0.22",
     "reload_time": "1.7",
     "shot_speed": "18",
     "range": "40",
@@ -2746,14 +2776,17 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Grants flight while held, but pops when damage is taken. Can be reinflated with an ammo box. A common party favor at Gungeon parties. Gungeon parties are, to be fair, fairly uncommon.",
-    "id": 520
+    "id": 520,
+    "game_spread": "5°",
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 85
   },
   {
     "name": "Banana",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/69/Banana.png",
     "notes": "Fires an explosive banana that sends out three more bouncing explosive bananas.",
     "quote": "Planpain",
-    "quality": "B",
+    "quality": "C",
     "type": "Charged",
     "dps": "15.0 (no extras) 30.0 (with 3 extras)",
     "magazine_size": "7",
@@ -2874,24 +2907,26 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Bananas resemble guns, and are high in potassium. A convenient snack and/or weapon for Gungeoneers.",
-    "id": 688
+    "id": 478,
+    "charge_stages": 1,
+    "ammonomicon_pos": 226
   },
   {
     "name": "Barrel",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a1/Barrel.png",
     "notes": "Fires a fish that has a chance to stun and leaves a pool of water on impact.",
     "quote": "Nothin' Easier",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "30.3",
     "magazine_size": "9",
     "ammo_capacity": "300",
-    "damage": "5",
+    "damage": "8",
     "fire_rate": "0.20",
     "reload_time": "0.78",
-    "shot_speed": "23",
-    "range": "35",
-    "force": "10",
+    "shot_speed": "20",
+    "range": "1000",
+    "force": "13",
     "spread": "7°",
     "class": "SILLY",
     "curse": 0.0,
@@ -2990,14 +3025,15 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Even mentioning guns in the Gungeon can have strange effects. This is an old idiom that has been given physical form through simple repetition. Note: Words are the Gungeon's second language, so slight inaccuracies may occur.",
-    "id": 709
+    "id": 7,
+    "ammonomicon_pos": 185
   },
   {
     "name": "Bee Hive",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/82/Bee_Hive.png",
     "notes": "Fires bees that home in on and damage enemies.",
     "quote": "Bzzzzzzzz!",
-    "quality": "A",
+    "quality": "B",
     "type": "Automatic",
     "dps": "29.9",
     "magazine_size": "150",
@@ -3098,7 +3134,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Shoots bees. A beehive is nature's gun! Give it a good shake and let the bullets fly.",
-    "id": 703
+    "id": 14,
+    "ammonomicon_pos": 227
   },
   {
     "name": "Betrayer's Shield",
@@ -3241,20 +3278,21 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Generates a protective shield upon reload. Blockner lost his knighthood when he betrayed Ser Manuel, but he did not lose his gun. He did that much later.",
-    "id": 380
+    "id": 380,
+    "ammonomicon_pos": 208
   },
   {
     "name": "Big Iron",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c2/Big_Iron.png",
     "notes": "Fires a random spread of three bullets.",
     "quote": "Heavy",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "42.0",
     "magazine_size": "6",
     "ammo_capacity": "150",
     "damage": "6",
-    "fire_rate": "0.35",
+    "fire_rate": "0.07",
     "reload_time": "1.2",
     "shot_speed": "16",
     "range": "16",
@@ -3402,20 +3440,21 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Big Iron is a strange revolver, created by attaching additional barrels to a magnum. The barrels are not actually connected to the chamber, but they fire nonetheless. Decades ago, Bullet Kin learned of the existence of human gunsmiths. In the intervening years, they have attempted to replicate the art of guncraft with mixed results.",
-    "id": 694
+    "id": 157,
+    "ammonomicon_pos": 33
   },
   {
     "name": "Big Shotgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/de/Big_Shotgun.png",
     "notes": "Fires three exploding shots that burst into bullets. Reloading next to Shotgun Kin sucks them up, killing them and restoring 1 ammo.",
     "quote": "A Shotgun That's Big",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "63.1",
     "magazine_size": "4",
     "ammo_capacity": "70",
     "damage": "5.5",
-    "fire_rate": "0.6",
+    "fire_rate": "0.2",
     "reload_time": "2.2",
     "shot_speed": "23",
     "range": "1000",
@@ -3559,14 +3598,18 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "A big shotgun. In comparison with the Regular Shotgun, this one is bigger.",
-    "id": 601
+    "id": 601,
+    "game_spread": "0°",
+    "charge_stages": 1,
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 41
   },
   {
     "name": "Black Hole Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/79/Black_Hole_Gun.png",
     "notes": "Charges to fire a black hole that attract enemies and absorb enemy bullets.",
     "quote": "Won't You Come",
-    "quality": "S",
+    "quality": "A",
     "type": "Charged",
     "dps": "29.56 (single black hole)",
     "magazine_size": "1",
@@ -3833,7 +3876,9 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Shoots Black Holes.\n\nA technological marvel, produced by Interstice Technology. Once fully charged, users report seeing the momentary birth, and death, of a star.",
-    "id": 169
+    "id": 169,
+    "charge_stages": 5,
+    "ammonomicon_pos": 235
   },
   {
     "name": "Blasphemy",
@@ -4572,24 +4617,26 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Betrayer!",
-    "id": 813
+    "id": 574,
+    "infinite_ammo": true,
+    "ammonomicon_pos": 6
   },
   {
     "name": "Blooper",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/43/Blooper.png",
     "notes": "Fires a shotgun blast of blue bullets with high knockback.",
     "quote": "Close Your Bloop",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "58.3",
-    "magazine_size": "5",
+    "magazine_size": "8",
     "ammo_capacity": "80",
     "damage": "7 x6 (42)",
     "fire_rate": "0.40",
     "reload_time": "2",
-    "shot_speed": "23",
+    "shot_speed": "27",
     "range": "10",
-    "force": "30",
+    "force": "45",
     "spread": "0°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -4702,14 +4749,16 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Extremely high knockback. A poor facsimile of the Gun That Can Kill The Past. Seeking an alternate route to past modification, time travelers would use these guns to eliminate their past selves and take their place. Unfortunately, without the power of the true Gun, this always resulted in ironic consequences.",
-    "id": 18
+    "id": 18,
+    "game_damage": "7",
+    "ammonomicon_pos": 62
   },
   {
     "name": "Blunderbuss",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b3/Blunderbuss.png",
     "notes": "Charges to fire a short-ranged spray of bullets.",
     "quote": "Shoots Anything",
-    "quality": "C",
+    "quality": "D",
     "type": "Charged",
     "dps": "33.3",
     "magazine_size": "4",
@@ -4815,7 +4864,9 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Used mostly by farmers who seek to defend their farms from hungry giants, the Blunderbuss fires anything you put into it. Hold to charge and launch projectiles in an inaccurate short spray. Not as effective against sly dragons.",
-    "id": 678
+    "id": 122,
+    "charge_stages": 1,
+    "ammonomicon_pos": 55
   },
   {
     "name": "Bow",
@@ -4980,14 +5031,18 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "The classic Bow will never go out of style.",
-    "id": 8
+    "id": 8,
+    "game_damage": "22",
+    "game_range": "1000",
+    "charge_stages": 2,
+    "ammonomicon_pos": 63
   },
   {
     "name": "Boxing Glove",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e1/Boxing_Glove.png",
     "notes": "Shoots a boxing glove with a chance to stun. Gains a star each time it kills an enemy, up to 3. When at 3 stars, can be charged to consume the stars and fire a high-damage super punch. Increases curse by 1.",
     "quote": "Pistol Hondo",
-    "quality": "B",
+    "quality": "C",
     "type": "Charged",
     "dps": "30.0 (Without Super Punches)",
     "magazine_size": "350",
@@ -5422,7 +5477,11 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Shoots a boxing glove, sort of. Crafted by the Resourceful Rat as a way to cheat at fisticuffs, this boxing glove has been modified to spring out in a humorous manner.",
-    "id": 539
+    "id": 539,
+    "game_spread": "0°",
+    "charge_stages": 2,
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 16
   },
   {
     "name": "Brick Breaker",
@@ -5545,7 +5604,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Legends tell of a mysterious alchemist who could turn bricks into coins, turtles, mushrooms, and a wide variety of other things. If true, this gun is a poor facsimile of his abilities, but is still useful nonetheless.",
-    "id": 376
+    "id": 376,
+    "game_range": "1000",
+    "ammonomicon_pos": 207
   },
   {
     "name": "BSG",
@@ -5748,25 +5809,27 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Charge to clear rooms. A Gungeon classic, and one of the first to be imported through the Gungeon Acquisitions Dept. The BSG's powerful blast will make short work of nearly any Gundead.",
-    "id": 21
+    "id": 21,
+    "charge_stages": 5,
+    "ammonomicon_pos": 236
   },
   {
     "name": "Bubble Blaster",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/04/Bubble_Blaster.png",
     "notes": "Fires bubbles which move slowly towards enemies. Reloading the gun launches bubbles away from the player at high speed.",
     "quote": "The Suds",
-    "quality": "B",
-    "type": "Automatic",
+    "quality": "C",
+    "type": "Charged",
     "dps": "105.3",
-    "magazine_size": "100",
+    "magazine_size": "15",
     "ammo_capacity": "500",
     "damage": "6",
-    "fire_rate": "0.10",
+    "fire_rate": "0.2",
     "reload_time": "1.5",
     "shot_speed": "15",
     "range": "35",
     "force": "6",
-    "spread": "12°",
+    "spread": "0°",
     "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -6258,7 +6321,10 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Shoots bubbles. Uniquely effective under the right circumstances. Doubles as an amusing toy for babies.",
-    "id": 599
+    "id": 599,
+    "charge_stages": 1,
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 46
   },
   {
     "name": "Budget Revolver",
@@ -6396,24 +6462,27 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "This Budget Revolver was brought to the Gungeon by an infamous fugitive. Provided by the Hegemony Regional Magistrate. The Convict won their plea to face the Gungeon in lieu of life imprisonment; undo their crimes, or face an eternity in the Gungeon. With no cost to the state, it was an acceptable arrangement.\n\nCheaply made and prone to jams, the Budget Revolver is used by only the most desperate Gungeoneers.",
-    "id": 652
+    "id": 652,
+    "infinite_ammo": true,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 3
   },
   {
     "name": "Bullet",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/65/Bullet_%28Gun%29.png",
     "notes": "Fires rotating guns which fire bullets as they travel.",
     "quote": "Fires Guns",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "21.0 (excluding stray bullets)",
     "magazine_size": "6",
-    "ammo_capacity": "180",
+    "ammo_capacity": "250",
     "damage": "7",
     "fire_rate": "0.2",
     "reload_time": "1",
-    "shot_speed": "21",
-    "range": "20",
-    "force": "6",
+    "shot_speed": "12",
+    "range": "100",
+    "force": "13",
     "spread": "N/A",
     "class": "PISTOL",
     "curse": 0.0,
@@ -6573,7 +6642,10 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "This strange gun, shaped like a bullet, fires bullets that are shaped like guns. Those gun-shaped bullets continue to fire bullets in-flight, but those bullets look like bullets. Straightforward Gungeon engineering!",
-    "id": 577
+    "id": 503,
+    "game_spread": "10°",
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 13
   },
   {
     "name": "Bullet Bore",
@@ -6709,14 +6781,15 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "The explosive drills this gun fires will stun enemies before exploding.\nThe Bullet Bore is an exotic weapon from the past, when the only creatures to carry guns were dinosaurs.",
-    "id": 362
+    "id": 362,
+    "ammonomicon_pos": 162
   },
   {
     "name": "Bundle of Wands",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b5/Bundle_of_Wands.png",
     "notes": "Fires a spread of three magic projectiles, each with a 10% chance to transmogrify enemies into chickens.",
     "quote": "Dark Arts",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "42.0",
     "magazine_size": "6",
@@ -6898,7 +6971,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Triple magic burst.\n\nMagic is unreliable in the Gungeon, unless it is based in the art of Gunjuration. Faced with low ammunition, some ingenious magic user taped several wands together in a crude approximation of a firearm.",
-    "id": 61
+    "id": 61,
+    "ammonomicon_pos": 149
   },
   {
     "name": "Buzzkill",
@@ -6916,7 +6990,7 @@
     "shot_speed": "25",
     "range": "1,000",
     "force": "10",
-    "spread": "5°",
+    "spread": "4°",
     "class": "SHITTY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -7097,14 +7171,15 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires sawblades. The marketing team assigned to the Saw Blader wanted to call it the Sawed-On Shotgun, but were overruled by the gun's designer. It's more of a handgun, anyway.",
-    "id": 341
+    "id": 341,
+    "ammonomicon_pos": 199
   },
   {
     "name": "Cactus",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a6/Cactus.png",
     "notes": "Fires needles.",
     "quote": "1000 Needles!",
-    "quality": "B",
+    "quality": "C",
     "type": "Automatic",
     "dps": "25.0",
     "magazine_size": "1000",
@@ -7264,14 +7339,15 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Low damage, high rate of fire. Spiny!\n\nRemnants of Gun Cacti can be found throughout the Gungeon, but no one is certain as to their source. Perhaps they hail from a yet undiscovered Chamber? Regardless, their impressive needle capacity is a boon to any Gungeoneer.",
-    "id": 700
+    "id": 124,
+    "ammonomicon_pos": 234
   },
   {
     "name": "Camera",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/80/Camera.png",
     "notes": "Damages all enemies in the room, with a chance to stun.",
     "quote": "Say Cheese",
-    "quality": "B",
+    "quality": "C",
     "type": "Charged",
     "dps": "15.4",
     "magazine_size": "4",
@@ -7484,14 +7560,16 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "A camera brought to the Gungeon by a journalist. The camera is shaped enough like a gun to survive in the Gungeon's depths.",
-    "id": 481
+    "id": 481,
+    "charge_stages": 1,
+    "ammonomicon_pos": 229
   },
   {
     "name": "Casey",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1e/Casey.png/revision/latest?cb=20161220033905",
     "notes": "Charged swings reflect nearby bullets. Does not crack secret walls. Increases curse by 2.",
     "quote": "Batting .50",
-    "quality": "C",
+    "quality": "D",
     "type": "Charged",
     "dps": "50.0",
     "magazine_size": "1",
@@ -8127,7 +8205,12 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "A standard baseball bat, modified to hit bullets instead of balls. Launches enemy projectiles back with a vengeance!\n\nNothing can happen until you swing the bat.",
-    "id": 616
+    "id": 541,
+    "game_spread": "0°",
+    "charge_stages": 2,
+    "infinite_ammo": true,
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 7
   },
   {
     "name": "Cat Claw",
@@ -8141,7 +8224,7 @@
     "ammo_capacity": "400",
     "damage": "2 (Dart) 10 (Explosion)",
     "fire_rate": "0.15",
-    "reload_time": "1.25s",
+    "reload_time": "1.2",
     "shot_speed": "23",
     "range": "1000",
     "force": "2",
@@ -8286,7 +8369,9 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires explosive homing darts.",
-    "id": 357
+    "id": 357,
+    "game_damage": "2",
+    "ammonomicon_pos": 163
   },
   {
     "name": "Chamber Gun",
@@ -8715,20 +8800,32 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Transforms based on Chamber. This gun uses an advanced shape-memory alloy. When exposed to different environmental stimuli it reacts with the salts in Gungeoneer's bodies and transforms into a location-specific gun. Master rounds can also influence the shape of this curious weapon.",
-    "id": 647
+    "id": 647,
+    "game_fire_rate": "0.3",
+    "game_magazine_size": "22",
+    "game_spread": "10°",
+    "game_damage": "5.5",
+    "game_shot_speed": "23",
+    "game_range": "1000",
+    "game_force": "9",
+    "game_reload_time": "1.3",
+    "game_ammo_capacity": "500",
+    "charge_stages": 1,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 111
   },
   {
     "name": "Charge Shot",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/81/Charge_Shot.png",
     "notes": "Fires a large laser that pierces enemies and bounces off of walls two times. Laser deals higher damage after bouncing.",
     "quote": "Hold To Fire",
-    "quality": "A",
+    "quality": "B",
     "type": "Charged",
     "dps": "24.39 (normal hit) 48.78 (bounced hit) 48.78 (hit then bounced hit) 97.56 (all three hits rare )",
     "magazine_size": "5",
     "ammo_capacity": "75",
     "damage": "22",
-    "fire_rate": "0.01",
+    "fire_rate": "0.05",
     "reload_time": "1",
     "shot_speed": "26",
     "range": "1000",
@@ -8840,14 +8937,16 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Charge Shot is a weapon from Distant Lands. Legend says it was once used by mutant gladiators in rocket-propelled deathmatches to the rocket-propelled death.",
-    "id": 328
+    "id": 328,
+    "charge_stages": 1,
+    "ammonomicon_pos": 135
   },
   {
     "name": "Charmed Bow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a5/Charmed_Bow.png",
     "notes": "Charges to fire shots that charm enemies.",
     "quote": "<3-----<<<",
-    "quality": "A",
+    "quality": "B",
     "type": "Charged",
     "dps": "37.5 (Uncharged) 20 (Charged)",
     "magazine_size": "1",
@@ -8982,7 +9081,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Charms enemies temporarily.\n\nThe preferred bow of the Pride of Venus before her fall. While its arrows deal little physical damage, they are coated in a potent hallucinogen. Even a slight scratch can confuse friend and foe.",
-    "id": 200
+    "id": 200,
+    "game_fire_rate": "0",
+    "game_spread": "0°",
+    "charge_stages": 2,
+    "ammonomicon_pos": 64
   },
   {
     "name": "Cobalt Hammer",
@@ -9153,14 +9256,18 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Shoots streaks of blue. Chargeable.\nBrought to the Gungeon by two of the first souls to conquer the Gungeon. Their ceaseless charge was driven by an unquenchable curiosity, and not even fatigue could slow their progress. Sleeping in shifts, the resting partner was carried into the depths on the other's back.\n\nMany adventurers throughout the galaxy would first learn of the Gungeon through tales of their exploits.",
-    "id": 390
+    "id": 390,
+    "game_damage": "36",
+    "game_range": "1000",
+    "charge_stages": 2,
+    "ammonomicon_pos": 160
   },
   {
     "name": "Cold 45",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c2/Cold_45.png",
     "notes": "Fires bullets that can freeze enemies.",
     "quote": "Shatterday Night Special",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "25.3",
     "magazine_size": "12",
@@ -9241,25 +9348,26 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Freezes enemies. This gun's manufacture was outsourced, and due to a typographical error turned out better than expected.",
-    "id": 223
+    "id": 223,
+    "ammonomicon_pos": 23
   },
   {
     "name": "Colt 1851",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/cd/Colt_1851.png",
     "notes": "Fires a burst of two bullets.",
     "quote": "You Dig",
-    "quality": "C",
-    "type": "Burst",
+    "quality": "B",
+    "type": "Semiautomatic",
     "dps": "28.2",
-    "magazine_size": "12",
-    "ammo_capacity": "350",
-    "damage": "6",
-    "fire_rate": "0.21",
-    "reload_time": "1.5s",
+    "magazine_size": "6",
+    "ammo_capacity": "200",
+    "damage": "8",
+    "fire_rate": "0.12",
+    "reload_time": "0.6",
     "shot_speed": "25",
     "range": "1,000",
-    "force": "10",
-    "spread": "8°",
+    "force": "14",
+    "spread": "0°",
     "class": "PISTOL",
     "curse": 0.0,
     "coolness": 0.0,
@@ -9358,14 +9466,16 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "An ancient example of fine guncraft, the Colt 1851 has been the gun of choice for many a nameless gunslinger.\n\nSkilled wielders have been known to quickly fire multiple shots, though the technique has been mostly lost to time.",
-    "id": 62
+    "id": 50,
+    "game_range": "1000",
+    "ammonomicon_pos": 22
   },
   {
     "name": "Com4nd0",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/af/Com4nd0.png",
     "notes": "Rapidly fires 4 homing rockets.",
     "quote": "You're Fired",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "54.6",
     "magazine_size": "4",
@@ -9376,7 +9486,7 @@
     "shot_speed": "14",
     "range": "90",
     "force": "10",
-    "spread": "5°",
+    "spread": "1°",
     "class": "EXPLOSIVE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -9550,15 +9660,16 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Standard box rocket. Capacity: 4. Often found atop military transports or mechanized walkers, this box rocket can be fired manually by the strongest Gungeoneers.",
-    "id": 723
+    "id": 129,
+    "ammonomicon_pos": 143
   },
   {
     "name": "Combined Rifle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/2b/Combined_Rifle.png",
     "notes": "Reloading alternates between a rapid-fire rifle and a bouncing, piercing, destructive energy ball that consumes 10 ammo per shot.",
     "quote": "Halve Lives",
-    "quality": "A",
-    "type": "Automatic",
+    "quality": "B",
+    "type": "Variable",
     "dps": "36.6 (Rifle)",
     "magazine_size": "30 (Rifle) 1 (Energy ball)",
     "ammo_capacity": "500",
@@ -9813,7 +9924,12 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Alternates between firing pulse blasts and an extremely powerful ball of dark energy. Alien technology, co-opted by the Hegemony of Man after the successful liberation of Planet 17.",
-    "id": 519
+    "id": 519,
+    "game_fire_rate": "0.1",
+    "game_magazine_size": "30",
+    "game_spread": "7°",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 80
   },
   {
     "name": "Composite Gun",
@@ -9821,9 +9937,9 @@
     "notes": "Charged shot consumes 2 ammo and will activate a blank effect when it hits a wall.",
     "quote": "Undetectable",
     "quality": "S",
-    "type": "Charged",
+    "type": "Semiautomatic",
     "dps": "100.0",
-    "magazine_size": "2",
+    "magazine_size": "1",
     "ammo_capacity": "50",
     "damage": "100",
     "fire_rate": "0.20",
@@ -10293,14 +10409,15 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "This gun is made entirely from composite materials and only holds two rounds. It was brought to the Gungeon by a thoughtless agent, not realizing the affront to the Gun that such a thing implied.",
-    "id": 337
+    "id": 337,
+    "ammonomicon_pos": 34
   },
   {
     "name": "Compressed Air Tank",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/af/Compressed_Air_Tank.png",
     "notes": "Charges to fire a shark that swim around the room, seeking enemies and biting them.",
     "quote": "You Know My Work",
-    "quality": "S",
+    "quality": "A",
     "type": "Charged",
     "dps": "125.0",
     "magazine_size": "1",
@@ -10604,7 +10721,9 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Shoots sharks. Really.\n\nThis gun, a Calx original, fires homing sharks. This would never function under normal circumstances, but the Gungeon respects the pure audacity of its existence.",
-    "id": 359
+    "id": 359,
+    "charge_stages": 1,
+    "ammonomicon_pos": 237
   },
   {
     "name": "Corsair",
@@ -10622,7 +10741,7 @@
     "shot_speed": "26",
     "range": "1000",
     "force": "25",
-    "spread": "5°",
+    "spread": "0°",
     "class": "CHARGE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -10763,14 +10882,17 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Circumnavigates the room, then explodes.\nMany years ago, Gungeon mariners used wind to propel their bullets instead of combustion. The trips would take so long to cross a room that the bullets would sometimes mutiny and change course entirely.",
-    "id": 327
+    "id": 327,
+    "game_damage": "22",
+    "charge_stages": 1,
+    "ammonomicon_pos": 100
   },
   {
     "name": "Crescent Crossbow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/18/Crescent_Crossbow.png",
     "notes": "Fires stars that split into smaller bouncing stars.",
     "quote": "Moon Shot",
-    "quality": "S",
+    "quality": "A",
     "type": "Charged",
     "dps": "19.5+ (Varies heavily)",
     "magazine_size": "12",
@@ -11086,7 +11208,10 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires shattering starlight. A crossbow that shines in the moonlight of Gunymede. Charge it up, and watch the shooting stars fly.",
-    "id": 52
+    "id": 52,
+    "game_fire_rate": "0.2",
+    "charge_stages": 2,
+    "ammonomicon_pos": 69
   },
   {
     "name": "Crestfaller",
@@ -11367,21 +11492,23 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Freezes enemies.\nThis unique weapon was brought to the Gungeon by a disgraced warrior who discarded it when he gave up. The projectiles it fires are extremely low-energy, delivering a cold and highly depressing death.",
-    "id": 178
+    "id": 178,
+    "game_range": "1000",
+    "ammonomicon_pos": 132
   },
   {
     "name": "Crossbow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/79/Crossbow.png",
     "notes": "Fires bolts. Starting gun of The Hunter.",
     "quote": "The Original",
-    "quality": "B",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "29.3",
     "magazine_size": "1",
     "ammo_capacity": "100",
     "damage": "22",
     "fire_rate": "0.50",
-    "reload_time": "0.9",
+    "reload_time": "0.75",
     "shot_speed": "26",
     "range": "1000",
     "force": "25",
@@ -11448,25 +11575,26 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "One of the earliest examples of trigger fired projectiles.",
-    "id": 381
+    "id": 12,
+    "ammonomicon_pos": 65
   },
   {
     "name": "Crown of Guns",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/d/dc/Crown_of_Guns.png",
     "notes": "Sits atop the player's head and spreads bullets in all directions.",
     "quote": "All Hail",
-    "quality": "B",
+    "quality": "C",
     "type": "Automatic",
     "dps": "220.0",
     "magazine_size": "3000",
     "ammo_capacity": "3000",
     "damage": "5.5",
-    "fire_rate": "0.04",
+    "fire_rate": "0.05",
     "reload_time": "2",
     "shot_speed": "23",
     "range": "40",
     "force": "9",
-    "spread": "180°",
+    "spread": "4°",
     "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -11825,7 +11953,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires rapidly in all directions. This unwieldy crown signifies sovereignty over bullets.",
-    "id": 551
+    "id": 551,
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 78
   },
   {
     "name": "Dark Marker",
@@ -11833,13 +11963,13 @@
     "notes": "Charge shot consumes the entire clip to create a room-wide explosion and blank effect.",
     "quote": "Big Bang",
     "quality": "S",
-    "type": "Semiautomatic",
+    "type": "Variable",
     "dps": "38.6 (Uncharged)",
-    "magazine_size": "12",
+    "magazine_size": "20",
     "ammo_capacity": "250",
     "damage": "13.5 (Uncharged) 40x2 (80) (Charged) 50 (Explosion) 10 (Blank)",
     "fire_rate": "0.20",
-    "reload_time": "2.0s",
+    "reload_time": "1.5",
     "shot_speed": "32",
     "range": "∞",
     "force": "20",
@@ -12319,7 +12449,11 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires two projectiles. If they meet... Matter is composed largely of strong particles, and antimatter is composed of weak particles. When they meet, the strong particles overwhelm the weak particles and then explode in satisfaction. This gun is the favorite gun of the Gunsling King, who somewhat inscrutably says it reminds him of his servant.",
-    "id": 274
+    "id": 274,
+    "game_damage": "22",
+    "game_range": "1000",
+    "charge_stages": 2,
+    "ammonomicon_pos": 136
   },
   {
     "name": "Dart Gun",
@@ -12441,14 +12575,16 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "Just because children are young, doesn't mean they don't have pasts they would like to change. Perhaps some young soul wished to make sure his or her sibling took the blame for spilling grape juice on the couch. Much less worthy causes have been championed in the Gungeon.",
-    "id": 811
+    "id": 24,
+    "infinite_ammo": true,
+    "ammonomicon_pos": 4
   },
   {
     "name": "Deck4rd",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/88/Deck4rd.png",
     "notes": "Fires a single powerful bullet that will explode upon impact.",
     "quote": "Unicorn Of Handguns",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "47.1",
     "magazine_size": "2",
@@ -12582,25 +12718,26 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires massive explosive rounds.\nFollowing the tragic Ten Days' War, a majority of the Hegemony's Shock Troops were decommissioned. A small number of the combat robots escaped however, and they were pursued relentlessly by special forces. This explosive hand cannon belonged to one such detective who tracked his prey to the Gungeon.",
-    "id": 81
+    "id": 81,
+    "ammonomicon_pos": 104
   },
   {
     "name": "Demon Head",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/3/34/Demon_Head.png",
     "notes": "Fires a continuous beam that has a chance to inflict Burn and slightly homes in on enemies.",
     "quote": "Wanged",
-    "quality": "A",
+    "quality": "B",
     "type": "Beam",
     "dps": "31.0",
     "magazine_size": "500",
     "ammo_capacity": "500",
     "damage": "31",
-    "fire_rate": "0.10",
+    "fire_rate": "0.5",
     "reload_time": "0",
     "shot_speed": "100",
     "range": "40",
     "force": "30",
-    "spread": "5°",
+    "spread": "0°",
     "class": "BEAM",
     "curse": 0.0,
     "coolness": 0.0,
@@ -12670,7 +12807,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a superheated beam that can ignite enemies. The Order of the True Gun tells three tales of the demons that dwell beneath the Gungeon. All end in fire.",
-    "id": 60
+    "id": 60,
+    "game_type": "Beam",
+    "ammonomicon_pos": 165
   },
   {
     "name": "Derringer",
@@ -12684,7 +12823,7 @@
     "ammo_capacity": "200",
     "damage": "10",
     "fire_rate": "0.07",
-    "reload_time": "1.25s",
+    "reload_time": "1.2",
     "shot_speed": "23",
     "range": "60",
     "force": "30",
@@ -12852,14 +12991,15 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "This tiny pistol packs a correspondingly small punch, but it is well-known for getting its wielders out of tight spots.",
-    "id": 378
+    "id": 378,
+    "ammonomicon_pos": 10
   },
   {
     "name": "Devolver",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/58/Devolver.png",
     "notes": "Has a chance to devolve enemies into simpler enemies.",
     "quote": "Degenerates",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "24.1",
     "magazine_size": "6",
@@ -13122,20 +13262,22 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Can reduce any target (or situation) to a more debased state. Smells of rum.",
-    "id": 484
+    "id": 484,
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 240
   },
   {
     "name": "Directional Pad",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ef/Directional_Pad.png",
     "notes": "Fires bullets in four directions. Combos can be entered to fire fireballs or a grappling hook. After running out of ammo, it is destroyed but spawns a chest.",
     "quote": "Input Output",
-    "quality": "A",
-    "type": "Burst",
+    "quality": "B",
+    "type": "Semiautomatic",
     "dps": ", no Fireball: 20.7 All Rows, no Fireball: 82.8 One Row, Fireball: 52.6 All Rows, Fireball: 210.3",
-    "magazine_size": "30",
+    "magazine_size": "12",
     "ammo_capacity": "120",
     "damage": "8",
-    "fire_rate": "1.0",
+    "fire_rate": "0.8",
     "reload_time": "1.7",
     "shot_speed": "23",
     "range": "50",
@@ -13330,7 +13472,10 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "When this gun runs out of ammo, it is destroyed, creating a chest.\n\nThis pad was once used as the summons for an ancient convocation of wizards. It is crusted from years of use, notably Back, Back, Low Punch.",
-    "id": 514
+    "id": 514,
+    "game_spread": "10°",
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 230
   },
   {
     "name": "Disintegrator",
@@ -13342,7 +13487,7 @@
     "dps": "70.0",
     "magazine_size": "500",
     "ammo_capacity": "500",
-    "damage": "1",
+    "damage": "70",
     "fire_rate": "1.00",
     "reload_time": "N/A",
     "shot_speed": "120",
@@ -13367,7 +13512,10 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a beam that decoheres matter into its constituent particles.\nThis disintegration ray is outlawed on almost every planet with some form of government, and feared by all beings made primarily of matter. It can be fired legally in only two places: the Gungeon, and the waste disposal facilities of Popolon V.",
-    "id": 121
+    "id": 121,
+    "game_reload_time": "0",
+    "game_type": "Beam",
+    "ammonomicon_pos": 179
   },
   {
     "name": "Dragunfire",
@@ -13380,11 +13528,11 @@
     "magazine_size": "30",
     "ammo_capacity": "600",
     "damage": "6.5",
-    "fire_rate": "0.1",
+    "fire_rate": "0.07",
     "reload_time": "1.6s",
     "shot_speed": "25",
     "range": "1,000",
-    "force": "27",
+    "force": "21",
     "spread": "7°",
     "class": "FULLAUTO",
     "curse": 0.0,
@@ -13483,14 +13631,16 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Finely balanced, rapid fire. Can ignite foes.\nAn Edwin original. The Dragunfire was forged deep in the heart of the Gungeon, crafted to emulate the wrath of the beast from which it takes its name.",
-    "id": 146
+    "id": 146,
+    "game_range": "1000",
+    "ammonomicon_pos": 95
   },
   {
     "name": "Dueling Laser",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/af/Dueling_Laser.png",
     "notes": "Fires a large, piercing, high-damage laser beam. Recharges like an active item after each shot.",
     "quote": "More interesting this way!",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "70.42 (ignoring recharge)",
     "magazine_size": "1",
@@ -13709,14 +13859,18 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Uses no ammo, but recharges like an item.\n\nA thousand worlds away on a war-torn planet, this pistol is used in duels to the death. Its powerful beam consumes no ammo, but takes time to recharge. A hasty shot comes with a price.",
-    "id": 508
+    "id": 508,
+    "game_spread": "0°",
+    "infinite_ammo": true,
+    "content_source": "CONTENT_UPDATE_01_FINAL",
+    "ammonomicon_pos": 190
   },
   {
     "name": "Dueling Pistol",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/95/Dueling_Pistol.png",
     "notes": "Fires large, piercing musket balls that bounce twice.",
     "quote": "Ricochet",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "10.0",
     "magazine_size": "1",
@@ -13797,14 +13951,15 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires ricocheting musket balls.\n\nThis most ancient of pistols has settled many a lovers' quarrel. This particular flintlock would be fairly useless in a duel, as the ricochet would probably kill several bystanders.",
-    "id": 675
+    "id": 9,
+    "ammonomicon_pos": 31
   },
   {
     "name": "Dungeon Eagle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f6/Dungeon_Eagle.png",
     "notes": "Can be charged to fire a more powerful shot, or tap fired for more frequent, weaker projectiles.",
     "quote": "Caw!",
-    "quality": "B",
+    "quality": "C",
     "type": "Charged",
     "dps": "32.1 (Uncharged) 26.5 (Charged)",
     "magazine_size": "9",
@@ -13869,24 +14024,27 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "A powerful, unwieldy handgun. A favorite more for its image than its efficiency, the Dungeon Eagle is capable of delivering massive damage. Not terribly accurate, but highly memorable.",
-    "id": 750
+    "id": 23,
+    "game_fire_rate": "0.2",
+    "charge_stages": 2,
+    "ammonomicon_pos": 26
   },
   {
     "name": "Elephant Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a0/Elephant_Gun.png",
     "notes": "Fires a cone spread of bullets with high knockback.",
     "quote": "Shoots Elephants",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "31.4",
-    "magazine_size": "2",
+    "magazine_size": "6",
     "ammo_capacity": "120",
     "damage": "5.5 x6 (33)",
     "fire_rate": "0.60",
     "reload_time": "1.5",
-    "shot_speed": "23",
+    "shot_speed": "30",
     "range": "15",
-    "force": "30",
+    "force": "22",
     "spread": "0°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -14040,7 +14198,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "An inelegant weapon for a less civilized age. These guns were once used to make pianos out of teeth.",
-    "id": 672
+    "id": 82,
+    "game_damage": "5.5",
+    "ammonomicon_pos": 47
   },
   {
     "name": "Elimentaler",
@@ -14257,21 +14417,25 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Encheeses enemies.\n\nA favorite of the Resourceful Rat. He doesn't typically favor any one gun in particular, as he usually collects only to grow his hoard, but he finds this one particularly appetizing.",
-    "id": 626
+    "id": 626,
+    "charge_stages": 1,
+    "infinite_ammo": true,
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 12
   },
   {
     "name": "Evolver",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/98/Evolver.png",
     "notes": "Evolves through 6 forms (amoeba to dragon) every 5 unique enemy types killed. Ammo refills on each evolution.",
     "quote": "Tamagunchi",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "13.5 19.1 25.8 43.125 23.0 93.8",
     "magazine_size": "24 24 24 8 300 200",
-    "ammo_capacity": "100",
+    "ammo_capacity": "300",
     "damage": "6 8.5 11.5 11.5 x3 (34.5) 23/s 37.5",
     "fire_rate": "0.4s 0.4s 0.4s 0.7s N/A 0.4s",
-    "reload_time": "0.78",
+    "reload_time": "1.5",
     "shot_speed": "22 23 25 20 -1 25",
     "range": "10 1000 25 25 30 25",
     "force": "13 35 7 22 10 7",
@@ -14391,7 +14555,16 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "This gun adapts.\n\nWhile some have disputed the claim that a gun can change shape or adapt to its new environment within the Gungeon, this weapon appears to be irrefutable proof of the phenomenon. Since its discovery, the number of self-proclaimed gunvolution deniers has increased by 4%.",
-    "id": 484
+    "id": 755,
+    "game_fire_rate": "0.4",
+    "game_magazine_size": "24",
+    "game_spread": "10°",
+    "game_damage": "6",
+    "game_shot_speed": "22",
+    "game_range": "10",
+    "game_force": "13",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 219
   },
   {
     "name": "Excaliber",
@@ -14402,13 +14575,13 @@
     "type": "Burst",
     "dps": "43.7",
     "magazine_size": "32",
-    "ammo_capacity": "300",
-    "damage": "3.799999952316284",
+    "ammo_capacity": "280",
+    "damage": "7",
     "fire_rate": "0.15",
-    "reload_time": "2",
-    "shot_speed": "30",
+    "reload_time": "0.48",
+    "shot_speed": "26",
     "range": "1000",
-    "force": "8",
+    "force": "15",
     "spread": "0°",
     "class": "FULLAUTO",
     "curse": 2.5,
@@ -14738,14 +14911,16 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Reload to clear the air of bullets. This abominable weapon angers the Jammed. The weapon of a mythical hero, said to have mastered the Gungeon. Reloading initiates a defensive flurry of slashes, each positioned to carve a bullet from the air.",
-    "id": 544
+    "id": 377,
+    "burst_count": 3,
+    "ammonomicon_pos": 210
   },
   {
     "name": "Eye of the Beholster",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4c/Eye_of_the_Beholster.png",
     "notes": "The last shot of each clip spawns a friendly Beadie.",
     "quote": "What A Beauty!",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "23.2 (not counting the Beadie)",
     "magazine_size": "12",
@@ -14889,7 +15064,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The reproductive gun of the terrible Beholster.\n\nWhen wielded by its creator, it summons young Beholster spawn from the void.",
-    "id": 90
+    "id": 90,
+    "ammonomicon_pos": 202
   },
   {
     "name": "Face Melter",
@@ -14899,7 +15075,7 @@
     "quality": "B",
     "type": "Automatic",
     "dps": "40 (Assuming an enemy is only hit by one stream of notes)",
-    "magazine_size": "600",
+    "magazine_size": "60",
     "ammo_capacity": "600",
     "damage": "4",
     "fire_rate": "0.10s",
@@ -15108,7 +15284,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "A normal electric guitar. Drops an amplifier on reload for double the power! Unfortunately, musical talent and Gungeoneering skill do not often overlap. Any damage caused by this \"gun\" has little to do with the Gungeon.",
-    "id": 149
+    "id": 149,
+    "ammonomicon_pos": 211
   },
   {
     "name": "Fightsabre",
@@ -15332,14 +15509,15 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Reload to reflect nearby bullets.\nAn ancient weapon, composed entirely of hardened light.",
-    "id": 345
+    "id": 345,
+    "ammonomicon_pos": 129
   },
   {
     "name": "Finished Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b5/Finished_Gun.png",
     "notes": "Replaces Unfinished Gun once the Ammonomicon is complete. Fires ricochet bullets. The final shot in magazine reflects enemy bullets back.",
     "quote": "Thanks For Playing",
-    "quality": "D",
+    "quality": "S",
     "type": "Semiautomatic",
     "dps": "84.1",
     "magazine_size": "6",
@@ -15352,7 +15530,7 @@
     "force": "14",
     "spread": "0°",
     "class": "PISTOL",
-    "curse": 0.0,
+    "curse": 5.0,
     "coolness": 0.0,
     "wiki": {
       "effects": [
@@ -15590,7 +15768,9 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "A gun to rule them all.\n\nThe swan-song of a prolific gunsmith. Though only recently completed, it somehow feels very familiar. A small hourglass is embossed on the cylinder, the sands fully filling the bottom half.",
-    "id": 762
+    "id": 762,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 241
   },
   {
     "name": "Flame Hand",
@@ -15827,14 +16007,15 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Sets enemies aflame.\n\nAlben Smallbore, enthralled with the variety of guns he found in the Gungeon, created this spell. Upon casting, the wielder's hand bursts into flame, allowing fireballs to be thrown like bullets.",
-    "id": 125
+    "id": 125,
+    "ammonomicon_pos": 168
   },
   {
     "name": "Flare Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/57/Flare_Gun.png",
     "notes": "Fires bullets that inflict burning on enemies.",
     "quote": "Over Here",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "17.3",
     "magazine_size": "1",
@@ -15941,7 +16122,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Sets targets aflame! Unfortunately, deep in the Gungeon, no one will see this flare but you.",
-    "id": 706
+    "id": 275,
+    "ammonomicon_pos": 35
   },
   {
     "name": "Flash Ray",
@@ -15951,14 +16133,14 @@
     "quality": "D",
     "type": "Semiautomatic",
     "dps": "23.1",
-    "magazine_size": "8",
+    "magazine_size": "10",
     "ammo_capacity": "350",
-    "damage": "7.5",
+    "damage": "10",
     "fire_rate": "0.20",
-    "reload_time": "1.2s",
-    "shot_speed": "600",
+    "reload_time": "1.5",
+    "shot_speed": "15",
     "range": "1000",
-    "force": "4",
+    "force": "11",
     "spread": "10°",
     "class": "PISTOL",
     "curse": 0.0,
@@ -16172,20 +16354,22 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "The trusty sidearm of a spacefaring hero.\n\nFeaturing a stylish design and solid performance, this blaster is almost always worth keeping around.",
-    "id": 383
+    "id": 657,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 88
   },
   {
     "name": "Fossilized Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/77/Fossilized_Gun.png",
     "notes": "Fires a stream of oil that leaves oil puddles on floor. Reloading spits fire, which can ignite the oil.",
     "quote": "Proof That Guns Once Existed",
-    "quality": "C",
+    "quality": "D",
     "type": "Beam",
     "dps": "15.0",
     "magazine_size": "500",
     "ammo_capacity": "500",
     "damage": "15",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "0",
     "shot_speed": "15",
     "range": "20",
@@ -16357,7 +16541,9 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Reloading this skull produces a gout of flame that can ignite oil.\n\nThis is a spectacularly preserved specimen of a gun that went extinct during the Ballistac era.",
-    "id": 196
+    "id": 196,
+    "game_type": "Beam",
+    "ammonomicon_pos": 175
   },
   {
     "name": "Freeze Ray",
@@ -16370,7 +16556,7 @@
     "magazine_size": "500",
     "ammo_capacity": "500",
     "damage": "20/s",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "0",
     "shot_speed": "60",
     "range": "30",
@@ -16428,7 +16614,10 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Freezes enemies in their tracks.",
-    "id": 710
+    "id": 710,
+    "game_type": "Beam",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 161
   },
   {
     "name": "Frost Giant",
@@ -16438,10 +16627,10 @@
     "quality": "B",
     "type": "Semiautomatic",
     "dps": "< 80.0 (depends on firing speed of player)",
-    "magazine_size": "12",
+    "magazine_size": "8",
     "ammo_capacity": "130",
     "damage": "12",
-    "fire_rate": "0.001",
+    "fire_rate": "0.01",
     "reload_time": "1.6s",
     "shot_speed": "20",
     "range": "30",
@@ -16542,7 +16731,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The arctic blast this gun emits can freeze enemies at close range.\nThis gun was carried by a frost giant, long ago. Though they no longer rule the icy depths, a few of their artifacts remain.",
-    "id": 387
+    "id": 387,
+    "ammonomicon_pos": 161
   },
   {
     "name": "Gamma Ray",
@@ -16555,11 +16745,11 @@
     "magazine_size": "800",
     "ammo_capacity": "800",
     "damage": "16/s",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "N/A",
     "shot_speed": "∞",
     "range": "50",
-    "force": "10",
+    "force": "20",
     "spread": "0°",
     "class": "BEAM",
     "curse": 0.0,
@@ -16800,7 +16990,12 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "This archaic laser has been studied for centuries. Gungeonologists can only conclude that it was used by primitive people to poison each other with radiation.",
-    "id": 87
+    "id": 87,
+    "game_damage": "16",
+    "game_shot_speed": "-1",
+    "game_reload_time": "0",
+    "game_type": "Beam",
+    "ammonomicon_pos": 176
   },
   {
     "name": "Gilded Hydra",
@@ -16815,9 +17010,9 @@
     "damage": "7.5x8 (60)",
     "fire_rate": "0.40",
     "reload_time": "2",
-    "shot_speed": "23",
+    "shot_speed": "20",
     "range": "15",
-    "force": "30",
+    "force": "12",
     "spread": "0°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -16973,7 +17168,10 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Increased clip capacity with damage taken.\n\nThe Gilded Hydra is a masterwork shotgun created by Edwin, the legendary gunsmith. Its capacity grows every time its bearer is wounded.\n\nRevolvations 2:1 These are the words of Kaliber, she who grips the seven sidearms in her hands and walks among the six loaded chambers. When the Gun is drawn to the heart of the pacifist, and when the chambers are empty and the shells are spent, the Last of the Jammed will ascend to seal the Breach forever.",
-    "id": 231
+    "id": 231,
+    "game_magazine_size": "8",
+    "game_damage": "7.5",
+    "ammonomicon_pos": 54
   },
   {
     "name": "Glacier",
@@ -17133,21 +17331,23 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Projectiles shatter and freeze enemies.",
-    "id": 130
+    "id": 130,
+    "game_damage": "8",
+    "ammonomicon_pos": 195
   },
   {
     "name": "Glass Cannon",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6e/Glass_Cannon.png",
     "notes": "Charges to fire a powerful piercing laser beam. Loses all ammo upon taking damage.",
     "quote": "Fragile, Fatal",
-    "quality": "B",
+    "quality": "C",
     "type": "Charged",
     "dps": "50.0",
     "magazine_size": "1",
     "ammo_capacity": "25",
     "damage": "140",
     "fire_rate": "1.00",
-    "reload_time": "2.4",
+    "reload_time": "2",
     "shot_speed": "600",
     "range": "1000",
     "force": "20",
@@ -17430,14 +17630,17 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Powerful, but shatters upon taking damage. Normally, a gun made of glass would shatter instantaneously, but the Gungeon's energies have reinforced this inadvisable device to the point of near usability.",
-    "id": 819
+    "id": 540,
+    "charge_stages": 1,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 204
   },
   {
     "name": "Grasschopper",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c5/Grasschopper.png",
     "notes": "Fires a single powerful blast with high recoil and releases a small blank effect on hit.",
     "quote": "Noisy",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "20.0",
     "magazine_size": "1",
@@ -17528,14 +17731,16 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "This petite weapon packs a punch, and the recoil can knock the user backwards.",
-    "id": 180
+    "id": 180,
+    "game_fire_rate": "0.07",
+    "ammonomicon_pos": 147
   },
   {
     "name": "Grenade Launcher",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/67/Grenade_Launcher.png",
     "notes": "Fires a grenade that bounces off of surfaces and explodes on impact with enemies.",
     "quote": "Fwomp!",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "29.17",
     "magazine_size": "1",
@@ -17674,21 +17879,22 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires grenades that can bounce. A difficult weapon to use effectively, but powerful in the right hands. The distinctive noise this gun makes is beloved by Pinheads.",
-    "id": 19
+    "id": 19,
+    "ammonomicon_pos": 140
   },
   {
     "name": "Grey Mauser",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/54/Grey_Mauser_%28Gun%29.png",
     "notes": "Reloading an empty clip makes the player invisible. Can be used to steal from shops.",
     "quote": "Silent And Deadly",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "43.3 (assuming invisibility at start of magazine)",
     "magazine_size": "10",
-    "ammo_capacity": "250",
-    "damage": "5",
+    "ammo_capacity": "100",
+    "damage": "8",
     "fire_rate": "0.10",
-    "reload_time": "1",
+    "reload_time": "1.5",
     "shot_speed": "32",
     "range": "1000",
     "force": "9",
@@ -17921,14 +18127,15 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Renders the wielder invisible when reloading an empty clip. Extra damage while stealthed.",
-    "id": 537
+    "id": 182,
+    "ammonomicon_pos": 27
   },
   {
     "name": "Gunbow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e6/Gunbow.png",
     "notes": "Fires a fast, piercing projectile that ricochets many times.",
     "quote": "Failed Experiment",
-    "quality": "S",
+    "quality": "A",
     "type": "Charged",
     "dps": "12.37 (hit once normal) 18.55 (hit twice) 30.92 (hit thrice) 55.65 (hit seven times rare)",
     "magazine_size": "1",
@@ -17966,7 +18173,10 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a large ricochet round.\nIn an attempt to combine the combat efficiency of bullets with the stealth and recoverability of arrows, modern archers developed the Gunbow. Though it proved ineffective in normal combat, it has taken on new life in the Gungeon.",
-    "id": 693
+    "id": 210,
+    "game_fire_rate": "0.001",
+    "charge_stages": 2,
+    "ammonomicon_pos": 70
   },
   {
     "name": "Gunderfury",
@@ -18193,24 +18403,36 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Blessed Gun of the Gunseeker.\n\nThis gun gains experience with every kill, and is strangely resistant to the Gungeon's temporal rifts. Any accrued experience will persist throughout time.\n\nA gun spoken of in legend. Once wielded by Gunderaan, Prince of Guns, this weapon ultimately found its way to the Gungeon after being mishandled by millions of idiots for countless hours.",
-    "id": 732
+    "id": 732,
+    "game_fire_rate": "0.05",
+    "game_magazine_size": "100",
+    "game_spread": "11°",
+    "game_damage": "8",
+    "game_shot_speed": "26",
+    "game_range": "1000",
+    "game_force": "9",
+    "game_reload_time": "1",
+    "game_ammo_capacity": "200",
+    "game_type": "Automatic",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 116
   },
   {
     "name": "Gungeon Ant",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/8d/Gungeon_Ant.png",
     "notes": "In oil mode, creates oil puddles on impact. In fire mode, fires fireballs that pierce and burn. Reloading switches modes.",
     "quote": "What Army?",
-    "quality": "B",
-    "type": "Semiautomatic",
+    "quality": "C",
+    "type": "Variable",
     "dps": "30.0",
-    "magazine_size": "6",
+    "magazine_size": "1",
     "ammo_capacity": "100",
-    "damage": "20",
-    "fire_rate": "0.15",
+    "damage": "22",
+    "fire_rate": "0",
     "reload_time": "1.2",
-    "shot_speed": "40",
-    "range": "90",
-    "force": "10",
+    "shot_speed": "26",
+    "range": "1000",
+    "force": "25",
     "spread": "0°",
     "class": "FIRE",
     "curse": 0.0,
@@ -18255,7 +18477,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Alternates between oily bursts and fiery blasts.\n\nWhen the great Bullet fell from the sky, not even the earth beneath the Gungeon was spared. The ants that made their home beneath the floors became terrifying in size, and capable of projectile spit. Nearly extinct, the last of the species occasionally hide in chests.",
-    "id": 739
+    "id": 176,
+    "charge_stages": 1,
+    "ammonomicon_pos": 220
   },
   {
     "name": "Gungine",
@@ -18269,7 +18493,7 @@
     "ammo_capacity": "800",
     "damage": "5",
     "fire_rate": "0.05",
-    "reload_time": "1.25s",
+    "reload_time": "1.14",
     "shot_speed": "35",
     "range": "1000",
     "force": "15",
@@ -18632,14 +18856,15 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Move faster. Reloading converts goop into ammo. Old technology, but reliable. The Gungine, once revved up, emits 40x more bullets than it was rated for.",
-    "id": 401
+    "id": 401,
+    "ammonomicon_pos": 93
   },
   {
     "name": "GuNNER",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/25/GuNNER.png",
     "notes": "Taking damage while GuNNER is held drains 40 ammo and drops a skull that heals the player upon pickup.",
     "quote": "Backpack Not Included",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "27.5",
     "magazine_size": "12",
@@ -19011,7 +19236,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "This brightly colored gun changes shape at regular intervals, making it a little hard to hold onto. That said, you're sure to have a whale of a time firing it!",
-    "id": 602
+    "id": 602,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 39
   },
   {
     "name": "Gunslinger's Ashes",
@@ -19026,7 +19253,7 @@
     "damage": "12 Shots: 5x3 (15)",
     "fire_rate": "0.60",
     "reload_time": "1.2s",
-    "shot_speed": "1",
+    "shot_speed": "1.8",
     "range": "6",
     "force": "25",
     "spread": "0°",
@@ -19133,7 +19360,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Releases a vengeful, and armed, spirit. The precise methods needed to preserve a body with gun intact have been lost to time, but the High Priest, First of the Gun, still remembers...",
-    "id": 198
+    "id": 198,
+    "game_damage": "12",
+    "ammonomicon_pos": 156
   },
   {
     "name": "Gunther",
@@ -19438,14 +19667,18 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Grows more powerful with each room cleared.\n\nThis distrustful gun has gained sentience. As with all intelligent weapons, he should be treated with respect and care.",
-    "id": 338
+    "id": 338,
+    "game_damage": "6",
+    "game_ammo_capacity": "400",
+    "infinite_ammo": true,
+    "ammonomicon_pos": 158
   },
   {
     "name": "Gunzheng",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9f/Gunzheng.png",
     "notes": "Rapidly fires inaccurate, piercing, homing arrows.",
     "quote": "Hustle",
-    "quality": "A",
+    "quality": "B",
     "type": "Automatic",
     "dps": "85.7",
     "magazine_size": "350",
@@ -19582,19 +19815,20 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "An ancient zither instrument possessed by vengeful spirits. Difficult to play, but deadly in the hands of a master.",
-    "id": 482
+    "id": 482,
+    "ammonomicon_pos": 232
   },
   {
     "name": "H4mmer",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/59/H4mmer.png",
     "notes": "Fires a barrage of bullets. The last shot in the magazine is a hammer, which deals extra damage and can stun enemies.",
     "quote": "Many Bullets",
-    "quality": "A",
+    "quality": "B",
     "type": "Automatic",
     "dps": "63.5",
     "magazine_size": "30",
     "ammo_capacity": "450",
-    "damage": "3.799999952316284",
+    "damage": "3.8",
     "fire_rate": "0.05",
     "reload_time": "0.6",
     "shot_speed": "23",
@@ -19681,7 +19915,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Originally crafted by a gunsmith who favored revolvers but was envious of the automatic weaponry being developed by his peers. It seems like he accidentally left one of his tools in the clip...?",
-    "id": 715
+    "id": 91,
+    "ammonomicon_pos": 122
   },
   {
     "name": "Heck Blaster",
@@ -19694,7 +19929,7 @@
     "magazine_size": "999",
     "ammo_capacity": "999",
     "damage": "2.2",
-    "fire_rate": "0.07",
+    "fire_rate": "0.05",
     "reload_time": "0.3s",
     "shot_speed": "40",
     "range": "14",
@@ -19954,7 +20189,8 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Extremely rapid fire. Used by a wiggly hero in the early days of the Gungeon.",
-    "id": 17
+    "id": 17,
+    "ammonomicon_pos": 88
   },
   {
     "name": "Hegemony Carbine",
@@ -20044,7 +20280,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "An advanced issue rifle for Hegemony troops. Primarily wielded by elite human soldiers, as the Hegemony combat robots have superior weaponry.",
-    "id": 229
+    "id": 229,
+    "ammonomicon_pos": 125
   },
   {
     "name": "Hegemony Rifle",
@@ -20145,7 +20382,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The standard issue rifle for all Hegemony of Man soldiers. Packs a decent punch, but the accuracy leaves much to be desired. Typical Hegemony work.",
-    "id": 59
+    "id": 59,
+    "ammonomicon_pos": 128
   },
   {
     "name": "Helix",
@@ -20155,10 +20393,10 @@
     "quality": "C",
     "type": "Semiautomatic",
     "dps": "34.0",
-    "magazine_size": "12",
+    "magazine_size": "22",
     "ammo_capacity": "250",
     "damage": "2x7.5 (15)",
-    "fire_rate": "0.30",
+    "fire_rate": "0.07",
     "reload_time": "2.00s",
     "shot_speed": "35",
     "range": "35",
@@ -20269,7 +20507,10 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires two wave projectiles.\nInspired by real science, the Helix is extremely useful for hitting two things at once, as long as they are a certain distance apart.",
-    "id": 230
+    "id": 230,
+    "game_spread": "7°",
+    "game_damage": "9",
+    "ammonomicon_pos": 130
   },
   {
     "name": "Heroine",
@@ -20422,7 +20663,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The arm of a famous bounty hunter.\n\nThis arm cannon has seen substantial use, but its upkeep has been immaculate.",
-    "id": 41
+    "id": 41,
+    "charge_stages": 3,
+    "ammonomicon_pos": 166
   },
   {
     "name": "Hexagun",
@@ -20436,7 +20679,7 @@
     "ammo_capacity": "75",
     "damage": "35",
     "fire_rate": "0.001 (N/A)",
-    "reload_time": "1.25s",
+    "reload_time": "1.02",
     "shot_speed": "200",
     "range": "1000",
     "force": "25",
@@ -20627,7 +20870,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Hexagun was created by a vengeful Gunjurer after his apprentices were slain by a Gungeoneer wielding the humble Bundle of Wands. The stock is formed from what was once his staff, and each piece of metal was enchanted thrice before assembly. His revenge came swiftly, and from a great distance.",
-    "id": 385
+    "id": 385,
+    "game_fire_rate": "0.001",
+    "ammonomicon_pos": 152
   },
   {
     "name": "High Kaliber",
@@ -21157,7 +21402,11 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Can sever enemies' souls.\n\nThis pocked and swollen gun splits and rends the spirit from the body.",
-    "id": 761
+    "id": 761,
+    "game_magazine_size": "66",
+    "game_ammo_capacity": "666",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 29
   },
   {
     "name": "Huntsman",
@@ -21173,7 +21422,7 @@
     "fire_rate": "0.65",
     "reload_time": "1.2s",
     "shot_speed": "23",
-    "range": "15",
+    "range": "50",
     "force": "10",
     "spread": "10°",
     "class": "FULLAUTO",
@@ -21359,7 +21608,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Reload for momentary safety.\n\nA misbegotten attempt to combine melee and ranged combat, the axe portion of this gun is mostly worthless. Reloading it involves swinging the blade around wildly, which might protect you from a stray bullet.",
-    "id": 346
+    "id": 346,
+    "game_damage": "6",
+    "ammonomicon_pos": 61
   },
   {
     "name": "Hyper Light Blaster",
@@ -21372,7 +21623,7 @@
     "magazine_size": "12",
     "ammo_capacity": "12",
     "damage": "20",
-    "fire_rate": "0.15",
+    "fire_rate": "0.12",
     "reload_time": "1.5 s",
     "shot_speed": "26",
     "range": "20",
@@ -21842,24 +22093,27 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Shots that impact foes are refunded.\n\nA weapon once carried by a brave wanderer, whose exploits are lost to the drifts of time. Designed to work in tandem with a blade, this one has been modified to recharge itself.",
-    "id": 504
+    "id": 504,
+    "game_spread": "4°",
+    "content_source": "CONTENT_UPDATE_01_FINAL",
+    "ammonomicon_pos": 15
   },
   {
     "name": "Ice Breaker",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/5a/Ice_Breaker.png",
     "notes": "The first two shots fire a shotgun blast of ice bullets, and the final shot fires a single explosive shot.",
     "quote": "Never Let Go",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "32.4",
-    "magazine_size": "3",
+    "magazine_size": "8",
     "ammo_capacity": "200",
     "damage": "2 x5 (10) (Ice Bullets) 35 (Slug)",
     "fire_rate": "0.40",
     "reload_time": "0.9",
-    "shot_speed": "23",
+    "shot_speed": "22",
     "range": "10",
-    "force": "30",
+    "force": "8",
     "spread": "0°",
     "class": "ICE",
     "curse": 0.0,
@@ -22187,14 +22441,16 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Alternates between frigid blasts and explosive slugs. The Ice Breaker was designed by Edwin, the legendary gunsmith. The only gun to combine freezing and shattering technology into one convenient package!",
-    "id": 745
+    "id": 225,
+    "game_damage": "2",
+    "ammonomicon_pos": 59
   },
   {
     "name": "JK-47",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/06/JK-47.png",
     "notes": "Reloading inflicts fear on nearby enemies, causing them to flee but continue shooting.",
     "quote": "Substitute",
-    "quality": "B",
+    "quality": "C",
     "type": "Automatic",
     "dps": "18.9",
     "magazine_size": "30",
@@ -22337,7 +22593,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Noodle shaped like a gun. Frightens enemies.\n\nLong, flat, gun shaped noodle. A staple of gundead cuisine. However, Gundead have a culturally embedded fear of being hit by a spinning gun-noodle, as adolescent Gundead claim that the limp and wiggly properties of the noodle are transferred to new carriers on contact.",
-    "id": 510
+    "id": 510,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 62
   },
   {
     "name": "Jolter",
@@ -22434,14 +22692,15 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Originally built to kill thick-skinned space mutants, the Jolter fires unreasonably large shells.",
-    "id": 47
+    "id": 47,
+    "ammonomicon_pos": 25
   },
   {
     "name": "Klobbe",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fd/Klobbe.png",
     "notes": "Rapidly fires low-damage bullets.",
     "quote": "Everyone's Favorite",
-    "quality": "C",
+    "quality": "D",
     "type": "Automatic",
     "dps": "11.9",
     "magazine_size": "32",
@@ -22665,7 +22924,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Gungeonologists have long debated what is truly the worst gun in the Gungeon. More Gungeoneers have perished with Klobbes in their inventory than any other gun. Coincidence?",
-    "id": 690
+    "id": 31,
+    "ammonomicon_pos": 71
   },
   {
     "name": "Knight's Gun",
@@ -22675,10 +22935,10 @@
     "quality": "A",
     "type": "Semiautomatic",
     "dps": "64.9",
-    "magazine_size": "6",
+    "magazine_size": "4",
     "ammo_capacity": "180",
     "damage": "8 x5 (40)",
-    "fire_rate": "0.4",
+    "fire_rate": "0.6",
     "reload_time": "1.7s",
     "shot_speed": "23",
     "range": "10",
@@ -22936,7 +23196,11 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Unloads firepower at foes, digs. This trusty shovel was gifted to one of the first Gungeoneers, by a traveling race of sentient yachts.",
-    "id": 550
+    "id": 550,
+    "game_spread": "10°",
+    "game_damage": "8",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 38
   },
   {
     "name": "Kruller Glaive",
@@ -23141,7 +23405,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "This shiny piece of die-cast metal was purchased from an ancient mall kiosk. The buyer's mom sold it at a flea market when they moved out to a middle-aged collector. That person swore it would eventually be worth many times what he paid for it. Unfortunately, he was disappointed, and it was valueless at the time of his death. Now it's in the Gungeon!",
-    "id": 656
+    "id": 656,
+    "game_spread": "0°",
+    "charge_stages": 1,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 214
   },
   {
     "name": "Laser Lotus",
@@ -23153,7 +23421,7 @@
     "dps": "50.3",
     "magazine_size": "10",
     "ammo_capacity": "150",
-    "damage": "16",
+    "damage": "18",
     "fire_rate": "0.20",
     "reload_time": "1.38s",
     "shot_speed": "45",
@@ -23233,20 +23501,22 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Pierce Weapon. Gifted to any who reach Level 5 in the Order of the True Gun.",
-    "id": 156
+    "id": 156,
+    "game_range": "1000",
+    "ammonomicon_pos": 127
   },
   {
     "name": "Laser Rifle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/0d/Laser_Rifle.png",
     "notes": "Fires a burst of three laser beams.",
     "quote": "Blast Off!",
-    "quality": "B",
+    "quality": "C",
     "type": "Burst",
     "dps": "25.5",
     "magazine_size": "24",
     "ammo_capacity": "500",
     "damage": "5",
-    "fire_rate": "0.50",
+    "fire_rate": "0.4",
     "reload_time": "1.2",
     "shot_speed": "200",
     "range": "60",
@@ -23390,17 +23660,19 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "A commonplace energy weapon.\nThe Laser Rifle is the AK-47 of the future! Known for its low manufacturing costs and lower maintenance requirements, the Laser Rifle is used throughout the galaxy by hunters and miscreants alike.",
-    "id": 676
+    "id": 54,
+    "burst_count": 3,
+    "ammonomicon_pos": 131
   },
   {
     "name": "Life Orb",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a5/Life_Orb.png",
     "notes": "continuously damaging the enemy that being closest to the cursor. After killing an enemy, reloading damages all enemies in the room.",
     "quote": "Your Soul is Mine",
-    "quality": "S",
+    "quality": "A",
     "type": "Beam",
     "dps": "20",
-    "magazine_size": "600",
+    "magazine_size": "200",
     "ammo_capacity": "600",
     "damage": "20",
     "fire_rate": "N/A",
@@ -23478,7 +23750,12 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Drains will from foes. An item to be held by a Gungeoneer. Can be used to weaponize stolen will against the holder's enemies.",
-    "id": 595
+    "id": 595,
+    "game_fire_rate": "0.1",
+    "game_spread": "0°",
+    "game_type": "Beam",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 221
   },
   {
     "name": "Light Gun",
@@ -23620,7 +23897,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "After a clumsy child of the Gungeon accidentally dropped this toy into a pit, they were forced to amuse themselves with the Dart Gun.",
-    "id": 27
+    "id": 27,
+    "game_damage": "7",
+    "ammonomicon_pos": 189
   },
   {
     "name": "Lil' Bomber",
@@ -23888,17 +24167,21 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Charge to fire bombs.\nA forgetful adventurer left a pouch full of bombs deep in the Gungeon, and they eventually sprouted into this amusing weapon. A favorite of the Gunsling King, who often sends Manservantes to pick up the bombs.",
-    "id": 332
+    "id": 332,
+    "game_damage": "13",
+    "game_range": "1000",
+    "charge_stages": 1,
+    "ammonomicon_pos": 146
   },
   {
     "name": "Lower Case r",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/f4/Lower_Case_r.png",
     "notes": "Fires a burst of 6 bullets that spell out the word BULLET. Can spell out more words with synergy.",
     "quote": "Alphabetical!",
-    "quality": "C",
-    "type": "Burst",
+    "quality": "D",
+    "type": "Semiautomatic",
     "dps": "18.0",
-    "magazine_size": "36",
+    "magazine_size": "8",
     "ammo_capacity": "900",
     "damage": "8",
     "fire_rate": "0.07",
@@ -24195,7 +24478,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "The letter r looks like a gun. It is rare, but not unheard of, for abstract concepts to take gun form when discussed near the Gungeon.",
-    "id": 738
+    "id": 340,
+    "ammonomicon_pos": 209
   },
   {
     "name": "Luxin Cannon",
@@ -24301,7 +24585,10 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Rapid fire with a big finale.\nThis tricky prism requires guile to wield, but with the right lens, fires shreds of solidified light that slice enemies in their path. Falsely rumored to have natural healing abilities.",
-    "id": 199
+    "id": 199,
+    "game_damage": "4.5",
+    "game_range": "1000",
+    "ammonomicon_pos": 157
   },
   {
     "name": "M1",
@@ -24415,15 +24702,16 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "The most famous rifle in history. This gun's usefulness and reliability have become legend. Though not native to the Gungeon, its arrival seemed to be expected by the Gundead.",
-    "id": 25
+    "id": 25,
+    "ammonomicon_pos": 98
   },
   {
     "name": "M16",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ea/M16.png",
     "notes": "Reloading alternates between bursts of 3 bullets and burst grenade launcher.",
     "quote": "Underslung",
-    "quality": "S",
-    "type": "Burst",
+    "quality": "A",
+    "type": "Variable",
     "dps": "34.3 (Machine Gun) 46.05 (Grenade Launcher) 35.57 (Combined)",
     "magazine_size": "30 (machine gun) 3 (grenade launcher)",
     "ammo_capacity": "500",
@@ -24550,14 +24838,17 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Alternates with grenades. The M16 is a classic military-issue machine gun that upon reload, switches projectiles to grenade launcher.",
-    "id": 96
+    "id": 96,
+    "game_magazine_size": "30",
+    "burst_count": 3,
+    "ammonomicon_pos": 79
   },
   {
     "name": "M1911",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b2/M1911.png",
     "notes": "Standard semiautomatic pistol firing simple lead projectiles. Can be fired manually or automatically.",
     "quote": "Classic",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "26.0 (Manual) 20.4 (Automatic)",
     "magazine_size": "7",
@@ -24568,7 +24859,7 @@
     "shot_speed": "23",
     "range": "60",
     "force": "30",
-    "spread": "4°",
+    "spread": "6°",
     "class": "PISTOL",
     "curse": 0.0,
     "coolness": 0.0,
@@ -24716,14 +25007,16 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "The ancient design fires simple lead projectiles from a moderately-sized clip. In the right hands, this weapon is a force to be reckoned with.",
-    "id": 30
+    "id": 30,
+    "game_fire_rate": "0.15",
+    "ammonomicon_pos": 19
   },
   {
     "name": "MAC10",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/62/MAC10.png",
     "notes": "Fires 4-round bursts with no delay.",
     "quote": "$#!^@ Never End",
-    "quality": "B",
+    "quality": "C",
     "type": "Burst",
     "dps": "34.7",
     "magazine_size": "30",
@@ -24822,7 +25115,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "High rate of fire and relatively compact, making it a favorite among Gungeoneers and criminals alike.",
-    "id": 94
+    "id": 94,
+    "burst_count": 4,
+    "ammonomicon_pos": 86
   },
   {
     "name": "Machine Fist",
@@ -24830,13 +25125,13 @@
     "notes": "Reloading alternates between firing a gatling gun, and a single shot exploding rocket punch that is guided by the player's reticle. The rocket punch consumes 10 ammo.",
     "quote": "Avalanche Of Bullets",
     "quality": "A",
-    "type": "Automatic",
+    "type": "Variable",
     "dps": "45.1 Rocket: 50 Both: 46.0",
     "magazine_size": "50 (gun) 1 (rocket)",
-    "ammo_capacity": "600",
+    "ammo_capacity": "500",
     "damage": "4 Rocket: 20 (Impact) + 30 (Explosion)",
     "fire_rate": "0.07",
-    "reload_time": "1.2",
+    "reload_time": "1",
     "shot_speed": "27",
     "range": "∞",
     "force": "15",
@@ -24944,14 +25239,18 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "According to legend, two men were each fitted with one of these hands. One the left, and the other the right.\nThe next time they met, only one walked away.",
-    "id": 673
+    "id": 186,
+    "game_magazine_size": "50",
+    "game_damage": "4",
+    "game_range": "1000",
+    "ammonomicon_pos": 170
   },
   {
     "name": "Machine Pistol",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/63/Machine_Pistol.png",
     "notes": "Compact automatic pistol with a high rate of fire and large spread. Favored by Bandana Bullet Kin.",
     "quote": "Rapid Fire",
-    "quality": "C",
+    "quality": "D",
     "type": "Automatic",
     "dps": "29.7",
     "magazine_size": "30",
@@ -25097,7 +25396,8 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Machine Pistol is a small but powerful hand-held machine gun.\n\nIt is a favorite of Bandana wearing Gundead, whose impatience with reloading is legendary.",
-    "id": 673
+    "id": 43,
+    "ammonomicon_pos": 72
   },
   {
     "name": "Magic Lamp",
@@ -25328,7 +25628,11 @@
     },
     "sell_price": "30",
     "neckbear_approved": true,
-    "ammonomicon_entry": "Three times the charm.\n\nGunies, unlike their non-gun counterparts, have no problem with death wishes."
+    "ammonomicon_entry": "Three times the charm.\n\nGunies, unlike their non-gun counterparts, have no problem with death wishes.",
+    "id": 0,
+    "game_damage": "8",
+    "game_range": "1000",
+    "ammonomicon_pos": 154
   },
   {
     "name": "Magnum",
@@ -25702,7 +26006,10 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "This gun is unusually filthy for a handgun in the Gungeon. The Gundead spend much of their time polishing and greasing guns, though they conspicuously leave the Magnum alone.",
-    "id": 751
+    "id": 751,
+    "game_fire_rate": "0.15",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 19
   },
   {
     "name": "Mahoguny",
@@ -25712,7 +26019,7 @@
     "quality": "C",
     "type": "Semiautomatic",
     "dps": "56.3 (All leaves hit) 31.3 (No leaves hit)",
-    "magazine_size": "10",
+    "magazine_size": "4",
     "ammo_capacity": "350",
     "damage": "5 (Impact) + 10 (Explosion) Leaves: 4x3 (12)",
     "fire_rate": "0.40",
@@ -25747,14 +26054,15 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "This leafy blaster is made of Mahoguny, a strange wood which will only take root near the Gungeon.",
-    "id": 339
+    "id": 339,
+    "ammonomicon_pos": 192
   },
   {
     "name": "Mailbox",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/88/Mailbox.png",
     "notes": "Fires mail at enemies. The last bullet of each magazine is a package, which can explode, leave confetti, burn, or poison.",
     "quote": "Special Delivery",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "16.6",
     "magazine_size": "10",
@@ -25870,14 +26178,15 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Contains junk mail and one untrustworthy package. It was a wise and hopeful Gungeoneer who observed that mailboxes share the same basic shape of guns. When they sought to change their past, they wondered whether any gun shaped object would operate as guns do, within the Gungeons walls.",
-    "id": 28
+    "id": 28,
+    "ammonomicon_pos": 187
   },
   {
     "name": "Makarov",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/4c/Makarov.png",
     "notes": "Standard semiautomatic pistol. No better or worse than any other gun.",
     "quote": "The People's Gun",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "16.6",
     "magazine_size": "7",
@@ -25971,7 +26280,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Makarov was brought to the Gungeon by a lost Cosmonaut. Some say that the brave, lost soul still wanders the Gungeon. This gun is no better or worse than any other gun.",
-    "id": 79
+    "id": 79,
+    "ammonomicon_pos": 17
   },
   {
     "name": "Makeshift Cannon",
@@ -25984,7 +26294,7 @@
     "magazine_size": "1",
     "ammo_capacity": "1",
     "damage": "200x6 (1200)",
-    "fire_rate": "0.50",
+    "fire_rate": "0.6",
     "reload_time": "2.1s",
     "shot_speed": "35",
     "range": "1000",
@@ -26250,7 +26560,10 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "A makeshift weapon filled with gunpowder and shrapnel. Immensely powerful, but it can only be fired once.",
-    "id": 480
+    "id": 480,
+    "game_damage": "50",
+    "charge_stages": 1,
+    "ammonomicon_pos": 239
   },
   {
     "name": "Marine Sidearm",
@@ -26372,7 +26685,10 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "The Marine Sidearm was brought to the Gungeon by a low-ranking Primerdyne soldier.\n\nThough this gun appears sturdy, it has been known to fail when it is most needed.",
-    "id": 809
+    "id": 86,
+    "game_spread": "5°",
+    "infinite_ammo": true,
+    "ammonomicon_pos": 1
   },
   {
     "name": "Mass Shotgun",
@@ -26382,13 +26698,13 @@
     "quality": "B",
     "type": "Semiautomatic",
     "dps": "25 (Ball 60 (Split)",
-    "magazine_size": "1",
+    "magazine_size": "8",
     "ammo_capacity": "200",
     "damage": "30 (Ball) 6 x12 (72) (Split Shots)",
     "fire_rate": "0.40",
     "reload_time": "1.2s",
-    "shot_speed": "23",
-    "range": "60",
+    "shot_speed": "10",
+    "range": "5",
     "force": "30",
     "spread": "0°",
     "class": "SHOTGUN",
@@ -26709,20 +27025,22 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "A shotgun used by the highest ranking soldiers of the Hegemony. Designed for rapid deployment and easy storage, the Mass Shotgun fires a single large slug that bursts into smaller pellets.",
-    "id": 365
+    "id": 365,
+    "game_damage": "30",
+    "ammonomicon_pos": 50
   },
   {
     "name": "Mega Douser",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c1/Mega_Douser.png",
     "notes": "Fires a continuous stream of water that leaves water puddles on floor.",
     "quote": "Contents Under Pressure",
-    "quality": "C",
+    "quality": "D",
     "type": "Beam",
     "dps": "15.0",
     "magazine_size": "900",
     "ammo_capacity": "900",
     "damage": "15",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "0",
     "shot_speed": "20",
     "range": "20",
@@ -26966,7 +27284,9 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "A water gun might seem to be a poor weapon for Gungeoneering, and in most cases that is true. But a well-placed blast of water can douse a raging inferno; a soaked enemy can be electrified; a dazed foe can be pushed into the abyss. In the Gungeon, creativity is key to victory.",
-    "id": 10
+    "id": 10,
+    "game_type": "Beam",
+    "ammonomicon_pos": 181
   },
   {
     "name": "Megahand",
@@ -27393,7 +27713,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Megahand is a relic of the Ten Days' War against the robots. The most powerful robot masters would modify it for their own styles of combat. This one is basic, but it still works well.",
-    "id": 36
+    "id": 36,
+    "game_damage": "6",
+    "game_range": "1000",
+    "charge_stages": 2,
+    "ammonomicon_pos": 164
   },
   {
     "name": "Microtransaction Gun",
@@ -27564,16 +27888,16 @@
     "notes": "Reloading alternates between firing three small, piercing, parallel lasers and single large lasers.",
     "quote": "Safety First",
     "quality": "B",
-    "type": "Semiautomatic",
+    "type": "Variable",
     "dps": "45.0",
-    "magazine_size": "12",
+    "magazine_size": "6",
     "ammo_capacity": "250",
     "damage": "10 Single: 8",
     "fire_rate": "0.10",
     "reload_time": "1.2s",
-    "shot_speed": "23",
-    "range": "60",
-    "force": "30",
+    "shot_speed": "600",
+    "range": "1000",
+    "force": "4",
     "spread": "7°",
     "class": "PISTOL",
     "curse": 0.0,
@@ -27909,7 +28233,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "This laser was designed to precisely cut rocks in the Gungeon's Black Powder Mining operations, but its powerful blasts are just as effective on Gundead.",
-    "id": 394
+    "id": 394,
+    "game_damage": "10",
+    "ammonomicon_pos": 118
   },
   {
     "name": "Molotov Launcher",
@@ -27925,7 +28251,7 @@
     "fire_rate": "1.50",
     "reload_time": "2.5s",
     "shot_speed": "18",
-    "range": "35",
+    "range": "25",
     "force": "13",
     "spread": "5°",
     "class": "FIRE",
@@ -28059,25 +28385,27 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Launches Molotovs.\n\nThe Molotov Launcher takes the principle of incendiary bottles and removes arm pain.",
-    "id": 292
+    "id": 292,
+    "game_damage": "6",
+    "ammonomicon_pos": 203
   },
   {
     "name": "Moonscraper",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/ba/Moonscraper.png",
     "notes": "Fires a continuous beam that reflects off of solid objects once.",
     "quote": "Beeeeoooowwww!",
-    "quality": "B",
+    "quality": "C",
     "type": "Beam",
     "dps": "26.0",
     "magazine_size": "700",
     "ammo_capacity": "700",
     "damage": "26",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "0",
     "shot_speed": "-1",
     "range": "50",
     "force": "20",
-    "spread": "5°",
+    "spread": "0°",
     "class": "BEAM",
     "curse": 0.0,
     "coolness": 0.0,
@@ -28193,7 +28521,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "This powerful laser was designed to carve moon rock at high speed during terraforming projects.",
-    "id": 713
+    "id": 20,
+    "game_type": "Beam",
+    "ammonomicon_pos": 184
   },
   {
     "name": "Mourning Star",
@@ -28206,7 +28536,7 @@
     "magazine_size": "800",
     "ammo_capacity": "800",
     "damage": "50",
-    "fire_rate": "0.3",
+    "fire_rate": "1",
     "reload_time": "N/A",
     "shot_speed": "∞",
     "range": "∞",
@@ -28440,7 +28770,15 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a tracking beam which, when held on an enemy target, calls down an orbital strike. Persists while the trigger is held. Can be guided.",
-    "id": 515
+    "id": 515,
+    "game_spread": "7°",
+    "game_shot_speed": "-1",
+    "game_range": "50",
+    "game_force": "0",
+    "game_reload_time": "1",
+    "game_type": "Beam",
+    "content_source": "CONTENT_UPDATE_01_FINAL",
+    "ammonomicon_pos": 106
   },
   {
     "name": "Mr. Accretion Jr.",
@@ -28448,17 +28786,17 @@
     "notes": "Fires planets which start orbiting the player if they hit a wall or obstacle.",
     "quote": "Music of the Spheres",
     "quality": "B",
-    "type": "Semiautomatic",
+    "type": "Automatic",
     "dps": "21.9 (average)",
-    "magazine_size": "20",
+    "magazine_size": "30",
     "ammo_capacity": "100",
     "damage": "Varies",
-    "fire_rate": "0.7",
+    "fire_rate": "0.1",
     "reload_time": "2.0s",
     "shot_speed": "19",
     "range": "1000",
     "force": "Varies",
-    "spread": "0°",
+    "spread": "5°",
     "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -28707,7 +29045,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires replicas of planets from a fictional solar system. Collect all eight! Due to a trick in perspective, these two-dimensional planets appear spherical. Though much smaller than the source material, the planets created by this device will pack quite a punch.",
-    "id": 597
+    "id": 597,
+    "game_damage": "5",
+    "game_force": "20",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 83
   },
   {
     "name": "Mutation",
@@ -28725,7 +29067,7 @@
     "shot_speed": "40",
     "range": "20",
     "force": "50",
-    "spread": "5°",
+    "spread": "0°",
     "class": "BEAM",
     "curse": 0.0,
     "coolness": 0.0,
@@ -28816,14 +29158,18 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "A horrific consequence of radiation exposure.\n\nAt least the arm is still somewhat useful.",
-    "id": 333
+    "id": 333,
+    "game_damage": "45",
+    "game_reload_time": "0",
+    "game_type": "Beam",
+    "ammonomicon_pos": 167
   },
   {
     "name": "Nail Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/79/Nail_Gun.png",
     "notes": "Fires low-damage nails.",
     "quote": "Pest Control",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "25.1",
     "magazine_size": "500",
@@ -28897,7 +29243,8 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "This ancient tool is theorized to have been used in bizarre pagan rituals involving spiders and flame.",
-    "id": 692
+    "id": 26,
+    "ammonomicon_pos": 188
   },
   {
     "name": "Old Goldie",
@@ -28912,9 +29259,9 @@
     "damage": "5.95x10 (59.5) [after damage multiplier]",
     "fire_rate": "0.50",
     "reload_time": "1.2s",
-    "shot_speed": "23",
+    "shot_speed": "22",
     "range": "10",
-    "force": "30",
+    "force": "13",
     "spread": "5°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -29062,17 +29409,19 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "A masterwork shotgun.\n\nThe right answer isn't always a gun that shoots bees, a water gun, or a flaming hand. Sometimes, all you need is a simple concept executed immaculately. This gold trimmed, double-barreled shotgun represents the best of traditional guncraft.",
-    "id": 93
+    "id": 93,
+    "game_damage": "3.5",
+    "ammonomicon_pos": 42
   },
   {
     "name": "Origuni",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/09/Origuni.png",
     "notes": "Fires piercing paper planes that follow the player's crosshair (Remote Bullets effect).",
     "quote": "Thousand Cuts",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "22.5 (Manual) 20.8 (Automatic)",
-    "magazine_size": "8",
+    "magazine_size": "1",
     "ammo_capacity": "300",
     "damage": "100",
     "fire_rate": "0.21 (Manual) 0.24 (Automatic)",
@@ -29342,7 +29691,10 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "This gun, incredibly enough, has been folded entirely out of paper.\n\nOnly a true master gunsmith could create something this elegant.",
-    "id": 744
+    "id": 477,
+    "game_fire_rate": "0.2",
+    "game_spread": "0°",
+    "ammonomicon_pos": 196
   },
   {
     "name": "Particulator",
@@ -29465,7 +29817,9 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "An initial burst of exotic particles triggers additional homing blasts.\nA weapon from the future. Perhaps a Gungeoneer from the distant future succeeded, and brought this gun back?\n\nGunesis 1:1 In the beginning, the Gungeon was formless and void, and bullets moved over the face of the deep.",
-    "id": 228
+    "id": 228,
+    "game_damage": "30",
+    "ammonomicon_pos": 137
   },
   {
     "name": "Patriot",
@@ -29783,24 +30137,26 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "A powerful machine gun that once belonged to a forgotten hero. This gun's mechanism is overly complicated, but it proves extremely effective in the field. Beloved by many, despite its flaws.",
-    "id": 98
+    "id": 98,
+    "game_range": "1000",
+    "ammonomicon_pos": 89
   },
   {
     "name": "Pea Shooter",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/09/Pea_Shooter.png/revision/latest?cb=20160305235549",
     "notes": "Fires low-damage peas.",
     "quote": "Baby's First Gun",
-    "quality": "B",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "10.6",
     "magazine_size": "6",
-    "ammo_capacity": "350",
+    "ammo_capacity": "1000",
     "damage": "7",
     "fire_rate": "0.15 (Manual) 0.25 (Automatic)",
-    "reload_time": "1.2",
-    "shot_speed": "10",
-    "range": "1000",
-    "force": "10",
+    "reload_time": "1.5",
+    "shot_speed": "20",
+    "range": "20",
+    "force": "3",
     "spread": "10°",
     "class": "SHITTY",
     "curse": 0.0,
@@ -29906,14 +30262,16 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Traditionally given to Gungeoneers when they first arrive at the Gungeon. It is incredibly weak.",
-    "id": 740
+    "id": 197,
+    "game_fire_rate": "0.15",
+    "ammonomicon_pos": 8
   },
   {
     "name": "Phoenix",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c1/Phoenix.png",
     "notes": "Shooting creates a small cone of fire in front of the player that burns enemies.",
     "quote": "Reborn In Flame",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "16.8",
     "magazine_size": "12",
@@ -30117,14 +30475,15 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "The muzzle flare from this fiery handgun can ignite enemies. Return enemies to dust. Famously wielded by Two-Shot Erias on her final Gungeon attempt.",
-    "id": 736
+    "id": 384,
+    "ammonomicon_pos": 153
   },
   {
     "name": "Pitchfork",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/1/1c/Pitchfork.png",
     "notes": "Fires piercing fireballs that burn enemies.",
     "quote": "Get Forked!",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "26.7",
     "magazine_size": "100",
@@ -30219,7 +30578,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "A favorite of Fallen Bullet Kin, who learned everything about being devils from television.",
-    "id": 722
+    "id": 336,
+    "ammonomicon_pos": 218
   },
   {
     "name": "Plague Pistol",
@@ -30231,13 +30591,13 @@
     "dps": "16.8",
     "magazine_size": "12",
     "ammo_capacity": "200",
-    "damage": "4",
+    "damage": "5",
     "fire_rate": "0.15",
     "reload_time": "1.2s",
     "shot_speed": "20",
     "range": "25",
     "force": "13",
-    "spread": "5°",
+    "spread": "4°",
     "class": "POISON",
     "curse": 0.0,
     "coolness": 0.0,
@@ -30335,7 +30695,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires poisonous rounds.",
-    "id": 207
+    "id": 207,
+    "ammonomicon_pos": 92
   },
   {
     "name": "Plunger",
@@ -30348,7 +30709,7 @@
     "magazine_size": "500",
     "ammo_capacity": "500",
     "damage": "5/s",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "N/A",
     "shot_speed": "20",
     "range": "20",
@@ -30527,20 +30888,24 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a stream of toxic goop. Ammo can be reused.\n\nThe Syringe Gun was ordered for the Gungeon by the Medecins Sans Diplome to perform complete blood transfusions all at once. When that proved dangerous, a crafty Gungeoneer filled the giant Syringe with a live Poisbulon.",
-    "id": 208
+    "id": 208,
+    "game_damage": "7",
+    "game_reload_time": "0",
+    "game_type": "Beam",
+    "ammonomicon_pos": 182
   },
   {
     "name": "Polaris",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a2/Polaris.png",
     "notes": "Has 3 levels. Killing enough enemies causes the gun to level up, increasing its damage. Taking damage decreases its level by 1.",
     "quote": "Storied",
-    "quality": "A",
-    "type": "Semiautomatic",
+    "quality": "B",
+    "type": "Variable",
     "dps": "17.9 (Level 1) 35.8 (Level 2) 89.6 (Level 3)",
     "magazine_size": "12",
-    "ammo_capacity": "700",
+    "ammo_capacity": "450",
     "damage": "25",
-    "fire_rate": "0.25",
+    "fire_rate": "0.07",
     "reload_time": "0.6",
     "shot_speed": "40",
     "range": "1000",
@@ -30916,14 +31281,15 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "A mysterious gun that grows in strength on each kill. Substantial power is lost any time its wielder is damaged. Stories are told of a rebellious android that once used this gun in a conflict deep underground. The handle is marked with two small tick marks.",
-    "id": 718
+    "id": 97,
+    "ammonomicon_pos": 24
   },
   {
     "name": "Poxcannon",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/96/Poxcannon.png",
     "notes": "Shoots poisonous t-shirts with high knockback. Poisoned enemies create a poison puddle on death.",
     "quote": "Lousy T-Shirt",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "26.1",
     "magazine_size": "6",
@@ -31041,20 +31407,21 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "This souped-up T-Shirt Cannon fires tainted apparel.\nEnemies defeated after contracting the pox will leave a pool of deadly ooze behind.",
-    "id": 513
+    "id": 513,
+    "ammonomicon_pos": 224
   },
   {
     "name": "Proton Backpack",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b0/Proton_Backpack.png",
     "notes": "Fires a slow, homing laser stream that locks onto enemies. Deals extra damage to ghostly enemies.",
     "quote": "Crossing Streams",
-    "quality": "A",
+    "quality": "B",
     "type": "Beam",
     "dps": "50.0",
     "magazine_size": "∞",
     "ammo_capacity": "500",
     "damage": "50",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "0",
     "shot_speed": "14",
     "range": "90",
@@ -31207,7 +31574,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Deals extra damage to ghosts and spectres. Originally brought to the Gungeon by a team of investigators who suspected that something strange was going on.",
-    "id": 720
+    "id": 179,
+    "game_type": "Beam",
+    "ammonomicon_pos": 180
   },
   {
     "name": "Prototype Railgun",
@@ -31225,7 +31594,7 @@
     "shot_speed": "800",
     "range": "1000",
     "force": "0",
-    "spread": "0°",
+    "spread": "4°",
     "class": "CHARGE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -31427,7 +31796,10 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Launches a dense metal slug at incredible speeds. A secret military prototype, built at great cost by the Hegemony of Man. A single shot can punch a hole in anything up to a Destroyer-class starship.",
-    "id": 370
+    "id": 370,
+    "game_fire_rate": "0.1",
+    "charge_stages": 2,
+    "ammonomicon_pos": 102
   },
   {
     "name": "Pulse Cannon",
@@ -31442,9 +31814,9 @@
     "damage": "4 x6 (24)",
     "fire_rate": "0.40",
     "reload_time": "1.8s",
-    "shot_speed": "23",
+    "shot_speed": "25",
     "range": "15",
-    "force": "60",
+    "force": "10",
     "spread": "0°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -31526,7 +31898,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires several pulses of decoherent energy. An early, less controlled version of modern energy weaponry.",
-    "id": 123
+    "id": 123,
+    "game_damage": "4",
+    "ammonomicon_pos": 56
   },
   {
     "name": "Quad Laser",
@@ -31666,21 +32040,22 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "This strange artifact fires an extremely powerful blast of Moon energy. While incredibly slow, it cannot be halted.",
-    "id": 475
+    "id": 475,
+    "ammonomicon_pos": 216
   },
   {
     "name": "Rad Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/e3/Rad_Gun.png",
     "notes": "Increases coolness by 2. When reloading, if the reload button is hit at the right time, the gun's damage is increased. Failing a reload resets the damage.",
     "quote": "Totally Rad",
-    "quality": "A",
-    "type": "Semiautomatic",
+    "quality": "B",
+    "type": "Variable",
     "dps": "24.6 (at 0 reloads)",
-    "magazine_size": "12",
+    "magazine_size": "8",
     "ammo_capacity": "250",
     "damage": "10",
-    "fire_rate": "0.15",
-    "reload_time": "1.4",
+    "fire_rate": "0.45",
+    "reload_time": "1.2",
     "shot_speed": "40",
     "range": "1000",
     "force": "11",
@@ -31969,7 +32344,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Active reload provides stacking benefits for bad enough dudes (and chicks).",
-    "id": 743
+    "id": 566,
+    "game_spread": "6°",
+    "active_reload": true,
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 133
   },
   {
     "name": "Raiden Coil",
@@ -31977,17 +32356,17 @@
     "notes": "Fires a continuous laser bean that homes in on all on-screen enemies one by one.",
     "quote": "Shoot Em' Up",
     "quality": "A",
-    "type": "Beam",
+    "type": "Variable",
     "dps": "17.5",
     "magazine_size": "500",
     "ammo_capacity": "500",
     "damage": "17.5/s",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "N/A",
     "shot_speed": "∞",
     "range": "30",
     "force": "10",
-    "spread": "5°",
+    "spread": "0°",
     "class": "SILLY",
     "curse": 0.0,
     "coolness": 0.0,
@@ -32115,25 +32494,28 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Damages all enemies on screen, no matter what.\nThis cannon was built for mounting on Supersonic Attack Fighters, but has been retrofitted to be carried by infantry. An inscription on the barrel reads, \"Know thy own position, and all others inevitably fall.\"",
-    "id": 107
+    "id": 712,
+    "game_reload_time": "0",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 167
   },
   {
     "name": "Railgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/ab/Railgun.png",
     "notes": "Charges to fire a high-velocity, piercing bullet that bounces many times.",
     "quote": "Calibrating",
-    "quality": "B",
+    "quality": "S",
     "type": "Charged",
     "dps": "27.0 (1 hit) 243.2 (maximum hits)",
     "magazine_size": "1",
-    "ammo_capacity": "200",
+    "ammo_capacity": "40",
     "damage": "22",
     "fire_rate": "/A",
-    "reload_time": "0.5",
+    "reload_time": "0.6",
     "shot_speed": "26",
     "range": "1000",
     "force": "25",
-    "spread": "0°",
+    "spread": "4°",
     "class": "CHARGE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -32308,7 +32690,10 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Launches a dense metal slug at incredible speeds. Ricochets will loosely track enemies.\nThis railgun has moved beyond the prototype stage into production. The slug has been reduced in mass to cut costs, resulting in weaker relative performance but high ricochet potential.",
-    "id": 686
+    "id": 358,
+    "game_fire_rate": "0.1",
+    "charge_stages": 2,
+    "ammonomicon_pos": 101
   },
   {
     "name": "Rattler",
@@ -32318,14 +32703,14 @@
     "quality": "B",
     "type": "Semiautomatic",
     "dps": "35.6",
-    "magazine_size": "8",
+    "magazine_size": "6",
     "ammo_capacity": "200",
     "damage": "3 x7 (21) (Bullets) 3 (Laser)",
-    "fire_rate": "0.60",
+    "fire_rate": "0.2",
     "reload_time": "1.2s",
-    "shot_speed": "23",
+    "shot_speed": "15",
     "range": "20",
-    "force": "30",
+    "force": "10",
     "spread": "0°",
     "class": "POISON",
     "curse": 0.0,
@@ -32476,7 +32861,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Rattler was one of Emmitt Calx's worst, and last, ideas. This is a Winchester shotgun with an extremely venomous snake wrapped around it, adding a poisonous blast to each volley. Requires extreme dexterity to reload.",
-    "id": 406
+    "id": 406,
+    "game_damage": "3",
+    "ammonomicon_pos": 45
   },
   {
     "name": "RC Rocket",
@@ -32611,7 +32998,8 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires wire-guided missiles, controlled by aiming.\nThese missiles are excellent for catching an enemy off guard, or perhaps for traversing an electrified corridor.",
-    "id": 372
+    "id": 372,
+    "ammonomicon_pos": 144
   },
   {
     "name": "Really Special Lute",
@@ -32621,13 +33009,13 @@
     "quality": "C",
     "type": "Automatic",
     "dps": "82.5 (if all bullets hit)",
-    "magazine_size": "75",
+    "magazine_size": "60",
     "ammo_capacity": "300",
     "damage": "6 x7 (42)",
-    "fire_rate": "0.5",
+    "fire_rate": "0.1",
     "reload_time": "1.2s",
-    "shot_speed": "9",
-    "range": "10",
+    "shot_speed": "15",
+    "range": "15",
     "force": "13",
     "spread": "N/A",
     "class": "SILLY",
@@ -33010,23 +33398,27 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Energizes companionable listeners.\n\nBarely a gun at all, but a very, very special lute. Or so were told.\n\nSeems to get out of tune when blue fire is around.",
-    "id": 506
+    "id": 506,
+    "game_spread": "6°",
+    "game_damage": "4",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 212
   },
   {
     "name": "Regular Shotgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/c6/Regular_Shotgun.png",
     "notes": "Standard shotgun firing a spread of 6 pellets. Favored by Shotgun Kin.",
     "quote": "Cocked and Locked",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "32.0",
     "magazine_size": "8",
-    "ammo_capacity": "500",
+    "ammo_capacity": "150",
     "damage": "30",
     "fire_rate": "0.60",
-    "reload_time": "0.1",
-    "shot_speed": "-1",
-    "range": "30",
+    "reload_time": "1.8",
+    "shot_speed": "20",
+    "range": "15",
     "force": "10",
     "spread": "10°",
     "class": "SHOTGUN",
@@ -33168,7 +33560,8 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "A regular shotgun. There's nothing special about it!\n\nFavored by the Shotgun Kin that roam the Gungeon, as it reminds them of their home.",
-    "id": 763
+    "id": 51,
+    "ammonomicon_pos": 40
   },
   {
     "name": "Robot's Left Hand",
@@ -33176,13 +33569,13 @@
     "notes": "Rapidly fires blue lasers.",
     "quote": "See You Later",
     "quality": "A",
-    "type": "Automatic",
+    "type": "Variable",
     "dps": "40.0",
     "magazine_size": "60",
     "ammo_capacity": "600",
     "damage": "5",
-    "fire_rate": "0.10",
-    "reload_time": "1.6s",
+    "fire_rate": "0.07",
+    "reload_time": "1.8",
     "shot_speed": "N/A",
     "range": "∞",
     "force": "N/A",
@@ -33316,7 +33709,13 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "The left hand of an assault robot that fled to the Gungeon.\nIt turns out most robots are left-handed.",
-    "id": 576
+    "id": 576,
+    "game_spread": "8°",
+    "game_shot_speed": "35",
+    "game_range": "1000",
+    "game_force": "20",
+    "content_source": "CONTENT_UPDATE_01_FINAL",
+    "ammonomicon_pos": 171
   },
   {
     "name": "Robot's Right Hand",
@@ -33439,7 +33838,11 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "The right hand of an assault robot that fled to the Gungeon. When weilded by the Robot, combines with Junk to increase all damage output.\nIt is a simple projectile delivery system. Reliable, but its short barrel is lacking in intricacy. Under the control of a targeting AI it becomes fearsome indeed.",
-    "id": 88
+    "id": 88,
+    "game_spread": "7°",
+    "game_ammo_capacity": "350",
+    "infinite_ammo": true,
+    "ammonomicon_pos": 5
   },
   {
     "name": "Rogue Special",
@@ -33622,14 +34025,17 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "The Rogue Special, given to the Pilot by his partner. It's never let him down.\n\nThis hip shooter has been known to fire half-cocked and often gets itself into more trouble than it can handle.",
-    "id": 651
+    "id": 651,
+    "infinite_ammo": true,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 2
   },
   {
     "name": "RPG",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/6f/RPG.png",
     "notes": "Fires explosive rocket-propelled grenades that accelerate over a short distance.",
     "quote": "Leveled Up",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "18.3",
     "magazine_size": "1",
@@ -33640,7 +34046,7 @@
     "shot_speed": "40",
     "range": "90",
     "force": "10",
-    "spread": "5°",
+    "spread": "1°",
     "class": "EXPLOSIVE",
     "curse": 0.0,
     "coolness": 0.0,
@@ -33807,7 +34213,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires rocket propelled grenades that accelerate over a short distance.",
-    "id": 39
+    "id": 39,
+    "ammonomicon_pos": 139
   },
   {
     "name": "RUBE-ADYNE MK.II",
@@ -33818,12 +34225,12 @@
     "type": "Semiautomatic",
     "dps": "63.8",
     "magazine_size": "15",
-    "ammo_capacity": "200",
-    "damage": "7",
+    "ammo_capacity": "300",
+    "damage": "10",
     "fire_rate": "0.10",
-    "reload_time": "0.6",
+    "reload_time": "0.48",
     "shot_speed": "40",
-    "range": "60",
+    "range": "35",
     "force": "10",
     "spread": "7°",
     "class": "PISTOL",
@@ -33970,7 +34377,8 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "After mostly confirming the functionality of bounce physics, work was done to improve the design. Smaller, lighter, and in an attractive shade of purple, the RUBE-ADYNE MK. II delivers on the promise of the original prototype.",
-    "id": 142
+    "id": 128,
+    "ammonomicon_pos": 109
   },
   {
     "name": "RUBE-ADYNE Prototype",
@@ -34105,7 +34513,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "A prototype ricochet blaster. This blaster was created to test the limits of projectile impact and ricochet physics.",
-    "id": 142
+    "id": 142,
+    "ammonomicon_pos": 108
   },
   {
     "name": "Rubenstein's Monster",
@@ -34118,7 +34527,7 @@
     "magazine_size": "100",
     "ammo_capacity": "900",
     "damage": "8",
-    "fire_rate": "0.07",
+    "fire_rate": "0.05",
     "reload_time": "0.9s",
     "shot_speed": "26",
     "range": "1000",
@@ -34328,7 +34737,9 @@
     "sell_price": "3",
     "neckbear_approved": true,
     "ammonomicon_entry": "An extremely powerful ricochet rifle. Cobbled together from the compatible parts of the RUBE-ADYNE and its prototype, this makeshift gun provides maximum lethality in one convenient package.",
-    "id": 609
+    "id": 609,
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 110
   },
   {
     "name": "Rusty Sidearm",
@@ -34460,14 +34871,17 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "The Rusty Sidearm was brought to the Gungeon by the Hunter. Despite its extremely dated design and some signs of rust, this gun appears relatively new. Very strange...",
-    "id": 810
+    "id": 99,
+    "game_fire_rate": "0.2",
+    "infinite_ammo": true,
+    "ammonomicon_pos": 0
   },
   {
     "name": "SAA",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/8f/SAA.png",
     "notes": "Fires bouncing bullets that aim towards enemies after bouncing.",
     "quote": "Exhilarating Reload Time",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "43.6",
     "magazine_size": "6",
@@ -34622,7 +35036,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires ricochet rounds.\n\nThe Single Action Army may take some time to reload, but you'll hear no complaints from its users. Documents reclaimed from the Order of the True Gun imply that on occasion, a cultist briefly attains gunvana while chambering its rounds.",
-    "id": 50
+    "id": 50,
+    "game_fire_rate": "0.12",
+    "ammonomicon_pos": 22
   },
   {
     "name": "Sawed-Off",
@@ -35001,14 +35417,15 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "An overcharged anti-loitering and mob dispersal device. Forces enemies to forget their purpose and conviction.",
-    "id": 3
+    "id": 3,
+    "ammonomicon_pos": 126
   },
   {
     "name": "Serious Cannon",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/51/Serious_Cannon.png",
     "notes": "Charges to fire a large, bouncing, piercing cannonball.",
     "quote": "Seriously MENTAL",
-    "quality": "S",
+    "quality": "A",
     "type": "Charged",
     "dps": "17 (single hit) 26 (twice hit) 35 (three hits) 69 (all 6 hits)",
     "magazine_size": "1",
@@ -35160,14 +35577,16 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "A cannon of serious power! This launches cannonballs that cannot be stopped by anything but a solid wall.\n\nThe Serious Cannon was brought to the Gungeon by Sam \"Serious\" Stone.",
-    "id": 37
+    "id": 37,
+    "charge_stages": 1,
+    "ammonomicon_pos": 238
   },
   {
     "name": "Shades's Revolver",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/4/43/Shades%27s_Revolver.png",
     "notes": "Increases coolness by 3.",
     "quote": "Someone Loses An Eye",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "30.0",
     "magazine_size": "6",
@@ -35296,7 +35715,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "The cooler bullet brother's handgun. The barrel has 17 notches carved along its length, and somewhat incongruously, a picture of a smiling Bullet Kin. Anyone who uses this handgun would look pretty cool.",
-    "id": 22
+    "id": 22,
+    "ammonomicon_pos": 37
   },
   {
     "name": "Shell",
@@ -35309,8 +35729,8 @@
     "magazine_size": "6",
     "ammo_capacity": "150",
     "damage": "3x8 (24) Bullets: 2x4 (8)",
-    "fire_rate": "0.5",
-    "reload_time": "1.4 s",
+    "fire_rate": "0.2",
+    "reload_time": "1.5",
     "shot_speed": "N/A",
     "range": "∞",
     "force": "N/A",
@@ -35387,15 +35807,22 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "This strange gun, shaped like a shotgun shell, fires bullets that are shaped like shotguns.\n\nThose shotgun-shaped bullets will fire a spray of rounds upon impact, much like a shotgun would.",
-    "id": 756
+    "id": 512,
+    "game_spread": "10°",
+    "game_damage": "7",
+    "game_shot_speed": "12",
+    "game_range": "100",
+    "game_force": "13",
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 14
   },
   {
     "name": "Shellegun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/5/59/Shellegun.png",
     "notes": "Reloading alternates between a pistol and a continuous beam. Increases curse by 1.",
     "quote": "Circle Of Death",
-    "quality": "A",
-    "type": "Semiautomatic",
+    "quality": "B",
+    "type": "Variable",
     "dps": "33.1 (Pistol, manual) 24.0 (Pistol, automatic) 13.3 (Beam) 18.4 (both modes)",
     "magazine_size": "12 (pistol) 20 (beam)",
     "ammo_capacity": "300",
@@ -35405,7 +35832,7 @@
     "shot_speed": "25",
     "range": "30",
     "force": "22",
-    "spread": "5°",
+    "spread": "2°",
     "class": "PISTOL",
     "curse": 1.0,
     "coolness": 0.0,
@@ -35515,7 +35942,10 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The pinnacle of Nuign's investigations into necromantic guns. Forged from a dying Shelleton, this gun reconstitutes itself when reloaded.\n\nRevolvations 22:12\n\nAs with all things, the Gun must eventually end; the final Bullet will leave the chamber, and all will be reloaded.",
-    "id": 464
+    "id": 464,
+    "game_fire_rate": "0.1",
+    "game_magazine_size": "12",
+    "ammonomicon_pos": 30
   },
   {
     "name": "Shock Rifle",
@@ -35690,17 +36120,19 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Shock Rifle uses a modified battery and coil to propel electricity.",
-    "id": 153
+    "id": 153,
+    "game_range": "1000",
+    "ammonomicon_pos": 205
   },
   {
     "name": "Shotbow",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a7/Shotbow.png",
     "notes": "Fires a shotgun blast of bolts.",
     "quote": "A Teleporter Accident",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "30.9",
-    "magazine_size": "3",
+    "magazine_size": "1",
     "ammo_capacity": "80",
     "damage": "22",
     "fire_rate": "1.00",
@@ -35822,14 +36254,15 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The shotbow fires crossbow bolts in a shotgun burst.\n\nThe shotbow is the result of a failed experiment using the Gungeon's teleportation network.",
-    "id": 749
+    "id": 126,
+    "ammonomicon_pos": 67
   },
   {
     "name": "Shotgrub",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/eb/Shotgrub.png",
     "notes": "Fires a spread of 5 bullets that leave small pools of poison goop.",
     "quote": "No Worries!",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "46.5",
     "magazine_size": "8",
@@ -35837,9 +36270,9 @@
     "damage": "5x5 (25)",
     "fire_rate": "0.40",
     "reload_time": "1.5",
-    "shot_speed": "23",
-    "range": "60",
-    "force": "30",
+    "shot_speed": "20",
+    "range": "25",
+    "force": "13",
     "spread": "0°",
     "class": "POISON",
     "curse": 0.0,
@@ -36075,14 +36508,16 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "The infant Shotgrub is typically wielded by an adult Shotgrub, a guardian of Bullet Hell.\nIt fires bullets in unnerving patterns. Gungeoneers should take care that it not attach to their brainstem.",
-    "id": 347
+    "id": 347,
+    "game_damage": "5",
+    "ammonomicon_pos": 53
   },
   {
     "name": "Shotgun Full of Hate",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/b/b1/Shotgun_Full_of_Hate.png",
     "notes": "Shoots a shotgun burst of skulls, nails, regular bullets, and poison bullets that leave pools of poison goop.",
     "quote": "Hate Is Power!",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "54.5",
     "magazine_size": "8",
@@ -36090,9 +36525,9 @@
     "damage": "6 x4 (24) (Regular & Poison) 5 (Skull) 3 (Nail) 32 (Total)",
     "fire_rate": "0.50",
     "reload_time": "1.2",
-    "shot_speed": "23",
-    "range": "60",
-    "force": "30",
+    "shot_speed": "16",
+    "range": "22",
+    "force": "13",
     "spread": "14°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -36243,14 +36678,16 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "A merciless shotgun variant, packed with skulls, nails, and poison. After Hespera fell, her shotgun grew dark and corrupted by rage.",
-    "id": 143
+    "id": 143,
+    "game_damage": "6",
+    "ammonomicon_pos": 51
   },
   {
     "name": "Shotgun Full of Love",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/2d/Shotgun_Full_of_Love.png",
     "notes": "Has a chance to charm enemies.",
     "quote": "Kill With Kindness",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "51.1",
     "magazine_size": "8",
@@ -36258,9 +36695,9 @@
     "damage": "5 x6 (30)",
     "fire_rate": "0.50",
     "reload_time": "1.2",
-    "shot_speed": "23",
-    "range": "60",
-    "force": "30",
+    "shot_speed": "25",
+    "range": "1000",
+    "force": "8",
     "spread": "14°",
     "class": "CHARM",
     "curse": 0.0,
@@ -36438,7 +36875,9 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Deals damage and potentially charms enemies.\n\nThe preferred weapon of Hespera, the Pride of Venus, a beloved Gungeoneer.",
-    "id": 379
+    "id": 379,
+    "game_damage": "5",
+    "ammonomicon_pos": 52
   },
   {
     "name": "Silencer",
@@ -36454,8 +36893,8 @@
     "fire_rate": "0.60",
     "reload_time": "1.5s",
     "shot_speed": "23",
-    "range": "60",
-    "force": "30",
+    "range": "40",
+    "force": "9",
     "spread": "5°",
     "class": "SILLY",
     "curse": 0.0,
@@ -36566,7 +37005,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Can stun enemies at close range. Alben Smallbore was known for enchanting mundane objects to make them more gun-like. This pillow, which once decorated his guest chambers, is a perfect example of his unique strain of madness.",
-    "id": 335
+    "id": 335,
+    "ammonomicon_pos": 228
   },
   {
     "name": "Siren",
@@ -36576,14 +37016,14 @@
     "quality": "C",
     "type": "Semiautomatic",
     "dps": "32.0",
-    "magazine_size": "6",
+    "magazine_size": "8",
     "ammo_capacity": "200",
     "damage": "6 x3 (18)",
     "fire_rate": "0.40",
     "reload_time": "1.50s",
-    "shot_speed": "23",
-    "range": "60",
-    "force": "30",
+    "shot_speed": "25",
+    "range": "1000",
+    "force": "10",
     "spread": "0° / 10° / 20°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -36818,7 +37258,10 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Prevents goop effects.\n\nThe Siren's watery blasts can be a lifesaver when faced with toxic pools or patches of flame.",
-    "id": 404
+    "id": 404,
+    "game_spread": "0°",
+    "game_damage": "6",
+    "ammonomicon_pos": 57
   },
   {
     "name": "Skull Spitter",
@@ -36916,14 +37359,16 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Even in death, bullets fly. This gun was crafted by Nuign the Cursed, from the skeleton of a Gundead that had become a Spectre.\nNuign's body still remains somewhere deep in the Hollow, and it is from his bones that all Curse arises.",
-    "id": 45
+    "id": 45,
+    "game_range": "1000",
+    "ammonomicon_pos": 198
   },
   {
     "name": "Sling",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/93/Sling.png",
     "notes": "Fires bouncing rocks. Deals 2.5x damage to bosses and 2x damage after bouncing.",
     "quote": "Outrageous!",
-    "quality": "C",
+    "quality": "D",
     "type": "Charged",
     "dps": "25.0 62.5 (to bosses)",
     "magazine_size": "1",
@@ -37059,7 +37504,9 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Sometimes the old ways are the best ways. Deals more damage to powerful foes.\n\nThis is not one of those old, best ways. The lowly sling is barely a gun, even by Gungeon standards. Only recommended as a last resort for serious Gungeoneers.",
-    "id": 382
+    "id": 382,
+    "charge_stages": 1,
+    "ammonomicon_pos": 233
   },
   {
     "name": "Slinger",
@@ -37291,14 +37738,19 @@
     },
     "neckbear_approved": true,
     "ammonomicon_entry": "Infinite ammo. Does not reveal secret walls. Brought to the Gungeon by a legendary gunplay expert.\n\nCalled the gunslinger by his foes not because of his ability to aim and shoot but because of his unusual habit of literally slinging his gun once it is out of ammo and replacing it with another from his magical belt of a million guns.",
-    "id": 604
+    "id": 604,
+    "game_fire_rate": "0.1",
+    "charge_stages": 1,
+    "infinite_ammo": true,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 10
   },
   {
     "name": "Smiley's Revolver",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a8/Smiley%27s_Revolver.png",
     "notes": "Decreases shop prices while held. Fire rate increased shortly after rolling.",
     "quote": "All Smiles",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "43.2 (Manual) 27 (Automatic)",
     "magazine_size": "6",
@@ -37364,7 +37816,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The younger bullet brother's handgun. It is unhelpfully labelled with an 'S'. Shopkeepers found Smiley's good nature disarming, often giving him the advantage when negotiating prices.",
-    "id": 35
+    "id": 35,
+    "game_fire_rate": "0.1",
+    "ammonomicon_pos": 36
   },
   {
     "name": "Snakemaker",
@@ -37515,14 +37969,16 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Chance to transmogrify enemies.\nThe Snakemaker was an attempt to replicate the strange transformative power of certain magics with technology. Though the experiment was a success, further research into transfigurative weaponry seemed excessive.",
-    "id": 360
+    "id": 360,
+    "game_range": "1000",
+    "ammonomicon_pos": 123
   },
   {
     "name": "Sniper Rifle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/c/cf/Sniper_Rifle.png",
     "notes": "Fires a high-velocity bullet that can pierce through one enemy.",
     "quote": "Scope Creep",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "24.8",
     "magazine_size": "10",
@@ -37627,7 +38083,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Low rate of fire, piercing.\nHandcrafted by the Rifle Gundead, each Sniper Rifle performs slightly differently. Though the Gungeon rarely offers many opportunities for distance shooting, this gun still rewards a steady hand.",
-    "id": 49
+    "id": 49,
+    "ammonomicon_pos": 96
   },
   {
     "name": "Snowballer",
@@ -37753,7 +38210,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "This weapon was constructed the single time the Gungeon experienced a snow day. New Gundead simply appeared with these cannons strapped to their bodies and pelted everything in sight with powdery projectiles. There were also many chipped teeth.",
-    "id": 402
+    "id": 402,
+    "ammonomicon_pos": 172
   },
   {
     "name": "Staff of Firepower",
@@ -37761,7 +38219,7 @@
     "notes": "Reloading alternates between a rapid fire pistol and a beam weapon that can set enemies on fire.",
     "quote": "Missing Link",
     "quality": "A",
-    "type": "Semiautomatic",
+    "type": "Variable",
     "dps": "24 Staff: 54.3 Both: 42.3",
     "magazine_size": "6 Staff: 12",
     "ammo_capacity": "200",
@@ -37919,20 +38377,24 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Reload to transform.\nOne of the earliest gun experiments, before the fires of the Forge were lit. This \"magic revolver\" was created when the then-master of the Gungeon taped one of his staves of power to the top of the barrel.",
-    "id": 395
+    "id": 395,
+    "game_magazine_size": "6",
+    "game_damage": "7",
+    "game_range": "1000",
+    "ammonomicon_pos": 150
   },
   {
     "name": "Starpew",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/0a/Starpew.png",
     "notes": "Fires water bubbles. Can be charged to increase the number of bubbles fired in fixed pattern.",
     "quote": "Reap And Sow",
-    "quality": "S",
+    "quality": "A",
     "type": "Charged",
     "dps": "35 (1 Droplet) 46.6 (3 Droplets) 50 (5 Droplets) 51.6 (9 Droplets) 93.3 (18 Droplets)",
-    "magazine_size": "100",
+    "magazine_size": "30",
     "ammo_capacity": "100",
     "damage": "7",
-    "fire_rate": "0.2s",
+    "fire_rate": "0.22",
     "reload_time": "1",
     "shot_speed": "N/A",
     "range": "∞",
@@ -38258,7 +38720,11 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Charge sequentially for more shots! A Watering can used by the Bullet Kin, who lack even a fundamental understanding of agriculture.",
-    "id": 507
+    "id": 507,
+    "game_spread": "0°",
+    "charge_stages": 3,
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 201
   },
   {
     "name": "Sticky Crossbow",
@@ -38393,13 +38859,13 @@
     "type": "Semiautomatic",
     "dps": "27.5",
     "magazine_size": "1",
-    "ammo_capacity": "60",
+    "ammo_capacity": "50",
     "damage": "10",
     "fire_rate": "1.00",
-    "reload_time": "1",
+    "reload_time": "2",
     "shot_speed": "20",
-    "range": "1000",
-    "force": "8",
+    "range": "60",
+    "force": "10",
     "spread": "1°",
     "class": "EXPLOSIVE",
     "curse": 0.0,
@@ -38686,7 +39152,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Originally used to swat down bothersome aircraft, the Stinger has become a favorite of the aim deficient Gungeoneer.",
-    "id": 369
+    "id": 92,
+    "ammonomicon_pos": 141
   },
   {
     "name": "Stone Dome",
@@ -38698,13 +39165,13 @@
     "dps": "26.5",
     "magazine_size": "750",
     "ammo_capacity": "750",
-    "damage": "4.5",
-    "fire_rate": "0.17",
+    "damage": "5.5",
+    "fire_rate": "0.05",
     "reload_time": "2.0s",
-    "shot_speed": "25",
-    "range": "1000",
-    "force": "10",
-    "spread": "8°",
+    "shot_speed": "23",
+    "range": "40",
+    "force": "9",
+    "spread": "4°",
     "class": "FULLAUTO",
     "curse": 1.0,
     "coolness": 0.0,
@@ -38955,7 +39422,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Spits bullets, fear. Chiseled from a large slab of the rare element Cranium, this terrifying stony visage is a totem of an angry god.",
-    "id": 598
+    "id": 598,
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 77
   },
   {
     "name": "Strafe Gun",
@@ -38968,7 +39437,7 @@
     "magazine_size": "20",
     "ammo_capacity": "400",
     "damage": "1",
-    "fire_rate": "0.13",
+    "fire_rate": "0.11",
     "reload_time": "1.5",
     "shot_speed": "200",
     "range": "1000",
@@ -39159,7 +39628,10 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires explosive nails that detonate when the trigger is released, or after a brief period of time. This particular model is from the 1996 Gun of the year re-release edition.",
-    "id": 542
+    "id": 542,
+    "game_spread": "4°",
+    "content_source": "CONTENT_UPDATE_01_FINAL",
+    "ammonomicon_pos": 75
   },
   {
     "name": "Sunlight Javelin",
@@ -39408,14 +39880,17 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Makes enemies grossly incandescent. This javelin was born from the chemistry of two heroes who conquered the Gungeon together.",
-    "id": 748
+    "id": 748,
+    "charge_stages": 1,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 169
   },
   {
     "name": "Super Meat Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/e/ee/Super_Meat_Gun.png",
     "notes": "Fires piercing, bouncing saw blades. Slightly increases movement speed. +1 empty heart container.",
     "quote": "Very Fast",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "45.0 (assuming blades do not rebound to hit enemies multiple times)",
     "magazine_size": "12",
@@ -39655,14 +40130,15 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Made of meat. Holding this gun allows its wielder to move just a little bit faster.",
-    "id": 479
+    "id": 479,
+    "ammonomicon_pos": 173
   },
   {
     "name": "T-Shirt Cannon",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/2/25/T-Shirt_Cannon.png",
     "notes": "Fires t-shirts with high knockback.",
     "quote": "Machine Gun Wash Only!",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "18.1",
     "magazine_size": "6",
@@ -39727,7 +40203,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires T-Shirts. Gungeon Merch was a shortlived startup enterprise founded by a few misguided Gundead. After shooting their fourth consecutive customer, they turned their sights away from business.",
-    "id": 150
+    "id": 150,
+    "ammonomicon_pos": 225
   },
   {
     "name": "Tangler",
@@ -39742,9 +40219,9 @@
     "damage": "6 x6 (36)",
     "fire_rate": "0.60",
     "reload_time": "1.50s",
-    "shot_speed": "23",
+    "shot_speed": "25",
     "range": "15",
-    "force": "30",
+    "force": "10",
     "spread": "10°",
     "class": "SILLY",
     "curse": 0.0,
@@ -39918,14 +40395,16 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a spread of three tangling shots.\n\nUsed by the Gundead to hunt the great Bullet that fell from the sky. The tangling shots are designed to slow prey.",
-    "id": 175
+    "id": 175,
+    "game_damage": "6",
+    "ammonomicon_pos": 48
   },
   {
     "name": "Teapot",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/81/Teapot.png",
     "notes": "While reloading, ignites nearby enemies. The final shot of every magazine is pink and deals extra damage.",
     "quote": "Monocular Monster",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "14.7 (Ignoring Fire Aura)",
     "magazine_size": "12",
@@ -40036,7 +40515,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Pour it out.\n\nThis teapot has been modified to fire a stream of scalding water. Reloading heats the water.",
-    "id": 596
+    "id": 596,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 155
   },
   {
     "name": "Tear Jerker",
@@ -40219,7 +40700,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires homing tears.\n\nA weapon favored by the saddest Gundead. The tears it fires are drawn to enemies, seeking them out with a melancholy certainty.",
-    "id": 33
+    "id": 33,
+    "ammonomicon_pos": 200
   },
   {
     "name": "Tetrominator",
@@ -40531,7 +41013,10 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Tetrominator shoots every possible configuration of four bullets.\n\nStrangely, the \"line\" configuration seems rarer than others.",
-    "id": 483
+    "id": 483,
+    "game_damage": "4",
+    "content_source": "CONTENT_UPDATE_01",
+    "ammonomicon_pos": 217
   },
   {
     "name": "The Emperor",
@@ -40544,8 +41029,8 @@
     "magazine_size": "30",
     "ammo_capacity": "300",
     "damage": "17",
-    "fire_rate": "0.15",
-    "reload_time": "1.25s",
+    "fire_rate": "0.3",
+    "reload_time": "1.2",
     "shot_speed": "20",
     "range": "50",
     "force": "10",
@@ -40685,7 +41170,9 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires linked projectiles.\nThis gun fires powerful electron bursts that imitate ancient spells of chained lightning.",
-    "id": 330
+    "id": 330,
+    "burst_count": 4,
+    "ammonomicon_pos": 138
   },
   {
     "name": "The Exotic",
@@ -40698,7 +41185,7 @@
     "magazine_size": "1",
     "ammo_capacity": "50",
     "damage": "25 (Rocket) 15 (Explosion) 2x7 (Small rocket) 5x7 (Small rocket explosion) 89 (Total potential damage)",
-    "fire_rate": "2.0",
+    "fire_rate": "1",
     "reload_time": "2.0s",
     "shot_speed": "25 (Rocket) 10 (Small rocket)",
     "range": "60 (Rocket) 10 (Small rocket)",
@@ -40832,7 +41319,12 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires homing rockets that erupt into short-range swarms. Comes with a helpful pal. Though this gun was built unimaginably far away, it seems it was destined to eventually find its way to the Gungeon.",
-    "id": 563
+    "id": 563,
+    "game_damage": "25",
+    "game_shot_speed": "25",
+    "game_range": "60",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 142
   },
   {
     "name": "The Fat Line",
@@ -41063,7 +41555,10 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires projectiles from the target position towards the gun.\n\nBecause Tachyons are particles that move faster than light, the Hegemony of Man has long used them for interstellar communication. As with all technology, it was eventually weaponized. However- tachyons travel backward in time, making this gun hard to aim.",
-    "id": 562
+    "id": 562,
+    "game_spread": "5°",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 82
   },
   {
     "name": "The Judge",
@@ -41198,7 +41693,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Pass judgement on your enemies.",
-    "id": 184
+    "id": 184,
+    "ammonomicon_pos": 105
   },
   {
     "name": "The Kiln",
@@ -41295,7 +41791,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires homing fireballs.\n\nThis ancient kiln has been repurposed as a weapon. The fireballs it fires seek out enemies with relentless determination.",
-    "id": 152
+    "id": 152,
+    "game_damage": "8",
+    "ammonomicon_pos": 197
   },
   {
     "name": "The Membrane",
@@ -41303,9 +41801,9 @@
     "notes": "Fires a shotgun blast of bouncing green bullets that split into more bouncing green bullets.",
     "quote": "Green Or Yellow?",
     "quality": "C",
-    "type": "Semiautomatic",
+    "type": "Automatic",
     "dps": "38.9 (excluding split bullets)",
-    "magazine_size": "6",
+    "magazine_size": "30",
     "ammo_capacity": "120",
     "damage": "4x6 (24) After split: 3x12 (36)",
     "fire_rate": "0.20",
@@ -41435,7 +41933,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a spread of three bullets.\n\nA biological weapon of uncertain origin. The membrane-like barrel flexes with each shot.",
-    "id": 151
+    "id": 151,
+    "game_damage": "4",
+    "ammonomicon_pos": 60
   },
   {
     "name": "The Predator",
@@ -41618,14 +42118,16 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Locks on. Tracks enemy heat signatures. This shoulder-mounted plasma cannon was used by an alien hunter. Generally, the Gundead do not bleed, but this gun can still make short work of them.",
-    "id": 543
+    "id": 543,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 94
   },
   {
     "name": "The Scrambler",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/f/fc/The_Scrambler.png",
     "notes": "Fires bullets that hatch into many homing bullets upon hitting an enemy or obstacle.",
     "quote": "Bullet Or The Gun?",
-    "quality": "B",
+    "quality": "C",
     "type": "Semiautomatic",
     "dps": "42.5",
     "magazine_size": "1",
@@ -41934,14 +42436,15 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires bullets that scramble enemy paths.\n\nA weapon of chaos. The bullets it fires cause enemies to move in unpredictable patterns.",
-    "id": 445
+    "id": 445,
+    "ammonomicon_pos": 193
   },
   {
     "name": "Thompson Sub-Machinegun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/6/62/Thompson_Sub-Machinegun.png",
     "notes": "Classic automatic sub-machinegun with a high rate of fire and infinite range.",
     "quote": "Myeah, See!",
-    "quality": "B",
+    "quality": "C",
     "type": "Automatic",
     "dps": "40.8",
     "magazine_size": "30",
@@ -41951,8 +42454,8 @@
     "reload_time": "0.78",
     "shot_speed": "23",
     "range": "1000",
-    "force": "15",
-    "spread": "4°",
+    "force": "9",
+    "spread": "10°",
     "class": "FULLAUTO",
     "curse": 0.0,
     "coolness": 0.0,
@@ -42066,7 +42569,8 @@
     "chest_color": "blue",
     "neckbear_approved": true,
     "ammonomicon_entry": "A classic weapon of the Prohibition era. Its high rate of fire and distinctive drum magazine make it a favorite of Gungeoneers with a sense of style.",
-    "id": 685
+    "id": 2,
+    "ammonomicon_pos": 73
   },
   {
     "name": "Thunderclap",
@@ -42078,9 +42582,9 @@
     "dps": "38.7",
     "magazine_size": "15",
     "ammo_capacity": "300",
-    "damage": "8",
+    "damage": "9",
     "fire_rate": "0.10",
-    "reload_time": "1.7s",
+    "reload_time": "1.5",
     "shot_speed": "20",
     "range": "∞",
     "force": "10",
@@ -42428,7 +42932,9 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "One of the first energy weapons created in the Gungeon. When lightning struck an old gunsmith's gun-rack, he decided to sand it down into a gun. The result is crude, as far as energy weapons go, but effective.",
-    "id": 13
+    "id": 13,
+    "game_range": "1000",
+    "ammonomicon_pos": 134
   },
   {
     "name": "Trank Gun",
@@ -42439,13 +42945,13 @@
     "type": "Semiautomatic",
     "dps": "47.6",
     "magazine_size": "12",
-    "ammo_capacity": "30",
+    "ammo_capacity": "200",
     "damage": "100",
     "fire_rate": "0.10",
-    "reload_time": "1.8",
-    "shot_speed": "26",
-    "range": "90",
-    "force": "10",
+    "reload_time": "0.54",
+    "shot_speed": "23",
+    "range": "60",
+    "force": "30",
     "spread": "6°",
     "class": "PISTOL",
     "curse": 0.0,
@@ -42598,7 +43104,8 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires tranquilizer darts.\n\nOriginally used by Gungeon zookeepers to subdue dangerous creatures. The darts slow enemies on impact.",
-    "id": 486
+    "id": 42,
+    "ammonomicon_pos": 11
   },
   {
     "name": "Trashcannon",
@@ -42822,7 +43329,9 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires trash.\n\nOne Gungeoneer's trash is another Gungeoneer's weapon. This gun fires a spread of garbage that somehow manages to be effective.",
-    "id": 154
+    "id": 154,
+    "game_range": "1000",
+    "ammonomicon_pos": 194
   },
   {
     "name": "Trick Gun",
@@ -42830,7 +43339,7 @@
     "notes": "Reloading transforms the gun between a pistol and a shotgun.",
     "quote": "Reload To Transform",
     "quality": "C",
-    "type": "Semiautomatic",
+    "type": "Variable",
     "dps": "24.7 (pistol) 13.8 (shotgun) 16.5 (both)",
     "magazine_size": "6",
     "ammo_capacity": "200",
@@ -43112,14 +43621,21 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "A gun that fires in two modes.\n\nThis clever weapon can switch between a single shot and a spread shot. The mechanism is a closely guarded secret.",
-    "id": 363
+    "id": 363,
+    "game_fire_rate": "0.1",
+    "game_spread": "7°",
+    "game_damage": "7",
+    "game_shot_speed": "30",
+    "game_range": "60",
+    "game_force": "11",
+    "ammonomicon_pos": 186
   },
   {
     "name": "Trident",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/9a/Trident.png",
     "notes": "Fires a long-range piercing laser beam. Destroys nearby bullets and pushes enemies away while reloading.",
     "quote": "Under The Sea",
-    "quality": "S",
+    "quality": "A",
     "type": "Semiautomatic",
     "dps": "46.5",
     "magazine_size": "10",
@@ -43284,7 +43800,8 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "This trident is immaculately crafted, and powerful runes etched into its length allow it to channel mighty bullet magics. Sometimes when the Gungeon shifts, entire regions are submerged.",
-    "id": 444
+    "id": 444,
+    "ammonomicon_pos": 213
   },
   {
     "name": "Triple Crossbow",
@@ -43292,12 +43809,12 @@
     "notes": "Reloading alternates between triple bolts and single bolts that slow enemies.",
     "quote": "3 > 1",
     "quality": "C",
-    "type": "Semiautomatic",
+    "type": "Variable",
     "dps": "19.1 (slow) 57.3 (triple) 38.2 (both)",
-    "magazine_size": "3",
+    "magazine_size": "1",
     "ammo_capacity": "100",
     "damage": "7 Triple Bolts: 7x3 (21)",
-    "fire_rate": "0.1",
+    "fire_rate": "0.6",
     "reload_time": "0.9s",
     "shot_speed": "26",
     "range": "∞",
@@ -43390,24 +43907,27 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires three bolts at once.\n\nA crossbow modified to fire three bolts simultaneously. The spread makes up for the reduced accuracy.",
-    "id": 381
+    "id": 381,
+    "game_damage": "22",
+    "game_range": "1000",
+    "ammonomicon_pos": 68
   },
   {
     "name": "Triple Gun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/a/a0/Triple_Gun.png",
     "notes": "Transforms between three forms based on ammo: revolver (full), machine gun (175/250), and beam weapon (50/500).",
     "quote": "Bullet the Stampede",
-    "quality": "A",
+    "quality": "B",
     "type": "Semiautomatic",
     "dps": "16.6 46.2 160.0",
     "magazine_size": "9 32 ∞",
-    "ammo_capacity": "500",
+    "ammo_capacity": "250",
     "damage": "160",
     "fire_rate": "0.5 0.11 0.1",
     "reload_time": "1.4",
-    "shot_speed": "75",
-    "range": "50",
-    "force": "20",
+    "shot_speed": "30",
+    "range": "1000",
+    "force": "9",
     "spread": "N/A",
     "class": "PISTOL",
     "curse": 0.0,
@@ -43670,7 +44190,12 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Transforms between three forms based on current ammo. Though it appears at first to be a gun like any other, this gun is in actuality a very rare plant.",
-    "id": 518
+    "id": 516,
+    "game_fire_rate": "0.5",
+    "game_magazine_size": "9",
+    "game_spread": "4°",
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 87
   },
   {
     "name": "Turbo-Gun",
@@ -43678,7 +44203,7 @@
     "notes": "Damage increases for the next magazine depending on the number of reload attempts during its reload.",
     "quote": "Repetitive Strain",
     "quality": "C",
-    "type": "Automatic",
+    "type": "Semiautomatic",
     "dps": "24-80",
     "magazine_size": "6",
     "ammo_capacity": "180",
@@ -43842,7 +44367,10 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires a rapid stream of bullets.\n\nThis gun is essentially a handheld Gatling gun. The barrels spin up to deliver a withering hail of bullets.",
-    "id": 577
+    "id": 577,
+    "game_damage": "7",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 124
   },
   {
     "name": "Unfinished Gun",
@@ -43853,10 +44381,10 @@
     "type": "Semiautomatic",
     "dps": "20.9",
     "magazine_size": "15",
-    "ammo_capacity": "500",
+    "ammo_capacity": "350",
     "damage": "6",
     "fire_rate": "0.20",
-    "reload_time": "0.78",
+    "reload_time": "1.5",
     "shot_speed": "15",
     "range": "35",
     "force": "6",
@@ -44046,7 +44574,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "This gun is still in the process of being forged! It barely functions in its current state, but could be a viable choice in a truly desperate situation. A small hourglass is embossed on the cylinder.",
-    "id": 762
+    "id": 83,
+    "ammonomicon_pos": 11
   },
   {
     "name": "Unicorn Horn",
@@ -44059,7 +44588,7 @@
     "magazine_size": "500",
     "ammo_capacity": "500",
     "damage": "30/s",
-    "fire_rate": "0.10",
+    "fire_rate": "1",
     "reload_time": "N/A",
     "shot_speed": "30",
     "range": "30",
@@ -44197,14 +44726,18 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "This magic horn is proof that at least one unicorn existed, and now is either dead or hornless.",
-    "id": 100
+    "id": 100,
+    "game_damage": "30",
+    "game_reload_time": "0",
+    "game_type": "Beam",
+    "ammonomicon_pos": 159
   },
   {
     "name": "VertebraeK-47",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/84/VertebraeK-47.png",
     "notes": "Bullets close to each other will form links between each other, which hurts enemies on touch.",
     "quote": "Nervous Yet?",
-    "quality": "A",
+    "quality": "B",
     "type": "Automatic",
     "dps": "27.3 (Not Counting Chains)",
     "magazine_size": "30",
@@ -44339,7 +44872,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "An abomination. This dark weapon was assembled from a fallen adventurer's spinal column and an AK-47 frame. When Nuign was first exiled from his homeland, he was heartbroken. In his pain, he turned to the Gungeon.",
-    "id": 29
+    "id": 29,
+    "ammonomicon_pos": 84
   },
   {
     "name": "Void Core Assault Rifle",
@@ -44481,7 +45015,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Before the Void Core was disbanded by the Hegemony of Man, they were renowned throughout the sector for their feats on and off the battlefield. Following their dissolution, the famed Void Core captain known as the Thunderbolt made his way to the Gungeon.",
-    "id": 58
+    "id": 58,
+    "burst_count": 3,
+    "ammonomicon_pos": 119
   },
   {
     "name": "Void Core Cannon",
@@ -44666,7 +45202,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Traditionally used by the Void Core for ship-to-ship combat, the VCC weapon fires an accelerating ball of plasma that delivers a devestating punch.\nThis hand-held model is a retrofit design made specifically for the Thunderbolt.",
-    "id": 593
+    "id": 593,
+    "game_damage": "10",
+    "burst_count": 4,
+    "content_source": "CONTENT_UPDATE_03",
+    "ammonomicon_pos": 148
   },
   {
     "name": "Void Marshal",
@@ -44731,7 +45271,8 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Compact, but highly accurate, the Void Marshal is a favorite of smugglers and rogues across the galaxy.",
-    "id": 32
+    "id": 32,
+    "ammonomicon_pos": 103
   },
   {
     "name": "Void Shotgun",
@@ -44741,14 +45282,14 @@
     "quality": "B",
     "type": "Semiautomatic",
     "dps": "50.0",
-    "magazine_size": "4",
+    "magazine_size": "8",
     "ammo_capacity": "120",
     "damage": "5x6 (30)",
     "fire_rate": "0.40",
     "reload_time": "1.2s",
-    "shot_speed": "23",
+    "shot_speed": "17",
     "range": "10",
-    "force": "30",
+    "force": "13",
     "spread": "0°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -44880,7 +45421,9 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "The favored weapon of the Void Core's frontline soldiers.\n\nIts short range ensures that any encounter will be lethal, one way or another.",
-    "id": 55
+    "id": 55,
+    "game_damage": "5",
+    "ammonomicon_pos": 49
   },
   {
     "name": "Vorpal Gun",
@@ -45218,7 +45761,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "Occasionally deals massive damage.\n\nThis striking handgun was forged hundreds of years ago by a forgotten gunsmith. Though its power has weakened, it occasionally recalls its former might.",
-    "id": 537
+    "id": 537,
+    "game_damage": "5",
+    "game_shot_speed": "32",
+    "content_source": "CONTENT_UPDATE_01_FINAL",
+    "ammonomicon_pos": 28
   },
   {
     "name": "Vulcan Cannon",
@@ -45229,10 +45776,10 @@
     "type": "Automatic",
     "dps": "100.0",
     "magazine_size": "900",
-    "ammo_capacity": "1000",
+    "ammo_capacity": "900",
     "damage": "5",
-    "fire_rate": "0.05",
-    "reload_time": "0.6",
+    "fire_rate": "0.035",
+    "reload_time": "1.5",
     "shot_speed": "50",
     "range": "1000",
     "force": "15",
@@ -45403,7 +45950,8 @@
     "sell_price": "54",
     "neckbear_approved": true,
     "ammonomicon_entry": "Favored by the huge predatory bird that nests in the Gungeon, it is a weapon to be feared.",
-    "id": 707
+    "id": 84,
+    "ammonomicon_pos": 91
   },
   {
     "name": "Winchester",
@@ -45416,11 +45964,11 @@
     "magazine_size": "8",
     "ammo_capacity": "100",
     "damage": "4x6 (24)",
-    "fire_rate": "0.50",
+    "fire_rate": "0.6",
     "reload_time": "1.7s",
-    "shot_speed": "23",
+    "shot_speed": "25",
     "range": "15",
-    "force": "30",
+    "force": "10",
     "spread": "7°",
     "class": "SHOTGUN",
     "curse": 0.0,
@@ -45510,14 +46058,16 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "A reliable lever-action rifle.\n\nNamed after the famous manufacturer, this rifle is known for its reliability and smooth action.",
-    "id": 1
+    "id": 1,
+    "game_damage": "4",
+    "ammonomicon_pos": 44
   },
   {
     "name": "Winchester Rifle",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/8/80/Winchester_Rifle.png",
     "notes": "Repeating rifle with high damage. Functionally automatic despite being classified as semiautomatic.",
     "quote": "Guns And Deviltry.",
-    "quality": "C",
+    "quality": "D",
     "type": "Semiautomatic",
     "dps": "19.7",
     "magazine_size": "12",
@@ -45634,7 +46184,8 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Winchester Rifle was used to famous effect by Frifle during his first adventures with the Grey Mauser. It might be a bit dated, but still packs quite the punch.",
-    "id": 181
+    "id": 181,
+    "ammonomicon_pos": 99
   },
   {
     "name": "Wind Up Gun",
@@ -45642,7 +46193,7 @@
     "notes": "In each magazine, the first 10 bullets pierce. The last 10 deal half damage.",
     "quote": "Charge It",
     "quality": "D",
-    "type": "Semiautomatic",
+    "type": "Automatic",
     "dps": "18.7 (10 shots) 18.9 (20 shots)",
     "magazine_size": "20",
     "ammo_capacity": "600",
@@ -45775,7 +46326,9 @@
     "sell_price": "16",
     "neckbear_approved": true,
     "ammonomicon_entry": "Decreases in damage output as the clip empties.\n\nYou gotta wind it!",
-    "id": 334
+    "id": 334,
+    "game_damage": "5",
+    "ammonomicon_pos": 121
   },
   {
     "name": "Witch Pistol",
@@ -45888,20 +46441,22 @@
     "sell_price": "21",
     "neckbear_approved": true,
     "ammonomicon_entry": "Fires homing bullets.\n\nThis pistol is favored by Gungeon witches. The bullets it fires seek out enemies with magical precision.",
-    "id": 145
+    "id": 145,
+    "game_range": "1000",
+    "ammonomicon_pos": 151
   },
   {
     "name": "Wood Beam",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/7/78/Wood_Beam.png",
     "notes": "Melee weapon that extends itself to hit enemies. Increases curse by 1.",
     "quote": "Speak Softly",
-    "quality": "A",
+    "quality": "B",
     "type": "Beam",
     "dps": "10 (No Swing)",
     "magazine_size": "100",
     "ammo_capacity": "900",
     "damage": "1",
-    "fire_rate": "1.0",
+    "fire_rate": "0.05",
     "reload_time": "0.9",
     "shot_speed": "40",
     "range": "10",
@@ -46111,7 +46666,11 @@
     "sell_price": "30",
     "neckbear_approved": true,
     "ammonomicon_entry": "A wooden beam, often used in construction. Not technically a gun, but you could probably smack some Bullet Kin around with it.",
-    "id": 610
+    "id": 610,
+    "game_spread": "0°",
+    "game_type": "Beam",
+    "content_source": "CONTENT_UPDATE_02",
+    "ammonomicon_pos": 191
   },
   {
     "name": "Yari Launcher",
@@ -46289,7 +46848,7 @@
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/9/93/Zilla_Shotgun.png",
     "notes": "Can be charged to fire 4 ammo at once, which will cause it to fire piercing, bouncing bullets.",
     "quote": "Quadruple the fun!",
-    "quality": "S",
+    "quality": "A",
     "type": "Charged",
     "dps": "42.7 (uncharged) 19.1 (charged)",
     "magazine_size": "4",
@@ -46418,17 +46977,19 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "A four-barreled shotgun that can be fired all at once. Zilla Industries is famous for crafting bespoke weapons for highly talented gunslingers. This shotgun was created with only one concept in mind: maximum destructive potential.",
-    "id": 329
+    "id": 329,
+    "charge_stages": 1,
+    "ammonomicon_pos": 58
   },
   {
     "name": "Zorgun",
     "icon": "https://static.wikia.nocookie.net/enterthegungeon_gamepedia/images/0/0a/Zorgun.png",
     "notes": "Rapidly fires homing bullets. The final bullet in each clip fires a random explosive (grenade, rocket, or drill).",
     "quote": "Don't Push The Red Button",
-    "quality": "S",
+    "quality": "A",
     "type": "Automatic",
     "dps": "55.6 (Grenade Launcher/Bullet Bore) 61.3 (RPG)",
-    "magazine_size": "30",
+    "magazine_size": "20",
     "ammo_capacity": "350",
     "damage": "5.5",
     "fire_rate": "0.10",
@@ -46606,6 +47167,7 @@
     "sell_price": "41",
     "neckbear_approved": true,
     "ammonomicon_entry": "The Zorgun is a mass-produced all-purpose machine gun. Its eggshell design allows it to be stored easily in intergalactic cruise ship compartments.",
-    "id": 6
+    "id": 6,
+    "ammonomicon_pos": 81
   }
 ]
