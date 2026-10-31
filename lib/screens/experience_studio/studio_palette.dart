@@ -36,6 +36,7 @@ class _PalettePanel extends StatelessWidget {
             ? nameColor
             : Colors.white.withValues(alpha: 0.08);
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
@@ -201,6 +202,7 @@ class _ThemeStepState extends State<_ThemeStep> {
   Widget _buildMakeTile() {
     final f = AppTheme.flair;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Haptics.selection();
         Navigator.push(context, fastRoute(const PaletteMakerScreen()));
@@ -246,6 +248,7 @@ class _ThemeStepState extends State<_ThemeStep> {
   Widget _buildSavedTile(SavedCustomTheme t) {
     final d = t.customData ?? CustomThemeData.defaultTheme;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Haptics.selection();
         AppTheme.saveCustomThemeData(d);
@@ -327,6 +330,7 @@ class _ThemeStepState extends State<_ThemeStep> {
     final isActive = m == activeMode;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         widget.onPreview(m);
         Haptics.selection();
@@ -606,8 +610,8 @@ class _SwipableGrid2x4State extends State<_SwipableGrid2x4> {
 
   Widget _buildTile(_GridItem item, ThemeFlair flair) {
     return GestureDetector(
-      onTap: item.onTap,
       behavior: HitTestBehavior.opaque,
+      onTap: item.onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         height: _rowHeight,

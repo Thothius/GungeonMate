@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'theme_overlay.dart' show ThemeOverlay;
+import 'skeuo/skeuo_tokens.dart';
 part 'particle_engine/particle_presets.dart';
 part 'particle_engine/particle_types.dart';
 
@@ -386,28 +387,31 @@ class _ParticleFieldState extends State<ParticleField>
               final t = _sw.elapsedMilliseconds / 1000.0;
               _update(t, size);
 
+              // Resolve once — widget.config (typed path) wins over
+              // preset.config; colors override composes on top.
+              final effectiveConfig =
+                  widget.config ??
+                  (widget.colorsOverride != null
+                      ? _withColors(
+                        widget.preset.config,
+                        widget.colorsOverride!,
+                      )
+                      : widget.preset.config);
+
               return CustomPaint(
                 painter: _ParticlePainter(
                   t: t,
                   particles: _particles,
-                  // Same resolution as _ensureParticles — widget.config
-                  // (typed path) wins; without this the painter drew
-                  // preset.config (always circles) while physics ran typed.
-                  config:
-                      widget.config ??
-                      (widget.colorsOverride != null
-                          ? _withColors(
-                            widget.preset.config,
-                            widget.colorsOverride!,
-                          )
-                          : widget.preset.config),
+                  // ALL fields read the resolved config — previously
+                  // glowEffect/lineLinks still came from preset.config,
+                  // so every type rendered the preset's glow (types
+                  // looked identical) and the preset's link lines.
+                  config: effectiveConfig,
                   sizeScale: widget.sizeScale,
                   opacity: widget.opacity,
-                  glowEffect:
-                      widget.glowOverride ?? widget.preset.config.glowEffect,
+                  glowEffect: widget.glowOverride ?? effectiveConfig.glowEffect,
                   lineLinks:
-                      widget.lineLinksOverride ??
-                      widget.preset.config.lineLinks,
+                      widget.lineLinksOverride ?? effectiveConfig.lineLinks,
                 ),
                 size: size,
               );
@@ -628,7 +632,9 @@ class _ParticlePainter extends CustomPainter {
           _paint.color = driftedColor.withValues(alpha: alpha * 0.7);
           canvas.drawCircle(Offset(p.x, p.y), drawSize * 1.4, _paint);
           _paint.maskFilter = null;
-          _paint.color = Colors.white.withValues(alpha: alpha * 0.6);
+          _paint.color = Skeuo.collapse(
+            Colors.white,
+          ).withValues(alpha: alpha * 0.6);
           canvas.drawCircle(Offset(p.x, p.y), drawSize * 0.5, _paint);
           break;
         case GlowEffect.aurora:
@@ -765,7 +771,9 @@ class _ParticlePainter extends CustomPainter {
         canvas.drawCircle(Offset(cx, cy), drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+          paint.color = Skeuo.collapse(
+            Colors.white,
+          ).withValues(alpha: alpha * 0.5);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.3, paint);
         }
         break;
@@ -773,7 +781,9 @@ class _ParticlePainter extends CustomPainter {
         _drawStar(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Colors.white.withValues(alpha: alpha * 0.6);
+          paint.color = Skeuo.collapse(
+            Colors.white,
+          ).withValues(alpha: alpha * 0.6);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.2, paint);
         }
         break;
@@ -795,7 +805,9 @@ class _ParticlePainter extends CustomPainter {
         _drawBullet(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Colors.white.withValues(alpha: alpha * 0.4);
+          paint.color = Skeuo.collapse(
+            Colors.white,
+          ).withValues(alpha: alpha * 0.4);
           canvas.drawCircle(
             Offset(cx, cy - drawSize * 0.3),
             drawSize * 0.15,
@@ -807,7 +819,9 @@ class _ParticlePainter extends CustomPainter {
         _drawHeart(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+          paint.color = Skeuo.collapse(
+            Colors.white,
+          ).withValues(alpha: alpha * 0.5);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.15, paint);
         }
         break;
@@ -824,7 +838,9 @@ class _ParticlePainter extends CustomPainter {
         _drawCrescent(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Colors.white.withValues(alpha: alpha * 0.4);
+          paint.color = Skeuo.collapse(
+            Colors.white,
+          ).withValues(alpha: alpha * 0.4);
           canvas.drawCircle(
             Offset(cx - drawSize * 0.15, cy),
             drawSize * 0.12,
@@ -836,7 +852,9 @@ class _ParticlePainter extends CustomPainter {
         _drawBolt(canvas, cx, cy, drawSize, paint);
         if (glow != GlowEffect.none) {
           paint.maskFilter = null;
-          paint.color = Colors.white.withValues(alpha: alpha * 0.5);
+          paint.color = Skeuo.collapse(
+            Colors.white,
+          ).withValues(alpha: alpha * 0.5);
           canvas.drawCircle(Offset(cx, cy), drawSize * 0.15, paint);
         }
         break;
@@ -934,7 +952,8 @@ class _ParticlePainter extends CustomPainter {
       Radius.circular(r * 0.12),
     );
     canvas.drawRRect(jawRect, paint);
-    final eyePaint = Paint()..color = Colors.black.withValues(alpha: 0.55);
+    final eyePaint =
+        Paint()..color = Skeuo.collapse(Colors.black).withValues(alpha: 0.55);
     canvas.drawCircle(Offset(cx - r * 0.22, cy - r * 0.2), r * 0.14, eyePaint);
     canvas.drawCircle(Offset(cx + r * 0.22, cy - r * 0.2), r * 0.14, eyePaint);
   }

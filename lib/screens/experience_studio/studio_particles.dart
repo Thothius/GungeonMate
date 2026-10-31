@@ -315,6 +315,7 @@ class _ParticleTypeTile extends StatelessWidget {
     final flair = AppTheme.flair;
     final c = active ? flair.primary : Colors.white.withValues(alpha: 0.5);
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
@@ -442,6 +443,7 @@ class _PhysicsToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
