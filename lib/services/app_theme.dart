@@ -55,7 +55,7 @@ class AppTheme {
   static const String _legacyKey = 'theme.mode';
 
   static final RefreshableValueNotifier<AppThemeMode> notifier =
-      RefreshableValueNotifier<AppThemeMode>(AppThemeMode.minimalist);
+      RefreshableValueNotifier<AppThemeMode>(AppThemeMode.paperInk);
 
   static final ValueNotifier<AppThemeMode?> previewNotifier =
       ValueNotifier<AppThemeMode?>(null);
@@ -177,11 +177,11 @@ class AppTheme {
       final idx = prefs.getInt(_prefsKey);
       if (idx != null && idx >= 0 && idx < AppThemeMode.values.length) {
         var m = AppThemeMode.values[idx];
-        // v3.0 theme cut — anything outside the three supported picker
-        // themes (or the plain Minimalist default) migrates to Moonlit
-        // Chamber. Covers the removed picker themes and custom themes.
-        if (m != AppThemeMode.minimalist && !kPickerThemes.contains(m)) {
-          m = AppThemeMode.moonlitChamber;
+        // Customization rework — anything outside the visible set
+        // (unicorn/moltenSteel/paperInk/custom) migrates to the
+        // visible-list default (paperInk).
+        if (!kVisibleThemes.contains(m)) {
+          m = kVisibleThemes.first;
           await prefs.setInt(_prefsKey, m.index);
         }
         if (kVisibleThemes.contains(m)) {

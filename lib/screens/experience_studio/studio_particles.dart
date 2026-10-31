@@ -148,7 +148,7 @@ class _ParticlesStep extends StatelessWidget {
                         i <
                             (kThemeParticleSchemas[AppTheme.notifier.value] ??
                                     kThemeParticleSchemas[AppThemeMode
-                                        .moonlitChamber]!)
+                                        .paperInk]!)
                                 .length;
                         i++
                       ) ...[
@@ -159,7 +159,7 @@ class _ParticlesStep extends StatelessWidget {
                                         .notifier
                                         .value] ??
                                     kThemeParticleSchemas[AppThemeMode
-                                        .moonlitChamber]!)[i],
+                                        .paperInk]!)[i],
                             active: i == prefs.particleSchemaIndex,
                             onTap: () {
                               VisualPrefs.setParticleSchemaIndex(i);

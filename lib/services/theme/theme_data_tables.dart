@@ -4,20 +4,11 @@ part of '../app_theme.dart';
 // Symbols stay in the same library — no import changes needed.
 
 const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
-  AppThemeMode.minimalist,
+  // Paper & Ink first — it is the calm/default look; the persisted-mode
+  // fallback in app_theme.dart lands on kVisibleThemes.first.
+  AppThemeMode.paperInk,
   AppThemeMode.unicorn,
-  AppThemeMode.forgeMaster,
-  AppThemeMode.robotsCore,
-  AppThemeMode.catLady,
-  AppThemeMode.moonlitChamber,
-  AppThemeMode.stormCaller,
-  AppThemeMode.mrRobot,
-  AppThemeMode.valorOfMarines,
-  AppThemeMode.theBullet,
-  AppThemeMode.theParadox,
-  AppThemeMode.gunpowder,
-  AppThemeMode.dragunfire,
-  AppThemeMode.lichsDomain,
+  AppThemeMode.moltenSteel,
   AppThemeMode.custom,
 ];
 
@@ -28,18 +19,9 @@ const List<AppThemeMode> kVisibleThemes = <AppThemeMode>[
 /// Minimalist stays in [kVisibleThemes] as the plain default look.
 
 const List<AppThemeMode> kPickerThemes = <AppThemeMode>[
-  // Unicorn family — OG + 2 variants
   AppThemeMode.unicorn,
-  AppThemeMode.candyRush,
-  AppThemeMode.neonPrism,
-  // Forge family — OG + 2 variants
-  AppThemeMode.forgeMaster,
-  AppThemeMode.blacksmithsFire,
   AppThemeMode.moltenSteel,
-  // Minimalist family — OG + 2 variants
-  AppThemeMode.moonlitChamber,
   AppThemeMode.paperInk,
-  AppThemeMode.voidWhite,
 ];
 
 /// Per-theme default particle preset. When a theme is active and the user
@@ -787,6 +769,6 @@ kThemeParticleSchemas = {
 List<Color> particleSchemaColors(AppThemeMode mode, int schemaIdx) {
   final list =
       kThemeParticleSchemas[mode] ??
-      kThemeParticleSchemas[AppThemeMode.moonlitChamber]!;
+      kThemeParticleSchemas[AppThemeMode.paperInk]!;
   return list[schemaIdx.clamp(0, list.length - 1)].colors;
 }
