@@ -156,6 +156,44 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                                 accent: AmmonomiconColors.location,
                                 icon: Icons.place_outlined,
                               ),
+                            if (entry.floor != null)
+                              _badge(
+                                flair,
+                                'FLOOR ${entry.floor}',
+                                accent: AmmonomiconColors.game,
+                                icon: Icons.layers_outlined,
+                              ),
+                            if (entry.floor == null &&
+                                entry.category == 'Chapter')
+                              _badge(
+                                flair,
+                                entry.secret ? 'SECRET' : 'HUB',
+                                accent:
+                                    entry.secret
+                                        ? const Color(0xFFB388FF)
+                                        : const Color(0xFFFFC857),
+                                icon:
+                                    entry.secret
+                                        ? Icons.vpn_key_outlined
+                                        : Icons.home_outlined,
+                              ),
+                            if (entry.bundle != null &&
+                                entry.bundle!.isNotEmpty)
+                              _badge(
+                                flair,
+                                entry.bundle!
+                                    .replaceFirst('base_', '')
+                                    .toUpperCase(),
+                                accent: AmmonomiconColors.location,
+                                icon: Icons.inventory_2_outlined,
+                              ),
+                            if (entry.gameClasses.isNotEmpty)
+                              _badge(
+                                flair,
+                                '${entry.gameClasses.length} MODIFIERS',
+                                accent: flair.primary,
+                                icon: Icons.tune,
+                              ),
                           ],
                         ),
                       ),
@@ -270,7 +308,9 @@ class AmmonomiconDetailScreen extends StatelessWidget {
                               mode: LaunchMode.externalApplication,
                             );
                           } catch (e) {
-                            debugPrint('[AmmonomiconDetail] url launch error: $e');
+                            debugPrint(
+                              '[AmmonomiconDetail] url launch error: $e',
+                            );
                           }
                         },
                         onLongPress: () {

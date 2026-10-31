@@ -12,6 +12,14 @@ class AmmonomiconEntry {
   final String? health;
   final String? ammonomicon;
   final List<String> tips;
+  // Silent metadata — only populated by chapters.json / game_modes.json:
+  // floor 1–6 (null = secret/hub chapter), secret flag, asset bundle,
+  // theme music key, and ChallengeModifier class names for game modes.
+  final int? floor;
+  final bool secret;
+  final String? bundle;
+  final String? music;
+  final List<String> gameClasses;
 
   AmmonomiconEntry({
     required this.name,
@@ -24,6 +32,11 @@ class AmmonomiconEntry {
     this.health,
     this.ammonomicon,
     this.tips = const [],
+    this.floor,
+    this.secret = false,
+    this.bundle,
+    this.music,
+    this.gameClasses = const [],
   });
 
   factory AmmonomiconEntry.fromJson(Map<String, dynamic> j) {
@@ -39,6 +52,15 @@ class AmmonomiconEntry {
       ammonomicon: j['ammonomicon'] as String?,
       tips:
           (j['tips'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+          const [],
+      floor: j['floor'] as int?,
+      secret: j['secret'] as bool? ?? false,
+      bundle: j['bundle'] as String?,
+      music: j['music'] as String?,
+      gameClasses:
+          (j['game_classes'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
           const [],
     );
   }
@@ -77,7 +99,19 @@ class AmmonomiconEntry {
 }
 
 /// Which ammonomicon section a list belongs to.
-enum AmmonomiconSection { objects, pickups, npcs, enemies, bosses, guns, items, synergies, shrines, chapters, gameModes }
+enum AmmonomiconSection {
+  objects,
+  pickups,
+  npcs,
+  enemies,
+  bosses,
+  guns,
+  items,
+  synergies,
+  shrines,
+  chapters,
+  gameModes,
+}
 
 /// Helper to resolve the image folder for a ammonomicon section.
 String ammonomiconImageFolder(AmmonomiconSection section) {

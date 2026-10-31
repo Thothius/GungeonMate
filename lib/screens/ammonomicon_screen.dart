@@ -409,6 +409,29 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
     }
   }
 
+  /// Tiny accent chip for member-row metadata (F1 / SECRET / HUB /
+  /// N MODS) in the expanded Chapters/Game Modes picker.
+  Widget _metaChip(String label, Color accent) {
+    return Container(
+      margin: const EdgeInsets.only(left: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: accent.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: accent.withValues(alpha: 0.5)),
+      ),
+      child: GoopText(
+        label,
+        style: TextStyle(
+          fontSize: FontSizes.labelSmall,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.6,
+          color: accent,
+        ),
+      ),
+    );
+  }
+
   /// Expanded member picker — a themed card list shown in place of the
   /// category grid when a Chapters/Game Modes tile is tapped.
   Widget _buildExpandedPanel(ThemeFlair flair) {
@@ -528,6 +551,18 @@ class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
                                 ],
                               ),
                             ),
+                            if (_expanded == 10)
+                              _metaChip(
+                                e.floor != null
+                                    ? 'F${e.floor}'
+                                    : (e.secret ? 'SECRET' : 'HUB'),
+                                e.secret ? const Color(0xFFB388FF) : c.color,
+                              ),
+                            if (_expanded == 11 && e.gameClasses.isNotEmpty)
+                              _metaChip(
+                                '${e.gameClasses.length} MODS',
+                                c.color,
+                              ),
                             Icon(
                               Icons.chevron_right,
                               size: 18,
