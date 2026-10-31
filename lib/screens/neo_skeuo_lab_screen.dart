@@ -51,14 +51,31 @@ class _NeoSkeuoLabScreenState extends State<NeoSkeuoLabScreen> {
               children: [
                 _sheetTabs(),
                 Expanded(
-                  child: IndexedStack(
-                    index: _sheetTab,
-                    children: [
-                      _specSheetTab(),
-                      _activeRunTab(),
-                      _browseTab(),
-                      _detailTab(),
-                    ],
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    switchInCurve: Curves.easeOutCubic,
+                    switchOutCurve: Curves.easeInCubic,
+                    transitionBuilder:
+                        (child, anim) => FadeTransition(
+                          opacity: anim,
+                          child: SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0.04, 0.02),
+                              end: Offset.zero,
+                            ).animate(anim),
+                            child: child,
+                          ),
+                        ),
+                    child: KeyedSubtree(
+                      key: ValueKey(_sheetTab),
+                      child:
+                          [
+                            _specSheetTab(),
+                            _activeRunTab(),
+                            _browseTab(),
+                            _detailTab(),
+                          ][_sheetTab],
+                    ),
                   ),
                 ),
               ],

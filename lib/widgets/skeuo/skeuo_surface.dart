@@ -52,6 +52,9 @@ class SkeuoSurface extends StatelessWidget {
   /// Sketch double-stroke on the border. Off for crisp kit lines.
   final bool sketchy;
 
+  /// Draw-in: the ink border strokes itself around the card on mount.
+  final bool animate;
+
   const SkeuoSurface({
     super.key,
     required this.child,
@@ -63,6 +66,7 @@ class SkeuoSurface extends StatelessWidget {
     this.fill,
     this.pressT = 0,
     this.sketchy = true,
+    this.animate = true,
   });
 
   double get _maxShadow => switch (elevation) {
@@ -82,28 +86,41 @@ class SkeuoSurface extends StatelessWidget {
     final inner = elevation == SkeuoElevation.inset;
     final thick = elevation == SkeuoElevation.pressed;
 
-    return CustomPaint(
-      painter: _SkeuoSurfacePainter(
-        fill: fill ?? (inner ? Skeuo.insetPaper : Skeuo.card),
-        radius: radius,
-        borderWidth: borderWidth ?? (thick ? 3.0 : Skeuo.borderMed),
-        maxShadow: maxShadow,
-        shadowOffset: offset,
-        shadowStyle: shadowStyle,
-        innerStroke: inner,
-        pressT: pressT,
-        interiorHatch: elevation == SkeuoElevation.pressed,
-        sketchy: sketchy,
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: padding.resolve(TextDirection.ltr).left + shift,
-          top: padding.resolve(TextDirection.ltr).top + shift,
-          right: padding.resolve(TextDirection.ltr).right + maxShadow - shift,
-          bottom: padding.resolve(TextDirection.ltr).bottom + maxShadow - shift,
-        ),
-        child: child,
-      ),
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: animate ? 0 : 1, end: 1),
+      duration: const Duration(milliseconds: 520),
+      curve: Curves.easeOutCubic,
+      builder:
+          (context, drawT, _) => CustomPaint(
+            painter: _SkeuoSurfacePainter(
+              fill: fill ?? (inner ? Skeuo.insetPaper : Skeuo.card),
+              radius: radius,
+              borderWidth: borderWidth ?? (thick ? 3.0 : Skeuo.borderMed),
+              maxShadow: maxShadow,
+              shadowOffset: offset,
+              shadowStyle: shadowStyle,
+              innerStroke: inner,
+              pressT: pressT,
+              interiorHatch: elevation == SkeuoElevation.pressed,
+              drawT: drawT,
+              sketchy: sketchy,
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: padding.resolve(TextDirection.ltr).left + shift,
+                top: padding.resolve(TextDirection.ltr).top + shift,
+                right:
+                    padding.resolve(TextDirection.ltr).right +
+                    maxShadow -
+                    shift,
+                bottom:
+                    padding.resolve(TextDirection.ltr).bottom +
+                    maxShadow -
+                    shift,
+              ),
+              child: child,
+            ),
+          ),
     );
   }
 }
@@ -120,6 +137,13 @@ class _SkeuoSurfacePainter extends CustomPainter {
   final bool innerStroke;
   final double pressT;
   final bool interiorHatch;
+
+  /// 0→1 draw-in progress: border strokes draw themselves around the
+  /// card and the hatched shadow hatches in. 1.0 = fully drawn.
+  final double drawT;
+
+  /// Tap position for the ink-blob press bloom (button only).
+  final Offset? tapPos;
   final bool sketchy;
 
   const _SkeuoSurfacePainter({
@@ -132,13 +156,17 @@ class _SkeuoSurfacePainter extends CustomPainter {
     required this.innerStroke,
     required this.pressT,
     required this.interiorHatch,
+    required this.drawT,
+    this.tapPos,
     required this.sketchy,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     if (size.width <= 0 || size.height <= 0) return;
-    final shift = maxShadow - shadowOffset;
+    // Hover can push shadowOffset past maxShadow — the card stays put
+    // while the hatch block deepens behind it.
+    final shift = (maxShadow - shadowOffset).clamp(0.0, maxShadow);
     final card = Rect.fromLTRB(
       shift,
       shift,
@@ -162,11 +190,11 @@ class _SkeuoSurfacePainter extends CustomPainter {
       canvas.save();
       canvas.clipRRect(shadowRRect);
       if (shadowStyle == SkeuoShadowStyle.solid) {
-        canvas.drawPaint(inkPaint..color = Skeuo.ink);
+        canvas.drawPaint(inkPaint..color = Skeuo.ink.withValues(alpha: drawT));
       } else {
         final hatch =
             Paint()
-              ..color = Skeuo.ink
+              ..color = Skeuo.ink.withValues(alpha: drawT)
               ..strokeWidth = 1.2
               ..isAntiAlias = true;
         for (
@@ -192,6 +220,22 @@ class _SkeuoSurfacePainter extends CustomPainter {
         ..isAntiAlias = true,
     );
 
+    // 2a. Ink-blob bloom at the tap point — a wet ink spot that spreads
+    //     as the press deepens, clipped to the card.
+    if (tapPos != null && pressT > 0.01) {
+      canvas.save();
+      canvas.clipRRect(cardRRect);
+      canvas.drawCircle(
+        tapPos!,
+        30 * pressT + 4,
+        Paint()
+          ..color = Skeuo.ink.withValues(alpha: 0.10 * pressT)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2)
+          ..isAntiAlias = true,
+      );
+      canvas.restore();
+    }
+
     // 2.5. Pressed interior hatch — faint 45° strokes inside the card
     //    so sunken surfaces read shaded, not just flat + thick-bordered.
     if (interiorHatch) {
@@ -199,7 +243,7 @@ class _SkeuoSurfacePainter extends CustomPainter {
       canvas.clipRRect(cardRRect);
       final shade =
           Paint()
-            ..color = Skeuo.ink.withValues(alpha: 0.07)
+            ..color = Skeuo.ink.withValues(alpha: 0.07 * drawT)
             ..strokeWidth = 1.0
             ..isAntiAlias = true;
       for (
@@ -218,22 +262,41 @@ class _SkeuoSurfacePainter extends CustomPainter {
 
     // 3. Border — main stroke + a faint shifted second stroke for the
     //    hand-drawn double-line feel (deterministic, no per-frame jitter).
-    canvas.drawRRect(
-      cardRRect,
-      inkPaint
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = borderWidth
-        ..color = Skeuo.ink,
-    );
+    //    While drawT < 1 the stroke draws itself around the card —
+    //    the second stroke trails slightly, like a second pen pass.
+    inkPaint
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = borderWidth
+      ..color = Skeuo.ink;
+    if (drawT >= 0.999) {
+      canvas.drawRRect(cardRRect, inkPaint);
+    } else {
+      final borderPath = Path()..addRRect(cardRRect);
+      for (final m in borderPath.computeMetrics()) {
+        canvas.drawPath(m.extractPath(0, m.length * drawT), inkPaint);
+      }
+    }
     if (sketchy) {
-      canvas.drawRRect(
-        cardRRect.shift(const Offset(0.45, 0.4)).inflate(borderWidth * 0.15),
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = (borderWidth * 0.55).clamp(0.7, 2.0)
-          ..color = Skeuo.ink.withValues(alpha: 0.28)
-          ..isAntiAlias = true,
-      );
+      final sketchPath =
+          Path()..addRRect(
+            cardRRect
+                .shift(const Offset(0.45, 0.4))
+                .inflate(borderWidth * 0.15),
+          );
+      final sketchPaint =
+          Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = (borderWidth * 0.55).clamp(0.7, 2.0)
+            ..color = Skeuo.ink.withValues(alpha: 0.28)
+            ..isAntiAlias = true;
+      final sketchT = (drawT * 1.2).clamp(0.0, 1.0);
+      if (sketchT >= 0.999) {
+        canvas.drawPath(sketchPath, sketchPaint);
+      } else {
+        for (final m in sketchPath.computeMetrics()) {
+          canvas.drawPath(m.extractPath(0, m.length * sketchT), sketchPaint);
+        }
+      }
     }
 
     // 4. Inset double border — recessed wells get a second inner rule.
@@ -347,6 +410,8 @@ class SkeuoButton extends StatefulWidget {
 
 class _SkeuoButtonState extends State<SkeuoButton> {
   bool _pressed = false;
+  bool _hover = false;
+  Offset? _tapPos;
 
   bool get _enabled =>
       widget.style != SkeuoButtonStyle.disabled &&
@@ -405,76 +470,125 @@ class _SkeuoButtonState extends State<SkeuoButton> {
 
     final pad = widget.padding.resolve(TextDirection.ltr);
 
+    // Three nested implicit animations:
+    //   drawT (outer, 480ms) — border strokes itself around the card on
+    //     mount + shadow hatches in — the signature "sketched live" feel.
+    //   t (middle, Motion.fast) — press physics: shadow collapse + squish.
+    //   h (inner, 140ms) — hover lift: shadow deepens + tiny scale-up.
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: _pressed ? 1 : 0),
-      duration: Motion.fast,
-      curve: Curves.easeOut,
-      builder: (context, t, _) {
-        final offset = _isDisabled ? 0.0 : lerp(Skeuo.shadowLow, 1.2, t);
-        final shift = _isDisabled ? 0.0 : Skeuo.shadowLow - offset;
-        final fill =
-            _isPrimary
-                ? Skeuo.ink
-                : _isDisabled
-                ? Skeuo.paper
-                : Skeuo.card;
-        return GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTapDown:
-              _enabled
-                  ? (_) {
-                    setState(() => _pressed = true);
-                    Haptics.light();
-                  }
-                  : null,
-          onTapUp:
-              _enabled
-                  ? (_) {
-                    setState(() => _pressed = false);
-                    Haptics.selection();
-                    widget.onTap!();
-                  }
-                  : null,
-          onTapCancel: _enabled ? () => setState(() => _pressed = false) : null,
-          child: Transform.scale(
-            scale: 1 - 0.02 * t,
-            child: CustomPaint(
-              painter: _SkeuoSurfacePainter(
-                fill: fill,
-                radius: widget.radius,
-                borderWidth: _isDisabled ? Skeuo.borderThin : 2.5 + t,
-                maxShadow: _isDisabled ? 0 : Skeuo.shadowLow,
-                shadowOffset: offset,
-                shadowStyle:
-                    _isPrimary
-                        ? SkeuoShadowStyle.solid
-                        : SkeuoShadowStyle.hatch,
-                innerStroke: false,
-                pressT: t,
-                interiorHatch: false,
-                sketchy: !_isPrimary,
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: pad.left + shift,
-                  top: pad.top + shift,
-                  right: pad.right + Skeuo.shadowLow - shift,
-                  bottom: pad.bottom + Skeuo.shadowLow - shift,
-                ),
-                child:
-                    widget.compact
-                        ? content
-                        : SizedBox(
-                          // Bare Center here would swallow the whole
-                          // bottomNav slot (landmine) — concrete height.
-                          height: widget.height ?? 52,
-                          child: Center(child: content),
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 480),
+      curve: Curves.easeOutCubic,
+      builder:
+          (context, drawT, _) => TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: _pressed ? 1 : 0),
+            duration: Motion.fast,
+            curve: Curves.easeOut,
+            builder:
+                (context, t, _) => MouseRegion(
+                  onEnter:
+                      _enabled ? (_) => setState(() => _hover = true) : null,
+                  onExit:
+                      _enabled ? (_) => setState(() => _hover = false) : null,
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween(begin: 0, end: _hover ? 1 : 0),
+                    duration: const Duration(milliseconds: 140),
+                    curve: Curves.easeOut,
+                    builder: (context, h, _) {
+                      final lift = _isDisabled ? 0.0 : 1.5 * h;
+                      final offset =
+                          _isDisabled
+                              ? 0.0
+                              : lerp(Skeuo.shadowLow, 1.2, t) + lift;
+                      final shift =
+                          _isDisabled
+                              ? 0.0
+                              : (Skeuo.shadowLow - offset).clamp(
+                                0.0,
+                                Skeuo.shadowLow,
+                              );
+                      final fill =
+                          _isPrimary
+                              ? Skeuo.ink
+                              : _isDisabled
+                              ? Skeuo.paper
+                              : Skeuo.card;
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTapDown:
+                            _enabled
+                                ? (d) {
+                                  setState(() {
+                                    _pressed = true;
+                                    _tapPos = d.localPosition;
+                                  });
+                                  Haptics.light();
+                                }
+                                : null,
+                        onTapUp:
+                            _enabled
+                                ? (_) {
+                                  setState(() {
+                                    _pressed = false;
+                                    _tapPos = null;
+                                  });
+                                  Haptics.selection();
+                                  widget.onTap!();
+                                }
+                                : null,
+                        onTapCancel:
+                            _enabled
+                                ? () => setState(() {
+                                  _pressed = false;
+                                  _tapPos = null;
+                                })
+                                : null,
+                        child: Transform.scale(
+                          scale: 1 - 0.02 * t + 0.012 * h,
+                          child: CustomPaint(
+                            painter: _SkeuoSurfacePainter(
+                              fill: fill,
+                              radius: widget.radius,
+                              borderWidth:
+                                  _isDisabled ? Skeuo.borderThin : 2.5 + t,
+                              maxShadow: _isDisabled ? 0 : Skeuo.shadowLow,
+                              shadowOffset: offset,
+                              shadowStyle:
+                                  _isPrimary
+                                      ? SkeuoShadowStyle.solid
+                                      : SkeuoShadowStyle.hatch,
+                              innerStroke: false,
+                              pressT: t,
+                              interiorHatch: false,
+                              drawT: drawT,
+                              tapPos: _tapPos,
+                              sketchy: !_isPrimary,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: pad.left + shift,
+                                top: pad.top + shift,
+                                right: pad.right + Skeuo.shadowLow - shift,
+                                bottom: pad.bottom + Skeuo.shadowLow - shift,
+                              ),
+                              child:
+                                  widget.compact
+                                      ? content
+                                      : SizedBox(
+                                        // Bare Center here would swallow
+                                        // the whole bottomNav slot
+                                        // (landmine) — concrete height.
+                                        height: widget.height ?? 52,
+                                        child: Center(child: content),
+                                      ),
+                            ),
+                          ),
                         ),
-              ),
-            ),
+                      );
+                    },
+                  ),
+                ),
           ),
-        );
-      },
     );
   }
 
