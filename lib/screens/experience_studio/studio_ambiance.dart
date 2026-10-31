@@ -65,6 +65,39 @@ class _AmbianceStep extends StatelessWidget {
                 flair.headlineStat,
                 (v) => VisualPrefs.setGrainIntensity(v),
               ),
+              const SizedBox(height: 18),
+              _StepLabel('BACKGROUND'),
+              const SizedBox(height: 8),
+              // The shader layer existed in the engine + prefs but had
+              // zero UI — surfacing it (hidden feature the user asked
+              // about).
+              Row(
+                children: [
+                  for (final (label, enabled, preset) in [
+                    ('OFF', false, ShaderPreset.digitalRain),
+                    ('FOG', true, ShaderPreset.darkNeonFog),
+                    ('RAIN', true, ShaderPreset.digitalRain),
+                  ])
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: _ShaderChip(
+                          label: label,
+                          on:
+                              prefs.shaderEnabled == enabled &&
+                              (!enabled || prefs.shaderPreset == preset),
+                          onTap: () {
+                            VisualPrefs.setShaderEnabled(enabled);
+                            if (enabled) {
+                              VisualPrefs.setShaderPreset(preset);
+                            }
+                            Haptics.selection();
+                          },
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ],
           ),
         );
@@ -248,6 +281,51 @@ class _GlowQuickRow extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _ShaderChip extends StatelessWidget {
+  final String label;
+  final bool on;
+  final VoidCallback onTap;
+  const _ShaderChip({
+    required this.label,
+    required this.on,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final flair = AppTheme.flair;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color:
+              on
+                  ? flair.primary.withValues(alpha: 0.16)
+                  : Colors.white.withValues(alpha: 0.04),
+          borderRadius: const BorderRadius.all(Radii.sm),
+          border: Border.all(
+            color: on ? flair.primary : Colors.white.withValues(alpha: 0.15),
+            width: on ? 1.4 : 0.8,
+          ),
+        ),
+        child: Center(
+          child: GoopText(
+            label,
+            style: TextStyle(
+              fontSize: FontSizes.labelSmall,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
+              color: on ? flair.primary : Colors.white.withValues(alpha: 0.5),
+            ),
+          ),
+        ),
       ),
     );
   }
