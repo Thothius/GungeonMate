@@ -371,6 +371,23 @@ void main() {
   });
 
   group('Particles controls write prefs', () {
+    test('LINKS + TYPE GLOW prefs — setters write + persist', () async {
+      SharedPreferences.setMockInitialValues({});
+      await VisualPrefs.setParticleLineLinks(true);
+      expect(VisualPrefs.notifier.value.particleLineLinks, isTrue);
+      await VisualPrefs.setParticleGlowEffect(GlowEffect.prism);
+      expect(
+        VisualPrefs.notifier.value.particleGlowEffect,
+        GlowEffect.prism,
+      );
+      // none = AUTO semantics — overlay maps it to null override.
+      await VisualPrefs.setParticleGlowEffect(GlowEffect.none);
+      expect(
+        VisualPrefs.notifier.value.particleGlowEffect,
+        GlowEffect.none,
+      );
+    });
+
     testWidgets('toggle + physics chips + schema chip', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(home: ExperienceStudioScreen()),

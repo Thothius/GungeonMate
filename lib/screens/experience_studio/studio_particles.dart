@@ -154,7 +154,7 @@ class _ParticlesStep extends StatelessWidget {
                   const SizedBox(height: 16),
                   _StepLabel('COLOR'),
                   const SizedBox(height: 8),
-                  // 12 global palettes — horizontal scroller so every
+                  // 18 global palettes — horizontal scroller so every
                   // theme gets the full set (was ~3 per-theme schemas).
                   SizedBox(
                     height: 62,
