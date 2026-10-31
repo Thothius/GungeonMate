@@ -5,18 +5,18 @@ import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/screens/main_menu_screen.dart';
 import 'package:gungeon_mate/screens/character_select_screen.dart';
-import 'package:gungeon_mate/screens/codex_screen.dart';
+import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
 
 /// Widget tests for MainMenuScreen — the opening screen with the app
 /// title, subtitle, and primary action buttons (Local Run, Multiplayer,
-/// Customization, Codex).
+/// Customization, Ammonomicon).
 ///
 /// "How to Use" was removed in the 10-item rework (2026-08-25).
 ///
 /// MainMenuScreen uses ScaleButton (spring-scale on press, not
 /// perpetual) and flutter_animate one-shot entrance animations, so
 /// pumpAndSettle is safe for the main screen. However, navigating to
-/// CodexScreen triggers SkeletonLoader (perpetual animation), so we
+/// AmmonomiconScreen triggers SkeletonLoader (perpetual animation), so we
 /// use pump() after that navigation.
 void main() {
   Widget wrap(Widget child) {
@@ -74,20 +74,20 @@ void main() {
     expect(find.byType(CharacterSelectScreen), findsOneWidget);
   });
 
-  testWidgets('Tapping Codex navigates to CodexScreen', (tester) async {
+  testWidgets('Tapping Ammonomicon navigates to AmmonomiconScreen', (tester) async {
     await tester.pumpWidget(wrap(const MainMenuScreen()));
     await tester.pumpAndSettle();
 
     await tester.ensureVisible(find.text('Ammonomicon'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Ammonomicon'));
-    // Use pump() not pumpAndSettle() — CodexScreen shows SkeletonLoader
+    // Use pump() not pumpAndSettle() — AmmonomiconScreen shows SkeletonLoader
     // which has a perpetual shimmer animation that would time out.
     await tester.pump(); // Process the tap callback
     await tester.pump(
       const Duration(milliseconds: 500),
     ); // Complete route transition
 
-    expect(find.byType(CodexScreen), findsOneWidget);
+    expect(find.byType(AmmonomiconScreen), findsOneWidget);
   });
 }

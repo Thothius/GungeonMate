@@ -1,7 +1,7 @@
-/// A single entry in the GungeonMate Codex — covers Objects, Pickups, NPCs,
+/// A single entry in the GungeonMate Ammonomicon — covers Objects, Pickups, NPCs,
 /// Enemies, and Bosses. All JSON files share the same shape, so one model
 /// handles them all.
-class CodexEntry {
+class AmmonomiconEntry {
   final String name;
   final String category;
   final String description;
@@ -13,7 +13,7 @@ class CodexEntry {
   final String? ammonomicon;
   final List<String> tips;
 
-  CodexEntry({
+  AmmonomiconEntry({
     required this.name,
     this.category = '',
     this.description = '',
@@ -26,8 +26,8 @@ class CodexEntry {
     this.tips = const [],
   });
 
-  factory CodexEntry.fromJson(Map<String, dynamic> j) {
-    return CodexEntry(
+  factory AmmonomiconEntry.fromJson(Map<String, dynamic> j) {
+    return AmmonomiconEntry(
       name: j['name'] as String? ?? '',
       category: j['category'] as String? ?? '',
       description: j['description'] as String? ?? '',
@@ -66,7 +66,7 @@ class CodexEntry {
       case 'items':
         return 'items';
       case 'synergies':
-        return 'codex';
+        return 'ammonomicon';
       default:
         // Pickups have their own categories like Currency, Health, etc.
         // Objects have categories like Barrel, Chest, Trap, etc.
@@ -76,43 +76,43 @@ class CodexEntry {
   }
 }
 
-/// Which codex section a list belongs to.
-enum CodexSection { objects, pickups, npcs, enemies, bosses, guns, items, synergies, shrines, chapters, gameModes }
+/// Which ammonomicon section a list belongs to.
+enum AmmonomiconSection { objects, pickups, npcs, enemies, bosses, guns, items, synergies, shrines, chapters, gameModes }
 
-/// Helper to resolve the image folder for a codex section.
-String codexImageFolder(CodexSection section) {
+/// Helper to resolve the image folder for a ammonomicon section.
+String ammonomiconImageFolder(AmmonomiconSection section) {
   switch (section) {
-    case CodexSection.objects:
+    case AmmonomiconSection.objects:
       return 'objects';
-    case CodexSection.pickups:
+    case AmmonomiconSection.pickups:
       return 'pickups';
-    case CodexSection.npcs:
+    case AmmonomiconSection.npcs:
       return 'npcs';
-    case CodexSection.enemies:
+    case AmmonomiconSection.enemies:
       return 'enemies';
-    case CodexSection.bosses:
+    case AmmonomiconSection.bosses:
       return 'bosses';
-    case CodexSection.guns:
+    case AmmonomiconSection.guns:
       return 'guns';
-    case CodexSection.items:
+    case AmmonomiconSection.items:
       return 'items';
-    case CodexSection.synergies:
-      return 'codex';
-    case CodexSection.shrines:
+    case AmmonomiconSection.synergies:
+      return 'ammonomicon';
+    case AmmonomiconSection.shrines:
       return 'shrines';
-    case CodexSection.chapters:
-    case CodexSection.gameModes:
-      return 'codex';
+    case AmmonomiconSection.chapters:
+    case AmmonomiconSection.gameModes:
+      return 'ammonomicon';
   }
 }
 
-/// Build the full asset path for a codex entry given its section.
+/// Build the full asset path for a ammonomicon entry given its section.
 /// Icons that already carry a folder prefix (e.g. `guns/x.png` from
 /// cross-category fabrication like synergy anchor icons) are used
 /// as-is rather than resolved under the section folder.
-String codexAssetPath(CodexSection section, String icon) {
+String ammonomiconAssetPath(AmmonomiconSection section, String icon) {
   if (icon.isEmpty) return '';
   if (icon.startsWith('assets/')) return icon;
   if (icon.contains('/')) return 'assets/images/$icon';
-  return 'assets/images/${codexImageFolder(section)}/$icon';
+  return 'assets/images/${ammonomiconImageFolder(section)}/$icon';
 }

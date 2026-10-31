@@ -3,13 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
-import 'package:gungeon_mate/models/codex_entry.dart';
-import 'package:gungeon_mate/screens/codex_screen.dart';
+import 'package:gungeon_mate/models/ammonomicon_entry.dart';
+import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
 import 'package:gungeon_mate/widgets/state_widgets.dart';
 
-/// Widget tests for CodexScreen — the browseable encyclopedia.
+/// Widget tests for AmmonomiconScreen — the browseable encyclopedia.
 ///
-/// CodexScreen loads its own JSON data in initState via compute()
+/// AmmonomiconScreen loads its own JSON data in initState via compute()
 /// (isolate parsing). While loading, it shows SkeletonLoader widgets
 /// which have a perpetual shimmer animation, so we use pump() instead
 /// of pumpAndSettle() to avoid timeouts.
@@ -30,7 +30,7 @@ void main() {
   }
 
   testWidgets('Shows skeleton loaders while data is loading', (tester) async {
-    await tester.pumpWidget(wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen()));
     // Only pump one frame — data hasn't loaded yet
     await tester.pump();
 
@@ -39,7 +39,7 @@ void main() {
   });
 
   testWidgets('Does not show category tabs while loading', (tester) async {
-    await tester.pumpWidget(wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen()));
     await tester.pump();
 
     // The AmmonomiconTabStrip is only rendered when _loaded is true
@@ -49,7 +49,7 @@ void main() {
   });
 
   testWidgets('Does not show search field while loading', (tester) async {
-    await tester.pumpWidget(wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen()));
     await tester.pump();
 
     expect(find.byType(TextField), findsNothing);
@@ -58,7 +58,7 @@ void main() {
   testWidgets('showBackButton true renders back button and CODEX title', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: true)));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: true)));
     await tester.pump();
 
     // The AppBar uses IconButton with Icons.arrow_back, not BackButton
@@ -70,7 +70,7 @@ void main() {
   testWidgets('showBackButton false does not render back button', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: false)));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
     await tester.pump();
 
     expect(find.byIcon(Icons.arrow_back), findsNothing);
@@ -79,7 +79,7 @@ void main() {
   testWidgets('Screen renders without crashing with empty provider data', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen()));
     await tester.pump();
 
     expect(find.byType(Scaffold), findsOneWidget);
@@ -88,7 +88,7 @@ void main() {
   testWidgets('Renders multiple skeleton loader lines during loading', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const CodexScreen()));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen()));
     await tester.pump();
 
     // The loading state shows 4 skeleton loaders
@@ -98,7 +98,7 @@ void main() {
   testWidgets('showBackButton true renders AppBar with correct height', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: true)));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: true)));
     await tester.pump();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));
@@ -108,7 +108,7 @@ void main() {
   testWidgets('showBackButton false renders AppBar with zero height', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: false)));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
     await tester.pump();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));
@@ -120,7 +120,7 @@ void main() {
   testWidgets('showBackButton false includes SafeArea with top: true', (
     tester,
   ) async {
-    await tester.pumpWidget(wrap(const CodexScreen(showBackButton: false)));
+    await tester.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
     await tester.pump();
 
     // SafeArea should be present in the widget tree
@@ -130,16 +130,16 @@ void main() {
   // Regression guard for the off-by-one that shipped: appended
   // categories must map to their own section, not the previous one.
   test('ammonomiconSectionForIndex maps every data tab correctly', () {
-    expect(ammonomiconSectionForIndex(1), CodexSection.npcs);
-    expect(ammonomiconSectionForIndex(2), CodexSection.enemies);
-    expect(ammonomiconSectionForIndex(3), CodexSection.bosses);
-    expect(ammonomiconSectionForIndex(4), CodexSection.pickups);
-    expect(ammonomiconSectionForIndex(5), CodexSection.objects);
-    expect(ammonomiconSectionForIndex(6), CodexSection.guns);
-    expect(ammonomiconSectionForIndex(7), CodexSection.items);
-    expect(ammonomiconSectionForIndex(8), CodexSection.synergies);
-    expect(ammonomiconSectionForIndex(9), CodexSection.shrines);
-    expect(ammonomiconSectionForIndex(10), CodexSection.chapters);
-    expect(ammonomiconSectionForIndex(11), CodexSection.gameModes);
+    expect(ammonomiconSectionForIndex(1), AmmonomiconSection.npcs);
+    expect(ammonomiconSectionForIndex(2), AmmonomiconSection.enemies);
+    expect(ammonomiconSectionForIndex(3), AmmonomiconSection.bosses);
+    expect(ammonomiconSectionForIndex(4), AmmonomiconSection.pickups);
+    expect(ammonomiconSectionForIndex(5), AmmonomiconSection.objects);
+    expect(ammonomiconSectionForIndex(6), AmmonomiconSection.guns);
+    expect(ammonomiconSectionForIndex(7), AmmonomiconSection.items);
+    expect(ammonomiconSectionForIndex(8), AmmonomiconSection.synergies);
+    expect(ammonomiconSectionForIndex(9), AmmonomiconSection.shrines);
+    expect(ammonomiconSectionForIndex(10), AmmonomiconSection.chapters);
+    expect(ammonomiconSectionForIndex(11), AmmonomiconSection.gameModes);
   });
 }

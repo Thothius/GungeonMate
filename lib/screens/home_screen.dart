@@ -11,7 +11,7 @@ import '../widgets/state_widgets.dart';
 import 'main_menu_screen.dart';
 import 'active_run_screen.dart';
 import 'browse_screen.dart';
-import 'codex_screen.dart';
+import 'ammonomicon_screen.dart';
 import 'settings_screen.dart';
 import 'quiz/quiz_home_screen.dart';
 
@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Tracks which tabs have been visited at least once.
   /// Tabs not yet visited are built as a zero-size placeholder,
   /// deferring their initState (and any expensive loading — e.g.
-  /// CodexScreen's 5-file JSON parse) until the user first opens them.
+  /// AmmonomiconScreen's 5-file JSON parse) until the user first opens them.
   /// Once visited, the widget stays mounted in the IndexedStack so
   /// state is preserved on switch-back.
   final Set<int> _visitedTabs = {0}; // Inventory is always visited
@@ -114,10 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
             targetSlot: _currentPlayerSlot,
           )
           : const SizedBox.shrink(),
-      // Codex: deferred until first visit — avoids loading 5 JSON files
-      // in initState if the user never opens the Codex tab.
+      // Ammonomicon: deferred until first visit — avoids loading 5 JSON files
+      // in initState if the user never opens the Ammonomicon tab.
       _visitedTabs.contains(2)
-          ? CodexScreen(showBackButton: false)
+          ? AmmonomiconScreen(showBackButton: false)
           : const SizedBox.shrink(),
       // Quiz: deferred until first visit — builds its engine from
       // RunProvider data on first open.

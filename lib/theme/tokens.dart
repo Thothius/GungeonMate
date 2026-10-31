@@ -194,7 +194,7 @@ TextTheme buildAppTextTheme(ColorScheme scheme) {
   );
 }
 
-/// Semantic identity colors for Codex/Ammonomicon categories.
+/// Semantic identity colors for Ammonomicon/Ammonomicon categories.
 ///
 /// These are **fixed identity colors** — each category has a distinct
 /// color that users learn to recognize (Gungeoneers=blue, NPCs=red,
@@ -202,7 +202,7 @@ TextTheme buildAppTextTheme(ColorScheme scheme) {
 /// they're game-data identity, not theme chrome. Extracted as named
 /// constants so the intent is documented and the values aren't
 /// sprinkled as magic hex across screen files.
-abstract final class CodexColors {
+abstract final class AmmonomiconColors {
   static const Color gungeoneers = Color(0xFF42A5F5);
   static const Color npcs = Color(0xFFEF5350);
   static const Color enemies = Color(0xFFFF7043);
@@ -214,7 +214,7 @@ abstract final class CodexColors {
   static const Color bulletHell = Color(0xFFFF5252);
   static const Color challenge = Color(0xFFAB47BC);
 
-  // Codex detail badge accents — also fixed identity.
+  // Ammonomicon detail badge accents — also fixed identity.
   static const Color game = Color(0xFF42A5F5);
   static const Color health = Color(0xFFEF5350);
   static const Color location = Color(0xFF66BB6A);

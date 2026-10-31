@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:gungeon_mate/screens/codex_screen.dart';
+import 'package:gungeon_mate/screens/ammonomicon_screen.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 import 'package:gungeon_mate/services/goop_talk_engine.dart';
@@ -23,12 +23,12 @@ void main() {
   );
 
   testWidgets(
-    'codex opens on category grid, picks, and backs out',
+    'ammonomicon opens on category grid, picks, and backs out',
     // Skipped: compute()+asset load in _loadData doesn't complete
     // under flutter_test — verified on-device. Guard kept for CI.
     skip: true,
     (t) async {
-      await t.pumpWidget(wrap(const CodexScreen(showBackButton: false)));
+      await t.pumpWidget(wrap(const AmmonomiconScreen(showBackButton: false)));
       // Data parses off-main-isolate — needs real async, not pump().
       await t.runAsync(() => Future.delayed(const Duration(seconds: 3)));
       await t.pump();

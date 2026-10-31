@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../models/codex_entry.dart';
+import '../models/ammonomicon_entry.dart';
 import '../services/app_theme.dart';
 import '../services/goop_talk_engine.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
 import '../utils/asset_paths.dart' show npcIdleGifPath;
 import '../utils/responsive.dart';
 
-/// Full-page view for a single Codex entry — large icon, name, category,
+/// Full-page view for a single Ammonomicon entry — large icon, name, category,
 /// description, and wiki link.
-class CodexDetailScreen extends StatelessWidget {
-  final CodexEntry entry;
-  final CodexSection section;
+class AmmonomiconDetailScreen extends StatelessWidget {
+  final AmmonomiconEntry entry;
+  final AmmonomiconSection section;
 
-  const CodexDetailScreen({
+  const AmmonomiconDetailScreen({
     super.key,
     required this.entry,
     required this.section,
@@ -25,17 +25,17 @@ class CodexDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
-    final assetPath = codexAssetPath(section, entry.icon);
+    final assetPath = ammonomiconAssetPath(section, entry.icon);
     // For NPC entries, prefer the animated idle GIF if available.
     final idleGif =
-        section == CodexSection.npcs ? npcIdleGifPath(entry.name) : '';
+        section == AmmonomiconSection.npcs ? npcIdleGifPath(entry.name) : '';
     final heroImgPath = idleGif.isNotEmpty ? idleGif : assetPath;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       // Persistent bottom back bar (task 17 sweep) — replaces the
-      // inline "Back to Codex" TextButton in the scroll content.
-      bottomNavigationBar: const BottomBackBar(label: 'Back to Codex'),
+      // inline "Back to Ammonomicon" TextButton in the scroll content.
+      bottomNavigationBar: const BottomBackBar(label: 'Back to Ammonomicon'),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
@@ -137,7 +137,7 @@ class CodexDetailScreen extends StatelessWidget {
                               _badge(
                                 flair,
                                 entry.game!,
-                                accent: CodexColors.game,
+                                accent: AmmonomiconColors.game,
                                 icon: Icons.videogame_asset_outlined,
                               ),
                             if (entry.health != null &&
@@ -145,7 +145,7 @@ class CodexDetailScreen extends StatelessWidget {
                               _badge(
                                 flair,
                                 'HP: ${entry.health}',
-                                accent: CodexColors.health,
+                                accent: AmmonomiconColors.health,
                                 icon: Icons.favorite_outline,
                               ),
                             if (entry.location != null &&
@@ -153,7 +153,7 @@ class CodexDetailScreen extends StatelessWidget {
                               _badge(
                                 flair,
                                 entry.location!,
-                                accent: CodexColors.location,
+                                accent: AmmonomiconColors.location,
                                 icon: Icons.place_outlined,
                               ),
                           ],
@@ -270,7 +270,7 @@ class CodexDetailScreen extends StatelessWidget {
                               mode: LaunchMode.externalApplication,
                             );
                           } catch (e) {
-                            debugPrint('[CodexDetail] url launch error: $e');
+                            debugPrint('[AmmonomiconDetail] url launch error: $e');
                           }
                         },
                         onLongPress: () {

@@ -4,7 +4,7 @@ import 'character_select_screen.dart';
 import 'mp_lobby_screen.dart';
 import 'experience_studio_screen.dart';
 import 'quiz/quiz_home_screen.dart';
-import 'codex_screen.dart';
+import 'ammonomicon_screen.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../widgets/scale_button.dart';
@@ -239,7 +239,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
                                                   Navigator.push(
                                                     context,
                                                     fastRoute(
-                                                      const CodexScreen(
+                                                      const AmmonomiconScreen(
                                                         showBackButton: true,
                                                       ),
                                                     ),

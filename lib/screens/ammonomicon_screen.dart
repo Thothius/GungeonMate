@@ -3,15 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import '../models/codex_entry.dart';
+import '../models/ammonomicon_entry.dart';
 import '../providers/run_provider.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../theme/tokens.dart';
 import '../widgets/active_run/bottom_back_bar.dart';
-import '../widgets/codex/ammonomicon_tabs.dart';
+import '../widgets/ammonomicon/ammonomicon_tabs.dart';
 import '../widgets/state_widgets.dart';
-import 'codex_detail_screen.dart';
+import 'ammonomicon_detail_screen.dart';
 import 'gungeoneer_detail_screen.dart';
 import 'item_detail_screen.dart';
 import 'synergy_detail_screen.dart';
@@ -19,32 +19,32 @@ import '../utils/asset_paths.dart';
 import '../utils/fast_route.dart';
 import '../services/goop_talk_engine.dart';
 
-part 'codex_widgets.dart';
+part 'ammonomicon_widgets.dart';
 
 // ── Isolate parse helper ───────────────────────────────────────
 // Top-level function for compute() — parses a JSON string into a list
-// of CodexEntry objects off the main isolate.
-List<CodexEntry> _parseCodexEntries(String jsonStr) =>
+// of AmmonomiconEntry objects off the main isolate.
+List<AmmonomiconEntry> _parseAmmonomiconEntries(String jsonStr) =>
     (jsonDecode(jsonStr) as List)
-        .map((j) => CodexEntry.fromJson(j as Map<String, dynamic>))
+        .map((j) => AmmonomiconEntry.fromJson(j as Map<String, dynamic>))
         .toList();
 
-/// The GungeonMate Codex — a browseable encyclopedia of Objects, Pickups,
+/// The GungeonMate Ammonomicon — a browseable encyclopedia of Objects, Pickups,
 /// NPCs, Enemies, and Bosses from Enter the Gungeon, plus themed special
 /// pages for Bullet Hell, The Paradox, and The Gunslinger.
 ///
 /// Categories are presented as a grid of tappable tiles at the top for
 /// quick, visual access. Special pages come first, then data categories.
-class CodexScreen extends StatefulWidget {
+class AmmonomiconScreen extends StatefulWidget {
   final bool showBackButton;
 
-  const CodexScreen({super.key, this.showBackButton = false});
+  const AmmonomiconScreen({super.key, this.showBackButton = false});
 
   @override
-  State<CodexScreen> createState() => _CodexScreenState();
+  State<AmmonomiconScreen> createState() => _AmmonomiconScreenState();
 }
 
-class _CodexScreenState extends State<CodexScreen> {
+class _AmmonomiconScreenState extends State<AmmonomiconScreen> {
   final TextEditingController _searchCtrl = TextEditingController();
   String _query = '';
 
@@ -72,14 +72,14 @@ class _CodexScreenState extends State<CodexScreen> {
   // content area the full screen width.
 
   // Loaded data
-  List<CodexEntry> _objects = [];
-  List<CodexEntry> _shrines = [];
-  List<CodexEntry> _chapters = [];
-  List<CodexEntry> _gameModes = [];
-  List<CodexEntry> _pickups = [];
-  List<CodexEntry> _npcs = [];
-  List<CodexEntry> _enemies = [];
-  List<CodexEntry> _bosses = [];
+  List<AmmonomiconEntry> _objects = [];
+  List<AmmonomiconEntry> _shrines = [];
+  List<AmmonomiconEntry> _chapters = [];
+  List<AmmonomiconEntry> _gameModes = [];
+  List<AmmonomiconEntry> _pickups = [];
+  List<AmmonomiconEntry> _npcs = [];
+  List<AmmonomiconEntry> _enemies = [];
+  List<AmmonomiconEntry> _bosses = [];
   bool _loaded = false;
 
   // Category definitions — Ammonomicon bookmark tabs.
@@ -90,42 +90,42 @@ class _CodexScreenState extends State<CodexScreen> {
     AmmonomiconTab(
       label: 'Gungeoneers',
       icon: Icons.person,
-      color: CodexColors.gungeoneers,
+      color: AmmonomiconColors.gungeoneers,
       isSpecial: true,
     ),
     AmmonomiconTab(
       label: 'NPCs',
       assetIcon: 'Ammonomicon_Tab_Death',
       icon: Icons.person_outline,
-      color: CodexColors.npcs,
+      color: AmmonomiconColors.npcs,
       isSpecial: false,
     ),
     AmmonomiconTab(
       label: 'Enemies',
       assetIcon: 'Ammonomicon_Tab_Enemies',
       icon: Icons.dangerous_outlined,
-      color: CodexColors.enemies,
+      color: AmmonomiconColors.enemies,
       isSpecial: false,
     ),
     AmmonomiconTab(
       label: 'Bosses',
       assetIcon: 'Ammonomicon_Tab_Bosses',
       icon: Icons.emoji_events_outlined,
-      color: CodexColors.bosses,
+      color: AmmonomiconColors.bosses,
       isSpecial: false,
     ),
     AmmonomiconTab(
       label: 'Pickups',
       assetIcon: 'Ammonomicon_Tab_Items',
       icon: Icons.inventory_2_outlined,
-      color: CodexColors.pickups,
+      color: AmmonomiconColors.pickups,
       isSpecial: false,
     ),
     AmmonomiconTab(
       label: 'Objects',
       assetIcon: 'Ammonomicon_Tab_Guns',
       icon: Icons.widgets,
-      color: CodexColors.objects,
+      color: AmmonomiconColors.objects,
       isSpecial: false,
     ),
     // ── Ammonomicon wiki cats (fabricated from provider data) ──
@@ -133,14 +133,14 @@ class _CodexScreenState extends State<CodexScreen> {
       label: 'Guns',
       assetIcon: 'Ammonomicon_Tab_Guns',
       icon: Icons.gps_fixed,
-      color: CodexColors.objects,
+      color: AmmonomiconColors.objects,
       isSpecial: false,
     ),
     AmmonomiconTab(
       label: 'Items',
       assetIcon: 'Ammonomicon_Tab_Items',
       icon: Icons.inventory_2,
-      color: CodexColors.pickups,
+      color: AmmonomiconColors.pickups,
       isSpecial: false,
     ),
     AmmonomiconTab(
@@ -197,15 +197,15 @@ class _CodexScreenState extends State<CodexScreen> {
       bundle.loadString('assets/data/game_modes.json'),
     ]);
     if (!mounted) return;
-    // Parse each JSON file in an isolate to avoid jank on the codex screen.
+    // Parse each JSON file in an isolate to avoid jank on the ammonomicon screen.
     final parsed = await Future.wait([
-      compute(_parseCodexEntries, results[0]),
-      compute(_parseCodexEntries, results[1]),
-      compute(_parseCodexEntries, results[2]),
-      compute(_parseCodexEntries, results[3]),
-      compute(_parseCodexEntries, results[4]),
-      compute(_parseCodexEntries, results[6]),
-      compute(_parseCodexEntries, results[7]),
+      compute(_parseAmmonomiconEntries, results[0]),
+      compute(_parseAmmonomiconEntries, results[1]),
+      compute(_parseAmmonomiconEntries, results[2]),
+      compute(_parseAmmonomiconEntries, results[3]),
+      compute(_parseAmmonomiconEntries, results[4]),
+      compute(_parseAmmonomiconEntries, results[6]),
+      compute(_parseAmmonomiconEntries, results[7]),
     ]);
     if (!mounted) return;
     // Shrines: custom parse — JSON icon fields are wiki URLs; the local
@@ -223,7 +223,7 @@ class _CodexScreenState extends State<CodexScreen> {
               ? 'Angel_Shrine.webp'
               : '$slug.webp';
           final eff = (j['effect'] as String? ?? '').trim();
-          return CodexEntry(
+          return AmmonomiconEntry(
               name: j['name'] ?? '',
               category: 'Shrines',
               icon: 'shrines/$iconFile',
@@ -257,7 +257,7 @@ class _CodexScreenState extends State<CodexScreen> {
     super.dispose();
   }
 
-  List<CodexEntry> _filter(List<CodexEntry> entries) {
+  List<AmmonomiconEntry> _filter(List<AmmonomiconEntry> entries) {
     if (_query.isEmpty) return entries;
     return entries.where((e) {
       if (e.name.toLowerCase().contains(_query) ||
@@ -274,7 +274,7 @@ class _CodexScreenState extends State<CodexScreen> {
   }
 
   /// Returns the data entries for the selected data category.
-  List<CodexEntry> _entriesFor(int index) {
+  List<AmmonomiconEntry> _entriesFor(int index) {
     switch (index) {
       case 1:
         return _filter(_npcs);
@@ -298,7 +298,7 @@ class _CodexScreenState extends State<CodexScreen> {
         return _filter(guns
             .where((g) =>
                 _qualityFilter.isEmpty || _qualityFilter.contains(g.quality))
-            .map((g) => CodexEntry(
+            .map((g) => AmmonomiconEntry(
                 name: g.name,
                 category: 'Guns',
                 icon: g.icon,
@@ -315,7 +315,7 @@ class _CodexScreenState extends State<CodexScreen> {
         return _filter(items
             .where((i) =>
                 _qualityFilter.isEmpty || _qualityFilter.contains(i.quality))
-            .map((i) => CodexEntry(
+            .map((i) => AmmonomiconEntry(
                 name: i.name,
                 category: 'Items',
                 icon: i.icon,
@@ -356,7 +356,7 @@ class _CodexScreenState extends State<CodexScreen> {
                     : p.startsWith('assets/')
                         ? p
                         : '$folder/$p';
-            return CodexEntry(
+            return AmmonomiconEntry(
                 name: s.name,
                 category: 'Synergies',
                 icon: gun != null
@@ -494,8 +494,8 @@ class _CodexScreenState extends State<CodexScreen> {
   }
 
   /// Grouped search result container for the global-search view.
-  Widget _searchIcon(CodexEntry entry, CodexSection section) {
-    final path = codexAssetPath(section, entry.icon);
+  Widget _searchIcon(AmmonomiconEntry entry, AmmonomiconSection section) {
+    final path = ammonomiconAssetPath(section, entry.icon);
     if (path.isEmpty) {
       return const Icon(Icons.help_outline, size: 20);
     }
@@ -510,8 +510,8 @@ class _CodexScreenState extends State<CodexScreen> {
   }
 
   /// Shared tap routing — guns/items go to their detail screens,
-  /// synergies to the synergy graph, everything else to codex detail.
-  void _openEntry(CodexEntry entry, CodexSection section) {
+  /// synergies to the synergy graph, everything else to ammonomicon detail.
+  void _openEntry(AmmonomiconEntry entry, AmmonomiconSection section) {
     final p = context.read<RunProvider>();
     final gun = entry.game == 'gun'
         ? p.allGuns
@@ -534,7 +534,7 @@ class _CodexScreenState extends State<CodexScreen> {
             ? ItemDetailScreen(item: item)
             : syn != null
                 ? SynergyDetailScreen(synergy: syn)
-                : CodexDetailScreen(entry: entry, section: section);
+                : AmmonomiconDetailScreen(entry: entry, section: section);
     Navigator.push(context, fastRoute(dest));
   }
 
@@ -650,7 +650,7 @@ class _CodexScreenState extends State<CodexScreen> {
     );
   }
 
-  CodexSection _sectionFor(int index) =>
+  AmmonomiconSection _sectionFor(int index) =>
       ammonomiconSectionForIndex(index);
 
   @override
@@ -1056,7 +1056,7 @@ class _CodexScreenState extends State<CodexScreen> {
                             _selected == 8)
                           _buildQualityChips(flair),
                         Expanded(
-                          child: _CodexList(
+                          child: _AmmonomiconList(
                             entries: _entriesFor(_selected),
                             section: _sectionFor(_selected),
                             onEntryTap: _openEntry,
@@ -1073,7 +1073,7 @@ class _CodexScreenState extends State<CodexScreen> {
   Widget _specialPage(int index) {
     switch (index) {
       case 0:
-        return const _GungeoneersCodexPage();
+        return const _GungeoneersAmmonomiconPage();
       default:
         return const SizedBox.shrink();
     }

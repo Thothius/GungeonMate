@@ -118,8 +118,8 @@ flutter:
     - assets/images/enemies/
     - assets/images/end_run/
     - assets/images/bosses/
-    - assets/images/codex/
-    - assets/images/codex/tabs/
+    - assets/images/ammonomicon/
+    - assets/images/ammonomicon/tabs/
     - assets/images/home/
     - assets/images/home/junk/
     - assets/animations/

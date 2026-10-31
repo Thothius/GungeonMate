@@ -1,11 +1,11 @@
-part of 'codex_screen.dart';
+part of 'ammonomicon_screen.dart';
 
-class _CodexList extends StatelessWidget {
-  final List<CodexEntry> entries;
-  final CodexSection section;
-  final void Function(CodexEntry entry, CodexSection section) onEntryTap;
+class _AmmonomiconList extends StatelessWidget {
+  final List<AmmonomiconEntry> entries;
+  final AmmonomiconSection section;
+  final void Function(AmmonomiconEntry entry, AmmonomiconSection section) onEntryTap;
 
-  const _CodexList(
+  const _AmmonomiconList(
       {required this.entries,
       required this.section,
       required this.onEntryTap});
@@ -50,7 +50,7 @@ class _CodexList extends StatelessWidget {
             sliver: SliverGrid(
               delegate: SliverChildBuilderDelegate((context, index) {
                 final entry = entries[index];
-                return _CodexCard(
+                return _AmmonomiconCard(
                   entry: entry,
                   section: section,
                   onTap: () {
@@ -82,12 +82,12 @@ class _CodexList extends StatelessWidget {
 // Entry Card — pixel-art icon + name label
 // =============================================================================
 
-class _CodexCard extends StatelessWidget {
-  final CodexEntry entry;
-  final CodexSection section;
+class _AmmonomiconCard extends StatelessWidget {
+  final AmmonomiconEntry entry;
+  final AmmonomiconSection section;
   final VoidCallback onTap;
 
-  const _CodexCard({
+  const _AmmonomiconCard({
     required this.entry,
     required this.section,
     required this.onTap,
@@ -97,10 +97,10 @@ class _CodexCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final flair = AppTheme.flair;
     final onSurface = Theme.of(context).colorScheme.onSurface;
-    final assetPath = codexAssetPath(section, entry.icon);
+    final assetPath = ammonomiconAssetPath(section, entry.icon);
     // For NPC entries, prefer the animated idle GIF if available.
     final idleGif =
-        section == CodexSection.npcs ? npcIdleGifPath(entry.name) : '';
+        section == AmmonomiconSection.npcs ? npcIdleGifPath(entry.name) : '';
     final imgPath = idleGif.isNotEmpty ? idleGif : assetPath;
 
     return GestureDetector(
@@ -207,11 +207,11 @@ class _CodexCard extends StatelessWidget {
 }
 
 // =============================================================================
-// Gungeoneers codex page — grid of all gungeoneers, tap for detail
+// Gungeoneers ammonomicon page — grid of all gungeoneers, tap for detail
 // =============================================================================
 
-class _GungeoneersCodexPage extends StatelessWidget {
-  const _GungeoneersCodexPage();
+class _GungeoneersAmmonomiconPage extends StatelessWidget {
+  const _GungeoneersAmmonomiconPage();
 
   @override
   Widget build(BuildContext context) {
@@ -318,8 +318,8 @@ class _GungeoneersCodexPage extends StatelessWidget {
 /// filtered entries + icon-folder resolver).
 class _SearchGroup {
   final AmmonomiconTab tab;
-  final List<CodexEntry> entries;
-  final CodexSection section;
+  final List<AmmonomiconEntry> entries;
+  final AmmonomiconSection section;
   const _SearchGroup(
       {required this.tab, required this.entries, required this.section});
 }
@@ -328,29 +328,29 @@ class _SearchGroup {
 /// tab-to-section alignment can be unit-tested — an earlier refactor
 /// shipped an off-by-one here that made every appended tab show the
 /// previous category's content.
-CodexSection ammonomiconSectionForIndex(int index) {
+AmmonomiconSection ammonomiconSectionForIndex(int index) {
   switch (index) {
     case 1:
-      return CodexSection.npcs;
+      return AmmonomiconSection.npcs;
     case 2:
-      return CodexSection.enemies;
+      return AmmonomiconSection.enemies;
     case 3:
-      return CodexSection.bosses;
+      return AmmonomiconSection.bosses;
     case 4:
-      return CodexSection.pickups;
+      return AmmonomiconSection.pickups;
     case 6:
-      return CodexSection.guns;
+      return AmmonomiconSection.guns;
     case 7:
-      return CodexSection.items;
+      return AmmonomiconSection.items;
     case 8:
-      return CodexSection.synergies;
+      return AmmonomiconSection.synergies;
     case 9:
-      return CodexSection.shrines;
+      return AmmonomiconSection.shrines;
     case 10:
-      return CodexSection.chapters;
+      return AmmonomiconSection.chapters;
     case 11:
-      return CodexSection.gameModes;
+      return AmmonomiconSection.gameModes;
     default:
-      return CodexSection.objects;
+      return AmmonomiconSection.objects;
   }
 }

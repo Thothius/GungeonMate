@@ -5,7 +5,7 @@ import 'chat_sheet.dart';
 import '../../models/multiplayer_messages.dart';
 import '../../models/player.dart' show PlayerSlot;
 import '../../providers/run_provider.dart';
-import '../../screens/codex_screen.dart';
+import '../../screens/ammonomicon_screen.dart';
 import '../../screens/cool_curse_screen.dart';
 import '../../screens/experience_studio_screen.dart';
 import '../../screens/settings_screen.dart';
@@ -28,7 +28,7 @@ import 'avatar_frame.dart';
 ///   [avatar]  MSG  COOL  CURSE              [chat]  [⋮ menu]
 ///
 /// MSG opens the messages sheet (unread count shown inline).
-/// ⋮ menu: INFO — Shrines, Codex · GAME — Reset items, Diceroller ·
+/// ⋮ menu: INFO — Shrines, Ammonomicon · GAME — Reset items, Diceroller ·
 /// bottom — END RUN. On the peer's page "Reset items" sends an
 /// [MpPeerEdit] clear (co-op trust model).
 class ParadoxPlayerPanel extends StatelessWidget {
@@ -182,7 +182,7 @@ class ParadoxPlayerPanel extends StatelessWidget {
                     Colors.amberAccent,
                   ),
                   _item(
-                    'codex',
+                    'ammonomicon',
                     Icons.menu_book_rounded,
                     'Ammonomicon',
                     const Color(0xFF4DD0E1),
@@ -358,8 +358,8 @@ class ParadoxPlayerPanel extends StatelessWidget {
     switch (v) {
       case 'shrines':
         Navigator.push(context, fastRoute(const ShrinePickerScreen()));
-      case 'codex':
-        Navigator.push(context, fastRoute(const CodexScreen()));
+      case 'ammonomicon':
+        Navigator.push(context, fastRoute(const AmmonomiconScreen()));
       case 'reset_p1':
         _confirmResetSlot(context, session, PlayerSlot.main);
       case 'reset_p2':

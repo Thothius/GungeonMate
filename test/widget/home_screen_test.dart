@@ -26,7 +26,7 @@ class _LoadedRunProvider extends RunProvider {
 
 /// Widget tests for HomeScreen — the root container that switches
 /// between MainMenuScreen (no active run) and the bottom-nav tab
-/// layout (Inventory, Browse, Codex, Settings) when a run is active.
+/// layout (Inventory, Browse, Ammonomicon, Settings) when a run is active.
 ///
 /// HomeScreen checks RunProvider.isLoading first:
 ///   - isLoading == true  → SkeletonLoader (perpetual shimmer animation)
@@ -166,7 +166,7 @@ void main() {
       expect(navBar.selectedIndex, 4);
     });
 
-    testWidgets('Tapping Codex tab switches selectedIndex', (tester) async {
+    testWidgets('Tapping Ammonomicon tab switches selectedIndex', (tester) async {
       final rp = _LoadedRunProvider();
       rp.startNewRun(Gungeoneer(name: 'The Marine'));
 

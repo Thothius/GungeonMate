@@ -9,7 +9,7 @@ import '../../services/effect_tagger.dart';
 import '../../services/mp_session.dart';
 import '../../models/multiplayer_messages.dart';
 import '../../utils/fast_route.dart';
-import '../../screens/codex_screen.dart';
+import '../../screens/ammonomicon_screen.dart';
 import '../../services/goop_talk_engine.dart';
 import '../../screens/effects_summary_screen.dart';
 import '../../screens/settings_screen.dart';
@@ -311,8 +311,8 @@ class HeaderMenu extends StatelessWidget {
               builder: (_) => const SurpriseSheet(),
             );
             break;
-          case 'codex':
-            Navigator.push(context, fastRoute(const CodexScreen()));
+          case 'ammonomicon':
+            Navigator.push(context, fastRoute(const AmmonomiconScreen()));
             break;
         }
       },
@@ -359,7 +359,7 @@ class HeaderMenu extends StatelessWidget {
 
             // ── CODEX ──
             const PopupMenuItem(
-              value: 'codex',
+              value: 'ammonomicon',
               child: Row(
                 children: [
                   Icon(

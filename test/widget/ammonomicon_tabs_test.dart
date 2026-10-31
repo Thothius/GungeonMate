@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gungeon_mate/widgets/codex/ammonomicon_tabs.dart';
+import 'package:gungeon_mate/widgets/ammonomicon/ammonomicon_tabs.dart';
 
 /// Widget tests for AmmonomiconTabStrip — the bookmark-style category tabs.
 ///
