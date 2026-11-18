@@ -1,3 +1,14 @@
+## v3.4.2 — Preset Save Hardening (November 2026)
+
+**Build:** 165
+
+Hotfix release: preset store persistence ordering fix + synergy parser correctness fixes + release asset bundling fix.
+
+### Changes
+- **Preset store** — `CustomThemeStore.save`/`delete` serialize and write SharedPreferences first, update the in-memory gallery only on success, return `bool`; studio save, preset delete, and palette maker now surface storage failures instead of silently dropping them.
+- **Synergy parser** — direction verbs attributed by proximity to the stat keyword (multi-stat clauses like "increases magazine ... decreases reload" previously flipped reload's sign); enemy-side clause tails no longer discard player buffs in the same sentence.
+- **Release fix** — `synergy_meta.json` added to pubspec assets (meta chips were absent from the v3.4.1 APK).
+
 ## v3.4.1 — Customization Polish Pass (November 2026)
 
 **Build:** 164

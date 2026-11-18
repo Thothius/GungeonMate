@@ -1,5 +1,17 @@
 [
   {
+    "version": "3.4.2",
+    "date": "2026-11",
+    "sections": {
+      "Features": [],
+      "Fixed": [
+        "Preset store fails loudly — save/delete now persist to storage BEFORE updating the gallery and report failures via snackbar instead of silently leaving ghost presets that vanish on restart",
+        "Synergy stat chips: multi-stat clauses no longer misattribute buff direction (\"increases magazine ... decreases reload\" gave reload +33%); enemy-side tails no longer swallow player buffs in the same clause",
+        "Synergy meta data (fx tags + qualitative buff arrows) now bundled in release builds — was missing from pubspec assets"
+      ]
+    }
+  },
+  {
     "version": "3.4.1",
     "date": "2026-11",
     "sections": {
