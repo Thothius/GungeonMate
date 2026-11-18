@@ -382,6 +382,7 @@ class _LebPageState extends State<_LebPage>
                   synergy: s,
                   march: _march,
                   statDeltas: _lebDeltas(p, curGun, s),
+                  meta: p.synergyMeta(s.name),
                 ),
             ],
           ],
@@ -573,10 +574,12 @@ class _GhostSynergyRow extends StatelessWidget {
   final Synergy synergy;
   final Animation<double> march;
   final List<StatDelta> statDeltas;
+  final SynergyMeta? meta;
   const _GhostSynergyRow({
     required this.synergy,
     required this.march,
     this.statDeltas = const [],
+    this.meta,
   });
 
   @override
@@ -706,9 +709,19 @@ class _GhostSynergyRow extends StatelessWidget {
                   ),
                 ),
               ],
-              if (statDeltas.isNotEmpty) ...[
+              if (statDeltas.isNotEmpty ||
+                  (meta?.qb.isNotEmpty ?? false) ||
+                  (meta?.fx.isNotEmpty ?? false)) ...[
                 const SizedBox(height: 6),
-                StatDeltaChips(deltas: statDeltas),
+                if (statDeltas.isNotEmpty) StatDeltaChips(deltas: statDeltas),
+                if ((meta?.qb.isNotEmpty ?? false) ||
+                    (meta?.fx.isNotEmpty ?? false))
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: statDeltas.isNotEmpty ? 4 : 0,
+                    ),
+                    child: SynergyMetaChips(meta: meta),
+                  ),
               ],
             ],
           ),

@@ -9,6 +9,7 @@ import '../models/gun.dart';
 import '../models/item.dart';
 import '../models/rich_text.dart';
 import '../models/synergy.dart';
+import '../services/synergy_stats.dart';
 import '../models/shrine.dart';
 import '../models/gungeoneer.dart';
 import '../models/player.dart';
@@ -30,6 +31,17 @@ List<Item> _parseItems(String jsonStr) =>
     (json.decode(jsonStr) as List).map((i) => Item.fromJson(i)).toList();
 List<Synergy> _parseSynergies(String jsonStr) =>
     (json.decode(jsonStr) as List).map((s) => Synergy.fromJson(s)).toList();
+Map<String, SynergyMeta> _parseSynergyMeta(String jsonStr) {
+  if (jsonStr.isEmpty) return const {};
+  final raw = json.decode(jsonStr) as Map<String, dynamic>;
+  return {
+    for (final e in raw.entries)
+      e.key.toLowerCase(): SynergyMeta.fromJson(
+        e.value as Map<String, dynamic>,
+      ),
+  };
+}
+
 List<Shrine> _parseShrines(String jsonStr) =>
     (json.decode(jsonStr) as List).map((s) => Shrine.fromJson(s)).toList();
 List<Gungeoneer> _parseGungeoneers(String jsonStr) =>
@@ -66,6 +78,7 @@ class RunProvider
   Map<String, Gun> _gunsByLowerName = const {};
   Map<String, Item> _itemsByLowerName = const {};
   Map<String, Synergy> _synergiesByLowerName = const {};
+  Map<String, SynergyMeta> _synergyMetaByLowerName = const {};
 
   // Shellegun mode: 1 = Pistol (manual), 2 = Pistol (auto), 3 = Beam
 
@@ -166,6 +179,11 @@ class RunProvider
   Synergy? synergyByName(String name) =>
       _synergiesByLowerName[name.toLowerCase()];
 
+  /// Gemini-classified non-numeric metadata (fx tags, qualitative buffs,
+  /// special items). Null when the synergy isn't in the data pass yet.
+  SynergyMeta? synergyMeta(String name) =>
+      _synergyMetaByLowerName[name.toLowerCase()];
+
   /// Case-insensitive character lookup. Returns null if [name] is
   /// unknown. The roster is tiny (≈7 entries) so a linear scan is
   /// faster in practice than maintaining another map.
@@ -221,6 +239,9 @@ class RunProvider
         rootBundle
             .loadString('assets/data/back_refs.json')
             .catchError((_) => ''),
+        rootBundle
+            .loadString('assets/data/synergy_meta.json')
+            .catchError((_) => ''),
       ]);
 
       // Parse the core data in parallel isolates.
@@ -269,6 +290,15 @@ class RunProvider
         }
       } else {
         _backRefs = BackRefs.empty;
+      }
+
+      try {
+        _synergyMetaByLowerName = await compute(
+          _parseSynergyMeta,
+          jsonResults[6],
+        );
+      } catch (_) {
+        _synergyMetaByLowerName = const {};
       }
 
       // Build O(1) name-lookup indices once everything else is hydrated.

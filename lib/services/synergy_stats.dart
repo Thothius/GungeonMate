@@ -472,3 +472,79 @@ List<StatDelta> deltasForSynergy(
       ).where((m) => clauseAppliesTo(m, currentName, otherGunNames)).toList();
   return resolveDeltas(mods, gun);
 }
+
+// ---------------------------------------------------------------------------
+// Gemini-derived metadata (assets/data/synergy_meta.json)
+// ---------------------------------------------------------------------------
+
+/// A qualitative (unquantified) buff/debuff reported by the data pass.
+class QualBuff {
+  final String stat;
+  final String dir; // up | down | mixed | neutral
+  final String note;
+  const QualBuff(this.stat, this.dir, this.note);
+}
+
+/// Non-numeric synergy metadata merged from the Gemini classification
+/// pass: fx tags, qualitative buffs, special items, co-op scope,
+/// parser-miss hints, enemy-side flag.
+class SynergyMeta {
+  final List<String> fx;
+  final List<QualBuff> qb;
+  final List<Map<String, String>> si;
+  final String coop;
+  final List<String> miss;
+  final bool enemy;
+  const SynergyMeta({
+    this.fx = const [],
+    this.qb = const [],
+    this.si = const [],
+    this.coop = 'BOTH',
+    this.miss = const [],
+    this.enemy = false,
+  });
+
+  factory SynergyMeta.fromJson(Map<String, dynamic> j) {
+    return SynergyMeta(
+      fx: [for (final x in (j['fx'] as List? ?? const [])) '$x'],
+      qb: [
+        for (final q in (j['qb'] as List? ?? const []))
+          QualBuff(
+            '${(q as Map)['s'] ?? 'other'}',
+            '${q['d'] ?? 'neutral'}',
+            '${q['note'] ?? ''}',
+          ),
+      ],
+      si: [
+        for (final s in (j['si'] as List? ?? const []))
+          {'item': '${(s as Map)['item'] ?? ''}', 'does': '${s['does'] ?? ''}'},
+      ],
+      coop: '${j['coop'] ?? 'BOTH'}',
+      miss: [for (final x in (j['miss'] as List? ?? const [])) '$x'],
+      enemy: j['enemy'] == true,
+    );
+  }
+}
+
+/// Short display labels for the Gemini stat-id vocabulary.
+String synStatLabelFor(String id) {
+  const labels = {
+    'damage': 'DMG',
+    'firerate': 'ROF',
+    'reload': 'RLD',
+    'magazine': 'MAG',
+    'ammo': 'AMMO',
+    'spread': 'SPR',
+    'shotspeed': 'VEL',
+    'range': 'RNG',
+    'force': 'KNK',
+    'pierce': 'PRC',
+    'bounce': 'BNC',
+    'projectile_size': 'SIZE',
+    'projectiles_per_shot': 'SHOTS',
+    'accuracy': 'ACC',
+    'move_speed': 'MOV',
+    'other': 'FX',
+  };
+  return labels[id] ?? id.toUpperCase();
+}

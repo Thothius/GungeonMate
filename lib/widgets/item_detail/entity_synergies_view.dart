@@ -289,6 +289,7 @@ class _SynergyRowState extends State<_SynergyRow> {
       iconPath = resolved.gun?.icon ?? resolved.item?.icon ?? '';
     }
 
+    final meta = p.synergyMeta(s.name);
     final accent =
         widget.locked
             ? Colors.white38
@@ -350,9 +351,20 @@ class _SynergyRowState extends State<_SynergyRow> {
                     ),
                   ),
                 ],
-                if (widget.statDeltas.isNotEmpty) ...[
+                if (widget.statDeltas.isNotEmpty ||
+                    (meta?.qb.isNotEmpty ?? false) ||
+                    (meta?.fx.isNotEmpty ?? false)) ...[
                   const SizedBox(height: 6),
-                  StatDeltaChips(deltas: widget.statDeltas),
+                  if (widget.statDeltas.isNotEmpty)
+                    StatDeltaChips(deltas: widget.statDeltas),
+                  if ((meta?.qb.isNotEmpty ?? false) ||
+                      (meta?.fx.isNotEmpty ?? false))
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: widget.statDeltas.isNotEmpty ? 4 : 0,
+                      ),
+                      child: SynergyMetaChips(meta: meta),
+                    ),
                 ],
               ],
             ),
