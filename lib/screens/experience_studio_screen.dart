@@ -3347,7 +3347,7 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
   Widget build(BuildContext context) {
     final colors = _palettes[_tab];
     return Container(
-      height: 400,
+      height: 440,
       decoration: BoxDecoration(
         color: const Color(0xFF16161C),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
@@ -3364,6 +3364,48 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(2),
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GoopText(
+                  'PICK A COLOR',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.6,
+                    color: Colors.white.withValues(alpha: 0.38),
+                  ),
+                ),
+                Row(
+                  children: [
+                    GoopText(
+                      '#${widget.current.toARGB32().toRadixString(16).toUpperCase().substring(2)}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white.withValues(alpha: 0.45),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      width: 18,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: widget.current,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.35),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
           Padding(
@@ -3398,19 +3440,49 @@ class _PaletteColorSheetState extends State<_PaletteColorSheet> {
                           ),
                         ),
                             child: Center(
-                              child: GoopText(
-                                _tabs[i],
-                                style: TextStyle(
-                                  fontSize: 9.5,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 0.8,
-                                  color:
-                                      _tab == i
-                                          ? Colors.white
-                                          : Colors.white.withValues(
-                                            alpha: 0.4,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  for (final d in [
+                                    _palettes[i].first,
+                                    _palettes[i][_palettes[i].length ~/ 2],
+                                    _palettes[i].last,
+                                  ])
+                                    Container(
+                                      width: 7,
+                                      height: 7,
+                                      margin: const EdgeInsets.only(right: 2),
+                                      decoration: BoxDecoration(
+                                        color: Color(d),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white.withValues(
+                                            alpha: 0.35,
                                           ),
-                                ),
+                                          width: 0.6,
+                                        ),
+                                      ),
+                                    ),
+                                  const SizedBox(width: 4),
+                                  Flexible(
+                                    child: GoopText(
+                                      _tabs[i],
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: FontSizes.labelSmall,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 0.6,
+                                        color:
+                                            _tab == i
+                                                ? Colors.white
+                                                : Colors.white.withValues(
+                                                  alpha: 0.4,
+                                                ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
