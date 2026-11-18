@@ -463,37 +463,64 @@ class _LoadoutPage extends StatelessWidget {
   final RunProvider provider;
   const _LoadoutPage({required this.g, required this.provider});
 
+  Widget _section(String label, List<String> names) {
+    if (names.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: GoopText(
+              label,
+              style: TextStyle(
+                fontSize: FontSizes.labelMedium,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 1.5,
+                color: AppTheme.flair.primary.withValues(alpha: 0.55),
+              ),
+            ),
+          ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final name in names)
+                _LoadoutTile(
+                  name: name,
+                  isRandom: name == 'Random',
+                  provider: provider,
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Combine guns + items + armor into a single row of compact chips.
-    final chips = <Widget>[];
-    for (final name in g.startingGuns) {
-      chips.add(
-        _LoadoutTile(
-          name: name,
-          isRandom: name == 'Random',
-          provider: provider,
-        ),
-      );
-    }
-    for (final name in g.startingItems) {
-      chips.add(
-        _LoadoutTile(
-          name: name,
-          isRandom: name == 'Random',
-          provider: provider,
-        ),
-      );
-    }
-    if (g.startingArmor > 0) {
-      chips.add(_ArmorTile(armor: g.startingArmor));
-    }
-
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
       child: _ContentCard(
         color: AppTheme.flair.primary,
-        child: Wrap(spacing: 8, runSpacing: 8, children: chips),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _section('GUNS', g.startingGuns),
+            _section('ITEMS', g.startingItems),
+            if (g.startingArmor > 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [_ArmorTile(armor: g.startingArmor)],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -778,8 +805,7 @@ class _LoadoutTile extends StatelessWidget {
               assetPath: iconPath,
               fallback: fallback,
               quality: quality,
-              size: 22,
-              showRing: false,
+              size: 30,
               semanticLabel: name,
             ),
             const SizedBox(width: 6),

@@ -5,6 +5,8 @@ import '../services/goop_talk_engine.dart';
 import 'package:provider/provider.dart';
 import '../providers/run_provider.dart';
 import '../models/gungeoneer.dart';
+import '../models/gun.dart';
+import '../models/item.dart';
 import '../services/app_theme.dart';
 import '../services/haptics.dart';
 import '../utils/asset_paths.dart';
@@ -299,6 +301,7 @@ class _GungeoneerPickerState extends State<_GungeoneerPicker> {
                   g: gs[i],
                   flair: flair,
                   sprite: _sprite(gs[i], 110),
+                  provider: context.read<RunProvider>(),
                 ),
           ),
         ),
@@ -365,11 +368,13 @@ class _GungeoneerPage extends StatelessWidget {
   final Gungeoneer g;
   final ThemeFlair flair;
   final Widget sprite;
+  final RunProvider provider;
 
   const _GungeoneerPage({
     required this.g,
     required this.flair,
     required this.sprite,
+    required this.provider,
   });
 
   Widget _loadout(String label, List<String> names, bool gun) {
@@ -394,45 +399,93 @@ class _GungeoneerPage extends StatelessWidget {
           runSpacing: Insets.sm,
           children: [
             for (final n in names)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Insets.sm,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: flair.card,
-                  borderRadius: BorderRadius.all(Radii.sm),
-                  border: Border.all(
-                    color: flair.primary.withValues(alpha: 0.15),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GameIcon(
-                      assetPath: gun ? localGunIcon(n) : localItemIcon(n),
-                      size: 30,
-                    ),
-                    const SizedBox(width: 6),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 180),
-                      child: GoopText(
-                        n,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: FontSizes.labelMedium,
-                          fontWeight: FontWeight.w700,
+              Builder(builder: (_) {
+                // Resolve through the provider so the icon + quality ring
+                // match the detail view exactly; 'Random' gets a shuffle
+                // glyph instead of a broken-image fallback.
+                if (n == 'Random') {
+                  return _loadoutChip(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.shuffle,
+                          size: 20,
+                          color: Colors.purpleAccent.withValues(alpha: 0.8),
                         ),
-                      ),
+                        const SizedBox(width: 6),
+                        GoopText(
+                          n,
+                          style: const TextStyle(
+                            fontSize: FontSizes.labelMedium,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  );
+                }
+                final resolved = gun
+                    ? provider.gunByName(n)
+                    : provider.itemByName(n);
+                final assetPath =
+                    (resolved is Gun ? resolved.icon : null) ??
+                    (resolved is Item ? resolved.icon : null) ??
+                    (gun ? localGunIcon(n) : localItemIcon(n));
+                final quality =
+                    (resolved is Gun ? resolved.quality : null) ??
+                    (resolved is Item ? resolved.quality : null) ??
+                    '';
+                final exists = assetPath.isNotEmpty;
+                return Opacity(
+                  opacity: exists ? 1.0 : 0.5,
+                  child: _loadoutChip(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GameIcon(assetPath: assetPath, quality: quality, size: 30),
+                        const SizedBox(width: 6),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 180),
+                          child: GoopText(
+                            n,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: FontSizes.labelMedium,
+                              fontWeight: FontWeight.w700,
+                              decoration: exists
+                                  ? null
+                                  : TextDecoration.lineThrough,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _loadoutChip({required Widget child}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Insets.sm,
+        vertical: 6,
+      ),
+      decoration: BoxDecoration(
+        color: flair.card,
+        borderRadius: BorderRadius.all(Radii.sm),
+        border: Border.all(
+          color: flair.primary.withValues(alpha: 0.15),
+          width: 1,
+        ),
+      ),
+      child: child,
     );
   }
 

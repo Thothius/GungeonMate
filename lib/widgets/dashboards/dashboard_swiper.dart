@@ -43,7 +43,10 @@ bool hasSpecialDashboards({
   if (charName.contains('hunter')) return true;
   if (ownedItemNames.any((n) => n.contains('ser junkan'))) return true;
   if (ownedGunNames.contains('gunderfury')) return true;
+  if (ownedGunNames.contains('triple gun')) return true;
   if (ownedGunNames.contains('evolver')) return true;
+  if (ownedGunNames.contains('shellegun')) return true;
+  if (ownedGunNames.contains('chamber gun')) return true;
   if (ownedItemNames.contains('platinum bullets')) return true;
   if (ownedItemNames.contains('iron coin')) return true;
   if (ownedItemNames.contains('spice')) return true;
@@ -51,6 +54,7 @@ bool hasSpecialDashboards({
   if (ownedItemNames.contains('sprun')) return true;
   if (ownedGunNames.contains('boxing glove')) return true;
   if (ownedItemNames.contains('cigarettes')) return true;
+  if (ownedGunNames.contains('polaris')) return true;
   if (ownedGunNames.contains('gunther')) return true;
   if (ownedItemNames.contains('gun soul')) return true;
   return false;
@@ -161,6 +165,16 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
       ),
     );
   }
+  if (ownedGunNames.contains('triple gun')) {
+    tabs.add(
+      DashboardTab(
+        label: 'Triple Gun',
+        iconPath: localGunIcon('Triple Gun'),
+        color: Colors.blueAccent,
+        widget: TripleGunDashboardSliver(slot: slot),
+      ),
+    );
+  }
   if (ownedGunNames.contains('evolver')) {
     tabs.add(
       DashboardTab(
@@ -168,6 +182,26 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
         iconPath: localGunIcon('Evolver'),
         color: Skeuo.inkIf(Colors.greenAccent),
         widget: EvolverDashboardSliver(slot: slot),
+      ),
+    );
+  }
+  if (ownedGunNames.contains('shellegun')) {
+    tabs.add(
+      DashboardTab(
+        label: 'Shellegun',
+        iconPath: localGunIcon('Shellegun'),
+        color: Colors.cyanAccent,
+        widget: ShellegunDashboard(slot: slot),
+      ),
+    );
+  }
+  if (ownedGunNames.contains('chamber gun')) {
+    tabs.add(
+      DashboardTab(
+        label: 'Chamber Gun',
+        iconPath: localGunIcon('Chamber Gun'),
+        color: Colors.amberAccent,
+        widget: ChamberGunDashboard(slot: slot),
       ),
     );
   }
@@ -238,6 +272,16 @@ List<DashboardTab> buildDashboardTabs(Player player, PlayerSlot slot) {
         iconPath: localItemIcon('Cigarettes'),
         color: Skeuo.inkIf(Colors.orangeAccent),
         widget: CigarettesDashboard(slot: slot),
+      ),
+    );
+  }
+  if (ownedGunNames.contains('polaris')) {
+    tabs.add(
+      DashboardTab(
+        label: 'Polaris',
+        iconPath: localGunIcon('Polaris'),
+        color: Colors.lightBlueAccent,
+        widget: PolarisDashboard(slot: slot),
       ),
     );
   }
