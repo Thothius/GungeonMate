@@ -56,7 +56,10 @@ void main() {
     });
   });
 
-  group('enter/exit restore', () {
+  // Neo-Skeuo is parked behind AppTheme.kNeoSkeuoEnabled — these groups
+  // exercise the live enter/exit + menu swap, so they only run when the
+  // skin is enabled. Plumbing tests above stay active either way.
+  group('enter/exit restore', skip: !AppTheme.kNeoSkeuoEnabled, () {
     test('enterSkeuo saves prev mode + font, exit restores both', () async {
       AppTheme.notifier.value = AppThemeMode.unicorn;
       await VisualPrefs.setFont(AppFont.fredoka);
@@ -85,7 +88,7 @@ void main() {
     });
   });
 
-  group('skeuo home menu', () {
+  group('skeuo home menu', skip: !AppTheme.kNeoSkeuoEnabled, () {
     Widget wrap(Widget child) {
       return MultiProvider(
         providers: [

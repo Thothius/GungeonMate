@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:gungeon_mate/screens/item_detail_screen.dart';
 import 'package:gungeon_mate/providers/run_provider.dart';
+import 'package:gungeon_mate/services/app_theme.dart';
 import 'package:gungeon_mate/services/mp_session.dart';
 
 void main() {
@@ -90,14 +91,25 @@ void main() {
   testWidgets('synergies render flat inside the same scroll', (t) async {
     await t.pumpWidget(wrap(ItemDetailScreen(gun: p.allGuns.first)));
     await t.pump();
-    // Either the grouped lists or the empty state renders — scroll
-    // until one of them appears.
-    await t.scrollUntilVisible(
-      find.text('No synergies to show.'),
-      400,
-      maxScrolls: 20,
-    );
+    // LEB mode is the default — every gun lists all its synergies as
+    // simulated rows. '38 Special' has 4 synergies in the catalog.
+    await t.scrollUntilVisible(find.textContaining('LICH'), 400, maxScrolls: 20);
     await t.pump();
     expect(t.takeException(), isNull);
+    expect(find.text('Detective Magnum'), findsOneWidget);
+  });
+
+  testWidgets('gun detail lists locked synergies when LEB toggle is off', (
+    t,
+  ) async {
+    await VisualPrefs.setShowLichEyeBulletsSynergies(false);
+    addTearDown(() => VisualPrefs.setShowLichEyeBulletsSynergies(true));
+    await t.pumpWidget(wrap(ItemDetailScreen(gun: p.allGuns.first)));
+    await t.pump();
+    // Empty run state → every synergy is LOCKED, but still listed.
+    await t.scrollUntilVisible(find.text('LOCKED'), 400, maxScrolls: 20);
+    await t.pump();
+    expect(t.takeException(), isNull);
+    expect(find.text('Detective Magnum'), findsOneWidget);
   });
 }

@@ -292,6 +292,44 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               ),
             ),
           ),
+          _SettingsSection(
+            label: 'GAMEPLAY',
+            flair: flair,
+            child: _CollapsibleCard(
+              title: 'SYNERGIES',
+              icon: Icons.hub_outlined,
+              flair: flair,
+              initiallyExpanded: false,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GoopText(
+                          "Lich's Eye Bullets",
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        GoopText(
+                          'Show simulated synergies for all guns',
+                          style: TextStyle(
+                            fontSize: FontSizes.labelMedium,
+                            color: Theme.of(context).colorScheme.onSurface
+                                .withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Switch(
+                    value: prefs.showLichEyeBulletsSynergies,
+                    activeThumbColor: flair.primary,
+                    onChanged: VisualPrefs.setShowLichEyeBulletsSynergies,
+                  ),
+                ],
+              ),
+            ),
+          ),
           if (mpActive || hasCoop)
             _SettingsSection(
               label: '',
