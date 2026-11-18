@@ -200,7 +200,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
         // Build all section widgets
         final List<Widget> sections = [
           _SettingsSection(
-            label: 'GENERAL',
+            label: 'RUN',
             flair: flair,
             child: _CollapsibleCard(
               title: 'RUN TOOLS',
@@ -267,72 +267,76 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
             ),
           ),
           _SettingsSection(
-            label: '',
-            flair: flair,
-            child: _CollapsibleCard(
-              title: 'DICE',
-              icon: Icons.casino_rounded,
-              flair: flair,
-              initiallyExpanded: false,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: _CompactActionTile(
-                      data: _TileData(
-                        icon: Icons.casino_outlined,
-                        label: 'Dice Roll',
-                        color: const Color(0xFFFFD54F),
-                        onTap: () => showDiceRollDialog(context),
-                      ),
-                    ),
-                  ),
-                  _buildDicePanel(flair, prefs),
-                ],
-              ),
-            ),
-          ),
-          _SettingsSection(
             label: 'GAMEPLAY',
             flair: flair,
-            child: _CollapsibleCard(
-              title: 'SYNERGIES',
-              icon: Icons.hub_outlined,
-              flair: flair,
-              initiallyExpanded: false,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GoopText(
-                          "Lich's Eye Bullets",
-                          style: const TextStyle(fontWeight: FontWeight.w700),
+            child: Column(
+              children: [
+                _CollapsibleCard(
+                  title: 'SYNERGIES',
+                  icon: Icons.hub_outlined,
+                  flair: flair,
+                  initiallyExpanded: false,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GoopText(
+                              "Lich's Eye Bullets",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            GoopText(
+                              'Show simulated synergies for all guns',
+                              style: TextStyle(
+                                fontSize: FontSizes.labelMedium,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
                         ),
-                        GoopText(
-                          'Show simulated synergies for all guns',
-                          style: TextStyle(
-                            fontSize: FontSizes.labelMedium,
-                            color: Theme.of(context).colorScheme.onSurface
-                                .withValues(alpha: 0.6),
+                      ),
+                      Switch(
+                        value: prefs.showLichEyeBulletsSynergies,
+                        activeThumbColor: flair.primary,
+                        onChanged: VisualPrefs.setShowLichEyeBulletsSynergies,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _CollapsibleCard(
+                  title: 'DICE',
+                  icon: Icons.casino_rounded,
+                  flair: flair,
+                  initiallyExpanded: false,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _CompactActionTile(
+                          data: _TileData(
+                            icon: Icons.casino_outlined,
+                            label: 'Dice Roll',
+                            color: const Color(0xFFFFD54F),
+                            onTap: () => showDiceRollDialog(context),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      _buildDicePanel(flair, prefs),
+                    ],
                   ),
-                  Switch(
-                    value: prefs.showLichEyeBulletsSynergies,
-                    activeThumbColor: flair.primary,
-                    onChanged: VisualPrefs.setShowLichEyeBulletsSynergies,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           if (mpActive || hasCoop)
             _SettingsSection(
-              label: '',
+              label: 'MULTIPLAYER',
               flair: flair,
               child: _CollapsibleCard(
                 title: 'MULTIPLAYER',
@@ -365,7 +369,7 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
               ),
             ),
           _SettingsSection(
-            label: '',
+            label: 'DATA',
             flair: flair,
             child: _CollapsibleCard(
               title: 'DATA & STORAGE',
@@ -459,15 +463,8 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                 ),
               ],
 
-              // APP / DANGER ZONE — always full-width
+              // DEV TOOLS — full-width, before the danger zone
               const SizedBox(height: 12),
-              _sectionLabel('APP', flair),
-              _buildEndRunButton(context, p),
-              const SizedBox(height: 10),
-              _buildResetDataButton(context),
-              const SizedBox(height: 12),
-
-              // DEV TOOLS — full-width
               _CollapsibleCard(
                 title: 'DEV TOOLS',
                 icon: Icons.bug_report_rounded,
@@ -500,6 +497,13 @@ class _SettingsTabState extends State<SettingsTab> with _SettingsTabSections {
                   ),
                 ]),
               ),
+
+              // DANGER ZONE — always last, full-width
+              const SizedBox(height: 12),
+              _sectionLabel('DANGER ZONE', flair),
+              _buildEndRunButton(context, p),
+              const SizedBox(height: 10),
+              _buildResetDataButton(context),
 
               const SizedBox(height: 24),
             ],
